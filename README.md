@@ -8,8 +8,8 @@
 
 | | |
 |---|---|
-| پیشرفت (بر اساس کلمات) | **19.9٪** |
-| صفحات ترجمه‌شده | 508 از 1722 |
+| پیشرفت (بر اساس کلمات) | **20.0٪** |
+| صفحات ترجمه‌شده | 523 از 1722 |
 | صفحات دارای ایراد ساختاری | 9 |
 | نسخه‌ی منبع انگلیسی | `ed70e311737a` |
 
@@ -72,7 +72,7 @@ cd kubernetes-doc-fa
 | `contribute` | 44 | 44 |
 | `doc-contributor-tools` | 1 | 1 |
 | `home` | 2 | 2 |
-| `reference` | 273 | 1198 |
+| `reference` | 288 | 1198 |
 | `setup` | 0 | 22 |
 | `tasks` | 0 | 221 |
 | `tutorials` | 0 | 45 |
@@ -91,26 +91,26 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [reference/command-line-tools-reference/feature-gates/MaxUnavailableStatefulSet.md](md/reference/command-line-tools-reference/feature-gates/MaxUnavailableStatefulSet.md) — 2026-10-27T16:57:17+03:30
+- [reference/command-line-tools-reference/feature-gates/MatchLabelKeysInPodAffinity.md](md/reference/command-line-tools-reference/feature-gates/MatchLabelKeysInPodAffinity.md) — 2026-10-27T16:57:08+03:30
+- [reference/command-line-tools-reference/feature-gates/MatchLabelKeysInPodTopologySpread.md](md/reference/command-line-tools-reference/feature-gates/MatchLabelKeysInPodTopologySpread.md) — 2026-10-27T16:57:08+03:30
+- [reference/command-line-tools-reference/feature-gates/LoggingBetaOptions.md](md/reference/command-line-tools-reference/feature-gates/LoggingBetaOptions.md) — 2026-10-27T16:57:02+03:30
+- [reference/command-line-tools-reference/feature-gates/ManifestBasedAdmissionControlConfig.md](md/reference/command-line-tools-reference/feature-gates/ManifestBasedAdmissionControlConfig.md) — 2026-10-27T16:57:00+03:30
+- [reference/command-line-tools-reference/feature-gates/LogarithmicScaleDown.md](md/reference/command-line-tools-reference/feature-gates/LogarithmicScaleDown.md) — 2026-10-27T16:56:55+03:30
+- [reference/command-line-tools-reference/feature-gates/LoggingAlphaOptions.md](md/reference/command-line-tools-reference/feature-gates/LoggingAlphaOptions.md) — 2026-10-27T16:56:55+03:30
+- [reference/command-line-tools-reference/feature-gates/LocalStorageCapacityIsolationFSQuotaMonitoring.md](md/reference/command-line-tools-reference/feature-gates/LocalStorageCapacityIsolationFSQuotaMonitoring.md) — 2026-10-27T16:56:51+03:30
+- [reference/command-line-tools-reference/feature-gates/LocalStorageCapacityIsolation.md](md/reference/command-line-tools-reference/feature-gates/LocalStorageCapacityIsolation.md) — 2026-10-27T16:56:49+03:30
+- [reference/command-line-tools-reference/feature-gates/LoadBalancerIPMode.md](md/reference/command-line-tools-reference/feature-gates/LoadBalancerIPMode.md) — 2026-10-27T16:56:45+03:30
+- [reference/command-line-tools-reference/feature-gates/ListFromCacheSnapshot.md](md/reference/command-line-tools-reference/feature-gates/ListFromCacheSnapshot.md) — 2026-10-27T16:56:43+03:30
+- [reference/command-line-tools-reference/feature-gates/LegacyServiceAccountTokenTracking.md](md/reference/command-line-tools-reference/feature-gates/LegacyServiceAccountTokenTracking.md) — 2026-10-27T16:56:40+03:30
+- [reference/command-line-tools-reference/feature-gates/LegacyServiceAccountTokenNoAutoGeneration.md](md/reference/command-line-tools-reference/feature-gates/LegacyServiceAccountTokenNoAutoGeneration.md) — 2026-10-27T16:56:38+03:30
+- [reference/command-line-tools-reference/feature-gates/LegacyServiceAccountTokenCleanUp.md](md/reference/command-line-tools-reference/feature-gates/LegacyServiceAccountTokenCleanUp.md) — 2026-10-27T16:56:34+03:30
+- [reference/command-line-tools-reference/feature-gates/KubeletServiceAccountTokenForCredentialProviders.md](md/reference/command-line-tools-reference/feature-gates/KubeletServiceAccountTokenForCredentialProviders.md) — 2026-10-27T16:56:29+03:30
 - [reference/command-line-tools-reference/feature-gates/LegacyNodeRoleBehavior.md](md/reference/command-line-tools-reference/feature-gates/LegacyNodeRoleBehavior.md) — 2026-10-27T16:56:27+03:30
 - [reference/command-line-tools-reference/feature-gates/KubeletTracing.md](md/reference/command-line-tools-reference/feature-gates/KubeletTracing.md) — 2026-10-27T16:56:22+03:30
 - [reference/command-line-tools-reference/feature-gates/KubeletCgroupDriverFromCRI.md](md/reference/command-line-tools-reference/feature-gates/KubeletCgroupDriverFromCRI.md) — 2026-10-27T16:56:15+03:30
 - [reference/command-line-tools-reference/feature-gates/KubeletSeparateDiskGC.md](md/reference/command-line-tools-reference/feature-gates/KubeletSeparateDiskGC.md) — 2026-10-27T16:56:14+03:30
 - [reference/command-line-tools-reference/feature-gates/KubeletPodResourcesGetAllocatable.md](md/reference/command-line-tools-reference/feature-gates/KubeletPodResourcesGetAllocatable.md) — 2026-10-27T16:56:08+03:30
-- [reference/command-line-tools-reference/feature-gates/KubeletPodResourcesGet.md](md/reference/command-line-tools-reference/feature-gates/KubeletPodResourcesGet.md) — 2026-10-27T16:56:01+03:30
-- [reference/command-line-tools-reference/feature-gates/KubeletPodResourcesDynamicResources.md](md/reference/command-line-tools-reference/feature-gates/KubeletPodResourcesDynamicResources.md) — 2026-10-27T16:55:54+03:30
-- [reference/command-line-tools-reference/feature-gates/KubeletPodResources.md](md/reference/command-line-tools-reference/feature-gates/KubeletPodResources.md) — 2026-10-27T16:55:44+03:30
-- [reference/command-line-tools-reference/feature-gates/KubeletPluginsWatcher.md](md/reference/command-line-tools-reference/feature-gates/KubeletPluginsWatcher.md) — 2026-10-27T16:55:33+03:30
-- [reference/command-line-tools-reference/feature-gates/KubeletPSI.md](md/reference/command-line-tools-reference/feature-gates/KubeletPSI.md) — 2026-10-27T16:55:27+03:30
-- [reference/command-line-tools-reference/feature-gates/KubeletInUserNamespace.md](md/reference/command-line-tools-reference/feature-gates/KubeletInUserNamespace.md) — 2026-10-27T16:55:22+03:30
-- [reference/command-line-tools-reference/feature-gates/KubeletFineGrainedAuthz.md](md/reference/command-line-tools-reference/feature-gates/KubeletFineGrainedAuthz.md) — 2026-10-27T16:55:16+03:30
-- [reference/command-line-tools-reference/feature-gates/KubeletEnsureSecretPulledImages.md](md/reference/command-line-tools-reference/feature-gates/KubeletEnsureSecretPulledImages.md) — 2026-10-27T16:55:10+03:30
-- [reference/command-line-tools-reference/feature-gates/KubeletCredentialProviders.md](md/reference/command-line-tools-reference/feature-gates/KubeletCredentialProviders.md) — 2026-10-27T16:55:03+03:30
-- [reference/command-line-tools-reference/feature-gates/KubeletCrashLoopBackOffMax.md](md/reference/command-line-tools-reference/feature-gates/KubeletCrashLoopBackOffMax.md) — 2026-10-27T16:54:57+03:30
-- [reference/command-line-tools-reference/feature-gates/KubeletConfigFile.md](md/reference/command-line-tools-reference/feature-gates/KubeletConfigFile.md) — 2026-10-27T16:54:46+03:30
-- [reference/command-line-tools-reference/feature-gates/KubeProxyNFTablesLocalhostNodePorts.md](md/reference/command-line-tools-reference/feature-gates/KubeProxyNFTablesLocalhostNodePorts.md) — 2026-10-27T16:54:40+03:30
-- [reference/command-line-tools-reference/feature-gates/KubeProxyIPVS.md](md/reference/command-line-tools-reference/feature-gates/KubeProxyIPVS.md) — 2026-10-27T16:54:33+03:30
-- [reference/command-line-tools-reference/feature-gates/KubeProxyDrainingTerminatingNodes.md](md/reference/command-line-tools-reference/feature-gates/KubeProxyDrainingTerminatingNodes.md) — 2026-10-27T16:54:32+03:30
-- [reference/command-line-tools-reference/feature-gates/KMSv2.md](md/reference/command-line-tools-reference/feature-gates/KMSv2.md) — 2026-10-27T16:54:27+03:30
 
 </div>
 

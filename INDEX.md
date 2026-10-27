@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-508 از 1722 صفحه
+523 از 1722 صفحه
 
 
 ## `.`
@@ -642,24 +642,24 @@
 - ✅ [KubeletPodResourcesGet.md](md/reference/command-line-tools-reference/feature-gates/KubeletPodResourcesGet.md)
 - ✅ [KubeletPodResourcesGetAllocatable.md](md/reference/command-line-tools-reference/feature-gates/KubeletPodResourcesGetAllocatable.md)
 - ✅ [KubeletSeparateDiskGC.md](md/reference/command-line-tools-reference/feature-gates/KubeletSeparateDiskGC.md)
-- ⏳ `KubeletServiceAccountTokenForCredentialProviders.md`
+- ✅ [KubeletServiceAccountTokenForCredentialProviders.md](md/reference/command-line-tools-reference/feature-gates/KubeletServiceAccountTokenForCredentialProviders.md)
 - ✅ [KubeletTracing.md](md/reference/command-line-tools-reference/feature-gates/KubeletTracing.md)
 - ✅ [LegacyNodeRoleBehavior.md](md/reference/command-line-tools-reference/feature-gates/LegacyNodeRoleBehavior.md)
-- ⏳ `LegacyServiceAccountTokenCleanUp.md`
-- ⏳ `LegacyServiceAccountTokenNoAutoGeneration.md`
-- ⏳ `LegacyServiceAccountTokenTracking.md`
-- ⏳ `ListFromCacheSnapshot.md`
-- ⏳ `LoadBalancerIPMode.md`
-- ⏳ `LocalStorageCapacityIsolation.md`
-- ⏳ `LocalStorageCapacityIsolationFSQuotaMonitoring.md`
-- ⏳ `LogarithmicScaleDown.md`
-- ⏳ `LoggingAlphaOptions.md`
-- ⏳ `LoggingBetaOptions.md`
-- ⏳ `ManifestBasedAdmissionControlConfig.md`
-- ⏳ `MatchLabelKeysInPodAffinity.md`
-- ⏳ `MatchLabelKeysInPodTopologySpread.md`
+- ✅ [LegacyServiceAccountTokenCleanUp.md](md/reference/command-line-tools-reference/feature-gates/LegacyServiceAccountTokenCleanUp.md)
+- ✅ [LegacyServiceAccountTokenNoAutoGeneration.md](md/reference/command-line-tools-reference/feature-gates/LegacyServiceAccountTokenNoAutoGeneration.md)
+- ✅ [LegacyServiceAccountTokenTracking.md](md/reference/command-line-tools-reference/feature-gates/LegacyServiceAccountTokenTracking.md)
+- ✅ [ListFromCacheSnapshot.md](md/reference/command-line-tools-reference/feature-gates/ListFromCacheSnapshot.md)
+- ✅ [LoadBalancerIPMode.md](md/reference/command-line-tools-reference/feature-gates/LoadBalancerIPMode.md)
+- ✅ [LocalStorageCapacityIsolation.md](md/reference/command-line-tools-reference/feature-gates/LocalStorageCapacityIsolation.md)
+- ✅ [LocalStorageCapacityIsolationFSQuotaMonitoring.md](md/reference/command-line-tools-reference/feature-gates/LocalStorageCapacityIsolationFSQuotaMonitoring.md)
+- ✅ [LogarithmicScaleDown.md](md/reference/command-line-tools-reference/feature-gates/LogarithmicScaleDown.md)
+- ✅ [LoggingAlphaOptions.md](md/reference/command-line-tools-reference/feature-gates/LoggingAlphaOptions.md)
+- ✅ [LoggingBetaOptions.md](md/reference/command-line-tools-reference/feature-gates/LoggingBetaOptions.md)
+- ✅ [ManifestBasedAdmissionControlConfig.md](md/reference/command-line-tools-reference/feature-gates/ManifestBasedAdmissionControlConfig.md)
+- ✅ [MatchLabelKeysInPodAffinity.md](md/reference/command-line-tools-reference/feature-gates/MatchLabelKeysInPodAffinity.md)
+- ✅ [MatchLabelKeysInPodTopologySpread.md](md/reference/command-line-tools-reference/feature-gates/MatchLabelKeysInPodTopologySpread.md)
 - ⏳ `MatchLabelKeysInPodTopologySpreadSelectorMerge.md`
-- ⏳ `MaxUnavailableStatefulSet.md`
+- ✅ [MaxUnavailableStatefulSet.md](md/reference/command-line-tools-reference/feature-gates/MaxUnavailableStatefulSet.md)
 - ⏳ `MemoryManager.md`
 - ⏳ `MemoryQoS.md`
 - ⏳ `MinDomainsInPodTopologySpread.md`
