@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-643 از 1722 صفحه
+658 از 1722 صفحه
 
 
 ## `.`
@@ -779,21 +779,21 @@
 - ✅ [ServiceAccountTokenJTI.md](md/reference/command-line-tools-reference/feature-gates/ServiceAccountTokenJTI.md)
 - ✅ [ServiceAccountTokenNodeBinding.md](md/reference/command-line-tools-reference/feature-gates/ServiceAccountTokenNodeBinding.md)
 - ✅ [ServiceAccountTokenNodeBindingValidation.md](md/reference/command-line-tools-reference/feature-gates/ServiceAccountTokenNodeBindingValidation.md)
-- ⏳ `ServiceAccountTokenPodNodeInfo.md`
-- ⏳ `ServiceAppProtocol.md`
-- ⏳ `ServiceIPStaticSubrange.md`
-- ⏳ `ServiceInternalTrafficPolicy.md`
-- ⏳ `ServiceLBNodePortControl.md`
-- ⏳ `ServiceLoadBalancerClass.md`
-- ⏳ `ServiceLoadBalancerFinalizer.md`
-- ⏳ `ServiceNodeExclusion.md`
-- ⏳ `ServiceNodePortStaticSubrange.md`
-- ⏳ `ServiceTopology.md`
-- ⏳ `ServiceTrafficDistribution.md`
-- ⏳ `SetHostnameAsFQDN.md`
-- ⏳ `ShardedListAndWatch.md`
-- ⏳ `SidecarContainers.md`
-- ⏳ `SizeBasedListCostEstimate.md`
+- ✅ [ServiceAccountTokenPodNodeInfo.md](md/reference/command-line-tools-reference/feature-gates/ServiceAccountTokenPodNodeInfo.md)
+- ✅ [ServiceAppProtocol.md](md/reference/command-line-tools-reference/feature-gates/ServiceAppProtocol.md)
+- ✅ [ServiceIPStaticSubrange.md](md/reference/command-line-tools-reference/feature-gates/ServiceIPStaticSubrange.md)
+- ✅ [ServiceInternalTrafficPolicy.md](md/reference/command-line-tools-reference/feature-gates/ServiceInternalTrafficPolicy.md)
+- ✅ [ServiceLBNodePortControl.md](md/reference/command-line-tools-reference/feature-gates/ServiceLBNodePortControl.md)
+- ✅ [ServiceLoadBalancerClass.md](md/reference/command-line-tools-reference/feature-gates/ServiceLoadBalancerClass.md)
+- ✅ [ServiceLoadBalancerFinalizer.md](md/reference/command-line-tools-reference/feature-gates/ServiceLoadBalancerFinalizer.md)
+- ✅ [ServiceNodeExclusion.md](md/reference/command-line-tools-reference/feature-gates/ServiceNodeExclusion.md)
+- ✅ [ServiceNodePortStaticSubrange.md](md/reference/command-line-tools-reference/feature-gates/ServiceNodePortStaticSubrange.md)
+- ✅ [ServiceTopology.md](md/reference/command-line-tools-reference/feature-gates/ServiceTopology.md)
+- ✅ [ServiceTrafficDistribution.md](md/reference/command-line-tools-reference/feature-gates/ServiceTrafficDistribution.md)
+- ✅ [SetHostnameAsFQDN.md](md/reference/command-line-tools-reference/feature-gates/SetHostnameAsFQDN.md)
+- ✅ [ShardedListAndWatch.md](md/reference/command-line-tools-reference/feature-gates/ShardedListAndWatch.md)
+- ✅ [SidecarContainers.md](md/reference/command-line-tools-reference/feature-gates/SidecarContainers.md)
+- ✅ [SizeBasedListCostEstimate.md](md/reference/command-line-tools-reference/feature-gates/SizeBasedListCostEstimate.md)
 - ⏳ `SizeMemoryBackedVolumes.md`
 - ⏳ `SkipReadOnlyValidationGCE.md`
 - ⏳ `StableLoadBalancerNodeSet.md`

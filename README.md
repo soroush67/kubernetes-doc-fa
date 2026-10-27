@@ -9,7 +9,7 @@
 | | |
 |---|---|
 | پیشرفت (بر اساس کلمات) | **20.3٪** |
-| صفحات ترجمه‌شده | 643 از 1722 |
+| صفحات ترجمه‌شده | 658 از 1722 |
 | صفحات دارای ایراد ساختاری | 9 |
 | نسخه‌ی منبع انگلیسی | `ed70e311737a` |
 
@@ -72,7 +72,7 @@ cd kubernetes-doc-fa
 | `contribute` | 44 | 44 |
 | `doc-contributor-tools` | 1 | 1 |
 | `home` | 2 | 2 |
-| `reference` | 408 | 1198 |
+| `reference` | 423 | 1198 |
 | `setup` | 0 | 22 |
 | `tasks` | 0 | 221 |
 | `tutorials` | 0 | 45 |
@@ -91,26 +91,26 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [reference/command-line-tools-reference/feature-gates/SizeBasedListCostEstimate.md](md/reference/command-line-tools-reference/feature-gates/SizeBasedListCostEstimate.md) — 2026-10-27T17:05:59+03:30
+- [reference/command-line-tools-reference/feature-gates/ShardedListAndWatch.md](md/reference/command-line-tools-reference/feature-gates/ShardedListAndWatch.md) — 2026-10-27T17:05:54+03:30
+- [reference/command-line-tools-reference/feature-gates/SidecarContainers.md](md/reference/command-line-tools-reference/feature-gates/SidecarContainers.md) — 2026-10-27T17:05:53+03:30
+- [reference/command-line-tools-reference/feature-gates/ServiceTrafficDistribution.md](md/reference/command-line-tools-reference/feature-gates/ServiceTrafficDistribution.md) — 2026-10-27T17:05:47+03:30
+- [reference/command-line-tools-reference/feature-gates/SetHostnameAsFQDN.md](md/reference/command-line-tools-reference/feature-gates/SetHostnameAsFQDN.md) — 2026-10-27T17:05:47+03:30
+- [reference/command-line-tools-reference/feature-gates/ServiceTopology.md](md/reference/command-line-tools-reference/feature-gates/ServiceTopology.md) — 2026-10-27T17:05:40+03:30
+- [reference/command-line-tools-reference/feature-gates/ServiceNodePortStaticSubrange.md](md/reference/command-line-tools-reference/feature-gates/ServiceNodePortStaticSubrange.md) — 2026-10-27T17:05:39+03:30
+- [reference/command-line-tools-reference/feature-gates/ServiceNodeExclusion.md](md/reference/command-line-tools-reference/feature-gates/ServiceNodeExclusion.md) — 2026-10-27T17:05:34+03:30
+- [reference/command-line-tools-reference/feature-gates/ServiceLoadBalancerFinalizer.md](md/reference/command-line-tools-reference/feature-gates/ServiceLoadBalancerFinalizer.md) — 2026-10-27T17:05:33+03:30
+- [reference/command-line-tools-reference/feature-gates/ServiceLBNodePortControl.md](md/reference/command-line-tools-reference/feature-gates/ServiceLBNodePortControl.md) — 2026-10-27T17:05:28+03:30
+- [reference/command-line-tools-reference/feature-gates/ServiceLoadBalancerClass.md](md/reference/command-line-tools-reference/feature-gates/ServiceLoadBalancerClass.md) — 2026-10-27T17:05:28+03:30
+- [reference/command-line-tools-reference/feature-gates/ServiceIPStaticSubrange.md](md/reference/command-line-tools-reference/feature-gates/ServiceIPStaticSubrange.md) — 2026-10-27T17:05:22+03:30
+- [reference/command-line-tools-reference/feature-gates/ServiceInternalTrafficPolicy.md](md/reference/command-line-tools-reference/feature-gates/ServiceInternalTrafficPolicy.md) — 2026-10-27T17:05:22+03:30
+- [reference/command-line-tools-reference/feature-gates/ServiceAppProtocol.md](md/reference/command-line-tools-reference/feature-gates/ServiceAppProtocol.md) — 2026-10-27T17:05:17+03:30
+- [reference/command-line-tools-reference/feature-gates/ServiceAccountTokenPodNodeInfo.md](md/reference/command-line-tools-reference/feature-gates/ServiceAccountTokenPodNodeInfo.md) — 2026-10-27T17:05:11+03:30
 - [reference/command-line-tools-reference/feature-gates/ServiceAccountTokenNodeBindingValidation.md](md/reference/command-line-tools-reference/feature-gates/ServiceAccountTokenNodeBindingValidation.md) — 2026-10-27T17:05:09+03:30
 - [reference/command-line-tools-reference/feature-gates/ServiceAccountTokenNodeBinding.md](md/reference/command-line-tools-reference/feature-gates/ServiceAccountTokenNodeBinding.md) — 2026-10-27T17:05:05+03:30
 - [reference/command-line-tools-reference/feature-gates/ServiceAccountTokenJTI.md](md/reference/command-line-tools-reference/feature-gates/ServiceAccountTokenJTI.md) — 2026-10-27T17:05:03+03:30
 - [reference/command-line-tools-reference/feature-gates/ServiceAccountNodeAudienceRestriction.md](md/reference/command-line-tools-reference/feature-gates/ServiceAccountNodeAudienceRestriction.md) — 2026-10-27T17:04:58+03:30
 - [reference/command-line-tools-reference/feature-gates/ServiceAccountIssuerDiscovery.md](md/reference/command-line-tools-reference/feature-gates/ServiceAccountIssuerDiscovery.md) — 2026-10-27T17:04:56+03:30
-- [reference/command-line-tools-reference/feature-gates/ServerSideFieldValidation.md](md/reference/command-line-tools-reference/feature-gates/ServerSideFieldValidation.md) — 2026-10-27T17:04:49+03:30
-- [reference/command-line-tools-reference/feature-gates/ServerSideApply.md](md/reference/command-line-tools-reference/feature-gates/ServerSideApply.md) — 2026-10-27T17:04:46+03:30
-- [reference/command-line-tools-reference/feature-gates/SeccompDefault.md](md/reference/command-line-tools-reference/feature-gates/SeccompDefault.md) — 2026-10-27T17:04:42+03:30
-- [reference/command-line-tools-reference/feature-gates/SeparateTaintEvictionController.md](md/reference/command-line-tools-reference/feature-gates/SeparateTaintEvictionController.md) — 2026-10-27T17:04:39+03:30
-- [reference/command-line-tools-reference/feature-gates/SeparateCacheWatchRPC.md](md/reference/command-line-tools-reference/feature-gates/SeparateCacheWatchRPC.md) — 2026-10-27T17:04:33+03:30
-- [reference/command-line-tools-reference/feature-gates/SelectorIndex.md](md/reference/command-line-tools-reference/feature-gates/SelectorIndex.md) — 2026-10-27T17:04:26+03:30
-- [reference/command-line-tools-reference/feature-gates/SecurityContextDeny.md](md/reference/command-line-tools-reference/feature-gates/SecurityContextDeny.md) — 2026-10-27T17:04:19+03:30
-- [reference/command-line-tools-reference/feature-gates/SchedulerQueueingHints.md](md/reference/command-line-tools-reference/feature-gates/SchedulerQueueingHints.md) — 2026-10-27T17:04:09+03:30
-- [reference/command-line-tools-reference/feature-gates/SchedulerPopFromBackoffQ.md](md/reference/command-line-tools-reference/feature-gates/SchedulerPopFromBackoffQ.md) — 2026-10-27T17:04:05+03:30
-- [reference/command-line-tools-reference/feature-gates/SchedulerAsyncAPICalls.md](md/reference/command-line-tools-reference/feature-gates/SchedulerAsyncAPICalls.md) — 2026-10-27T17:03:57+03:30
-- [reference/command-line-tools-reference/feature-gates/SchedulerAsyncPreemption.md](md/reference/command-line-tools-reference/feature-gates/SchedulerAsyncPreemption.md) — 2026-10-27T17:03:57+03:30
-- [reference/command-line-tools-reference/feature-gates/SELinuxMountReadWriteOncePod.md](md/reference/command-line-tools-reference/feature-gates/SELinuxMountReadWriteOncePod.md) — 2026-10-27T17:03:52+03:30
-- [reference/command-line-tools-reference/feature-gates/ScheduleDaemonSetPods.md](md/reference/command-line-tools-reference/feature-gates/ScheduleDaemonSetPods.md) — 2026-10-27T17:03:51+03:30
-- [reference/command-line-tools-reference/feature-gates/SELinuxMount.md](md/reference/command-line-tools-reference/feature-gates/SELinuxMount.md) — 2026-10-27T17:03:43+03:30
-- [reference/command-line-tools-reference/feature-gates/SELinuxChangePolicy.md](md/reference/command-line-tools-reference/feature-gates/SELinuxChangePolicy.md) — 2026-10-27T17:03:42+03:30
 
 </div>
 
