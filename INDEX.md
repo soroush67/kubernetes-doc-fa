@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-658 از 1722 صفحه
+673 از 1722 صفحه
 
 
 ## `.`
@@ -794,21 +794,21 @@
 - ✅ [ShardedListAndWatch.md](md/reference/command-line-tools-reference/feature-gates/ShardedListAndWatch.md)
 - ✅ [SidecarContainers.md](md/reference/command-line-tools-reference/feature-gates/SidecarContainers.md)
 - ✅ [SizeBasedListCostEstimate.md](md/reference/command-line-tools-reference/feature-gates/SizeBasedListCostEstimate.md)
-- ⏳ `SizeMemoryBackedVolumes.md`
-- ⏳ `SkipReadOnlyValidationGCE.md`
-- ⏳ `StableLoadBalancerNodeSet.md`
-- ⏳ `StaleControllerConsistencyDaemonset.md`
-- ⏳ `StaleControllerConsistencyJob.md`
-- ⏳ `StaleControllerConsistencyReplicaSet.md`
-- ⏳ `StaleControllerConsistencyStatefulSet.md`
-- ⏳ `StartupProbe.md`
-- ⏳ `StatefulSetAutoDeletePVC.md`
-- ⏳ `StatefulSetMinReadySeconds.md`
-- ⏳ `StatefulSetRecreateStrategy.md`
-- ⏳ `StatefulSetStartOrdinal.md`
-- ⏳ `StorageCapacityScoring.md`
-- ⏳ `StorageNamespaceIndex.md`
-- ⏳ `StorageObjectInUseProtection.md`
+- ✅ [SizeMemoryBackedVolumes.md](md/reference/command-line-tools-reference/feature-gates/SizeMemoryBackedVolumes.md)
+- ✅ [SkipReadOnlyValidationGCE.md](md/reference/command-line-tools-reference/feature-gates/SkipReadOnlyValidationGCE.md)
+- ✅ [StableLoadBalancerNodeSet.md](md/reference/command-line-tools-reference/feature-gates/StableLoadBalancerNodeSet.md)
+- ✅ [StaleControllerConsistencyDaemonset.md](md/reference/command-line-tools-reference/feature-gates/StaleControllerConsistencyDaemonset.md)
+- ✅ [StaleControllerConsistencyJob.md](md/reference/command-line-tools-reference/feature-gates/StaleControllerConsistencyJob.md)
+- ✅ [StaleControllerConsistencyReplicaSet.md](md/reference/command-line-tools-reference/feature-gates/StaleControllerConsistencyReplicaSet.md)
+- ✅ [StaleControllerConsistencyStatefulSet.md](md/reference/command-line-tools-reference/feature-gates/StaleControllerConsistencyStatefulSet.md)
+- ✅ [StartupProbe.md](md/reference/command-line-tools-reference/feature-gates/StartupProbe.md)
+- ✅ [StatefulSetAutoDeletePVC.md](md/reference/command-line-tools-reference/feature-gates/StatefulSetAutoDeletePVC.md)
+- ✅ [StatefulSetMinReadySeconds.md](md/reference/command-line-tools-reference/feature-gates/StatefulSetMinReadySeconds.md)
+- ✅ [StatefulSetRecreateStrategy.md](md/reference/command-line-tools-reference/feature-gates/StatefulSetRecreateStrategy.md)
+- ✅ [StatefulSetStartOrdinal.md](md/reference/command-line-tools-reference/feature-gates/StatefulSetStartOrdinal.md)
+- ✅ [StorageCapacityScoring.md](md/reference/command-line-tools-reference/feature-gates/StorageCapacityScoring.md)
+- ✅ [StorageNamespaceIndex.md](md/reference/command-line-tools-reference/feature-gates/StorageNamespaceIndex.md)
+- ✅ [StorageObjectInUseProtection.md](md/reference/command-line-tools-reference/feature-gates/StorageObjectInUseProtection.md)
 - ⏳ `StorageVersionAPI.md`
 - ⏳ `StorageVersionHash.md`
 - ⏳ `StorageVersionMigrator.md`

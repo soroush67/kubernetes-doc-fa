@@ -9,7 +9,7 @@
 | | |
 |---|---|
 | پیشرفت (بر اساس کلمات) | **20.3٪** |
-| صفحات ترجمه‌شده | 658 از 1722 |
+| صفحات ترجمه‌شده | 673 از 1722 |
 | صفحات دارای ایراد ساختاری | 9 |
 | نسخه‌ی منبع انگلیسی | `ed70e311737a` |
 
@@ -72,7 +72,7 @@ cd kubernetes-doc-fa
 | `contribute` | 44 | 44 |
 | `doc-contributor-tools` | 1 | 1 |
 | `home` | 2 | 2 |
-| `reference` | 423 | 1198 |
+| `reference` | 438 | 1198 |
 | `setup` | 0 | 22 |
 | `tasks` | 0 | 221 |
 | `tutorials` | 0 | 45 |
@@ -91,26 +91,26 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [reference/command-line-tools-reference/feature-gates/StorageObjectInUseProtection.md](md/reference/command-line-tools-reference/feature-gates/StorageObjectInUseProtection.md) — 2026-10-27T17:06:53+03:30
+- [reference/command-line-tools-reference/feature-gates/StorageNamespaceIndex.md](md/reference/command-line-tools-reference/feature-gates/StorageNamespaceIndex.md) — 2026-10-27T17:06:49+03:30
+- [reference/command-line-tools-reference/feature-gates/StorageCapacityScoring.md](md/reference/command-line-tools-reference/feature-gates/StorageCapacityScoring.md) — 2026-10-27T17:06:47+03:30
+- [reference/command-line-tools-reference/feature-gates/StatefulSetRecreateStrategy.md](md/reference/command-line-tools-reference/feature-gates/StatefulSetRecreateStrategy.md) — 2026-10-27T17:06:42+03:30
+- [reference/command-line-tools-reference/feature-gates/StatefulSetStartOrdinal.md](md/reference/command-line-tools-reference/feature-gates/StatefulSetStartOrdinal.md) — 2026-10-27T17:06:40+03:30
+- [reference/command-line-tools-reference/feature-gates/StatefulSetMinReadySeconds.md](md/reference/command-line-tools-reference/feature-gates/StatefulSetMinReadySeconds.md) — 2026-10-27T17:06:34+03:30
+- [reference/command-line-tools-reference/feature-gates/StatefulSetAutoDeletePVC.md](md/reference/command-line-tools-reference/feature-gates/StatefulSetAutoDeletePVC.md) — 2026-10-27T17:06:31+03:30
+- [reference/command-line-tools-reference/feature-gates/StartupProbe.md](md/reference/command-line-tools-reference/feature-gates/StartupProbe.md) — 2026-10-27T17:06:29+03:30
+- [reference/command-line-tools-reference/feature-gates/StaleControllerConsistencyStatefulSet.md](md/reference/command-line-tools-reference/feature-gates/StaleControllerConsistencyStatefulSet.md) — 2026-10-27T17:06:24+03:30
+- [reference/command-line-tools-reference/feature-gates/StaleControllerConsistencyReplicaSet.md](md/reference/command-line-tools-reference/feature-gates/StaleControllerConsistencyReplicaSet.md) — 2026-10-27T17:06:23+03:30
+- [reference/command-line-tools-reference/feature-gates/StaleControllerConsistencyJob.md](md/reference/command-line-tools-reference/feature-gates/StaleControllerConsistencyJob.md) — 2026-10-27T17:06:17+03:30
+- [reference/command-line-tools-reference/feature-gates/StableLoadBalancerNodeSet.md](md/reference/command-line-tools-reference/feature-gates/StableLoadBalancerNodeSet.md) — 2026-10-27T17:06:12+03:30
+- [reference/command-line-tools-reference/feature-gates/StaleControllerConsistencyDaemonset.md](md/reference/command-line-tools-reference/feature-gates/StaleControllerConsistencyDaemonset.md) — 2026-10-27T17:06:11+03:30
+- [reference/command-line-tools-reference/feature-gates/SkipReadOnlyValidationGCE.md](md/reference/command-line-tools-reference/feature-gates/SkipReadOnlyValidationGCE.md) — 2026-10-27T17:06:03+03:30
 - [reference/command-line-tools-reference/feature-gates/SizeBasedListCostEstimate.md](md/reference/command-line-tools-reference/feature-gates/SizeBasedListCostEstimate.md) — 2026-10-27T17:05:59+03:30
+- [reference/command-line-tools-reference/feature-gates/SizeMemoryBackedVolumes.md](md/reference/command-line-tools-reference/feature-gates/SizeMemoryBackedVolumes.md) — 2026-10-27T17:05:59+03:30
 - [reference/command-line-tools-reference/feature-gates/ShardedListAndWatch.md](md/reference/command-line-tools-reference/feature-gates/ShardedListAndWatch.md) — 2026-10-27T17:05:54+03:30
 - [reference/command-line-tools-reference/feature-gates/SidecarContainers.md](md/reference/command-line-tools-reference/feature-gates/SidecarContainers.md) — 2026-10-27T17:05:53+03:30
 - [reference/command-line-tools-reference/feature-gates/ServiceTrafficDistribution.md](md/reference/command-line-tools-reference/feature-gates/ServiceTrafficDistribution.md) — 2026-10-27T17:05:47+03:30
 - [reference/command-line-tools-reference/feature-gates/SetHostnameAsFQDN.md](md/reference/command-line-tools-reference/feature-gates/SetHostnameAsFQDN.md) — 2026-10-27T17:05:47+03:30
-- [reference/command-line-tools-reference/feature-gates/ServiceTopology.md](md/reference/command-line-tools-reference/feature-gates/ServiceTopology.md) — 2026-10-27T17:05:40+03:30
-- [reference/command-line-tools-reference/feature-gates/ServiceNodePortStaticSubrange.md](md/reference/command-line-tools-reference/feature-gates/ServiceNodePortStaticSubrange.md) — 2026-10-27T17:05:39+03:30
-- [reference/command-line-tools-reference/feature-gates/ServiceNodeExclusion.md](md/reference/command-line-tools-reference/feature-gates/ServiceNodeExclusion.md) — 2026-10-27T17:05:34+03:30
-- [reference/command-line-tools-reference/feature-gates/ServiceLoadBalancerFinalizer.md](md/reference/command-line-tools-reference/feature-gates/ServiceLoadBalancerFinalizer.md) — 2026-10-27T17:05:33+03:30
-- [reference/command-line-tools-reference/feature-gates/ServiceLBNodePortControl.md](md/reference/command-line-tools-reference/feature-gates/ServiceLBNodePortControl.md) — 2026-10-27T17:05:28+03:30
-- [reference/command-line-tools-reference/feature-gates/ServiceLoadBalancerClass.md](md/reference/command-line-tools-reference/feature-gates/ServiceLoadBalancerClass.md) — 2026-10-27T17:05:28+03:30
-- [reference/command-line-tools-reference/feature-gates/ServiceIPStaticSubrange.md](md/reference/command-line-tools-reference/feature-gates/ServiceIPStaticSubrange.md) — 2026-10-27T17:05:22+03:30
-- [reference/command-line-tools-reference/feature-gates/ServiceInternalTrafficPolicy.md](md/reference/command-line-tools-reference/feature-gates/ServiceInternalTrafficPolicy.md) — 2026-10-27T17:05:22+03:30
-- [reference/command-line-tools-reference/feature-gates/ServiceAppProtocol.md](md/reference/command-line-tools-reference/feature-gates/ServiceAppProtocol.md) — 2026-10-27T17:05:17+03:30
-- [reference/command-line-tools-reference/feature-gates/ServiceAccountTokenPodNodeInfo.md](md/reference/command-line-tools-reference/feature-gates/ServiceAccountTokenPodNodeInfo.md) — 2026-10-27T17:05:11+03:30
-- [reference/command-line-tools-reference/feature-gates/ServiceAccountTokenNodeBindingValidation.md](md/reference/command-line-tools-reference/feature-gates/ServiceAccountTokenNodeBindingValidation.md) — 2026-10-27T17:05:09+03:30
-- [reference/command-line-tools-reference/feature-gates/ServiceAccountTokenNodeBinding.md](md/reference/command-line-tools-reference/feature-gates/ServiceAccountTokenNodeBinding.md) — 2026-10-27T17:05:05+03:30
-- [reference/command-line-tools-reference/feature-gates/ServiceAccountTokenJTI.md](md/reference/command-line-tools-reference/feature-gates/ServiceAccountTokenJTI.md) — 2026-10-27T17:05:03+03:30
-- [reference/command-line-tools-reference/feature-gates/ServiceAccountNodeAudienceRestriction.md](md/reference/command-line-tools-reference/feature-gates/ServiceAccountNodeAudienceRestriction.md) — 2026-10-27T17:04:58+03:30
-- [reference/command-line-tools-reference/feature-gates/ServiceAccountIssuerDiscovery.md](md/reference/command-line-tools-reference/feature-gates/ServiceAccountIssuerDiscovery.md) — 2026-10-27T17:04:56+03:30
 
 </div>
 
