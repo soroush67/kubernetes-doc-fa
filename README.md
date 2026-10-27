@@ -8,8 +8,8 @@
 
 | | |
 |---|---|
-| پیشرفت (بر اساس کلمات) | **19.3٪** |
-| صفحات ترجمه‌شده | 283 از 1722 |
+| پیشرفت (بر اساس کلمات) | **19.4٪** |
+| صفحات ترجمه‌شده | 298 از 1722 |
 | صفحات دارای ایراد ساختاری | 9 |
 | نسخه‌ی منبع انگلیسی | `ed70e311737a` |
 
@@ -72,7 +72,7 @@ cd kubernetes-doc-fa
 | `contribute` | 44 | 44 |
 | `doc-contributor-tools` | 1 | 1 |
 | `home` | 2 | 2 |
-| `reference` | 48 | 1198 |
+| `reference` | 63 | 1198 |
 | `setup` | 0 | 22 |
 | `tasks` | 0 | 221 |
 | `tutorials` | 0 | 45 |
@@ -91,26 +91,26 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [reference/command-line-tools-reference/feature-gates/CRDValidationRatcheting.md](md/reference/command-line-tools-reference/feature-gates/CRDValidationRatcheting.md) — 2026-10-27T16:42:16+03:30
+- [reference/command-line-tools-reference/feature-gates/CRDObservedGenerationTracking.md](md/reference/command-line-tools-reference/feature-gates/CRDObservedGenerationTracking.md) — 2026-10-27T16:42:15+03:30
+- [reference/command-line-tools-reference/feature-gates/CPUManagerPolicyBetaOptions.md](md/reference/command-line-tools-reference/feature-gates/CPUManagerPolicyBetaOptions.md) — 2026-10-27T16:42:09+03:30
+- [reference/command-line-tools-reference/feature-gates/CPUManagerPolicyOptions.md](md/reference/command-line-tools-reference/feature-gates/CPUManagerPolicyOptions.md) — 2026-10-27T16:42:09+03:30
+- [reference/command-line-tools-reference/feature-gates/CPUManagerPolicyAlphaOptions.md](md/reference/command-line-tools-reference/feature-gates/CPUManagerPolicyAlphaOptions.md) — 2026-10-27T16:42:02+03:30
+- [reference/command-line-tools-reference/feature-gates/CBORServingAndStorage.md](md/reference/command-line-tools-reference/feature-gates/CBORServingAndStorage.md) — 2026-10-27T16:41:57+03:30
+- [reference/command-line-tools-reference/feature-gates/CPUManager.md](md/reference/command-line-tools-reference/feature-gates/CPUManager.md) — 2026-10-27T16:41:55+03:30
+- [reference/command-line-tools-reference/feature-gates/BtreeWatchCache.md](md/reference/command-line-tools-reference/feature-gates/BtreeWatchCache.md) — 2026-10-27T16:41:49+03:30
+- [reference/command-line-tools-reference/feature-gates/BoundServiceAccountTokenVolume.md](md/reference/command-line-tools-reference/feature-gates/BoundServiceAccountTokenVolume.md) — 2026-10-27T16:41:46+03:30
+- [reference/command-line-tools-reference/feature-gates/BlockVolume.md](md/reference/command-line-tools-reference/feature-gates/BlockVolume.md) — 2026-10-27T16:41:41+03:30
+- [reference/command-line-tools-reference/feature-gates/BalanceAttachedNodeVolumes.md](md/reference/command-line-tools-reference/feature-gates/BalanceAttachedNodeVolumes.md) — 2026-10-27T16:41:37+03:30
+- [reference/command-line-tools-reference/feature-gates/AuthorizeNodeWithSelectors.md](md/reference/command-line-tools-reference/feature-gates/AuthorizeNodeWithSelectors.md) — 2026-10-27T16:41:35+03:30
+- [reference/command-line-tools-reference/feature-gates/AuthorizeWithSelectors.md](md/reference/command-line-tools-reference/feature-gates/AuthorizeWithSelectors.md) — 2026-10-27T16:41:31+03:30
+- [reference/command-line-tools-reference/feature-gates/AuthorizePodWebsocketUpgradeCreatePermission.md](md/reference/command-line-tools-reference/feature-gates/AuthorizePodWebsocketUpgradeCreatePermission.md) — 2026-10-27T16:41:23+03:30
+- [reference/command-line-tools-reference/feature-gates/AttachVolumeLimit.md](md/reference/command-line-tools-reference/feature-gates/AttachVolumeLimit.md) — 2026-10-27T16:41:15+03:30
 - [reference/command-line-tools-reference/feature-gates/AppArmorFields.md](md/reference/command-line-tools-reference/feature-gates/AppArmorFields.md) — 2026-10-27T16:41:09+03:30
 - [reference/command-line-tools-reference/feature-gates/AtomicWriteVolumeUserFields.md](md/reference/command-line-tools-reference/feature-gates/AtomicWriteVolumeUserFields.md) — 2026-10-27T16:41:09+03:30
 - [reference/command-line-tools-reference/feature-gates/AtomicFIFO.md](md/reference/command-line-tools-reference/feature-gates/AtomicFIFO.md) — 2026-10-27T16:41:00+03:30
 - [reference/command-line-tools-reference/feature-gates/AppArmor.md](md/reference/command-line-tools-reference/feature-gates/AppArmor.md) — 2026-10-27T16:40:53+03:30
 - [reference/command-line-tools-reference/feature-gates/AnonymousAuthConfigurableEndpoints.md](md/reference/command-line-tools-reference/feature-gates/AnonymousAuthConfigurableEndpoints.md) — 2026-10-27T16:40:48+03:30
-- [reference/command-line-tools-reference/feature-gates/AnyVolumeDataSource.md](md/reference/command-line-tools-reference/feature-gates/AnyVolumeDataSource.md) — 2026-10-27T16:40:47+03:30
-- [reference/command-line-tools-reference/feature-gates/AllowServiceLBStatusOnNonLB.md](md/reference/command-line-tools-reference/feature-gates/AllowServiceLBStatusOnNonLB.md) — 2026-10-27T16:40:41+03:30
-- [reference/command-line-tools-reference/feature-gates/AllowUnsafeMalformedObjectDeletion.md](md/reference/command-line-tools-reference/feature-gates/AllowUnsafeMalformedObjectDeletion.md) — 2026-10-27T16:40:41+03:30
-- [reference/command-line-tools-reference/feature-gates/AllowServiceExternalIPs.md](md/reference/command-line-tools-reference/feature-gates/AllowServiceExternalIPs.md) — 2026-10-27T16:40:34+03:30
-- [reference/command-line-tools-reference/feature-gates/AllowParsingUserUIDFromCertAuth.md](md/reference/command-line-tools-reference/feature-gates/AllowParsingUserUIDFromCertAuth.md) — 2026-10-27T16:40:29+03:30
-- [reference/command-line-tools-reference/feature-gates/AllowExtTrafficLocalEndpoints.md](md/reference/command-line-tools-reference/feature-gates/AllowExtTrafficLocalEndpoints.md) — 2026-10-27T16:40:28+03:30
-- [reference/command-line-tools-reference/feature-gates/AllowInsecureKubeletCertificateSigningRequests.md](md/reference/command-line-tools-reference/feature-gates/AllowInsecureKubeletCertificateSigningRequests.md) — 2026-10-27T16:40:23+03:30
-- [reference/command-line-tools-reference/feature-gates/AllowInsecureBackendProxy.md](md/reference/command-line-tools-reference/feature-gates/AllowInsecureBackendProxy.md) — 2026-10-27T16:40:15+03:30
-- [reference/command-line-tools-reference/feature-gates/AllowDNSOnlyNodeCSR.md](md/reference/command-line-tools-reference/feature-gates/AllowDNSOnlyNodeCSR.md) — 2026-10-27T16:40:11+03:30
-- [reference/command-line-tools-reference/feature-gates/AggregatedDiscoveryEndpoint.md](md/reference/command-line-tools-reference/feature-gates/AggregatedDiscoveryEndpoint.md) — 2026-10-27T16:40:00+03:30
-- [reference/command-line-tools-reference/feature-gates/AdvancedAuditing.md](md/reference/command-line-tools-reference/feature-gates/AdvancedAuditing.md) — 2026-10-27T16:39:53+03:30
-- [reference/command-line-tools-reference/feature-gates/AffinityInAnnotations.md](md/reference/command-line-tools-reference/feature-gates/AffinityInAnnotations.md) — 2026-10-27T16:39:53+03:30
-- [reference/command-line-tools-reference/feature-gates/Accelerators.md](md/reference/command-line-tools-reference/feature-gates/Accelerators.md) — 2026-10-27T16:39:41+03:30
-- [reference/command-line-tools-reference/feature-gates/AdmissionWebhookMatchConditions.md](md/reference/command-line-tools-reference/feature-gates/AdmissionWebhookMatchConditions.md) — 2026-10-27T16:39:41+03:30
-- [reference/access-authn-authz/validating-admission-policy.md](md/reference/access-authn-authz/validating-admission-policy.md) — 2026-10-27T16:39:36+03:30
 
 </div>
 

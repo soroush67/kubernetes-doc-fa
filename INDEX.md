@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-283 از 1722 صفحه
+298 از 1722 صفحه
 
 
 ## `.`
@@ -419,21 +419,21 @@
 - ✅ [AppArmorFields.md](md/reference/command-line-tools-reference/feature-gates/AppArmorFields.md)
 - ✅ [AtomicFIFO.md](md/reference/command-line-tools-reference/feature-gates/AtomicFIFO.md)
 - ✅ [AtomicWriteVolumeUserFields.md](md/reference/command-line-tools-reference/feature-gates/AtomicWriteVolumeUserFields.md)
-- ⏳ `AttachVolumeLimit.md`
-- ⏳ `AuthorizeNodeWithSelectors.md`
-- ⏳ `AuthorizePodWebsocketUpgradeCreatePermission.md`
-- ⏳ `AuthorizeWithSelectors.md`
-- ⏳ `BalanceAttachedNodeVolumes.md`
-- ⏳ `BlockVolume.md`
-- ⏳ `BoundServiceAccountTokenVolume.md`
-- ⏳ `BtreeWatchCache.md`
-- ⏳ `CBORServingAndStorage.md`
-- ⏳ `CPUManager.md`
-- ⏳ `CPUManagerPolicyAlphaOptions.md`
-- ⏳ `CPUManagerPolicyBetaOptions.md`
-- ⏳ `CPUManagerPolicyOptions.md`
-- ⏳ `CRDObservedGenerationTracking.md`
-- ⏳ `CRDValidationRatcheting.md`
+- ✅ [AttachVolumeLimit.md](md/reference/command-line-tools-reference/feature-gates/AttachVolumeLimit.md)
+- ✅ [AuthorizeNodeWithSelectors.md](md/reference/command-line-tools-reference/feature-gates/AuthorizeNodeWithSelectors.md)
+- ✅ [AuthorizePodWebsocketUpgradeCreatePermission.md](md/reference/command-line-tools-reference/feature-gates/AuthorizePodWebsocketUpgradeCreatePermission.md)
+- ✅ [AuthorizeWithSelectors.md](md/reference/command-line-tools-reference/feature-gates/AuthorizeWithSelectors.md)
+- ✅ [BalanceAttachedNodeVolumes.md](md/reference/command-line-tools-reference/feature-gates/BalanceAttachedNodeVolumes.md)
+- ✅ [BlockVolume.md](md/reference/command-line-tools-reference/feature-gates/BlockVolume.md)
+- ✅ [BoundServiceAccountTokenVolume.md](md/reference/command-line-tools-reference/feature-gates/BoundServiceAccountTokenVolume.md)
+- ✅ [BtreeWatchCache.md](md/reference/command-line-tools-reference/feature-gates/BtreeWatchCache.md)
+- ✅ [CBORServingAndStorage.md](md/reference/command-line-tools-reference/feature-gates/CBORServingAndStorage.md)
+- ✅ [CPUManager.md](md/reference/command-line-tools-reference/feature-gates/CPUManager.md)
+- ✅ [CPUManagerPolicyAlphaOptions.md](md/reference/command-line-tools-reference/feature-gates/CPUManagerPolicyAlphaOptions.md)
+- ✅ [CPUManagerPolicyBetaOptions.md](md/reference/command-line-tools-reference/feature-gates/CPUManagerPolicyBetaOptions.md)
+- ✅ [CPUManagerPolicyOptions.md](md/reference/command-line-tools-reference/feature-gates/CPUManagerPolicyOptions.md)
+- ✅ [CRDObservedGenerationTracking.md](md/reference/command-line-tools-reference/feature-gates/CRDObservedGenerationTracking.md)
+- ✅ [CRDValidationRatcheting.md](md/reference/command-line-tools-reference/feature-gates/CRDValidationRatcheting.md)
 - ⏳ `CRIContainerLogRotation.md`
 - ⏳ `CRIListStreaming.md`
 - ⏳ `CSIBlockVolume.md`
