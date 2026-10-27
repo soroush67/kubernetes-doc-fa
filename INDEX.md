@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-523 از 1722 صفحه
+538 از 1722 صفحه
 
 
 ## `.`
@@ -658,22 +658,22 @@
 - ✅ [ManifestBasedAdmissionControlConfig.md](md/reference/command-line-tools-reference/feature-gates/ManifestBasedAdmissionControlConfig.md)
 - ✅ [MatchLabelKeysInPodAffinity.md](md/reference/command-line-tools-reference/feature-gates/MatchLabelKeysInPodAffinity.md)
 - ✅ [MatchLabelKeysInPodTopologySpread.md](md/reference/command-line-tools-reference/feature-gates/MatchLabelKeysInPodTopologySpread.md)
-- ⏳ `MatchLabelKeysInPodTopologySpreadSelectorMerge.md`
+- ✅ [MatchLabelKeysInPodTopologySpreadSelectorMerge.md](md/reference/command-line-tools-reference/feature-gates/MatchLabelKeysInPodTopologySpreadSelectorMerge.md)
 - ✅ [MaxUnavailableStatefulSet.md](md/reference/command-line-tools-reference/feature-gates/MaxUnavailableStatefulSet.md)
-- ⏳ `MemoryManager.md`
-- ⏳ `MemoryQoS.md`
-- ⏳ `MinDomainsInPodTopologySpread.md`
-- ⏳ `MinimizeIPTablesRestore.md`
-- ⏳ `MixedProtocolLBService.md`
-- ⏳ `MountContainers.md`
-- ⏳ `MountPropagation.md`
-- ⏳ `MultiCIDRRangeAllocator.md`
-- ⏳ `MultiCIDRServiceAllocator.md`
-- ⏳ `MutableCSINodeAllocatableCount.md`
-- ⏳ `MutablePVNodeAffinity.md`
-- ⏳ `MutablePodResourcesForSuspendedJobs.md`
-- ⏳ `MutableSchedulingDirectivesForSuspendedJobs.md`
-- ⏳ `MutatingAdmissionPolicy.md`
+- ✅ [MemoryManager.md](md/reference/command-line-tools-reference/feature-gates/MemoryManager.md)
+- ✅ [MemoryQoS.md](md/reference/command-line-tools-reference/feature-gates/MemoryQoS.md)
+- ✅ [MinDomainsInPodTopologySpread.md](md/reference/command-line-tools-reference/feature-gates/MinDomainsInPodTopologySpread.md)
+- ✅ [MinimizeIPTablesRestore.md](md/reference/command-line-tools-reference/feature-gates/MinimizeIPTablesRestore.md)
+- ✅ [MixedProtocolLBService.md](md/reference/command-line-tools-reference/feature-gates/MixedProtocolLBService.md)
+- ✅ [MountContainers.md](md/reference/command-line-tools-reference/feature-gates/MountContainers.md)
+- ✅ [MountPropagation.md](md/reference/command-line-tools-reference/feature-gates/MountPropagation.md)
+- ✅ [MultiCIDRRangeAllocator.md](md/reference/command-line-tools-reference/feature-gates/MultiCIDRRangeAllocator.md)
+- ✅ [MultiCIDRServiceAllocator.md](md/reference/command-line-tools-reference/feature-gates/MultiCIDRServiceAllocator.md)
+- ✅ [MutableCSINodeAllocatableCount.md](md/reference/command-line-tools-reference/feature-gates/MutableCSINodeAllocatableCount.md)
+- ✅ [MutablePVNodeAffinity.md](md/reference/command-line-tools-reference/feature-gates/MutablePVNodeAffinity.md)
+- ✅ [MutablePodResourcesForSuspendedJobs.md](md/reference/command-line-tools-reference/feature-gates/MutablePodResourcesForSuspendedJobs.md)
+- ✅ [MutableSchedulingDirectivesForSuspendedJobs.md](md/reference/command-line-tools-reference/feature-gates/MutableSchedulingDirectivesForSuspendedJobs.md)
+- ✅ [MutatingAdmissionPolicy.md](md/reference/command-line-tools-reference/feature-gates/MutatingAdmissionPolicy.md)
 - ⏳ `NFTablesProxyMode.md`
 - ⏳ `NamespaceDefaultLabelName.md`
 - ⏳ `NativeHistograms.md`
