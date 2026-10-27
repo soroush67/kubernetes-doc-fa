@@ -8,8 +8,8 @@
 
 | | |
 |---|---|
-| پیشرفت (بر اساس کلمات) | **20.2٪** |
-| صفحات ترجمه‌شده | 628 از 1722 |
+| پیشرفت (بر اساس کلمات) | **20.3٪** |
+| صفحات ترجمه‌شده | 643 از 1722 |
 | صفحات دارای ایراد ساختاری | 9 |
 | نسخه‌ی منبع انگلیسی | `ed70e311737a` |
 
@@ -72,7 +72,7 @@ cd kubernetes-doc-fa
 | `contribute` | 44 | 44 |
 | `doc-contributor-tools` | 1 | 1 |
 | `home` | 2 | 2 |
-| `reference` | 393 | 1198 |
+| `reference` | 408 | 1198 |
 | `setup` | 0 | 22 |
 | `tasks` | 0 | 221 |
 | `tutorials` | 0 | 45 |
@@ -91,26 +91,26 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [reference/command-line-tools-reference/feature-gates/ServiceAccountTokenNodeBindingValidation.md](md/reference/command-line-tools-reference/feature-gates/ServiceAccountTokenNodeBindingValidation.md) — 2026-10-27T17:05:09+03:30
+- [reference/command-line-tools-reference/feature-gates/ServiceAccountTokenNodeBinding.md](md/reference/command-line-tools-reference/feature-gates/ServiceAccountTokenNodeBinding.md) — 2026-10-27T17:05:05+03:30
+- [reference/command-line-tools-reference/feature-gates/ServiceAccountTokenJTI.md](md/reference/command-line-tools-reference/feature-gates/ServiceAccountTokenJTI.md) — 2026-10-27T17:05:03+03:30
+- [reference/command-line-tools-reference/feature-gates/ServiceAccountNodeAudienceRestriction.md](md/reference/command-line-tools-reference/feature-gates/ServiceAccountNodeAudienceRestriction.md) — 2026-10-27T17:04:58+03:30
+- [reference/command-line-tools-reference/feature-gates/ServiceAccountIssuerDiscovery.md](md/reference/command-line-tools-reference/feature-gates/ServiceAccountIssuerDiscovery.md) — 2026-10-27T17:04:56+03:30
+- [reference/command-line-tools-reference/feature-gates/ServerSideFieldValidation.md](md/reference/command-line-tools-reference/feature-gates/ServerSideFieldValidation.md) — 2026-10-27T17:04:49+03:30
+- [reference/command-line-tools-reference/feature-gates/ServerSideApply.md](md/reference/command-line-tools-reference/feature-gates/ServerSideApply.md) — 2026-10-27T17:04:46+03:30
+- [reference/command-line-tools-reference/feature-gates/SeccompDefault.md](md/reference/command-line-tools-reference/feature-gates/SeccompDefault.md) — 2026-10-27T17:04:42+03:30
+- [reference/command-line-tools-reference/feature-gates/SeparateTaintEvictionController.md](md/reference/command-line-tools-reference/feature-gates/SeparateTaintEvictionController.md) — 2026-10-27T17:04:39+03:30
+- [reference/command-line-tools-reference/feature-gates/SeparateCacheWatchRPC.md](md/reference/command-line-tools-reference/feature-gates/SeparateCacheWatchRPC.md) — 2026-10-27T17:04:33+03:30
+- [reference/command-line-tools-reference/feature-gates/SelectorIndex.md](md/reference/command-line-tools-reference/feature-gates/SelectorIndex.md) — 2026-10-27T17:04:26+03:30
+- [reference/command-line-tools-reference/feature-gates/SecurityContextDeny.md](md/reference/command-line-tools-reference/feature-gates/SecurityContextDeny.md) — 2026-10-27T17:04:19+03:30
+- [reference/command-line-tools-reference/feature-gates/SchedulerQueueingHints.md](md/reference/command-line-tools-reference/feature-gates/SchedulerQueueingHints.md) — 2026-10-27T17:04:09+03:30
+- [reference/command-line-tools-reference/feature-gates/SchedulerPopFromBackoffQ.md](md/reference/command-line-tools-reference/feature-gates/SchedulerPopFromBackoffQ.md) — 2026-10-27T17:04:05+03:30
 - [reference/command-line-tools-reference/feature-gates/SchedulerAsyncAPICalls.md](md/reference/command-line-tools-reference/feature-gates/SchedulerAsyncAPICalls.md) — 2026-10-27T17:03:57+03:30
+- [reference/command-line-tools-reference/feature-gates/SchedulerAsyncPreemption.md](md/reference/command-line-tools-reference/feature-gates/SchedulerAsyncPreemption.md) — 2026-10-27T17:03:57+03:30
 - [reference/command-line-tools-reference/feature-gates/SELinuxMountReadWriteOncePod.md](md/reference/command-line-tools-reference/feature-gates/SELinuxMountReadWriteOncePod.md) — 2026-10-27T17:03:52+03:30
 - [reference/command-line-tools-reference/feature-gates/ScheduleDaemonSetPods.md](md/reference/command-line-tools-reference/feature-gates/ScheduleDaemonSetPods.md) — 2026-10-27T17:03:51+03:30
 - [reference/command-line-tools-reference/feature-gates/SELinuxMount.md](md/reference/command-line-tools-reference/feature-gates/SELinuxMount.md) — 2026-10-27T17:03:43+03:30
 - [reference/command-line-tools-reference/feature-gates/SELinuxChangePolicy.md](md/reference/command-line-tools-reference/feature-gates/SELinuxChangePolicy.md) — 2026-10-27T17:03:42+03:30
-- [reference/command-line-tools-reference/feature-gates/SCTPSupport.md](md/reference/command-line-tools-reference/feature-gates/SCTPSupport.md) — 2026-10-27T17:03:36+03:30
-- [reference/command-line-tools-reference/feature-gates/RuntimeClassInImageCriApi.md](md/reference/command-line-tools-reference/feature-gates/RuntimeClassInImageCriApi.md) — 2026-10-27T17:03:33+03:30
-- [reference/command-line-tools-reference/feature-gates/RuntimeClass.md](md/reference/command-line-tools-reference/feature-gates/RuntimeClass.md) — 2026-10-27T17:03:28+03:30
-- [reference/command-line-tools-reference/feature-gates/RunAsGroup.md](md/reference/command-line-tools-reference/feature-gates/RunAsGroup.md) — 2026-10-27T17:03:27+03:30
-- [reference/command-line-tools-reference/feature-gates/RotateKubeletServerCertificate.md](md/reference/command-line-tools-reference/feature-gates/RotateKubeletServerCertificate.md) — 2026-10-27T17:03:23+03:30
-- [reference/command-line-tools-reference/feature-gates/RotateKubeletClientCertificate.md](md/reference/command-line-tools-reference/feature-gates/RotateKubeletClientCertificate.md) — 2026-10-27T17:03:20+03:30
-- [reference/command-line-tools-reference/feature-gates/RootCAConfigMap.md](md/reference/command-line-tools-reference/feature-gates/RootCAConfigMap.md) — 2026-10-27T17:03:17+03:30
-- [reference/command-line-tools-reference/feature-gates/RetryGenerateName.md](md/reference/command-line-tools-reference/feature-gates/RetryGenerateName.md) — 2026-10-27T17:03:14+03:30
-- [reference/command-line-tools-reference/feature-gates/RetroactiveDefaultStorageClass.md](md/reference/command-line-tools-reference/feature-gates/RetroactiveDefaultStorageClass.md) — 2026-10-27T17:03:11+03:30
-- [reference/command-line-tools-reference/feature-gates/RestartAllContainersOnContainerExits.md](md/reference/command-line-tools-reference/feature-gates/RestartAllContainersOnContainerExits.md) — 2026-10-27T17:03:04+03:30
-- [reference/command-line-tools-reference/feature-gates/ResourceQuotaScopeSelectors.md](md/reference/command-line-tools-reference/feature-gates/ResourceQuotaScopeSelectors.md) — 2026-10-27T17:03:02+03:30
-- [reference/command-line-tools-reference/feature-gates/ResourceHealthStatus.md](md/reference/command-line-tools-reference/feature-gates/ResourceHealthStatus.md) — 2026-10-27T17:02:58+03:30
-- [reference/command-line-tools-reference/feature-gates/ResourceLimitsPriorityFunction.md](md/reference/command-line-tools-reference/feature-gates/ResourceLimitsPriorityFunction.md) — 2026-10-27T17:02:57+03:30
-- [reference/command-line-tools-reference/feature-gates/ResilientWatchCacheInitialization.md](md/reference/command-line-tools-reference/feature-gates/ResilientWatchCacheInitialization.md) — 2026-10-27T17:02:52+03:30
-- [reference/command-line-tools-reference/feature-gates/RequestManagement.md](md/reference/command-line-tools-reference/feature-gates/RequestManagement.md) — 2026-10-27T17:02:49+03:30
 
 </div>
 

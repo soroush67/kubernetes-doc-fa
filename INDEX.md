@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-628 از 1722 صفحه
+643 از 1722 صفحه
 
 
 ## `.`
@@ -764,21 +764,21 @@
 - ✅ [SELinuxMountReadWriteOncePod.md](md/reference/command-line-tools-reference/feature-gates/SELinuxMountReadWriteOncePod.md)
 - ✅ [ScheduleDaemonSetPods.md](md/reference/command-line-tools-reference/feature-gates/ScheduleDaemonSetPods.md)
 - ✅ [SchedulerAsyncAPICalls.md](md/reference/command-line-tools-reference/feature-gates/SchedulerAsyncAPICalls.md)
-- ⏳ `SchedulerAsyncPreemption.md`
-- ⏳ `SchedulerPopFromBackoffQ.md`
-- ⏳ `SchedulerQueueingHints.md`
-- ⏳ `SeccompDefault.md`
-- ⏳ `SecurityContextDeny.md`
-- ⏳ `SelectorIndex.md`
-- ⏳ `SeparateCacheWatchRPC.md`
-- ⏳ `SeparateTaintEvictionController.md`
-- ⏳ `ServerSideApply.md`
-- ⏳ `ServerSideFieldValidation.md`
-- ⏳ `ServiceAccountIssuerDiscovery.md`
-- ⏳ `ServiceAccountNodeAudienceRestriction.md`
-- ⏳ `ServiceAccountTokenJTI.md`
-- ⏳ `ServiceAccountTokenNodeBinding.md`
-- ⏳ `ServiceAccountTokenNodeBindingValidation.md`
+- ✅ [SchedulerAsyncPreemption.md](md/reference/command-line-tools-reference/feature-gates/SchedulerAsyncPreemption.md)
+- ✅ [SchedulerPopFromBackoffQ.md](md/reference/command-line-tools-reference/feature-gates/SchedulerPopFromBackoffQ.md)
+- ✅ [SchedulerQueueingHints.md](md/reference/command-line-tools-reference/feature-gates/SchedulerQueueingHints.md)
+- ✅ [SeccompDefault.md](md/reference/command-line-tools-reference/feature-gates/SeccompDefault.md)
+- ✅ [SecurityContextDeny.md](md/reference/command-line-tools-reference/feature-gates/SecurityContextDeny.md)
+- ✅ [SelectorIndex.md](md/reference/command-line-tools-reference/feature-gates/SelectorIndex.md)
+- ✅ [SeparateCacheWatchRPC.md](md/reference/command-line-tools-reference/feature-gates/SeparateCacheWatchRPC.md)
+- ✅ [SeparateTaintEvictionController.md](md/reference/command-line-tools-reference/feature-gates/SeparateTaintEvictionController.md)
+- ✅ [ServerSideApply.md](md/reference/command-line-tools-reference/feature-gates/ServerSideApply.md)
+- ✅ [ServerSideFieldValidation.md](md/reference/command-line-tools-reference/feature-gates/ServerSideFieldValidation.md)
+- ✅ [ServiceAccountIssuerDiscovery.md](md/reference/command-line-tools-reference/feature-gates/ServiceAccountIssuerDiscovery.md)
+- ✅ [ServiceAccountNodeAudienceRestriction.md](md/reference/command-line-tools-reference/feature-gates/ServiceAccountNodeAudienceRestriction.md)
+- ✅ [ServiceAccountTokenJTI.md](md/reference/command-line-tools-reference/feature-gates/ServiceAccountTokenJTI.md)
+- ✅ [ServiceAccountTokenNodeBinding.md](md/reference/command-line-tools-reference/feature-gates/ServiceAccountTokenNodeBinding.md)
+- ✅ [ServiceAccountTokenNodeBindingValidation.md](md/reference/command-line-tools-reference/feature-gates/ServiceAccountTokenNodeBindingValidation.md)
 - ⏳ `ServiceAccountTokenPodNodeInfo.md`
 - ⏳ `ServiceAppProtocol.md`
 - ⏳ `ServiceIPStaticSubrange.md`
