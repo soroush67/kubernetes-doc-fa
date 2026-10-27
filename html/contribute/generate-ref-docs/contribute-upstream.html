@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>مشارکت در کد بالادستی (Upstream) کوبرنتیز | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">contribute / generate-ref-docs</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">مشارکت در کد بالادستی (Upstream) کوبرنتیز</h1><!-- overview -->
+<p dir="rtl">این صفحه نشان می‌دهد چگونه می‌توانید در پروژهٔ بالادستی <code dir="ltr">kubernetes/kubernetes</code> مشارکت کنید.
+می‌توانید اشکالاتی را که در مستندات API کوبرنتیز یا در محتوای مؤلفه‌های کوبرنتیز مانند
+<code dir="ltr">kubeadm</code>، <code dir="ltr">kube-apiserver</code> و <code dir="ltr">kube-controller-manager</code> یافته‌اید برطرف کنید.</p>
+<p dir="rtl">اگر به‌جای آن می‌خواهید مستندات مرجع API کوبرنتیز یا مؤلفه‌های <code dir="ltr">kube-*</code> را از کد بالادستی دوباره تولید کنید،
+دستورالعمل‌های زیر را ببینید:</p>
+<ul>
+<li dir="rtl"><a href="kubernetes-api.html">تولید مستندات مرجع برای API کوبرنتیز</a></li>
+<li dir="rtl"><a href="kubernetes-components.html">تولید مستندات مرجع برای مؤلفه‌ها و ابزارهای کوبرنتیز</a></li>
+</ul>
+<h2 id="پیش-از-شروع" dir="rtl">پیش از شروع</h2>
+<ul>
+<li dir="rtl">
+<p dir="rtl">باید این ابزارها نصب شده باشند:</p>
+<ul>
+<li dir="ltr" class="ltr"><a href="https://git-scm.com/book/en/v2/Getting-Started-Installing-Git" target="_blank" rel="noopener">Git</a></li>
+<li dir="rtl"><a href="https://go.dev/doc/install" target="_blank" rel="noopener">Golang</a> نسخهٔ 1.13 یا بالاتر</li>
+<li dir="ltr" class="ltr"><a href="https://docs.docker.com/engine/installation/" target="_blank" rel="noopener">Docker</a></li>
+<li dir="ltr" class="ltr"><a href="https://github.com/coreos/etcd/" target="_blank" rel="noopener">etcd</a></li>
+<li dir="ltr" class="ltr"><a href="https://www.gnu.org/software/make/" target="_blank" rel="noopener">make</a></li>
+<li dir="ltr" class="ltr"><a href="https://gcc.gnu.org/" target="_blank" rel="noopener">gcc compiler/linker</a></li>
+</ul>
+</li>
+<li dir="rtl">
+<p dir="rtl">متغیر محیطی <code dir="ltr">GOPATH</code> شما باید تنظیم شده باشد و مسیر <code dir="ltr">etcd</code>
+باید در متغیر محیطی <code dir="ltr">PATH</code> شما قرار داشته باشد.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">باید بدانید چگونه یک pull request برای یک مخزن GitHub ایجاد کنید.
+معمولاً این کار شامل ایجاد یک fork از مخزن است.
+برای اطلاعات بیشتر، <a href="https://help.github.com/articles/creating-a-pull-request/" target="_blank" rel="noopener">Creating a Pull Request</a>
+و <a href="https://gist.github.com/Chaser324/ce0505fbed06b947d962" target="_blank" rel="noopener">GitHub Standard Fork &amp; Pull Request Workflow</a> را ببینید.</p>
+</li>
+</ul>
+<!-- steps -->
+<h2 id="تصویر-کلی" dir="rtl">تصویر کلی</h2>
+<p dir="rtl">مستندات مرجع API کوبرنتیز و مؤلفه‌های <code dir="ltr">kube-*</code>
+مانند <code dir="ltr">kube-apiserver</code> و <code dir="ltr">kube-controller-manager</code> به‌طور خودکار
+از کد منبع <a href="https://github.com/kubernetes/kubernetes/" target="_blank" rel="noopener">کوبرنتیز بالادستی</a> تولید می‌شوند.</p>
+<p dir="rtl">وقتی در مستندات تولیدشده با اشکالی مواجه می‌شوید، می‌توانید
+ایجاد یک وصله (patch) برای رفع آن در پروژهٔ بالادستی را در نظر بگیرید.</p>
+<h2 id="کلون-کردن-مخزن-کوبرنتیز" dir="rtl">کلون کردن مخزن کوبرنتیز</h2>
+<p dir="rtl">اگر هنوز مخزن kubernetes/kubernetes را ندارید، اکنون آن را دریافت کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">mkdir $GOPATH/src
+cd $GOPATH/src
+go get github.com/kubernetes/kubernetes
+</code></pre>
+<p dir="rtl">دایرکتوری پایهٔ کلون مخزن
+<a href="https://github.com/kubernetes/kubernetes" target="_blank" rel="noopener">kubernetes/kubernetes</a> خود را مشخص کنید.
+برای مثال، اگر مرحلهٔ قبل را برای دریافت مخزن دنبال کرده باشید،
+دایرکتوری پایهٔ شما <code dir="ltr">$GOPATH/src/github.com/kubernetes/kubernetes</code> است.
+در مراحل بعدی، به دایرکتوری پایهٔ شما با عنوان <code dir="ltr">&lt;k8s-base&gt;</code> اشاره می‌شود.</p>
+<p dir="rtl">دایرکتوری پایهٔ کلون مخزن
+<a href="https://github.com/kubernetes-sigs/reference-docs" target="_blank" rel="noopener">kubernetes-sigs/reference-docs</a> خود را مشخص کنید.
+برای مثال، اگر مرحلهٔ قبل را برای دریافت مخزن دنبال کرده باشید،
+دایرکتوری پایهٔ شما <code dir="ltr">$GOPATH/src/github.com/kubernetes-sigs/reference-docs</code> است.
+در مراحل بعدی، به دایرکتوری پایهٔ شما با عنوان <code dir="ltr">&lt;rdocs-base&gt;</code> اشاره می‌شود.</p>
+<h2 id="ویرایش-کد-منبع-کوبرنتیز" dir="rtl">ویرایش کد منبع کوبرنتیز</h2>
+<p dir="rtl">مستندات مرجع API کوبرنتیز به‌طور خودکار از یک مشخصات OpenAPI تولید می‌شود
+که خود از کد منبع کوبرنتیز تولید شده است. اگر
+می‌خواهید مستندات مرجع API را تغییر دهید، گام نخست تغییر یک یا چند
+توضیح (comment) در کد منبع کوبرنتیز است.</p>
+<p dir="rtl">مستندات مؤلفه‌های <code dir="ltr">kube-*</code> نیز از کد منبع بالادستی تولید می‌شود.
+برای اصلاح مستندات تولیدشده، باید کد مربوط به مؤلفه‌ای را که
+می‌خواهید اصلاح کنید تغییر دهید.</p>
+<h3 id="اعمال-تغییرات-در-کد-منبع-بالادستی" dir="rtl">اعمال تغییرات در کد منبع بالادستی</h3>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">مراحل زیر یک مثال هستند و یک روش کلی به شمار نمی‌آیند. جزئیات
+در موقعیت شما متفاوت خواهد بود.</p>
+</div>
+<p dir="rtl">در ادامه مثالی از ویرایش یک توضیح (comment) در کد منبع کوبرنتیز آمده است.</p>
+<p dir="rtl">در مخزن محلی kubernetes/kubernetes خود، شاخهٔ پیش‌فرض را checkout کنید
+و مطمئن شوید که به‌روز است:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">cd &lt;k8s-base&gt;
+git checkout master
+git pull https://github.com/kubernetes/kubernetes master
+</code></pre>
+<p dir="rtl">فرض کنید این فایل منبع در آن شاخهٔ پیش‌فرض دارای غلط تایپی «atmost» است:</p>
+<p dir="ltr" class="ltr"><a href="https://github.com/kubernetes/kubernetes/blob/master/staging/src/k8s.io/api/apps/v1/types.go" target="_blank" rel="noopener">kubernetes/kubernetes/staging/src/k8s.io/api/apps/v1/types.go</a></p>
+<p dir="rtl">در محیط محلی خود، فایل <code dir="ltr">types.go</code> را باز کنید و «atmost» را به «at most» تغییر دهید.</p>
+<p dir="rtl">بررسی کنید که فایل را تغییر داده‌اید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">git status
+</code></pre>
+<p dir="rtl">خروجی نشان می‌دهد که در شاخهٔ master هستید و فایل منبع <code dir="ltr">types.go</code>
+تغییر کرده است:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">On branch master
+...
+    modified:   staging/src/k8s.io/api/apps/v1/types.go
+</code></pre>
+<h3 id="کامیت-کردن-فایل-ویرایش-شده" dir="rtl">کامیت کردن فایل ویرایش‌شده</h3>
+<p dir="rtl">دستورهای <code dir="ltr">git add</code> و <code dir="ltr">git commit</code> را اجرا کنید تا تغییراتی را که تاکنون اعمال کرده‌اید کامیت کنید. در گام بعد،
+کامیت دومی انجام خواهید داد. مهم است که تغییرات شما در دو کامیت جداگانه نگه داشته شوند.</p>
+<h3 id="تولید-مشخصات-openapi-و-فایل-های-مرتبط" dir="rtl">تولید مشخصات OpenAPI و فایل‌های مرتبط</h3>
+<p dir="rtl">به <code dir="ltr">&lt;k8s-base&gt;</code> بروید و این اسکریپت‌ها را اجرا کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">./hack/update-codegen.sh
+./hack/update-openapi-spec.sh
+</code></pre>
+<p dir="rtl">دستور <code dir="ltr">git status</code> را اجرا کنید تا ببینید چه چیزی تولید شده است.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">On branch master
+...
+    modified:   api/openapi-spec/swagger.json
+    modified:   api/openapi-spec/v3/apis__apps__v1_openapi.json
+    modified:   pkg/generated/openapi/zz_generated.openapi.go
+    modified:   staging/src/k8s.io/api/apps/v1/generated.proto
+    modified:   staging/src/k8s.io/api/apps/v1/types_swagger_doc_generated.go
+</code></pre>
+<p dir="rtl">محتوای فایل <code dir="ltr">api/openapi-spec/swagger.json</code> را بررسی کنید تا مطمئن شوید غلط تایپی برطرف شده است.
+برای مثال، می‌توانید دستور <code dir="ltr">git diff -a api/openapi-spec/swagger.json</code> را اجرا کنید.
+این کار مهم است، زیرا <code dir="ltr">swagger.json</code> ورودی مرحلهٔ دوم
+فرایند تولید مستندات است.</p>
+<p dir="rtl">دستورهای <code dir="ltr">git add</code> و <code dir="ltr">git commit</code> را اجرا کنید تا تغییرات خود را کامیت کنید. اکنون دو کامیت دارید:
+یکی شامل فایل ویرایش‌شدهٔ <code dir="ltr">types.go</code> و دیگری شامل مشخصات OpenAPI تولیدشده
+و فایل‌های مرتبط. این دو کامیت را جدا از هم نگه دارید. یعنی کامیت‌های خود را squash نکنید.</p>
+<p dir="rtl">تغییرات خود را به‌صورت یک
+<a href="https://help.github.com/articles/creating-a-pull-request/" target="_blank" rel="noopener">pull request</a>
+به شاخهٔ master مخزن
+<a href="https://github.com/kubernetes/kubernetes" target="_blank" rel="noopener">kubernetes/kubernetes</a> ارسال کنید.
+pull request خود را پایش کنید و در صورت لزوم به نظرات بازبینان پاسخ دهید. پایش pull request را
+تا زمان ادغام (merge) شدن آن ادامه دهید.</p>
+<p dir="rtl"><a href="https://github.com/kubernetes/kubernetes/pull/57758" target="_blank" rel="noopener">PR 57758</a>
+نمونه‌ای از یک pull request است که یک غلط تایپی را در کد منبع کوبرنتیز اصلاح می‌کند.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">تعیین فایل منبع درست برای تغییر ممکن است دشوار باشد. در مثال
+بالا، فایل منبع مرجع در دایرکتوری <code dir="ltr">staging</code>
+در مخزن <code dir="ltr">kubernetes/kubernetes</code> قرار دارد. اما در موقعیت شما، دایرکتوری <code dir="ltr">staging</code>
+ممکن است محل مناسبی برای یافتن منبع مرجع نباشد. برای راهنمایی، فایل‌های
+<code dir="ltr">README</code> را در مخزن
+<a href="https://github.com/kubernetes/kubernetes/tree/master/staging" target="_blank" rel="noopener">kubernetes/kubernetes</a>
+و در مخازن مرتبط، مانند
+<a href="https://github.com/kubernetes/apiserver/blob/master/README.md" target="_blank" rel="noopener">kubernetes/apiserver</a>، بررسی کنید.</p>
+</div>
+<h3 id="cherry-pick-کردن-کامیت-خود-در-یک-شاخهٔ-انتشار" dir="rtl">Cherry pick کردن کامیت خود در یک شاخهٔ انتشار</h3>
+<p dir="rtl">در بخش قبل، فایلی را در شاخهٔ master ویرایش کردید و سپس اسکریپت‌ها را اجرا کردید
+تا مشخصات OpenAPI و فایل‌های مرتبط تولید شوند. سپس تغییرات خود را در یک pull request
+به شاخهٔ master مخزن kubernetes/kubernetes ارسال کردید. اکنون فرض کنید می‌خواهید
+تغییر خود را به یک شاخهٔ انتشار backport کنید. برای مثال، فرض کنید شاخهٔ master برای توسعهٔ
+کوبرنتیز نسخهٔ 1.37 استفاده می‌شود و می‌خواهید تغییر خود را به شاخهٔ
+release-1.37 backport کنید.</p>
+<p dir="rtl">به یاد داشته باشید که pull request شما دو کامیت دارد: یکی برای ویرایش <code dir="ltr">types.go</code>
+و دیگری برای فایل‌هایی که اسکریپت‌ها تولید کرده‌اند. گام بعدی پیشنهاد cherry pick کامیت نخست شما
+به شاخهٔ release-1.37 است. ایده این است که کامیتی را که
+<code dir="ltr">types.go</code> را ویرایش کرده cherry pick کنید، نه کامیتی را که نتایج اجرای اسکریپت‌ها را دارد. برای دستورالعمل‌ها،
+<a href="https://git.k8s.io/community/contributors/devel/sig-release/cherry-picks.md" target="_blank" rel="noopener">Propose a Cherry Pick</a> را ببینید.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">پیشنهاد یک cherry pick مستلزم آن است که مجوز تنظیم برچسب و milestone را در
+pull request خود داشته باشید. اگر این مجوزها را ندارید، باید با فردی همکاری کنید که بتواند برچسب
+و milestone را برای شما تنظیم کند.</p>
+</div>
+<p dir="rtl">هنگامی که یک pull request برای cherry pick کردن تک کامیت خود به شاخهٔ
+release-1.37 ایجاد کردید، گام بعدی اجرای این اسکریپت‌ها در شاخهٔ
+release-1.37 در محیط محلی شماست.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">./hack/update-codegen.sh
+./hack/update-openapi-spec.sh
+</code></pre>
+<p dir="rtl">اکنون یک کامیت که شامل مشخصات OpenAPI و فایل‌های مرتبطِ تازه تولیدشده است
+به pull request مربوط به cherry-pick خود اضافه کنید. pull request خود را پایش کنید تا زمانی که در شاخهٔ
+release-1.37 ادغام شود.</p>
+<p dir="rtl">در این مرحله، هم شاخهٔ master و هم شاخهٔ release-1.37 فایل <code dir="ltr">types.go</code> به‌روزشدهٔ شما
+و مجموعه‌ای از فایل‌های تولیدشده را دارند که تغییر شما در <code dir="ltr">types.go</code> را منعکس می‌کنند. توجه داشته باشید که
+مشخصات OpenAPI تولیدشده و سایر فایل‌های تولیدشده در شاخهٔ release-1.37 لزوماً
+با فایل‌های تولیدشده در شاخهٔ master یکسان نیستند. فایل‌های تولیدشده در شاخهٔ release-1.37
+فقط شامل عناصر API از کوبرنتیز 1.37 هستند. فایل‌های تولیدشده در شاخهٔ master ممکن است شامل
+عناصر API‌ای باشند که در 1.37 وجود ندارند، اما برای 1.37 در دست توسعه‌اند.</p>
+<h2 id="تولید-مستندات-مرجع-منتشرشده" dir="rtl">تولید مستندات مرجع منتشرشده</h2>
+<p dir="rtl">بخش قبل نشان داد چگونه یک فایل منبع را ویرایش کنید و سپس
+چندین فایل، از جمله <code dir="ltr">api/openapi-spec/swagger.json</code> را در مخزن
+<code dir="ltr">kubernetes/kubernetes</code> تولید کنید.
+فایل <code dir="ltr">swagger.json</code> همان فایل تعریف OpenAPI است که برای تولید
+مستندات مرجع API به کار می‌رود.</p>
+<p dir="rtl">اکنون آمادهٔ آن هستید که راهنمای
+<a href="kubernetes-api.html">تولید مستندات مرجع برای API کوبرنتیز</a>
+را دنبال کنید تا
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.37/" target="_blank">مستندات مرجع منتشرشدهٔ API کوبرنتیز</a>
+را تولید کنید.</p>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<ul>
+<li dir="rtl"><a href="kubernetes-api.html">تولید مستندات مرجع برای API کوبرنتیز</a></li>
+<li dir="rtl"><a href="kubernetes-components.html">تولید مستندات مرجع برای مؤلفه‌ها و ابزارهای کوبرنتیز</a></li>
+<li dir="rtl"><a href="kubectl.html">تولید مستندات مرجع برای دستورهای kubectl</a></li>
+</ul>
+</main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#پیش-از-شروع">پیش از شروع</a><a class="l2" href="#تصویر-کلی">تصویر کلی</a><a class="l2" href="#کلون-کردن-مخزن-کوبرنتیز">کلون کردن مخزن کوبرنتیز</a><a class="l2" href="#ویرایش-کد-منبع-کوبرنتیز">ویرایش کد منبع کوبرنتیز</a><a class="l3" href="#اعمال-تغییرات-در-کد-منبع-بالادستی">اعمال تغییرات در کد منبع بالادستی</a><a class="l3" href="#کامیت-کردن-فایل-ویرایش-شده">کامیت کردن فایل ویرایش‌شده</a><a class="l3" href="#تولید-مشخصات-openapi-و-فایل-های-مرتبط">تولید مشخصات OpenAPI و فایل‌های مرتبط</a><a class="l3" href="#cherry-pick-کردن-کامیت-خود-در-یک-شاخهٔ-انتشار">Cherry pick کردن کامیت خود در یک شاخهٔ انتشار</a><a class="l2" href="#تولید-مستندات-مرجع-منتشرشده">تولید مستندات مرجع منتشرشده</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>

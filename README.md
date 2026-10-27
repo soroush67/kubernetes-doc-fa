@@ -8,9 +8,9 @@
 
 | | |
 |---|---|
-| پیشرفت (بر اساس کلمات) | **13.5٪** |
-| صفحات ترجمه‌شده | 193 از 1722 |
-| صفحات دارای ایراد ساختاری | 1 |
+| پیشرفت (بر اساس کلمات) | **14.9٪** |
+| صفحات ترجمه‌شده | 208 از 1722 |
+| صفحات دارای ایراد ساختاری | 2 |
 | نسخه‌ی منبع انگلیسی | `ed70e311737a` |
 
 ## مشاهده
@@ -68,8 +68,8 @@ cd kubernetes-doc-fa
 | بخش | ترجمه‌شده | کل |
 |---|---|---|
 | `(root)` | 1 | 2 |
-| `concepts` | 183 | 187 |
-| `contribute` | 9 | 44 |
+| `concepts` | 187 | 187 |
+| `contribute` | 20 | 44 |
 | `doc-contributor-tools` | 0 | 1 |
 | `home` | 0 | 2 |
 | `reference` | 0 | 1198 |
@@ -91,26 +91,26 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [contribute/generate-ref-docs/release-generation.md](md/contribute/generate-ref-docs/release-generation.md) — 2026-10-27T16:10:21+03:30
+- [contribute/generate-ref-docs/quickstart.md](md/contribute/generate-ref-docs/quickstart.md) — 2026-10-27T16:09:27+03:30
+- [contribute/generate-ref-docs/metrics-reference.md](md/contribute/generate-ref-docs/metrics-reference.md) — 2026-10-27T16:08:54+03:30
+- [contribute/generate-ref-docs/prerequisites-ref-docs.md](md/contribute/generate-ref-docs/prerequisites-ref-docs.md) — 2026-10-27T16:08:54+03:30
+- [contribute/generate-ref-docs/kubernetes-api.md](md/contribute/generate-ref-docs/kubernetes-api.md) — 2026-10-27T16:08:47+03:30
+- [contribute/generate-ref-docs/kubernetes-components.md](md/contribute/generate-ref-docs/kubernetes-components.md) — 2026-10-27T16:08:45+03:30
+- [concepts/workloads/pods/pod-lifecycle.md](md/concepts/workloads/pods/pod-lifecycle.md) — 2026-10-27T16:08:38+03:30
+- [contribute/generate-ref-docs/kubectl.md](md/contribute/generate-ref-docs/kubectl.md) — 2026-10-27T16:07:46+03:30
+- [contribute/generate-ref-docs/contribute-upstream.md](md/contribute/generate-ref-docs/contribute-upstream.md) — 2026-10-27T16:07:18+03:30
+- [contribute/generate-ref-docs/config-api.md](md/contribute/generate-ref-docs/config-api.md) — 2026-10-27T16:06:39+03:30
+- [contribute/generate-ref-docs/_index.md](md/contribute/generate-ref-docs/_index.md) — 2026-10-27T16:06:23+03:30
+- [contribute/docs.md](md/contribute/docs.md) — 2026-10-27T16:06:18+03:30
+- [concepts/workloads/controllers/job.md](md/concepts/workloads/controllers/job.md) — 2026-10-27T16:03:44+03:30
+- [concepts/workloads/pods/pod-hostname.md](md/concepts/workloads/pods/pod-hostname.md) — 2026-10-27T16:03:30+03:30
+- [concepts/workloads/pods/pod-condition.md](md/concepts/workloads/pods/pod-condition.md) — 2026-10-27T16:03:07+03:30
 - [concepts/workloads/pods/init-containers.md](md/concepts/workloads/pods/init-containers.md) — 2026-10-27T16:02:12+03:30
 - [concepts/workloads/pods/ephemeral-containers.md](md/concepts/workloads/pods/ephemeral-containers.md) — 2026-10-27T16:01:12+03:30
 - [concepts/workloads/pods/downward-api.md](md/concepts/workloads/pods/downward-api.md) — 2026-10-27T16:00:58+03:30
 - [concepts/storage/volumes.md](md/concepts/storage/volumes.md) — 2026-10-27T16:00:37+03:30
 - [concepts/workloads/autoscaling.md](md/concepts/workloads/autoscaling.md) — 2026-10-27T15:59:47+03:30
-- [concepts/workloads/_index.md](md/concepts/workloads/_index.md) — 2026-10-27T15:59:14+03:30
-- [concepts/windows/user-guide.md](md/concepts/windows/user-guide.md) — 2026-10-27T15:58:46+03:30
-- [concepts/windows/intro.md](md/concepts/windows/intro.md) — 2026-10-27T15:57:46+03:30
-- [concepts/windows/_index.md](md/concepts/windows/_index.md) — 2026-10-27T15:56:31+03:30
-- [concepts/storage/windows-storage.md](md/concepts/storage/windows-storage.md) — 2026-10-27T15:56:22+03:30
-- [concepts/storage/ephemeral-volumes.md](md/concepts/storage/ephemeral-volumes.md) — 2026-10-27T15:56:06+03:30
-- [concepts/storage/ephemeral-storage.md](md/concepts/storage/ephemeral-storage.md) — 2026-10-27T15:56:05+03:30
-- [concepts/storage/dynamic-provisioning.md](md/concepts/storage/dynamic-provisioning.md) — 2026-10-27T15:55:20+03:30
-- [concepts/services-networking/windows-networking.md](md/concepts/services-networking/windows-networking.md) — 2026-10-27T15:55:19+03:30
-- [concepts/storage/_index.md](md/concepts/storage/_index.md) — 2026-10-27T15:54:58+03:30
-- [concepts/services-networking/topology-aware-routing.md](md/concepts/services-networking/topology-aware-routing.md) — 2026-10-27T15:54:50+03:30
-- [concepts/services-networking/_index.md](md/concepts/services-networking/_index.md) — 2026-10-27T15:54:25+03:30
-- [concepts/security/service-accounts.md](md/concepts/security/service-accounts.md) — 2026-10-27T15:54:15+03:30
-- [concepts/security/windows-security.md](md/concepts/security/windows-security.md) — 2026-10-27T15:53:59+03:30
-- [concepts/security/security-checklist.md](md/concepts/security/security-checklist.md) — 2026-10-27T15:53:48+03:30
 
 </div>
 
@@ -119,6 +119,7 @@ cd kubernetes-doc-fa
 ## صفحات دارای ایراد ساختاری
 
 - [concepts/security/pod-security-standards.md](md/concepts/security/pod-security-standards.md): chunk 1: short: 909 words vs 1711 source words
+- [contribute/docs.md](md/contribute/docs.md): chunk 1: 10 untranslated English lines, e.g. 'D[Look over the<br>kubernetes/website<br>repository] --- E[Check out the<br>Hugo static site<br>generator]'
 
 </div>
 

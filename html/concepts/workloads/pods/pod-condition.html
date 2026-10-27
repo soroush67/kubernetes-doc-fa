@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>شرایط Pod | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body>
+<header class="top"><a href="../../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">concepts / workloads / pods</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">شرایط Pod</h1><p dir="rtl">در کوبرنتیز، بسیاری از آبجکت‌ها دارای <em>شرایط</em> (conditions) هستند.
+شرایط، نشانگرهایی برای جنبه‌ای از وضعیت واقعی چیزی هستند که آبجکت نمایانگر آن است.
+Podها نیز شرایطی دارند و شرایط Pod در کوبرنتیز جنبه مهمی از چگونگی درک سلامت یک Pod
+توسط کنترل‌کننده‌ها (و افرادی که عیب‌یابی می‌کنند) است.</p>
+<p dir="rtl"><a href="pod-lifecycle.html#pod-phase">فاز</a> یک Pod خلاصه‌ای سطح‌بالا از جایگاه Pod در چرخه حیات آن ارائه می‌دهد، اما یک مقدار واحد نمی‌تواند تصویر کامل را نشان دهد. برای مثال، ممکن است یک Pod در فاز <code dir="ltr">Running</code> باشد، اما هنوز آماده سرویس‌دهی به ترافیک نباشد.
+شرایط Pod با پیگیری مستقل جنبه‌های مختلف وضعیت Pod، فاز را تکمیل می‌کنند؛ جنبه‌هایی مانند اینکه Pod زمان‌بندی شده است یا نه، کانتینرهای آن آماده‌اند یا نه، تغییر اندازه (resize) در حال انجام است یا نه، یا اینکه Pod به دلیل یک <span class="term" title="taint">taint</span> در آستانه مختل شدن (disruption) است یا نه.</p>
+<h2 id="ساختار-شرط-pod-structure-of-a-pod-condition" dir="rtl">ساختار شرط Pod {#structure-of-a-pod-condition}</h2>
+<p dir="rtl">وضعیت (status) یک Pod شامل آرایه‌ای از
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.37/#podcondition-v1-core" target="_blank">PodConditions</a>
+است که نشان می‌دهد Pod از چه نقاط بررسی‌ای عبور کرده است.</p>
+<p dir="rtl">هر عنصر آرایه PodCondition دارای فیلدهای زیر است:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left" dir="rtl">نام فیلد</th>
+<th style="text-align:left" dir="rtl">توضیحات</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left" dir="ltr" class="ltr"><code dir="ltr">type</code></td>
+<td style="text-align:left" dir="rtl">نام این شرط Pod.</td>
+</tr>
+<tr>
+<td style="text-align:left" dir="ltr" class="ltr"><code dir="ltr">status</code></td>
+<td style="text-align:left" dir="rtl">نشان می‌دهد که آیا آن شرط برقرار است یا خیر؛ مقادیر ممکن <code dir="ltr">"True"</code>، <code dir="ltr">"False"</code> یا <code dir="ltr">"Unknown"</code> هستند.</td>
+</tr>
+<tr>
+<td style="text-align:left" dir="ltr" class="ltr"><code dir="ltr">lastProbeTime</code></td>
+<td style="text-align:left" dir="rtl">مهر زمانی آخرین باری که شرط Pod بررسی (probe) شده است.</td>
+</tr>
+<tr>
+<td style="text-align:left" dir="ltr" class="ltr"><code dir="ltr">lastTransitionTime</code></td>
+<td style="text-align:left" dir="rtl">مهر زمانی آخرین باری که Pod از یک وضعیت به وضعیت دیگر گذار کرده است.</td>
+</tr>
+<tr>
+<td style="text-align:left" dir="ltr" class="ltr"><code dir="ltr">reason</code></td>
+<td style="text-align:left" dir="rtl">متنی قابل‌پردازش برای ماشین، به قالب UpperCamelCase، که دلیل آخرین گذار شرط را نشان می‌دهد.</td>
+</tr>
+<tr>
+<td style="text-align:left" dir="ltr" class="ltr"><code dir="ltr">message</code></td>
+<td style="text-align:left" dir="rtl">پیامی قابل‌خواندن برای انسان که جزئیات آخرین گذار وضعیت را بیان می‌کند.</td>
+</tr>
+<tr>
+<td style="text-align:left" dir="ltr" class="ltr"><code dir="ltr">observedGeneration</code></td>
+<td style="text-align:left" dir="rtl">مقدار <code dir="ltr">.metadata.generation</code> مربوط به Pod در زمان ثبت شرط. به <a href="index.html#pod-generation">نسل Pod</a> مراجعه کنید.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="شرایط-درون-ساخت-pod-built-in-pod-conditions" dir="rtl">شرایط درون‌ساخت Pod {#built-in-pod-conditions}</h2>
+<p dir="rtl">کوبرنتیز شرایط Pod زیر را مدیریت می‌کند:</p>
+<p dir="rtl"><a href="#lifecycle-pod-conditions">شرایط چرخه حیات</a>: با پیشرفت Pod در چرخه حیات خود و تقریباً به این ترتیب تنظیم می‌شوند:
+<code dir="ltr">PodScheduled</code>، <code dir="ltr">PodReadyToStartContainers</code>، <code dir="ltr">Initialized</code>، <code dir="ltr">ContainersReady</code>، <code dir="ltr">Ready</code>.</p>
+<p dir="rtl"><a href="#other-pod-conditions">سایر شرایط</a>: در پاسخ به عملیات یا رویدادهای خاص تنظیم می‌شوند:
+<code dir="ltr">DisruptionTarget</code>، <code dir="ltr">PodResizePending</code>، <code dir="ltr">PodResizeInProgress</code>.</p>
+<p dir="rtl">علاوه بر شرایط درون‌ساخت بالا، می‌توانید با استفاده از
+<a href="#enhanced-pod-readiness">readiness gateهای Pod</a> شرایط سفارشی تعریف کنید.</p>
+<h2 id="شرایط-چرخه-حیات-pod-lifecycle-pod-conditions" dir="rtl">شرایط چرخه حیات Pod {#lifecycle-pod-conditions}</h2>
+<p dir="rtl">با پیشرفت Pod در چرخه حیات خود، kubelet شرایط زیر را تقریباً به این ترتیب تنظیم می‌کند:</p>
+<ol>
+<li dir="rtl"><code dir="ltr">PodScheduled</code>: Pod روی یک نود زمان‌بندی شده است.</li>
+<li dir="rtl"><code dir="ltr">PodReadyToStartContainers</code>: sandbox مربوط به Pod با موفقیت ایجاد شده و شبکه پیکربندی شده است. sandbox و شبکه توسط <span class="term" title="container-runtime">container runtime</span> و افزونه <span class="term" title="cni">CNI</span> راه‌اندازی می‌شوند.</li>
+<li dir="rtl"><code dir="ltr">Initialized</code>: همه <a href="init-containers.html">init containerها</a> با موفقیت تکمیل شده‌اند. برای Podای که init container ندارد، این شرط پیش از ایجاد sandbox روی <code dir="ltr">True</code> تنظیم می‌شود.</li>
+<li dir="rtl"><code dir="ltr">ContainersReady</code>: همه کانتینرهای Pod آماده هستند. آماده بودن یک کانتینر، در صورت پیکربندی، با <a href="probes.html#readiness-probe">readiness probe</a> آن تعیین می‌شود.</li>
+<li dir="rtl"><code dir="ltr">Ready</code>: Pod قادر به پاسخ‌گویی به درخواست‌هاست و باید به مجموعه‌های توزیع بار (load balancing) همه <a href="../../services-networking/service.html">Serviceهای</a> منطبق افزوده شود. Podهایی که <code dir="ltr">Ready</code> نیستند از endpointهای Service حذف می‌شوند.</li>
+</ol>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">شرط <code dir="ltr">Ready</code> فقط به <code dir="ltr">ContainersReady</code> وابسته نیست. اگر Pod مقدار <code dir="ltr">readinessGates</code> را مشخص کرده باشد، همه آن شرایط سفارشی نیز باید <code dir="ltr">True</code> باشند تا Pod در وضعیت <code dir="ltr">Ready</code> قرار گیرد. برای جزئیات به <a href="#enhanced-pod-readiness">آماده بودن Pod</a> مراجعه کنید.</p>
+</div>
+<p dir="rtl">می‌توانید شرایط یک Pod را با kubectl بررسی کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pod &lt;pod-name&gt; -o yaml
+</code></pre>
+<p dir="rtl">آنچه در ادامه می‌آید نشان می‌دهد <code dir="ltr">status.conditions</code> برای یک Pod در حال اجرا چگونه به نظر می‌رسد:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">status:
+  conditions:
+    - type: PodScheduled
+      status: "True"
+      lastProbeTime: null
+      lastTransitionTime: "2026-03-29T08:52:21Z"
+      observedGeneration: 1
+    - type: PodReadyToStartContainers
+      status: "True"
+      lastProbeTime: null
+      lastTransitionTime: "2026-04-11T06:02:16Z"
+      observedGeneration: 1
+    - type: Initialized
+      status: "True"
+      lastProbeTime: null
+      lastTransitionTime: "2026-03-29T08:52:21Z"
+      observedGeneration: 1
+    - type: ContainersReady
+      status: "True"
+      lastProbeTime: null
+      lastTransitionTime: "2026-04-11T06:02:45Z"
+      observedGeneration: 1
+    - type: Ready
+      status: "True"
+      lastProbeTime: null
+      lastTransitionTime: "2026-04-11T06:02:45Z"
+      observedGeneration: 1
+</code></pre>
+<h3 id="podreadytostartcontainers-pod-ready-to-start-containers" dir="ltr" class="ltr">PodReadyToStartContainers {#pod-ready-to-start-containers}</h3>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">در مراحل اولیه توسعه، این شرط <code dir="ltr">PodHasNetwork</code> نام داشت.</p>
+</div>
+<p dir="rtl">پس از آنکه یک Pod روی یک نود زمان‌بندی شد، باید توسط kubelet پذیرش شود
+و حجم‌های (volumes) ذخیره‌سازی موردنیاز آن نصب (mount) شوند. پس از تکمیل این مراحل،
+kubelet با یک container runtime همکاری می‌کند
+(با استفاده از <span class="term" title="cri">Container Runtime Interface (CRI)</span>)
+تا یک sandbox زمان اجرا راه‌اندازی کند و شبکه Pod را پیکربندی نماید.
+شرط <code dir="ltr">PodReadyToStartContainers</code> به فیلد <code dir="ltr">status.conditions</code> یک Pod افزوده می‌شود.</p>
+<p dir="rtl">زمانی که kubelet تشخیص دهد Pod فاقد sandbox زمان اجرا با شبکه پیکربندی‌شده است، این شرط را روی <code dir="ltr">False</code> تنظیم می‌کند. این وضعیت در سناریوهای زیر رخ می‌دهد:</p>
+<ul>
+<li dir="rtl">در مراحل ابتدایی چرخه حیات Pod، زمانی که kubelet هنوز با استفاده از container runtime شروع به راه‌اندازی sandbox برای Pod نکرده است.</li>
+<li dir="rtl">در مراحل بعدی چرخه حیات Pod، زمانی که sandbox مربوط به Pod به یکی از دلایل زیر از بین رفته باشد:
+<ul>
+<li dir="rtl">راه‌اندازی مجدد نود، بدون آنکه Pod اخراج (evict) شده باشد</li>
+<li dir="rtl">برای container runtimeهایی که از ماشین‌های مجازی برای ایزوله‌سازی استفاده می‌کنند، راه‌اندازی مجدد ماشین مجازی sandbox مربوط به Pod، که در نتیجه نیازمند ایجاد یک sandbox جدید و پیکربندی تازه شبکه کانتینر است.</li>
+</ul>
+</li>
+</ul>
+<p dir="rtl">شرط <code dir="ltr">PodReadyToStartContainers</code> پس از تکمیل موفقیت‌آمیز ایجاد sandbox و پیکربندی شبکه Pod توسط افزونه runtime، به‌وسیله kubelet روی <code dir="ltr">True</code> تنظیم می‌شود. kubelet می‌تواند پس از آنکه شرط <code dir="ltr">PodReadyToStartContainers</code> روی <code dir="ltr">True</code> تنظیم شد، دریافت ایمیج‌های کانتینر و ایجاد کانتینرها را آغاز کند.</p>
+<p dir="rtl">برای Podای که init container دارد، kubelet پس از تکمیل موفقیت‌آمیز init containerها (که پس از ایجاد موفق sandbox و پیکربندی شبکه توسط افزونه runtime رخ می‌دهد) شرط <code dir="ltr">Initialized</code> را روی <code dir="ltr">True</code> تنظیم می‌کند. برای Podای که init container ندارد، kubelet شرط <code dir="ltr">Initialized</code> را پیش از آغاز ایجاد sandbox و پیکربندی شبکه روی <code dir="ltr">True</code> تنظیم می‌کند.</p>
+<h2 id="سایر-شرایط-pod-other-pod-conditions" dir="rtl">سایر شرایط Pod {#other-pod-conditions}</h2>
+<p dir="rtl">شرایط زیر بخشی از روند عادی چرخه حیات Pod نیستند.
+آن‌ها در پاسخ به عملیات یا رویدادهای خاص تنظیم می‌شوند.</p>
+<h3 id="disruptiontarget-disruption-target" dir="ltr" class="ltr">DisruptionTarget {#disruption-target}</h3>
+<p dir="rtl">یک شرط اختصاصی Pod با نام <code dir="ltr">DisruptionTarget</code> افزوده می‌شود تا نشان دهد
+Pod به دلیل یک <span class="term" title="disruption">اختلال (disruption)</span> در آستانه حذف شدن است.
+فیلد <code dir="ltr">reason</code> این شرط علاوه بر آن،
+یکی از دلایل زیر را برای خاتمه یافتن Pod نشان می‌دهد:</p>
+<dl>
+<dt dir="ltr" class="ltr"><code dir="ltr">PreemptionByScheduler</code></dt>
+<dd dir="rtl">Pod قرار است توسط یک زمان‌بند به‌منظور جاسازی یک Pod جدید با اولویت بالاتر <span class="term" title="preemption">پیشدستی (preempt)</span> شود. برای اطلاعات بیشتر، به <a href="../../scheduling-eviction/pod-priority-preemption.html">پیشدستی بر اساس اولویت Pod</a> مراجعه کنید.</dd>
+<dt dir="ltr" class="ltr"><code dir="ltr">DeletionByTaintManager</code></dt>
+<dd dir="rtl">Pod قرار است توسط Taint Manager (که بخشی از کنترل‌کننده چرخه حیات نود در <code dir="ltr">kube-controller-manager</code> است) به دلیل یک taint از نوع <code dir="ltr">NoExecute</code> که Pod آن را تحمل نمی‌کند حذف شود؛ به اخراج‌های مبتنی بر <span class="term" title="taint">taint</span> مراجعه کنید.</dd>
+<dt dir="ltr" class="ltr"><code dir="ltr">EvictionByEvictionAPI</code></dt>
+<dd dir="rtl">Pod برای <span class="term" title="api-eviction">اخراج با استفاده از API کوبرنتیز</span> علامت‌گذاری شده است.</dd>
+<dt dir="ltr" class="ltr"><code dir="ltr">DeletionByPodGC</code></dt>
+<dd dir="rtl">Podای که به نودی متصل است که دیگر وجود ندارد، قرار است توسط <a href="pod-lifecycle.html#pod-garbage-collection">زباله‌روبی Pod (Pod garbage collection)</a> حذف شود.</dd>
+<dt dir="ltr" class="ltr"><code dir="ltr">TerminationByKubelet</code></dt>
+<dd dir="rtl">Pod توسط kubelet خاتمه یافته است، به یکی از دلایل <span class="term" title="node-pressure-eviction">اخراج ناشی از فشار نود</span>،
+<a href="../../architecture/nodes.html#graceful-node-shutdown">خاموش شدن مدیریت‌شده نود (graceful node shutdown)</a>،
+یا پیشدستی برای <a href="https://kubernetes.io/docs/tasks/administer-cluster/guaranteed-scheduling-critical-addon-pods/" target="_blank">Podهای حیاتی سیستم</a>.</dd>
+</dl>
+<p dir="rtl">در تمام سناریوهای اختلال دیگر، مانند اخراج به دلیل تجاوز از
+<a href="../../configuration/manage-resources-containers.html">محدودیت‌های کانتینر Pod</a>،
+Podها شرط <code dir="ltr">DisruptionTarget</code> را دریافت نمی‌کنند، زیرا این اختلال‌ها
+احتمالاً توسط خود Pod ایجاد شده‌اند و با تلاش مجدد دوباره رخ خواهند داد.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">یک اختلال در Pod ممکن است قطع شود. control plane ممکن است دوباره تلاش کند
+اختلال همان Pod را ادامه دهد، اما این امر تضمین‌شده نیست. در نتیجه،
+شرط <code dir="ltr">DisruptionTarget</code> ممکن است به یک Pod افزوده شود، ولی آن Pod در عمل حذف نشود. در چنین وضعیتی، پس از مدتی،
+شرط اختلال Pod پاک خواهد شد.</p>
+</div>
+<p dir="rtl">همزمان با پاکسازی Podها، زباله‌روب Pod (PodGC) آن‌ها را در صورتی که در فازی غیرپایانی باشند، ناموفق (failed) نیز علامت‌گذاری می‌کند
+(همچنین به <a href="pod-lifecycle.html#pod-garbage-collection">زباله‌روبی Pod</a> مراجعه کنید).</p>
+<p dir="rtl">هنگام استفاده از Job (یا CronJob)، ممکن است بخواهید از این شرایط اختلال Pod به‌عنوان بخشی از
+<a href="../controllers/job.html#pod-failure-policy">سیاست شکست Pod</a> در Job خود استفاده کنید.</p>
+<p dir="rtl">برای جزئیات بیشتر، به <a href="disruptions.html">اختلال‌ها (Disruptions)</a> مراجعه کنید.</p>
+<h3 id="podresizepending-و-podresizeinprogress-pod-resize-conditions" dir="rtl">PodResizePending و PodResizeInProgress {#pod-resize-conditions}</h3>
+<p dir="rtl">kubelet شرایط وضعیت Pod را به‌روزرسانی می‌کند تا وضعیت یک درخواست تغییر اندازه (resize) را نشان دهد:</p>
+<ul>
+<li dir="rtl"><code dir="ltr">type: PodResizePending</code>: kubelet نمی‌تواند درخواست را بلافاصله بپذیرد. فیلد <code dir="ltr">message</code> توضیح می‌دهد که چرا.
+<ul>
+<li dir="rtl"><code dir="ltr">reason: Infeasible</code>: تغییر اندازه درخواستی روی نود فعلی غیرممکن است (برای مثال، درخواست منابعی بیش از آنچه نود دارد).</li>
+<li dir="rtl"><code dir="ltr">reason: Deferred</code>: تغییر اندازه درخواستی در حال حاضر ممکن نیست، اما ممکن است بعداً شدنی شود (برای مثال اگر Pod دیگری حذف شود). kubelet دوباره تلاش خواهد کرد.</li>
+</ul>
+</li>
+<li dir="rtl"><code dir="ltr">type: PodResizeInProgress</code>: kubelet تغییر اندازه را پذیرفته و منابع را تخصیص داده است، اما تغییرات هنوز در حال اعمال شدن هستند. این مرحله معمولاً کوتاه است، اما بسته به نوع منبع و رفتار runtime ممکن است بیشتر طول بکشد. هر خطایی در حین اعمال تغییرات در فیلد <code dir="ltr">message</code> (همراه با <code dir="ltr">reason: Error</code>) گزارش می‌شود.</li>
+</ul>
+<p dir="rtl">اگر تغییر اندازه درخواستی در وضعیت <em>Deferred</em> باشد، kubelet به‌صورت دوره‌ای دوباره تلاش می‌کند تغییر اندازه را انجام دهد، برای مثال زمانی که Pod دیگری حذف یا کوچک‌مقیاس (scale down) شود.</p>
+<p dir="rtl">برای جزئیات بیشتر درباره تغییر اندازه Pod، به <a href="https://kubernetes.io/docs/tasks/configure-pod-container/resize-container-resources/" target="_blank">تغییر اندازه منابع CPU و حافظه تخصیص‌یافته به کانتینرها</a> مراجعه کنید.</p>
+<h2 id="آماده-بودن-پیشرفته-pod-enhanced-pod-readiness" dir="rtl">آماده بودن پیشرفته Pod {#enhanced-pod-readiness}</h2>
+<p dir="rtl">برنامه شما می‌تواند بازخوردها یا سیگنال‌های اضافی را به <code dir="ltr">.status</code> مربوط به Pod تزریق کند؛
+این قابلیت <em>آماده بودن پیشرفته Pod</em> (enhanced Pod readiness) نامیده می‌شود.
+برای استفاده از آن، مقدار <code dir="ltr">readinessGates</code> را در <code dir="ltr">spec</code> مربوط به Pod تنظیم کنید تا فهرستی از
+شرایط اضافی را که kubelet برای آماده بودن Pod ارزیابی می‌کند مشخص نمایید.
+سپس یک کنترل‌کننده پیاده‌سازی یا نصب می‌کنید که این شرایط سفارشی را مدیریت کند،
+و kubelet از آن به‌عنوان ورودی اضافی برای تصمیم‌گیری درباره آماده بودن Pod استفاده می‌کند.</p>
+<p dir="rtl">readiness gateها بر اساس وضعیت فعلی فیلدهای <code dir="ltr">status.condition</code> مربوط به Pod تعیین می‌شوند.
+اگر کوبرنتیز نتواند چنین شرطی را در فیلد <code dir="ltr">status.conditions</code> یک Pod پیدا کند، وضعیت آن شرط به‌طور پیش‌فرض "<code dir="ltr">False</code>" در نظر گرفته می‌شود.</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">kind: Pod
+...
+spec:
+  readinessGates:
+    - conditionType: "www.example.com/feature-1"
+status:
+  conditions:
+    - type: Ready                              # a built-in PodCondition
+      status: "False"
+      lastProbeTime: null
+      lastTransitionTime: 2018-01-01T00:00:00Z
+    - type: "www.example.com/feature-1"        # an extra PodCondition
+      status: "False"
+      lastProbeTime: null
+      lastTransitionTime: 2018-01-01T00:00:00Z
+  containerStatuses:
+    - containerID: docker://abcd...
+      ready: true
+...
+</code></pre>
+<p dir="rtl">شرایط Pod که اضافه می‌کنید باید نام‌هایی داشته باشند که با <a href="../../overview/working-with-objects/labels.html#syntax-and-character-set">قالب کلید برچسب</a> کوبرنتیز مطابقت داشته باشد.</p>
+<h3 id="وضعیت-برای-آماده-بودن-pod-status-for-pod-readiness" dir="rtl">وضعیت برای آماده بودن Pod {#status-for-pod-readiness}</h3>
+<p dir="rtl">برای تنظیم این <code dir="ltr">status.conditions</code> در Pod، برنامه‌ها و
+<span class="term" title="operator-pattern">اپراتورها</span> باید از
+عمل <code dir="ltr">PATCH</code> روی زیرمنبع status مربوط به Pod استفاده کنند. می‌توانید از <code dir="ltr">kubectl patch</code>
+همراه با <code dir="ltr">--subresource=status</code> یا یک <a href="https://kubernetes.io/docs/reference/using-api/client-libraries/" target="_blank">کتابخانه کلاینت کوبرنتیز</a> برای نوشتن
+کدی استفاده کنید که شرایط سفارشی Pod را برای آماده بودن Pod تنظیم می‌کند.</p>
+<p dir="rtl">برای Podای که از شرایط سفارشی استفاده می‌کند، آن Pod <strong>فقط</strong> زمانی آماده ارزیابی می‌شود که هر دو گزاره زیر برقرار باشند:</p>
+<ul>
+<li dir="rtl">همه کانتینرهای Pod آماده باشند.</li>
+<li dir="rtl">همه شرایط مشخص‌شده در <code dir="ltr">readinessGates</code> برابر <code dir="ltr">True</code> باشند.</li>
+</ul>
+<p dir="rtl">هنگامی که کانتینرهای یک Pod آماده (Ready) هستند اما دست‌کم یک شرط سفارشی وجود ندارد یا <code dir="ltr">False</code> است،
+kubelet شرط <code dir="ltr">Ready</code> مربوط به Pod را با <code dir="ltr">status: "False"</code> و <code dir="ltr">reason: ReadinessGatesNotReady</code> تنظیم می‌کند.</p>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<ul>
+<li dir="rtl">درباره <a href="pod-lifecycle.html">چرخه حیات Pod</a> بیاموزید.</li>
+<li dir="rtl">درباره <a href="disruptions.html">اختلال‌ها (Disruptions)</a> بیاموزید.</li>
+<li dir="rtl">درباره <a href="probes.html">probeهای کانتینر</a> و چگونگی تأثیر آن‌ها بر آماده بودن Pod بیاموزید.</li>
+<li dir="rtl">بیاموزید چگونه <a href="https://kubernetes.io/docs/tasks/configure-pod-container/resize-container-resources/" target="_blank">منابع Pod را به‌صورت درجا (in-place) تغییر اندازه دهید</a>.</li>
+</ul>
+</main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#ساختار-شرط-pod-structure-of-a-pod-condition">ساختار شرط Pod {#structure-of-a-pod-condition}</a><a class="l2" href="#شرایط-درون-ساخت-pod-built-in-pod-conditions">شرایط درون‌ساخت Pod {#built-in-pod-conditions}</a><a class="l2" href="#شرایط-چرخه-حیات-pod-lifecycle-pod-conditions">شرایط چرخه حیات Pod {#lifecycle-pod-conditions}</a><a class="l3" href="#podreadytostartcontainers-pod-ready-to-start-containers">PodReadyToStartContainers {#pod-ready-to-start-containers}</a><a class="l2" href="#سایر-شرایط-pod-other-pod-conditions">سایر شرایط Pod {#other-pod-conditions}</a><a class="l3" href="#disruptiontarget-disruption-target">DisruptionTarget {#disruption-target}</a><a class="l3" href="#podresizepending-و-podresizeinprogress-pod-resize-conditions">PodResizePending و PodResizeInProgress {#pod-resize-conditions}</a><a class="l2" href="#آماده-بودن-پیشرفته-pod-enhanced-pod-readiness">آماده بودن پیشرفته Pod {#enhanced-pod-readiness}</a><a class="l3" href="#وضعیت-برای-آماده-بودن-pod-status-for-pod-readiness">وضعیت برای آماده بودن Pod {#status-for-pod-readiness}</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>

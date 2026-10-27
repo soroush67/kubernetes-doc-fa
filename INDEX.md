@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-193 از 1722 صفحه
+208 از 1722 صفحه
 
 
 ## `.`
@@ -240,7 +240,7 @@
 - ✅ [cron-jobs.md](md/concepts/workloads/controllers/cron-jobs.md)
 - ✅ [daemonset.md](md/concepts/workloads/controllers/daemonset.md)
 - ✅ [deployment.md](md/concepts/workloads/controllers/deployment.md)
-- ⏳ `job.md`
+- ✅ [job.md](md/concepts/workloads/controllers/job.md)
 - ✅ [replicaset.md](md/concepts/workloads/controllers/replicaset.md)
 - ✅ [replicationcontroller.md](md/concepts/workloads/controllers/replicationcontroller.md)
 - ✅ [statefulset.md](md/concepts/workloads/controllers/statefulset.md)
@@ -259,9 +259,9 @@
 - ✅ [downward-api.md](md/concepts/workloads/pods/downward-api.md)
 - ✅ [ephemeral-containers.md](md/concepts/workloads/pods/ephemeral-containers.md)
 - ✅ [init-containers.md](md/concepts/workloads/pods/init-containers.md)
-- ⏳ `pod-condition.md`
-- ⏳ `pod-hostname.md`
-- ⏳ `pod-lifecycle.md`
+- ✅ [pod-condition.md](md/concepts/workloads/pods/pod-condition.md)
+- ✅ [pod-hostname.md](md/concepts/workloads/pods/pod-hostname.md)
+- ✅ [pod-lifecycle.md](md/concepts/workloads/pods/pod-lifecycle.md)
 - ✅ [pod-qos.md](md/concepts/workloads/pods/pod-qos.md)
 - ✅ [probes.md](md/concepts/workloads/pods/probes.md)
 - ✅ [scheduling-group.md](md/concepts/workloads/pods/scheduling-group.md)
@@ -282,7 +282,7 @@
 - ✅ [_index.md](md/contribute/_index.md)
 - ✅ [advanced.md](md/contribute/advanced.md)
 - ✅ [analytics.md](md/contribute/analytics.md)
-- ⏳ `docs.md`
+- ⚠️ [docs.md](md/contribute/docs.md)
 - ⏳ `localization.md`
 - ⏳ `suggesting-improvements.md`
 
@@ -297,16 +297,16 @@
 
 ## `contribute/generate-ref-docs`
 
-- ⏳ `_index.md`
-- ⏳ `config-api.md`
-- ⏳ `contribute-upstream.md`
-- ⏳ `kubectl.md`
-- ⏳ `kubernetes-api.md`
-- ⏳ `kubernetes-components.md`
-- ⏳ `metrics-reference.md`
-- ⏳ `prerequisites-ref-docs.md`
-- ⏳ `quickstart.md`
-- ⏳ `release-generation.md`
+- ✅ [_index.md](md/contribute/generate-ref-docs/_index.md)
+- ✅ [config-api.md](md/contribute/generate-ref-docs/config-api.md)
+- ✅ [contribute-upstream.md](md/contribute/generate-ref-docs/contribute-upstream.md)
+- ✅ [kubectl.md](md/contribute/generate-ref-docs/kubectl.md)
+- ✅ [kubernetes-api.md](md/contribute/generate-ref-docs/kubernetes-api.md)
+- ✅ [kubernetes-components.md](md/contribute/generate-ref-docs/kubernetes-components.md)
+- ✅ [metrics-reference.md](md/contribute/generate-ref-docs/metrics-reference.md)
+- ✅ [prerequisites-ref-docs.md](md/contribute/generate-ref-docs/prerequisites-ref-docs.md)
+- ✅ [quickstart.md](md/contribute/generate-ref-docs/quickstart.md)
+- ✅ [release-generation.md](md/contribute/generate-ref-docs/release-generation.md)
 
 ## `contribute/new-content`
 
