@@ -9,7 +9,7 @@
 | | |
 |---|---|
 | پیشرفت (بر اساس کلمات) | **20.0٪** |
-| صفحات ترجمه‌شده | 538 از 1722 |
+| صفحات ترجمه‌شده | 553 از 1722 |
 | صفحات دارای ایراد ساختاری | 9 |
 | نسخه‌ی منبع انگلیسی | `ed70e311737a` |
 
@@ -72,7 +72,7 @@ cd kubernetes-doc-fa
 | `contribute` | 44 | 44 |
 | `doc-contributor-tools` | 1 | 1 |
 | `home` | 2 | 2 |
-| `reference` | 303 | 1198 |
+| `reference` | 318 | 1198 |
 | `setup` | 0 | 22 |
 | `tasks` | 0 | 221 |
 | `tutorials` | 0 | 45 |
@@ -91,26 +91,26 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [reference/command-line-tools-reference/feature-gates/NonPreemptingPriority.md](md/reference/command-line-tools-reference/feature-gates/NonPreemptingPriority.md) — 2026-10-27T16:59:13+03:30
+- [reference/command-line-tools-reference/feature-gates/NodeSwap.md](md/reference/command-line-tools-reference/feature-gates/NodeSwap.md) — 2026-10-27T16:59:05+03:30
+- [reference/command-line-tools-reference/feature-gates/NodeOutOfServiceVolumeDetach.md](md/reference/command-line-tools-reference/feature-gates/NodeOutOfServiceVolumeDetach.md) — 2026-10-27T16:59:03+03:30
+- [reference/command-line-tools-reference/feature-gates/NodeLifecycleConditions.md](md/reference/command-line-tools-reference/feature-gates/NodeLifecycleConditions.md) — 2026-10-27T16:58:56+03:30
+- [reference/command-line-tools-reference/feature-gates/NodeLogQuery.md](md/reference/command-line-tools-reference/feature-gates/NodeLogQuery.md) — 2026-10-27T16:58:56+03:30
+- [reference/command-line-tools-reference/feature-gates/NodeInclusionPolicyInPodTopologySpread.md](md/reference/command-line-tools-reference/feature-gates/NodeInclusionPolicyInPodTopologySpread.md) — 2026-10-27T16:58:51+03:30
+- [reference/command-line-tools-reference/feature-gates/NodeLease.md](md/reference/command-line-tools-reference/feature-gates/NodeLease.md) — 2026-10-27T16:58:51+03:30
+- [reference/command-line-tools-reference/feature-gates/NodeDisruptionExclusion.md](md/reference/command-line-tools-reference/feature-gates/NodeDisruptionExclusion.md) — 2026-10-27T16:58:44+03:30
+- [reference/command-line-tools-reference/feature-gates/NodeDeclaredFeatures.md](md/reference/command-line-tools-reference/feature-gates/NodeDeclaredFeatures.md) — 2026-10-27T16:58:42+03:30
+- [reference/command-line-tools-reference/feature-gates/NetworkPolicyStatus.md](md/reference/command-line-tools-reference/feature-gates/NetworkPolicyStatus.md) — 2026-10-27T16:58:38+03:30
+- [reference/command-line-tools-reference/feature-gates/NewVolumeManagerReconstruction.md](md/reference/command-line-tools-reference/feature-gates/NewVolumeManagerReconstruction.md) — 2026-10-27T16:58:38+03:30
+- [reference/command-line-tools-reference/feature-gates/NetworkPolicyEndPort.md](md/reference/command-line-tools-reference/feature-gates/NetworkPolicyEndPort.md) — 2026-10-27T16:58:29+03:30
+- [reference/command-line-tools-reference/feature-gates/NativeHistograms.md](md/reference/command-line-tools-reference/feature-gates/NativeHistograms.md) — 2026-10-27T16:58:27+03:30
+- [reference/command-line-tools-reference/feature-gates/NamespaceDefaultLabelName.md](md/reference/command-line-tools-reference/feature-gates/NamespaceDefaultLabelName.md) — 2026-10-27T16:58:22+03:30
+- [reference/command-line-tools-reference/feature-gates/NFTablesProxyMode.md](md/reference/command-line-tools-reference/feature-gates/NFTablesProxyMode.md) — 2026-10-27T16:58:16+03:30
 - [reference/command-line-tools-reference/feature-gates/MutatingAdmissionPolicy.md](md/reference/command-line-tools-reference/feature-gates/MutatingAdmissionPolicy.md) — 2026-10-27T16:58:15+03:30
 - [reference/command-line-tools-reference/feature-gates/MutablePodResourcesForSuspendedJobs.md](md/reference/command-line-tools-reference/feature-gates/MutablePodResourcesForSuspendedJobs.md) — 2026-10-27T16:58:10+03:30
 - [reference/command-line-tools-reference/feature-gates/MutableSchedulingDirectivesForSuspendedJobs.md](md/reference/command-line-tools-reference/feature-gates/MutableSchedulingDirectivesForSuspendedJobs.md) — 2026-10-27T16:58:08+03:30
 - [reference/command-line-tools-reference/feature-gates/MutablePVNodeAffinity.md](md/reference/command-line-tools-reference/feature-gates/MutablePVNodeAffinity.md) — 2026-10-27T16:58:05+03:30
 - [reference/command-line-tools-reference/feature-gates/MutableCSINodeAllocatableCount.md](md/reference/command-line-tools-reference/feature-gates/MutableCSINodeAllocatableCount.md) — 2026-10-27T16:58:03+03:30
-- [reference/command-line-tools-reference/feature-gates/MultiCIDRServiceAllocator.md](md/reference/command-line-tools-reference/feature-gates/MultiCIDRServiceAllocator.md) — 2026-10-27T16:57:59+03:30
-- [reference/command-line-tools-reference/feature-gates/MultiCIDRRangeAllocator.md](md/reference/command-line-tools-reference/feature-gates/MultiCIDRRangeAllocator.md) — 2026-10-27T16:57:54+03:30
-- [reference/command-line-tools-reference/feature-gates/MountPropagation.md](md/reference/command-line-tools-reference/feature-gates/MountPropagation.md) — 2026-10-27T16:57:53+03:30
-- [reference/command-line-tools-reference/feature-gates/MountContainers.md](md/reference/command-line-tools-reference/feature-gates/MountContainers.md) — 2026-10-27T16:57:49+03:30
-- [reference/command-line-tools-reference/feature-gates/MixedProtocolLBService.md](md/reference/command-line-tools-reference/feature-gates/MixedProtocolLBService.md) — 2026-10-27T16:57:45+03:30
-- [reference/command-line-tools-reference/feature-gates/MinimizeIPTablesRestore.md](md/reference/command-line-tools-reference/feature-gates/MinimizeIPTablesRestore.md) — 2026-10-27T16:57:41+03:30
-- [reference/command-line-tools-reference/feature-gates/MinDomainsInPodTopologySpread.md](md/reference/command-line-tools-reference/feature-gates/MinDomainsInPodTopologySpread.md) — 2026-10-27T16:57:38+03:30
-- [reference/command-line-tools-reference/feature-gates/MemoryQoS.md](md/reference/command-line-tools-reference/feature-gates/MemoryQoS.md) — 2026-10-27T16:57:35+03:30
-- [reference/command-line-tools-reference/feature-gates/MemoryManager.md](md/reference/command-line-tools-reference/feature-gates/MemoryManager.md) — 2026-10-27T16:57:31+03:30
-- [reference/command-line-tools-reference/feature-gates/MatchLabelKeysInPodTopologySpreadSelectorMerge.md](md/reference/command-line-tools-reference/feature-gates/MatchLabelKeysInPodTopologySpreadSelectorMerge.md) — 2026-10-27T16:57:17+03:30
-- [reference/command-line-tools-reference/feature-gates/MaxUnavailableStatefulSet.md](md/reference/command-line-tools-reference/feature-gates/MaxUnavailableStatefulSet.md) — 2026-10-27T16:57:17+03:30
-- [reference/command-line-tools-reference/feature-gates/MatchLabelKeysInPodAffinity.md](md/reference/command-line-tools-reference/feature-gates/MatchLabelKeysInPodAffinity.md) — 2026-10-27T16:57:08+03:30
-- [reference/command-line-tools-reference/feature-gates/MatchLabelKeysInPodTopologySpread.md](md/reference/command-line-tools-reference/feature-gates/MatchLabelKeysInPodTopologySpread.md) — 2026-10-27T16:57:08+03:30
-- [reference/command-line-tools-reference/feature-gates/LoggingBetaOptions.md](md/reference/command-line-tools-reference/feature-gates/LoggingBetaOptions.md) — 2026-10-27T16:57:02+03:30
-- [reference/command-line-tools-reference/feature-gates/ManifestBasedAdmissionControlConfig.md](md/reference/command-line-tools-reference/feature-gates/ManifestBasedAdmissionControlConfig.md) — 2026-10-27T16:57:00+03:30
 
 </div>
 

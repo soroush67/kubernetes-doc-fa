@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-538 از 1722 صفحه
+553 از 1722 صفحه
 
 
 ## `.`
@@ -674,22 +674,22 @@
 - ✅ [MutablePodResourcesForSuspendedJobs.md](md/reference/command-line-tools-reference/feature-gates/MutablePodResourcesForSuspendedJobs.md)
 - ✅ [MutableSchedulingDirectivesForSuspendedJobs.md](md/reference/command-line-tools-reference/feature-gates/MutableSchedulingDirectivesForSuspendedJobs.md)
 - ✅ [MutatingAdmissionPolicy.md](md/reference/command-line-tools-reference/feature-gates/MutatingAdmissionPolicy.md)
-- ⏳ `NFTablesProxyMode.md`
-- ⏳ `NamespaceDefaultLabelName.md`
-- ⏳ `NativeHistograms.md`
-- ⏳ `NetworkPolicyEndPort.md`
-- ⏳ `NetworkPolicyStatus.md`
-- ⏳ `NewVolumeManagerReconstruction.md`
-- ⏳ `NodeDeclaredFeatures.md`
-- ⏳ `NodeDisruptionExclusion.md`
-- ⏳ `NodeInclusionPolicyInPodTopologySpread.md`
-- ⏳ `NodeLease.md`
-- ⏳ `NodeLifecycleConditions.md`
-- ⏳ `NodeLogQuery.md`
-- ⏳ `NodeOutOfServiceVolumeDetach.md`
-- ⏳ `NodeSwap.md`
+- ✅ [NFTablesProxyMode.md](md/reference/command-line-tools-reference/feature-gates/NFTablesProxyMode.md)
+- ✅ [NamespaceDefaultLabelName.md](md/reference/command-line-tools-reference/feature-gates/NamespaceDefaultLabelName.md)
+- ✅ [NativeHistograms.md](md/reference/command-line-tools-reference/feature-gates/NativeHistograms.md)
+- ✅ [NetworkPolicyEndPort.md](md/reference/command-line-tools-reference/feature-gates/NetworkPolicyEndPort.md)
+- ✅ [NetworkPolicyStatus.md](md/reference/command-line-tools-reference/feature-gates/NetworkPolicyStatus.md)
+- ✅ [NewVolumeManagerReconstruction.md](md/reference/command-line-tools-reference/feature-gates/NewVolumeManagerReconstruction.md)
+- ✅ [NodeDeclaredFeatures.md](md/reference/command-line-tools-reference/feature-gates/NodeDeclaredFeatures.md)
+- ✅ [NodeDisruptionExclusion.md](md/reference/command-line-tools-reference/feature-gates/NodeDisruptionExclusion.md)
+- ✅ [NodeInclusionPolicyInPodTopologySpread.md](md/reference/command-line-tools-reference/feature-gates/NodeInclusionPolicyInPodTopologySpread.md)
+- ✅ [NodeLease.md](md/reference/command-line-tools-reference/feature-gates/NodeLease.md)
+- ✅ [NodeLifecycleConditions.md](md/reference/command-line-tools-reference/feature-gates/NodeLifecycleConditions.md)
+- ✅ [NodeLogQuery.md](md/reference/command-line-tools-reference/feature-gates/NodeLogQuery.md)
+- ✅ [NodeOutOfServiceVolumeDetach.md](md/reference/command-line-tools-reference/feature-gates/NodeOutOfServiceVolumeDetach.md)
+- ✅ [NodeSwap.md](md/reference/command-line-tools-reference/feature-gates/NodeSwap.md)
 - ⏳ `NominatedNodeNameForExpectation.md`
-- ⏳ `NonPreemptingPriority.md`
+- ✅ [NonPreemptingPriority.md](md/reference/command-line-tools-reference/feature-gates/NonPreemptingPriority.md)
 - ⏳ `OpenAPIEnums.md`
 - ⏳ `OpenAPIV3.md`
 - ⏳ `OpportunisticBatching.md`
