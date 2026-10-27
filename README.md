@@ -9,7 +9,7 @@
 | | |
 |---|---|
 | پیشرفت (بر اساس کلمات) | **20.1٪** |
-| صفحات ترجمه‌شده | 568 از 1722 |
+| صفحات ترجمه‌شده | 583 از 1722 |
 | صفحات دارای ایراد ساختاری | 9 |
 | نسخه‌ی منبع انگلیسی | `ed70e311737a` |
 
@@ -72,7 +72,7 @@ cd kubernetes-doc-fa
 | `contribute` | 44 | 44 |
 | `doc-contributor-tools` | 1 | 1 |
 | `home` | 2 | 2 |
-| `reference` | 333 | 1198 |
+| `reference` | 348 | 1198 |
 | `setup` | 0 | 22 |
 | `tasks` | 0 | 221 |
 | `tutorials` | 0 | 45 |
@@ -91,26 +91,26 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [reference/command-line-tools-reference/feature-gates/PodReadyToStartContainersCondition.md](md/reference/command-line-tools-reference/feature-gates/PodReadyToStartContainersCondition.md) — 2026-10-27T17:01:11+03:30
+- [reference/command-line-tools-reference/feature-gates/PodReadinessGates.md](md/reference/command-line-tools-reference/feature-gates/PodReadinessGates.md) — 2026-10-27T17:01:05+03:30
+- [reference/command-line-tools-reference/feature-gates/PodOverhead.md](md/reference/command-line-tools-reference/feature-gates/PodOverhead.md) — 2026-10-27T17:01:01+03:30
+- [reference/command-line-tools-reference/feature-gates/PodPriority.md](md/reference/command-line-tools-reference/feature-gates/PodPriority.md) — 2026-10-27T17:00:59+03:30
+- [reference/command-line-tools-reference/feature-gates/PodObservedGenerationTracking.md](md/reference/command-line-tools-reference/feature-gates/PodObservedGenerationTracking.md) — 2026-10-27T17:00:53+03:30
+- [reference/command-line-tools-reference/feature-gates/PodLogsQuerySplitStreams.md](md/reference/command-line-tools-reference/feature-gates/PodLogsQuerySplitStreams.md) — 2026-10-27T17:00:52+03:30
+- [reference/command-line-tools-reference/feature-gates/PodLifecycleSleepAction.md](md/reference/command-line-tools-reference/feature-gates/PodLifecycleSleepAction.md) — 2026-10-27T17:00:47+03:30
+- [reference/command-line-tools-reference/feature-gates/PodLifecycleSleepActionAllowZero.md](md/reference/command-line-tools-reference/feature-gates/PodLifecycleSleepActionAllowZero.md) — 2026-10-27T17:00:45+03:30
+- [reference/command-line-tools-reference/feature-gates/PodLevelResourceManagers.md](md/reference/command-line-tools-reference/feature-gates/PodLevelResourceManagers.md) — 2026-10-27T17:00:34+03:30
+- [reference/command-line-tools-reference/feature-gates/PodLevelResources.md](md/reference/command-line-tools-reference/feature-gates/PodLevelResources.md) — 2026-10-27T17:00:34+03:30
+- [reference/command-line-tools-reference/feature-gates/PodHostIPs.md](md/reference/command-line-tools-reference/feature-gates/PodHostIPs.md) — 2026-10-27T17:00:26+03:30
+- [reference/command-line-tools-reference/feature-gates/PodIndexLabel.md](md/reference/command-line-tools-reference/feature-gates/PodIndexLabel.md) — 2026-10-27T17:00:26+03:30
+- [reference/command-line-tools-reference/feature-gates/PodGroupPreemptionPolicy.md](md/reference/command-line-tools-reference/feature-gates/PodGroupPreemptionPolicy.md) — 2026-10-27T17:00:16+03:30
+- [reference/command-line-tools-reference/feature-gates/PodHasNetworkCondition.md](md/reference/command-line-tools-reference/feature-gates/PodHasNetworkCondition.md) — 2026-10-27T17:00:14+03:30
+- [reference/command-line-tools-reference/feature-gates/PodDisruptionConditions.md](md/reference/command-line-tools-reference/feature-gates/PodDisruptionConditions.md) — 2026-10-27T17:00:08+03:30
 - [reference/command-line-tools-reference/feature-gates/PodDisruptionBudget.md](md/reference/command-line-tools-reference/feature-gates/PodDisruptionBudget.md) — 2026-10-27T17:00:01+03:30
 - [reference/command-line-tools-reference/feature-gates/PodDeletionCost.md](md/reference/command-line-tools-reference/feature-gates/PodDeletionCost.md) — 2026-10-27T16:59:58+03:30
 - [reference/command-line-tools-reference/feature-gates/PodCertificateRequest.md](md/reference/command-line-tools-reference/feature-gates/PodCertificateRequest.md) — 2026-10-27T16:59:56+03:30
 - [reference/command-line-tools-reference/feature-gates/PodAndContainerStatsFromCRI.md](md/reference/command-line-tools-reference/feature-gates/PodAndContainerStatsFromCRI.md) — 2026-10-27T16:59:52+03:30
 - [reference/command-line-tools-reference/feature-gates/PodAffinityNamespaceSelector.md](md/reference/command-line-tools-reference/feature-gates/PodAffinityNamespaceSelector.md) — 2026-10-27T16:59:51+03:30
-- [reference/command-line-tools-reference/feature-gates/PersistentVolumeLastPhaseTransitionTime.md](md/reference/command-line-tools-reference/feature-gates/PersistentVolumeLastPhaseTransitionTime.md) — 2026-10-27T16:59:45+03:30
-- [reference/command-line-tools-reference/feature-gates/PersistentVolumeClaimUnusedSinceTime.md](md/reference/command-line-tools-reference/feature-gates/PersistentVolumeClaimUnusedSinceTime.md) — 2026-10-27T16:59:44+03:30
-- [reference/command-line-tools-reference/feature-gates/PersistentLocalVolumes.md](md/reference/command-line-tools-reference/feature-gates/PersistentLocalVolumes.md) — 2026-10-27T16:59:38+03:30
-- [reference/command-line-tools-reference/feature-gates/PVCProtection.md](md/reference/command-line-tools-reference/feature-gates/PVCProtection.md) — 2026-10-27T16:59:37+03:30
-- [reference/command-line-tools-reference/feature-gates/PDBUnhealthyPodEvictionPolicy.md](md/reference/command-line-tools-reference/feature-gates/PDBUnhealthyPodEvictionPolicy.md) — 2026-10-27T16:59:32+03:30
-- [reference/command-line-tools-reference/feature-gates/OrderedNamespaceDeletion.md](md/reference/command-line-tools-reference/feature-gates/OrderedNamespaceDeletion.md) — 2026-10-27T16:59:31+03:30
-- [reference/command-line-tools-reference/feature-gates/OpportunisticBatching.md](md/reference/command-line-tools-reference/feature-gates/OpportunisticBatching.md) — 2026-10-27T16:59:26+03:30
-- [reference/command-line-tools-reference/feature-gates/OpenAPIV3.md](md/reference/command-line-tools-reference/feature-gates/OpenAPIV3.md) — 2026-10-27T16:59:24+03:30
-- [reference/command-line-tools-reference/feature-gates/OpenAPIEnums.md](md/reference/command-line-tools-reference/feature-gates/OpenAPIEnums.md) — 2026-10-27T16:59:18+03:30
-- [reference/command-line-tools-reference/feature-gates/NominatedNodeNameForExpectation.md](md/reference/command-line-tools-reference/feature-gates/NominatedNodeNameForExpectation.md) — 2026-10-27T16:59:13+03:30
-- [reference/command-line-tools-reference/feature-gates/NonPreemptingPriority.md](md/reference/command-line-tools-reference/feature-gates/NonPreemptingPriority.md) — 2026-10-27T16:59:13+03:30
-- [reference/command-line-tools-reference/feature-gates/NodeSwap.md](md/reference/command-line-tools-reference/feature-gates/NodeSwap.md) — 2026-10-27T16:59:05+03:30
-- [reference/command-line-tools-reference/feature-gates/NodeOutOfServiceVolumeDetach.md](md/reference/command-line-tools-reference/feature-gates/NodeOutOfServiceVolumeDetach.md) — 2026-10-27T16:59:03+03:30
-- [reference/command-line-tools-reference/feature-gates/NodeLifecycleConditions.md](md/reference/command-line-tools-reference/feature-gates/NodeLifecycleConditions.md) — 2026-10-27T16:58:56+03:30
-- [reference/command-line-tools-reference/feature-gates/NodeLogQuery.md](md/reference/command-line-tools-reference/feature-gates/NodeLogQuery.md) — 2026-10-27T16:58:56+03:30
 
 </div>
 

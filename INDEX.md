@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-568 از 1722 صفحه
+583 از 1722 صفحه
 
 
 ## `.`
@@ -704,21 +704,21 @@
 - ✅ [PodCertificateRequest.md](md/reference/command-line-tools-reference/feature-gates/PodCertificateRequest.md)
 - ✅ [PodDeletionCost.md](md/reference/command-line-tools-reference/feature-gates/PodDeletionCost.md)
 - ✅ [PodDisruptionBudget.md](md/reference/command-line-tools-reference/feature-gates/PodDisruptionBudget.md)
-- ⏳ `PodDisruptionConditions.md`
-- ⏳ `PodGroupPreemptionPolicy.md`
-- ⏳ `PodHasNetworkCondition.md`
-- ⏳ `PodHostIPs.md`
-- ⏳ `PodIndexLabel.md`
-- ⏳ `PodLevelResourceManagers.md`
-- ⏳ `PodLevelResources.md`
-- ⏳ `PodLifecycleSleepAction.md`
-- ⏳ `PodLifecycleSleepActionAllowZero.md`
-- ⏳ `PodLogsQuerySplitStreams.md`
-- ⏳ `PodObservedGenerationTracking.md`
-- ⏳ `PodOverhead.md`
-- ⏳ `PodPriority.md`
-- ⏳ `PodReadinessGates.md`
-- ⏳ `PodReadyToStartContainersCondition.md`
+- ✅ [PodDisruptionConditions.md](md/reference/command-line-tools-reference/feature-gates/PodDisruptionConditions.md)
+- ✅ [PodGroupPreemptionPolicy.md](md/reference/command-line-tools-reference/feature-gates/PodGroupPreemptionPolicy.md)
+- ✅ [PodHasNetworkCondition.md](md/reference/command-line-tools-reference/feature-gates/PodHasNetworkCondition.md)
+- ✅ [PodHostIPs.md](md/reference/command-line-tools-reference/feature-gates/PodHostIPs.md)
+- ✅ [PodIndexLabel.md](md/reference/command-line-tools-reference/feature-gates/PodIndexLabel.md)
+- ✅ [PodLevelResourceManagers.md](md/reference/command-line-tools-reference/feature-gates/PodLevelResourceManagers.md)
+- ✅ [PodLevelResources.md](md/reference/command-line-tools-reference/feature-gates/PodLevelResources.md)
+- ✅ [PodLifecycleSleepAction.md](md/reference/command-line-tools-reference/feature-gates/PodLifecycleSleepAction.md)
+- ✅ [PodLifecycleSleepActionAllowZero.md](md/reference/command-line-tools-reference/feature-gates/PodLifecycleSleepActionAllowZero.md)
+- ✅ [PodLogsQuerySplitStreams.md](md/reference/command-line-tools-reference/feature-gates/PodLogsQuerySplitStreams.md)
+- ✅ [PodObservedGenerationTracking.md](md/reference/command-line-tools-reference/feature-gates/PodObservedGenerationTracking.md)
+- ✅ [PodOverhead.md](md/reference/command-line-tools-reference/feature-gates/PodOverhead.md)
+- ✅ [PodPriority.md](md/reference/command-line-tools-reference/feature-gates/PodPriority.md)
+- ✅ [PodReadinessGates.md](md/reference/command-line-tools-reference/feature-gates/PodReadinessGates.md)
+- ✅ [PodReadyToStartContainersCondition.md](md/reference/command-line-tools-reference/feature-gates/PodReadyToStartContainersCondition.md)
 - ⏳ `PodSchedulingReadiness.md`
 - ⏳ `PodSecurity.md`
 - ⏳ `PodShareProcessNamespace.md`
