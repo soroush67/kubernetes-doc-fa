@@ -9,7 +9,7 @@
 | | |
 |---|---|
 | پیشرفت (بر اساس کلمات) | **19.9٪** |
-| صفحات ترجمه‌شده | 493 از 1722 |
+| صفحات ترجمه‌شده | 508 از 1722 |
 | صفحات دارای ایراد ساختاری | 9 |
 | نسخه‌ی منبع انگلیسی | `ed70e311737a` |
 
@@ -72,7 +72,7 @@ cd kubernetes-doc-fa
 | `contribute` | 44 | 44 |
 | `doc-contributor-tools` | 1 | 1 |
 | `home` | 2 | 2 |
-| `reference` | 258 | 1198 |
+| `reference` | 273 | 1198 |
 | `setup` | 0 | 22 |
 | `tasks` | 0 | 221 |
 | `tutorials` | 0 | 45 |
@@ -91,26 +91,26 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [reference/command-line-tools-reference/feature-gates/LegacyNodeRoleBehavior.md](md/reference/command-line-tools-reference/feature-gates/LegacyNodeRoleBehavior.md) — 2026-10-27T16:56:27+03:30
+- [reference/command-line-tools-reference/feature-gates/KubeletTracing.md](md/reference/command-line-tools-reference/feature-gates/KubeletTracing.md) — 2026-10-27T16:56:22+03:30
+- [reference/command-line-tools-reference/feature-gates/KubeletCgroupDriverFromCRI.md](md/reference/command-line-tools-reference/feature-gates/KubeletCgroupDriverFromCRI.md) — 2026-10-27T16:56:15+03:30
+- [reference/command-line-tools-reference/feature-gates/KubeletSeparateDiskGC.md](md/reference/command-line-tools-reference/feature-gates/KubeletSeparateDiskGC.md) — 2026-10-27T16:56:14+03:30
+- [reference/command-line-tools-reference/feature-gates/KubeletPodResourcesGetAllocatable.md](md/reference/command-line-tools-reference/feature-gates/KubeletPodResourcesGetAllocatable.md) — 2026-10-27T16:56:08+03:30
+- [reference/command-line-tools-reference/feature-gates/KubeletPodResourcesGet.md](md/reference/command-line-tools-reference/feature-gates/KubeletPodResourcesGet.md) — 2026-10-27T16:56:01+03:30
+- [reference/command-line-tools-reference/feature-gates/KubeletPodResourcesDynamicResources.md](md/reference/command-line-tools-reference/feature-gates/KubeletPodResourcesDynamicResources.md) — 2026-10-27T16:55:54+03:30
+- [reference/command-line-tools-reference/feature-gates/KubeletPodResources.md](md/reference/command-line-tools-reference/feature-gates/KubeletPodResources.md) — 2026-10-27T16:55:44+03:30
+- [reference/command-line-tools-reference/feature-gates/KubeletPluginsWatcher.md](md/reference/command-line-tools-reference/feature-gates/KubeletPluginsWatcher.md) — 2026-10-27T16:55:33+03:30
+- [reference/command-line-tools-reference/feature-gates/KubeletPSI.md](md/reference/command-line-tools-reference/feature-gates/KubeletPSI.md) — 2026-10-27T16:55:27+03:30
+- [reference/command-line-tools-reference/feature-gates/KubeletInUserNamespace.md](md/reference/command-line-tools-reference/feature-gates/KubeletInUserNamespace.md) — 2026-10-27T16:55:22+03:30
+- [reference/command-line-tools-reference/feature-gates/KubeletFineGrainedAuthz.md](md/reference/command-line-tools-reference/feature-gates/KubeletFineGrainedAuthz.md) — 2026-10-27T16:55:16+03:30
+- [reference/command-line-tools-reference/feature-gates/KubeletEnsureSecretPulledImages.md](md/reference/command-line-tools-reference/feature-gates/KubeletEnsureSecretPulledImages.md) — 2026-10-27T16:55:10+03:30
+- [reference/command-line-tools-reference/feature-gates/KubeletCredentialProviders.md](md/reference/command-line-tools-reference/feature-gates/KubeletCredentialProviders.md) — 2026-10-27T16:55:03+03:30
+- [reference/command-line-tools-reference/feature-gates/KubeletCrashLoopBackOffMax.md](md/reference/command-line-tools-reference/feature-gates/KubeletCrashLoopBackOffMax.md) — 2026-10-27T16:54:57+03:30
 - [reference/command-line-tools-reference/feature-gates/KubeletConfigFile.md](md/reference/command-line-tools-reference/feature-gates/KubeletConfigFile.md) — 2026-10-27T16:54:46+03:30
 - [reference/command-line-tools-reference/feature-gates/KubeProxyNFTablesLocalhostNodePorts.md](md/reference/command-line-tools-reference/feature-gates/KubeProxyNFTablesLocalhostNodePorts.md) — 2026-10-27T16:54:40+03:30
 - [reference/command-line-tools-reference/feature-gates/KubeProxyIPVS.md](md/reference/command-line-tools-reference/feature-gates/KubeProxyIPVS.md) — 2026-10-27T16:54:33+03:30
 - [reference/command-line-tools-reference/feature-gates/KubeProxyDrainingTerminatingNodes.md](md/reference/command-line-tools-reference/feature-gates/KubeProxyDrainingTerminatingNodes.md) — 2026-10-27T16:54:32+03:30
 - [reference/command-line-tools-reference/feature-gates/KMSv2.md](md/reference/command-line-tools-reference/feature-gates/KMSv2.md) — 2026-10-27T16:54:27+03:30
-- [reference/command-line-tools-reference/feature-gates/KMSv2KDF.md](md/reference/command-line-tools-reference/feature-gates/KMSv2KDF.md) — 2026-10-27T16:54:27+03:30
-- [reference/command-line-tools-reference/feature-gates/KMSv1.md](md/reference/command-line-tools-reference/feature-gates/KMSv1.md) — 2026-10-27T16:54:20+03:30
-- [reference/command-line-tools-reference/feature-gates/JobSuccessPolicy.md](md/reference/command-line-tools-reference/feature-gates/JobSuccessPolicy.md) — 2026-10-27T16:54:17+03:30
-- [reference/command-line-tools-reference/feature-gates/JobTrackingWithFinalizers.md](md/reference/command-line-tools-reference/feature-gates/JobTrackingWithFinalizers.md) — 2026-10-27T16:54:12+03:30
-- [reference/command-line-tools-reference/feature-gates/JobReadyPods.md](md/reference/command-line-tools-reference/feature-gates/JobReadyPods.md) — 2026-10-27T16:54:05+03:30
-- [reference/command-line-tools-reference/feature-gates/JobPodReplacementPolicy.md](md/reference/command-line-tools-reference/feature-gates/JobPodReplacementPolicy.md) — 2026-10-27T16:54:02+03:30
-- [reference/command-line-tools-reference/feature-gates/JobPodFailurePolicy.md](md/reference/command-line-tools-reference/feature-gates/JobPodFailurePolicy.md) — 2026-10-27T16:53:59+03:30
-- [reference/command-line-tools-reference/feature-gates/JobMutableNodeSchedulingDirectives.md](md/reference/command-line-tools-reference/feature-gates/JobMutableNodeSchedulingDirectives.md) — 2026-10-27T16:53:55+03:30
-- [reference/command-line-tools-reference/feature-gates/JobManagedBy.md](md/reference/command-line-tools-reference/feature-gates/JobManagedBy.md) — 2026-10-27T16:53:53+03:30
-- [reference/command-line-tools-reference/feature-gates/JobBackoffLimitPerIndex.md](md/reference/command-line-tools-reference/feature-gates/JobBackoffLimitPerIndex.md) — 2026-10-27T16:53:47+03:30
-- [reference/command-line-tools-reference/feature-gates/IngressClassNamespacedParams.md](md/reference/command-line-tools-reference/feature-gates/IngressClassNamespacedParams.md) — 2026-10-27T16:53:43+03:30
-- [reference/command-line-tools-reference/feature-gates/Initializers.md](md/reference/command-line-tools-reference/feature-gates/Initializers.md) — 2026-10-27T16:53:42+03:30
-- [reference/command-line-tools-reference/feature-gates/IndexedJob.md](md/reference/command-line-tools-reference/feature-gates/IndexedJob.md) — 2026-10-27T16:53:37+03:30
-- [reference/command-line-tools-reference/feature-gates/InformerResourceVersion.md](md/reference/command-line-tools-reference/feature-gates/InformerResourceVersion.md) — 2026-10-27T16:53:36+03:30
-- [reference/command-line-tools-reference/feature-gates/InTreePluginRBDUnregister.md](md/reference/command-line-tools-reference/feature-gates/InTreePluginRBDUnregister.md) — 2026-10-27T16:53:30+03:30
 
 </div>
 

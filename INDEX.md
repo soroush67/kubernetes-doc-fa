@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-493 از 1722 صفحه
+508 از 1722 صفحه
 
 
 ## `.`
@@ -628,23 +628,23 @@
 - ✅ [KubeProxyDrainingTerminatingNodes.md](md/reference/command-line-tools-reference/feature-gates/KubeProxyDrainingTerminatingNodes.md)
 - ✅ [KubeProxyIPVS.md](md/reference/command-line-tools-reference/feature-gates/KubeProxyIPVS.md)
 - ✅ [KubeProxyNFTablesLocalhostNodePorts.md](md/reference/command-line-tools-reference/feature-gates/KubeProxyNFTablesLocalhostNodePorts.md)
-- ⏳ `KubeletCgroupDriverFromCRI.md`
+- ✅ [KubeletCgroupDriverFromCRI.md](md/reference/command-line-tools-reference/feature-gates/KubeletCgroupDriverFromCRI.md)
 - ✅ [KubeletConfigFile.md](md/reference/command-line-tools-reference/feature-gates/KubeletConfigFile.md)
-- ⏳ `KubeletCrashLoopBackOffMax.md`
-- ⏳ `KubeletCredentialProviders.md`
-- ⏳ `KubeletEnsureSecretPulledImages.md`
-- ⏳ `KubeletFineGrainedAuthz.md`
-- ⏳ `KubeletInUserNamespace.md`
-- ⏳ `KubeletPSI.md`
-- ⏳ `KubeletPluginsWatcher.md`
-- ⏳ `KubeletPodResources.md`
-- ⏳ `KubeletPodResourcesDynamicResources.md`
-- ⏳ `KubeletPodResourcesGet.md`
-- ⏳ `KubeletPodResourcesGetAllocatable.md`
-- ⏳ `KubeletSeparateDiskGC.md`
+- ✅ [KubeletCrashLoopBackOffMax.md](md/reference/command-line-tools-reference/feature-gates/KubeletCrashLoopBackOffMax.md)
+- ✅ [KubeletCredentialProviders.md](md/reference/command-line-tools-reference/feature-gates/KubeletCredentialProviders.md)
+- ✅ [KubeletEnsureSecretPulledImages.md](md/reference/command-line-tools-reference/feature-gates/KubeletEnsureSecretPulledImages.md)
+- ✅ [KubeletFineGrainedAuthz.md](md/reference/command-line-tools-reference/feature-gates/KubeletFineGrainedAuthz.md)
+- ✅ [KubeletInUserNamespace.md](md/reference/command-line-tools-reference/feature-gates/KubeletInUserNamespace.md)
+- ✅ [KubeletPSI.md](md/reference/command-line-tools-reference/feature-gates/KubeletPSI.md)
+- ✅ [KubeletPluginsWatcher.md](md/reference/command-line-tools-reference/feature-gates/KubeletPluginsWatcher.md)
+- ✅ [KubeletPodResources.md](md/reference/command-line-tools-reference/feature-gates/KubeletPodResources.md)
+- ✅ [KubeletPodResourcesDynamicResources.md](md/reference/command-line-tools-reference/feature-gates/KubeletPodResourcesDynamicResources.md)
+- ✅ [KubeletPodResourcesGet.md](md/reference/command-line-tools-reference/feature-gates/KubeletPodResourcesGet.md)
+- ✅ [KubeletPodResourcesGetAllocatable.md](md/reference/command-line-tools-reference/feature-gates/KubeletPodResourcesGetAllocatable.md)
+- ✅ [KubeletSeparateDiskGC.md](md/reference/command-line-tools-reference/feature-gates/KubeletSeparateDiskGC.md)
 - ⏳ `KubeletServiceAccountTokenForCredentialProviders.md`
-- ⏳ `KubeletTracing.md`
-- ⏳ `LegacyNodeRoleBehavior.md`
+- ✅ [KubeletTracing.md](md/reference/command-line-tools-reference/feature-gates/KubeletTracing.md)
+- ✅ [LegacyNodeRoleBehavior.md](md/reference/command-line-tools-reference/feature-gates/LegacyNodeRoleBehavior.md)
 - ⏳ `LegacyServiceAccountTokenCleanUp.md`
 - ⏳ `LegacyServiceAccountTokenNoAutoGeneration.md`
 - ⏳ `LegacyServiceAccountTokenTracking.md`
