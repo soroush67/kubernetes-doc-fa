@@ -1,0 +1,434 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>معماری لاگ‌گیری | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">concepts / cluster-administration</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">معماری لاگ‌گیری</h1><!-- overview -->
+<p dir="rtl">لاگ‌های برنامه می‌توانند به شما کمک کنند بفهمید در درون برنامه‌تان چه می‌گذرد. لاگ‌ها به‌ویژه برای اشکال‌زدایی مشکلات و پایش فعالیت کلاستر مفیدند. بیشتر برنامه‌های مدرن نوعی سازوکار لاگ‌گیری دارند. همچنین موتورهای کانتینر برای پشتیبانی از لاگ‌گیری طراحی شده‌اند. ساده‌ترین و پرکاربردترین روش لاگ‌گیری برای برنامه‌های کانتینری‌شده، نوشتن در جریان‌های خروجی استاندارد (standard output) و خطای استاندارد (standard error) است.</p>
+<p dir="rtl">با این حال، قابلیت بومی ارائه‌شده توسط موتور کانتینر یا runtime معمولاً برای یک راهکار کامل لاگ‌گیری کافی نیست.</p>
+<p dir="rtl">برای مثال، ممکن است بخواهید در صورتی که یک کانتینر از کار بیفتد، یک Pod اخراج (evict) شود یا یک نود از بین برود، به لاگ‌های برنامه‌تان دسترسی داشته باشید.</p>
+<p dir="rtl">در یک کلاستر، لاگ‌ها باید ذخیره‌سازی و چرخه عمر جداگانه‌ای مستقل از نودها، Podها یا کانتینرها داشته باشند. این مفهوم
+<a href="#cluster-level-logging-architectures">لاگ‌گیری در سطح کلاستر</a> نامیده می‌شود.</p>
+<p dir="rtl">معماری‌های لاگ‌گیری در سطح کلاستر به یک backend جداگانه برای ذخیره، تحلیل و پرس‌وجوی لاگ‌ها نیاز دارند. کوبرنتیز راهکار ذخیره‌سازی بومی برای داده‌های لاگ ارائه نمی‌دهد. در عوض، راهکارهای لاگ‌گیری بسیاری وجود دارند که با کوبرنتیز یکپارچه می‌شوند. بخش‌های زیر نحوه مدیریت و ذخیره لاگ‌ها روی نودها را شرح می‌دهند.</p>
+<!-- body -->
+<h2 id="لاگ-های-pod-و-کانتینر-basic-logging-in-kubernetes" dir="rtl">لاگ‌های Pod و کانتینر {#basic-logging-in-kubernetes}</h2>
+<p dir="rtl">کوبرنتیز لاگ‌های هر کانتینر را در یک Pod در حال اجرا ثبت می‌کند.</p>
+<p dir="rtl">این مثال از مانیفست یک <code dir="ltr">Pod</code> استفاده می‌کند که در آن کانتینری هر ثانیه یک‌بار متنی را در جریان خروجی استاندارد می‌نویسد.</p>
+<div class="code-file ltr" dir="ltr">debug/counter-pod.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: Pod
+metadata:
+  name: counter
+spec:
+  containers:
+  - name: count
+    image: busybox:1.28
+    args: [/bin/sh, -c,
+            'i=0; while true; do echo "$i: $(date)"; i=$((i+1)); sleep 1; done']
+</code></pre>
+<p dir="rtl">برای اجرای این Pod از دستور زیر استفاده کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f https://k8s.io/examples/debug/counter-pod.yaml
+</code></pre>
+<p dir="rtl">خروجی به این صورت است:</p>
+<pre dir="ltr"><code class="language-console" dir="ltr">pod/counter created
+</code></pre>
+<p dir="rtl">برای دریافت لاگ‌ها، از دستور <code dir="ltr">kubectl logs</code> به‌صورت زیر استفاده کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl logs counter
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code class="language-console" dir="ltr">0: Fri Apr  1 11:42:23 UTC 2022
+1: Fri Apr  1 11:42:24 UTC 2022
+2: Fri Apr  1 11:42:25 UTC 2022
+</code></pre>
+<p dir="rtl">می‌توانید از <code dir="ltr">kubectl logs --previous</code> برای بازیابی لاگ‌های نمونه قبلی یک کانتینر استفاده کنید.
+اگر Pod شما چند کانتینر دارد، با افزودن نام کانتینر به دستور و با استفاده از فلگ <code dir="ltr">-c</code> مشخص کنید به لاگ‌های کدام کانتینر می‌خواهید دسترسی پیدا کنید، مانند زیر:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl logs counter -c count
+</code></pre>
+<h3 id="جریان-های-لاگ-کانتینر" dir="rtl">جریان‌های لاگ کانتینر</h3>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
+<p dir="rtl">به‌عنوان یک قابلیت آلفا، kubelet می‌تواند لاگ‌های دو جریان استاندارد تولیدشده توسط یک کانتینر را از یکدیگر جدا کند: <a href="https://en.wikipedia.org/wiki/Standard_streams#Standard_output_(stdout)" target="_blank" rel="noopener">خروجی استاندارد</a>
+و <a href="https://en.wikipedia.org/wiki/Standard_streams#Standard_error_(stderr)" target="_blank" rel="noopener">خطای استاندارد</a>.
+برای استفاده از این رفتار، باید
+<a href="https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/" target="_blank">feature gate</a> با نام <code dir="ltr">PodLogsQuerySplitStreams</code> را فعال کنید.
+با فعال بودن این feature gate، کوبرنتیز 1.37 امکان دسترسی مستقیم به این جریان‌های لاگ را از طریق API مربوط به Pod فراهم می‌کند. می‌توانید با مشخص کردن نام جریان (<code dir="ltr">Stdout</code> یا <code dir="ltr">Stderr</code>) از طریق query string با نام <code dir="ltr">stream</code>، یک جریان مشخص را دریافت کنید. باید به خواندن زیرمنبع <code dir="ltr">log</code> آن Pod دسترسی داشته باشید.</p>
+<p dir="rtl">برای نمایش این قابلیت، می‌توانید یک Pod ایجاد کنید که به‌صورت دوره‌ای متنی را هم در جریان خروجی استاندارد و هم در جریان خطای استاندارد می‌نویسد.</p>
+<div class="code-file ltr" dir="ltr">debug/counter-pod-err.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: Pod
+metadata:
+  name: counter-err
+spec:
+  containers:
+  - name: count
+    image: busybox:1.28
+    args: [/bin/sh, -c,
+            'i=0; while true; do echo "$i: $(date)"; echo "$i: err" &gt;&amp;2 ; i=$((i+1)); sleep 1; done']
+</code></pre>
+<p dir="rtl">برای اجرای این Pod از دستور زیر استفاده کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f https://k8s.io/examples/debug/counter-pod-err.yaml
+</code></pre>
+<p dir="rtl">برای دریافت تنها جریان لاگ stderr می‌توانید دستور زیر را اجرا کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get --raw "/api/v1/namespaces/default/pods/counter-err/log?stream=Stderr"
+</code></pre>
+<p dir="rtl">برای جزئیات بیشتر به <a href="https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#logs" target="_blank">مستندات <code dir="ltr">kubectl logs</code></a> مراجعه کنید.</p>
+<h3 id="نحوه-مدیریت-لاگ-های-کانتینر-توسط-نودها" dir="rtl">نحوه مدیریت لاگ‌های کانتینر توسط نودها</h3>
+<p><img src="/images/docs/user-guide/logging/logging-node-level.png" alt="لاگ‌گیری در سطح نود"></p>
+<p dir="rtl">یک container runtime هر خروجی تولیدشده به جریان‌های <code dir="ltr">stdout</code> و <code dir="ltr">stderr</code> یک برنامه کانتینری‌شده را مدیریت و هدایت می‌کند.
+container runtimeهای مختلف این کار را به شیوه‌های متفاوتی پیاده‌سازی می‌کنند؛ با این حال، یکپارچگی با kubelet به‌صورت <em>قالب لاگ‌گیری CRI</em> استانداردسازی شده است.</p>
+<p dir="rtl">به‌طور پیش‌فرض، اگر یک کانتینر راه‌اندازی مجدد شود، kubelet یک کانتینر خاتمه‌یافته را به‌همراه لاگ‌هایش نگه می‌دارد.
+اگر یک Pod از نود اخراج شود، تمام کانتینرهای متناظر آن نیز به‌همراه لاگ‌هایشان اخراج می‌شوند.</p>
+<p dir="rtl">kubelet لاگ‌ها را از طریق یک قابلیت ویژه API کوبرنتیز در دسترس کلاینت‌ها قرار می‌دهد.
+روش معمول دسترسی به آن اجرای <code dir="ltr">kubectl logs</code> است.</p>
+<h3 id="چرخش-لاگ-log-rotation" dir="rtl">چرخش لاگ (Log rotation)</h3>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes v1.21 [stable]</span> (پایدار)</div>
+<p dir="rtl">kubelet مسئول چرخش لاگ‌های کانتینر و مدیریت ساختار دایرکتوری لاگ‌ها است.
+kubelet این اطلاعات را (با استفاده از CRI) به container runtime ارسال می‌کند
+و runtime لاگ‌های کانتینر را در مکان داده‌شده می‌نویسد.</p>
+<p dir="rtl">می‌توانید دو تنظیم پیکربندی kubelet را
+(<a href="https://kubernetes.io/docs/reference/config-api/kubelet-config.v1beta1/" target="_blank">configuration settings</a>)
+یعنی <code dir="ltr">containerLogMaxSize</code> (پیش‌فرض 10Mi) و <code dir="ltr">containerLogMaxFiles</code> (پیش‌فرض 5)
+با استفاده از <a href="https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/" target="_blank">فایل پیکربندی kubelet</a> تنظیم کنید.
+این تنظیمات به شما امکان می‌دهند به‌ترتیب بیشینه اندازه هر فایل لاگ و بیشینه تعداد فایل‌های مجاز برای هر کانتینر را پیکربندی کنید.</p>
+<p dir="rtl">برای انجام چرخش کارآمد لاگ در کلاسترهایی که حجم لاگ‌های تولیدشده توسط بار کاری در آن‌ها زیاد است، kubelet سازوکاری نیز برای تنظیم نحوه چرخش لاگ‌ها فراهم می‌کند؛ از جمله اینکه چند چرخش هم‌زمان لاگ می‌تواند انجام شود و لاگ‌ها در چه بازه‌ای پایش و در صورت نیاز چرخانده شوند.
+می‌توانید دو تنظیم پیکربندی kubelet را
+(<a href="https://kubernetes.io/docs/reference/config-api/kubelet-config.v1beta1/" target="_blank">configuration settings</a>)
+یعنی <code dir="ltr">containerLogMaxWorkers</code> و <code dir="ltr">containerLogMonitorInterval</code> را با استفاده از
+<a href="https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/" target="_blank">فایل پیکربندی kubelet</a> تنظیم کنید.</p>
+<p dir="rtl">وقتی <a href="https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#logs" target="_blank"><code dir="ltr">kubectl logs</code></a> را مانند مثال لاگ‌گیری پایه اجرا می‌کنید، kubelet روی نود درخواست را مدیریت می‌کند و مستقیماً از فایل لاگ می‌خواند. kubelet محتوای فایل لاگ را برمی‌گرداند.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">تنها محتوای آخرین فایل لاگ از طریق <code dir="ltr">kubectl logs</code> در دسترس است.</p>
+<p dir="rtl">برای مثال، اگر یک Pod ‏40 MiB لاگ بنویسد و kubelet لاگ‌ها را پس از هر 10 MiB بچرخاند، اجرای <code dir="ltr">kubectl logs</code> حداکثر 10MiB داده برمی‌گرداند.</p>
+</div>
+<h2 id="لاگ-های-اجزای-سیستم" dir="rtl">لاگ‌های اجزای سیستم</h2>
+<p dir="rtl">دو نوع جزء سیستمی وجود دارد: اجزایی که معمولاً درون یک کانتینر اجرا می‌شوند،
+و اجزایی که مستقیماً در اجرای کانتینرها نقش دارند. برای مثال:</p>
+<ul>
+<li dir="rtl">kubelet و container runtime درون کانتینر اجرا نمی‌شوند. kubelet کانتینرهای شما را
+(که در <span class="term" title="pod">Podها</span> گروه‌بندی شده‌اند) اجرا می‌کند.</li>
+<li dir="rtl">زمان‌بند کوبرنتیز، controller manager و سرور API درون Podها اجرا می‌شوند
+(معمولاً به‌صورت <span class="term" title="static-pod">Podهای ایستا</span>).
+جزء etcd در control plane اجرا می‌شود و بیشتر اوقات نیز به‌صورت یک Pod ایستا اجرا می‌شود.
+اگر کلاستر شما از kube-proxy استفاده می‌کند، معمولاً آن را به‌صورت یک <code dir="ltr">DaemonSet</code> اجرا می‌کنید.</li>
+</ul>
+<h3 id="مکان-های-لاگ-log-location-node" dir="rtl">مکان‌های لاگ {#log-location-node}</h3>
+<p dir="rtl">نحوه نوشتن لاگ‌ها توسط kubelet و container runtime به سیستم‌عاملی که نود استفاده می‌کند بستگی دارد:</p>
+<div class="tabs">
+<div class="tab"><div class="tab-name">Linux</div>
+<p dir="rtl">در نودهای لینوکسی که از systemd استفاده می‌کنند، kubelet و container runtime به‌طور پیش‌فرض در journald می‌نویسند.
+برای خواندن ژورنال systemd از <code dir="ltr">journalctl</code> استفاده می‌کنید؛ برای مثال:
+<code dir="ltr">journalctl -u kubelet</code>.</p>
+<p dir="rtl">اگر systemd وجود نداشته باشد، kubelet و container runtime در فایل‌های <code dir="ltr">.log</code> در دایرکتوری <code dir="ltr">/var/log</code> می‌نویسند. اگر می‌خواهید لاگ‌ها در جای دیگری نوشته شوند، می‌توانید kubelet را به‌طور غیرمستقیم از طریق ابزار کمکی <code dir="ltr">kube-log-runner</code> اجرا کنید و از آن ابزار برای هدایت لاگ‌های kubelet به دایرکتوری دلخواه خود استفاده کنید.</p>
+<p dir="rtl">به‌طور پیش‌فرض، kubelet به container runtime شما دستور می‌دهد لاگ‌ها را در دایرکتوری‌هایی درون <code dir="ltr">/var/log/pods</code> بنویسد.</p>
+<p dir="rtl">برای اطلاعات بیشتر درباره <code dir="ltr">kube-log-runner</code>، <a href="system-logs.html#klog">لاگ‌های سیستم</a> را بخوانید.</p>
+</div>
+<div class="tab"><div class="tab-name">Windows</div>
+<p dir="rtl">به‌طور پیش‌فرض، kubelet لاگ‌ها را در فایل‌هایی درون دایرکتوری <code dir="ltr">C:\var\logs</code> می‌نویسد
+(توجه کنید که این <code dir="ltr">C:\var\log</code> نیست).</p>
+<p dir="rtl">اگرچه <code dir="ltr">C:\var\log</code> مکان پیش‌فرض کوبرنتیز برای این لاگ‌ها است، چند ابزار استقرار کلاستر نودهای ویندوزی را طوری تنظیم می‌کنند که به‌جای آن در <code dir="ltr">C:\var\log\kubelet</code> لاگ بنویسند.</p>
+<p dir="rtl">اگر می‌خواهید لاگ‌ها در جای دیگری نوشته شوند، می‌توانید kubelet را به‌طور غیرمستقیم از طریق ابزار کمکی <code dir="ltr">kube-log-runner</code> اجرا کنید و از آن ابزار برای هدایت لاگ‌های kubelet به دایرکتوری دلخواه خود استفاده کنید.</p>
+<p dir="rtl">با این حال، به‌طور پیش‌فرض، kubelet به container runtime شما دستور می‌دهد لاگ‌ها را درون دایرکتوری <code dir="ltr">C:\var\log\pods</code> بنویسد.</p>
+<p dir="rtl">برای اطلاعات بیشتر درباره <code dir="ltr">kube-log-runner</code>، <a href="system-logs.html#klog">لاگ‌های سیستم</a> را بخوانید.</p>
+</div>
+</div>
+<p><br><!-- work around rendering nit --></p>
+<p dir="rtl">اجزای کلاستر کوبرنتیز که درون Podها اجرا می‌شوند، در فایل‌هایی درون دایرکتوری <code dir="ltr">/var/log</code> می‌نویسند و سازوکار پیش‌فرض لاگ‌گیری را دور می‌زنند (این اجزا در ژورنال systemd نمی‌نویسند). می‌توانید از سازوکارهای ذخیره‌سازی کوبرنتیز استفاده کنید تا ذخیره‌سازی پایدار را به کانتینری که جزء را اجرا می‌کند نگاشت کنید.</p>
+<p dir="rtl">kubelet امکان تغییر دایرکتوری لاگ‌های Pod را از مسیر پیش‌فرض <code dir="ltr">/var/log/pods</code> به یک مسیر سفارشی فراهم می‌کند. این تنظیم با پیکربندی پارامتر <code dir="ltr">podLogsDir</code> در فایل پیکربندی kubelet انجام می‌شود.</p>
+<div class="callout caution"><div class="callout-title">احتیاط:</div>
+<p dir="rtl">توجه به این نکته مهم است که مکان پیش‌فرض <code dir="ltr">/var/log/pods</code> مدت زمان طولانی مورد استفاده بوده است و برخی فرایندها ممکن است به‌طور ضمنی این مسیر را فرض کنند. بنابراین، تغییر این پارامتر باید با احتیاط و با مسئولیت خود شما انجام شود.</p>
+<p dir="rtl">نکته دیگری که باید در نظر داشت این است که kubelet از قرار گرفتن این مکان روی همان دیسک <code dir="ltr">/var</code> پشتیبانی می‌کند. در غیر این صورت، اگر لاگ‌ها روی سیستم فایلی جدا از <code dir="ltr">/var</code> باشند، kubelet میزان استفاده از آن سیستم فایل را ردیابی نخواهد کرد و در صورت پر شدن آن ممکن است مشکلاتی پیش بیاید.</p>
+</div>
+<p dir="rtl">برای جزئیات درباره etcd و لاگ‌های آن، <a href="https://etcd.io/docs/" target="_blank" rel="noopener">مستندات etcd</a> را ببینید.
+در اینجا نیز می‌توانید از سازوکارهای ذخیره‌سازی کوبرنتیز استفاده کنید تا ذخیره‌سازی پایدار را به کانتینری که جزء را اجرا می‌کند نگاشت کنید.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">اگر اجزای کلاستر کوبرنتیز (مانند زمان‌بند) را طوری مستقر کنید که در یک حجم (volume) مشترک از نود والد لاگ بنویسند، باید بررسی کنید و اطمینان یابید که چرخش این لاگ‌ها انجام می‌شود. <strong>کوبرنتیز چرخش این لاگ‌ها را مدیریت نمی‌کند</strong>.</p>
+<p dir="rtl">ممکن است سیستم‌عامل شما به‌طور خودکار نوعی چرخش لاگ را پیاده‌سازی کند؛ برای مثال، اگر دایرکتوری <code dir="ltr">/var/log</code> را به یک Pod ایستا برای یک جزء به اشتراک بگذارید، چرخش لاگ در سطح نود با فایل موجود در آن دایرکتوری همانند فایلی رفتار می‌کند که یک جزء خارج از کوبرنتیز نوشته است.</p>
+<p dir="rtl">برخی ابزارهای استقرار این چرخش لاگ را در نظر می‌گیرند و آن را خودکار می‌کنند؛ برخی دیگر این کار را بر عهده شما می‌گذارند.</p>
+</div>
+<h2 id="معماری-های-لاگ-گیری-در-سطح-کلاستر-cluster-level-logging-architectures" dir="rtl">معماری‌های لاگ‌گیری در سطح کلاستر {#cluster-level-logging-architectures}</h2>
+<p dir="rtl">اگرچه کوبرنتیز راهکار بومی برای لاگ‌گیری در سطح کلاستر ارائه نمی‌دهد، چند رویکرد رایج وجود دارد که می‌توانید در نظر بگیرید. گزینه‌ها عبارت‌اند از:</p>
+<ul>
+<li dir="rtl">استفاده از یک عامل لاگ‌گیری در سطح نود که روی هر نود اجرا می‌شود.</li>
+<li dir="rtl">افزودن یک کانتینر sidecar اختصاصی برای لاگ‌گیری در Pod برنامه.</li>
+<li dir="rtl">ارسال مستقیم لاگ‌ها از درون برنامه به یک backend.</li>
+</ul>
+<h3 id="استفاده-از-عامل-لاگ-گیری-نود" dir="rtl">استفاده از عامل لاگ‌گیری نود</h3>
+<p><img src="/images/docs/user-guide/logging/logging-with-node-agent.png" alt="استفاده از عامل لاگ‌گیری در سطح نود"></p>
+<p dir="rtl">می‌توانید با قرار دادن یک <em>عامل لاگ‌گیری در سطح نود</em> روی هر نود، لاگ‌گیری در سطح کلاستر را پیاده‌سازی کنید.
+عامل لاگ‌گیری ابزاری اختصاصی است که لاگ‌ها را در دسترس قرار می‌دهد یا آن‌ها را به یک backend ارسال می‌کند.
+معمولاً عامل لاگ‌گیری کانتینری است که به دایرکتوری حاوی فایل‌های لاگ همه کانتینرهای برنامه روی آن نود دسترسی دارد.</p>
+<p dir="rtl">از آنجا که عامل لاگ‌گیری باید روی هر نود اجرا شود، توصیه می‌شود عامل به‌صورت یک <code dir="ltr">DaemonSet</code> اجرا شود.</p>
+<p dir="rtl">لاگ‌گیری در سطح نود فقط یک عامل برای هر نود ایجاد می‌کند و به هیچ تغییری در برنامه‌هایی که روی نود اجرا می‌شوند نیاز ندارد.</p>
+<p dir="rtl">کانتینرها در stdout و stderr می‌نویسند، اما قالب مورد توافقی وجود ندارد. یک عامل در سطح نود این لاگ‌ها را جمع‌آوری می‌کند و برای تجمیع ارسال می‌کند.</p>
+<h3 id="استفاده-از-کانتینر-sidecar-همراه-با-عامل-لاگ-گیری-sidecar-container-with-logging-agent" dir="rtl">استفاده از کانتینر sidecar همراه با عامل لاگ‌گیری {#sidecar-container-with-logging-agent}</h3>
+<p dir="rtl">می‌توانید از کانتینر sidecar به یکی از روش‌های زیر استفاده کنید:</p>
+<ul>
+<li dir="rtl">کانتینر sidecar لاگ‌های برنامه را به <code dir="ltr">stdout</code> خودش استریم می‌کند.</li>
+<li dir="rtl">کانتینر sidecar یک عامل لاگ‌گیری اجرا می‌کند که برای برداشت لاگ‌ها از یک کانتینر برنامه پیکربندی شده است.</li>
+</ul>
+<h4 id="کانتینر-sidecar-استریم-کننده" dir="rtl">کانتینر sidecar استریم‌کننده</h4>
+<p><img src="/images/docs/user-guide/logging/logging-with-streaming-sidecar.png" alt="کانتینر sidecar همراه با کانتینر استریم‌کننده"></p>
+<p dir="rtl">با اینکه کانتینرهای sidecar را وادار کنید در جریان‌های <code dir="ltr">stdout</code> و <code dir="ltr">stderr</code> خودشان بنویسند، می‌توانید از kubelet و عامل لاگ‌گیری‌ای که از قبل روی هر نود اجرا می‌شود بهره ببرید. کانتینرهای sidecar لاگ‌ها را از یک فایل، یک سوکت یا journald می‌خوانند. هر کانتینر sidecar لاگ را در جریان <code dir="ltr">stdout</code> یا <code dir="ltr">stderr</code> خودش چاپ می‌کند.</p>
+<p dir="rtl">این رویکرد به شما امکان می‌دهد چند جریان لاگ را از بخش‌های مختلف برنامه‌تان جدا کنید؛ بخش‌هایی که ممکن است از نوشتن در <code dir="ltr">stdout</code> یا <code dir="ltr">stderr</code> پشتیبانی نکنند. منطق هدایت لاگ‌ها حداقلی است، بنابراین سربار قابل‌توجهی ندارد. افزون بر این، چون <code dir="ltr">stdout</code> و <code dir="ltr">stderr</code> توسط kubelet مدیریت می‌شوند، می‌توانید از ابزارهای داخلی مانند <code dir="ltr">kubectl logs</code> استفاده کنید.</p>
+<p dir="rtl">برای مثال، یک Pod یک کانتینر واحد اجرا می‌کند و آن کانتینر با دو قالب متفاوت در دو فایل لاگ مجزا می‌نویسد. مانیفست این Pod به‌صورت زیر است:</p>
+<div class="code-file ltr" dir="ltr">admin/logging/two-files-counter-pod.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: Pod
+metadata:
+  name: counter
+spec:
+  containers:
+  - name: count
+    image: busybox:1.28
+    args:
+    - /bin/sh
+    - -c
+    - &gt;
+      i=0;
+      while true;
+      do
+        echo "$i: $(date)" &gt;&gt; /var/log/1.log;
+        echo "$(date) INFO $i" &gt;&gt; /var/log/2.log;
+        i=$((i+1));
+        sleep 1;
+      done
+    volumeMounts:
+    - name: varlog
+      mountPath: /var/log
+  volumes:
+  - name: varlog
+    emptyDir: {}
+</code></pre>
+<p dir="rtl">توصیه نمی‌شود ورودی‌های لاگ با قالب‌های مختلف در یک جریان لاگ نوشته شوند، حتی اگر موفق شده باشید هر دو جزء را به جریان <code dir="ltr">stdout</code> کانتینر هدایت کنید. در عوض، می‌توانید دو کانتینر sidecar ایجاد کنید. هر کانتینر sidecar می‌تواند یک فایل لاگ مشخص را از یک حجم (volume) مشترک دنبال (tail) کند و سپس لاگ‌ها را به جریان <code dir="ltr">stdout</code> خودش هدایت کند.</p>
+<p dir="rtl">مانیفست یک Pod که دو کانتینر sidecar دارد به‌صورت زیر است:</p>
+<div class="code-file ltr" dir="ltr">admin/logging/two-files-counter-pod-streaming-sidecar.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: Pod
+metadata:
+  name: counter
+spec:
+  containers:
+  - name: count
+    image: busybox:1.28
+    args:
+    - /bin/sh
+    - -c
+    - &gt;
+      i=0;
+      while true;
+      do
+        echo "$i: $(date)" &gt;&gt; /var/log/1.log;
+        echo "$(date) INFO $i" &gt;&gt; /var/log/2.log;
+        i=$((i+1));
+        sleep 1;
+      done
+    volumeMounts:
+    - name: varlog
+      mountPath: /var/log
+  - name: count-log-1
+    image: busybox:1.28
+    args: [/bin/sh, -c, 'tail -n+1 -F /var/log/1.log']
+    volumeMounts:
+    - name: varlog
+      mountPath: /var/log
+  - name: count-log-2
+    image: busybox:1.28
+    args: [/bin/sh, -c, 'tail -n+1 -F /var/log/2.log']
+    volumeMounts:
+    - name: varlog
+      mountPath: /var/log
+  volumes:
+  - name: varlog
+    emptyDir: {}
+</code></pre>
+<p dir="rtl">اکنون وقتی این Pod را اجرا می‌کنید، می‌توانید با اجرای دستورات زیر به هر جریان لاگ به‌صورت جداگانه دسترسی پیدا کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl logs counter count-log-1
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code class="language-console" dir="ltr">0: Fri Apr  1 11:42:26 UTC 2022
+1: Fri Apr  1 11:42:27 UTC 2022
+2: Fri Apr  1 11:42:28 UTC 2022
+...
+</code></pre>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl logs counter count-log-2
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code class="language-console" dir="ltr">Fri Apr  1 11:42:29 UTC 2022 INFO 0
+Fri Apr  1 11:42:30 UTC 2022 INFO 0
+Fri Apr  1 11:42:31 UTC 2022 INFO 0
+...
+</code></pre>
+<p dir="rtl">اگر در کلاستر خود یک عامل در سطح نود نصب کرده باشید، آن عامل این جریان‌های لاگ را بدون هیچ پیکربندی بیشتری به‌طور خودکار برمی‌دارد. در صورت تمایل، می‌توانید عامل را طوری پیکربندی کنید که خطوط لاگ را بسته به کانتینر مبدأ تجزیه (parse) کند.</p>
+<p dir="rtl">حتی برای Podهایی که مصرف CPU و حافظه پایینی دارند (در حد چند میلی‌کور برای CPU و چند مگابایت برای حافظه)، نوشتن لاگ‌ها در یک فایل و سپس استریم آن‌ها به <code dir="ltr">stdout</code> می‌تواند میزان ذخیره‌سازی موردنیاز شما روی نود را دو برابر کند.
+اگر برنامه‌ای دارید که در یک فایل واحد می‌نویسد، توصیه می‌شود به‌جای پیاده‌سازی رویکرد کانتینر sidecar استریم‌کننده، <code dir="ltr">/dev/stdout</code> را به‌عنوان مقصد تنظیم کنید.</p>
+<p dir="rtl">از کانتینرهای sidecar همچنین می‌توان برای چرخش فایل‌های لاگی استفاده کرد که خود برنامه نمی‌تواند آن‌ها را بچرخاند. نمونه‌ای از این رویکرد، یک کانتینر کوچک است که به‌صورت دوره‌ای <code dir="ltr">logrotate</code> را اجرا می‌کند.
+با این حال، استفاده مستقیم از <code dir="ltr">stdout</code> و <code dir="ltr">stderr</code> و واگذار کردن سیاست‌های چرخش و نگهداری به kubelet ساده‌تر است.</p>
+<h4 id="کانتینر-sidecar-همراه-با-عامل-لاگ-گیری" dir="rtl">کانتینر sidecar همراه با عامل لاگ‌گیری</h4>
+<p><img src="/images/docs/user-guide/logging/logging-with-sidecar-agent.png" alt="کانتینر sidecar همراه با عامل لاگ‌گیری"></p>
+<p dir="rtl">اگر عامل لاگ‌گیری در سطح نود برای شرایط شما به‌اندازه کافی انعطاف‌پذیر نیست، می‌توانید یک کانتینر sidecar با یک عامل لاگ‌گیری جداگانه ایجاد کنید که به‌طور مشخص برای اجرا همراه با برنامه شما پیکربندی کرده‌اید.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">استفاده از عامل لاگ‌گیری در یک کانتینر sidecar می‌تواند به مصرف قابل‌توجه منابع منجر شود. علاوه بر این، نمی‌توانید با <code dir="ltr">kubectl logs</code> به آن لاگ‌ها دسترسی پیدا کنید، زیرا توسط kubelet کنترل نمی‌شوند.</p>
+</div>
+<p dir="rtl">در اینجا دو مانیفست نمونه آمده است که می‌توانید برای پیاده‌سازی یک کانتینر sidecar همراه با عامل لاگ‌گیری از آن‌ها استفاده کنید.
+مانیفست اول شامل یک <a href="https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-configmap/" target="_blank"><code dir="ltr">ConfigMap</code></a> برای پیکربندی fluentd است.</p>
+<div class="code-file ltr" dir="ltr">admin/logging/fluentd-sidecar-config.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fluentd-config
+data:
+  fluentd.conf: |
+    &lt;source&gt;
+      type tail
+      format none
+      path /var/log/1.log
+      pos_file /var/log/1.log.pos
+      tag count.format1
+    &lt;/source&gt;
+
+    &lt;source&gt;
+      type tail
+      format none
+      path /var/log/2.log
+      pos_file /var/log/2.log.pos
+      tag count.format2
+    &lt;/source&gt;
+
+    &lt;match **&gt;
+      type google_cloud
+    &lt;/match&gt;
+</code></pre>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">در پیکربندی‌های نمونه، می‌توانید fluentd را با هر عامل لاگ‌گیری دیگری جایگزین کنید که از هر منبعی درون یک کانتینر برنامه می‌خواند.</p>
+</div>
+<p dir="rtl">مانیفست دوم یک Pod را توصیف می‌کند که یک کانتینر sidecar دارد و fluentd را اجرا می‌کند.
+این Pod حجمی (volume) را mount می‌کند که fluentd می‌تواند داده‌های پیکربندی خود را از آن برداشت کند.</p>
+<div class="code-file ltr" dir="ltr">admin/logging/two-files-counter-pod-agent-sidecar.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: Pod
+metadata:
+  name: counter
+spec:
+  containers:
+  - name: count
+    image: busybox:1.28
+    args:
+    - /bin/sh
+    - -c
+    - &gt;
+      i=0;
+      while true;
+      do
+        echo "$i: $(date)" &gt;&gt; /var/log/1.log;
+        echo "$(date) INFO $i" &gt;&gt; /var/log/2.log;
+        i=$((i+1));
+        sleep 1;
+      done
+    volumeMounts:
+    - name: varlog
+      mountPath: /var/log
+  - name: count-agent
+    image: registry.k8s.io/fluentd-gcp:1.30
+    env:
+    - name: FLUENTD_ARGS
+      value: -c /etc/fluentd-config/fluentd.conf
+    volumeMounts:
+    - name: varlog
+      mountPath: /var/log
+    - name: config-volume
+      mountPath: /etc/fluentd-config
+  volumes:
+  - name: varlog
+    emptyDir: {}
+  - name: config-volume
+    configMap:
+      name: fluentd-config
+</code></pre>
+<h3 id="در-دسترس-قرار-دادن-مستقیم-لاگ-ها-از-برنامه" dir="rtl">در دسترس قرار دادن مستقیم لاگ‌ها از برنامه</h3>
+<p><img src="/images/docs/user-guide/logging/logging-from-application.png" alt="در دسترس قرار دادن مستقیم لاگ‌ها از برنامه"></p>
+<p dir="rtl">لاگ‌گیری در سطح کلاستر که لاگ‌ها را مستقیماً از هر برنامه در دسترس قرار می‌دهد یا ارسال می‌کند، خارج از محدوده کوبرنتیز است.</p>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<ul>
+<li dir="rtl">درباره <a href="system-logs.html">لاگ‌های سیستمی کوبرنتیز</a> مطالعه کنید</li>
+<li dir="rtl">درباره <a href="system-traces.html">ردیابی (Trace) برای اجزای سیستمی کوبرنتیز</a> بیاموزید</li>
+<li dir="rtl">یاد بگیرید چگونه <a href="https://kubernetes.io/docs/tasks/debug/debug-application/determine-reason-pod-failure/#customizing-the-termination-message" target="_blank">پیام خاتمه را سفارشی‌سازی کنید</a>
+که کوبرنتیز هنگام شکست‌خوردن یک Pod ثبت می‌کند</li>
+</ul>
+</main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#لاگ-های-pod-و-کانتینر-basic-logging-in-kubernetes">لاگ‌های Pod و کانتینر {#basic-logging-in-kubernetes}</a><a class="l3" href="#جریان-های-لاگ-کانتینر">جریان‌های لاگ کانتینر</a><a class="l3" href="#نحوه-مدیریت-لاگ-های-کانتینر-توسط-نودها">نحوه مدیریت لاگ‌های کانتینر توسط نودها</a><a class="l3" href="#چرخش-لاگ-log-rotation">چرخش لاگ (Log rotation)</a><a class="l2" href="#لاگ-های-اجزای-سیستم">لاگ‌های اجزای سیستم</a><a class="l3" href="#مکان-های-لاگ-log-location-node">مکان‌های لاگ {#log-location-node}</a><a class="l2" href="#معماری-های-لاگ-گیری-در-سطح-کلاستر-cluster-level-logging-architectures">معماری‌های لاگ‌گیری در سطح کلاستر {#cluster-level-logging-architectures}</a><a class="l3" href="#استفاده-از-عامل-لاگ-گیری-نود">استفاده از عامل لاگ‌گیری نود</a><a class="l3" href="#استفاده-از-کانتینر-sidecar-همراه-با-عامل-لاگ-گیری-sidecar-container-with-logging-agent">استفاده از کانتینر sidecar همراه با عامل لاگ‌گیری {#sidecar-container-with-logging-agent}</a><a class="l3" href="#در-دسترس-قرار-دادن-مستقیم-لاگ-ها-از-برنامه">در دسترس قرار دادن مستقیم لاگ‌ها از برنامه</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>

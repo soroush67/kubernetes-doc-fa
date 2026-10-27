@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Runtime Class | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">concepts / containers</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="ltr" class="ltr">Runtime Class</h1><!-- overview -->
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes v1.20 [stable]</span> (پایدار)</div>
+<p dir="rtl">این صفحه منبع RuntimeClass و سازوکار انتخاب runtime را شرح می‌دهد.</p>
+<p dir="rtl">RuntimeClass قابلیتی برای انتخاب پیکربندی container runtime است. پیکربندی container runtime برای اجرای کانتینرهای یک Pod استفاده می‌شود.</p>
+<!-- body -->
+<h2 id="انگیزه" dir="rtl">انگیزه</h2>
+<p dir="rtl">می‌توانید برای Podهای مختلف، RuntimeClass متفاوتی تعیین کنید تا توازنی میان عملکرد و امنیت برقرار شود. برای مثال، اگر بخشی از بار کاری شما به سطح بالایی از اطمینان امنیت اطلاعات نیاز دارد، می‌توانید زمان‌بندی آن Podها را طوری انتخاب کنید که در یک container runtime مبتنی بر مجازی‌سازی سخت‌افزاری اجرا شوند. در این صورت از جداسازی بیشتر runtime جایگزین بهره‌مند می‌شوید، هرچند هزینه آن مقداری سربار اضافی است.</p>
+<p dir="rtl">همچنین می‌توانید از RuntimeClass برای اجرای Podهای مختلف با همان container runtime اما با تنظیمات متفاوت استفاده کنید.</p>
+<h2 id="راه-اندازی" dir="rtl">راه‌اندازی</h2>
+<ol>
+<li dir="rtl">پیکربندی پیاده‌سازی CRI روی نودها (وابسته به runtime)</li>
+<li dir="rtl">ایجاد منابع RuntimeClass متناظر</li>
+</ol>
+<h3 id="۱-پیکربندی-پیاده-سازی-cri-روی-نودها" dir="rtl">۱. پیکربندی پیاده‌سازی CRI روی نودها</h3>
+<p dir="rtl">پیکربندی‌هایی که از طریق RuntimeClass در دسترس هستند به پیاده‌سازی Container Runtime Interface (CRI) وابسته‌اند. برای نحوه پیکربندی، به مستندات مربوط به پیاده‌سازی CRI خود (<a href="#cri-configuration">در ادامه</a>) مراجعه کنید.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">RuntimeClass به‌طور پیش‌فرض فرض می‌کند که پیکربندی نودها در سراسر کلاستر همگن است (یعنی همه نودها از نظر container runtimeها به یک شکل پیکربندی شده‌اند). برای پشتیبانی از پیکربندی‌های ناهمگن نودها، بخش <a href="#scheduling">زمان‌بندی</a> را در ادامه ببینید.</p>
+</div>
+<p dir="rtl">هر پیکربندی یک نام <code dir="ltr">handler</code> متناظر دارد که RuntimeClass به آن ارجاع می‌دهد. handler باید یک <a href="../overview/working-with-objects/names.html#dns-label-names">نام برچسب DNS</a> معتبر باشد.</p>
+<h3 id="۲-ایجاد-منابع-runtimeclass-متناظر" dir="rtl">۲. ایجاد منابع RuntimeClass متناظر</h3>
+<p dir="rtl">هر یک از پیکربندی‌هایی که در گام ۱ انجام شده‌اند باید یک نام <code dir="ltr">handler</code> مرتبط داشته باشند که آن پیکربندی را شناسایی می‌کند. برای هر handler، یک آبجکت RuntimeClass متناظر ایجاد کنید.</p>
+<p dir="rtl">منبع RuntimeClass در حال حاضر فقط دو فیلد مهم دارد: نام RuntimeClass (<code dir="ltr">metadata.name</code>) و handler (<code dir="ltr">handler</code>). تعریف آبجکت به این شکل است:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr"># RuntimeClass is defined in the node.k8s.io API group
+apiVersion: node.k8s.io/v1
+kind: RuntimeClass
+metadata:
+  # The name the RuntimeClass will be referenced by.
+  # RuntimeClass is a non-namespaced resource.
+  name: myclass 
+# The name of the corresponding CRI configuration
+handler: myconfiguration 
+</code></pre>
+<p dir="rtl">نام یک آبجکت RuntimeClass باید یک <a href="../overview/working-with-objects/names.html#dns-subdomain-names">نام زیردامنه DNS</a> معتبر باشد.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">توصیه می‌شود عملیات نوشتن روی RuntimeClass (ایجاد/به‌روزرسانی/patch/حذف) به مدیر کلاستر محدود شود. این معمولاً به‌صورت پیش‌فرض برقرار است. برای جزئیات بیشتر، <a href="https://kubernetes.io/docs/reference/access-authn-authz/authorization/" target="_blank">مروری بر احراز مجوز</a> را ببینید.</p>
+</div>
+<h2 id="نحوه-استفاده" dir="rtl">نحوه استفاده</h2>
+<p dir="rtl">پس از پیکربندی RuntimeClassها برای کلاستر، می‌توانید برای استفاده از آن‌ها یک <code dir="ltr">runtimeClassName</code> در spec مربوط به Pod تعیین کنید. برای مثال:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: Pod
+metadata:
+  name: mypod
+spec:
+  runtimeClassName: myclass
+  # ...
+</code></pre>
+<p dir="rtl">این کار به kubelet دستور می‌دهد که برای اجرای این Pod از RuntimeClass نام‌برده‌شده استفاده کند. اگر RuntimeClass نام‌برده‌شده وجود نداشته باشد یا CRI نتواند handler متناظر را اجرا کند، Pod وارد <a href="https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#pod-phase" target="_blank">فاز</a> پایانی <code dir="ltr">Failed</code> می‌شود. برای مشاهده پیام خطا، به دنبال <a href="https://kubernetes.io/docs/tasks/debug/debug-application/debug-running-pod/" target="_blank">رویداد</a> متناظر بگردید.</p>
+<p dir="rtl">اگر هیچ <code dir="ltr">runtimeClassName</code> مشخص نشده باشد، RuntimeHandler پیش‌فرض استفاده می‌شود که معادل رفتار زمانی است که قابلیت RuntimeClass غیرفعال باشد.</p>
+<h3 id="پیکربندی-cri-cri-configuration" dir="rtl">پیکربندی CRI {#cri-configuration}</h3>
+<p dir="rtl">برای جزئیات بیشتر درباره راه‌اندازی runtimeهای CRI، <a href="https://kubernetes.io/docs/setup/production-environment/container-runtimes/" target="_blank">نصب CRI</a> را ببینید.</p>
+<h4 id="containerd" dir="ltr" class="ltr"><span class="term" title="containerd">containerd</span></h4>
+<p dir="rtl">handlerهای runtime از طریق پیکربندی containerd در مسیر <code dir="ltr">/etc/containerd/config.toml</code> تنظیم می‌شوند. handlerهای معتبر در بخش runtimes پیکربندی می‌شوند:</p>
+<pre dir="ltr"><code dir="ltr">[plugins."io.containerd.grpc.v1.cri".containerd.runtimes.${HANDLER_NAME}]
+</code></pre>
+<p dir="rtl">برای جزئیات بیشتر، <a href="https://github.com/containerd/containerd/blob/main/docs/cri/config.md" target="_blank" rel="noopener">مستندات پیکربندی</a> containerd را ببینید:</p>
+<h4 id="cri-o" dir="ltr" class="ltr"><span class="term" title="cri-o">cri o</span></h4>
+<p dir="rtl">handlerهای runtime از طریق پیکربندی CRI-O در مسیر <code dir="ltr">/etc/crio/crio.conf</code> تنظیم می‌شوند. handlerهای معتبر در <a href="https://github.com/cri-o/cri-o/blob/master/docs/crio.conf.5.md#crioruntime-table" target="_blank" rel="noopener">جدول crio.runtime</a> پیکربندی می‌شوند:</p>
+<pre dir="ltr"><code dir="ltr">[crio.runtime.runtimes.${HANDLER_NAME}]
+  runtime_path = "${PATH_TO_BINARY}"
+</code></pre>
+<p dir="rtl">برای جزئیات بیشتر، <a href="https://github.com/cri-o/cri-o/blob/master/docs/crio.conf.5.md" target="_blank" rel="noopener">مستندات پیکربندی</a> CRI-O را ببینید.</p>
+<h2 id="زمان-بندی-scheduling" dir="rtl">زمان‌بندی {#scheduling}</h2>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes v1.16 [beta]</span> (بتا)</div>
+<p dir="rtl">با تعیین فیلد <code dir="ltr">scheduling</code> برای یک RuntimeClass می‌توانید محدودیت‌هایی تعیین کنید تا اطمینان یابید Podهایی که با این RuntimeClass اجرا می‌شوند روی نودهایی زمان‌بندی می‌شوند که از آن پشتیبانی می‌کنند. اگر <code dir="ltr">scheduling</code> تنظیم نشده باشد، فرض می‌شود که همه نودها از این RuntimeClass پشتیبانی می‌کنند.</p>
+<p dir="rtl">برای اطمینان از اینکه Podها روی نودهای پشتیبانی‌کننده از یک RuntimeClass مشخص قرار می‌گیرند، آن مجموعه از نودها باید یک برچسب مشترک داشته باشند که سپس توسط فیلد <code dir="ltr">runtimeclass.scheduling.nodeSelector</code> انتخاب می‌شود. nodeSelector مربوط به RuntimeClass در مرحله admission با nodeSelector مربوط به Pod ادغام می‌شود، که در عمل اشتراک مجموعه نودهای انتخاب‌شده توسط هر یک را می‌گیرد. اگر تعارضی وجود داشته باشد، Pod رد می‌شود.</p>
+<p dir="rtl">اگر نودهای پشتیبانی‌کننده taint شده باشند تا از اجرای Podهای سایر RuntimeClassها روی آن نود جلوگیری شود، می‌توانید <code dir="ltr">tolerations</code> را به RuntimeClass اضافه کنید. همانند <code dir="ltr">nodeSelector</code>، tolerationها نیز در مرحله admission با tolerationهای Pod ادغام می‌شوند، که در عمل اجتماع مجموعه نودهای تحمل‌شده توسط هر یک را می‌گیرد.</p>
+<p dir="rtl">برای کسب اطلاعات بیشتر درباره پیکربندی انتخابگر نود (node selector) و tolerationها، <a href="../scheduling-eviction/assign-pod-node.html">اختصاص Podها به نودها</a> را ببینید.</p>
+<h3 id="سربار-pod-pod-overhead" dir="rtl">سربار Pod {#pod-overhead}</h3>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes v1.24 [stable]</span> (پایدار)</div>
+<p dir="rtl">می‌توانید منابع <em>سربار</em> (overhead) مرتبط با اجرای یک Pod را مشخص کنید. اعلام سربار به کلاستر (از جمله زمان‌بند) اجازه می‌دهد هنگام تصمیم‌گیری درباره Podها و منابع، آن را در نظر بگیرد.</p>
+<p dir="rtl">سربار Pod در RuntimeClass از طریق فیلد <code dir="ltr">overhead</code> تعریف می‌شود. با استفاده از این فیلد می‌توانید سربار اجرای Podهایی را که از این RuntimeClass استفاده می‌کنند مشخص کنید و اطمینان یابید که این سربارها در کوبرنتیز لحاظ می‌شوند.</p>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<ul>
+<li dir="rtl"><a href="https://github.com/kubernetes/enhancements/blob/master/keps/sig-node/585-runtime-class/README.md" target="_blank" rel="noopener">طراحی RuntimeClass</a></li>
+<li dir="rtl"><a href="https://github.com/kubernetes/enhancements/blob/master/keps/sig-node/585-runtime-class/README.md#runtimeclass-scheduling" target="_blank" rel="noopener">طراحی زمان‌بندی RuntimeClass</a></li>
+<li>
+<li dir="rtl">درباره مفهوم <a href="../scheduling-eviction/pod-overhead.html">سربار Pod</a> مطالعه کنید</li>
+<li dir="rtl"><a href="https://github.com/kubernetes/enhancements/tree/master/keps/sig-node/688-pod-overhead" target="_blank" rel="noopener">طراحی قابلیت PodOverhead</a></li>
+</ul>
+</main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#انگیزه">انگیزه</a><a class="l2" href="#راه-اندازی">راه‌اندازی</a><a class="l3" href="#۱-پیکربندی-پیاده-سازی-cri-روی-نودها">۱. پیکربندی پیاده‌سازی CRI روی نودها</a><a class="l3" href="#۲-ایجاد-منابع-runtimeclass-متناظر">۲. ایجاد منابع RuntimeClass متناظر</a><a class="l2" href="#نحوه-استفاده">نحوه استفاده</a><a class="l3" href="#پیکربندی-cri-cri-configuration">پیکربندی CRI {#cri-configuration}</a><a class="l2" href="#زمان-بندی-scheduling">زمان‌بندی {#scheduling}</a><a class="l3" href="#سربار-pod-pod-overhead">سربار Pod {#pod-overhead}</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>

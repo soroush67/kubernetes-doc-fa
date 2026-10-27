@@ -1,0 +1,845 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>اولویت و انصاف API | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">concepts / cluster-administration</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">اولویت و انصاف API</h1><!-- overview -->
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes v1.29 [stable]</span> (پایدار)</div>
+<p dir="rtl">کنترل رفتار سرور API کوبرنتیز در شرایط بار بیش‌ازحد، یکی از وظایف کلیدی مدیران کلاستر است. <span class="term" title="kube-apiserver">kube-apiserver</span> چند سازوکار کنترلی در اختیار دارد
+(مانند فلگ‌های خط فرمان <code dir="ltr">--max-requests-inflight</code> و <code dir="ltr">--max-mutating-requests-inflight</code>)
+تا میزان کار در حال انجامی را که پذیرفته می‌شود محدود کند و از سرریز شدن درخواست‌های ورودی و در نتیجه
+overload شدن و حتی از کار افتادن احتمالی سرور API جلوگیری نماید؛ اما این فلگ‌ها برای اطمینان از عبور مهم‌ترین
+درخواست‌ها در دوره‌های ترافیک بالا کافی نیستند.</p>
+<p dir="rtl">ویژگی اولویت و انصاف API (API Priority and Fairness یا APF) جایگزینی است که محدودیت‌های
+max-inflight یادشده را بهبود می‌بخشد. APF درخواست‌ها را با دقت بیشتری دسته‌بندی و
+ایزوله می‌کند. همچنین مقدار محدودی صف‌بندی را معرفی می‌کند تا در موارد
+افزایش ناگهانی و بسیار کوتاه‌مدت ترافیک، هیچ درخواستی رد نشود. درخواست‌ها با استفاده از یک
+تکنیک صف‌بندی منصفانه از صف‌ها ارسال می‌شوند تا برای مثال یک
+<span class="term" title="controller">کنترل‌کننده</span> بدرفتار نتواند
+سایرین را (حتی در همان سطح اولویت) دچار قحطی منابع (starvation) کند.</p>
+<p dir="rtl">این ویژگی طوری طراحی شده است که با کنترل‌کننده‌های استاندارد که
+از informerها استفاده می‌کنند و به شکست درخواست‌های API با exponential
+back-off واکنش نشان می‌دهند، و همچنین با سایر کلاینت‌هایی که به همین شیوه عمل می‌کنند، به خوبی کار کند.</p>
+<div class="callout caution"><div class="callout-title">احتیاط:</div>
+<p dir="rtl">برخی درخواست‌ها که «طولانی‌مدت» دسته‌بندی می‌شوند—مانند اجرای
+دستور از راه دور یا دنبال کردن لاگ‌ها—مشمول فیلتر اولویت و انصاف API
+نمی‌شوند. این موضوع درباره فلگ <code dir="ltr">--max-requests-inflight</code> نیز در حالتی که ویژگی
+اولویت و انصاف API فعال نباشد صادق است. اولویت و انصاف API <em>بر</em> درخواست‌های <strong>watch</strong>
+اعمال می‌شود. وقتی اولویت و انصاف API غیرفعال باشد، درخواست‌های <strong>watch</strong>
+مشمول محدودیت <code dir="ltr">--max-requests-inflight</code> نمی‌شوند.</p>
+</div>
+<!-- body -->
+<h2 id="فعال-غیرفعال-کردن-اولویت-و-انصاف-api-enabling-disabling-api-priority-and-fairness" dir="rtl">فعال/غیرفعال کردن اولویت و انصاف API {#enabling-disabling-api-priority-and-fairness}</h2>
+<p dir="rtl">ویژگی اولویت و انصاف API با یک فلگ خط فرمان کنترل می‌شود و به‌طور پیش‌فرض فعال است. برای توضیح کلی گزینه‌های خط فرمان موجود در kube-apiserver و نحوه فعال و غیرفعال کردن آن‌ها،
+<a href="https://kubernetes.io/docs/reference/command-line-tools-reference/kube-apiserver/#options" target="_blank">گزینه‌ها</a>
+را ببینید. نام گزینه خط فرمان برای APF برابر "--enable-priority-and-fairness" است. این ویژگی
+همچنین شامل یک <span class="term" title="api-group">گروه API</span>
+است که دارای این موارد است: (الف) نسخه پایدار <code dir="ltr">v1</code> که در 1.29 معرفی شد و
+به‌طور پیش‌فرض فعال است؛ (ب) نسخه <code dir="ltr">v1beta3</code> که به‌طور پیش‌فرض فعال است و
+در v1.29 منسوخ شد. می‌توانید
+نسخه بتای گروه API یعنی <code dir="ltr">v1beta3</code> را با افزودن
+فلگ‌های خط فرمان زیر به فراخوانی <code dir="ltr">kube-apiserver</code> غیرفعال کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kube-apiserver \
+--runtime-config=flowcontrol.apiserver.k8s.io/v1beta3=false \
+ # …and other flags as usual
+</code></pre>
+<p dir="rtl">فلگ خط فرمان <code dir="ltr">--enable-priority-and-fairness=false</code> ویژگی
+اولویت و انصاف API را غیرفعال می‌کند.</p>
+<h2 id="سناریوهای-بازگشتی-سرور-recursive-server-scenarios" dir="rtl">سناریوهای بازگشتی سرور {#recursive-server-scenarios}</h2>
+<p dir="rtl">اولویت و انصاف API باید در سناریوهای بازگشتی سرور با دقت به کار گرفته شود.
+این‌ها سناریوهایی هستند که در آن‌ها یک سرور A هنگام پاسخ‌دهی به
+یک درخواست، یک درخواست فرعی به سرور B ارسال می‌کند. ممکن است
+سرور B نیز خود یک فراخوانی فرعی دیگر را به سرور
+A بازگرداند. در شرایطی که کنترل اولویت و انصاف هم بر
+درخواست اصلی و هم بر برخی درخواست‌های فرعی اعمال شود، صرف‌نظر از اینکه
+بازگشت تا چه عمقی پیش برود، خطر وارونگی اولویت (priority inversion) و/یا
+بن‌بست (deadlock) وجود دارد.</p>
+<p dir="rtl">یک نمونه از بازگشت زمانی است که <code dir="ltr">kube-apiserver</code> یک فراخوانی
+admission webhook به سرور B ارسال می‌کند و سرور B هنگام پاسخ به آن فراخوانی،
+یک درخواست فرعی دیگر را به <code dir="ltr">kube-apiserver</code> ارسال می‌کند. نمونه دیگر بازگشت زمانی است که یک آبجکت <code dir="ltr">APIService</code>
+به <code dir="ltr">kube-apiserver</code> دستور می‌دهد درخواست‌های مربوط به یک
+گروه API مشخص را به یک سرور خارجی سفارشی B واگذار کند (این یکی از
+مواردی است که «aggregation» نامیده می‌شود).</p>
+<p dir="rtl">وقتی بدانیم درخواست اصلی به یک سطح اولویت مشخص تعلق دارد
+و درخواست‌های فرعی تحت کنترل در سطوح اولویت بالاتر دسته‌بندی شوند، این یک راه‌حل ممکن است. وقتی درخواست‌های
+اصلی می‌توانند به هر سطح اولویتی تعلق داشته باشند، درخواست‌های فرعی
+تحت کنترل باید از محدودیت اولویت و انصاف معاف شوند. یک
+روش برای این کار استفاده از آبجکت‌هایی است که دسته‌بندی و
+نحوه رسیدگی را پیکربندی می‌کنند و در ادامه بحث می‌شوند. روش دیگر غیرفعال کردن کامل اولویت و
+انصاف روی سرور B با استفاده از تکنیک‌هایی است که در بالا گفته شد. روش
+سوم، که وقتی سرور B همان <code dir="ltr">kube-apiserver</code> نیست ساده‌ترین روش است، ساخت سرور B با
+اولویت و انصاف غیرفعال در سطح کد است.</p>
+<h2 id="مفاهیم-concepts" dir="rtl">مفاهیم {#concepts}</h2>
+<p dir="rtl">چند ویژگی متمایز در ویژگی اولویت و انصاف API نقش دارند.
+درخواست‌های ورودی با استفاده از <em>FlowSchemaها</em> بر اساس ویژگی‌های درخواست دسته‌بندی می‌شوند و به سطوح اولویت اختصاص می‌یابند. سطوح اولویت با حفظ محدودیت‌های همروندی (concurrency) مجزا، درجه‌ای از
+ایزولگی ایجاد می‌کنند، به‌طوری که درخواست‌های اختصاص‌یافته
+به سطوح اولویت مختلف نمی‌توانند یکدیگر را دچار قحطی منابع کنند. در داخل یک سطح اولویت،
+یک الگوریتم صف‌بندی منصفانه مانع از آن می‌شود که درخواست‌های <em>جریان‌های</em> (flows) مختلف یکدیگر را دچار قحطی منابع کنند، و اجازه می‌دهد درخواست‌ها صف‌بندی شوند تا ترافیک ناگهانی (bursty)
+وقتی میانگین بار به‌طور قابل قبولی پایین است، باعث شکست درخواست‌ها نشود.</p>
+<h3 id="سطوح-اولویت-priority-levels" dir="rtl">سطوح اولویت {#priority-levels}</h3>
+<p dir="rtl">بدون فعال بودن APF، همروندی کلی در سرور API با فلگ‌های <code dir="ltr">kube-apiserver</code> یعنی <code dir="ltr">--max-requests-inflight</code> و
+<code dir="ltr">--max-mutating-requests-inflight</code> محدود می‌شود. با فعال بودن APF، محدودیت‌های همروندی
+تعریف‌شده توسط این فلگ‌ها با هم جمع می‌شوند و سپس حاصل‌جمع میان مجموعه‌ای
+پیکربندی‌پذیر از <em>سطوح اولویت</em> تقسیم می‌شود. هر درخواست ورودی به
+یک سطح اولویت اختصاص می‌یابد و هر سطح اولویت فقط به تعداد درخواست‌های همزمانی را ارسال می‌کند که
+محدودیت خاص خودش اجازه می‌دهد.</p>
+<p dir="rtl">برای مثال، پیکربندی پیش‌فرض شامل سطوح اولویت جداگانه برای
+درخواست‌های انتخاب رهبر (leader election)، درخواست‌های کنترل‌کننده‌های داخلی و درخواست‌های
+Podها است. این بدان معناست که یک Pod بدرفتار که سرور API را با
+درخواست‌ها سیل‌آسا پر می‌کند، نمی‌تواند مانع موفقیت انتخاب رهبر یا اقدامات کنترل‌کننده‌های داخلی شود.</p>
+<p dir="rtl">محدودیت‌های همروندی سطوح اولویت به‌صورت دوره‌ای
+تنظیم می‌شوند، تا سطوح اولویتی که کم‌استفاده‌اند بتوانند به‌طور موقت
+همروندی را به سطوح پرمصرف قرض دهند. این محدودیت‌ها بر پایه
+محدودیت‌های اسمی (nominal) و کران‌هایی هستند که تعیین می‌کنند یک سطح اولویت چه مقدار همروندی را می‌تواند
+قرض دهد و چه مقدار می‌تواند قرض بگیرد، و همه آن‌ها از آبجکت‌های پیکربندی
+که در ادامه ذکر می‌شوند به دست می‌آیند.</p>
+<h3 id="صندلی-های-اشغال-شده-توسط-یک-درخواست-seats-occupied-by-a-request" dir="rtl">صندلی‌های اشغال‌شده توسط یک درخواست {#seats-occupied-by-a-request}</h3>
+<p dir="rtl">توضیح بالا درباره مدیریت همروندی، روایت پایه است.
+درخواست‌ها مدت‌زمان‌های متفاوتی دارند اما هنگام مقایسه با محدودیت همروندی یک سطح اولویت، در هر لحظه یکسان
+شمرده می‌شوند. در روایت پایه، هر درخواست یک واحد همروندی را اشغال می‌کند. واژه
+«صندلی» (seat) برای اشاره به یک واحد همروندی به کار می‌رود و الهام‌گرفته از
+این است که هر مسافر قطار یا هواپیما یکی از تعداد ثابت
+صندلی‌ها را اشغال می‌کند.</p>
+<p dir="rtl">اما برخی درخواست‌ها بیش از یک صندلی را اشغال می‌کنند. برخی از این‌ها درخواست‌های <strong>list</strong>
+هستند که سرور برآورد می‌کند تعداد زیادی
+آبجکت برمی‌گردانند. مشخص شده است که این درخواست‌ها بار فوق‌العاده سنگینی
+بر سرور وارد می‌کنند. به همین دلیل، سرور تعداد آبجکت‌هایی را که
+برگردانده خواهند شد برآورد می‌کند و درخواست را اشغال‌کننده تعداد صندلی‌هایی
+متناسب با آن عدد برآوردشده در نظر می‌گیرد.</p>
+<h3 id="تنظیمات-زمان-اجرا-برای-درخواست-های-watch-execution-time-tweaks-for-watch-requests" dir="rtl">تنظیمات زمان اجرا برای درخواست‌های watch {#execution-time-tweaks-for-watch-requests}</h3>
+<p dir="rtl">اولویت و انصاف API درخواست‌های <strong>watch</strong> را مدیریت می‌کند، اما این کار شامل
+چند انحراف دیگر از رفتار پایه است. مورد اول به این مربوط است که
+یک درخواست <strong>watch</strong> تا چه مدتی صندلی خود را اشغال‌شده در نظر گرفته می‌شود. بسته به
+پارامترهای درخواست، پاسخ به یک درخواست <strong>watch</strong> ممکن است با اعلان‌های <strong>create</strong> برای همه آبجکت‌های
+از پیش موجود مرتبط آغاز شود یا نشود. اولویت و انصاف API یک درخواست <strong>watch</strong> را
+پس از پایان آن موج اولیه اعلان‌ها، در صورت وجود،
+از صندلی خود فارغ می‌داند.</p>
+<p dir="rtl">اعلان‌های عادی هر بار که سرور از ایجاد/به‌روزرسانی/حذف یک آبجکت مطلع می‌شود، در یک موج همروند به همه
+جریان‌های پاسخ <strong>watch</strong> مرتبط ارسال می‌شوند. برای محاسبه این کار، اولویت
+و انصاف API فرض می‌کند هر درخواست نوشتن پس از پایان نوشتن واقعی، مدت زمان
+اضافی‌ای را نیز صندلی‌ها را اشغال می‌کند. سرور
+تعداد اعلان‌هایی را که باید ارسال شوند برآورد می‌کند و تعداد صندلی‌ها و مدت اشغال صندلی درخواست نوشتن را
+طوری تنظیم می‌کند که این کار اضافی را نیز در بر بگیرد.</p>
+<h3 id="صف-بندی-queuing" dir="rtl">صف‌بندی {#queuing}</h3>
+<p dir="rtl">حتی در داخل یک سطح اولویت نیز ممکن است تعداد زیادی منبع متمایز ترافیک وجود داشته باشد. در شرایط
+بار بیش‌ازحد، جلوگیری از اینکه یک جریان از درخواست‌ها سایرین را دچار قحطی منابع کند ارزشمند است (به‌ویژه در حالت نسبتاً رایج
+یک کلاینت معیوب که kube-apiserver را با درخواست‌ها پر می‌کند؛ در حالت ایده‌آل آن کلاینت معیوب
+تأثیر قابل‌اندازه‌گیری چندانی بر سایر کلاینت‌ها نخواهد داشت). این موضوع
+با استفاده از یک الگوریتم صف‌بندی منصفانه برای پردازش درخواست‌هایی که به
+همان سطح اولویت اختصاص یافته‌اند مدیریت می‌شود. هر درخواست به یک <em>جریان</em> (flow) اختصاص می‌یابد که با
+نام FlowSchema منطبق به‌علاوه یک <em>شناسه‌ی تمایز جریان</em> (flow distinguisher) مشخص می‌شود — که
+یا کاربر درخواست‌کننده است، یا فضای نام منبع هدف، یا هیچ‌چیز — و
+سیستم تلاش می‌کند وزن تقریباً برابری به درخواست‌های جریان‌های مختلف
+در یک سطح اولویت بدهد.
+برای فعال کردن رسیدگی متمایز به نمونه‌های متمایز، کنترل‌کننده‌هایی که
+نمونه‌های متعدد دارند باید با نام‌های کاربری متمایز احراز هویت شوند</p>
+<p dir="rtl">پس از دسته‌بندی یک درخواست در یک جریان، ویژگی اولویت و انصاف API
+ممکن است درخواست را به یک صف اختصاص دهد. این اختصاص از
+تکنیکی به نام <span class="term" title="shuffle-sharding">shuffle sharding</span> استفاده می‌کند که استفاده نسبتاً کارآمدی از
+صف‌ها می‌کند تا جریان‌های کم‌شدت را از جریان‌های پرشدت مجزا کند.</p>
+<p dir="rtl">جزئیات الگوریتم صف‌بندی برای هر سطح اولویت قابل تنظیم است و
+به مدیران اجازه می‌دهد میان مصرف حافظه، انصاف (ویژگی‌ای که بر اساس آن
+جریان‌های مستقل همگی وقتی ترافیک کل از ظرفیت فراتر می‌رود پیشرفت می‌کنند)،
+تحمل ترافیک ناگهانی و تأخیر اضافی ناشی از صف‌بندی، موازنه برقرار کنند.</p>
+<h3 id="درخواست-های-معاف-exempt-requests" dir="rtl">درخواست‌های معاف {#exempt-requests}</h3>
+<p dir="rtl">برخی درخواست‌ها آن‌قدر مهم تلقی می‌شوند که مشمول
+هیچ‌یک از محدودیت‌های اعمال‌شده توسط این ویژگی نمی‌شوند. این معافیت‌ها مانع از آن می‌شوند که یک
+پیکربندی کنترل جریان نادرست، سرور API را به‌طور کامل از کار بیندازد.</p>
+<h2 id="منابع-resources" dir="rtl">منابع {#resources}</h2>
+<p dir="rtl">API کنترل جریان شامل دو نوع منبع است.
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.37/#prioritylevelconfiguration-v1-flowcontrol-apiserver-k8s-io" target="_blank">PriorityLevelConfigurationها</a>
+سطوح اولویت موجود، سهم هر یک از بودجه همروندی در دسترس
+که می‌تواند مدیریت کند را تعریف می‌کنند و امکان تنظیم دقیق رفتار صف‌بندی را فراهم می‌آورند.
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.37/#flowschema-v1-flowcontrol-apiserver-k8s-io" target="_blank">FlowSchemaها</a>
+برای دسته‌بندی درخواست‌های ورودی منفرد به کار می‌روند و هر یک را با
+یک PriorityLevelConfiguration منطبق می‌کنند.</p>
+<h3 id="prioritylevelconfiguration-prioritylevelconfiguration" dir="ltr" class="ltr">PriorityLevelConfiguration {#prioritylevelconfiguration}</h3>
+<p dir="rtl">یک PriorityLevelConfiguration نمایانگر یک سطح اولویت است. هر
+PriorityLevelConfiguration یک محدودیت مستقل بر تعداد درخواست‌های
+در حال انجام و محدودیت‌هایی بر تعداد درخواست‌های صف‌شده دارد.</p>
+<p dir="rtl">محدودیت همروندی اسمی برای یک PriorityLevelConfiguration بر حسب
+تعداد مطلق صندلی‌ها مشخص نمی‌شود، بلکه بر حسب «سهم‌های همروندی اسمی»
+(nominal concurrency shares) بیان می‌شود. محدودیت کل همروندی برای سرور API
+متناسب با این سهم‌ها میان PriorityLevelConfigurationهای موجود
+توزیع می‌شود تا محدودیت اسمی هر سطح بر حسب
+صندلی به دست آید. این امر به مدیر کلاستر اجازه می‌دهد با راه‌اندازی مجدد
+<code dir="ltr">kube-apiserver</code> با مقدار متفاوتی برای <code dir="ltr">--max-requests-inflight</code>
+(یا <code dir="ltr">--max-mutating-requests-inflight</code>)، مقدار کل ترافیک به سمت یک سرور را افزایش یا
+کاهش دهد، و همه
+PriorityLevelConfigurationها شاهد افزایش (یا کاهش) حداکثر همروندی مجاز خود
+به یک نسبت یکسان خواهند بود.</p>
+<div class="callout caution"><div class="callout-title">احتیاط:</div>
+<p dir="rtl">در نسخه‌های پیش از <code dir="ltr">v1beta3</code>، فیلد مرتبط در
+PriorityLevelConfiguration به‌جای "nominal concurrency shares" با نام "assured concurrency shares"
+شناخته می‌شود. همچنین در نسخه 1.25 کوبرنتیز
+و نسخه‌های قبل از آن، تنظیم دوره‌ای وجود نداشت: محدودیت‌های
+اسمی/تضمین‌شده همواره بدون تنظیم اعمال می‌شدند.</p>
+</div>
+<p dir="rtl">کران‌های مربوط به اینکه یک سطح اولویت چه مقدار همروندی را می‌تواند قرض دهد و چه مقدار می‌تواند
+قرض بگیرد، در PriorityLevelConfiguration به‌صورت
+درصدی از محدودیت اسمی آن سطح بیان می‌شوند. این مقادیر با ضرب در محدودیت اسمی تقسیم بر
+100.0 و گرد کردن، به تعداد مطلق صندلی‌ها تبدیل می‌شوند. محدودیت همروندی تنظیم‌شده‌ی پویای یک
+سطح اولویت چنان محدود می‌شود که میان (الف) یک کران پایین برابر با
+محدودیت اسمی آن منهای صندلی‌های قابل قرض‌دادن آن و (ب) یک کران بالا برابر با
+محدودیت اسمی آن به‌علاوه صندلی‌هایی که می‌تواند قرض بگیرد قرار گیرد. در هر تنظیم،
+محدودیت‌های پویا به این صورت به دست می‌آیند که هر سطح اولویت صندلی‌های قرض‌داده‌شده‌ای را که اخیراً برایشان
+تقاضا پدید آمده بازپس می‌گیرد و سپس به‌طور مشترک و منصفانه
+به تقاضای اخیر صندلی در سطوح اولویت، در چارچوب
+کران‌هایی که توضیح داده شد، پاسخ می‌دهد.</p>
+<div class="callout caution"><div class="callout-title">احتیاط:</div>
+<p dir="rtl">با فعال بودن ویژگی اولویت و انصاف، محدودیت کل همروندی برای
+سرور برابر با مجموع <code dir="ltr">--max-requests-inflight</code> و
+<code dir="ltr">--max-mutating-requests-inflight</code> تعیین می‌شود. دیگر هیچ تمایزی
+میان درخواست‌های تغییردهنده و غیرتغییردهنده قائل نمی‌شود؛ اگر می‌خواهید برای یک منبع مشخص با آن‌ها
+به‌طور جداگانه رفتار کنید، FlowSchemaهای جداگانه‌ای بسازید که به‌ترتیب با
+فعل‌های (verbs) تغییردهنده و غیرتغییردهنده تطبیق داشته باشند.</p>
+</div>
+<p dir="rtl">وقتی حجم درخواست‌های ورودی اختصاص‌یافته به یک
+PriorityLevelConfiguration بیش از سطح همروندی مجاز آن باشد،
+فیلد <code dir="ltr">type</code> در مشخصات آن تعیین می‌کند با درخواست‌های اضافی چه اتفاقی می‌افتد.
+نوع <code dir="ltr">Reject</code> به این معناست که ترافیک مازاد بلافاصله با
+خطای HTTP 429 (Too Many Requests) رد می‌شود. نوع <code dir="ltr">Queue</code> به این معناست که درخواست‌های
+بالاتر از آستانه صف‌بندی می‌شوند و از تکنیک‌های shuffle sharding و صف‌بندی منصفانه برای
+ایجاد توازن در پیشرفت میان جریان‌های درخواست استفاده می‌شود.</p>
+<p dir="rtl">پیکربندی صف‌بندی امکان تنظیم الگوریتم صف‌بندی منصفانه را برای یک
+سطح اولویت فراهم می‌کند. جزئیات الگوریتم را می‌توانید در
+<a href="https://github.com/kubernetes/enhancements/tree/master/keps/sig-api-machinery/1040-priority-and-fairness" target="_blank" rel="noopener">پیشنهاد بهبود (enhancement proposal)</a> مطالعه کنید، اما به‌طور خلاصه:</p>
+<ul>
+<li dir="rtl">
+<p dir="rtl">افزایش <code dir="ltr">queues</code> نرخ برخورد میان جریان‌های مختلف را کاهش می‌دهد، به
+بهای افزایش مصرف حافظه. مقدار 1 در اینجا عملاً منطق
+صف‌بندی منصفانه را غیرفعال می‌کند، اما همچنان اجازه می‌دهد درخواست‌ها صف‌بندی شوند.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">افزایش <code dir="ltr">queueLengthLimit</code> امکان تحمل موج‌های بزرگ‌تر ترافیک را بدون
+حذف هیچ درخواستی فراهم می‌کند، به بهای افزایش
+تأخیر و مصرف حافظه.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">تغییر <code dir="ltr">handSize</code> به شما اجازه می‌دهد احتمال برخورد میان
+جریان‌های مختلف و همروندی کلی در دسترس یک جریان واحد را در شرایط
+بار بیش‌ازحد تنظیم کنید.</p>
+</li>
+</ul>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl"><code dir="ltr">handSize</code> بزرگ‌تر احتمال برخورد دو جریان منفرد را کمتر می‌کند
+(و در نتیجه احتمال اینکه یکی بتواند دیگری را دچار قحطی منابع کند)، اما احتمال اینکه
+تعداد اندکی از جریان‌ها بتوانند بر apiserver مسلط شوند را بیشتر می‌کند. <code dir="ltr">handSize</code> بزرگ‌تر همچنین
+به‌طور بالقوه میزان تأخیری را که یک جریان پرترافیک واحد
+می‌تواند ایجاد کند افزایش می‌دهد. حداکثر تعداد درخواست‌های صف‌شده ممکن از
+یک جریان واحد برابر <code dir="ltr">handSize * queueLengthLimit</code> است.</p>
+</div>
+<p dir="rtl">در ادامه جدولی آمده است که مجموعه‌ای جالب از پیکربندی‌های shuffle
+sharding را نشان می‌دهد و برای هر یک، احتمال اینکه یک
+موش (جریان کم‌شدت) توسط فیل‌ها (جریان‌های پرشدت) له شود را برای
+مجموعه‌ای نمونه از تعداد فیل‌ها نشان می‌دهد. برای محاسبه این جدول به
+https://play.golang.org/p/Gi0PLgVHiUg مراجعه کنید.</p>
+<table dir="ltr">
+<thead>
+<tr>
+<th dir="ltr" class="ltr">HandSize</th>
+<th dir="ltr" class="ltr">Queues</th>
+<th dir="ltr" class="ltr">1 elephant</th>
+<th dir="ltr" class="ltr">4 elephants</th>
+<th dir="ltr" class="ltr">16 elephants</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>12</td>
+<td>32</td>
+<td dir="ltr" class="ltr">4.428838398950118e-09</td>
+<td>0.11431348830099144</td>
+<td>0.9935089607656024</td>
+</tr>
+<tr>
+<td>10</td>
+<td>32</td>
+<td dir="ltr" class="ltr">1.550093439632541e-08</td>
+<td>0.0626479840223545</td>
+<td>0.9753101519027554</td>
+</tr>
+<tr>
+<td>10</td>
+<td>64</td>
+<td dir="ltr" class="ltr">6.601827268370426e-12</td>
+<td>0.00045571320990370776</td>
+<td>0.49999929150089345</td>
+</tr>
+<tr>
+<td>9</td>
+<td>64</td>
+<td dir="ltr" class="ltr">3.6310049976037345e-11</td>
+<td>0.00045501212304112273</td>
+<td>0.4282314876454858</td>
+</tr>
+<tr>
+<td>8</td>
+<td>64</td>
+<td dir="ltr" class="ltr">2.25929199850899e-10</td>
+<td>0.0004886697053040446</td>
+<td>0.35935114681123076</td>
+</tr>
+<tr>
+<td>8</td>
+<td>128</td>
+<td dir="ltr" class="ltr">6.994461389026097e-13</td>
+<td dir="ltr" class="ltr">3.4055790161620863e-06</td>
+<td>0.02746173137155063</td>
+</tr>
+<tr>
+<td>7</td>
+<td>128</td>
+<td dir="ltr" class="ltr">1.0579122850901972e-11</td>
+<td dir="ltr" class="ltr">6.960839379258192e-06</td>
+<td>0.02406157386340147</td>
+</tr>
+<tr>
+<td>7</td>
+<td>256</td>
+<td dir="ltr" class="ltr">7.597695465552631e-14</td>
+<td dir="ltr" class="ltr">6.728547142019406e-08</td>
+<td>0.0006709661542533682</td>
+</tr>
+<tr>
+<td>6</td>
+<td>256</td>
+<td dir="ltr" class="ltr">2.7134626662687968e-12</td>
+<td dir="ltr" class="ltr">2.9516464018476436e-07</td>
+<td>0.0008895654642000348</td>
+</tr>
+<tr>
+<td>6</td>
+<td>512</td>
+<td dir="ltr" class="ltr">4.116062922897309e-14</td>
+<td dir="ltr" class="ltr">4.982983350480894e-09</td>
+<td dir="ltr" class="ltr">2.26025764343413e-05</td>
+</tr>
+<tr>
+<td>6</td>
+<td>1024</td>
+<td dir="ltr" class="ltr">6.337324016514285e-16</td>
+<td dir="ltr" class="ltr">8.09060164312957e-11</td>
+<td dir="ltr" class="ltr">4.517408062903668e-07</td>
+</tr>
+</tbody>
+</table>
+<h3 id="flowschema" dir="ltr" class="ltr">FlowSchema</h3>
+<p dir="rtl">یک FlowSchema بخشی از درخواست‌های ورودی را تطبیق می‌دهد و آن‌ها را به یک سطح اولویت (priority level) اختصاص می‌دهد. هر درخواست ورودی با FlowSchemaها سنجیده می‌شود؛ این کار از FlowSchemaهایی که <code dir="ltr">matchingPrecedence</code> عددی کمتری دارند آغاز می‌شود و به‌تدریج به سمت مقادیر بالاتر ادامه می‌یابد. نخستین تطبیق برنده است.</p>
+<div class="callout caution"><div class="callout-title">احتیاط:</div>
+<p dir="rtl">برای هر درخواست فقط نخستین FlowSchema منطبق اهمیت دارد. اگر چند FlowSchema با یک درخواست ورودی تطبیق پیدا کنند، درخواست بر اساس همان FlowSchema‌ای اختصاص می‌یابد که بیشترین <code dir="ltr">matchingPrecedence</code> را دارد. اگر چند FlowSchema با <code dir="ltr">matchingPrecedence</code> برابر با یک درخواست منطبق باشند، FlowSchema‌ای که <code dir="ltr">name</code> آن از نظر ترتیب الفبایی (lexicographic) کوچک‌تر است برنده می‌شود؛ اما بهتر است به این رفتار تکیه نکنید و در عوض مطمئن شوید که هیچ دو FlowSchema‌ای <code dir="ltr">matchingPrecedence</code> یکسان ندارند.</p>
+</div>
+<p dir="rtl">یک FlowSchema با یک درخواست مفروض تطبیق دارد اگر دست‌کم یکی از <code dir="ltr">rules</code> آن با درخواست تطبیق داشته باشد. یک rule زمانی تطبیق دارد که دست‌کم یکی از <code dir="ltr">subjects</code> آن <em>و</em> دست‌کم یکی از <code dir="ltr">resourceRules</code> یا <code dir="ltr">nonResourceRules</code> آن (بسته به اینکه درخواست ورودی برای یک URL منبع یا غیرمنبع است) با درخواست تطبیق داشته باشد.</p>
+<p dir="rtl">برای فیلد <code dir="ltr">name</code> در subjects و همچنین فیلدهای <code dir="ltr">verbs</code>، <code dir="ltr">apiGroups</code>، <code dir="ltr">resources</code>، <code dir="ltr">namespaces</code> و <code dir="ltr">nonResourceURLs</code> در قواعد منبع و غیرمنبع، می‌توان از نویسه‌ی عام <code dir="ltr">*</code> استفاده کرد تا با همه‌ی مقادیر آن فیلد تطبیق یابد؛ این کار در عمل آن فیلد را از ارزیابی خارج می‌کند.</p>
+<p dir="rtl">مقدار <code dir="ltr">distinguisherMethod.type</code> در یک FlowSchema تعیین می‌کند که درخواست‌های منطبق با آن schema چگونه به جریان‌ها (flows) تفکیک شوند. این مقدار می‌تواند <code dir="ltr">ByUser</code> باشد که در آن یک کاربر درخواست‌دهنده نمی‌تواند سایر کاربران را از ظرفیت محروم کند؛ <code dir="ltr">ByNamespace</code> باشد که در آن درخواست‌ها برای منابع یک فضای نام (namespace) نمی‌توانند درخواست‌ها برای منابع فضاهای نام دیگر را از ظرفیت محروم کنند؛ یا خالی باشد (یا فیلد <code dir="ltr">distinguisherMethod</code> به‌طور کامل حذف شود) که در این حالت همه‌ی درخواست‌هایی که با این FlowSchema تطبیق می‌یابند بخشی از یک جریان واحد در نظر گرفته می‌شوند. انتخاب درست برای یک FlowSchema مشخص به منبع موردنظر و محیط خاص شما بستگی دارد.</p>
+<h2 id="مقادیر-پیش-فرض-defaults" dir="rtl">مقادیر پیش‌فرض {#defaults}</h2>
+<p dir="rtl">هر kube-apiserver دو نوع آبجکت پیکربندی APF را نگهداری می‌کند: اجباری (mandatory) و پیشنهادی (suggested).</p>
+<h3 id="آبجکت-های-پیکربندی-اجباری" dir="rtl">آبجکت‌های پیکربندی اجباری</h3>
+<p dir="rtl">چهار آبجکت پیکربندی اجباری بیانگر رفتار حفاظتی (guardrail) ثابت و درونی هستند. این رفتار همان چیزی است که سرورها پیش از وجود این آبجکت‌ها دارند، و هنگامی که این آبجکت‌ها وجود دارند، spec آن‌ها این رفتار را منعکس می‌کند. چهار آبجکت اجباری به شرح زیر هستند.</p>
+<ul>
+<li dir="rtl">
+<p dir="rtl">سطح اولویت اجباری <code dir="ltr">exempt</code> برای درخواست‌هایی استفاده می‌شود که اصلاً مشمول کنترل جریان نیستند: این درخواست‌ها همیشه بی‌درنگ توزیع می‌شوند. FlowSchema اجباری <code dir="ltr">exempt</code> همه‌ی درخواست‌های گروه <code dir="ltr">system:masters</code> را در این سطح اولویت طبقه‌بندی می‌کند. در صورت لزوم می‌توانید FlowSchemaهای دیگری تعریف کنید که درخواست‌های دیگر را به این سطح اولویت هدایت کنند.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">سطح اولویت اجباری <code dir="ltr">catch-all</code> در ترکیب با FlowSchema اجباری <code dir="ltr">catch-all</code> به کار می‌رود تا اطمینان حاصل شود که هر درخواست به‌نوعی طبقه‌بندی می‌شود. معمولاً نباید به این پیکربندی فراگیر تکیه کنید و بسته به نیاز باید FlowSchema و PriorityLevelConfiguration فراگیر خودتان را ایجاد کنید (یا از سطح اولویت پیشنهادی <code dir="ltr">global-default</code> که به‌صورت پیش‌فرض نصب می‌شود استفاده کنید). از آنجا که انتظار نمی‌رود این سطح در حالت عادی استفاده شود، سطح اولویت اجباری <code dir="ltr">catch-all</code> سهم هم‌زمانی (concurrency share) بسیار کوچکی دارد و درخواست‌ها را در صف قرار نمی‌دهد.</p>
+</li>
+</ul>
+<h3 id="آبجکت-های-پیکربندی-پیشنهادی" dir="rtl">آبجکت‌های پیکربندی پیشنهادی</h3>
+<p dir="rtl">FlowSchemaها و PriorityLevelConfigurationهای پیشنهادی یک پیکربندی پیش‌فرض معقول را تشکیل می‌دهند. در صورت تمایل می‌توانید این‌ها را تغییر دهید و/یا آبجکت‌های پیکربندی اضافی ایجاد کنید. اگر احتمال می‌رود کلاستر شما بار سنگینی را تجربه کند، باید بررسی کنید چه پیکربندی بهترین کارکرد را خواهد داشت.</p>
+<p dir="rtl">پیکربندی پیشنهادی درخواست‌ها را در شش سطح اولویت گروه‌بندی می‌کند:</p>
+<ul>
+<li dir="rtl">
+<p dir="rtl">سطح اولویت <code dir="ltr">node-high</code> برای به‌روزرسانی‌های سلامت از سوی نودها است.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">سطح اولویت <code dir="ltr">system</code> برای درخواست‌های غیرمرتبط با سلامت از سوی گروه <code dir="ltr">system:nodes</code> است، یعنی Kubeletها، که باید بتوانند با API server ارتباط برقرار کنند تا بارهای کاری بتوانند روی آن‌ها زمان‌بندی شوند.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">سطح اولویت <code dir="ltr">leader-election</code> برای درخواست‌های انتخاب رهبر (leader election) از سوی کنترل‌کننده‌های داخلی است (به‌طور مشخص، درخواست‌های مربوط به <code dir="ltr">endpoints</code>، <code dir="ltr">configmaps</code> یا <code dir="ltr">leases</code> که از سوی کاربران <code dir="ltr">system:kube-controller-manager</code> یا <code dir="ltr">system:kube-scheduler</code> و حساب‌های سرویس در فضای نام <code dir="ltr">kube-system</code> می‌آیند). جدا نگه داشتن این ترافیک از ترافیک‌های دیگر اهمیت دارد، زیرا خطا در انتخاب رهبر باعث می‌شود کنترل‌کننده‌های مربوطه با شکست مواجه شوند و دوباره راه‌اندازی شوند، و این به نوبه‌ی خود ترافیک پرهزینه‌تری ایجاد می‌کند، چون کنترل‌کننده‌های جدید informerهای خود را همگام‌سازی می‌کنند.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">سطح اولویت <code dir="ltr">workload-high</code> برای سایر درخواست‌های کنترل‌کننده‌های داخلی است.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">سطح اولویت <code dir="ltr">workload-low</code> برای درخواست‌های هر حساب سرویس دیگر است که معمولاً شامل همه‌ی درخواست‌های کنترل‌کننده‌هایی می‌شود که در Podها اجرا می‌شوند.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">سطح اولویت <code dir="ltr">global-default</code> همه‌ی ترافیک‌های دیگر را مدیریت می‌کند، مانند دستورهای تعاملی <code dir="ltr">kubectl</code> که کاربران بدون دسترسی ویژه اجرا می‌کنند.</p>
+</li>
+</ul>
+<p dir="rtl">FlowSchemaهای پیشنهادی برای هدایت درخواست‌ها به سطوح اولویت بالا به کار می‌روند و در اینجا فهرست نشده‌اند.</p>
+<h3 id="نگهداری-آبجکت-های-پیکربندی-اجباری-و-پیشنهادی" dir="rtl">نگهداری آبجکت‌های پیکربندی اجباری و پیشنهادی</h3>
+<p dir="rtl">هر <code dir="ltr">kube-apiserver</code> آبجکت‌های پیکربندی اجباری و پیشنهادی را به‌طور مستقل و با رفتار اولیه و دوره‌ای نگهداری می‌کند. بنابراین، در شرایطی که ترکیبی از سرورهایی با نسخه‌های مختلف وجود دارد، تا زمانی که سرورهای مختلف دیدگاه‌های متفاوتی درباره‌ی محتوای صحیح این آبجکت‌ها داشته باشند، ممکن است نوسان (thrashing) رخ دهد.</p>
+<p dir="rtl">هر <code dir="ltr">kube-apiserver</code> یک مرحله‌ی نگهداری اولیه روی آبجکت‌های پیکربندی اجباری و پیشنهادی انجام می‌دهد و پس از آن به‌طور دوره‌ای (هر دقیقه یک‌بار) این آبجکت‌ها را نگهداری می‌کند.</p>
+<p dir="rtl">برای آبجکت‌های پیکربندی اجباری، نگهداری شامل اطمینان از وجود آبجکت و در صورت وجود، داشتن spec صحیح است. سرور اجازه‌ی ایجاد یا به‌روزرسانی با specی را که با رفتار حفاظتی سرور ناسازگار باشد نمی‌دهد.</p>
+<p dir="rtl">نگهداری آبجکت‌های پیکربندی پیشنهادی به‌گونه‌ای طراحی شده است که امکان بازنویسی specهای آن‌ها را فراهم کند. در مقابل، حذف آن‌ها پذیرفته نمی‌شود: فرایند نگهداری آبجکت را بازمی‌گرداند. اگر یک آبجکت پیکربندی پیشنهادی را نمی‌خواهید، باید آن را نگه دارید اما spec آن را طوری تنظیم کنید که کمترین پیامد را داشته باشد. نگهداری آبجکت‌های پیشنهادی همچنین برای پشتیبانی از مهاجرت خودکار هنگام عرضه‌ی نسخه‌ی جدید <code dir="ltr">kube-apiserver</code> طراحی شده است، هرچند ممکن است تا زمانی که جمعیتی ترکیبی از سرورها وجود دارد، با نوسان همراه باشد.</p>
+<p dir="rtl">نگهداری یک آبجکت پیکربندی پیشنهادی شامل ایجاد آن --- با spec پیشنهادی سرور --- در صورت عدم وجود آبجکت است. از سوی دیگر، اگر آبجکت از قبل وجود داشته باشد، رفتار نگهداری به این بستگی دارد که <code dir="ltr">kube-apiserver</code>ها آبجکت را کنترل می‌کنند یا کاربران. در حالت اول، سرور اطمینان حاصل می‌کند که spec آبجکت همان چیزی است که سرور پیشنهاد می‌کند؛ در حالت دوم، spec دست‌نخورده باقی می‌ماند.</p>
+<p dir="rtl">پاسخ به اینکه چه کسی آبجکت را کنترل می‌کند، ابتدا با جست‌وجوی یک annotation با کلید <code dir="ltr">apf.kubernetes.io/autoupdate-spec</code> به‌دست می‌آید. اگر چنین annotation ای وجود داشته باشد و مقدار آن <code dir="ltr">true</code> باشد، kube-apiserverها آبجکت را کنترل می‌کنند. اگر چنین annotation ای وجود داشته باشد و مقدار آن <code dir="ltr">false</code> باشد، کاربران آبجکت را کنترل می‌کنند. اگر هیچ‌یک از این دو شرط برقرار نباشد، <code dir="ltr">metadata.generation</code> آبجکت بررسی می‌شود. اگر مقدار آن 1 باشد، kube-apiserverها آبجکت را کنترل می‌کنند. در غیر این صورت، کاربران آبجکت را کنترل می‌کنند. این قواعد در نسخه‌ی 1.22 معرفی شدند و درنظر گرفتن <code dir="ltr">metadata.generation</code> برای مهاجرت از رفتار ساده‌تر پیشین است. کاربرانی که می‌خواهند یک آبجکت پیکربندی پیشنهادی را کنترل کنند، باید annotation با کلید <code dir="ltr">apf.kubernetes.io/autoupdate-spec</code> آن را روی <code dir="ltr">false</code> تنظیم کنند.</p>
+<p dir="rtl">نگهداری یک آبجکت پیکربندی اجباری یا پیشنهادی همچنین شامل اطمینان از این است که آبجکت یک annotation با کلید <code dir="ltr">apf.kubernetes.io/autoupdate-spec</code> دارد که به‌درستی نشان می‌دهد آیا kube-apiserverها آبجکت را کنترل می‌کنند یا خیر.</p>
+<p dir="rtl">نگهداری همچنین شامل حذف آبجکت‌هایی است که نه اجباری هستند و نه پیشنهادی، اما با <code dir="ltr">apf.kubernetes.io/autoupdate-spec=true</code> annotate شده‌اند.</p>
+<h2 id="معافیت-درخواست-های-بررسی-سلامت-از-محدودیت-هم-زمانی-health-check-concurrency-exemption" dir="rtl">معافیت درخواست‌های بررسی سلامت از محدودیت هم‌زمانی {#health-check-concurrency-exemption}</h2>
+<p dir="rtl">پیکربندی پیشنهادی هیچ رفتار ویژه‌ای برای درخواست‌های بررسی سلامت (health check) روی kube-apiserverها از سوی kubeletهای محلی آن‌ها در نظر نمی‌گیرد --- درخواست‌هایی که معمولاً از پورت امن استفاده می‌کنند اما هیچ اعتبارنامه‌ای ارائه نمی‌دهند. با پیکربندی پیشنهادی، این درخواست‌ها به FlowSchema با نام <code dir="ltr">global-default</code> و سطح اولویت متناظر <code dir="ltr">global-default</code> اختصاص می‌یابند، جایی که ترافیک‌های دیگر می‌توانند آن‌ها را از میدان به در کنند.</p>
+<p dir="rtl">اگر FlowSchema اضافی زیر را اضافه کنید، این درخواست‌ها از محدودسازی نرخ معاف می‌شوند.</p>
+<div class="callout caution"><div class="callout-title">احتیاط:</div>
+<p dir="rtl">اعمال این تغییر همچنین به هر طرف مخربی اجازه می‌دهد درخواست‌های بررسی سلامتی ارسال کند که با این FlowSchema تطبیق دارند، آن هم با هر حجمی که بخواهد. اگر برای محافظت از API server کلاستر خود در برابر ترافیک عمومی اینترنت از یک فیلتر ترافیک وب یا سازوکار امنیتی خارجی مشابه استفاده می‌کنید، می‌توانید قواعدی پیکربندی کنید که هر درخواست بررسی سلامتی را که از خارج کلاستر شما می‌آید مسدود کند.</p>
+</div>
+<div class="code-file ltr" dir="ltr">priority-and-fairness/health-for-strangers.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: flowcontrol.apiserver.k8s.io/v1
+kind: FlowSchema
+metadata:
+  name: health-for-strangers
+spec:
+  matchingPrecedence: 1000
+  priorityLevelConfiguration:
+    name: exempt
+  rules:
+    - nonResourceRules:
+      - nonResourceURLs:
+          - "/healthz"
+          - "/livez"
+          - "/readyz"
+        verbs:
+          - "*"
+      subjects:
+        - kind: Group
+          group:
+            name: "system:unauthenticated"
+</code></pre>
+<h2 id="قابلیت-مشاهده-پذیری-observability-observability" dir="rtl">قابلیت مشاهده‌پذیری (Observability) {#observability}</h2>
+<h3 id="متریک-ها-metrics" dir="rtl">متریک‌ها {#metrics}</h3>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">در نسخه‌های کوبرنتیز پیش از v1.20، برچسب‌های <code dir="ltr">flow_schema</code> و
+<code dir="ltr">priority_level</code> به‌صورت ناهماهنگ به ترتیب با نام‌های <code dir="ltr">flowSchema</code> و <code dir="ltr">priorityLevel</code> نام‌گذاری شده بودند.
+اگر از کوبرنتیز نسخه v1.19 یا قدیمی‌تر استفاده می‌کنید،
+باید به مستندات نسخه خود مراجعه کنید.</p>
+</div>
+<p dir="rtl">هنگامی که قابلیت API Priority and Fairness را فعال می‌کنید، kube-apiserver
+متریک‌های اضافی را ارائه می‌کند. پایش این متریک‌ها می‌تواند به شما کمک کند تشخیص دهید که آیا
+پیکربندی شما به‌طور نامناسب ترافیک مهم را محدود (throttle) می‌کند، یا بارهای کاری
+بدرفتاری را که ممکن است به سلامت سیستم آسیب بزنند پیدا کنید.</p>
+<h4 id="سطح-بلوغ-بتا" dir="rtl">سطح بلوغ بتا</h4>
+<ul>
+<li dir="rtl">
+<p dir="rtl"><code dir="ltr">apiserver_flowcontrol_rejected_requests_total</code> یک counter vector
+(تجمعی از زمان شروع سرور) از درخواست‌های ردشده است که
+بر اساس برچسب‌های <code dir="ltr">flow_schema</code> (نشان‌دهنده FlowSchema منطبق با درخواست)،
+<code dir="ltr">priority_level</code> (نشان‌دهنده سطح اولویتی که درخواست به آن تخصیص یافته)
+و <code dir="ltr">reason</code> تفکیک شده است. برچسب <code dir="ltr">reason</code>
+یکی از مقادیر زیر را خواهد داشت:</p>
+<ul>
+<li dir="rtl"><code dir="ltr">queue-full</code>: نشان می‌دهد که تعداد زیادی درخواست از قبل
+در صف قرار گرفته بود.</li>
+<li dir="rtl"><code dir="ltr">concurrency-limit</code>: نشان می‌دهد که
+PriorityLevelConfiguration به‌گونه‌ای پیکربندی شده که درخواست‌های مازاد را به‌جای
+صف‌بندی، رد کند.</li>
+<li dir="rtl"><code dir="ltr">time-out</code>: نشان می‌دهد که درخواست هنگام پایان یافتن محدودیت زمان صف‌بندی‌اش
+همچنان در صف بود.</li>
+<li dir="rtl"><code dir="ltr">cancelled</code>: نشان می‌دهد که درخواست purge locked نیست
+و از صف بیرون انداخته شده است.</li>
+</ul>
+</li>
+<li dir="rtl">
+<p dir="rtl"><code dir="ltr">apiserver_flowcontrol_dispatched_requests_total</code> یک counter
+vector (تجمعی از زمان شروع سرور) از درخواست‌هایی است که اجرایشان آغاز شده و
+بر اساس <code dir="ltr">flow_schema</code> و <code dir="ltr">priority_level</code> تفکیک شده است.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><code dir="ltr">apiserver_flowcontrol_current_inqueue_requests</code> یک gauge vector است که
+تعداد لحظه‌ای درخواست‌های صف‌شده (که در حال اجرا نیستند) را نگه می‌دارد و
+بر اساس <code dir="ltr">priority_level</code> و <code dir="ltr">flow_schema</code> تفکیک شده است.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><code dir="ltr">apiserver_flowcontrol_current_executing_requests</code> یک gauge vector است که
+تعداد لحظه‌ای درخواست‌های در حال اجرا (که در صف منتظر نیستند) را نگه می‌دارد و
+بر اساس <code dir="ltr">priority_level</code> و <code dir="ltr">flow_schema</code> تفکیک شده است.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><code dir="ltr">apiserver_flowcontrol_current_executing_seats</code> یک gauge vector است که
+تعداد لحظه‌ای seatهای اشغال‌شده را نگه می‌دارد و بر اساس
+<code dir="ltr">priority_level</code> و <code dir="ltr">flow_schema</code> تفکیک شده است.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><code dir="ltr">apiserver_flowcontrol_request_wait_duration_seconds</code> یک histogram
+vector از مدت زمانی است که درخواست‌ها در صف سپری کرده‌اند و بر اساس برچسب‌های
+<code dir="ltr">flow_schema</code>، <code dir="ltr">priority_level</code> و <code dir="ltr">execute</code> تفکیک شده است. برچسب <code dir="ltr">execute</code>
+نشان می‌دهد که آیا اجرای درخواست آغاز شده است یا خیر.</p>
+</li>
+</ul>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">از آنجا که هر FlowSchema همواره درخواست‌ها را به یک PriorityLevelConfiguration
+واحد تخصیص می‌دهد، می‌توانید هیستوگرام‌های همه FlowSchemaهای مربوط به یک سطح اولویت را
+با هم جمع کنید تا هیستوگرام مؤثر برای درخواست‌های تخصیص‌یافته به آن سطح اولویت به دست آید.</p>
+</div>
+<ul>
+<li dir="rtl"><code dir="ltr">apiserver_flowcontrol_nominal_limit_seats</code> یک gauge vector است که
+حد همزمانی اسمی هر سطح اولویت را نگه می‌دارد؛ این مقدار از
+حد همزمانی کل API server و سهم‌های همزمانی اسمی پیکربندی‌شده
+برای سطح اولویت محاسبه می‌شود.</li>
+</ul>
+<h4 id="سطح-بلوغ-آلفا" dir="rtl">سطح بلوغ آلفا</h4>
+<ul>
+<li dir="rtl">
+<p dir="rtl"><code dir="ltr">apiserver_current_inqueue_requests</code> یک gauge vector از
+بیشینه‌های اخیر (high water mark) تعداد درخواست‌های صف‌شده است که بر اساس
+برچسبی به نام <code dir="ltr">request_kind</code> با مقدار <code dir="ltr">mutating</code> یا <code dir="ltr">readOnly</code> گروه‌بندی می‌شود.
+این بیشینه‌ها بزرگ‌ترین عددی را توصیف می‌کنند که در آخرین بازه یک‌ثانیه‌ای
+کامل‌شده دیده شده است. این متریک‌ها مکمل gauge vector قدیمی‌تر
+<code dir="ltr">apiserver_current_inflight_requests</code> هستند که بیشینه تعداد درخواست‌هایی را که
+در آخرین بازه به‌طور فعال سرویس‌دهی می‌شدند نگه می‌دارد.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><code dir="ltr">apiserver_current_inqueue_seats</code> یک gauge vector از مجموع بزرگ‌ترین تعداد seat
+که هر یک از درخواست‌های صف‌شده اشغال خواهند کرد است و
+بر اساس برچسب‌های <code dir="ltr">flow_schema</code> و <code dir="ltr">priority_level</code> گروه‌بندی می‌شود.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><code dir="ltr">apiserver_flowcontrol_read_vs_write_current_requests</code> یک
+histogram vector از مشاهداتی است که در پایان هر نانوثانیه
+از تعداد درخواست‌ها انجام می‌شود و بر اساس برچسب‌های
+<code dir="ltr">phase</code> (با مقادیر <code dir="ltr">waiting</code> و <code dir="ltr">executing</code>) و
+<code dir="ltr">request_kind</code> (با مقادیر <code dir="ltr">mutating</code> و <code dir="ltr">readOnly</code>) تفکیک شده است.
+هر مقدار مشاهده‌شده نسبتی بین 0 و 1 است که از تقسیم
+تعداد درخواست‌ها بر حد متناظر تعداد درخواست‌ها به دست می‌آید
+(حد حجم صف برای وضعیت انتظار و حد همزمانی برای وضعیت اجرا).</p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><code dir="ltr">apiserver_flowcontrol_request_concurrency_in_use</code> یک gauge vector است که
+تعداد لحظه‌ای seatهای اشغال‌شده را نگه می‌دارد و بر اساس
+<code dir="ltr">priority_level</code> و <code dir="ltr">flow_schema</code> تفکیک شده است.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><code dir="ltr">apiserver_flowcontrol_priority_level_request_utilization</code> یک
+histogram vector از مشاهداتی است که در پایان هر
+نانوثانیه از تعداد درخواست‌ها انجام می‌شود و بر اساس برچسب‌های
+<code dir="ltr">phase</code> (با مقادیر <code dir="ltr">waiting</code> و <code dir="ltr">executing</code>) و
+<code dir="ltr">priority_level</code> تفکیک شده است. هر مقدار مشاهده‌شده نسبتی بین 0 و 1 است که از تقسیم
+تعداد درخواست‌ها بر حد متناظر تعداد درخواست‌ها به دست می‌آید
+(حد حجم صف برای وضعیت انتظار و حد همزمانی برای وضعیت اجرا).</p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><code dir="ltr">apiserver_flowcontrol_priority_level_seat_utilization</code> یک
+histogram vector از مشاهداتی است که در پایان هر
+نانوثانیه از میزان بهره‌برداری از حد همزمانی یک سطح اولویت انجام می‌شود و
+بر اساس <code dir="ltr">priority_level</code> تفکیک شده است. این بهره‌برداری برابر با کسر
+(تعداد seatهای اشغال‌شده) / (حد همزمانی) است. این
+متریک همه مراحل اجرا (هم مرحله عادی و هم تأخیر اضافی در پایان یک نوشتن برای پوشش
+کار اعلان متناظر) را برای همه درخواست‌ها به‌جز WATCHها در نظر می‌گیرد؛ برای WATCHها
+فقط مرحله اولیه‌ای را در نظر می‌گیرد که اعلان‌های مربوط به آبجکت‌های
+از پیش موجود را تحویل می‌دهد. هر هیستوگرام در این vector همچنین با
+<code dir="ltr">phase: executing</code> برچسب‌گذاری شده است (برای وضعیت انتظار هیچ حد seat وجود ندارد).</p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><code dir="ltr">apiserver_flowcontrol_request_queue_length_after_enqueue</code> یک
+histogram vector از طول صف‌ها است که بر اساس
+<code dir="ltr">priority_level</code> و <code dir="ltr">flow_schema</code> تفکیک شده و توسط درخواست‌های صف‌شده نمونه‌برداری می‌شود.
+هر درخواستی که در صف قرار می‌گیرد یک نمونه به هیستوگرام خود می‌افزاید که
+طول صف را بلافاصله پس از افزوده شدن درخواست گزارش می‌کند.
+توجه کنید که این روش آمارهایی متفاوت از یک بررسی نااریب تولید می‌کند.</p>
+</li>
+</ul>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">وجود یک مقدار پرت (outlier) در یکی از هیستوگرام‌ها نشان می‌دهد که احتمالاً یک جریان
+واحد (یعنی درخواست‌های یک کاربر یا برای یک فضای نام، بسته به
+پیکربندی) API server را مورد هجوم قرار داده و محدود (throttle) می‌شود. در مقابل،
+اگر هیستوگرام یک سطح اولویت نشان دهد که همه صف‌های آن سطح اولویت
+از صف‌های سایر سطوح اولویت بلندتر هستند، ممکن است افزایش سهم‌های همزمانی
+آن PriorityLevelConfiguration مناسب باشد.</p>
+</div>
+<ul>
+<li dir="rtl">
+<p dir="rtl"><code dir="ltr">apiserver_flowcontrol_request_concurrency_limit</code> همان
+<code dir="ltr">apiserver_flowcontrol_nominal_limit_seats</code> است. پیش از معرفی
+قرض‌گیری همزمانی میان سطوح اولویت،
+این مقدار همواره برابر با <code dir="ltr">apiserver_flowcontrol_current_limit_seats</code>
+بود (که به‌عنوان یک متریک مجزا وجود نداشت).</p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><code dir="ltr">apiserver_flowcontrol_lower_limit_seats</code> یک gauge vector است که
+کران پایین حد همزمانی پویای هر سطح اولویت را نگه می‌دارد.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><code dir="ltr">apiserver_flowcontrol_upper_limit_seats</code> یک gauge vector است که
+کران بالای حد همزمانی پویای هر سطح اولویت را نگه می‌دارد.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><code dir="ltr">apiserver_flowcontrol_demand_seats</code> یک histogram vector است که
+مشاهدات را در پایان هر نانوثانیه برای نسبت
+(تقاضای seat) / (حد همزمانی اسمی) هر سطح اولویت می‌شمارد.
+تقاضای seat یک سطح اولویت برابر است با مجموع، روی درخواست‌های صف‌شده
+و درخواست‌های موجود در مرحله اولیه اجرا، بیشینه تعداد seatهای اشغال‌شده
+در مراحل اجرای اولیه و نهایی درخواست.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><code dir="ltr">apiserver_flowcontrol_demand_seats_high_watermark</code> یک gauge vector است که
+برای هر سطح اولویت، بیشینه تقاضای seat دیده‌شده
+در طول آخرین بازه تنظیم قرض‌گیری همزمانی را نگه می‌دارد.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><code dir="ltr">apiserver_flowcontrol_demand_seats_average</code> یک gauge vector است که
+برای هر سطح اولویت، میانگین وزن‌دار زمانی تقاضای seat دیده‌شده
+در طول آخرین بازه تنظیم قرض‌گیری همزمانی را نگه می‌دارد.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><code dir="ltr">apiserver_flowcontrol_demand_seats_stdev</code> یک gauge vector است که
+برای هر سطح اولویت، انحراف معیار جامعه با وزن زمانی تقاضای seat دیده‌شده
+در طول آخرین بازه تنظیم قرض‌گیری همزمانی را نگه می‌دارد.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><code dir="ltr">apiserver_flowcontrol_demand_seats_smoothed</code> یک gauge vector است که
+برای هر سطح اولویت، تقاضای seat هموارشده و پوششی (enveloped) را که
+در آخرین تنظیم همزمانی تعیین شده است نگه می‌دارد.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><code dir="ltr">apiserver_flowcontrol_target_seats</code> یک gauge vector است که برای
+هر سطح اولویت، هدف همزمانی را که وارد مسئله تخصیص قرض‌گیری می‌شود نگه می‌دارد.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><code dir="ltr">apiserver_flowcontrol_seat_fair_frac</code> یک gauge است که کسر
+تخصیص منصفانه تعیین‌شده در آخرین تنظیم قرض‌گیری را نگه می‌دارد.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><code dir="ltr">apiserver_flowcontrol_current_limit_seats</code> یک gauge vector است که
+برای هر سطح اولویت، حد همزمانی پویای به‌دست‌آمده
+در آخرین تنظیم را نگه می‌دارد.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><code dir="ltr">apiserver_flowcontrol_request_execution_seconds</code> یک histogram
+vector از مدت زمانی است که اجرای واقعی درخواست‌ها طول کشیده و بر اساس
+<code dir="ltr">flow_schema</code> و <code dir="ltr">priority_level</code> تفکیک شده است.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><code dir="ltr">apiserver_flowcontrol_watch_count_samples</code> یک histogram vector از
+تعداد درخواست‌های WATCH فعالِ مرتبط با یک نوشتن مشخص است که
+بر اساس <code dir="ltr">flow_schema</code> و <code dir="ltr">priority_level</code> تفکیک شده است.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><code dir="ltr">apiserver_flowcontrol_work_estimated_seats</code> یک histogram vector
+از تعداد seatهای تخمینی (بیشینه مراحل اولیه و نهایی
+اجرا) مرتبط با درخواست‌ها است که بر اساس <code dir="ltr">flow_schema</code>
+و <code dir="ltr">priority_level</code> تفکیک شده است.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><code dir="ltr">apiserver_flowcontrol_request_dispatch_no_accommodation_total</code> یک
+counter vector از تعداد رویدادهایی است که در principle می‌توانستند منجر به
+dispatch شدن یک درخواست شوند اما به دلیل نبود همزمانی در دسترس این اتفاق نیفتاد و
+بر اساس <code dir="ltr">flow_schema</code> و <code dir="ltr">priority_level</code> تفکیک شده است.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><code dir="ltr">apiserver_flowcontrol_epoch_advance_total</code> یک counter vector از
+تعداد تلاش‌ها برای جهش دادن پیشرفت‌سنج (progress meter) یک سطح اولویت
+به عقب، به‌منظور جلوگیری از سرریز عددی است که بر اساس <code dir="ltr">priority_level</code> و
+<code dir="ltr">success</code> گروه‌بندی می‌شود.</p>
+</li>
+</ul>
+<h2 id="روش-های-توصیه-شده-برای-استفاده-از-api-priority-and-fairness-good-practices-for-using-api-priority-and-fairness" dir="rtl">روش‌های توصیه‌شده برای استفاده از API Priority and Fairness {#good-practices-for-using-api-priority-and-fairness}</h2>
+<p dir="rtl">هنگامی که یک سطح اولویت از همزمانی مجاز خود فراتر می‌رود، درخواست‌ها ممکن است
+با افزایش تأخیر روبه‌رو شوند یا با خطای HTTP 429 (Too Many Requests) حذف شوند. برای جلوگیری از این پیامدهای جانبی APF،
+می‌توانید بار کاری خود را تغییر دهید یا تنظیمات APF را اصلاح کنید تا اطمینان یابید
+seatهای کافی برای سرویس‌دهی به درخواست‌های شما در دسترس است.</p>
+<p dir="rtl">برای تشخیص اینکه آیا درخواست‌ها به دلیل APF رد می‌شوند، متریک‌های زیر را بررسی کنید:</p>
+<ul>
+<li dir="rtl">apiserver_flowcontrol_rejected_requests_total: تعداد کل درخواست‌های
+ردشده به تفکیک FlowSchema و PriorityLevelConfiguration.</li>
+<li dir="rtl">apiserver_flowcontrol_current_inqueue_requests: تعداد فعلی درخواست‌های
+صف‌شده به تفکیک FlowSchema و PriorityLevelConfiguration.</li>
+<li dir="rtl">apiserver_flowcontrol_request_wait_duration_seconds: تأخیری که به
+درخواست‌های منتظر در صف اضافه می‌شود.</li>
+<li dir="rtl">apiserver_flowcontrol_priority_level_seat_utilization: میزان بهره‌برداری از seat
+به ازای هر PriorityLevelConfiguration.</li>
+</ul>
+<h3 id="تغییرات-بار-کاری-good-practice-workload-modifications" dir="rtl">تغییرات بار کاری {#good-practice-workload-modifications}</h3>
+<p dir="rtl">برای جلوگیری از صف‌بندی درخواست‌ها و افزودن تأخیر یا حذف آن‌ها به دلیل APF،
+می‌توانید درخواست‌های خود را با روش‌های زیر بهینه کنید:</p>
+<ul>
+<li dir="rtl">کاهش نرخ اجرای درخواست‌ها. تعداد کمتر درخواست
+در یک بازه زمانی ثابت باعث می‌شود در هر لحظه به تعداد کمتری seat نیاز باشد.</li>
+<li dir="rtl">از ارسال همزمان تعداد زیادی درخواست پرهزینه خودداری کنید. درخواست‌ها را می‌توان
+طوری بهینه کرد که از seat کمتری استفاده کنند یا تأخیر کمتری داشته باشند تا این درخواست‌ها
+seatها را برای مدت کوتاه‌تری نگه دارند. درخواست‌های list بسته به تعداد آبجکت‌های واکشی‌شده در طول درخواست
+می‌توانند بیش از 1 seat را اشغال کنند. محدود کردن
+تعداد آبجکت‌های بازیابی‌شده در یک درخواست list، برای مثال با استفاده از
+صفحه‌بندی (pagination)، در بازه زمانی کوتاه‌تری از seatهای کل کمتری استفاده می‌کند. افزون بر این،
+جایگزین کردن درخواست‌های list با درخواست‌های watch به سهم‌های همزمانی کل کمتری نیاز دارد،
+زیرا درخواست‌های watch در طول انفجار اولیه اعلان‌ها فقط 1 seat را اشغال می‌کنند.
+اگر در نسخه‌های 1.27 و بالاتر از streaming list استفاده کنید، درخواست‌های watch
+برای انفجار اولیه اعلان‌های خود به همان تعداد seat که یک درخواست list اشغال می‌کند نیاز دارند، زیرا کل وضعیت مجموعه باید
+به‌صورت جریانی ارسال شود. توجه کنید که در هر دو حالت، یک درخواست watch پس از
+این مرحله اولیه هیچ seat‌ای را نگه نمی‌دارد.</li>
+</ul>
+<p dir="rtl">به خاطر داشته باشید که صف‌بندی یا ردشدن درخواست‌ها توسط APF می‌تواند ناشی از
+افزایش تعداد درخواست‌ها یا افزایش تأخیر درخواست‌های
+موجود باشد. برای مثال، اگر درخواست‌هایی که معمولاً 1 ثانیه برای اجرا طول می‌کشند
+شروع به صرف 60 ثانیه کنند، ممکن است APF شروع به رد درخواست‌ها کند، زیرا
+درخواست‌ها به دلیل این افزایش تأخیر، seatها را برای مدتی طولانی‌تر از حد معمول اشغال کرده‌اند. اگر APF شروع به رد درخواست‌ها در چندین سطح اولویت
+کند، بدون آنکه تغییر چشمگیری در بار کاری رخ داده باشد، ممکن است مشکلی
+زیربنایی در عملکرد control plane وجود داشته باشد، نه در بار کاری یا
+تنظیمات APF.</p>
+<h3 id="تنظیمات-اولویت-و-انصاف-good-practice-apf-settings" dir="rtl">تنظیمات اولویت و انصاف {#good-practice-apf-settings}</h3>
+<p dir="rtl">همچنین می‌توانید آبجکت‌های پیش‌فرض FlowSchema و PriorityLevelConfiguration را
+تغییر دهید یا آبجکت‌های جدیدی از این نوع‌ها ایجاد کنید تا بهتر با
+بار کاری شما سازگار شوند.</p>
+<p dir="rtl">تنظیمات APF را می‌توان برای اهداف زیر تغییر داد:</p>
+<ul>
+<li dir="rtl">اختصاص seatهای بیشتر به درخواست‌های با اولویت بالا.</li>
+<li dir="rtl">جداسازی درخواست‌های غیرضروری یا پرهزینه‌ای که اگر یک سطح همزمانی را با سایر جریان‌ها
+به اشتراک بگذارند، آن را دچار قحطی (starvation) می‌کنند.</li>
+</ul>
+<h4 id="اختصاص-seatهای-بیشتر-به-درخواست-های-با-اولویت-بالا-give-more-seats-to-high-priority-requests" dir="rtl">اختصاص seatهای بیشتر به درخواست‌های با اولویت بالا {#give-more-seats-to-high-priority-requests}</h4>
+<ol>
+<li dir="rtl">در صورت امکان، تعداد seatهای در دسترس در همه سطوح اولویت برای یک
+<code dir="ltr">kube-apiserver</code> مشخص را می‌توان با افزایش مقادیر فلگ‌های
+<code dir="ltr">max-requests-inflight</code> و <code dir="ltr">max-mutating-requests-inflight</code> افزایش داد. به‌طور جایگزین،
+مقیاس‌دهی افقی تعداد نمونه‌های <code dir="ltr">kube-apiserver</code> همزمانی کل
+هر سطح اولویت را در سراسر کلاستر افزایش می‌دهد، مشروط بر اینکه
+توزیع بار (load balancing) درخواست‌ها به‌اندازه کافی انجام شود.</li>
+<li dir="rtl">می‌توانید یک FlowSchema جدید ایجاد کنید که به یک PriorityLevelConfiguration
+با سطح همزمانی بزرگ‌تر ارجاع دهد. این PriorityLevelConfiguration جدید می‌تواند یک سطح
+موجود یا یک سطح جدید با مجموعه سهم‌های همزمانی اسمی مخصوص به خود باشد.
+برای مثال، می‌توان یک FlowSchema جدید معرفی کرد تا
+PriorityLevelConfiguration درخواست‌های شما را از global-default به workload-low تغییر دهد
+و تعداد seatهای در دسترس کاربر شما را افزایش دهد. ایجاد یک
+PriorityLevelConfiguration جدید تعداد seatهای اختصاص‌یافته به
+سطوح موجود را کاهش می‌دهد. به یاد داشته باشید که ویرایش یک FlowSchema یا
+PriorityLevelConfiguration پیش‌فرض مستلزم تنظیم
+حاشیه‌نویسی (annotation) با نام <code dir="ltr">apf.kubernetes.io/autoupdate-spec</code> روی false است.</li>
+<li dir="rtl">همچنین می‌توانید NominalConcurrencyShares را برای
+PriorityLevelConfiguration‌ای که به درخواست‌های با اولویت بالای شما سرویس می‌دهد افزایش دهید.
+به‌طور جایگزین، در نسخه‌های 1.26 و بالاتر، می‌توانید LendablePercent را
+برای سطوح اولویت رقیب افزایش دهید تا سطح اولویت مورد نظر استخر بزرگ‌تری
+از seatها برای قرض‌گرفتن داشته باشد.</li>
+</ol>
+<h4 id="جداسازی-درخواست-های-غیرضروری-برای-جلوگیری-از-قحطی-سایر-جریان-ها-isolate-non-essential-requests-from-starving-other-flows" dir="rtl">جداسازی درخواست‌های غیرضروری برای جلوگیری از قحطی سایر جریان‌ها {#isolate-non-essential-requests-from-starving-other-flows}</h4>
+<p dir="rtl">برای جداسازی درخواست‌ها، می‌توانید یک FlowSchema ایجاد کنید که subject آن با
+کاربری که این درخواست‌ها را ارسال می‌کند مطابقت داشته باشد، یا یک FlowSchema ایجاد کنید که با ماهیت درخواست
+(متناظر با resourceRules) مطابقت داشته باشد. سپس می‌توانید این FlowSchema را به یک
+PriorityLevelConfiguration با سهم کمی از seatها نگاشت کنید.</p>
+<p dir="rtl">برای مثال، فرض کنید درخواست‌های list رویدادها از Podهای در حال اجرا در فضای نام default
+هر کدام 10 seat استفاده می‌کنند و به مدت 1 دقیقه اجرا می‌شوند. برای جلوگیری از تأثیر این درخواست‌های پرهزینه
+بر درخواست‌های سایر Podها که از FlowSchema موجود service-accounts استفاده می‌کنند،
+می‌توانید FlowSchema زیر را اعمال کنید تا این فراخوانی‌های list از سایر درخواست‌ها
+جدا شوند.</p>
+<p dir="rtl">نمونه آبجکت FlowSchema برای جداسازی درخواست‌های list رویدادها:</p>
+<div class="code-file ltr" dir="ltr">priority-and-fairness/list-events-default-service-account.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: flowcontrol.apiserver.k8s.io/v1
+kind: FlowSchema
+metadata:
+  name: list-events-default-service-account
+spec:
+  distinguisherMethod:
+    type: ByUser
+  matchingPrecedence: 8000
+  priorityLevelConfiguration:
+    name: catch-all
+  rules:
+    - resourceRules:
+      - apiGroups:
+          - '*'
+        namespaces:
+          - default
+        resources:
+          - events
+        verbs:
+          - list
+      subjects:
+        - kind: ServiceAccount
+          serviceAccount:
+            name: default
+            namespace: default
+</code></pre>
+<ul>
+<li dir="rtl">این FlowSchema همه فراخوانی‌های list رویدادها را که توسط service account
+پیش‌فرض در فضای نام default انجام می‌شوند دربرمی‌گیرد. اولویت تطبیق 8000 کمتر از
+مقدار 9000 است که FlowSchema موجود service-accounts استفاده می‌کند، بنابراین این فراخوانی‌های list
+رویدادها با list-events-default-service-account مطابقت خواهند یافت، نه با
+service-accounts.</li>
+<li dir="rtl">از PriorityLevelConfiguration با نام catch-all برای جداسازی این درخواست‌ها استفاده می‌شود.
+سطح اولویت catch-all سهم همزمانی بسیار کوچکی دارد و درخواست‌ها را
+صف‌بندی نمی‌کند.</li>
+</ul>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<ul>
+<li dir="rtl">برای کسب اطلاعات بیشتر درباره عیب‌یابی می‌توانید <a href="https://kubernetes.io/docs/reference/debug-cluster/flow-control/" target="_blank">مستند مرجع</a> کنترل جریان را مطالعه کنید.</li>
+<li dir="rtl">برای اطلاعات پیش‌زمینه درباره جزئیات طراحی API Priority and Fairness، به
+<a href="https://github.com/kubernetes/enhancements/tree/master/keps/sig-api-machinery/1040-priority-and-fairness" target="_blank" rel="noopener">پیشنهاد بهبود (enhancement proposal)</a> مراجعه کنید.</li>
+<li dir="rtl">می‌توانید پیشنهادها و درخواست‌های قابلیت خود را از طریق <a href="https://github.com/kubernetes/community/tree/main/sig-api-machinery" target="_blank" rel="noopener">SIG API Machinery</a>
+یا <a href="https://kubernetes.slack.com/messages/api-priority-and-fairness" target="_blank" rel="noopener">کانال slack</a> این قابلیت مطرح کنید.</li>
+</ul>
+</main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#فعال-غیرفعال-کردن-اولویت-و-انصاف-api-enabling-disabling-api-priority-and-fairness">فعال/غیرفعال کردن اولویت و انصاف API {#enabling-disabling-api-priority-and-fairness}</a><a class="l2" href="#سناریوهای-بازگشتی-سرور-recursive-server-scenarios">سناریوهای بازگشتی سرور {#recursive-server-scenarios}</a><a class="l2" href="#مفاهیم-concepts">مفاهیم {#concepts}</a><a class="l3" href="#سطوح-اولویت-priority-levels">سطوح اولویت {#priority-levels}</a><a class="l3" href="#صندلی-های-اشغال-شده-توسط-یک-درخواست-seats-occupied-by-a-request">صندلی‌های اشغال‌شده توسط یک درخواست {#seats-occupied-by-a-request}</a><a class="l3" href="#تنظیمات-زمان-اجرا-برای-درخواست-های-watch-execution-time-tweaks-for-watch-requests">تنظیمات زمان اجرا برای درخواست‌های watch {#execution-time-tweaks-for-watch-requests}</a><a class="l3" href="#صف-بندی-queuing">صف‌بندی {#queuing}</a><a class="l3" href="#درخواست-های-معاف-exempt-requests">درخواست‌های معاف {#exempt-requests}</a><a class="l2" href="#منابع-resources">منابع {#resources}</a><a class="l3" href="#prioritylevelconfiguration-prioritylevelconfiguration">PriorityLevelConfiguration {#prioritylevelconfiguration}</a><a class="l3" href="#flowschema">FlowSchema</a><a class="l2" href="#مقادیر-پیش-فرض-defaults">مقادیر پیش‌فرض {#defaults}</a><a class="l3" href="#آبجکت-های-پیکربندی-اجباری">آبجکت‌های پیکربندی اجباری</a><a class="l3" href="#آبجکت-های-پیکربندی-پیشنهادی">آبجکت‌های پیکربندی پیشنهادی</a><a class="l3" href="#نگهداری-آبجکت-های-پیکربندی-اجباری-و-پیشنهادی">نگهداری آبجکت‌های پیکربندی اجباری و پیشنهادی</a><a class="l2" href="#معافیت-درخواست-های-بررسی-سلامت-از-محدودیت-هم-زمانی-health-check-concurrency-exemption">معافیت درخواست‌های بررسی سلامت از محدودیت هم‌زمانی {#health-check-concurrency-exemption}</a><a class="l2" href="#قابلیت-مشاهده-پذیری-observability-observability">قابلیت مشاهده‌پذیری (Observability) {#observability}</a><a class="l3" href="#متریک-ها-metrics">متریک‌ها {#metrics}</a><a class="l2" href="#روش-های-توصیه-شده-برای-استفاده-از-api-priority-and-fairness-good-practices-for-using-api-priority-and-fairness">روش‌های توصیه‌شده برای استفاده از API Priority and Fairness {#good-practices-for-using-api-priority-and-fairness}</a><a class="l3" href="#تغییرات-بار-کاری-good-practice-workload-modifications">تغییرات بار کاری {#good-practice-workload-modifications}</a><a class="l3" href="#تنظیمات-اولویت-و-انصاف-good-practice-apf-settings">تنظیمات اولویت و انصاف {#good-practice-apf-settings}</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>

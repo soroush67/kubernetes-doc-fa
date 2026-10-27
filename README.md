@@ -8,10 +8,10 @@
 
 | | |
 |---|---|
-| پیشرفت (بر اساس کلمات) | **10.0٪** |
-| صفحات ترجمه‌شده | 148 از 1722 |
+| پیشرفت (بر اساس کلمات) | **11.2٪** |
+| صفحات ترجمه‌شده | 163 از 1722 |
 | صفحات دارای ایراد ساختاری | 0 |
-| نسخه‌ی منبع انگلیسی | `?` |
+| نسخه‌ی منبع انگلیسی | `ed70e311737a` |
 
 ## مشاهده
 
@@ -68,7 +68,7 @@ cd kubernetes-doc-fa
 | بخش | ترجمه‌شده | کل |
 |---|---|---|
 | `(root)` | 1 | 2 |
-| `concepts` | 138 | 187 |
+| `concepts` | 153 | 187 |
 | `contribute` | 9 | 44 |
 | `doc-contributor-tools` | 0 | 1 |
 | `home` | 0 | 2 |
@@ -91,26 +91,26 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [concepts/resource-management/dynamic-resource-allocation/dra-features.md](md/concepts/resource-management/dynamic-resource-allocation/dra-features.md) — 2026-10-27T15:48:12+03:30
+- [concepts/extend-kubernetes/_index.md](md/concepts/extend-kubernetes/_index.md) — 2026-10-27T15:47:06+03:30
+- [concepts/extend-kubernetes/api-extension/apiserver-aggregation.md](md/concepts/extend-kubernetes/api-extension/apiserver-aggregation.md) — 2026-10-27T15:47:04+03:30
+- [concepts/extend-kubernetes/api-extension/_index.md](md/concepts/extend-kubernetes/api-extension/_index.md) — 2026-10-27T15:46:50+03:30
+- [concepts/containers/images.md](md/concepts/containers/images.md) — 2026-10-27T15:46:41+03:30
+- [concepts/containers/runtime-class.md](md/concepts/containers/runtime-class.md) — 2026-10-27T15:46:01+03:30
+- [concepts/containers/container-lifecycle-hooks.md](md/concepts/containers/container-lifecycle-hooks.md) — 2026-10-27T15:45:08+03:30
+- [concepts/containers/cri.md](md/concepts/containers/cri.md) — 2026-10-27T15:44:52+03:30
+- [concepts/cluster-administration/observability.md](md/concepts/cluster-administration/observability.md) — 2026-10-27T15:44:33+03:30
+- [concepts/cluster-administration/proxies.md](md/concepts/cluster-administration/proxies.md) — 2026-10-27T15:44:33+03:30
+- [concepts/cluster-administration/node-shutdown.md](md/concepts/cluster-administration/node-shutdown.md) — 2026-10-27T15:44:17+03:30
+- [concepts/cluster-administration/flow-control.md](md/concepts/cluster-administration/flow-control.md) — 2026-10-27T15:43:50+03:30
+- [concepts/cluster-administration/node-autoscaling.md](md/concepts/cluster-administration/node-autoscaling.md) — 2026-10-27T15:43:25+03:30
+- [concepts/cluster-administration/networking.md](md/concepts/cluster-administration/networking.md) — 2026-10-27T15:42:26+03:30
+- [concepts/cluster-administration/logging.md](md/concepts/cluster-administration/logging.md) — 2026-10-27T15:42:06+03:30
 - [_index.md](md/_index.md) — 2026-10-27T15:38:01+03:30
 - [concepts/_index.md](md/concepts/_index.md) — 2026-10-27T15:38:01+03:30
 - [concepts/architecture/_index.md](md/concepts/architecture/_index.md) — 2026-10-27T15:38:01+03:30
 - [concepts/architecture/cgroups.md](md/concepts/architecture/cgroups.md) — 2026-10-27T15:38:01+03:30
 - [concepts/architecture/cloud-controller.md](md/concepts/architecture/cloud-controller.md) — 2026-10-27T15:38:01+03:30
-- [concepts/architecture/control-plane-node-communication.md](md/concepts/architecture/control-plane-node-communication.md) — 2026-10-27T15:38:01+03:30
-- [concepts/architecture/controller.md](md/concepts/architecture/controller.md) — 2026-10-27T15:38:01+03:30
-- [concepts/architecture/garbage-collection.md](md/concepts/architecture/garbage-collection.md) — 2026-10-27T15:38:01+03:30
-- [concepts/architecture/leases.md](md/concepts/architecture/leases.md) — 2026-10-27T15:38:01+03:30
-- [concepts/architecture/mixed-version-proxy.md](md/concepts/architecture/mixed-version-proxy.md) — 2026-10-27T15:38:01+03:30
-- [concepts/architecture/nodes.md](md/concepts/architecture/nodes.md) — 2026-10-27T15:38:01+03:30
-- [concepts/architecture/self-healing.md](md/concepts/architecture/self-healing.md) — 2026-10-27T15:38:01+03:30
-- [concepts/cluster-administration/_index.md](md/concepts/cluster-administration/_index.md) — 2026-10-27T15:38:01+03:30
-- [concepts/cluster-administration/addons.md](md/concepts/cluster-administration/addons.md) — 2026-10-27T15:38:01+03:30
-- [concepts/cluster-administration/admission-webhooks-good-practices.md](md/concepts/cluster-administration/admission-webhooks-good-practices.md) — 2026-10-27T15:38:01+03:30
-- [concepts/cluster-administration/certificates.md](md/concepts/cluster-administration/certificates.md) — 2026-10-27T15:38:01+03:30
-- [concepts/cluster-administration/compatibility-version.md](md/concepts/cluster-administration/compatibility-version.md) — 2026-10-27T15:38:01+03:30
-- [concepts/cluster-administration/coordinated-leader-election.md](md/concepts/cluster-administration/coordinated-leader-election.md) — 2026-10-27T15:38:01+03:30
-- [concepts/cluster-administration/dra.md](md/concepts/cluster-administration/dra.md) — 2026-10-27T15:38:01+03:30
-- [concepts/cluster-administration/kube-state-metrics.md](md/concepts/cluster-administration/kube-state-metrics.md) — 2026-10-27T15:38:01+03:30
 
 </div>
 

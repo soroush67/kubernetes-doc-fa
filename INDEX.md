@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-148 از 1722 صفحه
+163 از 1722 صفحه
 
 
 ## `.`
@@ -38,14 +38,14 @@
 - ✅ [compatibility-version.md](md/concepts/cluster-administration/compatibility-version.md)
 - ✅ [coordinated-leader-election.md](md/concepts/cluster-administration/coordinated-leader-election.md)
 - ✅ [dra.md](md/concepts/cluster-administration/dra.md)
-- ⏳ `flow-control.md`
+- ✅ [flow-control.md](md/concepts/cluster-administration/flow-control.md)
 - ✅ [kube-state-metrics.md](md/concepts/cluster-administration/kube-state-metrics.md)
-- ⏳ `logging.md`
-- ⏳ `networking.md`
-- ⏳ `node-autoscaling.md`
-- ⏳ `node-shutdown.md`
-- ⏳ `observability.md`
-- ⏳ `proxies.md`
+- ✅ [logging.md](md/concepts/cluster-administration/logging.md)
+- ✅ [networking.md](md/concepts/cluster-administration/networking.md)
+- ✅ [node-autoscaling.md](md/concepts/cluster-administration/node-autoscaling.md)
+- ✅ [node-shutdown.md](md/concepts/cluster-administration/node-shutdown.md)
+- ✅ [observability.md](md/concepts/cluster-administration/observability.md)
+- ✅ [proxies.md](md/concepts/cluster-administration/proxies.md)
 - ✅ [swap-memory-management.md](md/concepts/cluster-administration/swap-memory-management.md)
 - ✅ [system-logs.md](md/concepts/cluster-administration/system-logs.md)
 - ✅ [system-metrics.md](md/concepts/cluster-administration/system-metrics.md)
@@ -64,20 +64,20 @@
 
 - ✅ [_index.md](md/concepts/containers/_index.md)
 - ✅ [container-environment.md](md/concepts/containers/container-environment.md)
-- ⏳ `container-lifecycle-hooks.md`
-- ⏳ `cri.md`
-- ⏳ `images.md`
-- ⏳ `runtime-class.md`
+- ✅ [container-lifecycle-hooks.md](md/concepts/containers/container-lifecycle-hooks.md)
+- ✅ [cri.md](md/concepts/containers/cri.md)
+- ✅ [images.md](md/concepts/containers/images.md)
+- ✅ [runtime-class.md](md/concepts/containers/runtime-class.md)
 
 ## `concepts/extend-kubernetes`
 
-- ⏳ `_index.md`
+- ✅ [_index.md](md/concepts/extend-kubernetes/_index.md)
 - ✅ [operator.md](md/concepts/extend-kubernetes/operator.md)
 
 ## `concepts/extend-kubernetes/api-extension`
 
-- ⏳ `_index.md`
-- ⏳ `apiserver-aggregation.md`
+- ✅ [_index.md](md/concepts/extend-kubernetes/api-extension/_index.md)
+- ✅ [apiserver-aggregation.md](md/concepts/extend-kubernetes/api-extension/apiserver-aggregation.md)
 - ✅ [custom-resources.md](md/concepts/extend-kubernetes/api-extension/custom-resources.md)
 
 ## `concepts/extend-kubernetes/compute-storage-net`
@@ -125,7 +125,7 @@
 - ✅ [_index.md](md/concepts/resource-management/dynamic-resource-allocation/_index.md)
 - ✅ [device-taints.md](md/concepts/resource-management/dynamic-resource-allocation/device-taints.md)
 - ⏳ `dra-api.md`
-- ⏳ `dra-features.md`
+- ✅ [dra-features.md](md/concepts/resource-management/dynamic-resource-allocation/dra-features.md)
 - ⏳ `dra-observability.md`
 - ✅ [how-dra-works.md](md/concepts/resource-management/dynamic-resource-allocation/how-dra-works.md)
 
