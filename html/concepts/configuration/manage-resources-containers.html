@@ -1,0 +1,429 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>مدیریت منابع برای Podها و کانتینرها | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+</head>
+<body>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">concepts / configuration</span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">مدیریت منابع برای Podها و کانتینرها</h1><!-- overview -->
+<p dir="rtl">هنگامی که یک <span class="term" title="pod">pod</span> را تعریف می‌کنید، می‌توانید به‌صورت اختیاری مشخص کنید که هر
+<span class="term" title="container">کانتینر</span> به چه مقدار از هر منبع نیاز دارد. رایج‌ترین منابعی که مشخص می‌شوند CPU و حافظه
+(RAM) هستند؛ منابع دیگری نیز وجود دارند.</p>
+<p dir="rtl">هنگامی که <em>درخواست</em> (request) منبع را برای کانتینرهای یک Pod مشخص می‌کنید،
+<span class="term" title="kube-scheduler">kube-scheduler</span> از این اطلاعات برای تصمیم‌گیری دربارهٔ اینکه Pod روی کدام نود قرار گیرد استفاده می‌کند.
+هنگامی که <em>حد</em> (limit) منبع را برای یک کانتینر مشخص می‌کنید، <span class="term" title="kubelet">kubelet</span> آن حدها را
+اعمال می‌کند تا کانتینر در حال اجرا اجازه نداشته باشد بیش از حدی که تعیین کرده‌اید
+از آن منبع استفاده کند. kubelet همچنین دست‌کم به اندازهٔ <em>درخواست</em> از
+آن منبع سیستمی را به‌طور خاص برای استفادهٔ آن کانتینر رزرو می‌کند.</p>
+<!-- body -->
+<h2 id="درخواست-ها-و-حدها" dir="rtl">درخواست‌ها و حدها</h2>
+<p dir="rtl">اگر نودی که Pod روی آن اجرا می‌شود به مقدار کافی از یک منبع در دسترس داشته باشد، ممکن (و
+مجاز) است که یک کانتینر بیش از مقداری که <code dir="ltr">request</code> آن برای آن منبع مشخص می‌کند از آن منبع استفاده کند.</p>
+<p dir="rtl">برای نمونه، اگر درخواست <code dir="ltr">memory</code> به میزان 256 MiB را برای یک کانتینر تنظیم کنید و آن کانتینر در
+Podی باشد که روی یک Node با 8GiB حافظه و بدون هیچ Pod دیگری زمان‌بندی شده است، آن‌گاه کانتینر می‌تواند تلاش کند
+از RAM بیشتری استفاده کند.</p>
+<p dir="rtl">حدها داستان دیگری دارند. هر دو حد <code dir="ltr">cpu</code> و <code dir="ltr">memory</code> توسط kubelet (و
+<span class="term" title="container-runtime">زمان اجرای کانتینر</span>) اعمال می‌شوند
+و در نهایت توسط کرنل به اجرا درمی‌آیند. روی نودهای لینوکسی، کرنل لینوکس
+حدها را با
+<span class="term" title="cgroup">cgroupها</span> اعمال می‌کند.
+رفتار اعمال حدهای <code dir="ltr">cpu</code> و <code dir="ltr">memory</code> اندکی متفاوت است.</p>
+<p dir="rtl">حدهای <code dir="ltr">cpu</code> با محدودسازی (throttling) CPU اعمال می‌شوند. هنگامی که یک کانتینر به
+حد <code dir="ltr">cpu</code> خود نزدیک می‌شود، کرنل دسترسی به CPU را متناسب با
+حد کانتینر محدود می‌کند. بنابراین، حد <code dir="ltr">cpu</code> یک حد سخت است که کرنل اعمال می‌کند.
+کانتینرها نمی‌توانند بیش از مقدار مشخص‌شده در حد <code dir="ltr">cpu</code> خود از CPU استفاده کنند.</p>
+<p dir="rtl">حدهای <code dir="ltr">memory</code> توسط کرنل با کشتن‌های ناشی از کمبود حافظه (OOM kill) اعمال می‌شوند. هنگامی که
+یک کانتینر بیش از حد <code dir="ltr">memory</code> خود استفاده کند، کرنل ممکن است آن را خاتمه دهد. با این حال،
+خاتمه‌دادن‌ها تنها زمانی رخ می‌دهند که کرنل فشار حافظه را تشخیص دهد. بنابراین،
+کانتینری که بیش از حد حافظه تخصیص دهد ممکن است بی‌درنگ کشته نشود. این بدان معناست که
+حدهای <code dir="ltr">memory</code> به‌صورت واکنشی اعمال می‌شوند. یک کانتینر ممکن است بیش از
+حد <code dir="ltr">memory</code> خود از حافظه استفاده کند، اما اگر چنین کند، ممکن است کشته شود.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">قابلیتی به نام <code dir="ltr">MemoryQoS</code> وجود دارد که محدودسازی حافظه و رزرو اختیاری
+لایه‌بندی‌شدهٔ حافظه را روی نودهای لینوکسی با استفاده از cgroup v2 اضافه می‌کند. برای جزئیات،
+<a href="../workloads/pods/pod-qos.html#memory-qos-with-cgroup-v2">Memory QoS با cgroup v2</a> را ببینید.</p>
+</div>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">اگر برای یک منبع حدی تعیین کنید اما هیچ درخواستی مشخص نکنید، و هیچ سازوکاری در زمان پذیرش (admission)
+درخواست پیش‌فرضی برای آن منبع اعمال نکرده باشد، کوبرنتیز حدی را که
+مشخص کرده‌اید کپی می‌کند و آن را به‌عنوان مقدار درخواستی برای آن منبع به کار می‌برد.</p>
+</div>
+<h2 id="انواع-منابع" dir="rtl">انواع منابع</h2>
+<p dir="rtl">یک <em>نوع منبع</em> دارای یک واحد پایه است و می‌تواند درخواست شود، محدود شود یا هر دو.
+کوبرنتیز انواع منابع داخلی زیر را دارد:</p>
+<table>
+<thead>
+<tr>
+<th dir="rtl">نوع منبع</th>
+<th dir="rtl">توضیح</th>
+<th dir="rtl">واحد پایه</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">cpu</code></td>
+<td dir="rtl">پردازش محاسباتی</td>
+<td dir="rtl">cpu (هسته)</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">memory</code></td>
+<td dir="ltr" class="ltr">RAM</td>
+<td dir="rtl">بایت</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">ephemeral-storage</code></td>
+<td dir="rtl"><a href="https://kubernetes.io/docs/concepts/storage/ephemeral-storage/" target="_blank">ذخیره‌سازی موقت محلی</a></td>
+<td dir="rtl">بایت</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">hugepages-&lt;size&gt;</code></td>
+<td dir="rtl"><a href="#huge-pages">صفحه‌های بزرگ (Huge pages)</a> (فقط لینوکس)</td>
+<td dir="rtl">بایت</td>
+</tr>
+</tbody>
+</table>
+<p dir="rtl">کلاسترها همچنین می‌توانند
+<a href="manage-resources-containers.html#extended-resources">منابع توسعه‌یافته (extended resources)</a>
+(منابعی با نام سفارشی که معمولاً توسط device pluginها ارائه می‌شوند) فراهم کنند.</p>
+<h3 id="صفحه-های-بزرگ-huge-pages" dir="rtl">صفحه‌های بزرگ (Huge pages)</h3>
+<p dir="rtl">برای بارهای کاری لینوکسی، می‌توانید منابع <em>صفحهٔ بزرگ</em> را مشخص کنید.
+صفحه‌های بزرگ قابلیتی خاص لینوکس هستند که در آن کرنل نود بلوک‌هایی از حافظه را تخصیص می‌دهد
+که بسیار بزرگ‌تر از اندازهٔ پیش‌فرض صفحه‌اند.</p>
+<p dir="rtl">برای نمونه، روی سیستمی که اندازهٔ پیش‌فرض صفحه 4KiB است، می‌توانید حد
+<code dir="ltr">hugepages-2Mi: 80Mi</code> را مشخص کنید. اگر کانتینر تلاش کند بیش از ۴۰ صفحهٔ بزرگ 2MiB (در
+مجموع 80 MiB) تخصیص دهد، آن تخصیص با شکست مواجه می‌شود.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">نمی‌توانید منابع <code dir="ltr">hugepages-*</code> را بیش از ظرفیت متعهد (overcommit) کنید.
+این با منابع <code dir="ltr">memory</code> و <code dir="ltr">cpu</code> متفاوت است.</p>
+</div>
+<p dir="rtl">CPU و حافظه در مجموع <em>منابع محاسباتی</em> یا <em>منابع</em> نامیده می‌شوند. منابع
+محاسباتی کمیت‌های قابل اندازه‌گیری‌ای هستند که می‌توانند درخواست، تخصیص و
+مصرف شوند. این منابع از
+<a href="../overview/kubernetes-api.html">منابع API</a> متمایزند. منابع API، مانند Podها و
+<a href="https://kubernetes.io/docs/concepts/services-networking/service/" target="_blank">Serviceها</a>، آبجکت‌هایی هستند که می‌توان آن‌ها را
+از طریق سرور API کوبرنتیز خواند و تغییر داد.</p>
+<h2 id="درخواست-ها-و-حدهای-منابع-pod-و-کانتینر" dir="rtl">درخواست‌ها و حدهای منابع Pod و کانتینر</h2>
+<p dir="rtl">برای هر کانتینر، می‌توانید حدها و درخواست‌های منابع را مشخص کنید،
+از جمله موارد زیر:</p>
+<ul>
+<li dir="ltr" class="ltr"><code dir="ltr">spec.containers[].resources.limits.cpu</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">spec.containers[].resources.limits.memory</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">spec.containers[].resources.limits.ephemeral-storage</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">spec.containers[].resources.limits.hugepages-&lt;size&gt;</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">spec.containers[].resources.requests.cpu</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">spec.containers[].resources.requests.memory</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">spec.containers[].resources.requests.ephemeral-storage</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">spec.containers[].resources.requests.hugepages-&lt;size&gt;</code></li>
+</ul>
+<p dir="rtl">اگرچه تنها می‌توانید درخواست‌ها و حدها را برای کانتینرهای منفرد مشخص کنید،
+اندیشیدن به درخواست‌ها و حدهای کلی منابع برای
+یک Pod نیز سودمند است.
+برای یک منبع مشخص، <em>درخواست/حد منبع Pod</em> برابر با مجموع
+درخواست‌ها/حدهای منبع از آن نوع برای همهٔ کانتینرهای Pod است.</p>
+<h2 id="مشخص-کردن-منابع-در-سطح-pod" dir="rtl">مشخص کردن منابع در سطح Pod</h2>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
+<p dir="rtl">به شرط آنکه <a href="https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/" target="_blank">feature gate</a> با نام <code dir="ltr">PodLevelResources</code>
+در کلاستر شما فعال باشد،
+می‌توانید درخواست‌ها و حدهای منابع را در
+سطح Pod مشخص کنید. در سطح Pod، کوبرنتیز 1.37
+تنها از درخواست‌ها یا حدهای منابع برای انواع مشخصی از منابع پشتیبانی می‌کند: <code dir="ltr">cpu</code> و/
+یا <code dir="ltr">memory</code> و/یا <code dir="ltr">hugepages</code>. با این قابلیت، کوبرنتیز به شما امکان می‌دهد بودجهٔ کلی منابع را
+برای Pod اعلام کنید، که به‌ویژه هنگام کار با تعداد زیادی
+کانتینر که سنجش دقیق نیازهای منابع تک‌تک آن‌ها دشوار است، سودمند است.
+افزون بر این، این قابلیت به کانتینرهای درون یک Pod امکان می‌دهد منابع بیکار را با
+یکدیگر به اشتراک بگذارند و در نتیجه بهره‌وری منابع بهبود یابد.</p>
+<p dir="rtl">برای یک Pod، می‌توانید حدها و درخواست‌های منابع را برای CPU و حافظه با افزودن موارد زیر مشخص کنید:</p>
+<ul>
+<li dir="ltr" class="ltr"><code dir="ltr">spec.resources.limits.cpu</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">spec.resources.limits.memory</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">spec.resources.limits.hugepages-&lt;size&gt;</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">spec.resources.requests.cpu</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">spec.resources.requests.memory</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">spec.resources.requests.hugepages-&lt;size&gt;</code></li>
+</ul>
+<h2 id="واحدهای-منابع-در-کوبرنتیز" dir="rtl">واحدهای منابع در کوبرنتیز</h2>
+<h3 id="واحدهای-منبع-cpu-meaning-of-cpu" dir="rtl">واحدهای منبع CPU {#meaning-of-cpu}</h3>
+<p dir="rtl">حدها و درخواست‌های منابع CPU با واحد <em>cpu</em> اندازه‌گیری می‌شوند.
+در کوبرنتیز، ۱ واحد CPU معادل <strong>۱ هستهٔ فیزیکی CPU</strong>
+یا <strong>۱ هستهٔ مجازی</strong> است، بسته به اینکه نود یک میزبان فیزیکی باشد
+یا یک ماشین مجازی که درون یک ماشین فیزیکی اجرا می‌شود.</p>
+<p dir="rtl">درخواست‌های کسری مجازند. هنگامی که کانتینری را با
+<code dir="ltr">spec.containers[].resources.requests.cpu</code> برابر با <code dir="ltr">0.5</code> تعریف می‌کنید، در مقایسه با حالتی که
+<code dir="ltr">1.0</code> CPU درخواست کنید، نصف زمان CPU را درخواست می‌کنید.
+برای واحدهای منبع CPU، عبارت <a href="https://kubernetes.io/docs/reference/kubernetes-api/common-definitions/quantity/" target="_blank">کمیت (quantity)</a> <code dir="ltr">0.1</code> معادل
+عبارت <code dir="ltr">100m</code> است که می‌توان آن را «صد میلی‌cpu» خواند. برخی افراد می‌گویند
+«صد میلی‌هسته» و این نیز به همان معنا درک می‌شود.</p>
+<p dir="rtl">منبع CPU همیشه به‌صورت مقدار مطلق منبع مشخص می‌شود، نه هرگز به‌صورت مقدار نسبی. برای نمونه،
+<code dir="ltr">500m</code> CPU تقریباً همان مقدار توان محاسباتی را نشان می‌دهد، چه آن کانتینر
+روی ماشینی تک‌هسته‌ای، دوهسته‌ای یا ۴۸ هسته‌ای اجرا شود.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">کوبرنتیز اجازه نمی‌دهد منابع CPU را با دقتی ریزتر از
+<code dir="ltr">1m</code> یا <code dir="ltr">0.001</code> CPU مشخص کنید. برای اجتناب از استفادهٔ تصادفی از یک کمیت CPU نامعتبر، سودمند است که هنگام استفاده از کمتر از ۱ واحد CPU،
+واحدهای CPU را به‌جای شکل اعشاری با شکل milliCPU مشخص کنید.</p>
+<p dir="rtl">برای نمونه، Podی دارید که از <code dir="ltr">5m</code> یا <code dir="ltr">0.005</code> CPU استفاده می‌کند و می‌خواهید
+منابع CPU آن را کاهش دهید. با استفاده از شکل اعشاری، تشخیص اینکه <code dir="ltr">0.0005</code> CPU
+مقداری نامعتبر است دشوارتر است، در حالی که با استفاده از شکل milliCPU، تشخیص اینکه
+<code dir="ltr">0.5m</code> مقداری نامعتبر است آسان‌تر است.</p>
+</div>
+<h3 id="واحدهای-منبع-حافظه-meaning-of-memory" dir="rtl">واحدهای منبع حافظه {#meaning-of-memory}</h3>
+<p dir="rtl">حدها و درخواست‌های <code dir="ltr">memory</code> بر حسب بایت اندازه‌گیری می‌شوند. می‌توانید حافظه را
+به‌صورت یک عدد صحیح ساده یا یک عدد ممیز ثابت با استفاده از یکی از این
+پسوندهای <a href="https://kubernetes.io/docs/reference/kubernetes-api/common-definitions/quantity/" target="_blank">کمیت</a> بیان کنید:
+E، P، T، G، M، k. همچنین می‌توانید از معادل‌های توانی از دو استفاده کنید: Ei، Pi، Ti، Gi،
+Mi، Ki. API کوبرنتیز همچنین m را به‌عنوان پسوند می‌پذیرد (برای میلی‌بایت: ۱/۱۰۰۰ بایت)،
+اما مشخص کردن آن سودمند نیست: همیشه باید تعداد صحیحی بایت، یا گاهی بخش‌های بزرگ‌تر مانند مضارب ۱ گیبی‌بایت، تخصیص دهید.</p>
+<p dir="rtl">در اینجا چند نمونه از کمیت‌های حافظه آمده است که تقریباً مقدار یکسانی را نشان می‌دهند:</p>
+<pre dir="ltr"><code dir="ltr">@@
+</code></pre>
+<p dir="rtl">به بزرگی و کوچکی حروف پسوندها توجه کنید. "M" به معنای مگابایت است، در حالی که "m" به معنای میلی‌بایت است. اگر <code dir="ltr">400m</code> حافظه درخواست کنید، این درخواستی برای 0.4 بایت است. کسی که این را تایپ می‌کند احتمالاً قصد داشته 400 مبی‌بایت (<code dir="ltr">400Mi</code>)
+یا 400 مگابایت (<code dir="ltr">400M</code>) درخواست کند.</p>
+<h2 id="نمونهٔ-منابع-کانتینر-example-1" dir="rtl">نمونهٔ منابع کانتینر {#example-1}</h2>
+<p dir="rtl">Pod زیر دو کانتینر دارد. هر دو کانتینر با درخواستی برای
+0.25 CPU
+و 64MiB (2<sup>26</sup> بایت) حافظه تعریف شده‌اند. هر کانتینر حدی برابر با 0.5
+CPU و 128MiB حافظه دارد. می‌توان گفت Pod درخواستی برابر با 0.5 CPU و 128
+MiB حافظه، و حدی برابر با 1 CPU و 256MiB حافظه دارد.</p>
+<pre dir="ltr"><code dir="ltr">@@
+</code></pre>
+<h2 id="نمونهٔ-منابع-pod-example-2" dir="rtl">نمونهٔ منابع Pod {#example-2}</h2>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
+<p dir="rtl">این قابلیت را می‌توان با تنظیم
+<a href="https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/" target="_blank">feature gate</a> با نام <code dir="ltr">PodLevelResources</code> فعال کرد.
+Pod زیر درخواست صریحی برابر با 1 CPU و 100 MiB حافظه، و
+حد صریحی برابر با 1 CPU و 200 MiB حافظه دارد. کانتینر <code dir="ltr">pod-resources-demo-ctr-1</code>
+درخواست‌ها و حدهای صریحی دارد. با این حال، کانتینر
+<code dir="ltr">pod-resources-demo-ctr-2</code> صرفاً منابع در دسترس را
+در محدودهٔ منابع Pod به اشتراک می‌گذارد، زیرا درخواست‌ها و حدهای صریحی برای آن
+تنظیم نشده است.</p>
+<div class="code-file ltr" dir="ltr">pods/resource/pod-level-resources.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-resources-demo
+  namespace: pod-resources-example
+spec:
+  resources:
+    limits:
+      cpu: "1"
+      memory: "200Mi"
+    requests:
+      cpu: "1"
+      memory: "100Mi"
+  containers:
+  - name: pod-resources-demo-ctr-1
+    image: nginx
+    resources:
+      limits:
+        cpu: "0.5"
+        memory: "100Mi"
+      requests:
+        cpu: "0.5"
+        memory: "50Mi"
+  - name: pod-resources-demo-ctr-2
+    image: fedora
+    command:
+    - sleep
+    - inf
+</code></pre>
+<h2 id="podهای-دارای-درخواست-منابع-چگونه-زمان-بندی-می-شوند" dir="rtl">Podهای دارای درخواست منابع چگونه زمان‌بندی می‌شوند</h2>
+<p dir="rtl">هنگامی که یک Pod ایجاد می‌کنید، زمان‌بند کوبرنتیز نودی را برای اجرای Pod
+انتخاب می‌کند. هر نود برای هر یک از انواع منابع ظرفیت بیشینه‌ای دارد:
+مقدار CPU و حافظه‌ای که می‌تواند برای Podها فراهم کند. زمان‌بند اطمینان حاصل می‌کند که
+برای هر نوع منبع، مجموع درخواست‌های منابع کانتینرهای
+زمان‌بندی‌شده کمتر از ظرفیت نود باشد.
+توجه داشته باشید که حتی اگر مصرف واقعی حافظه
+یا CPU روی نودها بسیار پایین باشد، اگر بررسی ظرفیت ناموفق باشد، زمان‌بند همچنان از قرار دادن
+Pod روی آن نود خودداری می‌کند. این کار از کمبود منابع روی یک نود در زمانی که مصرف منابع بعداً افزایش یابد،
+برای نمونه در اوج روزانهٔ نرخ درخواست‌ها، جلوگیری می‌کند.</p>
+<h2 id="کوبرنتیز-درخواست-ها-و-حدهای-منابع-را-چگونه-اعمال-می-کند-how-pods-with-resource-limits-are-run" dir="rtl">کوبرنتیز درخواست‌ها و حدهای منابع را چگونه اعمال می‌کند {#how-pods-with-resource-limits-are-run}</h2>
+<p dir="rtl">هنگامی که kubelet یک کانتینر را به‌عنوان بخشی از یک Pod آغاز می‌کند، درخواست‌ها و
+حدهای حافظه و CPU آن کانتینر را به زمان اجرای کانتینر ارسال می‌کند.</p>
+<p dir="rtl">در لینوکس، زمان اجرای کانتینر معمولاً
+<span class="term" title="cgroup">cgroupهای</span> کرنل را پیکربندی می‌کند که
+حدهایی را که تعریف کرده‌اید اعمال و اجرا می‌کنند.</p>
+<ul>
+<li dir="rtl">حد CPU سقف سختی را برای مقدار زمان CPU که کانتینر می‌تواند استفاده کند تعریف می‌کند.
+در هر بازهٔ زمان‌بندی (برش زمانی)، کرنل لینوکس بررسی می‌کند که آیا از این
+حد فراتر رفته است یا نه؛ اگر چنین باشد، کرنل پیش از اجازه دادن به ادامهٔ اجرای آن cgroup صبر می‌کند.</li>
+<li dir="rtl">درخواست CPU معمولاً یک وزن‌دهی را تعریف می‌کند. اگر چندین کانتینر (cgroup) مختلف
+بخواهند روی سیستمی که بر سر منابع آن رقابت وجود دارد اجرا شوند، به بارهای کاری با درخواست‌های CPU بزرگ‌تر
+زمان CPU بیشتری نسبت به بارهای کاری با درخواست‌های کوچک تخصیص داده می‌شود.</li>
+<li dir="rtl">درخواست حافظه عمدتاً در زمان زمان‌بندی Pod (کوبرنتیز) استفاده می‌شود. روی نودی که از
+cgroups v2 استفاده می‌کند، زمان اجرای کانتینر ممکن است از درخواست حافظه به‌عنوان راهنمایی برای تنظیم
+<code dir="ltr">memory.min</code> و <code dir="ltr">memory.low</code> استفاده کند.</li>
+<li dir="rtl">حد حافظه یک حد حافظه برای آن cgroup تعریف می‌کند. اگر کانتینر تلاش کند
+بیش از این حد حافظه تخصیص دهد، زیرسیستم کمبود حافظهٔ (out-of-memory) کرنل لینوکس فعال می‌شود
+و معمولاً با متوقف کردن یکی از فرایندهای درون کانتینر که تلاش کرده
+حافظه تخصیص دهد مداخله می‌کند. اگر آن فرایند PID 1 کانتینر باشد و کانتینر به‌عنوان
+قابل راه‌اندازی مجدد علامت‌گذاری شده باشد، کوبرنتیز کانتینر را دوباره راه‌اندازی می‌کند.</li>
+<li dir="rtl">حد حافظهٔ Pod یا کانتینر می‌تواند به صفحه‌های موجود در حجم‌های مبتنی بر حافظه،
+مانند یک <code dir="ltr">emptyDir</code>، نیز اعمال شود. kubelet حجم‌های emptyDir از نوع <code dir="ltr">tmpfs</code> را به‌عنوان مصرف حافظهٔ
+کانتینر ردگیری می‌کند، نه به‌عنوان <a href="https://kubernetes.io/docs/concepts/storage/ephemeral-storage/" target="_blank">ذخیره‌سازی موقت</a> محلی.
+هنگام استفاده از <code dir="ltr">emptyDir</code> مبتنی بر حافظه،
+حتماً نکات <a href="#memory-backed-emptydir">زیر</a> را بررسی کنید.</li>
+</ul>
+<p dir="rtl">اگر یک کانتینر از درخواست حافظهٔ خود فراتر رود و نودی که روی آن اجرا می‌شود در مجموع با کمبود
+حافظه مواجه شود، احتمالاً Podی که کانتینر به آن تعلق دارد
+<span class="term" title="eviction">بیرون رانده</span> خواهد شد.</p>
+<p dir="rtl">ممکن است به یک کانتینر اجازه داده شود یا داده نشود که برای مدت طولانی از حد CPU خود فراتر رود.
+با این حال، زمان‌های اجرای کانتینر، Podها یا کانتینرها را به دلیل مصرف بیش از حد CPU خاتمه نمی‌دهند.</p>
+<p dir="rtl">برای تعیین اینکه آیا یک کانتینر به دلیل حدهای منابع قابل زمان‌بندی نیست یا در حال کشته شدن است،
+بخش <a href="#troubleshooting">عیب‌یابی</a> را ببینید.</p>
+<h3 id="تغییر-اندازهٔ-منابع-کانتینر" dir="rtl">تغییر اندازهٔ منابع کانتینر</h3>
+<p dir="rtl">پس از ایجاد یک Pod، ممکن است لازم باشد منابع CPU یا حافظهٔ آن را بر اساس
+الگوهای مصرف واقعی تنظیم کنید. کوبرنتیز دو رویکرد برای تغییر اندازهٔ منابع Pod فراهم می‌کند:</p>
+<h4 id="تغییر-اندازهٔ-درجا-pod-resize-inplace" dir="rtl">تغییر اندازهٔ درجا {#pod-resize-inplace}</h4>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
+<p dir="rtl">می‌توانید <code dir="ltr">requests</code> و <code dir="ltr">limits</code> مربوط به CPU و حافظهٔ کانتینرها را
+در یک Pod در حال اجرا بدون ایجاد مجدد آن تغییر دهید. این کار <em>مقیاس‌پذیری عمودی درجای Pod</em>
+یا <em>تغییر اندازهٔ درجای Pod</em> نامیده می‌شود. برای انجام تغییر اندازهٔ درجا، مشخصات منابع کانتینر را
+با استفاده از زیرمنبع <code dir="ltr">/resize</code> در Pod به‌روزرسانی کنید. می‌توانید با تنظیم فیلد <code dir="ltr">resizePolicy</code> در مشخصات کانتینر
+کنترل کنید که آیا راه‌اندازی مجدد کانتینر لازم است یا نه.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">تغییر اندازهٔ درجا در حال حاضر برای منابع در سطح کانتینر اعمال می‌شود. برای تغییر اندازهٔ منابع
+در سطح Pod، <a href="https://kubernetes.io/docs/tasks/configure-pod-container/resize-pod-resources/" target="_blank">تغییر اندازهٔ منابع CPU و حافظهٔ Pod</a> را ببینید.</p>
+</div>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
+<p dir="rtl">هنگامی که feature gate با نام <code dir="ltr">InPlacePodVerticalScalingSchedulerPreemption</code> فعال باشد،
+درخواست‌های تغییر اندازهٔ درجای معوق می‌توانند <code dir="ltr">kube-scheduler</code> را وادار کنند تا
+Podهای با اولویت پایین‌تر را روی نود تعیین‌شده پیش‌دستی (preempt) کند تا برای تغییر اندازه جا باز شود.
+برای جزئیات بیشتر،
+<a href="https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/#preemption-for-in-place-pod-resize" target="_blank">پیش‌دستی برای تغییر اندازهٔ درجای Pod</a> را ببینید.</p>
+</div>
+<h4 id="تغییر-اندازه-با-راه-اندازی-podهای-جایگزین" dir="rtl">تغییر اندازه با راه‌اندازی Podهای جایگزین</h4>
+<p dir="rtl">رویکرد بومی ابر برای تغییر منابع یک Pod، به‌روزرسانی قالب Pod
+در آبجکت بار کاری (مانند یک Deployment یا StatefulSet) و سپردن کار به
+کنترل‌کنندهٔ بار کاری است تا Podها را با Podهای جدیدی که منابع به‌روزشده دارند جایگزین کند. این رویکرد
+با هر نسخه‌ای از کوبرنتیز کار می‌کند و می‌تواند هر مشخصه‌ای از Pod را تغییر دهد.</p>
+<p dir="rtl">برای جزئیات بیشتر دربارهٔ تغییر اندازهٔ Pod، <a href="https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#pod-resize" target="_blank">تغییر اندازهٔ Podها</a> را ببینید.
+برای دستورالعمل‌های تفصیلی دربارهٔ تغییر اندازهٔ درجا،
+<a href="https://kubernetes.io/docs/tasks/configure-pod-container/resize-container-resources/" target="_blank">تغییر اندازهٔ منابع CPU و حافظهٔ تخصیص‌یافته به کانتینرها</a> را ببینید.
+همچنین می‌توانید از <a href="../workloads/autoscaling/vertical-pod-autoscale.html">Vertical Pod Autoscaler</a>
+برای مدیریت خودکار توصیه‌های منابع Pod استفاده کنید.</p>
+<h3 id="پایش-مصرف-منابع-محاسباتی-و-حافظه" dir="rtl">پایش مصرف منابع محاسباتی و حافظه</h3>
+<p dir="rtl">kubelet مصرف منابع یک Pod را به‌عنوان بخشی از
+<a href="../overview/working-with-objects/index.html#object-spec-and-status"><code dir="ltr">status</code></a> آن Pod گزارش می‌کند.</p>
+<p dir="rtl">اگر <a href="https://kubernetes.io/docs/tasks/debug/debug-cluster/resource-usage-monitoring/" target="_blank">ابزارهای پایش</a> اختیاری
+در کلاستر شما در دسترس باشند، مصرف منابع Pod را می‌توان یا مستقیماً
+از <a href="https://kubernetes.io/docs/tasks/debug/debug-cluster/resource-metrics-pipeline/#metrics-api" target="_blank">Metrics API</a>
+یا از ابزارهای پایش خود بازیابی کرد.</p>
+<h3 id="ملاحظات-مربوط-به-حجم-های-emptydir-مبتنی-بر-حافظه-memory-backed-emptydir" dir="rtl">ملاحظات مربوط به حجم‌های <code dir="ltr">emptyDir</code> مبتنی بر حافظه {#memory-backed-emptydir}</h3>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
+<p dir="rtl">هنگامی که feature gate با نام <code dir="ltr">InPlacePodVerticalScalingMemoryBackedVolumes</code> فعال باشد، می‌توانید <code dir="ltr">sizeLimit</code> یک حجم <code dir="ltr">emptyDir</code> مبتنی بر حافظه (<code dir="ltr">medium: Memory</code>) را روی یک Pod در حال اجرا به‌صورت پویا تنظیم کنید، بدون آنکه نیازی به ایجاد مجدد Pod یا راه‌اندازی مجدد کانتینرها باشد. برای دستورالعمل‌های گام‌به‌گام، <a href="https://kubernetes.io/docs/tasks/configure-pod-container/resize-container-resources/#resizing-memory-backed-emptydir-volumes" target="_blank">تغییر اندازهٔ منابع CPU و حافظهٔ تخصیص‌یافته به کانتینرها</a> را ببینید.</p>
+</div>
+<div class="callout caution"><div class="callout-title">احتیاط:</div>
+<p dir="rtl">اگر برای یک حجم <code dir="ltr">emptyDir</code> مقدار <code dir="ltr">sizeLimit</code> را مشخص نکنید، آن حجم ممکن است
+تا سقف حد حافظهٔ آن Pod (<code dir="ltr">Pod.spec.containers[].resources.limits.memory</code>) مصرف کند.
+اگر حد حافظه تعیین نکنید، Pod هیچ سقفی برای مصرف حافظه ندارد
+و می‌تواند تمام حافظهٔ در دسترس روی نود را مصرف کند. کوبرنتیز Podها را
+بر اساس درخواست‌های منابع (<code dir="ltr">Pod.spec.containers[].resources.requests</code>) زمان‌بندی می‌کند و هنگام
+تصمیم‌گیری دربارهٔ اینکه آیا Pod دیگری روی یک نود مشخص جا می‌شود، مصرف حافظهٔ بیش از درخواست را
+در نظر نمی‌گیرد. این امر می‌تواند به منع سرویس (denial of service) منجر شود و سیستم‌عامل را وادار به
+رسیدگی به کمبود حافظه (OOM) کند. می‌توان هر تعداد <code dir="ltr">emptyDir</code> ایجاد کرد
+که به‌طور بالقوه تمام حافظهٔ در دسترس روی نود را مصرف کنند و احتمال OOM را
+افزایش دهند.</p>
+</div>
+<p dir="rtl">از منظر مدیریت حافظه، شباهت‌هایی میان حالتی که
+یک فرایند از حافظه به‌عنوان فضای کاری استفاده می‌کند و حالت استفاده از <code dir="ltr">emptyDir</code>
+مبتنی بر حافظه وجود دارد. اما هنگام استفاده از حافظه به‌عنوان حجم، مانند <code dir="ltr">emptyDir</code> مبتنی بر حافظه،
+نکات اضافی زیر وجود دارد که باید مراقب آن‌ها باشید:</p>
+<ul>
+<li dir="rtl">فایل‌های ذخیره‌شده روی یک حجم مبتنی بر حافظه تقریباً به‌طور کامل توسط
+برنامهٔ کاربر مدیریت می‌شوند. برخلاف زمانی که حافظه به‌عنوان فضای کاری یک فرایند استفاده می‌شود، نمی‌توانید
+به مواردی مانند زباله‌روبی در سطح زبان برنامه‌نویسی تکیه کنید.</li>
+<li dir="rtl">هدف از نوشتن فایل‌ها روی یک حجم، ذخیرهٔ داده‌ها یا انتقال آن‌ها میان
+برنامه‌هاست. نه کوبرنتیز و نه سیستم‌عامل فایل‌ها را به‌طور خودکار
+از یک حجم حذف نمی‌کنند، بنابراین حافظهٔ مصرف‌شده توسط آن فایل‌ها هنگامی که
+سیستم یا Pod تحت فشار حافظه است قابل بازپس‌گیری نیست.</li>
+<li dir="rtl"><code dir="ltr">emptyDir</code> مبتنی بر حافظه به دلیل کارایی‌اش سودمند است، اما حافظه
+معمولاً از نظر اندازه بسیار کوچک‌تر و از نظر هزینه بسیار گران‌تر از سایر رسانه‌های ذخیره‌سازی،
+مانند دیسک‌ها یا SSDها، است. استفاده از مقادیر زیاد حافظه برای حجم‌های <code dir="ltr">emptyDir</code>
+ممکن است بر عملکرد عادی Pod شما یا کل نود تأثیر بگذارد،
+بنابراین باید با احتیاط از آن استفاده شود.</li>
+</ul>
+<p dir="rtl">اگر مدیر یک کلاستر یا فضای نام هستید، می‌توانید
+<a href="https://kubernetes.io/docs/concepts/policy/resource-quotas/" target="_blank">ResourceQuota</a>ای نیز تنظیم کنید که مصرف حافظه را محدود کند؛
+همچنین ممکن است بخواهید برای اعمال محدودیت بیشتر یک <a href="https://kubernetes.io/docs/concepts/policy/limit-range/" target="_blank">LimitRange</a>
+تعریف کنید.
+اگر برای هر Pod مقدار <code dir="ltr">spec.containers[].resources.limits.memory</code> را مشخص کنید،
+بیشینهٔ اندازهٔ یک حجم <code dir="ltr">emptyDir</code> برابر با حد حافظهٔ Pod خواهد بود.</p>
+<p dir="rtl">به‌عنوان جایگزین، مدیر کلاستر می‌تواند با استفاده از سازوکار سیاستی مانند
+<a href="https://kubernetes.io/docs/reference/access-authn-authz/validating-admission-policy" target="_blank">ValidatingAdmissionPolicy</a>
+حدهای اندازه را برای حجم‌های <code dir="ltr">emptyDir</code> در Podهای جدید اعمال کند.</p>
+<h2 id="ذخیره-سازی-موقت-محلی" dir="rtl">ذخیره‌سازی موقت محلی</h2>
+<p dir="rtl">برای مفاهیم کلی دربارهٔ ذخیره‌سازی موقت محلی و نکاتی دربارهٔ
+پیکربندی درخواست‌ها و/یا حدهای ذخیره‌سازی موقت برای یک کانتینر،
+لطفاً صفحهٔ <a href="https://kubernetes.io/docs/concepts/storage/ephemeral-storage/" target="_blank">ذخیره‌سازی موقت محلی</a>
+را بررسی کنید.</p>
+<h3 id="پایش-منابع-برای-ذخیره-سازی-موقت-محلی" dir="rtl">پایش منابع برای ذخیره‌سازی موقت محلی</h3>
+<p dir="rtl">kubelet می‌تواند اندازه بگیرد که چه مقدار از ذخیره‌سازی موقت محلی در حال استفاده است. این کار را
+تا زمانی انجام می‌دهد که جداسازی ظرفیت ذخیره‌سازی موقت محلی را فعال کرده باشید.</p>
+<p dir="rtl">کوبرنتیز مقدار ذخیره‌سازی موقتی را که یک Pod استفاده می‌کند از موارد زیر ردگیری می‌کند:</p>
+<ul>
+<li dir="rtl">نوشتن در لایهٔ قابل نوشتن کانتینر (rootfs)، ایمیج‌های کانتینر یا هر دو.</li>
+<li dir="rtl">نوشتن در حجم‌های <code dir="ltr">emptyDir</code> محلی.</li>
+<li dir="rtl">لاگ‌های خود Pod (که معمولاً زیر <code dir="ltr">/var/log/pods</code> ذخیره می‌شوند).</li>
+<li dir="rtl">فایل‌های سیستمی مدیریت‌شده توسط کوبرنتیز که در Pod نگاشت می‌شوند، مانند <code dir="ltr">/etc/hosts</code>.</li>
+</ul>
+</main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#درخواست-ها-و-حدها">درخواست‌ها و حدها</a><a class="l2" href="#انواع-منابع">انواع منابع</a><a class="l3" href="#صفحه-های-بزرگ-huge-pages">صفحه‌های بزرگ (Huge pages)</a><a class="l2" href="#درخواست-ها-و-حدهای-منابع-pod-و-کانتینر">درخواست‌ها و حدهای منابع Pod و کانتینر</a><a class="l2" href="#مشخص-کردن-منابع-در-سطح-pod">مشخص کردن منابع در سطح Pod</a><a class="l2" href="#واحدهای-منابع-در-کوبرنتیز">واحدهای منابع در کوبرنتیز</a><a class="l3" href="#واحدهای-منبع-cpu-meaning-of-cpu">واحدهای منبع CPU {#meaning-of-cpu}</a><a class="l3" href="#واحدهای-منبع-حافظه-meaning-of-memory">واحدهای منبع حافظه {#meaning-of-memory}</a><a class="l2" href="#نمونهٔ-منابع-کانتینر-example-1">نمونهٔ منابع کانتینر {#example-1}</a><a class="l2" href="#نمونهٔ-منابع-pod-example-2">نمونهٔ منابع Pod {#example-2}</a><a class="l2" href="#podهای-دارای-درخواست-منابع-چگونه-زمان-بندی-می-شوند">Podهای دارای درخواست منابع چگونه زمان‌بندی می‌شوند</a><a class="l2" href="#کوبرنتیز-درخواست-ها-و-حدهای-منابع-را-چگونه-اعمال-می-کند-how-pods-with-resource-limits-are-run">کوبرنتیز درخواست‌ها و حدهای منابع را چگونه اعمال می‌کند {#how-pods-with-resource-limits-are-run}</a><a class="l3" href="#تغییر-اندازهٔ-منابع-کانتینر">تغییر اندازهٔ منابع کانتینر</a><a class="l3" href="#پایش-مصرف-منابع-محاسباتی-و-حافظه">پایش مصرف منابع محاسباتی و حافظه</a><a class="l3" href="#ملاحظات-مربوط-به-حجم-های-emptydir-مبتنی-بر-حافظه-memory-backed-emptydir">ملاحظات مربوط به حجم‌های emptyDir مبتنی بر حافظه {#memory-backed-emptydir}</a><a class="l2" href="#ذخیره-سازی-موقت-محلی">ذخیره‌سازی موقت محلی</a><a class="l3" href="#پایش-منابع-برای-ذخیره-سازی-موقت-محلی">پایش منابع برای ذخیره‌سازی موقت محلی</a></nav>
+</div>
+</body>
+</html>

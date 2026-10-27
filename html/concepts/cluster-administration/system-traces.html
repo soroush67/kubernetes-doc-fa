@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ردگیری (Trace) اجزای سیستم کوبرنتیز | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+</head>
+<body>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">concepts / cluster-administration</span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">ردگیری (Trace) اجزای سیستم کوبرنتیز</h1><!-- overview -->
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes v1.27 [beta]</span> (بتا)</div>
+<p dir="rtl">ردگیری‌های (traces) اجزای سیستم، تأخیر عملیات در کلاستر و روابط میان آن‌ها را ثبت می‌کنند.</p>
+<p dir="rtl">اجزای کوبرنتیز ردگیری‌ها را با استفاده از
+<a href="https://opentelemetry.io/docs/specs/otlp/" target="_blank" rel="noopener">پروتکل OpenTelemetry</a>
+و صادرکنندهٔ gRPC منتشر می‌کنند و می‌توان آن‌ها را با استفاده از یک
+<a href="https://github.com/open-telemetry/opentelemetry-collector#-opentelemetry-collector" target="_blank" rel="noopener">OpenTelemetry Collector</a> گردآوری کرد و به پشتوانه‌های (backends) ردگیری هدایت کرد.</p>
+<!-- body -->
+<h2 id="گردآوری-ردگیری-ها" dir="rtl">گردآوری ردگیری‌ها</h2>
+<p dir="rtl">اجزای کوبرنتیز دارای صادرکننده‌های gRPC داخلی برای OTLP هستند تا ردگیری‌ها را صادر کنند، چه با یک OpenTelemetry Collector
+و چه بدون آن.</p>
+<p dir="rtl">برای راهنمای کامل گردآوری ردگیری‌ها و استفاده از collector،
+<a href="https://opentelemetry.io/docs/collector/getting-started/" target="_blank" rel="noopener">شروع کار با OpenTelemetry Collector</a> را ببینید.
+با این حال، چند نکتهٔ خاص اجزای کوبرنتیز وجود دارد که باید به آن‌ها توجه کرد.</p>
+<p dir="rtl">به‌طور پیش‌فرض، اجزای کوبرنتیز ردگیری‌ها را با استفاده از صادرکنندهٔ grpc برای OTLP روی
+<a href="https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.xhtml?search=opentelemetry" target="_blank" rel="noopener">پورت IANA مربوط به OpenTelemetry</a>، یعنی 4317، صادر می‌کنند.
+برای نمونه، اگر collector به‌صورت sidecar در کنار یک جزء کوبرنتیز اجرا شود،
+پیکربندی گیرندهٔ زیر spanها را گردآوری کرده و آن‌ها را در خروجی استاندارد لاگ می‌کند:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">receivers:
+  otlp:
+    protocols:
+      grpc:
+exporters:
+  # Replace this exporter with the exporter for your backend
+  exporters:
+    debug:
+      verbosity: detailed
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      exporters: [debug]
+</code></pre>
+<p dir="rtl">برای ارسال مستقیم ردگیری‌ها به یک پشتوانه بدون استفاده از collector،
+فیلد endpoint را در فایل پیکربندی ردگیری کوبرنتیز با نشانی پشتوانهٔ ردگیری مورد نظر مشخص کنید.
+این روش نیاز به collector را از میان می‌برد و ساختار کلی را ساده‌تر می‌کند.</p>
+<p dir="rtl">برای پیکربندی سرآیندهای (headers) پشتوانهٔ ردگیری، از جمله جزئیات احراز هویت، می‌توان از متغیرهای محیطی با <code dir="ltr">OTEL_EXPORTER_OTLP_HEADERS</code> استفاده کرد؛
+<a href="https://opentelemetry.io/docs/languages/sdk-configuration/otlp-exporter/" target="_blank" rel="noopener">پیکربندی OTLP Exporter</a> را ببینید.</p>
+<p dir="rtl">افزون بر این، برای پیکربندی ویژگی‌های منبع ردگیری مانند نام کلاستر کوبرنتیز، فضای نام، نام Pod و غیره،
+می‌توان از متغیرهای محیطی با <code dir="ltr">OTEL_RESOURCE_ATTRIBUTES</code> نیز استفاده کرد؛ <a href="https://opentelemetry.io/docs/specs/semconv/resource/k8s/" target="_blank" rel="noopener">OTLP Kubernetes Resource</a> را ببینید.</p>
+<h2 id="ردگیری-های-اجزا" dir="rtl">ردگیری‌های اجزا</h2>
+<h3 id="ردگیری-های-kube-apiserver" dir="rtl">ردگیری‌های kube-apiserver</h3>
+<p dir="rtl">kube-apiserver برای درخواست‌های HTTP ورودی، و برای درخواست‌های خروجی
+به webhookها، etcd و درخواست‌های بازگشتی (re-entrant)، span تولید می‌کند. این جزء
+<a href="https://www.w3.org/TR/trace-context/" target="_blank" rel="noopener">W3C Trace Context</a> را همراه درخواست‌های خروجی منتشر می‌کند،
+اما از زمینهٔ ردگیری (trace context) پیوست‌شده به درخواست‌های ورودی استفاده نمی‌کند،
+زیرا kube-apiserver اغلب یک endpoint عمومی است.</p>
+<h4 id="فعال-سازی-ردگیری-در-kube-apiserver" dir="rtl">فعال‌سازی ردگیری در kube-apiserver</h4>
+<p dir="rtl">برای فعال‌سازی ردگیری، یک فایل پیکربندی ردگیری را با
+<code dir="ltr">--tracing-config-file=&lt;path-to-config&gt;</code> به kube-apiserver بدهید. این یک پیکربندی نمونه است که
+spanها را برای ۱ درخواست از هر ۱۰۰۰۰ درخواست ثبت می‌کند و از endpoint پیش‌فرض OpenTelemetry استفاده می‌کند:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: apiserver.config.k8s.io/v1
+kind: TracingConfiguration
+# default value
+#endpoint: localhost:4317
+samplingRatePerMillion: 100
+</code></pre>
+<p dir="rtl">برای اطلاعات بیشتر دربارهٔ ساختار <code dir="ltr">TracingConfiguration</code>،
+<a href="https://kubernetes.io/docs/reference/config-api/apiserver-config.v1/#apiserver-k8s-io-v1-TracingConfiguration" target="_blank">API پیکربندی سرور API (v1)</a> را ببینید.</p>
+<h3 id="ردگیری-های-kubelet" dir="rtl">ردگیری‌های kubelet</h3>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
+<p dir="rtl">واسط CRI در kubelet و سرورهای http احراز هویت‌شدهٔ آن برای تولید
+spanهای ردگیری ابزارگذاری (instrument) شده‌اند. همانند apiserver، endpoint و نرخ نمونه‌برداری قابل پیکربندی‌اند.
+انتشار زمینهٔ ردگیری نیز پیکربندی شده است. تصمیم نمونه‌برداری یک span والد همیشه رعایت می‌شود.
+نرخ نمونه‌برداری ارائه‌شده در پیکربندی ردگیری برای spanهای بدون والد اعمال می‌شود.
+اگر ردگیری بدون endpoint پیکربندی‌شده فعال شود، نشانی پیش‌فرض گیرندهٔ OpenTelemetry Collector یعنی "localhost:4317" تنظیم می‌شود.</p>
+<h4 id="فعال-سازی-ردگیری-در-kubelet" dir="rtl">فعال‌سازی ردگیری در kubelet</h4>
+<p dir="rtl">برای فعال‌سازی ردگیری، <a href="https://github.com/kubernetes/component-base/blob/release-1.27/tracing/api/v1/types.go" target="_blank" rel="noopener">پیکربندی ردگیری</a> را اعمال کنید.
+این قطعه‌ای نمونه از پیکربندی kubelet است که spanها را برای ۱ درخواست از هر ۱۰۰۰۰ درخواست ثبت می‌کند و از endpoint پیش‌فرض OpenTelemetry استفاده می‌کند:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: kubelet.config.k8s.io/v1beta1
+kind: KubeletConfiguration
+tracing:
+  # default value
+  #endpoint: localhost:4317
+  samplingRatePerMillion: 100
+</code></pre>
+<p dir="rtl">اگر <code dir="ltr">samplingRatePerMillion</code> روی یک میلیون (<code dir="ltr">1000000</code>) تنظیم شود، هر
+span به صادرکننده ارسال خواهد شد.</p>
+<p dir="rtl">kubelet در کوبرنتیز v1.37 spanها را از
+زباله‌روبی (garbage collection)، روال همگام‌سازی Pod و همچنین هر متد gRPC
+گردآوری می‌کند. kubelet زمینهٔ ردگیری را همراه درخواست‌های gRPC منتشر می‌کند تا
+زمان‌های اجرای کانتینری که ابزارگذاری ردگیری دارند، مانند CRI-O و containerd،
+بتوانند spanهای صادرشدهٔ خود را با زمینهٔ ردگیری kubelet مرتبط کنند.
+ردگیری‌های حاصل دارای پیوندهای والد-فرزند میان spanهای kubelet و
+زمان اجرای کانتینر خواهند بود که هنگام اشکال‌زدایی مشکلات نود
+زمینهٔ سودمندی فراهم می‌کند.</p>
+<p dir="rtl">لطفاً توجه داشته باشید که صادر کردن spanها همیشه با سربار کارایی اندکی
+در بخش شبکه و CPU همراه است که به پیکربندی کلی
+سیستم بستگی دارد. اگر چنین مشکلی در کلاستری که ردگیری در آن فعال است
+رخ دهد، مشکل را با کاهش
+<code dir="ltr">samplingRatePerMillion</code> یا غیرفعال کردن کامل ردگیری با حذف
+پیکربندی برطرف کنید.</p>
+<h2 id="پایداری" dir="rtl">پایداری</h2>
+<p dir="rtl">ابزارگذاری ردگیری هنوز در حال توسعهٔ فعال است و ممکن است
+به شیوه‌های گوناگونی تغییر کند. این شامل نام spanها، ویژگی‌های پیوست‌شده،
+endpointهای ابزارگذاری‌شده و غیره است. تا زمانی که این قابلیت به وضعیت پایدار ارتقا نیابد،
+هیچ تضمینی برای سازگاری رو به عقب ابزارگذاری ردگیری وجود ندارد.</p>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<ul>
+<li dir="rtl">دربارهٔ <a href="https://opentelemetry.io/docs/collector/getting-started/" target="_blank" rel="noopener">شروع کار با OpenTelemetry Collector</a> بخوانید</li>
+<li dir="rtl">دربارهٔ <a href="https://opentelemetry.io/docs/languages/sdk-configuration/otlp-exporter/" target="_blank" rel="noopener">پیکربندی OTLP Exporter</a> بخوانید</li>
+</ul>
+</main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#گردآوری-ردگیری-ها">گردآوری ردگیری‌ها</a><a class="l2" href="#ردگیری-های-اجزا">ردگیری‌های اجزا</a><a class="l3" href="#ردگیری-های-kube-apiserver">ردگیری‌های kube-apiserver</a><a class="l3" href="#ردگیری-های-kubelet">ردگیری‌های kubelet</a><a class="l2" href="#پایداری">پایداری</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>

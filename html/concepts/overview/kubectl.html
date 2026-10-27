@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ابزار خط فرمان kubectl | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+</head>
+<body>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">concepts / overview</span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">ابزار خط فرمان kubectl</h1><p class="page-meta" dir="rtl">kubectl ابزار خط فرمان اصلی برای ارتباط با یک کلاستر کوبرنتیز است. این صفحه نمای کلی‌ای از kubectl و نقش آن در اکوسیستم کوبرنتیز ارائه می‌کند.
+</p><!-- overview -->
+<p dir="rtl"><em>(تعریف واژه‌نامه: kubectl)</em></p>
+<p dir="rtl">ابزار <code dir="ltr">kubectl</code> از طریق <a href="kubernetes-api.html">API کوبرنتیز</a> با کلاستر شما ارتباط برقرار می‌کند.
+<code dir="ltr">kubectl</code> برای پیکربندی، به دنبال فایلی با نام <code dir="ltr">config</code> در دایرکتوری <code dir="ltr">$HOME/.kube</code> می‌گردد.
+می‌توانید با تنظیم متغیر محیطی <code dir="ltr">KUBECONFIG</code> یا با تنظیم فلگ
+<a href="https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/" target="_blank"><code dir="ltr">--kubeconfig</code></a>، فایل‌های
+<a href="https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/" target="_blank">kubeconfig</a> دیگری را مشخص کنید.</p>
+<!-- body -->
+<h2 id="نقش-kubectl" dir="rtl">نقش kubectl</h2>
+<p dir="rtl">ابزار <code dir="ltr">kubectl</code> رابط اصلی برای ایجاد، بررسی، به‌روزرسانی و حذف آبجکت‌های کوبرنتیز است.
+این ابزار مکمل <a href="components.html">مؤلفه‌های کوبرنتیز</a> است که درون کلاستر شما اجرا می‌شوند
+و نیز مکمل <a href="kubernetes-api.html">API کوبرنتیز</a> است که این مؤلفه‌ها آن را پیاده‌سازی می‌کنند.
+چه <code dir="ltr">kubectl</code> را از لپ‌تاپ خود اجرا کنید و چه از یک Pod درون کلاستر، این ابزار درخواست‌ها را به API server ارسال می‌کند.
+کلاینت‌های دیگر، مانند <a href="https://kubernetes.io/docs/reference/using-api/client-libraries/" target="_blank">کتابخانه‌های کلاینت</a> و داشبوردهای وب
+مانند <a href="https://headlamp.dev/" target="_blank" rel="noopener">Headlamp</a>، نیز از طریق همین API ارتباط برقرار می‌کنند.</p>
+<h2 id="kubectl-چگونه-کار-می-کند" dir="rtl">kubectl چگونه کار می‌کند</h2>
+<p dir="rtl">ابزار <code dir="ltr">kubectl</code> با استفاده از کلاستر، کاربر و context تعریف‌شده در فایل
+<a href="https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/" target="_blank">kubeconfig</a> شما، به API server متصل می‌شود و احراز هویت می‌کند.
+هنگامی که <code dir="ltr">kubectl</code> را از بیرون یک کلاستر اجرا می‌کنید، این ابزار از فایل kubeconfig برای یافتن نشانی API server و اعتبارنامه‌ها استفاده می‌کند.
+هنگامی که <code dir="ltr">kubectl</code> درون یک Pod اجرا می‌شود (برای مثال، در یک خط لوله‌ی CI/CD)، می‌تواند از احراز هویت درون‌کلاستری
+مبتنی بر توکن ServiceAccount که در Pod به‌صورت mount قرار گرفته است استفاده کند.</p>
+<p dir="rtl">هنگامی که فرمانی را اجرا می‌کنید، <code dir="ltr">kubectl</code> قصد شما را به یک یا چند درخواست HTTP به
+<a href="kubernetes-api.html">API کوبرنتیز</a> ترجمه می‌کند. API server هر درخواست را اعتبارسنجی می‌کند،
+آن را بر وضعیت کلاستر که در <span class="term" title="etcd">etcd</span> ذخیره شده است اعمال می‌کند و
+نتیجه را بازمی‌گرداند. این یعنی هر عملی که با <code dir="ltr">kubectl</code> انجام می‌شود، چه ایجاد یک Deployment باشد و چه خواندن لاگ‌ها،
+مسیر یکسانِ مبتنی بر API را طی می‌کند.</p>
+<p dir="rtl">از آنجا که kubeconfig شما می‌تواند چندین کلاستر، کاربر و context را تعریف کند، می‌توانید از <code dir="ltr">kubectl</code> برای
+جابه‌جایی میان کلاسترها بدون پیکربندی دوباره‌ی محیط خود استفاده کنید. برای تغییر context فعال،
+فرمان <code dir="ltr">kubectl config use-context</code> را اجرا کنید.</p>
+<h2 id="با-kubectl-چه-کارهایی-می-توانید-انجام-دهید" dir="rtl">با kubectl چه کارهایی می‌توانید انجام دهید</h2>
+<p dir="rtl">ابزار <code dir="ltr">kubectl</code> از عملیات بسیاری پشتیبانی می‌کند که در این دسته‌های کلی قرار می‌گیرند:</p>
+<ul>
+<li dir="rtl"><strong>مدیریت منابع</strong> – آبجکت‌هایی مانند Podها، Deploymentها و Serviceها را ایجاد، به‌روزرسانی و حذف کنید.
+برای مدیریت اعلانی بر اساس فایل‌های پیکربندی، از <code dir="ltr">kubectl apply</code> استفاده کنید.</li>
+<li dir="rtl"><strong>بررسی وضعیت کلاستر</strong> – آبجکت‌ها را فهرست و توصیف کنید، رویدادها را مشاهده کنید و میزان مصرف منابع را بررسی کنید.</li>
+<li dir="rtl"><strong>اشکال‌زدایی</strong> – لاگ‌های کانتینرها را مشاهده کنید، فرمان‌هایی را درون یک کانتینر در حال اجرا اجرا کنید، یا پورتی را به یک Pod هدایت (port-forward) کنید.</li>
+<li dir="rtl"><strong>عملیات کلاستر</strong> – نودها را برای نگهداری تخلیه (drain) کنید، نودها را برای جلوگیری از پذیرش بارهای کاری جدید cordon کنید و پیکربندی کلاستر را مدیریت کنید.</li>
+<li dir="rtl"><strong>اسکریپت‌نویسی و خودکارسازی</strong> – خروجی را برای استفاده در اسکریپت‌ها و خطوط لوله، به‌صورت JSON، YAML یا ستون‌های سفارشی با استفاده از <a href="https://kubernetes.io/docs/reference/kubectl/jsonpath/" target="_blank">JSONPath</a> قالب‌بندی کنید.</li>
+</ul>
+<p dir="rtl">برای نحو، مرجع فرمان‌ها و نمونه‌ها، <a href="https://kubernetes.io/docs/reference/kubectl/" target="_blank">مستندات مرجع kubectl</a> را ببینید.</p>
+<h2 id="اعلانی-در-برابر-دستوری" dir="rtl">اعلانی در برابر دستوری</h2>
+<p dir="rtl">برای بارهای کاری عملیاتی، <a href="working-with-objects/object-management.html">مدیریت اعلانی آبجکت‌ها</a>
+با استفاده از <code dir="ltr">kubectl apply</code> و فایل‌های پیکربندیِ تحت کنترل نسخه را ترجیح دهید.
+مدیریت اعلانی به شما کمک می‌کند تغییرات را ردیابی کنید، به‌صورت گروهی همکاری کنید و با گردش‌کارهای GitOps یکپارچه شوید.
+فرمان‌های دستوری (مانند <code dir="ltr">kubectl create</code> یا <code dir="ltr">kubectl run</code>) برای توسعه و آزمایش مفید هستند،
+اما بازتولید و ممیزی آن‌ها دشوارتر است.</p>
+<h2 id="گسترش-kubectl-با-افزونه-ها" dir="rtl">گسترش kubectl با افزونه‌ها</h2>
+<p dir="rtl">می‌توانید <code dir="ltr">kubectl</code> را با <a href="https://kubernetes.io/docs/tasks/extend-kubectl/kubectl-plugins/" target="_blank">افزونه‌هایی</a> گسترش دهید که
+زیرفرمان‌های جدیدی اضافه می‌کنند. افزونه‌ها فایل‌های اجرایی مستقلی هستند که از قرارداد نام‌گذاری <code dir="ltr">kubectl-&lt;plugin-name&gt;</code> پیروی می‌کنند.
+جامعه‌ی کوبرنتیز افزونه‌های بسیاری را نگهداری می‌کند و می‌توانید آن‌ها را با
+مدیر افزونه‌ی <a href="https://krew.sigs.k8s.io/" target="_blank" rel="noopener">Krew</a> مدیریت کنید.</p>
+<h2 id="سازگاری-نسخه-ها" dir="rtl">سازگاری نسخه‌ها</h2>
+<p dir="rtl">ابزار <code dir="ltr">kubectl</code> از اختلاف نسخه‌ی حداکثر یک نسخه‌ی فرعی (minor) بالاتر یا پایین‌تر نسبت به control plane
+کلاستر پشتیبانی می‌کند. برای مثال، <code dir="ltr">kubectl</code> نسخه‌ی v1.32 با control planeهای نسخه‌ی v1.31، v1.32 و v1.33 کار می‌کند.
+استفاده از نسخه‌ی سازگار از بروز رفتارهای غیرمنتظره جلوگیری می‌کند. برای جزئیات،
+<a href="/releases/version-skew-policy/">سیاست اختلاف نسخه</a> را ببینید.</p>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<ul>
+<li dir="rtl">برای جزئیات نحو و فرمان‌ها، <a href="https://kubernetes.io/docs/reference/kubectl/" target="_blank">مرجع kubectl</a> را مطالعه کنید.</li>
+<li dir="rtl"><a href="https://kubernetes.io/docs/tasks/tools/#kubectl" target="_blank">kubectl را روی ماشین خود نصب کنید</a>.</li>
+<li dir="rtl">درباره‌ی <a href="kubernetes-api.html">API کوبرنتیز</a> که <code dir="ltr">kubectl</code> از آن استفاده می‌کند بیاموزید.</li>
+<li dir="rtl"><a href="components.html">مؤلفه‌های کوبرنتیز</a> را که یک کلاستر را تشکیل می‌دهند مرور کنید.</li>
+<li dir="rtl"><a href="working-with-objects/object-management.html">مدیریت آبجکت‌ها</a> و پیکربندی اعلانی را بررسی کنید.</li>
+<li dir="rtl">برای ترکیب‌های نسخه‌ی پشتیبانی‌شده، <a href="/releases/version-skew-policy/">سیاست اختلاف نسخه</a> را بررسی کنید.</li>
+</ul>
+</main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#نقش-kubectl">نقش kubectl</a><a class="l2" href="#kubectl-چگونه-کار-می-کند">kubectl چگونه کار می‌کند</a><a class="l2" href="#با-kubectl-چه-کارهایی-می-توانید-انجام-دهید">با kubectl چه کارهایی می‌توانید انجام دهید</a><a class="l2" href="#اعلانی-در-برابر-دستوری">اعلانی در برابر دستوری</a><a class="l2" href="#گسترش-kubectl-با-افزونه-ها">گسترش kubectl با افزونه‌ها</a><a class="l2" href="#سازگاری-نسخه-ها">سازگاری نسخه‌ها</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>

@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>الگوی Operator | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+</head>
+<body>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">concepts / extend-kubernetes</span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">الگوی Operator</h1><!-- overview -->
+<p dir="rtl">Operatorها افزونه‌های نرم‌افزاری برای کوبرنتیز هستند که از
+<a href="api-extension/custom-resources.html">منابع سفارشی</a>
+برای مدیریت برنامه‌ها و اجزای آن‌ها استفاده می‌کنند. Operatorها از
+اصول کوبرنتیز، به‌ویژه <a href="../architecture/controller.html">حلقهٔ کنترل</a>، پیروی می‌کنند.</p>
+<!-- body -->
+<h2 id="انگیزه" dir="rtl">انگیزه</h2>
+<p dir="rtl">هدف <em>الگوی operator</em> بازتاب هدف اصلی یک اپراتور انسانی است که
+یک سرویس یا مجموعه‌ای از سرویس‌ها را مدیریت می‌کند. اپراتورهای انسانی که مسئول
+برنامه‌ها و سرویس‌های مشخصی هستند، دانش عمیقی دربارهٔ این دارند که سیستم
+چگونه باید رفتار کند، چگونه مستقر شود و در صورت بروز مشکل چگونه باید واکنش نشان داد.</p>
+<p dir="rtl">افرادی که بارهای کاری را روی کوبرنتیز اجرا می‌کنند، اغلب دوست دارند از خودکارسازی برای
+رسیدگی به کارهای تکراری استفاده کنند. الگوی operator نشان می‌دهد چگونه می‌توانید
+کدی بنویسید تا یک کار را فراتر از آنچه خود کوبرنتیز فراهم می‌کند خودکار کنید.</p>
+<h2 id="operatorها-در-کوبرنتیز" dir="rtl">Operatorها در کوبرنتیز</h2>
+<p dir="rtl">کوبرنتیز برای خودکارسازی طراحی شده است. به‌طور پیش‌فرض، مقدار زیادی
+خودکارسازی داخلی از هستهٔ کوبرنتیز دریافت می‌کنید. می‌توانید از کوبرنتیز
+برای خودکارسازی استقرار و اجرای بارهای کاری استفاده کنید، <em>و</em> می‌توانید نحوهٔ انجام این کار
+توسط کوبرنتیز را نیز خودکار کنید.</p>
+<p dir="rtl">مفهوم <span class="term" title="operator-pattern">الگوی operator</span> در کوبرنتیز
+به شما اجازه می‌دهد بدون تغییر کد خود کوبرنتیز، رفتار کلاستر را گسترش دهید؛
+این کار با پیوند دادن <span class="term" title="controller">کنترل‌کننده‌ها</span> به
+یک یا چند منبع سفارشی انجام می‌شود. Operatorها کلاینت‌های API کوبرنتیز هستند که به‌عنوان
+کنترل‌کننده برای یک <a href="api-extension/custom-resources.html">منبع سفارشی</a> عمل می‌کنند.</p>
+<h2 id="یک-operator-نمونه-example" dir="rtl">یک operator نمونه {#example}</h2>
+<p dir="rtl">برخی از کارهایی که می‌توانید با یک operator خودکار کنید عبارت‌اند از:</p>
+<ul>
+<li dir="rtl">استقرار یک برنامه در صورت نیاز</li>
+<li dir="rtl">تهیه و بازیابی نسخه‌های پشتیبان از وضعیت آن برنامه</li>
+<li dir="rtl">مدیریت ارتقاهای کد برنامه همراه با تغییرات مرتبط مانند
+طرح‌واره‌های پایگاه داده یا تنظیمات پیکربندی اضافی</li>
+<li dir="rtl">انتشار یک Service برای برنامه‌هایی که از APIهای کوبرنتیز برای
+کشف آن پشتیبانی نمی‌کنند</li>
+<li dir="rtl">شبیه‌سازی خرابی در تمام یا بخشی از کلاستر برای آزمودن تاب‌آوری آن</li>
+<li dir="rtl">انتخاب یک رهبر برای یک برنامهٔ توزیع‌شده که فرایند داخلی
+انتخاب عضو ندارد</li>
+</ul>
+<p dir="rtl">یک operator با جزئیات بیشتر چگونه ممکن است به نظر برسد؟ در اینجا یک مثال آمده است:</p>
+<ol>
+<li dir="rtl">یک منبع سفارشی با نام SampleDB که می‌توانید آن را در کلاستر پیکربندی کنید.</li>
+<li dir="rtl">یک Deployment که اطمینان حاصل می‌کند یک Pod شامل
+بخش کنترل‌کنندهٔ operator در حال اجراست.</li>
+<li dir="rtl">یک ایمیج کانتینر از کد operator.</li>
+<li dir="rtl">کد کنترل‌کننده‌ای که از control plane پرس‌وجو می‌کند تا دریابد کدام منابع SampleDB
+پیکربندی شده‌اند.</li>
+<li dir="rtl">هستهٔ operator کدی است که به سرور API می‌گوید چگونه
+واقعیت را با منابع پیکربندی‌شده منطبق کند.
+<ul>
+<li dir="rtl">اگر یک SampleDB جدید اضافه کنید، operator ‏PersistentVolumeClaimها را
+برای فراهم‌کردن ذخیره‌سازی ماندگار پایگاه داده، یک StatefulSet برای اجرای SampleDB و
+یک Job برای انجام پیکربندی اولیه راه‌اندازی می‌کند.</li>
+<li dir="rtl">اگر آن را حذف کنید، operator یک snapshot تهیه می‌کند و سپس اطمینان حاصل می‌کند که
+StatefulSet و Volumeها نیز حذف شده‌اند.</li>
+</ul>
+</li>
+<li dir="rtl">operator همچنین پشتیبان‌گیری‌های منظم از پایگاه داده را مدیریت می‌کند. برای هر منبع SampleDB،
+operator تعیین می‌کند چه زمانی یک Pod ایجاد شود که بتواند به
+پایگاه داده متصل شود و نسخهٔ پشتیبان تهیه کند. این پادها به یک ConfigMap
+و/یا یک Secret متکی خواهند بود که جزئیات اتصال و اعتبارنامه‌های پایگاه داده را در خود دارد.</li>
+<li dir="rtl">از آنجا که هدف operator فراهم‌کردن خودکارسازی مستحکم برای منبعی است که
+مدیریت می‌کند، کد پشتیبان دیگری نیز وجود خواهد داشت. در این مثال،
+کد بررسی می‌کند که آیا پایگاه داده نسخهٔ قدیمی را اجرا می‌کند و اگر چنین باشد،
+آبجکت‌های Job ایجاد می‌کند که آن را برای شما ارتقا می‌دهند.</li>
+</ol>
+<h2 id="استقرار-operatorها" dir="rtl">استقرار operatorها</h2>
+<p dir="rtl">رایج‌ترین روش برای استقرار یک operator، افزودن
+Custom Resource Definition و Controller مرتبط با آن به کلاستر است.
+Controller معمولاً بیرون از
+<span class="term" title="control-plane">control plane</span> اجرا می‌شود،
+تقریباً همان‌طور که هر برنامهٔ کانتینری‌شده‌ای را اجرا می‌کنید.
+برای مثال، می‌توانید کنترل‌کننده را در کلاستر خود به‌صورت یک Deployment اجرا کنید.</p>
+<h2 id="استفاده-از-یک-operator-using-operators" dir="rtl">استفاده از یک operator {#using-operators}</h2>
+<p dir="rtl">پس از استقرار یک operator، با افزودن، تغییر یا
+حذف نوع منبعی که operator از آن استفاده می‌کند، از آن بهره می‌برید. با دنبال کردن
+مثال بالا، یک Deployment برای خود operator راه‌اندازی می‌کنید و سپس:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get SampleDB                   # find configured databases
+
+kubectl edit SampleDB/example-database # manually change some settings
+</code></pre>
+<p dir="rtl">…و تمام! operator هم اعمال تغییرات و هم سالم نگه‌داشتن
+سرویس موجود را بر عهده خواهد گرفت.</p>
+<h2 id="نوشتن-operator-اختصاصی-writing-operator" dir="rtl">نوشتن operator اختصاصی {#writing-operator}</h2>
+<p dir="rtl">اگر در اکوسیستم operatorی وجود ندارد که رفتار مورد نظر شما را پیاده‌سازی کند،
+می‌توانید operator اختصاصی خود را بنویسید.</p>
+<p dir="rtl">همچنین می‌توانید یک operator (یعنی یک Controller) را با هر زبان یا محیط اجرایی
+پیاده‌سازی کنید که بتواند به‌عنوان <a href="https://kubernetes.io/docs/reference/using-api/client-libraries/" target="_blank">کلاینت API کوبرنتیز</a> عمل کند.</p>
+<p dir="rtl">در ادامه چند کتابخانه و ابزار آمده است که می‌توانید برای نوشتن operator ابرزاد
+اختصاصی خود از آن‌ها استفاده کنید.</p>
+<ul>
+<li dir="ltr" class="ltr"><a href="https://juju.is/" target="_blank" rel="noopener">Charmed Operator Framework</a></li>
+<li dir="ltr" class="ltr"><a href="https://github.com/operator-framework/java-operator-sdk" target="_blank" rel="noopener">Java Operator SDK</a></li>
+<li dir="ltr" class="ltr"><a href="https://github.com/nolar/kopf" target="_blank" rel="noopener">Kopf</a> (Kubernetes Operator Pythonic Framework)</li>
+<li dir="ltr" class="ltr"><a href="https://kube.rs/" target="_blank" rel="noopener">kube-rs</a> (Rust)</li>
+<li dir="ltr" class="ltr"><a href="https://book.kubebuilder.io/" target="_blank" rel="noopener">kubebuilder</a></li>
+<li dir="ltr" class="ltr"><a href="https://dotnet.github.io/dotnet-operator-sdk/" target="_blank" rel="noopener">KubeOps</a> (.NET operator SDK)</li>
+<li dir="ltr" class="ltr"><a href="https://docs.ansi.services/mast/user_guide/operator/" target="_blank" rel="noopener">Mast</a></li>
+<li dir="rtl"><a href="https://metacontroller.github.io/metacontroller/intro.html" target="_blank" rel="noopener">Metacontroller</a> همراه با WebHookهایی که
+خودتان پیاده‌سازی می‌کنید</li>
+<li dir="ltr" class="ltr"><a href="https://operatorframework.io" target="_blank" rel="noopener">Operator Framework</a></li>
+<li dir="ltr" class="ltr"><a href="https://github.com/flant/shell-operator" target="_blank" rel="noopener">shell-operator</a></li>
+</ul>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<ul>
+<li dir="rtl"><a href="https://github.com/cncf/tag-app-delivery/blob/163962c4b1cd70d085107fc579e3e04c2e14d59c/operator-wg/whitepaper/Operator-WhitePaper_v1-0.md" target="_blank" rel="noopener">مقالهٔ سفید Operator</a>
+از <span class="term" title="cncf">CNCF</span> را بخوانید.</li>
+<li dir="rtl">دربارهٔ <a href="api-extension/custom-resources.html">منابع سفارشی</a> بیشتر بیاموزید</li>
+<li dir="rtl">operatorهای آماده‌ای را که با مورد استفادهٔ شما تناسب دارند در <a href="https://operatorhub.io/" target="_blank" rel="noopener">OperatorHub.io</a> پیدا کنید</li>
+<li dir="rtl">operator خود را برای استفادهٔ دیگران <a href="https://operatorhub.io/" target="_blank" rel="noopener">منتشر کنید</a></li>
+<li dir="rtl"><a href="https://web.archive.org/web/20170129131616/https://coreos.com/blog/introducing-operators.html" target="_blank" rel="noopener">مقالهٔ اصلی CoreOS</a>
+را که الگوی operator را معرفی کرد بخوانید (این نسخه‌ای بایگانی‌شده از مقالهٔ اصلی است).</li>
+<li dir="rtl"><a href="https://cloud.google.com/blog/products/containers-kubernetes/best-practices-for-building-kubernetes-operators-and-stateful-apps" target="_blank" rel="noopener">مقاله‌ای</a>
+از Google Cloud دربارهٔ بهترین روش‌های ساخت operatorها بخوانید</li>
+</ul>
+</main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#انگیزه">انگیزه</a><a class="l2" href="#operatorها-در-کوبرنتیز">Operatorها در کوبرنتیز</a><a class="l2" href="#یک-operator-نمونه-example">یک operator نمونه {#example}</a><a class="l2" href="#استقرار-operatorها">استقرار operatorها</a><a class="l2" href="#استفاده-از-یک-operator-using-operators">استفاده از یک operator {#using-operators}</a><a class="l2" href="#نوشتن-operator-اختصاصی-writing-operator">نوشتن operator اختصاصی {#writing-operator}</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>

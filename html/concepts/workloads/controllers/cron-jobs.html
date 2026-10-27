@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CronJob | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+</head>
+<body>
+<header class="top"><a href="../../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">concepts / workloads / controllers</span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="ltr" class="ltr">CronJob</h1><p class="page-meta" dir="rtl">یک CronJob، Jobهای یک‌باره را طبق یک زمان‌بندی تکرارشونده آغاز می‌کند.</p><!-- overview -->
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes v1.21 [stable]</span> (پایدار)</div>
+<p dir="rtl">یک <em>CronJob</em>، <span class="term" title="job">Jobها</span> را طبق یک زمان‌بندی تکرارشونده ایجاد می‌کند.</p>
+<p dir="rtl">CronJob برای انجام اقدامات زمان‌بندی‌شده‌ی منظم، مانند پشتیبان‌گیری، تولید گزارش
+و موارد مشابه در نظر گرفته شده است. یک آبجکت CronJob مانند یک خط از فایل <em>crontab</em> (جدول cron) در
+یک سیستم Unix است. این آبجکت یک Job را به‌طور دوره‌ای طبق یک زمان‌بندی معین اجرا می‌کند که با قالب
+<a href="https://en.wikipedia.org/wiki/Cron" target="_blank" rel="noopener">Cron</a> نوشته شده است.</p>
+<p dir="rtl">CronJobها محدودیت‌ها و ویژگی‌های خاص خود را دارند.
+برای مثال، در شرایطی خاص، یک CronJob واحد می‌تواند چند Job هم‌زمان ایجاد کند. <a href="#cron-job-limitations">محدودیت‌ها</a> را در ادامه ببینید.</p>
+<p dir="rtl">هنگامی که control plane برای یک CronJob، Jobهای جدید و (به‌طور غیرمستقیم) Podها را ایجاد می‌کند، <code dir="ltr">.metadata.name</code>
+آن CronJob بخشی از مبنای نام‌گذاری آن Podها است. نام یک CronJob باید یک مقدار معتبر
+<a href="../../overview/working-with-objects/names.html#dns-subdomain-names">زیردامنه‌ی DNS</a>
+باشد، اما این ممکن است برای hostnameهای Pod نتایج غیرمنتظره‌ای ایجاد کند. برای بهترین سازگاری،
+نام باید از قواعد سخت‌گیرانه‌تر یک
+<a href="../../overview/working-with-objects/names.html#dns-label-names">برچسب DNS</a> پیروی کند.
+حتی هنگامی که نام یک زیردامنه‌ی DNS است، طول نام نباید بیشتر از ۵۲
+کاراکتر باشد. دلیل این است که کنترل‌کننده‌ی CronJob به‌طور خودکار
+۱۱ کاراکتر به نامی که ارائه می‌دهید اضافه می‌کند و محدودیتی وجود دارد که
+طول نام یک Job نباید بیشتر از ۶۳ کاراکتر باشد.</p>
+<!-- body -->
+<h2 id="مثال" dir="rtl">مثال</h2>
+<p dir="rtl">این مانیفست نمونه‌ی CronJob هر دقیقه زمان فعلی و یک پیام سلام را چاپ می‌کند:</p>
+<div class="code-file ltr" dir="ltr">application/job/cronjob.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: hello
+spec:
+  schedule: "* * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: hello
+            image: busybox:1.28
+            imagePullPolicy: IfNotPresent
+            command:
+            - /bin/sh
+            - -c
+            - date; echo Hello from the Kubernetes cluster
+          restartPolicy: OnFailure
+</code></pre>
+<p dir="rtl">(راهنمای <a href="https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/" target="_blank">اجرای وظایف خودکار با CronJob</a>
+شما را با جزئیات بیشتری در این مثال همراهی می‌کند).</p>
+<h2 id="نوشتن-spec-یک-cronjob" dir="rtl">نوشتن spec یک CronJob</h2>
+<h3 id="نحو-زمان-بندی" dir="rtl">نحو زمان‌بندی</h3>
+<p dir="rtl">فیلد <code dir="ltr">.spec.schedule</code> الزامی است. مقدار این فیلد از نحو <a href="https://en.wikipedia.org/wiki/Cron" target="_blank" rel="noopener">Cron</a> پیروی می‌کند:</p>
+<pre dir="ltr"><code dir="ltr"># ┌───────────── minute (0 - 59)
+# │ ┌───────────── hour (0 - 23)
+# │ │ ┌───────────── day of the month (1 - 31)
+# │ │ │ ┌───────────── month (1 - 12)
+# │ │ │ │ ┌───────────── day of the week (0 - 6) (Sunday to Saturday)
+# │ │ │ │ │                                   OR sun, mon, tue, wed, thu, fri, sat
+# │ │ │ │ │
+# │ │ │ │ │
+# * * * * *
+</code></pre>
+<p dir="rtl">برای مثال، <code dir="ltr">0 3 * * 1</code> به این معناست که این وظیفه برای اجرای هفتگی در روز دوشنبه ساعت ۳ بامداد زمان‌بندی شده است.</p>
+<p dir="rtl">این قالب همچنین شامل مقادیر گام (step) توسعه‌یافته‌ی «Vixie cron» است. همان‌طور که در
+<a href="https://www.freebsd.org/cgi/man.cgi?crontab%285%29" target="_blank" rel="noopener">راهنمای FreeBSD</a> توضیح داده شده است:</p>
+<blockquote dir="rtl">
+<p dir="rtl">مقادیر گام را می‌توان همراه با بازه‌ها به کار برد. قرار دادن
+<code dir="ltr">/&lt;number&gt;</code> پس از یک بازه، پرش‌هایی به اندازه‌ی مقدار آن عدد را در طول
+بازه مشخص می‌کند. برای مثال، <code dir="ltr">0-23/2</code> را می‌توان در فیلد ساعت برای مشخص کردن
+اجرای فرمان هر دو ساعت یک بار به کار برد (جایگزین آن در استاندارد V7
+<code dir="ltr">0,2,4,6,8,10,12,14,16,18,20,22</code> است). گام‌ها پس از یک
+ستاره نیز مجازند، بنابراین اگر می‌خواهید بگویید «هر دو ساعت»، کافی است از <code dir="ltr">*/2</code> استفاده کنید.</p>
+</blockquote>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">علامت سؤال (<code dir="ltr">?</code>) در زمان‌بندی همان معنای ستاره <code dir="ltr">*</code> را دارد، یعنی
+نماینده‌ی هر یک از مقادیر موجود برای یک فیلد معین است.</p>
+</div>
+<p dir="rtl">علاوه بر نحو استاندارد، برخی ماکروها مانند <code dir="ltr">@monthly</code> نیز قابل استفاده‌اند:</p>
+<table>
+<thead>
+<tr>
+<th dir="rtl">ورودی</th>
+<th dir="rtl">توضیح</th>
+<th dir="rtl">معادل</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td dir="rtl">@yearly (یا @annually)</td>
+<td dir="rtl">اجرا یک بار در سال در نیمه‌شب اول ژانویه</td>
+<td>0 0 1 1 *</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr">@monthly</td>
+<td dir="rtl">اجرا یک بار در ماه در نیمه‌شب نخستین روز ماه</td>
+<td>0 0 1 * *</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr">@weekly</td>
+<td dir="rtl">اجرا یک بار در هفته در نیمه‌شب بامداد یکشنبه</td>
+<td>0 0 * * 0</td>
+</tr>
+<tr>
+<td dir="rtl">@daily (یا @midnight)</td>
+<td dir="rtl">اجرا یک بار در روز در نیمه‌شب</td>
+<td>0 0 * * *</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr">@hourly</td>
+<td dir="rtl">اجرا یک بار در ساعت در ابتدای ساعت</td>
+<td>0 * * * *</td>
+</tr>
+</tbody>
+</table>
+<p dir="rtl">برای تولید عبارت‌های زمان‌بندی CronJob، می‌توانید از ابزارهای وب مانند <a href="https://crontab.guru/" target="_blank" rel="noopener">crontab.guru</a> نیز استفاده کنید.</p>
+<h3 id="قالب-job" dir="rtl">قالب Job</h3>
+<p dir="rtl"><code dir="ltr">.spec.jobTemplate</code> قالبی برای Jobهایی که CronJob ایجاد می‌کند تعریف می‌کند و الزامی است.
+این قالب دقیقاً همان شِمای یک <a href="https://kubernetes.io/docs/concepts/workloads/controllers/job/" target="_blank">Job</a> را دارد، با این تفاوت که
+تودرتو است و <code dir="ltr">apiVersion</code> یا <code dir="ltr">kind</code> ندارد.
+می‌توانید فراداده‌ی مشترکی برای Jobهای ساخته‌شده از قالب مشخص کنید، مانند
+<span class="term" title="label">برچسب‌ها</span> یا
+<span class="term" title="annotation">حاشیه‌نویسی‌ها</span>.
+برای اطلاعات درباره‌ی نوشتن <code dir="ltr">.spec</code> یک Job، به <a href="https://kubernetes.io/docs/concepts/workloads/controllers/job/#writing-a-job-spec" target="_blank">نوشتن spec یک Job</a> مراجعه کنید.</p>
+<h3 id="مهلت-آغاز-job-با-تأخیر-starting-deadline" dir="rtl">مهلت آغاز Job با تأخیر {#starting-deadline}</h3>
+<p dir="rtl">فیلد <code dir="ltr">.spec.startingDeadlineSeconds</code> اختیاری است.
+این فیلد مهلتی (بر حسب ثانیه‌ی کامل) برای آغاز Job تعریف می‌کند، در صورتی که آن Job به هر دلیلی
+زمان زمان‌بندی‌شده‌ی خود را از دست بدهد.</p>
+<p dir="rtl">پس از گذشتن مهلت، CronJob آن نمونه از Job را نادیده می‌گیرد (رخدادهای آینده همچنان زمان‌بندی می‌شوند).
+برای مثال، اگر یک Job پشتیبان‌گیری دارید که روزی دو بار اجرا می‌شود، ممکن است اجازه دهید تا ۸ ساعت با تأخیر آغاز شود،
+اما نه دیرتر، زیرا پشتیبانی که دیرتر از آن گرفته شود مفید نخواهد بود: در عوض ترجیح می‌دهید
+منتظر اجرای زمان‌بندی‌شده‌ی بعدی بمانید.</p>
+<p dir="rtl">کوبرنتیز با Jobهایی که مهلت پیکربندی‌شده‌ی خود را از دست می‌دهند مانند Jobهای ناموفق رفتار می‌کند.
+اگر <code dir="ltr">startingDeadlineSeconds</code> را برای یک CronJob مشخص نکنید، رخدادهای Job هیچ مهلتی ندارند.</p>
+<p dir="rtl">اگر فیلد <code dir="ltr">.spec.startingDeadlineSeconds</code> تنظیم شده باشد (null نباشد)، کنترل‌کننده‌ی CronJob
+فاصله‌ی زمانی میان زمانی که انتظار می‌رود یک Job ایجاد شود و
+اکنون را اندازه‌گیری می‌کند. اگر این اختلاف بیشتر از آن حد باشد، این اجرا را نادیده می‌گیرد.</p>
+<p dir="rtl">برای مثال، اگر روی <code dir="ltr">200</code> تنظیم شده باشد، اجازه می‌دهد یک Job تا ۲۰۰
+ثانیه پس از زمان‌بندی واقعی ایجاد شود.</p>
+<h3 id="سیاست-هم-زمانی" dir="rtl">سیاست هم‌زمانی</h3>
+<p dir="rtl">فیلد <code dir="ltr">.spec.concurrencyPolicy</code> نیز اختیاری است.
+این فیلد مشخص می‌کند که با اجراهای هم‌زمان یک Job که توسط این CronJob ایجاد می‌شود چگونه رفتار شود.
+spec می‌تواند فقط یکی از سیاست‌های هم‌زمانی زیر را مشخص کند:</p>
+<ul>
+<li dir="rtl"><code dir="ltr">Allow</code> (پیش‌فرض): CronJob اجازه می‌دهد Jobها به‌طور هم‌زمان اجرا شوند</li>
+<li dir="rtl"><code dir="ltr">Forbid</code>: CronJob اجرای هم‌زمان را مجاز نمی‌داند؛ اگر زمان اجرای یک Job جدید فرا رسیده باشد و
+اجرای Job قبلی هنوز تمام نشده باشد، CronJob اجرای Job جدید را نادیده می‌گیرد. همچنین توجه داشته باشید که هنگامی که
+اجرای Job قبلی تمام می‌شود، <code dir="ltr">.spec.startingDeadlineSeconds</code> همچنان در نظر گرفته می‌شود و ممکن است
+به اجرای یک Job جدید منجر شود.</li>
+<li dir="rtl"><code dir="ltr">Replace</code>: اگر زمان اجرای یک Job جدید فرا رسیده باشد و اجرای Job قبلی هنوز تمام نشده باشد،
+CronJob اجرای Job در حال اجرا را با اجرای یک Job جدید جایگزین می‌کند</li>
+</ul>
+<p dir="rtl">توجه داشته باشید که سیاست هم‌زمانی فقط بر Jobهایی اعمال می‌شود که توسط همان CronJob ایجاد شده‌اند.
+اگر چند CronJob وجود داشته باشد، Jobهای مربوط به هر یک همواره مجازند به‌طور هم‌زمان اجرا شوند.</p>
+<h3 id="تعلیق-زمان-بندی" dir="rtl">تعلیق زمان‌بندی</h3>
+<p dir="rtl">می‌توانید اجرای Jobهای یک CronJob را با تنظیم فیلد اختیاری <code dir="ltr">.spec.suspend</code>
+روی true به حالت تعلیق درآورید. مقدار پیش‌فرض این فیلد false است.</p>
+<p dir="rtl">این تنظیم بر Jobهایی که CronJob پیش‌تر آغاز کرده است اثر <em>نمی‌گذارد</em>.</p>
+<p dir="rtl">اگر این فیلد را روی true تنظیم کنید، همه‌ی اجراهای بعدی معلق می‌شوند (همچنان
+زمان‌بندی‌شده باقی می‌مانند، اما کنترل‌کننده‌ی CronJob، Jobها را برای اجرای وظایف آغاز نمی‌کند) تا زمانی که
+تعلیق CronJob را لغو کنید.</p>
+<div class="callout caution"><div class="callout-title">احتیاط:</div>
+<p dir="rtl">اجراهایی که در زمان زمان‌بندی‌شده‌ی خود معلق هستند، به‌عنوان Jobهای از دست‌رفته شمرده می‌شوند.
+هنگامی که <code dir="ltr">.spec.suspend</code> در یک CronJob موجود که فاقد
+<a href="#starting-deadline">مهلت آغاز</a> است از <code dir="ltr">true</code> به <code dir="ltr">false</code> تغییر کند، Jobهای از دست‌رفته بلافاصله زمان‌بندی می‌شوند.</p>
+</div>
+<h3 id="محدودیت-های-سابقه-ی-jobها" dir="rtl">محدودیت‌های سابقه‌ی Jobها</h3>
+<p dir="rtl">فیلدهای <code dir="ltr">.spec.successfulJobsHistoryLimit</code> و <code dir="ltr">.spec.failedJobsHistoryLimit</code> مشخص می‌کنند
+که چه تعداد Job تکمیل‌شده و ناموفق باید نگه داشته شوند. هر دو فیلد اختیاری هستند.</p>
+<ul>
+<li dir="rtl">
+<p dir="rtl"><code dir="ltr">.spec.successfulJobsHistoryLimit</code>: این فیلد تعداد Jobهای موفقِ پایان‌یافته را که باید نگه داشته شوند
+مشخص می‌کند. مقدار پیش‌فرض <code dir="ltr">3</code> است. تنظیم این فیلد روی <code dir="ltr">0</code> باعث می‌شود هیچ Job موفقی نگه داشته نشود.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><code dir="ltr">.spec.failedJobsHistoryLimit</code>: این فیلد تعداد Jobهای ناموفقِ پایان‌یافته را که باید نگه داشته شوند مشخص می‌کند.
+مقدار پیش‌فرض <code dir="ltr">1</code> است. تنظیم این فیلد روی <code dir="ltr">0</code> باعث می‌شود هیچ Job ناموفقی نگه داشته نشود.</p>
+</li>
+</ul>
+<p dir="rtl">برای روش دیگری جهت پاک‌سازی خودکار Jobها، به
+<a href="https://kubernetes.io/docs/concepts/workloads/controllers/job/#clean-up-finished-jobs-automatically" target="_blank">پاک‌سازی خودکار Jobهای پایان‌یافته</a> مراجعه کنید.</p>
+<h3 id="مناطق-زمانی" dir="rtl">مناطق زمانی</h3>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes v1.27 [stable]</span> (پایدار)</div>
+<p dir="rtl">برای CronJobهایی که منطقه‌ی زمانی برایشان مشخص نشده است، <span class="term" title="kube-controller-manager">kube-controller-manager</span>
+زمان‌بندی‌ها را نسبت به منطقه‌ی زمانی محلی خود تفسیر می‌کند.</p>
+<p dir="rtl">می‌توانید با تنظیم <code dir="ltr">.spec.timeZone</code> روی نام
+یک <a href="https://en.wikipedia.org/wiki/List_of_tz_database_time_zones" target="_blank" rel="noopener">منطقه‌ی زمانی</a> معتبر، یک منطقه‌ی زمانی برای CronJob مشخص کنید.
+برای مثال، تنظیم <code dir="ltr">.spec.timeZone: "Etc/UTC"</code> به کوبرنتیز دستور می‌دهد که
+زمان‌بندی را نسبت به زمان هماهنگ جهانی (UTC) تفسیر کند.</p>
+<p dir="rtl">یک پایگاه داده‌ی مناطق زمانی از کتابخانه‌ی استاندارد Go در فایل‌های اجرایی گنجانده شده است و در صورتی که پایگاه داده‌ی خارجی روی سیستم در دسترس نباشد، به‌عنوان جایگزین استفاده می‌شود.</p>
+<h2 id="محدودیت-های-cronjob-cron-job-limitations" dir="rtl">محدودیت‌های CronJob {#cron-job-limitations}</h2>
+<h3 id="مشخص-سازی-پشتیبانی-نشده-ی-timezone" dir="rtl">مشخص‌سازی پشتیبانی‌نشده‌ی TimeZone</h3>
+<p dir="rtl">مشخص کردن منطقه‌ی زمانی با استفاده از متغیرهای <code dir="ltr">CRON_TZ</code> یا <code dir="ltr">TZ</code> درون <code dir="ltr">.spec.schedule</code>
+<strong>به‌طور رسمی پشتیبانی نمی‌شود</strong> (و هرگز پشتیبانی نشده است). اگر تلاش کنید زمان‌بندی‌ای تنظیم کنید
+که شامل مشخص‌سازی منطقه‌ی زمانی <code dir="ltr">TZ</code> یا <code dir="ltr">CRON_TZ</code> باشد، کوبرنتیز در
+ایجاد یا به‌روزرسانی منبع با یک خطای اعتبارسنجی ناکام می‌ماند. در عوض باید مناطق زمانی را
+با استفاده از <a href="#time-zones">فیلد منطقه‌ی زمانی</a> مشخص کنید.</p>
+<h3 id="تغییر-یک-cronjob" dir="rtl">تغییر یک CronJob</h3>
+<p dir="rtl">بنا بر طراحی، یک CronJob قالبی برای Jobهای <em>جدید</em> دارد.
+اگر یک CronJob موجود را تغییر دهید، تغییراتی که انجام می‌دهید بر Jobهای جدیدی اعمال می‌شوند که
+پس از تکمیل تغییر شما شروع به اجرا می‌کنند. Jobها (و Podهای آن‌ها) که پیش‌تر
+آغاز شده‌اند بدون تغییر به اجرای خود ادامه می‌دهند.
+یعنی CronJob، Jobهای موجود را به‌روزرسانی <em>نمی‌کند</em>، حتی اگر آن‌ها همچنان در حال اجرا باشند.</p>
+<h3 id="ایجاد-job" dir="rtl">ایجاد Job</h3>
+<p dir="rtl">یک CronJob تقریباً یک بار در هر زمان اجرای زمان‌بندی خود یک آبجکت Job ایجاد می‌کند.
+زمان‌بندی تقریبی است، زیرا
+در شرایطی خاص ممکن است دو Job ایجاد شود یا هیچ Jobی ایجاد نشود.
+کوبرنتیز تلاش می‌کند از این وضعیت‌ها جلوگیری کند، اما به‌طور کامل مانع آن‌ها نمی‌شود. بنابراین،
+Jobهایی که تعریف می‌کنید باید <em>idempotent</em> (خودتوان) باشند.</p>
+<p dir="rtl">از کوبرنتیز نسخه‌ی v1.32 به بعد، CronJobها حاشیه‌نویسی
+<code dir="ltr">batch.kubernetes.io/cronjob-scheduled-timestamp</code> را روی Jobهای ایجادشده‌ی خود اعمال می‌کنند. این حاشیه‌نویسی
+زمان ایجاد زمان‌بندی‌شده‌ی اصلی Job را نشان می‌دهد و با قالب RFC3339 نوشته می‌شود.</p>
+<p dir="rtl">اگر <code dir="ltr">startingDeadlineSeconds</code> روی مقداری بزرگ تنظیم شده باشد یا تنظیم‌نشده باقی بماند (پیش‌فرض)
+و اگر <code dir="ltr">concurrencyPolicy</code> روی <code dir="ltr">Allow</code> تنظیم شده باشد، Jobها همواره
+دست‌کم یک بار اجرا خواهند شد.</p>
+<div class="callout caution"><div class="callout-title">احتیاط:</div>
+<p dir="rtl">اگر <code dir="ltr">startingDeadlineSeconds</code> روی مقداری کمتر از ۱۰ ثانیه تنظیم شود، ممکن است CronJob زمان‌بندی نشود. دلیل این است که کنترل‌کننده‌ی CronJob هر ۱۰ ثانیه یک بار وضعیت را بررسی می‌کند.</p>
+</div>
+<p dir="rtl">برای هر CronJob، <span class="term" title="controller">controller</span> مربوط به CronJob بررسی می‌کند که در فاصله‌ی زمانی از آخرین زمان زمان‌بندی‌شده تا اکنون چه تعداد زمان‌بندی را از دست داده است. اگر بیش از ۱۰۰ زمان‌بندی از دست رفته باشد، Job را آغاز نمی‌کند و خطا را در لاگ ثبت می‌کند.</p>
+<pre dir="ltr"><code dir="ltr">too many missed start times. Set or decrease .spec.startingDeadlineSeconds or check clock skew
+</code></pre>
+<p dir="rtl">این رفتار برای زمان‌بندی جبرانی (catch-up) کاربرد دارد و به این معنا نیست که CronJob از اجرا باز می‌ایستد.</p>
+<p dir="rtl">برای مثال، هنگام استفاده از <code dir="ltr">concurrencyPolicy: Forbid</code>، Jobهای طولانی‌مدت ممکن است باعث شوند زمان‌های زمان‌بندی‌شده نادیده گرفته شوند، اما پس از تکمیل Job قبلی می‌توان یک Job جدید ایجاد کرد.</p>
+<p dir="rtl">توجه به این نکته مهم است که اگر فیلد <code dir="ltr">startingDeadlineSeconds</code> تنظیم شده باشد (<code dir="ltr">nil</code> نباشد)، کنترل‌کننده تعداد Jobهای از دست‌رفته را از مقدار <code dir="ltr">startingDeadlineSeconds</code> تا اکنون می‌شمارد، نه از آخرین زمان زمان‌بندی‌شده تا اکنون. برای مثال، اگر <code dir="ltr">startingDeadlineSeconds</code> برابر <code dir="ltr">200</code> باشد، کنترل‌کننده تعداد Jobهای از دست‌رفته در ۲۰۰ ثانیه‌ی گذشته را می‌شمارد.</p>
+<p dir="rtl">یک CronJob در صورتی از دست‌رفته به حساب می‌آید که در زمان زمان‌بندی‌شده‌ی خود ایجاد نشده باشد. برای مثال، اگر <code dir="ltr">concurrencyPolicy</code> روی <code dir="ltr">Forbid</code> تنظیم شده باشد و تلاش شود یک CronJob در حالی زمان‌بندی شود که یک زمان‌بندی قبلی هنوز در حال اجراست، آن CronJob از دست‌رفته شمرده می‌شود.</p>
+<p dir="rtl">برای مثال، فرض کنید یک CronJob تنظیم شده است تا از ساعت <code dir="ltr">08:30:00</code> هر یک دقیقه یک Job جدید زمان‌بندی کند و فیلد
+<code dir="ltr">startingDeadlineSeconds</code> آن تنظیم نشده است. اگر کنترل‌کننده‌ی CronJob
+از <code dir="ltr">08:29:00</code> تا <code dir="ltr">10:21:00</code> از کار افتاده باشد، Job آغاز نخواهد شد، زیرا تعداد Jobهایی که زمان‌بندی خود را از دست داده‌اند بیشتر از ۱۰۰ است.</p>
+<p dir="rtl">برای توضیح بیشتر این مفهوم، فرض کنید یک CronJob تنظیم شده است تا از ساعت <code dir="ltr">08:30:00</code> هر یک دقیقه یک Job جدید زمان‌بندی کند و
+<code dir="ltr">startingDeadlineSeconds</code> آن روی ۲۰۰ ثانیه تنظیم شده است. اگر کنترل‌کننده‌ی CronJob
+در همان بازه‌ی مثال قبلی (<code dir="ltr">08:29:00</code> تا <code dir="ltr">10:21:00</code>) از کار افتاده باشد، Job همچنان در ساعت 10:22:00 آغاز می‌شود. این اتفاق می‌افتد زیرا کنترل‌کننده اکنون بررسی می‌کند که در ۲۰۰ ثانیه‌ی گذشته چه تعداد زمان‌بندی از دست رفته است (یعنی ۳ زمان‌بندی از دست‌رفته)، نه از آخرین زمان زمان‌بندی‌شده تا اکنون.</p>
+<p dir="rtl">CronJob فقط مسئول ایجاد Jobهایی است که با زمان‌بندی آن مطابقت دارند و
+Job نیز به نوبه‌ی خود مسئول مدیریت Podهایی است که نمایندگی می‌کند.</p>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<ul>
+<li dir="rtl">با <a href="https://kubernetes.io/docs/concepts/workloads/pods/" target="_blank">Podها</a> و
+<a href="https://kubernetes.io/docs/concepts/workloads/controllers/job/" target="_blank">Jobها</a> آشنا شوید؛ دو مفهومی
+که CronJobها به آن‌ها متکی هستند.</li>
+<li dir="rtl">درباره‌ی <a href="https://pkg.go.dev/github.com/robfig/cron/v3#hdr-CRON_Expression_Format" target="_blank" rel="noopener">قالب</a> دقیق
+فیلدهای <code dir="ltr">.spec.schedule</code> در CronJob بخوانید.</li>
+<li dir="rtl">برای دستورالعمل‌های ایجاد و کار با CronJobها، و برای مثالی
+از یک مانیفست CronJob،
+به <a href="https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/" target="_blank">اجرای وظایف خودکار با CronJobها</a> مراجعه کنید.</li>
+<li dir="rtl"><code dir="ltr">CronJob</code> بخشی از REST API کوبرنتیز است.
+برای جزئیات بیشتر، مرجع API
+را بخوانید.</li>
+</ul>
+</main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#مثال">مثال</a><a class="l2" href="#نوشتن-spec-یک-cronjob">نوشتن spec یک CronJob</a><a class="l3" href="#نحو-زمان-بندی">نحو زمان‌بندی</a><a class="l3" href="#قالب-job">قالب Job</a><a class="l3" href="#مهلت-آغاز-job-با-تأخیر-starting-deadline">مهلت آغاز Job با تأخیر {#starting-deadline}</a><a class="l3" href="#سیاست-هم-زمانی">سیاست هم‌زمانی</a><a class="l3" href="#تعلیق-زمان-بندی">تعلیق زمان‌بندی</a><a class="l3" href="#محدودیت-های-سابقه-ی-jobها">محدودیت‌های سابقه‌ی Jobها</a><a class="l3" href="#مناطق-زمانی">مناطق زمانی</a><a class="l2" href="#محدودیت-های-cronjob-cron-job-limitations">محدودیت‌های CronJob {#cron-job-limitations}</a><a class="l3" href="#مشخص-سازی-پشتیبانی-نشده-ی-timezone">مشخص‌سازی پشتیبانی‌نشده‌ی TimeZone</a><a class="l3" href="#تغییر-یک-cronjob">تغییر یک CronJob</a><a class="l3" href="#ایجاد-job">ایجاد Job</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>

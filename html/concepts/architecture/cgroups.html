@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>دربارهٔ cgroup v2 | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+</head>
+<body>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">concepts / architecture</span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">دربارهٔ cgroup v2</h1><!-- overview -->
+<p dir="rtl">در لینوکس، <span class="term" title="cgroup">گروه‌های کنترلی (control groups)</span>
+منابعی را که به فرایندها تخصیص داده می‌شوند محدود می‌کنند.</p>
+<p dir="rtl"><span class="term" title="kubelet">kubelet</span> و
+محیط اجرای کانتینر زیربنایی باید با cgroupها تعامل داشته باشند تا
+<a href="../configuration/manage-resources-containers.html">مدیریت منابع برای پادها و کانتینرها</a> را اعمال کنند؛ این مدیریت
+شامل درخواست‌ها (requests) و محدودیت‌های (limits) پردازنده و حافظه برای بارهای کاری کانتینری‌شده است.</p>
+<p dir="rtl">در لینوکس دو نسخه از cgroupها وجود دارد: cgroup v1 و cgroup v2. cgroup v2
+نسل جدید API مربوط به <code dir="ltr">cgroup</code> است.</p>
+<!-- body -->
+<h2 id="cgroup-v2-چیست؟-cgroup-v2" dir="rtl">cgroup v2 چیست؟ {#cgroup-v2}</h2>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes v1.25 [stable]</span> (پایدار)</div>
+<p dir="rtl">cgroup v2 نسخهٔ بعدی API لینوکس <code dir="ltr">cgroup</code> است. cgroup v2 یک
+سیستم کنترلی یکپارچه با قابلیت‌های پیشرفته‌تر مدیریت منابع
+فراهم می‌کند.</p>
+<p dir="rtl">cgroup v2 بهبودهای متعددی نسبت به cgroup v1 ارائه می‌دهد، از جمله موارد زیر:</p>
+<ul>
+<li dir="rtl">طراحی سلسله‌مراتب یکپارچهٔ واحد در API</li>
+<li dir="rtl">واگذاری امن‌تر زیردرخت‌ها به کانتینرها</li>
+<li dir="rtl">قابلیت‌های جدیدتر مانند <a href="https://www.kernel.org/doc/html/latest/accounting/psi.html" target="_blank" rel="noopener">اطلاعات توقف ناشی از فشار (Pressure Stall Information)</a></li>
+<li dir="rtl">مدیریت پیشرفته‌تر تخصیص منابع و جداسازی در میان چندین منبع
+<ul>
+<li dir="rtl">حسابرسی یکپارچه برای انواع مختلف تخصیص حافظه (حافظهٔ شبکه، حافظهٔ هسته و غیره)</li>
+<li dir="rtl">حسابرسی تغییرات غیرآنی منابع، مانند بازنویسی‌های حافظهٔ نهان صفحه (page cache write backs)</li>
+</ul>
+</li>
+</ul>
+<p dir="rtl">برخی از قابلیت‌های کوبرنتیز برای مدیریت و جداسازی پیشرفته‌تر منابع منحصراً از cgroup v2
+استفاده می‌کنند. برای نمونه، قابلیت
+<a href="../workloads/pods/pod-qos.html#memory-qos-with-cgroup-v2">MemoryQoS</a> کیفیت خدمات (QoS) حافظه را بهبود می‌بخشد
+و به سازه‌های پایه‌ای cgroup v2 متکی است.</p>
+<h2 id="استفاده-از-cgroup-v2-using-cgroupv2" dir="rtl">استفاده از cgroup v2 {#using-cgroupv2}</h2>
+<p dir="rtl">روش توصیه‌شده برای استفاده از cgroup v2، به‌کارگیری یک توزیع لینوکس است که
+cgroup v2 را به‌طور پیش‌فرض فعال کرده و از آن استفاده می‌کند.</p>
+<p dir="rtl">برای بررسی اینکه آیا توزیع شما از cgroup v2 استفاده می‌کند، به <a href="#check-cgroup-version">شناسایی نسخهٔ cgroup روی نودهای لینوکسی</a> مراجعه کنید.</p>
+<h3 id="نیازمندی-ها" dir="rtl">نیازمندی‌ها</h3>
+<p dir="rtl">cgroup v2 نیازمندی‌های زیر را دارد:</p>
+<ul>
+<li dir="rtl">توزیع سیستم‌عامل، cgroup v2 را فعال کرده باشد</li>
+<li dir="rtl">نسخهٔ هستهٔ لینوکس 5.8 یا بالاتر باشد</li>
+<li dir="rtl">محیط اجرای کانتینر از cgroup v2 پشتیبانی کند. برای نمونه:
+<ul>
+<li dir="rtl"><a href="https://containerd.io/" target="_blank" rel="noopener">containerd</a> نسخهٔ v1.4 و بالاتر</li>
+<li dir="rtl"><a href="https://cri-o.io/" target="_blank" rel="noopener">cri-o</a> نسخهٔ v1.20 و بالاتر</li>
+</ul>
+</li>
+<li dir="rtl">kubelet و محیط اجرای کانتینر برای استفاده از <a href="https://kubernetes.io/docs/setup/production-environment/container-runtimes#systemd-cgroup-driver" target="_blank">درایور cgroup مبتنی بر systemd</a> پیکربندی شده باشند</li>
+</ul>
+<h3 id="پشتیبانی-توزیع-های-لینوکس-از-cgroup-v2" dir="rtl">پشتیبانی توزیع‌های لینوکس از cgroup v2</h3>
+<p dir="rtl">برای فهرستی از توزیع‌های لینوکسی که از cgroup v2 استفاده می‌کنند، به <a href="https://github.com/opencontainers/runc/blob/main/docs/cgroup-v2.md" target="_blank" rel="noopener">مستندات cgroup v2</a> مراجعه کنید</p>
+<!-- the list should be kept in sync with https://github.com/opencontainers/runc/blob/main/docs/cgroup-v2.md -->
+<ul>
+<li dir="rtl">Container Optimized OS (از M97 به بعد)</li>
+<li dir="rtl">Ubuntu (از 21.10 به بعد؛ 22.04 و بالاتر توصیه می‌شود)</li>
+<li dir="rtl">Debian GNU/Linux (از Debian 11 bullseye به بعد)</li>
+<li dir="rtl">Fedora (از 31 به بعد)</li>
+<li dir="rtl">Arch Linux (از آوریل ۲۰۲۱ به بعد)</li>
+<li dir="rtl">RHEL و توزیع‌های مشابه RHEL (از 9 به بعد)</li>
+</ul>
+<p dir="rtl">برای بررسی اینکه آیا توزیع شما از cgroup v2 استفاده می‌کند، به مستندات توزیع خود مراجعه کنید
+یا دستورالعمل‌های بخش <a href="#check-cgroup-version">شناسایی نسخهٔ cgroup روی نودهای لینوکسی</a> را دنبال کنید.</p>
+<p dir="rtl">همچنین می‌توانید cgroup v2 را با تغییر آرگومان‌های راه‌اندازی خط فرمان هسته (kernel cmdline)
+به‌صورت دستی در توزیع لینوکس خود فعال کنید. اگر توزیع شما از GRUB استفاده می‌کند،
+باید <code dir="ltr">systemd.unified_cgroup_hierarchy=1</code> را به <code dir="ltr">GRUB_CMDLINE_LINUX</code>
+در فایل <code dir="ltr">/etc/default/grub</code> اضافه کنید و سپس <code dir="ltr">sudo update-grub</code> را اجرا کنید. با این حال،
+رویکرد توصیه‌شده استفاده از توزیعی است که cgroup v2 را از پیش و به‌طور
+پیش‌فرض فعال کرده باشد.</p>
+<h3 id="مهاجرت-به-cgroup-v2-migrating-cgroupv2" dir="rtl">مهاجرت به cgroup v2 {#migrating-cgroupv2}</h3>
+<p dir="rtl">برای مهاجرت به cgroup v2، اطمینان حاصل کنید که <a href="#requirements">نیازمندی‌ها</a> را برآورده می‌کنید و سپس
+به نسخه‌ای از هسته ارتقا دهید که cgroup v2 را به‌طور پیش‌فرض فعال می‌کند.</p>
+<p dir="rtl">kubelet به‌طور خودکار تشخیص می‌دهد که سیستم‌عامل روی cgroup v2 اجرا می‌شود و
+بدون نیاز به هیچ پیکربندی اضافه‌ای بر همین اساس عمل می‌کند.</p>
+<p dir="rtl">هنگام تغییر به cgroup v2 نباید تفاوت محسوسی در تجربهٔ کاربری وجود داشته باشد،
+مگر اینکه کاربران مستقیماً، چه روی نود و چه از درون کانتینرها، به سیستم فایل cgroup
+دسترسی داشته باشند.</p>
+<p dir="rtl">cgroup v2 از API متفاوتی نسبت به cgroup v1 استفاده می‌کند؛ بنابراین اگر برنامه‌هایی
+وجود دارند که مستقیماً به سیستم فایل cgroup دسترسی دارند، باید به
+نسخه‌های جدیدتری که از cgroup v2 پشتیبانی می‌کنند به‌روزرسانی شوند. برای نمونه:</p>
+<ul>
+<li dir="rtl">برخی از عامل‌های پایش و امنیتی شخص ثالث ممکن است به سیستم فایل cgroup وابسته باشند.
+این عامل‌ها را به نسخه‌هایی به‌روزرسانی کنید که از cgroup v2 پشتیبانی می‌کنند.</li>
+<li dir="rtl">اگر <a href="https://github.com/google/cadvisor" target="_blank" rel="noopener">cAdvisor</a> را به‌صورت یک DaemonSet مستقل
+برای پایش پادها و کانتینرها اجرا می‌کنید، آن را به نسخهٔ v0.43.0 یا بالاتر به‌روزرسانی کنید.</li>
+<li dir="rtl">اگر برنامه‌های Java مستقر می‌کنید، ترجیحاً از نسخه‌هایی استفاده کنید که به‌طور کامل از cgroup v2 پشتیبانی می‌کنند:
+<ul>
+<li dir="rtl"><a href="https://bugs.openjdk.org/browse/JDK-8230305" target="_blank" rel="noopener">OpenJDK / HotSpot</a>: نسخه‌های jdk8u372، 11.0.16، 15 و بالاتر</li>
+<li dir="rtl"><a href="https://www.ibm.com/support/pages/apar/IJ46681" target="_blank" rel="noopener">IBM Semeru Runtimes</a>: نسخه‌های 8.0.382.0، 11.0.20.0، 17.0.8.0 و بالاتر</li>
+<li dir="rtl"><a href="https://www.ibm.com/support/pages/apar/IJ46681" target="_blank" rel="noopener">IBM Java</a>: نسخهٔ 8.0.8.6 و بالاتر</li>
+</ul>
+</li>
+<li dir="rtl">اگر از بستهٔ <a href="https://github.com/uber-go/automaxprocs" target="_blank" rel="noopener">uber-go/automaxprocs</a> استفاده می‌کنید، اطمینان حاصل کنید
+که نسخهٔ مورد استفادهٔ شما v1.5.1 یا بالاتر است.</li>
+<li dir="rtl">اگر برنامه‌های <a href="https://nodejs.org/" target="_blank" rel="noopener">Node.js</a> مستقر می‌کنید، ترجیحاً از نسخه‌هایی استفاده کنید که محدودیت‌های حافظهٔ cgroup v2
+را تشخیص می‌دهند. Node.js از نسخهٔ v20.3.0 به بعد، محدودیت‌های حافظهٔ cgroup v2 را (از طریق <a href="https://libuv.org/" target="_blank" rel="noopener">libuv</a>)
+می‌خواند. شاخهٔ انتشار v18 محدودیت‌های حافظهٔ cgroup v2 را به‌طور قابل‌اطمینانی تشخیص نمی‌دهد.
+نسخه‌های فاقد این پشتیبانی ممکن است به‌جای محدودیت اعمال‌شده بر پاد، کل حافظهٔ میزبان را بخوانند
+که می‌تواند به اندازهٔ نادرست heap و خاتمه‌های ناشی از کمبود حافظه (OOM)
+منجر شود. در نسخه‌های متأثر، اندازهٔ heap را به‌طور صریح تنظیم کنید؛ برای نمونه با
+پرچم <code dir="ltr">--max-old-space-size</code>.</li>
+</ul>
+<h2 id="شناسایی-نسخهٔ-cgroup-روی-نودهای-لینوکسی-check-cgroup-version" dir="rtl">شناسایی نسخهٔ cgroup روی نودهای لینوکسی  {#check-cgroup-version}</h2>
+<p dir="rtl">نسخهٔ cgroup به توزیع لینوکس مورد استفاده و
+نسخهٔ پیش‌فرض cgroup پیکربندی‌شده در سیستم‌عامل بستگی دارد. برای بررسی اینکه توزیع شما از کدام نسخهٔ cgroup
+استفاده می‌کند، فرمان <code dir="ltr">stat -fc %T /sys/fs/cgroup/</code> را روی
+نود اجرا کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">stat -fc %T /sys/fs/cgroup/
+</code></pre>
+<p dir="rtl">برای cgroup v2، خروجی <code dir="ltr">cgroup2fs</code> است.</p>
+<p dir="rtl">برای cgroup v1، خروجی <code dir="ltr">tmpfs.</code> است.</p>
+<h2 id="منسوخ-شدن-cgroup-v1" dir="rtl">منسوخ‌شدن cgroup v1</h2>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes v1.35 [deprecated]</span> (منسوخ)</div>
+<p dir="rtl">کوبرنتیز cgroup v1 را منسوخ کرده است.
+حذف آن مطابق با <a href="https://kubernetes.io/docs/reference/using-api/deprecation-policy/" target="_blank">سیاست منسوخ‌سازی کوبرنتیز</a> انجام خواهد شد.</p>
+<p dir="rtl">kubelet به‌طور پیش‌فرض دیگر روی نودی با cgroup v1 راه‌اندازی نخواهد شد.
+برای غیرفعال‌کردن این تنظیم، مدیر کلاستر باید <code dir="ltr">failCgroupV1</code> را در <a href="https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/" target="_blank">فایل پیکربندی kubelet</a> برابر با false قرار دهد.</p>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<ul>
+<li dir="rtl">دربارهٔ <a href="https://man7.org/linux/man-pages/man7/cgroups.7.html" target="_blank" rel="noopener">cgroupها</a> بیشتر بیاموزید</li>
+<li dir="rtl">دربارهٔ <a href="https://kubernetes.io/docs/concepts/architecture/cri" target="_blank">محیط اجرای کانتینر</a> بیشتر بیاموزید</li>
+<li dir="rtl">دربارهٔ <a href="https://kubernetes.io/docs/setup/production-environment/container-runtimes#cgroup-drivers" target="_blank">درایورهای cgroup</a> بیشتر بیاموزید</li>
+</ul>
+</main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#cgroup-v2-چیست؟-cgroup-v2">cgroup v2 چیست؟ {#cgroup-v2}</a><a class="l2" href="#استفاده-از-cgroup-v2-using-cgroupv2">استفاده از cgroup v2 {#using-cgroupv2}</a><a class="l3" href="#نیازمندی-ها">نیازمندی‌ها</a><a class="l3" href="#پشتیبانی-توزیع-های-لینوکس-از-cgroup-v2">پشتیبانی توزیع‌های لینوکس از cgroup v2</a><a class="l3" href="#مهاجرت-به-cgroup-v2-migrating-cgroupv2">مهاجرت به cgroup v2 {#migrating-cgroupv2}</a><a class="l2" href="#شناسایی-نسخهٔ-cgroup-روی-نودهای-لینوکسی-check-cgroup-version">شناسایی نسخهٔ cgroup روی نودهای لینوکسی  {#check-cgroup-version}</a><a class="l2" href="#منسوخ-شدن-cgroup-v1">منسوخ‌شدن cgroup v1</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>

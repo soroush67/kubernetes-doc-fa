@@ -1,0 +1,438 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Taintها و Tolerationها | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+</head>
+<body>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">concepts / scheduling-eviction</span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">Taintها و Tolerationها</h1><!-- overview -->
+<p dir="rtl"><a href="assign-pod-node.html#affinity-and-anti-affinity"><em>وابستگی نود (Node affinity)</em></a>
+ویژگی‌ای از <span class="term" title="pod">پادها</span> است که آن‌ها را به‌سوی
+مجموعه‌ای از <span class="term" title="node">نودها</span> <em>جذب</em> می‌کند (یا به‌صورت یک ترجیح یا به‌صورت یک
+الزام سخت). <em>Taintها</em> عکس این عمل می‌کنند؛ آن‌ها به یک نود اجازه می‌دهند مجموعه‌ای از پادها را دفع کند.</p>
+<p dir="rtl"><em>Tolerationها</em> بر پادها اعمال می‌شوند. Tolerationها به زمان‌بند اجازه می‌دهند پادها را روی نودهایی با taintهای منطبق
+زمان‌بندی کند. Tolerationها زمان‌بندی را مجاز می‌کنند اما آن را تضمین نمی‌کنند: زمان‌بند به‌عنوان بخشی از کار خود
+<a href="https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/" target="_blank">پارامترهای دیگری را نیز ارزیابی می‌کند</a>.</p>
+<p dir="rtl">Taintها و tolerationها با هم کار می‌کنند تا اطمینان حاصل شود که پادها روی
+نودهای نامناسب زمان‌بندی نمی‌شوند. یک یا چند taint بر یک نود اعمال می‌شود؛ این کار
+مشخص می‌کند که نود نباید هیچ پادی را که آن taintها را تحمل نمی‌کند بپذیرد.</p>
+<!-- body -->
+<h2 id="مفاهیم" dir="rtl">مفاهیم</h2>
+<p dir="rtl">شما با استفاده از <a href="https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#taint" target="_blank">kubectl taint</a> یک taint به نود اضافه می‌کنید.
+برای مثال،</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl taint nodes node1 key1=value1:NoSchedule
+</code></pre>
+<p dir="rtl">یک taint روی نود <code dir="ltr">node1</code> قرار می‌دهد. این taint دارای کلید <code dir="ltr">key1</code>، مقدار <code dir="ltr">value1</code> و اثر taint برابر با <code dir="ltr">NoSchedule</code> است.
+این به آن معناست که هیچ پادی نمی‌تواند روی <code dir="ltr">node1</code> زمان‌بندی شود، مگر اینکه toleration منطبقی داشته باشد.</p>
+<p dir="rtl">برای حذف taint اضافه‌شده توسط دستور بالا، می‌توانید این دستور را اجرا کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl taint nodes node1 key1=value1:NoSchedule-
+</code></pre>
+<p dir="rtl">شما toleration یک پاد را در PodSpec مشخص می‌کنید. هر دو toleration زیر با
+taint ایجادشده توسط خط <code dir="ltr">kubectl taint</code> بالا «منطبق» هستند، و بنابراین پادی که هر یک از این tolerationها را داشته باشد
+می‌تواند روی <code dir="ltr">node1</code> زمان‌بندی شود:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">tolerations:
+- key: "key1"
+  operator: "Equal"
+  value: "value1"
+  effect: "NoSchedule"
+</code></pre>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">tolerations:
+- key: "key1"
+  operator: "Exists"
+  effect: "NoSchedule"
+</code></pre>
+<p dir="rtl">زمان‌بند پیش‌فرض کوبرنتیز هنگام انتخاب نودی برای اجرای یک Pod مشخص،
+taintها و tolerationها را در نظر می‌گیرد. با این حال، اگر <code dir="ltr">.spec.nodeName</code> یک Pod را به‌صورت دستی
+مشخص کنید، این کار زمان‌بند را دور می‌زند؛ در این صورت Pod به نودی که آن را به آن اختصاص داده‌اید
+متصل (bind) می‌شود، حتی اگر روی آن نود انتخاب‌شده taintهای <code dir="ltr">NoSchedule</code> وجود داشته باشد.
+اگر چنین اتفاقی بیفتد و نود یک taint از نوع <code dir="ltr">NoExecute</code> نیز داشته باشد، kubelet
+آن Pod را بیرون می‌کند، مگر اینکه toleration مناسبی تنظیم شده باشد.</p>
+<p dir="rtl">در اینجا نمونه‌ای از یک پاد را می‌بینید که چند toleration برای آن تعریف شده است:</p>
+<div class="code-file ltr" dir="ltr">pods/pod-with-toleration.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+  labels:
+    env: test
+spec:
+  containers:
+  - name: nginx
+    image: nginx
+    imagePullPolicy: IfNotPresent
+  tolerations:
+  - key: "example-key"
+    operator: "Exists"
+    effect: "NoSchedule"
+</code></pre>
+<p dir="rtl">مقدار پیش‌فرض <code dir="ltr">operator</code> برابر با <code dir="ltr">Equal</code> است.</p>
+<p dir="rtl">یک toleration زمانی با یک taint «منطبق» است که کلیدها یکسان و اثرها نیز یکسان باشند، و:</p>
+<ul>
+<li dir="rtl"><code dir="ltr">operator</code> برابر با <code dir="ltr">Exists</code> باشد (که در این حالت نباید هیچ <code dir="ltr">value</code> مشخص شود)، یا</li>
+<li dir="rtl"><code dir="ltr">operator</code> برابر با <code dir="ltr">Equal</code> باشد و مقدارها با هم برابر باشند.</li>
+</ul>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">دو حالت خاص وجود دارد:</p>
+<p dir="rtl">اگر <code dir="ltr">key</code> خالی باشد، <code dir="ltr">operator</code> باید <code dir="ltr">Exists</code> باشد که با همهٔ کلیدها و مقدارها منطبق می‌شود.
+توجه داشته باشید که <code dir="ltr">effect</code> همچنان باید هم‌زمان منطبق شود.</p>
+<p dir="rtl">یک <code dir="ltr">effect</code> خالی با همهٔ اثرهای دارای کلید <code dir="ltr">key1</code> منطبق می‌شود.</p>
+</div>
+<p dir="rtl">مثال بالا از <code dir="ltr">effect</code> با مقدار <code dir="ltr">NoSchedule</code> استفاده کرد. به‌عنوان جایگزین، می‌توانید از <code dir="ltr">effect</code> با مقدار <code dir="ltr">PreferNoSchedule</code> استفاده کنید.</p>
+<p dir="rtl">مقادیر مجاز برای فیلد <code dir="ltr">effect</code> عبارت‌اند از:</p>
+<dl>
+<dt dir="ltr" class="ltr"><code dir="ltr">NoExecute</code></dt>
+<dd dir="rtl">
+<p dir="rtl">این اثر بر پادهایی که هم‌اکنون روی نود در حال اجرا هستند به شرح زیر تأثیر می‌گذارد:</p>
+<ul>
+<li dir="rtl">پادهایی که taint را تحمل نمی‌کنند، بلافاصله بیرون رانده (evict) می‌شوند</li>
+<li dir="rtl">پادهایی که taint را تحمل می‌کنند بدون آنکه <code dir="ltr">tolerationSeconds</code> را در
+مشخصات toleration خود تعیین کرده باشند، برای همیشه متصل باقی می‌مانند</li>
+<li dir="rtl">پادهایی که taint را با یک <code dir="ltr">tolerationSeconds</code> مشخص تحمل می‌کنند، به مدت زمان
+تعیین‌شده متصل باقی می‌مانند. پس از سپری شدن این زمان،
+کنترل‌کنندهٔ چرخهٔ حیات نود پادها را از نود بیرون می‌راند.</li>
+</ul>
+</dd>
+<dt dir="ltr" class="ltr"><code dir="ltr">NoSchedule</code></dt>
+<dd dir="rtl">
+<p dir="rtl">هیچ Pod جدیدی روی نود دارای taint زمان‌بندی نمی‌شود، مگر اینکه toleration منطبقی
+داشته باشد. پادهایی که هم‌اکنون روی نود در حال اجرا هستند بیرون رانده <strong>نمی‌شوند</strong>.</p>
+</dd>
+<dt dir="ltr" class="ltr"><code dir="ltr">PreferNoSchedule</code></dt>
+<dd dir="rtl">
+<p dir="rtl"><code dir="ltr">PreferNoSchedule</code> نسخهٔ «ترجیحی» یا «نرم» <code dir="ltr">NoSchedule</code> است.
+control plane <em>تلاش می‌کند</em> از قرار دادن Podی که taint را تحمل نمی‌کند
+روی نود خودداری کند، اما این امر تضمین‌شده نیست.</p>
+</dd>
+</dl>
+<p dir="rtl">می‌توانید چندین taint روی یک نود و چندین toleration روی یک پاد قرار دهید.
+روشی که کوبرنتیز چندین taint و toleration را پردازش می‌کند مانند یک فیلتر است: کار
+با همهٔ taintهای یک نود آغاز می‌شود، سپس taintهایی که پاد toleration منطبقی برای آن‌ها دارد نادیده گرفته می‌شوند؛
+taintهای باقی‌مانده که نادیده گرفته نشده‌اند، اثرهای مشخص‌شدهٔ خود را بر پاد اعمال می‌کنند. به‌طور خاص،</p>
+<ul>
+<li dir="rtl">اگر دست‌کم یک taint نادیده‌گرفته‌نشده با اثر <code dir="ltr">NoSchedule</code> وجود داشته باشد، کوبرنتیز پاد را
+روی آن نود زمان‌بندی نمی‌کند</li>
+<li dir="rtl">اگر هیچ taint نادیده‌گرفته‌نشده‌ای با اثر <code dir="ltr">NoSchedule</code> وجود نداشته باشد، اما دست‌کم یک taint نادیده‌گرفته‌نشده با
+اثر <code dir="ltr">PreferNoSchedule</code> وجود داشته باشد، کوبرنتیز <em>تلاش می‌کند</em> پاد را روی آن نود زمان‌بندی نکند</li>
+<li dir="rtl">اگر دست‌کم یک taint نادیده‌گرفته‌نشده با اثر <code dir="ltr">NoExecute</code> وجود داشته باشد، پاد از
+نود بیرون رانده می‌شود (اگر هم‌اکنون روی نود در حال اجرا باشد) و روی
+نود زمان‌بندی نمی‌شود (اگر هنوز روی نود در حال اجرا نباشد).</li>
+</ul>
+<p dir="rtl">برای مثال، فرض کنید نودی را به این شکل taint کنید</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl taint nodes node1 key1=value1:NoSchedule
+kubectl taint nodes node1 key1=value1:NoExecute
+kubectl taint nodes node1 key2=value2:NoSchedule
+</code></pre>
+<p dir="rtl">و یک پاد دو toleration داشته باشد:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">tolerations:
+- key: "key1"
+  operator: "Equal"
+  value: "value1"
+  effect: "NoSchedule"
+- key: "key1"
+  operator: "Equal"
+  value: "value1"
+  effect: "NoExecute"
+</code></pre>
+<p dir="rtl">در این حالت، پاد نمی‌تواند روی نود زمان‌بندی شود، زیرا هیچ
+tolerationی منطبق با taint سوم وجود ندارد. اما اگر هنگام اضافه شدن taint
+از قبل روی نود در حال اجرا باشد، می‌تواند به اجرای خود ادامه دهد، زیرا taint سوم تنها
+taint از میان این سه است که توسط پاد تحمل نمی‌شود.</p>
+<p dir="rtl">به‌طور معمول، اگر taintی با اثر <code dir="ltr">NoExecute</code> به یک نود اضافه شود، هر پادی که
+آن taint را تحمل نکند بلافاصله بیرون رانده می‌شود، و پادهایی که آن taint را تحمل می‌کنند
+هرگز بیرون رانده نمی‌شوند. با این حال، یک toleration با اثر <code dir="ltr">NoExecute</code> می‌تواند
+فیلد اختیاری <code dir="ltr">tolerationSeconds</code> را مشخص کند که تعیین می‌کند پاد پس از اضافه شدن taint
+چه مدت به نود متصل باقی بماند. برای مثال،</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">tolerations:
+- key: "key1"
+  operator: "Equal"
+  value: "value1"
+  effect: "NoExecute"
+  tolerationSeconds: 3600
+</code></pre>
+<p dir="rtl">به این معناست که اگر این پاد در حال اجرا باشد و taint منطبقی به نود اضافه شود،
+پاد به مدت ۳۶۰۰ ثانیه به نود متصل باقی می‌ماند و سپس بیرون رانده می‌شود. اگر
+taint پیش از پایان این زمان حذف شود، پاد بیرون رانده نخواهد شد.</p>
+<h2 id="عملگرهای-مقایسهٔ-عددی-numeric-comparison-operators" dir="rtl">عملگرهای مقایسهٔ عددی {#numeric-comparison-operators}</h2>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
+<p dir="rtl">علاوه بر <code dir="ltr">Equal</code> و <code dir="ltr">Exists</code>، می‌توانید از عملگرهای مقایسهٔ عددی
+(<code dir="ltr">Gt</code> و <code dir="ltr">Lt</code>) برای تطبیق taintهایی با مقادیر صحیح استفاده کنید. این قابلیت برای زمان‌بندی مبتنی بر آستانه،
+مانند تطبیق نودها بر اساس سطح قابلیت اطمینان یا ردهٔ SLA، مفید است.</p>
+<ul>
+<li dir="rtl"><code dir="ltr">Gt</code> زمانی منطبق می‌شود که مقدار taint بزرگ‌تر از مقدار toleration باشد.</li>
+<li dir="rtl"><code dir="ltr">Lt</code> زمانی منطبق می‌شود که مقدار taint کوچک‌تر از مقدار toleration باشد.</li>
+</ul>
+<p dir="rtl">برای عملگرهای عددی، هم مقدار toleration و هم مقدار taint باید اعداد صحیح معتبر باشند.
+اگر هر یک از این مقادیر قابل تجزیه به عدد صحیح نباشد، toleration منطبق نمی‌شود.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">هنگامی که Podی ایجاد می‌کنید که از عملگرهای toleration از نوع <code dir="ltr">Gt</code> یا <code dir="ltr">Lt</code> استفاده می‌کند، API server اعتبارسنجی می‌کند که
+مقادیر toleration اعداد صحیح معتبری باشند. مقادیر taint روی نودها در زمان ثبت نود
+اعتبارسنجی نمی‌شوند. اگر نودی مقدار taint غیرعددی داشته باشد (برای مثال،
+<code dir="ltr">servicelevel.organization.example/agreed-service-level=high:NoSchedule</code>)،
+پادهایی که از عملگرهای مقایسهٔ عددی استفاده می‌کنند با آن taint منطبق نمی‌شوند و نمی‌توانند روی آن نود زمان‌بندی شوند.</p>
+</div>
+<p dir="rtl">برای مثال، اگر نودها با مقداری که نمایانگر توافق‌نامهٔ سطح خدمات (SLA) است taint شده باشند:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl taint nodes node1 servicelevel.organization.example/agreed-service-level=950:NoSchedule
+</code></pre>
+<p dir="rtl">یک پاد می‌تواند نودهایی با SLA بزرگ‌تر از ۹۰۰ را تحمل کند:</p>
+<div class="code-file ltr" dir="ltr">pods/pod-with-numeric-toleration.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-numeric-toleration
+  labels:
+    env: test
+spec:
+  containers:
+    - name: nginx
+      image: nginx
+      imagePullPolicy: IfNotPresent
+  tolerations:
+    - key: "servicelevel.organization.example/agreed-service-level"
+      operator: "Gt"
+      value: "900"
+      effect: "NoSchedule"
+</code></pre>
+<p dir="rtl">این toleration با taint روی <code dir="ltr">node1</code> منطبق است، زیرا <code dir="ltr">950 &gt; 900</code> (برای عملگر <code dir="ltr">Gt</code>، مقدار taint<br>
+بزرگ‌تر از مقدار toleration است).<br>
+به همین ترتیب، می‌توانید از عملگر <code dir="ltr">Lt</code> برای تطبیق taintهایی استفاده کنید که مقدار taint در آن‌ها<br>
+کوچک‌تر از مقدار toleration است:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">tolerations:
+- key: "servicelevel.organization.example/agreed-service-level"
+  operator: "Lt"
+  value: "1000"
+  effect: "NoSchedule"
+</code></pre>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">هنگام استفاده از عملگرهای مقایسهٔ عددی:</p>
+<ul>
+<li dir="rtl">هم مقدار toleration و هم مقدار taint باید اعداد صحیح علامت‌دار ۶۴ بیتی معتبر باشند
+(اعدادی با صفر در ابتدا (مثلاً "0550") مجاز نیستند).</li>
+<li dir="rtl">اگر مقداری قابل تجزیه به عدد صحیح نباشد، toleration منطبق نمی‌شود.</li>
+<li dir="rtl">عملگرهای عددی با همهٔ اثرهای taint کار می‌کنند: <code dir="ltr">NoSchedule</code>، <code dir="ltr">PreferNoSchedule</code> و <code dir="ltr">NoExecute</code>.</li>
+<li dir="rtl">برای <code dir="ltr">PreferNoSchedule</code> همراه با عملگرهای عددی: اگر toleration یک پاد مقایسهٔ عددی را برآورده نکند
+(مثلاً هنگام استفاده از <code dir="ltr">Gt</code>، مقدار taint &lt; مقدار toleration باشد)، زمان‌بند به آن نود اولویت پایین‌تری می‌دهد
+اما اگر گزینهٔ بهتری وجود نداشته باشد، ممکن است همچنان پاد را در آنجا زمان‌بندی کند.</li>
+</ul>
+</div>
+<div class="callout warning"><div class="callout-title">هشدار:</div>
+<p dir="rtl">پیش از غیرفعال کردن feature gate با نام <code dir="ltr">TaintTolerationComparisonOperators</code>:</p>
+<ul>
+<li dir="rtl">باید همهٔ بارهای کاری‌ای را که از عملگرهای <code dir="ltr">Gt</code> یا <code dir="ltr">Lt</code> استفاده می‌کنند شناسایی کنید تا از ایجاد حلقه‌های داغ (hot-loop) در کنترل‌کننده جلوگیری شود.</li>
+<li dir="rtl">همهٔ قالب‌های کنترل‌کنندهٔ بار کاری را به‌روزرسانی کنید تا به‌جای آن از عملگرهای <code dir="ltr">Equal</code> یا <code dir="ltr">Exists</code> استفاده کنند</li>
+<li dir="rtl">هر پاد در وضعیت pending را که از عملگرهای <code dir="ltr">Gt</code> یا <code dir="ltr">Lt</code> استفاده می‌کند حذف کنید</li>
+<li dir="rtl">متریک <code dir="ltr">apiserver_request_total</code> را برای افزایش ناگهانی خطاهای اعتبارسنجی پایش کنید</li>
+</ul>
+</div>
+<h2 id="نمونه-هایی-از-موارد-استفاده" dir="rtl">نمونه‌هایی از موارد استفاده</h2>
+<p dir="rtl">Taintها و tolerationها روشی انعطاف‌پذیر برای هدایت پادها به <em>دور</em> از نودها یا بیرون راندن
+پادهایی هستند که نباید در حال اجرا باشند. برخی از موارد استفاده عبارت‌اند از</p>
+<ul>
+<li dir="rtl">
+<p dir="rtl"><strong>نودهای اختصاصی</strong>: اگر می‌خواهید مجموعه‌ای از نودها را به استفادهٔ انحصاری
+مجموعهٔ مشخصی از کاربران اختصاص دهید، می‌توانید یک taint به آن نودها اضافه کنید (مثلاً
+<code dir="ltr">kubectl taint nodes nodename dedicated=groupName:NoSchedule</code>) و سپس toleration متناظر را
+به پادهای آن کاربران اضافه کنید (ساده‌ترین راه انجام این کار نوشتن یک
+<a href="https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/" target="_blank">کنترل‌کنندهٔ پذیرش (admission controller)</a> سفارشی است).
+در این صورت پادهای دارای tolerationها مجاز خواهند بود از نودهای دارای taint (اختصاصی) و نیز
+هر نود دیگری در کلاستر استفاده کنند. اگر می‌خواهید نودها را به آن‌ها اختصاص دهید <em>و</em>
+اطمینان حاصل کنید که آن‌ها <em>فقط</em> از نودهای اختصاصی استفاده می‌کنند، باید علاوه بر این برچسبی مشابه
+taint را به همان مجموعه از نودها اضافه کنید (مثلاً <code dir="ltr">dedicated=groupName</code>)، و کنترل‌کنندهٔ پذیرش
+نیز باید یک وابستگی نود اضافه کند تا الزام شود که پادها فقط بتوانند روی
+نودهایی با برچسب <code dir="ltr">dedicated=groupName</code> زمان‌بندی شوند.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><strong>نودهای دارای سخت‌افزار ویژه</strong>: در کلاستری که زیرمجموعهٔ کوچکی از نودها سخت‌افزار تخصصی
+(برای مثال GPU) دارند، مطلوب است پادهایی که به سخت‌افزار تخصصی نیاز ندارند
+از آن نودها دور نگه داشته شوند تا برای پادهایی که بعداً می‌رسند و به سخت‌افزار تخصصی
+نیاز دارند جا باقی بماند. این کار را می‌توان با taint کردن نودهای دارای سخت‌افزار
+تخصصی (مثلاً <code dir="ltr">kubectl taint nodes nodename special=true:NoSchedule</code> یا
+<code dir="ltr">kubectl taint nodes nodename special=true:PreferNoSchedule</code>) و افزودن toleration متناظر
+به پادهایی که از سخت‌افزار ویژه استفاده می‌کنند انجام داد. همانند مورد استفادهٔ نودهای اختصاصی،
+احتمالاً ساده‌ترین راه اعمال tolerationها استفاده از یک
+<a href="https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/" target="_blank">کنترل‌کنندهٔ پذیرش</a> سفارشی است.
+برای مثال، توصیه می‌شود از <a href="../configuration/manage-resources-containers.html#extended-resources">منابع
+توسعه‌یافته (Extended Resources)</a>
+برای نمایش سخت‌افزار ویژه استفاده کنید، نودهای دارای سخت‌افزار ویژه را با نام
+منبع توسعه‌یافته taint کنید و کنترل‌کنندهٔ پذیرش
+<a href="https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/#extendedresourcetoleration" target="_blank">ExtendedResourceToleration</a>
+را اجرا کنید. اکنون، چون نودها taint شده‌اند، هیچ پادی بدون
+toleration روی آن‌ها زمان‌بندی نمی‌شود. اما هنگامی که پادی را ارسال می‌کنید که
+منبع توسعه‌یافته را درخواست می‌کند، کنترل‌کنندهٔ پذیرش <code dir="ltr">ExtendedResourceToleration</code>
+به‌طور خودکار toleration درست را به پاد اضافه می‌کند و آن پاد روی
+نودهای دارای سخت‌افزار ویژه زمان‌بندی می‌شود. این کار تضمین می‌کند که این نودهای دارای سخت‌افزار
+ویژه به پادهایی اختصاص یابند که چنین سخت‌افزاری را درخواست می‌کنند و لازم نباشد
+tolerationها را به‌صورت دستی به پادهای خود اضافه کنید.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><strong>بیرون‌رانی مبتنی بر taint</strong>: رفتاری برای بیرون‌رانی که برای هر پاد قابل پیکربندی است
+و هنگام بروز مشکل در نودها اعمال می‌شود و در بخش بعدی توضیح داده شده است.</p>
+</li>
+</ul>
+<h2 id="بیرون-رانی-مبتنی-بر-taint" dir="rtl">بیرون‌رانی مبتنی بر taint</h2>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes v1.18 [stable]</span> (پایدار)</div>
+<p dir="rtl">کنترل‌کنندهٔ نود هنگامی که شرایط خاصی برقرار باشد، به‌طور خودکار یک Node را taint می‌کند.
+taintهای زیر به‌صورت داخلی تعریف شده‌اند:</p>
+<ul>
+<li dir="rtl"><code dir="ltr">node.kubernetes.io/not-ready</code>: نود آماده نیست. این وضعیت متناظر با
+این است که NodeCondition با نام <code dir="ltr">Ready</code> برابر با "<code dir="ltr">False</code>" باشد.</li>
+<li dir="rtl"><code dir="ltr">node.kubernetes.io/unreachable</code>: نود از سوی کنترل‌کنندهٔ نود قابل
+دسترسی نیست. این وضعیت متناظر با این است که NodeCondition با نام <code dir="ltr">Ready</code> برابر با "<code dir="ltr">Unknown</code>" باشد.</li>
+<li dir="rtl"><code dir="ltr">node.kubernetes.io/memory-pressure</code>: نود تحت فشار حافظه است.</li>
+<li dir="rtl"><code dir="ltr">node.kubernetes.io/disk-pressure</code>: نود تحت فشار دیسک است.</li>
+<li dir="rtl"><code dir="ltr">node.kubernetes.io/pid-pressure</code>: نود تحت فشار PID است.</li>
+<li dir="rtl"><code dir="ltr">node.kubernetes.io/network-unavailable</code>: شبکهٔ نود در دسترس نیست.</li>
+<li dir="rtl"><code dir="ltr">node.kubernetes.io/unschedulable</code>: نود قابل زمان‌بندی نیست.</li>
+<li dir="rtl"><code dir="ltr">node.cloudprovider.kubernetes.io/uninitialized</code>: هنگامی که kubelet با
+یک ارائه‌دهندهٔ ابری «خارجی» راه‌اندازی می‌شود، این taint روی نود تنظیم می‌شود تا آن را
+غیرقابل استفاده علامت‌گذاری کند. پس از آنکه یک کنترل‌کننده از cloud-controller-manager این نود را
+مقداردهی اولیه کرد، kubelet این taint را حذف می‌کند.</li>
+</ul>
+<p dir="rtl">در صورتی که قرار باشد نودی تخلیه (drain) شود، کنترل‌کنندهٔ نود یا kubelet taintهای مربوط
+را با اثر <code dir="ltr">NoExecute</code> اضافه می‌کند. این اثر به‌طور پیش‌فرض برای taintهای
+<code dir="ltr">node.kubernetes.io/not-ready</code> و <code dir="ltr">node.kubernetes.io/unreachable</code> اضافه می‌شود.
+اگر وضعیت خطا به حالت عادی بازگردد، kubelet یا کنترل‌کنندهٔ
+نود می‌تواند taint(های) مربوط را حذف کند.</p>
+<p dir="rtl">در برخی موارد که نود قابل دسترسی نیست، API server قادر به برقراری ارتباط
+با kubelet روی نود نیست. تصمیم به حذف پادها تا زمانی که ارتباط با API server
+دوباره برقرار نشود، نمی‌تواند به kubelet اطلاع داده شود. در این فاصله،
+پادهایی که برای حذف زمان‌بندی شده‌اند ممکن است همچنان روی نود جداافتاده به اجرا ادامه دهند.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">control plane نرخ افزودن taintهای جدید به نودها را محدود می‌کند. این محدودسازی نرخ،
+تعداد بیرون‌رانی‌هایی را که هنگام غیرقابل دسترس شدن هم‌زمان تعداد زیادی نود
+(برای مثال: در صورت بروز اختلال در شبکه) آغاز می‌شوند، مدیریت می‌کند.</p>
+</div>
+<p dir="rtl">می‌توانید <code dir="ltr">tolerationSeconds</code> را برای یک Pod مشخص کنید تا تعیین کنید آن Pod چه مدت
+به یک Node معیوب یا بدون پاسخ متصل باقی بماند.</p>
+<p dir="rtl">برای مثال، ممکن است بخواهید برنامه‌ای را که وضعیت محلی (local state) زیادی دارد،
+در صورت بروز جداافتادگی شبکه برای مدت طولانی به نود متصل نگه دارید، به این امید
+که جداافتادگی برطرف شود و در نتیجه از بیرون‌رانی پاد جلوگیری شود.
+tolerationی که برای آن Pod تنظیم می‌کنید ممکن است به این شکل باشد:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">tolerations:
+- key: "node.kubernetes.io/unreachable"
+  operator: "Exists"
+  effect: "NoExecute"
+  tolerationSeconds: 6000
+</code></pre>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">کوبرنتیز به‌طور خودکار یک toleration برای
+<code dir="ltr">node.kubernetes.io/not-ready</code> و <code dir="ltr">node.kubernetes.io/unreachable</code>
+با <code dir="ltr">tolerationSeconds=300</code> اضافه می‌کند،
+مگر اینکه شما یا یک کنترل‌کننده آن tolerationها را به‌صراحت تنظیم کرده باشید.</p>
+<p dir="rtl">این tolerationهای خودکار به این معنا هستند که پادها پس از تشخیص یکی از این مشکلات،
+به مدت ۵ دقیقه به نودها متصل باقی می‌مانند.</p>
+</div>
+<p dir="rtl">پادهای <a href="../workloads/controllers/daemonset.html">DaemonSet</a> با
+tolerationهای <code dir="ltr">NoExecute</code> برای taintهای زیر و بدون <code dir="ltr">tolerationSeconds</code> ایجاد می‌شوند:</p>
+<ul>
+<li dir="ltr" class="ltr"><code dir="ltr">node.kubernetes.io/unreachable</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">node.kubernetes.io/not-ready</code></li>
+</ul>
+<p dir="rtl">این کار تضمین می‌کند که پادهای DaemonSet هرگز به دلیل این مشکلات بیرون رانده نشوند.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">پیش‌تر کنترل‌کنندهٔ نود مسئول افزودن taintها به نودها و بیرون راندن پادها بود. اما پس از نسخهٔ 1.29،
+پیاده‌سازی بیرون‌رانی مبتنی بر taint از کنترل‌کنندهٔ نود خارج شده و به مؤلفه‌ای جداگانه
+و مستقل به نام taint-eviction-controller منتقل شده است. کاربران می‌توانند به‌صورت اختیاری بیرون‌رانی مبتنی بر taint را
+با تنظیم <code dir="ltr">--controllers=-taint-eviction-controller</code> در kube-controller-manager غیرفعال کنند.</p>
+</div>
+<h2 id="taint-کردن-نودها-بر-اساس-وضعیت" dir="rtl">Taint کردن نودها بر اساس وضعیت</h2>
+<p dir="rtl">control plane با استفاده از <span class="term" title="controller">کنترل‌کنندهٔ</span> نود،
+به‌طور خودکار taintهایی با اثر <code dir="ltr">NoSchedule</code> برای
+<a href="node-pressure-eviction.html#node-conditions">وضعیت‌های نود</a> ایجاد می‌کند.</p>
+<p dir="rtl">زمان‌بند هنگام اتخاذ تصمیم‌های زمان‌بندی، taintها را بررسی می‌کند، نه وضعیت‌های نود را.
+این کار تضمین می‌کند که وضعیت‌های نود به‌طور مستقیم بر زمان‌بندی تأثیر نگذارند.
+برای مثال، اگر وضعیت نود <code dir="ltr">DiskPressure</code> فعال باشد، control plane
+taint <code dir="ltr">node.kubernetes.io/disk-pressure</code> را اضافه می‌کند و پادهای جدید را
+روی نود متأثر زمان‌بندی نمی‌کند. اگر وضعیت نود <code dir="ltr">MemoryPressure</code> فعال باشد،
+control plane taint <code dir="ltr">node.kubernetes.io/memory-pressure</code> را اضافه می‌کند.</p>
+<p dir="rtl">می‌توانید با افزودن tolerationهای متناظر به Pod، وضعیت‌های نود را برای پادهای تازه ایجادشده
+نادیده بگیرید. control plane همچنین toleration <code dir="ltr">node.kubernetes.io/memory-pressure</code>
+را به پادهایی اضافه می‌کند که <span class="term" title="qos-class">کلاس QoS</span>
+آن‌ها چیزی غیر از <code dir="ltr">BestEffort</code> باشد. دلیل این است که کوبرنتیز با پادهای کلاس‌های QoS <code dir="ltr">Guaranteed</code>
+یا <code dir="ltr">Burstable</code> (حتی پادهایی که هیچ درخواست حافظه‌ای برایشان تنظیم نشده است) طوری رفتار می‌کند که گویی
+قادر به کنار آمدن با فشار حافظه هستند، در حالی که پادهای جدید <code dir="ltr">BestEffort</code> روی
+نود متأثر زمان‌بندی نمی‌شوند.</p>
+<p dir="rtl">کنترل‌کنندهٔ DaemonSet به‌طور خودکار tolerationهای <code dir="ltr">NoSchedule</code> زیر را
+به همهٔ daemonها اضافه می‌کند تا از خراب شدن DaemonSetها جلوگیری شود.</p>
+<ul>
+<li dir="ltr" class="ltr"><code dir="ltr">node.kubernetes.io/memory-pressure</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">node.kubernetes.io/disk-pressure</code></li>
+<li dir="rtl"><code dir="ltr">node.kubernetes.io/pid-pressure</code> (1.14 یا بالاتر)</li>
+<li dir="rtl"><code dir="ltr">node.kubernetes.io/unschedulable</code> (1.10 یا بالاتر)</li>
+<li dir="rtl"><code dir="ltr">node.kubernetes.io/network-unavailable</code> (<em>فقط شبکهٔ میزبان</em>)</li>
+</ul>
+<p dir="rtl">افزودن این tolerationها سازگاری با نسخه‌های پیشین را تضمین می‌کند. همچنین می‌توانید
+tolerationهای دلخواه را به DaemonSetها اضافه کنید.</p>
+<h2 id="taintها-و-tolerationهای-دستگاه" dir="rtl">Taintها و tolerationهای دستگاه</h2>
+<p dir="rtl">به‌جای taint کردن کل نودها، مدیران می‌توانند هنگامی که کلاستر از
+<a href="https://kubernetes.io/docs/concepts/resource-management/dynamic-resource-allocation/" target="_blank">تخصیص پویای منابع</a> برای مدیریت سخت‌افزار ویژه استفاده می‌کند،
+<a href="https://kubernetes.io/docs/concepts/resource-management/dynamic-resource-allocation/device-taints/#device-taints-and-tolerations" target="_blank">دستگاه‌های منفرد را taint کنند</a>.
+مزیت این روش آن است که taint کردن می‌تواند دقیقاً سخت‌افزاری را هدف بگیرد
+که معیوب است یا به نگهداری نیاز دارد. tolerationها نیز پشتیبانی می‌شوند و می‌توان آن‌ها را هنگام درخواست
+دستگاه‌ها مشخص کرد. tolerationها نیز مانند taintها بر همهٔ پادهایی که یک دستگاه تخصیص‌یافتهٔ مشترک دارند اعمال می‌شوند.</p>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<ul>
+<li dir="rtl">دربارهٔ <a href="node-pressure-eviction.html">بیرون‌رانی ناشی از فشار نود</a>
+و نحوهٔ پیکربندی آن مطالعه کنید</li>
+<li dir="rtl">دربارهٔ <a href="https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/" target="_blank">اولویت Pod</a> مطالعه کنید</li>
+<li dir="rtl">دربارهٔ <a href="https://kubernetes.io/docs/concepts/resource-management/dynamic-resource-allocation/device-taints/#device-taints-and-tolerations" target="_blank">taintها و tolerationهای دستگاه</a> مطالعه کنید</li>
+</ul>
+</main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#مفاهیم">مفاهیم</a><a class="l2" href="#عملگرهای-مقایسهٔ-عددی-numeric-comparison-operators">عملگرهای مقایسهٔ عددی {#numeric-comparison-operators}</a><a class="l2" href="#نمونه-هایی-از-موارد-استفاده">نمونه‌هایی از موارد استفاده</a><a class="l2" href="#بیرون-رانی-مبتنی-بر-taint">بیرون‌رانی مبتنی بر taint</a><a class="l2" href="#taint-کردن-نودها-بر-اساس-وضعیت">Taint کردن نودها بر اساس وضعیت</a><a class="l2" href="#taintها-و-tolerationهای-دستگاه">Taintها و tolerationهای دستگاه</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>

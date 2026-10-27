@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>کنترل‌کننده‌های Ingress | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+</head>
+<body>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">concepts / services-networking</span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">کنترل‌کننده‌های Ingress</h1><p class="page-meta" dir="rtl">برای آنکه یک [Ingress](/docs/concepts/services-networking/ingress/) در کلاستر شما کار کند، باید یک _کنترل‌کنندهٔ ingress_ در حال اجرا باشد. شما باید دست‌کم یک کنترل‌کنندهٔ ingress انتخاب کنید و از راه‌اندازی آن در کلاستر خود اطمینان حاصل کنید.   این صفحه کنترل‌کننده‌های ingress رایجی را که می‌توانید مستقر کنید، فهرست می‌کند.</p><div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">پروژهٔ کوبرنتیز استفاده از <a href="https://gateway-api.sigs.k8s.io/" target="_blank" rel="noopener">Gateway</a> را به‌جای
+<a href="ingress.html">Ingress</a> توصیه می‌کند.
+API مربوط به Ingress منجمد شده است.</p>
+<p dir="rtl">این به آن معناست که:</p>
+<ul>
+<li dir="rtl">API مربوط به Ingress به‌طور عمومی در دسترس (GA) است و مشمول <a href="https://kubernetes.io/docs/reference/using-api/deprecation-policy/#deprecating-parts-of-the-api" target="_blank">تضمین‌های پایداری</a> مربوط به APIهای عمومی در دسترس است.
+پروژهٔ کوبرنتیز هیچ برنامه‌ای برای حذف Ingress از کوبرنتیز ندارد.</li>
+<li dir="rtl">API مربوط به Ingress دیگر توسعه داده نمی‌شود و هیچ تغییر
+یا به‌روزرسانی دیگری در آن اعمال نخواهد شد.</li>
+</ul>
+</div>
+<!-- body -->
+<!-- overview -->
+<h2 id="کنترل-کننده-های-ingress" dir="rtl">کنترل‌کننده‌های Ingress</h2>
+<p dir="rtl">کوبرنتیز به‌عنوان یک پروژه، از کنترل‌کننده‌های ingress ‏<a href="https://github.com/kubernetes-sigs/aws-load-balancer-controller#readme" target="_blank" rel="noopener">AWS</a> و <a href="https://git.k8s.io/ingress-gce/README.md#readme" target="_blank" rel="noopener">GCE</a> پشتیبانی و آن‌ها را نگهداری می‌کند.</p>
+<h2 id="کنترل-کننده-های-ingress-شخص-ثالث" dir="rtl">کنترل‌کننده‌های ingress شخص ثالث</h2>
+<ul>
+<li dir="rtl"><a href="https://docs.microsoft.com/azure/application-gateway/tutorial-ingress-controller-add-on-existing?toc=https%3A%2F%2Fdocs.microsoft.com%2Fen-us%2Fazure%2Faks%2Ftoc.json&amp;bc=https%3A%2F%2Fdocs.microsoft.com%2Fen-us%2Fazure%2Fbread%2Ftoc.json" target="_blank" rel="noopener">AKS Application Gateway Ingress Controller</a> یک کنترل‌کنندهٔ ingress است که <a href="https://docs.microsoft.com/azure/application-gateway/overview" target="_blank" rel="noopener">Azure Application Gateway</a> را پیکربندی می‌کند.</li>
+<li dir="rtl"><a href="https://www.alibabacloud.com/help/en/api-gateway/cloud-native-api-gateway/user-guide/ingress-managementapig-ngress-management" target="_blank" rel="noopener">Alibaba Cloud API Gateway Ingress</a> یک کنترل‌کنندهٔ ingress است که <a href="https://www.alibabacloud.com/help/en/api-gateway/cloud-native-api-gateway/product-overview/what-is-cloud-native-api-gateway" target="_blank" rel="noopener">Alibaba Cloud Native API Gateway</a> را پیکربندی می‌کند؛ این محصول نسخهٔ تجاری <a href="https://github.com/alibaba/higress" target="_blank" rel="noopener">Higress</a> نیز هست.</li>
+<li dir="rtl"><a href="https://github.com/apache/apisix-ingress-controller" target="_blank" rel="noopener">کنترل‌کنندهٔ ingress ‏Apache APISIX</a> یک کنترل‌کنندهٔ ingress مبتنی بر <a href="https://github.com/apache/apisix" target="_blank" rel="noopener">Apache APISIX</a> است.</li>
+<li dir="rtl"><a href="https://github.com/vmware/load-balancer-and-ingress-services-for-kubernetes" target="_blank" rel="noopener">Avi Kubernetes Operator</a> با استفاده از <a href="https://avinetworks.com/" target="_blank" rel="noopener">VMware NSX Advanced Load Balancer</a> توزیع بار در لایه‌های L4 تا L7 را فراهم می‌کند.</li>
+<li dir="rtl"><a href="https://github.com/bfenetworks/ingress-bfe" target="_blank" rel="noopener">BFE Ingress Controller</a> یک کنترل‌کنندهٔ ingress مبتنی بر <a href="https://www.bfe-networks.net" target="_blank" rel="noopener">BFE</a> است.</li>
+<li dir="rtl"><a href="https://docs.bunkerweb.io/latest/integrations/#kubernetes" target="_blank" rel="noopener">BunkerWeb Ingress Controller</a> یک کنترل‌کنندهٔ ingress برای <a href="https://www.bunkerweb.io/" target="_blank" rel="noopener">BunkerWeb</a> است که یک WAF (دیوارهٔ آتش برنامهٔ وب) مبتنی بر nginx است.</li>
+<li dir="rtl"><a href="https://docs.cilium.io/en/stable/network/servicemesh/ingress/" target="_blank" rel="noopener">Cilium Ingress Controller</a> یک کنترل‌کنندهٔ ingress است که بر پایهٔ <a href="https://cilium.io/" target="_blank" rel="noopener">Cilium</a> کار می‌کند.</li>
+<li dir="rtl"><a href="https://github.com/citrix/citrix-k8s-ingress-controller#readme" target="_blank" rel="noopener">کنترل‌کنندهٔ ingress ‏Citrix</a> با
+Citrix Application Delivery Controller کار می‌کند.</li>
+<li dir="rtl"><a href="https://projectcontour.io/" target="_blank" rel="noopener">Contour</a> یک کنترل‌کنندهٔ ingress مبتنی بر <a href="https://www.envoyproxy.io/" target="_blank" rel="noopener">Envoy</a> است.</li>
+<li dir="rtl"><a href="https://www.getambassador.io/products/api-gateway" target="_blank" rel="noopener">Emissary-Ingress</a> API Gateway یک کنترل‌کنندهٔ ingress مبتنی بر <a href="https://www.envoyproxy.io" target="_blank" rel="noopener">Envoy</a>
+است.</li>
+<li dir="rtl"><a href="https://getenroute.io/" target="_blank" rel="noopener">EnRoute</a> یک API gateway مبتنی بر <a href="https://www.envoyproxy.io" target="_blank" rel="noopener">Envoy</a> است که می‌تواند به‌عنوان کنترل‌کنندهٔ ingress اجرا شود.</li>
+<li dir="rtl">F5 BIG-IP <a href="https://clouddocs.f5.com/containers/latest/userguide/kubernetes/" target="_blank" rel="noopener">Container Ingress Services for Kubernetes</a>
+به شما امکان می‌دهد با استفاده از یک Ingress، سرورهای مجازی F5 BIG-IP را پیکربندی کنید.</li>
+<li dir="rtl"><a href="https://docs.fortinet.com/document/fortiadc/7.0.0/fortiadc-ingress-controller/742835/fortiadc-ingress-controller-overview" target="_blank" rel="noopener">FortiADC Ingress Controller</a> از منابع Ingress کوبرنتیز پشتیبانی می‌کند و به شما امکان می‌دهد آبجکت‌های FortiADC را از درون کوبرنتیز مدیریت کنید</li>
+<li dir="rtl"><a href="https://gloo.solo.io" target="_blank" rel="noopener">Gloo</a> یک کنترل‌کنندهٔ ingress متن‌باز مبتنی بر <a href="https://www.envoyproxy.io" target="_blank" rel="noopener">Envoy</a> است
+که قابلیت‌های API gateway را ارائه می‌کند.</li>
+<li dir="rtl"><a href="https://github.com/alibaba/higress" target="_blank" rel="noopener">Higress</a> یک API gateway مبتنی بر <a href="https://www.envoyproxy.io" target="_blank" rel="noopener">Envoy</a> است که می‌تواند به‌عنوان کنترل‌کنندهٔ ingress اجرا شود.</li>
+<li dir="rtl"><a href="https://github.com/haproxytech/kubernetes-ingress#readme" target="_blank" rel="noopener">HAProxy Ingress Controller for Kubernetes</a>
+یک کنترل‌کنندهٔ ingress برای <a href="https://www.haproxy.org/#desc" target="_blank" rel="noopener">HAProxy</a> است.</li>
+<li dir="rtl"><a href="https://istio.io/latest/docs/tasks/traffic-management/ingress/kubernetes-ingress/" target="_blank" rel="noopener">Istio Ingress</a>
+یک کنترل‌کنندهٔ ingress مبتنی بر <a href="https://istio.io/" target="_blank" rel="noopener">Istio</a> است.</li>
+<li dir="rtl"><a href="https://github.com/Kong/kubernetes-ingress-controller#readme" target="_blank" rel="noopener">Kong Ingress Controller for Kubernetes</a>
+یک کنترل‌کنندهٔ ingress است که <a href="https://konghq.com/kong/" target="_blank" rel="noopener">Kong Gateway</a> را هدایت می‌کند.</li>
+<li dir="rtl"><a href="https://kusk.kubeshop.io/" target="_blank" rel="noopener">Kusk Gateway</a> یک کنترل‌کنندهٔ ingress مبتنی بر OpenAPI است که بر پایهٔ <a href="https://www.envoyproxy.io" target="_blank" rel="noopener">Envoy</a> ساخته شده است.</li>
+<li dir="rtl"><a href="https://n42-gateway.github.io/" target="_blank" rel="noopener">N42 Gateway</a> یک کنترل‌کنندهٔ Ingress و Gateway API برای <a href="https://www.haproxy.org/#desc" target="_blank" rel="noopener">HAProxy</a> است.</li>
+<li dir="rtl"><a href="https://www.nginx.com/products/nginx-ingress-controller/" target="_blank" rel="noopener">NGINX Ingress Controller for Kubernetes</a>
+با وب‌سرور <a href="https://www.nginx.com/resources/glossary/nginx/" target="_blank" rel="noopener">NGINX</a> (به‌عنوان پراکسی) کار می‌کند.</li>
+<li dir="rtl"><a href="https://github.com/ngrok/ngrok-operator" target="_blank" rel="noopener">ngrok-operator</a> یک کنترل‌کننده برای <a href="https://ngrok.com/" target="_blank" rel="noopener">ngrok</a> است که از هر دو API ‏Ingress و Gateway برای افزودن دسترسی عمومی امن به Serviceهای K8s شما پشتیبانی می‌کند.</li>
+<li dir="rtl"><a href="https://github.com/oracle/oci-native-ingress-controller#readme" target="_blank" rel="noopener">OCI Native Ingress Controller</a> یک کنترل‌کنندهٔ Ingress برای Oracle Cloud Infrastructure است که به شما امکان می‌دهد <a href="https://docs.oracle.com/en-us/iaas/Content/Balance/home.htm" target="_blank" rel="noopener">OCI Load Balancer</a> را مدیریت کنید.</li>
+<li dir="rtl"><a href="https://gitee.com/njet-rd/open-njet-kic" target="_blank" rel="noopener">OpenNJet Ingress Controller</a> یک کنترل‌کنندهٔ ingress مبتنی بر <a href="https://njet.org.cn/" target="_blank" rel="noopener">OpenNJet</a> است.</li>
+<li dir="rtl"><a href="https://www.pomerium.com/docs/k8s/ingress.html" target="_blank" rel="noopener">Pomerium Ingress Controller</a> مبتنی بر <a href="https://pomerium.com/" target="_blank" rel="noopener">Pomerium</a> است که سیاست دسترسی آگاه از زمینه (context-aware) ارائه می‌کند.</li>
+<li dir="rtl"><a href="https://opensource.zalando.com/skipper/kubernetes/ingress-controller/" target="_blank" rel="noopener">Skipper</a> یک مسیریاب HTTP و reverse proxy برای ترکیب سرویس‌ها، از جمله موارد استفاده‌ای مانند Ingress کوبرنتیز، است که به‌صورت یک کتابخانه برای ساخت پراکسی سفارشی شما طراحی شده است.</li>
+<li dir="rtl"><a href="https://doc.traefik.io/traefik/providers/kubernetes-ingress/" target="_blank" rel="noopener">Traefik Kubernetes Ingress provider</a> یک
+کنترل‌کنندهٔ ingress برای پراکسی <a href="https://traefik.io/traefik/" target="_blank" rel="noopener">Traefik</a> است.</li>
+<li dir="rtl"><a href="https://github.com/TykTechnologies/tyk-operator" target="_blank" rel="noopener">Tyk Operator</a> با استفاده از منابع سفارشی، Ingress را گسترش می‌دهد تا قابلیت‌های مدیریت API را به Ingress بیاورد. Tyk Operator با Tyk Gateway متن‌باز و control plane ‏Tyk Cloud کار می‌کند.</li>
+<li dir="rtl"><a href="https://voyagermesh.com" target="_blank" rel="noopener">Voyager</a> یک کنترل‌کنندهٔ ingress برای
+<a href="https://www.haproxy.org/#desc" target="_blank" rel="noopener">HAProxy</a> است.</li>
+<li dir="rtl"><a href="https://www.wallarm.com/solutions/waf-for-kubernetes" target="_blank" rel="noopener">Wallarm Ingress Controller</a> یک کنترل‌کنندهٔ Ingress است که قابلیت‌های WAAP (WAF) و امنیت API را فراهم می‌کند.</li>
+</ul>
+<h2 id="استفاده-از-چند-کنترل-کنندهٔ-ingress" dir="rtl">استفاده از چند کنترل‌کنندهٔ Ingress</h2>
+<p dir="rtl">می‌توانید هر تعداد کنترل‌کنندهٔ ingress را با استفاده از <a href="ingress.html#ingress-class">ingress class</a>
+درون یک کلاستر مستقر کنید. به <code dir="ltr">.metadata.name</code> منبع ingress class خود توجه کنید. هنگام ایجاد یک ingress، برای تعیین فیلد <code dir="ltr">ingressClassName</code> روی آبجکت Ingress خود به آن نام نیاز خواهید داشت (به <a href="https://kubernetes.io/docs/reference/kubernetes-api/service-resources/ingress-v1/#IngressSpec" target="_blank">مرجع IngressSpec v1</a> مراجعه کنید). <code dir="ltr">ingressClassName</code> جایگزین <a href="ingress.html#deprecated-annotation">روش قدیمی‌تر حاشیه‌نویسی</a> است.</p>
+<p dir="rtl">اگر برای یک Ingress هیچ IngressClassای تعیین نکنید و کلاستر شما دقیقاً یک IngressClass داشته باشد که به‌عنوان پیش‌فرض علامت‌گذاری شده است، کوبرنتیز IngressClass پیش‌فرض کلاستر را بر Ingress <a href="ingress.html#default-ingress-class">اعمال می‌کند</a>.
+برای علامت‌گذاری یک IngressClass به‌عنوان پیش‌فرض، <a href="https://kubernetes.io/docs/reference/labels-annotations-taints/#ingressclass-kubernetes-io-is-default-class" target="_blank">حاشیه‌نویسی <code dir="ltr">ingressclass.kubernetes.io/is-default-class</code></a> را با مقدار رشته‌ای <code dir="ltr">"true"</code> روی آن IngressClass تنظیم می‌کنید.</p>
+<p dir="rtl">در حالت ایدئال، همهٔ کنترل‌کننده‌های ingress باید این مشخصات را برآورده کنند، اما کنترل‌کننده‌های ingress
+مختلف اندکی متفاوت عمل می‌کنند.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">حتماً مستندات کنترل‌کنندهٔ ingress خود را مرور کنید تا از نکات احتیاطی انتخاب آن آگاه شوید.</p>
+</div>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<ul>
+<li dir="rtl">دربارهٔ <a href="ingress.html">Ingress</a> بیشتر بیاموزید.</li>
+</ul>
+</main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#کنترل-کننده-های-ingress">کنترل‌کننده‌های Ingress</a><a class="l2" href="#کنترل-کننده-های-ingress-شخص-ثالث">کنترل‌کننده‌های ingress شخص ثالث</a><a class="l2" href="#استفاده-از-چند-کنترل-کنندهٔ-ingress">استفاده از چند کنترل‌کنندهٔ Ingress</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>

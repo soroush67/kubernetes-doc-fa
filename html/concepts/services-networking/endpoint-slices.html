@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EndpointSliceها | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+</head>
+<body>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">concepts / services-networking</span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">EndpointSliceها</h1><p class="page-meta" dir="rtl">API مربوط به EndpointSlice سازوکاری است که کوبرنتیز به کمک آن به Service شما اجازه می‌دهد برای رسیدگی به تعداد زیادی backend مقیاس‌پذیر باشد و به کلاستر امکان می‌دهد فهرست backendهای سالم خود را به‌طور کارآمد به‌روزرسانی کند.</p><!-- overview -->
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes v1.21 [stable]</span> (پایدار)</div>
+<p dir="rtl"><em>(تعریف واژه‌نامه: endpoint-slice)</em></p>
+<!-- body -->
+<h2 id="api-مربوط-به-endpointslice-endpointslice-resource" dir="rtl">API مربوط به EndpointSlice {#endpointslice-resource}</h2>
+<p dir="rtl">در کوبرنتیز، یک EndpointSlice ارجاع‌هایی به مجموعه‌ای از endpointهای شبکه
+را در بر دارد. control plane به‌طور خودکار برای هر Service کوبرنتیز که یک
+<span class="term" title="selector">انتخابگر</span> برای آن تعیین شده باشد، EndpointSliceهایی ایجاد می‌کند. این EndpointSliceها
+ارجاع‌هایی به همهٔ Podهایی را که با انتخابگر Service مطابقت دارند، در بر دارند. EndpointSliceها
+endpointهای شبکه را بر اساس ترکیب‌های یکتای خانوادهٔ IP، پروتکل،
+شمارهٔ پورت و نام Service گروه‌بندی می‌کنند.
+نام یک آبجکت EndpointSlice باید یک
+<a href="../overview/working-with-objects/names.html#dns-subdomain-names">نام زیردامنهٔ DNS</a> معتبر باشد.</p>
+<p dir="rtl">به‌عنوان نمونه، در اینجا یک آبجکت EndpointSlice نمونه آمده است که مالک آن Service کوبرنتیزِ
+<code dir="ltr">example</code> است.</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: discovery.k8s.io/v1
+kind: EndpointSlice
+metadata:
+  name: example-abc
+  labels:
+    kubernetes.io/service-name: example
+addressType: IPv4
+ports:
+  - name: http
+    protocol: TCP
+    port: 80
+endpoints:
+  - addresses:
+      - "10.1.2.3"
+    conditions:
+      ready: true
+    hostname: pod-1
+    nodeName: node-1
+    zone: us-west2-a
+</code></pre>
+<p dir="rtl">به‌طور پیش‌فرض، control plane، EndpointSliceها را طوری ایجاد و مدیریت می‌کند که هر کدام
+بیش از ۱۰۰ endpoint نداشته باشند. می‌توانید این مقدار را با فلگ
+<code dir="ltr">--max-endpoints-per-slice</code> در
+<span class="term" title="kube-controller-manager">kube-controller-manager</span>
+پیکربندی کنید که حداکثر تا ۱۰۰۰ امکان‌پذیر است.</p>
+<p dir="rtl">EndpointSliceها در خصوص نحوهٔ مسیریابی ترافیک داخلی،
+به‌عنوان منبع مرجع (source of truth) برای <span class="term" title="kube-proxy">kube-proxy</span>
+عمل می‌کنند.</p>
+<h3 id="انواع-نشانی" dir="rtl">انواع نشانی</h3>
+<p dir="rtl">EndpointSliceها از دو نوع نشانی پشتیبانی می‌کنند:</p>
+<ul>
+<li dir="ltr" class="ltr">IPv4</li>
+<li dir="ltr" class="ltr">IPv6</li>
+</ul>
+<p dir="rtl">هر آبجکت <code dir="ltr">EndpointSlice</code> نمایندهٔ یک نوع نشانی IP مشخص است. اگر
+Serviceای داشته باشید که از طریق IPv4 و IPv6 در دسترس است، دست‌کم دو آبجکت
+<code dir="ltr">EndpointSlice</code> وجود خواهد داشت (یکی برای IPv4 و یکی برای IPv6).</p>
+<h3 id="وضعیت-ها-conditions" dir="rtl">وضعیت‌ها (Conditions)</h3>
+<p dir="rtl">API مربوط به EndpointSlice وضعیت‌هایی دربارهٔ endpointها ذخیره می‌کند که ممکن است برای مصرف‌کنندگان مفید باشند.
+این سه وضعیت عبارت‌اند از <code dir="ltr">serving</code>، <code dir="ltr">terminating</code> و <code dir="ltr">ready</code>.</p>
+<h4 id="serving" dir="ltr" class="ltr">Serving</h4>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes v1.26 [stable]</span> (پایدار)</div>
+<p dir="rtl">وضعیت <code dir="ltr">serving</code> نشان می‌دهد که endpoint در حال حاضر در حال ارائهٔ پاسخ است و
+بنابراین باید به‌عنوان مقصدی برای ترافیک Service استفاده شود. برای endpointهایی که پشتوانهٔ آن‌ها یک Pod است،
+این وضعیت با وضعیت <code dir="ltr">Ready</code> مربوط به Pod متناظر است.</p>
+<h4 id="terminating" dir="ltr" class="ltr">Terminating</h4>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes v1.26 [stable]</span> (پایدار)</div>
+<p dir="rtl">وضعیت <code dir="ltr">terminating</code> نشان می‌دهد که endpoint در حال
+خاتمه یافتن است. برای endpointهایی که پشتوانهٔ آن‌ها یک Pod است، این وضعیت زمانی تنظیم می‌شود که
+Pod برای نخستین بار حذف می‌شود (یعنی هنگامی که یک برچسب زمانی حذف (deletion
+timestamp) دریافت می‌کند، اما به احتمال زیاد پیش از آنکه کانتینرهای Pod خارج شوند).</p>
+<p dir="rtl">پراکسی‌های Service معمولاً endpointهایی را که در وضعیت <code dir="ltr">terminating</code> هستند نادیده می‌گیرند،
+اما اگر همهٔ endpointهای موجود در وضعیت <code dir="ltr">terminating</code> باشند، ممکن است ترافیک را به endpointهایی که هم <code dir="ltr">serving</code> و هم
+<code dir="ltr">terminating</code> هستند هدایت کنند. (این کار
+کمک می‌کند تا اطمینان حاصل شود که هیچ ترافیکی از Service در طول به‌روزرسانی‌های تدریجی (rolling update)
+Podهای زیرین از دست نمی‌رود.)</p>
+<h4 id="ready" dir="ltr" class="ltr">Ready</h4>
+<p dir="rtl">وضعیت <code dir="ltr">ready</code> در اصل میان‌بری برای بررسی
+«<code dir="ltr">serving</code> و نه <code dir="ltr">terminating</code>» است (هرچند برای Serviceهایی که <code dir="ltr">spec.publishNotReadyAddresses</code> آن‌ها روی
+<code dir="ltr">true</code> تنظیم شده است، همواره مقدار <code dir="ltr">true</code> خواهد داشت).</p>
+<h3 id="اطلاعات-توپولوژی-topology" dir="rtl">اطلاعات توپولوژی {#topology}</h3>
+<p dir="rtl">هر endpoint درون یک EndpointSlice می‌تواند اطلاعات توپولوژی مرتبط را در بر داشته باشد.
+اطلاعات توپولوژی شامل مکان endpoint و اطلاعاتی
+دربارهٔ Node و ناحیه (zone) متناظر است. این اطلاعات در فیلدهای زیر که برای هر endpoint
+در EndpointSliceها وجود دارند، در دسترس است:</p>
+<ul>
+<li dir="rtl"><code dir="ltr">nodeName</code> - نام Nodeی که این endpoint روی آن قرار دارد.</li>
+<li dir="rtl"><code dir="ltr">zone</code> - ناحیه‌ای که این endpoint در آن قرار دارد.</li>
+</ul>
+<h3 id="مدیریت" dir="rtl">مدیریت</h3>
+<p dir="rtl">در بیشتر موارد، control plane (به‌طور مشخص، <span class="term" title="controller">کنترل‌کنندهٔ</span>
+endpoint slice) آبجکت‌های EndpointSlice را ایجاد و
+مدیریت می‌کند. موارد استفادهٔ گوناگون دیگری نیز برای
+EndpointSliceها وجود دارد، مانند پیاده‌سازی‌های service mesh، که ممکن است منجر به آن شوند که موجودیت‌ها
+یا کنترل‌کننده‌های دیگری مجموعه‌های بیشتری از EndpointSliceها را مدیریت کنند.</p>
+<p dir="rtl">برای اطمینان از اینکه چند موجودیت می‌توانند بدون تداخل با یکدیگر EndpointSliceها را مدیریت کنند،
+کوبرنتیز <span class="term" title="label">برچسب</span>
+<code dir="ltr">endpointslice.kubernetes.io/managed-by</code> را تعریف می‌کند که موجودیتِ مدیریت‌کنندهٔ
+یک EndpointSlice را نشان می‌دهد.
+کنترل‌کنندهٔ endpoint slice مقدار <code dir="ltr">endpointslice-controller.k8s.io</code> را به‌عنوان مقدار
+این برچسب روی همهٔ EndpointSliceهایی که مدیریت می‌کند، تنظیم می‌کند. سایر موجودیت‌هایی که
+EndpointSliceها را مدیریت می‌کنند نیز باید مقدار یکتایی برای این برچسب تنظیم کنند.</p>
+<h3 id="مالکیت" dir="rtl">مالکیت</h3>
+<p dir="rtl">در بیشتر موارد استفاده، مالک EndpointSliceها همان Serviceای است که آبجکت endpoint
+slice، endpointهای آن را ردیابی می‌کند. این مالکیت با یک ارجاع مالک (owner
+reference) روی هر EndpointSlice و همچنین یک برچسب <code dir="ltr">kubernetes.io/service-name</code>
+نشان داده می‌شود که جست‌وجوی ساده‌ی همهٔ EndpointSliceهای متعلق به یک Service را ممکن می‌سازد.</p>
+<h3 id="توزیع-endpointsliceها" dir="rtl">توزیع EndpointSliceها</h3>
+<p dir="rtl">هر EndpointSlice مجموعه‌ای از پورت‌ها دارد که بر همهٔ endpointهای درون آن
+منبع اعمال می‌شود. هنگامی که برای یک Service از پورت‌های نام‌دار استفاده می‌شود، ممکن است Podها
+برای یک پورت نام‌دار یکسان، شماره‌های پورت مقصد متفاوتی داشته باشند که در این صورت به
+EndpointSliceهای متفاوتی نیاز است.</p>
+<p dir="rtl">control plane تلاش می‌کند EndpointSliceها را تا حد امکان پر کند، اما
+به‌طور فعال آن‌ها را دوباره متوازن نمی‌کند. منطق این کار نسبتاً ساده است:</p>
+<ol>
+<li dir="rtl">EndpointSliceهای موجود را پیمایش می‌کند، endpointهایی را که دیگر
+مورد نیاز نیستند حذف می‌کند و endpointهای منطبقی را که تغییر کرده‌اند به‌روزرسانی می‌کند.</li>
+<li dir="rtl">EndpointSliceهایی را که در گام نخست تغییر کرده‌اند پیمایش می‌کند و
+آن‌ها را با هر endpoint جدید مورد نیاز پر می‌کند.</li>
+<li dir="rtl">اگر هنوز endpointهای جدیدی برای افزودن باقی مانده باشد، تلاش می‌کند آن‌ها را در sliceای که پیش‌تر
+تغییر نکرده است جای دهد و/یا sliceهای جدیدی ایجاد می‌کند.</li>
+</ol>
+<p dir="rtl">نکتهٔ مهم این است که گام سوم، محدود کردن به‌روزرسانی‌های EndpointSlice را بر
+توزیع کاملاً پر EndpointSliceها اولویت می‌دهد. برای مثال، اگر ۱۰
+endpoint جدید برای افزودن وجود داشته باشد و ۲ EndpointSlice که هر کدام جای ۵ endpoint دیگر را دارند،
+این رویکرد به‌جای پر کردن ۲ EndpointSlice موجود، یک EndpointSlice جدید
+ایجاد می‌کند. به بیان دیگر، ایجاد یک EndpointSlice واحد
+بر چندین به‌روزرسانی EndpointSlice ترجیح دارد.</p>
+<p dir="rtl">از آنجا که kube-proxy روی هر Node اجرا می‌شود و EndpointSliceها را زیر نظر دارد، هر تغییر
+در یک EndpointSlice نسبتاً پرهزینه است، زیرا به
+همهٔ Nodeهای کلاستر منتقل می‌شود. هدف این رویکرد محدود کردن تعداد
+تغییراتی است که باید به هر Node ارسال شوند، حتی اگر به ایجاد چندین
+EndpointSlice ناپر منجر شود.</p>
+<p dir="rtl">در عمل، چنین توزیع نه‌چندان ایدئالی باید نادر باشد. بیشتر تغییراتی
+که کنترل‌کنندهٔ EndpointSlice پردازش می‌کند به اندازه‌ای کوچک هستند که در یک
+EndpointSlice موجود جای بگیرند و اگر چنین نباشد، احتمالاً به‌زودی به یک EndpointSlice جدید
+در هر صورت نیاز خواهد بود. به‌روزرسانی‌های تدریجی Deploymentها نیز با جایگزین شدن همهٔ Podها و
+endpointهای متناظرشان، به‌طور طبیعی EndpointSliceها را دوباره بسته‌بندی می‌کنند.</p>
+<h3 id="endpointهای-تکراری" dir="rtl">endpointهای تکراری</h3>
+<p dir="rtl">به دلیل ماهیت تغییرات EndpointSlice، ممکن است endpointها هم‌زمان در بیش از
+یک EndpointSlice نمایش داده شوند. این امر به‌طور طبیعی رخ می‌دهد، زیرا تغییرات
+آبجکت‌های EndpointSlice مختلف ممکن است در زمان‌های متفاوتی به watch / cache کلاینت کوبرنتیز
+برسند.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">کلاینت‌های API مربوط به EndpointSlice باید همهٔ EndpointSliceهای موجودِ
+مرتبط با یک Service را پیمایش کنند و فهرست کاملی از endpointهای شبکهٔ یکتا بسازند.
+ذکر این نکته اهمیت دارد که endpointها ممکن است در EndpointSliceهای مختلف تکرار شوند.</p>
+<p dir="rtl">می‌توانید یک پیاده‌سازی مرجع برای نحوهٔ انجام این تجمیع endpointها
+و حذف موارد تکراری را در بخشی از کد <code dir="ltr">EndpointSliceCache</code> درون <code dir="ltr">kube-proxy</code> بیابید.</p>
+</div>
+<h3 id="بازتاب-mirroring-endpointslice" dir="rtl">بازتاب (mirroring) EndpointSlice</h3>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes v1.33 [deprecated]</span> (منسوخ)</div>
+<p dir="rtl">API مربوط به EndpointSlice جایگزینی برای API قدیمی‌تر Endpoints است. برای
+حفظ سازگاری با کنترل‌کننده‌های قدیمی‌تر و بارهای کاری کاربران که
+انتظار دارند <span class="term" title="kube-proxy">kube-proxy</span>
+ترافیک را بر اساس منابع Endpoints مسیریابی کند، control plane
+کلاستر بیشتر منابع Endpoints ایجادشده توسط کاربر را در
+EndpointSliceهای متناظر بازتاب می‌دهد.</p>
+<p dir="rtl">(با این حال، این قابلیت، مانند بقیهٔ API مربوط به Endpoints،
+منسوخ شده است. کاربرانی که endpointها را برای Serviceهای بدون انتخابگر به‌صورت دستی تعیین می‌کنند،
+باید این کار را با ایجاد مستقیم منابع EndpointSlice انجام دهند،
+نه با ایجاد منابع Endpoints و اجازه دادن به بازتاب
+آن‌ها.)</p>
+<p dir="rtl">control plane منابع Endpoints را بازتاب می‌دهد، مگر اینکه:</p>
+<ul>
+<li dir="rtl">منبع Endpoints برچسب <code dir="ltr">endpointslice.kubernetes.io/skip-mirror</code>
+را با مقدار <code dir="ltr">true</code> داشته باشد.</li>
+<li dir="rtl">منبع Endpoints حاشیه‌نویسی (annotation) <code dir="ltr">control-plane.alpha.kubernetes.io/leader</code>
+را داشته باشد.</li>
+<li dir="rtl">منبع Service متناظر وجود نداشته باشد.</li>
+<li dir="rtl">منبع Service متناظر انتخابگری غیرتهی (non-nil) داشته باشد.</li>
+</ul>
+<p dir="rtl">هر منبع Endpoints ممکن است به چند EndpointSlice تبدیل شود. این امر
+زمانی رخ می‌دهد که یک منبع Endpoints چند زیرمجموعه (subset) داشته باشد یا endpointهایی
+با چند خانوادهٔ IP (IPv4 و IPv6) را در بر داشته باشد. حداکثر ۱۰۰۰ نشانی از هر
+زیرمجموعه در EndpointSliceها بازتاب داده می‌شود.</p>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<ul>
+<li dir="rtl">آموزش <a href="https://kubernetes.io/docs/tutorials/services/connect-applications-service/" target="_blank">اتصال برنامه‌ها با Serviceها</a> را دنبال کنید</li>
+<li dir="rtl"><a href="https://kubernetes.io/docs/reference/kubernetes-api/service-resources/endpoint-slice-v1/" target="_blank">مرجع API</a> مربوط به API ‏EndpointSlice را بخوانید</li>
+<li dir="rtl"><a href="https://kubernetes.io/docs/reference/kubernetes-api/service-resources/endpoints-v1/" target="_blank">مرجع API</a> مربوط به API ‏Endpoints را بخوانید</li>
+</ul>
+</main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#api-مربوط-به-endpointslice-endpointslice-resource">API مربوط به EndpointSlice {#endpointslice-resource}</a><a class="l3" href="#انواع-نشانی">انواع نشانی</a><a class="l3" href="#وضعیت-ها-conditions">وضعیت‌ها (Conditions)</a><a class="l3" href="#اطلاعات-توپولوژی-topology">اطلاعات توپولوژی {#topology}</a><a class="l3" href="#مدیریت">مدیریت</a><a class="l3" href="#مالکیت">مالکیت</a><a class="l3" href="#توزیع-endpointsliceها">توزیع EndpointSliceها</a><a class="l3" href="#endpointهای-تکراری">endpointهای تکراری</a><a class="l3" href="#بازتاب-mirroring-endpointslice">بازتاب (mirroring) EndpointSlice</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>

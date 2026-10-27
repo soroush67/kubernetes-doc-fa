@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>مدیریت حافظهٔ swap | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+</head>
+<body>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">concepts / cluster-administration</span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">مدیریت حافظهٔ swap</h1><!-- overview -->
+<p dir="rtl">کوبرنتیز را می‌توان طوری پیکربندی کرد که روی یک <span class="term" title="node">نود</span> از حافظهٔ swap استفاده کند؛
+در این حالت کرنل می‌تواند با انتقال صفحه‌ها به فضای ذخیره‌سازی پشتیبان، حافظهٔ فیزیکی را آزاد کند.
+این قابلیت در موارد کاربرد متعددی سودمند است.
+برای نمونه، نودهایی که بارهای کاری بهره‌مند از swap را اجرا می‌کنند،
+مانند بارهای کاری‌ای که ردپای حافظهٔ بزرگی دارند اما در هر لحظه تنها به بخشی از آن حافظه دسترسی پیدا می‌کنند.
+همچنین این قابلیت به جلوگیری از خاتمه‌یافتن Podها هنگام جهش‌های فشار حافظه کمک می‌کند،
+نودها را در برابر جهش‌های حافظه در سطح سیستم که ممکن است پایداری آن‌ها را به خطر بیندازد محافظت می‌کند،
+مدیریت انعطاف‌پذیرتر حافظه را روی نود ممکن می‌سازد و مزایای بسیار دیگری نیز دارد.</p>
+<p dir="rtl">برای آشنایی با پیکربندی swap در کلاستر خود، مطلب
+<a href="https://kubernetes.io/docs/tutorials/cluster-management/provision-swap-memory/" target="_blank">پیکربندی حافظهٔ swap روی نودهای کوبرنتیز</a> را بخوانید.</p>
+<!-- body -->
+<h2 id="پشتیبانی-سیستم-عامل" dir="rtl">پشتیبانی سیستم‌عامل</h2>
+<ul>
+<li dir="rtl">نودهای لینوکسی از swap پشتیبانی می‌کنند؛ برای فعال‌سازی آن باید هر نود را پیکربندی کنید.
+به‌طور پیش‌فرض، kubelet روی نود لینوکسی‌ای که swap در آن فعال است <strong>اجرا نمی‌شود</strong>.</li>
+<li dir="rtl">نودهای ویندوزی به فضای swap نیاز دارند.
+به‌طور پیش‌فرض، kubelet روی نود ویندوزی‌ای که swap در آن غیرفعال است <strong>اجرا نمی‌شود</strong>.</li>
+</ul>
+<h2 id="این-قابلیت-چگونه-کار-می-کند؟" dir="rtl">این قابلیت چگونه کار می‌کند؟</h2>
+<p dir="rtl">روش‌های گوناگونی برای تصور استفاده از swap روی یک نود وجود دارد.
+اگر kubelet از قبل روی نودی در حال اجرا باشد، پس از تأمین swap باید دوباره راه‌اندازی شود تا آن را شناسایی کند.</p>
+<p dir="rtl">هنگامی که kubelet روی نودی اجرا می‌شود که swap در آن تأمین شده و در دسترس است
+(با پیکربندی <code dir="ltr">failSwapOn: false</code>)، kubelet:</p>
+<ul>
+<li dir="rtl">می‌تواند روی این نودِ دارای swap اجرا شود.</li>
+<li dir="rtl">به پیاده‌سازی واسط زمان اجرای کانتینر (CRI)، که اغلب «زمان اجرای کانتینر» نامیده می‌شود، دستور می‌دهد
+که به‌طور پیش‌فرض هیچ حافظهٔ swapای به بارهای کاری کوبرنتیز اختصاص ندهد.</li>
+</ul>
+<p dir="rtl">پیکربندی swap روی یک نود از طریق
+<a href="https://kubernetes.io/docs/reference/config-api/kubelet-config.v1" target="_blank"><code dir="ltr">memorySwap</code> در KubeletConfiguration</a> در اختیار مدیر کلاستر قرار می‌گیرد.
+شما به‌عنوان مدیر کلاستر می‌توانید با تنظیم <code dir="ltr">memorySwap.swapBehavior</code> رفتار نود را
+در حضور حافظهٔ swap مشخص کنید.</p>
+<h3 id="رفتارهای-swap" dir="rtl">رفتارهای swap</h3>
+<p dir="rtl">باید یک <a href="https://kubernetes.io/docs/reference/node/swap-behavior/" target="_blank">رفتار swap</a> را برای استفاده انتخاب کنید.
+نودهای مختلف کلاستر شما می‌توانند از رفتارهای swap متفاوتی استفاده کنند.</p>
+<p dir="rtl">رفتارهای swap قابل انتخاب برای نودهای لینوکسی عبارت‌اند از:</p>
+<dl>
+<dt dir="rtl"><code dir="ltr">NoSwap</code> (پیش‌فرض)</dt>
+<dd dir="rtl">بارهای کاری‌ای که به‌صورت Pod روی این نود اجرا می‌شوند از swap استفاده نمی‌کنند و نمی‌توانند استفاده کنند.</dd>
+<dt dir="ltr" class="ltr"><code dir="ltr">LimitedSwap</code></dt>
+<dd dir="rtl">بارهای کاری کوبرنتیز می‌توانند از حافظهٔ swap بهره ببرند.</dd>
+</dl>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">اگر رفتار NoSwap را انتخاب کنید و kubelet را طوری پیکربندی کنید که وجود فضای swap را تحمل کند
+(<code dir="ltr">failSwapOn: false</code>)، بارهای کاری شما هیچ استفاده‌ای از swap نمی‌کنند.</p>
+<p dir="rtl">با این حال، فرایندهای بیرون از کانتینرهای مدیریت‌شده توسط کوبرنتیز، مانند سرویس‌های systemd
+(و حتی خود kubelet!) <strong>می‌توانند</strong> از swap استفاده کنند.</p>
+</div>
+<p dir="rtl">برای آشنایی با فعال‌سازی swap در کلاستر خود می‌توانید مطلب <a href="https://kubernetes.io/docs/tutorials/cluster-management/provision-swap-memory/" target="_blank">پیکربندی حافظهٔ swap روی نودهای کوبرنتیز</a> را بخوانید.</p>
+<h3 id="یکپارچگی-با-زمان-اجرای-کانتینر" dir="rtl">یکپارچگی با زمان اجرای کانتینر</h3>
+<p dir="rtl">kubelet از API زمان اجرای کانتینر استفاده می‌کند و به زمان اجرای کانتینر دستور می‌دهد
+پیکربندی مشخصی را (برای نمونه، در حالت cgroup v2، مقدار <code dir="ltr">memory.swap.max</code>) به‌گونه‌ای اعمال کند که
+پیکربندی swap مطلوب برای یک کانتینر فعال شود. در زمان‌های اجرایی که از گروه‌های کنترلی (control groups یا cgroups) استفاده می‌کنند،
+زمان اجرای کانتینر مسئول نوشتن این تنظیمات در cgroup سطح کانتینر است.</p>
+<h2 id="مشاهده-پذیری-استفاده-از-swap" dir="rtl">مشاهده‌پذیری استفاده از swap</h2>
+<h3 id="آمار-متریک-ها-در-سطح-نود-و-کانتینر" dir="rtl">آمار متریک‌ها در سطح نود و کانتینر</h3>
+<p dir="rtl">kubelet اکنون آمار متریک‌ها را در سطح نود و کانتینر گردآوری می‌کند؛
+این آمار از طریق endpointهای HTTP مربوط به kubelet یعنی <code dir="ltr">/metrics/resource</code> (که عمدتاً ابزارهای پایش
+مانند Prometheus از آن استفاده می‌کنند) و <code dir="ltr">/stats/summary</code> (که عمدتاً Autoscalerها از آن استفاده می‌کنند) در دسترس است.
+این امکان به کلاینت‌هایی که می‌توانند مستقیماً از kubelet درخواست کنند اجازه می‌دهد
+هنگام استفاده از <code dir="ltr">LimitedSwap</code> میزان استفاده از swap و حافظهٔ swap باقی‌مانده را پایش کنند.
+افزون بر این، متریک <code dir="ltr">machine_swap_bytes</code> به cadvisor اضافه شده است تا
+ظرفیت کل swap فیزیکی ماشین را نشان دهد.
+برای اطلاعات بیشتر <a href="https://kubernetes.io/docs/reference/instrumentation/node-metrics/" target="_blank">این صفحه</a> را ببینید.</p>
+<p dir="rtl">برای نمونه، این متریک‌های <code dir="ltr">/metrics/resource</code> پشتیبانی می‌شوند:</p>
+<ul>
+<li dir="rtl"><code dir="ltr">node_swap_usage_bytes</code>: میزان فعلی استفادهٔ نود از swap بر حسب بایت.</li>
+<li dir="rtl"><code dir="ltr">container_swap_usage_bytes</code>: میزان فعلی استفادهٔ کانتینر از swap بر حسب بایت.</li>
+<li dir="rtl"><code dir="ltr">container_swap_limit_bytes</code>: میزان فعلی حد swap کانتینر بر حسب بایت.</li>
+</ul>
+<h3 id="استفاده-از-kubectl-top---show-swap" dir="rtl">استفاده از <code dir="ltr">kubectl top --show-swap</code></h3>
+<p dir="rtl">پرس‌وجوی متریک‌ها ارزشمند است، اما تا حدی دشوار است، زیرا این متریک‌ها
+برای استفادهٔ نرم‌افزارها طراحی شده‌اند، نه انسان‌ها.
+برای آنکه این داده‌ها به شیوه‌ای کاربرپسندتر مصرف شوند،
+فرمان <code dir="ltr">kubectl top</code> گسترش یافته است تا با استفاده از پرچم <code dir="ltr">--show-swap</code> از متریک‌های swap پشتیبانی کند.</p>
+<p dir="rtl">برای دریافت اطلاعات دربارهٔ میزان استفاده از swap روی نودها، می‌توان از <code dir="ltr">kubectl top nodes --show-swap</code> استفاده کرد:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl top nodes --show-swap
+</code></pre>
+<p dir="rtl">خروجی‌ای مشابه زیر به دست می‌آید:</p>
+<pre dir="ltr"><code dir="ltr">NAME    CPU(cores)   CPU(%)   MEMORY(bytes)   MEMORY(%)   SWAP(bytes)    SWAP(%)       
+node1   1m           10%      2Mi             10%         1Mi            0%   
+node2   5m           10%      6Mi             10%         2Mi            0%   
+node3   3m           10%      4Mi             10%         &lt;unknown&gt;      &lt;unknown&gt;   
+</code></pre>
+<p dir="rtl">برای دریافت اطلاعات دربارهٔ میزان استفادهٔ Podها از swap، می‌توان از <code dir="ltr">kubectl top pods --show-swap</code> استفاده کرد:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl top pod -n kube-system --show-swap
+</code></pre>
+<p dir="rtl">خروجی‌ای مشابه زیر به دست می‌آید:</p>
+<pre dir="ltr"><code dir="ltr">NAME                                      CPU(cores)   MEMORY(bytes)   SWAP(bytes)
+coredns-58d5bc5cdb-5nbk4                  2m           19Mi            0Mi
+coredns-58d5bc5cdb-jsh26                  3m           37Mi            0Mi
+etcd-node01                               51m          143Mi           5Mi
+kube-apiserver-node01                     98m          824Mi           16Mi
+kube-controller-manager-node01            20m          135Mi           9Mi
+kube-proxy-ffgs2                          1m           24Mi            0Mi
+kube-proxy-fhvwx                          1m           39Mi            0Mi
+kube-scheduler-node01                     13m          69Mi            0Mi
+metrics-server-8598789fdb-d2kcj           5m           26Mi            0Mi   
+</code></pre>
+<h3 id="گزارش-ظرفیت-swap-نودها-به-عنوان-بخشی-از-وضعیت-نود" dir="rtl">گزارش ظرفیت swap نودها به‌عنوان بخشی از وضعیت نود</h3>
+<p dir="rtl">فیلد وضعیت جدیدی به نام <code dir="ltr">node.status.nodeInfo.swap.capacity</code> به نود اضافه شده است تا ظرفیت swap یک نود را گزارش کند.</p>
+<p dir="rtl">برای نمونه، می‌توان از فرمان زیر برای بازیابی ظرفیت swap نودهای یک کلاستر استفاده کرد:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get nodes -o go-template='{{range .items}}{{.metadata.name}}: {{if .status.nodeInfo.swap.capacity}}{{.status.nodeInfo.swap.capacity}}{{else}}&lt;unknown&gt;{{end}}{{"\n"}}{{end}}'
+</code></pre>
+<p dir="rtl">خروجی‌ای مشابه زیر به دست می‌آید:</p>
+<pre dir="ltr"><code dir="ltr">node1: 21474836480
+node2: 42949664768
+node3: &lt;unknown&gt;
+</code></pre>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">مقدار <code dir="ltr">&lt;unknown&gt;</code> نشان می‌دهد که فیلد <code dir="ltr">.status.nodeInfo.swap.capacity</code> برای آن Node تنظیم نشده است.
+این احتمالاً به این معناست که نود swap تأمین‌شده ندارد، یا با احتمال کمتر،
+kubelet قادر به تعیین ظرفیت swap نود نیست.</p>
+</div>
+<h3 id="کشف-swap-با-استفاده-از-node-feature-discovery-nfd-node-feature-discovery" dir="rtl">کشف swap با استفاده از Node Feature Discovery (NFD) {#node-feature-discovery}</h3>
+<p dir="rtl"><a href="https://github.com/kubernetes-sigs/node-feature-discovery" target="_blank" rel="noopener">Node Feature Discovery</a>
+یک افزونهٔ کوبرنتیز برای شناسایی ویژگی‌ها و پیکربندی سخت‌افزار است.
+می‌توان از آن برای کشف اینکه کدام نودها دارای swap تأمین‌شده هستند استفاده کرد.</p>
+<p dir="rtl">برای نمونه، برای اینکه بفهمید کدام نودها دارای swap تأمین‌شده هستند،
+از فرمان زیر استفاده کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get nodes -o jsonpath='{range .items[?(@.metadata.labels.feature\.node\.kubernetes\.io/memory-swap)]}{.metadata.name}{"\t"}{.metadata.labels.feature\.node\.kubernetes\.io/memory-swap}{"\n"}{end}'
+</code></pre>
+<p dir="rtl">خروجی‌ای مشابه زیر به دست می‌آید:</p>
+<pre dir="ltr"><code dir="ltr">k8s-worker1: true
+k8s-worker2: true
+k8s-worker3: false
+</code></pre>
+<p dir="rtl">در این مثال، swap روی نودهای <code dir="ltr">k8s-worker1</code> و <code dir="ltr">k8s-worker2</code> تأمین شده است، اما روی <code dir="ltr">k8s-worker3</code> تأمین نشده است.</p>
+<h2 id="ریسک-ها-و-ملاحظات" dir="rtl">ریسک‌ها و ملاحظات</h2>
+<div class="callout caution"><div class="callout-title">احتیاط:</div>
+<p dir="rtl">اکیداً توصیه می‌شود فضای swap رمزگذاری شود.
+برای اطلاعات بیشتر بخش حجم‌های مبتنی بر حافظه <a href="#memory-backed-volumes">حجم‌های مبتنی بر حافظه</a> را ببینید.</p>
+</div>
+<p dir="rtl">در دسترس بودن swap روی یک سیستم، پیش‌بینی‌پذیری را کاهش می‌دهد.
+اگرچه swap می‌تواند با در دسترس قرار دادن RAM بیشتر کارایی را افزایش دهد، بازگرداندن داده‌ها
+به حافظه عملیاتی سنگین است که گاهی چندین مرتبهٔ بزرگی کندتر است
+و می‌تواند به افت‌های غیرمنتظرهٔ کارایی منجر شود.
+افزون بر این، swap رفتار سیستم را تحت فشار حافظه تغییر می‌دهد.
+فعال‌سازی swap خطر همسایه‌های پرسروصدا (noisy neighbors) را افزایش می‌دهد،
+به این صورت که Podهایی که مکرراً از RAM خود استفاده می‌کنند ممکن است باعث شوند Podهای دیگر به swap منتقل شوند.
+همچنین، از آنجا که swap امکان استفادهٔ بیشتر از حافظه را برای بارهای کاری کوبرنتیز فراهم می‌کند که نمی‌توان آن را به‌طور پیش‌بینی‌پذیر محاسبه کرد،
+و به دلیل پیکربندی‌های غیرمنتظرهٔ چیدمان،
+زمان‌بند در حال حاضر میزان استفاده از حافظهٔ swap را در نظر نمی‌گیرد.
+این امر خطر همسایه‌های پرسروصدا را تشدید می‌کند.</p>
+<p dir="rtl">کارایی نودی که حافظهٔ swap در آن فعال است به ذخیره‌سازی فیزیکی زیربنایی بستگی دارد.
+هنگامی که از حافظهٔ swap استفاده می‌شود، در محیطی که از نظر تعداد عملیات I/O
+در ثانیه (IOPS) محدود است، مانند یک ماشین مجازی ابری با
+محدودسازی I/O، کارایی در مقایسه با رسانه‌های ذخیره‌سازی سریع‌تر مانند درایوهای حالت جامد
+یا NVMe به‌طور چشمگیری بدتر خواهد بود.
+از آنجا که swap ممکن است فشار IO ایجاد کند، توصیه می‌شود به daemonهای حیاتی سیستم
+اولویت بالاتری از نظر تأخیر IO داده شود. بخش مرتبط را در
+بخش <a href="#good-practice-for-using-swap-in-a-kubernetes-cluster">روش‌های توصیه‌شده</a> در ادامه ببینید.</p>
+<h3 id="حجم-های-مبتنی-بر-حافظه" dir="rtl">حجم‌های مبتنی بر حافظه</h3>
+<p dir="rtl">روی نودهای لینوکسی، حجم‌های مبتنی بر حافظه (مانند mountهای حجم <a href="https://kubernetes.io/docs/concepts/configuration/secret/" target="_blank"><code dir="ltr">secret</code></a>
+یا <a href="https://kubernetes.io/docs/concepts/storage/volumes/#emptydir" target="_blank"><code dir="ltr">emptyDir</code></a> با <code dir="ltr">medium: Memory</code>)
+با سیستم فایل <code dir="ltr">tmpfs</code> پیاده‌سازی می‌شوند.
+محتوای چنین حجم‌هایی باید همواره در حافظه باقی بماند و بنابراین نباید
+به دیسک منتقل (swap) شود.
+برای اطمینان از اینکه محتوای چنین حجم‌هایی در حافظه باقی می‌ماند، از گزینهٔ tmpfs به نام <code dir="ltr">noswap</code>
+استفاده می‌شود.</p>
+<p dir="rtl">کرنل لینوکس از نسخهٔ 6.3 به‌طور رسمی از گزینهٔ <code dir="ltr">noswap</code> پشتیبانی می‌کند (اطلاعات بیشتر
+را می‌توانید در <a href="https://kubernetes.io/docs/reference/node/kernel-version-requirements/#requirements-other" target="_blank">الزامات نسخهٔ کرنل لینوکس</a> بیابید).
+با این حال، توزیع‌های مختلف اغلب تصمیم می‌گیرند این گزینهٔ mount را به نسخه‌های قدیمی‌تر
+لینوکس نیز backport کنند.</p>
+<p dir="rtl">برای بررسی اینکه آیا نود از گزینهٔ <code dir="ltr">noswap</code> پشتیبانی می‌کند یا نه، kubelet کارهای زیر را انجام می‌دهد:</p>
+<ul>
+<li dir="rtl">اگر نسخهٔ کرنل بالاتر از 6.3 باشد، فرض می‌شود که گزینهٔ <code dir="ltr">noswap</code> پشتیبانی می‌شود.</li>
+<li dir="rtl">در غیر این صورت، kubelet هنگام راه‌اندازی تلاش می‌کند یک tmpfs آزمایشی را با گزینهٔ <code dir="ltr">noswap</code> mount کند.
+اگر kubelet با خطایی حاکی از گزینهٔ ناشناخته شکست بخورد، فرض می‌شود که <code dir="ltr">noswap</code>
+پشتیبانی نمی‌شود و بنابراین استفاده نخواهد شد.
+یک مدخل لاگ kubelet منتشر می‌شود تا به کاربر هشدار دهد که حجم‌های مبتنی بر حافظه ممکن است به دیسک منتقل شوند.
+اگر kubelet موفق شود، tmpfs آزمایشی حذف می‌شود و گزینهٔ <code dir="ltr">noswap</code> مورد استفاده قرار می‌گیرد.
+<ul>
+<li dir="rtl">اگر گزینهٔ <code dir="ltr">noswap</code> پشتیبانی نشود، kubelet یک مدخل لاگ هشدار منتشر می‌کند
+و سپس به اجرای خود ادامه می‌دهد.</li>
+</ul>
+</li>
+</ul>
+<p dir="rtl">برای نمونه‌ای از راه‌اندازی swap، <a href="https://kubernetes.io/docs/tutorials/cluster-management/provision-swap-memory/" target="_blank">پیکربندی حافظهٔ swap روی نودهای کوبرنتیز</a> را ببینید.
+با این حال، مدیریت swap رمزگذاری‌شده در حیطهٔ kubelet نیست؛
+بلکه یک دغدغهٔ عمومی پیکربندی سیستم‌عامل است و باید در همان سطح به آن پرداخته شود.
+تأمین swap رمزگذاری‌شده برای کاهش این ریسک بر عهدهٔ مدیر سیستم است.</p>
+<h3 id="بیرون-رانی-ها-evictions" dir="rtl">بیرون‌رانی‌ها (Evictions)</h3>
+<p dir="rtl">پیکربندی آستانه‌های بیرون‌رانی حافظه برای نودهای دارای swap می‌تواند دشوار باشد.</p>
+<p dir="rtl">هنگامی که swap غیرفعال است، منطقی است که آستانه‌های بیرون‌رانی kubelet را
+کمی پایین‌تر از ظرفیت حافظهٔ نود پیکربندی کنیم.
+دلیل این است که می‌خواهیم کوبرنتیز پیش از آنکه حافظهٔ نود تمام شود
+و OOM killer (Out Of Memory) فراخوانی شود، بیرون‌راندن Podها را آغاز کند، زیرا OOM killer از کوبرنتیز آگاه نیست
+و بنابراین مواردی مانند QoS، اولویت Pod یا سایر عوامل خاص کوبرنتیز را در نظر نمی‌گیرد.</p>
+<p dir="rtl">هنگامی که swap فعال است، وضعیت پیچیده‌تر است.
+در لینوکس، پارامتر <code dir="ltr">vm.min_free_kbytes</code> آستانهٔ حافظه‌ای را تعریف می‌کند که کرنل
+از آن به بعد بازپس‌گیری تهاجمی حافظه را آغاز می‌کند، که شامل انتقال صفحه‌ها به swap نیز می‌شود.
+اگر آستانه‌های بیرون‌رانی kubelet به‌گونه‌ای تنظیم شوند که بیرون‌رانی
+پیش از آغاز بازپس‌گیری حافظه توسط کرنل رخ دهد، ممکن است بارهای کاری
+هرگز نتوانند هنگام فشار حافظهٔ نود به swap منتقل شوند.
+از سوی دیگر، تنظیم آستانه‌های بیرون‌رانی در سطحی بیش از حد بالا می‌تواند باعث شود حافظهٔ نود تمام شود
+و OOM killer فراخوانی شود، که آن هم مطلوب نیست.</p>
+<p dir="rtl">برای رفع این مسئله، توصیه می‌شود آستانه‌های بیرون‌رانی kubelet
+کمی پایین‌تر از مقدار <code dir="ltr">vm.min_free_kbytes</code> تنظیم شوند.
+به این ترتیب، نود می‌تواند پیش از آنکه kubelet بیرون‌راندن Podها را آغاز کند، swap کردن را شروع کند
+و به بارهای کاری اجازه دهد داده‌های بلااستفاده را به swap منتقل کنند و از وقوع بیرون‌رانی جلوگیری شود.
+از سوی دیگر، از آنجا که این مقدار تنها کمی پایین‌تر است، احتمالاً kubelet پیش از تمام شدن حافظهٔ نود
+بیرون‌راندن Podها را آغاز می‌کند و در نتیجه از OOM killer اجتناب می‌شود.</p>
+<p dir="rtl">مقدار <code dir="ltr">vm.min_free_kbytes</code> را می‌توان با اجرای فرمان زیر روی نود تعیین کرد:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">cat /proc/sys/vm/min_free_kbytes
+</code></pre>
+<h3 id="فضای-swap-بلااستفاده" dir="rtl">فضای swap بلااستفاده</h3>
+<p dir="rtl">در رفتار <code dir="ltr">LimitedSwap</code>، مقدار swap در دسترس برای یک Pod به‌طور خودکار
+بر اساس نسبت حافظهٔ درخواست‌شده به کل حافظهٔ نود تعیین می‌شود
+(برای جزئیات بیشتر، <a href="#how-is-the-swap-limit-being-determined-with-limitedswap">بخش زیر</a> را ببینید).</p>
+<p dir="rtl">این طراحی به این معناست که معمولاً بخشی از swap برای بارهای کاری کوبرنتیز
+محدود باقی می‌ماند.
+برای نمونه، از آنجا که کوبرنتیز 1.37 اجازهٔ استفاده از swap را به
+Podهای <span class="term" title="qos-class">کلاس QoS</span> از نوع Guaranteed نمی‌دهد،
+مقداری از swap که متناسب با درخواست حافظهٔ Podهای Guaranteed است
+توسط بارهای کاری کوبرنتیز بلااستفاده باقی می‌ماند.</p>
+<p dir="rtl">این رفتار در شرایطی که بسیاری از Podها واجد شرایط swap نیستند، ریسک‌هایی به همراه دارد.
+از سوی دیگر، این رفتار عملاً مقداری حافظهٔ swap رزروشده برای سیستم نگه می‌دارد که فرایندهای
+خارج از حیطهٔ کوبرنتیز، مانند daemonهای سیستم و حتی خود kubelet، می‌توانند از آن استفاده کنند.</p>
+<h2 id="روش-های-خوب-برای-استفاده-از-swap-در-یک-کلاستر-کوبرنتیز" dir="rtl">روش‌های خوب برای استفاده از swap در یک کلاستر کوبرنتیز</h2>
+<h3 id="غیرفعال-سازی-swap-برای-daemonهای-حیاتی-سیستم" dir="rtl">غیرفعال‌سازی swap برای daemonهای حیاتی سیستم</h3>
+<p dir="rtl">در مرحلهٔ آزمایش و بر اساس بازخورد کاربران، مشاهده شد که کارایی
+daemonها و سرویس‌های حیاتی سیستم ممکن است کاهش یابد.
+این بدان معناست که daemonهای سیستم، از جمله kubelet، ممکن است کندتر از معمول عمل کنند.
+اگر با این مشکل مواجه شدید، توصیه می‌شود cgroup مربوط به system slice را طوری پیکربندی کنید
+که از swap کردن جلوگیری شود (یعنی <code dir="ltr">memory.swap.max=0</code> را تنظیم کنید).</p>
+<h3 id="محافظت-از-daemonهای-حیاتی-سیستم-از-نظر-تأخیر-i-o" dir="rtl">محافظت از daemonهای حیاتی سیستم از نظر تأخیر I/O</h3>
+<p dir="rtl">swap می‌تواند بار I/O روی یک نود را افزایش دهد.
+هنگامی که فشار حافظه باعث می‌شود کرنل به‌سرعت صفحه‌ها را به swap منتقل کند و از آن بازگرداند،
+daemonها و سرویس‌های حیاتی سیستم که به عملیات I/O وابسته‌اند ممکن است
+دچار افت کارایی شوند.</p>
+<p dir="rtl">برای کاهش این مشکل، به کاربران systemd توصیه می‌شود system slice را از نظر تأخیر I/O در اولویت قرار دهند.
+برای کاربرانی که از systemd استفاده نمی‌کنند،
+توصیه می‌شود یک cgroup اختصاصی برای daemonها و فرایندهای سیستم راه‌اندازی کنند و به همین شیوه تأخیر I/O را در اولویت قرار دهند.
+این کار را می‌توان با تنظیم <code dir="ltr">io.latency</code> برای system slice انجام داد
+و بدین ترتیب اولویت I/O بالاتری به آن اعطا کرد.
+برای اطلاعات بیشتر <a href="https://www.kernel.org/doc/Documentation/admin-guide/cgroup-v2.rst" target="_blank" rel="noopener">مستندات cgroup</a> را ببینید.</p>
+<h3 id="swap-و-نودهای-control-plane" dir="rtl">swap و نودهای control plane</h3>
+<p dir="rtl">پروژهٔ کوبرنتیز توصیه می‌کند نودهای control plane بدون هیچ فضای swap پیکربندی‌شده‌ای اجرا شوند.
+control plane عمدتاً میزبان Podهایی با QoS از نوع Guaranteed است، بنابراین معمولاً می‌توان swap را غیرفعال کرد.
+نگرانی اصلی این است که swap کردن سرویس‌های حیاتی روی control plane می‌تواند تأثیر منفی بر کارایی داشته باشد.</p>
+<h3 id="استفاده-از-یک-دیسک-اختصاصی-برای-swap" dir="rtl">استفاده از یک دیسک اختصاصی برای swap</h3>
+<p dir="rtl">پروژهٔ کوبرنتیز توصیه می‌کند هر زمان که نودهایی با swap فعال اجرا می‌کنید، از swap رمزگذاری‌شده استفاده کنید.
+اگر swap روی یک پارتیشن یا سیستم فایل ریشه قرار داشته باشد، بارهای کاری ممکن است
+با فرایندهای سیستمی که نیاز به نوشتن روی دیسک دارند تداخل ایجاد کنند.
+هنگامی که از یک دیسک مشترک استفاده می‌کنند، فرایندها می‌توانند swap را تحت فشار قرار دهند
+و I/O مربوط به kubelet، زمان اجرای کانتینر و systemd را مختل کنند، که بر سایر بارهای کاری تأثیر می‌گذارد.
+از آنجا که فضای swap روی دیسک قرار دارد، اطمینان از اینکه دیسک برای موارد کاربرد مورد نظر به‌اندازهٔ کافی سریع است اهمیت حیاتی دارد.
+به‌عنوان جایگزین، می‌توان اولویت‌های I/O را میان نواحی نگاشت‌شدهٔ مختلفِ یک دستگاه پشتیبان واحد پیکربندی کرد.</p>
+<h3 id="زمان-بندی-آگاه-از-swap" dir="rtl">زمان‌بندی آگاه از swap</h3>
+<p dir="rtl">کوبرنتیز 1.37 از تخصیص Podها به نودها به شیوه‌ای که
+میزان استفاده از حافظهٔ swap را در نظر بگیرد پشتیبانی نمی‌کند. زمان‌بند معمولاً از <em>درخواست‌ها</em> (requests) برای منابع زیرساختی
+برای هدایت جای‌گذاری Podها استفاده می‌کند و Podها فضای swap درخواست نمی‌کنند؛ آن‌ها فقط <code dir="ltr">memory</code> درخواست می‌کنند.
+این بدان معناست که زمان‌بند هنگام تصمیم‌گیری‌های زمان‌بندی حافظهٔ swap را در نظر نمی‌گیرد.
+اگرچه ما به‌طور فعال روی این موضوع کار می‌کنیم، هنوز پیاده‌سازی نشده است.</p>
+<p dir="rtl">برای اینکه مدیران اطمینان حاصل کنند Podها روی نودهای دارای
+حافظهٔ swap زمان‌بندی نمی‌شوند مگر آنکه به‌طور مشخص برای استفاده از آن در نظر گرفته شده باشند،
+مدیران می‌توانند نودهای دارای swap را taint کنند تا از این مشکل جلوگیری شود.
+taintها تضمین می‌کنند بارهای کاری‌ای که swap را تحمل می‌کنند تحت بار به نودهای بدون swap سرریز نشوند.</p>
+<h3 id="انتخاب-ذخیره-سازی-برای-کارایی-بهینه" dir="rtl">انتخاب ذخیره‌سازی برای کارایی بهینه</h3>
+<p dir="rtl">دستگاه ذخیره‌سازی‌ای که برای فضای swap تعیین می‌شود در حفظ پاسخ‌گویی سیستم
+هنگام استفادهٔ زیاد از حافظه نقشی حیاتی دارد.
+درایوهای دیسک سخت چرخشی (HDD) برای این کار مناسب نیستند، زیرا ماهیت مکانیکی آن‌ها تأخیر قابل‌توجهی ایجاد می‌کند
+و به افت شدید کارایی و thrashing سیستم منجر می‌شود.
+برای نیازهای کارایی امروزی، دستگاهی مانند درایو حالت جامد (SSD) احتمالاً انتخاب مناسبی برای swap است،
+زیرا دسترسی الکترونیکی کم‌تأخیر آن کندی را به حداقل می‌رساند.</p>
+<h2 id="جزئیات-رفتار-swap" dir="rtl">جزئیات رفتار swap</h2>
+<h3 id="حد-swap-در-limitedswap-چگونه-تعیین-می-شود؟" dir="rtl">حد swap در LimitedSwap چگونه تعیین می‌شود؟</h3>
+<p dir="rtl">پیکربندی حافظهٔ swap، از جمله محدودیت‌های آن، چالش قابل‌توجهی
+به شمار می‌رود. نه‌تنها این پیکربندی مستعد پیکربندی نادرست است، بلکه از آنجا که یک ویژگی در سطح سیستم است، هر
+پیکربندی نادرستی می‌تواند به‌جای یک بار کاری مشخص، کل نود را به خطر
+بیندازد. برای کاهش این ریسک و تضمین سلامت نود، ما
+swap را با پیکربندی خودکار محدودیت‌ها پیاده‌سازی کرده‌ایم.</p>
+<p dir="rtl">با <code dir="ltr">LimitedSwap</code>، Podهایی که در دستهٔ QoS از نوع Burstable قرار نمی‌گیرند (یعنی
+Podهای با QoS از نوع <code dir="ltr">BestEffort</code>/<code dir="ltr">Guaranteed</code>) از استفاده از حافظهٔ swap منع می‌شوند.
+Podهای با QoS از نوع <code dir="ltr">BestEffort</code> الگوهای مصرف حافظهٔ غیرقابل‌پیش‌بینی دارند و
+اطلاعاتی دربارهٔ میزان استفادهٔ خود از حافظه ارائه نمی‌دهند، که تعیین تخصیص ایمن
+حافظهٔ swap را دشوار می‌کند.
+در مقابل، Podهای با QoS از نوع <code dir="ltr">Guaranteed</code> معمولاً برای برنامه‌هایی به کار می‌روند که به
+تخصیص دقیق منابع مشخص‌شده توسط بار کاری متکی‌اند و حافظه باید بی‌درنگ در دسترس باشد.
+برای حفظ تضمین‌های امنیتی و سلامت نود که پیش‌تر ذکر شد،
+این Podها هنگامی که <code dir="ltr">LimitedSwap</code> فعال است اجازهٔ استفاده از حافظهٔ swap را ندارند.
+افزون بر این، Podهای با اولویت بالا اجازهٔ استفاده از swap را ندارند تا اطمینان حاصل شود حافظه‌ای
+که مصرف می‌کنند همواره در RAM قرار دارد و بنابراین آمادهٔ استفاده است.</p>
+<p dir="rtl">پیش از تشریح جزئیات محاسبهٔ حد swap، لازم است اصطلاحات زیر تعریف شوند:</p>
+<ul>
+<li dir="rtl"><code dir="ltr">nodeTotalMemory</code>: کل مقدار حافظهٔ فیزیکی در دسترس روی نود.</li>
+<li dir="rtl"><code dir="ltr">totalPodsSwapAvailable</code>: کل مقدار حافظهٔ swap روی نود که برای استفادهٔ Podها در دسترس است (ممکن است بخشی از حافظهٔ swap برای استفادهٔ سیستم رزرو شده باشد).</li>
+<li dir="rtl"><code dir="ltr">containerMemoryRequest</code>: درخواست حافظهٔ کانتینر.</li>
+</ul>
+<p dir="rtl">محدودیت swap به این صورت پیکربندی می‌شود:<br>
+( <code dir="ltr">containerMemoryRequest</code> / <code dir="ltr">nodeTotalMemory</code> ) × <code dir="ltr">totalPodsSwapAvailable</code></p>
+<p dir="rtl">به بیان دیگر، مقدار swapای که یک کانتینر می‌تواند استفاده کند متناسب با
+درخواست حافظهٔ آن، کل حافظهٔ فیزیکی نود و کل مقدار حافظهٔ swap روی
+نود که برای استفادهٔ Podها در دسترس است، تعیین می‌شود.</p>
+<p dir="rtl">توجه به این نکته مهم است که برای کانتینرهای درون Podهای با QoS از نوع Burstable، می‌توان
+با تعیین درخواست‌های حافظه‌ای برابر با حدهای حافظه، از استفاده از swap صرف‌نظر کرد.
+کانتینرهایی که به این شیوه پیکربندی شوند به حافظهٔ swap دسترسی نخواهند داشت.</p>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<ul>
+<li dir="rtl">برای آشنایی با مدیریت swap روی نودهای لینوکسی، مطلب
+<a href="https://kubernetes.io/docs/tutorials/cluster-management/provision-swap-memory/" target="_blank">پیکربندی حافظهٔ swap روی نودهای کوبرنتیز</a> را بخوانید.</li>
+<li dir="rtl">می‌توانید <a href="/blog/2025/03/25/swap-linux-improvements/">پست وبلاگ دربارهٔ کوبرنتیز و swap</a> را مطالعه کنید.</li>
+<li dir="rtl">برای اطلاعات پیش‌زمینه، لطفاً KEP اصلی، یعنی <a href="https://github.com/kubernetes/enhancements/tree/master/keps/sig-node/2400-node-swap" target="_blank" rel="noopener">KEP-2400</a>،
+و <a href="https://github.com/kubernetes/enhancements/blob/master/keps/sig-node/2400-node-swap/README.md" target="_blank" rel="noopener">طراحی</a> آن را ببینید.</li>
+</ul>
+</main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#پشتیبانی-سیستم-عامل">پشتیبانی سیستم‌عامل</a><a class="l2" href="#این-قابلیت-چگونه-کار-می-کند؟">این قابلیت چگونه کار می‌کند؟</a><a class="l3" href="#رفتارهای-swap">رفتارهای swap</a><a class="l3" href="#یکپارچگی-با-زمان-اجرای-کانتینر">یکپارچگی با زمان اجرای کانتینر</a><a class="l2" href="#مشاهده-پذیری-استفاده-از-swap">مشاهده‌پذیری استفاده از swap</a><a class="l3" href="#آمار-متریک-ها-در-سطح-نود-و-کانتینر">آمار متریک‌ها در سطح نود و کانتینر</a><a class="l3" href="#استفاده-از-kubectl-top---show-swap">استفاده از kubectl top --show-swap</a><a class="l3" href="#گزارش-ظرفیت-swap-نودها-به-عنوان-بخشی-از-وضعیت-نود">گزارش ظرفیت swap نودها به‌عنوان بخشی از وضعیت نود</a><a class="l3" href="#کشف-swap-با-استفاده-از-node-feature-discovery-nfd-node-feature-discovery">کشف swap با استفاده از Node Feature Discovery (NFD) {#node-feature-discovery}</a><a class="l2" href="#ریسک-ها-و-ملاحظات">ریسک‌ها و ملاحظات</a><a class="l3" href="#حجم-های-مبتنی-بر-حافظه">حجم‌های مبتنی بر حافظه</a><a class="l3" href="#بیرون-رانی-ها-evictions">بیرون‌رانی‌ها (Evictions)</a><a class="l3" href="#فضای-swap-بلااستفاده">فضای swap بلااستفاده</a><a class="l2" href="#روش-های-خوب-برای-استفاده-از-swap-در-یک-کلاستر-کوبرنتیز">روش‌های خوب برای استفاده از swap در یک کلاستر کوبرنتیز</a><a class="l3" href="#غیرفعال-سازی-swap-برای-daemonهای-حیاتی-سیستم">غیرفعال‌سازی swap برای daemonهای حیاتی سیستم</a><a class="l3" href="#محافظت-از-daemonهای-حیاتی-سیستم-از-نظر-تأخیر-i-o">محافظت از daemonهای حیاتی سیستم از نظر تأخیر I/O</a><a class="l3" href="#swap-و-نودهای-control-plane">swap و نودهای control plane</a><a class="l3" href="#استفاده-از-یک-دیسک-اختصاصی-برای-swap">استفاده از یک دیسک اختصاصی برای swap</a><a class="l3" href="#زمان-بندی-آگاه-از-swap">زمان‌بندی آگاه از swap</a><a class="l3" href="#انتخاب-ذخیره-سازی-برای-کارایی-بهینه">انتخاب ذخیره‌سازی برای کارایی بهینه</a><a class="l2" href="#جزئیات-رفتار-swap">جزئیات رفتار swap</a><a class="l3" href="#حد-swap-در-limitedswap-چگونه-تعیین-می-شود؟">حد swap در LimitedSwap چگونه تعیین می‌شود؟</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>

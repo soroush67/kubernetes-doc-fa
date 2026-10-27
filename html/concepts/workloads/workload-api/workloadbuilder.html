@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>APIهای بلوک سازنده‌ی زمان‌بندی و کتابخانه‌ی workloadbuilder | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+</head>
+<body>
+<header class="top"><a href="../../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">concepts / workloads / workload-api</span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">APIهای بلوک سازنده‌ی زمان‌بندی و کتابخانه‌ی workloadbuilder</h1><p class="page-meta" dir="rtl">مؤلفه‌های پایه‌ی قابل‌استفاده‌ی مجدد API زمان‌بندی که کنترل‌کننده‌های بار کاری درون‌درختی و برون‌درختی در APIهای خود جاسازی می‌کنند، و کتابخانه‌ی مشترک workloadbuilder که آن‌ها را به آبجکت‌های Workload، PodGroup و CompositePodGroup تبدیل می‌کند.</p><!-- overview -->
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
+<p dir="rtl">زمان‌بندی آگاه از بار کاری مجموعه‌ای از <em>بلوک‌های سازنده‌ی</em> (building blocks) قابل‌استفاده‌ی مجدد API را در
+<span class="term" title="api-group">گروه API</span> <code dir="ltr">scheduling.k8s.io</code> تعریف می‌کند.
+نویسندگان کنترل‌کننده‌ها این مؤلفه‌های پایه را در APIهای خود جاسازی می‌کنند تا کاربران قصد
+زمان‌بندی خود (زمان‌بندی گروهی، توپولوژی، رفتار اختلال) را با طرح‌واره‌ای (schema) یکسان
+در سراسر اکوسیستم بیان کنند، و کتابخانه‌ی مشترک <code dir="ltr">workloadbuilder</code> این
+قصد را به آبجکت‌های <a href="index.html">Workload</a>،
+<a href="../podgroup-api/index.html">PodGroup</a> و <a href="https://kubernetes.io/docs/concepts/workloads/workload-api/compositepodgroup-api/" target="_blank">CompositePodGroup</a> که با زمان‌بند سروکار دارند تبدیل می‌کند.</p>
+<p dir="rtl">مصرف‌کننده‌ی داخلی این بلوک‌های سازنده در حال حاضر کنترل‌کننده‌ی
+<a href="https://kubernetes.io/docs/concepts/workloads/controllers/job/" target="_blank">Job</a> است که با
+<a href="https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/" target="_blank">feature gate</a> <code dir="ltr">WorkloadWithJob</code> کنترل می‌شود.</p>
+<!-- body -->
+<h2 id="بلوک-های-سازنده-ی-قابل-استفاده-ی-مجدد" dir="rtl">بلوک‌های سازنده‌ی قابل‌استفاده‌ی مجدد</h2>
+<p dir="rtl">بلوک‌های سازنده، ساختارهای (struct) Go با نوع‌بندی قوی در گروه API
+<code dir="ltr">scheduling.k8s.io/v1alpha3</code> هستند. این بلوک‌ها برای <em>نویسندگان کنترل‌کننده</em> در نظر گرفته شده‌اند: یک کنترل‌کننده این ساختارها را
+به‌صورت فیلد در نوع API خود جاسازی می‌کند و کتابخانه‌ی <code dir="ltr">workloadbuilder</code> آن‌ها را تبدیل می‌کند. نام‌های نوع
+از دو قرارداد پیروی می‌کنند: نوع‌های سطح برگ پیشوند <code dir="ltr">WorkloadPodGroup...</code> دارند (برای مثال،
+<code dir="ltr">WorkloadPodGroupSchedulingPolicy</code>) و گونه‌های چندسطحی پیشوند <code dir="ltr">WorkloadCompositePodGroup...</code> دارند.</p>
+<p dir="rtl">هر کنترل‌کننده نام فیلدها و ساختاری را انتخاب می‌کند که برای API خودش مرسوم است، بنابراین
+این بلوک‌ها هیچ شکل ثابتی را در سطح بالا تحمیل نمی‌کنند. اگرچه این موضوع به‌طور قطعی اعمال نمی‌شود، استفاده‌ی مجدد از
+نام فیلدها و ساختار استاندارد توصیه می‌شود، تا کاربری که زمان‌بندی گروهی را روی منبع یک کنترل‌کننده
+پیکربندی کرده است، همان گزینه‌ها را روی منبع کنترل‌کننده‌ی دیگر نیز بازشناسد.</p>
+<p dir="rtl">برای به‌کارگیری بلوک‌های سازنده، یک کنترل‌کننده بلوک‌هایی را که می‌خواهد پشتیبانی کند به‌صورت فیلد به
+نوع‌های خود اضافه می‌کند. برای مثال، API مربوط به <a href="https://kubernetes.io/docs/concepts/workloads/controllers/job/" target="_blank">Job</a>
+هر چهار بلوک را در یک نوع واحد گرد می‌آورد که از طریق <code dir="ltr">spec.scheduling</code> قابل دسترسی است:</p>
+<pre dir="ltr"><code class="language-go" dir="ltr">type JobSchedulingConfiguration struct {
+    SchedulingPolicy      *schedulingv1alpha3.WorkloadPodGroupSchedulingPolicy
+    SchedulingConstraints *schedulingv1alpha3.WorkloadPodGroupSchedulingConstraints
+    DisruptionMode        *schedulingv1alpha3.WorkloadPodGroupDisruptionMode
+    ResourceClaims        []schedulingv1alpha3.WorkloadPodGroupResourceClaim
+}
+</code></pre>
+<p dir="rtl">کنترل‌کننده‌ی دیگری ممکن است همین بلوک‌ها را به ازای هر جزء از یک بار کاری چندبخشی به‌صورت تودرتو قرار دهد،
+یا تنها از زیرمجموعه‌ای از آن‌ها پشتیبانی کند.</p>
+<h3 id="سیاست-زمان-بندی" dir="rtl">سیاست زمان‌بندی</h3>
+<p dir="rtl">بلوک سیاست زمان‌بندی همان سیاست‌های <code dir="ltr">basic</code> و <code dir="ltr">gang</code> موجود در
+<code dir="ltr">spec.schedulingPolicy</code> یک PodGroup را در بر دارد. برای اینکه بدانید هر سیاست به چه معناست و زمان‌بند آن را چگونه اعمال می‌کند،
+<a href="policies.html">سیاست‌های زمان‌بندی PodGroup</a>
+را ببینید.</p>
+<p dir="rtl">تنها تفاوت این است که حداقل تعداد <code dir="ltr">gang</code> در این بلوک اختیاری است. کاربران می‌توانند
+<code dir="ltr">minCount</code> را تنظیم‌نشده رها کنند که در این صورت کنترل‌کننده مقدار پیش‌فرضی را ارائه می‌کند که برای
+حوزه‌ی خودش معنادار باشد؛ برای مثال، کنترل‌کننده‌ی Job از میزان موازی‌سازی (parallelism) آن Job استفاده می‌کند.</p>
+<h3 id="محدودیت-های-زمان-بندی" dir="rtl">محدودیت‌های زمان‌بندی</h3>
+<p dir="rtl">بلوک محدودیت‌های زمان‌بندی، محدودیت‌های توپولوژی‌ای را در بر دارد که در
+<a href="topology-aware-scheduling.html">زمان‌بندی بار کاری آگاه از توپولوژی</a> مستند شده‌اند:
+یک کلید برچسب نود که دامنه‌ای (مانند یک رک یا یک zone) را نام می‌برد که همه‌ی Podهای گروه
+باید در آن مشترک باشند، با حداکثر یک محدودیت توپولوژی به ازای هر گروه. کنترل‌کننده‌ها باید این
+فیلد را پس از ایجاد ثابت کنند، زیرا محدودیت‌ها در Workload تبدیل‌شده تغییرناپذیر هستند.</p>
+<h3 id="حالت-اختلال" dir="rtl">حالت اختلال</h3>
+<p dir="rtl">بلوک حالت اختلال تعیین می‌کند که آیا Podهای گروه می‌توانند به‌صورت منفرد دچار اختلال شوند
+(<code dir="ltr">single</code>) یا تنها به‌صورت یک واحد (<code dir="ltr">all</code>)؛ این دو متناظر با حالت‌های اختلال <code dir="ltr">Pod</code> و <code dir="ltr">PodGroup</code>
+هستند که در
+<a href="disruption-and-priority.html">اختلال و اولویت گروه Pod</a> مستند شده‌اند.</p>
+<p dir="rtl">این کتابخانه ترکیب‌هایی را که معنادار نیستند رد می‌کند. برای مثال، از حالت اختلال <code dir="ltr">all</code>
+برای PodGroupهایی با BasicSchedulingPolicy جلوگیری می‌کند، زیرا واحد پس‌گیری نباید بزرگ‌تر از
+واحد زمان‌بندی باشد؛ گروهی که Pod به Pod زمان‌بندی می‌شود هیچ واحد سطح گروهی برای پس‌گیری یا اختلال ندارد.</p>
+<h3 id="درخواست-های-منبع-resource-claims" dir="rtl">درخواست‌های منبع (Resource claims)</h3>
+<p dir="rtl">بلوک درخواست‌های منبع بیان می‌کند که کدام درخواست‌های
+<a href="https://kubernetes.io/docs/concepts/scheduling-eviction/dynamic-resource-allocation/" target="_blank">تخصیص پویای منابع</a>
+میان همه‌ی Podهای گروه مشترک هستند، به جای آنکه به ازای هر Pod تخصیص یابند. هر مدخل
+نام درخواست را درون گروه مشخص می‌کند و یا به یک
+<span class="term" title="resourceclaim">ResourceClaim</span> موجود یا به یک
+<span class="term" title="resourceclaimtemplate">ResourceClaimTemplate</span>
+اشاره می‌کند که درخواست از روی آن تولید می‌شود. یک گروه حداکثر می‌تواند چهار درخواست اعلام کند.</p>
+<p dir="rtl">Podها دستگاه‌های تخصیص‌یافته به گروه را با اعلام یک درخواست منطبق در spec خود،
+با همان نام و با ارجاع به همان آبجکت، مصرف می‌کنند.</p>
+<h3 id="بلوک-های-سازنده-ی-مرکب" dir="rtl">بلوک‌های سازنده‌ی مرکب</h3>
+<p dir="rtl">کنترل‌کننده‌های چندسطحی که کنترل‌کننده‌های دیگر را هماهنگ می‌کنند (برای مثال، JobSet
+که Jobها را ایجاد می‌کند)، یک <em>گروه از گروه‌ها</em> را هماهنگ می‌کنند. برای این لایه، API مجموعه‌ای
+مشابه از مؤلفه‌های پایه با پیشوند <code dir="ltr">WorkloadCompositePodGroup...</code> فراهم می‌کند
+(برای مثال <code dir="ltr">WorkloadCompositePodGroupSchedulingPolicy</code>). این مؤلفه‌ها از همان شکل‌های
+بلوک‌های سطح برگ پیروی می‌کنند، با این تفاوت که سیاست gang مرکب به جای <code dir="ltr">minCount</code> برگ
+از <code dir="ltr">minGroupCount</code> (حداقل تعداد گروه‌های فرزندی که باید با هم قابل زمان‌بندی باشند)
+استفاده می‌کند. متمایز نگه‌داشتن نوع‌های برگ و مرکب اجازه می‌دهد هر سطح از سلسله‌مراتب
+به‌طور مستقل تکامل یابد.</p>
+<h3 id="مثال-یکپارچگی-با-job" dir="rtl">مثال: یکپارچگی با Job</h3>
+<p dir="rtl">کنترل‌کننده‌ی Job نمونه‌ی داخلی استفاده از این بلوک‌هاست. کاربر
+<code dir="ltr">spec.scheduling</code> یک Job را پر می‌کند و کنترل‌کننده آن را به یک Workload و PodGroup تبدیل می‌کند. برای یک مانیفست کامل Job،
+مقادیر پیش‌فرضی که هنگام حذف <code dir="ltr">spec.scheduling</code> اعمال می‌شوند، و
+فیلدهایی که پس از ایجاد می‌توانید تغییر دهید،
+<a href="https://kubernetes.io/docs/concepts/workloads/controllers/job/#integrate-with-workload-apis" target="_blank">یکپارچه‌سازی با Workload APIها</a> را ببینید.</p>
+<h2 id="کتابخانه-ی-workloadbuilder" dir="rtl">کتابخانه‌ی workloadbuilder</h2>
+<p dir="rtl"><code dir="ltr">workloadbuilder</code> یک کتابخانه‌ی مشترک Go است که قصد زمان‌بندی یک کنترل‌کننده را به
+Workload مواجه با زمان‌بند و آبجکت‌های PodGroup/CompositePodGroup زمان اجرای آن تبدیل می‌کند، تا هر
+کنترل‌کننده مجبور به پیاده‌سازی مجدد مقداردهی پیش‌فرض، اعتبارسنجی و تبدیل الگوها نباشد. این کتابخانه هم برای
+کنترل‌کننده‌های درون‌درختی (مانند کنترل‌کننده‌ی Job) و هم برای کنترل‌کننده‌های برون‌درختی (مانند
+JobSet یا Kubeflow TrainJob) طراحی شده است که آن را مانند هر وابستگی Go دیگری vendor می‌کنند. این کتابخانه از
+<code dir="ltr">k8s.io/component-helpers/scheduling/schedulingv1/workloadbuilder</code> منتشر می‌شود.</p>
+<p dir="rtl">این کتابخانه بلوک‌های سازنده‌ی <code dir="ltr">scheduling.k8s.io/v1alpha3</code> را مصرف می‌کند و آن‌ها را به
+آبجکت‌های Workload و PodGroup از نوع <code dir="ltr">scheduling.k8s.io/v1beta1</code> تبدیل می‌کند، در حالی که آبجکت‌های CompositePodGroup
+همچنان <code dir="ltr">scheduling.k8s.io/v1alpha3</code> باقی می‌مانند.</p>
+<h3 id="نحوه-ی-استفاده-ی-یک-کنترل-کننده-از-آن" dir="rtl">نحوه‌ی استفاده‌ی یک کنترل‌کننده از آن</h3>
+<p dir="rtl">یک کنترل‌کننده بار کاری خود را به‌صورت درختی از نودهای <code dir="ltr">WorkloadItem</code> توصیف می‌کند، یکی به ازای هر
+جزء منطقی. نودی که فرزندی ندارد به یک <code dir="ltr">PodGroupTemplate</code> واحد تبدیل می‌شود، در حالی که نودی با
+فرزندان به یک <code dir="ltr">CompositePodGroupTemplate</code> بر روی آن‌ها تبدیل می‌شود؛ این همان روشی است که یک
+کنترل‌کننده‌ی چندسطحی یک گروه از گروه‌ها را نمایش می‌دهد. هر نود موارد زیر را در بر دارد:</p>
+<ul>
+<li dir="rtl">یک <em>پیکربندی پیش‌فرض</em>، یعنی مقادیر پیش‌فرض خود کنترل‌کننده برای هر چیزی که کاربر تنظیم‌نشده رها می‌کند. این
+همان جایی است که یک کنترل‌کننده تصمیم می‌گیرد، برای مثال، که یک Job پیکربندی‌نشده روی زمان‌بندی <code dir="ltr">basic</code>
+باقی بماند.</li>
+<li dir="rtl">یک <em>ورودی</em>، یعنی قصد کاربر که از API کنترل‌کننده گرفته می‌شود. کنترل‌کننده هر
+بلوک سازنده را همراه با مسیر فیلدی که در آن قرار دارد ثبت می‌کند، تا خطاهای اعتبارسنجی به
+دقیقاً همان فیلدی اشاره کنند که کاربر تنظیم کرده است.</li>
+<li dir="rtl"><em>توابع بازفراخوان</em> (callbacks) اختیاری که پیکربندی ادغام‌شده را تنظیم می‌کنند. این روشی است که یک کنترل‌کننده
+مقدار پیش‌فرض وابسته به زمینه را ارائه می‌کند، مانند پرکردن حداقل تعداد gang تنظیم‌نشده بر اساس
+میزان موازی‌سازی آن Job.</li>
+</ul>
+<p dir="rtl">سپس کنترل‌کننده آن درخت را به یک <code dir="ltr">Builder</code> می‌سپارد و چهار فراخوانی را انجام می‌دهد:</p>
+<ol>
+<li dir="rtl"><code dir="ltr">NewBuilder</code> سازنده را از روی درخت، همراه با نام، فضای نام و
+ارجاع مالک برای آبجکتی که باید تولید شود، می‌سازد. مالک به ارجاع
+کنترل‌کننده‌ی Workload تبدیل می‌شود که برای کشف و جمع‌آوری زباله (garbage collection) استفاده می‌شود.</li>
+<li dir="rtl"><code dir="ltr">Validate</code> درخت را تفکیک می‌کند و هر مشکلی را به‌صورت فهرستی از خطاهای فیلد گزارش می‌دهد که
+کنترل‌کننده آن‌ها را از اعتبارسنجی API خود برمی‌گرداند.</li>
+<li dir="rtl"><code dir="ltr">BuildWorkload</code> درخت را به یک Workload تبدیل می‌کند. نتیجه در حافظه‌ی نهان نگهداری می‌شود، بنابراین چندین
+PodGroup را می‌توان از یک نتیجه‌ی تبدیل‌شده ایجاد کرد.</li>
+<li dir="rtl"><code dir="ltr">NewPodGroup</code> یک PodGroup زمان اجرا را از یکی از الگوهای تبدیل‌شده ایجاد می‌کند و
+الگویی را که باید از روی آن ساخته شود نام می‌برد.</li>
+</ol>
+<pre dir="ltr"><code class="language-go" dir="ltr">builder := workloadbuilder.NewBuilder(item, opts)
+if errs := builder.Validate(ctx, workloadbuilder.ValidationInput{}); len(errs) &gt; 0 {
+    // reject the request
+}
+workload, err := builder.BuildWorkload()
+podGroup, err := builder.NewPodGroup("trainer-pg", item.Name)
+</code></pre>
+<p dir="rtl">برای نسخه‌های کامل و قابل‌اجرای این جریان، از جمله نحوه‌ی اتصال آن در کنترل‌کننده‌ی Job،
+مثال‌های موجود در
+<a href="https://pkg.go.dev/k8s.io/component-helpers/scheduling/schedulingv1/workloadbuilder" target="_blank" rel="noopener">مرجع بسته</a> را ببینید.</p>
+<h3 id="اعتبارسنجی-یک-پیکربندی-زمان-بندی" dir="rtl">اعتبارسنجی یک پیکربندی زمان‌بندی</h3>
+<p dir="rtl"><code dir="ltr">Validate</code> یک پیکربندی را در دو لایه بررسی می‌کند:</p>
+<ul>
+<li dir="rtl"><strong>اعتبارسنجی ساختاری</strong> خود بلوک‌های سازنده: فیلدهای الزامی، بازه‌های مقادیر،
+قاعده‌ی اینکه دقیقاً یک عضو از یک اجتماع انحصاری (union) تنظیم شده باشد، و تغییرناپذیری. این بررسی‌ها از
+قواعد <a href="https://kubernetes.io/docs/reference/using-api/declarative-validation/" target="_blank">اعتبارسنجی اعلانی</a> که
+از نوع‌های API تولید شده‌اند می‌آیند.</li>
+<li dir="rtl"><strong>بررسی‌های سیاست کنترل‌کننده</strong> که اعتبارسنجی اعلانی نمی‌تواند بیان کند: فهرست‌های مجاز
+(allow-lists) که در ادامه توضیح داده می‌شوند، و قواعد میان‌فیلدی مانند رد حالت اختلال <code dir="ltr">all</code> در کنار
+سیاست <code dir="ltr">basic</code>.</li>
+</ul>
+<p dir="rtl">اعتبارسنجی همچنین میان ایجاد و به‌روزرسانی یک آبجکت متفاوت است. در به‌روزرسانی، کتابخانه
+افزون بر این، فیلدهایی را که پس از ایجاد ثابت می‌شوند اعمال می‌کند، به این معنا که کنترل‌کننده
+باید پیکربندی ذخیره‌شده‌ی قبلی را همراه با پیکربندی جدید ارائه کند. در ایجاد،
+چیزی برای مقایسه وجود ندارد، بنابراین این بررسی‌ها اعمال نمی‌شوند.</p>
+<h4 id="انصراف-از-اعتبارسنجی-اعلانی" dir="rtl">انصراف از اعتبارسنجی اعلانی</h4>
+<p dir="rtl">اینکه آیا لایه‌ی اول را می‌خواهید یا خیر به محل اجرای کنترل‌کننده‌ی شما بستگی دارد، و یک گزینه
+آن را کنترل می‌کند:</p>
+<ul>
+<li dir="rtl"><strong>کنترل‌کننده‌های برون‌درختی</strong> اعتبارسنجی اعلانی را فعال نگه می‌دارند که حالت پیش‌فرض است.
+هیچ چیز دیگری این قواعد ساختاری را روی یک منبع سفارشی اعمال نمی‌کند، بنابراین یک فراخوانی
+<code dir="ltr">Validate</code> هر دو لایه را پوشش می‌دهد.</li>
+<li dir="rtl"><strong>کنترل‌کننده‌های درون‌درختی</strong> <code dir="ltr">DisableDeclarativeValidation</code> را تنظیم می‌کنند، زیرا API server
+هنگام اعتبارسنجی آبجکت والد، از قبل اعتبارسنجی اعلانی را روی بلوک‌های جاسازی‌شده اجرا می‌کند.
+نادیده‌گرفتن لایه‌ی اول از دوبار بررسی‌شدن فیلدهای یکسان جلوگیری می‌کند و <code dir="ltr">Validate</code>
+تنها بررسی‌های سیاست کنترل‌کننده را اجرا می‌کند.</li>
+</ul>
+<h4 id="انتخاب-گزینه-های-زمان-بندی" dir="rtl">انتخاب گزینه‌های زمان‌بندی</h4>
+<p dir="rtl">از آنجا که نوع‌های بلوک سازنده میان کنترل‌کننده‌ها مشترک هستند، نسخه‌های آینده ممکن است
+گزینه‌های زمان‌بندی‌ای اضافه کنند که برای همه‌ی کنترل‌کننده‌ها معنادار نباشند. برای جلوگیری از ورود بی‌صدای
+گزینه‌های جدید، <code dir="ltr">workloadbuilder</code> از مدل فهرست مجاز استفاده می‌کند: یک کنترل‌کننده
+سیاست‌ها و حالت‌های اختلالی را که پشتیبانی می‌کند اعلام می‌کند و <code dir="ltr">Validate</code> هر چیزی خارج از آن مجموعه را رد می‌کند
+و خطا را در مسیر فیلد بلوک متخلف گزارش می‌دهد.</p>
+<p dir="rtl">بنابراین گزینه‌ها به‌طور پیش‌فرض رد می‌شوند. هنگامی که یک سیاست جدید معرفی می‌شود، یک
+کنترل‌کننده‌ی موجود تا زمانی که نگهدارندگانش فهرست مجاز را گسترش ندهند، همچنان آن را رد می‌کند؛ که برای یک
+کنترل‌کننده‌ی برون‌درختی به معنای به‌روزرسانی نسخه‌ی vendorشده‌ی کتابخانه نیز هست.</p>
+<pre dir="ltr"><code class="language-go" dir="ltr">builder := workloadbuilder.NewBuilder(item, workloadbuilder.BuildOptions{
+    Owner:                  owner,
+    AllowedPolicies:        []workloadbuilder.SchedulingPolicyOption{workloadbuilder.BasicPolicy, workloadbuilder.GangPolicy},
+    AllowedDisruptionModes: []workloadbuilder.DisruptionModeOption{workloadbuilder.SingleMode, workloadbuilder.AllMode},
+})
+allErrs := builder.Validate(ctx, workloadbuilder.ValidationInput{})
+</code></pre>
+<h3 id="تولید-podgroupها-از-یک-workload-موجود" dir="rtl">تولید PodGroupها از یک Workload موجود</h3>
+<p dir="rtl">هنگامی که Workload از قبل وجود دارد، چه توسط یک کنترل‌کننده‌ی والد تبدیل شده باشد و چه به‌صورت دستی ایجاد شده باشد،
+یک کنترل‌کننده‌ی فرزند که تنها PodGroup زمان اجرا را مدیریت می‌کند، به جای آن از <code dir="ltr">NewBuilderFromExistingWorkload</code>
+استفاده می‌کند. این سازنده آبجکت‌های PodGroup را از Workload ارائه‌شده و با استفاده از ارجاع مالک
+خودش ایجاد می‌کند. این سازنده هیچ چیزی را اعتبارسنجی یا تبدیل نمی‌کند، بنابراین Workload موجود هرگز
+دوباره تبدیل نمی‌شود.</p>
+<pre dir="ltr"><code class="language-go" dir="ltr">builder := workloadbuilder.NewBuilderFromExistingWorkload(parentWorkload, workloadbuilder.BuildOptions{Owner: owner})
+podGroup, err := builder.NewPodGroup("trainer-pg", "trainer-pgt-0")
+</code></pre>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<ul>
+<li dir="rtl">درباره‌ی <a href="policies.html">سیاست‌های زمان‌بندی PodGroup</a> بیاموزید.</li>
+<li dir="rtl">درباره‌ی <a href="disruption-and-priority.html">اختلال و اولویت گروه Pod</a> بیاموزید.</li>
+<li dir="rtl">درباره‌ی <a href="topology-aware-scheduling.html">زمان‌بندی بار کاری آگاه از توپولوژی</a> بیاموزید.</li>
+<li dir="rtl">نمای کلی <a href="index.html">Workload API</a> را ببینید.</li>
+<li dir="rtl">ببینید کنترل‌کننده‌ی Job چگونه <a href="https://kubernetes.io/docs/concepts/workloads/controllers/job/#integrate-with-workload-apis" target="_blank">با Workload APIها یکپارچه می‌شود</a>.</li>
+<li dir="rtl"><a href="https://pkg.go.dev/k8s.io/component-helpers/scheduling/schedulingv1/workloadbuilder" target="_blank" rel="noopener">مرجع بسته‌ی <code dir="ltr">workloadbuilder</code></a> را بخوانید.</li>
+</ul>
+</main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#بلوک-های-سازنده-ی-قابل-استفاده-ی-مجدد">بلوک‌های سازنده‌ی قابل‌استفاده‌ی مجدد</a><a class="l3" href="#سیاست-زمان-بندی">سیاست زمان‌بندی</a><a class="l3" href="#محدودیت-های-زمان-بندی">محدودیت‌های زمان‌بندی</a><a class="l3" href="#حالت-اختلال">حالت اختلال</a><a class="l3" href="#درخواست-های-منبع-resource-claims">درخواست‌های منبع (Resource claims)</a><a class="l3" href="#بلوک-های-سازنده-ی-مرکب">بلوک‌های سازنده‌ی مرکب</a><a class="l3" href="#مثال-یکپارچگی-با-job">مثال: یکپارچگی با Job</a><a class="l2" href="#کتابخانه-ی-workloadbuilder">کتابخانه‌ی workloadbuilder</a><a class="l3" href="#نحوه-ی-استفاده-ی-یک-کنترل-کننده-از-آن">نحوه‌ی استفاده‌ی یک کنترل‌کننده از آن</a><a class="l3" href="#اعتبارسنجی-یک-پیکربندی-زمان-بندی">اعتبارسنجی یک پیکربندی زمان‌بندی</a><a class="l3" href="#تولید-podgroupها-از-یک-workload-موجود">تولید PodGroupها از یک Workload موجود</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>

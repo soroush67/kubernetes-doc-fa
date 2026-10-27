@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>کنترل دسترسی به API کوبرنتیز | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+</head>
+<body>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">concepts / security</span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">کنترل دسترسی به API کوبرنتیز</h1><!-- overview -->
+<p dir="rtl">این صفحه مروری بر کنترل دسترسی به API کوبرنتیز ارائه می‌دهد.</p>
+<!-- body -->
+<p dir="rtl">کاربران با استفاده از <code dir="ltr">kubectl</code>، کتابخانه‌های کلاینت، یا با ارسال درخواست‌های REST به
+<a href="../overview/kubernetes-api.html">API کوبرنتیز</a> دسترسی پیدا می‌کنند. هم کاربران انسانی و هم
+<a href="https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/" target="_blank">حساب‌های سرویس کوبرنتیز</a> می‌توانند
+برای دسترسی به API مجوز بگیرند.
+هنگامی که یک درخواست به API می‌رسد، از چندین مرحله عبور می‌کند که در
+نمودار زیر نشان داده شده‌اند:</p>
+<p><img src="/images/docs/admin/access-control-overview.svg" alt="نمودار مراحل پردازش درخواست برای یک درخواست API کوبرنتیز"></p>
+<h2 id="امنیت-انتقال" dir="rtl">امنیت انتقال</h2>
+<p dir="rtl">به‌طور پیش‌فرض، API server کوبرنتیز روی پورت 6443 در نخستین رابط شبکهٔ
+غیر localhost گوش می‌دهد و با TLS محافظت می‌شود. در یک کلاستر کوبرنتیز تولیدی معمول،
+API روی پورت 443 سرویس می‌دهد. پورت را می‌توان با <code dir="ltr">--secure-port</code> و
+نشانی IP شنود را با فلگ <code dir="ltr">--bind-address</code> تغییر داد.</p>
+<p dir="rtl">API server یک گواهی‌نامه ارائه می‌کند. این گواهی‌نامه ممکن است با استفاده از
+یک مرجع صدور گواهی‌نامهٔ (CA) خصوصی امضا شده باشد، یا مبتنی بر یک زیرساخت کلید عمومی مرتبط
+با یک CA عموماً شناخته‌شده باشد. گواهی‌نامه و کلید خصوصی متناظر آن را می‌توان
+با استفاده از فلگ‌های <code dir="ltr">--tls-cert-file</code> و <code dir="ltr">--tls-private-key-file</code> تنظیم کرد.</p>
+<p dir="rtl">اگر کلاستر شما از یک مرجع صدور گواهی‌نامهٔ خصوصی استفاده می‌کند، به نسخه‌ای از گواهی‌نامهٔ آن CA
+نیاز دارید که در <code dir="ltr">~/.kube/config</code> روی کلاینت پیکربندی شده باشد، تا بتوانید
+به اتصال اعتماد کنید و مطمئن باشید که رهگیری نشده است.</p>
+<p dir="rtl">کلاینت شما می‌تواند در این مرحله یک گواهی‌نامهٔ کلاینت TLS ارائه کند.</p>
+<h2 id="احراز-هویت" dir="rtl">احراز هویت</h2>
+<p dir="rtl">پس از برقراری TLS، درخواست HTTP به مرحلهٔ احراز هویت می‌رود.
+این مرحله در نمودار به‌عنوان گام <strong>1</strong> نشان داده شده است.
+اسکریپت ایجاد کلاستر یا مدیر کلاستر، API server را طوری پیکربندی می‌کند که
+یک یا چند ماژول احراز هویت‌کننده (Authenticator) را اجرا کند.
+احراز هویت‌کننده‌ها با جزئیات بیشتر در
+<a href="https://kubernetes.io/docs/reference/access-authn-authz/authentication/" target="_blank">احراز هویت</a> توصیف شده‌اند.</p>
+<p dir="rtl">ورودی مرحلهٔ احراز هویت کل درخواست HTTP است؛ با این حال، این مرحله معمولاً
+سرآیندها و/یا گواهی‌نامهٔ کلاینت را بررسی می‌کند.</p>
+<p dir="rtl">ماژول‌های احراز هویت شامل گواهی‌نامه‌های کلاینت، گذرواژه و توکن‌های ساده،
+توکن‌های راه‌اندازی (bootstrap token)، و JSON Web Tokenها (که برای حساب‌های سرویس استفاده می‌شوند) هستند.</p>
+<p dir="rtl">می‌توان چندین ماژول احراز هویت را مشخص کرد که در این صورت هر یک به ترتیب امتحان می‌شود،
+تا زمانی که یکی از آن‌ها موفق شود.</p>
+<p dir="rtl">اگر درخواست قابل احراز هویت نباشد، با کد وضعیت HTTP 401 رد می‌شود.
+در غیر این صورت، کاربر به‌عنوان یک <code dir="ltr">username</code> مشخص احراز هویت می‌شود و نام کاربری
+برای استفاده در تصمیم‌های مراحل بعدی در دسترس قرار می‌گیرد. برخی از احراز هویت‌کننده‌ها
+عضویت‌های گروهی کاربر را نیز فراهم می‌کنند، در حالی که سایر احراز هویت‌کننده‌ها
+این کار را نمی‌کنند.</p>
+<p dir="rtl">اگرچه کوبرنتیز از نام‌های کاربری برای تصمیم‌های کنترل دسترسی و در ثبت لاگ درخواست‌ها استفاده می‌کند،
+آبجکتی به نام <code dir="ltr">User</code> ندارد و نام‌های کاربری یا سایر اطلاعات مربوط به
+کاربران را در API خود ذخیره نمی‌کند.</p>
+<h2 id="مجوزدهی" dir="rtl">مجوزدهی</h2>
+<p dir="rtl">پس از آنکه درخواست به‌عنوان درخواستی از یک کاربر مشخص احراز هویت شد، درخواست باید
+مجوزدهی شود. این مرحله در نمودار به‌عنوان گام <strong>2</strong> نشان داده شده است.</p>
+<p dir="rtl">یک درخواست باید شامل نام کاربری درخواست‌کننده، اقدام درخواست‌شده، و
+آبجکتی که اقدام بر آن تأثیر می‌گذارد باشد. درخواست در صورتی مجوز می‌گیرد که یک سیاست موجود
+اعلام کند که کاربر مجوز انجام اقدام درخواست‌شده را دارد.</p>
+<p dir="rtl">برای مثال، اگر Bob سیاست زیر را داشته باشد، تنها می‌تواند پادها را در فضای نام <code dir="ltr">projectCaribou</code> بخواند:</p>
+<pre dir="ltr"><code class="language-json" dir="ltr">{
+    "apiVersion": "abac.authorization.kubernetes.io/v1beta1",
+    "kind": "Policy",
+    "spec": {
+        "user": "bob",
+        "namespace": "projectCaribou",
+        "resource": "pods",
+        "readonly": true
+    }
+}
+</code></pre>
+<p dir="rtl">اگر Bob درخواست زیر را ارسال کند، درخواست مجوز می‌گیرد زیرا او
+مجاز به خواندن آبجکت‌ها در فضای نام <code dir="ltr">projectCaribou</code> است:</p>
+<pre dir="ltr"><code class="language-json" dir="ltr">{
+  "apiVersion": "authorization.k8s.io/v1beta1",
+  "kind": "SubjectAccessReview",
+  "spec": {
+    "resourceAttributes": {
+      "namespace": "projectCaribou",
+      "verb": "get",
+      "group": "unicorn.example.org",
+      "resource": "pods"
+    }
+  }
+}
+</code></pre>
+<p dir="rtl">اگر Bob درخواستی برای نوشتن (<code dir="ltr">create</code> یا <code dir="ltr">update</code>) در آبجکت‌های
+فضای نام <code dir="ltr">projectCaribou</code> ارسال کند، مجوز او رد می‌شود. اگر Bob درخواستی
+برای خواندن (<code dir="ltr">get</code>) آبجکت‌ها در فضای نام دیگری مانند <code dir="ltr">projectFish</code> ارسال کند، مجوز او رد می‌شود.</p>
+<p dir="rtl">مجوزدهی کوبرنتیز مستلزم آن است که از ویژگی‌های رایج REST برای تعامل
+با سیستم‌های کنترل دسترسی موجود در سطح سازمان یا در سطح ارائه‌دهندهٔ ابری استفاده کنید.
+استفاده از قالب‌بندی REST اهمیت دارد، زیرا این سیستم‌های کنترلی ممکن است
+علاوه بر API کوبرنتیز با APIهای دیگری نیز تعامل داشته باشند.</p>
+<p dir="rtl">کوبرنتیز از چندین ماژول مجوزدهی، مانند حالت ABAC، حالت RBAC،
+و حالت Webhook پشتیبانی می‌کند. هنگامی که یک مدیر کلاستری ایجاد می‌کند، ماژول‌های
+مجوزدهی‌ای را که باید در API server استفاده شوند پیکربندی می‌کند. اگر بیش از یک
+ماژول مجوزدهی پیکربندی شده باشد، کوبرنتیز هر ماژول را بررسی می‌کند و اگر
+هر یک از ماژول‌ها درخواست را مجاز کند، درخواست می‌تواند ادامه یابد. اگر همهٔ
+ماژول‌ها درخواست را رد کنند، درخواست رد می‌شود (کد وضعیت HTTP 403).</p>
+<p dir="rtl">برای آشنایی بیشتر با مجوزدهی کوبرنتیز، از جمله جزئیات ایجاد
+سیاست‌ها با استفاده از ماژول‌های مجوزدهی پشتیبانی‌شده، به <a href="https://kubernetes.io/docs/reference/access-authn-authz/authorization/" target="_blank">مجوزدهی</a> مراجعه کنید.</p>
+<h2 id="کنترل-پذیرش" dir="rtl">کنترل پذیرش</h2>
+<p dir="rtl">ماژول‌های کنترل پذیرش، ماژول‌های نرم‌افزاری‌ای هستند که می‌توانند درخواست‌ها را تغییر دهند یا رد کنند.
+علاوه بر ویژگی‌هایی که در اختیار ماژول‌های مجوزدهی قرار دارد، ماژول‌های کنترل
+پذیرش می‌توانند به محتوای آبجکتی که در حال ایجاد یا تغییر است دسترسی داشته باشند.</p>
+<p dir="rtl">کنترل‌کننده‌های پذیرش بر درخواست‌هایی عمل می‌کنند که یک آبجکت را ایجاد، تغییر یا حذف می‌کنند یا به آن متصل می‌شوند (proxy).
+کنترل‌کننده‌های پذیرش بر درخواست‌هایی که صرفاً آبجکت‌ها را می‌خوانند عمل نمی‌کنند.
+هنگامی که چندین کنترل‌کنندهٔ پذیرش پیکربندی شده باشند، به ترتیب فراخوانی می‌شوند.</p>
+<p dir="rtl">این مرحله در نمودار به‌عنوان گام <strong>3</strong> نشان داده شده است.</p>
+<p dir="rtl">برخلاف ماژول‌های احراز هویت و مجوزدهی، اگر هر یک از ماژول‌های کنترل‌کنندهٔ پذیرش
+درخواست را رد کند، درخواست بلافاصله رد می‌شود.</p>
+<p dir="rtl">علاوه بر رد کردن آبجکت‌ها، کنترل‌کننده‌های پذیرش می‌توانند مقادیر پیش‌فرض پیچیده‌ای را نیز برای
+فیلدها تنظیم کنند.</p>
+<p dir="rtl">ماژول‌های کنترل پذیرش موجود در <a href="https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/" target="_blank">کنترل‌کننده‌های پذیرش</a> توصیف شده‌اند.</p>
+<p dir="rtl">پس از آنکه درخواستی از همهٔ کنترل‌کننده‌های پذیرش عبور کرد، با استفاده از روال‌های اعتبارسنجی
+آبجکت API متناظر اعتبارسنجی می‌شود و سپس در مخزن آبجکت‌ها نوشته می‌شود (که به‌عنوان گام <strong>4</strong> نشان داده شده است).</p>
+<h2 id="ممیزی" dir="rtl">ممیزی</h2>
+<p dir="rtl">ممیزی کوبرنتیز مجموعه‌ای مرتبط با امنیت و به ترتیب زمانی از رکوردها را فراهم می‌کند که توالی اقدامات انجام‌شده در یک کلاستر را مستند می‌کند.
+کلاستر فعالیت‌های ایجادشده توسط کاربران، توسط برنامه‌هایی که از API کوبرنتیز استفاده می‌کنند، و توسط خود control plane را ممیزی می‌کند.</p>
+<p dir="rtl">برای اطلاعات بیشتر، به <a href="https://kubernetes.io/docs/tasks/debug/debug-cluster/audit/" target="_blank">ممیزی</a> مراجعه کنید.</p>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<p dir="rtl">مستندات بیشتری دربارهٔ احراز هویت، مجوزدهی و کنترل دسترسی به API مطالعه کنید:</p>
+<ul>
+<li dir="rtl"><a href="https://kubernetes.io/docs/reference/access-authn-authz/authentication/" target="_blank">احراز هویت</a>
+<ul>
+<li dir="rtl"><a href="https://kubernetes.io/docs/reference/access-authn-authz/bootstrap-tokens/" target="_blank">احراز هویت با توکن‌های راه‌اندازی</a></li>
+</ul>
+</li>
+<li dir="rtl"><a href="https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/" target="_blank">کنترل‌کننده‌های پذیرش</a>
+<ul>
+<li dir="rtl"><a href="https://kubernetes.io/docs/reference/access-authn-authz/extensible-admission-controllers/" target="_blank">کنترل پذیرش پویا</a></li>
+</ul>
+</li>
+<li dir="rtl"><a href="https://kubernetes.io/docs/reference/access-authn-authz/authorization/" target="_blank">مجوزدهی</a>
+<ul>
+<li dir="rtl"><a href="https://kubernetes.io/docs/reference/access-authn-authz/rbac/" target="_blank">کنترل دسترسی مبتنی بر نقش</a></li>
+<li dir="rtl"><a href="https://kubernetes.io/docs/reference/access-authn-authz/abac/" target="_blank">کنترل دسترسی مبتنی بر ویژگی</a></li>
+<li dir="rtl"><a href="https://kubernetes.io/docs/reference/access-authn-authz/node/" target="_blank">مجوزدهی نود</a></li>
+<li dir="rtl"><a href="https://kubernetes.io/docs/reference/access-authn-authz/webhook/" target="_blank">مجوزدهی Webhook</a></li>
+</ul>
+</li>
+<li dir="rtl"><a href="https://kubernetes.io/docs/reference/access-authn-authz/certificate-signing-requests/" target="_blank">درخواست‌های امضای گواهی‌نامه</a>
+<ul>
+<li dir="rtl">از جمله <a href="https://kubernetes.io/docs/reference/access-authn-authz/certificate-signing-requests/#approval-rejection" target="_blank">تأیید CSR</a>
+و <a href="https://kubernetes.io/docs/reference/access-authn-authz/certificate-signing-requests/#signing" target="_blank">امضای گواهی‌نامه</a></li>
+</ul>
+</li>
+<li dir="rtl">حساب‌های سرویس
+<ul>
+<li dir="rtl"><a href="https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/" target="_blank">راهنمای توسعه‌دهنده</a></li>
+<li dir="rtl"><a href="https://kubernetes.io/docs/reference/access-authn-authz/service-accounts-admin/" target="_blank">مدیریت</a></li>
+</ul>
+</li>
+</ul>
+<p dir="rtl">می‌توانید با موارد زیر آشنا شوید:</p>
+<ul>
+<li dir="rtl">اینکه پادها چگونه می‌توانند از
+<a href="https://kubernetes.io/docs/concepts/configuration/secret/#service-accounts-automatically-create-and-attach-secrets-with-api-credentials" target="_blank">Secretها</a>
+برای به دست آوردن اعتبارنامه‌های API استفاده کنند.</li>
+</ul>
+</main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#امنیت-انتقال">امنیت انتقال</a><a class="l2" href="#احراز-هویت">احراز هویت</a><a class="l2" href="#مجوزدهی">مجوزدهی</a><a class="l2" href="#کنترل-پذیرش">کنترل پذیرش</a><a class="l2" href="#ممیزی">ممیزی</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>

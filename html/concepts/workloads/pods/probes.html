@@ -1,0 +1,476 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>پروب‌های Liveness، Readiness و Startup | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+</head>
+<body>
+<header class="top"><a href="../../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">concepts / workloads / pods</span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">پروب‌های Liveness، Readiness و Startup</h1><!-- overview -->
+<p dir="rtl">کوبرنتیز به شما اجازه می‌دهد <em>پروب‌هایی</em> (probes) تعریف کنید تا سلامت
+کانتینرهای یک Pod را به‌طور پیوسته پایش کنید. پروب یک بررسی تشخیصی است که به‌صورت دوره‌ای
+توسط <span class="term" title="kubelet">kubelet</span> روی یک کانتینر انجام می‌شود.
+kubelet برای انجام این بررسی تشخیصی یا کدی را درون
+کانتینر اجرا می‌کند یا یک درخواست شبکه‌ای ارسال می‌کند.</p>
+<p dir="rtl">کوبرنتیز بر اساس نتایج پروب می‌تواند کانتینرهای ناسالم را دوباره راه‌اندازی کند
+یا ارسال ترافیک به کانتینرهایی را که آماده نیستند متوقف کند.</p>
+<!-- body -->
+<h2 id="انواع-پروب-types-of-probe" dir="rtl">انواع پروب {#types-of-probe}</h2>
+<p dir="rtl">kubelet می‌تواند به‌صورت اختیاری سه نوع پروب را روی کانتینرهای در حال اجرا انجام دهد و
+به نتایج آن‌ها واکنش نشان دهد که هر کدام هدف متفاوتی دارند:</p>
+<ul>
+<li dir="rtl"><a href="#startup-probe">پروب Startup</a></li>
+<li dir="rtl"><a href="#liveness-probe">پروب Liveness</a></li>
+<li dir="rtl"><a href="#readiness-probe">پروب Readiness</a></li>
+</ul>
+<h3 id="پروب-startup-startup-probe" dir="rtl">پروب Startup {#startup-probe}</h3>
+<p dir="rtl">پروب‌های Startup بررسی می‌کنند که آیا برنامه‌ی درون یک کانتینر راه‌اندازی شده است یا خیر.
+اگر یک پروب Startup پیکربندی شده باشد، کوبرنتیز تا زمانی که پروب Startup موفق نشود، پروب‌های Liveness یا
+Readiness را اجرا نمی‌کند و بدین ترتیب به برنامه
+فرصت می‌دهد مقداردهی اولیه‌ی خود را به پایان برساند.</p>
+<p dir="rtl">این نوع پروب برخلاف پروب‌های Liveness و Readiness که به‌صورت دوره‌ای اجرا می‌شوند،
+تنها در هنگام راه‌اندازی اجرا می‌شود.
+اگر پروب Startup شکست بخورد، kubelet کانتینر را از بین می‌برد و کانتینر
+تابع <a href="https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#restart-policy" target="_blank">سیاست راه‌اندازی مجدد</a> خود می‌شود.</p>
+<h3 id="پروب-liveness-liveness-probe" dir="rtl">پروب Liveness {#liveness-probe}</h3>
+<p dir="rtl">پروب‌های Liveness تعیین می‌کنند که چه زمانی یک کانتینر باید دوباره راه‌اندازی شود.
+برای مثال، پروب‌های Liveness می‌توانند بن‌بست (deadlock) را تشخیص دهند؛ وضعیتی که در آن برنامه
+در حال اجراست اما نمی‌تواند پیشرفتی داشته باشد. راه‌اندازی مجدد کانتینر در چنین وضعیتی
+می‌تواند با وجود باگ‌ها به افزایش دسترس‌پذیری برنامه کمک کند.</p>
+<p dir="rtl">اگر یک کانتینر بیش از حد تحمل پیکربندی‌شده در پروب Liveness خود شکست بخورد،
+kubelet آن کانتینر را دوباره راه‌اندازی می‌کند.
+پروب‌های Liveness منتظر موفقیت پروب‌های Readiness نمی‌مانند. اگر می‌خواهید
+پیش از اجرای پروب Liveness صبر شود، می‌توانید یا
+<code dir="ltr">initialDelaySeconds</code> را تعریف کنید یا از یک <a href="#startup-probe">پروب Startup</a> استفاده کنید.</p>
+<div class="callout caution"><div class="callout-title">احتیاط:</div>
+<p dir="rtl">پروب‌های Liveness می‌توانند روشی قدرتمند برای بازیابی از خرابی‌های برنامه باشند،
+اما باید با احتیاط به کار روند.
+پروب‌های Liveness باید با دقت پیکربندی شوند تا اطمینان حاصل شود که واقعاً نشان‌دهنده‌ی
+خرابی غیرقابل‌بازیابی برنامه، برای مثال یک بن‌بست، هستند.</p>
+<p dir="rtl">پیاده‌سازی نادرست پروب‌های Liveness می‌تواند به خرابی‌های زنجیره‌ای منجر شود.
+نتیجه‌ی این امر، راه‌اندازی مجدد کانتینر تحت بار زیاد، شکست درخواست‌های کلاینت
+به دلیل کاهش مقیاس‌پذیری برنامه، و افزایش بار کاری روی Podهای باقی‌مانده
+به دلیل شکست برخی Podها است. تفاوت میان پروب‌های Liveness و
+Readiness و زمان مناسب برای به‌کارگیری هر یک در برنامه‌ی خود را درک کنید.</p>
+</div>
+<h3 id="پروب-readiness-readiness-probe" dir="rtl">پروب Readiness {#readiness-probe}</h3>
+<p dir="rtl">پروب‌های Readiness تعیین می‌کنند که چه زمانی یک کانتینر آماده‌ی پذیرش ترافیک است.
+این کار هنگامی مفید است که منتظر می‌مانید برنامه وظایف اولیه‌ی زمان‌بری
+مانند برقراری اتصال‌های شبکه، بارگذاری فایل‌ها و گرم‌کردن
+حافظه‌های نهان (cache) را انجام دهد.
+پروب‌های Readiness می‌توانند در مراحل بعدی چرخه‌ی عمر کانتینر نیز مفید باشند،
+برای مثال هنگام بازیابی از خطاهای موقت یا بار بیش از حد.</p>
+<p dir="rtl">اگر پروب Readiness وضعیت شکست را برگرداند، کنترل‌کننده‌ی
+<span class="term" title="endpoint-slice">EndpointSlice</span>
+نشانی IP آن Pod را از EndpointSliceهای همه‌ی Serviceهایی که
+با Pod منطبق هستند حذف می‌کند.</p>
+<p dir="rtl">پروب‌های Readiness در تمام چرخه‌ی عمر کانتینر روی آن اجرا می‌شوند.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">اگر می‌خواهید هنگام حذف Pod بتوانید درخواست‌ها را تخلیه (drain) کنید،
+لزوماً به پروب Readiness نیاز ندارید؛ هنگامی که Pod حذف می‌شود، endpoint متناظر
+در EndpointSlice <a href="../../services-networking/endpoint-slices.html#conditions">شرایط</a> خود را به‌روزرسانی می‌کند: شرط ready
+آن endpoint روی false تنظیم می‌شود، بنابراین متعادل‌کننده‌های بار از آن Pod برای
+ترافیک عادی استفاده نمی‌کنند. برای اطلاعات بیشتر درباره‌ی نحوه‌ی رسیدگی kubelet به حذف Pod،
+<a href="https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#pod-termination" target="_blank">خاتمه‌ی Pod</a> را ببینید.</p>
+</div>
+<h2 id="زمان-استفاده-از-هر-پروب-when-to-use-each-probe" dir="rtl">زمان استفاده از هر پروب {#when-to-use-each-probe}</h2>
+<h3 id="چه-زمانی-باید-از-پروب-startup-استفاده-کرد؟-when-should-you-use-a-startup-probe" dir="rtl">چه زمانی باید از پروب Startup استفاده کرد؟ {#when-should-you-use-a-startup-probe}</h3>
+<p dir="rtl">پروب‌های Startup برای Podهایی مفید هستند که کانتینرهایشان زمان زیادی برای
+آماده‌شدن به خدمت‌رسانی نیاز دارند. به جای تعیین یک بازه‌ی Liveness طولانی، می‌توانید
+پیکربندی جداگانه‌ای برای پروب‌کردن کانتینر در هنگام راه‌اندازی تعیین کنید و
+زمانی طولانی‌تر از آنچه بازه‌ی Liveness اجازه می‌دهد در نظر بگیرید.</p>
+<!-- ensure front matter contains math: true -->
+<p dir="rtl">اگر کانتینر شما معمولاً در زمانی بیش از
+\( initialDelaySeconds + failureThreshold \times  periodSeconds \) راه‌اندازی می‌شود، باید یک
+پروب Startup تعیین کنید که همان endpoint پروب Liveness را بررسی کند. مقدار پیش‌فرض
+<code dir="ltr">periodSeconds</code> برابر 10s است. سپس باید <code dir="ltr">failureThreshold</code> آن را به اندازه‌ی کافی
+بزرگ تنظیم کنید تا کانتینر بتواند راه‌اندازی شود، بدون آنکه مقادیر پیش‌فرض
+پروب Liveness را تغییر دهید. این کار به محافظت در برابر بن‌بست‌ها کمک می‌کند.</p>
+<h3 id="چه-زمانی-باید-از-پروب-liveness-استفاده-کرد؟-when-should-you-use-a-liveness-probe" dir="rtl">چه زمانی باید از پروب Liveness استفاده کرد؟ {#when-should-you-use-a-liveness-probe}</h3>
+<p dir="rtl">اگر فرایند درون کانتینر شما می‌تواند هر زمان که با مشکلی مواجه شد یا
+ناسالم شد خودبه‌خود از کار بیفتد، لزوماً به پروب Liveness نیاز ندارید؛
+kubelet به‌طور خودکار اقدام درست را مطابق با
+<code dir="ltr">restartPolicy</code> آن Pod انجام می‌دهد.</p>
+<p dir="rtl">اگر می‌خواهید در صورت شکست یک پروب، کانتینر شما از بین برود و دوباره راه‌اندازی شود،
+یک پروب Liveness تعیین کنید و <code dir="ltr">restartPolicy</code> را روی <code dir="ltr">Always</code> یا
+<code dir="ltr">OnFailure</code> تنظیم کنید.</p>
+<p dir="rtl">یک الگوی رایج برای پروب‌های Liveness، استفاده از همان endpoint کم‌هزینه‌ی HTTP
+پروب‌های Readiness است، اما با <code dir="ltr">failureThreshold</code> بالاتر. این کار تضمین می‌کند
+که Pod پیش از آنکه به‌طور قطعی از بین برده شود، برای مدتی در وضعیت not-ready
+مشاهده شود.</p>
+<h3 id="چه-زمانی-باید-از-پروب-readiness-استفاده-کرد؟-when-should-you-use-a-readiness-probe" dir="rtl">چه زمانی باید از پروب Readiness استفاده کرد؟ {#when-should-you-use-a-readiness-probe}</h3>
+<p dir="rtl">برای اینکه ارسال ترافیک به یک Pod تنها پس از موفقیت یک پروب آغاز شود، یک
+پروب Readiness تعیین کنید. پروب Readiness ممکن است با پروب Liveness یکسان باشد،
+اما وجود پروب Readiness در spec به این معناست که Pod بدون دریافت هیچ ترافیکی
+راه‌اندازی می‌شود و تنها پس از آنکه پروب موفق شد، دریافت ترافیک را آغاز می‌کند.</p>
+<p dir="rtl">همچنین می‌توانید از پروب Readiness استفاده کنید تا یک کانتینر بتواند خود را برای
+نگهداری از سرویس خارج کند؛ این کار با بررسی endpoint ویژه‌ی Readiness انجام می‌شود که با
+endpoint پروب Liveness متفاوت است.</p>
+<p dir="rtl">هنگامی که برنامه‌ی شما وابستگی سختی به سرویس‌های پشتیبان (back-end) دارد، می‌توانید
+هم پروب Liveness و هم پروب Readiness پیاده‌سازی کنید. پروب Liveness زمانی موفق می‌شود که خود برنامه
+سالم باشد، اما پروب Readiness علاوه بر آن بررسی می‌کند که هر
+سرویس پشتیبان موردنیاز در دسترس باشد. این کار به شما کمک می‌کند از هدایت ترافیک
+به Podهایی که تنها می‌توانند با پیام‌های خطا پاسخ دهند پرهیز کنید.</p>
+<p dir="rtl">برای کانتینرهایی که باید در هنگام راه‌اندازی داده‌های حجیم، فایل‌های پیکربندی یا
+مهاجرت‌ها (migrations) را بارگذاری کنند، استفاده از یک <a href="#startup-probe">پروب Startup</a> را در نظر بگیرید.
+با این حال، اگر می‌خواهید تفاوت میان برنامه‌ای که شکست خورده
+و برنامه‌ای که هنوز در حال پردازش داده‌های راه‌اندازی خود است را تشخیص دهید، ممکن است پروب Readiness را ترجیح دهید.</p>
+<h2 id="سازوکارهای-بررسی-check-mechanisms" dir="rtl">سازوکارهای بررسی {#check-mechanisms}</h2>
+<p dir="rtl">چهار روش مختلف برای بررسی یک کانتینر با استفاده از پروب وجود دارد. هر پروب
+باید دقیقاً یکی از این چهار سازوکار را تعریف کند:</p>
+<dl>
+<dt dir="ltr" class="ltr"><code dir="ltr">exec</code></dt>
+<dd dir="rtl">یک فرمان مشخص را درون کانتینر اجرا می‌کند. بررسی تشخیصی در صورتی
+موفق در نظر گرفته می‌شود که فرمان با کد وضعیت 0 خاتمه یابد.</dd>
+<dt dir="ltr" class="ltr"><code dir="ltr">grpc</code></dt>
+<dd dir="rtl">یک فراخوانی رویه‌ی راه دور با استفاده از <a href="https://grpc.io/" target="_blank" rel="noopener">gRPC</a> انجام می‌دهد. هدف
+باید <a href="https://grpc.io/grpc/core/md_doc_health-checking.html" target="_blank" rel="noopener">بررسی‌های سلامت gRPC</a> را پیاده‌سازی کرده باشد.
+بررسی تشخیصی در صورتی موفق در نظر گرفته می‌شود که <code dir="ltr">status</code> پاسخ برابر
+<code dir="ltr">SERVING</code> باشد. برای جزئیات بیشتر، <a href="#grpc-probes">پروب‌های gRPC</a> را ببینید.</dd>
+<dt dir="ltr" class="ltr"><code dir="ltr">httpGet</code></dt>
+<dd dir="rtl">یک درخواست HTTP <code dir="ltr">GET</code> به نشانی IP آن Pod روی درگاه (port) و مسیر مشخص‌شده
+ارسال می‌کند. بررسی تشخیصی در صورتی موفق در نظر گرفته می‌شود که پاسخ
+کد وضعیتی بزرگ‌تر یا مساوی 200 و کوچک‌تر از 400 داشته باشد.
+برای جزئیات بیشتر، <a href="#http-probes">پروب‌های HTTP</a> را ببینید.</dd>
+<dt dir="ltr" class="ltr"><code dir="ltr">tcpSocket</code></dt>
+<dd dir="rtl">یک بررسی TCP روی نشانی IP آن Pod و درگاه مشخص‌شده انجام می‌دهد.
+بررسی تشخیصی در صورتی موفق در نظر گرفته می‌شود که درگاه باز باشد. اگر سیستم راه دور
+(کانتینر) اتصال را بلافاصله پس از باز شدن ببندد، این وضعیت نیز
+سالم به شمار می‌آید.
+برای جزئیات بیشتر، <a href="#tcp-probes">پروب‌های TCP</a> را ببینید.</dd>
+</dl>
+<div class="callout caution"><div class="callout-title">احتیاط:</div>
+<p dir="rtl">برخلاف سایر سازوکارها، پیاده‌سازی پروب <code dir="ltr">exec</code> هر بار که اجرا می‌شود
+شامل ایجاد/انشعاب (fork) چندین فرایند است. در نتیجه، در
+کلاسترهایی با تراکم Pod بالاتر و بازه‌های کوتاه‌تر
+<code dir="ltr">initialDelaySeconds</code> و <code dir="ltr">periodSeconds</code>، پیکربندی هر پروبی با سازوکار exec
+ممکن است سربار قابل‌توجهی بر مصرف CPU نود تحمیل کند. در چنین
+سناریوهایی، استفاده از سازوکارهای جایگزین پروب را برای پرهیز از این سربار در نظر بگیرید.</p>
+</div>
+<h2 id="نتایج-پروب-probe-results" dir="rtl">نتایج پروب {#probe-results}</h2>
+<p dir="rtl">kubelet نتیجه‌ی هر اجرای پروب را ارزیابی می‌کند و بر اساس آن
+اقدام می‌کند. هر پروب یکی از سه نتیجه‌ی زیر را دارد:</p>
+<dl>
+<dt dir="ltr" class="ltr"><code dir="ltr">Success</code></dt>
+<dd dir="rtl">کانتینر بررسی تشخیصی را با موفقیت پشت سر گذاشت.</dd>
+<dt dir="ltr" class="ltr"><code dir="ltr">Failure</code></dt>
+<dd dir="rtl">کانتینر در بررسی تشخیصی شکست خورد. برای پروب‌های Liveness و Startup،
+kubelet کانتینر را از بین می‌برد و کانتینر تابع
+<a href="https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#restart-policy" target="_blank">سیاست راه‌اندازی مجدد</a> خود می‌شود.
+برای پروب‌های Readiness، kubelet کانتینر را به‌عنوان آماده‌نبودن علامت‌گذاری می‌کند و
+Pod دیگر از Serviceهای منطبق ترافیکی دریافت نمی‌کند.</dd>
+<dt dir="ltr" class="ltr"><code dir="ltr">Unknown</code></dt>
+<dd dir="rtl">خود بررسی تشخیصی شکست خورد (نباید اقدامی انجام شود و kubelet
+بررسی‌های بیشتری انجام خواهد داد).</dd>
+</dl>
+<p dir="rtl">اگر یک کانتینر پروب خاصی را ارائه نکند، kubelet همواره
+نتیجه را <code dir="ltr">Success</code> در نظر می‌گیرد. به‌طور خاص برای پروب‌های Readiness،
+نتیجه پیش از سپری‌شدن تأخیر اولیه <code dir="ltr">Failure</code> در نظر گرفته می‌شود.</p>
+<h2 id="فیلدهای-پیکربندی-configure-probes" dir="rtl">فیلدهای پیکربندی {#configure-probes}</h2>
+<p dir="rtl"><a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.37/#probe-v1-core" target="_blank">پروب‌ها</a>
+فیلدهای متعددی دارند که می‌توانید با استفاده از آن‌ها رفتار بررسی‌های Startup،
+Liveness و Readiness را دقیق‌تر کنترل کنید. برای مثال:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: Pod
+metadata:
+  name: probe-example
+spec:
+  containers:
+  - name: app
+    image: registry.k8s.io/e2e-test-images/agnhost:2.40
+    ports:
+    - containerPort: 8080
+    startupProbe:
+      httpGet:
+        path: /healthz
+        port: 8080
+      failureThreshold: 30
+      periodSeconds: 10
+    livenessProbe:
+      httpGet:
+        path: /healthz
+        port: 8080
+      initialDelaySeconds: 10
+      periodSeconds: 5
+      timeoutSeconds: 3
+      failureThreshold: 3
+    readinessProbe:
+      httpGet:
+        path: /ready
+        port: 8080
+      periodSeconds: 5
+</code></pre>
+<dl>
+<dt dir="ltr" class="ltr"><code dir="ltr">initialDelaySeconds</code></dt>
+<dd dir="rtl">تعداد ثانیه‌هایی که پس از شروع کانتینر سپری می‌شود تا پروب‌های Startup، Liveness یا Readiness آغاز شوند. اگر یک پروب Startup تعریف شده باشد، تأخیرهای پروب‌های Liveness و Readiness تا زمان موفقیت پروب Startup آغاز نمی‌شوند. در برخی نسخه‌های قدیمی‌تر کوبرنتیز، اگر periodSeconds روی مقداری بزرگ‌تر از initialDelaySeconds تنظیم می‌شد، ممکن بود initialDelaySeconds نادیده گرفته شود. با این حال، در نسخه‌های کنونی، initialDelaySeconds همواره رعایت می‌شود و پروب تا پس از این تأخیر اولیه آغاز نمی‌شود. مقدار پیش‌فرض 0 ثانیه است. حداقل مقدار 0 است.</dd>
+<dt dir="ltr" class="ltr"><code dir="ltr">periodSeconds</code></dt>
+<dd dir="rtl">فاصله‌ی زمانی (بر حسب ثانیه) میان اجراهای پروب. مقدار پیش‌فرض 10 ثانیه است. حداقل مقدار 1 است. تا زمانی که یک کانتینر Ready نیست، پروب Readiness ممکن است در زمان‌هایی غیر از بازه‌ی پیکربندی‌شده‌ی <code dir="ltr">periodSeconds</code> اجرا شود. این کار برای آن است که Pod سریع‌تر آماده شود.</dd>
+<dt dir="ltr" class="ltr"><code dir="ltr">timeoutSeconds</code></dt>
+<dd dir="rtl">تعداد ثانیه‌هایی که پس از آن مهلت پروب به پایان می‌رسد. مقدار پیش‌فرض 1 ثانیه است. حداقل مقدار 1 است.</dd>
+<dt dir="ltr" class="ltr"><code dir="ltr">successThreshold</code></dt>
+<dd dir="rtl">حداقل تعداد موفقیت‌های متوالی لازم برای آنکه پروب پس از شکست، موفق در نظر گرفته شود. مقدار پیش‌فرض 1 است. برای پروب‌های Liveness و Startup باید 1 باشد. حداقل مقدار 1 است.</dd>
+<dt dir="ltr" class="ltr"><code dir="ltr">failureThreshold</code></dt>
+<dd dir="rtl">پس از آنکه یک پروب <code dir="ltr">failureThreshold</code> بار پشت سر هم شکست بخورد، کوبرنتیز کل بررسی را شکست‌خورده در نظر می‌گیرد: کانتینر آماده/سالم/زنده <em>نیست</em>. مقدار پیش‌فرض 3 است. حداقل مقدار 1 است. در مورد پروب Startup یا Liveness، اگر دست‌کم <code dir="ltr">failureThreshold</code> پروب شکست خورده باشند، کوبرنتیز کانتینر را ناسالم تلقی می‌کند و راه‌اندازی مجدد همان کانتینر خاص را آغاز می‌کند. kubelet تنظیم <code dir="ltr">terminationGracePeriodSeconds</code> آن کانتینر را رعایت می‌کند. برای یک پروب Readiness شکست‌خورده، kubelet به اجرای کانتینری که در بررسی‌ها شکست خورده ادامه می‌دهد و همچنین به اجرای پروب‌های بیشتر ادامه می‌دهد؛ از آنجا که بررسی شکست خورده است، kubelet <a href="https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#pod-conditions" target="_blank">شرط</a> <code dir="ltr">Ready</code> را روی Pod برابر <code dir="ltr">false</code> تنظیم می‌کند.</dd>
+<dt dir="ltr" class="ltr"><code dir="ltr">terminationGracePeriodSeconds</code></dt>
+<dd dir="rtl">یک مهلت ملایم (grace period) پیکربندی می‌کند که kubelet میان آغاز خاموش‌کردن کانتینر شکست‌خورده و سپس وادارکردن محیط اجرای کانتینر به متوقف‌کردن آن کانتینر صبر کند. پیش‌فرض این است که مقدار سطح Pod برای <code dir="ltr">terminationGracePeriodSeconds</code> به ارث برده شود (در صورت تعیین‌نشدن، 30 ثانیه) و حداقل مقدار 1 است. برای جزئیات بیشتر، <a href="#probe-level-terminationgraceperiodseconds"><code dir="ltr">terminationGracePeriodSeconds</code> در سطح پروب</a> را ببینید.</dd>
+</dl>
+<div class="callout caution"><div class="callout-title">احتیاط:</div>
+<p dir="rtl">پیاده‌سازی نادرست پروب‌های Readiness ممکن است به افزایش پیوسته‌ی
+تعداد فرایندها در کانتینر و در صورت رسیدگی‌نکردن، به کمبود منابع منجر شود.</p>
+</div>
+<h3 id="terminationgraceperiodseconds-در-سطح-پروب-probe-level-terminationgraceperiodseconds" dir="rtl"><code dir="ltr">terminationGracePeriodSeconds</code> در سطح پروب {#probe-level-terminationgraceperiodseconds}</h3>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes v1.28 [stable]</span> (پایدار)</div>
+<p dir="rtl">در نسخه‌ی 1.25 و بالاتر، کاربران می‌توانند <code dir="ltr">terminationGracePeriodSeconds</code> را در سطح پروب
+به‌عنوان بخشی از مشخصات پروب تعیین کنند. هنگامی که <code dir="ltr">terminationGracePeriodSeconds</code>
+هم در سطح Pod و هم در سطح پروب تنظیم شده باشد، kubelet از مقدار سطح پروب
+استفاده می‌کند.</p>
+<p dir="rtl">هنگام تنظیم <code dir="ltr">terminationGracePeriodSeconds</code>، به نکات زیر توجه کنید:</p>
+<ul>
+<li dir="rtl">kubelet همواره فیلد <code dir="ltr">terminationGracePeriodSeconds</code> در سطح پروب را
+در صورت وجود در یک Pod رعایت می‌کند.</li>
+<li dir="rtl">اگر Podهای موجودی دارید که فیلد <code dir="ltr">terminationGracePeriodSeconds</code> در آن‌ها
+تنظیم شده است و دیگر نمی‌خواهید از مهلت‌های ملایم خاتمه به ازای هر پروب استفاده کنید،
+باید آن Podهای موجود را حذف کنید.</li>
+</ul>
+<p dir="rtl">برای مثال:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">spec:
+  terminationGracePeriodSeconds: 3600  # pod-level
+  containers:
+  - name: test
+    image: ...
+
+    ports:
+    - name: liveness-port
+      containerPort: 8080
+
+    livenessProbe:
+      httpGet:
+        path: /healthz
+        port: liveness-port
+      failureThreshold: 1
+      periodSeconds: 60
+      # Override pod-level terminationGracePeriodSeconds
+      terminationGracePeriodSeconds: 60
+</code></pre>
+<p dir="rtl"><code dir="ltr">terminationGracePeriodSeconds</code> در سطح پروب را <strong>نمی‌توان</strong> برای پروب‌های Readiness تنظیم کرد.
+API server آن را رد می‌کند.</p>
+<h2 id="جزئیات-سازوکارهای-پروب-probe-mechanism-details" dir="rtl">جزئیات سازوکارهای پروب {#probe-mechanism-details}</h2>
+<h3 id="پروب-های-http-http-probes" dir="rtl">پروب‌های HTTP {#http-probes}</h3>
+<p dir="rtl"><a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.37/#httpgetaction-v1-core" target="_blank">پروب‌های HTTP</a>
+فیلدهای دیگری نیز دارند که می‌توان روی <code dir="ltr">httpGet</code> تنظیم کرد:</p>
+<ul>
+<li dir="rtl"><code dir="ltr">host</code>: نام میزبانی که باید به آن متصل شد؛ مقدار پیش‌فرض آن IP آن Pod است. احتمالاً بهتر است
+به جای آن، "Host" را در <code dir="ltr">httpHeaders</code> تنظیم کنید.</li>
+<li dir="rtl"><code dir="ltr">scheme</code>: طرحی (scheme) که برای اتصال به میزبان استفاده می‌شود (HTTP یا HTTPS). مقدار پیش‌فرض
+"HTTP" است.</li>
+<li dir="rtl"><code dir="ltr">path</code>: مسیری که باید روی سرور HTTP به آن دسترسی یافت. مقدار پیش‌فرض "/" است.</li>
+<li dir="rtl"><code dir="ltr">httpHeaders</code>: هدرهای سفارشی برای تنظیم در درخواست. HTTP اجازه‌ی تکرار
+هدرها را می‌دهد.</li>
+<li dir="rtl"><code dir="ltr">port</code>: نام یا شماره‌ی درگاهی از کانتینر که باید به آن دسترسی یافت. شماره باید
+در بازه‌ی 1 تا 65535 باشد.</li>
+<li dir="rtl"><code dir="ltr">protocol</code>: پروتکلی که برای درخواست پروب استفاده می‌شود. مقدار پیش‌فرض <code dir="ltr">HTTP1</code> است.
+برای پروب‌کردن از طریق HTTP/2 بدون رمزنگاری (h2c) آن را روی <code dir="ltr">HTTP2</code> تنظیم کنید. این کار مستلزم
+فعال‌بودن <a href="https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/" target="_blank">feature gate</a> <code dir="ltr">H2CContainerProbe</code>
+است.</li>
+</ul>
+<p dir="rtl">برای یک پروب HTTP، kubelet برای انجام بررسی یک درخواست HTTP به درگاه و
+مسیر مشخص‌شده ارسال می‌کند. kubelet پروب را به نشانی IP آن Pod ارسال می‌کند،
+مگر آنکه این نشانی با فیلد اختیاری <code dir="ltr">host</code> در <code dir="ltr">httpGet</code> جایگزین شده باشد. اگر
+فیلد <code dir="ltr">scheme</code> روی <code dir="ltr">HTTPS</code> تنظیم شده باشد، kubelet یک درخواست HTTPS ارسال می‌کند و
+راستی‌آزمایی گواهی را نادیده می‌گیرد. در بیشتر سناریوها، نیازی به تنظیم فیلد
+<code dir="ltr">host</code> ندارید. در اینجا سناریویی را می‌بینید که در آن باید آن را تنظیم کنید. فرض کنید کانتینر
+روی 127.0.0.1 گوش می‌دهد و فیلد <code dir="ltr">hostNetwork</code> آن Pod برابر true است. در این صورت <code dir="ltr">host</code>
+در زیر <code dir="ltr">httpGet</code> باید روی 127.0.0.1 تنظیم شود. اگر Pod شما به میزبان‌های
+مجازی (virtual hosts) متکی است، که احتمالاً حالت رایج‌تری است، نباید از <code dir="ltr">host</code> استفاده کنید، بلکه
+باید هدر <code dir="ltr">Host</code> را در <code dir="ltr">httpHeaders</code> تنظیم کنید.</p>
+<p dir="rtl">برای یک پروب HTTP، kubelet علاوه بر هدر الزامی <code dir="ltr">Host</code>، دو هدر درخواست دیگر
+نیز ارسال می‌کند:</p>
+<ul>
+<li dir="rtl"><code dir="ltr">User-Agent</code> که مقدار پیش‌فرض آن <code dir="ltr">kube-probe/1.37</code> است؛
+که در آن <code dir="ltr">1.37</code> نسخه‌ی kubelet است.</li>
+<li dir="rtl"><code dir="ltr">Accept</code> که مقدار پیش‌فرض آن <code dir="ltr">*/*</code> است.</li>
+</ul>
+<p dir="rtl">می‌توانید با تعریف <code dir="ltr">httpHeaders</code> برای پروب، این هدرها را بازنویسی کنید.
+برای مثال:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">livenessProbe:
+  httpGet:
+    httpHeaders:
+      - name: Accept
+        value: application/json
+
+startupProbe:
+  httpGet:
+    httpHeaders:
+      - name: User-Agent
+        value: MyUserAgent
+</code></pre>
+<p dir="rtl">همچنین می‌توانید با تعریف این دو هدر با مقدار خالی، آن‌ها را حذف کنید.</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">livenessProbe:
+  httpGet:
+    httpHeaders:
+      - name: Accept
+        value: ""
+
+startupProbe:
+  httpGet:
+    httpHeaders:
+      - name: User-Agent
+        value: ""
+</code></pre>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
+<p dir="rtl">می‌توانید با تنظیم فیلد <code dir="ltr">protocol</code> روی <code dir="ltr">HTTP2</code>، یک پروب HTTP را برای استفاده از HTTP/2 بدون رمزنگاری (h2c)
+پیکربندی کنید. هنگامی که <code dir="ltr">protocol</code> روی <code dir="ltr">HTTP2</code> تنظیم شده باشد، kubelet
+به جای HTTP/1.1 از h2c (HTTP/2 روی TCP ساده) استفاده می‌کند. مقدار پیش‌فرض <code dir="ltr">protocol</code>
+برابر <code dir="ltr">HTTP1</code> است. تنظیم <code dir="ltr">protocol: HTTP2</code> مستلزم <code dir="ltr">scheme: HTTP</code> (مقدار پیش‌فرض) است؛
+API server ترکیب <code dir="ltr">protocol: HTTP2</code> با
+<code dir="ltr">scheme: HTTPS</code> را رد می‌کند. برای جزئیات بیشتر،
+<a href="https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#use-h2c-with-http-probes" target="_blank">استفاده از HTTP/2 بدون رمزنگاری (h2c) با پروب‌های HTTP</a> را ببینید.</p>
+<h4 id="رسیدگی-به-تغییر-مسیرها-http-probes-redirects" dir="rtl">رسیدگی به تغییر مسیرها {#http-probes-redirects}</h4>
+<p dir="rtl">هنگامی که kubelet یک کانتینر را با استفاده از HTTP پروب می‌کند، تنها در صورتی تغییر مسیرها (redirects) را دنبال می‌کند که
+تغییر مسیر به همان میزبان باشد. این شامل تغییر مسیرهایی نیز می‌شود که
+پروتکل را از HTTP به HTTPS تغییر می‌دهند، حتی اگر پروب با
+<code dir="ltr">scheme: HTTP</code> پیکربندی شده باشد.</p>
+<p dir="rtl">اگر تغییر مسیر به نام میزبان دیگری باشد، kubelet آن را دنبال نمی‌کند.
+در عوض، kubelet پروب را موفق تلقی می‌کند و یک رویداد
+<code dir="ltr">ProbeWarning</code> ثبت می‌کند.</p>
+<p dir="rtl">اگر kubelet یک تغییر مسیر را دنبال کند و در مجموع 11 تغییر مسیر یا بیشتر دریافت کند، پروب
+موفق در نظر گرفته می‌شود و یک رویداد <code dir="ltr">ProbeWarning</code> ثبت می‌کند. برای مثال:</p>
+<pre dir="ltr"><code class="language-none" dir="ltr">Events:
+  Type     Reason        Age                     From               Message
+  ----     ------        ----                    ----               -------
+  Normal   Scheduled     29m                     default-scheduler  Successfully assigned default/httpbin-7b8bc9cb85-bjzwn to daocloud
+  Normal   Pulling       29m                     kubelet            Pulling image "docker.io/kennethreitz/httpbin"
+  Normal   Pulled        24m                     kubelet            Successfully pulled image "docker.io/kennethreitz/httpbin" in 5m12.402735213s
+  Normal   Created       24m                     kubelet            Created container httpbin
+  Normal   Started       24m                     kubelet            Started container httpbin
+ Warning  ProbeWarning  4m11s (x1197 over 24m)  kubelet            Readiness probe warning: Probe terminated redirects
+</code></pre>
+<div class="callout caution"><div class="callout-title">احتیاط:</div>
+<p dir="rtl">هنگام پردازش یک پروب <code dir="ltr">httpGet</code>، kubelet پس از 10KiB خواندن بدنه‌ی پاسخ را متوقف می‌کند.
+موفقیت پروب تنها بر اساس کد وضعیت پاسخ تعیین می‌شود که در هدرهای پاسخ قرار دارد.</p>
+<p dir="rtl">اگر endpointی را پروب کنید که بدنه‌ی پاسخی بزرگ‌تر از <strong>10KiB</strong> برمی‌گرداند،
+kubelet همچنان پروب را بر اساس کد وضعیت موفق علامت‌گذاری می‌کند،
+اما پس از رسیدن به حد 10KiB اتصال را می‌بندد.
+این بسته‌شدن ناگهانی می‌تواند باعث شود خطاهای <strong>connection reset by peer</strong> یا <strong>broken pipe</strong> در لاگ‌های برنامه‌ی شما ظاهر شوند
+که تشخیص آن‌ها از مشکلات واقعی شبکه می‌تواند دشوار باشد.</p>
+<p dir="rtl">برای داشتن پروب‌های <code dir="ltr">httpGet</code> قابل‌اعتماد، اکیداً توصیه می‌شود از endpointهای اختصاصی بررسی سلامت
+استفاده کنید که بدنه‌ی پاسخ حداقلی برمی‌گردانند. اگر ناچارید از endpoint موجودی با محتوای حجیم استفاده کنید،
+به جای آن استفاده از یک پروب <code dir="ltr">exec</code> را برای انجام یک درخواست HEAD در نظر بگیرید.</p>
+</div>
+<h3 id="پروب-های-tcp-tcp-probes" dir="rtl">پروب‌های TCP {#tcp-probes}</h3>
+<p dir="rtl">برای یک پروب TCP، kubelet اتصال پروب را در سطح نود برقرار می‌کند، نه درون
+Pod؛ این بدان معناست که نمی‌توانید از نام یک سرویس در پارامتر <code dir="ltr">host</code> استفاده کنید،
+زیرا kubelet قادر به تفکیک (resolve) آن نیست.</p>
+<h3 id="پروب-های-grpc-grpc-probes" dir="rtl">پروب‌های gRPC {#grpc-probes}</h3>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes v1.27 [stable]</span> (پایدار)</div>
+<p dir="rtl">اگر برنامه‌ی شما
+<a href="https://github.com/grpc/grpc/blob/master/doc/health-checking.md" target="_blank" rel="noopener">پروتکل بررسی سلامت gRPC</a> را پیاده‌سازی کرده باشد،
+می‌توانید کوبرنتیز را طوری پیکربندی کنید که از آن برای بررسی‌های Startup، Liveness یا Readiness برنامه استفاده کند.</p>
+<p dir="rtl">در اینجا یک مانیفست نمونه آمده است:</p>
+<div class="code-file ltr" dir="ltr">pods/probe/grpc-liveness.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: Pod
+metadata:
+  name: etcd-with-grpc
+spec:
+  containers:
+  - name: etcd
+    image: registry.k8s.io/etcd:3.5.1-0
+    command: [ "/usr/local/bin/etcd", "--data-dir",  "/var/lib/etcd", "--listen-client-urls", "http://0.0.0.0:2379", "--advertise-client-urls", "http://127.0.0.1:2379", "--log-level", "debug"]
+    ports:
+    - containerPort: 2379
+    livenessProbe:
+      grpc:
+        port: 2379
+      initialDelaySeconds: 10
+</code></pre>
+<p dir="rtl">برای استفاده از پروب gRPC، باید <code dir="ltr">port</code> پیکربندی شود. اگر می‌خواهید
+پروب‌های انواع مختلف و پروب‌های قابلیت‌های مختلف را از یکدیگر متمایز کنید، می‌توانید
+از فیلد <code dir="ltr">service</code> استفاده کنید. می‌توانید <code dir="ltr">service</code> را روی مقدار <code dir="ltr">liveness</code> تنظیم کنید و
+endpoint بررسی سلامت gRPC خود را طوری بسازید که به این درخواست پاسخی متفاوت از حالتی بدهد که
+<code dir="ltr">service</code> را روی <code dir="ltr">readiness</code> تنظیم کرده‌اید. این کار به شما امکان می‌دهد از یک endpoint برای
+انواع مختلف بررسی سلامت کانتینر استفاده کنید، به جای آنکه روی دو درگاه مختلف
+گوش دهید. اگر می‌خواهید نام سرویس سفارشی خود را تعیین کنید و نوع
+پروب را نیز مشخص کنید، پروژه‌ی کوبرنتیز توصیه می‌کند از نامی استفاده کنید که
+این دو را به هم پیوند می‌دهد. برای مثال: <code dir="ltr">myservice-liveness</code> (با استفاده از <code dir="ltr">-</code> به‌عنوان جداکننده).</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">برخلاف پروب‌های HTTP یا TCP، نمی‌توانید درگاه بررسی سلامت را با نام آن تعیین کنید
+و نمی‌توانید نام میزبان سفارشی پیکربندی کنید.</p>
+</div>
+<p dir="rtl">مشکلات پیکربندی (برای مثال: درگاه یا سرویس نادرست، یا پیاده‌سازی‌نشدن
+پروتکل بررسی سلامت)، مشابه پروب‌های HTTP و
+TCP، شکست پروب در نظر گرفته می‌شوند.</p>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
+<p dir="rtl">می‌توانید با تنظیم فیلد <code dir="ltr">mode</code> روی <code dir="ltr">TLS</code>، یک پروب gRPC را برای اتصال از طریق TLS
+پیکربندی کنید. هنگامی که <code dir="ltr">mode</code> روی <code dir="ltr">TLS</code> تنظیم شده باشد، kubelet از TLS با
+<code dir="ltr">InsecureSkipVerify</code> استفاده می‌کند (یعنی گواهی سرور را راستی‌آزمایی نمی‌کند). مقدار پیش‌فرض
+<code dir="ltr">mode</code> برابر <code dir="ltr">Plaintext</code> است. برای جزئیات بیشتر،
+<a href="https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#grpc-probe-tls" target="_blank">استفاده از TLS با پروب‌های gRPC</a> را ببینید.</p>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<ul>
+<li dir="rtl">بیاموزید چگونه
+<a href="https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/" target="_blank">پروب‌های Liveness، Readiness و Startup را پیکربندی کنید</a>.</li>
+<li dir="rtl">برای مشخصات کامل فیلدهای مرتبط با پروب، مرجع API را ببینید:
+<a href="https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/" target="_blank">Pod</a>،
+<a href="https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#Container" target="_blank">Container</a>،
+<a href="https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#Probe" target="_blank">Probe</a></li>
+</ul>
+</main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#انواع-پروب-types-of-probe">انواع پروب {#types-of-probe}</a><a class="l3" href="#پروب-startup-startup-probe">پروب Startup {#startup-probe}</a><a class="l3" href="#پروب-liveness-liveness-probe">پروب Liveness {#liveness-probe}</a><a class="l3" href="#پروب-readiness-readiness-probe">پروب Readiness {#readiness-probe}</a><a class="l2" href="#زمان-استفاده-از-هر-پروب-when-to-use-each-probe">زمان استفاده از هر پروب {#when-to-use-each-probe}</a><a class="l3" href="#چه-زمانی-باید-از-پروب-startup-استفاده-کرد؟-when-should-you-use-a-startup-probe">چه زمانی باید از پروب Startup استفاده کرد؟ {#when-should-you-use-a-startup-probe}</a><a class="l3" href="#چه-زمانی-باید-از-پروب-liveness-استفاده-کرد؟-when-should-you-use-a-liveness-probe">چه زمانی باید از پروب Liveness استفاده کرد؟ {#when-should-you-use-a-liveness-probe}</a><a class="l3" href="#چه-زمانی-باید-از-پروب-readiness-استفاده-کرد؟-when-should-you-use-a-readiness-probe">چه زمانی باید از پروب Readiness استفاده کرد؟ {#when-should-you-use-a-readiness-probe}</a><a class="l2" href="#سازوکارهای-بررسی-check-mechanisms">سازوکارهای بررسی {#check-mechanisms}</a><a class="l2" href="#نتایج-پروب-probe-results">نتایج پروب {#probe-results}</a><a class="l2" href="#فیلدهای-پیکربندی-configure-probes">فیلدهای پیکربندی {#configure-probes}</a><a class="l3" href="#terminationgraceperiodseconds-در-سطح-پروب-probe-level-terminationgraceperiodseconds">terminationGracePeriodSeconds در سطح پروب {#probe-level-terminationgraceperiodseconds}</a><a class="l2" href="#جزئیات-سازوکارهای-پروب-probe-mechanism-details">جزئیات سازوکارهای پروب {#probe-mechanism-details}</a><a class="l3" href="#پروب-های-http-http-probes">پروب‌های HTTP {#http-probes}</a><a class="l3" href="#پروب-های-tcp-tcp-probes">پروب‌های TCP {#tcp-probes}</a><a class="l3" href="#پروب-های-grpc-grpc-probes">پروب‌های gRPC {#grpc-probes}</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>

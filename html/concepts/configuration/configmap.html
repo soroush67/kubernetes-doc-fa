@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ConfigMapها | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+</head>
+<body>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">concepts / configuration</span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">ConfigMapها</h1><!-- overview -->
+<p dir="rtl"><em>(تعریف واژه‌نامه: configmap)</em></p>
+<div class="callout caution"><div class="callout-title">احتیاط:</div>
+<p dir="rtl">ConfigMap هیچ‌گونه محرمانگی یا رمزگذاری‌ای فراهم نمی‌کند.
+اگر داده‌هایی که می‌خواهید ذخیره کنید محرمانه‌اند، به‌جای ConfigMap از یک
+<span class="term" title="secret">Secret</span> استفاده کنید،
+یا برای خصوصی نگه داشتن داده‌هایتان از ابزارهای اضافی (شخص ثالث) بهره ببرید.</p>
+</div>
+<!-- body -->
+<h2 id="انگیزه" dir="rtl">انگیزه</h2>
+<p dir="rtl">از ConfigMap برای تنظیم داده‌های پیکربندی به‌صورت جدا از کد برنامه استفاده کنید.</p>
+<p dir="rtl">برای نمونه، فرض کنید در حال توسعهٔ برنامه‌ای هستید که می‌توانید آن را روی
+رایانهٔ خودتان (برای توسعه) و در ابر (برای رسیدگی به ترافیک واقعی) اجرا کنید.
+کد را طوری می‌نویسید که در یک متغیر محیطی به نام <code dir="ltr">DATABASE_HOST</code> جست‌وجو کند.
+در محیط محلی، آن متغیر را روی <code dir="ltr">localhost</code> تنظیم می‌کنید. در ابر، آن را طوری تنظیم می‌کنید که
+به یک <span class="term" title="service">Service</span> کوبرنتیز
+اشاره کند که جزء پایگاه داده را در اختیار کلاستر شما قرار می‌دهد.
+این کار به شما امکان می‌دهد یک ایمیج کانتینر را که در ابر اجرا می‌شود دریافت کنید و
+در صورت نیاز دقیقاً همان کد را به‌صورت محلی اشکال‌زدایی کنید.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">ConfigMap برای نگهداری حجم‌های بزرگ داده طراحی نشده است. داده‌های ذخیره‌شده در یک
+ConfigMap نمی‌توانند از 1 MiB بیشتر باشند. اگر نیاز دارید تنظیماتی را ذخیره کنید که
+از این حد بزرگ‌ترند، بهتر است mount کردن یک حجم یا استفاده از یک
+پایگاه داده یا سرویس فایل جداگانه را در نظر بگیرید.</p>
+</div>
+<h2 id="آبجکت-configmap" dir="rtl">آبجکت ConfigMap</h2>
+<p dir="rtl">ConfigMap یک <span class="term" title="object">آبجکت API</span> است
+که به شما امکان می‌دهد پیکربندی را برای استفادهٔ سایر آبجکت‌ها ذخیره کنید. برخلاف بیشتر
+آبجکت‌های کوبرنتیز که یک <code dir="ltr">spec</code> دارند، ConfigMap دارای فیلدهای <code dir="ltr">data</code> و <code dir="ltr">binaryData</code>
+است. این فیلدها جفت‌های کلید-مقدار را به‌عنوان مقدار خود می‌پذیرند. هر دو فیلد <code dir="ltr">data</code>
+و <code dir="ltr">binaryData</code> اختیاری‌اند. فیلد <code dir="ltr">data</code> برای نگهداری
+رشته‌های UTF-8 طراحی شده است، در حالی که فیلد <code dir="ltr">binaryData</code> برای نگهداری
+داده‌های دودویی به‌صورت رشته‌های کدگذاری‌شده با base64 طراحی شده است.</p>
+<p dir="rtl">نام یک ConfigMap باید یک
+<a href="../overview/working-with-objects/names.html#dns-subdomain-names">نام زیردامنهٔ DNS</a> معتبر باشد.</p>
+<p dir="rtl">هر کلید زیر فیلد <code dir="ltr">data</code> یا <code dir="ltr">binaryData</code> باید از
+نویسه‌های الفبایی-عددی، <code dir="ltr">-</code>، <code dir="ltr">_</code> یا <code dir="ltr">.</code> تشکیل شده باشد. کلیدهای ذخیره‌شده در <code dir="ltr">data</code> نباید
+با کلیدهای فیلد <code dir="ltr">binaryData</code> هم‌پوشانی داشته باشند.</p>
+<p dir="rtl">از نسخهٔ v1.19 به بعد، می‌توانید یک فیلد <code dir="ltr">immutable</code> را به تعریف ConfigMap
+اضافه کنید تا یک <a href="#configmap-immutable">ConfigMap تغییرناپذیر</a> ایجاد کنید.</p>
+<h2 id="configmapها-و-podها" dir="rtl">ConfigMapها و Podها</h2>
+<p dir="rtl">می‌توانید یک <code dir="ltr">spec</code> برای Pod بنویسید که به یک ConfigMap اشاره کند و کانتینر(های)
+آن Pod را بر اساس داده‌های ConfigMap پیکربندی کند. Pod و ConfigMap باید در
+یک <span class="term" title="namespace">فضای نام (namespace)</span> یکسان باشند.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl"><code dir="ltr">spec</code> یک <span class="term" title="static-pod">Pod ایستا</span> نمی‌تواند به یک ConfigMap
+یا هیچ آبجکت API دیگری اشاره کند.</p>
+</div>
+<p dir="rtl">در اینجا نمونه‌ای از یک ConfigMap آمده است که برخی کلیدهای آن مقادیر منفرد دارند
+و مقدار برخی کلیدهای دیگر شبیه قطعه‌ای از یک قالب
+پیکربندی است.</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: game-demo
+data:
+  # property-like keys; each key maps to a simple value
+  player_initial_lives: "3"
+  ui_properties_file_name: "user-interface.properties"
+
+  # file-like keys
+  game.properties: |
+    enemy.types=aliens,monsters
+    player.maximum-lives=5
+  user-interface.properties: |
+    color.good=purple
+    color.bad=yellow
+    allow.textmode=true
+</code></pre>
+<p dir="rtl">چهار روش مختلف وجود دارد که می‌توانید با آن‌ها از یک ConfigMap برای پیکربندی
+یک کانتینر درون یک Pod استفاده کنید:</p>
+<ol>
+<li dir="rtl">درون فرمان و آرگومان‌های (args) یک کانتینر</li>
+<li dir="rtl">متغیرهای محیطی برای یک کانتینر</li>
+<li dir="rtl">افزودن یک فایل در یک حجم فقط‌خواندنی، تا برنامه آن را بخواند</li>
+<li dir="rtl">نوشتن کدی که درون Pod اجرا شود و با استفاده از API کوبرنتیز یک ConfigMap را بخواند</li>
+</ol>
+<p dir="rtl">این روش‌های مختلف برای شیوه‌های متفاوت مدل‌سازی
+داده‌های مصرفی مناسب‌اند.
+در سه روش نخست،
+<span class="term" title="kubelet">kubelet</span> هنگام راه‌اندازی کانتینر(های) یک Pod
+از داده‌های ConfigMap استفاده می‌کند.</p>
+<p dir="rtl">روش چهارم به این معناست که باید کدی برای خواندن ConfigMap و داده‌های آن بنویسید.
+با این حال، از آنجا که مستقیماً از API کوبرنتیز استفاده می‌کنید، برنامهٔ شما می‌تواند
+مشترک دریافت به‌روزرسانی‌ها شود تا هر زمان ConfigMap تغییر کرد مطلع شود و
+به آن واکنش نشان دهد. با دسترسی مستقیم به API کوبرنتیز، این
+روش همچنین به شما امکان می‌دهد به ConfigMapای در یک فضای نام دیگر دسترسی داشته باشید.</p>
+<p dir="rtl">در اینجا نمونه‌ای از یک Pod آمده است که از مقادیر <code dir="ltr">game-demo</code> برای پیکربندی یک Pod استفاده می‌کند:</p>
+<div class="code-file ltr" dir="ltr">configmap/configure-pod.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: Pod
+metadata:
+  name: configmap-demo-pod
+spec:
+  containers:
+    - name: demo
+      image: alpine
+      command: ["sleep", "3600"]
+      env:
+        # Define the environment variable
+        - name: PLAYER_INITIAL_LIVES # Notice that the case is different here
+                                     # from the key name in the ConfigMap.
+          valueFrom:
+            configMapKeyRef:
+              name: game-demo           # The ConfigMap this value comes from.
+              key: player_initial_lives # The key to fetch.
+        - name: UI_PROPERTIES_FILE_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: game-demo
+              key: ui_properties_file_name
+      volumeMounts:
+      - name: config
+        mountPath: "/config"
+        readOnly: true
+  volumes:
+  # You set volumes at the Pod level, then mount them into containers inside that Pod
+  - name: config
+    configMap:
+      # Provide the name of the ConfigMap you want to mount.
+      name: game-demo
+      # An array of keys from the ConfigMap to create as files
+      items:
+      - key: "game.properties"
+        path: "game.properties"
+      - key: "user-interface.properties"
+        path: "user-interface.properties"
+</code></pre>
+<p dir="rtl">ConfigMap میان مقادیر ویژگی تک‌خطی و
+مقادیر چندخطیِ شبیه فایل تفاوتی قائل نمی‌شود.
+آنچه اهمیت دارد این است که Podها و سایر آبجکت‌ها چگونه آن مقادیر را مصرف می‌کنند.</p>
+<p dir="rtl">در این مثال، تعریف یک حجم و mount کردن آن درون کانتینر <code dir="ltr">demo</code>
+در مسیر <code dir="ltr">/config</code> دو فایل ایجاد می‌کند،
+یعنی <code dir="ltr">/config/game.properties</code> و <code dir="ltr">/config/user-interface.properties</code>،
+با اینکه ConfigMap چهار کلید دارد. دلیل این است که تعریف Pod
+یک آرایهٔ <code dir="ltr">items</code> را در بخش <code dir="ltr">volumes</code> مشخص می‌کند.
+اگر آرایهٔ <code dir="ltr">items</code> را به‌طور کامل حذف کنید، هر کلید در ConfigMap به
+فایلی با همان نام کلید تبدیل می‌شود و ۴ فایل خواهید داشت.</p>
+<h2 id="استفاده-از-configmapها" dir="rtl">استفاده از ConfigMapها</h2>
+<p dir="rtl">ConfigMapها را می‌توان به‌عنوان حجم‌های داده mount کرد. ConfigMapها را همچنین می‌توان توسط سایر
+بخش‌های سیستم، بدون آنکه مستقیماً در اختیار Pod قرار گیرند، استفاده کرد. برای نمونه،
+ConfigMapها می‌توانند داده‌هایی را نگه دارند که سایر بخش‌های سیستم باید برای پیکربندی از آن‌ها استفاده کنند.</p>
+<p dir="rtl">رایج‌ترین روش استفاده از ConfigMapها، پیکربندی تنظیمات برای
+کانتینرهایی است که در یک Pod در همان فضای نام اجرا می‌شوند. همچنین می‌توانید از یک
+ConfigMap به‌صورت جداگانه استفاده کنید.</p>
+<p dir="rtl">برای نمونه،
+ممکن است با <span class="term" title="addons">افزونه‌ها</span>
+یا <span class="term" title="operator-pattern">اپراتورهایی</span> مواجه شوید که
+رفتار خود را بر اساس یک ConfigMap تنظیم می‌کنند.</p>
+<h3 id="استفاده-از-configmapها-به-صورت-فایل-در-یک-pod" dir="rtl">استفاده از ConfigMapها به‌صورت فایل در یک Pod</h3>
+<p dir="rtl">برای مصرف یک ConfigMap در یک حجم در یک Pod:</p>
+<ol>
+<li dir="rtl">یک ConfigMap ایجاد کنید یا از یک ConfigMap موجود استفاده کنید. چندین Pod می‌توانند به
+یک ConfigMap یکسان ارجاع دهند.</li>
+<li dir="rtl">تعریف Pod خود را تغییر دهید تا یک حجم زیر <code dir="ltr">.spec.volumes[]</code> اضافه شود. هر نامی
+که می‌خواهید برای حجم انتخاب کنید و فیلد <code dir="ltr">.spec.volumes[].configMap.name</code> را طوری تنظیم کنید
+که به آبجکت ConfigMap شما ارجاع دهد.</li>
+<li dir="rtl">یک <code dir="ltr">.spec.containers[].volumeMounts[]</code> به هر کانتینری که به
+ConfigMap نیاز دارد اضافه کنید. <code dir="ltr">.spec.containers[].volumeMounts[].readOnly = true</code> را مشخص کنید و
+<code dir="ltr">.spec.containers[].volumeMounts[].mountPath</code> را روی نام دایرکتوری بلااستفاده‌ای تنظیم کنید
+که می‌خواهید ConfigMap در آن ظاهر شود.</li>
+<li dir="rtl">ایمیج یا خط فرمان خود را طوری تغییر دهید که برنامه در آن دایرکتوری به دنبال فایل‌ها بگردد.
+هر کلید در نگاشت <code dir="ltr">data</code> مربوط به ConfigMap به نام فایلی
+زیر <code dir="ltr">mountPath</code> تبدیل می‌شود.</li>
+</ol>
+<p dir="rtl">این نمونه‌ای از یک Pod است که یک ConfigMap را در یک حجم mount می‌کند:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: Pod
+metadata:
+  name: mypod
+spec:
+  containers:
+  - name: mypod
+    image: redis
+    volumeMounts:
+    - name: foo
+      mountPath: "/etc/foo"
+      readOnly: true
+  volumes:
+  - name: foo
+    configMap:
+      name: myconfigmap
+</code></pre>
+<p dir="rtl">به هر ConfigMapای که می‌خواهید استفاده کنید باید در <code dir="ltr">.spec.volumes</code> ارجاع داده شود.</p>
+<p dir="rtl">اگر چندین کانتینر در Pod وجود داشته باشد، هر کانتینر به بلوک <code dir="ltr">volumeMounts</code>
+مخصوص خود نیاز دارد، اما برای هر ConfigMap تنها یک <code dir="ltr">.spec.volumes</code> لازم است.</p>
+<h4 id="configmapهای-mount-شده-به-طور-خودکار-به-روزرسانی-می-شوند" dir="rtl">ConfigMapهای mount‌شده به‌طور خودکار به‌روزرسانی می‌شوند</h4>
+<p dir="rtl">هنگامی که یک ConfigMap که در حال حاضر در یک حجم مصرف می‌شود به‌روزرسانی شود، کلیدهای projectشده نیز سرانجام به‌روزرسانی می‌شوند.
+kubelet در هر همگام‌سازی دوره‌ای بررسی می‌کند که آیا ConfigMap mount‌شده به‌روز است یا نه.
+با این حال، kubelet برای دریافت مقدار فعلی ConfigMap از حافظهٔ نهان (cache) محلی خود استفاده می‌کند.
+نوع حافظهٔ نهان را می‌توان با استفاده از فیلد <code dir="ltr">configMapAndSecretChangeDetectionStrategy</code> در
+<a href="https://kubernetes.io/docs/reference/config-api/kubelet-config.v1beta1/" target="_blank">ساختار KubeletConfiguration</a> پیکربندی کرد.
+یک ConfigMap می‌تواند از طریق watch (پیش‌فرض)، بر پایهٔ ttl، یا با هدایت
+همهٔ درخواست‌ها مستقیماً به سرور API منتشر شود.
+در نتیجه، کل تأخیر از لحظه‌ای که ConfigMap به‌روزرسانی می‌شود تا لحظه‌ای
+که کلیدهای جدید در Pod project می‌شوند می‌تواند به اندازهٔ دورهٔ همگام‌سازی kubelet به‌علاوهٔ تأخیر
+انتشار حافظهٔ نهان باشد، که تأخیر انتشار حافظهٔ نهان به نوع حافظهٔ نهان انتخاب‌شده بستگی دارد
+(به ترتیب برابر با تأخیر انتشار watch، مقدار ttl حافظهٔ نهان، یا صفر است).</p>
+<p dir="rtl">ConfigMapهایی که به‌صورت متغیر محیطی مصرف می‌شوند به‌طور خودکار به‌روزرسانی نمی‌شوند و نیازمند راه‌اندازی مجدد Pod هستند.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">کانتینری که از یک ConfigMap به‌صورت mount حجم <a href="https://kubernetes.io/docs/concepts/storage/volumes#using-subpath" target="_blank">subPath</a> استفاده می‌کند، به‌روزرسانی‌های ConfigMap را دریافت نخواهد کرد.</p>
+</div>
+<h3 id="استفاده-از-configmapها-به-صورت-متغیرهای-محیطی" dir="rtl">استفاده از ConfigMapها به‌صورت متغیرهای محیطی</h3>
+<p dir="rtl">برای استفاده از یک ConfigMap در یک <span class="term" title="container-env-variables">متغیر محیطی</span>
+در یک Pod:</p>
+<ol>
+<li dir="rtl">برای هر کانتینر در مشخصات Pod خود، به ازای هر کلید ConfigMap که می‌خواهید استفاده کنید
+یک متغیر محیطی به فیلد
+<code dir="ltr">env[].valueFrom.configMapKeyRef</code> اضافه کنید.</li>
+<li dir="rtl">ایمیج و/یا خط فرمان خود را طوری تغییر دهید که برنامه مقادیر را
+در متغیرهای محیطی مشخص‌شده جست‌وجو کند.</li>
+</ol>
+<p dir="rtl">این نمونه‌ای از تعریف یک ConfigMap به‌عنوان متغیر محیطی Pod است:</p>
+<p dir="rtl">ConfigMap زیر (myconfigmap.yaml) دو ویژگی را ذخیره می‌کند: username و access_level:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: myconfigmap
+data:
+  username: k8s-admin
+  access_level: "1"
+</code></pre>
+<p dir="rtl">فرمان زیر آبجکت ConfigMap را ایجاد می‌کند:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f myconfigmap.yaml
+</code></pre>
+<p dir="rtl">Pod زیر محتوای ConfigMap را به‌صورت متغیرهای محیطی مصرف می‌کند:</p>
+<div class="code-file ltr" dir="ltr">configmap/env-configmap.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: Pod
+metadata:
+  name: env-configmap
+spec:
+  containers:
+    - name: app
+      command: ["/bin/sh", "-c", "printenv"]
+      image: busybox:latest
+      envFrom:
+        - configMapRef:
+            name: myconfigmap
+</code></pre>
+<p dir="rtl">فیلد <code dir="ltr">envFrom</code> به کوبرنتیز دستور می‌دهد از منابعی که درون آن قرار گرفته‌اند متغیرهای محیطی ایجاد کند.
+<code dir="ltr">configMapRef</code> درونی با نام به یک ConfigMap ارجاع می‌دهد و همهٔ جفت‌های کلید-مقدار آن را انتخاب می‌کند.
+Pod را به کلاستر خود اضافه کنید، سپس لاگ‌های آن را بازیابی کنید تا خروجی فرمان printenv را ببینید.
+این کار باید تأیید کند که دو جفت کلید-مقدار از ConfigMap به‌عنوان متغیرهای محیطی تنظیم شده‌اند:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f env-configmap.yaml
+</code></pre>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl logs pod/env-configmap
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code class="language-console" dir="ltr">...
+username: "k8s-admin"
+access_level: "1"
+...
+</code></pre>
+<p dir="rtl">گاهی یک Pod به همهٔ مقادیر یک ConfigMap نیاز ندارد.
+برای نمونه، ممکن است Pod دیگری داشته باشید که فقط از مقدار username در ConfigMap استفاده می‌کند.
+برای این مورد کاربرد، می‌توانید به‌جای آن از نحو <code dir="ltr">env.valueFrom</code> استفاده کنید که به شما امکان می‌دهد کلیدهای منفرد را در
+یک ConfigMap انتخاب کنید. نام متغیر محیطی همچنین می‌تواند با کلید درون ConfigMap متفاوت باشد.
+برای نمونه:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: Pod
+metadata:
+  name: env-configmap
+spec:
+  containers:
+  - name: envars-test-container
+    image: nginx
+    env:
+    - name: CONFIGMAP_USERNAME
+      valueFrom:
+        configMapKeyRef:
+          name: myconfigmap
+          key: username
+</code></pre>
+<p dir="rtl">در Podی که از این مانیفست ایجاد می‌شود، خواهید دید که متغیر محیطی
+<code dir="ltr">CONFIGMAP_USERNAME</code> روی مقدار <code dir="ltr">username</code> از ConfigMap تنظیم شده است.
+سایر کلیدهای داده‌های ConfigMap در محیط کپی نمی‌شوند.</p>
+<p dir="rtl">توجه به این نکته مهم است که بازهٔ نویسه‌های مجاز برای نام متغیرهای
+محیطی در Podها <a href="https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/#using-environment-variables-inside-of-your-config" target="_blank">محدود</a> است.
+اگر کلیدهایی با این قواعد مطابقت نداشته باشند، آن کلیدها در اختیار کانتینر شما قرار نمی‌گیرند،
+هرچند Pod اجازهٔ آغاز به کار دارد.</p>
+<h2 id="configmapهای-تغییرناپذیر-configmap-immutable" dir="rtl">ConfigMapهای تغییرناپذیر {#configmap-immutable}</h2>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes v1.21 [stable]</span> (پایدار)</div>
+<p dir="rtl">قابلیت <em>Secretها و ConfigMapهای تغییرناپذیر</em> در کوبرنتیز گزینه‌ای برای تنظیم
+Secretها و ConfigMapهای منفرد به‌صورت تغییرناپذیر فراهم می‌کند. برای کلاسترهایی که به‌طور گسترده از ConfigMapها استفاده می‌کنند
+(دست‌کم ده‌ها هزار mount یکتای ConfigMap به Pod)، جلوگیری از تغییر
+داده‌های آن‌ها مزایای زیر را دارد:</p>
+<ul>
+<li dir="rtl">شما را از به‌روزرسانی‌های تصادفی (یا ناخواسته) که ممکن است باعث از کار افتادن برنامه‌ها شوند محافظت می‌کند</li>
+<li dir="rtl">با بستن watchها برای ConfigMapهایی که به‌عنوان تغییرناپذیر علامت‌گذاری شده‌اند، بار روی kube-apiserver را
+به‌طور چشمگیری کاهش می‌دهد و در نتیجه کارایی کلاستر شما را بهبود می‌بخشد.</li>
+</ul>
+<p dir="rtl">می‌توانید با تنظیم فیلد <code dir="ltr">immutable</code> روی <code dir="ltr">true</code> یک ConfigMap تغییرناپذیر ایجاد کنید.
+برای نمونه:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: ConfigMap
+metadata:
+  ...
+data:
+  ...
+immutable: true
+</code></pre>
+<p dir="rtl">هنگامی که یک ConfigMap به‌عنوان تغییرناپذیر علامت‌گذاری شود، بازگرداندن این تغییر
+یا تغییر محتوای فیلد <code dir="ltr">data</code> یا <code dir="ltr">binaryData</code> <em>ممکن نیست</em>. تنها می‌توانید
+ConfigMap را حذف و دوباره ایجاد کنید. از آنجا که Podهای موجود نقطهٔ mount
+به ConfigMap حذف‌شده را حفظ می‌کنند، توصیه می‌شود این Podها را دوباره ایجاد کنید.</p>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<ul>
+<li dir="rtl">دربارهٔ <a href="https://kubernetes.io/docs/concepts/configuration/secret/" target="_blank">Secretها</a> بخوانید.</li>
+<li dir="rtl">مطلب <a href="https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-configmap/" target="_blank">پیکربندی یک Pod برای استفاده از یک ConfigMap</a> را بخوانید.</li>
+<li dir="rtl">دربارهٔ <a href="https://kubernetes.io/docs/tasks/manage-kubernetes-objects/update-api-object-kubectl-patch/" target="_blank">تغییر یک ConfigMap (یا هر آبجکت دیگر کوبرنتیز)</a> بخوانید</li>
+<li dir="rtl">مطلب <a href="https://12factor.net/" target="_blank" rel="noopener">The Twelve-Factor App</a> را بخوانید تا انگیزهٔ
+جداسازی کد از پیکربندی را درک کنید.</li>
+</ul>
+</main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#انگیزه">انگیزه</a><a class="l2" href="#آبجکت-configmap">آبجکت ConfigMap</a><a class="l2" href="#configmapها-و-podها">ConfigMapها و Podها</a><a class="l2" href="#استفاده-از-configmapها">استفاده از ConfigMapها</a><a class="l3" href="#استفاده-از-configmapها-به-صورت-فایل-در-یک-pod">استفاده از ConfigMapها به‌صورت فایل در یک Pod</a><a class="l3" href="#استفاده-از-configmapها-به-صورت-متغیرهای-محیطی">استفاده از ConfigMapها به‌صورت متغیرهای محیطی</a><a class="l2" href="#configmapهای-تغییرناپذیر-configmap-immutable">ConfigMapهای تغییرناپذیر {#configmap-immutable}</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>

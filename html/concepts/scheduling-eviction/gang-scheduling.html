@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>زمان‌بندی گروهی (Gang Scheduling) | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+</head>
+<body>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">concepts / scheduling-eviction</span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">زمان‌بندی گروهی (Gang Scheduling)</h1><!-- overview -->
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
+<p dir="rtl">زمان‌بندی گروهی (Gang scheduling) تضمین می‌کند که گروهی از Podها بر مبنای «همه یا هیچ» زمان‌بندی شوند.
+اگر کلاستر نتواند کل گروه (یا حداقل تعداد تعریف‌شده‌ای از Podها که با <code dir="ltr">minCount</code> مشخص می‌شود) را جای دهد،
+هیچ‌یک از Podها به نودی متصل نمی‌شوند.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">هرچند زمان‌بند در جای‌گذاری اولیه هرگز کمتر از <code dir="ltr">minCount</code> پیکربندی‌شده Pod را نمی‌پذیرد، تعداد واقعی
+Podهای زمان‌بندی‌شده در زمان اجرا ممکن است کمتر از این آستانه شود؛ برای مثال اگر Podهای در حال اجرا بعداً حذف یا بیرون‌رانده شوند، یا اگر
+الزام <code dir="ltr">minCount</code> افزایش یابد. در چنین حالتی، زمان‌بند تنها در صورتی Podهای بیشتری را جای‌گذاری می‌کند که
+مجموع Podهای از قبل زمان‌بندی‌شده و Podهای زمان‌بندی‌نشده‌ای که به‌تازگی قابل جای‌گذاری شده‌اند، به <code dir="ltr">minCount</code> برسد یا از آن بیشتر شود.</p>
+</div>
+<p dir="rtl">این قابلیت به <a href="../workloads/podgroup-api/index.html">PodGroup API</a> وابسته است.
+اطمینان حاصل کنید که feature gate
+<a href="https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/#GenericWorkload" target="_blank"><code dir="ltr">GenericWorkload</code></a>
+و <span class="term" title="api-group">گروه API</span>
+<code dir="ltr">scheduling.k8s.io/v1beta1</code> در کلاستر فعال باشند.</p>
+<!-- body -->
+<h2 id="نحوهٔ-کار" dir="rtl">نحوهٔ کار</h2>
+<p dir="rtl">هنگامی که افزونهٔ <code dir="ltr">GangScheduling</code> فعال باشد، زمان‌بند چرخهٔ حیات Podهایی را که
+به یک <a href="../workloads/podgroup-api/index.html">PodGroup</a> با
+<a href="../workloads/workload-api/policies.html">سیاست زمان‌بندی</a> از نوع <code dir="ltr">gang</code> تعلق دارند، تغییر می‌دهد.
+این فرایند برای هر PodGroup مراحل زیر را طی می‌کند:</p>
+<ol>
+<li dir="rtl">
+<p dir="rtl">زمان‌بند Podها را در مرحلهٔ <code dir="ltr">PreEnqueue</code> نگه می‌دارد تا زمانی که:</p>
+<ul>
+<li dir="rtl">آبجکت PodGroup ارجاع‌شده وجود داشته باشد.</li>
+<li dir="rtl">تعداد Podهای ایجادشده برای PodGroup (هم زمان‌بندی‌شده و هم زمان‌بندی‌نشده) دست‌کم برابر با <code dir="ltr">minCount</code> باشد.</li>
+</ul>
+<p dir="rtl">PodGroup تا زمانی که هر دو شرط برآورده نشوند، وارد صف فعال زمان‌بندی نمی‌شود.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">پس از رسیدن به حد نصاب (quorum)، زمان‌بند می‌کوشد برای همهٔ Podهای زمان‌بندی‌نشدهٔ گروه جای‌گذاری بیابد.
+زمان‌بند از چرخهٔ <a href="https://kubernetes.io/docs/concepts/scheduling-eviction/podgroup-scheduling/" target="_blank">زمان‌بندی PodGroup</a> استفاده می‌کند تا یک تصمیم زمان‌بندی
+واحد و اتمیک بگیرد. افزونهٔ <code dir="ltr">GangScheduling</code> یک نقطهٔ توسعهٔ <code dir="ltr">PlacementFeasible</code> را پیاده‌سازی می‌کند که در طول چرخه برای هر
+Pod ارزیابی‌شده فراخوانی می‌شود. از این نقطه برای تعیین اینکه آیا قید <code dir="ltr">minCount</code> برآورده شده است یا نه استفاده می‌شود؛
+این کار با مقایسهٔ تعداد Podهایی که با موفقیت جای‌گذاری شده‌اند (از جمله Podهایی که در چرخه‌های قبلی زمان‌بندی شده‌اند) با مقدار <code dir="ltr">minCount</code> انجام می‌شود.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">اگر زمان‌بند برای دست‌کم <code dir="ltr">minCount</code> عدد از Podها جای‌گذاری معتبری بیابد،
+اجازه می‌دهد آن Podهایی که با موفقیت جای‌گذاری شده‌اند به نودهای اختصاص‌یافتهٔ خود متصل شوند.
+اگر نتواند جای‌گذاری‌های کافی برای برآوردن الزام <code dir="ltr">minCount</code> بیابد، هیچ‌یک از Podها زمان‌بندی نمی‌شوند.
+در عوض، آن‌ها به صف غیرقابل زمان‌بندی (unschedulable queue) منتقل می‌شوند تا منتظر آزاد شدن منابع کلاستر بمانند
+و در این فاصله بارهای کاری دیگر بتوانند زمان‌بندی شوند.</p>
+</li>
+</ol>
+<h2 id="زمان-بندی-گروهی-سلسله-مراتبی-با-compositepodgroupها" dir="rtl">زمان‌بندی گروهی سلسله‌مراتبی با CompositePodGroupها</h2>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
+<p dir="rtl">هنگامی که feature gate
+<a href="https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/#CompositePodGroup" target="_blank"><code dir="ltr">CompositePodGroup</code></a>
+و <span class="term" title="api-group">گروه API</span> <code dir="ltr">scheduling.k8s.io/v1alpha3</code>
+فعال باشند، زمان‌بندی گروهی پشتیبانی خود را به <code dir="ltr">CompositePodGroups</code> نیز گسترش می‌دهد.</p>
+<p dir="rtl">برخلاف <code dir="ltr">PodGroups</code> که Podها را گروه‌بندی می‌کنند، <code dir="ltr">CompositePodGroups</code> گروه‌های فرزند را با هم گروه‌بندی می‌کنند؛ این گروه‌ها یا
+<code dir="ltr">PodGroups</code> هستند یا <code dir="ltr">CompositePodGroups</code> دیگر. <code dir="ltr">CompositePodGroup</code> یک سیاست زمان‌بندی مشخص می‌کند که
+در طول زمان‌بندی روی گروه‌های فرزند آن اعمال می‌شود:</p>
+<ul>
+<li dir="rtl">سیاست <code dir="ltr">gang</code> با یک فیلد <code dir="ltr">minGroupCount</code> که حداقل تعداد گروه‌های فرزند (چه آبجکت‌های
+<code dir="ltr">CompositePodGroup</code> و چه <code dir="ltr">PodGroup</code>) را مشخص می‌کند که باید با هم به‌عنوان یک واحد واحد و
+به‌صورت اتمیک زمان‌بندی شوند.</li>
+<li dir="rtl">سیاست <code dir="ltr">basic</code> که نشان می‌دهد گروه‌های فرزند می‌توانند به‌طور مستقل زمان‌بندی شوند.</li>
+</ul>
+<p dir="rtl">سیاست <code dir="ltr">gang</code> برای بارهای کاری چندجزئی مفید است که به زمان‌بندی همه یا هیچ در میان
+چند گروه فرزند نیاز دارند و تضمین می‌کند که حداقل تعدادی از گروه‌های فرزند با هم زمان‌بندی شوند. یک
+نمونه بار کاری با چنین نیازهایی، آموزش تکثیرشدهٔ هوش مصنوعی (replicated AI training) است.</p>
+<p dir="rtl">سیاست <code dir="ltr">basic</code> را می‌توان برای بارهای کاری‌ای به کار برد که از چند گروه Pod تشکیل شده‌اند و هر یک از آن‌ها می‌تواند
+به‌عنوان یک گروه (gang) مستقل زمان‌بندی شود؛ برای مثال، بارهای کاری استنتاج (inference) هوش مصنوعی.</p>
+<h3 id="حد-نصاب-سلسله-مراتبی" dir="rtl">حد نصاب سلسله‌مراتبی</h3>
+<p dir="rtl">افزونهٔ <code dir="ltr">GangScheduling</code> در مرحلهٔ <code dir="ltr">PreEnqueue</code> از ورود <code dir="ltr">CompositePodGroup</code> ریشه به صف فعال زمان‌بندی
+جلوگیری می‌کند تا زمانی که <strong>حد نصاب سلسله‌مراتبی</strong> را برآورده کند. این حد نصاب
+از پایین به بالا، از آبجکت‌های <code dir="ltr">PodGroup</code> برگ تا <code dir="ltr">CompositePodGroup</code> ریشه، ارزیابی می‌شود:</p>
+<ul>
+<li dir="rtl">یک <code dir="ltr">PodGroup</code> برگ <strong>حد نصاب را برآورده می‌کند</strong> اگر و تنها اگر آبجکت <code dir="ltr">PodGroup</code> وجود داشته باشد و
+بتواند به‌طور بالقوه معیارهای سیاست زمان‌بندی خود را برآورده کند:
+<ul>
+<li dir="rtl">برای سیاست <code dir="ltr">gang</code>: دست‌کم <code dir="ltr">minCount</code> عدد از Podهای تشکیل‌دهندهٔ آن ایجاد شده باشند.</li>
+<li dir="rtl">برای سیاست <code dir="ltr">basic</code>: دست‌کم یکی از Podهای تشکیل‌دهندهٔ آن ایجاد شده باشد.</li>
+</ul>
+</li>
+<li dir="rtl">یک <code dir="ltr">CompositePodGroup</code> <strong>حد نصاب را برآورده می‌کند</strong> اگر و تنها اگر آبجکت <code dir="ltr">CompositePodGroup</code> وجود داشته باشد
+و بتواند به‌طور بالقوه معیارهای سیاست زمان‌بندی خود را برآورده کند:
+<ul>
+<li dir="rtl">برای سیاست <code dir="ltr">gang</code>: دست‌کم <code dir="ltr">minGroupCount</code> عدد از گروه‌های فرزند مستقیم آن حد نصاب را برآورده کنند.</li>
+<li dir="rtl">برای سیاست <code dir="ltr">basic</code>: دست‌کم یکی از گروه‌های فرزند مستقیم آن حد نصاب را برآورده کند.</li>
+</ul>
+</li>
+<li dir="rtl"><strong>حد نصاب سلسله‌مراتبی</strong> کلی اگر و تنها اگر برآورده می‌شود که <code dir="ltr">CompositePodGroup</code> ریشه
+حد نصاب را برآورده کند.</li>
+</ul>
+<p dir="rtl">در نهایت، یک <code dir="ltr">CompositePodGroup</code> ریشه اگر و تنها اگر وارد صف فعال زمان‌بندی پذیرفته می‌شود که
+حد نصاب سلسله‌مراتبی را برآورده کند و دست‌کم یک Pod در انتظار وجود داشته باشد که به یکی از
+<code dir="ltr">PodGroups</code> نوادهٔ آن تعلق دارد.</p>
+<h3 id="امکان-پذیری-جای-گذاری" dir="rtl">امکان‌پذیری جای‌گذاری</h3>
+<p dir="rtl">متد <code dir="ltr">PlacementFeasible</code> در افزونهٔ <code dir="ltr">GangScheduling</code> از ارزیابی هر دو نوع
+<code dir="ltr">PodGroups</code> و <code dir="ltr">CompositePodGroups</code> پشتیبانی می‌کند. این متد توسط چرخهٔ زمان‌بندی پیش از شروع ارزیابی
+فرزندان و پس از ارزیابی هر گروه فرزند یک <code dir="ltr">CompositePodGroup</code> فراخوانی می‌شود.</p>
+<p dir="rtl"><code dir="ltr">PlacementFeasible</code> با در نظر گرفتن تعداد گروه‌های فرزندی که با موفقیت زمان‌بندی شده‌اند و گروه‌های
+فرزندی که هنوز در چرخهٔ زمان‌بندی ارزیابی نشده‌اند، تعیین می‌کند
+که آیا قید سیاست گروه هنوز دست‌یافتنی است یا نه؛ این کار به چرخهٔ زمان‌بندی اجازه می‌دهد
+در صورتی که سیاست زمان‌بندی زیربنایی <code dir="ltr">CompositePodGroup</code> دیگر قابل برآورده شدن نباشد،
+ارزیابی آن را زودتر لغو کند.</p>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<ul>
+<li dir="rtl">دربارهٔ <a href="../workloads/podgroup-api/index.html">PodGroup API</a> و <a href="../workloads/podgroup-api/lifecycle.html">چرخهٔ حیات</a> آن بیاموزید.</li>
+<li dir="rtl">دربارهٔ <a href="../workloads/compositepodgroup-api/index.html">CompositePodGroup API</a> بخوانید.</li>
+<li dir="rtl">دربارهٔ <a href="../workloads/workload-api/policies.html">سیاست‌های زمان‌بندی PodGroup</a> بخوانید.</li>
+<li dir="rtl">دربارهٔ <a href="https://kubernetes.io/docs/concepts/scheduling-eviction/podgroup-scheduling/" target="_blank">زمان‌بندی PodGroup</a> بخوانید.</li>
+</ul>
+</main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#نحوهٔ-کار">نحوهٔ کار</a><a class="l2" href="#زمان-بندی-گروهی-سلسله-مراتبی-با-compositepodgroupها">زمان‌بندی گروهی سلسله‌مراتبی با CompositePodGroupها</a><a class="l3" href="#حد-نصاب-سلسله-مراتبی">حد نصاب سلسله‌مراتبی</a><a class="l3" href="#امکان-پذیری-جای-گذاری">امکان‌پذیری جای‌گذاری</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>

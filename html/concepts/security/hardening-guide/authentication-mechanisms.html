@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>راهنمای سخت‌سازی - سازوکارهای احراز هویت | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+</head>
+<body>
+<header class="top"><a href="../../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">concepts / security / hardening-guide</span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">راهنمای سخت‌سازی - سازوکارهای احراز هویت</h1><p class="page-meta" dir="rtl">اطلاعاتی دربارهٔ گزینه‌های احراز هویت در کوبرنتیز و ویژگی‌های امنیتی آن‌ها.
+</p><!-- overview -->
+<p dir="rtl">انتخاب سازوکار(های) احراز هویت مناسب جنبه‌ای حیاتی از ایمن‌سازی کلاستر شماست.
+کوبرنتیز چندین سازوکار داخلی فراهم می‌کند که هر یک نقاط قوت و ضعف خود را دارد و
+هنگام انتخاب بهترین سازوکار احراز هویت برای کلاستر باید به‌دقت در نظر گرفته شوند.</p>
+<p dir="rtl">به‌طور کلی، توصیه می‌شود تا حد امکان سازوکارهای احراز هویت کمتری فعال کنید تا
+مدیریت کاربران ساده‌تر شود و از مواردی جلوگیری شود که کاربران دسترسی‌ای به کلاستر را حفظ می‌کنند که دیگر به آن نیازی ندارند.</p>
+<p dir="rtl">توجه به این نکته اهمیت دارد که کوبرنتیز پایگاه دادهٔ کاربری داخلی درون کلاستر ندارد.
+در عوض، اطلاعات کاربران را از سیستم احراز هویت پیکربندی‌شده دریافت می‌کند و از آن برای اتخاذ
+تصمیم‌های مجوزدهی استفاده می‌کند. بنابراین، برای ممیزی دسترسی کاربران، باید اعتبارنامه‌ها را از هر
+منبع احراز هویت پیکربندی‌شده بازبینی کنید.</p>
+<p dir="rtl">برای کلاسترهای تولیدی که چندین کاربر به‌طور مستقیم به API کوبرنتیز دسترسی دارند،
+توصیه می‌شود از منابع احراز هویت خارجی مانند OIDC استفاده شود. سازوکارهای احراز هویت
+داخلی، مانند گواهی‌نامه‌های کلاینت و توکن‌های حساب سرویس که در ادامه توصیف شده‌اند، برای
+این مورد استفاده مناسب نیستند.</p>
+<!-- body -->
+<h2 id="احراز-هویت-با-گواهی-نامهٔ-کلاینت-x-509-x509-client-certificate-authentication" dir="rtl">احراز هویت با گواهی‌نامهٔ کلاینت X.509 {#x509-client-certificate-authentication}</h2>
+<p dir="rtl">کوبرنتیز از احراز هویت با <a href="https://kubernetes.io/docs/reference/access-authn-authz/authentication/#x509-client-certificates" target="_blank">گواهی‌نامهٔ کلاینت X.509</a>
+برای مؤلفه‌های سیستمی استفاده می‌کند، مانند زمانی که kubelet در API Server احراز هویت می‌شود.
+اگرچه این سازوکار را می‌توان برای احراز هویت کاربران نیز به کار برد، ممکن است به دلیل چندین محدودیت
+برای استفادهٔ تولیدی مناسب نباشد:</p>
+<ul>
+<li dir="rtl">گواهی‌نامه‌های کلاینت را نمی‌توان به‌صورت تکی باطل کرد. هنگامی که یک گواهی‌نامه افشا شود، مهاجم می‌تواند
+تا زمان انقضای آن از آن استفاده کند. برای کاهش این خطر، توصیه می‌شود طول عمر کوتاهی
+برای اعتبارنامه‌های احراز هویت کاربر که با استفاده از گواهی‌نامه‌های کلاینت ایجاد می‌شوند پیکربندی شود.</li>
+<li dir="rtl">اگر لازم باشد گواهی‌نامه‌ای بی‌اعتبار شود، کلید مرجع صدور گواهی‌نامه باید از نو تولید شود که این کار
+می‌تواند خطرات دسترس‌پذیری را برای کلاستر به همراه داشته باشد.</li>
+<li dir="rtl">هیچ سابقهٔ دائمی‌ای از گواهی‌نامه‌های کلاینت ایجادشده در کلاستر وجود ندارد. بنابراین، اگر
+نیاز به پیگیری گواهی‌نامه‌های صادرشده دارید، همهٔ آن‌ها باید ثبت شوند.</li>
+<li dir="rtl">کلیدهای خصوصی مورد استفاده برای احراز هویت با گواهی‌نامهٔ کلاینت را نمی‌توان با گذرواژه محافظت کرد. هر کسی
+که بتواند فایل حاوی کلید را بخواند، قادر به استفاده از آن خواهد بود.</li>
+<li dir="rtl">استفاده از احراز هویت با گواهی‌نامهٔ کلاینت مستلزم اتصال مستقیم از کلاینت به
+API server بدون هیچ نقطهٔ خاتمهٔ TLS میانی است که می‌تواند معماری‌های شبکه را پیچیده کند.</li>
+<li dir="rtl">داده‌های گروه در مقدار <code dir="ltr">O</code> گواهی‌نامهٔ کلاینت جاسازی شده‌اند، به این معنا که عضویت‌های گروهی کاربر
+در طول عمر گواهی‌نامه قابل تغییر نیستند.</li>
+</ul>
+<h2 id="فایل-توکن-ایستا-static-token-file" dir="rtl">فایل توکن ایستا {#static-token-file}</h2>
+<p dir="rtl">اگرچه کوبرنتیز به شما اجازه می‌دهد اعتبارنامه‌ها را از یک
+<a href="https://kubernetes.io/docs/reference/access-authn-authz/authentication/#static-token-file" target="_blank">فایل توکن ایستا</a> واقع
+روی دیسک‌های نودهای control plane بارگذاری کنید، این رویکرد به دلایل متعددی برای سرورهای تولیدی
+توصیه نمی‌شود:</p>
+<ul>
+<li dir="rtl">اعتبارنامه‌ها به‌صورت متن ساده روی دیسک‌های نودهای control plane ذخیره می‌شوند که می‌تواند یک خطر امنیتی باشد.</li>
+<li dir="rtl">تغییر هر اعتبارنامه برای اعمال شدن مستلزم راه‌اندازی مجدد فرایند API server است که می‌تواند
+بر دسترس‌پذیری تأثیر بگذارد.</li>
+<li dir="rtl">هیچ سازوکاری برای اینکه کاربران بتوانند اعتبارنامه‌های خود را چرخش دهند وجود ندارد. برای چرخش یک
+اعتبارنامه، مدیر کلاستر باید توکن را روی دیسک تغییر داده و آن را میان کاربران توزیع کند.</li>
+<li dir="rtl">هیچ سازوکار قفل‌کردنی برای جلوگیری از حملات brute-force وجود ندارد.</li>
+</ul>
+<h2 id="توکن-های-راه-اندازی-bootstrap-tokens" dir="rtl">توکن‌های راه‌اندازی {#bootstrap-tokens}</h2>
+<p dir="rtl"><a href="https://kubernetes.io/docs/reference/access-authn-authz/bootstrap-tokens/" target="_blank">توکن‌های راه‌اندازی (Bootstrap tokens)</a> برای پیوستن
+نودها به کلاسترها استفاده می‌شوند و به دلایل متعددی برای احراز هویت کاربران توصیه نمی‌شوند:</p>
+<ul>
+<li dir="rtl">آن‌ها عضویت‌های گروهی ثابت و ازپیش‌تعیین‌شده‌ای دارند که برای استفادهٔ عمومی مناسب نیست و این امر آن‌ها را
+برای اهداف احراز هویت نامناسب می‌سازد.</li>
+<li dir="rtl">تولید دستی توکن‌های راه‌اندازی می‌تواند به توکن‌های ضعیفی منجر شود که مهاجم بتواند آن‌ها را حدس بزند
+و این می‌تواند یک خطر امنیتی باشد.</li>
+<li dir="rtl">هیچ سازوکار قفل‌کردنی برای جلوگیری از حملات brute-force وجود ندارد و این امر حدس زدن یا شکستن توکن را
+برای مهاجمان آسان‌تر می‌کند.</li>
+</ul>
+<h2 id="توکن-های-secret-مربوط-به-serviceaccount-serviceaccount-secret-tokens" dir="rtl">توکن‌های secret مربوط به ServiceAccount {#serviceaccount-secret-tokens}</h2>
+<p dir="rtl"><a href="https://kubernetes.io/docs/reference/access-authn-authz/service-accounts-admin/#manual-secret-management-for-serviceaccounts" target="_blank">Secretهای حساب سرویس</a>
+به‌عنوان گزینه‌ای در دسترس هستند تا بارهای کاری در حال اجرا در کلاستر بتوانند در
+API server احراز هویت شوند. در کوبرنتیز &lt; 1.23، این‌ها گزینهٔ پیش‌فرض بودند، اما در حال جایگزین شدن
+با توکن‌های TokenRequest API هستند. اگرچه می‌توان از این secretها برای احراز هویت کاربران استفاده کرد،
+به دلایل متعددی عموماً نامناسب هستند:</p>
+<ul>
+<li dir="rtl">نمی‌توان برای آن‌ها تاریخ انقضا تعیین کرد و تا زمان حذف حساب سرویس مرتبط معتبر باقی می‌مانند.</li>
+<li dir="rtl">توکن‌های احراز هویت برای هر کاربر کلاستری که بتواند secretها را در فضای نامی که در آن
+تعریف شده‌اند بخواند قابل مشاهده هستند.</li>
+<li dir="rtl">حساب‌های سرویس را نمی‌توان به گروه‌های دلخواه اضافه کرد و این امر مدیریت RBAC را در جاهایی که استفاده می‌شوند پیچیده می‌کند.</li>
+</ul>
+<h2 id="توکن-های-tokenrequest-api-tokenrequest-api-tokens" dir="rtl">توکن‌های TokenRequest API {#tokenrequest-api-tokens}</h2>
+<p dir="rtl">TokenRequest API ابزاری مفید برای تولید اعتبارنامه‌های کوتاه‌عمر برای احراز هویت
+سرویس‌ها در API server یا سیستم‌های شخص ثالث است. با این حال، عموماً برای احراز هویت کاربران
+توصیه نمی‌شود، زیرا هیچ روشی برای ابطال وجود ندارد و توزیع ایمن اعتبارنامه‌ها
+میان کاربران می‌تواند چالش‌برانگیز باشد.</p>
+<p dir="rtl">هنگام استفاده از توکن‌های TokenRequest برای احراز هویت سرویس، توصیه می‌شود طول عمر کوتاهی
+برای آن‌ها پیاده‌سازی شود تا تأثیر توکن‌های افشاشده کاهش یابد.</p>
+<h2 id="احراز-هویت-با-توکن-openid-connect-openid-connect-token-authentication" dir="rtl">احراز هویت با توکن OpenID Connect {#openid-connect-token-authentication}</h2>
+<p dir="rtl">کوبرنتیز از یکپارچه‌سازی سرویس‌های احراز هویت خارجی با API کوبرنتیز با استفاده از
+<a href="https://kubernetes.io/docs/reference/access-authn-authz/authentication/#openid-connect-tokens" target="_blank">OpenID Connect (OIDC)</a> پشتیبانی می‌کند.
+طیف گسترده‌ای از نرم‌افزارها وجود دارد که می‌توان از آن‌ها برای یکپارچه‌سازی کوبرنتیز با یک ارائه‌دهندهٔ
+هویت استفاده کرد. با این حال، هنگام استفاده از احراز هویت OIDC در کوبرنتیز، در نظر گرفتن
+اقدامات سخت‌سازی زیر اهمیت دارد:</p>
+<ul>
+<li dir="rtl">نرم‌افزاری که برای پشتیبانی از احراز هویت OIDC در کلاستر نصب می‌شود باید از
+بارهای کاری عمومی ایزوله شود، زیرا با امتیازات بالا اجرا خواهد شد.</li>
+<li dir="rtl">برخی از سرویس‌های مدیریت‌شدهٔ کوبرنتیز از نظر ارائه‌دهندگان OIDC قابل استفاده محدودیت دارند.</li>
+<li dir="rtl">همانند توکن‌های TokenRequest، توکن‌های OIDC باید طول عمر کوتاهی داشته باشند تا تأثیر
+توکن‌های افشاشده کاهش یابد.</li>
+</ul>
+<h2 id="احراز-هویت-با-توکن-webhook-webhook-token-authentication" dir="rtl">احراز هویت با توکن Webhook {#webhook-token-authentication}</h2>
+<p dir="rtl"><a href="https://kubernetes.io/docs/reference/access-authn-authz/authentication/#webhook-token-authentication" target="_blank">احراز هویت با توکن Webhook</a>
+گزینهٔ دیگری برای یکپارچه‌سازی ارائه‌دهندگان احراز هویت خارجی با کوبرنتیز است. این سازوکار
+اجازه می‌دهد برای اتخاذ تصمیم احراز هویت، از طریق یک webhook با یک سرویس احراز هویت، که یا درون کلاستر یا به‌صورت خارجی
+اجرا می‌شود، ارتباط برقرار شود. توجه به این نکته اهمیت دارد که مناسب بودن
+این سازوکار احتمالاً به نرم‌افزار مورد استفاده برای سرویس احراز هویت بستگی دارد و
+ملاحظات خاص کوبرنتیز نیز وجود دارد که باید در نظر گرفته شوند.</p>
+<p dir="rtl">برای پیکربندی احراز هویت Webhook، دسترسی به فایل‌سیستم‌های سرورهای control plane لازم است. این
+به آن معناست که این کار با کوبرنتیز مدیریت‌شده ممکن نخواهد بود، مگر اینکه ارائه‌دهنده به‌طور خاص آن را
+در دسترس قرار دهد. علاوه بر این، هر نرم‌افزاری که برای پشتیبانی از این دسترسی در کلاستر نصب می‌شود باید
+از بارهای کاری عمومی ایزوله شود، زیرا با امتیازات بالا اجرا خواهد شد.</p>
+<h2 id="پراکسی-احراز-هویت-کننده-authenticating-proxy" dir="rtl">پراکسی احراز هویت‌کننده {#authenticating-proxy}</h2>
+<p dir="rtl">گزینهٔ دیگر برای یکپارچه‌سازی سیستم‌های احراز هویت خارجی با کوبرنتیز، استفاده از یک
+<a href="https://kubernetes.io/docs/reference/access-authn-authz/authentication/#authenticating-proxy" target="_blank">پراکسی احراز هویت‌کننده</a> است.
+با این سازوکار، کوبرنتیز انتظار دارد درخواست‌هایی را از پراکسی دریافت کند که مقادیر سرآیند
+مشخصی در آن‌ها تنظیم شده است و نام کاربری و عضویت‌های گروهی‌ای را که باید برای اهداف مجوزدهی اختصاص یابند نشان می‌دهند.
+توجه به این نکته اهمیت دارد که هنگام استفاده از این سازوکار، ملاحظات مشخصی وجود دارد
+که باید در نظر گرفته شوند.</p>
+<p dir="rtl">نخست، باید از TLS با پیکربندی ایمن میان پراکسی و API server کوبرنتیز استفاده شود تا
+خطر رهگیری ترافیک یا حملات شنود کاهش یابد. این کار تضمین می‌کند که ارتباط
+میان پراکسی و API server کوبرنتیز ایمن است.</p>
+<p dir="rtl">دوم، باید آگاه بود که مهاجمی که بتواند سرآیندهای
+درخواست را تغییر دهد ممکن است بتواند به منابع کوبرنتیز دسترسی غیرمجاز پیدا کند. از این رو، اهمیت دارد
+اطمینان حاصل شود که سرآیندها به‌درستی ایمن شده‌اند و قابل دستکاری نیستند.</p>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<ul>
+<li dir="rtl"><a href="https://kubernetes.io/docs/reference/access-authn-authz/authentication/" target="_blank">احراز هویت کاربران</a></li>
+<li dir="rtl"><a href="https://kubernetes.io/docs/reference/access-authn-authz/bootstrap-tokens/" target="_blank">احراز هویت با توکن‌های راه‌اندازی</a></li>
+<li dir="rtl"><a href="https://kubernetes.io/docs/reference/access-authn-authz/kubelet-authn-authz/#kubelet-authentication" target="_blank">احراز هویت kubelet</a></li>
+<li dir="rtl"><a href="https://kubernetes.io/docs/reference/access-authn-authz/service-accounts-admin/#bound-service-account-tokens" target="_blank">احراز هویت با توکن‌های حساب سرویس</a></li>
+</ul>
+</main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#احراز-هویت-با-گواهی-نامهٔ-کلاینت-x-509-x509-client-certificate-authentication">احراز هویت با گواهی‌نامهٔ کلاینت X.509 {#x509-client-certificate-authentication}</a><a class="l2" href="#فایل-توکن-ایستا-static-token-file">فایل توکن ایستا {#static-token-file}</a><a class="l2" href="#توکن-های-راه-اندازی-bootstrap-tokens">توکن‌های راه‌اندازی {#bootstrap-tokens}</a><a class="l2" href="#توکن-های-secret-مربوط-به-serviceaccount-serviceaccount-secret-tokens">توکن‌های secret مربوط به ServiceAccount {#serviceaccount-secret-tokens}</a><a class="l2" href="#توکن-های-tokenrequest-api-tokenrequest-api-tokens">توکن‌های TokenRequest API {#tokenrequest-api-tokens}</a><a class="l2" href="#احراز-هویت-با-توکن-openid-connect-openid-connect-token-authentication">احراز هویت با توکن OpenID Connect {#openid-connect-token-authentication}</a><a class="l2" href="#احراز-هویت-با-توکن-webhook-webhook-token-authentication">احراز هویت با توکن Webhook {#webhook-token-authentication}</a><a class="l2" href="#پراکسی-احراز-هویت-کننده-authenticating-proxy">پراکسی احراز هویت‌کننده {#authenticating-proxy}</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>

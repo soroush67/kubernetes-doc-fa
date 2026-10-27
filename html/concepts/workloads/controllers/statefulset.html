@@ -1,0 +1,591 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>StatefulSetها | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+</head>
+<body>
+<header class="top"><a href="../../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">concepts / workloads / controllers</span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">StatefulSetها</h1><p class="page-meta" dir="rtl">یک StatefulSet گروهی از Podها را اجرا می‌کند و برای هر یک از آن Podها هویتی ماندگار حفظ می‌کند. این ویژگی برای مدیریت برنامه‌هایی که به ذخیره‌سازی پایدار یا هویت شبکه‌ای پایدار و یکتا نیاز دارند مفید است.</p><!-- overview -->
+<p dir="rtl">StatefulSet آبجکت API بار کاری است که برای مدیریت برنامه‌های دارای حالت (stateful) به کار می‌رود.</p>
+<p dir="rtl"><em>(تعریف واژه‌نامه: statefulset)</em></p>
+<!-- body -->
+<h2 id="استفاده-از-statefulsetها" dir="rtl">استفاده از StatefulSetها</h2>
+<p dir="rtl">StatefulSetها برای برنامه‌هایی ارزشمند هستند که به یک یا چند مورد از موارد زیر
+نیاز دارند:</p>
+<ul>
+<li dir="rtl">شناسه‌های شبکه‌ای پایدار و یکتا.</li>
+<li dir="rtl">ذخیره‌سازی پایدار و ماندگار.</li>
+<li dir="rtl">استقرار و مقیاس‌دهی مرتب و مسالمت‌آمیز (graceful).</li>
+<li dir="rtl">به‌روزرسانی‌های غلتان مرتب و خودکار.</li>
+</ul>
+<p dir="rtl">در موارد بالا، «پایدار» به معنای ماندگاری در طول زمان‌بندی (مجدد) Pod است.
+اگر برنامه‌ای به هیچ شناسه پایداری یا استقرار، حذف یا مقیاس‌دهی مرتب نیاز نداشته باشد،
+باید برنامه خود را با استفاده از یک آبجکت بار کاری مستقر کنید
+که مجموعه‌ای از replicaهای بدون حالت را فراهم می‌کند.
+<a href="deployment.html">Deployment</a> یا
+<a href="replicaset.html">ReplicaSet</a> ممکن است برای نیازهای بدون حالت شما مناسب‌تر باشند.</p>
+<h2 id="محدودیت-ها" dir="rtl">محدودیت‌ها</h2>
+<ul>
+<li dir="rtl">ذخیره‌سازی برای یک Pod مشخص باید یا توسط یک
+<a href="https://kubernetes.io/docs/concepts/storage/dynamic-provisioning/" target="_blank">PersistentVolume Provisioner</a>
+بر اساس <em>storage class</em> درخواست‌شده تأمین شود، یا از پیش توسط یک مدیر تأمین شده باشد.</li>
+<li dir="rtl">حذف و/یا کاهش مقیاس یک StatefulSet، حجم‌های (volume) مرتبط با
+StatefulSet را حذف <em>نمی‌کند</em>. این کار برای تضمین ایمنی داده‌ها انجام می‌شود که به‌طور کلی ارزشمندتر از
+پاک‌سازی خودکار همه منابع مرتبط با StatefulSet است.</li>
+<li dir="rtl">StatefulSetها در حال حاضر به یک <a href="https://kubernetes.io/docs/concepts/services-networking/service/#headless-services" target="_blank">Headless Service</a>
+نیاز دارند که مسئول هویت شبکه‌ای Podها باشد. ایجاد این
+Service بر عهده شماست.</li>
+<li dir="rtl">StatefulSetها هنگام حذف یک StatefulSet، هیچ تضمینی درباره خاتمه Podها ارائه نمی‌دهند.
+برای دستیابی به خاتمه مرتب و مسالمت‌آمیز Podهای StatefulSet،
+می‌توان پیش از حذف، مقیاس StatefulSet را به 0 کاهش داد.</li>
+<li dir="rtl">هنگام استفاده از <a href="#rolling-updates">به‌روزرسانی‌های غلتان</a> با
+<a href="#pod-management-policies">سیاست مدیریت Pod</a> پیش‌فرض (<code dir="ltr">OrderedReady</code>)،
+ممکن است در وضعیتی معیوب قرار بگیرید که
+<a href="#forced-rollback">برای ترمیم به مداخله دستی</a> نیاز دارد.</li>
+</ul>
+<h2 id="مؤلفه-ها" dir="rtl">مؤلفه‌ها</h2>
+<p dir="rtl">مثال زیر مؤلفه‌های یک StatefulSet را نشان می‌دهد.</p>
+<div class="code-file ltr" dir="ltr">controllers/statefulset.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: Service
+metadata:
+  name: nginx
+  labels:
+    app: nginx
+spec:
+  ports:
+  - port: 80
+    name: web
+  clusterIP: None
+  selector:
+    app: nginx
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: web
+spec:
+  selector:
+    matchLabels:
+      app: nginx # has to match .spec.template.metadata.labels
+  serviceName: "nginx"
+  replicas: 3 # by default is 1
+  minReadySeconds: 10 # by default is 0
+  template:
+    metadata:
+      labels:
+        app: nginx # has to match .spec.selector.matchLabels
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: nginx
+        image: registry.k8s.io/nginx-slim:0.24
+        ports:
+        - containerPort: 80
+          name: web
+        volumeMounts:
+        - name: www
+          mountPath: /usr/share/nginx/html
+  volumeClaimTemplates:
+  - metadata:
+      name: www
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: "my-storage-class"
+      resources:
+        requests:
+          storage: 1Gi
+</code></pre>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">این مثال برای سادگی از حالت دسترسی <code dir="ltr">ReadWriteOnce</code> استفاده می‌کند. برای
+استفاده در محیط عملیاتی (production)، پروژه کوبرنتیز استفاده از حالت دسترسی <code dir="ltr">ReadWriteOncePod</code>
+را توصیه می‌کند.</p>
+</div>
+<p dir="rtl">در مثال بالا:</p>
+<ul>
+<li dir="rtl">یک Headless Service با نام <code dir="ltr">nginx</code> برای کنترل دامنه شبکه استفاده می‌شود.</li>
+<li dir="rtl">StatefulSet با نام <code dir="ltr">web</code> دارای یک Spec است که نشان می‌دهد 3 replica از کانتینر nginx در Podهای یکتا راه‌اندازی خواهند شد.</li>
+<li dir="rtl"><code dir="ltr">volumeClaimTemplates</code> با استفاده از
+<a href="../../storage/persistent-volumes.html">PersistentVolumeها</a> که توسط یک
+PersistentVolume Provisioner تأمین می‌شوند، ذخیره‌سازی پایدار فراهم می‌کند.</li>
+</ul>
+<p dir="rtl">نام یک آبجکت StatefulSet باید یک
+<a href="../../overview/working-with-objects/names.html#dns-label-names">برچسب DNS</a> معتبر باشد.</p>
+<h3 id="انتخابگر-pod" dir="rtl">انتخابگر Pod</h3>
+<p dir="rtl">باید فیلد <code dir="ltr">.spec.selector</code> یک StatefulSet را طوری تنظیم کنید که با برچسب‌های
+<code dir="ltr">.spec.template.metadata.labels</code> آن مطابقت داشته باشد. مشخص نکردن یک انتخابگر Pod منطبق، به
+خطای اعتبارسنجی در هنگام ایجاد StatefulSet منجر می‌شود.</p>
+<h3 id="قالب-های-درخواست-حجم-volume-claim-templates" dir="rtl">قالب‌های درخواست حجم (Volume Claim Templates)</h3>
+<p dir="rtl">می‌توانید فیلد <code dir="ltr">.spec.volumeClaimTemplates</code> را برای ایجاد یک
+<a href="../../storage/persistent-volumes.html#persistentvolumeclaims">PersistentVolumeClaim</a> تنظیم کنید.
+این کار در صورتی ذخیره‌سازی پایدار برای StatefulSet فراهم می‌کند که یکی از شرایط زیر برقرار باشد:</p>
+<ul>
+<li dir="rtl">StorageClass مشخص‌شده برای درخواست حجم طوری تنظیم شده باشد که از <a href="https://kubernetes.io/docs/concepts/storage/dynamic-provisioning/" target="_blank">تأمین
+پویا</a> استفاده کند.</li>
+<li dir="rtl">کلاستر از قبل یک PersistentVolume با StorageClass درست
+و فضای ذخیره‌سازی در دسترس کافی داشته باشد.</li>
+</ul>
+<h3 id="حداقل-ثانیه-های-آمادگی" dir="rtl">حداقل ثانیه‌های آمادگی</h3>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes v1.25 [stable]</span> (پایدار)</div>
+<p dir="rtl"><code dir="ltr">.spec.minReadySeconds</code> یک فیلد اختیاری است که حداقل تعداد ثانیه‌هایی را مشخص می‌کند که یک Pod تازه
+ایجادشده باید بدون از کار افتادن هیچ‌یک از کانتینرهایش در حال اجرا و آماده باشد تا در دسترس (available) در نظر گرفته شود.
+از این فیلد برای بررسی پیشرفت یک rollout هنگام استفاده از راهبرد <a href="#rolling-updates">به‌روزرسانی غلتان</a> استفاده می‌شود.
+مقدار پیش‌فرض این فیلد 0 است (Pod به محض آماده شدن، در دسترس در نظر گرفته می‌شود). برای آشنایی بیشتر با اینکه
+یک Pod چه زمانی آماده در نظر گرفته می‌شود، به <a href="https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes" target="_blank">بررسی‌های کانتینر (Container Probes)</a> مراجعه کنید.</p>
+<h2 id="هویت-pod" dir="rtl">هویت Pod</h2>
+<p dir="rtl">Podهای StatefulSet هویتی یکتا دارند که از یک شماره ترتیبی، یک
+هویت شبکه‌ای پایدار و یک ذخیره‌سازی پایدار تشکیل شده است. این هویت به Pod می‌چسبد،
+صرف‌نظر از اینکه روی کدام نود زمان‌بندی (مجدد) شود.</p>
+<h3 id="اندیس-ترتیبی" dir="rtl">اندیس ترتیبی</h3>
+<p dir="rtl">برای یک StatefulSet با N <a href="#replicas">replica</a>، به هر Pod در StatefulSet
+یک شماره ترتیبی صحیح اختصاص داده می‌شود که در کل مجموعه یکتاست. به‌طور پیش‌فرض،
+به Podها شماره‌های ترتیبی از 0 تا N-1 اختصاص داده می‌شود. کنترل‌کننده StatefulSet
+همچنین یک برچسب Pod با این اندیس اضافه می‌کند: <code dir="ltr">apps.kubernetes.io/pod-index</code>.</p>
+<h3 id="شماره-ترتیبی-آغازین" dir="rtl">شماره ترتیبی آغازین</h3>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
+<p dir="rtl"><code dir="ltr">.spec.ordinals</code> یک فیلد اختیاری است که به شما امکان می‌دهد شماره‌های ترتیبی صحیحی را که
+به هر Pod اختصاص داده می‌شود پیکربندی کنید. مقدار پیش‌فرض آن nil است. در این فیلد می‌توانید
+گزینه‌های زیر را پیکربندی کنید:</p>
+<ul>
+<li dir="rtl"><code dir="ltr">.spec.ordinals.start</code>: اگر فیلد <code dir="ltr">.spec.ordinals.start</code> تنظیم شده باشد، به Podها
+شماره‌های ترتیبی از <code dir="ltr">.spec.ordinals.start</code> تا
+<code dir="ltr">.spec.ordinals.start + .spec.replicas - 1</code> اختصاص داده می‌شود.</li>
+</ul>
+<h3 id="شناسه-شبکه-پایدار" dir="rtl">شناسه شبکه پایدار</h3>
+<p dir="rtl">هر Pod در یک StatefulSet نام میزبان (hostname) خود را از نام StatefulSet
+و شماره ترتیبی Pod به دست می‌آورد. الگوی نام میزبان ساخته‌شده
+<code dir="ltr">$(statefulset name)-$(ordinal)</code> است. مثال بالا سه Pod
+با نام‌های <code dir="ltr">web-0,web-1,web-2</code> ایجاد می‌کند.
+یک StatefulSet می‌تواند از یک <a href="https://kubernetes.io/docs/concepts/services-networking/service/#headless-services" target="_blank">Headless Service</a>
+برای کنترل دامنه Podهای خود استفاده کند. دامنه‌ای که توسط این Service مدیریت می‌شود به این شکل است:
+<code dir="ltr">$(service name).$(namespace).svc.cluster.local</code>، که در آن «cluster.local»
+دامنه کلاستر است.
+با ایجاد هر Pod، یک زیردامنه DNS متناظر به آن داده می‌شود که به این شکل است:
+<code dir="ltr">$(podname).$(governing service domain)</code>، که در آن سرویس حاکم (governing service) توسط
+فیلد <code dir="ltr">serviceName</code> در StatefulSet تعریف می‌شود.</p>
+<p dir="rtl">بسته به نحوه پیکربندی DNS در کلاستر شما، ممکن است نتوانید نام DNS
+یک Pod تازه اجراشده را بلافاصله جست‌وجو کنید. این رفتار زمانی رخ می‌دهد که کلاینت‌های دیگر در
+کلاستر پیش از ایجاد Pod، پرس‌وجوهایی برای نام میزبان آن ارسال کرده باشند.
+کش منفی (negative caching) که در DNS امری عادی است، به این معناست که نتایج جست‌وجوهای ناموفق قبلی
+حتی پس از اجرا شدن Pod، دست‌کم برای چند ثانیه به خاطر سپرده شده و دوباره استفاده می‌شوند.</p>
+<p dir="rtl">اگر نیاز دارید Podها را بلافاصله پس از ایجاد کشف کنید، چند گزینه دارید:</p>
+<ul>
+<li dir="rtl">به‌جای اتکا به جست‌وجوهای DNS، مستقیماً از API کوبرنتیز پرس‌وجو کنید (برای مثال با استفاده از watch).</li>
+<li dir="rtl">زمان کش کردن را در ارائه‌دهنده DNS کوبرنتیز خود کاهش دهید (معمولاً این به معنای ویرایش
+config map مربوط به CoreDNS است که در حال حاضر به مدت 30 ثانیه کش می‌کند).</li>
+</ul>
+<p dir="rtl">همان‌طور که در بخش <a href="#limitations">محدودیت‌ها</a> اشاره شد، ایجاد
+<a href="https://kubernetes.io/docs/concepts/services-networking/service/#headless-services" target="_blank">Headless Service</a>
+که مسئول هویت شبکه‌ای Podها است بر عهده شماست.</p>
+<p dir="rtl">در اینجا چند نمونه از انتخاب‌های ممکن برای دامنه کلاستر، نام Service و
+نام StatefulSet، و تأثیر آن‌ها بر نام‌های DNS مربوط به Podهای StatefulSet آمده است.</p>
+<table>
+<thead>
+<tr>
+<th dir="rtl">دامنه کلاستر</th>
+<th dir="ltr" class="ltr">Service (ns/name)</th>
+<th dir="ltr" class="ltr">StatefulSet (ns/name)</th>
+<th dir="rtl">دامنه StatefulSet</th>
+<th dir="rtl">DNS مربوط به Pod</th>
+<th dir="rtl">نام میزبان Pod</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td dir="ltr" class="ltr">cluster.local</td>
+<td dir="ltr" class="ltr">default/nginx</td>
+<td dir="ltr" class="ltr">default/web</td>
+<td dir="ltr" class="ltr">nginx.default.svc.cluster.local</td>
+<td dir="ltr" class="ltr">web-{0..N-1}.nginx.default.svc.cluster.local</td>
+<td dir="ltr" class="ltr">web-{0..N-1}</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr">cluster.local</td>
+<td dir="ltr" class="ltr">foo/nginx</td>
+<td dir="ltr" class="ltr">foo/web</td>
+<td dir="ltr" class="ltr">nginx.foo.svc.cluster.local</td>
+<td dir="ltr" class="ltr">web-{0..N-1}.nginx.foo.svc.cluster.local</td>
+<td dir="ltr" class="ltr">web-{0..N-1}</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr">kube.local</td>
+<td dir="ltr" class="ltr">foo/nginx</td>
+<td dir="ltr" class="ltr">foo/web</td>
+<td dir="ltr" class="ltr">nginx.foo.svc.kube.local</td>
+<td dir="ltr" class="ltr">web-{0..N-1}.nginx.foo.svc.kube.local</td>
+<td dir="ltr" class="ltr">web-{0..N-1}</td>
+</tr>
+</tbody>
+</table>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">دامنه کلاستر روی <code dir="ltr">cluster.local</code> تنظیم خواهد شد، مگر اینکه
+<a href="../../services-networking/dns-pod-service.html">به شکل دیگری پیکربندی شده باشد</a>.</p>
+</div>
+<h3 id="ذخیره-سازی-پایدار" dir="rtl">ذخیره‌سازی پایدار</h3>
+<p dir="rtl">برای هر ورودی VolumeClaimTemplate که در یک StatefulSet تعریف شده است، هر Pod یک
+PersistentVolumeClaim دریافت می‌کند. در مثال nginx بالا، هر Pod یک PersistentVolume واحد
+با StorageClass برابر <code dir="ltr">my-storage-class</code> و 1 GiB ذخیره‌سازی تأمین‌شده دریافت می‌کند. اگر هیچ StorageClassای
+مشخص نشده باشد، از StorageClass پیش‌فرض استفاده می‌شود. هنگامی که یک Pod روی یک نود زمان‌بندی (مجدد)
+می‌شود، <code dir="ltr">volumeMounts</code> آن PersistentVolumeهای مرتبط با
+PersistentVolume Claimهای آن را mount می‌کند. توجه داشته باشید که PersistentVolumeهای مرتبط با
+PersistentVolume Claimهای Podها، هنگام حذف Podها یا StatefulSet حذف نمی‌شوند.
+این کار باید به‌صورت دستی انجام شود.</p>
+<h3 id="برچسب-نام-pod" dir="rtl">برچسب نام Pod</h3>
+<p dir="rtl">هنگامی که <span class="term" title="controller">کنترل‌کننده</span> StatefulSet یک Pod ایجاد می‌کند،
+برچسبی با نام <code dir="ltr">statefulset.kubernetes.io/pod-name</code> به آن اضافه می‌کند که مقدار آن برابر با نام
+Pod است. این برچسب به شما امکان می‌دهد یک Service را به یک Pod مشخص در
+StatefulSet متصل کنید.</p>
+<h3 id="برچسب-اندیس-pod" dir="rtl">برچسب اندیس Pod</h3>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
+<p dir="rtl">هنگامی که <span class="term" title="controller">کنترل‌کننده</span> StatefulSet یک Pod ایجاد می‌کند،
+Pod جدید با <code dir="ltr">apps.kubernetes.io/pod-index</code> برچسب‌گذاری می‌شود. مقدار این برچسب، اندیس ترتیبی
+Pod است. این برچسب به شما امکان می‌دهد ترافیک را به یک اندیس Pod خاص هدایت کنید، لاگ‌ها/متریک‌ها را
+با استفاده از برچسب اندیس Pod فیلتر کنید و کارهای دیگری انجام دهید. توجه داشته باشید که feature gate <code dir="ltr">PodIndexLabel</code> برای این
+قابلیت به‌طور پیش‌فرض فعال و قفل شده است؛ برای غیرفعال کردن آن، کاربران باید از نسخه شبیه‌سازی‌شده سرور (server emulated version) v1.31 استفاده کنند.</p>
+<h2 id="تضمین-های-استقرار-و-مقیاس-دهی" dir="rtl">تضمین‌های استقرار و مقیاس‌دهی</h2>
+<ul>
+<li dir="rtl">برای یک StatefulSet با N replica، هنگام استقرار Podها، آن‌ها به‌ترتیب و یکی پس از دیگری از {0..N-1} ایجاد می‌شوند.</li>
+<li dir="rtl">هنگام حذف Podها، آن‌ها به ترتیب معکوس، از {N-1..0}، خاتمه می‌یابند.</li>
+<li dir="rtl">پیش از اعمال یک عملیات مقیاس‌دهی روی یک Pod، همه Podهای پیش از آن باید Running و Ready باشند. اگر <a href="#minimum-ready-seconds"><code dir="ltr">.spec.minReadySeconds</code></a> تنظیم شده باشد، Podهای پیشین باید در دسترس باشند (دست‌کم به مدت <code dir="ltr">minReadySeconds</code> در وضعیت Ready باشند).</li>
+<li dir="rtl">پیش از خاتمه یافتن یک Pod، همه Podهای پس از آن باید به‌طور کامل خاموش شده باشند.</li>
+</ul>
+<p dir="rtl">StatefulSet نباید <code dir="ltr">pod.Spec.TerminationGracePeriodSeconds</code> را برابر 0 مشخص کند. این کار
+ناامن است و اکیداً توصیه نمی‌شود. برای توضیح بیشتر، به
+<a href="https://kubernetes.io/docs/tasks/run-application/force-delete-stateful-set-pod/" target="_blank">حذف اجباری Podهای StatefulSet</a> مراجعه کنید.</p>
+<p dir="rtl">هنگامی که مثال nginx بالا ایجاد شود، سه Pod به ترتیب
+web-0، web-1 و web-2 مستقر می‌شوند. web-1 پیش از آنکه web-0
+<a href="https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/" target="_blank">Running و Ready</a> شود مستقر نخواهد شد، و web-2 تا زمانی که
+web-1 در وضعیت Running و Ready قرار نگیرد مستقر نخواهد شد. اگر web-0 پس از Running و Ready شدن web-1، اما پیش از
+راه‌اندازی web-2 از کار بیفتد، web-2 تا زمانی که web-0 با موفقیت دوباره راه‌اندازی نشود و
+در وضعیت Running و Ready قرار نگیرد، راه‌اندازی نخواهد شد.</p>
+<p dir="rtl">اگر کاربری مقیاس مثال مستقرشده را با patch کردن StatefulSet به گونه‌ای تغییر دهد که
+<code dir="ltr">replicas=1</code> شود، ابتدا web-2 خاتمه می‌یابد. web-1 تا زمانی که web-2
+به‌طور کامل خاموش و حذف نشود، خاتمه نخواهد یافت. اگر web-0 پس از خاتمه یافتن و
+خاموش شدن کامل web-2، اما پیش از خاتمه web-1 از کار بیفتد، web-1 تا زمانی که
+web-0 در وضعیت Running و Ready قرار نگیرد، خاتمه نخواهد یافت.</p>
+<h3 id="سیاست-های-مدیریت-pod" dir="rtl">سیاست‌های مدیریت Pod</h3>
+<p dir="rtl">StatefulSet به شما امکان می‌دهد از طریق فیلد <code dir="ltr">.spec.podManagementPolicy</code> تضمین‌های ترتیبی آن را
+تسهیل کنید، در حالی که تضمین‌های یکتایی و هویت آن حفظ می‌شوند.</p>
+<h4 id="مدیریت-pod-به-روش-orderedready" dir="rtl">مدیریت Pod به روش OrderedReady</h4>
+<p dir="rtl">مدیریت Pod به روش <code dir="ltr">OrderedReady</code> حالت پیش‌فرض برای StatefulSetها است. این روش رفتاری را که
+در <a href="#deployment-and-scaling-guarantees">تضمین‌های استقرار و مقیاس‌دهی</a> توضیح داده شد پیاده‌سازی می‌کند.</p>
+<h4 id="مدیریت-موازی-pod" dir="rtl">مدیریت موازی Pod</h4>
+<p dir="rtl">مدیریت Pod به روش <code dir="ltr">Parallel</code> به کنترل‌کننده StatefulSet می‌گوید که همه Podها را به‌صورت موازی راه‌اندازی یا
+خاتمه دهد و پیش از راه‌اندازی یا خاتمه دادن Pod دیگری، منتظر Running
+و Ready شدن یا خاتمه کامل Podها نماند.</p>
+<p dir="rtl">در عملیات مقیاس‌دهی، این به آن معناست که همه Podها به‌طور هم‌زمان ایجاد یا خاتمه می‌یابند.</p>
+<p dir="rtl">در به‌روزرسانی‌های غلتان، هنگامی که <a href="#maximum-unavailable-pods"><code dir="ltr">.spec.updateStrategy.rollingUpdate.maxUnavailable</code></a>
+بزرگ‌تر از 1 باشد، کنترل‌کننده StatefulSet حداکثر به تعداد <code dir="ltr">maxUnavailable</code> Pod را
+به‌طور هم‌زمان خاتمه داده و ایجاد می‌کند (که «bursting» نیز نامیده می‌شود). این کار می‌تواند به‌روزرسانی‌ها را سریع‌تر کند، اما ممکن است باعث شود Podها خارج از ترتیب آماده شوند که برای برنامه‌هایی که به ترتیب دقیق نیاز دارند مناسب نیست.</p>
+<h2 id="راهبردهای-به-روزرسانی" dir="rtl">راهبردهای به‌روزرسانی</h2>
+<p dir="rtl">فیلد <code dir="ltr">.spec.updateStrategy</code> یک StatefulSet به شما امکان می‌دهد به‌روزرسانی‌های غلتان خودکار را
+برای کانتینرها، برچسب‌ها، درخواست‌ها/محدودیت‌های منابع و
+حاشیه‌نویسی‌های Podهای یک StatefulSet پیکربندی یا غیرفعال کنید. سه مقدار ممکن وجود دارد:</p>
+<dl>
+<dt dir="ltr" class="ltr"><code dir="ltr">OnDelete</code></dt>
+<dd dir="rtl">هنگامی که <code dir="ltr">.spec.updateStrategy.type</code> یک StatefulSet روی <code dir="ltr">OnDelete</code> تنظیم شده باشد،
+کنترل‌کننده StatefulSet، Podهای یک
+StatefulSet را به‌طور خودکار به‌روزرسانی نمی‌کند. کاربران باید Podها را به‌صورت دستی حذف کنند تا کنترل‌کننده
+Podهای جدیدی ایجاد کند که تغییرات اعمال‌شده در <code dir="ltr">.spec.template</code> یک StatefulSet را منعکس می‌کنند.</dd>
+<dt dir="ltr" class="ltr"><code dir="ltr">RollingUpdate</code></dt>
+<dd dir="rtl">راهبرد به‌روزرسانی <code dir="ltr">RollingUpdate</code> به‌روزرسانی‌های غلتان و خودکار را برای Podهای یک
+StatefulSet پیاده‌سازی می‌کند. این راهبرد، راهبرد به‌روزرسانی پیش‌فرض است.</dd>
+</dl>
+<p dir="ltr" class="ltr"><code dir="ltr">Recreate</code>
+:</p>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
+<p dir="rtl">راهبرد به‌روزرسانی <code dir="ltr">Recreate</code> همه Podهای StatefulSet را پیش از ایجاد Podهای جدیدی
+که تغییرات اعمال‌شده در <code dir="ltr">.spec.template</code> یک StatefulSet را منعکس می‌کنند حذف می‌کند. استفاده از این
+راهبرد مستلزم فعال بودن
+<a href="https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/#StatefulSetRecreateStrategy" target="_blank">feature gate</a> <code dir="ltr">StatefulSetRecreateStrategy</code>
+است. برای جزئیات به <a href="#recreate">Recreate</a> مراجعه کنید.</p>
+<h2 id="به-روزرسانی-های-غلتان" dir="rtl">به‌روزرسانی‌های غلتان</h2>
+<p dir="rtl">هنگامی که <code dir="ltr">.spec.updateStrategy.type</code> یک StatefulSet روی <code dir="ltr">RollingUpdate</code> تنظیم شده باشد،
+کنترل‌کننده StatefulSet هر Pod در StatefulSet را حذف و دوباره ایجاد می‌کند. این کار
+به همان ترتیب خاتمه Podها (از بزرگ‌ترین شماره ترتیبی به کوچک‌ترین) پیش می‌رود و
+هر بار یک Pod را به‌روزرسانی می‌کند.</p>
+<p dir="rtl">control plane کوبرنتیز پیش از به‌روزرسانی Pod قبلی، منتظر می‌ماند تا Pod به‌روزرسانی‌شده در وضعیت Running و Ready
+قرار گیرد. اگر <code dir="ltr">.spec.minReadySeconds</code> را تنظیم کرده باشید (به
+<a href="#minimum-ready-seconds">حداقل ثانیه‌های آمادگی</a> مراجعه کنید)، control plane پس از آماده شدن Pod، پیش از ادامه کار،
+به همان مدت زمان نیز منتظر می‌ماند.</p>
+<h3 id="به-روزرسانی-های-غلتان-بخش-بندی-شده-partitions" dir="rtl">به‌روزرسانی‌های غلتان بخش‌بندی‌شده {#partitions}</h3>
+<p dir="rtl">راهبرد به‌روزرسانی <code dir="ltr">RollingUpdate</code> را می‌توان با مشخص کردن
+<code dir="ltr">.spec.updateStrategy.rollingUpdate.partition</code> بخش‌بندی کرد. اگر یک partition مشخص شده باشد، هنگام به‌روزرسانی
+<code dir="ltr">.spec.template</code> در StatefulSet، همه Podهایی که شماره ترتیبی آن‌ها بزرگ‌تر یا مساوی partition است به‌روزرسانی می‌شوند.
+همه Podهایی که شماره ترتیبی آن‌ها کمتر از partition است به‌روزرسانی نمی‌شوند و حتی اگر حذف شوند،
+با نسخه قبلی دوباره ایجاد خواهند شد. اگر
+<code dir="ltr">.spec.updateStrategy.rollingUpdate.partition</code> یک StatefulSet بزرگ‌تر از <code dir="ltr">.spec.replicas</code> آن باشد،
+به‌روزرسانی‌های <code dir="ltr">.spec.template</code> آن به Podهایش منتقل نخواهند شد.
+در بیشتر موارد نیازی به استفاده از partition نخواهید داشت، اما اگر بخواهید یک
+به‌روزرسانی را مرحله‌بندی کنید، یک canary را منتشر کنید یا یک rollout مرحله‌ای انجام دهید، مفید هستند.</p>
+<h3 id="حداکثر-podهای-در-دسترس-نبودنی" dir="rtl">حداکثر Podهای در دسترس نبودنی</h3>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes v1.35 [beta]</span> (بتا)</div>
+<p dir="rtl">می‌توانید حداکثر تعداد Podهایی را که در طول یک به‌روزرسانی می‌توانند در دسترس نباشند،
+با مشخص کردن فیلد <code dir="ltr">.spec.updateStrategy.rollingUpdate.maxUnavailable</code> کنترل کنید.
+مقدار آن می‌تواند یک عدد مطلق (برای مثال <code dir="ltr">5</code>) یا درصدی از Podهای مطلوب
+(برای مثال <code dir="ltr">10%</code>) باشد. عدد مطلق از مقدار درصدی
+با گرد کردن به سمت بالا محاسبه می‌شود. این فیلد نمی‌تواند 0 باشد. مقدار پیش‌فرض 1 است.</p>
+<p dir="rtl">این فیلد برای همه Podهای بازه <code dir="ltr">0</code> تا <code dir="ltr">replicas - 1</code> اعمال می‌شود. اگر هر
+Pod در دسترس نبودنی در بازه <code dir="ltr">0</code> تا <code dir="ltr">replicas - 1</code> وجود داشته باشد، در شمارش
+<code dir="ltr">maxUnavailable</code> به حساب می‌آید.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">فیلد <code dir="ltr">maxUnavailable</code> در مرحله بتا قرار دارد و به‌طور پیش‌فرض فعال است.</p>
+</div>
+<h3 id="بازگشت-اجباری-forced-rollback" dir="rtl">بازگشت اجباری (Forced rollback)</h3>
+<p dir="rtl">هنگام استفاده از <a href="#rolling-updates">به‌روزرسانی‌های غلتان</a> با
+<a href="#pod-management-policies">سیاست مدیریت Pod</a> پیش‌فرض (<code dir="ltr">OrderedReady</code>)،
+ممکن است در وضعیتی معیوب قرار بگیرید که برای ترمیم به مداخله دستی نیاز دارد.</p>
+<p dir="rtl">اگر قالب Pod را به پیکربندی‌ای به‌روزرسانی کنید که هرگز به وضعیت Running و
+Ready نمی‌رسد (برای مثال، به دلیل یک فایل اجرایی معیوب یا خطای پیکربندی در سطح برنامه)،
+StatefulSet روند rollout را متوقف کرده و منتظر می‌ماند.</p>
+<p dir="rtl">در این وضعیت، بازگرداندن قالب Pod به یک پیکربندی سالم کافی نیست.
+به دلیل یک <a href="https://github.com/kubernetes/kubernetes/issues/67250" target="_blank" rel="noopener">مشکل شناخته‌شده</a>،
+StatefulSet همچنان منتظر می‌ماند تا Pod معیوب Ready شود
+(که هرگز رخ نمی‌دهد) و پس از آن تلاش می‌کند آن را به پیکربندی
+سالم بازگرداند.</p>
+<p dir="rtl">پس از بازگرداندن قالب، باید همه Podهایی را که StatefulSet
+پیش‌تر تلاش کرده بود با پیکربندی معیوب اجرا کند نیز حذف کنید.
+سپس StatefulSet شروع به ایجاد مجدد Podها با استفاده از قالب بازگردانده‌شده می‌کند.</p>
+<h2 id="recreate" dir="ltr" class="ltr">Recreate</h2>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
+<p dir="rtl">هنگامی که <code dir="ltr">.spec.updateStrategy.type</code> یک StatefulSet روی <code dir="ltr">Recreate</code> تنظیم شده باشد، کنترل‌کننده
+StatefulSet همه Podهای StatefulSet را یکجا حذف می‌کند و پیش از ایجاد هر Pod جدیدی از <code dir="ltr">.spec.template</code> به‌روزرسانی‌شده،
+منتظر می‌ماند تا به‌طور کامل خاتمه یابند. برخلاف
+<a href="#rolling-updates"><code dir="ltr">RollingUpdate</code></a>، نسخه‌های قدیمی و جدید یک Pod هرگز
+به‌طور هم‌زمان در حال اجرا نیستند، بنابراین این راهبرد در طول مدت به‌روزرسانی باعث قطعی سرویس (downtime) می‌شود. این رفتار مشابه
+راهبرد <code dir="ltr">Recreate</code> در Deploymentها است و برای برنامه‌هایی مفید است که نمی‌توانند دو
+نسخه را به‌طور هم‌زمان اجرا کنند، مانند بارهای کاری که به دسترسی انحصاری به یک منبع مشترک نیاز دارند
+یا از قالب ذخیره‌سازی روی دیسکی استفاده می‌کنند که میان نسخه‌ها ناسازگار است.</p>
+<p dir="rtl">حذف همیشه همه Podها را با هم حذف می‌کند، صرف‌نظر از
+<a href="#pod-management-policies">سیاست مدیریت Pod</a>. پس از خاتمه یافتن همه Podها، Podهای جدید
+طبق همان سیاست ایجاد می‌شوند: با <code dir="ltr">OrderedReady</code> (حالت پیش‌فرض)، Podها
+یکی‌یکی و به ترتیب صعودی شماره ترتیبی دوباره ایجاد می‌شوند و پیش از ایجاد Pod بعدی، منتظر می‌ماند تا هر کدام در وضعیت Running و
+Ready قرار گیرد؛ با <code dir="ltr">Parallel</code> همه Podها یکجا دوباره ایجاد می‌شوند.</p>
+<p dir="rtl">از آنجا که این یک قابلیت آلفا است، برای استفاده از این راهبرد باید
+<a href="https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/#StatefulSetRecreateStrategy" target="_blank">feature gate</a> <code dir="ltr">StatefulSetRecreateStrategy</code>
+را روی kube-controller-manager و kube-apiserver فعال کنید.</p>
+<h2 id="تاریخچه-نسخه-ها-revision-history" dir="rtl">تاریخچه نسخه‌ها (Revision history)</h2>
+<p dir="rtl">ControllerRevision یک منبع API کوبرنتیز است که کنترل‌کننده‌ها، مانند کنترل‌کننده StatefulSet، برای ردیابی تغییرات تاریخی پیکربندی از آن استفاده می‌کنند.</p>
+<p dir="rtl">StatefulSetها از ControllerRevisionها برای نگهداری تاریخچه نسخه‌ها استفاده می‌کنند تا امکان بازگشت (rollback) و ردیابی نسخه‌ها فراهم شود.</p>
+<h3 id="statefulsetها-چگونه-تغییرات-را-با-استفاده-از-controllerrevisionها-ردیابی-می-کنند" dir="rtl">StatefulSetها چگونه تغییرات را با استفاده از ControllerRevisionها ردیابی می‌کنند</h3>
+<p dir="rtl">هنگامی که قالب Pod یک StatefulSet (<code dir="ltr">spec.template</code>) را به‌روزرسانی می‌کنید، کنترل‌کننده StatefulSet:</p>
+<ol>
+<li dir="rtl">یک آبجکت ControllerRevision جدید آماده می‌کند</li>
+<li dir="rtl">یک تصویر لحظه‌ای (snapshot) از قالب Pod و فراداده را ذخیره می‌کند</li>
+<li dir="rtl">یک شماره نسخه افزایشی اختصاص می‌دهد</li>
+</ol>
+<h4 id="ویژگی-های-کلیدی" dir="rtl">ویژگی‌های کلیدی</h4>
+<p dir="rtl">برای آشنایی بیشتر با ویژگی‌های کلیدی و سایر جزئیات، به <a href="https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/controller-revision-v1/" target="_blank">ControllerRevision</a> مراجعه کنید.</p>
+<hr>
+<h3 id="مدیریت-تاریخچه-نسخه-ها" dir="rtl">مدیریت تاریخچه نسخه‌ها</h3>
+<p dir="rtl">نسخه‌های نگهداری‌شده را با <code dir="ltr">.spec.revisionHistoryLimit</code> کنترل کنید:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: webapp
+spec:
+  revisionHistoryLimit: 5  # Keep last 5 revisions
+  # ... other spec fields ...
+</code></pre>
+<ul>
+<li dir="rtl"><strong>پیش‌فرض</strong>: در صورت مشخص نشدن، 10 نسخه نگهداری می‌شود</li>
+<li dir="rtl"><strong>پاک‌سازی</strong>: هنگامی که از محدودیت فراتر رود، قدیمی‌ترین نسخه‌ها توسط جمع‌آوری زباله حذف می‌شوند</li>
+</ul>
+<h4 id="انجام-بازگشت-rollback" dir="rtl">انجام بازگشت (Rollback)</h4>
+<p dir="rtl">می‌توانید با استفاده از دستورات زیر به یک پیکربندی قبلی بازگردید:</p>
+<pre dir="ltr"><code class="language-bash" dir="ltr"># View revision history
+kubectl rollout history statefulset/webapp
+
+# Rollback to a specific revision
+kubectl rollout undo statefulset/webapp --to-revision=3
+</code></pre>
+<p dir="rtl">این کار:</p>
+<ul>
+<li dir="rtl">قالب Pod نسخه 3 را اعمال می‌کند</li>
+<li dir="rtl">یک ControllerRevision جدید با شماره نسخه به‌روزشده ایجاد می‌کند</li>
+</ul>
+<h4 id="بررسی-controllerrevisionها" dir="rtl">بررسی ControllerRevisionها</h4>
+<p dir="rtl">برای مشاهده ControllerRevisionهای مرتبط:</p>
+<pre dir="ltr"><code class="language-bash" dir="ltr"># List all revisions for the StatefulSet
+kubectl get controllerrevisions -l app.kubernetes.io/name=webapp
+
+# View detailed configuration of a specific revision
+kubectl get controllerrevision/webapp-3 -o yaml
+</code></pre>
+<h4 id="بهترین-شیوه-ها" dir="rtl">بهترین شیوه‌ها</h4>
+<h5 dir="rtl">سیاست نگهداری</h5>
+<ul>
+<li dir="rtl">برای بیشتر بارهای کاری، <code dir="ltr">revisionHistoryLimit</code> را بین <strong>5 تا 10</strong> تنظیم کنید.</li>
+<li dir="rtl">تنها در صورتی که به <strong>تاریخچه بازگشت عمیق</strong> نیاز باشد، آن را افزایش دهید.</li>
+</ul>
+<h5 dir="rtl">پایش</h5>
+<ul>
+<li dir="rtl">
+<p dir="rtl">نسخه‌ها را به‌طور منظم با فرمان زیر بررسی کنید:</p>
+<pre dir="ltr"><code class="language-bash" dir="ltr">kubectl get controllerrevisions
+</code></pre>
+</li>
+</ul>
+<ul>
+<li dir="rtl">برای <strong>رشد سریع تعداد نسخه‌ها</strong> هشدار تنظیم کنید.</li>
+</ul>
+<h5 dir="rtl">موارد اجتناب</h5>
+<ul>
+<li dir="rtl">ویرایش دستی آبجکت‌های ControllerRevision.</li>
+<li dir="rtl">استفاده از نسخه‌ها به‌عنوان سازوکار پشتیبان‌گیری (از ابزارهای پشتیبان‌گیری واقعی استفاده کنید).</li>
+<li dir="rtl">تنظیم <code dir="ltr">revisionHistoryLimit: 0</code> (که قابلیت بازگشت را غیرفعال می‌کند).</li>
+</ul>
+<h2 id="نگهداری-persistentvolumeclaim" dir="rtl">نگهداری PersistentVolumeClaim</h2>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
+<p dir="rtl">فیلد اختیاری <code dir="ltr">.spec.persistentVolumeClaimRetentionPolicy</code> کنترل می‌کند که آیا
+و چگونه PVCها در طول چرخه عمر یک StatefulSet حذف شوند. برای استفاده از این فیلد باید
+<a href="https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/" target="_blank">feature gate</a> <code dir="ltr">StatefulSetAutoDeletePVC</code>
+را روی API server و controller manager فعال کنید.
+پس از فعال‌سازی، دو سیاست وجود دارد که می‌توانید برای هر StatefulSet پیکربندی کنید:</p>
+<dl>
+<dt dir="ltr" class="ltr"><code dir="ltr">whenDeleted</code></dt>
+<dd dir="rtl">رفتار نگهداری حجم را که هنگام حذف StatefulSet اعمال می‌شود پیکربندی می‌کند.</dd>
+<dt dir="ltr" class="ltr"><code dir="ltr">whenScaled</code></dt>
+<dd dir="rtl">رفتار نگهداری حجم را که هنگام کاهش تعداد replicaهای
+StatefulSet اعمال می‌شود پیکربندی می‌کند؛ برای مثال، هنگام کاهش مقیاس مجموعه.</dd>
+</dl>
+<p dir="rtl">برای هر سیاستی که می‌توانید پیکربندی کنید، می‌توانید مقدار را روی <code dir="ltr">Delete</code> یا <code dir="ltr">Retain</code> تنظیم کنید.</p>
+<dl>
+<dt dir="ltr" class="ltr"><code dir="ltr">Delete</code></dt>
+<dd dir="rtl">PVCهایی که از <code dir="ltr">volumeClaimTemplate</code> در StatefulSet ایجاد شده‌اند، برای هر Pod
+تحت تأثیر این سیاست حذف می‌شوند. با سیاست <code dir="ltr">whenDeleted</code>، همه PVCهای حاصل از
+<code dir="ltr">volumeClaimTemplate</code> پس از حذف Podهایشان حذف می‌شوند. با سیاست
+<code dir="ltr">whenScaled</code>، تنها PVCهای متناظر با replicaهای Podای که مقیاسشان کاهش می‌یابد،
+پس از حذف Podهایشان حذف می‌شوند.</dd>
+<dt dir="rtl"><code dir="ltr">Retain</code> (پیش‌فرض)</dt>
+<dd dir="rtl">PVCهای حاصل از <code dir="ltr">volumeClaimTemplate</code> هنگام حذف Podشان تحت تأثیر قرار
+نمی‌گیرند. این همان رفتار پیش از این قابلیت جدید است.</dd>
+</dl>
+<p dir="rtl">به خاطر داشته باشید که این سیاست‌ها <strong>تنها</strong> زمانی اعمال می‌شوند که Podها به دلیل
+حذف یا کاهش مقیاس StatefulSet حذف می‌شوند. برای مثال، اگر یک Pod مرتبط با یک StatefulSet
+به دلیل خرابی نود از کار بیفتد و control plane یک Pod جایگزین ایجاد کند، StatefulSet
+PVC موجود را حفظ می‌کند. حجم موجود تحت تأثیر قرار نمی‌گیرد و کلاستر آن را به
+نودی که Pod جدید قرار است روی آن راه‌اندازی شود متصل می‌کند.</p>
+<p dir="rtl">مقدار پیش‌فرض سیاست‌ها <code dir="ltr">Retain</code> است که با رفتار StatefulSet پیش از این قابلیت جدید مطابقت دارد.</p>
+<p dir="rtl">در اینجا نمونه‌ای از یک سیاست آمده است:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: apps/v1
+kind: StatefulSet
+...
+spec:
+  persistentVolumeClaimRetentionPolicy:
+    whenDeleted: Retain
+    whenScaled: Delete
+...
+</code></pre>
+<p dir="rtl"><span class="term" title="controller">کنترل‌کننده</span> StatefulSet
+<a href="../../overview/working-with-objects/owners-dependents.html#owner-references-in-object-specifications">ارجاع‌های مالک (owner references)</a>
+را به PVCهای خود اضافه می‌کند که سپس پس از خاتمه یافتن Pod، توسط <span class="term" title="garbage-collection">جمع‌آوری‌کننده زباله</span> حذف می‌شوند. این کار به Pod امکان می‌دهد پیش از حذف PVCها
+(و پیش از حذف PV و حجم پشتیبان، بسته به سیاست نگهداری) همه حجم‌ها را به‌طور تمیز unmount کند.
+هنگامی که سیاست <code dir="ltr">whenDeleted</code> را روی <code dir="ltr">Delete</code> تنظیم می‌کنید، یک ارجاع مالک به نمونه StatefulSet روی همه PVCهای
+مرتبط با آن StatefulSet قرار داده می‌شود.</p>
+<p dir="rtl">سیاست <code dir="ltr">whenScaled</code> باید PVCها را تنها زمانی حذف کند که مقیاس یک Pod کاهش یابد، نه زمانی که
+یک Pod به دلیل دیگری حذف شود. هنگام تطبیق (reconcile)، کنترل‌کننده StatefulSet
+تعداد replica مطلوب خود را با Podهای واقعی موجود در کلاستر مقایسه می‌کند. هر Pod متعلق به StatefulSet
+که شناسه آن بزرگ‌تر از تعداد replicaها باشد، محکوم شده و برای حذف علامت‌گذاری می‌شود. اگر
+سیاست <code dir="ltr">whenScaled</code> برابر <code dir="ltr">Delete</code> باشد، پیش از حذف Pod، Podهای محکوم ابتدا به‌عنوان مالک
+PVCهای قالب StatefulSet مرتبط تنظیم می‌شوند. این کار باعث می‌شود PVCها
+تنها پس از خاتمه یافتن Podهای محکوم، توسط جمع‌آوری زباله حذف شوند.</p>
+<p dir="rtl">این بدان معناست که اگر کنترل‌کننده از کار بیفتد و دوباره راه‌اندازی شود، هیچ Podای پیش از
+به‌روزرسانی مناسب ارجاع مالک آن مطابق با سیاست حذف نخواهد شد. اگر یک Pod محکوم
+در زمانی که کنترل‌کننده از کار افتاده است به‌اجبار حذف شود، ممکن است ارجاع مالک
+تنظیم شده باشد یا نشده باشد، بسته به اینکه کنترل‌کننده چه زمانی از کار افتاده است. ممکن است چندین حلقه تطبیق طول بکشد تا
+ارجاع‌های مالک به‌روزرسانی شوند، بنابراین ممکن است برخی از Podهای محکوم ارجاع مالک را تنظیم کرده باشند و
+برخی دیگر نه. به همین دلیل توصیه می‌کنیم منتظر بمانید تا کنترل‌کننده دوباره فعال شود؛
+کنترل‌کننده پیش از خاتمه دادن Podها، ارجاع‌های مالک را بررسی می‌کند. اگر این کار ممکن نباشد،
+اپراتور باید ارجاع‌های مالک روی PVCها را بررسی کند تا اطمینان حاصل شود که آبجکت‌های مورد انتظار
+هنگام حذف اجباری Podها حذف می‌شوند.</p>
+<h3 id="replicaها" dir="rtl">Replicaها</h3>
+<p dir="rtl"><code dir="ltr">.spec.replicas</code> یک فیلد اختیاری است که تعداد Podهای مطلوب را مشخص می‌کند. مقدار پیش‌فرض آن 1 است.</p>
+<p dir="rtl">اگر مقیاس یک StatefulSet را به‌صورت دستی، از طریق <code dir="ltr">kubectl scale statefulset statefulset --replicas=X</code>، تغییر دهید و سپس آن StatefulSet را
+بر اساس یک مانیفست به‌روزرسانی کنید (برای مثال با اجرای <code dir="ltr">kubectl apply -f statefulset.yaml</code>)، اعمال آن مانیفست، مقیاس‌دهی دستی را که پیش‌تر انجام داده‌اید
+بازنویسی می‌کند.</p>
+<p dir="rtl">اگر یک <a href="../autoscaling/horizontal-pod-autoscale.html">HorizontalPodAutoscaler</a>
+(یا هر API مشابه دیگری برای مقیاس‌دهی افقی) مقیاس‌دهی یک
+StatefulSet را مدیریت می‌کند، <code dir="ltr">.spec.replicas</code> را تنظیم نکنید. در عوض، اجازه دهید
+<span class="term" title="control-plane">control plane</span> کوبرنتیز
+فیلد <code dir="ltr">.spec.replicas</code> را به‌طور خودکار مدیریت کند.</p>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<ul>
+<li dir="rtl">درباره <a href="https://kubernetes.io/docs/concepts/workloads/pods" target="_blank">Podها</a> بیاموزید.</li>
+<li dir="rtl">با نحوه استفاده از StatefulSetها آشنا شوید
+<ul>
+<li dir="rtl">مثال <a href="https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/" target="_blank">استقرار یک برنامه دارای حالت</a> را دنبال کنید.</li>
+<li dir="rtl">مثال <a href="https://kubernetes.io/docs/tutorials/stateful-application/cassandra/" target="_blank">استقرار Cassandra با Stateful Setها</a> را دنبال کنید.</li>
+<li dir="rtl">مثال <a href="https://kubernetes.io/docs/tasks/run-application/run-replicated-stateful-application/" target="_blank">اجرای یک برنامه دارای حالت تکثیرشده</a> را دنبال کنید.</li>
+<li dir="rtl">بیاموزید چگونه <a href="https://kubernetes.io/docs/tasks/run-application/scale-stateful-set/" target="_blank">مقیاس یک StatefulSet را تغییر دهید</a>.</li>
+<li dir="rtl">بیاموزید هنگام <a href="https://kubernetes.io/docs/tasks/run-application/delete-stateful-set/" target="_blank">حذف یک StatefulSet</a> چه مراحلی در کار است.</li>
+<li dir="rtl">بیاموزید چگونه <a href="https://kubernetes.io/docs/tasks/configure-pod-container/configure-volume-storage/" target="_blank">یک Pod را برای استفاده از یک حجم برای ذخیره‌سازی پیکربندی کنید</a>.</li>
+<li dir="rtl">بیاموزید چگونه <a href="https://kubernetes.io/docs/tutorials/configuration/configure-persistent-volume-storage/" target="_blank">یک Pod را برای استفاده از یک PersistentVolume برای ذخیره‌سازی پیکربندی کنید</a>.</li>
+</ul>
+</li>
+<li dir="rtl"><code dir="ltr">StatefulSet</code> یک منبع سطح بالا در REST API کوبرنتیز است.
+تعریف آبجکت
+را بخوانید تا API مربوط به stateful setها را درک کنید.</li>
+<li dir="rtl">درباره <a href="https://kubernetes.io/docs/concepts/workloads/pods/disruptions/" target="_blank">PodDisruptionBudget</a> و اینکه چگونه
+می‌توانید از آن برای مدیریت در دسترس بودن برنامه در هنگام اختلال‌ها استفاده کنید، مطالعه کنید.</li>
+</ul>
+</main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#استفاده-از-statefulsetها">استفاده از StatefulSetها</a><a class="l2" href="#محدودیت-ها">محدودیت‌ها</a><a class="l2" href="#مؤلفه-ها">مؤلفه‌ها</a><a class="l3" href="#انتخابگر-pod">انتخابگر Pod</a><a class="l3" href="#قالب-های-درخواست-حجم-volume-claim-templates">قالب‌های درخواست حجم (Volume Claim Templates)</a><a class="l3" href="#حداقل-ثانیه-های-آمادگی">حداقل ثانیه‌های آمادگی</a><a class="l2" href="#هویت-pod">هویت Pod</a><a class="l3" href="#اندیس-ترتیبی">اندیس ترتیبی</a><a class="l3" href="#شماره-ترتیبی-آغازین">شماره ترتیبی آغازین</a><a class="l3" href="#شناسه-شبکه-پایدار">شناسه شبکه پایدار</a><a class="l3" href="#ذخیره-سازی-پایدار">ذخیره‌سازی پایدار</a><a class="l3" href="#برچسب-نام-pod">برچسب نام Pod</a><a class="l3" href="#برچسب-اندیس-pod">برچسب اندیس Pod</a><a class="l2" href="#تضمین-های-استقرار-و-مقیاس-دهی">تضمین‌های استقرار و مقیاس‌دهی</a><a class="l3" href="#سیاست-های-مدیریت-pod">سیاست‌های مدیریت Pod</a><a class="l2" href="#راهبردهای-به-روزرسانی">راهبردهای به‌روزرسانی</a><a class="l2" href="#به-روزرسانی-های-غلتان">به‌روزرسانی‌های غلتان</a><a class="l3" href="#به-روزرسانی-های-غلتان-بخش-بندی-شده-partitions">به‌روزرسانی‌های غلتان بخش‌بندی‌شده {#partitions}</a><a class="l3" href="#حداکثر-podهای-در-دسترس-نبودنی">حداکثر Podهای در دسترس نبودنی</a><a class="l3" href="#بازگشت-اجباری-forced-rollback">بازگشت اجباری (Forced rollback)</a><a class="l2" href="#recreate">Recreate</a><a class="l2" href="#تاریخچه-نسخه-ها-revision-history">تاریخچه نسخه‌ها (Revision history)</a><a class="l3" href="#statefulsetها-چگونه-تغییرات-را-با-استفاده-از-controllerrevisionها-ردیابی-می-کنند">StatefulSetها چگونه تغییرات را با استفاده از ControllerRevisionها ردیابی می‌کنند</a><a class="l3" href="#مدیریت-تاریخچه-نسخه-ها">مدیریت تاریخچه نسخه‌ها</a><a class="l2" href="#نگهداری-persistentvolumeclaim">نگهداری PersistentVolumeClaim</a><a class="l3" href="#replicaها">Replicaها</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>

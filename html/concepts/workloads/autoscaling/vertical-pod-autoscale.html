@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>مقیاس‌دهی خودکار عمودی Pod | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+</head>
+<body>
+<header class="top"><a href="../../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">concepts / workloads / autoscaling</span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">مقیاس‌دهی خودکار عمودی Pod</h1><!-- overview -->
+<p dir="rtl">در کوبرنتیز، یک <em>VerticalPodAutoscaler</em> به‌طور خودکار یک <span class="term" title="api-resource">منبع</span> مدیریت بار کاری (مانند
+یک <span class="term" title="deployment">Deployment</span> یا
+<span class="term" title="statefulset">StatefulSet</span>) را به‌روزرسانی می‌کند، با
+این هدف که <a href="../../configuration/manage-resources-containers.html#requests-and-limits">درخواست‌ها و محدودیت‌های</a> <span class="term" title="infrastructure-resource">منابع</span> زیرساختی
+به‌طور خودکار متناسب با مصرف واقعی تنظیم شوند.</p>
+<p dir="rtl">مقیاس‌دهی عمودی به این معناست که پاسخ به افزایش تقاضای منابع، اختصاص منابع بیشتر (برای مثال: حافظه یا CPU)
+به <span class="term" title="pod">Podهایی</span> است که از قبل برای آن بار کاری در حال اجرا هستند.
+این کار با نام <em>rightsizing</em> (تعیین اندازه‌ی درست) یا گاهی <em>autopilot</em> نیز شناخته می‌شود.
+این با مقیاس‌دهی افقی متفاوت است؛ مقیاس‌دهی افقی در کوبرنتیز به معنای استقرار Podهای بیشتر برای توزیع بار است.</p>
+<p dir="rtl">اگر مصرف منابع کاهش یابد و درخواست‌های منابع Pod بالاتر از سطوح بهینه باشند،
+VerticalPodAutoscaler به منبع بار کاری (Deployment، StatefulSet یا منبع مشابه دیگر) دستور می‌دهد
+که درخواست‌های منابع را دوباره کاهش دهد و بدین ترتیب از هدررفت منابع جلوگیری می‌کند.</p>
+<p dir="rtl">VerticalPodAutoscaler به‌صورت یک منبع API کوبرنتیز و یک
+<span class="term" title="controller">کنترل‌کننده</span> پیاده‌سازی شده است.
+منبع، رفتار کنترل‌کننده را تعیین می‌کند.
+کنترل‌کننده‌ی مقیاس‌دهی خودکار عمودی Pod که درون data plane کوبرنتیز اجرا می‌شود،
+به‌طور دوره‌ای درخواست‌ها و محدودیت‌های منابع هدف خود (برای مثال، یک Deployment) را
+بر اساس تحلیل سوابق میزان استفاده از منابع، مقدار منابع در دسترس در کلاستر،
+و رویدادهای بلادرنگ مانند وضعیت‌های کمبود حافظه (OOM) تنظیم می‌کند.</p>
+<!-- body -->
+<h2 id="آبجکت-api" dir="rtl">آبجکت API</h2>
+<p dir="rtl">VerticalPodAutoscaler در کوبرنتیز به‌صورت یک <span class="term" title="customresourcedefinition">Custom Resource Definition</span> (CRD) تعریف شده است. برخلاف HorizontalPodAutoscaler که بخشی از API هسته‌ی کوبرنتیز است، VPA باید جداگانه در کلاستر شما نصب شود.</p>
+<p dir="rtl">نسخه‌ی پایدار فعلی API، <code dir="ltr">autoscaling.k8s.io/v1</code> است. جزئیات بیشتر درباره‌ی نصب VPA و API آن را می‌توانید در <a href="https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler" target="_blank" rel="noopener">مخزن GitHub مربوط به VPA</a> بیابید.</p>
+<h2 id="verticalpodautoscaler-چگونه-کار-می-کند؟" dir="rtl">VerticalPodAutoscaler چگونه کار می‌کند؟</h2>
+<figure><img src="https://kubernetes.io/images/docs/concepts/vpa-architecture.svg" alt="معماری مقیاس‌دهی خودکار عمودی Pod"><figcaption dir="rtl">شکل ۱. VerticalPodAutoscaler درخواست‌ها و محدودیت‌های منابع Podهای یک Deployment را کنترل می‌کند</figcaption></figure>
+<!-- https://mermaid-js.github.io/mermaid-live-editor/edit#pako:eNqlVG1P2zAQ_iuW-RpY0rVNG6RJpSkSH9hQuzFpLZo850o9nDiznQKj_PddYqcvMGmaSKXG53vuuefuHD9RrjKgCb3VrFyRs8-LguBjqh9uY1SWUnBmhSrIV6XvpGKZg9QPV4XVSkrQ8xRKqR5zKCx5R6Zj_JtZZmFZyRnYm11IqbL5lcrQP8ZgJgrQ3guFZ3b_OVgtuJlfujeZgV5vsawU89HVxYvNLBfGoNL59dWIjFqrSeRU3uwnWJfsO9fza9AWK5QoalRZZXAJmoynqQdr4CrHujIssubdsz2iKjOs1Hn9Gj0HVZDj4w_7ka-oa8BmZpUGQ6btdtN2s_FKW0pnNQHjFfA7Q5ZKE75ixS0g2Cs4kNaAJ2vBrSF18xH_pfEYIgpSSsZhszdMF7uzm_Ap_KrAIEEB9zXJph5CqwmXDeij85Gxhkb8ZjeUFzPynNgdWKMMWYuxu4746Lby16EXxU_gXg02TVWaA1kzWdU9-IuyRhEYp_wfpbZV3Au7Ip9KK3ImcSouCdLjGW7puWTGpLCslZKlkDI5Gp6Pe5NBYJDxDpKjaIK_1JvH9yKzqyQqHwKupNKt-_QFG9eZZ0t7o_5Z-ja29hA6xvPzdNjvv42RlaVnO-un8ej_q93j2_8MAn9gg92wsbH72dvjjx062G5r9O8D3268AY6uFn9KA7zxREYTqysIaA46Z7VJn-rABbUryGFBE1xmsGSVtAu6KJ4xrGTFN6XyNlKr6nZFkyWTBi0nPxUMb88txG1OMoGf9xbJ8K6ZPRZ8y9PUP1ZVYWkSdZs8NHmiDzSJOyedXhiGUe_9IIw63SigjzQZhCfhMO5FcTwcdgaDuPsc0N-NsPBkENf4MBr0O_1uNx4GFJrsl-6ub6785z9_1f9X -->
+<p dir="rtl">کوبرنتیز مقیاس‌دهی خودکار عمودی Pod را از طریق چند جزء همکار پیاده‌سازی می‌کند که به‌طور متناوب اجرا می‌شوند (یک فرایند پیوسته نیست). VPA از سه جزء اصلی تشکیل شده است:</p>
+<ul>
+<li dir="rtl"><em>recommender</em> (توصیه‌گر) که مصرف منابع را تحلیل می‌کند و توصیه‌هایی ارائه می‌دهد.</li>
+<li dir="rtl"><em>updater</em> (به‌روزرسان) که درخواست‌های منابع Pod را یا با بیرون‌راندن (evict) Podها یا با تغییر درجای آن‌ها به‌روزرسانی می‌کند.</li>
+<li dir="rtl">و webhook مربوط به <em>admission controller</em> (کنترل‌کننده‌ی پذیرش) VPA که توصیه‌های منابع را روی Podهای جدید یا بازسازی‌شده اعمال می‌کند.</li>
+</ul>
+<p dir="rtl">در هر دوره یک بار، Recommender میزان استفاده از منابع را برای Podهایی که هر تعریف VerticalPodAutoscaler هدف قرار داده است پرس‌وجو می‌کند. Recommender منبع هدف تعریف‌شده توسط <code dir="ltr">targetRef</code> را پیدا می‌کند، سپس Podها را بر اساس برچسب‌های <code dir="ltr">.spec.selector</code> منبع هدف انتخاب می‌کند و متریک‌ها را از API متریک‌های منابع دریافت می‌کند تا مصرف واقعی CPU و حافظه را تحلیل کند.</p>
+<p dir="rtl">Recommender داده‌های مصرف منابع (CPU و حافظه) را، هم فعلی و هم تاریخی، برای هر Podای که VerticalPodAutoscaler هدف قرار داده است تحلیل می‌کند. این جزء موارد زیر را بررسی می‌کند:</p>
+<ul>
+<li dir="rtl">الگوهای مصرف تاریخی در طول زمان برای شناسایی روندها</li>
+<li dir="rtl">اوج مصرف و واریانس برای اطمینان از وجود حاشیه‌ی کافی</li>
+<li dir="rtl">رویدادهای کمبود حافظه (OOM) و سایر رخدادهای مرتبط با منابع</li>
+</ul>
+<p dir="rtl">بر اساس این تحلیل، Recommender سه نوع توصیه محاسبه می‌کند:</p>
+<ul>
+<li dir="rtl">توصیه‌ی هدف (منابع بهینه برای مصرف معمول)</li>
+<li dir="rtl">کران پایین (حداقل منابع قابل‌قبول)</li>
+<li dir="rtl">کران بالا (حداکثر منابع معقول).</li>
+</ul>
+<p dir="rtl">این توصیه‌ها در فیلد <code dir="ltr">.status.recommendation</code> منبع VerticalPodAutoscaler ذخیره می‌شوند.</p>
+<p dir="rtl">جزء <em>updater</em> منابع VerticalPodAutoscaler را پایش می‌کند و درخواست‌های منابع فعلی Pod را با توصیه‌ها مقایسه می‌کند. هنگامی که اختلاف از آستانه‌های پیکربندی‌شده فراتر رود و سیاست به‌روزرسانی اجازه دهد، updater می‌تواند یکی از کارهای زیر را انجام دهد:</p>
+<ul>
+<li dir="rtl">Podها را بیرون براند و بدین ترتیب بازسازی آن‌ها را با درخواست‌های منابع جدید آغاز کند (رویکرد سنتی)</li>
+<li dir="rtl">در صورتی که کلاستر از به‌روزرسانی درجای منابع Pod پشتیبانی کند، منابع Pod را بدون بیرون‌راندن به‌صورت درجا به‌روزرسانی کند</li>
+</ul>
+<p dir="rtl">روش انتخاب‌شده به حالت به‌روزرسانی پیکربندی‌شده، قابلیت‌های کلاستر و نوع تغییر منبع موردنیاز بستگی دارد. به‌روزرسانی‌های درجا، در صورت دسترس بودن، از اختلال در Pod جلوگیری می‌کنند، اما ممکن است درباره‌ی منابعی که قابل تغییر هستند محدودیت‌هایی داشته باشند. updater به PodDisruptionBudgetها احترام می‌گذارد تا اثر بر سرویس را به حداقل برساند.</p>
+<p dir="rtl"><em>admission controller</em> به‌صورت یک mutating webhook عمل می‌کند که درخواست‌های ایجاد Pod را رهگیری می‌کند.
+این جزء بررسی می‌کند که آیا Pod توسط یک VerticalPodAutoscaler هدف قرار گرفته است یا نه و، در این صورت، درخواست‌ها و محدودیت‌های
+منابع توصیه‌شده را پیش از ایجاد Pod اعمال می‌کند. به‌طور دقیق‌تر، admission controller از توصیه‌ی Target در بخش <code dir="ltr">.status.recommendation</code> منبع VerticalPodAutoscaler به‌عنوان درخواست‌های منابع جدید استفاده می‌کند. admission controller اطمینان حاصل می‌کند که Podهای جدید با تخصیص منابع با اندازه‌ی مناسب آغاز به کار کنند، خواه در هنگام استقرار اولیه ایجاد شوند، خواه پس از بیرون‌رانده شدن توسط updater، یا به دلیل عملیات مقیاس‌دهی.</p>
+<p dir="rtl">VerticalPodAutoscaler به یک منبع متریک، مانند <span class="term" title="addons">افزونه‌ی</span> Metrics Server کوبرنتیز،
+نیاز دارد که در کلاستر نصب شده باشد.
+اجزای VPA متریک‌ها را از API <code dir="ltr">metrics.k8s.io</code> دریافت می‌کنند. Metrics Server باید جداگانه راه‌اندازی شود، زیرا در بیشتر کلاسترها به‌طور پیش‌فرض مستقر نمی‌شود. برای اطلاعات بیشتر درباره‌ی متریک‌های منابع، به <a href="https://kubernetes.io/docs/tasks/debug/debug-cluster/resource-metrics-pipeline/#metrics-server" target="_blank">Metrics Server</a> مراجعه کنید.</p>
+<h2 id="حالت-های-به-روزرسانی" dir="rtl">حالت‌های به‌روزرسانی</h2>
+<p dir="rtl">یک VerticalPodAutoscaler از <em>حالت‌های به‌روزرسانی</em> مختلفی پشتیبانی می‌کند که کنترل می‌کنند توصیه‌های منابع
+چگونه و چه زمانی روی Podهای شما اعمال شوند. حالت به‌روزرسانی را با استفاده از
+فیلد <code dir="ltr">updateMode</code> در spec مربوط به VPA، زیر <code dir="ltr">updatePolicy</code>، پیکربندی می‌کنید:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">---
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: my-app-vpa
+spec:
+  targetRef:
+    apiVersion: "apps/v1"
+    kind: Deployment
+    name: my-app
+  updatePolicy:
+    updateMode: "Recreate"  # Off, Initial, Recreate, InPlaceOrRecreate, InPlace
+</code></pre>
+<h3 id="off-updatemode-off" dir="ltr" class="ltr">Off {#updateMode-Off}</h3>
+<p dir="rtl">در حالت به‌روزرسانی <em>Off</em>، recommender مربوط به VPA همچنان مصرف منابع را تحلیل می‌کند و
+توصیه‌هایی تولید می‌کند، اما این توصیه‌ها به‌طور خودکار روی Podها اعمال نمی‌شوند.
+توصیه‌ها فقط در فیلد <code dir="ltr">.status</code> آبجکت VPA ذخیره می‌شوند.</p>
+<p dir="rtl">می‌توانید از ابزاری مانند <code dir="ltr">kubectl</code> برای مشاهده‌ی <code dir="ltr">.status</code> و توصیه‌های موجود در آن استفاده کنید.</p>
+<h3 id="initial-updatemode-initial" dir="ltr" class="ltr">Initial {#updateMode-Initial}</h3>
+<p dir="rtl">در حالت <em>Initial</em>، VPA درخواست‌های منابع را فقط هنگام نخستین ایجاد Podها تنظیم می‌کند. این حالت منابع Podهای در حال اجرا را به‌روزرسانی نمی‌کند، حتی اگر توصیه‌ها در طول زمان تغییر کنند. توصیه‌ها فقط در هنگام ایجاد Pod اعمال می‌شوند.</p>
+<h3 id="recreate-updatemode-recreate" dir="ltr" class="ltr">Recreate {#updateMode-Recreate}</h3>
+<p dir="rtl">در حالت <em>Recreate</em>، VPA منابع Pod را به‌طور فعال مدیریت می‌کند؛ به این صورت که هرگاه
+درخواست‌های منابع فعلی Podها به‌طور قابل‌توجهی با توصیه‌ها تفاوت داشته باشد، آن‌ها را بیرون می‌راند. هنگامی که یک Pod بیرون رانده می‌شود، کنترل‌کننده‌ی
+بار کاری (که یک Deployment، StatefulSet و غیره را مدیریت می‌کند) یک Pod جایگزین ایجاد می‌کند و admission
+controller مربوط به VPA درخواست‌های منابع به‌روزشده را روی Pod جدید اعمال می‌کند.</p>
+<h3 id="inplaceorrecreate-updatemode-inplaceorrecreate" dir="ltr" class="ltr">InPlaceOrRecreate {#updateMode-InPlaceOrRecreate}</h3>
+<p dir="rtl">در حالت <code dir="ltr">InPlaceOrRecreate</code>، VPA تلاش می‌کند در صورت امکان درخواست‌ها و محدودیت‌های منابع Pod را بدون راه‌اندازی مجدد Pod به‌روزرسانی کند. با این حال، اگر به‌روزرسانی درجا برای یک تغییر منبع خاص قابل انجام نباشد، VPA به بیرون‌راندن Pod بازمی‌گردد
+(مشابه حالت <code dir="ltr">Recreate</code>) و به کنترل‌کننده‌ی بار کاری اجازه می‌دهد یک Pod جایگزین با منابع به‌روزشده ایجاد کند.</p>
+<p dir="rtl">در این حالت، updater توصیه‌ها را با استفاده از قابلیت <a href="https://kubernetes.io/docs/tasks/configure-pod-container/resize-container-resources/" target="_blank">تغییر اندازه‌ی درجای منابع کانتینر</a> به‌صورت درجا اعمال می‌کند.</p>
+<h3 id="inplace-updatemode-inplace" dir="ltr" class="ltr">InPlace {#updateMode-InPlace}</h3>
+<p dir="rtl">این حالت به‌عنوان یک ویژگی آلفا در VPA 1.7.0 در دسترس است و به
+کوبرنتیز 1.33 یا جدیدتر با feature gate کلاستری <code dir="ltr">InPlacePodVerticalScaling</code>
+فعال، و feature gate <code dir="ltr">InPlace</code> فعال روی updater و
+admission controller مربوط به VPA نیاز دارد. این حالت از قابلیت
+<a href="https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#pod-resize" target="_blank">تغییر اندازه‌ی درجای Pod</a>
+برای اعمال به‌روزرسانی‌ها بدون ایجاد اختلال در Pod استفاده می‌کند.</p>
+<p dir="rtl">در حالت <code dir="ltr">InPlace</code>، VPA تلاش می‌کند درخواست‌ها و محدودیت‌های منابع Pod را بدون
+راه‌اندازی مجدد یا بیرون‌راندن Pod به‌روزرسانی کند. برخلاف <code dir="ltr">InPlaceOrRecreate</code>، این حالت <strong>هرگز
+به بیرون‌راندن بازنمی‌گردد</strong>. اگر یک به‌روزرسانی درجا قابل اعمال نباشد (برای مثال، به این دلیل که
+نود ظرفیت کافی ندارد)، VPA به‌روزرسانی را به تعویق می‌اندازد و آن را در
+یک حلقه‌ی هماهنگ‌سازی (reconciliation) بعدی دوباره امتحان می‌کند.</p>
+<p dir="rtl">برای استفاده از حالت <code dir="ltr">InPlace</code>، feature gate <code dir="ltr">InPlace</code> را هم روی updater
+و هم روی admission controller مربوط به VPA فعال کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">--feature-gates=InPlace=true
+</code></pre>
+<p dir="rtl">سپس <code dir="ltr">updateMode</code> را در spec مربوط به VPA روی <code dir="ltr">"InPlace"</code> تنظیم کنید:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: my-app-vpa
+spec:
+  targetRef:
+    apiVersion: "apps/v1"
+    kind: Deployment
+    name: my-app
+  updatePolicy:
+    updateMode: "InPlace"
+</code></pre>
+<p dir="rtl"><strong>تفاوت کلیدی با <code dir="ltr">InPlaceOrRecreate</code>:</strong> هنگامی که یک تغییر اندازه به تعویق افتاده، در حال انجام،
+یا غیرقابل‌انجام باشد، حالت <code dir="ltr">InPlace</code> همواره منتظر می‌ماند و دوباره تلاش می‌کند — این حالت هرگز Pod را بیرون نمی‌راند،
+صرف‌نظر از اینکه به‌روزرسانی چه مدت در انتظار مانده باشد.</p>
+<h3 id="auto-منسوخ-شده-updatemode-auto" dir="rtl">Auto (منسوخ‌شده) {#updateMode-Auto}</h3>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">حالت به‌روزرسانی <code dir="ltr">Auto</code> <strong>از نسخه‌ی 1.4.0 مربوط به VPA منسوخ شده است</strong>. برای به‌روزرسانی‌های مبتنی بر بیرون‌راندن از <code dir="ltr">Recreate</code>
+و برای به‌روزرسانی‌های درجا با امکان بازگشت به بیرون‌راندن از <code dir="ltr">InPlaceOrRecreate</code> استفاده کنید.</p>
+</div>
+<p dir="rtl">حالت <code dir="ltr">Auto</code> در حال حاضر نام مستعاری برای حالت <code dir="ltr">Recreate</code> است و دقیقاً به همان شکل رفتار می‌کند. این حالت برای فراهم کردن امکان گسترش راهبردهای به‌روزرسانی خودکار در آینده معرفی شد.</p>
+<h2 id="سیاست-های-منابع" dir="rtl">سیاست‌های منابع</h2>
+<p dir="rtl">سیاست‌های منابع به شما امکان می‌دهند نحوه‌ی تولید توصیه‌ها و اعمال به‌روزرسانی‌ها توسط VerticalPodAutoscaler را به‌دقت تنظیم کنید.
+می‌توانید برای توصیه‌های منابع کران تعیین کنید، مشخص کنید کدام منابع مدیریت شوند، و سیاست‌های متفاوتی را برای کانتینرهای منفرد درون یک Pod پیکربندی کنید.</p>
+<p dir="rtl">سیاست‌های منابع را در فیلد <code dir="ltr">resourcePolicy</code> از spec مربوط به VPA تعریف می‌کنید:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: my-app-vpa
+spec:
+  targetRef:
+    apiVersion: "apps/v1"
+    kind: Deployment
+    name: my-app
+  updatePolicy:
+    updateMode: "Recreate"
+  resourcePolicy:
+    containerPolicies:
+    - containerName: "application"
+      minAllowed:
+        cpu: 100m
+        memory: 128Mi
+      maxAllowed:
+        cpu: 2
+        memory: 2Gi
+      controlledResources:
+      - cpu
+      - memory
+      controlledValues: RequestsAndLimits
+</code></pre>
+<h4 id="minallowed-و-maxallowed" dir="rtl">minAllowed و maxAllowed</h4>
+<p dir="rtl">این فیلدها برای توصیه‌های VPA کران تعیین می‌کنند.
+VPA هرگز منابعی کمتر از <code dir="ltr">minAllowed</code> یا بیشتر از <code dir="ltr">maxAllowed</code> توصیه نمی‌کند، حتی اگر داده‌های مصرف واقعی مقادیر متفاوتی را پیشنهاد کنند.</p>
+<h4 id="controlledresources" dir="ltr" class="ltr">controlledResources</h4>
+<p dir="rtl">فیلد <code dir="ltr">controlledResources</code> مشخص می‌کند که VPA کدام انواع منبع را برای یک کانتینر در یک Pod مدیریت کند.
+اگر مشخص نشود، VPA به‌طور پیش‌فرض هم CPU و هم حافظه را مدیریت می‌کند. می‌توانید VPA را محدود کنید تا فقط منابع خاصی را مدیریت کند.
+نام‌های معتبر منابع شامل <code dir="ltr">cpu</code> و <code dir="ltr">memory</code> هستند.</p>
+<h3 id="controlledvalues" dir="ltr" class="ltr">controlledValues</h3>
+<p dir="rtl">فیلد <code dir="ltr">controlledValues</code> تعیین می‌کند که VPA درخواست‌های منابع، محدودیت‌ها، یا هر دو را کنترل کند:</p>
+<dl>
+<dt dir="ltr" class="ltr">RequestsAndLimits</dt>
+<dd dir="rtl">VPA هم درخواست‌ها و هم محدودیت‌ها را تنظیم می‌کند. محدودیت بر اساس نسبت درخواست به محدودیت تعریف‌شده در spec مربوط به Pod، متناسب با درخواست مقیاس‌دهی می‌شود. این حالت پیش‌فرض است.</dd>
+<dt dir="ltr" class="ltr">RequestsOnly</dt>
+<dd dir="rtl">VPA فقط درخواست‌ها را تنظیم می‌کند و محدودیت‌ها را بدون تغییر باقی می‌گذارد. محدودیت‌ها رعایت می‌شوند و اگر مصرف از آن‌ها فراتر رود، همچنان می‌توانند باعث throttling یا کشته شدن به دلیل کمبود حافظه شوند.</dd>
+</dl>
+<p dir="rtl">برای آشنایی بیشتر با این دو مفهوم، به <a href="../../configuration/manage-resources-containers.html#requests-and-limits">درخواست‌ها و محدودیت‌ها</a> مراجعه کنید.</p>
+<h2 id="منابع-limitrange" dir="rtl">منابع LimitRange</h2>
+<p dir="rtl">اجزای admission controller و updater مربوط به VPA توصیه‌ها را پس‌پردازش می‌کنند تا با قیدهای تعریف‌شده در <a href="https://kubernetes.io/docs/concepts/policy/limit-range/" target="_blank">LimitRangeها</a> سازگار باشند. منابع LimitRange با <code dir="ltr">type</code> برابر Pod و Container در کلاستر کوبرنتیز بررسی می‌شوند.</p>
+<p dir="rtl">برای مثال، اگر از مقدار فیلد <code dir="ltr">max</code> در یک منبع LimitRange از نوع Container فراتر رفته شود، هر دو جزء VPA محدودیت را به مقدار تعریف‌شده در فیلد <code dir="ltr">max</code> کاهش می‌دهند و درخواست به‌طور متناسب کاهش می‌یابد تا نسبت درخواست به محدودیت در spec مربوط به Pod حفظ شود.</p>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<p dir="rtl">اگر مقیاس‌دهی خودکار را در کلاستر خود پیکربندی می‌کنید، ممکن است بخواهید استفاده از
+<a href="https://kubernetes.io/docs/concepts/cluster-administration/node-autoscaling/" target="_blank">مقیاس‌دهی خودکار نود</a>
+را نیز در نظر بگیرید تا اطمینان حاصل کنید که تعداد مناسبی نود را اجرا می‌کنید.
+همچنین می‌توانید درباره‌ی <a href="horizontal-pod-autoscale.html">مقیاس‌دهی خودکار <em>افقی</em> Pod</a> بیشتر بخوانید.</p>
+</main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#آبجکت-api">آبجکت API</a><a class="l2" href="#verticalpodautoscaler-چگونه-کار-می-کند؟">VerticalPodAutoscaler چگونه کار می‌کند؟</a><a class="l2" href="#حالت-های-به-روزرسانی">حالت‌های به‌روزرسانی</a><a class="l3" href="#off-updatemode-off">Off {#updateMode-Off}</a><a class="l3" href="#initial-updatemode-initial">Initial {#updateMode-Initial}</a><a class="l3" href="#recreate-updatemode-recreate">Recreate {#updateMode-Recreate}</a><a class="l3" href="#inplaceorrecreate-updatemode-inplaceorrecreate">InPlaceOrRecreate {#updateMode-InPlaceOrRecreate}</a><a class="l3" href="#inplace-updatemode-inplace">InPlace {#updateMode-InPlace}</a><a class="l3" href="#auto-منسوخ-شده-updatemode-auto">Auto (منسوخ‌شده) {#updateMode-Auto}</a><a class="l2" href="#سیاست-های-منابع">سیاست‌های منابع</a><a class="l3" href="#controlledvalues">controlledValues</a><a class="l2" href="#منابع-limitrange">منابع LimitRange</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>

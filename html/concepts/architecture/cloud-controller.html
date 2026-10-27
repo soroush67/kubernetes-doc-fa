@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>مدیر کنترل‌کنندهٔ ابری (Cloud Controller Manager) | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+</head>
+<body>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">concepts / architecture</span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">مدیر کنترل‌کنندهٔ ابری (Cloud Controller Manager)</h1><!-- overview -->
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes v1.11 [beta]</span> (بتا)</div>
+<p dir="rtl">فناوری‌های زیرساخت ابری به شما امکان می‌دهند کوبرنتیز را روی ابرهای عمومی، خصوصی و ترکیبی اجرا کنید.
+کوبرنتیز به زیرساختی خودکار و مبتنی بر API، بدون وابستگی تنگاتنگ میان
+اجزا، باور دارد.</p>
+<p dir="rtl"><em>(تعریف واژه‌نامه: cloud-controller-manager)</em></p>
+<p dir="rtl">cloud-controller-manager با استفاده از یک سازوکار افزونه‌ای (plugin)
+ساختار یافته است که به ارائه‌دهندگان ابری مختلف اجازه می‌دهد سکوهای خود را با کوبرنتیز یکپارچه کنند.</p>
+<!-- body -->
+<h2 id="طراحی" dir="rtl">طراحی</h2>
+<p><img src="/images/docs/components-of-kubernetes.svg" alt="اجزای کوبرنتیز"></p>
+<p dir="rtl">مدیر کنترل‌کنندهٔ ابری در control plane به‌صورت مجموعه‌ای تکثیرشده از فرایندها اجرا می‌شود
+(معمولاً این فرایندها کانتینرهایی درون Podها هستند). هر cloud-controller-manager
+چندین <span class="term" title="controller">کنترل‌کننده</span> را در یک
+فرایند واحد پیاده‌سازی می‌کند.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">همچنین می‌توانید مدیر کنترل‌کنندهٔ ابری را به‌جای اجرا به‌عنوان بخشی از control plane،
+به‌صورت یک <span class="term" title="addons">افزونه</span>ی کوبرنتیز
+اجرا کنید.</p>
+</div>
+<h2 id="کارکردهای-مدیر-کنترل-کنندهٔ-ابری-functions-of-the-ccm" dir="rtl">کارکردهای مدیر کنترل‌کنندهٔ ابری {#functions-of-the-ccm}</h2>
+<p dir="rtl">کنترل‌کننده‌های درون مدیر کنترل‌کنندهٔ ابری عبارت‌اند از:</p>
+<h3 id="کنترل-کنندهٔ-نود" dir="rtl">کنترل‌کنندهٔ نود</h3>
+<p dir="rtl">کنترل‌کنندهٔ نود مسئول به‌روزرسانی آبجکت‌های <span class="term" title="node">Node</span>
+هنگام ایجاد سرورهای جدید در زیرساخت ابری شماست. کنترل‌کنندهٔ نود اطلاعات مربوط به
+میزبان‌هایی را که درون فضای اجاره‌ای (tenancy) شما نزد ارائه‌دهندهٔ ابری اجرا می‌شوند به دست می‌آورد. کنترل‌کنندهٔ نود کارکردهای زیر را انجام می‌دهد:</p>
+<ol>
+<li dir="rtl">به‌روزرسانی آبجکت Node با شناسهٔ یکتای سرور متناظر که از API ارائه‌دهندهٔ ابری به دست آمده است.</li>
+<li dir="rtl">افزودن حاشیه‌نویسی و برچسب به آبجکت Node با اطلاعات مختص ابر، مانند منطقه‌ای (region) که نود
+در آن مستقر شده و منابعی (پردازنده، حافظه و غیره) که در اختیار دارد.</li>
+<li dir="rtl">به دست آوردن نام میزبان و نشانی‌های شبکهٔ نود.</li>
+<li dir="rtl">بررسی سلامت نود. در صورتی که نودی پاسخ‌گو نباشد، این کنترل‌کننده از طریق
+API ارائه‌دهندهٔ ابری شما بررسی می‌کند که آیا سرور غیرفعال / حذف / خاتمه داده شده است یا نه.
+اگر نود از ابر حذف شده باشد، کنترل‌کننده آبجکت Node را از کلاستر کوبرنتیز شما
+حذف می‌کند.</li>
+</ol>
+<p dir="rtl">برخی از پیاده‌سازی‌های ارائه‌دهندگان ابری این کار را میان یک کنترل‌کنندهٔ نود و یک کنترل‌کنندهٔ
+چرخهٔ عمر نود جداگانه تقسیم می‌کنند.</p>
+<h3 id="کنترل-کنندهٔ-مسیر" dir="rtl">کنترل‌کنندهٔ مسیر</h3>
+<p dir="rtl">کنترل‌کنندهٔ مسیر مسئول پیکربندی مناسب مسیرها در ابر است
+تا کانتینرهای روی نودهای مختلف در کلاستر کوبرنتیز شما
+بتوانند با یکدیگر ارتباط برقرار کنند.</p>
+<p dir="rtl">بسته به ارائه‌دهندهٔ ابری، کنترل‌کنندهٔ مسیر ممکن است بلوک‌هایی
+از نشانی‌های IP را نیز برای شبکهٔ Pod تخصیص دهد.</p>
+<h3 id="کنترل-کنندهٔ-service" dir="rtl">کنترل‌کنندهٔ Service</h3>
+<p dir="rtl"><span class="term" title="service">Serviceها</span> با اجزای زیرساخت
+ابری مانند متعادل‌کننده‌های بار مدیریت‌شده، نشانی‌های IP، پالایش بسته‌های
+شبکه و بررسی سلامت مقصد یکپارچه می‌شوند. کنترل‌کنندهٔ Service با APIهای
+ارائه‌دهندهٔ ابری شما تعامل می‌کند تا هنگامی که یک منبع Service را تعریف می‌کنید که به متعادل‌کننده‌های بار
+و دیگر اجزای زیرساختی نیاز دارد، آن‌ها را راه‌اندازی کند.</p>
+<h2 id="مجوزدهی" dir="rtl">مجوزدهی</h2>
+<p dir="rtl">این بخش دسترسی‌هایی را که مدیر کنترل‌کنندهٔ ابری برای انجام عملیات خود
+روی آبجکت‌های گوناگون API نیاز دارد، به تفکیک شرح می‌دهد.</p>
+<h3 id="کنترل-کنندهٔ-نود-authorization-node-controller" dir="rtl">کنترل‌کنندهٔ نود {#authorization-node-controller}</h3>
+<p dir="rtl">کنترل‌کنندهٔ Node تنها با آبجکت‌های Node کار می‌کند. این کنترل‌کننده برای خواندن و
+تغییر آبجکت‌های Node به دسترسی کامل نیاز دارد.</p>
+<p dir="ltr" class="ltr"><code dir="ltr">v1/Node</code>:</p>
+<ul>
+<li dir="ltr" class="ltr">get</li>
+<li dir="ltr" class="ltr">list</li>
+<li dir="ltr" class="ltr">create</li>
+<li dir="ltr" class="ltr">update</li>
+<li dir="ltr" class="ltr">patch</li>
+<li dir="ltr" class="ltr">watch</li>
+<li dir="ltr" class="ltr">delete</li>
+</ul>
+<h3 id="کنترل-کنندهٔ-مسیر-authorization-route-controller" dir="rtl">کنترل‌کنندهٔ مسیر {#authorization-route-controller}</h3>
+<p dir="rtl">کنترل‌کنندهٔ مسیر به رویداد ایجاد آبجکت Node گوش می‌دهد و مسیرها را
+به‌طور مناسب پیکربندی می‌کند. این کنترل‌کننده به دسترسی Get روی آبجکت‌های Node نیاز دارد.</p>
+<p dir="ltr" class="ltr"><code dir="ltr">v1/Node</code>:</p>
+<ul>
+<li dir="ltr" class="ltr">get</li>
+</ul>
+<h3 id="کنترل-کنندهٔ-service-authorization-service-controller" dir="rtl">کنترل‌کنندهٔ Service {#authorization-service-controller}</h3>
+<p dir="rtl">کنترل‌کنندهٔ Service رویدادهای <strong>create</strong>، <strong>update</strong> و <strong>delete</strong> آبجکت‌های Service را پایش می‌کند و سپس
+متعادل‌کننده‌های بار را برای آن Serviceها به‌طور مناسب پیکربندی می‌کند.</p>
+<p dir="rtl">برای دسترسی به Serviceها، این کنترل‌کننده به دسترسی‌های <strong>list</strong> و <strong>watch</strong> نیاز دارد. برای به‌روزرسانی Serviceها، به
+دسترسی‌های <strong>patch</strong> و <strong>update</strong> روی زیرمنبع <code dir="ltr">status</code> نیاز دارد.</p>
+<p dir="ltr" class="ltr"><code dir="ltr">v1/Service</code>:</p>
+<ul>
+<li dir="ltr" class="ltr">list</li>
+<li dir="ltr" class="ltr">get</li>
+<li dir="ltr" class="ltr">watch</li>
+<li dir="ltr" class="ltr">patch</li>
+<li dir="ltr" class="ltr">update</li>
+</ul>
+<h3 id="سایر-موارد-authorization-miscellaneous" dir="rtl">سایر موارد {#authorization-miscellaneous}</h3>
+<p dir="rtl">پیاده‌سازی هستهٔ مدیر کنترل‌کنندهٔ ابری به دسترسی برای ایجاد آبجکت‌های Event
+نیاز دارد و برای اطمینان از عملکرد امن، به دسترسی برای ایجاد ServiceAccountها نیاز دارد.</p>
+<p dir="ltr" class="ltr"><code dir="ltr">v1/Event</code>:</p>
+<ul>
+<li dir="ltr" class="ltr">create</li>
+<li dir="ltr" class="ltr">patch</li>
+<li dir="ltr" class="ltr">update</li>
+</ul>
+<p dir="ltr" class="ltr"><code dir="ltr">v1/ServiceAccount</code>:</p>
+<ul>
+<li dir="ltr" class="ltr">create</li>
+</ul>
+<p dir="rtl">ClusterRole مربوط به <span class="term" title="rbac">RBAC</span> برای مدیر
+کنترل‌کنندهٔ ابری به این شکل است:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: cloud-controller-manager
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - events
+  verbs:
+  - create
+  - patch
+  - update
+- apiGroups:
+  - ""
+  resources:
+  - nodes
+  verbs:
+  - '*'
+- apiGroups:
+  - ""
+  resources:
+  - nodes/status
+  verbs:
+  - patch
+- apiGroups:
+  - ""
+  resources:
+  - services
+  verbs:
+  - list
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - services/status
+  verbs:
+  - patch
+  - update
+- apiGroups:
+  - ""
+  resources:
+  - serviceaccounts
+  verbs:
+  - create
+- apiGroups:
+  - ""
+  resources:
+  - persistentvolumes
+  verbs:
+  - get
+  - list
+  - update
+  - watch
+</code></pre>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<ul>
+<li dir="rtl">
+<p dir="rtl"><a href="https://kubernetes.io/docs/tasks/administer-cluster/running-cloud-controller/#cloud-controller-manager" target="_blank">مدیریت Cloud Controller Manager</a>
+دستورالعمل‌هایی برای اجرا و مدیریت مدیر کنترل‌کنندهٔ ابری ارائه می‌دهد.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">برای ارتقای یک control plane با دسترس‌پذیری بالا (HA) به‌منظور استفاده از مدیر کنترل‌کنندهٔ ابری، به
+<a href="https://kubernetes.io/docs/tasks/administer-cluster/controller-manager-leader-migration/" target="_blank">مهاجرت control plane تکثیرشده به استفاده از Cloud Controller Manager</a> مراجعه کنید.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">می‌خواهید بدانید چگونه مدیر کنترل‌کنندهٔ ابری خود را پیاده‌سازی کنید یا یک پروژهٔ موجود را گسترش دهید؟</p>
+<ul>
+<li dir="rtl">مدیر کنترل‌کنندهٔ ابری از رابط‌های Go استفاده می‌کند؛ به‌طور مشخص، رابط <code dir="ltr">CloudProvider</code> که در
+<a href="https://github.com/kubernetes/cloud-provider/blob/release-1.21/cloud.go#L42-L69" target="_blank" rel="noopener"><code dir="ltr">cloud.go</code></a>
+از <a href="https://github.com/kubernetes/cloud-provider" target="_blank" rel="noopener">kubernetes/cloud-provider</a> تعریف شده است، تا امکان
+اتصال پیاده‌سازی‌های هر ابری فراهم شود.</li>
+<li dir="rtl">پیاده‌سازی کنترل‌کننده‌های مشترکی که در این سند برجسته شده‌اند (Node، Route و Service)،
+به‌همراه بخشی از چارچوب‌بندی و رابط مشترک cloudprovider، بخشی از هستهٔ کوبرنتیز است.
+پیاده‌سازی‌های مختص ارائه‌دهندگان ابری خارج از هستهٔ کوبرنتیز قرار دارند و
+رابط <code dir="ltr">CloudProvider</code> را پیاده‌سازی می‌کنند.</li>
+<li dir="rtl">برای اطلاعات بیشتر دربارهٔ توسعهٔ افزونه‌ها،
+به <a href="https://kubernetes.io/docs/tasks/administer-cluster/developing-cloud-controller-manager/" target="_blank">توسعهٔ Cloud Controller Manager</a> مراجعه کنید.</li>
+</ul>
+</li>
+</ul>
+</main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#طراحی">طراحی</a><a class="l2" href="#کارکردهای-مدیر-کنترل-کنندهٔ-ابری-functions-of-the-ccm">کارکردهای مدیر کنترل‌کنندهٔ ابری {#functions-of-the-ccm}</a><a class="l3" href="#کنترل-کنندهٔ-نود">کنترل‌کنندهٔ نود</a><a class="l3" href="#کنترل-کنندهٔ-مسیر">کنترل‌کنندهٔ مسیر</a><a class="l3" href="#کنترل-کنندهٔ-service">کنترل‌کنندهٔ Service</a><a class="l2" href="#مجوزدهی">مجوزدهی</a><a class="l3" href="#کنترل-کنندهٔ-نود-authorization-node-controller">کنترل‌کنندهٔ نود {#authorization-node-controller}</a><a class="l3" href="#کنترل-کنندهٔ-مسیر-authorization-route-controller">کنترل‌کنندهٔ مسیر {#authorization-route-controller}</a><a class="l3" href="#کنترل-کنندهٔ-service-authorization-service-controller">کنترل‌کنندهٔ Service {#authorization-service-controller}</a><a class="l3" href="#سایر-موارد-authorization-miscellaneous">سایر موارد {#authorization-miscellaneous}</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>

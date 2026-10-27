@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ارتباط میان نودها و control plane | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+</head>
+<body>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">concepts / architecture</span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">ارتباط میان نودها و control plane</h1><!-- overview -->
+<p dir="rtl">این سند مسیرهای ارتباطی میان <span class="term" title="kube-apiserver">سرور API</span>
+و <span class="term" title="cluster">کلاستر</span> کوبرنتیز را فهرست می‌کند.
+هدف این است که کاربران بتوانند نصب خود را سفارشی کنند و پیکربندی شبکه را مستحکم سازند
+تا کلاستر بتواند روی یک شبکهٔ غیرقابل‌اعتماد (یا روی نشانی‌های IP کاملاً عمومی در یک ارائه‌دهندهٔ
+ابری) اجرا شود.</p>
+<!-- body -->
+<h2 id="از-نود-به-control-plane" dir="rtl">از نود به control plane</h2>
+<p dir="rtl">کوبرنتیز از الگوی API «هاب و پره» (hub-and-spoke) پیروی می‌کند. همهٔ استفاده‌ها از API که از سوی نودها (یا پادهایی که اجرا می‌کنند) انجام می‌شود،
+به سرور API ختم می‌شود. هیچ‌یک از دیگر اجزای control plane برای در معرض قرار دادن
+سرویس‌های راه دور طراحی نشده‌اند. سرور API طوری پیکربندی می‌شود که روی یک درگاه امن HTTPS
+(معمولاً 443) به اتصال‌های راه دور گوش دهد و یک یا چند شکل از
+<a href="https://kubernetes.io/docs/reference/access-authn-authz/authentication/" target="_blank">احراز هویت</a> کلاینت در آن فعال باشد.
+یک یا چند شکل از <a href="https://kubernetes.io/docs/reference/access-authn-authz/authorization/" target="_blank">مجوزدهی</a> نیز باید
+فعال باشد، به‌ویژه اگر <a href="https://kubernetes.io/docs/reference/access-authn-authz/authentication/#anonymous-requests" target="_blank">درخواست‌های ناشناس</a>
+یا <a href="https://kubernetes.io/docs/reference/access-authn-authz/authentication/#service-account-tokens" target="_blank">توکن‌های حساب سرویس</a>
+مجاز باشند.</p>
+<p dir="rtl">نودها باید با <span class="term" title="certificate">گواهی</span> ریشهٔ عمومی کلاستر تأمین شوند تا بتوانند
+به‌همراه اعتبارنامه‌های معتبر کلاینت، به‌طور امن به سرور API متصل شوند. یک رویکرد مناسب این است که
+اعتبارنامه‌های کلاینتی که به kubelet داده می‌شود، به شکل یک گواهی کلاینت باشد. برای
+تأمین خودکار گواهی‌های کلاینت kubelet، به
+<a href="https://kubernetes.io/docs/reference/access-authn-authz/kubelet-tls-bootstrapping/" target="_blank">راه‌اندازی اولیهٔ TLS در kubelet</a>
+مراجعه کنید.</p>
+<p dir="rtl"><span class="term" title="pod">پادهایی</span> که می‌خواهند به سرور API متصل شوند، می‌توانند با بهره‌گیری از یک حساب سرویس این کار را به‌طور امن انجام دهند،
+به‌گونه‌ای که کوبرنتیز هنگام نمونه‌سازی پاد، گواهی ریشهٔ عمومی و یک توکن حامل (bearer token) معتبر را
+به‌طور خودکار به درون آن تزریق کند.
+سرویس <code dir="ltr">kubernetes</code> (در فضای نام <code dir="ltr">default</code>) با یک نشانی IP مجازی پیکربندی شده است که
+(از طریق <code dir="ltr">&lt;span class="term" title="kube-proxy"&gt;kube-proxy&lt;/span&gt;</code>) به نقطهٔ پایانی HTTPS روی سرور API هدایت می‌شود.</p>
+<p dir="rtl">اجزای control plane نیز از طریق درگاه امن با سرور API ارتباط برقرار می‌کنند.</p>
+<p dir="rtl">در نتیجه، حالت عملیاتی پیش‌فرض برای اتصال‌ها از نودها و پادهای در حال اجرا روی
+نودها به control plane، به‌طور پیش‌فرض امن است و می‌تواند روی شبکه‌های غیرقابل‌اعتماد و/یا
+عمومی اجرا شود.</p>
+<h2 id="از-control-plane-به-نود" dir="rtl">از control plane به نود</h2>
+<p dir="rtl">دو مسیر ارتباطی اصلی از control plane (سرور API) به نودها وجود دارد.
+مسیر نخست از سرور API به فرایند <span class="term" title="kubelet">kubelet</span> است که روی هر نود کلاستر اجرا می‌شود.
+مسیر دوم از سرور API به هر نود، پاد یا سرویسی از طریق قابلیت <em>پراکسی</em> سرور API
+است.</p>
+<h3 id="از-سرور-api-به-kubelet" dir="rtl">از سرور API به kubelet</h3>
+<p dir="rtl">اتصال‌های سرور API به kubelet برای موارد زیر استفاده می‌شوند:</p>
+<ul>
+<li dir="rtl">دریافت لاگ‌های پادها.</li>
+<li dir="rtl">اتصال (معمولاً از طریق <code dir="ltr">kubectl</code>) به پادهای در حال اجرا.</li>
+<li dir="rtl">فراهم‌کردن قابلیت هدایت درگاه (port-forwarding) در kubelet.</li>
+</ul>
+<p dir="rtl">این اتصال‌ها به نقطهٔ پایانی HTTPS مربوط به kubelet ختم می‌شوند. به‌طور پیش‌فرض، سرور API
+گواهی سرویس‌دهی kubelet را تأیید نمی‌کند؛ این امر اتصال را در معرض حملات مرد میانی
+قرار می‌دهد و اجرای آن را روی شبکه‌های غیرقابل‌اعتماد و/یا عمومی <strong>ناامن</strong> می‌سازد.</p>
+<p dir="rtl">برای تأیید این اتصال، از پرچم <code dir="ltr">--kubelet-certificate-authority</code> استفاده کنید تا
+بستهٔ گواهی ریشه‌ای را در اختیار سرور API قرار دهید که برای تأیید گواهی سرویس‌دهی kubelet به کار رود.</p>
+<p dir="rtl">اگر این کار ممکن نیست، در صورت نیاز از <a href="#ssh-tunnels">تونل‌زنی SSH</a> میان سرور API و kubelet
+استفاده کنید تا از اتصال از طریق یک شبکهٔ
+غیرقابل‌اعتماد یا عمومی پرهیز شود.</p>
+<p dir="rtl">در نهایت، <a href="https://kubernetes.io/docs/reference/access-authn-authz/kubelet-authn-authz/" target="_blank">احراز هویت و/یا مجوزدهی kubelet</a>
+باید برای ایمن‌سازی API مربوط به kubelet فعال شود.</p>
+<h3 id="از-سرور-api-به-نودها،-پادها-و-سرویس-ها" dir="rtl">از سرور API به نودها، پادها و سرویس‌ها</h3>
+<p dir="rtl">اتصال‌های سرور API به یک نود، پاد یا سرویس به‌طور پیش‌فرض اتصال‌های HTTP ساده هستند
+و بنابراین نه احراز هویت می‌شوند و نه رمزگذاری. می‌توان آن‌ها را با افزودن پیشوند <code dir="ltr">https:</code>
+به نام نود، پاد یا سرویس در URL مربوط به API، روی یک اتصال امن HTTPS اجرا کرد، اما در این حالت
+گواهی ارائه‌شده توسط نقطهٔ پایانی HTTPS اعتبارسنجی نمی‌شود و اعتبارنامهٔ کلاینت نیز ارائه نمی‌شود. بنابراین
+اگرچه اتصال رمزگذاری می‌شود، هیچ تضمینی برای یکپارچگی فراهم نمی‌کند. اجرای این
+اتصال‌ها روی شبکه‌های غیرقابل‌اعتماد یا عمومی <strong>در حال حاضر امن نیست</strong>.</p>
+<h3 id="تونل-های-ssh" dir="rtl">تونل‌های SSH</h3>
+<p dir="rtl">کوبرنتیز از <a href="https://www.ssh.com/academy/ssh/tunneling" target="_blank" rel="noopener">تونل‌های SSH</a> برای محافظت از مسیرهای ارتباطی control plane به نودها پشتیبانی می‌کند. در این
+پیکربندی، سرور API یک تونل SSH به هر نود کلاستر برقرار می‌کند (با اتصال به
+سرور SSH که روی درگاه 22 گوش می‌دهد) و همهٔ ترافیک مقصد kubelet، نود، پاد یا
+سرویس را از طریق این تونل عبور می‌دهد.
+این تونل تضمین می‌کند که ترافیک بیرون از شبکه‌ای که نودها در آن
+اجرا می‌شوند در معرض دید قرار نگیرد.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">تونل‌های SSH در حال حاضر منسوخ شده‌اند، بنابراین نباید استفاده از آن‌ها را برگزینید، مگر اینکه بدانید
+چه می‌کنید. <a href="#konnectivity-service">سرویس Konnectivity</a> جایگزینی برای این
+کانال ارتباطی است.</p>
+</div>
+<h3 id="سرویس-konnectivity" dir="rtl">سرویس Konnectivity</h3>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes v1.18 [beta]</span> (بتا)</div>
+<p dir="rtl">سرویس Konnectivity به‌عنوان جایگزین تونل‌های SSH، یک پراکسی در سطح TCP برای
+ارتباط control plane با کلاستر فراهم می‌کند. سرویس Konnectivity از دو بخش تشکیل شده است:
+سرور Konnectivity در شبکهٔ control plane و عامل‌های Konnectivity در شبکهٔ نودها.
+عامل‌های Konnectivity اتصال‌ها را به سرور Konnectivity آغاز می‌کنند و اتصال‌های شبکه
+را برقرار نگه می‌دارند.
+پس از فعال‌سازی سرویس Konnectivity، همهٔ ترافیک control plane به نودها از طریق این
+اتصال‌ها عبور می‌کند.</p>
+<p dir="rtl">برای راه‌اندازی سرویس Konnectivity در کلاستر خود، <a href="https://kubernetes.io/docs/tasks/extend-kubernetes/setup-konnectivity/" target="_blank">وظیفهٔ سرویس Konnectivity</a> را
+دنبال کنید.</p>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<ul>
+<li dir="rtl">دربارهٔ <a href="index.html#control-plane-components">اجزای control plane کوبرنتیز</a> بخوانید</li>
+<li dir="rtl">دربارهٔ <a href="https://book.kubebuilder.io/multiversion-tutorial/conversion-concepts.html#hubs-spokes-and-other-wheel-metaphors" target="_blank" rel="noopener">مدل هاب و پره</a> بیشتر بیاموزید</li>
+<li dir="rtl">بیاموزید چگونه <a href="https://kubernetes.io/docs/tasks/administer-cluster/securing-a-cluster/" target="_blank">یک کلاستر را ایمن کنید</a></li>
+<li dir="rtl">دربارهٔ <a href="../overview/kubernetes-api.html">API کوبرنتیز</a> بیشتر بیاموزید</li>
+<li dir="rtl"><a href="https://kubernetes.io/docs/tasks/extend-kubernetes/setup-konnectivity/" target="_blank">سرویس Konnectivity را راه‌اندازی کنید</a></li>
+<li dir="rtl"><a href="https://kubernetes.io/docs/tasks/access-application-cluster/port-forward-access-application-cluster/" target="_blank">از هدایت درگاه برای دسترسی به برنامه‌ها در یک کلاستر استفاده کنید</a></li>
+<li dir="rtl">بیاموزید چگونه <a href="https://kubernetes.io/docs/tasks/debug/debug-application/debug-running-pod/#examine-pod-logs" target="_blank">لاگ‌های پادها را دریافت کنید</a> و <a href="https://kubernetes.io/docs/tasks/access-application-cluster/port-forward-access-application-cluster/#forward-a-local-port-to-a-port-on-the-pod" target="_blank">از kubectl port-forward استفاده کنید</a></li>
+</ul>
+</main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#از-نود-به-control-plane">از نود به control plane</a><a class="l2" href="#از-control-plane-به-نود">از control plane به نود</a><a class="l3" href="#از-سرور-api-به-kubelet">از سرور API به kubelet</a><a class="l3" href="#از-سرور-api-به-نودها،-پادها-و-سرویس-ها">از سرور API به نودها، پادها و سرویس‌ها</a><a class="l3" href="#تونل-های-ssh">تونل‌های SSH</a><a class="l3" href="#سرویس-konnectivity">سرویس Konnectivity</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>

@@ -1,0 +1,639 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>مقیاس‌دهی خودکار افقی Pod | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+</head>
+<body>
+<header class="top"><a href="../../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">concepts / workloads / autoscaling</span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">مقیاس‌دهی خودکار افقی Pod</h1><!-- overview -->
+<p dir="rtl">در کوبرنتیز، یک <em>HorizontalPodAutoscaler</em> به‌طور خودکار یک منبع بار کاری (مانند
+یک <span class="term" title="deployment">Deployment</span> یا
+<span class="term" title="statefulset">StatefulSet</span>) را به‌روزرسانی می‌کند، با
+این هدف که ظرفیت به‌طور خودکار متناسب با تقاضا مقیاس‌دهی شود.</p>
+<p dir="rtl">مقیاس‌دهی افقی به این معناست که پاسخ به افزایش بار، استقرار
+<span class="term" title="pod">Podهای</span> بیشتر است.
+این با مقیاس‌دهی <em>عمودی</em> متفاوت است؛ مقیاس‌دهی عمودی در کوبرنتیز به معنای
+اختصاص منابع بیشتر (برای مثال: حافظه یا CPU) به Podهایی است که از قبل
+برای آن بار کاری در حال اجرا هستند.</p>
+<p dir="rtl">اگر بار کاهش یابد و تعداد Podها بیشتر از حداقل پیکربندی‌شده باشد،
+HorizontalPodAutoscaler به منبع بار کاری (Deployment، StatefulSet
+یا منبع مشابه دیگر) دستور می‌دهد که مقیاس خود را کاهش دهد.</p>
+<p dir="rtl">مقیاس‌دهی خودکار افقی Pod برای آبجکت‌هایی که قابل مقیاس‌دهی نیستند (برای مثال:
+یک <span class="term" title="daemonset">DaemonSet</span>) کاربرد ندارد.</p>
+<p dir="rtl">HorizontalPodAutoscaler به‌صورت یک منبع API کوبرنتیز و یک
+<span class="term" title="controller">کنترل‌کننده</span> پیاده‌سازی شده است.
+منبع، رفتار کنترل‌کننده را تعیین می‌کند.
+کنترل‌کننده‌ی مقیاس‌دهی خودکار افقی Pod که درون
+<span class="term" title="control-plane">control plane</span> کوبرنتیز اجرا می‌شود، به‌طور دوره‌ای
+مقیاس مطلوب هدف خود (برای مثال، یک Deployment) را تنظیم می‌کند تا با متریک‌های مشاهده‌شده‌ای مانند میانگین
+استفاده از CPU، میانگین استفاده از حافظه، یا هر متریک سفارشی دیگری که شما تعیین می‌کنید، مطابقت داشته باشد.</p>
+<p dir="rtl">یک <a href="https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale-walkthrough/" target="_blank">مثال گام‌به‌گام</a> از استفاده از
+مقیاس‌دهی خودکار افقی Pod وجود دارد.</p>
+<!-- body -->
+<h2 id="horizontalpodautoscaler-چگونه-کار-می-کند؟" dir="rtl">HorizontalPodAutoscaler چگونه کار می‌کند؟</h2>
+<pre dir="ltr"><code class="language-mermaid" dir="ltr">graph BT
+
+hpa[HorizontalPodAutoscaler] --&gt; scale[Scale]
+
+subgraph rc[Deployment]
+    scale
+end
+
+scale -.-&gt; pod1[Pod 1]
+scale -.-&gt; pod2[Pod 2]
+scale -.-&gt; pod3[Pod N]
+
+classDef hpa fill:#D5A6BD,stroke:#1E1E1D,stroke-width:1px,color:#1E1E1D;
+classDef rc fill:#F9CB9C,stroke:#1E1E1D,stroke-width:1px,color:#1E1E1D;
+classDef scale fill:#B6D7A8,stroke:#1E1E1D,stroke-width:1px,color:#1E1E1D;
+classDef pod fill:#9FC5E8,stroke:#1E1E1D,stroke-width:1px,color:#1E1E1D;
+class hpa hpa;
+class rc rc;
+class scale scale;
+class pod1,pod2,pod3 pod
+</code></pre>
+<p dir="rtl">شکل ۱. HorizontalPodAutoscaler مقیاس یک Deployment و ReplicaSet آن را کنترل می‌کند</p>
+<p dir="rtl">کوبرنتیز مقیاس‌دهی خودکار افقی Pod را به‌صورت یک حلقه‌ی کنترلی پیاده‌سازی می‌کند که به‌طور متناوب اجرا می‌شود
+(یک فرایند پیوسته نیست). این بازه با پارامتر
+<code dir="ltr">--horizontal-pod-autoscaler-sync-period</code> در
+<a href="https://kubernetes.io/docs/reference/command-line-tools-reference/kube-controller-manager/" target="_blank"><code dir="ltr">kube-controller-manager</code></a>
+تنظیم می‌شود (و بازه‌ی پیش‌فرض ۱۵ ثانیه است).</p>
+<p dir="rtl">در هر دوره یک بار، controller manager میزان استفاده از منابع را در برابر
+متریک‌های مشخص‌شده در تعریف هر HorizontalPodAutoscaler پرس‌وجو می‌کند. controller manager
+منبع هدف تعریف‌شده توسط <code dir="ltr">scaleTargetRef</code> را پیدا می‌کند،
+سپس Podها را بر اساس برچسب‌های <code dir="ltr">.spec.selector</code> منبع هدف انتخاب می‌کند
+و متریک‌ها را یا از API متریک‌های منابع (برای متریک‌های منبع به‌ازای هر Pod)،
+یا از API متریک‌های سفارشی (برای همه‌ی متریک‌های دیگر) دریافت می‌کند.</p>
+<ul>
+<li dir="rtl">
+<p dir="rtl">برای متریک‌های منبع به‌ازای هر Pod (مانند CPU)، کنترل‌کننده متریک‌ها را
+از API متریک‌های منابع برای هر Podای که HorizontalPodAutoscaler هدف قرار داده است دریافت می‌کند.
+سپس، اگر یک مقدار هدف برای میزان استفاده (utilization) تنظیم شده باشد، کنترل‌کننده مقدار استفاده
+را به‌صورت درصدی از
+<a href="../../configuration/manage-resources-containers.html#requests-and-limits">درخواست منبع</a>
+معادل در کانتینرهای هر Pod محاسبه می‌کند. اگر یک مقدار خام هدف تنظیم شده باشد، مقادیر خام متریک مستقیماً استفاده می‌شوند.
+سپس کنترل‌کننده میانگین میزان استفاده یا مقدار خام را (بسته به نوع
+هدف مشخص‌شده) در میان همه‌ی Podهای هدف محاسبه می‌کند و نسبتی تولید می‌کند که برای مقیاس‌دهی
+تعداد رپلیکاهای مطلوب به کار می‌رود.</p>
+<p dir="rtl">لطفاً توجه داشته باشید که اگر برای برخی از کانتینرهای Pod درخواست منبع مربوطه تنظیم نشده باشد،
+میزان استفاده از CPU برای آن Pod تعریف نخواهد شد و مقیاس‌دهنده‌ی خودکار
+هیچ اقدامی برای آن متریک انجام نخواهد داد. برای اطلاعات بیشتر درباره‌ی نحوه‌ی کار الگوریتم مقیاس‌دهی خودکار،
+بخش <a href="#algorithm-details">جزئیات الگوریتم</a> را در ادامه ببینید.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">برای متریک‌های سفارشی به‌ازای هر Pod، کنترل‌کننده مشابه متریک‌های منبع به‌ازای هر Pod عمل می‌کند،
+با این تفاوت که با مقادیر خام کار می‌کند، نه با مقادیر میزان استفاده.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">برای متریک‌های آبجکت و متریک‌های خارجی، یک متریک واحد دریافت می‌شود که
+آبجکت موردنظر را توصیف می‌کند. این متریک با مقدار هدف مقایسه می‌شود
+تا همانند بالا یک نسبت تولید شود. در نسخه‌ی API <code dir="ltr">autoscaling/v2</code>،
+می‌توان این مقدار را به‌صورت اختیاری پیش از انجام مقایسه بر تعداد Podها
+تقسیم کرد.</p>
+</li>
+</ul>
+<p dir="rtl">کاربرد رایج HorizontalPodAutoscaler این است که آن را طوری پیکربندی کنند که متریک‌ها را از
+<span class="term" title="aggregation-layer">APIهای تجمیع‌شده</span>
+(<code dir="ltr">metrics.k8s.io</code>، <code dir="ltr">custom.metrics.k8s.io</code> یا <code dir="ltr">external.metrics.k8s.io</code>) دریافت کند. API <code dir="ltr">metrics.k8s.io</code>
+معمولاً توسط افزونه‌ای به نام Metrics Server ارائه می‌شود که باید جداگانه راه‌اندازی شود.
+برای اطلاعات بیشتر درباره‌ی متریک‌های منابع، به
+<a href="https://kubernetes.io/docs/tasks/debug/debug-cluster/resource-metrics-pipeline/#metrics-server" target="_blank">Metrics Server</a> مراجعه کنید.</p>
+<p dir="rtl">بخش <a href="#support-for-metrics-apis">پشتیبانی از APIهای متریک</a> تضمین‌های پایداری و وضعیت پشتیبانی این
+APIهای مختلف را توضیح می‌دهد.</p>
+<p dir="rtl">کنترل‌کننده‌ی HorizontalPodAutoscaler به منابع بار کاری متناظری که از مقیاس‌دهی پشتیبانی می‌کنند (مانند Deploymentها
+و StatefulSet) دسترسی پیدا می‌کند. هر یک از این منابع یک زیرمنبع به نام <code dir="ltr">scale</code> دارند؛ رابطی که به شما امکان می‌دهد
+تعداد رپلیکاها را به‌صورت پویا تنظیم کنید و وضعیت فعلی هر یک از آن‌ها را بررسی کنید.
+برای اطلاعات کلی درباره‌ی زیرمنابع در API کوبرنتیز، به
+<a href="https://kubernetes.io/docs/reference/using-api/api-concepts/" target="_blank">مفاهیم API کوبرنتیز</a> مراجعه کنید.</p>
+<h3 id="جزئیات-الگوریتم" dir="rtl">جزئیات الگوریتم</h3>
+<p dir="rtl">از ابتدایی‌ترین دیدگاه، کنترل‌کننده‌ی HorizontalPodAutoscaler
+بر اساس نسبت میان مقدار مطلوب متریک و مقدار فعلی متریک
+عمل می‌کند:</p>
+<pre dir="ltr"><code class="language-math" dir="ltr">\begin{equation*}
+desiredReplicas = ceil\left\lceil currentReplicas \times \frac{currentMetricValue}{desiredMetricValue} \right\rceil
+\end{equation*}
+</code></pre>
+<p dir="rtl">برای مثال، اگر مقدار فعلی متریک <code dir="ltr">200m</code> و مقدار مطلوب
+<code dir="ltr">100m</code> باشد، تعداد رپلیکاها دو برابر خواهد شد، زیرا
+\( { 200.0 \div 100.0 } = 2.0 \).<br>
+اگر در عوض مقدار فعلی <code dir="ltr">50m</code> باشد، تعداد رپلیکاها
+نصف خواهد شد، زیرا \( { 50.0 \div 100.0 } = 0.5 \). اگر این نسبت به‌اندازه‌ی کافی به 1.0 نزدیک باشد (در محدوده‌ی یک
+<a href="#tolerance">رواداری قابل پیکربندی</a> که به‌طور پیش‌فرض 0.1 است)، control plane از هرگونه اقدام مقیاس‌دهی
+صرف‌نظر می‌کند.</p>
+<p dir="rtl">هنگامی که <code dir="ltr">targetAverageValue</code> یا <code dir="ltr">targetAverageUtilization</code> مشخص شده باشد،
+مقدار <code dir="ltr">currentMetricValue</code> با گرفتن میانگین متریک داده‌شده
+در میان همه‌ی Podهای موجود در هدف مقیاس HorizontalPodAutoscaler محاسبه می‌شود.</p>
+<p dir="rtl">پیش از بررسی رواداری و تصمیم‌گیری درباره‌ی مقادیر نهایی، control
+plane همچنین بررسی می‌کند که آیا متریکی مفقود است یا نه، و چه تعداد از Podها
+<a href="https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#pod-conditions" target="_blank"><code dir="ltr">Ready</code></a> هستند.
+برای متریک‌های منبع به‌ازای هر Pod، همه‌ی Podهایی که برچسب زمانی حذف (deletion timestamp) برایشان تنظیم شده است
+(آبجکت‌هایی که برچسب زمانی حذف دارند در حال خاموش شدن /
+حذف شدن هستند) نادیده گرفته می‌شوند و همه‌ی Podهای ناموفق کنار گذاشته می‌شوند.
+برای متریک‌های خارجی و متریک‌های آبجکت، تعداد رپلیکاها بر اساس
+تعداد Podهای Running و Ready تعیین می‌شود؛ Podهای در حال خاتمه که هنوز Ready هستند
+همچنان در این مجموع شمرده می‌شوند.</p>
+<p dir="rtl">اگر یک Pod خاص متریک نداشته باشد، برای بعد کنار گذاشته می‌شود؛ Podهای
+فاقد متریک برای تنظیم مقدار نهایی مقیاس‌دهی استفاده خواهند شد.</p>
+<p dir="rtl">هنگام مقیاس‌دهی بر اساس CPU، اگر هر Podای هنوز آماده نشده باشد (هنوز در حال
+راه‌اندازی است یا احتمالاً سالم نیست) <em>یا</em> جدیدترین نقطه‌ی متریک برای
+آن Pod مربوط به پیش از آماده شدن آن باشد، آن Pod نیز کنار گذاشته می‌شود.</p>
+<p dir="rtl">به دلیل محدودیت‌های فنی، کنترل‌کننده‌ی HorizontalPodAutoscaler
+هنگام تصمیم‌گیری درباره‌ی کنار گذاشتن برخی متریک‌های CPU نمی‌تواند به‌طور دقیق نخستین زمانی را
+که یک Pod آماده می‌شود تعیین کند. در عوض،
+یک Pod را «هنوز آماده‌نشده» در نظر می‌گیرد اگر آماده نباشد و در یک بازه‌ی زمانی کوتاه و قابل پیکربندی
+از زمان شروع آن به حالت آماده گذار کرده باشد.
+این مقدار با گزینه‌ی خط فرمان <code dir="ltr">--horizontal-pod-autoscaler-initial-readiness-delay</code>
+پیکربندی می‌شود و مقدار پیش‌فرض آن ۳۰ ثانیه است.
+پس از آنکه یک Pod آماده شد، کنترل‌کننده هر گذار به حالت
+آماده را در صورتی نخستین گذار در نظر می‌گیرد که در یک بازه‌ی زمانی طولانی‌تر و قابل پیکربندی
+از زمان شروع آن رخ داده باشد. این مقدار با
+گزینه‌ی خط فرمان <code dir="ltr">--horizontal-pod-autoscaler-cpu-initialization-period</code> پیکربندی می‌شود
+و مقدار پیش‌فرض آن ۵ دقیقه است.</p>
+<p dir="rtl">سپس نسبت مقیاس پایه‌ی \( currentMetricValue \over desiredMetricValue \)
+با استفاده از Podهای باقی‌مانده‌ای که در مراحل بالا کنار گذاشته یا حذف نشده‌اند محاسبه می‌شود.</p>
+<p dir="rtl">اگر متریک مفقودی وجود داشته باشد، control plane میانگین را به‌صورت
+محافظه‌کارانه‌تری دوباره محاسبه می‌کند و فرض می‌کند آن Podها در صورت کاهش مقیاس ۱۰۰٪ از
+مقدار مطلوب و در صورت افزایش مقیاس ۰٪ از آن را مصرف می‌کردند. این کار
+شدت هرگونه مقیاس‌دهی احتمالی را تعدیل می‌کند.</p>
+<p dir="rtl">افزون بر این، اگر Podهای هنوز آماده‌نشده وجود داشته باشند و بار کاری بدون
+در نظر گرفتن متریک‌های مفقود یا Podهای هنوز آماده‌نشده افزایش مقیاس می‌یافت،
+کنترل‌کننده به‌صورت محافظه‌کارانه فرض می‌کند که Podهای هنوز آماده‌نشده ۰٪
+از متریک مطلوب را مصرف می‌کنند و بدین ترتیب شدت افزایش مقیاس را باز هم تعدیل می‌کند.</p>
+<p dir="rtl">پس از در نظر گرفتن Podهای هنوز آماده‌نشده و متریک‌های مفقود،
+کنترل‌کننده نسبت استفاده را دوباره محاسبه می‌کند. اگر نسبت جدید جهت مقیاس‌دهی را
+معکوس کند یا در محدوده‌ی رواداری باشد، کنترل‌کننده هیچ اقدام مقیاس‌دهی‌ای
+انجام نمی‌دهد. در سایر موارد، از نسبت جدید برای تصمیم‌گیری درباره‌ی هرگونه تغییر در
+تعداد Podها استفاده می‌شود.</p>
+<p dir="rtl">توجه داشته باشید که مقدار <em>اصلی</em> میانگین میزان استفاده، بدون در نظر گرفتن
+Podهای هنوز آماده‌نشده یا متریک‌های مفقود، از طریق وضعیت HorizontalPodAutoscaler
+گزارش می‌شود، حتی زمانی که از نسبت استفاده‌ی جدید
+استفاده می‌شود.</p>
+<p dir="rtl">اگر چند متریک در یک HorizontalPodAutoscaler مشخص شده باشد، این
+محاسبه برای هر متریک انجام می‌شود و سپس بزرگ‌ترین تعداد رپلیکای مطلوب
+انتخاب می‌شود. اگر هر یک از این متریک‌ها قابل تبدیل
+به تعداد رپلیکای مطلوب نباشد (برای مثال به دلیل خطا در دریافت متریک‌ها
+از APIهای متریک) و متریک‌هایی که قابل دریافت هستند کاهش مقیاس را پیشنهاد کنند،
+مقیاس‌دهی انجام نمی‌شود. این بدان معناست که HPA همچنان
+قادر به افزایش مقیاس است، اگر یک یا چند متریک مقدار <code dir="ltr">desiredReplicas</code> بزرگ‌تر از
+مقدار فعلی بدهند.</p>
+<p dir="rtl">در نهایت، درست پیش از آنکه HPA هدف را مقیاس‌دهی کند، توصیه‌ی مقیاس ثبت می‌شود.
+کنترل‌کننده همه‌ی توصیه‌ها را در یک پنجره‌ی قابل پیکربندی در نظر می‌گیرد و
+بالاترین توصیه را از درون آن پنجره انتخاب می‌کند. می‌توانید این مقدار را با استفاده از
+گزینه‌ی خط فرمان <code dir="ltr">--horizontal-pod-autoscaler-downscale-stabilization</code> پیکربندی کنید که مقدار پیش‌فرض آن ۵ دقیقه است.
+این بدان معناست که کاهش‌های مقیاس به‌تدریج رخ می‌دهند و اثر مقادیر متریکی را که به‌سرعت
+نوسان می‌کنند هموار می‌سازند.</p>
+<h2 id="آمادگی-pod-و-متریک-های-مقیاس-دهی-خودکار" dir="rtl">آمادگی Pod و متریک‌های مقیاس‌دهی خودکار</h2>
+<p dir="rtl">کنترل‌کننده‌ی HorizontalPodAutoscaler (HPA) دو گزینه‌ی خط فرمان دارد که بر نحوه‌ی جمع‌آوری متریک‌های CPU از Podها در هنگام راه‌اندازی اثر می‌گذارند:</p>
+<ol>
+<li dir="rtl"><code dir="ltr">--horizontal-pod-autoscaler-cpu-initialization-period</code> (پیش‌فرض: ۵ دقیقه)</li>
+</ol>
+<p dir="rtl">این گزینه بازه‌ی زمانی پس از شروع یک Pod را تعریف می‌کند که در طی آن <strong>میزان استفاده‌ی آن از CPU نادیده گرفته می‌شود</strong>، مگر آنکه:
+- Pod در وضعیت <code dir="ltr">Ready</code> باشد <strong>و</strong>
+- نمونه‌ی متریک به‌طور کامل در دوره‌ای گرفته شده باشد که Pod در وضعیت <code dir="ltr">Ready</code> بوده است.</p>
+<p dir="rtl">این گزینه‌ی خط فرمان کمک می‌کند تا <strong>استفاده‌ی بالا و گمراه‌کننده از CPU</strong> توسط Podهای در حال راه‌اندازی (برای مثال: برنامه‌های Java در حال گرم شدن) در تصمیم‌های مقیاس‌دهی HPA کنار گذاشته شود.</p>
+<ol>
+<li dir="rtl"><code dir="ltr">--horizontal-pod-autoscaler-initial-readiness-delay</code> (پیش‌فرض: ۳۰ ثانیه)</li>
+</ol>
+<p dir="rtl">این گزینه یک دوره‌ی تأخیر کوتاه پس از شروع یک Pod را تعریف می‌کند که در طی آن کنترل‌کننده‌ی HPA با Podهایی که در حال حاضر <code dir="ltr">Unready</code> هستند به‌عنوان Podهای هنوز در حال راه‌اندازی رفتار می‌کند، <strong>حتی اگر پیش‌تر برای مدت کوتاهی به <code dir="ltr">Ready</code> گذار کرده باشند</strong>.</p>
+<p dir="rtl">این گزینه برای این منظور طراحی شده است که:
+- از در نظر گرفتن Podهایی که در هنگام راه‌اندازی به‌سرعت میان <code dir="ltr">Ready</code> و <code dir="ltr">Unready</code> نوسان می‌کنند جلوگیری کند.
+- پیش از آنکه HPA متریک‌های Podها را معتبر بداند، پایداری سیگنال آمادگی اولیه را تضمین کند.</p>
+<p dir="rtl">این گزینه‌های خط فرمان را فقط می‌توانید در سطح کل کلاستر تنظیم کنید.</p>
+<h3 id="رفتارهای-کلیدی-برای-آمادگی-pod-pod-readiness-key-behaviors" dir="rtl">رفتارهای کلیدی برای آمادگی Pod {#pod-readiness-key-behaviors}</h3>
+<ul>
+<li dir="rtl">اگر یک Pod در وضعیت <code dir="ltr">Ready</code> باشد و در همین وضعیت باقی بماند، حتی در طول دوره‌ی تأخیر نیز می‌توان آن را به‌عنوان ارائه‌دهنده‌ی متریک به حساب آورد.</li>
+<li dir="rtl">اگر یک Pod به‌سرعت میان <code dir="ltr">Ready</code> و <code dir="ltr">Unready</code> جابه‌جا شود، متریک‌های آن تا زمانی که به‌طور پایدار <code dir="ltr">Ready</code> در نظر گرفته شود نادیده گرفته می‌شوند.</li>
+</ul>
+<h3 id="روش-مناسب-برای-آمادگی-pod-pod-readiness-good-practices" dir="rtl">روش مناسب برای آمادگی Pod {#pod-readiness-good-practices}</h3>
+<ul>
+<li dir="rtl">یک <code dir="ltr">startupProbe</code> پیکربندی کنید که تا زمانی که دوره‌ی استفاده‌ی بالا از CPU سپری نشده است موفق نشود، یا</li>
+<li dir="rtl">با استفاده از <code dir="ltr">initialDelaySeconds</code> اطمینان حاصل کنید که <code dir="ltr">readinessProbe</code> شما فقط <strong>پس از</strong> فروکش کردن جهش CPU وضعیت <code dir="ltr">Ready</code> را گزارش می‌کند.</li>
+</ul>
+<p dir="rtl">و در حالت ایدئال، <code dir="ltr">--horizontal-pod-autoscaler-cpu-initialization-period</code> را نیز طوری تنظیم کنید که <strong>مدت زمان راه‌اندازی را پوشش دهد</strong>.</p>
+<h2 id="آبجکت-api" dir="rtl">آبجکت API</h2>
+<p dir="rtl">HorizontalPodAutoscaler یک نوع (kind) API در گروه API
+<code dir="ltr">autoscaling</code> کوبرنتیز است. نسخه‌ی پایدار فعلی را می‌توان در
+نسخه‌ی API <code dir="ltr">autoscaling/v2</code> یافت که از مقیاس‌دهی بر اساس
+حافظه و متریک‌های سفارشی پشتیبانی می‌کند. فیلدهای جدیدی که در
+<code dir="ltr">autoscaling/v2</code> معرفی شده‌اند، هنگام کار با <code dir="ltr">autoscaling/v1</code>
+به‌صورت حاشیه‌نویسی (annotation) حفظ می‌شوند.</p>
+<p dir="rtl">هنگامی که یک آبجکت API از نوع HorizontalPodAutoscaler ایجاد می‌کنید، مطمئن شوید که نام مشخص‌شده یک
+<a href="../../overview/working-with-objects/names.html#dns-subdomain-names">نام زیردامنه‌ی DNS</a> معتبر باشد.
+جزئیات بیشتر درباره‌ی این آبجکت API را می‌توانید در
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.37/#horizontalpodautoscaler-v2-autoscaling" target="_blank">آبجکت HorizontalPodAutoscaler</a> بیابید.</p>
+<h2 id="پایداری-مقیاس-بار-کاری-flapping" dir="rtl">پایداری مقیاس بار کاری {#flapping}</h2>
+<p dir="rtl">هنگام مدیریت مقیاس گروهی از رپلیکاها با استفاده از HorizontalPodAutoscaler،
+ممکن است به دلیل ماهیت پویای متریک‌های ارزیابی‌شده، تعداد رپلیکاها
+مدام و به‌طور مکرر نوسان کند. این پدیده گاهی <em>thrashing</em>
+یا <em>flapping</em> نامیده می‌شود. این مفهوم مشابه مفهوم <em>هیسترزیس</em> (hysteresis) در سایبرنتیک است.</p>
+<h2 id="مقیاس-دهی-خودکار-در-هنگام-به-روزرسانی-تدریجی" dir="rtl">مقیاس‌دهی خودکار در هنگام به‌روزرسانی تدریجی</h2>
+<p dir="rtl">کوبرنتیز به شما امکان می‌دهد یک به‌روزرسانی تدریجی (rolling update) روی یک Deployment انجام دهید. در این
+حالت، Deployment مدیریت ReplicaSetهای زیربنایی را برای شما بر عهده می‌گیرد.
+هنگامی که مقیاس‌دهی خودکار را برای یک Deployment پیکربندی می‌کنید، یک
+HorizontalPodAutoscaler را به یک Deployment واحد متصل می‌کنید. HorizontalPodAutoscaler
+فیلد <code dir="ltr">replicas</code> آن Deployment را مدیریت می‌کند. کنترل‌کننده‌ی deployment مسئول
+تنظیم <code dir="ltr">replicas</code> در ReplicaSetهای زیربنایی است، به‌طوری که مجموع آن‌ها در طول rollout و پس از آن
+به عددی مناسب برسد.</p>
+<p dir="rtl">اگر یک به‌روزرسانی تدریجی روی StatefulSetای انجام دهید که تعداد رپلیکاهای آن
+به‌صورت خودکار مقیاس‌دهی می‌شود، StatefulSet مجموعه‌ی Podهای خود را مستقیماً مدیریت می‌کند (هیچ منبع میانی
+مشابه ReplicaSet وجود ندارد).</p>
+<h2 id="پشتیبانی-از-متریک-های-منابع" dir="rtl">پشتیبانی از متریک‌های منابع</h2>
+<p dir="rtl">هر هدف HPA را می‌توان بر اساس میزان استفاده از منابع توسط Podهای موجود در هدف مقیاس‌دهی، مقیاس‌دهی کرد.
+هنگام تعریف مشخصات Pod، درخواست‌های منابع مانند <code dir="ltr">cpu</code> و <code dir="ltr">memory</code> باید
+مشخص شوند. این مقادیر برای تعیین میزان استفاده از منابع به کار می‌روند و کنترل‌کننده‌ی HPA از آن‌ها
+برای افزایش یا کاهش مقیاس هدف استفاده می‌کند. برای استفاده از مقیاس‌دهی مبتنی بر میزان استفاده از منابع، یک منبع متریک
+مانند زیر مشخص کنید:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">type: Resource
+resource:
+  name: cpu
+  target:
+    type: Utilization
+    averageUtilization: 60
+</code></pre>
+<p dir="rtl">با این متریک، کنترل‌کننده‌ی HPA میانگین میزان استفاده‌ی Podهای موجود در هدف
+مقیاس‌دهی را در ۶۰٪ نگه می‌دارد. میزان استفاده (utilization) نسبت میان مصرف فعلی منبع و منابع
+درخواست‌شده‌ی Pod است. برای جزئیات بیشتر درباره‌ی نحوه‌ی محاسبه و میانگین‌گیری میزان استفاده،
+به بخش <a href="#algorithm-details">الگوریتم</a> مراجعه کنید.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">از آنجا که مصرف منابع همه‌ی کانتینرها با هم جمع می‌شود، میزان استفاده‌ی کل Pod ممکن است
+مصرف منابع هر کانتینر را به‌طور دقیق نشان ندهد. این می‌تواند به وضعیت‌هایی منجر شود که در آن‌ها
+یک کانتینر منفرد با مصرف بالا در حال اجرا باشد، ولی HPA مقیاس را افزایش ندهد، زیرا مصرف کلی
+Pod همچنان در محدوده‌ی قابل‌قبول است.</p>
+</div>
+<h3 id="متریک-های-منابع-کانتینر" dir="rtl">متریک‌های منابع کانتینر</h3>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
+<p dir="rtl">API مربوط به HorizontalPodAutoscaler همچنین از یک منبع متریک کانتینر پشتیبانی می‌کند که در آن HPA می‌تواند
+مصرف منابع کانتینرهای منفرد را در مجموعه‌ای از Podها ردیابی کند تا منبع هدف را مقیاس‌دهی کند.
+این کار به شما امکان می‌دهد آستانه‌های مقیاس‌دهی را برای کانتینرهایی که در یک Pod خاص بیشترین اهمیت را دارند پیکربندی کنید.
+برای مثال، اگر یک برنامه‌ی وب و یک کانتینر sidecar دارید که لاگ‌گیری را فراهم می‌کند، می‌توانید بر اساس مصرف
+منابع برنامه‌ی وب مقیاس‌دهی کنید و کانتینر sidecar و مصرف منابع آن را نادیده بگیرید.</p>
+<p dir="rtl">اگر منبع هدف را طوری بازبینی کنید که مشخصات Pod جدیدی با مجموعه‌ی متفاوتی از کانتینرها داشته باشد،
+در صورتی که کانتینر تازه اضافه‌شده نیز باید برای مقیاس‌دهی استفاده شود، باید مشخصات HPA را
+نیز بازبینی کنید. اگر کانتینر مشخص‌شده در منبع متریک وجود نداشته باشد یا فقط در زیرمجموعه‌ای
+از Podها وجود داشته باشد، آن Podها نادیده گرفته می‌شوند و توصیه دوباره محاسبه می‌شود. برای جزئیات بیشتر
+درباره‌ی محاسبه، به بخش <a href="#algorithm-details">الگوریتم</a> مراجعه کنید. برای استفاده از منابع کانتینر در مقیاس‌دهی خودکار، یک منبع
+متریک را به شکل زیر تعریف کنید:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">type: ContainerResource
+containerResource:
+  name: cpu
+  container: application
+  target:
+    type: Utilization
+    averageUtilization: 60
+</code></pre>
+<p dir="rtl">در مثال بالا، کنترل‌کننده‌ی HPA هدف را طوری مقیاس‌دهی می‌کند که میانگین میزان استفاده از cpu
+در کانتینر <code dir="ltr">application</code> همه‌ی Podها ۶۰٪ باشد.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">اگر نام کانتینری را که یک HorizontalPodAutoscaler در حال ردیابی آن است تغییر دهید، می‌توانید
+این تغییر را با ترتیب مشخصی انجام دهید تا اطمینان حاصل شود که مقیاس‌دهی در طول اعمال تغییر
+در دسترس و مؤثر باقی می‌ماند. پیش از به‌روزرسانی منبعی که کانتینر را تعریف می‌کند
+(مانند یک Deployment)، باید HPA مرتبط را طوری به‌روزرسانی کنید که هم نام جدید و هم نام
+قدیمی کانتینر را ردیابی کند. به این ترتیب، HPA می‌تواند در سراسر فرایند به‌روزرسانی
+یک توصیه‌ی مقیاس‌دهی محاسبه کند.</p>
+<p dir="rtl">پس از آنکه تغییر نام کانتینر را در منبع بار کاری rollout کردید، با حذف
+نام قدیمی کانتینر از مشخصات HPA، پیکربندی را مرتب کنید.</p>
+</div>
+<h2 id="مقیاس-دهی-بر-اساس-متریک-های-سفارشی" dir="rtl">مقیاس‌دهی بر اساس متریک‌های سفارشی</h2>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes v1.23 [stable]</span> (پایدار)</div>
+<p dir="rtl">(نسخه‌ی API <code dir="ltr">autoscaling/v2beta2</code> پیش‌تر این قابلیت را به‌عنوان یک ویژگی بتا ارائه می‌کرد)</p>
+<p dir="rtl">به شرط آنکه از نسخه‌ی API <code dir="ltr">autoscaling/v2</code> استفاده کنید، می‌توانید یک HorizontalPodAutoscaler را
+طوری پیکربندی کنید که بر اساس یک متریک سفارشی (که در کوبرنتیز یا هیچ‌یک از اجزای کوبرنتیز تعبیه نشده است) مقیاس‌دهی کند.
+سپس کنترل‌کننده‌ی HorizontalPodAutoscaler این متریک‌های سفارشی را از API کوبرنتیز
+پرس‌وجو می‌کند.</p>
+<p dir="rtl">برای الزامات، به <a href="#support-for-metrics-apis">پشتیبانی از APIهای متریک</a> مراجعه کنید.</p>
+<h2 id="مقیاس-دهی-بر-اساس-چند-متریک" dir="rtl">مقیاس‌دهی بر اساس چند متریک</h2>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes v1.23 [stable]</span> (پایدار)</div>
+<p dir="rtl">(نسخه‌ی API <code dir="ltr">autoscaling/v2beta2</code> پیش‌تر این قابلیت را به‌عنوان یک ویژگی بتا ارائه می‌کرد)</p>
+<p dir="rtl">به شرط آنکه از نسخه‌ی API <code dir="ltr">autoscaling/v2</code> استفاده کنید، می‌توانید چند متریک را برای
+مقیاس‌دهی یک HorizontalPodAutoscaler مشخص کنید. در این صورت، کنترل‌کننده‌ی HorizontalPodAutoscaler هر متریک را ارزیابی می‌کند
+و بر اساس آن متریک یک مقیاس جدید پیشنهاد می‌دهد. HorizontalPodAutoscaler بیشینه‌ی مقیاس
+توصیه‌شده برای هر متریک را برمی‌گزیند و بار کاری را به آن اندازه تنظیم می‌کند (به شرط آنکه این مقدار از
+بیشینه‌ی کلی‌ای که پیکربندی کرده‌اید بزرگ‌تر نباشد).</p>
+<h2 id="پشتیبانی-از-apiهای-متریک" dir="rtl">پشتیبانی از APIهای متریک</h2>
+<p dir="rtl">به‌طور پیش‌فرض، کنترل‌کننده‌ی HorizontalPodAutoscaler متریک‌ها را از مجموعه‌ای از APIها دریافت می‌کند.
+برای اینکه کنترل‌کننده بتواند به این APIها دسترسی داشته باشد، مدیران کلاستر باید اطمینان حاصل کنند که:</p>
+<ul>
+<li dir="rtl">
+<p dir="rtl"><a href="https://kubernetes.io/docs/tasks/extend-kubernetes/configure-aggregation-layer/" target="_blank">لایه‌ی تجمیع API</a> فعال باشد.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">APIهای متناظر ثبت شده باشند:</p>
+<ul>
+<li dir="rtl">برای متریک‌های منابع، این API همان <a href="https://kubernetes.io/docs/reference/external-api/metrics.v1beta1/" target="_blank">API</a> <code dir="ltr">metrics.k8s.io</code> است
+که معمولاً توسط <a href="https://github.com/kubernetes-sigs/metrics-server" target="_blank" rel="noopener">metrics-server</a> ارائه می‌شود.
+این API را می‌توان به‌صورت یک افزونه‌ی کلاستر راه‌اندازی کرد.</li>
+</ul>
+</li>
+</ul>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<pre dir="ltr"><code dir="ltr">HorizontalPodAutoscaler در حال حاضر از API `metrics.k8s.io/v1beta1`
+برای متریک‌های منابع پشتیبانی می‌کند. هنوز از `metrics.k8s.io/v1` پشتیبانی نمی‌کند.
+</code></pre>
+</div>
+<ul>
+<li dir="rtl">
+<p dir="rtl">برای متریک‌های سفارشی، این API همان <a href="https://kubernetes.io/docs/reference/external-api/custom-metrics.v1beta2/" target="_blank">API</a> <code dir="ltr">custom.metrics.k8s.io</code> است.
+این API توسط سرورهای API «آداپتور» که فروشندگان راهکارهای متریک ارائه می‌کنند فراهم می‌شود.
+با خط لوله‌ی متریک خود بررسی کنید که آیا آداپتور متریک کوبرنتیز در دسترس است یا نه.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">برای متریک‌های خارجی، این API همان <a href="https://kubernetes.io/docs/reference/external-api/external-metrics.v1beta1/" target="_blank">API</a> <code dir="ltr">external.metrics.k8s.io</code> است.
+این API ممکن است توسط همان آداپتورهای متریک سفارشی که در بالا ذکر شد ارائه شود.</p>
+</li>
+</ul>
+<p dir="rtl">برای اطلاعات بیشتر درباره‌ی این مسیرهای مختلف متریک و تفاوت‌های آن‌ها، لطفاً پیشنهادهای طراحی مربوطه را برای
+<a href="https://git.k8s.io/design-proposals-archive/autoscaling/hpa-v2.md" target="_blank" rel="noopener">HPA V2</a>،
+<a href="https://git.k8s.io/design-proposals-archive/instrumentation/custom-metrics-api.md" target="_blank" rel="noopener">custom.metrics.k8s.io</a>
+و <a href="https://git.k8s.io/design-proposals-archive/instrumentation/external-metrics-api.md" target="_blank" rel="noopener">external.metrics.k8s.io</a> ببینید.</p>
+<p dir="rtl">برای مثال‌هایی از نحوه‌ی استفاده از آن‌ها،
+<a href="https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale-walkthrough/#autoscaling-on-multiple-metrics-and-custom-metrics" target="_blank">راهنمای گام‌به‌گام استفاده از متریک‌های سفارشی</a>
+و <a href="https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale-walkthrough/#autoscaling-on-metrics-not-related-to-kubernetes-objects" target="_blank">راهنمای گام‌به‌گام استفاده از متریک‌های خارجی</a> را ببینید.</p>
+<h2 id="رفتار-مقیاس-دهی-قابل-پیکربندی" dir="rtl">رفتار مقیاس‌دهی قابل پیکربندی</h2>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes v1.23 [stable]</span> (پایدار)</div>
+<p dir="rtl">(نسخه‌ی API <code dir="ltr">autoscaling/v2beta2</code> پیش‌تر این قابلیت را به‌عنوان یک ویژگی بتا ارائه می‌کرد)</p>
+<p dir="rtl">اگر از API نسخه‌ی <code dir="ltr">v2</code> مربوط به HorizontalPodAutoscaler استفاده کنید، می‌توانید از فیلد <code dir="ltr">behavior</code>
+(به <a href="https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/horizontal-pod-autoscaler-v2/#HorizontalPodAutoscalerSpec" target="_blank">مرجع API</a> مراجعه کنید)
+برای پیکربندی رفتارهای جداگانه‌ی افزایش مقیاس و کاهش مقیاس استفاده کنید.
+این رفتارها را با تنظیم <code dir="ltr">scaleUp</code> و / یا <code dir="ltr">scaleDown</code>
+زیر فیلد <code dir="ltr">behavior</code> مشخص می‌کنید.</p>
+<p dir="rtl">سیاست‌های مقیاس‌دهی به شما امکان می‌دهند نرخ تغییر رپلیکاها را در هنگام مقیاس‌دهی کنترل کنید.
+همچنین از دو تنظیم می‌توان برای جلوگیری از <a href="#flapping">flapping</a> استفاده کرد: می‌توانید یک
+<em>پنجره‌ی پایدارسازی</em> برای هموارسازی تعداد رپلیکاها و یک رواداری برای نادیده گرفتن
+نوسانات جزئی متریک در زیر یک آستانه‌ی مشخص تعیین کنید.</p>
+<h3 id="سیاست-های-مقیاس-دهی" dir="rtl">سیاست‌های مقیاس‌دهی</h3>
+<p dir="rtl">یک یا چند سیاست مقیاس‌دهی را می‌توان در بخش <code dir="ltr">behavior</code> از spec مشخص کرد.
+هنگامی که چند سیاست مشخص شده باشد، سیاستی که بیشترین میزان تغییر را مجاز می‌داند
+به‌طور پیش‌فرض انتخاب می‌شود. مثال زیر این رفتار را
+در هنگام کاهش مقیاس نشان می‌دهد:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">behavior:
+  scaleDown:
+    policies:
+    - type: Pods
+      value: 4
+      periodSeconds: 60
+    - type: Percent
+      value: 10
+      periodSeconds: 60
+</code></pre>
+<p dir="rtl"><code dir="ltr">periodSeconds</code> طول بازه‌ی زمانی گذشته‌ای را نشان می‌دهد که سیاست باید در آن برقرار باشد.
+بیشینه‌ی مقداری که می‌توانید برای <code dir="ltr">periodSeconds</code> تنظیم کنید ۱۸۰۰ (نیم ساعت) است.
+سیاست نخست <em>(Pods)</em> اجازه می‌دهد حداکثر ۴ رپلیکا در یک دقیقه کاهش یابند. سیاست دوم
+<em>(Percent)</em> اجازه می‌دهد حداکثر ۱۰٪ از رپلیکاهای فعلی در یک دقیقه کاهش یابند.</p>
+<p dir="rtl">از آنجا که به‌طور پیش‌فرض سیاستی که بیشترین میزان تغییر را مجاز می‌داند انتخاب می‌شود، سیاست دوم
+فقط زمانی استفاده خواهد شد که تعداد رپلیکاهای Pod بیش از ۴۰ باشد. با ۴۰ رپلیکا یا کمتر، سیاست نخست اعمال خواهد شد.
+برای نمونه، اگر ۸۰ رپلیکا وجود داشته باشد و هدف باید به ۱۰ رپلیکا کاهش یابد،
+در گام نخست ۸ رپلیکا کم خواهد شد. در تکرار بعدی، هنگامی که تعداد
+رپلیکاها ۷۲ است، ۱۰٪ از Podها برابر ۷٫۲ است، اما این عدد به ۸ گرد می‌شود. در هر حلقه‌ی
+کنترل‌کننده‌ی مقیاس‌دهی خودکار، تعداد Podهایی که باید تغییر کنند بر اساس تعداد
+رپلیکاهای فعلی دوباره محاسبه می‌شود. هنگامی که تعداد رپلیکاها به کمتر از ۴۰ برسد، سیاست نخست <em>(Pods)</em> اعمال می‌شود
+و هر بار ۴ رپلیکا کاهش خواهد یافت.</p>
+<p dir="rtl">انتخاب سیاست را می‌توان با مشخص کردن فیلد <code dir="ltr">selectPolicy</code> برای یک جهت
+مقیاس‌دهی تغییر داد. با تنظیم مقدار آن روی <code dir="ltr">Min</code>، سیاستی انتخاب می‌شود که
+کمترین تغییر را در تعداد رپلیکاها مجاز می‌داند. تنظیم مقدار روی <code dir="ltr">Disabled</code> مقیاس‌دهی
+در آن جهت را به‌طور کامل غیرفعال می‌کند.</p>
+<h3 id="پنجره-ی-پایدارسازی" dir="rtl">پنجره‌ی پایدارسازی</h3>
+<p dir="rtl">پنجره‌ی پایدارسازی برای محدود کردن <a href="#flapping">flapping</a> در
+تعداد رپلیکاها، هنگامی که متریک‌های مورد استفاده برای مقیاس‌دهی مدام نوسان می‌کنند، به کار می‌رود. الگوریتم مقیاس‌دهی خودکار
+از این پنجره برای استنتاج یک وضعیت مطلوب قبلی و جلوگیری از تغییرات ناخواسته در مقیاس
+بار کاری استفاده می‌کند.</p>
+<p dir="rtl">برای مثال، در قطعه‌کد نمونه‌ی زیر، یک پنجره‌ی پایدارسازی برای <code dir="ltr">scaleDown</code> مشخص شده است.</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">behavior:
+  scaleDown:
+    stabilizationWindowSeconds: 300
+</code></pre>
+<p dir="rtl">هنگامی که متریک‌ها نشان می‌دهند که هدف باید کاهش مقیاس یابد، الگوریتم
+به وضعیت‌های مطلوبی که پیش‌تر محاسبه شده‌اند نگاه می‌کند و بالاترین مقدار را از بازه‌ی
+مشخص‌شده به کار می‌برد. در مثال بالا، همه‌ی وضعیت‌های مطلوب ۵ دقیقه‌ی گذشته در نظر گرفته می‌شوند.</p>
+<p dir="rtl">این کار تقریبی از یک بیشینه‌ی غلتان (rolling maximum) است و از این جلوگیری می‌کند که الگوریتم مقیاس‌دهی به‌طور مکرر
+Podها را حذف کند، تنها برای آنکه لحظاتی بعد بازسازی یک Pod معادل را آغاز کند.</p>
+<h3 id="رواداری-tolerance" dir="rtl">رواداری {#tolerance}</h3>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
+<p dir="rtl">فیلد <code dir="ltr">tolerance</code> یک آستانه برای تغییرات متریک پیکربندی می‌کند و از
+مقیاس‌دهی مقیاس‌دهنده‌ی خودکار برای تغییرات کمتر از آن مقدار جلوگیری می‌کند.</p>
+<p dir="rtl">این رواداری به‌صورت میزان تغییر در اطراف مقدار مطلوب متریک تعریف می‌شود که در محدوده‌ی آن
+هیچ مقیاس‌دهی‌ای رخ نمی‌دهد. برای مثال، یک HorizontalPodAutoscaler را در نظر بگیرید که
+با هدف مصرف حافظه‌ی 100MiB و رواداری افزایش مقیاس ۵٪ پیکربندی شده است:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">behavior:
+  scaleUp:
+    tolerance: 0.05 # 5% tolerance for scale up
+</code></pre>
+<p dir="rtl">با این پیکربندی، الگوریتم HPA تنها در صورتی افزایش مقیاس را در نظر می‌گیرد که مصرف
+حافظه بیشتر از 105MiB باشد (یعنی: ۵٪ بالاتر از هدف).</p>
+<p dir="rtl">اگر این فیلد را تنظیم نکنید، HPA رواداری پیش‌فرض ۱۰٪ در سطح کل کلاستر را اعمال می‌کند. این
+مقدار پیش‌فرض را می‌توان هم برای افزایش مقیاس و هم برای کاهش مقیاس با استفاده از آرگومان خط فرمان
+<code dir="ltr">--horizontal-pod-autoscaler-tolerance</code> در
+<a href="https://kubernetes.io/docs/reference/command-line-tools-reference/kube-controller-manager/" target="_blank">kube-controller-manager</a>
+به‌روزرسانی کرد. (نمی‌توانید از API کوبرنتیز
+برای پیکربندی این مقدار پیش‌فرض استفاده کنید.)</p>
+<h3 id="رفتار-پیش-فرض" dir="rtl">رفتار پیش‌فرض</h3>
+<p dir="rtl">برای استفاده از مقیاس‌دهی سفارشی، لازم نیست همه‌ی فیلدها مشخص شوند. فقط مقادیری که باید
+سفارشی شوند را می‌توان مشخص کرد. این مقادیر سفارشی با مقادیر پیش‌فرض ادغام می‌شوند. مقادیر پیش‌فرض
+با رفتار موجود در الگوریتم HPA مطابقت دارند.</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">behavior:
+  scaleDown:
+    stabilizationWindowSeconds: 300
+    policies:
+    - type: Percent
+      value: 100
+      periodSeconds: 15
+  scaleUp:
+    stabilizationWindowSeconds: 0
+    policies:
+    - type: Percent
+      value: 100
+      periodSeconds: 15
+    - type: Pods
+      value: 4
+      periodSeconds: 15
+    selectPolicy: Max
+</code></pre>
+<p dir="rtl">برای کاهش مقیاس، پنجره‌ی پایدارسازی <em>300</em> ثانیه است (یا مقدار
+گزینه‌ی خط فرمان <code dir="ltr">--horizontal-pod-autoscaler-downscale-stabilization</code>، در صورتی که ارائه شده باشد). تنها یک سیاست
+برای کاهش مقیاس وجود دارد که اجازه می‌دهد ۱۰۰٪ از رپلیکاهای در حال اجرا حذف شوند؛ این
+بدان معناست که هدف مقیاس‌دهی می‌تواند تا حداقل تعداد رپلیکای مجاز کاهش یابد.
+برای افزایش مقیاس، هیچ پنجره‌ی پایدارسازی‌ای وجود ندارد. هنگامی که متریک‌ها نشان می‌دهند که هدف باید
+افزایش مقیاس یابد، هدف بلافاصله افزایش مقیاس می‌یابد. دو سیاست وجود دارد که طبق آن‌ها حداکثر ۴ Pod یا ۱۰۰٪ از
+رپلیکاهای در حال اجرا می‌توانند هر ۱۵ ثانیه اضافه شوند تا HPA به وضعیت پایدار خود برسد.</p>
+<h3 id="مثال-تغییر-پنجره-ی-پایدارسازی-کاهش-مقیاس" dir="rtl">مثال: تغییر پنجره‌ی پایدارسازی کاهش مقیاس</h3>
+<p dir="rtl">برای ارائه‌ی یک پنجره‌ی پایدارسازی سفارشی کاهش مقیاس به مدت ۱ دقیقه،
+رفتار زیر به HPA افزوده می‌شود:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">behavior:
+  scaleDown:
+    stabilizationWindowSeconds: 60
+</code></pre>
+<h3 id="مثال-محدود-کردن-نرخ-کاهش-مقیاس" dir="rtl">مثال: محدود کردن نرخ کاهش مقیاس</h3>
+<p dir="rtl">برای محدود کردن نرخ حذف Podها توسط HPA به ۱۰٪ در دقیقه،
+رفتار زیر به HPA افزوده می‌شود:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">behavior:
+  scaleDown:
+    policies:
+    - type: Percent
+      value: 10
+      periodSeconds: 60
+</code></pre>
+<p dir="rtl">برای اطمینان از اینکه بیش از ۵ Pod در دقیقه حذف نشوند، می‌توانید یک سیاست دوم کاهش مقیاس
+با اندازه‌ی ثابت ۵ اضافه کنید و <code dir="ltr">selectPolicy</code> را روی کمینه تنظیم کنید. تنظیم <code dir="ltr">selectPolicy</code> روی <code dir="ltr">Min</code> به این معناست
+که مقیاس‌دهنده‌ی خودکار سیاستی را انتخاب می‌کند که بر کمترین تعداد Podها اثر می‌گذارد:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">behavior:
+  scaleDown:
+    policies:
+    - type: Percent
+      value: 10
+      periodSeconds: 60
+    - type: Pods
+      value: 5
+      periodSeconds: 60
+    selectPolicy: Min
+</code></pre>
+<h3 id="مثال-غیرفعال-کردن-کاهش-مقیاس" dir="rtl">مثال: غیرفعال کردن کاهش مقیاس</h3>
+<p dir="rtl">مقدار <code dir="ltr">Disabled</code> برای <code dir="ltr">selectPolicy</code> مقیاس‌دهی در جهت داده‌شده را خاموش می‌کند.
+بنابراین برای جلوگیری از کاهش مقیاس، از سیاست زیر استفاده می‌شود:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">behavior:
+  scaleDown:
+    selectPolicy: Disabled
+</code></pre>
+<h2 id="پشتیبانی-از-horizontalpodautoscaler-در-kubectl" dir="rtl">پشتیبانی از HorizontalPodAutoscaler در kubectl</h2>
+<p dir="rtl">HorizontalPodAutoscaler، مانند هر منبع API دیگری، به روشی استاندارد توسط <code dir="ltr">kubectl</code> پشتیبانی می‌شود.
+می‌توانید با استفاده از فرمان <code dir="ltr">kubectl create</code> یک مقیاس‌دهنده‌ی خودکار جدید ایجاد کنید.
+می‌توانید مقیاس‌دهنده‌های خودکار را با <code dir="ltr">kubectl get hpa</code> فهرست کنید یا توضیحات مفصل را با <code dir="ltr">kubectl describe hpa</code> دریافت کنید.
+در نهایت، می‌توانید یک مقیاس‌دهنده‌ی خودکار را با استفاده از <code dir="ltr">kubectl delete hpa</code> حذف کنید.</p>
+<p dir="rtl">افزون بر این، یک فرمان ویژه‌ی <code dir="ltr">kubectl autoscale</code> برای ایجاد یک آبجکت HorizontalPodAutoscaler وجود دارد.
+برای نمونه، اجرای <code dir="ltr">kubectl autoscale rs foo --min=2 --max=5 --cpu=80%</code>
+یک مقیاس‌دهنده‌ی خودکار برای ReplicaSet <em>foo</em> ایجاد می‌کند که میزان استفاده‌ی هدف از CPU در آن روی <code dir="ltr">80%</code>
+و تعداد رپلیکاها میان ۲ و ۵ تنظیم شده است.</p>
+<h2 id="مقیاس-دهی-به-صفر-و-از-صفر" dir="rtl">مقیاس‌دهی به صفر و از صفر</h2>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
+<p dir="rtl">برای HorizontalPodAutoscalerهایی که بر اساس متریک‌های <a href="#scaling-on-custom-metrics">سفارشی</a> (آبجکت) یا
+خارجی مقیاس‌دهی می‌کنند، می‌توانید <code dir="ltr">spec.minReplicas</code> را روی <code dir="ltr">0</code> تنظیم کنید. در این صورت، بار کاری هنگامی که باری وجود ندارد
+تا صفر رپلیکا کاهش مقیاس می‌یابد و هنگامی که متریک نشان دهد دست‌کم
+یک رپلیکا لازم است، دوباره افزایش مقیاس می‌یابد. این قابلیت برای بارهای کاری‌ای مفید است که برای مدت‌های طولانی بیکار هستند و
+نگه داشتن آن‌ها در حال اجرا پرهزینه است، مانند مصرف‌کنندگان صفی که گاه‌به‌گاه استفاده می‌شود یا Jobهایی که به
+سخت‌افزار اختصاصی مانند GPU نیاز دارند.</p>
+<p dir="rtl">مقیاس‌دهی به صفر فقط برای متریک‌های آبجکت و متریک‌های خارجی پشتیبانی می‌شود. این قابلیت برای
+متریک‌های منابع (مانند میزان استفاده از CPU یا حافظه) در دسترس نیست، زیرا این متریک‌ها را فقط می‌توان روی
+Podهای در حال اجرا اندازه‌گیری کرد. تنظیم <code dir="ltr">minReplicas: 0</code> مستلزم آن است که دست‌کم یک متریک آبجکت یا متریک خارجی
+پیکربندی شده باشد؛ در غیر این صورت سرور API آن HorizontalPodAutoscaler را رد می‌کند.</p>
+<p dir="rtl">این رفتار توسط
+<a href="https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/" target="_blank">feature gate</a> <code dir="ltr">HPAScaleToZero</code> کنترل می‌شود که به‌طور
+پیش‌فرض فعال است. این feature gate باید هم روی
+<span class="term" title="kube-apiserver">kube-apiserver</span> (که
+<code dir="ltr">minReplicas: 0</code> را مجاز می‌کند) و هم روی
+<span class="term" title="kube-controller-manager">kube-controller-manager</span>
+(که مقیاس‌دهی را انجام می‌دهد) فعال باشد.</p>
+<p dir="rtl">در حالی که HPA یک بار کاری را در صفر رپلیکا نگه داشته است، یک condition به نام <code dir="ltr">ScaledToZero</code> با مقدار
+<code dir="ltr">True</code> در وضعیت HorizontalPodAutoscaler ثبت می‌کند. HPA از این condition برای تمایز میان
+بار کاری‌ای که خودش آن را به صفر رسانده است (و هنگام بازگشت متریک دوباره افزایش مقیاس خواهد داد) و بار کاری‌ای که با تنظیم تعداد رپلیکای آن روی
+<code dir="ltr">0</code> <a href="#implicit-maintenance-mode-deactivation">به‌صورت دستی غیرفعال شده</a> است استفاده می‌کند. هنگامی که بار کاری دوباره افزایش مقیاس یابد، این condition با دلیل
+<code dir="ltr">NotScaledToZero</code> روی <code dir="ltr">False</code> تنظیم می‌شود.</p>
+<h2 id="غیرفعال-سازی-ضمنی-در-حالت-نگهداری" dir="rtl">غیرفعال‌سازی ضمنی در حالت نگهداری</h2>
+<p dir="rtl">می‌توانید HPA را برای یک هدف به‌طور ضمنی غیرفعال کنید، بدون
+اینکه نیازی به تغییر پیکربندی خود HPA باشد. اگر تعداد رپلیکای مطلوب هدف
+روی 0 تنظیم شود و حداقل تعداد رپلیکای HPA بزرگ‌تر از 0 باشد، HPA
+تنظیم هدف را متوقف می‌کند (و Condition <code dir="ltr">ScalingActive</code> را روی خودش
+به <code dir="ltr">false</code> تنظیم می‌کند) تا زمانی که آن را با تنظیم دستی تعداد رپلیکای مطلوب هدف
+یا حداقل تعداد رپلیکای HPA دوباره فعال کنید.</p>
+<h3 id="مهاجرت-deploymentها-و-statefulsetها-به-مقیاس-دهی-خودکار-افقی" dir="rtl">مهاجرت Deploymentها و StatefulSetها به مقیاس‌دهی خودکار افقی</h3>
+<p dir="rtl">هنگامی که یک HPA فعال است، توصیه می‌شود مقدار <code dir="ltr">spec.replicas</code> مربوط به
+Deployment و / یا StatefulSet از
+<span class="term" title="manifest">مانیفست(های)</span> آن‌ها حذف شود. اگر این کار انجام نشود، هر بار
+که تغییری روی آن آبجکت اعمال شود، برای مثال از طریق <code dir="ltr">kubectl apply -f deployment.yaml</code>، این کار به کوبرنتیز دستور می‌دهد که تعداد فعلی Podها را
+به مقدار کلید <code dir="ltr">spec.replicas</code> مقیاس‌دهی کند. این ممکن است
+مطلوب نباشد و هنگامی که یک HPA فعال است دردسرساز شود و به رفتار thrashing یا flapping منجر شود.</p>
+<p dir="rtl">به خاطر داشته باشید که حذف <code dir="ltr">spec.replicas</code> ممکن است یک‌بار باعث
+کاهش تعداد Podها شود، زیرا مقدار پیش‌فرض این کلید 1 است (به
+<a href="../controllers/deployment.html#replicas">رپلیکاهای Deployment</a> مراجعه کنید).
+پس از به‌روزرسانی، همه‌ی Podها به‌جز 1 Pod فرایند خاتمه‌ی خود را آغاز می‌کنند. هر
+اعمال استقرار پس از آن به‌طور عادی رفتار خواهد کرد و پیکربندی به‌روزرسانی
+تدریجی را به‌صورت مطلوب رعایت خواهد کرد. می‌توانید با انتخاب یکی از دو روش زیر،
+بسته به نحوه‌ی تغییر استقرارهای خود، از این کاهش جلوگیری کنید:</p>
+<div class="tabs">
+<div class="tab"><div class="tab-name">اعمال سمت کلاینت (Client Side Apply؛ این حالت پیش‌فرض است)</div>
+<ol>
+<li dir="ltr" class="ltr"><code dir="ltr">kubectl apply edit-last-applied deployment/&lt;deployment_name&gt;</code></li>
+<li dir="rtl">در ویرایشگر، <code dir="ltr">spec.replicas</code> را حذف کنید. هنگامی که ذخیره می‌کنید و از ویرایشگر خارج می‌شوید، <code dir="ltr">kubectl</code>
+به‌روزرسانی را اعمال می‌کند. در این مرحله هیچ تغییری در تعداد Podها رخ نمی‌دهد.</li>
+<li dir="rtl">اکنون می‌توانید <code dir="ltr">spec.replicas</code> را از مانیفست حذف کنید. اگر از سیستم مدیریت کد منبع استفاده می‌کنید،
+تغییرات خود را نیز commit کنید یا هر گام دیگری را که برای بازبینی کد منبع
+متناسب با نحوه‌ی ردیابی به‌روزرسانی‌های شماست انجام دهید.</li>
+<li dir="rtl">از این پس می‌توانید <code dir="ltr">kubectl apply -f deployment.yaml</code> را اجرا کنید</li>
+</ol>
+</div>
+<div class="tab"><div class="tab-name">اعمال سمت سرور (Server Side Apply)</div>
+<p dir="rtl">هنگام استفاده از <a href="https://kubernetes.io/docs/reference/using-api/server-side-apply/" target="_blank">Server-Side Apply</a>
+می‌توانید از رهنمودهای <a href="https://kubernetes.io/docs/reference/using-api/server-side-apply/#transferring-ownership" target="_blank">انتقال مالکیت</a>
+پیروی کنید که دقیقاً همین مورد استفاده را پوشش می‌دهند.</p>
+</div>
+</div>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<p dir="rtl">اگر مقیاس‌دهی خودکار را در کلاستر خود پیکربندی می‌کنید، ممکن است بخواهید استفاده از
+<a href="https://kubernetes.io/docs/concepts/cluster-administration/node-autoscaling/" target="_blank">مقیاس‌دهی خودکار نود</a>
+را نیز در نظر بگیرید تا اطمینان حاصل کنید که تعداد مناسبی نود را اجرا می‌کنید.
+همچنین می‌توانید درباره‌ی <a href="vertical-pod-autoscale.html">مقیاس‌دهی خودکار <em>عمودی</em> Pod</a> بیشتر بخوانید.</p>
+<p dir="rtl">برای اطلاعات بیشتر درباره‌ی HorizontalPodAutoscaler:</p>
+<ul>
+<li dir="rtl">یک <a href="https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale-walkthrough/" target="_blank">مثال گام‌به‌گام</a> برای مقیاس‌دهی خودکار افقی Pod را بخوانید.</li>
+<li dir="rtl">مستندات <a href="https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands/#autoscale" target="_blank"><code dir="ltr">kubectl autoscale</code></a> را بخوانید.</li>
+<li dir="rtl">اگر می‌خواهید آداپتور متریک سفارشی خود را بنویسید، برای شروع
+<a href="https://github.com/kubernetes-sigs/custom-metrics-apiserver" target="_blank" rel="noopener">boilerplate</a> را بررسی کنید.</li>
+<li dir="rtl"><a href="https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/horizontal-pod-autoscaler-v2/" target="_blank">مرجع API</a> مربوط به HorizontalPodAutoscaler را بخوانید.</li>
+</ul>
+</main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#horizontalpodautoscaler-چگونه-کار-می-کند؟">HorizontalPodAutoscaler چگونه کار می‌کند؟</a><a class="l3" href="#جزئیات-الگوریتم">جزئیات الگوریتم</a><a class="l2" href="#آمادگی-pod-و-متریک-های-مقیاس-دهی-خودکار">آمادگی Pod و متریک‌های مقیاس‌دهی خودکار</a><a class="l3" href="#رفتارهای-کلیدی-برای-آمادگی-pod-pod-readiness-key-behaviors">رفتارهای کلیدی برای آمادگی Pod {#pod-readiness-key-behaviors}</a><a class="l3" href="#روش-مناسب-برای-آمادگی-pod-pod-readiness-good-practices">روش مناسب برای آمادگی Pod {#pod-readiness-good-practices}</a><a class="l2" href="#آبجکت-api">آبجکت API</a><a class="l2" href="#پایداری-مقیاس-بار-کاری-flapping">پایداری مقیاس بار کاری {#flapping}</a><a class="l2" href="#مقیاس-دهی-خودکار-در-هنگام-به-روزرسانی-تدریجی">مقیاس‌دهی خودکار در هنگام به‌روزرسانی تدریجی</a><a class="l2" href="#پشتیبانی-از-متریک-های-منابع">پشتیبانی از متریک‌های منابع</a><a class="l3" href="#متریک-های-منابع-کانتینر">متریک‌های منابع کانتینر</a><a class="l2" href="#مقیاس-دهی-بر-اساس-متریک-های-سفارشی">مقیاس‌دهی بر اساس متریک‌های سفارشی</a><a class="l2" href="#مقیاس-دهی-بر-اساس-چند-متریک">مقیاس‌دهی بر اساس چند متریک</a><a class="l2" href="#پشتیبانی-از-apiهای-متریک">پشتیبانی از APIهای متریک</a><a class="l2" href="#رفتار-مقیاس-دهی-قابل-پیکربندی">رفتار مقیاس‌دهی قابل پیکربندی</a><a class="l3" href="#سیاست-های-مقیاس-دهی">سیاست‌های مقیاس‌دهی</a><a class="l3" href="#پنجره-ی-پایدارسازی">پنجره‌ی پایدارسازی</a><a class="l3" href="#رواداری-tolerance">رواداری {#tolerance}</a><a class="l3" href="#رفتار-پیش-فرض">رفتار پیش‌فرض</a><a class="l3" href="#مثال-تغییر-پنجره-ی-پایدارسازی-کاهش-مقیاس">مثال: تغییر پنجره‌ی پایدارسازی کاهش مقیاس</a><a class="l3" href="#مثال-محدود-کردن-نرخ-کاهش-مقیاس">مثال: محدود کردن نرخ کاهش مقیاس</a><a class="l3" href="#مثال-غیرفعال-کردن-کاهش-مقیاس">مثال: غیرفعال کردن کاهش مقیاس</a><a class="l2" href="#پشتیبانی-از-horizontalpodautoscaler-در-kubectl">پشتیبانی از HorizontalPodAutoscaler در kubectl</a><a class="l2" href="#مقیاس-دهی-به-صفر-و-از-صفر">مقیاس‌دهی به صفر و از صفر</a><a class="l2" href="#غیرفعال-سازی-ضمنی-در-حالت-نگهداری">غیرفعال‌سازی ضمنی در حالت نگهداری</a><a class="l3" href="#مهاجرت-deploymentها-و-statefulsetها-به-مقیاس-دهی-خودکار-افقی">مهاجرت Deploymentها و StatefulSetها به مقیاس‌دهی خودکار افقی</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>

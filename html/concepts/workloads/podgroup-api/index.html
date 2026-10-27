@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PodGroup API | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+</head>
+<body>
+<header class="top"><a href="../../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">concepts / workloads / podgroup-api</span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="ltr" class="ltr">PodGroup API</h1><!-- overview -->
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
+<p dir="rtl">PodGroup یک آبجکت زمان اجرا است که گروهی از Podها را نشان می‌دهد که با هم و به‌عنوان یک واحد زمان‌بندی می‌شوند.
+در حالی که <a href="../workload-api/index.html">Workload API</a> قالب‌های سیاست زمان‌بندی را
+تعریف می‌کند، PodGroupها همتایان زمان اجرای آن هستند که هم سیاست و هم وضعیت زمان‌بندی
+یک نمونه مشخص از آن گروه را در خود دارند.</p>
+<!-- body -->
+<h2 id="podgroup-چیست؟" dir="rtl">PodGroup چیست؟</h2>
+<p dir="rtl">منبع API مربوط به PodGroup بخشی از
+<span class="term" title="api-group">گروه API</span> <code dir="ltr">scheduling.k8s.io/v1beta1</code>
+است و پیش از آنکه بتوانید از این API استفاده کنید، کلاستر شما باید آن گروه API و همچنین
+<a href="https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/" target="_blank">feature gate</a> <code dir="ltr">GenericWorkload</code>
+را فعال کرده باشد.</p>
+<p dir="rtl">PodGroup یک واحد زمان‌بندی خودبسنده است. این آبجکت گروه Podهایی را که باید با هم زمان‌بندی شوند تعریف می‌کند،
+سیاست زمان‌بندی حاکم بر جای‌گذاری را در خود دارد و وضعیت زمان اجرای آن
+تصمیم زمان‌بندی را ثبت می‌کند.</p>
+<h2 id="ساختار-api" dir="rtl">ساختار API</h2>
+<p dir="rtl">یک PodGroup از یک <code dir="ltr">spec</code> که رفتار زمان‌بندی مطلوب را تعریف می‌کند و
+یک <code dir="ltr">status</code> که وضعیت فعلی زمان‌بندی را منعکس می‌کند تشکیل شده است.</p>
+<h3 id="سیاست-زمان-بندی" dir="rtl">سیاست زمان‌بندی</h3>
+<p dir="rtl">هر PodGroup یک <a href="../workload-api/policies.html">سیاست زمان‌بندی</a>
+(<code dir="ltr">basic</code> یا <code dir="ltr">gang</code>) را در <code dir="ltr">spec.schedulingPolicy</code> در خود دارد. هنگامی که یک کنترل‌کننده بار کاری
+PodGroup را ایجاد می‌کند، این سیاست در زمان ایجاد از PodGroupTemplate مربوط به Workload کپی می‌شود.
+برای PodGroupهای مستقل، سیاست را مستقیماً خودتان تنظیم می‌کنید.</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">spec:
+  schedulingPolicy:
+    gang:
+      minCount: 4
+</code></pre>
+<h3 id="ارجاع-به-قالب" dir="rtl">ارجاع به قالب</h3>
+<p dir="rtl">فیلد اختیاری <code dir="ltr">spec.podGroupTemplateRef</code>، PodGroup را به PodGroupTemplate موجود
+در Workloadای که از آن ایجاد شده است پیوند می‌دهد. این ویژگی برای مشاهده‌پذیری و ابزارها سودمند است.</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">spec:
+  podGroupTemplateRef:
+    workload:
+      workloadName: training-policy
+      podGroupTemplateName: worker
+</code></pre>
+<h3 id="اولویت-و-حالت-اختلال-disruption-mode" dir="rtl">اولویت و حالت اختلال (Disruption mode)</h3>
+<p dir="rtl">هر PodGroup همچنین می‌تواند <code dir="ltr">spec.priority</code>، <code dir="ltr">spec.preemptionPolicy</code> و
+<code dir="ltr">spec.disruptionMode</code> مخصوص به خود را تعریف کند. اولویت و سیاست پیش‌دستی (preemption) با استفاده از
+فیلد <code dir="ltr">spec.priorityClassName</code> تنظیم می‌شوند که به یک منبع <code dir="ltr">PriorityClass</code> اشاره می‌کند.
+برای توضیح مفصل این فیلدها، به
+<a href="../workload-api/disruption-and-priority.html">اختلال و اولویت Pod Group</a>
+مراجعه کنید.</p>
+<p dir="rtl">هنگامی که یک کنترل‌کننده بار کاری PodGroup را ایجاد می‌کند، این فیلدها در زمان ایجاد از
+PodGroupTemplate مربوط به Workload کپی می‌شوند. برای PodGroupهای مستقل،
+فیلدها را مستقیماً خودتان تنظیم می‌کنید.</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">spec:
+  disruptionMode:
+    all: {}
+  priorityClassName: high-priority
+</code></pre>
+<h3 id="درخواست-دستگاه-های-dra-برای-یک-podgroup" dir="rtl">درخواست دستگاه‌های DRA برای یک PodGroup</h3>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
+<p dir="rtl"><span class="term" title="device">دستگاه‌هایی</span> که از طریق
+<span class="term" title="dra">تخصیص پویای منابع (DRA)</span>
+در دسترس هستند، می‌توانند توسط یک PodGroup از طریق فیلد <code dir="ltr">spec.resourceClaims</code> آن درخواست شوند:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: scheduling.k8s.io/v1beta1
+kind: PodGroup
+metadata:
+  name: training-group
+  namespace: some-ns
+spec:
+  ...
+  resourceClaims:
+  - name: pg-claim
+    resourceClaimName: my-pg-claim
+  - name: pg-claim-template
+    resourceClaimTemplateName: my-pg-template
+</code></pre>
+<p dir="rtl"><span class="term" title="resourceclaim">ResourceClaimهای</span>
+مرتبط با PodGroupها می‌توانند میان همه Podهای متعلق به گروه به اشتراک گذاشته شوند. با
+وجود تنها یک ارجاع به PodGroup در <code dir="ltr">status.reservedFor</code> مربوط به ResourceClaim،
+به‌جای ارجاع به تک‌تک Podها، هر تعداد Pod در یک PodGroup می‌توانند
+یک ResourceClaim را به اشتراک بگذارند. همچنین ResourceClaimها را می‌توان از
+<span class="term" title="resourceclaimtemplate">ResourceClaimTemplateها</span>
+برای هر PodGroup تولید کرد تا دستگاه‌های تخصیص‌یافته به هر
+ResourceClaim تولیدشده، میان Podهای هر PodGroup به اشتراک گذاشته شوند.</p>
+<p dir="rtl">برای جزئیات بیشتر و یک مثال کامل‌تر، به
+<a href="https://kubernetes.io/docs/concepts/resource-management/dynamic-resource-allocation/dra-api/#workload-resource-claims" target="_blank">مستندات DRA</a> مراجعه کنید.</p>
+<h3 id="وضعیت-status" dir="rtl">وضعیت (Status)</h3>
+<p dir="rtl">زمان‌بند <code dir="ltr">status.conditions</code> را به‌روزرسانی می‌کند تا گزارش دهد آیا گروه
+با موفقیت زمان‌بندی شده است یا نه. شرط اصلی <code dir="ltr">PodGroupInitiallyScheduled</code> است که زمانی <code dir="ltr">True</code> است
+که همه Podهای لازم جای‌گذاری شده باشند و زمانی <code dir="ltr">False</code> است که زمان‌بندی شکست بخورد.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">شرط <code dir="ltr">PodGroupInitiallyScheduled</code> تنها تصمیم زمان‌بندی اولیه را منعکس می‌کند.
+اگر Podها بعداً از کار بیفتند یا بیرون رانده (evict) شوند، زمان‌بند آن را به‌روزرسانی نمی‌کند. برای جزئیات به
+<a href="lifecycle.html#limitations">محدودیت‌ها</a>
+مراجعه کنید.</p>
+</div>
+<p dir="rtl">برای فهرست کامل شرط‌ها و دلایل، به صفحه <a href="lifecycle.html#podgroup-status">چرخه عمر PodGroup</a>
+مراجعه کنید.</p>
+<h2 id="ایجاد-یک-podgroup" dir="rtl">ایجاد یک PodGroup</h2>
+<p dir="rtl">منبع API مربوط به PodGroup بخشی از
+<span class="term" title="api-group">گروه API</span> <code dir="ltr">scheduling.k8s.io/v1beta1</code> است.
+(و پیش از آنکه بتوانید از این API استفاده کنید، کلاستر شما باید آن گروه API و همچنین
+<a href="https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/" target="_blank">feature gate</a> <code dir="ltr">GenericWorkload</code>
+را فعال کرده باشد).</p>
+<p dir="rtl">مانیفست زیر یک PodGroup با سیاست زمان‌بندی gang ایجاد می‌کند که لازم است
+دست‌کم 4 Pod به‌طور هم‌زمان قابل زمان‌بندی باشند:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: scheduling.k8s.io/v1beta1
+kind: PodGroup
+metadata:
+  name: training-worker-0
+  namespace: default
+spec:
+  schedulingPolicy:
+    gang:
+      minCount: 4
+</code></pre>
+<p dir="rtl">می‌توانید PodGroupهای کلاستر خود را بررسی کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get podgroups
+</code></pre>
+<p dir="rtl">برای دیدن وضعیت کامل، از جمله شرط‌های زمان‌بندی:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl describe podgroup training-worker-0
+</code></pre>
+<h2 id="اجزا-چگونه-در-کنار-هم-قرار-می-گیرند" dir="rtl">اجزا چگونه در کنار هم قرار می‌گیرند</h2>
+<p dir="rtl">رابطه میان کنترل‌کننده‌ها، Workloadها، PodGroupها و Podها از این الگو پیروی می‌کند:</p>
+<ol>
+<li dir="rtl">کنترل‌کننده بار کاری یک Workload ایجاد می‌کند که PodGroupTemplateهایی با سیاست‌های زمان‌بندی تعریف می‌کند.</li>
+<li dir="rtl">برای هر نمونه زمان اجرا، کنترل‌کننده یک PodGroup از یکی از PodGroupTemplateهای Workload ایجاد می‌کند.</li>
+<li dir="rtl">کنترل‌کننده Podهایی ایجاد می‌کند که از طریق فیلد <code dir="ltr">spec.schedulingGroup.podGroupName</code>
+به PodGroup ارجاع می‌دهند.</li>
+</ol>
+<p dir="rtl">کنترل‌کننده <a href="https://kubernetes.io/docs/concepts/workloads/controllers/job/" target="_blank">Job</a> در حال حاضر تنها کنترل‌کننده
+بار کاری داخلی است که از این الگو پیروی می‌کند.
+کنترل‌کننده‌های سفارشی می‌توانند همین روند را برای انواع بار کاری خود پیاده‌سازی کنند.</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: scheduling.k8s.io/v1beta1
+kind: Workload
+metadata:
+  name: training-policy
+spec:
+  podGroupTemplates:
+  - name: worker
+    schedulingPolicy:
+      gang:
+        minCount: 4
+---
+apiVersion: scheduling.k8s.io/v1beta1
+kind: PodGroup
+metadata:
+  name: training-worker-0
+spec:
+  podGroupTemplateRef:
+    workload:
+      workloadName: training-policy
+      podGroupTemplateName: worker
+  schedulingPolicy:
+    gang:
+      minCount: 4
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: worker-0
+spec:
+  schedulingGroup:
+    podGroupName: training-worker-0
+  containers:
+  - name: ml-worker
+    image: training:v1
+</code></pre>
+<p dir="rtl">Workload نقش یک تعریف سیاست بلندمدت را ایفا می‌کند، در حالی که PodGroupها وضعیت
+زمان اجرای گذرا و مختص هر نمونه را مدیریت می‌کنند. این جداسازی به این معناست که به‌روزرسانی‌های وضعیت
+PodGroupهای منفرد بر سر آبجکت Workload مشترک با یکدیگر رقابت نمی‌کنند.</p>
+<h2 id="گروه-والد" dir="rtl">گروه والد</h2>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
+<p dir="rtl">هنگامی که feature gate <a href="https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/#CompositePodGroup" target="_blank"><code dir="ltr">CompositePodGroup</code></a>
+فعال باشد، یک <code dir="ltr">PodGroup</code> می‌تواند به‌عنوان یک نود برگ در یک سلسله‌مراتب چندسطحی از گروه‌ها عمل کند که
+از <code dir="ltr">PodGroups</code> و <code dir="ltr">CompositePodGroups</code> تشکیل شده است. یک <code dir="ltr">PodGroup</code> می‌تواند گروه والد خود را با استفاده از
+فیلد <code dir="ltr">spec.parentCompositePodGroupName</code> مشخص کند. سازمان‌دهی یک بار کاری در قالب سلسله‌مراتبی از گروه‌ها را می‌توان
+برای بیان الزامات زمان‌بندی gang چندسطحی، محدودیت‌های توپولوژی چندسطحی و
+سرنوشت مشترک در برابر اختلال میان بخش‌های مختلف بار کاری به کار برد.</p>
+<p dir="rtl">برای جزئیات بیشتر درباره ساختارهای گروهی سلسله‌مراتبی و زمان‌بندی gang چندسطحی، به
+نمای کلی <a href="../compositepodgroup-api/index.html">CompositePodGroup API</a> مراجعه کنید.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">یک <code dir="ltr">PodGroup</code> که <code dir="ltr">spec.parentCompositePodGroupName</code> را مشخص می‌کند باید <code dir="ltr">spec.workloadRef</code> را نیز مشخص کند
+تا <code dir="ltr">PodGroup</code> را به قالب خود در <code dir="ltr">Workload</code> پیوند دهد. آبجکت‌های <code dir="ltr">PodGroup</code> مستقل
+(که بدون <code dir="ltr">spec.workloadRef</code> ایجاد شده‌اند) مجاز به مشخص کردن یک <code dir="ltr">CompositePodGroup</code> والد نیستند.</p>
+</div>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<ul>
+<li dir="rtl">با <a href="lifecycle.html">چرخه عمر PodGroup</a> به‌طور مفصل آشنا شوید.</li>
+<li dir="rtl">درباره <a href="../workload-api/index.html">Workload API</a> که PodGroupTemplateها را فراهم می‌کند مطالعه کنید.</li>
+<li dir="rtl">ببینید Podها چگونه از طریق فیلد <a href="../pods/scheduling-group.html">گروه زمان‌بندی (scheduling group)</a> به PodGroup خود ارجاع می‌دهند.</li>
+<li dir="rtl">الگوریتم <a href="../../scheduling-eviction/gang-scheduling.html">زمان‌بندی گروهی (gang scheduling)</a> را درک کنید.</li>
+</ul>
+</main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#podgroup-چیست؟">PodGroup چیست؟</a><a class="l2" href="#ساختار-api">ساختار API</a><a class="l3" href="#سیاست-زمان-بندی">سیاست زمان‌بندی</a><a class="l3" href="#ارجاع-به-قالب">ارجاع به قالب</a><a class="l3" href="#اولویت-و-حالت-اختلال-disruption-mode">اولویت و حالت اختلال (Disruption mode)</a><a class="l3" href="#درخواست-دستگاه-های-dra-برای-یک-podgroup">درخواست دستگاه‌های DRA برای یک PodGroup</a><a class="l3" href="#وضعیت-status">وضعیت (Status)</a><a class="l2" href="#ایجاد-یک-podgroup">ایجاد یک PodGroup</a><a class="l2" href="#اجزا-چگونه-در-کنار-هم-قرار-می-گیرند">اجزا چگونه در کنار هم قرار می‌گیرند</a><a class="l2" href="#گروه-والد">گروه والد</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>

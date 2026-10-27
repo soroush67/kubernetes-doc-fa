@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>تخصیص ClusterIP به Service | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+</head>
+<body>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">concepts / services-networking</span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">تخصیص ClusterIP به Service</h1><!-- overview -->
+<p dir="rtl">در کوبرنتیز، <a href="https://kubernetes.io/docs/concepts/services-networking/service/" target="_blank">Serviceها</a> روشی انتزاعی برای در دسترس قرار دادن
+برنامه‌ای هستند که روی مجموعه‌ای از Podها اجرا می‌شود. Serviceها
+می‌توانند یک نشانی IP مجازی با دامنهٔ کل کلاستر داشته باشند (با استفاده از Serviceای از نوع <code dir="ltr">type: ClusterIP</code>).
+کلاینت‌ها می‌توانند با استفاده از آن نشانی IP مجازی متصل شوند و سپس کوبرنتیز ترافیک آن
+Service را میان Podهای پشتیبان مختلف توزیع بار (load-balance) می‌کند.</p>
+<!-- body -->
+<h2 id="clusteripهای-service-چگونه-تخصیص-داده-می-شوند؟" dir="rtl">ClusterIPهای Service چگونه تخصیص داده می‌شوند؟</h2>
+<p dir="rtl">هنگامی که کوبرنتیز باید یک نشانی IP مجازی به یک Service اختصاص دهد،
+این تخصیص به یکی از دو روش زیر انجام می‌شود:</p>
+<dl>
+<dt dir="rtl"><em>به‌صورت پویا</em></dt>
+<dd dir="rtl">control plane کلاستر به‌طور خودکار یک نشانی IP آزاد را از درون بازهٔ IP پیکربندی‌شده برای Serviceهای <code dir="ltr">type: ClusterIP</code> انتخاب می‌کند.</dd>
+<dt dir="rtl"><em>به‌صورت ایستا</em></dt>
+<dd dir="rtl">شما نشانی IP دلخواه خود را از درون بازهٔ IP پیکربندی‌شده برای Serviceها تعیین می‌کنید.</dd>
+</dl>
+<p dir="rtl">در سراسر کلاستر شما، <code dir="ltr">ClusterIP</code> هر Service باید یکتا باشد.
+تلاش برای ایجاد یک Service با <code dir="ltr">ClusterIP</code> مشخصی که پیش‌تر
+تخصیص داده شده است، به خطا منجر می‌شود.</p>
+<h2 id="چرا-باید-clusteripهای-service-را-رزرو-کنید؟" dir="rtl">چرا باید ClusterIPهای Service را رزرو کنید؟</h2>
+<p dir="rtl">گاهی ممکن است بخواهید Serviceها روی نشانی‌های IP شناخته‌شده اجرا شوند تا سایر مؤلفه‌ها و
+کاربران کلاستر بتوانند از آن‌ها استفاده کنند.</p>
+<p dir="rtl">بهترین نمونه، Service مربوط به DNS کلاستر است. طبق یک قرارداد غیرالزامی، برخی نصب‌کننده‌های کوبرنتیز دهمین نشانی IP
+از بازهٔ IP مربوط به Serviceها را به سرویس DNS اختصاص می‌دهند. با فرض اینکه کلاستر خود را با بازهٔ IP سرویس
+10.96.0.0/16 پیکربندی کرده‌اید و می‌خواهید نشانی IP سرویس DNS شما 10.96.0.10 باشد، باید Serviceای مانند
+زیر ایجاد کنید:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    k8s-app: kube-dns
+    kubernetes.io/cluster-service: "true"
+    kubernetes.io/name: CoreDNS
+  name: kube-dns
+  namespace: kube-system
+spec:
+  clusterIP: 10.96.0.10
+  ports:
+  - name: dns
+    port: 53
+    protocol: UDP
+    targetPort: 53
+  - name: dns-tcp
+    port: 53
+    protocol: TCP
+    targetPort: 53
+  selector:
+    k8s-app: kube-dns
+  type: ClusterIP
+</code></pre>
+<p dir="rtl">اما همان‌طور که پیش‌تر توضیح داده شد، نشانی IP ‏10.96.0.10 رزرو نشده است.
+اگر Serviceهای دیگری پیش از آن یا هم‌زمان با تخصیص پویا ایجاد شوند، این احتمال وجود دارد که این IP را به خود اختصاص دهند.
+در نتیجه، نخواهید توانست Service مربوط به DNS را ایجاد کنید، زیرا با خطای تعارض (conflict) با شکست مواجه می‌شود.</p>
+<h2 id="چگونه-می-توان-از-تعارض-clusteripهای-service-جلوگیری-کرد؟-avoid-clusterip-conflict" dir="rtl">چگونه می‌توان از تعارض ClusterIPهای Service جلوگیری کرد؟ {#avoid-ClusterIP-conflict}</h2>
+<p dir="rtl">راهبرد تخصیصی که کوبرنتیز برای اختصاص ClusterIP به Serviceها پیاده‌سازی کرده است، خطر
+برخورد (collision) را کاهش می‌دهد.</p>
+<p dir="rtl">بازهٔ <code dir="ltr">ClusterIP</code> بر اساس فرمول <code dir="ltr">min(max(16, cidrSize / 16), 256)</code> تقسیم می‌شود
+که به این صورت توصیف می‌شود: <em>هرگز کمتر از ۱۶ یا بیشتر از ۲۵۶ نیست و میان این دو، گامی تدریجی دارد</em>.</p>
+<p dir="rtl">تخصیص پویای IP به‌طور پیش‌فرض از باند بالایی استفاده می‌کند و پس از پر شدن آن،
+از بازهٔ پایینی استفاده خواهد کرد. این کار به کاربران اجازه می‌دهد با خطر برخورد کم،
+از تخصیص‌های ایستا در باند پایینی استفاده کنند.</p>
+<h2 id="نمونه-ها-allocation-examples" dir="rtl">نمونه‌ها {#allocation-examples}</h2>
+<h3 id="نمونهٔ-۱-allocation-example-1" dir="rtl">نمونهٔ ۱ {#allocation-example-1}</h3>
+<p dir="rtl">این نمونه از بازهٔ نشانی IP ‏10.96.0.0/24 (با نمادگذاری CIDR) برای نشانی‌های IP
+مربوط به Serviceها استفاده می‌کند.</p>
+<p dir="rtl">اندازهٔ بازه: 2<sup>8</sup> - 2 = 254<br>
+آفست باند: <code dir="ltr">min(max(16, 256/16), 256)</code> = <code dir="ltr">min(16, 256)</code> = 16<br>
+شروع باند ایستا: 10.96.0.1<br>
+پایان باند ایستا: 10.96.0.16<br>
+پایان بازه: 10.96.0.254</p>
+<pre dir="ltr"><code class="language-mermaid" dir="ltr">pie showData
+    title 10.96.0.0/24
+    "Static" : 16
+    "Dynamic" : 238
+</code></pre>
+<h3 id="نمونهٔ-۲-allocation-example-2" dir="rtl">نمونهٔ ۲ {#allocation-example-2}</h3>
+<p dir="rtl">این نمونه از بازهٔ نشانی IP ‏10.96.0.0/20 (با نمادگذاری CIDR) برای نشانی‌های IP
+مربوط به Serviceها استفاده می‌کند.</p>
+<p dir="rtl">اندازهٔ بازه: 2<sup>12</sup> - 2 = 4094<br>
+آفست باند: <code dir="ltr">min(max(16, 4096/16), 256)</code> = <code dir="ltr">min(256, 256)</code> = 256<br>
+شروع باند ایستا: 10.96.0.1<br>
+پایان باند ایستا: 10.96.1.0<br>
+پایان بازه: 10.96.15.254</p>
+<pre dir="ltr"><code class="language-mermaid" dir="ltr">pie showData
+    title 10.96.0.0/20
+    "Static" : 256
+    "Dynamic" : 3838
+</code></pre>
+<h3 id="نمونهٔ-۳-allocation-example-3" dir="rtl">نمونهٔ ۳ {#allocation-example-3}</h3>
+<p dir="rtl">این نمونه از بازهٔ نشانی IP ‏10.96.0.0/16 (با نمادگذاری CIDR) برای نشانی‌های IP
+مربوط به Serviceها استفاده می‌کند.</p>
+<p dir="rtl">اندازهٔ بازه: 2<sup>16</sup> - 2 = 65534<br>
+آفست باند: <code dir="ltr">min(max(16, 65536/16), 256)</code> = <code dir="ltr">min(4096, 256)</code> = 256<br>
+شروع باند ایستا: 10.96.0.1<br>
+پایان باند ایستا: 10.96.1.0<br>
+پایان بازه: 10.96.255.254</p>
+<pre dir="ltr"><code class="language-mermaid" dir="ltr">pie showData
+    title 10.96.0.0/16
+    "Static" : 256
+    "Dynamic" : 65278
+</code></pre>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<ul>
+<li dir="rtl">دربارهٔ <a href="https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip" target="_blank">سیاست ترافیک خارجی Service</a> بخوانید</li>
+<li dir="rtl">دربارهٔ <a href="https://kubernetes.io/docs/tutorials/services/connect-applications-service/" target="_blank">اتصال برنامه‌ها با Serviceها</a> بخوانید</li>
+<li dir="rtl">دربارهٔ <a href="https://kubernetes.io/docs/concepts/services-networking/service/" target="_blank">Serviceها</a> بخوانید</li>
+</ul>
+</main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#clusteripهای-service-چگونه-تخصیص-داده-می-شوند؟">ClusterIPهای Service چگونه تخصیص داده می‌شوند؟</a><a class="l2" href="#چرا-باید-clusteripهای-service-را-رزرو-کنید؟">چرا باید ClusterIPهای Service را رزرو کنید؟</a><a class="l2" href="#چگونه-می-توان-از-تعارض-clusteripهای-service-جلوگیری-کرد؟-avoid-clusterip-conflict">چگونه می‌توان از تعارض ClusterIPهای Service جلوگیری کرد؟ {#avoid-ClusterIP-conflict}</a><a class="l2" href="#نمونه-ها-allocation-examples">نمونه‌ها {#allocation-examples}</a><a class="l3" href="#نمونهٔ-۱-allocation-example-1">نمونهٔ ۱ {#allocation-example-1}</a><a class="l3" href="#نمونهٔ-۲-allocation-example-2">نمونهٔ ۲ {#allocation-example-2}</a><a class="l3" href="#نمونهٔ-۳-allocation-example-3">نمونهٔ ۳ {#allocation-example-3}</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>

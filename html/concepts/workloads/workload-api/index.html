@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Workload API | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+</head>
+<body>
+<header class="top"><a href="../../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">concepts / workloads / workload-api</span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="ltr" class="ltr">Workload API</h1><!-- overview -->
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
+<p dir="rtl">منبع API با نام <code dir="ltr">Workload</code> الزامات زمان‌بندی و ساختار یک برنامه‌ی چند-Pod را
+تعریف می‌کند. در حالی که کنترل‌کننده‌های بار کاری مانند <a href="https://kubernetes.io/docs/concepts/workloads/controllers/job/" target="_blank">Job</a>
+وضعیت زمان اجرای برنامه را مدیریت می‌کنند، <code dir="ltr">Workload</code> مشخص می‌کند که گروه‌هایی از <code dir="ltr">Pods</code>
+چگونه باید زمان‌بندی شوند. کنترل‌کننده‌ی Job تنها کنترل‌کننده‌ی داخلی است که در زمان اجرا
+آبجکت‌های <a href="../podgroup-api/index.html">PodGroup</a> را از
+<code dir="ltr">PodGroupTemplates</code> آن <code dir="ltr">Workload</code> ایجاد می‌کند.</p>
+<!-- body -->
+<h2 id="workload-چیست؟" dir="rtl">Workload چیست؟</h2>
+<p dir="rtl">منبع API با نام Workload بخشی از
+<span class="term" title="api-group">گروه API</span> <code dir="ltr">scheduling.k8s.io/v1beta1</code>
+است و پیش از آنکه بتوانید از این API استفاده کنید، باید آن گروه API و همچنین
+<a href="https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/" target="_blank">feature gate</a> <code dir="ltr">GenericWorkload</code>
+در کلاستر شما فعال باشند.</p>
+<p dir="rtl">یک <code dir="ltr">Workload</code> یک الگوی سیاست ایستا و بلندمدت است. این الگو تعریف می‌کند که چه سیاست‌های
+زمان‌بندی‌ای باید روی گروه‌هایی از Podها اعمال شوند، اما خودش وضعیت زمان اجرا را دنبال نمی‌کند.
+وضعیت زمان‌بندی در زمان اجرا توسط آبجکت‌های <a href="../podgroup-api/index.html">PodGroup</a>
+نگهداری می‌شود که کنترل‌کننده‌ها آن‌ها را از <code dir="ltr">PodGroupTemplates</code> آن <code dir="ltr">Workload</code> ایجاد می‌کنند.</p>
+<h2 id="ساختار-api" dir="rtl">ساختار API</h2>
+<p dir="rtl">یک <code dir="ltr">Workload</code> از دو فیلد تشکیل شده است: فهرستی از <code dir="ltr">PodGroupTemplates</code> و یک ارجاع
+اختیاری به کنترل‌کننده. کل spec یک <code dir="ltr">Workload</code> پس از ایجاد تغییرناپذیر است: نمی‌توانید
+الگوهای موجود را تغییر دهید، الگوهای جدید اضافه کنید یا الگوهایی را از <code dir="ltr">podGroupTemplates</code> حذف کنید.</p>
+<h3 id="podgrouptemplates" dir="ltr" class="ltr">PodGroupTemplates</h3>
+<p dir="rtl">فهرست <code dir="ltr">spec.podGroupTemplates</code> اجزای متمایز بار کاری شما را تعریف می‌کند.
+برای مثال، یک Job یادگیری ماشین ممکن است یک الگوی <code dir="ltr">driver</code> و یک الگوی <code dir="ltr">worker</code> داشته باشد.</p>
+<p dir="rtl">هر مدخل در <code dir="ltr">podGroupTemplates</code> باید موارد زیر را داشته باشد:</p>
+<ol>
+<li dir="rtl">یک <code dir="ltr">name</code> یکتا که برای ارجاع به الگو در <code dir="ltr">spec.podGroupTemplateRef</code> آن <code dir="ltr">PodGroup</code> استفاده می‌شود.</li>
+<li dir="rtl">یک <a href="policies.html">سیاست زمان‌بندی</a> (<code dir="ltr">basic</code> یا <code dir="ltr">gang</code>).</li>
+</ol>
+<p dir="rtl">هر مدخل همچنین می‌تواند فیلدهای
+<a href="disruption-and-priority.html">اولویت و حالت اختلال</a>
+داشته باشد.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">در v1.36، فیلدهای <a href="disruption-and-priority.html">اولویت و حالت اختلال</a>
+توسط feature gate
+<a href="https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/#WorkloadAwarePreemption" target="_blank"><code dir="ltr">WorkloadAwarePreemption</code></a>
+فعال می‌شدند. این gate در v1.37 در
+<a href="https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/#GenericWorkload" target="_blank"><code dir="ltr">GenericWorkload</code></a> ادغام شد.</p>
+</div>
+<p dir="rtl">حداکثر تعداد PodGroupTemplateها در یک Workload برابر 8 است.</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: scheduling.k8s.io/v1beta1
+kind: Workload
+metadata:
+  name: training-job-workload
+  namespace: some-ns
+spec:
+  controllerRef:
+    apiGroup: batch
+    kind: Job
+    name: training-job
+  podGroupTemplates:
+  - name: workers
+    schedulingPolicy:
+      gang:
+        # The gang is schedulable only if 4 pods can run at once
+        minCount: 4
+    priorityClassName: high-priority
+    disruptionMode:
+      all: {}
+</code></pre>
+<p dir="rtl">هنگامی که یک کنترل‌کننده‌ی بار کاری یک <code dir="ltr">PodGroup</code> را از یکی از این الگوها ایجاد می‌کند،
+<code dir="ltr">schedulingPolicy</code> را در spec خودِ آن <code dir="ltr">PodGroup</code> کپی می‌کند. تغییرات در <code dir="ltr">Workload</code> تنها بر
+<code dir="ltr">PodGroups</code> تازه‌ایجادشده اثر می‌گذارند، نه بر موارد موجود.</p>
+<h3 id="ارجاع-به-آبجکت-کنترل-کننده-ی-بار-کاری" dir="rtl">ارجاع به آبجکت کنترل‌کننده‌ی بار کاری</h3>
+<p dir="rtl">فیلد <code dir="ltr">controllerRef</code> آن Workload را به آبجکت سطح‌بالای مشخصی که برنامه را تعریف می‌کند پیوند می‌دهد،
+مانند یک <a href="https://kubernetes.io/docs/concepts/workloads/controllers/job/" target="_blank">Job</a> یا یک CRD سفارشی. این کار برای مشاهده‌پذیری و ابزارها مفید است.
+این داده برای زمان‌بندی یا مدیریت Workload استفاده نمی‌شود.</p>
+<h3 id="compositepodgrouptemplates" dir="ltr" class="ltr">CompositePodGroupTemplates</h3>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
+<p dir="rtl">هنگامی که feature gate
+<a href="https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/#CompositePodGroup" target="_blank"><code dir="ltr">CompositePodGroup</code></a>
+و <span class="term" title="api-group">گروه API</span> <code dir="ltr">scheduling.k8s.io/v1alpha3</code>
+فعال باشند، می‌توانید از <code dir="ltr">CompositePodGroupTemplates</code> برای تعریف الزامات زمان‌بندی چندسطحی و سلسله‌مراتبی
+در یک <code dir="ltr">Workload</code> استفاده کنید. این الزامات می‌توانند شامل اعمال محدودیت‌های توپولوژی تودرتو
+در لایه‌های مختلف زیرساخت کلاستر (زمان‌بندی چندسطحی آگاه از توپولوژی)،
+زمان‌بندی همه یا هیچ در میان گروه‌های فرزند (زمان‌بندی گروهی چندسطحی)، یا سیاست‌های اختلال
+در سطح گروه باشند.</p>
+<p dir="rtl"><code dir="ltr">CompositePodGroupTemplates</code> را می‌توان با استفاده از فیلد <code dir="ltr">spec.compositePodGroupTemplates</code> در
+API آن <code dir="ltr">Workload</code> تعریف کرد. در زمان اجرا، کنترل‌کننده‌های بار کاری آبجکت‌های <a href="../compositepodgroup-api/index.html">CompositePodGroup</a>
+و <a href="../podgroup-api/index.html">PodGroup</a> را از این الگوها ایجاد می‌کنند تا وضعیت زمان‌بندی
+سلسله‌مراتب را در زمان اجرا نگهداری کنند. در حالی که آبجکت‌های <code dir="ltr">PodGroup</code> گروه‌هایی از Podها را در برگ‌ها مدیریت می‌کنند،
+آبجکت‌های <code dir="ltr">CompositePodGroup</code> نماینده‌ی گروه‌های غیربرگ هستند که سیاست‌های زمان‌بندی را در میان گروه‌های فرزند اعمال می‌کنند.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">در مشخصات یک <code dir="ltr">Workload</code>، فیلدهای <code dir="ltr">spec.compositePodGroupTemplates</code> و <code dir="ltr">spec.podGroupTemplates</code>
+یک اجتماع انحصاری (union) تشکیل می‌دهند: یک <code dir="ltr">Workload</code> باید یا <code dir="ltr">spec.podGroupTemplates</code> (برای
+بارهای کاری تخت) یا <code dir="ltr">spec.compositePodGroupTemplates</code> (برای بارهای کاری سلسله‌مراتبی) را تعریف کند، اما نمی‌تواند
+هر دو را تعیین کند.</p>
+</div>
+<h4 id="ساختار-و-محدودیت-ها" dir="rtl">ساختار و محدودیت‌ها</h4>
+<p dir="rtl">فیلد <code dir="ltr">spec.compositePodGroupTemplates</code> الگوهای غیربرگ را در یک درخت سلسله‌مراتبی
+از الگوهای گروه تعریف می‌کند. هر مدخل نماینده‌ی الگویی برای یک <code dir="ltr">CompositePodGroup</code> است و می‌تواند شامل موارد زیر باشد:</p>
+<ul>
+<li dir="rtl"><strong>الگوهای فرزند</strong>: <code dir="ltr">CompositePodGroupTemplates</code> تودرتو (برای گروه‌های میانی
+غیربرگ) یا <code dir="ltr">PodGroupTemplates</code> (برای گروه‌های برگ که Podها را در بر دارند).</li>
+<li dir="rtl"><strong>سیاست زمان‌بندی</strong>: مشخص می‌کند که گروه‌های فرزند درون این گروه مرکب چگونه
+زمان‌بندی شوند:
+<ul>
+<li dir="rtl"><code dir="ltr">basic</code>: گروه‌های فرزند به‌طور مستقل پذیرفته و زمان‌بندی می‌شوند.</li>
+<li dir="rtl"><code dir="ltr">gang</code>: زمان‌بندی چندسطحی همه یا هیچ را در میان گروه‌های فرزند اعمال می‌کند.
+به <code dir="ltr">minGroupCount</code> نیاز دارد که حداقل تعداد گروه‌های فرزندی را مشخص می‌کند
+که باید به‌طور همزمان قابل زمان‌بندی باشند تا گروه مرکب امکان‌پذیر باشد.</li>
+</ul>
+</li>
+<li dir="rtl"><strong>محدودیت‌های زمان‌بندی</strong>:
+<a href="topology-aware-scheduling.html">محدودیت‌های توپولوژی</a> اختیاری
+برای زمان‌بندی چندسطحی آگاه از توپولوژی.</li>
+<li dir="rtl"><strong>اولویت، سیاست پس‌گیری و حالت اختلال</strong>: فیلدهای اختیاری <code dir="ltr">priorityClassName</code>،
+<code dir="ltr">disruptionMode</code> (<code dir="ltr">Single</code> یا <code dir="ltr">All</code>) و <code dir="ltr">preemptionPolicy</code> برای
+<a href="disruption-and-priority.html">پس‌گیری آگاه از بار کاری</a>.</li>
+</ul>
+<p dir="rtl">برای تضمین پایداری کلاستر و کارایی control plane، سلسله‌مراتب الگوهای گروه
+محدودیت‌های زیر را اعمال می‌کند:</p>
+<ul>
+<li dir="rtl"><strong>حداکثر عمق تودرتویی</strong>: سلسله‌مراتب الگوهای گروه حداکثر از عمق
+4 سطح پشتیبانی می‌کند.</li>
+<li dir="rtl"><strong>محدودیت فهرست</strong>: هر فهرست <code dir="ltr">compositePodGroupTemplates</code> و <code dir="ltr">podGroupTemplates</code> به‌طور قطعی
+به حداکثر 8 آیتم محدود است.</li>
+</ul>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">در حال حاضر، نمی‌توانید <code dir="ltr">CompositePodGroupTemplates</code> جدید اضافه کنید یا موارد موجود را حذف کنید. تنها می‌توانید
+مقدار <code dir="ltr">minCount</code> را در سیاست زمان‌بندی گروهی تعریف‌شده در <code dir="ltr">PodGroupTemplates</code> برگ تغییر دهید.</p>
+</div>
+<h4 id="مثال" dir="rtl">مثال</h4>
+<p dir="rtl">مثال زیر یک <code dir="ltr">Workload</code> سلسله‌مراتبی را با یک الگوی <code dir="ltr">CompositePodGroup</code> تعریف می‌کند
+که زمان‌بندی گروهی را در میان دو الگوی <code dir="ltr">PodGroup</code> فرزند (<code dir="ltr">minGroupCount: 2</code>) اعمال می‌کند،
+که هر یک سیاست زمان‌بندی گروهی خاص خود را تعیین می‌کنند:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: scheduling.k8s.io/v1alpha3
+kind: Workload
+metadata:
+  name: gang-of-gangs-workload
+  namespace: default
+spec:
+  compositePodGroupTemplates:
+  - name: root
+    schedulingPolicy:
+      gang:
+        # Requires both child PodGroups to be schedulable together
+        minGroupCount: 2
+    podGroupTemplates:
+    - name: workers-a
+      schedulingPolicy:
+        gang:
+          # Requires 4 Pods in this group to be schedulable
+          minCount: 4
+    - name: workers-b
+      schedulingPolicy:
+        gang:
+          # Requires 4 Pods in this group to be schedulable
+          minCount: 4
+</code></pre>
+<h2 id="زمان-بندی-گروهی-با-jobها" dir="rtl">زمان‌بندی گروهی با Jobها</h2>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
+<p dir="rtl">هنگامی که feature gate
+<a href="https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/" target="_blank"><code dir="ltr">WorkloadWithJob</code></a>
+فعال باشد، کنترل‌کننده‌ی
+<a href="https://kubernetes.io/docs/concepts/workloads/controllers/job/" target="_blank">Job</a> پیکربندی
+<code dir="ltr">.spec.scheduling</code> یک Job را پیش از ایجاد هر Podی به آبجکت‌های <code dir="ltr">Workload</code> و <code dir="ltr">PodGroup</code>
+تبدیل می‌کند. شما با تنظیم
+<code dir="ltr">.spec.scheduling.schedulingPolicy.gang</code> روی Job، زمان‌بندی گروهی را انتخاب می‌کنید؛ اگر <code dir="ltr">gang.minCount</code>
+حذف شود، مقدار پیش‌فرض آن <code dir="ltr">.spec.parallelism</code> آن Job است، بنابراین همه‌ی Podها باید پیش از آنکه هیچ‌یک از آن‌ها
+به نودها متصل شوند، با هم قابل زمان‌بندی باشند.</p>
+<p dir="rtl">هنگامی که <code dir="ltr">.spec.scheduling</code> حذف شود، Job به‌طور پیش‌فرض از سیاست <code dir="ltr">basic</code> استفاده می‌کند که
+زمان‌بندی استاندارد Pod به Pod را حفظ می‌کند. در هر دو حالت، کنترل‌کننده‌ی Job
+<code dir="ltr">Workload</code> و <code dir="ltr">PodGroup</code> را برای شما ایجاد می‌کند، بنابراین لازم نیست خودتان آن‌ها را ایجاد کنید.
+سایر کنترل‌کننده‌های بار کاری (مانند JobSet) ممکن است آبجکت‌های <code dir="ltr">Workload</code> و
+<code dir="ltr">PodGroup</code> خود را به‌طور مستقل مدیریت کنند.</p>
+<p dir="rtl">برای مجموعه‌ی کامل فیلدهای زمان‌بندی و مثال‌ها،
+<a href="https://kubernetes.io/docs/concepts/workloads/controllers/job/#integrate-with-workload-apis" target="_blank">یکپارچه‌سازی با Workload APIها</a> را ببینید.</p>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<ul>
+<li dir="rtl">درباره‌ی <a href="policies.html">سیاست‌های زمان‌بندی PodGroup</a> بیاموزید.</li>
+<li dir="rtl">ببینید PodGroupها چگونه از Workloadها ایجاد می‌شوند، در نمای کلی <a href="../podgroup-api/index.html">PodGroup API</a>.</li>
+<li dir="rtl">بخوانید که Podها چگونه از طریق فیلد <a href="../pods/scheduling-group.html">گروه زمان‌بندی</a> به PodGroup خود ارجاع می‌دهند.</li>
+<li dir="rtl">درباره‌ی <a href="topology-aware-scheduling.html">زمان‌بندی بار کاری آگاه از توپولوژی</a> بیاموزید.</li>
+<li dir="rtl">الگوریتم <a href="../../scheduling-eviction/gang-scheduling.html">زمان‌بندی گروهی</a> را درک کنید.</li>
+</ul>
+</main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#workload-چیست؟">Workload چیست؟</a><a class="l2" href="#ساختار-api">ساختار API</a><a class="l3" href="#podgrouptemplates">PodGroupTemplates</a><a class="l3" href="#ارجاع-به-آبجکت-کنترل-کننده-ی-بار-کاری">ارجاع به آبجکت کنترل‌کننده‌ی بار کاری</a><a class="l3" href="#compositepodgrouptemplates">CompositePodGroupTemplates</a><a class="l2" href="#زمان-بندی-گروهی-با-jobها">زمان‌بندی گروهی با Jobها</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>

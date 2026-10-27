@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>کانتینرهای Sidecar | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+</head>
+<body>
+<header class="top"><a href="../../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">concepts / workloads / pods</span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">کانتینرهای Sidecar</h1><!-- overview -->
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
+<p dir="rtl">کانتینرهای sidecar کانتینرهای ثانویه‌ای هستند که در کنار کانتینر اصلی برنامه
+درون همان <span class="term" title="pod">Pod</span> اجرا می‌شوند.
+این کانتینرها برای بهبود یا گسترش عملکرد <em>کانتینر برنامه‌ی</em> اصلی
+از طریق ارائه‌ی سرویس‌های اضافی یا قابلیت‌هایی مانند ثبت لاگ، پایش،
+امنیت یا همگام‌سازی داده به کار می‌روند، بدون آنکه کد برنامه‌ی اصلی مستقیماً تغییر کند.</p>
+<p dir="rtl">معمولاً تنها یک کانتینر برنامه در هر Pod دارید. برای مثال، اگر یک برنامه‌ی وب
+دارید که به یک وب‌سرور محلی نیاز دارد، وب‌سرور محلی یک sidecar است و
+خود برنامه‌ی وب، کانتینر برنامه است.</p>
+<!-- body -->
+<h2 id="کانتینرهای-sidecar-در-کوبرنتیز-pod-sidecar-containers" dir="rtl">کانتینرهای sidecar در کوبرنتیز {#pod-sidecar-containers}</h2>
+<p dir="rtl">کوبرنتیز کانتینرهای sidecar را به‌عنوان حالت خاصی از
+<a href="https://kubernetes.io/docs/concepts/workloads/pods/init-containers/" target="_blank">کانتینرهای init</a> پیاده‌سازی می‌کند؛ کانتینرهای sidecar پس از
+راه‌اندازی Pod همچنان در حال اجرا باقی می‌مانند. این سند از اصطلاح <em>کانتینرهای init معمولی</em> استفاده می‌کند تا به‌روشنی
+به کانتینرهایی اشاره کند که تنها در طول راه‌اندازی Pod اجرا می‌شوند.</p>
+<p dir="rtl">به شرط آنکه <a href="https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/" target="_blank">feature gate</a> <code dir="ltr">SidecarContainers</code>
+در کلاستر شما فعال باشد
+(این قابلیت از کوبرنتیز v1.29 به‌طور پیش‌فرض فعال است)، می‌توانید یک <code dir="ltr">restartPolicy</code>
+برای کانتینرهای فهرست‌شده در فیلد <code dir="ltr">initContainers</code> یک Pod تعیین کنید.
+این کانتینرهای <em>sidecar</em> قابل‌راه‌اندازی مجدد، از سایر کانتینرهای init و از
+کانتینر(های) اصلی برنامه در همان Pod مستقل هستند.
+این کانتینرها را می‌توان بدون تأثیر بر کانتینر اصلی برنامه
+و سایر کانتینرهای init راه‌اندازی، متوقف یا دوباره راه‌اندازی کرد.</p>
+<p dir="rtl">همچنین می‌توانید یک Pod را با چندین کانتینر اجرا کنید که به‌عنوان کانتینر init یا sidecar
+علامت‌گذاری نشده‌اند. این روش زمانی مناسب است که کانتینرهای درون Pod برای
+کارکرد کلی Pod لازم باشند، اما نیازی نداشته باشید کنترل کنید کدام کانتینرها زودتر آغاز یا متوقف شوند.
+همچنین اگر نیاز دارید از نسخه‌های قدیمی‌تر کوبرنتیز پشتیبانی کنید که
+از فیلد <code dir="ltr">restartPolicy</code> در سطح کانتینر پشتیبانی نمی‌کنند، می‌توانید این کار را انجام دهید.</p>
+<h3 id="برنامه-ی-نمونه-sidecar-example" dir="rtl">برنامه‌ی نمونه {#sidecar-example}</h3>
+<p dir="rtl">در اینجا نمونه‌ای از یک Deployment با دو کانتینر آمده است که یکی از آن‌ها sidecar است:</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">در این مثال، کانتینر sidecar عمداً در زیر <code dir="ltr">initContainers</code>
+با <code dir="ltr">restartPolicy: Always</code> تعریف شده است. کوبرنتیز با چنین کانتینرهایی به‌عنوان sidecarهایی رفتار می‌کند که
+در تمام طول عمر Pod به اجرا ادامه می‌دهند.</p>
+</div>
+<div class="code-file ltr" dir="ltr">application/deployment-sidecar.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp
+  labels:
+    app: myapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: myapp
+  template:
+    metadata:
+      labels:
+        app: myapp
+    spec:
+      containers:
+        - name: myapp
+          image: alpine:latest
+          command: ['sh', '-c', 'while true; do echo "logging" &gt;&gt; /opt/logs.txt; sleep 1; done']
+          volumeMounts:
+            - name: data
+              mountPath: /opt
+      initContainers:
+        - name: logshipper
+          image: alpine:latest
+          # Setting restartPolicy: Always makes this a sidecar container.
+          restartPolicy: Always
+          command: ['sh', '-c', 'tail -F /opt/logs.txt']
+          volumeMounts:
+            - name: data
+              mountPath: /opt
+      volumes:
+        - name: data
+          emptyDir: {}
+</code></pre>
+<h2 id="کانتینرهای-sidecar-و-چرخه-ی-عمر-pod" dir="rtl">کانتینرهای sidecar و چرخه‌ی عمر Pod</h2>
+<p dir="rtl">اگر یک کانتینر init با <code dir="ltr">restartPolicy</code> برابر <code dir="ltr">Always</code> ایجاد شود،
+آغاز می‌شود و در تمام طول عمر Pod در حال اجرا باقی می‌ماند. این ویژگی می‌تواند برای
+اجرای سرویس‌های پشتیبان جدا از کانتینرهای اصلی برنامه مفید باشد.</p>
+<p dir="rtl">اگر یک <code dir="ltr">readinessProbe</code> برای این کانتینر init تعیین شده باشد، نتیجه‌ی آن
+برای تعیین وضعیت <code dir="ltr">ready</code> آن Pod استفاده می‌شود.</p>
+<p dir="rtl">از آنجا که این کانتینرها به‌عنوان کانتینرهای init تعریف می‌شوند، از همان
+تضمین‌های ترتیب و توالی کانتینرهای init معمولی بهره می‌برند، و این امکان را فراهم می‌کنند که
+کانتینرهای sidecar را برای جریان‌های پیچیده‌ی مقداردهی اولیه‌ی Pod با کانتینرهای init معمولی ترکیب کنید.</p>
+<p dir="rtl">در مقایسه با کانتینرهای init معمولی، sidecarهای تعریف‌شده در <code dir="ltr">initContainers</code> پس از
+آغاز به کار، به اجرای خود ادامه می‌دهند. این موضوع زمانی اهمیت دارد که بیش از یک مدخل در
+<code dir="ltr">.spec.initContainers</code> یک Pod وجود داشته باشد. پس از آنکه یک کانتینر init به سبک sidecar در حال اجرا باشد (یعنی kubelet
+وضعیت <code dir="ltr">started</code> آن کانتینر init را روی true تنظیم کرده باشد)، kubelet سپس
+کانتینر init بعدی را از فهرست مرتب <code dir="ltr">.spec.initContainers</code> آغاز می‌کند.
+این وضعیت یا به این دلیل true می‌شود که فرایندی در کانتینر در حال اجراست
+و هیچ پروب Startup تعریف نشده است، یا در نتیجه‌ی موفقیت <code dir="ltr">startupProbe</code> آن.</p>
+<p dir="rtl">هنگام <a href="https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#termination-with-sidecars" target="_blank">خاتمه‌ی</a> Pod،
+kubelet خاتمه‌دادن به کانتینرهای sidecar را تا زمانی که کانتینر اصلی برنامه به‌طور کامل متوقف شود به تعویق می‌اندازد.
+سپس کانتینرهای sidecar به ترتیب معکوس ظاهرشدنشان در مشخصات Pod خاموش می‌شوند.
+این رویکرد تضمین می‌کند که sidecarها تا زمانی که دیگر به سرویس آن‌ها نیازی نباشد،
+عملیاتی باقی بمانند و از سایر کانتینرهای درون Pod پشتیبانی کنند.</p>
+<h3 id="jobها-با-کانتینرهای-sidecar" dir="rtl">Jobها با کانتینرهای sidecar</h3>
+<p dir="rtl">اگر یک Job تعریف کنید که با استفاده از کانتینرهای init به سبک کوبرنتیز از sidecar بهره می‌برد،
+کانتینر sidecar در هر Pod مانع از تکمیل Job پس از
+پایان کار کانتینر اصلی نمی‌شود.</p>
+<p dir="rtl">در اینجا نمونه‌ای از یک Job با دو کانتینر آمده است که یکی از آن‌ها sidecar است:</p>
+<div class="code-file ltr" dir="ltr">application/job/job-sidecar.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: batch/v1
+kind: Job
+metadata:
+  name: myjob
+spec:
+  template:
+    spec:
+      containers:
+        - name: myjob
+          image: alpine:latest
+          command: ['sh', '-c', 'echo "logging" &gt; /opt/logs.txt']
+          volumeMounts:
+            - name: data
+              mountPath: /opt
+      initContainers:
+        - name: logshipper
+          image: alpine:latest
+          # Setting restartPolicy: Always makes this a sidecar container.
+          restartPolicy: Always
+          command: ['sh', '-c', 'tail -F /opt/logs.txt']
+          volumeMounts:
+            - name: data
+              mountPath: /opt
+      restartPolicy: Never
+      volumes:
+        - name: data
+          emptyDir: {}
+</code></pre>
+<h2 id="تفاوت-ها-با-کانتینرهای-برنامه" dir="rtl">تفاوت‌ها با کانتینرهای برنامه</h2>
+<p dir="rtl">کانتینرهای sidecar در کنار <em>کانتینرهای برنامه</em> در همان Pod اجرا می‌شوند. با این حال،
+منطق اصلی برنامه را اجرا نمی‌کنند؛ بلکه قابلیت‌های پشتیبان را برای
+برنامه‌ی اصلی فراهم می‌کنند.</p>
+<p dir="rtl">کانتینرهای sidecar چرخه‌ی عمر مستقل خود را دارند. آن‌ها را می‌توان مستقل از
+کانتینرهای برنامه راه‌اندازی، متوقف و دوباره راه‌اندازی کرد. این بدان معناست که می‌توانید کانتینرهای sidecar را
+بدون تأثیر بر برنامه‌ی اصلی به‌روزرسانی، مقیاس‌دهی یا نگهداری کنید.</p>
+<p dir="rtl">کانتینرهای sidecar فضاهای نام شبکه و ذخیره‌سازی یکسانی با کانتینر
+اصلی دارند. این هم‌مکانی به آن‌ها اجازه می‌دهد تعامل نزدیکی داشته باشند و منابع را به اشتراک بگذارند.</p>
+<p dir="rtl">از دیدگاه کوبرنتیز، خاتمه‌ی ملایم (graceful) کانتینر sidecar اهمیت کمتری دارد.
+هنگامی که سایر کانتینرها تمام زمان تخصیص‌یافته برای خاتمه‌ی ملایم را مصرف کنند، کانتینرهای sidecar
+پیش از آنکه فرصت خاتمه‌ی ملایم داشته باشند، سیگنال <code dir="ltr">SIGTERM</code> و به دنبال آن سیگنال <code dir="ltr">SIGKILL</code> را دریافت می‌کنند.
+بنابراین کدهای خروج متفاوت از <code dir="ltr">0</code> (<code dir="ltr">0</code> نشان‌دهنده‌ی خروج موفق است) برای کانتینرهای sidecar
+هنگام خاتمه‌ی Pod عادی هستند و ابزارهای خارجی معمولاً باید آن‌ها را نادیده بگیرند.</p>
+<h2 id="تفاوت-ها-با-کانتینرهای-init" dir="rtl">تفاوت‌ها با کانتینرهای init</h2>
+<p dir="rtl">کانتینرهای sidecar در کنار کانتینر اصلی کار می‌کنند، عملکرد آن را گسترش می‌دهند و
+سرویس‌های اضافی فراهم می‌کنند.</p>
+<p dir="rtl">کانتینرهای sidecar به‌طور همزمان با کانتینر اصلی برنامه اجرا می‌شوند. آن‌ها در
+سراسر چرخه‌ی عمر Pod فعال هستند و می‌توانند مستقل از
+کانتینر اصلی راه‌اندازی و متوقف شوند. برخلاف <a href="https://kubernetes.io/docs/concepts/workloads/pods/init-containers/" target="_blank">کانتینرهای init</a>،
+کانتینرهای sidecar از <a href="https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#types-of-probe" target="_blank">پروب‌ها</a> برای کنترل چرخه‌ی عمر خود پشتیبانی می‌کنند.</p>
+<p dir="rtl">کانتینرهای sidecar می‌توانند مستقیماً با کانتینرهای اصلی برنامه تعامل داشته باشند، زیرا
+همانند کانتینرهای init همواره شبکه‌ی یکسانی را به اشتراک می‌گذارند و می‌توانند به‌صورت اختیاری
+حجم‌ها (volumes) (سیستم‌فایل‌ها) را نیز به اشتراک بگذارند.</p>
+<p dir="rtl">کانتینرهای init پیش از آغاز کانتینرهای اصلی متوقف می‌شوند، بنابراین کانتینرهای init نمی‌توانند
+با کانتینر برنامه در یک Pod پیام رد و بدل کنند. هرگونه انتقال داده یک‌طرفه است
+(برای مثال، یک کانتینر init می‌تواند اطلاعاتی را درون یک حجم <code dir="ltr">emptyDir</code> قرار دهد).</p>
+<p dir="rtl">تغییر ایمیج یک کانتینر sidecar باعث راه‌اندازی مجدد Pod نمی‌شود، اما
+راه‌اندازی مجدد کانتینر را به دنبال خواهد داشت.</p>
+<h2 id="اشتراک-منابع-میان-کانتینرها" dir="rtl">اشتراک منابع میان کانتینرها</h2>
+<p dir="rtl">با توجه به ترتیب اجرای کانتینرهای init، sidecar و برنامه، قواعد زیر
+برای مصرف منابع اعمال می‌شوند:</p>
+<ul>
+<li dir="rtl">بالاترین مقدار درخواست یا محدودیت هر منبع خاص که روی همه‌ی کانتینرهای init
+تعریف شده باشد، <em>درخواست/محدودیت مؤثر init</em> است. اگر برای منبعی هیچ
+محدودیتی تعیین نشده باشد، همین به‌عنوان بالاترین محدودیت در نظر گرفته می‌شود.</li>
+<li dir="rtl"><em>درخواست/محدودیت مؤثر</em> یک Pod برای یک منبع، مجموع
+<a href="https://kubernetes.io/docs/concepts/scheduling-eviction/pod-overhead/" target="_blank">سربار Pod</a> و بزرگ‌ترِ این دو مقدار است:
+<ul>
+<li dir="rtl">مجموع درخواست/محدودیت همه‌ی کانتینرهای غیر init (کانتینرهای برنامه و sidecar) برای یک
+منبع</li>
+<li dir="rtl">درخواست/محدودیت مؤثر init برای یک منبع</li>
+</ul>
+</li>
+<li dir="rtl">زمان‌بندی بر اساس درخواست‌ها/محدودیت‌های مؤثر انجام می‌شود، به این معنا که
+کانتینرهای init می‌توانند منابعی را برای مقداردهی اولیه رزرو کنند که
+در طول عمر Pod استفاده نمی‌شوند.</li>
+<li dir="rtl">رده‌ی QoS (کیفیت خدمات) یا <em>رده‌ی QoS مؤثر</em> Pod، همان
+رده‌ی QoS برای همه‌ی کانتینرهای init، sidecar و برنامه به‌طور یکسان است.</li>
+</ul>
+<p dir="rtl">سهمیه (quota) و محدودیت‌ها بر اساس درخواست و محدودیت مؤثر Pod
+اعمال می‌شوند.</p>
+<h3 id="کانتینرهای-sidecar-و-cgroupهای-لینوکس-cgroups" dir="rtl">کانتینرهای sidecar و cgroupهای لینوکس {#cgroups}</h3>
+<p dir="rtl">در لینوکس، تخصیص منابع برای گروه‌های کنترلی (cgroups) سطح Pod، همانند زمان‌بند، بر اساس
+درخواست و محدودیت مؤثر Pod انجام می‌شود.</p>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<ul>
+<li dir="rtl">بیاموزید چگونه <a href="https://kubernetes.io/docs/tutorials/configuration/pod-sidecar-containers/" target="_blank">کانتینرهای Sidecar را به کار بگیرید</a></li>
+<li dir="rtl">یک پست وبلاگ درباره‌ی <a href="/blog/2023/08/25/native-sidecar-containers/">کانتینرهای sidecar بومی</a> بخوانید.</li>
+<li dir="rtl">درباره‌ی <a href="https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-initialization/#create-a-pod-that-has-an-init-container" target="_blank">ایجاد Podی که یک کانتینر init دارد</a> بخوانید.</li>
+<li dir="rtl">درباره‌ی <a href="https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#types-of-probe" target="_blank">انواع پروب‌ها</a> بیاموزید: پروب Liveness، Readiness و Startup.</li>
+<li dir="rtl">درباره‌ی <a href="https://kubernetes.io/docs/concepts/scheduling-eviction/pod-overhead/" target="_blank">سربار Pod</a> بیاموزید.</li>
+</ul>
+</main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#کانتینرهای-sidecar-در-کوبرنتیز-pod-sidecar-containers">کانتینرهای sidecar در کوبرنتیز {#pod-sidecar-containers}</a><a class="l3" href="#برنامه-ی-نمونه-sidecar-example">برنامه‌ی نمونه {#sidecar-example}</a><a class="l2" href="#کانتینرهای-sidecar-و-چرخه-ی-عمر-pod">کانتینرهای sidecar و چرخه‌ی عمر Pod</a><a class="l3" href="#jobها-با-کانتینرهای-sidecar">Jobها با کانتینرهای sidecar</a><a class="l2" href="#تفاوت-ها-با-کانتینرهای-برنامه">تفاوت‌ها با کانتینرهای برنامه</a><a class="l2" href="#تفاوت-ها-با-کانتینرهای-init">تفاوت‌ها با کانتینرهای init</a><a class="l2" href="#اشتراک-منابع-میان-کانتینرها">اشتراک منابع میان کانتینرها</a><a class="l3" href="#کانتینرهای-sidecar-و-cgroupهای-لینوکس-cgroups">کانتینرهای sidecar و cgroupهای لینوکس {#cgroups}</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>

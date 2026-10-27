@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gateway API | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+</head>
+<body>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">concepts / services-networking</span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="ltr" class="ltr">Gateway API</h1><p class="page-meta" dir="rtl">Gateway API خانواده‌ای از انواع API است که فراهم‌سازی پویای زیرساخت و مسیریابی پیشرفتهٔ ترافیک را ارائه می‌کند.</p><!-- overview -->
+<p dir="rtl">سرویس‌های شبکه را با استفاده از یک سازوکار پیکربندی توسعه‌پذیر، نقش‌محور و آگاه از پروتکل
+در دسترس قرار دهید. <a href="https://gateway-api.sigs.k8s.io/" target="_blank" rel="noopener">Gateway API</a> یک <span class="term" title="addons">افزونه (add-on)</span>
+است که شامل <a href="https://gateway-api.sigs.k8s.io/references/spec/" target="_blank" rel="noopener">انواع</a> API است که فراهم‌سازی پویای زیرساخت
+و مسیریابی پیشرفتهٔ ترافیک را ارائه می‌کنند.</p>
+<!-- body -->
+<h2 id="اصول-طراحی" dir="rtl">اصول طراحی</h2>
+<p dir="rtl">اصول زیر طراحی و معماری Gateway API را شکل داده‌اند:</p>
+<ul>
+<li dir="rtl"><strong>نقش‌محور:</strong> انواع Gateway API بر اساس نقش‌های سازمانی‌ای مدل‌سازی شده‌اند که
+مسئول مدیریت شبکهٔ سرویس‌ها در کوبرنتیز هستند:
+<ul>
+<li dir="rtl"><strong>ارائه‌دهندهٔ زیرساخت:</strong> زیرساختی را مدیریت می‌کند که به چندین کلاستر ایزوله اجازه می‌دهد
+به چندین مستأجر (tenant) خدمت‌رسانی کنند؛ برای مثال یک ارائه‌دهندهٔ ابری.</li>
+<li dir="rtl"><strong>اپراتور کلاستر:</strong> کلاسترها را مدیریت می‌کند و معمولاً با سیاست‌ها، دسترسی
+شبکه، مجوزهای برنامه و مواردی از این دست سروکار دارد.</li>
+<li dir="rtl"><strong>توسعه‌دهندهٔ برنامه:</strong> برنامه‌ای را که در یک کلاستر اجرا می‌شود مدیریت می‌کند و معمولاً
+با پیکربندی در سطح برنامه و ترکیب <a href="https://kubernetes.io/docs/concepts/services-networking/service/" target="_blank">Service</a>
+سروکار دارد.</li>
+</ul>
+</li>
+<li dir="rtl"><strong>قابل حمل:</strong> مشخصات Gateway API به‌صورت <a href="../extend-kubernetes/api-extension/custom-resources.html">منابع سفارشی (custom resources)</a>
+تعریف شده‌اند و <a href="https://gateway-api.sigs.k8s.io/implementations/" target="_blank" rel="noopener">پیاده‌سازی‌های</a> بسیاری از آن‌ها پشتیبانی می‌کنند.</li>
+<li dir="rtl"><strong>بیانگر:</strong> انواع Gateway API از قابلیت‌هایی برای موارد استفادهٔ رایج مسیریابی ترافیک
+پشتیبانی می‌کنند، مانند تطبیق مبتنی بر هدر، وزن‌دهی ترافیک و موارد دیگری که پیش‌تر تنها در
+<a href="ingress.html">Ingress</a> و با استفاده از حاشیه‌نویسی‌های سفارشی امکان‌پذیر بودند.</li>
+<li dir="rtl"><strong>توسعه‌پذیر:</strong> Gateway اجازه می‌دهد منابع سفارشی در لایه‌های مختلف API پیوند داده شوند.
+این امر سفارشی‌سازی جزئی را در جاهای مناسب درون ساختار API ممکن می‌سازد.</li>
+</ul>
+<h2 id="مدل-منابع" dir="rtl">مدل منابع</h2>
+<p dir="rtl">Gateway API چهار نوع API پایدار دارد:</p>
+<ul>
+<li dir="rtl">
+<p dir="rtl"><strong>GatewayClass:</strong> مجموعه‌ای از gatewayها را با پیکربندی مشترک تعریف می‌کند که توسط کنترل‌کننده‌ای
+که این کلاس را پیاده‌سازی می‌کند، مدیریت می‌شوند.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><strong>Gateway:</strong> نمونه‌ای از زیرساخت رسیدگی به ترافیک، مانند توزیع‌کنندهٔ بار ابری، را تعریف می‌کند.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><strong>HTTPRoute:</strong> قواعد مختص HTTP را برای نگاشت ترافیک از یک listener در Gateway به
+نمایشی از endpointهای شبکهٔ backend تعریف می‌کند. این endpointها اغلب به‌صورت یک
+<span class="term" title="service">Service</span> نمایش داده می‌شوند.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><strong>GRPCRoute:</strong> قواعد مختص gRPC را برای نگاشت ترافیک از یک listener در Gateway به
+نمایشی از endpointهای شبکهٔ backend تعریف می‌کند. این endpointها اغلب به‌صورت یک
+<span class="term" title="service">Service</span> نمایش داده می‌شوند.</p>
+</li>
+</ul>
+<p dir="rtl">Gateway API در قالب انواع API مختلفی سازمان‌دهی شده است که برای پشتیبانی از
+ماهیت نقش‌محور سازمان‌ها، روابط وابسته به هم دارند. هر آبجکت Gateway دقیقاً با یک GatewayClass مرتبط است؛
+GatewayClass کنترل‌کنندهٔ gateway مسئول مدیریت Gatewayهای این کلاس را توصیف می‌کند.
+سپس یک یا چند نوع route، مانند HTTPRoute، با Gatewayها مرتبط می‌شوند. یک Gateway می‌تواند routeهایی را
+که ممکن است به <code dir="ltr">listeners</code> آن متصل شوند فیلتر کند و بدین ترتیب یک مدل اعتماد دوسویه با routeها شکل دهد.</p>
+<p dir="rtl">شکل زیر روابط سه نوع پایدار Gateway API را نشان می‌دهد:</p>
+<figure><img src="https://kubernetes.io/docs/images/gateway-kind-relationships.svg" alt="شکلی که روابط سه نوع پایدار Gateway API را نشان می‌دهد"><figcaption dir="rtl">شکلی که روابط سه نوع پایدار Gateway API را نشان می‌دهد</figcaption></figure>
+<h3 id="gatewayclass-api-kind-gateway-class" dir="ltr" class="ltr">GatewayClass {#api-kind-gateway-class}</h3>
+<p dir="rtl">Gatewayها را می‌توان با کنترل‌کننده‌های مختلف و اغلب با پیکربندی‌های متفاوت پیاده‌سازی کرد. یک Gateway
+باید به GatewayClassای ارجاع دهد که نام کنترل‌کنندهٔ پیاده‌سازی‌کنندهٔ آن
+کلاس را در بر دارد.</p>
+<p dir="rtl">یک نمونهٔ حداقلی از GatewayClass:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: gateway.networking.k8s.io/v1
+kind: GatewayClass
+metadata:
+  name: example-class
+spec:
+  controllerName: example.com/gateway-controller
+</code></pre>
+<p dir="rtl">در این نمونه، کنترل‌کننده‌ای که Gateway API را پیاده‌سازی کرده است، برای مدیریت GatewayClassهایی
+با نام کنترل‌کنندهٔ <code dir="ltr">example.com/gateway-controller</code> پیکربندی شده است. Gatewayهای این کلاس توسط
+کنترل‌کنندهٔ آن پیاده‌سازی مدیریت خواهند شد.</p>
+<p dir="rtl">برای تعریف کامل این نوع API، مرجع <a href="https://gateway-api.sigs.k8s.io/references/spec/#gateway.networking.k8s.io/v1.GatewayClass" target="_blank" rel="noopener">GatewayClass</a>
+را ببینید.</p>
+<h3 id="gateway-api-kind-gateway" dir="ltr" class="ltr">Gateway {#api-kind-gateway}</h3>
+<p dir="rtl">یک Gateway نمونه‌ای از زیرساخت رسیدگی به ترافیک را توصیف می‌کند. این آبجکت یک endpoint شبکه تعریف می‌کند
+که می‌توان از آن برای پردازش ترافیک، یعنی فیلتر کردن، توزیع بار، تقسیم و غیره، برای backendهایی
+مانند یک Service استفاده کرد. برای مثال، یک Gateway ممکن است نمایانگر یک توزیع‌کنندهٔ بار ابری یا یک سرور پراکسی
+درون کلاستر باشد که برای پذیرش ترافیک HTTP پیکربندی شده است.</p>
+<p dir="rtl">یک نمونهٔ معمول از منبع Gateway:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: example-gateway
+  namespace: example-namespace
+spec:
+  gatewayClassName: example-class
+  listeners:
+  - name: http
+    protocol: HTTP
+    port: 80
+    hostname: "www.example.com"
+    allowedRoutes:
+      namespaces:
+        from: Same
+</code></pre>
+<p dir="rtl">در این نمونه، یک نمونه از زیرساخت رسیدگی به ترافیک طوری برنامه‌ریزی شده است که به ترافیک HTTP
+روی پورت 80 گوش دهد. از آنجا که فیلد <code dir="ltr">addresses</code> تعیین نشده است، یک نشانی یا hostname
+توسط کنترل‌کنندهٔ پیاده‌سازی به Gateway اختصاص داده می‌شود. این نشانی به‌عنوان endpoint شبکه برای
+پردازش ترافیک endpointهای شبکهٔ backend که در routeها تعریف شده‌اند، استفاده می‌شود.</p>
+<p dir="rtl">برای تعریف کامل این نوع API، مرجع <a href="https://gateway-api.sigs.k8s.io/references/spec/#gateway.networking.k8s.io/v1.Gateway" target="_blank" rel="noopener">Gateway</a>
+را ببینید. برای راهنمایی دربارهٔ پیکربندی listenerهای HTTPS/TLS،
+<a href="https://gateway-api.sigs.k8s.io/guides/tls/" target="_blank" rel="noopener">راهنمای TLS در Gateway API</a> را ببینید.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">به‌طور پیش‌فرض، یک Gateway تنها Routeهایی را از همان فضای نام می‌پذیرد. Routeهای میان‌فضای‌نامی نیازمند پیکربندی <code dir="ltr">allowedRoutes</code> هستند.</p>
+</div>
+<h3 id="httproute-api-kind-httproute" dir="ltr" class="ltr">HTTPRoute {#api-kind-httproute}</h3>
+<p dir="rtl">نوع HTTPRoute رفتار مسیریابی درخواست‌های HTTP را از یک listener در Gateway به endpointهای شبکهٔ
+backend مشخص می‌کند. برای یک backend از نوع Service، یک پیاده‌سازی ممکن است endpoint شبکهٔ backend را به‌صورت IP
+مربوط به Service یا EndpointSliceهای پشتیبان Service نمایش دهد. یک HTTPRoute نمایانگر پیکربندی‌ای است که بر
+پیاده‌سازی زیرین Gateway اعمال می‌شود. برای مثال، تعریف یک HTTPRoute جدید ممکن است به پیکربندی routeهای
+ترافیکی اضافی در یک توزیع‌کنندهٔ بار ابری یا سرور پراکسی درون کلاستر منجر شود.</p>
+<p dir="rtl">یک نمونهٔ معمول از HTTPRoute:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: example-httproute
+spec:
+  parentRefs:
+  - name: example-gateway
+  hostnames:
+  - "www.example.com"
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /login
+    backendRefs:
+    - name: example-svc
+      port: 8080
+</code></pre>
+<p dir="rtl">در این نمونه، ترافیک HTTP از Gateway ‏<code dir="ltr">example-gateway</code> که هدر Host: آن روی <code dir="ltr">www.example.com</code>
+تنظیم شده و مسیر درخواست آن <code dir="ltr">/login</code> باشد، به Service ‏<code dir="ltr">example-svc</code> روی پورت <code dir="ltr">8080</code> هدایت می‌شود.</p>
+<p dir="rtl">برای تعریف کامل این نوع API، مرجع <a href="https://gateway-api.sigs.k8s.io/references/spec/#gateway.networking.k8s.io/v1.HTTPRoute" target="_blank" rel="noopener">HTTPRoute</a>
+را ببینید.</p>
+<h3 id="grpcroute-api-kind-grpcroute" dir="ltr" class="ltr">GRPCRoute {#api-kind-grpcroute}</h3>
+<p dir="rtl">نوع GRPCRoute رفتار مسیریابی درخواست‌های gRPC را از یک listener در Gateway به endpointهای شبکهٔ
+backend مشخص می‌کند. برای یک backend از نوع Service، یک پیاده‌سازی ممکن است endpoint شبکهٔ backend را به‌صورت IP
+مربوط به Service یا EndpointSliceهای پشتیبان Service نمایش دهد. یک GRPCRoute نمایانگر پیکربندی‌ای است که بر
+پیاده‌سازی زیرین Gateway اعمال می‌شود. برای مثال، تعریف یک GRPCRoute جدید ممکن است به پیکربندی routeهای
+ترافیکی اضافی در یک توزیع‌کنندهٔ بار ابری یا سرور پراکسی درون کلاستر منجر شود.</p>
+<p dir="rtl">Gatewayهایی که از GRPCRoute پشتیبانی می‌کنند، ملزم‌اند بدون ارتقای اولیه از HTTP/1 از HTTP/2 پشتیبانی کنند
+تا جریان صحیح ترافیک gRPC تضمین شود.</p>
+<p dir="rtl">یک نمونهٔ معمول از GRPCRoute:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: gateway.networking.k8s.io/v1
+kind: GRPCRoute
+metadata:
+  name: example-grpcroute
+spec:
+  parentRefs:
+  - name: example-gateway
+  hostnames:
+  - "svc.example.com"
+  rules:
+  - backendRefs:
+    - name: example-svc
+      port: 50051
+</code></pre>
+<p dir="rtl">در این نمونه، ترافیک gRPC از Gateway ‏<code dir="ltr">example-gateway</code> که host آن روی <code dir="ltr">svc.example.com</code> تنظیم شده باشد،
+به سرویس <code dir="ltr">example-svc</code> روی پورت <code dir="ltr">50051</code> در همان فضای نام هدایت می‌شود.</p>
+<p dir="rtl">GRPCRoute امکان تطبیق سرویس‌های gRPC مشخص را فراهم می‌کند، مطابق نمونهٔ زیر:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: gateway.networking.k8s.io/v1
+kind: GRPCRoute
+metadata:
+  name: example-grpcroute
+spec:
+  parentRefs:
+  - name: example-gateway
+  hostnames:
+  - "svc.example.com"
+  rules:
+  - matches:
+    - method:
+        service: com.example
+        method: Login
+    backendRefs:
+    - name: foo-svc
+      port: 50051
+</code></pre>
+<p dir="rtl">در این حالت، GRPCRoute با هر ترافیکی برای svc.example.com مطابقت پیدا می‌کند و قواعد مسیریابی خود را
+برای ارسال ترافیک به backend درست اعمال می‌کند. از آنجا که تنها یک تطبیق تعیین شده است، تنها درخواست‌های
+مربوط به متد com.example.User.Login به svc.example.com ارسال خواهند شد.
+RPCهای مربوط به هر متد دیگری با این Route مطابقت پیدا نخواهند کرد.</p>
+<p dir="rtl">برای تعریف کامل این نوع API، مرجع <a href="https://gateway-api.sigs.k8s.io/references/spec/#grpcroute" target="_blank" rel="noopener">GRPCRoute</a>
+را ببینید.</p>
+<h2 id="جریان-درخواست" dir="rtl">جریان درخواست</h2>
+<p dir="rtl">در اینجا یک نمونهٔ ساده از ترافیک HTTP آمده است که با استفاده از یک Gateway و یک HTTPRoute به یک Service هدایت می‌شود:</p>
+<figure><img src="https://kubernetes.io/docs/images/gateway-request-flow.svg" alt="نموداری که نمونه‌ای از هدایت ترافیک HTTP به یک Service با استفاده از یک Gateway و یک HTTPRoute را نشان می‌دهد"><figcaption dir="rtl">نموداری که نمونه‌ای از هدایت ترافیک HTTP به یک Service با استفاده از یک Gateway و یک HTTPRoute را نشان می‌دهد</figcaption></figure>
+<p dir="rtl">در این نمونه، جریان درخواست برای Gatewayای که به‌صورت reverse proxy پیاده‌سازی شده، به این شرح است:</p>
+<ol>
+<li dir="rtl">کلاینت شروع به آماده‌سازی یک درخواست HTTP برای URL ‏<code dir="ltr">http://www.example.com</code> می‌کند</li>
+<li dir="rtl">resolver مربوط به DNS در کلاینت، نام مقصد را پرس‌وجو می‌کند و نگاشتی به
+یک یا چند نشانی IP مرتبط با Gateway به دست می‌آورد.</li>
+<li dir="rtl">کلاینت درخواستی به نشانی IP مربوط به Gateway ارسال می‌کند؛ reverse proxy درخواست HTTP را
+دریافت می‌کند و با استفاده از هدر Host: آن را با پیکربندی‌ای تطبیق می‌دهد که از Gateway
+و HTTPRoute متصل‌شده به دست آمده است.</li>
+<li dir="rtl">به‌صورت اختیاری، reverse proxy می‌تواند بر اساس قواعد تطبیق HTTPRoute،
+تطبیق هدر درخواست و/یا مسیر را انجام دهد.</li>
+<li dir="rtl">به‌صورت اختیاری، reverse proxy می‌تواند درخواست را بر اساس قواعد فیلتر HTTPRoute تغییر دهد؛
+برای مثال، هدرهایی را اضافه یا حذف کند.</li>
+<li dir="rtl">در پایان، reverse proxy درخواست را به یک یا چند backend ارسال می‌کند.</li>
+</ol>
+<h2 id="انطباق-conformance" dir="rtl">انطباق (Conformance)</h2>
+<p dir="rtl">Gateway API مجموعهٔ گسترده‌ای از قابلیت‌ها را پوشش می‌دهد و به‌طور گسترده پیاده‌سازی شده است. این ترکیب
+نیازمند تعاریف و آزمون‌های انطباق روشنی است تا اطمینان حاصل شود که API در هر جایی که استفاده می‌شود،
+تجربه‌ای یکسان ارائه می‌کند.</p>
+<p dir="rtl">برای درک جزئیاتی مانند کانال‌های انتشار، سطوح پشتیبانی و اجرای آزمون‌های انطباق، مستندات
+<a href="https://gateway-api.sigs.k8s.io/docs/concepts/conformance/" target="_blank" rel="noopener">انطباق</a> را ببینید.</p>
+<h2 id="مهاجرت-از-ingress" dir="rtl">مهاجرت از Ingress</h2>
+<p dir="rtl">Gateway API جانشین API مربوط به <a href="ingress.html">Ingress</a> است.
+با این حال، نوع Ingress را در بر ندارد. در نتیجه، یک تبدیل یک‌باره از منابع Ingress موجود شما
+به منابع Gateway API ضروری است.</p>
+<p dir="rtl">برای جزئیات مهاجرت منابع Ingress به منابع Gateway API، به راهنمای
+<a href="https://gateway-api.sigs.k8s.io/guides/getting-started/migrating-from-ingress" target="_blank" rel="noopener">مهاجرت از ingress</a> مراجعه کنید.</p>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<p dir="rtl">به‌جای آنکه منابع Gateway API به‌صورت بومی توسط کوبرنتیز پیاده‌سازی شوند، مشخصات آن‌ها
+به‌صورت <a href="../extend-kubernetes/api-extension/custom-resources.html">منابع سفارشی</a>
+تعریف شده‌اند که طیف گسترده‌ای از <a href="https://gateway-api.sigs.k8s.io/implementations/" target="_blank" rel="noopener">پیاده‌سازی‌ها</a> از آن‌ها پشتیبانی می‌کنند.
+CRDهای Gateway API را <a href="https://gateway-api.sigs.k8s.io/guides/#installing-gateway-api" target="_blank" rel="noopener">نصب کنید</a> یا
+دستورالعمل‌های نصب پیاده‌سازی انتخابی خود را دنبال کنید. پس از نصب یک
+پیاده‌سازی، از راهنمای <a href="https://gateway-api.sigs.k8s.io/guides/" target="_blank" rel="noopener">شروع به کار</a> استفاده کنید تا
+به‌سرعت کار با Gateway API را آغاز کنید.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">حتماً مستندات پیاده‌سازی انتخابی خود را مرور کنید تا از هرگونه نکتهٔ احتیاطی آگاه شوید.</p>
+</div>
+<p dir="rtl">برای جزئیات بیشتر دربارهٔ همهٔ انواع Gateway API، به <a href="https://gateway-api.sigs.k8s.io/reference/api-spec/main/spec/" target="_blank" rel="noopener">مشخصات API</a>
+مراجعه کنید.</p>
+</main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#اصول-طراحی">اصول طراحی</a><a class="l2" href="#مدل-منابع">مدل منابع</a><a class="l3" href="#gatewayclass-api-kind-gateway-class">GatewayClass {#api-kind-gateway-class}</a><a class="l3" href="#gateway-api-kind-gateway">Gateway {#api-kind-gateway}</a><a class="l3" href="#httproute-api-kind-httproute">HTTPRoute {#api-kind-httproute}</a><a class="l3" href="#grpcroute-api-kind-grpcroute">GRPCRoute {#api-kind-grpcroute}</a><a class="l2" href="#جریان-درخواست">جریان درخواست</a><a class="l2" href="#انطباق-conformance">انطباق (Conformance)</a><a class="l2" href="#مهاجرت-از-ingress">مهاجرت از Ingress</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>

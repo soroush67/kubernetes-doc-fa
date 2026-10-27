@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>اختلال و اولویت گروه Pod | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+</head>
+<body>
+<header class="top"><a href="../../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">concepts / workloads / workload-api</span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">اختلال و اولویت گروه Pod</h1><!-- overview -->
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
+<p dir="rtl">PodGroup می‌تواند یک حالت اختلال (disruption mode) اعلام کند. این حالت تعیین می‌کند که
+زمان‌بند چگونه می‌تواند یک PodGroup در حال اجرا را دچار اختلال کند، برای مثال برای جادادن
+یک PodGroup با اولویت بالاتر. یک PodGroup همچنین یک اولویت دارد
+که در رویدادهای <a href="../../scheduling-eviction/workload-aware-preemption.html">پس‌گیری آگاه از بار کاری</a>
+بر اولویت تک‌تک Podهای آن گروه مقدم است.</p>
+<!-- body -->
+<h2 id="انواع-حالت-اختلال" dir="rtl">انواع حالت اختلال</h2>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">در v1.36، فیلدهای <code dir="ltr">priority</code> یا <code dir="ltr">disruptionMode</code> آن PodGroup تنها
+در <a href="../../scheduling-eviction/workload-aware-preemption.html">پس‌گیری آگاه از بار کاری</a> رعایت می‌شوند.
+در مرحله‌ی زمان‌بندی Pod، زمان‌بند فیلدهای <code dir="ltr">priority</code> یا <code dir="ltr">disruptionMode</code>
+آن PodGroup را در نظر نمی‌گیرد. این محدودیت در v1.37 دیگر
+وجود ندارد.</p>
+</div>
+<p dir="rtl">API از دو حالت اختلال پشتیبانی می‌کند: <code dir="ltr">Single</code> و <code dir="ltr">All</code>.
+حالت پیش‌فرض <code dir="ltr">Single</code> است.</p>
+<h3 id="single" dir="ltr" class="ltr">Single</h3>
+<p dir="rtl">حالت <code dir="ltr">Single</code> به زمان‌بند دستور می‌دهد با همه‌ی Podهای گروه به‌عنوان موجودیت‌های جداگانه رفتار کند
+و اجازه می‌دهد یک Pod از یک PodGroup به‌طور مستقل دچار اختلال شود.</p>
+<h3 id="all" dir="ltr" class="ltr">All</h3>
+<p dir="rtl">حالت <code dir="ltr">All</code> بر معنای «همه یا هیچ» برای اختلال تأکید دارد.
+این حالت به زمان‌بند اعلام می‌کند که همه‌ی Podهای آن PodGroup باید با هم دچار اختلال شوند.</p>
+<h2 id="compositepodgroup" dir="ltr" class="ltr">CompositePodGroup</h2>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
+<p dir="rtl">یک <code dir="ltr">CompositePodGroup</code> نیز می‌تواند در مشخصات خود یک <code dir="ltr">disruptionMode</code> اعلام کند که کنترل می‌کند
+زمان‌بند در رویدادهای پس‌گیری، گروه‌های فرزند درون گروه مرکب را چگونه دچار اختلال کند.</p>
+<p dir="rtl">API از دو حالت اختلال برای <code dir="ltr">CompositePodGroups</code> پشتیبانی می‌کند:</p>
+<ul>
+<li dir="rtl"><strong><code dir="ltr">Single</code></strong>: اجازه می‌دهد تک‌تک گروه‌های فرزند درون <code dir="ltr">CompositePodGroup</code> در هنگام پس‌گیری
+به‌طور مستقل دچار اختلال شوند.</li>
+<li dir="rtl"><strong><code dir="ltr">All</code></strong>: معنای اختلال همه یا هیچ را در سراسر سلسله‌مراتب <code dir="ltr">CompositePodGroup</code> اعمال می‌کند.
+اگر هر Podی که در سلسله‌مراتب زیر این <code dir="ltr">CompositePodGroup</code> قرار دارد باید پس گرفته شود، همه‌ی
+Podهای کل سلسله‌مراتب باید پس گرفته شوند.</li>
+</ul>
+<p dir="rtl">اگر حالتی تعیین نشود، حالت پیش‌فرض <code dir="ltr">Single</code> است.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">در v1.37، یک گروه می‌تواند حالت اختلال خود را روی <code dir="ltr">All</code> تنظیم کند و گروه‌های فرزندی داشته باشد که حالت آن‌ها
+<code dir="ltr">Single</code> است. در چنین حالتی، حالت <code dir="ltr">All</code> سطح بالا بر حالت‌های <code dir="ltr">Single</code> نوادگان مقدم است.</p>
+<p dir="rtl">به دلیل مبهم بودن معنای این پیکربندی، استفاده از آن توصیه نمی‌شود.</p>
+</div>
+<h2 id="اولویت-گروه-pod" dir="rtl">اولویت گروه Pod</h2>
+<p dir="rtl">PodGroup از همان مفهوم <a href="https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/#priorityclass" target="_blank">PriorityClass</a> استفاده می‌کند که Podهای منفرد استفاده می‌کنند.
+پس از آنکه یک یا چند PriorityClass ایجاد کردید،
+می‌توانید یک PodGroup ایجاد کنید که یکی از این نام‌های PriorityClass را در مشخصات خود تعیین کند.
+کنترل‌کننده‌ی پذیرش اولویت (priority admission controller) از فیلد <code dir="ltr">priorityClassName</code> استفاده می‌کند و مقدار عددی اولویت را پر می‌کند.
+اگر کلاس اولویت یافت نشود، آن PodGroup رد می‌شود.
+هنگامی که <code dir="ltr">priorityClassName</code> برای یک PodGroup تنظیم نشده باشد، کوبرنتیز به دنبال یک مقدار پیش‌فرض می‌گردد (یک PriorityClass که <code dir="ltr">globalDefault</code> آن روی true تنظیم شده است).
+اگر هیچ PriorityClassی با <code dir="ltr">globalDefault</code> برابر true وجود نداشته باشد، PodGroupی که <code dir="ltr">priorityClassName</code> ندارد اولویت صفر خواهد داشت.</p>
+<p dir="rtl">اولویت PodGroup در رویدادهای <a href="../../scheduling-eviction/workload-aware-preemption.html">پس‌گیری آگاه از بار کاری</a> اولویت مرجع برای همه‌ی Podهای گروه است.
+این مقدار همچنین برای مرتب‌سازی PodGroupها در صف زمان‌بندی استفاده می‌شود.
+هنگامی که اولویت تک‌تک Podهای تشکیل‌دهنده‌ی این PodGroup با اولویت PodGroup متفاوت باشد،
+آن PodGroup با خطای <code dir="ltr">all pods in a single pod group should have the same priority as the pod group</code> زمان‌بندی نمی‌شود.</p>
+<p dir="rtl">هنگامی که feature gate <a href="https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/podgroup-preemption-policy/" target="_blank">PodGroupPreemptionPolicy</a>
+فعال باشد، PodGroup فیلد <code dir="ltr">preemptionPolicy</code> را نیز دارد. این فیلد نیز از PriorirtyClass گرفته می‌شود.
+این فیلد برای همه‌ی Podهای گروه مرجع است و تعیین می‌کند که آیا PodGroup می‌تواند Podها و گروه‌های Pod با
+اولویت پایین‌تر را پس بگیرد تا برای خود جا باز کند یا خیر. هنگامی که این feature gate فعال باشد، همه‌ی Podهای آن PodGroup
+باید همان <code dir="ltr">preemptionPolicy</code> آن PodGroup را داشته باشند. در غیر این صورت، آن PodGroup با خطای
+<code dir="ltr">all pods in a single pod group should have the same preemption policy as the pod group's preemption policy</code> زمان‌بندی نمی‌شود.
+هنگامی که PodGroup دارای <code dir="ltr">preemptionPolicy: Never</code> باشد، پس‌گیری آگاه از بار کاری را انجام نمی‌دهد.
+اگر این feature flag غیرفعال باشد، همه‌ی Podهای تشکیل‌دهنده‌ی PodGroup باید <code dir="ltr">preemptionPolicy</code> یکسانی داشته باشند.
+در غیر این صورت، آن PodGroup با خطای
+<code dir="ltr">all pods in a single pod group should have the same preemption policy</code> زمان‌بندی نمی‌شود.</p>
+<p dir="rtl">YAML زیر نمونه‌ای از پیکربندی یک PodGroup است که از PriorityClass با نام <code dir="ltr">high-priority</code> استفاده می‌کند،
+که به مقدار عددی اولویت 1000000 نگاشت می‌شود.
+کنترل‌کننده‌ی پذیرش اولویت مشخصات را بررسی می‌کند و اولویت PodGroup را 1000000 تعیین می‌کند.</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: scheduling.k8s.io/v1beta1
+kind: PodGroup
+metadata:
+  namespace: ns-1
+  name: job-1
+spec:
+  priorityClassName: high-priority
+</code></pre>
+<h3 id="اولویت-compositepodgroup" dir="rtl">اولویت CompositePodGroup</h3>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
+<p dir="rtl">API مربوط به <code dir="ltr">CompositePodGroup</code> نیز فیلدهای <code dir="ltr">priorityClassName</code> و <code dir="ltr">priority</code> را دارد و مقدار آن‌ها
+به همان روشی که برای <code dir="ltr">PodGroups</code> انجام می‌شود، از طریق کنترل‌کننده‌ی پذیرش اولویت تعیین می‌شود.</p>
+<p dir="rtl">اولویت یک <code dir="ltr">CompositePodGroup</code> ریشه در رویدادهای
+<a href="../../scheduling-eviction/workload-aware-preemption.html">پس‌گیری آگاه از بار کاری</a>
+به‌عنوان اولویت مرجع برای همه‌ی گروه‌های فرزند و Podهای درون سلسله‌مراتب آن عمل می‌کند.
+همه‌ی Podهای درون یک سلسله‌مراتب گروه باید دقیقاً اولویت یکسانی داشته باشند و این اولویت باید با
+اولویت <code dir="ltr">CompositePodGroup</code> ریشه برابر باشد.</p>
+<p dir="rtl">مقدار اولویت همچنین برای مرتب‌سازی <code dir="ltr">CompositePodGroups</code> ریشه در صف فعال
+زمان‌بندی استفاده می‌شود.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">در v1.37، زمان‌بند بررسی نمی‌کند که آیا گروه‌های غیرریشه مقدار اولویتی برابر با
+اولویت <code dir="ltr">CompositePodGroup</code> ریشه دارند یا خیر.</p>
+</div>
+<h3 id="preemptionpolicy-در-compositepodgroup" dir="rtl">PreemptionPolicy در CompositePodGroup</h3>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
+<p dir="rtl">API مربوط به <code dir="ltr">CompositePodGroup</code> فیلد <code dir="ltr">preemptionPolicy</code> را نیز دارد و مقدار آن دقیقاً
+به همان روشی که برای API مربوط به <code dir="ltr">PodGroup</code> انجام می‌شود تعیین می‌گردد.</p>
+<p dir="rtl">مقدار <code dir="ltr">preemptionPolicy</code> در <code dir="ltr">CompositePodGroup</code> ریشه تعیین می‌کند که آیا
+<a href="../../scheduling-eviction/workload-aware-preemption.html">پس‌گیری آگاه از بار کاری</a> می‌تواند
+در صورت نیاز در هنگام زمان‌بندی برای جادادن Podهای آن فراخوانی شود یا خیر:</p>
+<ul>
+<li dir="rtl">سیاست <code dir="ltr">PreemptLowerPriority</code> اجازه‌ی پس‌گرفتن قربانیانی با اولویت پایین‌تر را می‌دهد،</li>
+<li dir="rtl">سیاست <code dir="ltr">Never</code> پس‌گیری آگاه از بار کاری را برای آن <code dir="ltr">CompositePodGroup</code> ریشه غیرفعال می‌کند.</li>
+</ul>
+<p dir="rtl">همه‌ی Podهای درون یک سلسله‌مراتب گروه باید دقیقاً سیاست پس‌گیری یکسانی داشته باشند که باید
+با سیاست پس‌گیری <code dir="ltr">CompositePodGroup</code> ریشه برابر باشد.</p>
+<p dir="rtl">اگر این feature flag غیرفعال باشد، <code dir="ltr">CompositePodGroup</code> ریشه مجاز به انجام پس‌گیری خواهد بود،
+مگر آنکه یکی از Podهای متعلق به سلسله‌مراتب گروه، <code dir="ltr">preemptionPolicy</code> را روی <code dir="ltr">Never</code> تنظیم کرده باشد.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">در v1.37، هنگامی که این feature gate فعال باشد، زمان‌بند بررسی نمی‌کند که آیا گروه‌های غیرریشه
+سیاست پس‌گیری‌ای برابر با سیاست پس‌گیری <code dir="ltr">CompositePodGroup</code> ریشه دارند یا خیر.</p>
+</div>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<ul>
+<li dir="rtl">درباره‌ی الگوریتم <a href="../../scheduling-eviction/workload-aware-preemption.html">پس‌گیری آگاه از بار کاری</a> بخوانید.</li>
+<li dir="rtl">درباره‌ی <a href="index.html">Workload API</a> بیاموزید.</li>
+<li dir="rtl">درباره‌ی <a href="workloadbuilder.html">بلوک‌های سازنده‌ی زمان‌بندی و کتابخانه‌ی workloadbuilder</a>، از جمله بلوک سازنده‌ی حالت اختلال، بیاموزید.</li>
+</ul>
+</main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#انواع-حالت-اختلال">انواع حالت اختلال</a><a class="l3" href="#single">Single</a><a class="l3" href="#all">All</a><a class="l2" href="#compositepodgroup">CompositePodGroup</a><a class="l2" href="#اولویت-گروه-pod">اولویت گروه Pod</a><a class="l3" href="#اولویت-compositepodgroup">اولویت CompositePodGroup</a><a class="l3" href="#preemptionpolicy-در-compositepodgroup">PreemptionPolicy در CompositePodGroup</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>

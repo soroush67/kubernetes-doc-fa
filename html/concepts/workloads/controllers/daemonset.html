@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DaemonSet | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+</head>
+<body>
+<header class="top"><a href="../../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">concepts / workloads / controllers</span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="ltr" class="ltr">DaemonSet</h1><p class="page-meta" dir="rtl">یک DaemonSet، Podهایی را تعریف می‌کند که امکاناتی محلی برای نود فراهم می‌کنند. این امکانات ممکن است برای عملکرد کلاستر شما بنیادی باشند، مانند یک ابزار کمکی شبکه، یا بخشی از یک افزونه باشند.</p><!-- overview -->
+<p dir="rtl">یک <em>DaemonSet</em> اطمینان حاصل می‌کند که همه‌ی نودها (یا برخی از آن‌ها) یک نسخه از یک Pod را اجرا کنند. با افزوده شدن نودها به
+کلاستر، Podها نیز به آن‌ها افزوده می‌شوند. با حذف نودها از کلاستر، آن Podها توسط جمع‌آوری زباله
+حذف می‌شوند. حذف یک DaemonSet، Podهایی را که ایجاد کرده است پاک‌سازی می‌کند.</p>
+<p dir="rtl">برخی از کاربردهای معمول DaemonSet عبارت‌اند از:</p>
+<ul>
+<li dir="rtl">اجرای یک daemon ذخیره‌سازی کلاستر روی هر نود</li>
+<li dir="rtl">اجرای یک daemon جمع‌آوری لاگ روی هر نود</li>
+<li dir="rtl">اجرای یک daemon پایش نود روی هر نود</li>
+</ul>
+<p dir="rtl">در یک حالت ساده، برای هر نوع daemon از یک DaemonSet که همه‌ی نودها را پوشش می‌دهد استفاده می‌شود.
+یک پیکربندی پیچیده‌تر ممکن است برای یک نوع daemon از چند DaemonSet استفاده کند، اما با
+flagهای متفاوت و/یا درخواست‌های حافظه و cpu متفاوت برای انواع مختلف سخت‌افزار.</p>
+<!-- body -->
+<h2 id="نوشتن-spec-یک-daemonset" dir="rtl">نوشتن spec یک DaemonSet</h2>
+<h3 id="ایجاد-یک-daemonset" dir="rtl">ایجاد یک DaemonSet</h3>
+<p dir="rtl">می‌توانید یک DaemonSet را در یک فایل YAML توصیف کنید. برای مثال، فایل <code dir="ltr">daemonset.yaml</code> زیر
+یک DaemonSet را توصیف می‌کند که ایمیج Docker مربوط به fluentd-elasticsearch را اجرا می‌کند:</p>
+<div class="code-file ltr" dir="ltr">controllers/daemonset.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: fluentd-elasticsearch
+  namespace: kube-system
+  labels:
+    k8s-app: fluentd-logging
+spec:
+  selector:
+    matchLabels:
+      name: fluentd-elasticsearch
+  template:
+    metadata:
+      labels:
+        name: fluentd-elasticsearch
+    spec:
+      tolerations:
+      # these tolerations are to have the daemonset runnable on control plane nodes
+      # remove them if your control plane nodes should not run pods
+      - key: node-role.kubernetes.io/control-plane
+        operator: Exists
+        effect: NoSchedule
+      - key: node-role.kubernetes.io/master
+        operator: Exists
+        effect: NoSchedule
+      containers:
+      - name: fluentd-elasticsearch
+        image: quay.io/fluentd_elasticsearch/fluentd:v5.0.1
+        resources:
+          limits:
+            memory: 200Mi
+          requests:
+            cpu: 100m
+            memory: 200Mi
+        volumeMounts:
+        - name: varlog
+          mountPath: /var/log
+      # it may be desirable to set a high priority class to ensure that a DaemonSet Pod
+      # preempts running Pods
+      # priorityClassName: important
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - name: varlog
+        hostPath:
+          path: /var/log
+</code></pre>
+<p dir="rtl">یک DaemonSet بر اساس فایل YAML ایجاد کنید:</p>
+<pre dir="ltr"><code dir="ltr">kubectl apply -f https://k8s.io/examples/controllers/daemonset.yaml
+</code></pre>
+<h3 id="فیلدهای-الزامی" dir="rtl">فیلدهای الزامی</h3>
+<p dir="rtl">همانند همه‌ی پیکربندی‌های دیگر کوبرنتیز، یک DaemonSet به فیلدهای <code dir="ltr">apiVersion</code>، <code dir="ltr">kind</code> و <code dir="ltr">metadata</code> نیاز دارد. برای
+اطلاعات کلی درباره‌ی کار با فایل‌های پیکربندی، به
+<a href="https://kubernetes.io/docs/tasks/run-application/run-stateless-application-deployment/" target="_blank">اجرای برنامه‌های بی‌حالت</a>
+و <a href="../../overview/working-with-objects/object-management.html">مدیریت آبجکت با استفاده از kubectl</a> مراجعه کنید.</p>
+<p dir="rtl">نام یک آبجکت DaemonSet باید یک
+<a href="../../overview/working-with-objects/names.html#dns-subdomain-names">نام زیردامنه‌ی DNS</a> معتبر باشد.</p>
+<p dir="rtl">یک DaemonSet همچنین به یک بخش
+<a href="https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status" target="_blank" rel="noopener"><code dir="ltr">.spec</code></a>
+نیاز دارد.</p>
+<h3 id="قالب-pod" dir="rtl">قالب Pod</h3>
+<p dir="rtl"><code dir="ltr">.spec.template</code> یکی از فیلدهای الزامی در <code dir="ltr">.spec</code> است.</p>
+<p dir="rtl"><code dir="ltr">.spec.template</code> یک <a href="https://kubernetes.io/docs/concepts/workloads/pods/#pod-templates" target="_blank">قالب Pod</a> است.
+این قالب دقیقاً همان شِمای یک <span class="term" title="pod">Pod</span> را دارد،
+با این تفاوت که تودرتو است و <code dir="ltr">apiVersion</code> یا <code dir="ltr">kind</code> ندارد.</p>
+<p dir="rtl">علاوه بر فیلدهای الزامی یک Pod، قالب Pod در یک DaemonSet باید برچسب‌های مناسبی
+مشخص کند (به <a href="#pod-selector">انتخابگر Pod</a> مراجعه کنید).</p>
+<p dir="rtl">قالب Pod در یک DaemonSet باید <a href="https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#restart-policy" target="_blank"><code dir="ltr">RestartPolicy</code></a>ای
+برابر با <code dir="ltr">Always</code> داشته باشد، یا مشخص نشده باشد که در این صورت پیش‌فرض آن <code dir="ltr">Always</code> است.</p>
+<h3 id="انتخابگر-pod" dir="rtl">انتخابگر Pod</h3>
+<p dir="rtl">فیلد <code dir="ltr">.spec.selector</code> یک انتخابگر (selector) Pod است. این فیلد همانند <code dir="ltr">.spec.selector</code> یک
+<a href="https://kubernetes.io/docs/concepts/workloads/controllers/job/" target="_blank">Job</a> عمل می‌کند.</p>
+<p dir="rtl">باید یک انتخابگر Pod مشخص کنید که با برچسب‌های
+<code dir="ltr">.spec.template</code> مطابقت داشته باشد.
+همچنین، پس از ایجاد یک DaemonSet،
+<code dir="ltr">.spec.selector</code> آن قابل تغییر نیست. تغییر انتخابگر Pod می‌تواند به
+یتیم شدن ناخواسته‌ی Podها منجر شود و مشخص شد که برای کاربران گیج‌کننده است.</p>
+<p dir="rtl"><code dir="ltr">.spec.selector</code> یک آبجکت متشکل از دو فیلد است:</p>
+<ul>
+<li dir="rtl"><code dir="ltr">matchLabels</code> - همانند <code dir="ltr">.spec.selector</code> یک
+<a href="replicationcontroller.html">ReplicationController</a> عمل می‌کند.</li>
+<li dir="rtl"><code dir="ltr">matchExpressions</code> - امکان ساخت انتخابگرهای پیچیده‌تر را با مشخص کردن کلید،
+فهرست مقادیر و عملگری که کلید و مقادیر را به هم مرتبط می‌کند فراهم می‌کند.</li>
+</ul>
+<p dir="rtl">هنگامی که هر دو مشخص شوند، نتیجه حاصل AND آن‌هاست.</p>
+<p dir="rtl"><code dir="ltr">.spec.selector</code> باید با <code dir="ltr">.spec.template.metadata.labels</code> مطابقت داشته باشد.
+پیکربندی‌ای که این دو در آن با هم مطابقت نداشته باشند توسط API رد می‌شود.</p>
+<h3 id="اجرای-podها-روی-نودهای-انتخاب-شده" dir="rtl">اجرای Podها روی نودهای انتخاب‌شده</h3>
+<p dir="rtl">اگر <code dir="ltr">.spec.template.spec.nodeSelector</code> را مشخص کنید، کنترل‌کننده‌ی DaemonSet
+Podها را روی نودهایی ایجاد می‌کند که با آن <a href="../../scheduling-eviction/assign-pod-node.html">انتخابگر نود</a> مطابقت دارند.
+به همین ترتیب، اگر <code dir="ltr">.spec.template.spec.affinity</code> را مشخص کنید،
+کنترل‌کننده‌ی DaemonSet Podها را روی نودهایی ایجاد می‌کند که با آن
+<a href="../../scheduling-eviction/assign-pod-node.html">وابستگی نود (node affinity)</a> مطابقت دارند.
+اگر هیچ‌کدام را مشخص نکنید، کنترل‌کننده‌ی DaemonSet Podها را روی همه‌ی نودها ایجاد می‌کند.</p>
+<h2 id="podهای-daemon-چگونه-زمان-بندی-می-شوند" dir="rtl">Podهای Daemon چگونه زمان‌بندی می‌شوند</h2>
+<p dir="rtl">از یک DaemonSet می‌توان برای اطمینان از اینکه همه‌ی نودهای واجد شرایط یک نسخه از یک Pod را اجرا می‌کنند استفاده کرد.
+کنترل‌کننده‌ی DaemonSet برای هر نود واجد شرایط یک Pod ایجاد می‌کند و فیلد
+<code dir="ltr">spec.affinity.nodeAffinity</code> آن Pod را برای مطابقت با میزبان هدف اضافه می‌کند. پس از
+ایجاد Pod، معمولاً زمان‌بند پیش‌فرض کار را بر عهده می‌گیرد و سپس
+Pod را با تنظیم فیلد <code dir="ltr">.spec.nodeName</code> به میزبان هدف متصل (bind) می‌کند. اگر Pod
+جدید روی نود جا نشود، زمان‌بند پیش‌فرض ممکن است بر اساس
+<a href="https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/#pod-priority" target="_blank">اولویت</a>
+Pod جدید، برخی از Podهای موجود را پیش‌دستی (بیرون‌رانی) کند.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">اگر اجرای Pod مربوط به DaemonSet روی هر نود اهمیت دارد، اغلب مطلوب است که
+<code dir="ltr">.spec.template.spec.priorityClassName</code> مربوط به DaemonSet را روی یک
+<a href="https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/#priorityclass" target="_blank">PriorityClass</a>
+با اولویت بالاتر تنظیم کنید تا اطمینان حاصل شود که این بیرون‌رانی رخ می‌دهد.</p>
+</div>
+<p dir="rtl">کاربر می‌تواند با تنظیم فیلد <code dir="ltr">.spec.template.spec.schedulerName</code> در DaemonSet،
+زمان‌بند متفاوتی برای Podهای DaemonSet مشخص کند.</p>
+<p dir="rtl">وابستگی نود اصلی که در فیلد
+<code dir="ltr">.spec.template.spec.affinity.nodeAffinity</code> مشخص شده است (در صورت مشخص شدن)، توسط
+کنترل‌کننده‌ی DaemonSet هنگام ارزیابی نودهای واجد شرایط در نظر گرفته می‌شود،
+اما در Pod ایجادشده با وابستگی نودی جایگزین می‌شود که با نام
+نود واجد شرایط مطابقت دارد.</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">nodeAffinity:
+  requiredDuringSchedulingIgnoredDuringExecution:
+    nodeSelectorTerms:
+    - matchFields:
+      - key: metadata.name
+        operator: In
+        values:
+        - target-host-name
+</code></pre>
+<h3 id="taintها-و-tolerationها" dir="rtl">Taintها و tolerationها</h3>
+<p dir="rtl">کنترل‌کننده‌ی DaemonSet به‌طور خودکار مجموعه‌ای از <span class="term" title="toleration">tolerationها</span> را به Podهای DaemonSet اضافه می‌کند:</p>
+<table>
+<thead>
+<tr>
+<th dir="rtl">کلید toleration</th>
+<th dir="rtl">اثر</th>
+<th dir="rtl">جزئیات</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td dir="ltr" class="ltr"><a href="https://kubernetes.io/docs/reference/labels-annotations-taints/#node-kubernetes-io-not-ready" target="_blank"><code dir="ltr">node.kubernetes.io/not-ready</code></a></td>
+<td dir="ltr" class="ltr"><code dir="ltr">NoExecute</code></td>
+<td dir="rtl">Podهای DaemonSet را می‌توان روی نودهایی زمان‌بندی کرد که سالم نیستند یا برای پذیرش Podها آماده نیستند. هیچ‌یک از Podهای DaemonSet که روی چنین نودهایی در حال اجرا هستند بیرون رانده نمی‌شوند.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><a href="https://kubernetes.io/docs/reference/labels-annotations-taints/#node-kubernetes-io-unreachable" target="_blank"><code dir="ltr">node.kubernetes.io/unreachable</code></a></td>
+<td dir="ltr" class="ltr"><code dir="ltr">NoExecute</code></td>
+<td dir="rtl">Podهای DaemonSet را می‌توان روی نودهایی زمان‌بندی کرد که از سوی کنترل‌کننده‌ی نود قابل دسترسی نیستند. هیچ‌یک از Podهای DaemonSet که روی چنین نودهایی در حال اجرا هستند بیرون رانده نمی‌شوند.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><a href="https://kubernetes.io/docs/reference/labels-annotations-taints/#node-kubernetes-io-disk-pressure" target="_blank"><code dir="ltr">node.kubernetes.io/disk-pressure</code></a></td>
+<td dir="ltr" class="ltr"><code dir="ltr">NoSchedule</code></td>
+<td dir="rtl">Podهای DaemonSet را می‌توان روی نودهایی با مشکل فشار دیسک زمان‌بندی کرد.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><a href="https://kubernetes.io/docs/reference/labels-annotations-taints/#node-kubernetes-io-memory-pressure" target="_blank"><code dir="ltr">node.kubernetes.io/memory-pressure</code></a></td>
+<td dir="ltr" class="ltr"><code dir="ltr">NoSchedule</code></td>
+<td dir="rtl">Podهای DaemonSet را می‌توان روی نودهایی با مشکل فشار حافظه زمان‌بندی کرد.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><a href="https://kubernetes.io/docs/reference/labels-annotations-taints/#node-kubernetes-io-pid-pressure" target="_blank"><code dir="ltr">node.kubernetes.io/pid-pressure</code></a></td>
+<td dir="ltr" class="ltr"><code dir="ltr">NoSchedule</code></td>
+<td dir="rtl">Podهای DaemonSet را می‌توان روی نودهایی با مشکل فشار فرایند زمان‌بندی کرد.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><a href="https://kubernetes.io/docs/reference/labels-annotations-taints/#node-kubernetes-io-unschedulable" target="_blank"><code dir="ltr">node.kubernetes.io/unschedulable</code></a></td>
+<td dir="ltr" class="ltr"><code dir="ltr">NoSchedule</code></td>
+<td dir="rtl">Podهای DaemonSet را می‌توان روی نودهایی زمان‌بندی کرد که غیرقابل زمان‌بندی هستند.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><a href="https://kubernetes.io/docs/reference/labels-annotations-taints/#node-kubernetes-io-network-unavailable" target="_blank"><code dir="ltr">node.kubernetes.io/network-unavailable</code></a></td>
+<td dir="ltr" class="ltr"><code dir="ltr">NoSchedule</code></td>
+<td dir="rtl"><strong>فقط برای Podهای DaemonSet که شبکه‌ی میزبان را درخواست می‌کنند اضافه می‌شود</strong>، یعنی Podهایی که <code dir="ltr">spec.hostNetwork: true</code> دارند. چنین Podهای DaemonSet را می‌توان روی نودهایی با شبکه‌ی در دسترس نبودن زمان‌بندی کرد.</td>
+</tr>
+</tbody>
+</table>
+<p dir="rtl">همچنین می‌توانید tolerationهای خود را با تعریف آن‌ها در قالب Pod مربوط به DaemonSet،
+به Podهای آن DaemonSet اضافه کنید.</p>
+<p dir="rtl">از آنجا که کنترل‌کننده‌ی DaemonSet toleration
+<code dir="ltr">node.kubernetes.io/unschedulable:NoSchedule</code> را به‌طور خودکار تنظیم می‌کند،
+کوبرنتیز می‌تواند Podهای DaemonSet را روی نودهایی اجرا کند که به‌عنوان <em>unschedulable</em> (غیرقابل زمان‌بندی) علامت‌گذاری شده‌اند.</p>
+<p dir="rtl">اگر از یک DaemonSet برای فراهم کردن یک کارکرد مهم در سطح نود، مانند
+<a href="https://kubernetes.io/docs/concepts/cluster-administration/networking/" target="_blank">شبکه‌ی کلاستر</a>، استفاده می‌کنید،
+مفید است که کوبرنتیز Podهای DaemonSet را پیش از آماده شدن نودها روی آن‌ها قرار دهد.
+برای مثال، بدون آن toleration ویژه، ممکن است در وضعیت بن‌بستی گرفتار شوید
+که در آن نود به‌عنوان آماده علامت‌گذاری نمی‌شود، زیرا پلاگین شبکه
+روی آن اجرا نمی‌شود، و در همان حال پلاگین شبکه روی آن نود اجرا نمی‌شود، زیرا نود هنوز آماده نیست.</p>
+<h2 id="ارتباط-با-podهای-daemon" dir="rtl">ارتباط با Podهای Daemon</h2>
+<p dir="rtl">برخی الگوهای ممکن برای ارتباط با Podهای یک DaemonSet عبارت‌اند از:</p>
+<ul>
+<li dir="rtl"><strong>Push</strong>: Podهای DaemonSet طوری پیکربندی می‌شوند که به‌روزرسانی‌ها را به سرویس دیگری، مانند
+یک پایگاه داده‌ی آمار، ارسال کنند. این Podها کلاینت ندارند.</li>
+<li dir="rtl"><strong>NodeIP و پورت شناخته‌شده</strong>: Podهای DaemonSet می‌توانند از <code dir="ltr">hostPort</code> استفاده کنند، به‌طوری که Podها
+از طریق IPهای نود قابل دسترسی باشند.
+کلاینت‌ها فهرست IPهای نود را به نحوی می‌دانند و پورت را بر اساس قرارداد می‌شناسند.</li>
+<li dir="rtl"><strong>DNS</strong>: یک <a href="https://kubernetes.io/docs/concepts/services-networking/service/#headless-services" target="_blank">سرویس headless</a>
+با همان انتخابگر Pod ایجاد کنید و سپس DaemonSetها را با استفاده از منبع <code dir="ltr">endpoints</code>
+کشف کنید یا چند رکورد A را از DNS بازیابی کنید.</li>
+<li dir="rtl"><strong>Service</strong>: یک سرویس با همان انتخابگر Pod ایجاد کنید و از آن سرویس برای دسترسی به
+یک daemon روی یک نود تصادفی استفاده کنید. از <a href="../../services-networking/service-traffic-policy.html">سیاست ترافیک داخلی Service</a>
+برای محدود کردن به Podهای روی همان نود استفاده کنید.</li>
+</ul>
+<h2 id="به-روزرسانی-یک-daemonset" dir="rtl">به‌روزرسانی یک DaemonSet</h2>
+<p dir="rtl">اگر برچسب‌های نود تغییر کنند، DaemonSet بی‌درنگ Podها را به نودهایی که به‌تازگی مطابقت پیدا کرده‌اند اضافه می‌کند و
+Podها را از نودهایی که دیگر مطابقت ندارند حذف می‌کند.</p>
+<p dir="rtl">می‌توانید Podهایی را که یک DaemonSet ایجاد می‌کند تغییر دهید. با این حال، Podها اجازه‌ی به‌روزرسانی همه‌ی
+فیلدها را نمی‌دهند. همچنین، کنترل‌کننده‌ی DaemonSet دفعه‌ی بعد که یک نود (حتی با همان نام)
+ایجاد شود، از قالب اصلی استفاده خواهد کرد.</p>
+<p dir="rtl">می‌توانید یک DaemonSet را حذف کنید. اگر <code dir="ltr">--cascade=orphan</code> را همراه با <code dir="ltr">kubectl</code> مشخص کنید، Podها
+روی نودها باقی می‌مانند. اگر سپس یک DaemonSet جدید با همان انتخابگر ایجاد کنید،
+DaemonSet جدید Podهای موجود را به فرزندی می‌پذیرد. اگر لازم باشد Podهایی جایگزین شوند، DaemonSet آن‌ها را
+بر اساس <code dir="ltr">updateStrategy</code> خود جایگزین می‌کند.</p>
+<p dir="rtl">می‌توانید یک <a href="https://kubernetes.io/docs/tasks/manage-daemon/update-daemon-set/" target="_blank">به‌روزرسانی تدریجی</a> روی یک DaemonSet انجام دهید.</p>
+<h2 id="جایگزین-های-daemonset" dir="rtl">جایگزین‌های DaemonSet</h2>
+<h3 id="اسکریپت-های-init" dir="rtl">اسکریپت‌های Init</h3>
+<p dir="rtl">قطعاً می‌توان فرایندهای daemon را با آغاز مستقیم آن‌ها روی یک نود اجرا کرد (برای مثال با استفاده از
+<code dir="ltr">init</code>، <code dir="ltr">upstartd</code> یا <code dir="ltr">systemd</code>). این کار کاملاً قابل‌قبول است. با این حال، اجرای چنین فرایندهایی
+از طریق یک DaemonSet چندین مزیت دارد:</p>
+<ul>
+<li dir="rtl">امکان پایش و مدیریت لاگ‌های daemonها به همان روشی که برای برنامه‌ها انجام می‌شود.</li>
+<li dir="rtl">زبان پیکربندی و ابزارهای یکسان (برای مثال قالب‌های Pod و <code dir="ltr">kubectl</code>) برای daemonها و برنامه‌ها.</li>
+<li dir="rtl">اجرای daemonها در کانتینرهایی با محدودیت منابع، جداسازی میان daemonها و کانتینرهای برنامه را
+افزایش می‌دهد. با این حال، این کار را می‌توان با اجرای daemonها در یک کانتینر، اما نه در یک Pod، نیز انجام داد.</li>
+</ul>
+<h3 id="podهای-مستقل-bare-pods" dir="rtl">Podهای مستقل (Bare Pods)</h3>
+<p dir="rtl">می‌توان Podها را مستقیماً ایجاد کرد و نود مشخصی را برای اجرای آن‌ها تعیین کرد. با این حال،
+یک DaemonSet، Podهایی را که به هر دلیلی حذف یا خاتمه یافته‌اند جایگزین می‌کند، مانند حالت
+خرابی نود یا نگهداری اخلال‌گر نود، مانند ارتقای کرنل. به همین دلیل، باید
+به‌جای ایجاد Podهای منفرد از یک DaemonSet استفاده کنید.</p>
+<h3 id="podهای-ایستا" dir="rtl">Podهای ایستا</h3>
+<p dir="rtl">می‌توان Podها را با نوشتن یک فایل در دایرکتوری مشخصی که Kubelet آن را زیر نظر دارد ایجاد کرد. این
+Podها <a href="https://kubernetes.io/docs/tasks/configure-pod-container/static-pod/" target="_blank">Podهای ایستا</a> نامیده می‌شوند.
+برخلاف DaemonSet، Podهای ایستا را نمی‌توان با kubectl
+یا سایر کلاینت‌های API کوبرنتیز مدیریت کرد. Podهای ایستا به apiserver وابسته نیستند و همین آن‌ها را
+در موارد راه‌اندازی اولیه‌ی کلاستر (bootstrapping) مفید می‌سازد. همچنین، Podهای ایستا ممکن است در آینده منسوخ شوند.</p>
+<h3 id="deploymentها" dir="rtl">Deploymentها</h3>
+<p dir="rtl">DaemonSetها از این جهت به <a href="deployment.html">Deploymentها</a> شباهت دارند که
+هر دو Pod ایجاد می‌کنند و آن Podها فرایندهایی دارند که انتظار نمی‌رود خاتمه یابند (برای مثال سرورهای وب،
+سرورهای ذخیره‌سازی).</p>
+<p dir="rtl">برای سرویس‌های بی‌حالت، مانند frontendها، از Deployment استفاده کنید؛ جایی که افزایش و کاهش
+تعداد رپلیکاها و rollout به‌روزرسانی‌ها مهم‌تر از کنترل دقیق این است که Pod روی کدام میزبان
+اجرا شود. هنگامی از DaemonSet استفاده کنید که اهمیت دارد یک نسخه از Pod همواره روی
+همه‌ی میزبان‌ها یا میزبان‌های مشخصی اجرا شود، در صورتی که DaemonSet کارکردی در سطح نود فراهم می‌کند که به سایر Podها امکان می‌دهد روی آن نود خاص به‌درستی اجرا شوند.</p>
+<p dir="rtl">برای مثال، <a href="../../extend-kubernetes/compute-storage-net/network-plugins.html">پلاگین‌های شبکه</a> اغلب شامل جزئی هستند که به‌صورت یک DaemonSet اجرا می‌شود. جزء DaemonSet اطمینان حاصل می‌کند که نودی که روی آن اجرا می‌شود شبکه‌ی کلاستر کارآمدی دارد.</p>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<ul>
+<li dir="rtl">با <a href="https://kubernetes.io/docs/concepts/workloads/pods" target="_blank">Podها</a> آشنا شوید:
+<ul>
+<li dir="rtl">با <a href="https://kubernetes.io/docs/tasks/configure-pod-container/static-pod/" target="_blank">Podهای ایستا</a> آشنا شوید که برای اجرای اجزای
+<span class="term" title="control-plane">control plane</span> کوبرنتیز مفید هستند.</li>
+</ul>
+</li>
+<li dir="rtl">نحوه‌ی استفاده از DaemonSetها را بیاموزید:
+<ul>
+<li dir="rtl"><a href="https://kubernetes.io/docs/tasks/manage-daemon/update-daemon-set/" target="_blank">انجام به‌روزرسانی تدریجی روی یک DaemonSet</a>.</li>
+<li dir="rtl"><a href="https://kubernetes.io/docs/tasks/manage-daemon/rollback-daemon-set/" target="_blank">انجام بازگشت (rollback) روی یک DaemonSet</a>
+(برای مثال، اگر یک rollout آن‌طور که انتظار داشتید کار نکرد).</li>
+</ul>
+</li>
+<li dir="rtl">بفهمید <a href="../../scheduling-eviction/assign-pod-node.html">کوبرنتیز چگونه Podها را به نودها اختصاص می‌دهد</a>.</li>
+<li dir="rtl">با <a href="../../extend-kubernetes/compute-storage-net/device-plugins.html">پلاگین‌های دستگاه</a> و
+<a href="../../cluster-administration/addons.html">افزونه‌ها</a> آشنا شوید که اغلب به‌صورت DaemonSet اجرا می‌شوند.</li>
+<li dir="rtl"><code dir="ltr">DaemonSet</code> یک منبع سطح بالا در REST API کوبرنتیز است.
+برای درک API مربوط به daemon setها، تعریف آبجکت
+را بخوانید.</li>
+</ul>
+</main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#نوشتن-spec-یک-daemonset">نوشتن spec یک DaemonSet</a><a class="l3" href="#ایجاد-یک-daemonset">ایجاد یک DaemonSet</a><a class="l3" href="#فیلدهای-الزامی">فیلدهای الزامی</a><a class="l3" href="#قالب-pod">قالب Pod</a><a class="l3" href="#انتخابگر-pod">انتخابگر Pod</a><a class="l3" href="#اجرای-podها-روی-نودهای-انتخاب-شده">اجرای Podها روی نودهای انتخاب‌شده</a><a class="l2" href="#podهای-daemon-چگونه-زمان-بندی-می-شوند">Podهای Daemon چگونه زمان‌بندی می‌شوند</a><a class="l3" href="#taintها-و-tolerationها">Taintها و tolerationها</a><a class="l2" href="#ارتباط-با-podهای-daemon">ارتباط با Podهای Daemon</a><a class="l2" href="#به-روزرسانی-یک-daemonset">به‌روزرسانی یک DaemonSet</a><a class="l2" href="#جایگزین-های-daemonset">جایگزین‌های DaemonSet</a><a class="l3" href="#اسکریپت-های-init">اسکریپت‌های Init</a><a class="l3" href="#podهای-مستقل-bare-pods">Podهای مستقل (Bare Pods)</a><a class="l3" href="#podهای-ایستا">Podهای ایستا</a><a class="l3" href="#deploymentها">Deploymentها</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>

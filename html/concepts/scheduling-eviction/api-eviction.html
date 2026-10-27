@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>بیرون‌رانی آغازشده از طریق API | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+</head>
+<body>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">concepts / scheduling-eviction</span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">بیرون‌رانی آغازشده از طریق API</h1><p dir="rtl"><em>(تعریف واژه‌نامه: api-eviction)</em> </p>
+<p dir="rtl">می‌توانید بیرون‌رانی را با فراخوانی مستقیم Eviction API یا به‌صورت برنامه‌نویسی‌شده
+با استفاده از یک کلاینت <span class="term" title="kube-apiserver">سرور API</span>، مانند فرمان <code dir="ltr">kubectl drain</code>، درخواست کنید. این کار
+یک آبجکت <code dir="ltr">Eviction</code> ایجاد می‌کند که باعث می‌شود سرور API به Pod خاتمه دهد.</p>
+<p dir="rtl">بیرون‌رانی‌های آغازشده از طریق API، <a href="https://kubernetes.io/docs/tasks/run-application/configure-pdb/" target="_blank"><code dir="ltr">PodDisruptionBudgets</code></a>
+و <a href="https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#pod-termination" target="_blank"><code dir="ltr">terminationGracePeriodSeconds</code></a> پیکربندی‌شدهٔ شما را رعایت می‌کنند.</p>
+<p dir="rtl">استفاده از API برای ایجاد یک آبجکت Eviction برای یک Pod، مانند انجام یک
+<a href="https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#delete-delete-a-pod" target="_blank">عملیات <code dir="ltr">DELETE</code></a> کنترل‌شده با سیاست
+روی آن Pod است.</p>
+<h2 id="فراخوانی-eviction-api" dir="rtl">فراخوانی Eviction API</h2>
+<p dir="rtl">می‌توانید از یک <a href="https://kubernetes.io/docs/tasks/administer-cluster/access-cluster-api/#programmatic-access-to-the-api" target="_blank">کلاینت زبان برنامه‌نویسی کوبرنتیز</a>
+برای دسترسی به API کوبرنتیز و ایجاد یک آبجکت <code dir="ltr">Eviction</code> استفاده کنید. برای این کار،
+عملیات موردنظر را با POST ارسال می‌کنید، مشابه مثال زیر:</p>
+<div class="tabs">
+<div class="tab"><div class="tab-name">policy/v1</div>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">Eviction نسخهٔ <code dir="ltr">policy/v1</code> در v1.22 و نسخه‌های بالاتر در دسترس است. در نسخه‌های پیشین از <code dir="ltr">policy/v1beta1</code> استفاده کنید.</p>
+</div>
+<pre dir="ltr"><code class="language-json" dir="ltr">{
+  "apiVersion": "policy/v1",
+  "kind": "Eviction",
+  "metadata": {
+    "name": "quux",
+    "namespace": "default"
+  }
+}
+</code></pre>
+</div>
+<div class="tab"><div class="tab-name">policy/v1beta1</div>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">در v1.22 به نفع <code dir="ltr">policy/v1</code> منسوخ شده است</p>
+</div>
+<pre dir="ltr"><code class="language-json" dir="ltr">{
+  "apiVersion": "policy/v1beta1",
+  "kind": "Eviction",
+  "metadata": {
+    "name": "quux",
+    "namespace": "default"
+  }
+}
+</code></pre>
+</div>
+</div>
+<p dir="rtl">به‌عنوان راه دیگر، می‌توانید با دسترسی به API با استفاده از
+<code dir="ltr">curl</code> یا <code dir="ltr">wget</code> اقدام به عملیات بیرون‌رانی کنید، مشابه مثال زیر:</p>
+<pre dir="ltr"><code class="language-bash" dir="ltr">curl -v -H 'Content-type: application/json' https://your-cluster-api-endpoint.example/api/v1/namespaces/default/pods/quux/eviction -d @eviction.json
+</code></pre>
+<h2 id="نحوهٔ-کار-بیرون-رانی-آغازشده-از-طریق-api" dir="rtl">نحوهٔ کار بیرون‌رانی آغازشده از طریق API</h2>
+<p dir="rtl">هنگامی که با استفاده از API درخواست بیرون‌رانی می‌کنید، سرور API بررسی‌های پذیرش (admission)
+را انجام می‌دهد و به یکی از روش‌های زیر پاسخ می‌دهد:</p>
+<ul>
+<li dir="rtl"><code dir="ltr">200 OK</code>: بیرون‌رانی مجاز است، زیرمنبع <code dir="ltr">Eviction</code> ایجاد می‌شود و
+Pod حذف می‌شود؛ مشابه ارسال یک درخواست <code dir="ltr">DELETE</code> به URL مربوط به Pod.</li>
+<li dir="rtl"><code dir="ltr">429 Too Many Requests</code>: بیرون‌رانی در حال حاضر به دلیل
+<span class="term" title="pod-disruption-budget">PodDisruptionBudget</span> پیکربندی‌شده مجاز نیست.
+ممکن است بتوانید بعداً دوباره اقدام به بیرون‌رانی کنید. همچنین ممکن است این
+پاسخ را به دلیل محدودسازی نرخ (rate limiting) API ببینید.</li>
+<li dir="rtl"><code dir="ltr">500 Internal Server Error</code>: بیرون‌رانی مجاز نیست، زیرا یک
+پیکربندی نادرست وجود دارد؛ برای مثال، اگر چند PodDisruptionBudget به یک Pod ارجاع دهند.</li>
+</ul>
+<p dir="rtl">اگر Podی که می‌خواهید بیرون برانید بخشی از بار کاری‌ای نباشد که
+PodDisruptionBudget دارد، سرور API همیشه <code dir="ltr">200 OK</code> برمی‌گرداند و
+بیرون‌رانی را مجاز می‌داند.</p>
+<p dir="rtl">اگر سرور API بیرون‌رانی را مجاز بداند، Pod به شرح زیر حذف می‌شود:</p>
+<ol>
+<li dir="rtl">منبع <code dir="ltr">Pod</code> در سرور API با یک مهر زمانی حذف (deletion timestamp) به‌روزرسانی می‌شود،
+و پس از آن سرور API منبع <code dir="ltr">Pod</code> را خاتمه‌یافته در نظر می‌گیرد. منبع
+<code dir="ltr">Pod</code> همچنین با مهلت مقرر (grace period) پیکربندی‌شده علامت‌گذاری می‌شود.</li>
+<li dir="rtl"><span class="term" title="kubelet">kubelet</span> روی نودی که Pod محلی در آن در حال اجراست، متوجه می‌شود که منبع <code dir="ltr">Pod</code>
+برای خاتمه علامت‌گذاری شده است و شروع به خاموش کردن مؤدبانه (graceful) Pod
+محلی می‌کند.</li>
+<li dir="rtl">در حالی که kubelet در حال خاموش کردن Pod است، control plane آن Pod را
+از آبجکت‌های <span class="term" title="endpoint-slice">EndpointSlice</span>
+حذف می‌کند. در نتیجه، کنترل‌کننده‌ها دیگر آن Pod را یک آبجکت معتبر در نظر نمی‌گیرند.</li>
+<li dir="rtl">پس از پایان مهلت مقرر Pod، kubelet به‌اجبار
+Pod محلی را خاتمه می‌دهد.</li>
+<li dir="rtl">kubelet به سرور API اعلام می‌کند که منبع <code dir="ltr">Pod</code> را حذف کند.</li>
+<li dir="rtl">سرور API منبع <code dir="ltr">Pod</code> را حذف می‌کند.</li>
+</ol>
+<h2 id="عیب-یابی-بیرون-رانی-های-گیرکرده" dir="rtl">عیب‌یابی بیرون‌رانی‌های گیرکرده</h2>
+<p dir="rtl">در برخی موارد، ممکن است برنامه‌های شما وارد وضعیتی معیوب شوند که در آن Eviction
+API تا زمانی که شما مداخله نکنید، فقط پاسخ‌های <code dir="ltr">429</code> یا <code dir="ltr">500</code> برمی‌گرداند. این وضعیت
+ممکن است برای مثال زمانی رخ دهد که یک ReplicaSet برای برنامهٔ شما Podهایی ایجاد می‌کند، اما Podهای
+جدید وارد وضعیت <code dir="ltr">Ready</code> نمی‌شوند. همچنین ممکن است این رفتار را در مواردی ببینید
+که آخرین Pod بیرون‌رانده‌شده مهلت مقرر خاتمهٔ طولانی‌ای داشته است.</p>
+<p dir="rtl">اگر متوجه بیرون‌رانی‌های گیرکرده شدید، یکی از راه‌حل‌های زیر را امتحان کنید:</p>
+<ul>
+<li dir="rtl">عملیات خودکاری را که باعث مشکل شده است، لغو یا متوقف کنید. پیش از راه‌اندازی مجدد عملیات،
+برنامهٔ گیرکرده را بررسی کنید.</li>
+<li dir="rtl">مدتی صبر کنید، سپس به‌جای استفاده از Eviction API، Pod را مستقیماً از طریق control plane
+کلاستر خود حذف کنید.</li>
+</ul>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<ul>
+<li dir="rtl">بیاموزید که چگونه با یک <a href="https://kubernetes.io/docs/tasks/run-application/configure-pdb/" target="_blank">Pod Disruption Budget</a> از برنامه‌های خود محافظت کنید.</li>
+<li dir="rtl">دربارهٔ <a href="node-pressure-eviction.html">بیرون‌رانی ناشی از فشار نود</a> بیاموزید.</li>
+<li dir="rtl">دربارهٔ <a href="https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/" target="_blank">اولویت و پس‌گیری Pod</a> بیاموزید.</li>
+</ul>
+</main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#فراخوانی-eviction-api">فراخوانی Eviction API</a><a class="l2" href="#نحوهٔ-کار-بیرون-رانی-آغازشده-از-طریق-api">نحوهٔ کار بیرون‌رانی آغازشده از طریق API</a><a class="l2" href="#عیب-یابی-بیرون-رانی-های-گیرکرده">عیب‌یابی بیرون‌رانی‌های گیرکرده</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>

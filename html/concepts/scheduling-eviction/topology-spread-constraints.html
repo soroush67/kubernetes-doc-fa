@@ -1,0 +1,725 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>قیدهای پخش توپولوژی Pod | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+</head>
+<body>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">concepts / scheduling-eviction</span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">قیدهای پخش توپولوژی Pod</h1><!-- overview -->
+<p dir="rtl">می‌توانید از <em>قیدهای پخش توپولوژی</em> (topology spread constraints) استفاده کنید تا کنترل کنید
+<span class="term" title="Pod">پادها</span> چگونه در کلاستر شما
+میان دامنه‌های خرابی (failure-domain) مانند regionها، zoneها، نودها و سایر دامنه‌های توپولوژی
+تعریف‌شده توسط کاربر پخش شوند. این کار می‌تواند به دستیابی به دسترس‌پذیری بالا و نیز بهره‌وری کارآمد
+از منابع کمک کند.</p>
+<p dir="rtl">می‌توانید <a href="#cluster-level-default-constraints">قیدهای سطح کلاستر</a> را به‌عنوان پیش‌فرض تنظیم کنید،
+یا قیدهای پخش توپولوژی را برای بارهای کاری منفرد پیکربندی کنید.</p>
+<!-- body -->
+<h2 id="انگیزه" dir="rtl">انگیزه</h2>
+<p dir="rtl">فرض کنید کلاستری با حداکثر بیست نود دارید و می‌خواهید یک
+<span class="term" title="workload">بار کاری</span>
+اجرا کنید که تعداد replicaهای مورد استفادهٔ خود را به‌طور خودکار مقیاس‌بندی می‌کند. تعداد پادها ممکن است
+از دو تا پانزده عدد متغیر باشد.
+هنگامی که فقط دو Pod وجود دارد، ترجیح می‌دهید هر دوی آن پادها روی یک نود
+اجرا نشوند: در غیر این صورت این خطر وجود دارد که خرابی یک نود واحد، بار کاری شما را
+از دسترس خارج کند.</p>
+<p dir="rtl">علاوه بر این کاربرد پایه، برخی نمونه‌های کاربرد پیشرفته نیز وجود دارد که
+بارهای کاری شما را قادر می‌سازد از دسترس‌پذیری بالا و بهره‌وری کلاستر بهره‌مند شوند.</p>
+<p dir="rtl">با افزایش مقیاس و اجرای پادهای بیشتر، دغدغهٔ دیگری اهمیت پیدا می‌کند. فرض کنید
+سه نود دارید که هر کدام پنج Pod را اجرا می‌کنند. نودها ظرفیت کافی
+برای اجرای این تعداد replica دارند؛ با این حال، کلاینت‌هایی که با این بار کاری تعامل دارند
+میان سه مرکز داده (یا zone زیرساختی) مختلف تقسیم شده‌اند. اکنون
+نگرانی کمتری دربارهٔ خرابی یک نود واحد دارید، اما متوجه می‌شوید که تأخیر (latency)
+بیش از حد دلخواه شماست و هزینه‌های شبکهٔ مرتبط با
+ارسال ترافیک شبکه میان zoneهای مختلف را پرداخت می‌کنید.</p>
+<p dir="rtl">تصمیم می‌گیرید که در شرایط عادی ترجیح می‌دهید تعداد مشابهی replica
+در هر zone زیرساختی <a href="index.html">زمان‌بندی</a> شود،
+و مایلید کلاستر در صورت بروز مشکل خود را ترمیم کند.</p>
+<p dir="rtl">قیدهای پخش توپولوژی Pod روشی اعلانی برای پیکربندی این موضوع در اختیار شما قرار می‌دهند.</p>
+<h2 id="فیلد-topologyspreadconstraints" dir="rtl">فیلد <code dir="ltr">topologySpreadConstraints</code></h2>
+<p dir="rtl">API مربوط به Pod شامل فیلدی به نام <code dir="ltr">spec.topologySpreadConstraints</code> است. نحوهٔ استفاده از این فیلد
+به شکل زیر است:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: example-pod
+spec:
+  # Configure a topology spread constraint
+  topologySpreadConstraints:
+    - maxSkew: &lt;integer&gt;
+      minDomains: &lt;integer&gt; # optional
+      topologyKey: &lt;string&gt;
+      whenUnsatisfiable: &lt;string&gt;
+      labelSelector: &lt;object&gt;
+      matchLabelKeys: &lt;list&gt; # optional; beta since v1.27
+      nodeAffinityPolicy: [Honor|Ignore] # optional; beta since v1.26
+      nodeTaintsPolicy: [Honor|Ignore] # optional; beta since v1.26
+  ### other Pod fields go here
+</code></pre>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">برای هر ترکیب مشخص از <code dir="ltr">topologyKey</code> و مقدار <code dir="ltr">whenUnsatisfiable</code> تنها یک <code dir="ltr">topologySpreadConstraint</code> می‌تواند وجود داشته باشد. برای مثال، اگر یک <code dir="ltr">topologySpreadConstraint</code> تعریف کرده باشید که از <code dir="ltr">topologyKey</code> با مقدار "kubernetes.io/hostname" و مقدار <code dir="ltr">whenUnsatisfiable</code> برابر با "DoNotSchedule" استفاده می‌کند، تنها در صورتی می‌توانید <code dir="ltr">topologySpreadConstraint</code> دیگری برای <code dir="ltr">topologyKey</code> با مقدار "kubernetes.io/hostname" اضافه کنید که از مقدار متفاوتی برای <code dir="ltr">whenUnsatisfiable</code> استفاده کنید.</p>
+</div>
+<p dir="rtl">می‌توانید با اجرای <code dir="ltr">kubectl explain Pod.spec.topologySpreadConstraints</code> دربارهٔ این فیلد بیشتر بخوانید یا
+به بخش <a href="https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#scheduling" target="_blank">زمان‌بندی</a> در مرجع API مربوط به Pod مراجعه کنید.</p>
+<h3 id="تعریف-قید-پخش" dir="rtl">تعریف قید پخش</h3>
+<p dir="rtl">می‌توانید یک یا چند مدخل <code dir="ltr">topologySpreadConstraints</code> تعریف کنید تا به
+kube-scheduler دستور دهید هر Pod ورودی را نسبت به پادهای موجود در سراسر
+کلاستر چگونه قرار دهد. این فیلدها عبارت‌اند از:</p>
+<ul>
+<li dir="rtl">
+<p dir="rtl"><strong>maxSkew</strong> میزانی را توصیف می‌کند که پادها می‌توانند به‌طور نابرابر توزیع شوند. شما باید
+این فیلد را مشخص کنید و عدد آن باید بزرگ‌تر از صفر باشد. معنای آن بسته به
+مقدار <code dir="ltr">whenUnsatisfiable</code> متفاوت است:</p>
+<ul>
+<li dir="rtl">اگر <code dir="ltr">whenUnsatisfiable: DoNotSchedule</code> را انتخاب کنید، <code dir="ltr">maxSkew</code> حداکثر
+اختلاف مجاز میان تعداد پادهای منطبق در توپولوژی هدف
+و <em>کمینهٔ سراسری</em> را تعریف می‌کند
+(کمینهٔ تعداد پادهای منطبق در یک دامنهٔ واجد شرایط، یا صفر اگر تعداد دامنه‌های واجد شرایط کمتر از MinDomains باشد).
+برای مثال، اگر ۳ zone داشته باشید که به ترتیب ۲، ۲ و ۱ پاد منطبق دارند،
+و <code dir="ltr">MaxSkew</code> برابر با 1 تنظیم شده باشد، آنگاه کمینهٔ سراسری برابر با 1 است.</li>
+<li dir="rtl">اگر <code dir="ltr">whenUnsatisfiable: ScheduleAnyway</code> را انتخاب کنید، زمان‌بند به توپولوژی‌هایی
+که به کاهش skew کمک می‌کنند اولویت بالاتری می‌دهد.</li>
+</ul>
+</li>
+<li dir="rtl">
+<p dir="rtl"><strong>minDomains</strong> کمینهٔ تعداد دامنه‌های واجد شرایط را نشان می‌دهد. این فیلد اختیاری است.
+یک دامنه نمونهٔ مشخصی از یک توپولوژی است. دامنهٔ واجد شرایط دامنه‌ای است که
+نودهای آن با انتخابگر نود منطبق باشند.</p>
+<!-- OK to remove this note once v1.29 Kubernetes is out of support -->
+</li>
+</ul>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">پیش از کوبرنتیز v1.30، فیلد <code dir="ltr">minDomains</code> تنها در صورتی در دسترس بود که
+<a href="https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates-removed/" target="_blank">feature gate</a> با نام <code dir="ltr">MinDomainsInPodTopologySpread</code>
+فعال بود (که از v1.28 به‌طور پیش‌فرض فعال است). در کلاسترهای قدیمی‌تر کوبرنتیز ممکن است به‌صراحت
+غیرفعال شده باشد یا این فیلد در دسترس نباشد.</p>
+</div>
+<ul>
+<li dir="rtl">
+<p dir="rtl">مقدار <code dir="ltr">minDomains</code> در صورت مشخص شدن باید بزرگ‌تر از 0 باشد.
+تنها می‌توانید <code dir="ltr">minDomains</code> را همراه با <code dir="ltr">whenUnsatisfiable: DoNotSchedule</code> مشخص کنید.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">هنگامی که تعداد دامنه‌های واجد شرایط دارای کلیدهای توپولوژی منطبق کمتر از <code dir="ltr">minDomains</code> باشد،
+پخش توپولوژی Pod کمینهٔ سراسری را 0 در نظر می‌گیرد و سپس محاسبهٔ <code dir="ltr">skew</code> انجام می‌شود.
+کمینهٔ سراسری برابر با کمینهٔ تعداد پادهای منطبق در یک دامنهٔ واجد شرایط است،
+یا صفر اگر تعداد دامنه‌های واجد شرایط کمتر از <code dir="ltr">minDomains</code> باشد.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">هنگامی که تعداد دامنه‌های واجد شرایط دارای کلیدهای توپولوژی منطبق برابر یا بیشتر از
+<code dir="ltr">minDomains</code> باشد، این مقدار هیچ تأثیری بر زمان‌بندی ندارد.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">اگر <code dir="ltr">minDomains</code> را مشخص نکنید، قید طوری رفتار می‌کند که گویی <code dir="ltr">minDomains</code> برابر با 1 است.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><strong>topologyKey</strong> کلید <a href="#node-labels">برچسب‌های نود</a> است. نودهایی که برچسبی با این کلید
+و مقادیر یکسان دارند، در یک توپولوژی در نظر گرفته می‌شوند.
+ما هر نمونه از یک توپولوژی (به عبارت دیگر، یک جفت &lt;key, value&gt;) را یک دامنه می‌نامیم. زمان‌بند
+تلاش می‌کند تعداد متوازنی از پادها را در هر دامنه قرار دهد.
+همچنین، دامنهٔ واجد شرایط را دامنه‌ای تعریف می‌کنیم که نودهای آن الزامات
+nodeAffinityPolicy و nodeTaintsPolicy را برآورده کنند.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><strong>whenUnsatisfiable</strong> نشان می‌دهد که اگر یک Pod قید پخش را برآورده نکند، چگونه با آن رفتار شود:</p>
+<ul>
+<li dir="rtl"><code dir="ltr">DoNotSchedule</code> (پیش‌فرض) به زمان‌بند می‌گوید آن را زمان‌بندی نکند.</li>
+<li dir="rtl"><code dir="ltr">ScheduleAnyway</code> به زمان‌بند می‌گوید آن را همچنان زمان‌بندی کند و در عین حال به نودهایی که skew را کمینه می‌کنند اولویت دهد.</li>
+</ul>
+</li>
+<li dir="rtl">
+<p dir="rtl"><strong>labelSelector</strong> برای یافتن پادهای منطبق استفاده می‌شود. پادهایی
+که با این انتخابگر برچسب منطبق باشند، برای تعیین
+تعداد پادها در دامنهٔ توپولوژی متناظرشان شمرده می‌شوند.
+برای جزئیات بیشتر، به <a href="../overview/working-with-objects/labels.html#label-selectors">انتخابگرهای برچسب</a>
+مراجعه کنید.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><strong>matchLabelKeys</strong> فهرستی از کلیدهای برچسب پاد است که برای انتخاب گروهی از پادها به کار می‌رود که
+skew پخش بر روی آن‌ها محاسبه می‌شود. هنگام ایجاد پاد،
+kube-apiserver از این کلیدها برای جست‌وجوی مقادیر در برچسب‌های پاد ورودی استفاده می‌کند،
+و آن برچسب‌های کلید-مقدار با هر <code dir="ltr">labelSelector</code> موجود ادغام می‌شوند.
+وجود یک کلید یکسان در هر دوی <code dir="ltr">matchLabelKeys</code> و <code dir="ltr">labelSelector</code> ممنوع است.
+هنگامی که <code dir="ltr">labelSelector</code> تنظیم نشده باشد، نمی‌توان <code dir="ltr">matchLabelKeys</code> را تنظیم کرد.
+کلیدهایی که در برچسب‌های پاد وجود ندارند نادیده گرفته می‌شوند.
+یک فهرست null یا خالی به این معناست که تطبیق فقط بر اساس <code dir="ltr">labelSelector</code> انجام می‌شود.</p>
+</li>
+</ul>
+<div class="callout caution"><div class="callout-title">احتیاط:</div>
+<p dir="rtl">استفاده از <code dir="ltr">matchLabelKeys</code> با برچسب‌هایی که ممکن است مستقیماً روی پادها به‌روزرسانی شوند توصیه نمی‌شود.
+حتی اگر برچسب پادی را که در <code dir="ltr">matchLabelKeys</code> مشخص شده است <strong>مستقیماً</strong> ویرایش کنید
+(یعنی Pod را ویرایش کنید و نه یک Deployment را)،
+kube-apiserver به‌روزرسانی برچسب را در <code dir="ltr">labelSelector</code> ادغام‌شده منعکس نمی‌کند.</p>
+</div>
+<p dir="rtl">با <code dir="ltr">matchLabelKeys</code>، نیازی به به‌روزرسانی <code dir="ltr">pod.spec</code> میان بازبینی‌های (revision) مختلف ندارید.
+کنترل‌کننده/اپراتور فقط کافی است برای بازبینی‌های مختلف، مقادیر متفاوتی را به یک کلید برچسب یکسان
+اختصاص دهد. برای مثال، اگر یک Deployment را پیکربندی می‌کنید، می‌توانید از برچسبی با کلید
+<a href="../workloads/controllers/deployment.html#pod-template-hash-label">pod-template-hash</a> استفاده کنید که
+به‌طور خودکار توسط کنترل‌کنندهٔ Deployment اضافه می‌شود تا میان بازبینی‌های مختلف
+در یک Deployment واحد تمایز قائل شوید.</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">    topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: DoNotSchedule
+          labelSelector:
+            matchLabels:
+              app: foo
+          matchLabelKeys:
+            - pod-template-hash
+</code></pre>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">فیلد <code dir="ltr">matchLabelKeys</code> یک فیلد در سطح بتا است و در 1.27 به‌طور پیش‌فرض فعال است. می‌توانید آن را با غیرفعال کردن
+<a href="https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/" target="_blank">feature gate</a> با نام <code dir="ltr">MatchLabelKeysInPodTopologySpread</code> غیرفعال کنید.</p>
+<p dir="rtl">پیش از v1.34، <code dir="ltr">matchLabelKeys</code> به‌صورت ضمنی مدیریت می‌شد.
+از v1.34 به بعد، برچسب‌های کلید-مقدار متناظر با <code dir="ltr">matchLabelKeys</code> به‌صراحت در <code dir="ltr">labelSelector</code> ادغام می‌شوند.
+می‌توانید این رفتار را غیرفعال کرده و با غیرفعال کردن
+<a href="https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/" target="_blank">feature gate</a> با نام <code dir="ltr">MatchLabelKeysInPodTopologySpreadSelectorMerge</code> در kube-apiserver به رفتار پیشین بازگردید.</p>
+</div>
+<ul>
+<li dir="rtl">
+<p dir="rtl"><strong>nodeAffinityPolicy</strong> نشان می‌دهد که هنگام محاسبهٔ skew پخش توپولوژی پاد،
+با nodeAffinity/nodeSelector پاد چگونه رفتار خواهیم کرد. گزینه‌ها عبارت‌اند از:</p>
+<ul>
+<li dir="rtl">Honor: فقط نودهای منطبق با nodeAffinity/nodeSelector در محاسبات گنجانده می‌شوند.</li>
+<li dir="rtl">Ignore: nodeAffinity/nodeSelector نادیده گرفته می‌شوند. همهٔ نودها در محاسبات گنجانده می‌شوند.</li>
+</ul>
+<p dir="rtl">اگر این مقدار null باشد، رفتار معادل سیاست Honor است.</p>
+</li>
+</ul>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl"><code dir="ltr">nodeAffinityPolicy</code> در 1.26 به مرحلهٔ بتا رسید و در 1.33 به GA ارتقا یافت.
+این قابلیت در مرحلهٔ بتا به‌طور پیش‌فرض فعال است و می‌توانید آن را با غیرفعال کردن
+<a href="https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/" target="_blank">feature gate</a> با نام <code dir="ltr">NodeInclusionPolicyInPodTopologySpread</code> غیرفعال کنید.</p>
+</div>
+<ul>
+<li dir="rtl">
+<p dir="rtl"><strong>nodeTaintsPolicy</strong> نشان می‌دهد که هنگام محاسبهٔ skew پخش توپولوژی پاد،
+با taintهای نود چگونه رفتار خواهیم کرد. گزینه‌ها عبارت‌اند از:</p>
+<ul>
+<li dir="rtl">Honor: نودهای بدون taint، به همراه نودهای دارای taint که پاد ورودی
+برای آن‌ها toleration دارد، گنجانده می‌شوند.</li>
+<li dir="rtl">Ignore: taintهای نود نادیده گرفته می‌شوند. همهٔ نودها گنجانده می‌شوند.</li>
+</ul>
+<p dir="rtl">اگر این مقدار null باشد، رفتار معادل سیاست Ignore است.</p>
+</li>
+</ul>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl"><code dir="ltr">nodeTaintsPolicy</code> در 1.26 به مرحلهٔ بتا رسید و در 1.33 به GA ارتقا یافت.
+این قابلیت در مرحلهٔ بتا به‌طور پیش‌فرض فعال است و می‌توانید آن را با غیرفعال کردن
+<a href="https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/" target="_blank">feature gate</a> با نام <code dir="ltr">NodeInclusionPolicyInPodTopologySpread</code> غیرفعال کنید.</p>
+</div>
+<p dir="rtl">هنگامی که یک Pod بیش از یک <code dir="ltr">topologySpreadConstraint</code> تعریف کند، این قیدها
+با استفاده از عملگر منطقی AND ترکیب می‌شوند: kube-scheduler برای Pod ورودی به دنبال نودی می‌گردد
+که همهٔ قیدهای پیکربندی‌شده را برآورده کند.</p>
+<h3 id="برچسب-های-نود" dir="rtl">برچسب‌های نود</h3>
+<p dir="rtl">قیدهای پخش توپولوژی برای شناسایی دامنه(های) توپولوژی‌ای که هر <span class="term" title="node">نود</span>
+در آن قرار دارد، به برچسب‌های نود متکی هستند.
+برای مثال، یک نود ممکن است این برچسب‌ها را داشته باشد:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">  region: us-east-1
+  zone: us-east-1a
+</code></pre>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">برای اختصار، این مثال از کلیدهای برچسب
+<a href="https://kubernetes.io/docs/reference/labels-annotations-taints/" target="_blank">شناخته‌شده</a>
+<code dir="ltr">topology.kubernetes.io/zone</code> و <code dir="ltr">topology.kubernetes.io/region</code> استفاده نمی‌کند. با این حال،
+آن کلیدهای برچسب ثبت‌شده همچنان به کلیدهای برچسب خصوصی
+(بدون پیشوند) <code dir="ltr">region</code> و <code dir="ltr">zone</code> که در اینجا استفاده شده‌اند، ترجیح داده می‌شوند.</p>
+<p dir="rtl">نمی‌توانید فرض قابل اتکایی دربارهٔ معنای یک کلید برچسب خصوصی
+در زمینه‌های مختلف داشته باشید.</p>
+</div>
+<p dir="rtl">فرض کنید یک کلاستر ۴ نودی با برچسب‌های زیر دارید:</p>
+<pre dir="ltr"><code dir="ltr">NAME    STATUS   ROLES    AGE     VERSION   LABELS
+node1   Ready    &lt;none&gt;   4m26s   v1.16.0   node=node1,zone=zoneA
+node2   Ready    &lt;none&gt;   3m58s   v1.16.0   node=node2,zone=zoneA
+node3   Ready    &lt;none&gt;   3m17s   v1.16.0   node=node3,zone=zoneB
+node4   Ready    &lt;none&gt;   2m43s   v1.16.0   node=node4,zone=zoneB
+</code></pre>
+<p dir="rtl">در این صورت، کلاستر از نظر منطقی به شکل زیر دیده می‌شود:</p>
+<pre dir="ltr"><code class="language-mermaid" dir="ltr">graph TB
+    subgraph "zoneB"
+        n3(Node3)
+        n4(Node4)
+    end
+    subgraph "zoneA"
+        n1(Node1)
+        n2(Node2)
+    end
+
+    classDef plain fill:#ddd,stroke:#fff,stroke-width:4px,color:#000;
+    classDef k8s fill:#326ce5,stroke:#fff,stroke-width:4px,color:#fff;
+    classDef cluster fill:#fff,stroke:#bbb,stroke-width:2px,color:#326ce5;
+    class n1,n2,n3,n4 k8s;
+    class zoneA,zoneB cluster;
+</code></pre>
+<h2 id="سازگاری" dir="rtl">سازگاری</h2>
+<p dir="rtl">باید قیدهای پخش توپولوژی Pod یکسانی را روی همهٔ پادهای یک گروه تنظیم کنید.</p>
+<p dir="rtl">معمولاً اگر از یک کنترل‌کنندهٔ بار کاری مانند Deployment استفاده می‌کنید، قالب پاد
+این کار را برای شما انجام می‌دهد. اگر قیدهای پخش متفاوتی را با هم ترکیب کنید، کوبرنتیز
+از تعریف API فیلد پیروی می‌کند؛ با این حال، احتمال بیشتری وجود دارد که رفتار
+گیج‌کننده شود و عیب‌یابی آن کمتر سرراست باشد.</p>
+<p dir="rtl">به سازوکاری نیاز دارید تا اطمینان حاصل کنید همهٔ نودهای یک دامنهٔ توپولوژی (مانند یک
+region ارائه‌دهندهٔ ابری) به‌طور یکنواخت برچسب‌گذاری شده‌اند.
+برای اینکه نیازی به برچسب‌گذاری دستی نودها نداشته باشید، بیشتر کلاسترها به‌طور خودکار
+برچسب‌های شناخته‌شده‌ای مانند <code dir="ltr">kubernetes.io/hostname</code> را مقداردهی می‌کنند. بررسی کنید که آیا
+کلاستر شما از این قابلیت پشتیبانی می‌کند یا خیر.</p>
+<h2 id="نمونه-های-قید-پخش-توپولوژی" dir="rtl">نمونه‌های قید پخش توپولوژی</h2>
+<h3 id="مثال-یک-قید-پخش-توپولوژی-example-one-topologyspreadconstraint" dir="rtl">مثال: یک قید پخش توپولوژی {#example-one-topologyspreadconstraint}</h3>
+<p dir="rtl">فرض کنید یک کلاستر ۴ نودی دارید که در آن ۳ Pod با برچسب <code dir="ltr">foo: bar</code> به ترتیب روی
+node1، node2 و node3 قرار دارند:</p>
+<pre dir="ltr"><code class="language-mermaid" dir="ltr">graph BT
+    subgraph "zoneB"
+        p3(Pod) --&gt; n3(Node3)
+        n4(Node4)
+    end
+    subgraph "zoneA"
+        p1(Pod) --&gt; n1(Node1)
+        p2(Pod) --&gt; n2(Node2)
+    end
+
+    classDef plain fill:#ddd,stroke:#fff,stroke-width:4px,color:#000;
+    classDef k8s fill:#326ce5,stroke:#fff,stroke-width:4px,color:#fff;
+    classDef cluster fill:#fff,stroke:#bbb,stroke-width:2px,color:#326ce5;
+    class n1,n2,n3,n4,p1,p2,p3 k8s;
+    class zoneA,zoneB cluster;
+</code></pre>
+<p dir="rtl">اگر می‌خواهید یک Pod ورودی به‌طور یکنواخت همراه با پادهای موجود در میان zoneها پخش شود،
+می‌توانید از مانیفستی مشابه زیر استفاده کنید:</p>
+<div class="code-file ltr" dir="ltr">pods/topology-spread-constraints/one-constraint.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">kind: Pod
+apiVersion: v1
+metadata:
+  name: mypod
+  labels:
+    foo: bar
+spec:
+  topologySpreadConstraints:
+  - maxSkew: 1
+    topologyKey: zone
+    whenUnsatisfiable: DoNotSchedule
+    labelSelector:
+      matchLabels:
+        foo: bar
+  containers:
+  - name: pause
+    image: registry.k8s.io/pause:3.1
+</code></pre>
+<p dir="rtl">بر اساس این مانیفست، <code dir="ltr">topologyKey: zone</code> به این معناست که توزیع یکنواخت فقط بر
+نودهایی اعمال می‌شود که برچسب <code dir="ltr">zone: &lt;any value&gt;</code> دارند (نودهایی که برچسب <code dir="ltr">zone</code>
+ندارند نادیده گرفته می‌شوند). فیلد <code dir="ltr">whenUnsatisfiable: DoNotSchedule</code> به زمان‌بند می‌گوید
+اگر نتوانست راهی برای برآورده کردن قید بیابد، اجازه دهد Pod ورودی در وضعیت pending باقی بماند.</p>
+<p dir="rtl">اگر زمان‌بند این Pod ورودی را در zone <code dir="ltr">A</code> قرار می‌داد، توزیع پادها
+به <code dir="ltr">[3, 1]</code> تبدیل می‌شد. این یعنی skew واقعی برابر با 2 (محاسبه‌شده به‌صورت <code dir="ltr">3 - 1</code>) می‌شد که
+<code dir="ltr">maxSkew: 1</code> را نقض می‌کند. برای برآورده کردن قیدها و شرایط این مثال،
+Pod ورودی فقط می‌تواند روی نودی در zone <code dir="ltr">B</code> قرار گیرد:</p>
+<pre dir="ltr"><code class="language-mermaid" dir="ltr">graph BT
+    subgraph "zoneB"
+        p3(Pod) --&gt; n3(Node3)
+        p4(mypod) --&gt; n4(Node4)
+    end
+    subgraph "zoneA"
+        p1(Pod) --&gt; n1(Node1)
+        p2(Pod) --&gt; n2(Node2)
+    end
+
+    classDef plain fill:#ddd,stroke:#fff,stroke-width:4px,color:#000;
+    classDef k8s fill:#326ce5,stroke:#fff,stroke-width:4px,color:#fff;
+    classDef cluster fill:#fff,stroke:#bbb,stroke-width:2px,color:#326ce5;
+    class n1,n2,n3,n4,p1,p2,p3 k8s;
+    class p4 plain;
+    class zoneA,zoneB cluster;
+</code></pre>
+<p dir="rtl">یا</p>
+<pre dir="ltr"><code class="language-mermaid" dir="ltr">graph BT
+    subgraph "zoneB"
+        p3(Pod) --&gt; n3(Node3)
+        p4(mypod) --&gt; n3
+        n4(Node4)
+    end
+    subgraph "zoneA"
+        p1(Pod) --&gt; n1(Node1)
+        p2(Pod) --&gt; n2(Node2)
+    end
+
+    classDef plain fill:#ddd,stroke:#fff,stroke-width:4px,color:#000;
+    classDef k8s fill:#326ce5,stroke:#fff,stroke-width:4px,color:#fff;
+    classDef cluster fill:#fff,stroke:#bbb,stroke-width:2px,color:#326ce5;
+    class n1,n2,n3,n4,p1,p2,p3 k8s;
+    class p4 plain;
+    class zoneA,zoneB cluster;
+</code></pre>
+<p dir="rtl">می‌توانید spec مربوط به Pod را برای برآورده کردن انواع مختلف الزامات تنظیم کنید:</p>
+<ul>
+<li dir="rtl"><code dir="ltr">maxSkew</code> را به مقدار بزرگ‌تری، مانند <code dir="ltr">2</code>، تغییر دهید تا Pod ورودی بتواند
+در zone <code dir="ltr">A</code> نیز قرار گیرد.</li>
+<li dir="rtl"><code dir="ltr">topologyKey</code> را به <code dir="ltr">node</code> تغییر دهید تا پادها به‌جای zoneها به‌طور یکنواخت
+میان نودها توزیع شوند. در مثال بالا، اگر <code dir="ltr">maxSkew</code> برابر با <code dir="ltr">1</code> باقی بماند، Pod ورودی
+فقط می‌تواند روی نود <code dir="ltr">node4</code> قرار گیرد.</li>
+<li dir="rtl"><code dir="ltr">whenUnsatisfiable: DoNotSchedule</code> را به <code dir="ltr">whenUnsatisfiable: ScheduleAnyway</code> تغییر دهید
+تا اطمینان حاصل شود که Pod ورودی همیشه قابل زمان‌بندی است (با فرض اینکه سایر APIهای زمان‌بندی
+برآورده شده باشند). با این حال، ترجیح داده می‌شود که در دامنهٔ توپولوژی‌ای قرار گیرد که
+پادهای منطبق کمتری دارد. (توجه داشته باشید که این ترجیح به‌طور مشترک
+با سایر اولویت‌های داخلی زمان‌بندی، مانند نسبت استفاده از منابع، نرمال‌سازی می‌شود).</li>
+</ul>
+<h3 id="مثال-چند-قید-پخش-توپولوژی-example-multiple-topologyspreadconstraints" dir="rtl">مثال: چند قید پخش توپولوژی {#example-multiple-topologyspreadconstraints}</h3>
+<p dir="rtl">این مثال بر پایهٔ مثال قبلی بنا شده است. فرض کنید یک کلاستر ۴ نودی دارید که در آن ۳
+Pod موجود با برچسب <code dir="ltr">foo: bar</code> به ترتیب روی node1، node2 و node3 قرار دارند:</p>
+<pre dir="ltr"><code class="language-mermaid" dir="ltr">graph BT
+    subgraph "zoneB"
+        p3(Pod) --&gt; n3(Node3)
+        n4(Node4)
+    end
+    subgraph "zoneA"
+        p1(Pod) --&gt; n1(Node1)
+        p2(Pod) --&gt; n2(Node2)
+    end
+
+    classDef plain fill:#ddd,stroke:#fff,stroke-width:4px,color:#000;
+    classDef k8s fill:#326ce5,stroke:#fff,stroke-width:4px,color:#fff;
+    classDef cluster fill:#fff,stroke:#bbb,stroke-width:2px,color:#326ce5;
+    class n1,n2,n3,n4,p1,p2,p3 k8s;
+    class p4 plain;
+    class zoneA,zoneB cluster;
+</code></pre>
+<p dir="rtl">می‌توانید دو قید پخش توپولوژی را ترکیب کنید تا پخش پادها را هم
+بر اساس نود و هم بر اساس zone کنترل کنید:</p>
+<div class="code-file ltr" dir="ltr">pods/topology-spread-constraints/two-constraints.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">kind: Pod
+apiVersion: v1
+metadata:
+  name: mypod
+  labels:
+    foo: bar
+spec:
+  topologySpreadConstraints:
+  - maxSkew: 1
+    topologyKey: zone
+    whenUnsatisfiable: DoNotSchedule
+    labelSelector:
+      matchLabels:
+        foo: bar
+  - maxSkew: 1
+    topologyKey: node
+    whenUnsatisfiable: DoNotSchedule
+    labelSelector:
+      matchLabels:
+        foo: bar
+  containers:
+  - name: pause
+    image: registry.k8s.io/pause:3.1
+</code></pre>
+<p dir="rtl">در این حالت، برای انطباق با قید اول، Pod ورودی فقط می‌تواند روی
+نودهای zone <code dir="ltr">B</code> قرار گیرد؛ در حالی که از نظر قید دوم، Pod ورودی فقط می‌تواند
+روی نود <code dir="ltr">node4</code> زمان‌بندی شود. زمان‌بند فقط گزینه‌هایی را در نظر می‌گیرد که همهٔ
+قیدهای تعریف‌شده را برآورده کنند، بنابراین تنها جای‌گذاری معتبر روی نود <code dir="ltr">node4</code> است.</p>
+<h3 id="مثال-قیدهای-پخش-توپولوژی-متعارض-example-conflicting-topologyspreadconstraints" dir="rtl">مثال: قیدهای پخش توپولوژی متعارض {#example-conflicting-topologyspreadconstraints}</h3>
+<p dir="rtl">چندین قید می‌توانند به تعارض منجر شوند. فرض کنید یک کلاستر ۳ نودی دارید که در ۲ zone گسترده شده است:</p>
+<pre dir="ltr"><code class="language-mermaid" dir="ltr">graph BT
+    subgraph "zoneB"
+        p4(Pod) --&gt; n3(Node3)
+        p5(Pod) --&gt; n3
+    end
+    subgraph "zoneA"
+        p1(Pod) --&gt; n1(Node1)
+        p2(Pod) --&gt; n1
+        p3(Pod) --&gt; n2(Node2)
+    end
+
+    classDef plain fill:#ddd,stroke:#fff,stroke-width:4px,color:#000;
+    classDef k8s fill:#326ce5,stroke:#fff,stroke-width:4px,color:#fff;
+    classDef cluster fill:#fff,stroke:#bbb,stroke-width:2px,color:#326ce5;
+    class n1,n2,n3,n4,p1,p2,p3,p4,p5 k8s;
+    class zoneA,zoneB cluster;
+</code></pre>
+<p dir="rtl">اگر
+<a href="https://raw.githubusercontent.com/kubernetes/website/main/content/en/examples/pods/topology-spread-constraints/two-constraints.yaml" target="_blank" rel="noopener"><code dir="ltr">two-constraints.yaml</code></a>
+(مانیفست مثال قبلی) را
+روی <strong>این</strong> کلاستر اعمال کنید، خواهید دید که Pod با نام <code dir="ltr">mypod</code> در وضعیت <code dir="ltr">Pending</code> باقی می‌ماند.
+دلیل این امر آن است که: برای برآورده کردن قید اول، Pod با نام <code dir="ltr">mypod</code> فقط می‌تواند
+در zone <code dir="ltr">B</code> قرار گیرد؛ در حالی که از نظر قید دوم، Pod با نام <code dir="ltr">mypod</code>
+فقط می‌تواند روی نود <code dir="ltr">node2</code> زمان‌بندی شود. اشتراک این دو قید
+یک مجموعهٔ تهی است و زمان‌بند نمی‌تواند Pod را جای‌گذاری کند.</p>
+<p dir="rtl">برای غلبه بر این وضعیت، می‌توانید مقدار <code dir="ltr">maxSkew</code> را افزایش دهید یا
+یکی از قیدها را طوری تغییر دهید که از <code dir="ltr">whenUnsatisfiable: ScheduleAnyway</code> استفاده کند. بسته به
+شرایط، ممکن است تصمیم بگیرید یک Pod موجود را به‌صورت دستی حذف کنید؛ برای مثال،
+اگر در حال عیب‌یابی این موضوع هستید که چرا انتشار (rollout) یک رفع اشکال پیش نمی‌رود.</p>
+<h4 id="تعامل-با-وابستگی-نود-و-انتخابگرهای-نود" dir="rtl">تعامل با وابستگی نود و انتخابگرهای نود</h4>
+<p dir="rtl">اگر Pod ورودی دارای <code dir="ltr">spec.nodeSelector</code> یا <code dir="ltr">spec.affinity.nodeAffinity</code> تعریف‌شده باشد،
+زمان‌بند نودهای غیرمنطبق را از محاسبات skew کنار می‌گذارد.</p>
+<h3 id="مثال-قیدهای-پخش-توپولوژی-همراه-با-وابستگی-نود-example-topologyspreadconstraints-with-nodeaffinity" dir="rtl">مثال: قیدهای پخش توپولوژی همراه با وابستگی نود {#example-topologyspreadconstraints-with-nodeaffinity}</h3>
+<p dir="rtl">فرض کنید یک کلاستر ۵ نودی دارید که در zoneهای A تا C گسترده شده است:</p>
+<pre dir="ltr"><code class="language-mermaid" dir="ltr">graph BT
+    subgraph "zoneB"
+        p3(Pod) --&gt; n3(Node3)
+        n4(Node4)
+    end
+    subgraph "zoneA"
+        p1(Pod) --&gt; n1(Node1)
+        p2(Pod) --&gt; n2(Node2)
+    end
+
+classDef plain fill:#ddd,stroke:#fff,stroke-width:4px,color:#000;
+classDef k8s fill:#326ce5,stroke:#fff,stroke-width:4px,color:#fff;
+classDef cluster fill:#fff,stroke:#bbb,stroke-width:2px,color:#326ce5;
+class n1,n2,n3,n4,p1,p2,p3 k8s;
+class p4 plain;
+class zoneA,zoneB cluster;
+</code></pre>
+<pre dir="ltr"><code class="language-mermaid" dir="ltr">graph BT
+    subgraph "zoneC"
+        n5(Node5)
+    end
+
+classDef plain fill:#ddd,stroke:#fff,stroke-width:4px,color:#000;
+classDef k8s fill:#326ce5,stroke:#fff,stroke-width:4px,color:#fff;
+classDef cluster fill:#fff,stroke:#bbb,stroke-width:2px,color:#326ce5;
+class n5 k8s;
+class zoneC cluster;
+</code></pre>
+<p dir="rtl">و می‌دانید که zone <code dir="ltr">C</code> باید مستثنا شود. در این حالت، می‌توانید مانیفستی
+مانند زیر بنویسید تا Pod با نام <code dir="ltr">mypod</code> به‌جای zone <code dir="ltr">C</code> در zone <code dir="ltr">B</code> قرار گیرد.
+به همین ترتیب، کوبرنتیز <code dir="ltr">spec.nodeSelector</code> را نیز رعایت می‌کند.</p>
+<div class="code-file ltr" dir="ltr">pods/topology-spread-constraints/one-constraint-with-nodeaffinity.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">kind: Pod
+apiVersion: v1
+metadata:
+  name: mypod
+  labels:
+    foo: bar
+spec:
+  topologySpreadConstraints:
+  - maxSkew: 1
+    topologyKey: zone
+    whenUnsatisfiable: DoNotSchedule
+    labelSelector:
+      matchLabels:
+        foo: bar
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: zone
+            operator: NotIn
+            values:
+            - zoneC
+  containers:
+  - name: pause
+    image: registry.k8s.io/pause:3.1
+</code></pre>
+<h2 id="قراردادهای-ضمنی" dir="rtl">قراردادهای ضمنی</h2>
+<p dir="rtl">برخی قراردادهای ضمنی وجود دارد که در اینجا ارزش توجه دارند:</p>
+<ul>
+<li dir="rtl">
+<p dir="rtl">فقط پادهایی که در همان فضای نام (namespace) Pod ورودی قرار دارند می‌توانند نامزدهای منطبق باشند.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">زمان‌بند فقط نودهایی را در نظر می‌گیرد که همهٔ <code dir="ltr">topologySpreadConstraints[*].topologyKey</code> را به‌طور هم‌زمان داشته باشند.
+نودهایی که هر یک از این <code dir="ltr">topologyKeys</code> را نداشته باشند کنار گذاشته می‌شوند. این به آن معناست که:</p>
+<ol>
+<li dir="rtl">هیچ یک از پادهای واقع روی آن نودهای کنارگذاشته‌شده بر محاسبهٔ <code dir="ltr">maxSkew</code> تأثیر نمی‌گذارند؛ در
+<a href="#example-conflicting-topologyspreadconstraints">مثال</a> بالا، فرض کنید نود <code dir="ltr">node1</code>
+برچسب "zone" نداشته باشد، در این صورت آن ۲ Pod
+نادیده گرفته می‌شوند و بنابراین Pod ورودی در zone <code dir="ltr">A</code> زمان‌بندی خواهد شد.</li>
+<li dir="rtl">Pod ورودی هیچ شانسی برای زمان‌بندی روی این نوع نودها ندارد؛
+در مثال بالا، فرض کنید نود <code dir="ltr">node5</code> برچسبی با <strong>غلط تایپی</strong> به‌صورت <code dir="ltr">zone-typo: zoneC</code> داشته باشد
+(و هیچ برچسب <code dir="ltr">zone</code> تنظیم نشده باشد). پس از پیوستن نود <code dir="ltr">node5</code> به کلاستر، این نود کنار گذاشته می‌شود و
+پادهای این بار کاری روی آن زمان‌بندی نمی‌شوند.</li>
+</ol>
+</li>
+<li dir="rtl">
+<p dir="rtl">آگاه باشید که اگر <code dir="ltr">topologySpreadConstraints[*].labelSelector</code> در Pod ورودی
+با برچسب‌های خود آن منطبق نباشد، چه اتفاقی می‌افتد. در
+مثال بالا، اگر برچسب‌های Pod ورودی را حذف کنید، همچنان می‌تواند روی
+نودهای zone <code dir="ltr">B</code> قرار گیرد، زیرا قیدها همچنان برآورده می‌شوند. با این حال، پس از این
+جای‌گذاری، میزان عدم توازن کلاستر بدون تغییر باقی می‌ماند؛ همچنان zone <code dir="ltr">A</code>
+دارای ۲ Pod با برچسب <code dir="ltr">foo: bar</code> و zone <code dir="ltr">B</code> دارای ۱ Pod با برچسب
+<code dir="ltr">foo: bar</code> است. اگر این آن چیزی نیست که انتظار دارید،
+<code dir="ltr">topologySpreadConstraints[*].labelSelector</code> بار کاری را به‌روزرسانی کنید تا با برچسب‌های قالب پاد منطبق شود.</p>
+</li>
+</ul>
+<h2 id="قیدهای-پیش-فرض-سطح-کلاستر" dir="rtl">قیدهای پیش‌فرض سطح کلاستر</h2>
+<p dir="rtl">می‌توان قیدهای پخش توپولوژی پیش‌فرضی را برای یک کلاستر تنظیم کرد. قیدهای پخش
+توپولوژی پیش‌فرض تنها و تنها در صورتی بر یک Pod اعمال می‌شوند که:</p>
+<ul>
+<li dir="rtl">هیچ قیدی در <code dir="ltr">.spec.topologySpreadConstraints</code> خود تعریف نکرده باشد.</li>
+<li dir="rtl">به یک Service، ReplicaSet، StatefulSet یا ReplicationController تعلق داشته باشد.</li>
+</ul>
+<p dir="rtl">قیدهای پیش‌فرض را می‌توان به‌عنوان بخشی از آرگومان‌های افزونهٔ <code dir="ltr">PodTopologySpread</code>
+در یک <a href="https://kubernetes.io/docs/reference/scheduling/config/#profiles" target="_blank">پروفایل زمان‌بندی</a> تنظیم کرد.
+این قیدها با همان <a href="#topologyspreadconstraints-field">API بالا</a> مشخص می‌شوند، با این تفاوت که
+<code dir="ltr">labelSelector</code> باید خالی باشد. انتخابگرها از Serviceها،
+ReplicaSetها، StatefulSetها یا ReplicationControllerهایی که Pod به آن‌ها تعلق دارد محاسبه می‌شوند.</p>
+<p dir="rtl">یک پیکربندی نمونه ممکن است به شکل زیر باشد:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: kubescheduler.config.k8s.io/v1
+kind: KubeSchedulerConfiguration
+
+profiles:
+  - schedulerName: default-scheduler
+    pluginConfig:
+      - name: PodTopologySpread
+        args:
+          defaultConstraints:
+            - maxSkew: 1
+              topologyKey: topology.kubernetes.io/zone
+              whenUnsatisfiable: ScheduleAnyway
+          defaultingType: List
+</code></pre>
+<h3 id="قیدهای-پیش-فرض-داخلی-internal-default-constraints" dir="rtl">قیدهای پیش‌فرض داخلی {#internal-default-constraints}</h3>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes v1.24 [stable]</span> (پایدار)</div>
+<p dir="rtl">اگر هیچ قید پیش‌فرض سطح کلاستری برای پخش توپولوژی پاد پیکربندی نکنید،
+kube-scheduler طوری عمل می‌کند که گویی قیدهای توپولوژی پیش‌فرض زیر را مشخص کرده‌اید:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">defaultConstraints:
+  - maxSkew: 3
+    topologyKey: "kubernetes.io/hostname"
+    whenUnsatisfiable: ScheduleAnyway
+  - maxSkew: 5
+    topologyKey: "topology.kubernetes.io/zone"
+    whenUnsatisfiable: ScheduleAnyway
+</code></pre>
+<p dir="rtl">همچنین، افزونهٔ قدیمی <code dir="ltr">SelectorSpread</code> که رفتاری معادل ارائه می‌دهد،
+به‌طور پیش‌فرض غیرفعال است.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">افزونهٔ <code dir="ltr">PodTopologySpread</code> به نودهایی که کلیدهای توپولوژی مشخص‌شده در قیدهای پخش را
+ندارند امتیاز نمی‌دهد. این امر ممکن است هنگام استفاده از قیدهای توپولوژی پیش‌فرض
+به رفتار پیش‌فرض متفاوتی در مقایسه با افزونهٔ قدیمی <code dir="ltr">SelectorSpread</code> منجر شود.</p>
+<p dir="rtl">اگر انتظار نمی‌رود نودهای شما <strong>هر دو</strong> برچسب <code dir="ltr">kubernetes.io/hostname</code> و
+<code dir="ltr">topology.kubernetes.io/zone</code> را داشته باشند، به‌جای استفاده از پیش‌فرض‌های کوبرنتیز،
+قیدهای خودتان را تعریف کنید.</p>
+</div>
+<p dir="rtl">اگر نمی‌خواهید از قیدهای پخش پیش‌فرض Pod برای کلاستر خود استفاده کنید،
+می‌توانید با تنظیم <code dir="ltr">defaultingType</code> به <code dir="ltr">List</code> و خالی گذاشتن
+<code dir="ltr">defaultConstraints</code> در پیکربندی افزونهٔ <code dir="ltr">PodTopologySpread</code>، این پیش‌فرض‌ها را غیرفعال کنید:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: kubescheduler.config.k8s.io/v1
+kind: KubeSchedulerConfiguration
+
+profiles:
+  - schedulerName: default-scheduler
+    pluginConfig:
+      - name: PodTopologySpread
+        args:
+          defaultConstraints: []
+          defaultingType: List
+</code></pre>
+<h2 id="مقایسه-با-podaffinity-و-podantiaffinity-comparison-with-podaffinity-podantiaffinity" dir="rtl">مقایسه با podAffinity و podAntiAffinity {#comparison-with-podaffinity-podantiaffinity}</h2>
+<p dir="rtl">در کوبرنتیز، <a href="assign-pod-node.html#inter-pod-affinity-and-anti-affinity">وابستگی و ضدوابستگی میان پادها (inter-Pod affinity and anti-affinity)</a>
+کنترل می‌کنند که پادها نسبت به یکدیگر چگونه زمان‌بندی شوند؛ یا متراکم‌تر
+یا پراکنده‌تر.</p>
+<dl>
+<dt dir="ltr" class="ltr"><code dir="ltr">podAffinity</code></dt>
+<dd dir="rtl">پادها را جذب می‌کند؛ می‌توانید تلاش کنید هر تعداد پاد را در دامنه(های)
+توپولوژی واجد شرایط متراکم کنید.</dd>
+<dt dir="ltr" class="ltr"><code dir="ltr">podAntiAffinity</code></dt>
+<dd dir="rtl">پادها را دفع می‌کند. اگر آن را روی حالت <code dir="ltr">requiredDuringSchedulingIgnoredDuringExecution</code> تنظیم کنید،
+فقط یک Pod می‌تواند در یک دامنهٔ توپولوژی واحد زمان‌بندی شود؛ اگر
+<code dir="ltr">preferredDuringSchedulingIgnoredDuringExecution</code> را انتخاب کنید، توانایی اعمال اجباری
+قید را از دست می‌دهید.</dd>
+</dl>
+<p dir="rtl">برای کنترل دقیق‌تر، می‌توانید قیدهای پخش توپولوژی را برای توزیع
+پادها در دامنه‌های توپولوژی مختلف مشخص کنید تا به دسترس‌پذیری بالا یا
+صرفه‌جویی در هزینه دست یابید. این کار همچنین می‌تواند به به‌روزرسانی تدریجی (rolling update) بارهای کاری و افزایش مقیاس
+replicaها به‌صورت روان کمک کند.</p>
+<p dir="rtl">برای زمینهٔ بیشتر، بخش
+<a href="https://github.com/kubernetes/enhancements/tree/master/keps/sig-scheduling/895-pod-topology-spread#motivation" target="_blank" rel="noopener">انگیزه</a>
+در پیشنهاد بهبود (enhancement proposal) مربوط به قیدهای پخش توپولوژی Pod را ببینید.</p>
+<h2 id="محدودیت-های-شناخته-شده" dir="rtl">محدودیت‌های شناخته‌شده</h2>
+<ul>
+<li dir="rtl">
+<p dir="rtl">هیچ تضمینی وجود ندارد که قیدها هنگام حذف پادها همچنان برآورده بمانند. برای
+مثال، کاهش مقیاس یک Deployment ممکن است به توزیع نامتوازن پادها منجر شود.</p>
+<p dir="rtl">می‌توانید از ابزاری مانند <a href="https://github.com/kubernetes-sigs/descheduler" target="_blank" rel="noopener">Descheduler</a>
+برای متوازن کردن دوبارهٔ توزیع پادها استفاده کنید.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">پادهای منطبق روی نودهای دارای taint نیز در نظر گرفته می‌شوند.
+به <a href="https://github.com/kubernetes/kubernetes/issues/80921" target="_blank" rel="noopener">Issue 80921</a> مراجعه کنید.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">زمان‌بند از پیش از همهٔ zoneها یا سایر دامنه‌های توپولوژی‌ای که یک کلاستر دارد
+اطلاع ندارد. این دامنه‌ها از روی نودهای موجود در
+کلاستر تعیین می‌شوند. این موضوع می‌تواند در کلاسترهای دارای مقیاس‌بندی خودکار مشکل‌ساز شود، هنگامی که یک node pool (یا
+node group) به صفر نود کاهش مقیاس یافته باشد و انتظار داشته باشید کلاستر افزایش مقیاس یابد،
+زیرا در این حالت، آن دامنه‌های توپولوژی تا زمانی که دست‌کم یک نود در آن‌ها
+وجود نداشته باشد در نظر گرفته نمی‌شوند.</p>
+<p dir="rtl">می‌توانید با استفاده از یک مقیاس‌دهندهٔ خودکار نود (Node autoscaler) که از
+قیدهای پخش توپولوژی Pod و نیز از مجموعهٔ کلی دامنه‌های توپولوژی آگاه است،
+این مشکل را دور بزنید.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">پادهایی که با labelSelector خودشان منطبق نیستند، «پادهای شبح» (ghost pods) ایجاد می‌کنند. اگر
+برچسب‌های یک پاد با <code dir="ltr">labelSelector</code> در قید پخش توپولوژی آن منطبق نباشند، آن پاد
+خودش را در محاسبات پخش به حساب نمی‌آورد. این به آن معناست که:</p>
+<ul>
+<li dir="rtl">چندین پاد از این نوع ممکن است به‌سادگی روی یک توپولوژی انباشته شوند (تا زمانی که پادهای منطبق تازه ایجاد یا حذف شوند)، زیرا زمان‌بندی این پادها نتیجهٔ محاسبهٔ پخش را تغییر نمی‌دهد.</li>
+<li dir="rtl">قید پخش به شیوه‌ای ناخواسته عمل می‌کند که به احتمال زیاد با انتظارات شما مطابقت ندارد</li>
+</ul>
+<p dir="rtl">اطمینان حاصل کنید که برچسب‌های پاد شما با <code dir="ltr">labelSelector</code> در قیدهای پخش منطبق هستند.
+معمولاً یک پاد باید با انتخابگر قید پخش توپولوژی خودش منطبق باشد.</p>
+</li>
+</ul>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<ul>
+<li dir="rtl">مقالهٔ وبلاگ <a href="/blog/2020/05/introducing-podtopologyspread/">معرفی PodTopologySpread</a>
+<code dir="ltr">maxSkew</code> را با جزئیاتی توضیح می‌دهد و برخی نمونه‌های کاربرد پیشرفته را نیز پوشش می‌دهد.</li>
+<li dir="rtl">بخش <a href="https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#scheduling" target="_blank">زمان‌بندی</a> در
+مرجع API مربوط به Pod را مطالعه کنید.</li>
+</ul>
+</main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#انگیزه">انگیزه</a><a class="l2" href="#فیلد-topologyspreadconstraints">فیلد topologySpreadConstraints</a><a class="l3" href="#تعریف-قید-پخش">تعریف قید پخش</a><a class="l3" href="#برچسب-های-نود">برچسب‌های نود</a><a class="l2" href="#سازگاری">سازگاری</a><a class="l2" href="#نمونه-های-قید-پخش-توپولوژی">نمونه‌های قید پخش توپولوژی</a><a class="l3" href="#مثال-یک-قید-پخش-توپولوژی-example-one-topologyspreadconstraint">مثال: یک قید پخش توپولوژی {#example-one-topologyspreadconstraint}</a><a class="l3" href="#مثال-چند-قید-پخش-توپولوژی-example-multiple-topologyspreadconstraints">مثال: چند قید پخش توپولوژی {#example-multiple-topologyspreadconstraints}</a><a class="l3" href="#مثال-قیدهای-پخش-توپولوژی-متعارض-example-conflicting-topologyspreadconstraints">مثال: قیدهای پخش توپولوژی متعارض {#example-conflicting-topologyspreadconstraints}</a><a class="l3" href="#مثال-قیدهای-پخش-توپولوژی-همراه-با-وابستگی-نود-example-topologyspreadconstraints-with-nodeaffinity">مثال: قیدهای پخش توپولوژی همراه با وابستگی نود {#example-topologyspreadconstraints-with-nodeaffinity}</a><a class="l2" href="#قراردادهای-ضمنی">قراردادهای ضمنی</a><a class="l2" href="#قیدهای-پیش-فرض-سطح-کلاستر">قیدهای پیش‌فرض سطح کلاستر</a><a class="l3" href="#قیدهای-پیش-فرض-داخلی-internal-default-constraints">قیدهای پیش‌فرض داخلی {#internal-default-constraints}</a><a class="l2" href="#مقایسه-با-podaffinity-و-podantiaffinity-comparison-with-podaffinity-podantiaffinity">مقایسه با podAffinity و podAntiAffinity {#comparison-with-podaffinity-podantiaffinity}</a><a class="l2" href="#محدودیت-های-شناخته-شده">محدودیت‌های شناخته‌شده</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>

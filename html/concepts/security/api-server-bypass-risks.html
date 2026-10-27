@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>خطرات دور زدن API Server کوبرنتیز | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+</head>
+<body>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">concepts / security</span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">خطرات دور زدن API Server کوبرنتیز</h1><p class="page-meta" dir="rtl">اطلاعات معماری امنیتی مرتبط با API server و سایر مؤلفه‌ها
+</p><!-- overview -->
+<p dir="rtl">API server کوبرنتیز نقطهٔ ورود اصلی به یک کلاستر برای طرف‌های خارجی
+(کاربران و سرویس‌ها) است که با آن تعامل دارند.</p>
+<p dir="rtl">API server به‌عنوان بخشی از این نقش، چندین کنترل امنیتی کلیدی داخلی دارد، مانند
+ثبت لاگ ممیزی و <span class="term" title="admission-controller">کنترل‌کننده‌های پذیرش</span>.
+با این حال، روش‌هایی برای تغییر پیکربندی
+یا محتوای کلاستر وجود دارد که این کنترل‌ها را دور می‌زنند.</p>
+<p dir="rtl">این صفحه روش‌هایی را توصیف می‌کند که از طریق آن‌ها می‌توان کنترل‌های امنیتی داخلی
+API server کوبرنتیز را دور زد، تا اپراتورهای کلاستر
+و معماران امنیت بتوانند اطمینان حاصل کنند که این راه‌های دور زدن به‌طور مناسب محدود شده‌اند.</p>
+<!-- body -->
+<h2 id="پادهای-ایستا-static-pods-static-pods" dir="rtl">پادهای ایستا (Static Pods) {#static-pods}</h2>
+<p dir="rtl"><span class="term" title="kubelet">kubelet</span> روی هر نود، هر مانیفستی را که در یک
+دایرکتوری مشخص ذخیره شده یا از یک URL مشخص دریافت شده باشد، به‌عنوان <a href="https://kubernetes.io/docs/tasks/configure-pod-container/static-pod" target="_blank"><em>پادهای ایستا</em></a>
+در کلاستر شما بارگذاری کرده و مستقیماً مدیریت می‌کند. API server این پادهای ایستا را مدیریت نمی‌کند. مهاجمی که دسترسی نوشتن
+به این مکان داشته باشد، می‌تواند پیکربندی پادهای ایستای بارگذاری‌شده از آن
+منبع را تغییر دهد، یا پادهای ایستای جدیدی وارد کند.</p>
+<p dir="rtl">دسترسی پادهای ایستا به سایر آبجکت‌ها در API کوبرنتیز محدود است. برای مثال،
+نمی‌توانید یک Pod ایستا را طوری پیکربندی کنید که یک Secret را از کلاستر mount کند. با این حال، این پادها می‌توانند
+اقدامات حساس امنیتی دیگری انجام دهند، مانند استفاده از mountهای <code dir="ltr">hostPath</code> از
+نود زیربنایی.</p>
+<p dir="rtl">به‌طور پیش‌فرض، kubelet یک <span class="term" title="mirror-pod">پاد آینه‌ای (mirror pod)</span>
+ایجاد می‌کند تا پادهای ایستا در API کوبرنتیز قابل مشاهده باشند. با این حال، اگر مهاجم هنگام ایجاد Pod
+از نام فضای نام نامعتبری استفاده کند، Pod در API کوبرنتیز قابل مشاهده نخواهد بود و تنها
+توسط ابزارهایی که به میزبان(های) متأثر دسترسی دارند قابل کشف است.</p>
+<p dir="rtl">اگر یک Pod ایستا در کنترل پذیرش رد شود، kubelet آن Pod را در
+API server ثبت نمی‌کند. با این حال، Pod همچنان روی نود اجرا می‌شود. برای اطلاعات بیشتر، به
+<a href="https://github.com/kubernetes/kubeadm/issues/1541#issuecomment-487331701" target="_blank" rel="noopener">kubeadm issue #1541</a> مراجعه کنید.</p>
+<h3 id="راهکارهای-کاهش-خطر-static-pods-mitigations" dir="rtl">راهکارهای کاهش خطر {#static-pods-mitigations}</h3>
+<ul>
+<li dir="rtl"><a href="https://kubernetes.io/docs/tasks/configure-pod-container/static-pod/#static-pod-creation" target="_blank">قابلیت مانیفست Pod ایستای kubelet را فعال کنید</a>
+فقط در صورتی که نود به آن نیاز داشته باشد.</li>
+<li dir="rtl">اگر نودی از قابلیت Pod ایستا استفاده می‌کند، دسترسی فایل‌سیستمی به دایرکتوری یا URL
+مانیفست‌های Pod ایستا را به کاربرانی که به این دسترسی نیاز دارند محدود کنید.</li>
+<li dir="rtl">دسترسی به پارامترها و فایل‌های پیکربندی kubelet را محدود کنید تا از تنظیم
+مسیر یا URL مربوط به Pod ایستا توسط مهاجم جلوگیری شود.</li>
+<li dir="rtl">همهٔ دسترسی‌ها به دایرکتوری‌ها یا مکان‌های ذخیره‌سازی وبی که میزبان
+مانیفست‌های Pod ایستا و فایل‌های پیکربندی kubelet هستند را به‌طور منظم ممیزی کرده و به‌صورت متمرکز گزارش کنید.</li>
+</ul>
+<h2 id="api-مربوط-به-kubelet-kubelet-api" dir="rtl">API مربوط به kubelet {#kubelet-api}</h2>
+<p dir="rtl">kubelet یک API از نوع HTTP فراهم می‌کند که معمولاً روی پورت TCP 10250 در
+نودهای کارگر کلاستر در معرض دسترسی قرار می‌گیرد. بسته به توزیع کوبرنتیز مورد استفاده،
+این API ممکن است روی نودهای control plane نیز در معرض دسترسی باشد. دسترسی مستقیم به این API امکان افشای اطلاعات دربارهٔ
+پادهای در حال اجرا روی یک نود، لاگ‌های آن پادها، و اجرای دستورات در
+هر کانتینر در حال اجرا روی نود را فراهم می‌کند.</p>
+<p dir="rtl">برخی از این endpointها از پروتکل‌های Websocket از طریق درخواست‌های HTTP <code dir="ltr">GET</code> پشتیبانی می‌کنند که با فعل <strong>get</strong> مجوزدهی می‌شوند.
+این به آن معناست که مجوز <strong>get</strong> روی <code dir="ltr">nodes/proxy</code> یک مجوز فقط‌خواندنی نیست،
+و دسترسی به endpointهایی را مجاز می‌کند که می‌توان از آن‌ها برای اجرای دستورات در هر کانتینر در حال اجرا روی نود استفاده کرد.</p>
+<p dir="rtl">هنگامی که کاربران کلاستر کوبرنتیز دسترسی RBAC به زیرمنابع آبجکت <code dir="ltr">Node</code> دارند، این دسترسی
+به‌عنوان مجوزی برای تعامل با API مربوط به kubelet عمل می‌کند. دسترسی دقیق بستگی به این دارد که
+دسترسی به کدام زیرمنبع اعطا شده است، همان‌طور که در
+<a href="https://kubernetes.io/docs/reference/access-authn-authz/kubelet-authn-authz/#kubelet-authorization" target="_blank">مجوزدهی kubelet</a> به تفصیل آمده است.</p>
+<p dir="rtl">دسترسی مستقیم به API مربوط به kubelet مشمول کنترل پذیرش نیست و توسط
+ثبت لاگ ممیزی کوبرنتیز ثبت نمی‌شود. مهاجمی که دسترسی مستقیم به این API داشته باشد ممکن است بتواند
+کنترل‌هایی را که اقدامات خاصی را تشخیص می‌دهند یا از آن‌ها جلوگیری می‌کنند دور بزند.</p>
+<p dir="rtl">API مربوط به kubelet را می‌توان طوری پیکربندی کرد که درخواست‌ها را به روش‌های گوناگونی احراز هویت کند.
+به‌طور پیش‌فرض، پیکربندی kubelet اجازهٔ دسترسی ناشناس را می‌دهد. بیشتر ارائه‌دهندگان کوبرنتیز
+این پیش‌فرض را تغییر می‌دهند تا از احراز هویت webhook و گواهی‌نامه استفاده شود. این کار به control plane امکان می‌دهد
+اطمینان حاصل کند که فراخواننده مجوز دسترسی به منبع API <code dir="ltr">nodes</code> یا زیرمنابع آن را دارد.
+دسترسی ناشناس پیش‌فرض این بررسی را با control plane انجام نمی‌دهد.</p>
+<h3 id="راهکارهای-کاهش-خطر" dir="rtl">راهکارهای کاهش خطر</h3>
+<ul>
+<li dir="rtl">دسترسی به زیرمنابع آبجکت API <code dir="ltr">nodes</code> را با استفاده از سازوکارهایی مانند
+<a href="https://kubernetes.io/docs/reference/access-authn-authz/rbac/" target="_blank">RBAC</a> محدود کنید. این دسترسی را فقط در صورت نیاز اعطا کنید،
+مانند نیاز سرویس‌های پایش.</li>
+<li dir="rtl">از اعطای مجوز همه‌جانبهٔ <code dir="ltr">nodes/proxy</code>، حتی فقط با فعل <strong>get</strong>، خودداری کنید.
+به‌جای آن، <a href="https://kubernetes.io/docs/reference/access-authn-authz/kubelet-authn-authz/#fine-grained-authorization" target="_blank">مجوزهای جزئی</a> اعطا کنید.</li>
+<li dir="rtl">دسترسی به پورت kubelet را محدود کنید. فقط به محدوده‌های نشانی IP مشخص و مورد اعتماد
+اجازهٔ دسترسی به این پورت را بدهید.</li>
+<li dir="rtl">اطمینان حاصل کنید که <a href="https://kubernetes.io/docs/reference/access-authn-authz/kubelet-authn-authz/#kubelet-authentication" target="_blank">احراز هویت kubelet</a>.
+روی حالت webhook یا گواهی‌نامه تنظیم شده است.</li>
+<li dir="rtl">اطمینان حاصل کنید که پورت «فقط‌خواندنی» و بدون احراز هویت Kubelet در کلاستر فعال نیست.</li>
+</ul>
+<h2 id="api-مربوط-به-etcd" dir="rtl">API مربوط به etcd</h2>
+<p dir="rtl">کلاسترهای کوبرنتیز از etcd به‌عنوان مخزن داده استفاده می‌کنند. سرویس <code dir="ltr">etcd</code> روی پورت TCP 2379 گوش می‌دهد.
+تنها کلاینت‌هایی که به دسترسی نیاز دارند، API server کوبرنتیز و هر ابزار پشتیبان‌گیری‌ای
+است که استفاده می‌کنید. دسترسی مستقیم به این API امکان افشا یا تغییر هر
+داده‌ای را که در کلاستر نگهداری می‌شود فراهم می‌کند.</p>
+<p dir="rtl">دسترسی به API مربوط به etcd معمولاً از طریق احراز هویت با گواهی‌نامهٔ کلاینت مدیریت می‌شود.
+هر گواهی‌نامه‌ای که توسط یک مرجع صدور گواهی‌نامهٔ مورد اعتماد etcd صادر شده باشد، دسترسی کامل
+به داده‌های ذخیره‌شده در etcd را فراهم می‌کند.</p>
+<p dir="rtl">دسترسی مستقیم به etcd مشمول کنترل پذیرش کوبرنتیز نیست و توسط
+ثبت لاگ ممیزی کوبرنتیز ثبت نمی‌شود. مهاجمی که به کلید خصوصی گواهی‌نامهٔ کلاینت etcd مربوط به API server
+دسترسی خواندن داشته باشد (یا بتواند یک گواهی‌نامهٔ کلاینت مورد اعتماد جدید ایجاد کند)، می‌تواند
+با دسترسی به secretهای کلاستر یا تغییر قواعد دسترسی، حقوق مدیر کلاستر را به دست آورد. حتی بدون
+ارتقای امتیازات RBAC کوبرنتیز، مهاجمی که بتواند etcd را تغییر دهد می‌تواند هر آبجکت API را بازیابی کند
+یا بارهای کاری جدیدی درون کلاستر ایجاد کند.</p>
+<p dir="rtl">بسیاری از ارائه‌دهندگان کوبرنتیز
+etcd را طوری پیکربندی می‌کنند که از TLS متقابل (mutual TLS) استفاده کند (هم کلاینت و هم سرور گواهی‌نامهٔ یکدیگر را برای احراز هویت بررسی می‌کنند).
+هیچ پیاده‌سازی مجوزدهی پذیرفته‌شده و گسترده‌ای برای API مربوط به etcd وجود ندارد، هرچند
+این قابلیت وجود دارد. از آنجا که هیچ مدل مجوزدهی‌ای وجود ندارد، هر گواهی‌نامه‌ای
+که دسترسی کلاینت به etcd داشته باشد می‌تواند برای کسب دسترسی کامل به etcd استفاده شود. معمولاً گواهی‌نامه‌های کلاینت etcd
+که فقط برای بررسی سلامت استفاده می‌شوند نیز می‌توانند دسترسی کامل خواندن و نوشتن اعطا کنند.</p>
+<h3 id="راهکارهای-کاهش-خطر-etcd-api-mitigations" dir="rtl">راهکارهای کاهش خطر {#etcd-api-mitigations}</h3>
+<ul>
+<li dir="rtl">اطمینان حاصل کنید که مرجع صدور گواهی‌نامهٔ مورد اعتماد etcd فقط برای اهداف
+احراز هویت در آن سرویس استفاده می‌شود.</li>
+<li dir="rtl">دسترسی به کلید خصوصی گواهی‌نامهٔ سرور etcd، و به گواهی‌نامه و کلید کلاینت
+API server را کنترل کنید.</li>
+<li dir="rtl">محدود کردن دسترسی به پورت etcd در سطح شبکه را در نظر بگیرید تا فقط دسترسی
+از محدوده‌های نشانی IP مشخص و مورد اعتماد مجاز باشد.</li>
+</ul>
+<h2 id="سوکت-محیط-اجرای-کانتینر-runtime-socket" dir="rtl">سوکت محیط اجرای کانتینر {#runtime-socket}</h2>
+<p dir="rtl">روی هر نود در یک کلاستر کوبرنتیز، دسترسی برای تعامل با کانتینرها توسط
+محیط اجرای کانتینر (container runtime) کنترل می‌شود (یا محیط‌های اجرا، اگر بیش از یکی پیکربندی کرده باشید). معمولاً
+محیط اجرای کانتینر یک سوکت Unix در معرض دسترسی قرار می‌دهد که kubelet می‌تواند به آن دسترسی داشته باشد. مهاجمی که
+به این سوکت دسترسی داشته باشد می‌تواند کانتینرهای جدیدی راه‌اندازی کند یا با کانتینرهای در حال اجرا تعامل داشته باشد.</p>
+<p dir="rtl">در سطح کلاستر، تأثیر این دسترسی به این بستگی دارد که آیا کانتینرهایی که
+روی نود آسیب‌دیده اجرا می‌شوند به Secretها یا سایر داده‌های محرمانه‌ای دسترسی دارند
+که مهاجم بتواند از آن‌ها برای ارتقای امتیازات به سایر نودهای کارگر یا به
+مؤلفه‌های control plane استفاده کند.</p>
+<h3 id="راهکارهای-کاهش-خطر-runtime-socket-mitigations" dir="rtl">راهکارهای کاهش خطر {#runtime-socket-mitigations}</h3>
+<ul>
+<li dir="rtl">اطمینان حاصل کنید که دسترسی فایل‌سیستمی به سوکت‌های محیط اجرای کانتینر را به‌دقت کنترل می‌کنید.
+در صورت امکان، این دسترسی را به کاربر <code dir="ltr">root</code> محدود کنید.</li>
+<li dir="rtl">kubelet را با استفاده از سازوکارهایی مانند فضاهای نام هستهٔ لینوکس،
+از سایر مؤلفه‌های در حال اجرا روی نود ایزوله کنید.</li>
+<li dir="rtl">اطمینان حاصل کنید که استفاده از <a href="https://kubernetes.io/docs/concepts/storage/volumes/#hostpath" target="_blank">mountهای <code dir="ltr">hostPath</code></a>
+را که شامل سوکت محیط اجرای کانتینر هستند، چه به‌طور مستقیم و چه با mount کردن یک دایرکتوری
+والد، محدود یا ممنوع می‌کنید. همچنین mountهای <code dir="ltr">hostPath</code> باید به‌صورت فقط‌خواندنی تنظیم شوند تا خطرات
+دور زدن محدودیت‌های دایرکتوری توسط مهاجمان کاهش یابد.</li>
+<li dir="rtl">دسترسی کاربران به نودها را محدود کنید، و به‌ویژه دسترسی ابرکاربر به نودها را محدود کنید.</li>
+</ul>
+</main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#پادهای-ایستا-static-pods-static-pods">پادهای ایستا (Static Pods) {#static-pods}</a><a class="l3" href="#راهکارهای-کاهش-خطر-static-pods-mitigations">راهکارهای کاهش خطر {#static-pods-mitigations}</a><a class="l2" href="#api-مربوط-به-kubelet-kubelet-api">API مربوط به kubelet {#kubelet-api}</a><a class="l3" href="#راهکارهای-کاهش-خطر">راهکارهای کاهش خطر</a><a class="l2" href="#api-مربوط-به-etcd">API مربوط به etcd</a><a class="l3" href="#راهکارهای-کاهش-خطر-etcd-api-mitigations">راهکارهای کاهش خطر {#etcd-api-mitigations}</a><a class="l2" href="#سوکت-محیط-اجرای-کانتینر-runtime-socket">سوکت محیط اجرای کانتینر {#runtime-socket}</a><a class="l3" href="#راهکارهای-کاهش-خطر-runtime-socket-mitigations">راهکارهای کاهش خطر {#runtime-socket-mitigations}</a></nav>
+</div>
+</body>
+</html>
