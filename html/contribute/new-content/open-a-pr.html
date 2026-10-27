@@ -1,0 +1,580 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>باز کردن یک pull request | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">contribute / new-content</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">باز کردن یک pull request</h1><!-- overview -->
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl"><strong>توسعه‌دهندگان کد</strong>: اگر در حال مستندسازی یک قابلیت جدید برای نسخهٔ آتی کوبرنتیز هستید، به
+<a href="new-features.html">مستندسازی یک قابلیت جدید</a> مراجعه کنید.</p>
+</div>
+<p dir="rtl">برای مشارکت با افزودن صفحات محتوای جدید یا بهبود صفحات موجود، یک pull request (PR) باز کنید.
+مطمئن شوید که همهٔ الزامات بخش
+<a href="index.html">پیش از شروع</a> را رعایت کرده‌اید.</p>
+<p dir="rtl">اگر تغییر شما کوچک است یا با git آشنایی ندارید، بخش
+<a href="#changes-using-github">تغییرات با استفاده از GitHub</a> را بخوانید تا نحوهٔ ویرایش یک صفحه را بیاموزید.</p>
+<p dir="rtl">اگر تغییرات شما گسترده است، بخش <a href="#fork-the-repo">کار با یک fork محلی</a> را بخوانید تا یاد بگیرید
+چگونه تغییرات را به‌صورت محلی روی رایانهٔ خود انجام دهید.</p>
+<!-- body -->
+<h2 id="تغییرات-با-استفاده-از-github-changes-using-github" dir="rtl">تغییرات با استفاده از GitHub {#changes-using-github}</h2>
+<p dir="rtl">اگر تجربهٔ کمتری در کار با جریان‌های کاری git دارید، این روشی ساده‌تر برای
+باز کردن یک pull request است. شکل ۱ مراحل را به‌طور خلاصه نشان می‌دهد و جزئیات در ادامه آمده است.</p>
+<!-- See https://github.com/kubernetes/website/issues/28808 for live-editor URL to this figure -->
+<!-- You can also cut/paste the mermaid code into the live editor at https://mermaid-js.github.io/mermaid-live-editor to play around with it -->
+<p dir="ltr" class="ltr">flowchart LR
+A([fa:fa-user New<br>Contributor]) --- id1[(kubernetes/website<br>GitHub)]
+subgraph tasks[Changes using GitHub]
+direction TB
+0[ ] -.-
+1[1. Edit this page] --&gt; 2[2. Use GitHub markdown<br>editor to make changes]
+2 --&gt; 3[3. Select Commit changes...]</p>
+<p dir="ltr" class="ltr">end
+subgraph tasks2[ ]
+direction TB
+4[4. Select Propose changes] --&gt; 5[5. Select Create pull request] --&gt; 6[6. Fill in Open a pull request]
+6 --&gt; 7[7. Select Create pull request]
+end</p>
+<p dir="ltr" class="ltr">id1 --&gt; tasks --&gt; tasks2</p>
+<p dir="ltr" class="ltr">classDef grey fill:#dddddd,stroke:#ffffff,stroke-width:px,color:#000000, font-size:15px;
+classDef white fill:#ffffff,stroke:#000,stroke-width:px,color:#000,font-weight:bold
+classDef k8s fill:#326ce5,stroke:#fff,stroke-width:1px,color:#fff;
+classDef spacewhite fill:#ffffff,stroke:#fff,stroke-width:0px,color:#000
+class A,1,2,3,4,5,6,7 grey
+class 0 spacewhite
+class tasks,tasks2 white
+class id1 k8s</p>
+<p dir="rtl">شکل ۱. مراحل باز کردن یک PR با استفاده از GitHub.</p>
+<ol>
+<li dir="rtl">
+<p dir="rtl">در صفحه‌ای که مشکل را مشاهده می‌کنید، گزینهٔ <strong>Edit this page</strong> را در پنل ناوبری سمت راست انتخاب کنید.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">تغییرات خود را در ویرایشگر markdown گیت‌هاب اعمال کنید.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">در بالای ویرایشگر، سمت راست، <strong>Commit changes</strong> را انتخاب کنید.
+در فیلد اول، برای پیام commit خود یک عنوان بنویسید.
+در فیلد دوم، توضیحات را وارد کنید.</p>
+</li>
+</ol>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">از هیچ‌یک از <a href="https://help.github.com/en/github/managing-your-work-on-github/linking-a-pull-request-to-an-issue#linking-a-pull-request-to-an-issue-using-a-keyword" target="_blank" rel="noopener">کلیدواژه‌های GitHub</a>
+در پیام commit خود استفاده نکنید. می‌توانید این کلیدواژه‌ها را بعداً به توضیحات pull request اضافه کنید.</p>
+</div>
+<ol>
+<li dir="rtl">
+<p dir="rtl"><strong>Propose changes</strong> را انتخاب کنید.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><strong>Create pull request</strong> را انتخاب کنید.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">صفحهٔ <strong>Open a pull request</strong> نمایش داده می‌شود. فرم را تکمیل کنید:</p>
+<ul>
+<li dir="rtl">فیلد <strong>Add a title</strong> در pull request به‌طور پیش‌فرض برابر با خلاصهٔ commit است.
+در صورت نیاز می‌توانید آن را تغییر دهید.</li>
+<li dir="rtl">فیلد <strong>Add a description</strong> شامل پیام کامل commit شما (در صورت وجود)
+و مقداری متن قالب است. جزئیاتی را که متن قالب از شما می‌خواهد
+اضافه کنید و سپس متن اضافی قالب را حذف کنید.</li>
+<li dir="rtl">کادر انتخاب <strong>Allow edits from maintainers</strong> را انتخاب‌شده رها کنید.</li>
+</ul>
+</li>
+</ol>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">توضیحات PR راه بسیار خوبی برای کمک به بازبین‌ها در درک تغییر شماست.
+برای اطلاعات بیشتر، به <a href="#open-a-pr">باز کردن یک PR</a> مراجعه کنید.</p>
+<ol>
+<li dir="rtl"><strong>Create pull request</strong> را انتخاب کنید.</li>
+</ol>
+<h3 id="رسیدگی-به-بازخوردها-در-github" dir="rtl">رسیدگی به بازخوردها در GitHub</h3>
+<p dir="rtl">پیش از ادغام یک pull request، اعضای جامعهٔ کوبرنتیز آن را بازبینی و
+تأیید می‌کنند. <code dir="ltr">k8s-ci-robot</code> بر اساس نزدیک‌ترین مالک ذکرشده در صفحات،
+بازبین‌هایی را پیشنهاد می‌دهد. اگر شخص مشخصی را در نظر دارید،
+نظری بگذارید که نام کاربری GitHub او در آن آمده باشد.</p>
+<p dir="rtl">اگر بازبین از شما خواست تغییراتی اعمال کنید:</p>
+<ol>
+<li dir="rtl">به زبانهٔ <strong>Files changed</strong> بروید.</li>
+<li dir="rtl">روی نماد مداد (ویرایش) در کنار هر فایلی که توسط pull request تغییر کرده است کلیک کنید.</li>
+<li dir="rtl">تغییرات درخواست‌شده را اعمال کنید.</li>
+<li dir="rtl">تغییرات را commit کنید.</li>
+</ol>
+<p dir="rtl">اگر منتظر یک بازبین هستید، هر ۷ روز یک بار با او تماس بگیرید. همچنین می‌توانید در کانال
+Slack با نام <code dir="ltr">#sig-docs</code> پیام بگذارید.</p>
+<p dir="rtl">پس از پایان بازبینی، یک بازبین PR شما را ادغام می‌کند و چند دقیقه بعد تغییرات شما منتشر می‌شود.</p>
+<h2 id="کار-با-یک-fork-محلی-fork-the-repo" dir="rtl">کار با یک fork محلی {#fork-the-repo}</h2>
+<p dir="rtl">اگر تجربهٔ بیشتری با git دارید یا تغییرات شما بیش از چند خط است،
+با یک fork محلی کار کنید.</p>
+<p dir="rtl">مطمئن شوید که <a href="https://git-scm.com/book/en/v2/Getting-Started-Installing-Git" target="_blank" rel="noopener">git</a> روی
+رایانهٔ شما نصب شده است. همچنین می‌توانید از یک برنامهٔ رابط کاربری git استفاده کنید.</p>
+<p dir="rtl">شکل ۲ مراحلی را که هنگام کار با یک fork محلی باید دنبال کنید نشان می‌دهد. جزئیات هر مرحله در ادامه آمده است.</p>
+<!-- See https://github.com/kubernetes/website/issues/28808 for live-editor URL to this figure -->
+<!-- You can also cut/paste the mermaid code into the live editor at https://mermaid-js.github.io/mermaid-live-editor to play around with it -->
+<p dir="ltr" class="ltr">flowchart LR
+1[Fork the kubernetes/website<br>repository] --&gt; 2[Create local clone<br>and set upstream]
+subgraph changes[Your changes]
+direction TB
+S[ ] -.-
+3[Create a branch<br>example: my_new_branch] --&gt; 3a[Make changes using<br>text editor] --&gt; 4["Preview your changes<br>locally using Hugo<br>(localhost:1313)<br>or build container image"]
+end
+subgraph changes2[Commit / Push]
+direction TB
+T[ ] -.-
+5[Commit your changes] --&gt; 6[Push commit to<br>origin/my_new_branch]
+end</p>
+<p dir="ltr" class="ltr">2 --&gt; changes --&gt; changes2</p>
+<p dir="ltr" class="ltr">classDef grey fill:#dddddd,stroke:#ffffff,stroke-width:px,color:#000000, font-size:15px;
+classDef white fill:#ffffff,stroke:#000,stroke-width:px,color:#000,font-weight:bold
+classDef k8s fill:#326ce5,stroke:#fff,stroke-width:1px,color:#fff;
+classDef spacewhite fill:#ffffff,stroke:#fff,stroke-width:0px,color:#000
+class 1,2,3,3a,4,5,6 grey
+class S,T spacewhite
+class changes,changes2 white</p>
+<p dir="rtl">شکل ۲. کار با یک fork محلی برای اعمال تغییرات.</p>
+<h3 id="ایجاد-fork-از-مخزن-kubernetes-website" dir="rtl">ایجاد fork از مخزن kubernetes/website</h3>
+<ol>
+<li dir="rtl">به مخزن <a href="https://github.com/kubernetes/website/" target="_blank" rel="noopener"><code dir="ltr">kubernetes/website</code></a> بروید.</li>
+<li dir="rtl"><strong>Fork</strong> را انتخاب کنید.</li>
+</ol>
+<h3 id="ایجاد-یک-کلون-محلی-و-تنظیم-upstream" dir="rtl">ایجاد یک کلون محلی و تنظیم upstream</h3>
+<ol>
+<li dir="rtl">
+<p dir="rtl">در یک پنجرهٔ ترمینال، fork خود را کلون کنید و <a href="https://github.com/google/docsy#readme" target="_blank" rel="noopener">تم Docsy Hugo</a> را به‌روزرسانی کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">git clone git@github.com:&lt;github_username&gt;/website
+cd website
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">به دایرکتوری جدید <code dir="ltr">website</code> بروید. مخزن <code dir="ltr">kubernetes/website</code> را به‌عنوان remote با نام <code dir="ltr">upstream</code> تنظیم کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">cd website
+
+git remote add upstream https://github.com/kubernetes/website.git
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">مخازن <code dir="ltr">origin</code> و <code dir="ltr">upstream</code> خود را بررسی کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">git remote -v
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code class="language-none" dir="ltr">origin	git@github.com:&lt;github_username&gt;/website.git (fetch)
+origin	git@github.com:&lt;github_username&gt;/website.git (push)
+upstream	https://github.com/kubernetes/website.git (fetch)
+upstream	https://github.com/kubernetes/website.git (push)
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">commitها را از <code dir="ltr">origin/main</code> در fork خود و <code dir="ltr">upstream/main</code> در <code dir="ltr">kubernetes/website</code> دریافت (fetch) کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">git fetch origin
+git fetch upstream
+</code></pre>
+<p dir="rtl">این کار تضمین می‌کند که پیش از شروع اعمال تغییرات، مخزن محلی شما به‌روز است.</p>
+</li>
+</ol>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">این جریان کاری با
+<a href="https://github.com/kubernetes/community/blob/main/contributors/guide/github-workflow.md" target="_blank" rel="noopener">جریان کاری GitHub جامعهٔ کوبرنتیز</a>
+متفاوت است.
+لازم نیست پیش از ارسال (push) به‌روزرسانی‌ها به fork خود، نسخهٔ محلی <code dir="ltr">main</code> را با <code dir="ltr">upstream/main</code> ادغام کنید.</p>
+</div>
+<h3 id="ایجاد-یک-شاخه-branch" dir="rtl">ایجاد یک شاخه (branch)</h3>
+<ol>
+<li dir="rtl">
+<p dir="rtl">تصمیم بگیرید کار خود را بر پایهٔ کدام شاخه انجام دهید:</p>
+<ul>
+<li dir="rtl">برای بهبود محتوای موجود، از <code dir="ltr">upstream/main</code> استفاده کنید.</li>
+<li dir="rtl">برای محتوای جدید دربارهٔ قابلیت‌های موجود، از <code dir="ltr">upstream/main</code> استفاده کنید.</li>
+<li dir="rtl">برای محتوای بومی‌سازی‌شده، از قراردادهای همان بومی‌سازی پیروی کنید. برای اطلاعات بیشتر، به
+<a href="../localization.html">بومی‌سازی مستندات کوبرنتیز</a> مراجعه کنید.</li>
+<li dir="rtl">برای قابلیت‌های جدید در نسخهٔ آتی کوبرنتیز، از شاخهٔ قابلیت (feature branch) استفاده کنید. برای
+اطلاعات بیشتر، به <a href="new-features.html">مستندسازی برای یک نسخه</a> مراجعه کنید.</li>
+<li dir="rtl">برای تلاش‌های طولانی‌مدت که چند مشارکت‌کنندهٔ SIG Docs در آن همکاری می‌کنند،
+مانند سازماندهی مجدد محتوا، از یک شاخهٔ قابلیت مخصوص که برای همان تلاش ایجاد شده است استفاده کنید.</li>
+</ul>
+<p dir="rtl">اگر در انتخاب شاخه به کمک نیاز دارید، در کانال Slack با نام <code dir="ltr">#sig-docs</code> بپرسید.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">یک شاخهٔ جدید بر پایهٔ شاخه‌ای که در مرحلهٔ ۱ مشخص کردید ایجاد کنید. این مثال فرض می‌کند که شاخهٔ پایه
+<code dir="ltr">upstream/main</code> است:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">git checkout -b &lt;my_new_branch&gt; upstream/main
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">تغییرات خود را با یک ویرایشگر متن اعمال کنید.</p>
+</li>
+</ol>
+<p dir="rtl">در هر زمان می‌توانید با دستور <code dir="ltr">git status</code> فایل‌هایی را که تغییر داده‌اید مشاهده کنید.</p>
+<h3 id="commit-کردن-تغییرات" dir="rtl">commit کردن تغییرات</h3>
+<p dir="rtl">وقتی آمادهٔ ارسال یک pull request هستید، تغییرات خود را commit کنید.</p>
+<ol>
+<li dir="rtl">
+<p dir="rtl">در مخزن محلی خود بررسی کنید کدام فایل‌ها را باید commit کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">git status
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code class="language-none" dir="ltr">On branch &lt;my_new_branch&gt;
+Your branch is up to date with 'origin/&lt;my_new_branch&gt;'.
+
+Changes not staged for commit:
+(use "git add &lt;file&gt;..." to update what will be committed)
+(use "git checkout -- &lt;file&gt;..." to discard changes in working directory)
+
+modified:   content/en/docs/contribute/new-content/contributing-content.md
+
+no changes added to commit (use "git add" and/or "git commit -a")
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">فایل‌های فهرست‌شده در بخش <strong>Changes not staged for commit</strong> را به commit اضافه کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">git add &lt;your_file_name&gt;
+</code></pre>
+<p dir="rtl">این کار را برای هر فایل تکرار کنید.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">پس از افزودن همهٔ فایل‌ها، یک commit ایجاد کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">git commit -m "Your commit message"
+</code></pre>
+</li>
+</ol>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">از هیچ‌یک از <a href="https://help.github.com/en/github/managing-your-work-on-github/linking-a-pull-request-to-an-issue#linking-a-pull-request-to-an-issue-using-a-keyword" target="_blank" rel="noopener">کلیدواژه‌های GitHub</a>
+در پیام commit خود استفاده نکنید. می‌توانید این کلیدواژه‌ها را بعداً به
+توضیحات pull request اضافه کنید.</p>
+</div>
+<ol>
+<li dir="rtl">
+<p dir="rtl">شاخهٔ محلی خود و commit جدید آن را به fork راه دور (remote) خود ارسال (push) کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">git push origin &lt;my_new_branch&gt;
+</code></pre>
+</li>
+</ol>
+<h3 id="پیش-نمایش-محلی-تغییرات-preview-locally" dir="rtl">پیش‌نمایش محلی تغییرات {#preview-locally}</h3>
+<p dir="rtl">بهتر است پیش از ارسال تغییرات یا
+باز کردن یک pull request، آن‌ها را به‌صورت محلی پیش‌نمایش کنید. مقالهٔ <a href="preview-locally.html">پیش‌نمایش محلی</a>
+توضیح می‌دهد که چگونه می‌توانید وب‌سایت را به‌صورت محلی اجرا کنید و
+تغییرات پیشنهادی را پیش‌نمایش کنید.</p>
+<h3 id="باز-کردن-یک-pull-request-از-fork-خود-به-kubernetes-website-open-a-pr" dir="rtl">باز کردن یک pull request از fork خود به kubernetes/website {#open-a-pr}</h3>
+<p dir="rtl">شکل ۳ مراحل باز کردن یک PR از fork شما به <a href="https://github.com/kubernetes/website" target="_blank" rel="noopener">kubernetes/website</a> را نشان می‌دهد. جزئیات در ادامه آمده است.</p>
+<p dir="rtl">توجه داشته باشید که مشارکت‌کنندگان می‌توانند <code dir="ltr">kubernetes/website</code> را به‌صورت <code dir="ltr">k/website</code> ذکر کنند.</p>
+<!-- See https://github.com/kubernetes/website/issues/28808 for live-editor URL to this figure -->
+<!-- You can also cut/paste the mermaid code into the live editor at https://mermaid-js.github.io/mermaid-live-editor to play around with it -->
+<p dir="ltr" class="ltr">flowchart LR
+subgraph first[ ]
+direction TB
+1[1. Go to kubernetes/website repository] --&gt; 2[2. Select New Pull Request]
+2 --&gt; 3[3. Select compare across forks]
+3 --&gt; 4[4. Select your fork from<br>head repository drop-down menu]
+end
+subgraph second [ ]
+direction TB
+5[5. Select your branch from<br>the compare drop-down menu] --&gt; 6[6. Select Create Pull Request]
+6 --&gt; 7[7. Add a description<br>to your PR]
+7 --&gt; 8[8. Select Create pull request]
+end</p>
+<p dir="ltr" class="ltr">first --&gt; second</p>
+<p dir="ltr" class="ltr">classDef grey fill:#dddddd,stroke:#ffffff,stroke-width:px,color:#000000, font-size:15px;
+classDef white fill:#ffffff,stroke:#000,stroke-width:px,color:#000,font-weight:bold
+class 1,2,3,4,5,6,7,8 grey
+class first,second white</p>
+<p dir="rtl">شکل ۳. مراحل باز کردن یک PR از fork شما به <a href="https://github.com/kubernetes/website" target="_blank" rel="noopener">kubernetes/website</a>.</p>
+<ol>
+<li dir="rtl">
+<p dir="rtl">در یک مرورگر وب، به مخزن <a href="https://github.com/kubernetes/website/" target="_blank" rel="noopener"><code dir="ltr">kubernetes/website</code></a> بروید.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><strong>New Pull Request</strong> را انتخاب کنید.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><strong>compare across forks</strong> را انتخاب کنید.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">از منوی کشویی <strong>head repository</strong>، fork خود را انتخاب کنید.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">از منوی کشویی <strong>compare</strong>، شاخهٔ خود را انتخاب کنید.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><strong>Create Pull Request</strong> را انتخاب کنید.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">برای pull request خود توضیحات بنویسید:</p>
+<ul>
+<li dir="rtl">
+<p dir="rtl"><strong>Title</strong> (حداکثر ۵۰ نویسه): هدف تغییر را خلاصه کنید.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><strong>Description</strong>: تغییر را با جزئیات بیشتری شرح دهید.</p>
+<ul>
+<li dir="rtl">اگر یک issue مرتبط در GitHub وجود دارد، عبارت <code dir="ltr">Fixes #12345</code> یا <code dir="ltr">Closes #12345</code> را در
+توضیحات بیاورید. در صورت استفاده از این عبارت، خودکارسازی GitHub پس از ادغام PR، issue ذکرشده را می‌بندد.
+اگر PRهای مرتبط دیگری وجود دارد، آن‌ها را نیز پیوند دهید.</li>
+<li dir="rtl">اگر دربارهٔ موضوع خاصی توصیه می‌خواهید، هر پرسشی را که دوست دارید بازبین‌ها
+به آن فکر کنند در توضیحات خود بیاورید.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li dir="rtl">
+<p dir="rtl">دکمهٔ <strong>Create pull request</strong> را انتخاب کنید.</p>
+</li>
+</ol>
+<p dir="rtl">تبریک! pull request شما در بخش <a href="https://github.com/kubernetes/website/pulls" target="_blank" rel="noopener">Pull requests</a> در دسترس است.</p>
+<p dir="rtl">پس از باز کردن یک PR، GitHub آزمون‌های خودکار را اجرا می‌کند و تلاش می‌کند با استفاده از
+<a href="https://www.netlify.com/" target="_blank" rel="noopener">Netlify</a> یک پیش‌نمایش مستقر کند.</p>
+<ul>
+<li dir="rtl">اگر ساخت Netlify شکست بخورد، برای اطلاعات بیشتر <strong>Details</strong> را انتخاب کنید.</li>
+<li dir="rtl">اگر ساخت Netlify موفق باشد، انتخاب <strong>Details</strong> نسخه‌ای آزمایشی (staged) از وب‌سایت
+کوبرنتیز را با تغییرات اعمال‌شدهٔ شما باز می‌کند. بازبین‌ها از همین طریق تغییرات شما را بررسی می‌کنند.</li>
+</ul>
+<p dir="rtl">GitHub همچنین به‌طور خودکار برچسب‌هایی را برای کمک به بازبین‌ها به یک PR اختصاص می‌دهد. در صورت
+نیاز، شما نیز می‌توانید برچسب اضافه کنید. برای اطلاعات بیشتر، به <a href="../review/for-approvers.html#adding-and-removing-issue-labels">افزودن و حذف برچسب‌های issue</a> مراجعه کنید.</p>
+<h3 id="رسیدگی-به-بازخوردها-به-صورت-محلی" dir="rtl">رسیدگی به بازخوردها به‌صورت محلی</h3>
+<ol>
+<li dir="rtl">
+<p dir="rtl">پس از اعمال تغییرات، commit قبلی خود را اصلاح (amend) کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">git commit -a --amend
+</code></pre>
+<ul>
+<li dir="rtl"><code dir="ltr">-a</code>: همهٔ تغییرات را commit می‌کند</li>
+<li dir="rtl"><code dir="ltr">--amend</code>: به‌جای ایجاد یک commit جدید، commit قبلی را اصلاح می‌کند</li>
+</ul>
+</li>
+<li dir="rtl">
+<p dir="rtl">در صورت نیاز، پیام commit خود را به‌روزرسانی کنید.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">با دستور <code dir="ltr">git push origin &lt;my_new_branch&gt;</code> تغییرات خود را ارسال کنید و آزمون‌های Netlify را دوباره اجرا کنید.</p>
+</li>
+</ol>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">اگر به‌جای amend از <code dir="ltr">git commit -m</code> استفاده کنید، باید پیش از ادغام، <a href="#squashing-commits">commitهای خود را squash کنید</a>.</p>
+</div>
+<h4 id="تغییرات-بازبین-ها" dir="rtl">تغییرات بازبین‌ها</h4>
+<p dir="rtl">گاهی بازبین‌ها روی pull request شما commit می‌کنند. پیش از اعمال هر تغییر دیگری، آن commitها را دریافت (fetch) کنید.</p>
+<ol>
+<li dir="rtl">
+<p dir="rtl">commitها را از fork راه دور خود دریافت کنید و شاخهٔ کاری خود را rebase کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">git fetch origin
+git rebase origin/&lt;your-branch-name&gt;
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">پس از rebase، تغییرات جدید را با force-push به fork خود ارسال کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">git push --force-with-lease origin &lt;your-branch-name&gt;
+</code></pre>
+</li>
+</ol>
+<h4 id="تداخل-های-ادغام-و-rebase" dir="rtl">تداخل‌های ادغام و rebase</h4>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">برای اطلاعات بیشتر، به <a href="https://git-scm.com/book/en/v2/Git-Branching-Basic-Branching-and-Merging#_basic_merge_conflicts" target="_blank" rel="noopener">Git Branching - Basic Branching and Merging</a>،
+<a href="https://git-scm.com/book/en/v2/Git-Tools-Advanced-Merging" target="_blank" rel="noopener">Advanced Merging</a> مراجعه کنید یا برای کمک در کانال Slack
+با نام <code dir="ltr">#sig-docs</code> بپرسید.</p>
+</div>
+<p dir="rtl">اگر مشارکت‌کنندهٔ دیگری در یک PR دیگر تغییراتی را در همان فایل commit کند، ممکن است یک تداخل ادغام (merge conflict)
+ایجاد شود. شما باید همهٔ تداخل‌های ادغام را در PR خود برطرف کنید.</p>
+<ol>
+<li dir="rtl">
+<p dir="rtl">fork خود را به‌روزرسانی کنید و شاخهٔ محلی خود را rebase کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">git fetch origin
+git rebase origin/&lt;your-branch-name&gt;
+</code></pre>
+<p dir="rtl">سپس تغییرات را با force-push به fork خود ارسال کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">git push --force-with-lease origin &lt;your-branch-name&gt;
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">تغییرات را از <code dir="ltr">upstream/main</code> در <code dir="ltr">kubernetes/website</code> دریافت (fetch) کنید و شاخهٔ خود را rebase کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">git fetch upstream
+git rebase upstream/main
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">نتایج rebase را بررسی کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">git status
+</code></pre>
+<p dir="rtl">در نتیجه، تعدادی فایل به‌عنوان دارای تداخل علامت‌گذاری می‌شوند.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">هر فایل دارای تداخل را باز کنید و به دنبال نشانگرهای تداخل بگردید: <code dir="ltr">&gt;&gt;&gt;</code>، <code dir="ltr">&lt;&lt;&lt;</code> و <code dir="ltr">===</code>.
+تداخل را برطرف کنید و نشانگر تداخل را حذف کنید.</p>
+</li>
+</ol>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">برای اطلاعات بیشتر، به <a href="https://git-scm.com/docs/git-merge#_how_conflicts_are_presented" target="_blank" rel="noopener">How conflicts are presented</a> مراجعه کنید.</p>
+</div>
+<ol>
+<li dir="rtl">
+<p dir="rtl">فایل‌ها را به مجموعه تغییرات (changeset) اضافه کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">git add &lt;filename&gt;
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">rebase را ادامه دهید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">git rebase --continue
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">در صورت نیاز، مراحل ۲ تا ۵ را تکرار کنید.</p>
+<p dir="rtl">پس از اعمال همهٔ commitها، دستور <code dir="ltr">git status</code> نشان می‌دهد که rebase کامل شده است.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">شاخه را با force-push به fork خود ارسال کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">git push --force-with-lease origin &lt;your-branch-name&gt;
+</code></pre>
+<p dir="rtl">دیگر هیچ تداخلی در pull request نمایش داده نمی‌شود.</p>
+</li>
+</ol>
+<h3 id="ادغام-کامیت-ها-squashing-commits" dir="rtl">ادغام کامیت‌ها (Squashing commits)</h3>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">برای اطلاعات بیشتر، <a href="https://git-scm.com/book/en/v2/Git-Tools-Rewriting-History" target="_blank" rel="noopener">Git Tools - Rewriting History</a> را ببینید،
+یا در کانال Slack با نام <code dir="ltr">#sig-docs</code> درخواست کمک کنید.</p>
+</div>
+<p dir="rtl">اگر PR شما چند کامیت دارد، پیش از ادغام (merge) PR باید آن‌ها را در یک کامیت واحد ادغام (squash) کنید.
+می‌توانید تعداد کامیت‌های PR خود را در زبانه‌ی <strong>Commits</strong> در PR یا با اجرای دستور <code dir="ltr">git log</code>
+به‌صورت محلی بررسی کنید.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">این مبحث فرض می‌کند که <code dir="ltr">vim</code> ویرایشگر متن خط فرمان است.</p>
+</div>
+<ol>
+<li dir="rtl">
+<p dir="rtl">یک rebase تعاملی را آغاز کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">git rebase -i HEAD~&lt;number_of_commits_in_branch&gt;
+</code></pre>
+<p dir="rtl">ادغام کامیت‌ها نوعی rebase است. سوئیچ <code dir="ltr">-i</code> به git می‌گوید که می‌خواهید rebase را به‌صورت تعاملی انجام دهید.
+عبارت <code dir="ltr">HEAD~&lt;number_of_commits_in_branch</code> مشخص می‌کند که برای rebase چند کامیت بررسی شود.</p>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code class="language-none" dir="ltr">pick d875112ca Original commit
+pick 4fa167b80 Address feedback 1
+pick 7d54e15ee Address feedback 2
+
+# Rebase 3d18sf680..7d54e15ee onto 3d183f680 (3 commands)
+
+...
+
+# These lines can be re-ordered; they are executed from top to bottom.
+</code></pre>
+<p dir="rtl">بخش اول خروجی کامیت‌های موجود در rebase را فهرست می‌کند. بخش دوم گزینه‌های
+هر کامیت را فهرست می‌کند. تغییر واژه‌ی <code dir="ltr">pick</code> پس از اتمام rebase، وضعیت کامیت را تغییر می‌دهد.</p>
+<p dir="rtl">برای اهداف rebase، روی <code dir="ltr">squash</code> و <code dir="ltr">pick</code> تمرکز کنید.</p>
+</li>
+</ol>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">برای اطلاعات بیشتر، <a href="https://git-scm.com/docs/git-rebase#_interactive_mode" target="_blank" rel="noopener">Interactive Mode</a> را ببینید.</p>
+</div>
+<ol>
+<li dir="rtl">
+<p dir="rtl">ویرایش فایل را آغاز کنید.</p>
+<p dir="rtl">متن اصلی را تغییر دهید:</p>
+<pre dir="ltr"><code class="language-none" dir="ltr">pick d875112ca Original commit
+pick 4fa167b80 Address feedback 1
+pick 7d54e15ee Address feedback 2
+</code></pre>
+<p dir="rtl">به:</p>
+<pre dir="ltr"><code class="language-none" dir="ltr">pick d875112ca Original commit
+squash 4fa167b80 Address feedback 1
+squash 7d54e15ee Address feedback 2
+</code></pre>
+<p dir="rtl">این کار کامیت‌های <code dir="ltr">4fa167b80 Address feedback 1</code> و <code dir="ltr">7d54e15ee Address feedback 2</code> را در
+<code dir="ltr">d875112ca Original commit</code> ادغام می‌کند و تنها <code dir="ltr">d875112ca Original commit</code> را به‌عنوان بخشی از تاریخچه باقی می‌گذارد.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">فایل را ذخیره کنید و از آن خارج شوید.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">کامیت ادغام‌شده‌ی خود را push کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">git push --force-with-lease origin &lt;branch_name&gt;
+</code></pre>
+</li>
+</ol>
+<h2 id="مشارکت-در-مخزن-های-دیگر" dir="rtl">مشارکت در مخزن‌های دیگر</h2>
+<p dir="rtl"><a href="https://github.com/kubernetes" target="_blank" rel="noopener">پروژه‌ی کوبرنتیز</a> بیش از ۵۰ مخزن (repository) دارد. بسیاری از این
+مخزن‌ها شامل مستندات هستند: متن راهنمای کاربرمحور، پیام‌های خطا، مراجع API یا
+توضیحات داخل کد.</p>
+<p dir="rtl">اگر متنی می‌بینید که مایلید آن را بهبود دهید، از GitHub برای جست‌وجو در تمام مخزن‌های سازمان
+کوبرنتیز استفاده کنید. این کار می‌تواند به شما کمک کند تشخیص دهید issue یا PR خود را کجا ارسال کنید.</p>
+<p dir="rtl">هر مخزن فرایندها و رویه‌های مخصوص به خود را دارد. پیش از ثبت issue یا ارسال PR،
+فایل‌های <code dir="ltr">README.md</code>، <code dir="ltr">CONTRIBUTING.md</code> و <code dir="ltr">code-of-conduct.md</code> آن مخزن را، در صورت وجود، بخوانید.</p>
+<p dir="rtl">بیشتر مخزن‌ها از قالب‌های (template) issue و PR استفاده می‌کنند. چند issue و PR باز را مرور کنید تا
+با فرایندهای آن تیم آشنا شوید. هنگام ثبت issue یا PR، قالب‌ها را با بیشترین جزئیات ممکن
+تکمیل کنید.</p>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<ul>
+<li dir="rtl">برای آشنایی بیشتر با فرایند بازبینی، <a href="https://kubernetes.io/docs/contribute/review/reviewing-prs" target="_blank">Reviewing</a> را بخوانید.</li>
+</ul>
+</div></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#تغییرات-با-استفاده-از-github-changes-using-github">تغییرات با استفاده از GitHub {#changes-using-github}</a><a class="l3" href="#رسیدگی-به-بازخوردها-در-github">رسیدگی به بازخوردها در GitHub</a><a class="l2" href="#کار-با-یک-fork-محلی-fork-the-repo">کار با یک fork محلی {#fork-the-repo}</a><a class="l3" href="#ایجاد-fork-از-مخزن-kubernetes-website">ایجاد fork از مخزن kubernetes/website</a><a class="l3" href="#ایجاد-یک-کلون-محلی-و-تنظیم-upstream">ایجاد یک کلون محلی و تنظیم upstream</a><a class="l3" href="#ایجاد-یک-شاخه-branch">ایجاد یک شاخه (branch)</a><a class="l3" href="#commit-کردن-تغییرات">commit کردن تغییرات</a><a class="l3" href="#پیش-نمایش-محلی-تغییرات-preview-locally">پیش‌نمایش محلی تغییرات {#preview-locally}</a><a class="l3" href="#باز-کردن-یک-pull-request-از-fork-خود-به-kubernetes-website-open-a-pr">باز کردن یک pull request از fork خود به kubernetes/website {#open-a-pr}</a><a class="l3" href="#رسیدگی-به-بازخوردها-به-صورت-محلی">رسیدگی به بازخوردها به‌صورت محلی</a><a class="l3" href="#ادغام-کامیت-ها-squashing-commits">ادغام کامیت‌ها (Squashing commits)</a><a class="l2" href="#مشارکت-در-مخزن-های-دیگر">مشارکت در مخزن‌های دیگر</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>

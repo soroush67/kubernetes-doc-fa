@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>مستندسازی یک ویژگی برای یک انتشار | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">contribute / new-content</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">مستندسازی یک ویژگی برای یک انتشار</h1><!-- overview -->
+<p dir="rtl">هر انتشار اصلی کوبرنتیز ویژگی‌های جدیدی را معرفی می‌کند که به مستندات نیاز دارند.
+انتشارهای جدید همچنین شامل به‌روزرسانی‌هایی برای ویژگی‌ها و مستندات موجود هستند
+(مانند ارتقای یک ویژگی از آلفا به بتا).</p>
+<p dir="rtl">به‌طور معمول، SIG مسئول یک ویژگی، پیش‌نویس مستندات آن ویژگی را در قالب یک pull request
+به شاخهٔ توسعهٔ مناسب در مخزن <code dir="ltr">kubernetes/website</code> ارسال می‌کند و یکی از اعضای تیم SIG Docs
+بازخورد ویرایشی ارائه می‌دهد یا پیش‌نویس را مستقیماً ویرایش می‌کند. این بخش قراردادهای شاخه‌بندی
+و فرایندی را که هر دو گروه در طول یک انتشار به کار می‌برند توضیح می‌دهد.</p>
+<p dir="rtl">برای آشنایی با نحوهٔ اعلام ویژگی‌ها در وبلاگ، بخش
+<a href="../blog/release-comms.html">ارتباطات پس از انتشار</a> را بخوانید.</p>
+<!-- body -->
+<h2 id="برای-مشارکت-کنندگان-مستندات-for-documentation-contributors" dir="rtl">برای مشارکت‌کنندگان مستندات {#for-documentation-contributors}</h2>
+<p dir="rtl">به‌طور کلی، مشارکت‌کنندگان مستندات محتوای مربوط به یک انتشار را از ابتدا نمی‌نویسند.
+در عوض، آن‌ها با SIG که ویژگی جدید را ایجاد می‌کند همکاری می‌کنند تا پیش‌نویس مستندات را
+اصلاح کرده و آن را برای انتشار آماده سازند.</p>
+<p dir="rtl">پس از آنکه ویژگی‌ای را برای مستندسازی یا کمک به آن انتخاب کردید، دربارهٔ آن در کانال Slack با نام <code dir="ltr">#sig-docs</code>،
+در یکی از جلسات هفتگی SIG Docs، یا مستقیماً در PR ثبت‌شده توسط SIG مربوط به ویژگی سؤال کنید.
+اگر موافقت شد، می‌توانید با یکی از روش‌های شرح‌داده‌شده در
+<a href="../review/for-approvers.html#commit-into-another-person-s-pr">Commit into another person's PR</a>
+در همان PR ویرایش انجام دهید.</p>
+<h3 id="آگاهی-از-ویژگی-های-آینده-find-out-about-upcoming-features" dir="rtl">آگاهی از ویژگی‌های آینده {#find-out-about-upcoming-features}</h3>
+<p dir="rtl">برای آگاهی از ویژگی‌های آینده، در جلسهٔ هفتگی SIG Release شرکت کنید (برای جلسات پیش‌رو
+به صفحهٔ <a href="/community/">community</a> مراجعه کنید)
+و مستندات ویژهٔ هر انتشار را در مخزن
+<a href="https://github.com/kubernetes/sig-release/" target="_blank" rel="noopener">kubernetes/sig-release</a>
+پیگیری کنید. هر انتشار یک زیرپوشه در پوشهٔ
+<a href="https://github.com/kubernetes/sig-release/tree/master/releases" target="_blank" rel="noopener">/sig-release/tree/master/releases/</a>
+دارد. این زیرپوشه شامل برنامهٔ زمانی انتشار، پیش‌نویس یادداشت‌های انتشار
+و سندی است که تک‌تک اعضای تیم انتشار را فهرست می‌کند.</p>
+<p dir="rtl">برنامهٔ زمانی انتشار شامل پیوندهایی به همهٔ اسناد، جلسات، صورت‌جلسه‌ها
+و milestoneهای دیگر مربوط به انتشار است. همچنین اطلاعاتی دربارهٔ اهداف و جدول زمانی انتشار
+و هر فرایند ویژه‌ای که برای این انتشار در نظر گرفته شده است در آن آمده است. در بخش‌های پایانی سند،
+چند اصطلاح مرتبط با انتشار تعریف شده‌اند.</p>
+<p dir="rtl">این سند همچنین پیوندی به <strong>Feature tracking sheet</strong> دارد که روش رسمی برای آگاهی از
+همهٔ ویژگی‌های جدیدی است که قرار است در انتشار گنجانده شوند.</p>
+<p dir="rtl">سند تیم انتشار مشخص می‌کند که مسئول هر نقش در انتشار چه کسی است. اگر
+مشخص نیست که دربارهٔ یک ویژگی خاص یا پرسش شما باید با چه کسی صحبت کنید،
+یا در جلسهٔ انتشار شرکت کنید و پرسش خود را مطرح کنید، یا با سرپرست انتشار (release lead) تماس بگیرید
+تا او شما را راهنمایی کند.</p>
+<p dir="rtl">پیش‌نویس یادداشت‌های انتشار جای مناسبی برای آگاهی از
+ویژگی‌های خاص، تغییرات، منسوخ‌شدن‌ها و موارد دیگر دربارهٔ انتشار است. محتوای
+آن تا اواخر چرخهٔ انتشار نهایی نمی‌شود، بنابراین با احتیاط از آن استفاده کنید.</p>
+<h3 id="feature-tracking-sheet-feature-tracking-sheet" dir="ltr" class="ltr">Feature tracking sheet {#feature-tracking-sheet}</h3>
+<p dir="rtl">Feature tracking sheet <a href="https://github.com/kubernetes/sig-release/tree/master/releases" target="_blank" rel="noopener">برای یک انتشار مشخص کوبرنتیز</a>
+هر ویژگی‌ای را که برای آن انتشار برنامه‌ریزی شده است فهرست می‌کند.
+هر ردیف شامل نام ویژگی، پیوندی به issue اصلی ویژگی در GitHub، سطح پایداری آن (آلفا، بتا یا پایدار)،
+SIG و فرد مسئول پیاده‌سازی آن، اینکه آیا به مستندات نیاز دارد یا خیر، پیش‌نویس یادداشت انتشار
+برای آن ویژگی و اینکه آیا merge شده است یا خیر می‌باشد. نکات زیر را در نظر داشته باشید:</p>
+<ul>
+<li dir="rtl">ویژگی‌های بتا و پایدار معمولاً اولویت مستندسازی بالاتری نسبت به ویژگی‌های آلفا دارند.</li>
+<li dir="rtl">آزمایش (و در نتیجه مستندسازی) ویژگی‌ای که merge نشده است، یا دست‌کم در PR خود
+از نظر ویژگی‌ها کامل در نظر گرفته نمی‌شود، دشوار است.</li>
+<li dir="rtl">تعیین اینکه آیا یک ویژگی به مستندات نیاز دارد یا خیر فرایندی دستی است. حتی اگر
+ویژگی‌ای به‌عنوان نیازمند مستندات علامت‌گذاری نشده باشد، ممکن است لازم باشد آن را مستند کنید.</li>
+</ul>
+<h2 id="برای-توسعه-دهندگان-یا-سایر-اعضای-sig-for-developers-or-other-sig-members" dir="rtl">برای توسعه‌دهندگان یا سایر اعضای SIG {#for-developers-or-other-sig-members}</h2>
+<p dir="rtl">این بخش اطلاعاتی برای اعضای سایر SIGهای کوبرنتیز است که ویژگی‌های جدید را برای یک انتشار مستند می‌کنند.</p>
+<p dir="rtl">اگر عضو یک SIG هستید که ویژگی جدیدی را برای کوبرنتیز توسعه می‌دهد، باید
+با SIG Docs همکاری کنید تا مطمئن شوید ویژگی شما به‌موقع برای
+انتشار مستند می‌شود. برای اطمینان از جزئیات زمان‌بندی و مهلت‌ها،
+<a href="https://github.com/kubernetes/sig-release/tree/master/releases" target="_blank" rel="noopener">feature tracking spreadsheet</a>
+را بررسی کنید یا در کانال Slack کوبرنتیز با نام <code dir="ltr">#sig-release</code> پرسش کنید.</p>
+<h3 id="ایجاد-یک-pr-جایگزین-placeholder-open-a-placeholder-pr" dir="rtl">ایجاد یک PR جایگزین (placeholder) {#open-a-placeholder-pr}</h3>
+<ol>
+<li dir="rtl">یک pull request از نوع <strong>draft</strong> را روی شاخهٔ
+<code dir="ltr">dev-1.37</code> در مخزن <code dir="ltr">kubernetes/website</code> باز کنید، همراه با یک
+commit کوچک که بعداً آن را اصلاح (amend) خواهید کرد. برای ایجاد یک draft pull request، از منوی کشویی
+<strong>Create Pull Request</strong> گزینهٔ <strong>Create Draft Pull Request</strong> را انتخاب کنید
+و سپس روی <strong>Draft Pull Request</strong> کلیک کنید.</li>
+<li dir="rtl">توضیحات pull request را ویرایش کنید تا شامل پیوند به PR(های) <a href="https://github.com/kubernetes/kubernetes" target="_blank" rel="noopener">kubernetes/kubernetes</a>
+و issue(های) <a href="https://github.com/kubernetes/enhancements" target="_blank" rel="noopener">kubernetes/enhancements</a> باشد.</li>
+<li dir="rtl">در issue مرتبط در <a href="https://github.com/kubernetes/enhancements" target="_blank" rel="noopener">kubernetes/enhancements</a>
+یک نظر همراه با پیوند به PR بگذارید تا فرد مسئول مستندات که این انتشار را مدیریت می‌کند آگاه شود که
+مستندات ویژگی در راه است و باید برای انتشار پیگیری شود.</li>
+</ol>
+<p dir="rtl">اگر ویژگی شما به هیچ تغییری در مستندات نیاز ندارد، با اشاره به آن در کانال Slack با نام <code dir="ltr">#sig-release</code>
+مطمئن شوید که تیم sig-release از این موضوع آگاه است. اگر ویژگی به مستندات نیاز داشته باشد
+اما PR ایجاد نشده باشد، ممکن است ویژگی از milestone حذف شود.</p>
+<h3 id="pr-آماده-برای-بازبینی-pr-ready-for-review" dir="rtl">PR آماده برای بازبینی {#pr-ready-for-review}</h3>
+<p dir="rtl">هنگامی که آماده بودید، PR جایگزین خود را با مستندات ویژگی تکمیل کنید و وضعیت PR را از draft
+به <strong>ready for review</strong> تغییر دهید. برای علامت‌گذاری یک pull request
+به‌عنوان آمادهٔ بازبینی، به بخش merge box بروید و روی <strong>Ready for review</strong> کلیک کنید.</p>
+<p dir="rtl">نهایت تلاش خود را بکنید تا ویژگی خود و نحوهٔ استفاده از آن را توضیح دهید. اگر برای ساختاردهی
+مستندات به کمک نیاز دارید، در کانال Slack با نام <code dir="ltr">#sig-docs</code> بپرسید.</p>
+<p dir="rtl">پس از تکمیل محتوا، فرد مسئول مستندات که به ویژگی شما اختصاص داده شده است آن را بازبینی می‌کند.
+برای اطمینان از صحت فنی، ممکن است محتوا به بازبینی فنی از سوی SIG(های) مربوط نیز نیاز داشته باشد.
+از پیشنهادهای آن‌ها استفاده کنید تا محتوا را به وضعیت آمادهٔ انتشار برسانید.</p>
+<p dir="rtl">اگر ویژگی شما به مستندات نیاز دارد و پیش‌نویس اولیهٔ محتوا دریافت نشود،
+ممکن است ویژگی از milestone حذف شود.</p>
+<h4 id="feature-gates-ready-for-review-feature-gates" dir="ltr" class="ltr">Feature gates {#ready-for-review-feature-gates}</h4>
+<p dir="rtl">اگر ویژگی شما آلفا یا بتا است و پشت یک feature gate قرار دارد،
+به یک فایل feature gate برای آن در مسیر
+<code dir="ltr">content/en/docs/reference/command-line-tools-reference/feature-gates/</code> نیاز دارید.
+نام فایل باید همان نام feature gate با پسوند <code dir="ltr">.md</code> باشد.
+می‌توانید با نگاه به فایل‌های دیگری که از قبل در همان پوشه وجود دارند، دربارهٔ شکل مناسب فایل خود
+ایده بگیرید. معمولاً یک پاراگراف کافی است؛ برای توضیحات طولانی‌تر،
+مستندات را در جای دیگری اضافه کنید و به آن پیوند دهید.</p>
+<p dir="rtl">همچنین، برای اینکه feature gate شما در جدول
+<a href="https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/#feature-gates-for-alpha-or-beta-features" target="_blank">Alpha/Beta Feature gates</a>
+نمایش داده شود، جزئیات زیر را در
+<a href="https://gohugo.io/content-management/front-matter/" target="_blank" rel="noopener">front matter</a>
+فایل توضیحات Markdown خود بگنجانید:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">stages:
+  - stage: &lt;alpha/beta/stable/deprecated&gt;  # Specify the development stage of the feature gate
+    defaultValue: &lt;true or false&gt;     # Set to true if enabled by default, false otherwise
+    fromVersion: &lt;Version&gt;            # Version from which the feature gate is available
+    toVersion: &lt;Version&gt;              # (Optional) The version until which the feature gate is available
+</code></pre>
+<p dir="rtl">برای feature gateهای کاملاً جدید، یک توضیح جداگانه از feature gate نیز لازم است؛
+یک فایل Markdown جدید در مسیر <code dir="ltr">content/en/docs/reference/command-line-tools-reference/feature-gates/</code>
+ایجاد کنید (از فایل‌های دیگر به‌عنوان الگو استفاده کنید).</p>
+<p dir="rtl">هنگامی که یک feature gate را از حالت غیرفعال‌به‌صورت‌پیش‌فرض به فعال‌به‌صورت‌پیش‌فرض تغییر می‌دهید،
+ممکن است لازم باشد مستندات دیگری را نیز تغییر دهید (نه فقط فهرست
+feature gateها). مراقب عباراتی مانند این باشید: «فیلد <code dir="ltr">exampleSetting</code>
+یک فیلد بتا است و به‌صورت پیش‌فرض غیرفعال است. می‌توانید آن را با فعال‌کردن
+feature gate با نام <code dir="ltr">ProcessExampleThings</code> فعال کنید.»</p>
+<p dir="rtl">اگر ویژگی شما به GA رسیده یا منسوخ شده است، یک ورودی <code dir="ltr">stage</code> اضافی در بلوک
+<code dir="ltr">stages</code> در فایل توضیحات بگنجانید.
+مطمئن شوید که مراحل آلفا و بتا دست‌نخورده باقی بمانند. این گام، feature gate را از جدول
+<a href="https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/#feature-gates-for-alpha-or-beta-features" target="_blank">Feature gates for Alpha/Beta</a>
+به جدول
+<a href="https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/#feature-gates-for-graduated-or-deprecated-features" target="_blank">Feature gates for graduated or deprecated features</a>
+منتقل می‌کند. برای نمونه:</p>
+<p dir="ltr" class="ltr">stages:</p>
+<ul>
+<li dir="ltr" class="ltr">stage: alpha
+defaultValue: false
+fromVersion: "1.12"
+toVersion: "1.12"</li>
+<li dir="ltr" class="ltr">stage: beta
+defaultValue: true
+fromVersion: "1.13"</li>
+</ul>
+<h1 dir="ltr" class="ltr">Added a <code dir="ltr">toVersion</code> to the previous stage.</h1>
+<pre dir="ltr"><code dir="ltr">toVersion: "1.18"
+</code></pre>
+<h1 dir="ltr" class="ltr">Added 'stable' stage block to existing stages.</h1>
+<ul>
+<li dir="ltr" class="ltr">stage: stable
+defaultValue: true
+fromVersion: "1.19"
+toVersion: "1.27"</li>
+</ul>
+<p dir="rtl">در نهایت، کوبرنتیز دیگر آن feature gate را اصلاً شامل نخواهد کرد.
+برای نشان‌دادن حذف یک feature gate، عبارت <code dir="ltr">removed: true</code> را در
+front matter فایل توضیحات مربوطه قرار دهید.
+این تغییر به این معناست که اطلاعات feature gate از بخش
+<a href="https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates-removed/#feature-gates-that-are-removed" target="_blank">Feature gates for graduated or deprecated features</a>
+به صفحه‌ای اختصاصی با عنوان
+<a href="https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates-removed/" target="_blank">Feature Gates (removed)</a>
+منتقل می‌شود، همراه با توضیحات آن.</p>
+<h3 id="همهٔ-prها-بازبینی-شده-و-آمادهٔ-merge-هستند-all-prs-reviewed-and-ready-to-merge" dir="rtl">همهٔ PRها بازبینی شده و آمادهٔ merge هستند {#all-prs-reviewed-and-ready-to-merge}</h3>
+<p dir="rtl">اگر PR شما تا مهلت انتشار در شاخهٔ <code dir="ltr">dev-1.37</code>
+merge نشده باشد، با فرد مسئول مستنداتی که انتشار را مدیریت می‌کند همکاری کنید
+تا آن را تا مهلت مقرر وارد کنید. اگر ویژگی شما به مستندات نیاز دارد
+و مستندات آماده نیست، ممکن است ویژگی از milestone حذف شود.</p>
+</main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#برای-مشارکت-کنندگان-مستندات-for-documentation-contributors">برای مشارکت‌کنندگان مستندات {#for-documentation-contributors}</a><a class="l3" href="#آگاهی-از-ویژگی-های-آینده-find-out-about-upcoming-features">آگاهی از ویژگی‌های آینده {#find-out-about-upcoming-features}</a><a class="l3" href="#feature-tracking-sheet-feature-tracking-sheet">Feature tracking sheet {#feature-tracking-sheet}</a><a class="l2" href="#برای-توسعه-دهندگان-یا-سایر-اعضای-sig-for-developers-or-other-sig-members">برای توسعه‌دهندگان یا سایر اعضای SIG {#for-developers-or-other-sig-members}</a><a class="l3" href="#ایجاد-یک-pr-جایگزین-placeholder-open-a-placeholder-pr">ایجاد یک PR جایگزین (placeholder) {#open-a-placeholder-pr}</a><a class="l3" href="#pr-آماده-برای-بازبینی-pr-ready-for-review">PR آماده برای بازبینی {#pr-ready-for-review}</a><a class="l3" href="#همهٔ-prها-بازبینی-شده-و-آمادهٔ-merge-هستند-all-prs-reviewed-and-ready-to-merge">همهٔ PRها بازبینی شده و آمادهٔ merge هستند {#all-prs-reviewed-and-ready-to-merge}</a></nav>
+</div>
+</body>
+</html>

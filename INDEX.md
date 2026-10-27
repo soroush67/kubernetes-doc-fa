@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-208 از 1722 صفحه
+223 از 1722 صفحه
 
 
 ## `.`
@@ -283,7 +283,7 @@
 - ✅ [advanced.md](md/contribute/advanced.md)
 - ✅ [analytics.md](md/contribute/analytics.md)
 - ⚠️ [docs.md](md/contribute/docs.md)
-- ⏳ `localization.md`
+- ✅ [localization.md](md/contribute/localization.md)
 - ⏳ `suggesting-improvements.md`
 
 ## `contribute/blog`
@@ -310,30 +310,30 @@
 
 ## `contribute/new-content`
 
-- ⏳ `_index.md`
-- ⏳ `case-studies.md`
-- ⏳ `new-features.md`
-- ⏳ `open-a-pr.md`
-- ⏳ `preview-locally.md`
+- ⚠️ [_index.md](md/contribute/new-content/_index.md)
+- ✅ [case-studies.md](md/contribute/new-content/case-studies.md)
+- ✅ [new-features.md](md/contribute/new-content/new-features.md)
+- ⚠️ [open-a-pr.md](md/contribute/new-content/open-a-pr.md)
+- ✅ [preview-locally.md](md/contribute/new-content/preview-locally.md)
 
 ## `contribute/participate`
 
-- ⏳ `_index.md`
-- ⏳ `issue-wrangler.md`
-- ⏳ `pr-wranglers.md`
-- ⏳ `roles-and-responsibilities.md`
+- ✅ [_index.md](md/contribute/participate/_index.md)
+- ✅ [issue-wrangler.md](md/contribute/participate/issue-wrangler.md)
+- ✅ [pr-wranglers.md](md/contribute/participate/pr-wranglers.md)
+- ✅ [roles-and-responsibilities.md](md/contribute/participate/roles-and-responsibilities.md)
 
 ## `contribute/review`
 
-- ⏳ `_index.md`
-- ⏳ `for-approvers.md`
+- ✅ [_index.md](md/contribute/review/_index.md)
+- ✅ [for-approvers.md](md/contribute/review/for-approvers.md)
 - ⏳ `reviewing-prs.md`
 
 ## `contribute/style`
 
-- ⏳ `_index.md`
-- ⏳ `content-guide.md`
-- ⏳ `content-organization.md`
+- ✅ [_index.md](md/contribute/style/_index.md)
+- ✅ [content-guide.md](md/contribute/style/content-guide.md)
+- ✅ [content-organization.md](md/contribute/style/content-organization.md)
 - ⏳ `diagram-guide.md`
 - ⏳ `page-content-types.md`
 - ⏳ `style-guide.md`
