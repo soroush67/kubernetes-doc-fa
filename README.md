@@ -9,7 +9,7 @@
 | | |
 |---|---|
 | پیشرفت (بر اساس کلمات) | **19.8٪** |
-| صفحات ترجمه‌شده | 463 از 1722 |
+| صفحات ترجمه‌شده | 478 از 1722 |
 | صفحات دارای ایراد ساختاری | 9 |
 | نسخه‌ی منبع انگلیسی | `ed70e311737a` |
 
@@ -72,7 +72,7 @@ cd kubernetes-doc-fa
 | `contribute` | 44 | 44 |
 | `doc-contributor-tools` | 1 | 1 |
 | `home` | 2 | 2 |
-| `reference` | 228 | 1198 |
+| `reference` | 243 | 1198 |
 | `setup` | 0 | 22 |
 | `tasks` | 0 | 221 |
 | `tutorials` | 0 | 45 |
@@ -91,26 +91,26 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [reference/command-line-tools-reference/feature-gates/IngressClassNamespacedParams.md](md/reference/command-line-tools-reference/feature-gates/IngressClassNamespacedParams.md) — 2026-10-27T16:53:43+03:30
+- [reference/command-line-tools-reference/feature-gates/Initializers.md](md/reference/command-line-tools-reference/feature-gates/Initializers.md) — 2026-10-27T16:53:42+03:30
+- [reference/command-line-tools-reference/feature-gates/IndexedJob.md](md/reference/command-line-tools-reference/feature-gates/IndexedJob.md) — 2026-10-27T16:53:37+03:30
+- [reference/command-line-tools-reference/feature-gates/InformerResourceVersion.md](md/reference/command-line-tools-reference/feature-gates/InformerResourceVersion.md) — 2026-10-27T16:53:36+03:30
+- [reference/command-line-tools-reference/feature-gates/InTreePluginRBDUnregister.md](md/reference/command-line-tools-reference/feature-gates/InTreePluginRBDUnregister.md) — 2026-10-27T16:53:30+03:30
+- [reference/command-line-tools-reference/feature-gates/InTreePluginvSphereUnregister.md](md/reference/command-line-tools-reference/feature-gates/InTreePluginvSphereUnregister.md) — 2026-10-27T16:53:30+03:30
+- [reference/command-line-tools-reference/feature-gates/InTreePluginPortworxUnregister.md](md/reference/command-line-tools-reference/feature-gates/InTreePluginPortworxUnregister.md) — 2026-10-27T16:53:25+03:30
+- [reference/command-line-tools-reference/feature-gates/InTreePluginOpenStackUnregister.md](md/reference/command-line-tools-reference/feature-gates/InTreePluginOpenStackUnregister.md) — 2026-10-27T16:53:17+03:30
+- [reference/command-line-tools-reference/feature-gates/InTreePluginGCEUnregister.md](md/reference/command-line-tools-reference/feature-gates/InTreePluginGCEUnregister.md) — 2026-10-27T16:53:16+03:30
+- [reference/command-line-tools-reference/feature-gates/InTreePluginAzureDiskUnregister.md](md/reference/command-line-tools-reference/feature-gates/InTreePluginAzureDiskUnregister.md) — 2026-10-27T16:53:11+03:30
+- [reference/command-line-tools-reference/feature-gates/InTreePluginAzureFileUnregister.md](md/reference/command-line-tools-reference/feature-gates/InTreePluginAzureFileUnregister.md) — 2026-10-27T16:53:10+03:30
+- [reference/command-line-tools-reference/feature-gates/InPlacePodVerticalScalingSchedulerPreemption.md](md/reference/command-line-tools-reference/feature-gates/InPlacePodVerticalScalingSchedulerPreemption.md) — 2026-10-27T16:53:05+03:30
+- [reference/command-line-tools-reference/feature-gates/InTreePluginAWSUnregister.md](md/reference/command-line-tools-reference/feature-gates/InTreePluginAWSUnregister.md) — 2026-10-27T16:53:05+03:30
+- [reference/command-line-tools-reference/feature-gates/InPlacePodVerticalScalingMemoryBackedVolumes.md](md/reference/command-line-tools-reference/feature-gates/InPlacePodVerticalScalingMemoryBackedVolumes.md) — 2026-10-27T16:52:59+03:30
+- [reference/command-line-tools-reference/feature-gates/InPlacePodVerticalScalingExclusiveMemory.md](md/reference/command-line-tools-reference/feature-gates/InPlacePodVerticalScalingExclusiveMemory.md) — 2026-10-27T16:52:52+03:30
 - [reference/command-line-tools-reference/feature-gates/InPlacePodVerticalScalingExclusiveCPUs.md](md/reference/command-line-tools-reference/feature-gates/InPlacePodVerticalScalingExclusiveCPUs.md) — 2026-10-27T16:52:50+03:30
 - [reference/command-line-tools-reference/feature-gates/InPlacePodVerticalScalingAllocatedStatus.md](md/reference/command-line-tools-reference/feature-gates/InPlacePodVerticalScalingAllocatedStatus.md) — 2026-10-27T16:52:47+03:30
 - [reference/command-line-tools-reference/feature-gates/InPlacePodVerticalScaling.md](md/reference/command-line-tools-reference/feature-gates/InPlacePodVerticalScaling.md) — 2026-10-27T16:52:45+03:30
 - [reference/command-line-tools-reference/feature-gates/ImmutableEphemeralVolumes.md](md/reference/command-line-tools-reference/feature-gates/ImmutableEphemeralVolumes.md) — 2026-10-27T16:52:41+03:30
 - [reference/command-line-tools-reference/feature-gates/InPlacePodLevelResourcesVerticalScaling.md](md/reference/command-line-tools-reference/feature-gates/InPlacePodLevelResourcesVerticalScaling.md) — 2026-10-27T16:52:40+03:30
-- [reference/command-line-tools-reference/feature-gates/InOrderInformers.md](md/reference/command-line-tools-reference/feature-gates/InOrderInformers.md) — 2026-10-27T16:52:34+03:30
-- [reference/command-line-tools-reference/feature-gates/ImageVolumeWithDigest.md](md/reference/command-line-tools-reference/feature-gates/ImageVolumeWithDigest.md) — 2026-10-27T16:52:22+03:30
-- [reference/command-line-tools-reference/feature-gates/ImageVolume.md](md/reference/command-line-tools-reference/feature-gates/ImageVolume.md) — 2026-10-27T16:52:20+03:30
-- [reference/command-line-tools-reference/feature-gates/ImageMaximumGCAge.md](md/reference/command-line-tools-reference/feature-gates/ImageMaximumGCAge.md) — 2026-10-27T16:52:15+03:30
-- [reference/command-line-tools-reference/feature-gates/IPv6DualStack.md](md/reference/command-line-tools-reference/feature-gates/IPv6DualStack.md) — 2026-10-27T16:52:13+03:30
-- [reference/command-line-tools-reference/feature-gates/IdentifyPodOS.md](md/reference/command-line-tools-reference/feature-gates/IdentifyPodOS.md) — 2026-10-27T16:52:10+03:30
-- [reference/command-line-tools-reference/feature-gates/HyperVContainer.md](md/reference/command-line-tools-reference/feature-gates/HyperVContainer.md) — 2026-10-27T16:52:05+03:30
-- [reference/command-line-tools-reference/feature-gates/IPTablesOwnershipCleanup.md](md/reference/command-line-tools-reference/feature-gates/IPTablesOwnershipCleanup.md) — 2026-10-27T16:52:05+03:30
-- [reference/command-line-tools-reference/feature-gates/HugepageAwareEviction.md](md/reference/command-line-tools-reference/feature-gates/HugepageAwareEviction.md) — 2026-10-27T16:52:00+03:30
-- [reference/command-line-tools-reference/feature-gates/HugePages.md](md/reference/command-line-tools-reference/feature-gates/HugePages.md) — 2026-10-27T16:51:54+03:30
-- [reference/command-line-tools-reference/feature-gates/HugePageStorageMediumSize.md](md/reference/command-line-tools-reference/feature-gates/HugePageStorageMediumSize.md) — 2026-10-27T16:51:51+03:30
-- [reference/command-line-tools-reference/feature-gates/HostnameOverride.md](md/reference/command-line-tools-reference/feature-gates/HostnameOverride.md) — 2026-10-27T16:51:48+03:30
-- [reference/command-line-tools-reference/feature-gates/HonorPVReclaimPolicy.md](md/reference/command-line-tools-reference/feature-gates/HonorPVReclaimPolicy.md) — 2026-10-27T16:51:44+03:30
-- [reference/command-line-tools-reference/feature-gates/HPAScaleToZero.md](md/reference/command-line-tools-reference/feature-gates/HPAScaleToZero.md) — 2026-10-27T16:51:42+03:30
-- [reference/command-line-tools-reference/feature-gates/HPAContainerMetrics.md](md/reference/command-line-tools-reference/feature-gates/HPAContainerMetrics.md) — 2026-10-27T16:51:39+03:30
 
 </div>
 

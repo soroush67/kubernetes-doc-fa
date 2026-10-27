@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-463 از 1722 صفحه
+478 از 1722 صفحه
 
 
 ## `.`
@@ -599,21 +599,21 @@
 - ✅ [InPlacePodVerticalScaling.md](md/reference/command-line-tools-reference/feature-gates/InPlacePodVerticalScaling.md)
 - ✅ [InPlacePodVerticalScalingAllocatedStatus.md](md/reference/command-line-tools-reference/feature-gates/InPlacePodVerticalScalingAllocatedStatus.md)
 - ✅ [InPlacePodVerticalScalingExclusiveCPUs.md](md/reference/command-line-tools-reference/feature-gates/InPlacePodVerticalScalingExclusiveCPUs.md)
-- ⏳ `InPlacePodVerticalScalingExclusiveMemory.md`
-- ⏳ `InPlacePodVerticalScalingMemoryBackedVolumes.md`
-- ⏳ `InPlacePodVerticalScalingSchedulerPreemption.md`
-- ⏳ `InTreePluginAWSUnregister.md`
-- ⏳ `InTreePluginAzureDiskUnregister.md`
-- ⏳ `InTreePluginAzureFileUnregister.md`
-- ⏳ `InTreePluginGCEUnregister.md`
-- ⏳ `InTreePluginOpenStackUnregister.md`
-- ⏳ `InTreePluginPortworxUnregister.md`
-- ⏳ `InTreePluginRBDUnregister.md`
-- ⏳ `InTreePluginvSphereUnregister.md`
-- ⏳ `IndexedJob.md`
-- ⏳ `InformerResourceVersion.md`
-- ⏳ `IngressClassNamespacedParams.md`
-- ⏳ `Initializers.md`
+- ✅ [InPlacePodVerticalScalingExclusiveMemory.md](md/reference/command-line-tools-reference/feature-gates/InPlacePodVerticalScalingExclusiveMemory.md)
+- ✅ [InPlacePodVerticalScalingMemoryBackedVolumes.md](md/reference/command-line-tools-reference/feature-gates/InPlacePodVerticalScalingMemoryBackedVolumes.md)
+- ✅ [InPlacePodVerticalScalingSchedulerPreemption.md](md/reference/command-line-tools-reference/feature-gates/InPlacePodVerticalScalingSchedulerPreemption.md)
+- ✅ [InTreePluginAWSUnregister.md](md/reference/command-line-tools-reference/feature-gates/InTreePluginAWSUnregister.md)
+- ✅ [InTreePluginAzureDiskUnregister.md](md/reference/command-line-tools-reference/feature-gates/InTreePluginAzureDiskUnregister.md)
+- ✅ [InTreePluginAzureFileUnregister.md](md/reference/command-line-tools-reference/feature-gates/InTreePluginAzureFileUnregister.md)
+- ✅ [InTreePluginGCEUnregister.md](md/reference/command-line-tools-reference/feature-gates/InTreePluginGCEUnregister.md)
+- ✅ [InTreePluginOpenStackUnregister.md](md/reference/command-line-tools-reference/feature-gates/InTreePluginOpenStackUnregister.md)
+- ✅ [InTreePluginPortworxUnregister.md](md/reference/command-line-tools-reference/feature-gates/InTreePluginPortworxUnregister.md)
+- ✅ [InTreePluginRBDUnregister.md](md/reference/command-line-tools-reference/feature-gates/InTreePluginRBDUnregister.md)
+- ✅ [InTreePluginvSphereUnregister.md](md/reference/command-line-tools-reference/feature-gates/InTreePluginvSphereUnregister.md)
+- ✅ [IndexedJob.md](md/reference/command-line-tools-reference/feature-gates/IndexedJob.md)
+- ✅ [InformerResourceVersion.md](md/reference/command-line-tools-reference/feature-gates/InformerResourceVersion.md)
+- ✅ [IngressClassNamespacedParams.md](md/reference/command-line-tools-reference/feature-gates/IngressClassNamespacedParams.md)
+- ✅ [Initializers.md](md/reference/command-line-tools-reference/feature-gates/Initializers.md)
 - ⏳ `JobBackoffLimitPerIndex.md`
 - ⏳ `JobManagedBy.md`
 - ⏳ `JobMutableNodeSchedulingDirectives.md`
