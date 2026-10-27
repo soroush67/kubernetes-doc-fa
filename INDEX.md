@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-718 از 1722 صفحه
+733 از 1722 صفحه
 
 
 ## `.`
@@ -854,21 +854,21 @@
 - ✅ [ValidatingAdmissionPolicy.md](md/reference/command-line-tools-reference/feature-gates/ValidatingAdmissionPolicy.md)
 - ✅ [VolumeAttributesClass.md](md/reference/command-line-tools-reference/feature-gates/VolumeAttributesClass.md)
 - ✅ [VolumeBindMountOptions.md](md/reference/command-line-tools-reference/feature-gates/VolumeBindMountOptions.md)
-- ⏳ `VolumeCapacityPriority.md`
-- ⏳ `VolumeLimitScaling.md`
-- ⏳ `VolumePVCDataSource.md`
-- ⏳ `VolumeScheduling.md`
-- ⏳ `VolumeSnapshotDataSource.md`
-- ⏳ `VolumeSubpath.md`
-- ⏳ `VolumeSubpathEnvExpansion.md`
-- ⏳ `WarningHeaders.md`
-- ⏳ `WatchBookmark.md`
-- ⏳ `WatchCacheInitializationPostStartHook.md`
-- ⏳ `WatchFromStorageWithoutResourceVersion.md`
-- ⏳ `WatchList.md`
-- ⏳ `WatchListClient.md`
-- ⏳ `WatchListCompression.md`
-- ⏳ `WinDSR.md`
+- ✅ [VolumeCapacityPriority.md](md/reference/command-line-tools-reference/feature-gates/VolumeCapacityPriority.md)
+- ✅ [VolumeLimitScaling.md](md/reference/command-line-tools-reference/feature-gates/VolumeLimitScaling.md)
+- ✅ [VolumePVCDataSource.md](md/reference/command-line-tools-reference/feature-gates/VolumePVCDataSource.md)
+- ✅ [VolumeScheduling.md](md/reference/command-line-tools-reference/feature-gates/VolumeScheduling.md)
+- ✅ [VolumeSnapshotDataSource.md](md/reference/command-line-tools-reference/feature-gates/VolumeSnapshotDataSource.md)
+- ✅ [VolumeSubpath.md](md/reference/command-line-tools-reference/feature-gates/VolumeSubpath.md)
+- ✅ [VolumeSubpathEnvExpansion.md](md/reference/command-line-tools-reference/feature-gates/VolumeSubpathEnvExpansion.md)
+- ✅ [WarningHeaders.md](md/reference/command-line-tools-reference/feature-gates/WarningHeaders.md)
+- ✅ [WatchBookmark.md](md/reference/command-line-tools-reference/feature-gates/WatchBookmark.md)
+- ✅ [WatchCacheInitializationPostStartHook.md](md/reference/command-line-tools-reference/feature-gates/WatchCacheInitializationPostStartHook.md)
+- ✅ [WatchFromStorageWithoutResourceVersion.md](md/reference/command-line-tools-reference/feature-gates/WatchFromStorageWithoutResourceVersion.md)
+- ✅ [WatchList.md](md/reference/command-line-tools-reference/feature-gates/WatchList.md)
+- ✅ [WatchListClient.md](md/reference/command-line-tools-reference/feature-gates/WatchListClient.md)
+- ✅ [WatchListCompression.md](md/reference/command-line-tools-reference/feature-gates/WatchListCompression.md)
+- ✅ [WinDSR.md](md/reference/command-line-tools-reference/feature-gates/WinDSR.md)
 - ⏳ `WinOverlay.md`
 - ⏳ `WindowsCPUAndMemoryAffinity.md`
 - ⏳ `WindowsEndpointSliceProxying.md`
