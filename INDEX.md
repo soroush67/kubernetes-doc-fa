@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-343 از 1722 صفحه
+358 از 1722 صفحه
 
 
 ## `.`
@@ -479,22 +479,22 @@
 - ✅ [ConsistentHTTPGetHandlers.md](md/reference/command-line-tools-reference/feature-gates/ConsistentHTTPGetHandlers.md)
 - ✅ [ConsistentListFromCache.md](md/reference/command-line-tools-reference/feature-gates/ConsistentListFromCache.md)
 - ✅ [ConstrainedImpersonation.md](md/reference/command-line-tools-reference/feature-gates/ConstrainedImpersonation.md)
-- ⏳ `ContainerCheckpoint.md`
-- ⏳ `ContainerRestartRules.md`
-- ⏳ `ContainerStopSignals.md`
-- ⏳ `ContextualLogging.md`
-- ⏳ `ControllerManagerLeaderMigration.md`
-- ⏳ `ControllerManagerReleaseLeaderElectionLockOnExit.md`
-- ⏳ `CoordinatedLeaderElection.md`
-- ⏳ `CronJobControllerV2.md`
-- ⏳ `CronJobTimeZone.md`
-- ⏳ `CronJobsScheduledAnnotation.md`
-- ⏳ `CrossNamespaceVolumeDataSource.md`
-- ⏳ `CustomCPUCFSQuotaPeriod.md`
-- ⏳ `CustomPodDNS.md`
-- ⏳ `CustomResourceDefaulting.md`
+- ✅ [ContainerCheckpoint.md](md/reference/command-line-tools-reference/feature-gates/ContainerCheckpoint.md)
+- ✅ [ContainerRestartRules.md](md/reference/command-line-tools-reference/feature-gates/ContainerRestartRules.md)
+- ✅ [ContainerStopSignals.md](md/reference/command-line-tools-reference/feature-gates/ContainerStopSignals.md)
+- ✅ [ContextualLogging.md](md/reference/command-line-tools-reference/feature-gates/ContextualLogging.md)
+- ✅ [ControllerManagerLeaderMigration.md](md/reference/command-line-tools-reference/feature-gates/ControllerManagerLeaderMigration.md)
+- ✅ [ControllerManagerReleaseLeaderElectionLockOnExit.md](md/reference/command-line-tools-reference/feature-gates/ControllerManagerReleaseLeaderElectionLockOnExit.md)
+- ✅ [CoordinatedLeaderElection.md](md/reference/command-line-tools-reference/feature-gates/CoordinatedLeaderElection.md)
+- ✅ [CronJobControllerV2.md](md/reference/command-line-tools-reference/feature-gates/CronJobControllerV2.md)
+- ✅ [CronJobTimeZone.md](md/reference/command-line-tools-reference/feature-gates/CronJobTimeZone.md)
+- ✅ [CronJobsScheduledAnnotation.md](md/reference/command-line-tools-reference/feature-gates/CronJobsScheduledAnnotation.md)
+- ✅ [CrossNamespaceVolumeDataSource.md](md/reference/command-line-tools-reference/feature-gates/CrossNamespaceVolumeDataSource.md)
+- ✅ [CustomCPUCFSQuotaPeriod.md](md/reference/command-line-tools-reference/feature-gates/CustomCPUCFSQuotaPeriod.md)
+- ✅ [CustomPodDNS.md](md/reference/command-line-tools-reference/feature-gates/CustomPodDNS.md)
+- ✅ [CustomResourceDefaulting.md](md/reference/command-line-tools-reference/feature-gates/CustomResourceDefaulting.md)
 - ⏳ `CustomResourceFieldSelectors.md`
-- ⏳ `CustomResourcePublishOpenAPI.md`
+- ✅ [CustomResourcePublishOpenAPI.md](md/reference/command-line-tools-reference/feature-gates/CustomResourcePublishOpenAPI.md)
 - ⏳ `CustomResourceSubresources.md`
 - ⏳ `CustomResourceValidation.md`
 - ⏳ `CustomResourceValidationExpressions.md`
