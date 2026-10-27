@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-553 از 1722 صفحه
+568 از 1722 صفحه
 
 
 ## `.`
@@ -688,22 +688,22 @@
 - ✅ [NodeLogQuery.md](md/reference/command-line-tools-reference/feature-gates/NodeLogQuery.md)
 - ✅ [NodeOutOfServiceVolumeDetach.md](md/reference/command-line-tools-reference/feature-gates/NodeOutOfServiceVolumeDetach.md)
 - ✅ [NodeSwap.md](md/reference/command-line-tools-reference/feature-gates/NodeSwap.md)
-- ⏳ `NominatedNodeNameForExpectation.md`
+- ✅ [NominatedNodeNameForExpectation.md](md/reference/command-line-tools-reference/feature-gates/NominatedNodeNameForExpectation.md)
 - ✅ [NonPreemptingPriority.md](md/reference/command-line-tools-reference/feature-gates/NonPreemptingPriority.md)
-- ⏳ `OpenAPIEnums.md`
-- ⏳ `OpenAPIV3.md`
-- ⏳ `OpportunisticBatching.md`
-- ⏳ `OrderedNamespaceDeletion.md`
-- ⏳ `PDBUnhealthyPodEvictionPolicy.md`
-- ⏳ `PVCProtection.md`
-- ⏳ `PersistentLocalVolumes.md`
-- ⏳ `PersistentVolumeClaimUnusedSinceTime.md`
-- ⏳ `PersistentVolumeLastPhaseTransitionTime.md`
-- ⏳ `PodAffinityNamespaceSelector.md`
-- ⏳ `PodAndContainerStatsFromCRI.md`
-- ⏳ `PodCertificateRequest.md`
-- ⏳ `PodDeletionCost.md`
-- ⏳ `PodDisruptionBudget.md`
+- ✅ [OpenAPIEnums.md](md/reference/command-line-tools-reference/feature-gates/OpenAPIEnums.md)
+- ✅ [OpenAPIV3.md](md/reference/command-line-tools-reference/feature-gates/OpenAPIV3.md)
+- ✅ [OpportunisticBatching.md](md/reference/command-line-tools-reference/feature-gates/OpportunisticBatching.md)
+- ✅ [OrderedNamespaceDeletion.md](md/reference/command-line-tools-reference/feature-gates/OrderedNamespaceDeletion.md)
+- ✅ [PDBUnhealthyPodEvictionPolicy.md](md/reference/command-line-tools-reference/feature-gates/PDBUnhealthyPodEvictionPolicy.md)
+- ✅ [PVCProtection.md](md/reference/command-line-tools-reference/feature-gates/PVCProtection.md)
+- ✅ [PersistentLocalVolumes.md](md/reference/command-line-tools-reference/feature-gates/PersistentLocalVolumes.md)
+- ✅ [PersistentVolumeClaimUnusedSinceTime.md](md/reference/command-line-tools-reference/feature-gates/PersistentVolumeClaimUnusedSinceTime.md)
+- ✅ [PersistentVolumeLastPhaseTransitionTime.md](md/reference/command-line-tools-reference/feature-gates/PersistentVolumeLastPhaseTransitionTime.md)
+- ✅ [PodAffinityNamespaceSelector.md](md/reference/command-line-tools-reference/feature-gates/PodAffinityNamespaceSelector.md)
+- ✅ [PodAndContainerStatsFromCRI.md](md/reference/command-line-tools-reference/feature-gates/PodAndContainerStatsFromCRI.md)
+- ✅ [PodCertificateRequest.md](md/reference/command-line-tools-reference/feature-gates/PodCertificateRequest.md)
+- ✅ [PodDeletionCost.md](md/reference/command-line-tools-reference/feature-gates/PodDeletionCost.md)
+- ✅ [PodDisruptionBudget.md](md/reference/command-line-tools-reference/feature-gates/PodDisruptionBudget.md)
 - ⏳ `PodDisruptionConditions.md`
 - ⏳ `PodGroupPreemptionPolicy.md`
 - ⏳ `PodHasNetworkCondition.md`
