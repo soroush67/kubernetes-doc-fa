@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-598 از 1722 صفحه
+613 از 1722 صفحه
 
 
 ## `.`
@@ -734,21 +734,21 @@
 - ✅ [QOSReserved.md](md/reference/command-line-tools-reference/feature-gates/QOSReserved.md)
 - ✅ [ReadOnlyAPIDataVolumes.md](md/reference/command-line-tools-reference/feature-gates/ReadOnlyAPIDataVolumes.md)
 - ✅ [ReadWriteOncePod.md](md/reference/command-line-tools-reference/feature-gates/ReadWriteOncePod.md)
-- ⏳ `RecoverVolumeExpansionFailure.md`
-- ⏳ `RecursiveReadOnlyMounts.md`
-- ⏳ `ReduceDefaultCrashLoopBackOffDecay.md`
-- ⏳ `RelaxedDNSSearchValidation.md`
-- ⏳ `RelaxedEnvironmentVariableValidation.md`
-- ⏳ `RelaxedServiceNameValidation.md`
-- ⏳ `ReloadKubeletServerCertificateFile.md`
-- ⏳ `RemainingItemCount.md`
-- ⏳ `RemoteRequestHeaderUID.md`
-- ⏳ `RemoveSelfLink.md`
-- ⏳ `RequestManagement.md`
-- ⏳ `ResilientWatchCacheInitialization.md`
-- ⏳ `ResourceHealthStatus.md`
-- ⏳ `ResourceLimitsPriorityFunction.md`
-- ⏳ `ResourceQuotaScopeSelectors.md`
+- ✅ [RecoverVolumeExpansionFailure.md](md/reference/command-line-tools-reference/feature-gates/RecoverVolumeExpansionFailure.md)
+- ✅ [RecursiveReadOnlyMounts.md](md/reference/command-line-tools-reference/feature-gates/RecursiveReadOnlyMounts.md)
+- ✅ [ReduceDefaultCrashLoopBackOffDecay.md](md/reference/command-line-tools-reference/feature-gates/ReduceDefaultCrashLoopBackOffDecay.md)
+- ✅ [RelaxedDNSSearchValidation.md](md/reference/command-line-tools-reference/feature-gates/RelaxedDNSSearchValidation.md)
+- ✅ [RelaxedEnvironmentVariableValidation.md](md/reference/command-line-tools-reference/feature-gates/RelaxedEnvironmentVariableValidation.md)
+- ✅ [RelaxedServiceNameValidation.md](md/reference/command-line-tools-reference/feature-gates/RelaxedServiceNameValidation.md)
+- ✅ [ReloadKubeletServerCertificateFile.md](md/reference/command-line-tools-reference/feature-gates/ReloadKubeletServerCertificateFile.md)
+- ✅ [RemainingItemCount.md](md/reference/command-line-tools-reference/feature-gates/RemainingItemCount.md)
+- ✅ [RemoteRequestHeaderUID.md](md/reference/command-line-tools-reference/feature-gates/RemoteRequestHeaderUID.md)
+- ✅ [RemoveSelfLink.md](md/reference/command-line-tools-reference/feature-gates/RemoveSelfLink.md)
+- ✅ [RequestManagement.md](md/reference/command-line-tools-reference/feature-gates/RequestManagement.md)
+- ✅ [ResilientWatchCacheInitialization.md](md/reference/command-line-tools-reference/feature-gates/ResilientWatchCacheInitialization.md)
+- ✅ [ResourceHealthStatus.md](md/reference/command-line-tools-reference/feature-gates/ResourceHealthStatus.md)
+- ✅ [ResourceLimitsPriorityFunction.md](md/reference/command-line-tools-reference/feature-gates/ResourceLimitsPriorityFunction.md)
+- ✅ [ResourceQuotaScopeSelectors.md](md/reference/command-line-tools-reference/feature-gates/ResourceQuotaScopeSelectors.md)
 - ⏳ `RestartAllContainersOnContainerExits.md`
 - ⏳ `RetroactiveDefaultStorageClass.md`
 - ⏳ `RetryGenerateName.md`
