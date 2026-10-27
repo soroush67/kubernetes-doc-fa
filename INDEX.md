@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-358 از 1722 صفحه
+373 از 1722 صفحه
 
 
 ## `.`
@@ -493,22 +493,22 @@
 - ✅ [CustomCPUCFSQuotaPeriod.md](md/reference/command-line-tools-reference/feature-gates/CustomCPUCFSQuotaPeriod.md)
 - ✅ [CustomPodDNS.md](md/reference/command-line-tools-reference/feature-gates/CustomPodDNS.md)
 - ✅ [CustomResourceDefaulting.md](md/reference/command-line-tools-reference/feature-gates/CustomResourceDefaulting.md)
-- ⏳ `CustomResourceFieldSelectors.md`
+- ✅ [CustomResourceFieldSelectors.md](md/reference/command-line-tools-reference/feature-gates/CustomResourceFieldSelectors.md)
 - ✅ [CustomResourcePublishOpenAPI.md](md/reference/command-line-tools-reference/feature-gates/CustomResourcePublishOpenAPI.md)
-- ⏳ `CustomResourceSubresources.md`
-- ⏳ `CustomResourceValidation.md`
-- ⏳ `CustomResourceValidationExpressions.md`
-- ⏳ `CustomResourceWebhookConversion.md`
-- ⏳ `DRAAdminAccess.md`
-- ⏳ `DRAConsumableCapacity.md`
-- ⏳ `DRAControlPlaneController.md`
-- ⏳ `DRADerivedAttributes.md`
-- ⏳ `DRADeviceBindingConditions.md`
-- ⏳ `DRADeviceCompatibilityGroups.md`
-- ⏳ `DRADeviceTaintRules.md`
-- ⏳ `DRADeviceTaints.md`
-- ⏳ `DRAExtendedResource.md`
-- ⏳ `DRAListTypeAttributes.md`
+- ✅ [CustomResourceSubresources.md](md/reference/command-line-tools-reference/feature-gates/CustomResourceSubresources.md)
+- ✅ [CustomResourceValidation.md](md/reference/command-line-tools-reference/feature-gates/CustomResourceValidation.md)
+- ✅ [CustomResourceValidationExpressions.md](md/reference/command-line-tools-reference/feature-gates/CustomResourceValidationExpressions.md)
+- ✅ [CustomResourceWebhookConversion.md](md/reference/command-line-tools-reference/feature-gates/CustomResourceWebhookConversion.md)
+- ✅ [DRAAdminAccess.md](md/reference/command-line-tools-reference/feature-gates/DRAAdminAccess.md)
+- ✅ [DRAConsumableCapacity.md](md/reference/command-line-tools-reference/feature-gates/DRAConsumableCapacity.md)
+- ✅ [DRAControlPlaneController.md](md/reference/command-line-tools-reference/feature-gates/DRAControlPlaneController.md)
+- ✅ [DRADerivedAttributes.md](md/reference/command-line-tools-reference/feature-gates/DRADerivedAttributes.md)
+- ✅ [DRADeviceBindingConditions.md](md/reference/command-line-tools-reference/feature-gates/DRADeviceBindingConditions.md)
+- ✅ [DRADeviceCompatibilityGroups.md](md/reference/command-line-tools-reference/feature-gates/DRADeviceCompatibilityGroups.md)
+- ✅ [DRADeviceTaintRules.md](md/reference/command-line-tools-reference/feature-gates/DRADeviceTaintRules.md)
+- ✅ [DRADeviceTaints.md](md/reference/command-line-tools-reference/feature-gates/DRADeviceTaints.md)
+- ✅ [DRAExtendedResource.md](md/reference/command-line-tools-reference/feature-gates/DRAExtendedResource.md)
+- ✅ [DRAListTypeAttributes.md](md/reference/command-line-tools-reference/feature-gates/DRAListTypeAttributes.md)
 - ⏳ `DRANodeAllocatableResources.md`
 - ⏳ `DRAOptionalNodeOperations.md`
 - ⏳ `DRAPartitionableDevices.md`
