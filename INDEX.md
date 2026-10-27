@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-478 از 1722 صفحه
+493 از 1722 صفحه
 
 
 ## `.`
@@ -614,22 +614,22 @@
 - ✅ [InformerResourceVersion.md](md/reference/command-line-tools-reference/feature-gates/InformerResourceVersion.md)
 - ✅ [IngressClassNamespacedParams.md](md/reference/command-line-tools-reference/feature-gates/IngressClassNamespacedParams.md)
 - ✅ [Initializers.md](md/reference/command-line-tools-reference/feature-gates/Initializers.md)
-- ⏳ `JobBackoffLimitPerIndex.md`
-- ⏳ `JobManagedBy.md`
-- ⏳ `JobMutableNodeSchedulingDirectives.md`
-- ⏳ `JobPodFailurePolicy.md`
-- ⏳ `JobPodReplacementPolicy.md`
-- ⏳ `JobReadyPods.md`
-- ⏳ `JobSuccessPolicy.md`
-- ⏳ `JobTrackingWithFinalizers.md`
-- ⏳ `KMSv1.md`
-- ⏳ `KMSv2.md`
-- ⏳ `KMSv2KDF.md`
-- ⏳ `KubeProxyDrainingTerminatingNodes.md`
-- ⏳ `KubeProxyIPVS.md`
-- ⏳ `KubeProxyNFTablesLocalhostNodePorts.md`
+- ✅ [JobBackoffLimitPerIndex.md](md/reference/command-line-tools-reference/feature-gates/JobBackoffLimitPerIndex.md)
+- ✅ [JobManagedBy.md](md/reference/command-line-tools-reference/feature-gates/JobManagedBy.md)
+- ✅ [JobMutableNodeSchedulingDirectives.md](md/reference/command-line-tools-reference/feature-gates/JobMutableNodeSchedulingDirectives.md)
+- ✅ [JobPodFailurePolicy.md](md/reference/command-line-tools-reference/feature-gates/JobPodFailurePolicy.md)
+- ✅ [JobPodReplacementPolicy.md](md/reference/command-line-tools-reference/feature-gates/JobPodReplacementPolicy.md)
+- ✅ [JobReadyPods.md](md/reference/command-line-tools-reference/feature-gates/JobReadyPods.md)
+- ✅ [JobSuccessPolicy.md](md/reference/command-line-tools-reference/feature-gates/JobSuccessPolicy.md)
+- ✅ [JobTrackingWithFinalizers.md](md/reference/command-line-tools-reference/feature-gates/JobTrackingWithFinalizers.md)
+- ✅ [KMSv1.md](md/reference/command-line-tools-reference/feature-gates/KMSv1.md)
+- ✅ [KMSv2.md](md/reference/command-line-tools-reference/feature-gates/KMSv2.md)
+- ✅ [KMSv2KDF.md](md/reference/command-line-tools-reference/feature-gates/KMSv2KDF.md)
+- ✅ [KubeProxyDrainingTerminatingNodes.md](md/reference/command-line-tools-reference/feature-gates/KubeProxyDrainingTerminatingNodes.md)
+- ✅ [KubeProxyIPVS.md](md/reference/command-line-tools-reference/feature-gates/KubeProxyIPVS.md)
+- ✅ [KubeProxyNFTablesLocalhostNodePorts.md](md/reference/command-line-tools-reference/feature-gates/KubeProxyNFTablesLocalhostNodePorts.md)
 - ⏳ `KubeletCgroupDriverFromCRI.md`
-- ⏳ `KubeletConfigFile.md`
+- ✅ [KubeletConfigFile.md](md/reference/command-line-tools-reference/feature-gates/KubeletConfigFile.md)
 - ⏳ `KubeletCrashLoopBackOffMax.md`
 - ⏳ `KubeletCredentialProviders.md`
 - ⏳ `KubeletEnsureSecretPulledImages.md`
