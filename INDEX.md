@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-298 از 1722 صفحه
+313 از 1722 صفحه
 
 
 ## `.`
@@ -434,22 +434,22 @@
 - ✅ [CPUManagerPolicyOptions.md](md/reference/command-line-tools-reference/feature-gates/CPUManagerPolicyOptions.md)
 - ✅ [CRDObservedGenerationTracking.md](md/reference/command-line-tools-reference/feature-gates/CRDObservedGenerationTracking.md)
 - ✅ [CRDValidationRatcheting.md](md/reference/command-line-tools-reference/feature-gates/CRDValidationRatcheting.md)
-- ⏳ `CRIContainerLogRotation.md`
-- ⏳ `CRIListStreaming.md`
-- ⏳ `CSIBlockVolume.md`
-- ⏳ `CSIDriverRegistry.md`
-- ⏳ `CSIInlineVolume.md`
-- ⏳ `CSIMigration.md`
-- ⏳ `CSIMigrationAWS.md`
-- ⏳ `CSIMigrationAWSComplete.md`
-- ⏳ `CSIMigrationAzureDisk.md`
-- ⏳ `CSIMigrationAzureDiskComplete.md`
-- ⏳ `CSIMigrationAzureFile.md`
-- ⏳ `CSIMigrationAzureFileComplete.md`
-- ⏳ `CSIMigrationGCE.md`
-- ⏳ `CSIMigrationGCEComplete.md`
+- ✅ [CRIContainerLogRotation.md](md/reference/command-line-tools-reference/feature-gates/CRIContainerLogRotation.md)
+- ✅ [CRIListStreaming.md](md/reference/command-line-tools-reference/feature-gates/CRIListStreaming.md)
+- ✅ [CSIBlockVolume.md](md/reference/command-line-tools-reference/feature-gates/CSIBlockVolume.md)
+- ✅ [CSIDriverRegistry.md](md/reference/command-line-tools-reference/feature-gates/CSIDriverRegistry.md)
+- ✅ [CSIInlineVolume.md](md/reference/command-line-tools-reference/feature-gates/CSIInlineVolume.md)
+- ✅ [CSIMigration.md](md/reference/command-line-tools-reference/feature-gates/CSIMigration.md)
+- ✅ [CSIMigrationAWS.md](md/reference/command-line-tools-reference/feature-gates/CSIMigrationAWS.md)
+- ✅ [CSIMigrationAWSComplete.md](md/reference/command-line-tools-reference/feature-gates/CSIMigrationAWSComplete.md)
+- ✅ [CSIMigrationAzureDisk.md](md/reference/command-line-tools-reference/feature-gates/CSIMigrationAzureDisk.md)
+- ✅ [CSIMigrationAzureDiskComplete.md](md/reference/command-line-tools-reference/feature-gates/CSIMigrationAzureDiskComplete.md)
+- ✅ [CSIMigrationAzureFile.md](md/reference/command-line-tools-reference/feature-gates/CSIMigrationAzureFile.md)
+- ✅ [CSIMigrationAzureFileComplete.md](md/reference/command-line-tools-reference/feature-gates/CSIMigrationAzureFileComplete.md)
+- ✅ [CSIMigrationGCE.md](md/reference/command-line-tools-reference/feature-gates/CSIMigrationGCE.md)
+- ✅ [CSIMigrationGCEComplete.md](md/reference/command-line-tools-reference/feature-gates/CSIMigrationGCEComplete.md)
 - ⏳ `CSIMigrationOpenStack.md`
-- ⏳ `CSIMigrationOpenStackComplete.md`
+- ✅ [CSIMigrationOpenStackComplete.md](md/reference/command-line-tools-reference/feature-gates/CSIMigrationOpenStackComplete.md)
 - ⏳ `CSIMigrationPortworx.md`
 - ⏳ `CSIMigrationRBD.md`
 - ⏳ `CSIMigrationvSphere.md`
