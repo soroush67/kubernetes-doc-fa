@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-448 از 1722 صفحه
+463 از 1722 صفحه
 
 
 ## `.`
@@ -584,21 +584,21 @@
 - ✅ [HonorPVReclaimPolicy.md](md/reference/command-line-tools-reference/feature-gates/HonorPVReclaimPolicy.md)
 - ✅ [HostnameOverride.md](md/reference/command-line-tools-reference/feature-gates/HostnameOverride.md)
 - ✅ [HugePageStorageMediumSize.md](md/reference/command-line-tools-reference/feature-gates/HugePageStorageMediumSize.md)
-- ⏳ `HugePages.md`
-- ⏳ `HugepageAwareEviction.md`
-- ⏳ `HyperVContainer.md`
-- ⏳ `IPTablesOwnershipCleanup.md`
-- ⏳ `IPv6DualStack.md`
-- ⏳ `IdentifyPodOS.md`
-- ⏳ `ImageMaximumGCAge.md`
-- ⏳ `ImageVolume.md`
-- ⏳ `ImageVolumeWithDigest.md`
-- ⏳ `ImmutableEphemeralVolumes.md`
-- ⏳ `InOrderInformers.md`
-- ⏳ `InPlacePodLevelResourcesVerticalScaling.md`
-- ⏳ `InPlacePodVerticalScaling.md`
-- ⏳ `InPlacePodVerticalScalingAllocatedStatus.md`
-- ⏳ `InPlacePodVerticalScalingExclusiveCPUs.md`
+- ✅ [HugePages.md](md/reference/command-line-tools-reference/feature-gates/HugePages.md)
+- ✅ [HugepageAwareEviction.md](md/reference/command-line-tools-reference/feature-gates/HugepageAwareEviction.md)
+- ✅ [HyperVContainer.md](md/reference/command-line-tools-reference/feature-gates/HyperVContainer.md)
+- ✅ [IPTablesOwnershipCleanup.md](md/reference/command-line-tools-reference/feature-gates/IPTablesOwnershipCleanup.md)
+- ✅ [IPv6DualStack.md](md/reference/command-line-tools-reference/feature-gates/IPv6DualStack.md)
+- ✅ [IdentifyPodOS.md](md/reference/command-line-tools-reference/feature-gates/IdentifyPodOS.md)
+- ✅ [ImageMaximumGCAge.md](md/reference/command-line-tools-reference/feature-gates/ImageMaximumGCAge.md)
+- ✅ [ImageVolume.md](md/reference/command-line-tools-reference/feature-gates/ImageVolume.md)
+- ✅ [ImageVolumeWithDigest.md](md/reference/command-line-tools-reference/feature-gates/ImageVolumeWithDigest.md)
+- ✅ [ImmutableEphemeralVolumes.md](md/reference/command-line-tools-reference/feature-gates/ImmutableEphemeralVolumes.md)
+- ✅ [InOrderInformers.md](md/reference/command-line-tools-reference/feature-gates/InOrderInformers.md)
+- ✅ [InPlacePodLevelResourcesVerticalScaling.md](md/reference/command-line-tools-reference/feature-gates/InPlacePodLevelResourcesVerticalScaling.md)
+- ✅ [InPlacePodVerticalScaling.md](md/reference/command-line-tools-reference/feature-gates/InPlacePodVerticalScaling.md)
+- ✅ [InPlacePodVerticalScalingAllocatedStatus.md](md/reference/command-line-tools-reference/feature-gates/InPlacePodVerticalScalingAllocatedStatus.md)
+- ✅ [InPlacePodVerticalScalingExclusiveCPUs.md](md/reference/command-line-tools-reference/feature-gates/InPlacePodVerticalScalingExclusiveCPUs.md)
 - ⏳ `InPlacePodVerticalScalingExclusiveMemory.md`
 - ⏳ `InPlacePodVerticalScalingMemoryBackedVolumes.md`
 - ⏳ `InPlacePodVerticalScalingSchedulerPreemption.md`
