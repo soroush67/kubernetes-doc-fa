@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-418 از 1722 صفحه
+433 از 1722 صفحه
 
 
 ## `.`
@@ -554,21 +554,21 @@
 - ✅ [EndpointSliceProxying.md](md/reference/command-line-tools-reference/feature-gates/EndpointSliceProxying.md)
 - ✅ [EndpointSliceTerminatingCondition.md](md/reference/command-line-tools-reference/feature-gates/EndpointSliceTerminatingCondition.md)
 - ✅ [EnvFiles.md](md/reference/command-line-tools-reference/feature-gates/EnvFiles.md)
-- ⏳ `EphemeralContainers.md`
-- ⏳ `EtcdRangeStream.md`
-- ⏳ `EvenPodsSpread.md`
-- ⏳ `EventedPLEG.md`
-- ⏳ `ExcludeAdmissionWebhookVirtualResources.md`
-- ⏳ `ExecProbeTimeout.md`
-- ⏳ `ExpandCSIVolumes.md`
-- ⏳ `ExpandInUsePersistentVolumes.md`
-- ⏳ `ExpandPersistentVolumes.md`
-- ⏳ `ExpandedDNSConfig.md`
-- ⏳ `ExperimentalCriticalPodAnnotation.md`
-- ⏳ `ExperimentalHostUserNamespaceDefaulting.md`
-- ⏳ `ExternalPolicyForExternalIP.md`
-- ⏳ `ExternalServiceAccountTokenSigner.md`
-- ⏳ `GCERegionalPersistentDisk.md`
+- ✅ [EphemeralContainers.md](md/reference/command-line-tools-reference/feature-gates/EphemeralContainers.md)
+- ✅ [EtcdRangeStream.md](md/reference/command-line-tools-reference/feature-gates/EtcdRangeStream.md)
+- ✅ [EvenPodsSpread.md](md/reference/command-line-tools-reference/feature-gates/EvenPodsSpread.md)
+- ✅ [EventedPLEG.md](md/reference/command-line-tools-reference/feature-gates/EventedPLEG.md)
+- ✅ [ExcludeAdmissionWebhookVirtualResources.md](md/reference/command-line-tools-reference/feature-gates/ExcludeAdmissionWebhookVirtualResources.md)
+- ✅ [ExecProbeTimeout.md](md/reference/command-line-tools-reference/feature-gates/ExecProbeTimeout.md)
+- ✅ [ExpandCSIVolumes.md](md/reference/command-line-tools-reference/feature-gates/ExpandCSIVolumes.md)
+- ✅ [ExpandInUsePersistentVolumes.md](md/reference/command-line-tools-reference/feature-gates/ExpandInUsePersistentVolumes.md)
+- ✅ [ExpandPersistentVolumes.md](md/reference/command-line-tools-reference/feature-gates/ExpandPersistentVolumes.md)
+- ✅ [ExpandedDNSConfig.md](md/reference/command-line-tools-reference/feature-gates/ExpandedDNSConfig.md)
+- ✅ [ExperimentalCriticalPodAnnotation.md](md/reference/command-line-tools-reference/feature-gates/ExperimentalCriticalPodAnnotation.md)
+- ✅ [ExperimentalHostUserNamespaceDefaulting.md](md/reference/command-line-tools-reference/feature-gates/ExperimentalHostUserNamespaceDefaulting.md)
+- ✅ [ExternalPolicyForExternalIP.md](md/reference/command-line-tools-reference/feature-gates/ExternalPolicyForExternalIP.md)
+- ✅ [ExternalServiceAccountTokenSigner.md](md/reference/command-line-tools-reference/feature-gates/ExternalServiceAccountTokenSigner.md)
+- ✅ [GCERegionalPersistentDisk.md](md/reference/command-line-tools-reference/feature-gates/GCERegionalPersistentDisk.md)
 - ⏳ `GRPCContainerProbe.md`
 - ⏳ `GRPCContainerProbeTLS.md`
 - ⏳ `GangScheduling.md`
