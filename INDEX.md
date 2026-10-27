@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-703 از 1722 صفحه
+718 از 1722 صفحه
 
 
 ## `.`
@@ -839,21 +839,21 @@
 - ✅ [TopologyAwareHints.md](md/reference/command-line-tools-reference/feature-gates/TopologyAwareHints.md)
 - ✅ [TopologyAwareWorkloadScheduling.md](md/reference/command-line-tools-reference/feature-gates/TopologyAwareWorkloadScheduling.md)
 - ✅ [TopologyManager.md](md/reference/command-line-tools-reference/feature-gates/TopologyManager.md)
-- ⏳ `TopologyManagerPolicyAlphaOptions.md`
-- ⏳ `TopologyManagerPolicyBetaOptions.md`
-- ⏳ `TopologyManagerPolicyOptions.md`
-- ⏳ `TranslateStreamCloseWebsocketRequests.md`
-- ⏳ `UnauthenticatedHTTP2DOSMitigation.md`
-- ⏳ `UnknownVersionInteroperabilityProxy.md`
-- ⏳ `UnlockWhileProcessingFIFO.md`
-- ⏳ `UserNamespacesHostNetworkSupport.md`
-- ⏳ `UserNamespacesPodSecurityStandards.md`
-- ⏳ `UserNamespacesStatelessPodsSupport.md`
-- ⏳ `UserNamespacesSupport.md`
-- ⏳ `ValidateProxyRedirects.md`
-- ⏳ `ValidatingAdmissionPolicy.md`
-- ⏳ `VolumeAttributesClass.md`
-- ⏳ `VolumeBindMountOptions.md`
+- ✅ [TopologyManagerPolicyAlphaOptions.md](md/reference/command-line-tools-reference/feature-gates/TopologyManagerPolicyAlphaOptions.md)
+- ✅ [TopologyManagerPolicyBetaOptions.md](md/reference/command-line-tools-reference/feature-gates/TopologyManagerPolicyBetaOptions.md)
+- ✅ [TopologyManagerPolicyOptions.md](md/reference/command-line-tools-reference/feature-gates/TopologyManagerPolicyOptions.md)
+- ✅ [TranslateStreamCloseWebsocketRequests.md](md/reference/command-line-tools-reference/feature-gates/TranslateStreamCloseWebsocketRequests.md)
+- ✅ [UnauthenticatedHTTP2DOSMitigation.md](md/reference/command-line-tools-reference/feature-gates/UnauthenticatedHTTP2DOSMitigation.md)
+- ✅ [UnknownVersionInteroperabilityProxy.md](md/reference/command-line-tools-reference/feature-gates/UnknownVersionInteroperabilityProxy.md)
+- ✅ [UnlockWhileProcessingFIFO.md](md/reference/command-line-tools-reference/feature-gates/UnlockWhileProcessingFIFO.md)
+- ✅ [UserNamespacesHostNetworkSupport.md](md/reference/command-line-tools-reference/feature-gates/UserNamespacesHostNetworkSupport.md)
+- ✅ [UserNamespacesPodSecurityStandards.md](md/reference/command-line-tools-reference/feature-gates/UserNamespacesPodSecurityStandards.md)
+- ✅ [UserNamespacesStatelessPodsSupport.md](md/reference/command-line-tools-reference/feature-gates/UserNamespacesStatelessPodsSupport.md)
+- ✅ [UserNamespacesSupport.md](md/reference/command-line-tools-reference/feature-gates/UserNamespacesSupport.md)
+- ✅ [ValidateProxyRedirects.md](md/reference/command-line-tools-reference/feature-gates/ValidateProxyRedirects.md)
+- ✅ [ValidatingAdmissionPolicy.md](md/reference/command-line-tools-reference/feature-gates/ValidatingAdmissionPolicy.md)
+- ✅ [VolumeAttributesClass.md](md/reference/command-line-tools-reference/feature-gates/VolumeAttributesClass.md)
+- ✅ [VolumeBindMountOptions.md](md/reference/command-line-tools-reference/feature-gates/VolumeBindMountOptions.md)
 - ⏳ `VolumeCapacityPriority.md`
 - ⏳ `VolumeLimitScaling.md`
 - ⏳ `VolumePVCDataSource.md`

@@ -9,7 +9,7 @@
 | | |
 |---|---|
 | پیشرفت (بر اساس کلمات) | **20.4٪** |
-| صفحات ترجمه‌شده | 703 از 1722 |
+| صفحات ترجمه‌شده | 718 از 1722 |
 | صفحات دارای ایراد ساختاری | 9 |
 | نسخه‌ی منبع انگلیسی | `ed70e311737a` |
 
@@ -72,7 +72,7 @@ cd kubernetes-doc-fa
 | `contribute` | 44 | 44 |
 | `doc-contributor-tools` | 1 | 1 |
 | `home` | 2 | 2 |
-| `reference` | 468 | 1198 |
+| `reference` | 483 | 1198 |
 | `setup` | 0 | 22 |
 | `tasks` | 0 | 221 |
 | `tutorials` | 0 | 45 |
@@ -91,26 +91,26 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [reference/command-line-tools-reference/feature-gates/VolumeAttributesClass.md](md/reference/command-line-tools-reference/feature-gates/VolumeAttributesClass.md) — 2026-10-27T17:09:37+03:30
+- [reference/command-line-tools-reference/feature-gates/VolumeBindMountOptions.md](md/reference/command-line-tools-reference/feature-gates/VolumeBindMountOptions.md) — 2026-10-27T17:09:37+03:30
+- [reference/command-line-tools-reference/feature-gates/ValidatingAdmissionPolicy.md](md/reference/command-line-tools-reference/feature-gates/ValidatingAdmissionPolicy.md) — 2026-10-27T17:09:30+03:30
+- [reference/command-line-tools-reference/feature-gates/ValidateProxyRedirects.md](md/reference/command-line-tools-reference/feature-gates/ValidateProxyRedirects.md) — 2026-10-27T17:09:28+03:30
+- [reference/command-line-tools-reference/feature-gates/UserNamespacesSupport.md](md/reference/command-line-tools-reference/feature-gates/UserNamespacesSupport.md) — 2026-10-27T17:09:22+03:30
+- [reference/command-line-tools-reference/feature-gates/UserNamespacesStatelessPodsSupport.md](md/reference/command-line-tools-reference/feature-gates/UserNamespacesStatelessPodsSupport.md) — 2026-10-27T17:09:18+03:30
+- [reference/command-line-tools-reference/feature-gates/UserNamespacesPodSecurityStandards.md](md/reference/command-line-tools-reference/feature-gates/UserNamespacesPodSecurityStandards.md) — 2026-10-27T17:09:16+03:30
+- [reference/command-line-tools-reference/feature-gates/UserNamespacesHostNetworkSupport.md](md/reference/command-line-tools-reference/feature-gates/UserNamespacesHostNetworkSupport.md) — 2026-10-27T17:09:12+03:30
+- [reference/command-line-tools-reference/feature-gates/UnlockWhileProcessingFIFO.md](md/reference/command-line-tools-reference/feature-gates/UnlockWhileProcessingFIFO.md) — 2026-10-27T17:09:10+03:30
+- [reference/command-line-tools-reference/feature-gates/UnknownVersionInteroperabilityProxy.md](md/reference/command-line-tools-reference/feature-gates/UnknownVersionInteroperabilityProxy.md) — 2026-10-27T17:09:06+03:30
+- [reference/command-line-tools-reference/feature-gates/UnauthenticatedHTTP2DOSMitigation.md](md/reference/command-line-tools-reference/feature-gates/UnauthenticatedHTTP2DOSMitigation.md) — 2026-10-27T17:09:05+03:30
+- [reference/command-line-tools-reference/feature-gates/TranslateStreamCloseWebsocketRequests.md](md/reference/command-line-tools-reference/feature-gates/TranslateStreamCloseWebsocketRequests.md) — 2026-10-27T17:09:00+03:30
+- [reference/command-line-tools-reference/feature-gates/TopologyManagerPolicyOptions.md](md/reference/command-line-tools-reference/feature-gates/TopologyManagerPolicyOptions.md) — 2026-10-27T17:08:57+03:30
+- [reference/command-line-tools-reference/feature-gates/TopologyManagerPolicyBetaOptions.md](md/reference/command-line-tools-reference/feature-gates/TopologyManagerPolicyBetaOptions.md) — 2026-10-27T17:08:55+03:30
+- [reference/command-line-tools-reference/feature-gates/TopologyManagerPolicyAlphaOptions.md](md/reference/command-line-tools-reference/feature-gates/TopologyManagerPolicyAlphaOptions.md) — 2026-10-27T17:08:49+03:30
 - [reference/command-line-tools-reference/feature-gates/TopologyManager.md](md/reference/command-line-tools-reference/feature-gates/TopologyManager.md) — 2026-10-27T17:08:47+03:30
 - [reference/command-line-tools-reference/feature-gates/TopologyAwareWorkloadScheduling.md](md/reference/command-line-tools-reference/feature-gates/TopologyAwareWorkloadScheduling.md) — 2026-10-27T17:08:43+03:30
 - [reference/command-line-tools-reference/feature-gates/TokenRequestServiceAccountUIDValidation.md](md/reference/command-line-tools-reference/feature-gates/TokenRequestServiceAccountUIDValidation.md) — 2026-10-27T17:08:41+03:30
 - [reference/command-line-tools-reference/feature-gates/TopologyAwareHints.md](md/reference/command-line-tools-reference/feature-gates/TopologyAwareHints.md) — 2026-10-27T17:08:39+03:30
 - [reference/command-line-tools-reference/feature-gates/TokenRequest.md](md/reference/command-line-tools-reference/feature-gates/TokenRequest.md) — 2026-10-27T17:08:32+03:30
-- [reference/command-line-tools-reference/feature-gates/TokenRequestProjection.md](md/reference/command-line-tools-reference/feature-gates/TokenRequestProjection.md) — 2026-10-27T17:08:32+03:30
-- [reference/command-line-tools-reference/feature-gates/TaintTolerationComparisonOperators.md](md/reference/command-line-tools-reference/feature-gates/TaintTolerationComparisonOperators.md) — 2026-10-27T17:08:26+03:30
-- [reference/command-line-tools-reference/feature-gates/TaintNodesByCondition.md](md/reference/command-line-tools-reference/feature-gates/TaintNodesByCondition.md) — 2026-10-27T17:08:24+03:30
-- [reference/command-line-tools-reference/feature-gates/TaintBasedEvictions.md](md/reference/command-line-tools-reference/feature-gates/TaintBasedEvictions.md) — 2026-10-27T17:08:20+03:30
-- [reference/command-line-tools-reference/feature-gates/Sysctls.md](md/reference/command-line-tools-reference/feature-gates/Sysctls.md) — 2026-10-27T17:08:17+03:30
-- [reference/command-line-tools-reference/feature-gates/TTLAfterFinished.md](md/reference/command-line-tools-reference/feature-gates/TTLAfterFinished.md) — 2026-10-27T17:08:14+03:30
-- [reference/command-line-tools-reference/feature-gates/SystemdWatchdog.md](md/reference/command-line-tools-reference/feature-gates/SystemdWatchdog.md) — 2026-10-27T17:08:09+03:30
-- [reference/command-line-tools-reference/feature-gates/SuspendJob.md](md/reference/command-line-tools-reference/feature-gates/SuspendJob.md) — 2026-10-27T17:08:04+03:30
-- [reference/command-line-tools-reference/feature-gates/SupportPodPidsLimit.md](md/reference/command-line-tools-reference/feature-gates/SupportPodPidsLimit.md) — 2026-10-27T17:08:03+03:30
-- [reference/command-line-tools-reference/feature-gates/SupportNodePidsLimit.md](md/reference/command-line-tools-reference/feature-gates/SupportNodePidsLimit.md) — 2026-10-27T17:07:58+03:30
-- [reference/command-line-tools-reference/feature-gates/SupportIPVSProxyMode.md](md/reference/command-line-tools-reference/feature-gates/SupportIPVSProxyMode.md) — 2026-10-27T17:07:54+03:30
-- [reference/command-line-tools-reference/feature-gates/SupplementalGroupsPolicy.md](md/reference/command-line-tools-reference/feature-gates/SupplementalGroupsPolicy.md) — 2026-10-27T17:07:50+03:30
-- [reference/command-line-tools-reference/feature-gates/StructuredAuthorizationConfiguration.md](md/reference/command-line-tools-reference/feature-gates/StructuredAuthorizationConfiguration.md) — 2026-10-27T17:07:46+03:30
-- [reference/command-line-tools-reference/feature-gates/StructuredAuthenticationConfigurationJWKSMetrics.md](md/reference/command-line-tools-reference/feature-gates/StructuredAuthenticationConfigurationJWKSMetrics.md) — 2026-10-27T17:07:43+03:30
-- [reference/command-line-tools-reference/feature-gates/StructuredAuthenticationConfigurationEgressSelector.md](md/reference/command-line-tools-reference/feature-gates/StructuredAuthenticationConfigurationEgressSelector.md) — 2026-10-27T17:07:39+03:30
 
 </div>
 
