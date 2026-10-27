@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-253 از 1722 صفحه
+268 از 1722 صفحه
 
 
 ## `.`
@@ -378,12 +378,12 @@
 - ✅ [rbac.md](md/reference/access-authn-authz/rbac.md)
 - ✅ [service-accounts-admin.md](md/reference/access-authn-authz/service-accounts-admin.md)
 - ✅ [user-impersonation.md](md/reference/access-authn-authz/user-impersonation.md)
-- ⏳ `validating-admission-policy.md`
-- ⏳ `webhook.md`
+- ✅ [validating-admission-policy.md](md/reference/access-authn-authz/validating-admission-policy.md)
+- ✅ [webhook.md](md/reference/access-authn-authz/webhook.md)
 
 ## `reference/command-line-tools-reference`
 
-- ⏳ `_index.md`
+- ✅ [_index.md](md/reference/command-line-tools-reference/_index.md)
 - ⏳ `kube-apiserver.md`
 - ⏳ `kube-controller-manager.md`
 - ⏳ `kube-proxy.md`
@@ -392,18 +392,18 @@
 
 ## `reference/command-line-tools-reference/feature-gates`
 
-- ⏳ `APIListChunking.md`
-- ⏳ `APIPriorityAndFairness.md`
-- ⏳ `APIResponseCompression.md`
-- ⏳ `APISelfSubjectReview.md`
-- ⏳ `APIServerIdentity.md`
-- ⏳ `APIServerTracing.md`
-- ⏳ `APIServerWebhookAuthenticationToken.md`
-- ⏳ `APIServingWithRoutine.md`
-- ⏳ `Accelerators.md`
-- ⏳ `AdmissionWebhookMatchConditions.md`
-- ⏳ `AdvancedAuditing.md`
-- ⏳ `AffinityInAnnotations.md`
+- ✅ [APIListChunking.md](md/reference/command-line-tools-reference/feature-gates/APIListChunking.md)
+- ✅ [APIPriorityAndFairness.md](md/reference/command-line-tools-reference/feature-gates/APIPriorityAndFairness.md)
+- ✅ [APIResponseCompression.md](md/reference/command-line-tools-reference/feature-gates/APIResponseCompression.md)
+- ✅ [APISelfSubjectReview.md](md/reference/command-line-tools-reference/feature-gates/APISelfSubjectReview.md)
+- ✅ [APIServerIdentity.md](md/reference/command-line-tools-reference/feature-gates/APIServerIdentity.md)
+- ✅ [APIServerTracing.md](md/reference/command-line-tools-reference/feature-gates/APIServerTracing.md)
+- ✅ [APIServerWebhookAuthenticationToken.md](md/reference/command-line-tools-reference/feature-gates/APIServerWebhookAuthenticationToken.md)
+- ✅ [APIServingWithRoutine.md](md/reference/command-line-tools-reference/feature-gates/APIServingWithRoutine.md)
+- ✅ [Accelerators.md](md/reference/command-line-tools-reference/feature-gates/Accelerators.md)
+- ✅ [AdmissionWebhookMatchConditions.md](md/reference/command-line-tools-reference/feature-gates/AdmissionWebhookMatchConditions.md)
+- ✅ [AdvancedAuditing.md](md/reference/command-line-tools-reference/feature-gates/AdvancedAuditing.md)
+- ✅ [AffinityInAnnotations.md](md/reference/command-line-tools-reference/feature-gates/AffinityInAnnotations.md)
 - ⏳ `AggregatedDiscoveryEndpoint.md`
 - ⏳ `AllowDNSOnlyNodeCSR.md`
 - ⏳ `AllowExtTrafficLocalEndpoints.md`

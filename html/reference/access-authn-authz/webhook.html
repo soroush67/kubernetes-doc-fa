@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>حالت Webhook | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">reference / access-authn-authz</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">حالت Webhook</h1><!-- overview -->
+<p dir="rtl">WebHook یک callback مبتنی بر HTTP است: یک درخواست HTTP POST که هنگام وقوع یک رویداد ارسال می‌شود؛ یعنی یک اعلان ساده‌ی رویداد از طریق HTTP POST. یک برنامه‌ی وب که WebHookها را پیاده‌سازی می‌کند، هنگام رخ دادن رویدادهای مشخص، پیامی را به یک URL ارسال (POST) می‌کند.</p>
+<!-- body -->
+<p dir="rtl">در صورت تعیین حالت <code dir="ltr">Webhook</code>، کوبرنتیز برای تعیین سطح دسترسی کاربران، از یک سرویس REST خارجی پرس‌وجو می‌کند.</p>
+<h2 id="قالب-فایل-پیکربندی-configuration-file-format" dir="rtl">قالب فایل پیکربندی {#configuration-file-format}</h2>
+<p dir="rtl">حالت <code dir="ltr">Webhook</code> به یک فایل برای پیکربندی HTTP نیاز دارد که با فلگ <code dir="ltr">--authorization-webhook-config-file=SOME_FILENAME</code> مشخص می‌شود.</p>
+<p dir="rtl">فایل پیکربندی از قالب فایل <a href="https://kubernetes.io/docs/tasks/access-application-cluster/configure-access-multiple-clusters/" target="_blank">kubeconfig</a> استفاده می‌کند. در این فایل، «users» به webhook سرور API و «clusters» به سرویس راه دور اشاره دارد.</p>
+<p dir="rtl">نمونه‌ای از پیکربندی که از احراز هویت کلاینت مبتنی بر HTTPS استفاده می‌کند:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr"># Kubernetes API version
+apiVersion: v1
+# kind of the API object
+kind: Config
+# clusters refers to the remote service.
+clusters:
+  - name: name-of-remote-authz-service
+    cluster:
+      # CA for verifying the remote service.
+      certificate-authority: /path/to/ca.pem
+      # URL of remote service to query. Must use 'https'. May not include parameters.
+      server: https://authz.example.com/authorize
+
+# users refers to the API Server's webhook configuration.
+users:
+  - name: name-of-api-server
+    user:
+      client-certificate: /path/to/cert.pem # cert for the webhook plugin to use
+      client-key: /path/to/key.pem          # key matching the cert
+
+# kubeconfig files require a context. Provide one for the API Server.
+current-context: webhook
+contexts:
+- context:
+    cluster: name-of-remote-authz-service
+    user: name-of-api-server
+  name: webhook
+</code></pre>
+<h2 id="بار-داده-ی-درخواست-ها-request-payloads" dir="rtl">بار داده‌ی درخواست‌ها {#request-payloads}</h2>
+<p dir="rtl">هنگامی که باید درباره‌ی مجوزدهی تصمیم‌گیری شود، سرور API یک آبجکت <code dir="ltr">SubjectAccessReview</code> از نوع <code dir="ltr">authorization.k8s.io/v1beta1</code> را که به‌صورت JSON سریالایز شده و عمل مورد نظر را توصیف می‌کند، POST می‌کند. این آبجکت شامل فیلدهایی است که کاربری را که قصد ارسال درخواست دارد توصیف می‌کنند، و همچنین یا جزئیات منبعی که به آن دسترسی پیدا می‌شود، یا ویژگی‌های درخواست را در بر دارد.</p>
+<p dir="rtl">توجه داشته باشید که آبجکت‌های API مربوط به webhook تابع همان <a href="../../concepts/overview/kubernetes-api.html">قواعد سازگاری نسخه‌بندی</a> آبجکت‌های دیگر API کوبرنتیز هستند. پیاده‌سازان باید از تعهدات سازگاری سهل‌گیرانه‌تر برای آبجکت‌های بتا آگاه باشند و برای اطمینان از deserialize صحیح، فیلد "apiVersion" درخواست را بررسی کنند. علاوه بر این، سرور API باید گروه افزونه‌های API با نام <code dir="ltr">authorization.k8s.io/v1beta1</code> را فعال کند (<code dir="ltr">--runtime-config=authorization.k8s.io/v1beta1=true</code>).</p>
+<p dir="rtl">نمونه‌ای از بدنه‌ی درخواست:</p>
+<pre dir="ltr"><code class="language-json" dir="ltr">{
+  "apiVersion": "authorization.k8s.io/v1beta1",
+  "kind": "SubjectAccessReview",
+  "spec": {
+    "resourceAttributes": {
+      "namespace": "kittensandponies",
+      "verb": "get",
+      "group": "unicorn.example.org",
+      "resource": "pods"
+    },
+    "user": "jane",
+    "group": [
+      "group1",
+      "group2"
+    ]
+  }
+}
+</code></pre>
+<p dir="rtl">انتظار می‌رود سرویس راه دور فیلد <code dir="ltr">status</code> درخواست را پر کند و با اجازه دادن یا ندادن دسترسی پاسخ دهد. فیلد <code dir="ltr">spec</code> در بدنه‌ی پاسخ نادیده گرفته می‌شود و می‌توان آن را حذف کرد. یک پاسخ موافق به‌صورت زیر خواهد بود:</p>
+<pre dir="ltr"><code class="language-json" dir="ltr">{
+  "apiVersion": "authorization.k8s.io/v1beta1",
+  "kind": "SubjectAccessReview",
+  "status": {
+    "allowed": true
+  }
+}
+</code></pre>
+<p dir="rtl">برای رد کردن دسترسی دو روش وجود دارد.</p>
+<p dir="rtl">روش اول در بیشتر موارد ترجیح داده می‌شود و نشان می‌دهد که webhook مجوزدهی اجازه نمی‌دهد یا درباره‌ی درخواست «نظری ندارد»؛ اما اگر مجوزدهنده‌های (authorizer) دیگری پیکربندی شده باشند، به آن‌ها فرصت داده می‌شود که درخواست را مجاز کنند. اگر مجوزدهنده‌ی دیگری وجود نداشته باشد یا هیچ‌یک از آن‌ها درخواست را مجاز نکنند، درخواست ممنوع می‌شود. webhook پاسخ زیر را برمی‌گرداند:</p>
+<pre dir="ltr"><code class="language-json" dir="ltr">{
+  "apiVersion": "authorization.k8s.io/v1beta1",
+  "kind": "SubjectAccessReview",
+  "status": {
+    "allowed": false,
+    "reason": "user does not have read access to the namespace"
+  }
+}
+</code></pre>
+<p dir="rtl">روش دوم بلافاصله درخواست را رد می‌کند و ارزیابی توسط سایر مجوزدهنده‌های پیکربندی‌شده را کوتاه می‌کند (short-circuit). این روش فقط باید توسط webhookهایی به کار رود که اطلاعات دقیقی از پیکربندی کامل مجوزدهنده‌های کلاستر دارند. webhook پاسخ زیر را برمی‌گرداند:</p>
+<pre dir="ltr"><code class="language-json" dir="ltr">{
+  "apiVersion": "authorization.k8s.io/v1beta1",
+  "kind": "SubjectAccessReview",
+  "status": {
+    "allowed": false,
+    "denied": true,
+    "reason": "user does not have read access to the namespace"
+  }
+}
+</code></pre>
+<p dir="rtl">دسترسی به مسیرهای غیرمنبعی (non-resource) به‌صورت زیر ارسال می‌شود:</p>
+<pre dir="ltr"><code class="language-json" dir="ltr">{
+  "apiVersion": "authorization.k8s.io/v1beta1",
+  "kind": "SubjectAccessReview",
+  "spec": {
+    "nonResourceAttributes": {
+      "path": "/debug",
+      "verb": "get"
+    },
+    "user": "jane",
+    "group": [
+      "group1",
+      "group2"
+    ]
+  }
+}
+</code></pre>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
+<p dir="rtl">هنگام فراخوانی یک webhook مجوزدهی، کوبرنتیز انتخابگرهای (selector) برچسب و فیلد را در درخواست به webhook مجوزدهی ارسال می‌کند. webhook مجوزدهی در صورت تمایل می‌تواند تصمیم‌های مجوزدهی خود را با در نظر گرفتن انتخابگرهای محدوده‌دار فیلد و برچسب اتخاذ کند.</p>
+<p dir="rtl"><a href="https://kubernetes.io/docs/reference/kubernetes-api/definitions/subject-access-review-v1-authorization/" target="_blank">مستندات API مربوط به SubjectAccessReview</a> رهنمودهایی درباره‌ی نحوه‌ی تفسیر و پردازش این فیلدها توسط webhookهای مجوزدهی ارائه می‌دهد؛ به‌ویژه درباره‌ی استفاده از الزامات تجزیه‌شده (parsed requirements) به‌جای رشته‌های خام انتخابگر، و نحوه‌ی مدیریت ایمن عملگرهای ناشناخته.</p>
+<pre dir="ltr"><code class="language-json" dir="ltr">{
+  "apiVersion": "authorization.k8s.io/v1beta1",
+  "kind": "SubjectAccessReview",
+  "spec": {
+    "resourceAttributes": {
+      "verb": "list",
+      "group": "",
+      "resource": "pods",
+      "fieldSelector": {
+        "requirements": [
+          {"key":"spec.nodeName", "operator":"In", "values":["mynode"]}
+        ]
+      },
+      "labelSelector": {
+        "requirements": [
+          {"key":"example.com/mykey", "operator":"In", "values":["myvalue"]}
+        ]
+      }
+    },
+    "user": "jane",
+    "group": [
+      "group1",
+      "group2"
+    ]
+  }
+}
+</code></pre>
+<p dir="rtl">مسیرهای غیرمنبعی عبارت‌اند از: <code dir="ltr">/api</code>، <code dir="ltr">/apis</code>، <code dir="ltr">/metrics</code>، <code dir="ltr">/logs</code>، <code dir="ltr">/debug</code>، <code dir="ltr">/healthz</code>، <code dir="ltr">/livez</code>، <code dir="ltr">/openapi/v2</code>، <code dir="ltr">/readyz</code> و <code dir="ltr">/version.</code>. کلاینت‌ها برای کشف منابع و نسخه‌های موجود روی سرور، به دسترسی به <code dir="ltr">/api</code>، <code dir="ltr">/api/*</code>، <code dir="ltr">/apis</code>، <code dir="ltr">/apis/*</code> و <code dir="ltr">/version</code> نیاز دارند. می‌توان دسترسی به سایر مسیرهای غیرمنبعی را بدون محدود کردن دسترسی به REST API مسدود کرد.</p>
+<p dir="rtl">برای اطلاعات بیشتر، به <a href="https://kubernetes.io/docs/reference/kubernetes-api/definitions/subject-access-review-v1-authorization/" target="_blank">مستندات API مربوط به SubjectAccessReview</a> و <a href="https://github.com/kubernetes/kubernetes/blob/master/staging/src/k8s.io/apiserver/plugin/pkg/authorizer/webhook/webhook.go" target="_blank" rel="noopener">پیاده‌سازی webhook.go</a> مراجعه کنید.</p>
+</main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#قالب-فایل-پیکربندی-configuration-file-format">قالب فایل پیکربندی {#configuration-file-format}</a><a class="l2" href="#بار-داده-ی-درخواست-ها-request-payloads">بار داده‌ی درخواست‌ها {#request-payloads}</a></nav>
+</div>
+</body>
+</html>

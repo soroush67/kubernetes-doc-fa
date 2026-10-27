@@ -8,8 +8,8 @@
 
 | | |
 |---|---|
-| پیشرفت (بر اساس کلمات) | **19.0٪** |
-| صفحات ترجمه‌شده | 253 از 1722 |
+| پیشرفت (بر اساس کلمات) | **19.3٪** |
+| صفحات ترجمه‌شده | 268 از 1722 |
 | صفحات دارای ایراد ساختاری | 9 |
 | نسخه‌ی منبع انگلیسی | `ed70e311737a` |
 
@@ -72,7 +72,7 @@ cd kubernetes-doc-fa
 | `contribute` | 44 | 44 |
 | `doc-contributor-tools` | 1 | 1 |
 | `home` | 2 | 2 |
-| `reference` | 18 | 1198 |
+| `reference` | 33 | 1198 |
 | `setup` | 0 | 22 |
 | `tasks` | 0 | 221 |
 | `tutorials` | 0 | 45 |
@@ -91,26 +91,26 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [reference/command-line-tools-reference/feature-gates/AdvancedAuditing.md](md/reference/command-line-tools-reference/feature-gates/AdvancedAuditing.md) — 2026-10-27T16:39:53+03:30
+- [reference/command-line-tools-reference/feature-gates/AffinityInAnnotations.md](md/reference/command-line-tools-reference/feature-gates/AffinityInAnnotations.md) — 2026-10-27T16:39:53+03:30
+- [reference/command-line-tools-reference/feature-gates/Accelerators.md](md/reference/command-line-tools-reference/feature-gates/Accelerators.md) — 2026-10-27T16:39:41+03:30
+- [reference/command-line-tools-reference/feature-gates/AdmissionWebhookMatchConditions.md](md/reference/command-line-tools-reference/feature-gates/AdmissionWebhookMatchConditions.md) — 2026-10-27T16:39:41+03:30
+- [reference/access-authn-authz/validating-admission-policy.md](md/reference/access-authn-authz/validating-admission-policy.md) — 2026-10-27T16:39:36+03:30
+- [reference/command-line-tools-reference/feature-gates/APIServingWithRoutine.md](md/reference/command-line-tools-reference/feature-gates/APIServingWithRoutine.md) — 2026-10-27T16:39:35+03:30
+- [reference/command-line-tools-reference/feature-gates/APIServerWebhookAuthenticationToken.md](md/reference/command-line-tools-reference/feature-gates/APIServerWebhookAuthenticationToken.md) — 2026-10-27T16:39:28+03:30
+- [reference/command-line-tools-reference/feature-gates/APIServerTracing.md](md/reference/command-line-tools-reference/feature-gates/APIServerTracing.md) — 2026-10-27T16:39:20+03:30
+- [reference/command-line-tools-reference/feature-gates/APIServerIdentity.md](md/reference/command-line-tools-reference/feature-gates/APIServerIdentity.md) — 2026-10-27T16:39:14+03:30
+- [reference/command-line-tools-reference/feature-gates/APISelfSubjectReview.md](md/reference/command-line-tools-reference/feature-gates/APISelfSubjectReview.md) — 2026-10-27T16:39:07+03:30
+- [reference/command-line-tools-reference/feature-gates/APIResponseCompression.md](md/reference/command-line-tools-reference/feature-gates/APIResponseCompression.md) — 2026-10-27T16:38:59+03:30
+- [reference/command-line-tools-reference/feature-gates/APIPriorityAndFairness.md](md/reference/command-line-tools-reference/feature-gates/APIPriorityAndFairness.md) — 2026-10-27T16:38:52+03:30
+- [reference/command-line-tools-reference/feature-gates/APIListChunking.md](md/reference/command-line-tools-reference/feature-gates/APIListChunking.md) — 2026-10-27T16:38:46+03:30
+- [reference/command-line-tools-reference/_index.md](md/reference/command-line-tools-reference/_index.md) — 2026-10-27T16:38:39+03:30
+- [reference/access-authn-authz/webhook.md](md/reference/access-authn-authz/webhook.md) — 2026-10-27T16:38:33+03:30
 - [reference/access-authn-authz/user-impersonation.md](md/reference/access-authn-authz/user-impersonation.md) — 2026-10-27T16:38:05+03:30
 - [reference/access-authn-authz/service-accounts-admin.md](md/reference/access-authn-authz/service-accounts-admin.md) — 2026-10-27T16:37:48+03:30
 - [reference/access-authn-authz/rbac.md](md/reference/access-authn-authz/rbac.md) — 2026-10-27T16:37:07+03:30
 - [reference/access-authn-authz/psp-to-pod-security-standards.md](md/reference/access-authn-authz/psp-to-pod-security-standards.md) — 2026-10-27T16:36:04+03:30
 - [reference/access-authn-authz/mutating-admission-policy.md](md/reference/access-authn-authz/mutating-admission-policy.md) — 2026-10-27T16:34:32+03:30
-- [reference/access-authn-authz/node.md](md/reference/access-authn-authz/node.md) — 2026-10-27T16:34:22+03:30
-- [reference/access-authn-authz/manifest-admission-control.md](md/reference/access-authn-authz/manifest-admission-control.md) — 2026-10-27T16:33:52+03:30
-- [reference/access-authn-authz/extensible-admission-controllers.md](md/reference/access-authn-authz/extensible-admission-controllers.md) — 2026-10-27T16:33:45+03:30
-- [reference/access-authn-authz/kubelet-tls-bootstrapping.md](md/reference/access-authn-authz/kubelet-tls-bootstrapping.md) — 2026-10-27T16:32:53+03:30
-- [reference/access-authn-authz/kubelet-authn-authz.md](md/reference/access-authn-authz/kubelet-authn-authz.md) — 2026-10-27T16:31:28+03:30
-- [reference/access-authn-authz/certificate-signing-requests.md](md/reference/access-authn-authz/certificate-signing-requests.md) — 2026-10-27T16:30:58+03:30
-- [reference/access-authn-authz/authentication.md](md/reference/access-authn-authz/authentication.md) — 2026-10-27T16:30:27+03:30
-- [reference/access-authn-authz/bootstrap-tokens.md](md/reference/access-authn-authz/bootstrap-tokens.md) — 2026-10-27T16:29:02+03:30
-- [reference/access-authn-authz/authorization.md](md/reference/access-authn-authz/authorization.md) — 2026-10-27T16:28:33+03:30
-- [reference/access-authn-authz/admission-controllers.md](md/reference/access-authn-authz/admission-controllers.md) — 2026-10-27T16:25:50+03:30
-- [contribute/style/style-guide.md](md/contribute/style/style-guide.md) — 2026-10-27T16:23:17+03:30
-- [reference/access-authn-authz/abac.md](md/reference/access-authn-authz/abac.md) — 2026-10-27T16:22:53+03:30
-- [reference/access-authn-authz/_index.md](md/reference/access-authn-authz/_index.md) — 2026-10-27T16:22:24+03:30
-- [reference/_index.md](md/reference/_index.md) — 2026-10-27T16:22:12+03:30
-- [home/supported-doc-versions.md](md/home/supported-doc-versions.md) — 2026-10-27T16:21:26+03:30
 
 </div>
 
