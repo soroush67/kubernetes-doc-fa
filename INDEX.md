@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-163 از 1722 صفحه
+178 از 1722 صفحه
 
 
 ## `.`
@@ -124,9 +124,9 @@
 
 - ✅ [_index.md](md/concepts/resource-management/dynamic-resource-allocation/_index.md)
 - ✅ [device-taints.md](md/concepts/resource-management/dynamic-resource-allocation/device-taints.md)
-- ⏳ `dra-api.md`
+- ✅ [dra-api.md](md/concepts/resource-management/dynamic-resource-allocation/dra-api.md)
 - ✅ [dra-features.md](md/concepts/resource-management/dynamic-resource-allocation/dra-features.md)
-- ⏳ `dra-observability.md`
+- ✅ [dra-observability.md](md/concepts/resource-management/dynamic-resource-allocation/dra-observability.md)
 - ✅ [how-dra-works.md](md/concepts/resource-management/dynamic-resource-allocation/how-dra-works.md)
 
 ## `concepts/scheduling-eviction`
@@ -141,11 +141,11 @@
 - ✅ [pod-overhead.md](md/concepts/scheduling-eviction/pod-overhead.md)
 - ✅ [pod-priority-preemption.md](md/concepts/scheduling-eviction/pod-priority-preemption.md)
 - ✅ [pod-scheduling-readiness.md](md/concepts/scheduling-eviction/pod-scheduling-readiness.md)
-- ⏳ `podgroup-scheduling.md`
-- ⏳ `resource-bin-packing.md`
-- ⏳ `running-multiple-schedulers.md`
-- ⏳ `scheduler-perf-tuning.md`
-- ⏳ `scheduling-framework.md`
+- ✅ [podgroup-scheduling.md](md/concepts/scheduling-eviction/podgroup-scheduling.md)
+- ✅ [resource-bin-packing.md](md/concepts/scheduling-eviction/resource-bin-packing.md)
+- ✅ [running-multiple-schedulers.md](md/concepts/scheduling-eviction/running-multiple-schedulers.md)
+- ✅ [scheduler-perf-tuning.md](md/concepts/scheduling-eviction/scheduler-perf-tuning.md)
+- ✅ [scheduling-framework.md](md/concepts/scheduling-eviction/scheduling-framework.md)
 - ✅ [taint-and-toleration.md](md/concepts/scheduling-eviction/taint-and-toleration.md)
 - ✅ [topology-aware-scheduling.md](md/concepts/scheduling-eviction/topology-aware-scheduling.md)
 - ✅ [topology-spread-constraints.md](md/concepts/scheduling-eviction/topology-spread-constraints.md)
@@ -163,12 +163,12 @@
 - ✅ [multi-tenancy.md](md/concepts/security/multi-tenancy.md)
 - ✅ [pod-security-admission.md](md/concepts/security/pod-security-admission.md)
 - ✅ [pod-security-policy.md](md/concepts/security/pod-security-policy.md)
-- ⏳ `pod-security-standards.md`
-- ⏳ `rbac-good-practices.md`
-- ⏳ `secrets-good-practices.md`
-- ⏳ `security-checklist.md`
-- ⏳ `service-accounts.md`
-- ⏳ `windows-security.md`
+- ⚠️ [pod-security-standards.md](md/concepts/security/pod-security-standards.md)
+- ✅ [rbac-good-practices.md](md/concepts/security/rbac-good-practices.md)
+- ✅ [secrets-good-practices.md](md/concepts/security/secrets-good-practices.md)
+- ✅ [security-checklist.md](md/concepts/security/security-checklist.md)
+- ✅ [service-accounts.md](md/concepts/security/service-accounts.md)
+- ✅ [windows-security.md](md/concepts/security/windows-security.md)
 
 ## `concepts/security/hardening-guide`
 
@@ -178,7 +178,7 @@
 
 ## `concepts/services-networking`
 
-- ⏳ `_index.md`
+- ✅ [_index.md](md/concepts/services-networking/_index.md)
 - ✅ [cluster-ip-allocation.md](md/concepts/services-networking/cluster-ip-allocation.md)
 - ✅ [dns-pod-service.md](md/concepts/services-networking/dns-pod-service.md)
 - ✅ [dual-stack.md](md/concepts/services-networking/dual-stack.md)
@@ -189,7 +189,7 @@
 - ✅ [network-policies.md](md/concepts/services-networking/network-policies.md)
 - ✅ [service-traffic-policy.md](md/concepts/services-networking/service-traffic-policy.md)
 - ✅ [service.md](md/concepts/services-networking/service.md)
-- ⏳ `topology-aware-routing.md`
+- ✅ [topology-aware-routing.md](md/concepts/services-networking/topology-aware-routing.md)
 - ⏳ `windows-networking.md`
 
 ## `concepts/storage`

@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>بهترین شیوه‌های کنترل دسترسی مبتنی بر نقش (RBAC) | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">concepts / security</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">بهترین شیوه‌های کنترل دسترسی مبتنی بر نقش (RBAC)</h1><p class="page-meta" dir="rtl">اصول و شیوه‌هایی برای طراحی مناسب RBAC برای اپراتورهای کلاستر.
+</p><!-- overview -->
+<p dir="rtl"><span class="term" title="rbac">RBAC</span> در کوبرنتیز یک کنترل امنیتی کلیدی است
+که تضمین می‌کند کاربران کلاستر و بارهای کاری فقط به منابعی دسترسی داشته باشند که برای
+انجام نقش‌هایشان لازم است. هنگام طراحی مجوزها برای کاربران کلاستر، لازم است مدیر کلاستر
+حوزه‌هایی را که امکان ارتقای سطح دسترسی (privilege escalation) در آن‌ها وجود دارد بشناسد،
+تا خطر دسترسی بیش‌ازحد که به حوادث امنیتی منجر می‌شود کاهش یابد.</p>
+<p dir="rtl">شیوه‌های توصیه‌شده در اینجا باید همراه با
+<a href="https://kubernetes.io/docs/reference/access-authn-authz/rbac/#restrictions-on-role-creation-or-update" target="_blank">مستندات RBAC</a>
+مطالعه شوند.</p>
+<!-- body -->
+<h2 id="شیوه-های-توصیه-شده-عمومی" dir="rtl">شیوه‌های توصیه‌شده عمومی</h2>
+<h3 id="حداقل-سطح-دسترسی" dir="rtl">حداقل سطح دسترسی</h3>
+<p dir="rtl">در حالت ایده‌آل، باید حداقل حقوق RBAC به کاربران و service accountها اختصاص یابد. فقط مجوزهایی
+که به‌طور صریح برای عملکرد آن‌ها لازم است باید استفاده شوند. اگرچه هر کلاستر با دیگری متفاوت است،
+برخی قواعد عمومی که می‌توان به کار برد عبارت‌اند از:</p>
+<ul>
+<li dir="rtl">در صورت امکان، مجوزها را در سطح فضای نام (namespace) اختصاص دهید. از RoleBinding به‌جای
+ClusterRoleBinding استفاده کنید تا به کاربران فقط در یک فضای نام مشخص حق دسترسی بدهید.</li>
+<li dir="rtl">در صورت امکان، از اعطای مجوزهای wildcard، به‌ویژه روی همه منابع، خودداری کنید.
+از آنجا که کوبرنتیز یک سیستم توسعه‌پذیر است، اعطای دسترسی wildcard نه‌تنها به همه انواع آبجکتی که
+هم‌اکنون در کلاستر وجود دارند، بلکه به همه انواع آبجکتی که در آینده ایجاد می‌شوند نیز حق دسترسی می‌دهد.</li>
+<li dir="rtl">مدیران نباید از حساب‌های <code dir="ltr">cluster-admin</code> استفاده کنند، مگر در مواردی که به‌طور خاص لازم باشد.
+اعطای <a href="https://kubernetes.io/docs/reference/access-authn-authz/authentication/#user-impersonation" target="_blank">حق impersonation</a>
+به یک حساب کم‌سطح‌دسترسی می‌تواند از تغییر ناخواسته منابع کلاستر جلوگیری کند.</li>
+<li dir="rtl">از افزودن کاربران به گروه <code dir="ltr">system:masters</code> خودداری کنید. هر کاربری که عضو این گروه باشد،
+از همه بررسی‌های حقوق RBAC عبور می‌کند و همیشه دسترسی نامحدود در سطح superuser خواهد داشت که
+با حذف RoleBindingها یا ClusterRoleBindingها قابل لغو نیست. به‌عنوان نکته‌ای جانبی، اگر کلاستر
+از یک authorization webhook استفاده می‌کند، عضویت در این گروه از آن webhook نیز عبور می‌کند
+(درخواست‌های کاربرانی که عضو آن گروه هستند هرگز به webhook ارسال نمی‌شوند).</li>
+</ul>
+<h3 id="کاهش-توزیع-توکن-های-دارای-سطح-دسترسی-بالا" dir="rtl">کاهش توزیع توکن‌های دارای سطح دسترسی بالا</h3>
+<p dir="rtl">در حالت ایده‌آل، نباید به Podها service accountهایی اختصاص داده شود که مجوزهای قدرتمند دریافت کرده‌اند
+(برای مثال، هر یک از حقوق فهرست‌شده در بخش <a href="#privilege-escalation-risks">خطرات ارتقای سطح دسترسی</a>).
+در مواردی که یک بار کاری به مجوزهای قدرتمند نیاز دارد، شیوه‌های زیر را در نظر بگیرید:</p>
+<ul>
+<li dir="rtl">تعداد نودهایی را که Podهای قدرتمند روی آن‌ها اجرا می‌شوند محدود کنید. اطمینان حاصل کنید که هر
+DaemonSet ای که اجرا می‌کنید ضروری است و با حداقل سطح دسترسی اجرا می‌شود تا دامنه تأثیر
+فرار از کانتینر (container escape) محدود شود.</li>
+<li dir="rtl">از اجرای Podهای قدرتمند در کنار Podهای نامطمئن یا در معرض دسترسی عمومی خودداری کنید. برای اطمینان از
+اینکه Podها در کنار Podهای نامطمئن یا کم‌اطمینان‌تر اجرا نمی‌شوند، استفاده از
+<a href="../scheduling-eviction/taint-and-toleration.html">Taints and Toleration</a>،
+<a href="../scheduling-eviction/assign-pod-node.html#node-affinity">NodeAffinity</a> یا
+<a href="../scheduling-eviction/assign-pod-node.html#inter-pod-affinity-and-anti-affinity">PodAntiAffinity</a>
+را در نظر بگیرید. به موقعیت‌هایی که در آن‌ها Podهای کم‌اطمینان‌تر استاندارد امنیتی Pod با سطح
+<strong>Restricted</strong> را رعایت نمی‌کنند، توجه ویژه داشته باشید.</li>
+</ul>
+<h3 id="مستحکم-سازی-hardening" dir="rtl">مستحکم‌سازی (Hardening)</h3>
+<p dir="rtl">کوبرنتیز به‌صورت پیش‌فرض دسترسی‌هایی فراهم می‌کند که ممکن است در هر کلاستری لازم نباشد. بازبینی
+حقوق RBAC که به‌صورت پیش‌فرض اعطا شده‌اند می‌تواند فرصت‌هایی برای مستحکم‌سازی امنیتی فراهم کند.
+به‌طور کلی نباید در حقوق اعطاشده به حساب‌های <code dir="ltr">system:</code> تغییری داده شود، اما گزینه‌هایی برای
+مستحکم‌سازی حقوق کلاستر وجود دارد:</p>
+<ul>
+<li dir="rtl">bindingهای گروه <code dir="ltr">system:unauthenticated</code> را بازبینی کنید و در صورت امکان آن‌ها را حذف کنید، زیرا این
+bindingها به هر کسی که در سطح شبکه بتواند با API server ارتباط برقرار کند دسترسی می‌دهند.</li>
+<li dir="rtl">با تنظیم <code dir="ltr">automountServiceAccountToken: false</code> از mount خودکار پیش‌فرض توکن‌های service account
+خودداری کنید. برای جزئیات بیشتر،
+<a href="https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/#use-the-default-service-account-to-access-the-api-server" target="_blank">استفاده از توکن service account پیش‌فرض</a>
+را ببینید. تنظیم این مقدار برای یک Pod، تنظیم service account را بازنویسی می‌کند و بارهای کاری
+که به توکن‌های service account نیاز دارند همچنان می‌توانند آن‌ها را mount کنند.</li>
+</ul>
+<h3 id="بازبینی-دوره-ای" dir="rtl">بازبینی دوره‌ای</h3>
+<p dir="rtl">بازبینی دوره‌ای تنظیمات RBAC کوبرنتیز برای یافتن ورودی‌های زائد و ارتقای سطح دسترسی‌های احتمالی
+ضروری است.
+اگر مهاجمی بتواند یک حساب کاربری با همان نام کاربر حذف‌شده ایجاد کند، می‌تواند به‌طور خودکار
+همه حقوق کاربر حذف‌شده، به‌ویژه حقوقی را که به آن کاربر اختصاص داده شده بود، به ارث ببرد.</p>
+<h2 id="rbac-در-کوبرنتیز---خطرات-ارتقای-سطح-دسترسی-privilege-escalation-risks" dir="rtl">RBAC در کوبرنتیز - خطرات ارتقای سطح دسترسی {#privilege-escalation-risks}</h2>
+<p dir="rtl">در RBAC کوبرنتیز تعدادی امتیاز وجود دارد که در صورت اعطا می‌توانند به یک کاربر یا service account
+اجازه دهند سطح دسترسی خود را در کلاستر ارتقا دهد یا بر سیستم‌های خارج از کلاستر تأثیر بگذارد.</p>
+<p dir="rtl">هدف این بخش ایجاد دید روشن نسبت به حوزه‌هایی است که اپراتورهای کلاستر باید مراقب آن‌ها باشند،
+تا اطمینان حاصل شود که ناخواسته دسترسی بیشتری از آنچه مدنظر بوده به کلاسترها نمی‌دهند.</p>
+<h3 id="فهرست-کردن-secretها" dir="rtl">فهرست‌کردن Secretها</h3>
+<p dir="rtl">به‌طور کلی روشن است که اعطای دسترسی <code dir="ltr">get</code> روی Secretها به کاربر امکان خواندن محتوای آن‌ها را می‌دهد.
+همچنین مهم است بدانید که دسترسی <code dir="ltr">list</code> و <code dir="ltr">watch</code> نیز عملاً به کاربران اجازه می‌دهد محتوای Secret را
+افشا کنند. برای مثال، وقتی پاسخ یک List بازگردانده می‌شود (مثلاً از طریق
+<code dir="ltr">kubectl get secrets -A -o yaml</code>)، پاسخ شامل محتوای همه Secretها است.</p>
+<h3 id="ایجاد-بار-کاری" dir="rtl">ایجاد بار کاری</h3>
+<p dir="rtl">مجوز ایجاد بارهای کاری (یعنی Podها یا
+<a href="../workloads/controllers/index.html">منابع بار کاری</a> که Podها را مدیریت می‌کنند) در یک فضای نام،
+به‌طور ضمنی دسترسی به بسیاری از منابع دیگر در آن فضای نام را نیز اعطا می‌کند، مانند Secretها،
+ConfigMapها و PersistentVolumeهایی که می‌توانند در Podها mount شوند. علاوه بر این، از آنجا که Podها
+می‌توانند با هر <a href="https://kubernetes.io/docs/reference/access-authn-authz/service-accounts-admin/" target="_blank">ServiceAccount</a> اجرا شوند،
+اعطای مجوز ایجاد بارهای کاری به‌طور ضمنی سطوح دسترسی API هر service account در آن فضای نام را نیز اعطا می‌کند.</p>
+<p dir="rtl">کاربرانی که می‌توانند Podهای دارای امتیاز بالا (privileged) اجرا کنند، می‌توانند از آن دسترسی برای
+دستیابی به نود و بالقوه ارتقای بیشتر سطح دسترسی خود استفاده کنند. در مواردی که به یک کاربر یا
+principal دیگر برای ایجاد Podهای به‌اندازه کافی امن و منزوی اعتماد کامل ندارید، باید یکی از
+استانداردهای امنیتی Pod یعنی <strong>Baseline</strong> یا <strong>Restricted</strong> را اعمال کنید.
+برای پیاده‌سازی این اعمال می‌توانید از <a href="pod-security-admission.html">Pod Security admission</a>
+یا سازوکارهای دیگر (شخص ثالث) استفاده کنید.</p>
+<p dir="rtl">به این دلایل، باید از فضاهای نام برای جداسازی منابعی که به سطوح متفاوتی از اعتماد یا tenancy نیاز
+دارند استفاده کرد. پیروی از اصول <a href="#least-privilege">حداقل سطح دسترسی</a> و اختصاص حداقل مجموعه مجوزها
+همچنان بهترین شیوه محسوب می‌شود، اما مرزهای درون یک فضای نام باید ضعیف در نظر گرفته شوند.</p>
+<h3 id="ایجاد-persistentvolume" dir="rtl">ایجاد PersistentVolume</h3>
+<p dir="rtl">اگر به فردی - یا برنامه‌ای - اجازه داده شود PersistentVolumeهای دلخواه ایجاد کند، این دسترسی
+شامل ایجاد حجم‌های (volume) <code dir="ltr">hostPath</code> نیز می‌شود، که به این معناست که یک Pod به فایل‌سیستم(های)
+میزبان زیربنایی روی نود مربوطه دسترسی پیدا می‌کند. اعطای این توانایی یک ریسک امنیتی است.</p>
+<p dir="rtl">راه‌های زیادی وجود دارد که یک کانتینر با دسترسی نامحدود به فایل‌سیستم میزبان بتواند سطح دسترسی خود
+را ارتقا دهد، از جمله خواندن داده‌ها از کانتینرهای دیگر و سوءاستفاده از اعتبارنامه‌های سرویس‌های
+سیستمی مانند Kubelet.</p>
+<p dir="rtl">باید دسترسی ایجاد آبجکت‌های PersistentVolume را فقط به موارد زیر بدهید:</p>
+<ul>
+<li dir="rtl">کاربران (اپراتورهای کلاستر) که برای کارشان به این دسترسی نیاز دارند و به آن‌ها اعتماد دارید.</li>
+<li dir="rtl">اجزای control plane کوبرنتیز که PersistentVolumeها را بر اساس PersistentVolumeClaimهایی که برای
+تأمین خودکار (automatic provisioning) پیکربندی شده‌اند ایجاد می‌کنند.
+این معمولاً توسط ارائه‌دهنده کوبرنتیز یا توسط اپراتور هنگام نصب یک درایور CSI راه‌اندازی می‌شود.</li>
+</ul>
+<p dir="rtl">در جایی که دسترسی به ذخیره‌سازی پایدار لازم است، مدیران مورد اعتماد باید PersistentVolumeها را ایجاد
+کنند و کاربران محدودشده باید از PersistentVolumeClaimها برای دسترسی به آن ذخیره‌سازی استفاده کنند.</p>
+<h3 id="دسترسی-به-زیرمنبع-proxy-نودها" dir="rtl">دسترسی به زیرمنبع <code dir="ltr">proxy</code> نودها</h3>
+<p dir="rtl">کاربرانی که به زیرمنبع <code dir="ltr">nodes/proxy</code> دسترسی دارند، به API مربوط به Kubelet دسترسی دارند که
+اجرای دستور روی هر Pod در نود(هایی) را که به آن‌ها دسترسی دارند ممکن می‌سازد.
+این دسترسی از audit logging و admission control عبور می‌کند، بنابراین پیش از اعطای هر حقی روی این منبع
+باید دقت شود.
+این APIها را می‌توان از طریق درخواست‌های HTTP <code dir="ltr">GET</code> مبتنی بر websocket اجرا کرد، که فقط به مجوز
+فعل <strong>get</strong> نیاز دارد.
+این بدان معناست که مجوز <strong>get</strong> روی <code dir="ltr">nodes/proxy</code> یک مجوز فقط‌خواندنی نیست.
+برای مثال، مجوز <strong>get</strong> روی <code dir="ltr">nodes/proxy</code> دسترسی به APIهای دارای امتیاز kubelet را فراهم می‌کند که
+می‌توانند لاگ‌های کانتینر را بازیابی کنند یا فرآیندهای Pod را اجرا کرده و به آن‌ها attach شوند،
+حتی زمانی که فراخواننده مجوزهای معادل را از طریق API کوبرنتیز نداشته باشد.</p>
+<p dir="rtl">برای اطلاعات بیشتر،
+<a href="https://kubernetes.io/docs/reference/access-authn-authz/kubelet-authn-authz/#get-nodes-proxy-warning" target="_blank">احراز هویت/مجوزدهی Kubelet</a>
+را ببینید.</p>
+<h3 id="فعل-escalate" dir="rtl">فعل escalate</h3>
+<p dir="rtl">به‌طور کلی، سیستم RBAC از ایجاد clusterroleهایی با حقوق بیشتر از حقوق خود کاربر جلوگیری می‌کند.
+استثنای این قاعده فعل <code dir="ltr">escalate</code> است. همان‌طور که در <a href="https://kubernetes.io/docs/reference/access-authn-authz/rbac/#restrictions-on-role-creation-or-update" target="_blank">مستندات RBAC</a>
+ذکر شده است، کاربرانی که این حق را دارند عملاً می‌توانند سطح دسترسی خود را ارتقا دهند.</p>
+<h3 id="فعل-bind" dir="rtl">فعل bind</h3>
+<p dir="rtl">مشابه فعل <code dir="ltr">escalate</code>، اعطای این حق به کاربران امکان دور زدن محافظت‌های داخلی کوبرنتیز در برابر ارتقای
+سطح دسترسی را می‌دهد و به کاربران اجازه می‌دهد bindingهایی به نقش‌هایی ایجاد کنند که حقوق آن‌ها را
+خودشان از قبل ندارند.</p>
+<h3 id="فعل-impersonate" dir="rtl">فعل impersonate</h3>
+<p dir="rtl">این فعل به کاربران اجازه می‌دهد هویت کاربران دیگر کلاستر را جعل (impersonate) کنند و حقوق آن‌ها را به دست آورند.
+هنگام اعطای آن باید دقت شود تا اطمینان حاصل شود که از طریق یکی از حساب‌های impersonate‌شده
+نمی‌توان مجوزهای بیش‌ازحد به دست آورد.</p>
+<h3 id="csrها-و-صدور-گواهی" dir="rtl">CSRها و صدور گواهی</h3>
+<p dir="rtl">CSR API به کاربرانی که حق <code dir="ltr">create</code> روی CSRها و حق <code dir="ltr">update</code> روی <code dir="ltr">certificatesigningrequests/approval</code>
+دارند، در حالی که signer برابر <code dir="ltr">kubernetes.io/kube-apiserver-client</code> است، اجازه می‌دهد گواهی‌های
+کلاینت جدیدی ایجاد کنند که به کاربران امکان احراز هویت در کلاستر را می‌دهد. این گواهی‌های کلاینت
+می‌توانند نام‌های دلخواه داشته باشند، از جمله نام‌های تکراری اجزای سیستمی کوبرنتیز. این امر عملاً
+امکان ارتقای سطح دسترسی را فراهم می‌کند.</p>
+<h3 id="درخواست-توکن" dir="rtl">درخواست توکن</h3>
+<p dir="rtl">کاربرانی که حق <code dir="ltr">create</code> روی <code dir="ltr">serviceaccounts/token</code> دارند می‌توانند TokenRequest ایجاد کنند تا برای
+service accountهای موجود توکن صادر کنند.</p>
+<h3 id="کنترل-admission-webhookها" dir="rtl">کنترل admission webhookها</h3>
+<p dir="rtl">کاربرانی که بر <code dir="ltr">validatingwebhookconfigurations</code> یا <code dir="ltr">mutatingwebhookconfigurations</code> کنترل دارند،
+می‌توانند webhookهایی را کنترل کنند که قادرند هر آبجکتی را که وارد کلاستر می‌شود بخوانند، و در مورد
+mutating webhookها، آبجکت‌های پذیرفته‌شده را نیز تغییر دهند.</p>
+<h3 id="تغییر-فضای-نام" dir="rtl">تغییر فضای نام</h3>
+<p dir="rtl">کاربرانی که می‌توانند عملیات <strong>patch</strong> را روی آبجکت‌های Namespace انجام دهند (از طریق یک RoleBinding
+در سطح فضای نام به یک Role دارای آن دسترسی) می‌توانند برچسب‌های آن فضای نام را تغییر دهند. در
+کلاسترهایی که Pod Security Admission استفاده می‌شود، این ممکن است به کاربر اجازه دهد فضای نام را
+برای سیاستی آزادانه‌تر از آنچه مدیران در نظر داشته‌اند پیکربندی کند.
+در کلاسترهایی که از NetworkPolicy استفاده می‌شود، کاربران ممکن است بتوانند برچسب‌هایی تنظیم کنند که
+به‌طور غیرمستقیم دسترسی به سرویس‌هایی را ممکن می‌سازد که مدیر قصد اجازه دادن به آن‌ها را نداشته است.
+در کلاسترهایی که از Dynamic Resource Allocation استفاده می‌کنند، برچسب‌گذاری یک فضای نام با
+<code dir="ltr">resource.kubernetes.io/admin-access: "true"</code> به هر کاربری که بتواند ResourceClaim در آن فضای نام
+ایجاد کند اجازه می‌دهد برای دستگاه‌هایی که پیش‌تر به هر claim دیگری در هر فضای نامی اختصاص یافته‌اند،
+درخواست دسترسی مدیریتی (admin) بدهد.</p>
+<h2 id="rbac-در-کوبرنتیز---خطرات-حمله-منع-سرویس-denial-of-service-risks" dir="rtl">RBAC در کوبرنتیز - خطرات حمله منع سرویس {#denial-of-service-risks}</h2>
+<h3 id="منع-سرویس-ناشی-از-ایجاد-آبجکت-object-creation-dos" dir="rtl">منع سرویس ناشی از ایجاد آبجکت {#object-creation-dos}</h3>
+<p dir="rtl">کاربرانی که حق ایجاد آبجکت در کلاستر را دارند، ممکن است بتوانند آبجکت‌هایی به‌اندازه کافی بزرگ ایجاد
+کنند تا وضعیت منع سرویس (denial of service) را، چه بر اساس اندازه و چه بر اساس تعداد آبجکت‌ها، ایجاد
+کنند؛ همان‌طور که در
+<a href="https://github.com/kubernetes/kubernetes/issues/107325" target="_blank" rel="noopener">etcd used by Kubernetes is vulnerable to OOM attack</a>
+بحث شده است. این موضوع ممکن است به‌طور خاص در کلاسترهای چندمستاجری (multi-tenant) اهمیت داشته باشد،
+اگر به کاربران نیمه‌مطمئن یا نامطمئن دسترسی محدودی به سیستم داده شده باشد.</p>
+<p dir="rtl">یکی از گزینه‌ها برای کاهش این مشکل استفاده از
+<a href="../policy/resource-quotas.html#object-count-quota">سهمیه‌های منابع</a>
+برای محدود کردن تعداد آبجکت‌هایی است که می‌توان ایجاد کرد.</p>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<ul>
+<li dir="rtl">برای کسب اطلاعات بیشتر درباره RBAC، <a href="https://kubernetes.io/docs/reference/access-authn-authz/rbac/" target="_blank">مستندات RBAC</a> را ببینید.</li>
+</ul>
+</main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#شیوه-های-توصیه-شده-عمومی">شیوه‌های توصیه‌شده عمومی</a><a class="l3" href="#حداقل-سطح-دسترسی">حداقل سطح دسترسی</a><a class="l3" href="#کاهش-توزیع-توکن-های-دارای-سطح-دسترسی-بالا">کاهش توزیع توکن‌های دارای سطح دسترسی بالا</a><a class="l3" href="#مستحکم-سازی-hardening">مستحکم‌سازی (Hardening)</a><a class="l3" href="#بازبینی-دوره-ای">بازبینی دوره‌ای</a><a class="l2" href="#rbac-در-کوبرنتیز---خطرات-ارتقای-سطح-دسترسی-privilege-escalation-risks">RBAC در کوبرنتیز - خطرات ارتقای سطح دسترسی {#privilege-escalation-risks}</a><a class="l3" href="#فهرست-کردن-secretها">فهرست‌کردن Secretها</a><a class="l3" href="#ایجاد-بار-کاری">ایجاد بار کاری</a><a class="l3" href="#ایجاد-persistentvolume">ایجاد PersistentVolume</a><a class="l3" href="#دسترسی-به-زیرمنبع-proxy-نودها">دسترسی به زیرمنبع proxy نودها</a><a class="l3" href="#فعل-escalate">فعل escalate</a><a class="l3" href="#فعل-bind">فعل bind</a><a class="l3" href="#فعل-impersonate">فعل impersonate</a><a class="l3" href="#csrها-و-صدور-گواهی">CSRها و صدور گواهی</a><a class="l3" href="#درخواست-توکن">درخواست توکن</a><a class="l3" href="#کنترل-admission-webhookها">کنترل admission webhookها</a><a class="l3" href="#تغییر-فضای-نام">تغییر فضای نام</a><a class="l2" href="#rbac-در-کوبرنتیز---خطرات-حمله-منع-سرویس-denial-of-service-risks">RBAC در کوبرنتیز - خطرات حمله منع سرویس {#denial-of-service-risks}</a><a class="l3" href="#منع-سرویس-ناشی-از-ایجاد-آبجکت-object-creation-dos">منع سرویس ناشی از ایجاد آبجکت {#object-creation-dos}</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>

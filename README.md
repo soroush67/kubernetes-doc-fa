@@ -8,9 +8,9 @@
 
 | | |
 |---|---|
-| پیشرفت (بر اساس کلمات) | **11.2٪** |
-| صفحات ترجمه‌شده | 163 از 1722 |
-| صفحات دارای ایراد ساختاری | 0 |
+| پیشرفت (بر اساس کلمات) | **12.5٪** |
+| صفحات ترجمه‌شده | 178 از 1722 |
+| صفحات دارای ایراد ساختاری | 1 |
 | نسخه‌ی منبع انگلیسی | `ed70e311737a` |
 
 ## مشاهده
@@ -68,7 +68,7 @@ cd kubernetes-doc-fa
 | بخش | ترجمه‌شده | کل |
 |---|---|---|
 | `(root)` | 1 | 2 |
-| `concepts` | 153 | 187 |
+| `concepts` | 168 | 187 |
 | `contribute` | 9 | 44 |
 | `doc-contributor-tools` | 0 | 1 |
 | `home` | 0 | 2 |
@@ -91,26 +91,34 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [concepts/services-networking/topology-aware-routing.md](md/concepts/services-networking/topology-aware-routing.md) — 2026-10-27T15:54:50+03:30
+- [concepts/services-networking/_index.md](md/concepts/services-networking/_index.md) — 2026-10-27T15:54:25+03:30
+- [concepts/security/service-accounts.md](md/concepts/security/service-accounts.md) — 2026-10-27T15:54:15+03:30
+- [concepts/security/windows-security.md](md/concepts/security/windows-security.md) — 2026-10-27T15:53:59+03:30
+- [concepts/security/security-checklist.md](md/concepts/security/security-checklist.md) — 2026-10-27T15:53:48+03:30
+- [concepts/security/pod-security-standards.md](md/concepts/security/pod-security-standards.md) — 2026-10-27T15:53:16+03:30
+- [concepts/security/secrets-good-practices.md](md/concepts/security/secrets-good-practices.md) — 2026-10-27T15:52:25+03:30
+- [concepts/security/rbac-good-practices.md](md/concepts/security/rbac-good-practices.md) — 2026-10-27T15:52:01+03:30
+- [concepts/scheduling-eviction/scheduling-framework.md](md/concepts/scheduling-eviction/scheduling-framework.md) — 2026-10-27T15:51:14+03:30
+- [concepts/scheduling-eviction/scheduler-perf-tuning.md](md/concepts/scheduling-eviction/scheduler-perf-tuning.md) — 2026-10-27T15:50:42+03:30
+- [concepts/scheduling-eviction/resource-bin-packing.md](md/concepts/scheduling-eviction/resource-bin-packing.md) — 2026-10-27T15:50:22+03:30
+- [concepts/scheduling-eviction/running-multiple-schedulers.md](md/concepts/scheduling-eviction/running-multiple-schedulers.md) — 2026-10-27T15:50:07+03:30
+- [concepts/resource-management/dynamic-resource-allocation/dra-observability.md](md/concepts/resource-management/dynamic-resource-allocation/dra-observability.md) — 2026-10-27T15:49:51+03:30
+- [concepts/scheduling-eviction/podgroup-scheduling.md](md/concepts/scheduling-eviction/podgroup-scheduling.md) — 2026-10-27T15:49:51+03:30
+- [concepts/resource-management/dynamic-resource-allocation/dra-api.md](md/concepts/resource-management/dynamic-resource-allocation/dra-api.md) — 2026-10-27T15:48:47+03:30
 - [concepts/resource-management/dynamic-resource-allocation/dra-features.md](md/concepts/resource-management/dynamic-resource-allocation/dra-features.md) — 2026-10-27T15:48:12+03:30
 - [concepts/extend-kubernetes/_index.md](md/concepts/extend-kubernetes/_index.md) — 2026-10-27T15:47:06+03:30
 - [concepts/extend-kubernetes/api-extension/apiserver-aggregation.md](md/concepts/extend-kubernetes/api-extension/apiserver-aggregation.md) — 2026-10-27T15:47:04+03:30
 - [concepts/extend-kubernetes/api-extension/_index.md](md/concepts/extend-kubernetes/api-extension/_index.md) — 2026-10-27T15:46:50+03:30
 - [concepts/containers/images.md](md/concepts/containers/images.md) — 2026-10-27T15:46:41+03:30
-- [concepts/containers/runtime-class.md](md/concepts/containers/runtime-class.md) — 2026-10-27T15:46:01+03:30
-- [concepts/containers/container-lifecycle-hooks.md](md/concepts/containers/container-lifecycle-hooks.md) — 2026-10-27T15:45:08+03:30
-- [concepts/containers/cri.md](md/concepts/containers/cri.md) — 2026-10-27T15:44:52+03:30
-- [concepts/cluster-administration/observability.md](md/concepts/cluster-administration/observability.md) — 2026-10-27T15:44:33+03:30
-- [concepts/cluster-administration/proxies.md](md/concepts/cluster-administration/proxies.md) — 2026-10-27T15:44:33+03:30
-- [concepts/cluster-administration/node-shutdown.md](md/concepts/cluster-administration/node-shutdown.md) — 2026-10-27T15:44:17+03:30
-- [concepts/cluster-administration/flow-control.md](md/concepts/cluster-administration/flow-control.md) — 2026-10-27T15:43:50+03:30
-- [concepts/cluster-administration/node-autoscaling.md](md/concepts/cluster-administration/node-autoscaling.md) — 2026-10-27T15:43:25+03:30
-- [concepts/cluster-administration/networking.md](md/concepts/cluster-administration/networking.md) — 2026-10-27T15:42:26+03:30
-- [concepts/cluster-administration/logging.md](md/concepts/cluster-administration/logging.md) — 2026-10-27T15:42:06+03:30
-- [_index.md](md/_index.md) — 2026-10-27T15:38:01+03:30
-- [concepts/_index.md](md/concepts/_index.md) — 2026-10-27T15:38:01+03:30
-- [concepts/architecture/_index.md](md/concepts/architecture/_index.md) — 2026-10-27T15:38:01+03:30
-- [concepts/architecture/cgroups.md](md/concepts/architecture/cgroups.md) — 2026-10-27T15:38:01+03:30
-- [concepts/architecture/cloud-controller.md](md/concepts/architecture/cloud-controller.md) — 2026-10-27T15:38:01+03:30
+
+</div>
+
+<div dir="rtl">
+
+## صفحات دارای ایراد ساختاری
+
+- [concepts/security/pod-security-standards.md](md/concepts/security/pod-security-standards.md): chunk 1: short: 909 words vs 1711 source words
 
 </div>
 

@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>بسته‌بندی منابع (Resource Bin Packing) | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">concepts / scheduling-eviction</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">بسته‌بندی منابع (Resource Bin Packing)</h1><!-- overview -->
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">این مقاله به بسته‌بندی منابع در زمینه زمان‌بندی یک Pod منفرد می‌پردازد. برای آگاهی از بسته‌بندی در زمان‌بندی گروه‌های Pod، لطفاً <a href="topology-aware-scheduling.html">مقاله درباره زمان‌بندی آگاه از توپولوژی</a> را مطالعه کنید.</p>
+</div>
+<p dir="rtl">در <a href="https://kubernetes.io/docs/reference/scheduling/config/#scheduling-plugins" target="_blank">افزونه زمان‌بندی</a> با نام <code dir="ltr">NodeResourcesFit</code> در kube-scheduler، دو
+راهبرد امتیازدهی وجود دارد که از بسته‌بندی (bin packing) منابع پشتیبانی می‌کنند: <code dir="ltr">MostAllocated</code> و <code dir="ltr">RequestedToCapacityRatio</code>.</p>
+<!-- body -->
+<h2 id="فعال-سازی-بسته-بندی-با-استفاده-از-راهبرد-mostallocated" dir="rtl">فعال‌سازی بسته‌بندی با استفاده از راهبرد MostAllocated</h2>
+<p dir="rtl">راهبرد <code dir="ltr">MostAllocated</code> نودها را بر اساس میزان بهره‌برداری از منابع امتیازدهی می‌کند و نودهایی را که تخصیص بیشتری دارند ترجیح می‌دهد.
+برای هر نوع منبع می‌توانید وزنی تعیین کنید تا میزان تأثیر آن بر امتیاز نود تغییر کند.</p>
+<p dir="rtl">برای تنظیم راهبرد <code dir="ltr">MostAllocated</code> در افزونه <code dir="ltr">NodeResourcesFit</code>، از یک
+<a href="https://kubernetes.io/docs/reference/scheduling/config" target="_blank">پیکربندی زمان‌بند</a> مشابه نمونه زیر استفاده کنید:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: kubescheduler.config.k8s.io/v1
+kind: KubeSchedulerConfiguration
+profiles:
+- pluginConfig:
+  - args:
+      scoringStrategy:
+        resources:
+        - name: cpu
+          weight: 1
+        - name: memory
+          weight: 1
+        - name: intel.com/foo
+          weight: 3
+        - name: intel.com/bar
+          weight: 3
+        type: MostAllocated
+    name: NodeResourcesFit
+</code></pre>
+<p dir="rtl">با این پیکربندی، نودها با استفاده از میانگین وزنی میزان بهره‌برداری در هر چهار
+منبع امتیازدهی می‌شوند. از آنجا که وزن <code dir="ltr">intel.com/foo</code> و <code dir="ltr">intel.com/bar</code> هرکدام <code dir="ltr">3</code> است، در حالی که وزن
+CPU و memory برابر <code dir="ltr">1</code> است، میزان بهره‌برداری از این منابع توسعه‌یافته (extended resources) سه برابر بیشتر بر
+امتیاز نهایی نود اثر می‌گذارد. زمان‌بند نودی را که بالاترین امتیاز را دارد انتخاب می‌کند و هدفش این است که Podها را روی
+نودهایی با بهره‌برداری بالا زمان‌بندی کند. این کار به آماده‌سازی برای کاهش مقیاس (scale-down) نودهایی که کمترین بهره‌برداری را دارند کمک می‌کند.</p>
+<p dir="rtl">برای کسب اطلاعات بیشتر درباره سایر پارامترها و پیکربندی پیش‌فرض آن‌ها، مستندات API مربوط به
+<a href="https://kubernetes.io/docs/reference/config-api/kube-scheduler-config.v1/#kubescheduler-config-k8s-io-v1-NodeResourcesFitArgs" target="_blank"><code dir="ltr">NodeResourcesFitArgs</code></a> را مطالعه کنید.</p>
+<h2 id="فعال-سازی-بسته-بندی-با-استفاده-از-requestedtocapacityratio" dir="rtl">فعال‌سازی بسته‌بندی با استفاده از RequestedToCapacityRatio</h2>
+<p dir="rtl">راهبرد <code dir="ltr">RequestedToCapacityRatio</code> به کاربران امکان می‌دهد منابع را همراه با وزن هر منبع مشخص کنند تا نودها بر اساس
+نسبت درخواست به ظرفیت امتیازدهی شوند. این قابلیت
+به کاربران اجازه می‌دهد با استفاده از پارامترهای مناسب، منابع توسعه‌یافته را بسته‌بندی کنند
+تا بهره‌برداری از منابع کمیاب در کلاسترهای بزرگ بهبود یابد. این راهبرد نودها را بر اساس یک
+تابع پیکربندی‌شده از منابع تخصیص‌یافته ترجیح می‌دهد. رفتار <code dir="ltr">RequestedToCapacityRatio</code> در
+تابع امتیازدهی <code dir="ltr">NodeResourcesFit</code> را می‌توان با فیلد
+<a href="https://kubernetes.io/docs/reference/config-api/kube-scheduler-config.v1/#kubescheduler-config-k8s-io-v1-ScoringStrategy" target="_blank">scoringStrategy</a> کنترل کرد.
+در فیلد <code dir="ltr">scoringStrategy</code> می‌توانید دو پارامتر را پیکربندی کنید: <code dir="ltr">requestedToCapacityRatio</code> و
+<code dir="ltr">resources</code>. مقدار <code dir="ltr">shape</code> در پارامتر <code dir="ltr">requestedToCapacityRatio</code>
+به کاربر امکان می‌دهد تابع را بر اساس مقادیر <code dir="ltr">utilization</code> و <code dir="ltr">score</code> به‌صورت کمترین درخواست‌شده (least requested) یا بیشترین
+درخواست‌شده (most requested) تنظیم کند. پارامتر <code dir="ltr">resources</code>
+شامل <code dir="ltr">name</code> منبعی است که در امتیازدهی در نظر گرفته می‌شود
+و <code dir="ltr">weight</code> متناظر با آن، که وزن هر منبع را مشخص می‌کند.</p>
+<p dir="rtl">در ادامه نمونه‌ای از پیکربندی آمده است که رفتار بسته‌بندی را برای منابع توسعه‌یافته <code dir="ltr">intel.com/foo</code> و <code dir="ltr">intel.com/bar</code>
+با استفاده از فیلد <code dir="ltr">requestedToCapacityRatio</code> تنظیم می‌کند.</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: kubescheduler.config.k8s.io/v1
+kind: KubeSchedulerConfiguration
+profiles:
+- pluginConfig:
+  - args:
+      scoringStrategy:
+        resources:
+        - name: intel.com/foo
+          weight: 3
+        - name: intel.com/bar
+          weight: 3
+        requestedToCapacityRatio:
+          shape:
+          - utilization: 0
+            score: 0
+          - utilization: 100
+            score: 10
+        type: RequestedToCapacityRatio
+    name: NodeResourcesFit
+</code></pre>
+<p dir="rtl">در این نمونه، فقط منابع توسعه‌یافته <code dir="ltr">intel.com/foo</code> و <code dir="ltr">intel.com/bar</code> در
+<code dir="ltr">resources</code> فهرست شده‌اند. بنابراین افزونه <code dir="ltr">NodeResourcesFit</code> نودها را صرفاً بر اساس میزان بهره‌برداری
+از همین دو منبع امتیازدهی می‌کند؛ CPU و memory در امتیاز این افزونه نقشی ندارند. از آنجا که
+شکل (shape) پیکربندی‌شده با افزایش بهره‌برداری امتیاز بالاتری اختصاص می‌دهد (<code dir="ltr">score: 0</code> در <code dir="ltr">utilization: 0</code>
+که تا <code dir="ltr">score: 10</code> در <code dir="ltr">utilization: 100</code> افزایش می‌یابد)، زمان‌بند نودهایی را ترجیح می‌دهد که بخش بیشتری از این
+منابع توسعه‌یافته در آن‌ها از قبل در حال استفاده است، و درخواست‌های مربوط به آن‌ها را روی کمترین تعداد ممکن نود بسته‌بندی می‌کند.</p>
+<p dir="rtl">برای اینکه CPU و memory نیز در این راهبرد امتیازدهی لحاظ شوند، آن‌ها را به فهرست <code dir="ltr">resources</code> اضافه کنید. توجه داشته باشید که همه
+منابع موجود در فهرست از یک تابع <code dir="ltr">shape</code> مشترک استفاده می‌کنند، بنابراین این کار همان منحنی بسته‌بندی را
+برای این منابع نیز اعمال می‌کند.</p>
+<p dir="rtl">با ارجاع به فایل <code dir="ltr">KubeSchedulerConfiguration</code> از طریق فلگ
+<code dir="ltr">--config=/path/to/config/file</code> در kube-scheduler، پیکربندی به
+زمان‌بند ارسال می‌شود.</p>
+<p dir="rtl">برای کسب اطلاعات بیشتر درباره سایر پارامترها و پیکربندی پیش‌فرض آن‌ها، مستندات API مربوط به
+<a href="https://kubernetes.io/docs/reference/config-api/kube-scheduler-config.v1/#kubescheduler-config-k8s-io-v1-NodeResourcesFitArgs" target="_blank"><code dir="ltr">NodeResourcesFitArgs</code></a> را مطالعه کنید.</p>
+<h3 id="تنظیم-تابع-امتیازدهی" dir="rtl">تنظیم تابع امتیازدهی</h3>
+<p dir="rtl">از <code dir="ltr">shape</code> برای مشخص کردن رفتار تابع <code dir="ltr">RequestedToCapacityRatio</code> استفاده می‌شود.</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">shape:
+  - utilization: 0
+    score: 0
+  - utilization: 100
+    score: 10
+</code></pre>
+<p dir="rtl">آرگومان‌های بالا اگر <code dir="ltr">utilization</code> برابر ۰٪ باشد به نود <code dir="ltr">score</code> برابر ۰ و اگر
+<code dir="ltr">utilization</code> برابر ۱۰۰٪ باشد امتیاز ۱۰ می‌دهند و به این ترتیب رفتار بسته‌بندی را فعال می‌کنند. برای فعال‌سازی رفتار کمترین
+درخواست‌شده (least requested)، مقدار امتیاز باید به شکل زیر معکوس شود.</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">shape:
+  - utilization: 0
+    score: 10
+  - utilization: 100
+    score: 0
+</code></pre>
+<p dir="rtl"><code dir="ltr">resources</code> یک پارامتر اختیاری است که مقدار پیش‌فرض آن به شرح زیر است:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">resources:
+  - name: cpu
+    weight: 1
+  - name: memory
+    weight: 1
+</code></pre>
+<p dir="rtl">می‌توان از آن برای افزودن منابع توسعه‌یافته به شکل زیر استفاده کرد:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">resources:
+  - name: intel.com/foo
+    weight: 5
+  - name: cpu
+    weight: 3
+  - name: memory
+    weight: 1
+</code></pre>
+<p dir="rtl">پارامتر <code dir="ltr">weight</code> اختیاری است و در صورت مشخص نشدن، مقدار آن ۱ در نظر گرفته می‌شود. همچنین،
+مقدار <code dir="ltr">weight</code> نمی‌تواند منفی باشد.</p>
+<h3 id="امتیازدهی-نود-برای-تخصیص-ظرفیت" dir="rtl">امتیازدهی نود برای تخصیص ظرفیت</h3>
+<p dir="rtl">این بخش برای کسانی است که می‌خواهند جزئیات داخلی این قابلیت را درک کنند.
+در ادامه نمونه‌ای آمده است که نشان می‌دهد امتیاز نود برای مجموعه‌ای مشخص از مقادیر چگونه محاسبه می‌شود.</p>
+<p dir="rtl">منابع درخواست‌شده:</p>
+<pre dir="ltr"><code dir="ltr">intel.com/foo : 2
+memory: 256MB
+cpu: 2
+</code></pre>
+<p dir="rtl">وزن منابع:</p>
+<pre dir="ltr"><code dir="ltr">intel.com/foo : 5
+memory: 1
+cpu: 3
+</code></pre>
+<p dir="ltr" class="ltr">FunctionShapePoint {{0, 0}, {100, 10}}</p>
+<p dir="rtl">مشخصات نود ۱:</p>
+<pre dir="ltr"><code dir="ltr">Available:
+  intel.com/foo: 4
+  memory: 1 GB
+  cpu: 8
+
+Used:
+  intel.com/foo: 1
+  memory: 256MB
+  cpu: 1
+</code></pre>
+<p dir="rtl">امتیاز نود:</p>
+<pre dir="ltr"><code dir="ltr">intel.com/foo  = resourceScoringFunction((2+1),4)
+               = (100 - ((4-3)*100/4))
+               = (100 - 25)
+               = 75                       # requested + used = 75% * available
+               = rawScoringFunction(75)
+               = 7                        # floor(75/10)
+
+memory         = resourceScoringFunction((256+256),1024)
+               = (100 -((1024-512)*100/1024))
+               = 50                       # requested + used = 50% * available
+               = rawScoringFunction(50)
+               = 5                        # floor(50/10)
+
+cpu            = resourceScoringFunction((2+1),8)
+               = (100 -((8-3)*100/8))
+               = 37.5                     # requested + used = 37.5% * available
+               = rawScoringFunction(37.5)
+               = 3                        # floor(37.5/10)
+
+NodeScore   =  ((7 * 5) + (5 * 1) + (3 * 3)) / (5 + 1 + 3)
+            =  5
+</code></pre>
+<p dir="rtl">مشخصات نود ۲:</p>
+<pre dir="ltr"><code dir="ltr">Available:
+  intel.com/foo: 8
+  memory: 1GB
+  cpu: 8
+Used:
+  intel.com/foo: 2
+  memory: 512MB
+  cpu: 6
+</code></pre>
+<p dir="rtl">امتیاز نود:</p>
+<pre dir="ltr"><code dir="ltr">intel.com/foo  = resourceScoringFunction((2+2),8)
+               =  (100 - ((8-4)*100/8)
+               =  (100 - 50)
+               =  50
+               =  rawScoringFunction(50)
+               = 5
+
+memory         = resourceScoringFunction((256+512),1024)
+               = (100 -((1024-768)*100/1024))
+               = 75
+               = rawScoringFunction(75)
+               = 7
+
+cpu            = resourceScoringFunction((2+6),8)
+               = (100 -((8-8)*100/8))
+               = 100
+               = rawScoringFunction(100)
+               = 10
+
+NodeScore   =  ((5 * 5) + (7 * 1) + (10 * 3)) / (5 + 1 + 3)
+            =  7
+
+</code></pre>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<ul>
+<li dir="rtl">درباره <a href="scheduling-framework.html">چارچوب زمان‌بندی (scheduling framework)</a> بیشتر بخوانید</li>
+<li dir="rtl">درباره <a href="https://kubernetes.io/docs/reference/scheduling/config/" target="_blank">پیکربندی زمان‌بند</a> بیشتر بخوانید</li>
+</ul>
+</main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#فعال-سازی-بسته-بندی-با-استفاده-از-راهبرد-mostallocated">فعال‌سازی بسته‌بندی با استفاده از راهبرد MostAllocated</a><a class="l2" href="#فعال-سازی-بسته-بندی-با-استفاده-از-requestedtocapacityratio">فعال‌سازی بسته‌بندی با استفاده از RequestedToCapacityRatio</a><a class="l3" href="#تنظیم-تابع-امتیازدهی">تنظیم تابع امتیازدهی</a><a class="l3" href="#امتیازدهی-نود-برای-تخصیص-ظرفیت">امتیازدهی نود برای تخصیص ظرفیت</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>
