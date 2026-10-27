@@ -9,7 +9,7 @@
 | | |
 |---|---|
 | پیشرفت (بر اساس کلمات) | **19.6٪** |
-| صفحات ترجمه‌شده | 373 از 1722 |
+| صفحات ترجمه‌شده | 388 از 1722 |
 | صفحات دارای ایراد ساختاری | 9 |
 | نسخه‌ی منبع انگلیسی | `ed70e311737a` |
 
@@ -72,7 +72,7 @@ cd kubernetes-doc-fa
 | `contribute` | 44 | 44 |
 | `doc-contributor-tools` | 1 | 1 |
 | `home` | 2 | 2 |
-| `reference` | 138 | 1198 |
+| `reference` | 153 | 1198 |
 | `setup` | 0 | 22 |
 | `tasks` | 0 | 221 |
 | `tutorials` | 0 | 45 |
@@ -91,26 +91,26 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [reference/command-line-tools-reference/feature-gates/DeclarativeValidationTakeover.md](md/reference/command-line-tools-reference/feature-gates/DeclarativeValidationTakeover.md) — 2026-10-27T16:48:00+03:30
+- [reference/command-line-tools-reference/feature-gates/DefaultHostNetworkHostPortsInPodTemplates.md](md/reference/command-line-tools-reference/feature-gates/DefaultHostNetworkHostPortsInPodTemplates.md) — 2026-10-27T16:48:00+03:30
+- [reference/command-line-tools-reference/feature-gates/DeclarativeValidationBeta.md](md/reference/command-line-tools-reference/feature-gates/DeclarativeValidationBeta.md) — 2026-10-27T16:47:51+03:30
+- [reference/command-line-tools-reference/feature-gates/DeclarativeValidation.md](md/reference/command-line-tools-reference/feature-gates/DeclarativeValidation.md) — 2026-10-27T16:47:50+03:30
+- [reference/command-line-tools-reference/feature-gates/DaemonSetUpdateSurge.md](md/reference/command-line-tools-reference/feature-gates/DaemonSetUpdateSurge.md) — 2026-10-27T16:47:44+03:30
+- [reference/command-line-tools-reference/feature-gates/DRAWorkloadResourceClaims.md](md/reference/command-line-tools-reference/feature-gates/DRAWorkloadResourceClaims.md) — 2026-10-27T16:47:43+03:30
+- [reference/command-line-tools-reference/feature-gates/DRAResourcePoolStatus.md](md/reference/command-line-tools-reference/feature-gates/DRAResourcePoolStatus.md) — 2026-10-27T16:47:36+03:30
+- [reference/command-line-tools-reference/feature-gates/DRASchedulerFilterTimeout.md](md/reference/command-line-tools-reference/feature-gates/DRASchedulerFilterTimeout.md) — 2026-10-27T16:47:33+03:30
+- [reference/command-line-tools-reference/feature-gates/DRAResourceClaimGranularStatusAuthorization.md](md/reference/command-line-tools-reference/feature-gates/DRAResourceClaimGranularStatusAuthorization.md) — 2026-10-27T16:47:29+03:30
+- [reference/command-line-tools-reference/feature-gates/DRAResourceClaimDeviceStatus.md](md/reference/command-line-tools-reference/feature-gates/DRAResourceClaimDeviceStatus.md) — 2026-10-27T16:47:24+03:30
+- [reference/command-line-tools-reference/feature-gates/DRAPartitionableDevicesType.md](md/reference/command-line-tools-reference/feature-gates/DRAPartitionableDevicesType.md) — 2026-10-27T16:47:20+03:30
+- [reference/command-line-tools-reference/feature-gates/DRAPrioritizedList.md](md/reference/command-line-tools-reference/feature-gates/DRAPrioritizedList.md) — 2026-10-27T16:47:18+03:30
+- [reference/command-line-tools-reference/feature-gates/DRAOptionalNodeOperations.md](md/reference/command-line-tools-reference/feature-gates/DRAOptionalNodeOperations.md) — 2026-10-27T16:47:11+03:30
+- [reference/command-line-tools-reference/feature-gates/DRAPartitionableDevices.md](md/reference/command-line-tools-reference/feature-gates/DRAPartitionableDevices.md) — 2026-10-27T16:47:11+03:30
+- [reference/command-line-tools-reference/feature-gates/DRANodeAllocatableResources.md](md/reference/command-line-tools-reference/feature-gates/DRANodeAllocatableResources.md) — 2026-10-27T16:47:04+03:30
 - [reference/command-line-tools-reference/feature-gates/DRAListTypeAttributes.md](md/reference/command-line-tools-reference/feature-gates/DRAListTypeAttributes.md) — 2026-10-27T16:46:59+03:30
 - [reference/command-line-tools-reference/feature-gates/DRAExtendedResource.md](md/reference/command-line-tools-reference/feature-gates/DRAExtendedResource.md) — 2026-10-27T16:46:53+03:30
 - [reference/command-line-tools-reference/feature-gates/DRADeviceTaints.md](md/reference/command-line-tools-reference/feature-gates/DRADeviceTaints.md) — 2026-10-27T16:46:51+03:30
 - [reference/command-line-tools-reference/feature-gates/DRADeviceTaintRules.md](md/reference/command-line-tools-reference/feature-gates/DRADeviceTaintRules.md) — 2026-10-27T16:46:48+03:30
 - [reference/command-line-tools-reference/feature-gates/DRADeviceCompatibilityGroups.md](md/reference/command-line-tools-reference/feature-gates/DRADeviceCompatibilityGroups.md) — 2026-10-27T16:46:46+03:30
-- [reference/command-line-tools-reference/feature-gates/DRADeviceBindingConditions.md](md/reference/command-line-tools-reference/feature-gates/DRADeviceBindingConditions.md) — 2026-10-27T16:46:42+03:30
-- [reference/command-line-tools-reference/feature-gates/DRADerivedAttributes.md](md/reference/command-line-tools-reference/feature-gates/DRADerivedAttributes.md) — 2026-10-27T16:46:39+03:30
-- [reference/command-line-tools-reference/feature-gates/DRAControlPlaneController.md](md/reference/command-line-tools-reference/feature-gates/DRAControlPlaneController.md) — 2026-10-27T16:46:37+03:30
-- [reference/command-line-tools-reference/feature-gates/DRAConsumableCapacity.md](md/reference/command-line-tools-reference/feature-gates/DRAConsumableCapacity.md) — 2026-10-27T16:46:34+03:30
-- [reference/command-line-tools-reference/feature-gates/DRAAdminAccess.md](md/reference/command-line-tools-reference/feature-gates/DRAAdminAccess.md) — 2026-10-27T16:46:30+03:30
-- [reference/command-line-tools-reference/feature-gates/CustomResourceWebhookConversion.md](md/reference/command-line-tools-reference/feature-gates/CustomResourceWebhookConversion.md) — 2026-10-27T16:46:28+03:30
-- [reference/command-line-tools-reference/feature-gates/CustomResourceValidationExpressions.md](md/reference/command-line-tools-reference/feature-gates/CustomResourceValidationExpressions.md) — 2026-10-27T16:46:25+03:30
-- [reference/command-line-tools-reference/feature-gates/CustomResourceValidation.md](md/reference/command-line-tools-reference/feature-gates/CustomResourceValidation.md) — 2026-10-27T16:46:22+03:30
-- [reference/command-line-tools-reference/feature-gates/CustomResourceSubresources.md](md/reference/command-line-tools-reference/feature-gates/CustomResourceSubresources.md) — 2026-10-27T16:46:19+03:30
-- [reference/command-line-tools-reference/feature-gates/CustomResourceFieldSelectors.md](md/reference/command-line-tools-reference/feature-gates/CustomResourceFieldSelectors.md) — 2026-10-27T16:46:10+03:30
-- [reference/command-line-tools-reference/feature-gates/CustomResourcePublishOpenAPI.md](md/reference/command-line-tools-reference/feature-gates/CustomResourcePublishOpenAPI.md) — 2026-10-27T16:46:09+03:30
-- [reference/command-line-tools-reference/feature-gates/CustomPodDNS.md](md/reference/command-line-tools-reference/feature-gates/CustomPodDNS.md) — 2026-10-27T16:46:03+03:30
-- [reference/command-line-tools-reference/feature-gates/CustomResourceDefaulting.md](md/reference/command-line-tools-reference/feature-gates/CustomResourceDefaulting.md) — 2026-10-27T16:46:03+03:30
-- [reference/command-line-tools-reference/feature-gates/CustomCPUCFSQuotaPeriod.md](md/reference/command-line-tools-reference/feature-gates/CustomCPUCFSQuotaPeriod.md) — 2026-10-27T16:45:56+03:30
-- [reference/command-line-tools-reference/feature-gates/CrossNamespaceVolumeDataSource.md](md/reference/command-line-tools-reference/feature-gates/CrossNamespaceVolumeDataSource.md) — 2026-10-27T16:45:54+03:30
 
 </div>
 

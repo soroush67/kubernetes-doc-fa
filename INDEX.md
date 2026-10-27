@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-373 از 1722 صفحه
+388 از 1722 صفحه
 
 
 ## `.`
@@ -509,21 +509,21 @@
 - ✅ [DRADeviceTaints.md](md/reference/command-line-tools-reference/feature-gates/DRADeviceTaints.md)
 - ✅ [DRAExtendedResource.md](md/reference/command-line-tools-reference/feature-gates/DRAExtendedResource.md)
 - ✅ [DRAListTypeAttributes.md](md/reference/command-line-tools-reference/feature-gates/DRAListTypeAttributes.md)
-- ⏳ `DRANodeAllocatableResources.md`
-- ⏳ `DRAOptionalNodeOperations.md`
-- ⏳ `DRAPartitionableDevices.md`
-- ⏳ `DRAPartitionableDevicesType.md`
-- ⏳ `DRAPrioritizedList.md`
-- ⏳ `DRAResourceClaimDeviceStatus.md`
-- ⏳ `DRAResourceClaimGranularStatusAuthorization.md`
-- ⏳ `DRAResourcePoolStatus.md`
-- ⏳ `DRASchedulerFilterTimeout.md`
-- ⏳ `DRAWorkloadResourceClaims.md`
-- ⏳ `DaemonSetUpdateSurge.md`
-- ⏳ `DeclarativeValidation.md`
-- ⏳ `DeclarativeValidationBeta.md`
-- ⏳ `DeclarativeValidationTakeover.md`
-- ⏳ `DefaultHostNetworkHostPortsInPodTemplates.md`
+- ✅ [DRANodeAllocatableResources.md](md/reference/command-line-tools-reference/feature-gates/DRANodeAllocatableResources.md)
+- ✅ [DRAOptionalNodeOperations.md](md/reference/command-line-tools-reference/feature-gates/DRAOptionalNodeOperations.md)
+- ✅ [DRAPartitionableDevices.md](md/reference/command-line-tools-reference/feature-gates/DRAPartitionableDevices.md)
+- ✅ [DRAPartitionableDevicesType.md](md/reference/command-line-tools-reference/feature-gates/DRAPartitionableDevicesType.md)
+- ✅ [DRAPrioritizedList.md](md/reference/command-line-tools-reference/feature-gates/DRAPrioritizedList.md)
+- ✅ [DRAResourceClaimDeviceStatus.md](md/reference/command-line-tools-reference/feature-gates/DRAResourceClaimDeviceStatus.md)
+- ✅ [DRAResourceClaimGranularStatusAuthorization.md](md/reference/command-line-tools-reference/feature-gates/DRAResourceClaimGranularStatusAuthorization.md)
+- ✅ [DRAResourcePoolStatus.md](md/reference/command-line-tools-reference/feature-gates/DRAResourcePoolStatus.md)
+- ✅ [DRASchedulerFilterTimeout.md](md/reference/command-line-tools-reference/feature-gates/DRASchedulerFilterTimeout.md)
+- ✅ [DRAWorkloadResourceClaims.md](md/reference/command-line-tools-reference/feature-gates/DRAWorkloadResourceClaims.md)
+- ✅ [DaemonSetUpdateSurge.md](md/reference/command-line-tools-reference/feature-gates/DaemonSetUpdateSurge.md)
+- ✅ [DeclarativeValidation.md](md/reference/command-line-tools-reference/feature-gates/DeclarativeValidation.md)
+- ✅ [DeclarativeValidationBeta.md](md/reference/command-line-tools-reference/feature-gates/DeclarativeValidationBeta.md)
+- ✅ [DeclarativeValidationTakeover.md](md/reference/command-line-tools-reference/feature-gates/DeclarativeValidationTakeover.md)
+- ✅ [DefaultHostNetworkHostPortsInPodTemplates.md](md/reference/command-line-tools-reference/feature-gates/DefaultHostNetworkHostPortsInPodTemplates.md)
 - ⏳ `DefaultPodSysctls.md`
 - ⏳ `DefaultPodTopologySpread.md`
 - ⏳ `DelegateFSGroupToCSIDriver.md`
