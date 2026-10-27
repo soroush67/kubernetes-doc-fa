@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-223 از 1722 صفحه
+238 از 1722 صفحه
 
 
 ## `.`
@@ -284,7 +284,7 @@
 - ✅ [analytics.md](md/contribute/analytics.md)
 - ⚠️ [docs.md](md/contribute/docs.md)
 - ✅ [localization.md](md/contribute/localization.md)
-- ⏳ `suggesting-improvements.md`
+- ✅ [suggesting-improvements.md](md/contribute/suggesting-improvements.md)
 
 ## `contribute/blog`
 
@@ -327,42 +327,42 @@
 
 - ✅ [_index.md](md/contribute/review/_index.md)
 - ✅ [for-approvers.md](md/contribute/review/for-approvers.md)
-- ⏳ `reviewing-prs.md`
+- ⚠️ [reviewing-prs.md](md/contribute/review/reviewing-prs.md)
 
 ## `contribute/style`
 
 - ✅ [_index.md](md/contribute/style/_index.md)
 - ✅ [content-guide.md](md/contribute/style/content-guide.md)
 - ✅ [content-organization.md](md/contribute/style/content-organization.md)
-- ⏳ `diagram-guide.md`
-- ⏳ `page-content-types.md`
-- ⏳ `style-guide.md`
-- ⏳ `write-new-topic.md`
+- ✅ [diagram-guide.md](md/contribute/style/diagram-guide.md)
+- ✅ [page-content-types.md](md/contribute/style/page-content-types.md)
+- ⚠️ [style-guide.md](md/contribute/style/style-guide.md)
+- ✅ [write-new-topic.md](md/contribute/style/write-new-topic.md)
 
 ## `contribute/style/hugo-shortcodes`
 
-- ⏳ `example1.md`
-- ⏳ `example2.md`
-- ⏳ `index.md`
+- ✅ [example1.md](md/contribute/style/hugo-shortcodes/example1.md)
+- ✅ [example2.md](md/contribute/style/hugo-shortcodes/example2.md)
+- ⚠️ [index.md](md/contribute/style/hugo-shortcodes/index.md)
 
 ## `doc-contributor-tools/linkchecker`
 
-- ⏳ `README.md`
+- ✅ [README.md](md/doc-contributor-tools/linkchecker/README.md)
 
 ## `home`
 
-- ⏳ `_index.md`
-- ⏳ `supported-doc-versions.md`
+- ✅ [_index.md](md/home/_index.md)
+- ✅ [supported-doc-versions.md](md/home/supported-doc-versions.md)
 
 ## `reference`
 
-- ⏳ `_index.md`
+- ✅ [_index.md](md/reference/_index.md)
 - ⏳ `deprecation-policy.md`
 
 ## `reference/access-authn-authz`
 
-- ⏳ `_index.md`
-- ⏳ `abac.md`
+- ✅ [_index.md](md/reference/access-authn-authz/_index.md)
+- ✅ [abac.md](md/reference/access-authn-authz/abac.md)
 - ⏳ `admission-controllers.md`
 - ⏳ `authentication.md`
 - ⏳ `authorization.md`

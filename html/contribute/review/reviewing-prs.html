@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>بازبینی درخواست‌های ادغام (Pull Request) | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">contribute / review</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">بازبینی درخواست‌های ادغام (Pull Request)</h1><!-- overview -->
+<p dir="rtl">هر کسی می‌تواند یک pull request مربوط به مستندات را بازبینی کند. برای مشاهده‌ی pull requestهای باز، به بخش <a href="https://github.com/kubernetes/website/pulls" target="_blank" rel="noopener">pull requests</a> در مخزن وب‌سایت کوبرنتیز مراجعه کنید.</p>
+<p dir="rtl">بازبینی pull requestهای مستندات راهی عالی برای معرفی خود به جامعه‌ی کوبرنتیز است. این کار به شما کمک می‌کند با پایگاه کد آشنا شوید و اعتماد سایر مشارکت‌کنندگان را جلب کنید.</p>
+<p dir="rtl">پیش از بازبینی، بهتر است:</p>
+<ul>
+<li dir="rtl"><a href="../style/content-guide.html">راهنمای محتوا</a> و <a href="../style/style-guide.html">راهنمای سبک نگارش</a> را بخوانید تا بتوانید نظرهایی آگاهانه ارائه دهید.</li>
+<li dir="rtl">با <a href="../participate/roles-and-responsibilities.html">نقش‌ها و مسئولیت‌های</a> مختلف در جامعه‌ی مستندات کوبرنتیز آشنا شوید.</li>
+</ul>
+<!-- body -->
+<h2 id="پیش-از-شروع-before-you-begin" dir="rtl">پیش از شروع {#before-you-begin}</h2>
+<p dir="rtl">پیش از آغاز یک بازبینی:</p>
+<ul>
+<li dir="rtl"><a href="https://github.com/cncf/foundation/blob/main/code-of-conduct.md" target="_blank" rel="noopener">منشور رفتار CNCF</a> را بخوانید و مطمئن شوید که همواره به آن پایبند هستید.</li>
+<li dir="rtl">مؤدب، با ملاحظه و یاری‌رسان باشید.</li>
+<li dir="rtl">علاوه بر تغییرات، درباره‌ی جنبه‌های مثبت PRها نیز نظر بدهید.</li>
+<li dir="rtl">همدل باشید و به این نکته توجه داشته باشید که بازبینی شما چگونه دریافت خواهد شد.</li>
+<li dir="rtl">حسن نیت را فرض کنید و برای روشن‌شدن ابهامات پرسش بپرسید.</li>
+<li dir="rtl">مشارکت‌کنندگان باتجربه می‌توانند با مشارکت‌کنندگان جدیدی که کارشان نیازمند تغییرات گسترده است، همکاری مشترک داشته باشند.</li>
+</ul>
+<h2 id="فرایند-بازبینی-review-process" dir="rtl">فرایند بازبینی {#review-process}</h2>
+<p dir="rtl">به‌طور کلی، pull requestها را از نظر محتوا و سبک نگارش به زبان انگلیسی بازبینی کنید. شکل ۱ مراحل فرایند بازبینی را نشان می‌دهد. جزئیات هر مرحله در ادامه آمده است.</p>
+<!-- See https://github.com/kubernetes/website/issues/28808 for live-editor URL to this figure -->
+<!-- You can also cut/paste the mermaid code into the live editor at https://mermaid-js.github.io/mermaid-live-editor to play around with it -->
+<p dir="ltr" class="ltr">flowchart LR
+subgraph fourth[Start review]
+direction TB
+S[ ] -.-
+M[add comments] --&gt; N[review changes]
+N --&gt; O[new contributors should<br>choose Comment]
+end
+subgraph third[Select PR]
+direction TB
+T[ ] -.-
+J[read description<br>and comments]--&gt; K[preview changes in<br>Netlify preview build]
+end</p>
+<p dir="ltr" class="ltr">A[Review open PR list]--&gt; B[Filter open PRs<br>by label]
+B --&gt; third --&gt; fourth</p>
+<p dir="ltr" class="ltr">classDef grey fill:#dddddd,stroke:#ffffff,stroke-width:px,color:#000000, font-size:15px;
+classDef white fill:#ffffff,stroke:#000,stroke-width:px,color:#000,font-weight:bold
+classDef spacewhite fill:#ffffff,stroke:#fff,stroke-width:0px,color:#000
+class A,B,J,K,M,N,O grey
+class S,T spacewhite
+class third,fourth white</p>
+<p dir="rtl">شکل ۱. مراحل فرایند بازبینی.</p>
+<ol>
+<li dir="rtl">
+<p dir="rtl">به نشانی <a href="https://github.com/kubernetes/website/pulls" target="_blank" rel="noopener">https://github.com/kubernetes/website/pulls</a> بروید. فهرستی از همه‌ی pull requestهای باز برای وب‌سایت و مستندات کوبرنتیز را مشاهده می‌کنید.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">PRهای باز را با استفاده از یک یا همه‌ی برچسب‌های زیر فیلتر کنید:</p>
+<ul>
+<li dir="rtl"><code dir="ltr">cncf-cla: yes</code> (توصیه‌شده): PRهایی که مشارکت‌کنندگانی ارسال کرده‌اند که CLA را امضا نکرده‌اند، قابل ادغام نیستند. برای اطلاعات بیشتر، <a href="../new-content/index.html#sign-the-cla">امضای CLA</a> را ببینید.</li>
+<li dir="rtl"><code dir="ltr">language/en</code> (توصیه‌شده): فقط PRهای زبان انگلیسی را فیلتر می‌کند.</li>
+<li dir="rtl"><code dir="ltr">size/&lt;size&gt;</code>: PRهایی با اندازه‌ی مشخص را فیلتر می‌کند. اگر تازه‌کار هستید، با PRهای کوچک‌تر شروع کنید.</li>
+</ul>
+<p dir="rtl">علاوه بر این، مطمئن شوید که PR به‌عنوان کار در دست انجام علامت‌گذاری نشده باشد. PRهایی که برچسب <code dir="ltr">work in progress</code> دارند هنوز آماده‌ی بازبینی نیستند.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">پس از انتخاب یک PR برای بازبینی، با روش‌های زیر تغییرات را درک کنید:</p>
+<ul>
+<li dir="rtl">توضیحات PR را بخوانید تا تغییرات انجام‌شده را بفهمید و هر issue پیوندخورده را نیز مطالعه کنید</li>
+<li dir="rtl">نظرهای سایر بازبین‌ها را بخوانید</li>
+<li dir="rtl">روی زبانه‌ی <strong>Files changed</strong> کلیک کنید تا فایل‌ها و خطوط تغییریافته را ببینید</li>
+<li dir="rtl">تغییرات را در نسخه‌ی پیش‌نمایش Netlify مشاهده کنید؛ برای این کار به بخش بررسی ساخت (build check) مربوط به PR در پایین زبانه‌ی <strong>Conversation</strong> بروید.
+در ادامه یک تصویر نمونه آمده است (این تصویر سایت دسکتاپ GitHub را نشان می‌دهد؛ اگر بازبینی را با تبلت یا گوشی هوشمند انجام می‌دهید، رابط وب GitHub کمی متفاوت است):</li>
+</ul>
+</li>
+</ol>
+<figure><img src="https://kubernetes.io/images/docs/github_netlify_deploy_preview.png" alt="GitHub pull request details including link to Netlify preview"><figcaption dir="ltr" class="ltr">GitHub pull request details including link to Netlify preview</figcaption></figure>
+<pre dir="ltr"><code dir="ltr"> برای باز کردن پیش‌نمایش، در فهرست بررسی‌ها (checks) روی پیوند **Details** در خط **deploy/netlify** کلیک کنید.
+</code></pre>
+<ol start="4">
+<li dir="rtl">
+<p dir="rtl">برای شروع بازبینی به زبانه‌ی <strong>Files changed</strong> بروید.</p>
+<ol>
+<li dir="rtl">روی نماد <code dir="ltr">+</code> کنار خطی که می‌خواهید درباره‌ی آن نظر بدهید کلیک کنید.</li>
+<li dir="rtl">نظرهای خود را درباره‌ی آن خط بنویسید و سپس روی <strong>Add single comment</strong> (اگر فقط یک نظر دارید) یا <strong>Start a review</strong> (اگر چند نظر دارید) کلیک کنید.</li>
+<li dir="rtl">پس از اتمام، در بالای صفحه روی <strong>Review changes</strong> کلیک کنید. در اینجا می‌توانید خلاصه‌ای از بازبینی خود را بنویسید (و چند نظر مثبت برای مشارکت‌کننده بگذارید!).
+لطفاً همواره گزینه‌ی "Comment" را استفاده کنید.</li>
+</ol>
+<ul>
+<li dir="rtl">
+<p dir="rtl">هنگام پایان بازبینی از کلیک روی دکمه‌ی "Request changes" خودداری کنید.
+اگر می‌خواهید پیش از اعمال برخی تغییرات بیشتر، از ادغام یک PR جلوگیری کنید، می‌توانید یک نظر "/hold" بگذارید.
+دلیل اعمال hold را ذکر کنید و در صورت تمایل، شرایطی را مشخص کنید که تحت آن، شما یا سایر بازبین‌ها می‌توانید hold را بردارید.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">هنگام پایان بازبینی از کلیک روی دکمه‌ی "Approve" خودداری کنید.
+در بیشتر موارد توصیه می‌شود یک نظر "/approve" بگذارید.</p>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="فهرست-بررسی-بازبینی-reviewing-checklist" dir="rtl">فهرست بررسی بازبینی {#reviewing-checklist}</h2>
+<p dir="rtl">هنگام بازبینی، موارد زیر را به‌عنوان نقطه‌ی شروع در نظر بگیرید.</p>
+<h3 id="زبان-و-دستور-زبان-language-and-grammar" dir="rtl">زبان و دستور زبان {#language-and-grammar}</h3>
+<ul>
+<li dir="rtl">آیا خطای آشکاری در زبان یا دستور زبان وجود دارد؟ آیا راه بهتری برای بیان مطلبی وجود دارد؟
+<ul>
+<li dir="rtl">بر زبان و دستور زبان بخش‌هایی از صفحه تمرکز کنید که نویسنده در حال تغییر آن‌هاست.
+مگر آنکه نویسنده آشکارا قصد به‌روزرسانی کل صفحه را داشته باشد، او الزامی به رفع همه‌ی مشکلات صفحه ندارد.</li>
+<li dir="rtl">وقتی یک PR صفحه‌ای موجود را به‌روزرسانی می‌کند، باید بر بازبینی بخش‌هایی از صفحه تمرکز کنید که در حال به‌روزرسانی هستند. آن محتوای تغییریافته باید از نظر درستی فنی و ویرایشی بازبینی شود.
+اگر در صفحه خطاهایی یافتید که ارتباط مستقیمی با موضوعی که نویسنده‌ی PR قصد رفع آن را دارد ندارند، باید آن‌ها را به‌عنوان یک issue جداگانه در نظر گرفت (ابتدا بررسی کنید که issue موجودی درباره‌ی این موضوع وجود نداشته باشد).</li>
+<li dir="rtl">مراقب pull requestهایی باشید که محتوا را <em>جابه‌جا</em> می‌کنند. اگر نویسنده‌ای صفحه‌ای را تغییر نام دهد یا دو صفحه را ادغام کند، ما (SIG Docs کوبرنتیز) معمولاً از او نمی‌خواهیم هر ایراد جزئی دستوری یا املایی را که می‌توانیم در آن محتوای جابه‌جاشده بیابیم برطرف کند.</li>
+</ul>
+</li>
+<li dir="rtl">آیا کلمات پیچیده یا قدیمی‌ای وجود دارد که بتوان آن‌ها را با واژه‌ای ساده‌تر جایگزین کرد؟</li>
+<li dir="rtl">آیا واژه، اصطلاح یا عبارتی به کار رفته است که بتوان آن را با جایگزینی غیرتبعیض‌آمیز عوض کرد؟</li>
+<li dir="rtl">آیا انتخاب واژه‌ها و نحوه‌ی بزرگ‌نویسی آن‌ها از <a href="../style/style-guide.html">راهنمای سبک نگارش</a> پیروی می‌کند؟</li>
+<li dir="rtl">آیا جمله‌های بلندی وجود دارد که بتوان آن‌ها را کوتاه‌تر یا کم‌پیچیده‌تر کرد؟</li>
+<li dir="rtl">آیا پاراگراف‌های طولانی‌ای وجود دارد که به‌صورت فهرست یا جدول بهتر عمل کنند؟</li>
+</ul>
+<h3 id="محتوا-content" dir="rtl">محتوا {#content}</h3>
+<ul>
+<li dir="rtl">آیا محتوای مشابه در جای دیگری از سایت کوبرنتیز وجود دارد؟</li>
+<li dir="rtl">آیا محتوا بیش از حد به مستندات بیرون از سایت، مستندات فروشنده‌های خاص یا مستندات غیرمتن‌باز پیوند می‌دهد؟</li>
+</ul>
+<h3 id="مستندات-documentation" dir="rtl">مستندات {#documentation}</h3>
+<p dir="rtl">چند بررسی که باید در نظر بگیرید:</p>
+<ul>
+<li dir="rtl">
+<p dir="rtl">آیا این PR عنوان صفحه، slug/alias یا پیوند لنگر (anchor) را تغییر داده یا حذف کرده است؟ اگر چنین است، آیا در نتیجه‌ی این PR پیوندهای شکسته‌ای ایجاد شده است؟ آیا گزینه‌ی دیگری، مانند تغییر عنوان صفحه بدون تغییر slug، وجود دارد؟</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">آیا PR یک صفحه‌ی جدید معرفی می‌کند؟ اگر چنین است:</p>
+<ul>
+<li dir="rtl">آیا صفحه از <a href="../style/page-content-types.html">نوع محتوای صفحه</a> و Hugo shortcodeهای مرتبط درست استفاده می‌کند؟</li>
+<li dir="rtl">آیا صفحه در ناوبری کناری بخش به‌درستی ظاهر می‌شود (یا اصلاً ظاهر می‌شود)؟</li>
+<li dir="rtl">آیا صفحه باید در فهرست <a href="../../home/index.html">صفحه‌ی اصلی مستندات</a> نمایش داده شود؟</li>
+</ul>
+</li>
+<li dir="rtl">
+<p dir="rtl">آیا تغییرات در پیش‌نمایش Netlify نمایش داده می‌شوند؟ به‌ویژه مراقب فهرست‌ها، بلوک‌های کد، جدول‌ها، یادداشت‌ها و تصاویر باشید.</p>
+</li>
+</ul>
+<h3 id="زیرساخت-وب-سایت-website-infrastructure" dir="rtl">زیرساخت وب‌سایت {#website-infrastructure}</h3>
+<p dir="rtl">برای تغییراتی که چارچوب وب‌سایت را شامل می‌شوند (مانند ارتقای Hugo یا به‌روزرسانی قالب Docsy)، بازبین‌ها باید از نویسنده‌ی PR بخواهند تأیید کند که سایت در حالت production بدون خطا ساخته می‌شود، یا خودشان این موضوع را بررسی کنند.
+این کار ضروری است، زیرا پیش‌نمایش‌های خودکار Netlify ممکن است خطاهای خاص تبدیل دارایی‌ها (asset) یا تفکیک مسیر را که فقط در یک ساخت کامل production رخ می‌دهند شناسایی نکنند.</p>
+<p dir="rtl">بازبین‌ها می‌توانند ساخت را با یکی از روش‌های زیر بررسی کنند:</p>
+<ul>
+<li dir="rtl"><strong>مبتنی بر کانتینر (توصیه‌شده):</strong> بدون نیاز به نصب Hugo روی سیستم محلی، یکسانی محیط را تضمین می‌کند.</li>
+</ul>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">هدف پیش‌فرض <code dir="ltr">container-serve</code> در حالت توسعه (development) اجرا می‌شود.
+برای ساختی معادل production، فایل <code dir="ltr">Makefile</code> را موقتاً ویرایش کنید و در هدف <code dir="ltr">container-serve</code>
+عبارت <code dir="ltr">--environment development</code> را به <code dir="ltr">--environment production</code> تغییر دهید، سپس اجرا کنید:</p>
+<pre dir="ltr"><code class="language-bash" dir="ltr">make container-image
+make container-serve
+</code></pre>
+</div>
+<ul>
+<li dir="rtl">
+<p dir="rtl"><strong>Hugo محلی از طریق Make:</strong> از هدف موجود در Makefile برای ساخت production استفاده می‌کند. توجه داشته باشید که این روش یک ساخت کامل انجام می‌دهد و از سرویس‌دهی سایت کندتر است.</p>
+<pre dir="ltr"><code class="language-bash" dir="ltr">make production-build
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl"><strong>دستور مستقیم Hugo:</strong> سریع‌ترین روش برای انجام ساخت production بدون سرویس‌دهی سایت.</p>
+<pre dir="ltr"><code class="language-bash" dir="ltr">hugo --gc --minify --templateMetrics --environment production
+</code></pre>
+</li>
+</ul>
+<h4 id="بررسی-خروجی-verify-the-output" dir="rtl">بررسی خروجی {#verify-the-output}</h4>
+<p dir="rtl">یک ساخت موفق، جدول خلاصه‌ای را نمایش می‌دهد:</p>
+<pre dir="ltr"><code class="language-text" dir="ltr">| EN  | ZH-CN | JA | ...
+---+------+-------+-----+
+Pages | 2601 | 2148 | 747 | ...
+
+Built in 95753 ms
+Environment: "production"
+</code></pre>
+<p dir="rtl">اگر ساخت با شکست مواجه شود، گزارش‌های ERROR صریحی خواهید دید؛
+شکستی مانند خطا در shortcode یا تبدیل دارایی ممکن است به این صورت باشد:</p>
+<pre dir="ltr"><code class="language-text" dir="ltr">ERROR render of "page" failed: "/src/layouts/shortcodes/cve-feed.html:3:14": 
+execute of template failed: template: shortcodes/cve-feed.html:3:14: 
+failed to transform "scss/main.scss" (text/x-scss): SCSS processing failed
+</code></pre>
+<p dir="rtl">پیش‌نمایش Netlify را بررسی کنید تا ببینید این شکست در سایت چگونه نمایش داده می‌شود.
+اگر ساخت production با شکست مواجه شود، PR نباید ادغام شود تا زمانی که نویسنده خطاهای تبدیل یا قالب را برطرف کند.</p>
+<h3 id="وبلاگ-blog" dir="rtl">وبلاگ {#blog}</h3>
+<p dir="rtl">دریافت بازخورد زودهنگام درباره‌ی نوشته‌های وبلاگ از طریق Google Doc یا HackMD مورد استقبال است. لطفاً در همان ابتدا از <a href="https://kubernetes.slack.com/archives/CJDHVD54J" target="_blank" rel="noopener">کانال Slack با نام #sig-docs-blog</a> نظرخواهی کنید.</p>
+<p dir="rtl">پیش از بازبینی PRهای وبلاگ، با <a href="../blog/guidelines.html">رهنمودهای وبلاگ</a> و همچنین <a href="https://kubernetes.io/docs/contribute/new-content/blogs-case-studies/" target="_blank">ارسال نوشته‌های وبلاگ و مطالعات موردی</a> آشنا باشید.</p>
+<p dir="rtl">اطمینان حاصل کنید که با مقاله‌های <a href="../blog/index.html#maintenance-evergreen">evergreen</a> و نحوه‌ی تشخیص evergreen بودن یک مقاله نیز آشنا هستید.</p>
+<p dir="rtl">مقاله‌های وبلاگ ممکن است شامل <a href="https://en.wikipedia.org/wiki/Direct_discourse" target="_blank" rel="noopener">نقل‌قول مستقیم</a> و <a href="https://en.wikipedia.org/wiki/Indirect_speech" target="_blank" rel="noopener">گفتار غیرمستقیم</a> باشند. از پیشنهاد بازنویسی هر مطلبی که به شخصی نسبت داده شده یا بخشی از یک گفت‌وگوی انجام‌شده است خودداری کنید، حتی اگر فکر می‌کنید دستور زبان گوینده‌ی اصلی درست نبوده است. در این موارد همچنین سعی کنید به نشانه‌گذاری پیشنهادی نویسنده‌ی مقاله احترام بگذارید، مگر آنکه آشکارا نادرست باشد.</p>
+<p dir="rtl">ما به‌عنوان یک پروژه، مقاله‌های وبلاگ را تنها زمانی به‌عنوان نگهداری‌شده علامت‌گذاری می‌کنیم (<code dir="ltr">evergreen: true</code> در front matter) که پروژه‌ی کوبرنتیز مایل باشد به نگهداری نامحدود آن‌ها متعهد شود.
+برخی مقاله‌های وبلاگ قطعاً شایسته‌ی این کار هستند و ما همواره اعلامیه‌های انتشار (release) را evergreen علامت‌گذاری می‌کنیم. اگر درباره‌ی نحوه‌ی بازبینی این موضوع مطمئن نیستید، با سایر مشارکت‌کنندگان مشورت کنید.</p>
+<p dir="rtl"><a href="../style/content-guide.html">راهنمای محتوا</a> بدون قید و شرط بر مقاله‌های وبلاگ و PRهایی که آن‌ها را اضافه می‌کنند اعمال می‌شود. به یاد داشته باشید که برخی محدودیت‌های موجود در این راهنما تصریح می‌کنند که فقط به مستندات مربوط هستند؛ این محدودیت‌ها بر مقاله‌های وبلاگ اعمال نمی‌شوند.</p>
+<p dir="rtl">بررسی کنید که منبع Markdown از <a href="../style/page-content-types.html">نوع محتوای صفحه</a> و/یا <code dir="ltr">layout</code> درست استفاده می‌کند.</p>
+<h3 id="سایر-موارد-other" dir="rtl">سایر موارد {#other}</h3>
+<p dir="rtl">مراقب <a href="https://www.kubernetes.dev/docs/guide/pull-requests/#trivial-edits" target="_blank" rel="noopener">ویرایش‌های جزئی (trivial edits)</a> باشید؛
+اگر تغییری را دیدید که فکر می‌کنید ویرایش جزئی است، لطفاً به این سیاست اشاره کنید
+(پذیرش تغییر همچنان در صورتی که واقعاً بهبودی باشد، اشکالی ندارد).</p>
+<p dir="rtl">نویسندگانی را که اصلاحات فاصله‌گذاری (whitespace) انجام می‌دهند تشویق کنید
+این کار را در نخستین commit از PR خود انجام دهند و سپس سایر تغییرات را روی آن اضافه کنند. این کار
+هم ادغام و هم بازبینی را آسان‌تر می‌کند. به‌ویژه مراقب تغییر جزئی‌ای باشید که
+در یک commit واحد همراه با حجم زیادی پاک‌سازی فاصله‌گذاری رخ می‌دهد
+(و اگر چنین چیزی دیدید، نویسنده را به اصلاح آن تشویق کنید).</p>
+<p dir="rtl">به‌عنوان بازبین، اگر مشکلات کوچکی در یک PR شناسایی کردید که برای معنا ضروری نیستند،
+مانند غلط‌های تایپی یا فاصله‌گذاری نادرست، نظرهای خود را با <code dir="ltr">nit:</code> آغاز کنید.
+این کار به نویسنده می‌فهماند که این بخش از بازخورد شما حیاتی نیست.</p>
+<p dir="rtl">اگر در حال بررسی یک pull request برای تأیید هستید و تمام بازخوردهای باقی‌مانده
+به‌عنوان nit علامت‌گذاری شده‌اند، می‌توانید به هر حال PR را ادغام کنید. در این صورت، اغلب مفید است که
+درباره‌ی nitهای باقی‌مانده یک issue باز کنید. بررسی کنید که آیا می‌توانید الزامات
+علامت‌گذاری آن issue جدید را به‌عنوان <a href="https://www.kubernetes.dev/docs/guide/help-wanted/#good-first-issue" target="_blank" rel="noopener">Good First Issue</a> برآورده کنید؛ اگر می‌توانید، این‌ها منبع خوبی هستند.</p>
+</main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#پیش-از-شروع-before-you-begin">پیش از شروع {#before-you-begin}</a><a class="l2" href="#فرایند-بازبینی-review-process">فرایند بازبینی {#review-process}</a><a class="l2" href="#فهرست-بررسی-بازبینی-reviewing-checklist">فهرست بررسی بازبینی {#reviewing-checklist}</a><a class="l3" href="#زبان-و-دستور-زبان-language-and-grammar">زبان و دستور زبان {#language-and-grammar}</a><a class="l3" href="#محتوا-content">محتوا {#content}</a><a class="l3" href="#مستندات-documentation">مستندات {#documentation}</a><a class="l3" href="#زیرساخت-وب-سایت-website-infrastructure">زیرساخت وب‌سایت {#website-infrastructure}</a><a class="l3" href="#وبلاگ-blog">وبلاگ {#blog}</a><a class="l3" href="#سایر-موارد-other">سایر موارد {#other}</a></nav>
+</div>
+</body>
+</html>
