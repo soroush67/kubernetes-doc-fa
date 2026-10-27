@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-313 از 1722 صفحه
+328 از 1722 صفحه
 
 
 ## `.`
@@ -448,22 +448,22 @@
 - ✅ [CSIMigrationAzureFileComplete.md](md/reference/command-line-tools-reference/feature-gates/CSIMigrationAzureFileComplete.md)
 - ✅ [CSIMigrationGCE.md](md/reference/command-line-tools-reference/feature-gates/CSIMigrationGCE.md)
 - ✅ [CSIMigrationGCEComplete.md](md/reference/command-line-tools-reference/feature-gates/CSIMigrationGCEComplete.md)
-- ⏳ `CSIMigrationOpenStack.md`
+- ✅ [CSIMigrationOpenStack.md](md/reference/command-line-tools-reference/feature-gates/CSIMigrationOpenStack.md)
 - ✅ [CSIMigrationOpenStackComplete.md](md/reference/command-line-tools-reference/feature-gates/CSIMigrationOpenStackComplete.md)
-- ⏳ `CSIMigrationPortworx.md`
-- ⏳ `CSIMigrationRBD.md`
-- ⏳ `CSIMigrationvSphere.md`
-- ⏳ `CSIMigrationvSphereComplete.md`
-- ⏳ `CSINodeExpandSecret.md`
-- ⏳ `CSINodeInfo.md`
-- ⏳ `CSIPersistentVolume.md`
-- ⏳ `CSIServiceAccountToken.md`
-- ⏳ `CSIServiceAccountTokenSecrets.md`
-- ⏳ `CSIStorageCapacity.md`
-- ⏳ `CSIVolumeFSGroupPolicy.md`
-- ⏳ `CSIVolumeHealth.md`
-- ⏳ `CSRDuration.md`
-- ⏳ `ChangeContainerStatusOnKubeletRestart.md`
+- ✅ [CSIMigrationPortworx.md](md/reference/command-line-tools-reference/feature-gates/CSIMigrationPortworx.md)
+- ✅ [CSIMigrationRBD.md](md/reference/command-line-tools-reference/feature-gates/CSIMigrationRBD.md)
+- ✅ [CSIMigrationvSphere.md](md/reference/command-line-tools-reference/feature-gates/CSIMigrationvSphere.md)
+- ✅ [CSIMigrationvSphereComplete.md](md/reference/command-line-tools-reference/feature-gates/CSIMigrationvSphereComplete.md)
+- ✅ [CSINodeExpandSecret.md](md/reference/command-line-tools-reference/feature-gates/CSINodeExpandSecret.md)
+- ✅ [CSINodeInfo.md](md/reference/command-line-tools-reference/feature-gates/CSINodeInfo.md)
+- ✅ [CSIPersistentVolume.md](md/reference/command-line-tools-reference/feature-gates/CSIPersistentVolume.md)
+- ✅ [CSIServiceAccountToken.md](md/reference/command-line-tools-reference/feature-gates/CSIServiceAccountToken.md)
+- ✅ [CSIServiceAccountTokenSecrets.md](md/reference/command-line-tools-reference/feature-gates/CSIServiceAccountTokenSecrets.md)
+- ✅ [CSIStorageCapacity.md](md/reference/command-line-tools-reference/feature-gates/CSIStorageCapacity.md)
+- ✅ [CSIVolumeFSGroupPolicy.md](md/reference/command-line-tools-reference/feature-gates/CSIVolumeFSGroupPolicy.md)
+- ✅ [CSIVolumeHealth.md](md/reference/command-line-tools-reference/feature-gates/CSIVolumeHealth.md)
+- ✅ [CSRDuration.md](md/reference/command-line-tools-reference/feature-gates/CSRDuration.md)
+- ✅ [ChangeContainerStatusOnKubeletRestart.md](md/reference/command-line-tools-reference/feature-gates/ChangeContainerStatusOnKubeletRestart.md)
 - ⏳ `ClearingNominatedNodeNameAfterBinding.md`
 - ⏳ `CloudControllerManagerWatchBasedRoutesReconciliation.md`
 - ⏳ `CloudControllerManagerWebhook.md`
