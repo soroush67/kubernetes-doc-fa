@@ -8,8 +8,8 @@
 
 | | |
 |---|---|
-| پیشرفت (بر اساس کلمات) | **12.5٪** |
-| صفحات ترجمه‌شده | 178 از 1722 |
+| پیشرفت (بر اساس کلمات) | **13.5٪** |
+| صفحات ترجمه‌شده | 193 از 1722 |
 | صفحات دارای ایراد ساختاری | 1 |
 | نسخه‌ی منبع انگلیسی | `ed70e311737a` |
 
@@ -68,7 +68,7 @@ cd kubernetes-doc-fa
 | بخش | ترجمه‌شده | کل |
 |---|---|---|
 | `(root)` | 1 | 2 |
-| `concepts` | 168 | 187 |
+| `concepts` | 183 | 187 |
 | `contribute` | 9 | 44 |
 | `doc-contributor-tools` | 0 | 1 |
 | `home` | 0 | 2 |
@@ -91,26 +91,26 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [concepts/workloads/pods/init-containers.md](md/concepts/workloads/pods/init-containers.md) — 2026-10-27T16:02:12+03:30
+- [concepts/workloads/pods/ephemeral-containers.md](md/concepts/workloads/pods/ephemeral-containers.md) — 2026-10-27T16:01:12+03:30
+- [concepts/workloads/pods/downward-api.md](md/concepts/workloads/pods/downward-api.md) — 2026-10-27T16:00:58+03:30
+- [concepts/storage/volumes.md](md/concepts/storage/volumes.md) — 2026-10-27T16:00:37+03:30
+- [concepts/workloads/autoscaling.md](md/concepts/workloads/autoscaling.md) — 2026-10-27T15:59:47+03:30
+- [concepts/workloads/_index.md](md/concepts/workloads/_index.md) — 2026-10-27T15:59:14+03:30
+- [concepts/windows/user-guide.md](md/concepts/windows/user-guide.md) — 2026-10-27T15:58:46+03:30
+- [concepts/windows/intro.md](md/concepts/windows/intro.md) — 2026-10-27T15:57:46+03:30
+- [concepts/windows/_index.md](md/concepts/windows/_index.md) — 2026-10-27T15:56:31+03:30
+- [concepts/storage/windows-storage.md](md/concepts/storage/windows-storage.md) — 2026-10-27T15:56:22+03:30
+- [concepts/storage/ephemeral-volumes.md](md/concepts/storage/ephemeral-volumes.md) — 2026-10-27T15:56:06+03:30
+- [concepts/storage/ephemeral-storage.md](md/concepts/storage/ephemeral-storage.md) — 2026-10-27T15:56:05+03:30
+- [concepts/storage/dynamic-provisioning.md](md/concepts/storage/dynamic-provisioning.md) — 2026-10-27T15:55:20+03:30
+- [concepts/services-networking/windows-networking.md](md/concepts/services-networking/windows-networking.md) — 2026-10-27T15:55:19+03:30
+- [concepts/storage/_index.md](md/concepts/storage/_index.md) — 2026-10-27T15:54:58+03:30
 - [concepts/services-networking/topology-aware-routing.md](md/concepts/services-networking/topology-aware-routing.md) — 2026-10-27T15:54:50+03:30
 - [concepts/services-networking/_index.md](md/concepts/services-networking/_index.md) — 2026-10-27T15:54:25+03:30
 - [concepts/security/service-accounts.md](md/concepts/security/service-accounts.md) — 2026-10-27T15:54:15+03:30
 - [concepts/security/windows-security.md](md/concepts/security/windows-security.md) — 2026-10-27T15:53:59+03:30
 - [concepts/security/security-checklist.md](md/concepts/security/security-checklist.md) — 2026-10-27T15:53:48+03:30
-- [concepts/security/pod-security-standards.md](md/concepts/security/pod-security-standards.md) — 2026-10-27T15:53:16+03:30
-- [concepts/security/secrets-good-practices.md](md/concepts/security/secrets-good-practices.md) — 2026-10-27T15:52:25+03:30
-- [concepts/security/rbac-good-practices.md](md/concepts/security/rbac-good-practices.md) — 2026-10-27T15:52:01+03:30
-- [concepts/scheduling-eviction/scheduling-framework.md](md/concepts/scheduling-eviction/scheduling-framework.md) — 2026-10-27T15:51:14+03:30
-- [concepts/scheduling-eviction/scheduler-perf-tuning.md](md/concepts/scheduling-eviction/scheduler-perf-tuning.md) — 2026-10-27T15:50:42+03:30
-- [concepts/scheduling-eviction/resource-bin-packing.md](md/concepts/scheduling-eviction/resource-bin-packing.md) — 2026-10-27T15:50:22+03:30
-- [concepts/scheduling-eviction/running-multiple-schedulers.md](md/concepts/scheduling-eviction/running-multiple-schedulers.md) — 2026-10-27T15:50:07+03:30
-- [concepts/resource-management/dynamic-resource-allocation/dra-observability.md](md/concepts/resource-management/dynamic-resource-allocation/dra-observability.md) — 2026-10-27T15:49:51+03:30
-- [concepts/scheduling-eviction/podgroup-scheduling.md](md/concepts/scheduling-eviction/podgroup-scheduling.md) — 2026-10-27T15:49:51+03:30
-- [concepts/resource-management/dynamic-resource-allocation/dra-api.md](md/concepts/resource-management/dynamic-resource-allocation/dra-api.md) — 2026-10-27T15:48:47+03:30
-- [concepts/resource-management/dynamic-resource-allocation/dra-features.md](md/concepts/resource-management/dynamic-resource-allocation/dra-features.md) — 2026-10-27T15:48:12+03:30
-- [concepts/extend-kubernetes/_index.md](md/concepts/extend-kubernetes/_index.md) — 2026-10-27T15:47:06+03:30
-- [concepts/extend-kubernetes/api-extension/apiserver-aggregation.md](md/concepts/extend-kubernetes/api-extension/apiserver-aggregation.md) — 2026-10-27T15:47:04+03:30
-- [concepts/extend-kubernetes/api-extension/_index.md](md/concepts/extend-kubernetes/api-extension/_index.md) — 2026-10-27T15:46:50+03:30
-- [concepts/containers/images.md](md/concepts/containers/images.md) — 2026-10-27T15:46:41+03:30
 
 </div>
 

@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Downward API | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body>
+<header class="top"><a href="../../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">concepts / workloads / pods</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="ltr" class="ltr">Downward API</h1><p class="page-meta" dir="rtl">دو روش برای در اختیار قرار دادن فیلدهای Pod و کانتینر به یک کانتینر در حال اجرا وجود دارد: متغیرهای محیطی، و فایل‌هایی که توسط یک نوع حجم (volume) ویژه پر می‌شوند. این دو روش در کنار هم برای در اختیار قرار دادن فیلدهای Pod و کانتینر، downward API نامیده می‌شوند.</p><!-- overview -->
+<p dir="rtl">گاهی لازم است یک کانتینر اطلاعاتی درباره خودش داشته باشد، بدون آن‌که بیش از حد به کوبرنتیز وابسته باشد. <em>downward API</em> به کانتینرها امکان می‌دهد بدون استفاده از کلاینت کوبرنتیز یا API server، اطلاعات مربوط به خودشان یا کلاستر را دریافت کنند.</p>
+<p dir="rtl">برای مثال، یک برنامه موجود را در نظر بگیرید که فرض می‌کند یک متغیر محیطی شناخته‌شده و مشخص، شناسه‌ای یکتا را نگهداری می‌کند. یک راه این است که برنامه را در یک لایه واسط بپیچید، اما این کار خسته‌کننده و مستعد خطاست و با هدف وابستگی کم (low coupling) در تضاد است. گزینه بهتر این است که از نام Pod به‌عنوان شناسه استفاده شود و نام Pod درون همان متغیر محیطی شناخته‌شده تزریق گردد.</p>
+<p dir="rtl">در کوبرنتیز دو روش برای در اختیار قرار دادن فیلدهای Pod و کانتینر به یک کانتینر در حال اجرا وجود دارد:</p>
+<ul>
+<li dir="rtl">به‌صورت <a href="https://kubernetes.io/docs/tasks/inject-data-application/environment-variable-expose-pod-information/" target="_blank">متغیرهای محیطی</a></li>
+<li dir="rtl">به‌صورت <a href="https://kubernetes.io/docs/tasks/inject-data-application/downward-api-volume-expose-pod-information/" target="_blank">فایل‌هایی در یک حجم <code dir="ltr">downwardAPI</code></a></li>
+</ul>
+<p dir="rtl">این دو روش در کنار هم برای در اختیار قرار دادن فیلدهای Pod و کانتینر، <em>downward API</em> نامیده می‌شوند.</p>
+<!-- body -->
+<h2 id="فیلدهای-در-دسترس-available-fields" dir="rtl">فیلدهای در دسترس {#available-fields}</h2>
+<p dir="rtl">تنها برخی از فیلدهای API کوبرنتیز از طریق downward API در دسترس هستند. این بخش فهرست فیلدهایی را که می‌توانید در دسترس قرار دهید ارائه می‌کند.</p>
+<p dir="rtl">می‌توانید اطلاعات فیلدهای در دسترس در سطح Pod را با استفاده از <code dir="ltr">fieldRef</code> منتقل کنید.
+در سطح API، بخش <code dir="ltr">spec</code> یک Pod همیشه دست‌کم یک <a href="https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#Container" target="_blank">Container</a> تعریف می‌کند.
+می‌توانید اطلاعات فیلدهای در دسترس در سطح کانتینر را با استفاده از <code dir="ltr">resourceFieldRef</code> منتقل کنید.</p>
+<h3 id="اطلاعات-در-دسترس-از-طریق-fieldref-downwardapi-fieldref" dir="rtl">اطلاعات در دسترس از طریق <code dir="ltr">fieldRef</code> {#downwardapi-fieldRef}</h3>
+<p dir="rtl">برخی از فیلدهای سطح Pod را می‌توانید یا به‌صورت متغیر محیطی یا با استفاده از یک حجم <code dir="ltr">downwardAPI</code> در اختیار کانتینر قرار دهید. فیلدهای در دسترس از طریق هر دو سازوکار عبارت‌اند از:</p>
+<dl>
+<dt dir="ltr" class="ltr"><code dir="ltr">metadata.name</code></dt>
+<dd dir="rtl">نام pod</dd>
+<dt dir="ltr" class="ltr"><code dir="ltr">metadata.namespace</code></dt>
+<dd dir="rtl"><span class="term" title="namespace">فضای نام</span> (namespace) مربوط به pod</dd>
+<dt dir="ltr" class="ltr"><code dir="ltr">metadata.uid</code></dt>
+<dd dir="rtl">شناسه یکتای pod</dd>
+<dt dir="ltr" class="ltr"><code dir="ltr">metadata.annotations['&lt;KEY&gt;']</code></dt>
+<dd dir="rtl">مقدار <span class="term" title="annotation">حاشیه‌نویسی</span> (annotation) مربوط به pod با نام <code dir="ltr">&lt;KEY&gt;</code> (برای مثال، <code dir="ltr">metadata.annotations['myannotation']</code>)</dd>
+<dt dir="ltr" class="ltr"><code dir="ltr">metadata.labels['&lt;KEY&gt;']</code></dt>
+<dd dir="rtl">مقدار متنی <span class="term" title="label">برچسب</span> (label) مربوط به pod با نام <code dir="ltr">&lt;KEY&gt;</code> (برای مثال، <code dir="ltr">metadata.labels['mylabel']</code>)</dd>
+</dl>
+<p dir="rtl">اطلاعات زیر از طریق متغیرهای محیطی در دسترس است
+<strong>اما نه به‌عنوان fieldRef در حجم downwardAPI</strong>:</p>
+<dl>
+<dt dir="ltr" class="ltr"><code dir="ltr">spec.serviceAccountName</code></dt>
+<dd dir="rtl">نام <span class="term" title="service-account">service account</span> مربوط به pod</dd>
+<dt dir="ltr" class="ltr"><code dir="ltr">spec.nodeName</code></dt>
+<dd dir="rtl">نام <span class="term" title="node">نود</span>ی که Pod روی آن در حال اجراست</dd>
+<dt dir="ltr" class="ltr"><code dir="ltr">status.hostIP</code></dt>
+<dd dir="rtl">آدرس IP اصلی نودی که Pod به آن تخصیص داده شده است</dd>
+<dt dir="ltr" class="ltr"><code dir="ltr">status.hostIPs</code></dt>
+<dd dir="rtl">آدرس‌های IP، نسخه dual-stack مربوط به <code dir="ltr">status.hostIP</code> هستند و اولین آدرس همیشه با <code dir="ltr">status.hostIP</code> یکسان است.</dd>
+<dt dir="ltr" class="ltr"><code dir="ltr">status.podIP</code></dt>
+<dd dir="rtl">آدرس IP اصلی pod (معمولاً آدرس IPv4 آن)</dd>
+<dt dir="ltr" class="ltr"><code dir="ltr">status.podIPs</code></dt>
+<dd dir="rtl">آدرس‌های IP، نسخه dual-stack مربوط به <code dir="ltr">status.podIP</code> هستند و اولین آدرس همیشه با <code dir="ltr">status.podIP</code> یکسان است</dd>
+</dl>
+<p dir="rtl">اطلاعات زیر از طریق <code dir="ltr">fieldRef</code> در یک حجم <code dir="ltr">downwardAPI</code> در دسترس است،
+<strong>اما نه به‌صورت متغیر محیطی</strong>:</p>
+<dl>
+<dt dir="ltr" class="ltr"><code dir="ltr">metadata.labels</code></dt>
+<dd dir="rtl">تمام برچسب‌های pod، با قالب <code dir="ltr">label-key="escaped-label-value"</code> و هر برچسب در یک خط</dd>
+<dt dir="ltr" class="ltr"><code dir="ltr">metadata.annotations</code></dt>
+<dd dir="rtl">تمام حاشیه‌نویسی‌های pod، با قالب <code dir="ltr">annotation-key="escaped-annotation-value"</code> و هر حاشیه‌نویسی در یک خط</dd>
+</dl>
+<h3 id="اطلاعات-در-دسترس-از-طریق-resourcefieldref-downwardapi-resourcefieldref" dir="rtl">اطلاعات در دسترس از طریق <code dir="ltr">resourceFieldRef</code> {#downwardapi-resourceFieldRef}</h3>
+<p dir="rtl">این فیلدهای سطح کانتینر به شما امکان می‌دهند اطلاعاتی درباره
+<a href="../../configuration/manage-resources-containers.html#requests-and-limits">درخواست‌ها و محدودیت‌ها (requests and limits)</a>
+برای منابعی مانند CPU و حافظه ارائه دهید.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
+<p dir="rtl">منابع CPU و حافظه کانتینر را می‌توان در زمان اجرای کانتینر تغییر اندازه داد.
+در این صورت، حجم downward API به‌روزرسانی می‌شود،
+اما متغیرهای محیطی تا زمانی که کانتینر راه‌اندازی مجدد نشود به‌روزرسانی نخواهند شد.
+برای جزئیات بیشتر، <a href="https://kubernetes.io/docs/tasks/configure-pod-container/resize-container-resources/" target="_blank">تغییر اندازه منابع CPU و حافظه تخصیص‌یافته به کانتینرها</a> را ببینید.</p>
+</div>
+<dl>
+<dt dir="ltr" class="ltr"><code dir="ltr">resource: limits.cpu</code></dt>
+<dd dir="rtl">محدودیت CPU یک کانتینر</dd>
+<dt dir="ltr" class="ltr"><code dir="ltr">resource: requests.cpu</code></dt>
+<dd dir="rtl">درخواست CPU یک کانتینر</dd>
+<dt dir="ltr" class="ltr"><code dir="ltr">resource: limits.memory</code></dt>
+<dd dir="rtl">محدودیت حافظه یک کانتینر</dd>
+<dt dir="ltr" class="ltr"><code dir="ltr">resource: requests.memory</code></dt>
+<dd dir="rtl">درخواست حافظه یک کانتینر</dd>
+<dt dir="ltr" class="ltr"><code dir="ltr">resource: limits.hugepages-*</code></dt>
+<dd dir="rtl">محدودیت hugepages یک کانتینر</dd>
+<dt dir="ltr" class="ltr"><code dir="ltr">resource: requests.hugepages-*</code></dt>
+<dd dir="rtl">درخواست hugepages یک کانتینر</dd>
+<dt dir="ltr" class="ltr"><code dir="ltr">resource: limits.ephemeral-storage</code></dt>
+<dd dir="rtl">محدودیت ephemeral-storage یک کانتینر</dd>
+<dt dir="ltr" class="ltr"><code dir="ltr">resource: requests.ephemeral-storage</code></dt>
+<dd dir="rtl">درخواست ephemeral-storage یک کانتینر</dd>
+</dl>
+<h4 id="اطلاعات-جایگزین-برای-محدودیت-منابع-fallback-information-for-resource-limits" dir="rtl">اطلاعات جایگزین برای محدودیت منابع {#fallback-information-for-resource-limits}</h4>
+<p dir="rtl">اگر محدودیت‌های CPU و حافظه برای یک کانتینر مشخص نشده باشند و شما بخواهید با استفاده از downward API این اطلاعات را در دسترس قرار دهید، kubelet به‌طور پیش‌فرض بیشینه مقدار قابل تخصیص (allocatable) برای CPU و حافظه را بر پایه محاسبه <a href="https://kubernetes.io/docs/tasks/administer-cluster/reserve-compute-resources/#node-allocatable" target="_blank">منابع قابل تخصیص نود (node allocatable)</a> در اختیار قرار می‌دهد.</p>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<p dir="rtl">می‌توانید درباره <a href="../../storage/volumes.html#downwardapi">حجم‌های <code dir="ltr">downwardAPI</code></a> مطالعه کنید.</p>
+<p dir="rtl">می‌توانید با استفاده از downward API اطلاعات سطح کانتینر یا Pod را در دسترس قرار دهید:</p>
+<ul>
+<li dir="rtl">به‌صورت <a href="https://kubernetes.io/docs/tasks/inject-data-application/environment-variable-expose-pod-information/" target="_blank">متغیرهای محیطی</a></li>
+<li dir="rtl">به‌صورت <a href="https://kubernetes.io/docs/tasks/inject-data-application/downward-api-volume-expose-pod-information/" target="_blank">فایل‌هایی در حجم <code dir="ltr">downwardAPI</code></a></li>
+</ul>
+</main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#فیلدهای-در-دسترس-available-fields">فیلدهای در دسترس {#available-fields}</a><a class="l3" href="#اطلاعات-در-دسترس-از-طریق-fieldref-downwardapi-fieldref">اطلاعات در دسترس از طریق fieldRef {#downwardapi-fieldRef}</a><a class="l3" href="#اطلاعات-در-دسترس-از-طریق-resourcefieldref-downwardapi-resourcefieldref">اطلاعات در دسترس از طریق resourceFieldRef {#downwardapi-resourceFieldRef}</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>

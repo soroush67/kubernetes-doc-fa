@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>راهنمای اجرای کانتینرهای ویندوزی در کوبرنتیز | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">concepts / windows</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">راهنمای اجرای کانتینرهای ویندوزی در کوبرنتیز</h1><!-- overview -->
+<p dir="rtl">این صفحه مروری گام‌به‌گام بر مراحلی ارائه می‌کند که می‌توانید برای اجرای
+کانتینرهای ویندوزی با استفاده از کوبرنتیز دنبال کنید.
+این صفحه همچنین برخی قابلیت‌های ویژه‌ی ویندوز در کوبرنتیز را برجسته می‌کند.</p>
+<p dir="rtl">توجه به این نکته مهم است که ایجاد و استقرار سرویس‌ها و بارهای کاری در کوبرنتیز
+برای کانتینرهای لینوکسی و ویندوزی تقریباً به یک شکل انجام می‌شود.
+<a href="https://kubernetes.io/docs/reference/kubectl/" target="_blank">دستورهای kubectl</a> برای تعامل با کلاستر یکسان هستند.
+مثال‌های این صفحه برای آغاز سریع تجربه‌ی شما با کانتینرهای ویندوزی ارائه شده‌اند.</p>
+<!-- body -->
+<h2 id="اهداف-objectives" dir="rtl">اهداف {#objectives}</h2>
+<p dir="rtl">یک استقرار (deployment) نمونه را برای اجرای کانتینرهای ویندوزی روی یک نود ویندوزی پیکربندی کنید.</p>
+<h2 id="پیش-از-شروع" dir="rtl">پیش از شروع</h2>
+<p dir="rtl">شما باید از قبل به یک کلاستر کوبرنتیز دسترسی داشته باشید که شامل یک
+نود کارگر (worker) با سیستم‌عامل Windows Server باشد.</p>
+<h2 id="شروع-کار-استقرار-یک-بار-کاری-ویندوزی" dir="rtl">شروع کار: استقرار یک بار کاری ویندوزی</h2>
+<p dir="rtl">فایل YAML نمونه‌ی زیر یک برنامه‌ی وب‌سرور ساده را که درون یک کانتینر ویندوزی اجرا می‌شود، مستقر می‌کند.</p>
+<p dir="rtl">یک مانیفست با نام <code dir="ltr">win-webserver.yaml</code> و با محتوای زیر ایجاد کنید:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">---
+apiVersion: v1
+kind: Service
+metadata:
+  name: win-webserver
+  labels:
+    app: win-webserver
+spec:
+  ports:
+    # the port that this service should serve on
+    - port: 80
+      targetPort: 80
+  selector:
+    app: win-webserver
+  type: NodePort
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: win-webserver
+  name: win-webserver
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: win-webserver
+  template:
+    metadata:
+      labels:
+        app: win-webserver
+      name: win-webserver
+    spec:
+     containers:
+      - name: windowswebserver
+        image: mcr.microsoft.com/windows/servercore:ltsc2019
+        command:
+        - powershell.exe
+        - -command
+        - "&lt;#code used from https://gist.github.com/19WAS85/5424431#&gt; ; $$listener = New-Object System.Net.HttpListener ; $$listener.Prefixes.Add('http://*:80/') ; $$listener.Start() ; $$callerCounts = @{} ; Write-Host('Listening at http://*:80/') ; while ($$listener.IsListening) { ;$$context = $$listener.GetContext() ;$$requestUrl = $$context.Request.Url ;$$clientIP = $$context.Request.RemoteEndPoint.Address ;$$response = $$context.Response ;Write-Host '' ;Write-Host('&gt; {0}' -f $$requestUrl) ;  ;$$count = 1 ;$$k=$$callerCounts.Get_Item($$clientIP) ;if ($$k -ne $$null) { $$count += $$k } ;$$callerCounts.Set_Item($$clientIP, $$count) ;$$ip=(Get-NetAdapter | Get-NetIpAddress); $$header='&lt;html&gt;&lt;body&gt;&lt;H1&gt;Windows Container Web Server&lt;/H1&gt;' ;$$callerCountsString='' ;$$callerCounts.Keys | % { $$callerCountsString+='&lt;p&gt;IP {0} callerCount {1} ' -f $$ip[1].IPAddress,$$callerCounts.Item($$_) } ;$$footer='&lt;/body&gt;&lt;/html&gt;' ;$$content='{0}{1}{2}' -f $$header,$$callerCountsString,$$footer ;Write-Output $$content ;$$buffer = [System.Text.Encoding]::UTF8.GetBytes($$content) ;$$response.ContentLength64 = $$buffer.Length ;$$response.OutputStream.Write($$buffer, 0, $$buffer.Length) ;$$response.Close() ;$$responseStatus = $$response.StatusCode ;Write-Host('&lt; {0}' -f $$responseStatus)  } ; "
+     nodeSelector:
+      kubernetes.io/os: windows
+</code></pre>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">نگاشت پورت (port mapping) نیز پشتیبانی می‌شود، اما برای سادگی، این مثال
+پورت 80 کانتینر را مستقیماً از طریق Service در دسترس قرار می‌دهد.</p>
+</div>
+<ol>
+<li dir="rtl">
+<p dir="rtl">بررسی کنید که همه‌ی نودها سالم هستند:</p>
+<pre dir="ltr"><code class="language-bash" dir="ltr">kubectl get nodes
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">سرویس را مستقر کنید و تغییرات Podها را زیر نظر بگیرید:</p>
+<pre dir="ltr"><code class="language-bash" dir="ltr">kubectl apply -f win-webserver.yaml
+kubectl get pods -o wide -w
+</code></pre>
+<p dir="rtl">هنگامی که سرویس به‌درستی مستقر شود، هر دو Pod در وضعیت Ready علامت‌گذاری می‌شوند. برای خروج از دستور watch، کلیدهای Ctrl+C را فشار دهید.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">بررسی کنید که استقرار با موفقیت انجام شده است. برای راستی‌آزمایی:</p>
+<ul>
+<li dir="rtl">برای مشاهده‌ی چند Pod فهرست‌شده از نود control plane لینوکسی، از <code dir="ltr">kubectl get pods</code> استفاده کنید</li>
+<li dir="rtl">برای ارتباط نود به Pod در سراسر شبکه، از نود control plane لینوکسی روی پورت 80 نشانی IP Podهای خود <code dir="ltr">curl</code> بزنید
+تا پاسخ وب‌سرور را بررسی کنید</li>
+<li dir="rtl">برای ارتباط Pod به Pod، با استفاده از <code dir="ltr">kubectl exec</code> بین Podها (و در صورتی که بیش از یک نود ویندوزی دارید، بین میزبان‌ها) ping بزنید</li>
+<li dir="rtl">برای ارتباط سرویس به Pod، از نود control plane لینوکسی و از درون Podهای منفرد روی IP مجازی سرویس
+(که در خروجی <code dir="ltr">kubectl get services</code> دیده می‌شود) <code dir="ltr">curl</code> بزنید</li>
+<li dir="rtl">برای کشف سرویس (service discovery)، با استفاده از <a href="../services-networking/dns-pod-service.html#services">پسوند DNS پیش‌فرض</a> کوبرنتیز روی نام سرویس <code dir="ltr">curl</code> بزنید</li>
+<li dir="rtl">برای اتصال ورودی، از نود control plane لینوکسی یا از ماشین‌های خارج از کلاستر روی NodePort <code dir="ltr">curl</code> بزنید</li>
+<li dir="rtl">برای اتصال خروجی، با استفاده از <code dir="ltr">kubectl exec</code> از درون Pod روی IPهای خارجی <code dir="ltr">curl</code> بزنید</li>
+</ul>
+</li>
+</ol>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">به دلیل محدودیت‌های فعلی پلتفرم در پشته‌ی شبکه‌ی ویندوز، میزبان‌های کانتینر ویندوزی نمی‌توانند به IP سرویس‌هایی که روی خودشان زمان‌بندی شده‌اند دسترسی پیدا کنند.
+فقط Podهای ویندوزی می‌توانند به IP سرویس‌ها دسترسی داشته باشند.</p>
+</div>
+<h2 id="قابلیت-مشاهده-پذیری-observability-observability" dir="rtl">قابلیت مشاهده‌پذیری (Observability) {#observability}</h2>
+<h3 id="جمع-آوری-لاگ-ها-از-بارهای-کاری" dir="rtl">جمع‌آوری لاگ‌ها از بارهای کاری</h3>
+<p dir="rtl">لاگ‌ها عنصری مهم در مشاهده‌پذیری هستند؛ آن‌ها به کاربران امکان می‌دهند
+دیدی نسبت به جنبه‌ی عملیاتی بارهای کاری به دست آورند و از اجزای کلیدی عیب‌یابی مشکلات به شمار می‌روند.
+از آنجا که کانتینرهای ویندوزی و بارهای کاری درون آن‌ها رفتاری متفاوت از کانتینرهای لینوکسی دارند،
+کاربران در جمع‌آوری لاگ‌ها با دشواری روبه‌رو بودند و این موضوع دید عملیاتی را محدود می‌کرد.
+برای نمونه، بارهای کاری ویندوزی معمولاً به گونه‌ای پیکربندی می‌شوند که در ETW (Event Tracing for Windows) لاگ بنویسند
+یا ورودی‌ها را به لاگ رویداد برنامه (application event log) ارسال کنند.
+<a href="https://github.com/microsoft/windows-container-tools/tree/master/LogMonitor" target="_blank" rel="noopener">LogMonitor</a>، یک ابزار متن‌باز از مایکروسافت،
+روش توصیه‌شده برای پایش منابع لاگ پیکربندی‌شده درون یک کانتینر ویندوزی است.
+LogMonitor از پایش لاگ‌های رویداد، ارائه‌دهندگان ETW و لاگ‌های سفارشی برنامه پشتیبانی می‌کند
+و آن‌ها را به STDOUT هدایت می‌کند تا با <code dir="ltr">kubectl logs &lt;pod&gt;</code> قابل مصرف باشند.</p>
+<p dir="rtl">دستورالعمل‌های موجود در صفحه‌ی GitHub مربوط به LogMonitor را دنبال کنید تا فایل‌های اجرایی و پیکربندی آن
+را در همه‌ی کانتینرهای خود کپی کنید و entrypointهای لازم را اضافه کنید تا LogMonitor لاگ‌های شما را به STDOUT ارسال کند.</p>
+<h2 id="پیکربندی-کاربر-کانتینر-configuring-container-user" dir="rtl">پیکربندی کاربر کانتینر {#configuring-container-user}</h2>
+<h3 id="استفاده-از-نام-های-کاربری-قابل-پیکربندی-کانتینر" dir="rtl">استفاده از نام‌های کاربری قابل پیکربندی کانتینر</h3>
+<p dir="rtl">کانتینرهای ویندوزی را می‌توان طوری پیکربندی کرد که entrypointها و فرایندهای خود را
+با نام‌های کاربری متفاوت از پیش‌فرض ایمیج اجرا کنند.
+برای اطلاعات بیشتر <a href="https://kubernetes.io/docs/tasks/configure-pod-container/configure-runasusername/" target="_blank">اینجا</a> را ببینید.</p>
+<h3 id="مدیریت-هویت-بار-کاری-با-group-managed-service-accounts" dir="rtl">مدیریت هویت بار کاری با Group Managed Service Accounts</h3>
+<p dir="rtl">بارهای کاری کانتینرهای ویندوزی را می‌توان برای استفاده از Group Managed Service Accounts (GMSA) پیکربندی کرد.
+Group Managed Service Accountها نوع خاصی از حساب‌های Active Directory هستند که مدیریت خودکار گذرواژه،
+مدیریت ساده‌شده‌ی service principal name (SPN) و امکان واگذاری مدیریت به سایر مدیران را در چندین سرور فراهم می‌کنند.
+کانتینرهای پیکربندی‌شده با GMSA می‌توانند ضمن حمل هویت پیکربندی‌شده با GMSA، به منابع دامنه‌ی خارجی Active Directory دسترسی پیدا کنند.
+برای اطلاعات بیشتر درباره‌ی پیکربندی و استفاده از GMSA برای کانتینرهای ویندوزی <a href="https://kubernetes.io/docs/tasks/configure-pod-container/configure-gmsa/" target="_blank">اینجا</a> را ببینید.</p>
+<h2 id="taintها-و-tolerationها-taints-and-tolerations" dir="rtl">Taintها و Tolerationها {#taints-and-tolerations}</h2>
+<p dir="rtl">کاربران برای زمان‌بندی بارهای کاری لینوکسی و ویندوزی روی نودهای مخصوص هر سیستم‌عامل، باید از ترکیبی از <span class="term" title="taint">taint</span>
+و انتخابگرهای نود (node selector) استفاده کنند.
+رویکرد توصیه‌شده در ادامه تشریح شده است
+و یکی از اهداف اصلی آن این است که این رویکرد نباید سازگاری بارهای کاری لینوکسی موجود را از بین ببرد.</p>
+<p dir="rtl">شما می‌توانید (و باید) برای هر Pod مقدار <code dir="ltr">.spec.os.name</code> را تنظیم کنید تا سیستم‌عاملی را که
+کانتینرهای آن Pod برای آن طراحی شده‌اند مشخص کنید. برای Podهایی که کانتینرهای لینوکسی اجرا می‌کنند،
+<code dir="ltr">.spec.os.name</code> را برابر <code dir="ltr">linux</code> قرار دهید. برای Podهایی که کانتینرهای ویندوزی اجرا می‌کنند، <code dir="ltr">.spec.os.name</code>
+را برابر <code dir="ltr">windows</code> قرار دهید.</p>
+<p dir="rtl">زمان‌بند هنگام تخصیص Podها به نودها از مقدار <code dir="ltr">.spec.os.name</code> استفاده نمی‌کند. شما باید
+از سازوکارهای معمول کوبرنتیز برای
+<a href="../scheduling-eviction/assign-pod-node.html">تخصیص Podها به نودها</a>
+استفاده کنید تا اطمینان یابید control plane کلاستر شما Podها را روی نودهایی قرار می‌دهد که
+سیستم‌عامل مناسب را اجرا می‌کنند.</p>
+<p dir="rtl">مقدار <code dir="ltr">.spec.os.name</code> بر زمان‌بندی Podهای ویندوزی تأثیری ندارد،
+بنابراین taintها و tolerationها (یا انتخابگرهای نود) همچنان برای اطمینان از
+قرار گرفتن Podهای ویندوزی روی نودهای ویندوزی مناسب لازم هستند.</p>
+<h3 id="اطمینان-از-قرار-گرفتن-بارهای-کاری-مخصوص-هر-سیستم-عامل-روی-میزبان-کانتینر-مناسب" dir="rtl">اطمینان از قرار گرفتن بارهای کاری مخصوص هر سیستم‌عامل روی میزبان کانتینر مناسب</h3>
+<p dir="rtl">کاربران می‌توانند با استفاده از taintها و tolerationها اطمینان حاصل کنند که کانتینرهای ویندوزی روی میزبان مناسب زمان‌بندی می‌شوند.
+همه‌ی نودهایی که کوبرنتیز 1.37 را اجرا می‌کنند، برچسب‌های پیش‌فرض زیر را دارند:</p>
+<ul>
+<li dir="ltr" class="ltr">kubernetes.io/os = [windows|linux]</li>
+<li dir="ltr" class="ltr">kubernetes.io/arch = [amd64|arm64|...]</li>
+</ul>
+<p dir="rtl">اگر مشخصات یک Pod، <code dir="ltr">nodeSelector</code> ای مانند <code dir="ltr">"kubernetes.io/os": windows</code> را تعیین نکرده باشد،
+ممکن است Pod روی هر میزبانی، چه ویندوزی و چه لینوکسی، زمان‌بندی شود.
+این موضوع می‌تواند مشکل‌ساز باشد، زیرا یک کانتینر ویندوزی فقط روی ویندوز و یک کانتینر لینوکسی فقط روی لینوکس اجرا می‌شود.
+بهترین روش برای کوبرنتیز 1.37 استفاده از <code dir="ltr">nodeSelector</code> است.</p>
+<p dir="rtl">با این حال، در موارد بسیاری کاربران تعداد زیادی استقرار از پیش موجود برای کانتینرهای لینوکسی دارند،
+و همچنین اکوسیستمی از پیکربندی‌های آماده مانند Helm chartهای جامعه‌ی کاربری، و مواردی از تولید برنامه‌نویسی‌شده‌ی Pod مانند operatorها.
+در چنین شرایطی ممکن است تمایلی به اعمال تغییر پیکربندی برای افزودن فیلدهای <code dir="ltr">nodeSelector</code> به همه‌ی Podها و قالب‌های Pod نداشته باشید.
+گزینه‌ی جایگزین استفاده از taintهاست. از آنجا که kubelet می‌تواند هنگام ثبت (registration) taint تنظیم کند،
+می‌توان آن را به‌سادگی تغییر داد تا فقط هنگام اجرا روی ویندوز، به‌طور خودکار یک taint اضافه کند.</p>
+<p dir="rtl">برای مثال: <code dir="ltr">--register-with-taints='os=windows:NoSchedule'</code></p>
+<p dir="rtl">با افزودن یک taint به همه‌ی نودهای ویندوزی، هیچ چیزی روی آن‌ها زمان‌بندی نخواهد شد (از جمله Podهای لینوکسی موجود).
+برای اینکه یک Pod ویندوزی روی یک نود ویندوزی زمان‌بندی شود،
+هم به <code dir="ltr">nodeSelector</code> و هم به toleration مطابق مناسب برای انتخاب ویندوز نیاز دارد.</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">nodeSelector:
+    kubernetes.io/os: windows
+    node.kubernetes.io/windows-build: '10.0.20348'
+tolerations:
+    - key: "os"
+      operator: "Equal"
+      value: "windows"
+      effect: "NoSchedule"
+</code></pre>
+<h3 id="مدیریت-چند-نسخه-ی-ویندوز-در-یک-کلاستر-handling-multiple-windows-versions-in-the-same-cluster" dir="rtl">مدیریت چند نسخه‌ی ویندوز در یک کلاستر {#handling-multiple-windows-versions-in-the-same-cluster}</h3>
+<p dir="rtl">نسخه‌ی Windows Server که هر Pod استفاده می‌کند باید با نسخه‌ی نود مطابقت داشته باشد. اگر می‌خواهید از چند نسخه‌ی
+Windows Server در یک کلاستر استفاده کنید، باید برچسب‌های نود و فیلدهای <code dir="ltr">nodeSelector</code> اضافی تنظیم کنید.</p>
+<p dir="rtl">کوبرنتیز برای ساده‌سازی این کار به‌طور خودکار برچسبی با نام
+<a href="https://kubernetes.io/docs/reference/labels-annotations-taints/#nodekubernetesiowindows-build" target="_blank"><code dir="ltr">node.kubernetes.io/windows-build</code></a>
+اضافه می‌کند.</p>
+<p dir="rtl">این برچسب شماره‌ی major، minor و build ویندوز را که برای سازگاری باید مطابقت داشته باشند، نشان می‌دهد.
+مقادیر مورد استفاده برای هر نسخه‌ی Windows Server در ادامه آمده است:</p>
+<table>
+<thead>
+<tr>
+<th dir="rtl">نام محصول</th>
+<th dir="rtl">نسخه</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td dir="ltr" class="ltr">Windows Server 2022</td>
+<td>10.0.20348</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr">Windows Server 2025</td>
+<td>10.0.26100</td>
+</tr>
+</tbody>
+</table>
+<h3 id="ساده-سازی-با-runtimeclass" dir="rtl">ساده‌سازی با RuntimeClass</h3>
+<p dir="rtl">از <a href="../containers/runtime-class.html">RuntimeClass</a> می‌توان برای ساده‌سازی فرایند استفاده از taintها و tolerationها بهره برد.
+مدیر کلاستر می‌تواند یک آبجکت <code dir="ltr">RuntimeClass</code> ایجاد کند که برای کپسوله‌سازی این taintها و tolerationها به کار می‌رود.</p>
+<ol>
+<li dir="rtl">
+<p dir="rtl">این فایل را در <code dir="ltr">runtimeClasses.yml</code> ذخیره کنید. این فایل شامل <code dir="ltr">nodeSelector</code> مناسب
+برای سیستم‌عامل ویندوز، معماری و نسخه است.</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">---
+apiVersion: node.k8s.io/v1
+kind: RuntimeClass
+metadata:
+  name: windows-2019
+handler: example-container-runtime-handler
+scheduling:
+  nodeSelector:
+    kubernetes.io/os: 'windows'
+    kubernetes.io/arch: 'amd64'
+    node.kubernetes.io/windows-build: '10.0.20348'
+  tolerations:
+  - effect: NoSchedule
+    key: os
+    operator: Equal
+    value: "windows"
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">دستور <code dir="ltr">kubectl create -f runtimeClasses.yml</code> را با دسترسی مدیر کلاستر اجرا کنید</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">مقدار <code dir="ltr">runtimeClassName: windows-2019</code> را به‌طور مناسب به مشخصات Podها اضافه کنید</p>
+<p dir="rtl">برای مثال:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: iis-2019
+  labels:
+    app: iis-2019
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: iis-2019
+      labels:
+        app: iis-2019
+    spec:
+      runtimeClassName: windows-2019
+      containers:
+      - name: iis
+        image: mcr.microsoft.com/windows/servercore/iis:windowsservercore-ltsc2019
+        resources:
+          limits:
+            cpu: 1
+            memory: 800Mi
+          requests:
+            cpu: 100m
+            memory: 300Mi
+        ports:
+          - containerPort: 80
+  selector:
+    matchLabels:
+      app: iis-2019
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: iis
+spec:
+  type: LoadBalancer
+  ports:
+  - protocol: TCP
+    port: 80
+  selector:
+    app: iis-2019
+</code></pre>
+</li>
+</ol>
+</main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#اهداف-objectives">اهداف {#objectives}</a><a class="l2" href="#پیش-از-شروع">پیش از شروع</a><a class="l2" href="#شروع-کار-استقرار-یک-بار-کاری-ویندوزی">شروع کار: استقرار یک بار کاری ویندوزی</a><a class="l2" href="#قابلیت-مشاهده-پذیری-observability-observability">قابلیت مشاهده‌پذیری (Observability) {#observability}</a><a class="l3" href="#جمع-آوری-لاگ-ها-از-بارهای-کاری">جمع‌آوری لاگ‌ها از بارهای کاری</a><a class="l2" href="#پیکربندی-کاربر-کانتینر-configuring-container-user">پیکربندی کاربر کانتینر {#configuring-container-user}</a><a class="l3" href="#استفاده-از-نام-های-کاربری-قابل-پیکربندی-کانتینر">استفاده از نام‌های کاربری قابل پیکربندی کانتینر</a><a class="l3" href="#مدیریت-هویت-بار-کاری-با-group-managed-service-accounts">مدیریت هویت بار کاری با Group Managed Service Accounts</a><a class="l2" href="#taintها-و-tolerationها-taints-and-tolerations">Taintها و Tolerationها {#taints-and-tolerations}</a><a class="l3" href="#اطمینان-از-قرار-گرفتن-بارهای-کاری-مخصوص-هر-سیستم-عامل-روی-میزبان-کانتینر-مناسب">اطمینان از قرار گرفتن بارهای کاری مخصوص هر سیستم‌عامل روی میزبان کانتینر مناسب</a><a class="l3" href="#مدیریت-چند-نسخه-ی-ویندوز-در-یک-کلاستر-handling-multiple-windows-versions-in-the-same-cluster">مدیریت چند نسخه‌ی ویندوز در یک کلاستر {#handling-multiple-windows-versions-in-the-same-cluster}</a><a class="l3" href="#ساده-سازی-با-runtimeclass">ساده‌سازی با RuntimeClass</a></nav>
+</div>
+</body>
+</html>

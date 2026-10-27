@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>کانتینرهای مقداردهی اولیه (Init Containers) | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body>
+<header class="top"><a href="../../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">concepts / workloads / pods</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">کانتینرهای مقداردهی اولیه (Init Containers)</h1><!-- overview -->
+<p dir="rtl">این صفحه یک نمای کلی از init containerها ارائه می‌دهد: کانتینرهای تخصصی که پیش از کانتینرهای برنامه در یک <span class="term" title="pod">Pod</span> اجرا می‌شوند.
+Init containerها می‌توانند شامل ابزارها یا اسکریپت‌های راه‌اندازی باشند که در ایمیج برنامه وجود ندارند.</p>
+<p dir="rtl">می‌توانید init containerها را در مشخصات Pod و در کنار آرایه <code dir="ltr">containers</code> (که کانتینرهای برنامه را توصیف می‌کند) تعریف کنید.</p>
+<p dir="rtl">در کوبرنتیز، <a href="sidecar-containers.html">کانتینر سایدکار (sidecar)</a> کانتینری است که پیش از کانتینر اصلی برنامه شروع به کار می‌کند و <em>به اجرای خود ادامه می‌دهد</em>. این سند درباره init containerهاست: کانتینرهایی که در طول مقداردهی اولیه Pod تا پایان کار اجرا می‌شوند.</p>
+<!-- body -->
+<h2 id="شناخت-init-containerها-understanding-init-containers" dir="rtl">شناخت init containerها {#understanding-init-containers}</h2>
+<p dir="rtl">یک <span class="term" title="pod">Pod</span> می‌تواند چندین کانتینر داشته باشد که برنامه‌ها را درون آن اجرا می‌کنند، اما می‌تواند یک یا چند init container نیز داشته باشد که پیش از شروع کانتینرهای برنامه اجرا می‌شوند.</p>
+<p dir="rtl">Init containerها دقیقاً مانند کانتینرهای معمولی هستند، با این تفاوت‌ها:</p>
+<ul>
+<li dir="rtl">Init containerها همیشه تا پایان کار اجرا می‌شوند.</li>
+<li dir="rtl">هر init container باید پیش از شروع init container بعدی با موفقیت به پایان برسد.</li>
+</ul>
+<p dir="rtl">اگر init container یک Pod با شکست مواجه شود، kubelet آن init container را پیوسته راه‌اندازی مجدد می‌کند تا موفق شود.
+با این حال، اگر مقدار <code dir="ltr">restartPolicy</code> در Pod برابر Never باشد و یک init container در طول راه‌اندازی آن Pod شکست بخورد، کوبرنتیز کل Pod را ناموفق در نظر می‌گیرد.</p>
+<p dir="rtl">برای تعیین یک init container برای Pod، فیلد <code dir="ltr">initContainers</code> را به <a href="https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#PodSpec" target="_blank">مشخصات Pod</a> اضافه کنید، به‌صورت آرایه‌ای از آیتم‌های <code dir="ltr">container</code> (مشابه فیلد <code dir="ltr">containers</code> برنامه و محتویات آن).
+برای جزئیات بیشتر، بخش <a href="https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#Container" target="_blank">Container</a> را در مرجع API ببینید.</p>
+<p dir="rtl">وضعیت init containerها در فیلد <code dir="ltr">.status.initContainerStatuses</code> به‌صورت آرایه‌ای از وضعیت کانتینرها بازگردانده می‌شود (مشابه فیلد <code dir="ltr">.status.containerStatuses</code>).</p>
+<h3 id="تفاوت-ها-با-کانتینرهای-معمولی-differences-from-regular-containers" dir="rtl">تفاوت‌ها با کانتینرهای معمولی {#differences-from-regular-containers}</h3>
+<p dir="rtl">Init containerها از همه فیلدها و ویژگی‌های کانتینرهای برنامه پشتیبانی می‌کنند، از جمله محدودیت‌های منابع، <a href="../../storage/volumes.html">حجم‌ها (volumes)</a> و تنظیمات امنیتی. با این حال، درخواست‌ها و محدودیت‌های منابع برای init container به شکل متفاوتی مدیریت می‌شوند، همان‌طور که در <a href="#resource-sharing-within-containers">اشتراک منابع میان کانتینرها</a> توضیح داده شده است.</p>
+<p dir="rtl">Init containerهای معمولی (به عبارت دیگر: به‌جز کانتینرهای سایدکار) از فیلدهای <code dir="ltr">lifecycle</code>، <code dir="ltr">livenessProbe</code>، <code dir="ltr">readinessProbe</code> و <code dir="ltr">startupProbe</code> پشتیبانی نمی‌کنند. Init containerها باید پیش از آماده شدن Pod تا پایان کار اجرا شوند؛ کانتینرهای سایدکار در طول عمر Pod به اجرا ادامه می‌دهند و از برخی probeها <em>پشتیبانی می‌کنند</em>. برای جزئیات بیشتر درباره کانتینرهای سایدکار، <a href="sidecar-containers.html">کانتینر سایدکار</a> را ببینید.</p>
+<p dir="rtl">اگر چند init container برای یک Pod تعریف کنید، kubelet هر init container را به‌صورت ترتیبی اجرا می‌کند. هر init container باید پیش از اجرای بعدی با موفقیت به پایان برسد.
+هنگامی که همه init containerها تا پایان کار اجرا شدند، kubelet کانتینرهای برنامه Pod را مقداردهی اولیه می‌کند و آن‌ها را به‌طور معمول اجرا می‌کند.</p>
+<h3 id="تفاوت-ها-با-کانتینرهای-سایدکار-differences-from-sidecar-containers" dir="rtl">تفاوت‌ها با کانتینرهای سایدکار {#differences-from-sidecar-containers}</h3>
+<p dir="rtl">Init containerها پیش از شروع کانتینر اصلی برنامه اجرا می‌شوند و کار خود را کامل می‌کنند.
+برخلاف <a href="sidecar-containers.html">کانتینرهای سایدکار</a>، init containerها به‌طور پیوسته در کنار کانتینرهای اصلی اجرا نمی‌شوند.</p>
+<p dir="rtl">Init containerها به‌صورت ترتیبی تا پایان کار اجرا می‌شوند و کانتینر اصلی تا زمانی که همه init containerها با موفقیت به پایان نرسیده باشند، شروع نمی‌شود.</p>
+<p dir="rtl">Init containerها از <code dir="ltr">lifecycle</code>، <code dir="ltr">livenessProbe</code>، <code dir="ltr">readinessProbe</code> و <code dir="ltr">startupProbe</code> پشتیبانی نمی‌کنند، در حالی که کانتینرهای سایدکار از همه این <a href="https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#types-of-probe" target="_blank">probeها</a> برای کنترل چرخه عمر خود پشتیبانی می‌کنند.</p>
+<p dir="rtl">Init containerها منابع یکسانی (CPU، حافظه، شبکه) را با کانتینرهای اصلی برنامه به اشتراک می‌گذارند، اما به‌طور مستقیم با آن‌ها تعامل ندارند. با این حال، می‌توانند برای تبادل داده از حجم‌های (volumes) مشترک استفاده کنند.</p>
+<h2 id="استفاده-از-init-containerها-using-init-containers" dir="rtl">استفاده از init containerها {#using-init-containers}</h2>
+<p dir="rtl">از آنجا که init containerها ایمیج‌هایی جدا از کانتینرهای برنامه دارند، برای کدهای مربوط به راه‌اندازی چند مزیت دارند:</p>
+<ul>
+<li dir="rtl">Init containerها می‌توانند شامل ابزارها یا کد سفارشی برای راه‌اندازی باشند که در ایمیج برنامه وجود ندارند. برای مثال، لازم نیست فقط برای استفاده از ابزارهایی مانند <code dir="ltr">sed</code>، <code dir="ltr">awk</code>، <code dir="ltr">python</code> یا <code dir="ltr">dig</code> در زمان راه‌اندازی، یک ایمیج را با <code dir="ltr">FROM</code> از ایمیج دیگری بسازید.</li>
+<li dir="rtl">نقش‌های سازنده ایمیج برنامه و مستقرکننده آن می‌توانند به‌طور مستقل کار کنند، بدون اینکه نیازی به ساخت مشترک یک ایمیج واحد برای برنامه باشد.</li>
+<li dir="rtl">Init containerها می‌توانند با دیدی متفاوت از سیستم فایل نسبت به کانتینرهای برنامه در همان Pod اجرا شوند. در نتیجه، می‌توان به آن‌ها دسترسی به <span class="term" title="secret">Secretها</span> داد که کانتینرهای برنامه به آن‌ها دسترسی ندارند.</li>
+<li dir="rtl">از آنجا که init containerها پیش از شروع هر یک از کانتینرهای برنامه تا پایان کار اجرا می‌شوند، سازوکاری فراهم می‌کنند تا شروع کانتینرهای برنامه تا برآورده شدن مجموعه‌ای از پیش‌شرط‌ها مسدود یا به تأخیر انداخته شود. پس از برآورده شدن پیش‌شرط‌ها، همه کانتینرهای برنامه در یک Pod می‌توانند به‌طور موازی شروع شوند.</li>
+<li dir="rtl">Init containerها می‌توانند ابزارها یا کد سفارشی را که در غیر این صورت ایمیج کانتینر برنامه را کم‌امن‌تر می‌کردند، به‌صورت ایمن اجرا کنند. با جدا نگه داشتن ابزارهای غیرضروری، می‌توانید سطح حمله ایمیج کانتینر برنامه خود را محدود کنید.</li>
+</ul>
+<h3 id="مثال-ها-examples" dir="rtl">مثال‌ها {#examples}</h3>
+<p dir="rtl">در اینجا چند ایده برای استفاده از init containerها آمده است:</p>
+<ul>
+<li dir="rtl">
+<p dir="rtl">منتظر ماندن تا یک <span class="term" title="service">Service</span> ایجاد شود، با استفاده از یک فرمان تک‌خطی شل مانند:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">for i in {1..100}; do sleep 1; if nslookup myservice; then exit 0; fi; done; exit 1
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">ثبت این Pod در یک سرور راه دور از طریق downward API با فرمانی مانند:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">curl -X POST http://$MANAGEMENT_SERVICE_HOST:$MANAGEMENT_SERVICE_PORT/register -d 'instance=$(&lt;POD_NAME&gt;)&amp;ip=$(&lt;POD_IP&gt;)'
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">منتظر ماندن برای مدتی پیش از شروع کانتینر برنامه با فرمانی مانند</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">sleep 60
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">کلون کردن یک مخزن Git در یک <span class="term" title="volume">Volume</span></p>
+</li>
+<li dir="rtl">
+<p dir="rtl">قرار دادن مقادیر در یک فایل پیکربندی و اجرای یک ابزار قالب‌ساز برای تولید پویای فایل پیکربندی کانتینر اصلی برنامه. برای مثال، مقدار <code dir="ltr">POD_IP</code> را در یک پیکربندی قرار دهید و فایل پیکربندی اصلی برنامه را با استفاده از Jinja تولید کنید.</p>
+</li>
+</ul>
+<h4 id="init-containerها-در-عمل-init-containers-in-use" dir="rtl">Init containerها در عمل {#init-containers-in-use}</h4>
+<p dir="rtl">این مثال یک Pod ساده با دو init container تعریف می‌کند.
+اولی منتظر <code dir="ltr">myservice</code> می‌ماند و دومی منتظر <code dir="ltr">mydb</code>. پس از اینکه هر دو init container به پایان رسیدند، Pod کانتینر برنامه را از بخش <code dir="ltr">spec</code> خود اجرا می‌کند.</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: Pod
+metadata:
+  name: myapp-pod
+  labels:
+    app.kubernetes.io/name: MyApp
+spec:
+  containers:
+  - name: myapp-container
+    image: busybox:1.28
+    command: ['sh', '-c', 'echo The app is running! &amp;&amp; sleep 3600']
+  initContainers:
+  - name: init-myservice
+    image: busybox:1.28
+    command: ['sh', '-c', "until nslookup myservice.$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace).svc.cluster.local; do echo waiting for myservice; sleep 2; done"]
+  - name: init-mydb
+    image: busybox:1.28
+    command: ['sh', '-c', "until nslookup mydb.$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace).svc.cluster.local; do echo waiting for mydb; sleep 2; done"]
+</code></pre>
+<p dir="rtl">می‌توانید این Pod را با اجرای دستور زیر شروع کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f myapp.yaml
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">pod/myapp-pod created
+</code></pre>
+<p dir="rtl">و وضعیت آن را با دستور زیر بررسی کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get -f myapp.yaml
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">NAME        READY     STATUS     RESTARTS   AGE
+myapp-pod   0/1       Init:0/2   0          6m
+</code></pre>
+<p dir="rtl">یا برای جزئیات بیشتر:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl describe -f myapp.yaml
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">Name:          myapp-pod
+Namespace:     default
+[...]
+Labels:        app.kubernetes.io/name=MyApp
+Status:        Pending
+[...]
+Init Containers:
+  init-myservice:
+[...]
+    State:         Running
+[...]
+  init-mydb:
+[...]
+    State:         Waiting
+      Reason:      PodInitializing
+    Ready:         False
+[...]
+Containers:
+  myapp-container:
+[...]
+    State:         Waiting
+      Reason:      PodInitializing
+    Ready:         False
+[...]
+Events:
+  FirstSeen    LastSeen    Count    From                      SubObjectPath                           Type          Reason        Message
+  ---------    --------    -----    ----                      -------------                           --------      ------        -------
+  16s          16s         1        {default-scheduler }                                              Normal        Scheduled     Successfully assigned myapp-pod to 172.17.4.201
+  16s          16s         1        {kubelet 172.17.4.201}    spec.initContainers{init-myservice}     Normal        Pulling       pulling image "busybox"
+  13s          13s         1        {kubelet 172.17.4.201}    spec.initContainers{init-myservice}     Normal        Pulled        Successfully pulled image "busybox"
+  13s          13s         1        {kubelet 172.17.4.201}    spec.initContainers{init-myservice}     Normal        Created       Created container init-myservice
+  13s          13s         1        {kubelet 172.17.4.201}    spec.initContainers{init-myservice}     Normal        Started       Started container init-myservice
+</code></pre>
+<p dir="rtl">برای مشاهده لاگ‌های init containerهای این Pod، دستورهای زیر را اجرا کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl logs myapp-pod -c init-myservice # Inspect the first init container
+kubectl logs myapp-pod -c init-mydb      # Inspect the second init container
+</code></pre>
+<p dir="rtl">در این مرحله، این init containerها منتظر کشف <span class="term" title="service">Serviceهایی</span> با نام‌های <code dir="ltr">mydb</code> و <code dir="ltr">myservice</code> خواهند بود.</p>
+<p dir="rtl">در اینجا پیکربندی‌ای آمده است که می‌توانید برای ظاهر شدن این Serviceها از آن استفاده کنید:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">---
+apiVersion: v1
+kind: Service
+metadata:
+  name: myservice
+spec:
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 9376
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mydb
+spec:
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 9377
+</code></pre>
+<p dir="rtl">برای ایجاد Serviceهای <code dir="ltr">mydb</code> و <code dir="ltr">myservice</code>:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f services.yaml
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">service/myservice created
+service/mydb created
+</code></pre>
+<p dir="rtl">سپس خواهید دید که این init containerها به پایان می‌رسند و Pod با نام <code dir="ltr">myapp-pod</code> به وضعیت Running می‌رود:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get -f myapp.yaml
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">NAME        READY     STATUS    RESTARTS   AGE
+myapp-pod   1/1       Running   0          9m
+</code></pre>
+<p dir="rtl">این مثال ساده باید الهام‌بخش شما برای ایجاد init containerهای خودتان باشد. بخش <a href="#what-s-next">گام بعدی</a> شامل پیوندی به یک مثال دقیق‌تر است.</p>
+<h2 id="رفتار-دقیق-detailed-behavior" dir="rtl">رفتار دقیق {#detailed-behavior}</h2>
+<p dir="rtl">در طول راه‌اندازی Pod، kubelet اجرای init containerها را تا آماده شدن شبکه و ذخیره‌سازی به تأخیر می‌اندازد. سپس kubelet init containerهای Pod را به همان ترتیبی که در مشخصات Pod ظاهر شده‌اند اجرا می‌کند.</p>
+<p dir="rtl">هر init container باید پیش از شروع کانتینر بعدی با موفقیت خارج شود. اگر کانتینری به دلیل runtime نتواند شروع شود یا با شکست خارج شود، بر اساس <code dir="ltr">restartPolicy</code> مربوط به Pod دوباره تلاش می‌شود. با این حال، اگر <code dir="ltr">restartPolicy</code> در Pod روی Always تنظیم شده باشد، init containerها از <code dir="ltr">restartPolicy</code> برابر OnFailure استفاده می‌کنند.</p>
+<p dir="rtl">یک Pod تا زمانی که همه init containerها موفق نشده باشند نمی‌تواند <code dir="ltr">Ready</code> شود. پورت‌های یک init container زیر یک Service تجمیع نمی‌شوند. Podی که در حال مقداردهی اولیه است در وضعیت <code dir="ltr">Pending</code> قرار دارد، اما باید شرط <code dir="ltr">Initialized</code> آن روی false تنظیم شده باشد.</p>
+<p dir="rtl">اگر Pod <a href="#pod-restart-reasons">راه‌اندازی مجدد شود</a> یا مجدداً راه‌اندازی شود، همه init containerها باید دوباره اجرا شوند.</p>
+<p dir="rtl">تغییرات در مشخصات init container به فیلد ایمیج کانتینر محدود است.
+تغییر مستقیم فیلد <code dir="ltr">image</code> در یک init container، Pod را راه‌اندازی مجدد نمی‌کند و باعث ایجاد مجدد آن نمی‌شود. اگر Pod هنوز شروع نشده باشد، این تغییر ممکن است بر نحوه بالا آمدن Pod تأثیر بگذارد.</p>
+<p dir="rtl">برای یک <a href="index.html#pod-templates">قالب Pod</a> معمولاً می‌توانید هر فیلدی را برای یک init container تغییر دهید؛ تأثیر این تغییر به محلی که قالب Pod در آن استفاده می‌شود بستگی دارد.</p>
+<p dir="rtl">از آنجا که init containerها می‌توانند راه‌اندازی مجدد، دوباره‌تلاش یا دوباره‌اجرا شوند، کد init container باید خنثی‌توان (idempotent) باشد. به‌ویژه، کدی که در هر حجم <code dir="ltr">emptyDir</code> می‌نویسد باید برای این احتمال آماده باشد که فایل خروجی از قبل وجود داشته باشد.</p>
+<p dir="rtl">Init containerها همه فیلدهای یک کانتینر برنامه را دارند. با این حال، کوبرنتیز استفاده از <code dir="ltr">readinessProbe</code> را ممنوع می‌کند، زیرا init containerها نمی‌توانند آمادگی‌ای جدا از تکمیل شدن تعریف کنند. این موضوع در طول اعتبارسنجی اعمال می‌شود.</p>
+<p dir="rtl">برای جلوگیری از شکست دائمی init containerها، از <code dir="ltr">activeDeadlineSeconds</code> در Pod استفاده کنید.
+مهلت فعال (active deadline) شامل init containerها نیز می‌شود.
+با این حال، توصیه می‌شود <code dir="ltr">activeDeadlineSeconds</code> را فقط زمانی استفاده کنید که تیم‌ها برنامه خود را به‌صورت Job مستقر می‌کنند، زیرا <code dir="ltr">activeDeadlineSeconds</code> حتی پس از پایان کار initContainer نیز اثر دارد.
+در صورت تنظیم این فیلد، Podی که از قبل به‌درستی در حال اجراست نیز توسط <code dir="ltr">activeDeadlineSeconds</code> متوقف خواهد شد.</p>
+<p dir="rtl">نام هر کانتینر برنامه و init container در یک Pod باید یکتا باشد؛ برای هر کانتینری که نام خود را با کانتینر دیگری به اشتراک بگذارد، خطای اعتبارسنجی صادر می‌شود.</p>
+<h3 id="اشتراک-منابع-میان-کانتینرها-resource-sharing-within-containers" dir="rtl">اشتراک منابع میان کانتینرها {#resource-sharing-within-containers}</h3>
+<p dir="rtl">با توجه به ترتیب اجرای init containerها، کانتینرهای سایدکار و کانتینرهای برنامه، قوانین زیر برای استفاده از منابع اعمال می‌شود:</p>
+<ul>
+<li dir="rtl">بالاترین درخواست یا محدودیت هر منبع مشخص که روی همه init containerها تعریف شده باشد، <em>درخواست/محدودیت مؤثر init</em> است. اگر برای هر منبعی محدودیتی تعیین نشده باشد، این مورد به‌عنوان بالاترین محدودیت در نظر گرفته می‌شود.</li>
+<li dir="rtl"><em>درخواست/محدودیت مؤثر</em> Pod برای یک منبع، مقدار بزرگ‌تر از میان موارد زیر است:
+<ul>
+<li dir="rtl">مجموع درخواست/محدودیت همه کانتینرهای برنامه برای آن منبع</li>
+<li dir="rtl">درخواست/محدودیت مؤثر init برای آن منبع</li>
+</ul>
+</li>
+<li dir="rtl">زمان‌بندی بر اساس درخواست‌ها/محدودیت‌های مؤثر انجام می‌شود، به این معنا که init containerها می‌توانند منابعی را برای مقداردهی اولیه رزرو کنند که در طول عمر Pod استفاده نمی‌شوند.</li>
+<li dir="rtl">سطح QoS (کیفیت خدمات) مؤثر Pod، همان سطح QoS برای init containerها و کانتینرهای برنامه به‌طور یکسان است.</li>
+</ul>
+<p dir="rtl">سهمیه (quota) و محدودیت‌ها بر اساس درخواست و محدودیت مؤثر Pod اعمال می‌شوند.</p>
+<h3 id="init-containerها-و-cgroupهای-لینوکس-cgroups" dir="rtl">Init containerها و cgroupهای لینوکس {#cgroups}</h3>
+<p dir="rtl">در لینوکس، تخصیص منابع برای گروه‌های کنترل (cgroups) در سطح Pod بر اساس درخواست و محدودیت مؤثر Pod انجام می‌شود، همانند زمان‌بند.</p>
+<h3 id="دلایل-راه-اندازی-مجدد-pod-pod-restart-reasons" dir="rtl">دلایل راه‌اندازی مجدد Pod {#pod-restart-reasons}</h3>
+<p dir="rtl">یک Pod می‌تواند راه‌اندازی مجدد شود و موجب اجرای دوباره init containerها گردد، به دلایل زیر:</p>
+<ul>
+<li dir="rtl">کانتینر زیرساختی Pod راه‌اندازی مجدد شود. این حالت نادر است و باید توسط کسی انجام شود که به نودها دسترسی root دارد.</li>
+<li dir="rtl">همه کانتینرهای یک Pod در حالی که <code dir="ltr">restartPolicy</code> روی Always تنظیم شده است خاتمه یابند و راه‌اندازی مجدد اجباری شود، و رکورد تکمیل init container به دلیل <span class="term" title="garbage-collection">garbage collection</span> از بین رفته باشد.</li>
+</ul>
+<p dir="rtl">با تغییر ایمیج init container، یا از بین رفتن رکورد تکمیل init container به دلیل garbage collection، Pod راه‌اندازی مجدد نخواهد شد. این موضوع برای کوبرنتیز نسخه v1.20 و بعد از آن صدق می‌کند. اگر از نسخه قدیمی‌تری از کوبرنتیز استفاده می‌کنید، مستندات نسخه مورد استفاده خود را مطالعه کنید.</p>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<p dir="rtl">درباره موارد زیر بیشتر بیاموزید:</p>
+<ul>
+<li dir="rtl"><a href="https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-initialization/#create-a-pod-that-has-an-init-container" target="_blank">ایجاد یک Pod که دارای init container است</a>.</li>
+<li dir="rtl"><a href="https://kubernetes.io/docs/tasks/debug/debug-application/debug-init-containers/" target="_blank">اشکال‌زدایی init containerها</a>.</li>
+<li dir="rtl">نمای کلی <a href="https://kubernetes.io/docs/reference/command-line-tools-reference/kubelet/" target="_blank">kubelet</a> و <a href="https://kubernetes.io/docs/reference/kubectl/" target="_blank">kubectl</a>.</li>
+<li dir="rtl"><a href="https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#types-of-probe" target="_blank">انواع probeها</a>: probeهای liveness، readiness و startup.</li>
+<li dir="rtl"><a href="sidecar-containers.html">کانتینرهای سایدکار</a>.</li>
+</ul>
+</main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#شناخت-init-containerها-understanding-init-containers">شناخت init containerها {#understanding-init-containers}</a><a class="l3" href="#تفاوت-ها-با-کانتینرهای-معمولی-differences-from-regular-containers">تفاوت‌ها با کانتینرهای معمولی {#differences-from-regular-containers}</a><a class="l3" href="#تفاوت-ها-با-کانتینرهای-سایدکار-differences-from-sidecar-containers">تفاوت‌ها با کانتینرهای سایدکار {#differences-from-sidecar-containers}</a><a class="l2" href="#استفاده-از-init-containerها-using-init-containers">استفاده از init containerها {#using-init-containers}</a><a class="l3" href="#مثال-ها-examples">مثال‌ها {#examples}</a><a class="l2" href="#رفتار-دقیق-detailed-behavior">رفتار دقیق {#detailed-behavior}</a><a class="l3" href="#اشتراک-منابع-میان-کانتینرها-resource-sharing-within-containers">اشتراک منابع میان کانتینرها {#resource-sharing-within-containers}</a><a class="l3" href="#init-containerها-و-cgroupهای-لینوکس-cgroups">Init containerها و cgroupهای لینوکس {#cgroups}</a><a class="l3" href="#دلایل-راه-اندازی-مجدد-pod-pod-restart-reasons">دلایل راه‌اندازی مجدد Pod {#pod-restart-reasons}</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>

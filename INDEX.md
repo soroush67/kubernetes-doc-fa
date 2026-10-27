@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-178 از 1722 صفحه
+193 از 1722 صفحه
 
 
 ## `.`
@@ -190,14 +190,14 @@
 - ✅ [service-traffic-policy.md](md/concepts/services-networking/service-traffic-policy.md)
 - ✅ [service.md](md/concepts/services-networking/service.md)
 - ✅ [topology-aware-routing.md](md/concepts/services-networking/topology-aware-routing.md)
-- ⏳ `windows-networking.md`
+- ✅ [windows-networking.md](md/concepts/services-networking/windows-networking.md)
 
 ## `concepts/storage`
 
-- ⏳ `_index.md`
-- ⏳ `dynamic-provisioning.md`
-- ⏳ `ephemeral-storage.md`
-- ⏳ `ephemeral-volumes.md`
+- ✅ [_index.md](md/concepts/storage/_index.md)
+- ✅ [dynamic-provisioning.md](md/concepts/storage/dynamic-provisioning.md)
+- ✅ [ephemeral-storage.md](md/concepts/storage/ephemeral-storage.md)
+- ✅ [ephemeral-volumes.md](md/concepts/storage/ephemeral-volumes.md)
 - ✅ [persistent-volumes.md](md/concepts/storage/persistent-volumes.md)
 - ✅ [projected-volumes.md](md/concepts/storage/projected-volumes.md)
 - ✅ [storage-capacity.md](md/concepts/storage/storage-capacity.md)
@@ -209,19 +209,19 @@
 - ✅ [volume-pvc-datasource.md](md/concepts/storage/volume-pvc-datasource.md)
 - ✅ [volume-snapshot-classes.md](md/concepts/storage/volume-snapshot-classes.md)
 - ✅ [volume-snapshots.md](md/concepts/storage/volume-snapshots.md)
-- ⏳ `volumes.md`
-- ⏳ `windows-storage.md`
+- ✅ [volumes.md](md/concepts/storage/volumes.md)
+- ✅ [windows-storage.md](md/concepts/storage/windows-storage.md)
 
 ## `concepts/windows`
 
-- ⏳ `_index.md`
-- ⏳ `intro.md`
-- ⏳ `user-guide.md`
+- ✅ [_index.md](md/concepts/windows/_index.md)
+- ✅ [intro.md](md/concepts/windows/intro.md)
+- ✅ [user-guide.md](md/concepts/windows/user-guide.md)
 
 ## `concepts/workloads`
 
-- ⏳ `_index.md`
-- ⏳ `autoscaling.md`
+- ✅ [_index.md](md/concepts/workloads/_index.md)
+- ✅ [autoscaling.md](md/concepts/workloads/autoscaling.md)
 - ✅ [management.md](md/concepts/workloads/management.md)
 
 ## `concepts/workloads/autoscaling`
@@ -256,9 +256,9 @@
 - ✅ [_index.md](md/concepts/workloads/pods/_index.md)
 - ✅ [advanced-pod-config.md](md/concepts/workloads/pods/advanced-pod-config.md)
 - ✅ [disruptions.md](md/concepts/workloads/pods/disruptions.md)
-- ⏳ `downward-api.md`
-- ⏳ `ephemeral-containers.md`
-- ⏳ `init-containers.md`
+- ✅ [downward-api.md](md/concepts/workloads/pods/downward-api.md)
+- ✅ [ephemeral-containers.md](md/concepts/workloads/pods/ephemeral-containers.md)
+- ✅ [init-containers.md](md/concepts/workloads/pods/init-containers.md)
 - ⏳ `pod-condition.md`
 - ⏳ `pod-hostname.md`
 - ⏳ `pod-lifecycle.md`
