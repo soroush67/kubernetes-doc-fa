@@ -9,7 +9,7 @@
 | | |
 |---|---|
 | پیشرفت (بر اساس کلمات) | **20.4٪** |
-| صفحات ترجمه‌شده | 688 از 1722 |
+| صفحات ترجمه‌شده | 703 از 1722 |
 | صفحات دارای ایراد ساختاری | 9 |
 | نسخه‌ی منبع انگلیسی | `ed70e311737a` |
 
@@ -72,7 +72,7 @@ cd kubernetes-doc-fa
 | `contribute` | 44 | 44 |
 | `doc-contributor-tools` | 1 | 1 |
 | `home` | 2 | 2 |
-| `reference` | 453 | 1198 |
+| `reference` | 468 | 1198 |
 | `setup` | 0 | 22 |
 | `tasks` | 0 | 221 |
 | `tutorials` | 0 | 45 |
@@ -91,26 +91,26 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [reference/command-line-tools-reference/feature-gates/TopologyManager.md](md/reference/command-line-tools-reference/feature-gates/TopologyManager.md) — 2026-10-27T17:08:47+03:30
+- [reference/command-line-tools-reference/feature-gates/TopologyAwareWorkloadScheduling.md](md/reference/command-line-tools-reference/feature-gates/TopologyAwareWorkloadScheduling.md) — 2026-10-27T17:08:43+03:30
+- [reference/command-line-tools-reference/feature-gates/TokenRequestServiceAccountUIDValidation.md](md/reference/command-line-tools-reference/feature-gates/TokenRequestServiceAccountUIDValidation.md) — 2026-10-27T17:08:41+03:30
+- [reference/command-line-tools-reference/feature-gates/TopologyAwareHints.md](md/reference/command-line-tools-reference/feature-gates/TopologyAwareHints.md) — 2026-10-27T17:08:39+03:30
+- [reference/command-line-tools-reference/feature-gates/TokenRequest.md](md/reference/command-line-tools-reference/feature-gates/TokenRequest.md) — 2026-10-27T17:08:32+03:30
+- [reference/command-line-tools-reference/feature-gates/TokenRequestProjection.md](md/reference/command-line-tools-reference/feature-gates/TokenRequestProjection.md) — 2026-10-27T17:08:32+03:30
+- [reference/command-line-tools-reference/feature-gates/TaintTolerationComparisonOperators.md](md/reference/command-line-tools-reference/feature-gates/TaintTolerationComparisonOperators.md) — 2026-10-27T17:08:26+03:30
+- [reference/command-line-tools-reference/feature-gates/TaintNodesByCondition.md](md/reference/command-line-tools-reference/feature-gates/TaintNodesByCondition.md) — 2026-10-27T17:08:24+03:30
+- [reference/command-line-tools-reference/feature-gates/TaintBasedEvictions.md](md/reference/command-line-tools-reference/feature-gates/TaintBasedEvictions.md) — 2026-10-27T17:08:20+03:30
+- [reference/command-line-tools-reference/feature-gates/Sysctls.md](md/reference/command-line-tools-reference/feature-gates/Sysctls.md) — 2026-10-27T17:08:17+03:30
+- [reference/command-line-tools-reference/feature-gates/TTLAfterFinished.md](md/reference/command-line-tools-reference/feature-gates/TTLAfterFinished.md) — 2026-10-27T17:08:14+03:30
+- [reference/command-line-tools-reference/feature-gates/SystemdWatchdog.md](md/reference/command-line-tools-reference/feature-gates/SystemdWatchdog.md) — 2026-10-27T17:08:09+03:30
+- [reference/command-line-tools-reference/feature-gates/SuspendJob.md](md/reference/command-line-tools-reference/feature-gates/SuspendJob.md) — 2026-10-27T17:08:04+03:30
+- [reference/command-line-tools-reference/feature-gates/SupportPodPidsLimit.md](md/reference/command-line-tools-reference/feature-gates/SupportPodPidsLimit.md) — 2026-10-27T17:08:03+03:30
+- [reference/command-line-tools-reference/feature-gates/SupportNodePidsLimit.md](md/reference/command-line-tools-reference/feature-gates/SupportNodePidsLimit.md) — 2026-10-27T17:07:58+03:30
 - [reference/command-line-tools-reference/feature-gates/SupportIPVSProxyMode.md](md/reference/command-line-tools-reference/feature-gates/SupportIPVSProxyMode.md) — 2026-10-27T17:07:54+03:30
 - [reference/command-line-tools-reference/feature-gates/SupplementalGroupsPolicy.md](md/reference/command-line-tools-reference/feature-gates/SupplementalGroupsPolicy.md) — 2026-10-27T17:07:50+03:30
 - [reference/command-line-tools-reference/feature-gates/StructuredAuthorizationConfiguration.md](md/reference/command-line-tools-reference/feature-gates/StructuredAuthorizationConfiguration.md) — 2026-10-27T17:07:46+03:30
 - [reference/command-line-tools-reference/feature-gates/StructuredAuthenticationConfigurationJWKSMetrics.md](md/reference/command-line-tools-reference/feature-gates/StructuredAuthenticationConfigurationJWKSMetrics.md) — 2026-10-27T17:07:43+03:30
 - [reference/command-line-tools-reference/feature-gates/StructuredAuthenticationConfigurationEgressSelector.md](md/reference/command-line-tools-reference/feature-gates/StructuredAuthenticationConfigurationEgressSelector.md) — 2026-10-27T17:07:39+03:30
-- [reference/command-line-tools-reference/feature-gates/StructuredAuthenticationConfiguration.md](md/reference/command-line-tools-reference/feature-gates/StructuredAuthenticationConfiguration.md) — 2026-10-27T17:07:38+03:30
-- [reference/command-line-tools-reference/feature-gates/StrictIPCIDRValidation.md](md/reference/command-line-tools-reference/feature-gates/StrictIPCIDRValidation.md) — 2026-10-27T17:07:34+03:30
-- [reference/command-line-tools-reference/feature-gates/StrictCostEnforcementForWebhooks.md](md/reference/command-line-tools-reference/feature-gates/StrictCostEnforcementForWebhooks.md) — 2026-10-27T17:07:31+03:30
-- [reference/command-line-tools-reference/feature-gates/StrictCostEnforcementForVAP.md](md/reference/command-line-tools-reference/feature-gates/StrictCostEnforcementForVAP.md) — 2026-10-27T17:07:27+03:30
-- [reference/command-line-tools-reference/feature-gates/StreamingProxyRedirects.md](md/reference/command-line-tools-reference/feature-gates/StreamingProxyRedirects.md) — 2026-10-27T17:07:26+03:30
-- [reference/command-line-tools-reference/feature-gates/StreamingCollectionEncodingToProtobuf.md](md/reference/command-line-tools-reference/feature-gates/StreamingCollectionEncodingToProtobuf.md) — 2026-10-27T17:07:21+03:30
-- [reference/command-line-tools-reference/feature-gates/StreamingCollectionEncodingToJSON.md](md/reference/command-line-tools-reference/feature-gates/StreamingCollectionEncodingToJSON.md) — 2026-10-27T17:07:14+03:30
-- [reference/command-line-tools-reference/feature-gates/StorageVersionMigrator.md](md/reference/command-line-tools-reference/feature-gates/StorageVersionMigrator.md) — 2026-10-27T17:07:09+03:30
-- [reference/command-line-tools-reference/feature-gates/StorageVersionHash.md](md/reference/command-line-tools-reference/feature-gates/StorageVersionHash.md) — 2026-10-27T17:07:02+03:30
-- [reference/command-line-tools-reference/feature-gates/StorageVersionAPI.md](md/reference/command-line-tools-reference/feature-gates/StorageVersionAPI.md) — 2026-10-27T17:06:54+03:30
-- [reference/command-line-tools-reference/feature-gates/StorageObjectInUseProtection.md](md/reference/command-line-tools-reference/feature-gates/StorageObjectInUseProtection.md) — 2026-10-27T17:06:53+03:30
-- [reference/command-line-tools-reference/feature-gates/StorageNamespaceIndex.md](md/reference/command-line-tools-reference/feature-gates/StorageNamespaceIndex.md) — 2026-10-27T17:06:49+03:30
-- [reference/command-line-tools-reference/feature-gates/StorageCapacityScoring.md](md/reference/command-line-tools-reference/feature-gates/StorageCapacityScoring.md) — 2026-10-27T17:06:47+03:30
-- [reference/command-line-tools-reference/feature-gates/StatefulSetRecreateStrategy.md](md/reference/command-line-tools-reference/feature-gates/StatefulSetRecreateStrategy.md) — 2026-10-27T17:06:42+03:30
-- [reference/command-line-tools-reference/feature-gates/StatefulSetStartOrdinal.md](md/reference/command-line-tools-reference/feature-gates/StatefulSetStartOrdinal.md) — 2026-10-27T17:06:40+03:30
 
 </div>
 

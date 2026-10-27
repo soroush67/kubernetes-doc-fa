@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-688 از 1722 صفحه
+703 از 1722 صفحه
 
 
 ## `.`
@@ -824,21 +824,21 @@
 - ✅ [StructuredAuthorizationConfiguration.md](md/reference/command-line-tools-reference/feature-gates/StructuredAuthorizationConfiguration.md)
 - ✅ [SupplementalGroupsPolicy.md](md/reference/command-line-tools-reference/feature-gates/SupplementalGroupsPolicy.md)
 - ✅ [SupportIPVSProxyMode.md](md/reference/command-line-tools-reference/feature-gates/SupportIPVSProxyMode.md)
-- ⏳ `SupportNodePidsLimit.md`
-- ⏳ `SupportPodPidsLimit.md`
-- ⏳ `SuspendJob.md`
-- ⏳ `Sysctls.md`
-- ⏳ `SystemdWatchdog.md`
-- ⏳ `TTLAfterFinished.md`
-- ⏳ `TaintBasedEvictions.md`
-- ⏳ `TaintNodesByCondition.md`
-- ⏳ `TaintTolerationComparisonOperators.md`
-- ⏳ `TokenRequest.md`
-- ⏳ `TokenRequestProjection.md`
-- ⏳ `TokenRequestServiceAccountUIDValidation.md`
-- ⏳ `TopologyAwareHints.md`
-- ⏳ `TopologyAwareWorkloadScheduling.md`
-- ⏳ `TopologyManager.md`
+- ✅ [SupportNodePidsLimit.md](md/reference/command-line-tools-reference/feature-gates/SupportNodePidsLimit.md)
+- ✅ [SupportPodPidsLimit.md](md/reference/command-line-tools-reference/feature-gates/SupportPodPidsLimit.md)
+- ✅ [SuspendJob.md](md/reference/command-line-tools-reference/feature-gates/SuspendJob.md)
+- ✅ [Sysctls.md](md/reference/command-line-tools-reference/feature-gates/Sysctls.md)
+- ✅ [SystemdWatchdog.md](md/reference/command-line-tools-reference/feature-gates/SystemdWatchdog.md)
+- ✅ [TTLAfterFinished.md](md/reference/command-line-tools-reference/feature-gates/TTLAfterFinished.md)
+- ✅ [TaintBasedEvictions.md](md/reference/command-line-tools-reference/feature-gates/TaintBasedEvictions.md)
+- ✅ [TaintNodesByCondition.md](md/reference/command-line-tools-reference/feature-gates/TaintNodesByCondition.md)
+- ✅ [TaintTolerationComparisonOperators.md](md/reference/command-line-tools-reference/feature-gates/TaintTolerationComparisonOperators.md)
+- ✅ [TokenRequest.md](md/reference/command-line-tools-reference/feature-gates/TokenRequest.md)
+- ✅ [TokenRequestProjection.md](md/reference/command-line-tools-reference/feature-gates/TokenRequestProjection.md)
+- ✅ [TokenRequestServiceAccountUIDValidation.md](md/reference/command-line-tools-reference/feature-gates/TokenRequestServiceAccountUIDValidation.md)
+- ✅ [TopologyAwareHints.md](md/reference/command-line-tools-reference/feature-gates/TopologyAwareHints.md)
+- ✅ [TopologyAwareWorkloadScheduling.md](md/reference/command-line-tools-reference/feature-gates/TopologyAwareWorkloadScheduling.md)
+- ✅ [TopologyManager.md](md/reference/command-line-tools-reference/feature-gates/TopologyManager.md)
 - ⏳ `TopologyManagerPolicyAlphaOptions.md`
 - ⏳ `TopologyManagerPolicyBetaOptions.md`
 - ⏳ `TopologyManagerPolicyOptions.md`
