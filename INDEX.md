@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-403 از 1722 صفحه
+418 از 1722 صفحه
 
 
 ## `.`
@@ -538,22 +538,22 @@
 - ✅ [DisableKubeletCloudCredentialProviders.md](md/reference/command-line-tools-reference/feature-gates/DisableKubeletCloudCredentialProviders.md)
 - ✅ [DisableNodeKubeProxyVersion.md](md/reference/command-line-tools-reference/feature-gates/DisableNodeKubeProxyVersion.md)
 - ✅ [DownwardAPIHugePages.md](md/reference/command-line-tools-reference/feature-gates/DownwardAPIHugePages.md)
-- ⏳ `DryRun.md`
+- ✅ [DryRun.md](md/reference/command-line-tools-reference/feature-gates/DryRun.md)
 - ✅ [DynamicAuditing.md](md/reference/command-line-tools-reference/feature-gates/DynamicAuditing.md)
-- ⏳ `DynamicKubeletConfig.md`
-- ⏳ `DynamicProvisioningScheduling.md`
-- ⏳ `DynamicResourceAllocation.md`
-- ⏳ `DynamicVolumeProvisioning.md`
-- ⏳ `EfficientWatchResumption.md`
-- ⏳ `ElasticIndexedJob.md`
-- ⏳ `EmptyDirVolumeMode.md`
-- ⏳ `EnableAggregatedDiscoveryTimeout.md`
-- ⏳ `EnableEquivalenceClassCache.md`
-- ⏳ `EndpointSlice.md`
-- ⏳ `EndpointSliceNodeName.md`
-- ⏳ `EndpointSliceProxying.md`
-- ⏳ `EndpointSliceTerminatingCondition.md`
-- ⏳ `EnvFiles.md`
+- ✅ [DynamicKubeletConfig.md](md/reference/command-line-tools-reference/feature-gates/DynamicKubeletConfig.md)
+- ✅ [DynamicProvisioningScheduling.md](md/reference/command-line-tools-reference/feature-gates/DynamicProvisioningScheduling.md)
+- ✅ [DynamicResourceAllocation.md](md/reference/command-line-tools-reference/feature-gates/DynamicResourceAllocation.md)
+- ✅ [DynamicVolumeProvisioning.md](md/reference/command-line-tools-reference/feature-gates/DynamicVolumeProvisioning.md)
+- ✅ [EfficientWatchResumption.md](md/reference/command-line-tools-reference/feature-gates/EfficientWatchResumption.md)
+- ✅ [ElasticIndexedJob.md](md/reference/command-line-tools-reference/feature-gates/ElasticIndexedJob.md)
+- ✅ [EmptyDirVolumeMode.md](md/reference/command-line-tools-reference/feature-gates/EmptyDirVolumeMode.md)
+- ✅ [EnableAggregatedDiscoveryTimeout.md](md/reference/command-line-tools-reference/feature-gates/EnableAggregatedDiscoveryTimeout.md)
+- ✅ [EnableEquivalenceClassCache.md](md/reference/command-line-tools-reference/feature-gates/EnableEquivalenceClassCache.md)
+- ✅ [EndpointSlice.md](md/reference/command-line-tools-reference/feature-gates/EndpointSlice.md)
+- ✅ [EndpointSliceNodeName.md](md/reference/command-line-tools-reference/feature-gates/EndpointSliceNodeName.md)
+- ✅ [EndpointSliceProxying.md](md/reference/command-line-tools-reference/feature-gates/EndpointSliceProxying.md)
+- ✅ [EndpointSliceTerminatingCondition.md](md/reference/command-line-tools-reference/feature-gates/EndpointSliceTerminatingCondition.md)
+- ✅ [EnvFiles.md](md/reference/command-line-tools-reference/feature-gates/EnvFiles.md)
 - ⏳ `EphemeralContainers.md`
 - ⏳ `EtcdRangeStream.md`
 - ⏳ `EvenPodsSpread.md`

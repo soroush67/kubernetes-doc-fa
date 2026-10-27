@@ -9,7 +9,7 @@
 | | |
 |---|---|
 | پیشرفت (بر اساس کلمات) | **19.7٪** |
-| صفحات ترجمه‌شده | 403 از 1722 |
+| صفحات ترجمه‌شده | 418 از 1722 |
 | صفحات دارای ایراد ساختاری | 9 |
 | نسخه‌ی منبع انگلیسی | `ed70e311737a` |
 
@@ -72,7 +72,7 @@ cd kubernetes-doc-fa
 | `contribute` | 44 | 44 |
 | `doc-contributor-tools` | 1 | 1 |
 | `home` | 2 | 2 |
-| `reference` | 168 | 1198 |
+| `reference` | 183 | 1198 |
 | `setup` | 0 | 22 |
 | `tasks` | 0 | 221 |
 | `tutorials` | 0 | 45 |
@@ -91,26 +91,26 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [reference/command-line-tools-reference/feature-gates/EndpointSliceTerminatingCondition.md](md/reference/command-line-tools-reference/feature-gates/EndpointSliceTerminatingCondition.md) — 2026-10-27T16:50:06+03:30
+- [reference/command-line-tools-reference/feature-gates/EnvFiles.md](md/reference/command-line-tools-reference/feature-gates/EnvFiles.md) — 2026-10-27T16:50:06+03:30
+- [reference/command-line-tools-reference/feature-gates/EndpointSliceProxying.md](md/reference/command-line-tools-reference/feature-gates/EndpointSliceProxying.md) — 2026-10-27T16:50:01+03:30
+- [reference/command-line-tools-reference/feature-gates/EndpointSliceNodeName.md](md/reference/command-line-tools-reference/feature-gates/EndpointSliceNodeName.md) — 2026-10-27T16:50:00+03:30
+- [reference/command-line-tools-reference/feature-gates/EnableEquivalenceClassCache.md](md/reference/command-line-tools-reference/feature-gates/EnableEquivalenceClassCache.md) — 2026-10-27T16:49:55+03:30
+- [reference/command-line-tools-reference/feature-gates/EndpointSlice.md](md/reference/command-line-tools-reference/feature-gates/EndpointSlice.md) — 2026-10-27T16:49:54+03:30
+- [reference/command-line-tools-reference/feature-gates/EmptyDirVolumeMode.md](md/reference/command-line-tools-reference/feature-gates/EmptyDirVolumeMode.md) — 2026-10-27T16:49:48+03:30
+- [reference/command-line-tools-reference/feature-gates/EnableAggregatedDiscoveryTimeout.md](md/reference/command-line-tools-reference/feature-gates/EnableAggregatedDiscoveryTimeout.md) — 2026-10-27T16:49:48+03:30
+- [reference/command-line-tools-reference/feature-gates/ElasticIndexedJob.md](md/reference/command-line-tools-reference/feature-gates/ElasticIndexedJob.md) — 2026-10-27T16:49:43+03:30
+- [reference/command-line-tools-reference/feature-gates/EfficientWatchResumption.md](md/reference/command-line-tools-reference/feature-gates/EfficientWatchResumption.md) — 2026-10-27T16:49:39+03:30
+- [reference/command-line-tools-reference/feature-gates/DynamicResourceAllocation.md](md/reference/command-line-tools-reference/feature-gates/DynamicResourceAllocation.md) — 2026-10-27T16:49:36+03:30
+- [reference/command-line-tools-reference/feature-gates/DynamicVolumeProvisioning.md](md/reference/command-line-tools-reference/feature-gates/DynamicVolumeProvisioning.md) — 2026-10-27T16:49:30+03:30
+- [reference/command-line-tools-reference/feature-gates/DynamicKubeletConfig.md](md/reference/command-line-tools-reference/feature-gates/DynamicKubeletConfig.md) — 2026-10-27T16:49:25+03:30
+- [reference/command-line-tools-reference/feature-gates/DynamicProvisioningScheduling.md](md/reference/command-line-tools-reference/feature-gates/DynamicProvisioningScheduling.md) — 2026-10-27T16:49:24+03:30
+- [reference/command-line-tools-reference/feature-gates/DryRun.md](md/reference/command-line-tools-reference/feature-gates/DryRun.md) — 2026-10-27T16:49:16+03:30
 - [reference/command-line-tools-reference/feature-gates/DynamicAuditing.md](md/reference/command-line-tools-reference/feature-gates/DynamicAuditing.md) — 2026-10-27T16:49:11+03:30
 - [reference/command-line-tools-reference/feature-gates/DownwardAPIHugePages.md](md/reference/command-line-tools-reference/feature-gates/DownwardAPIHugePages.md) — 2026-10-27T16:49:06+03:30
 - [reference/command-line-tools-reference/feature-gates/DisableNodeKubeProxyVersion.md](md/reference/command-line-tools-reference/feature-gates/DisableNodeKubeProxyVersion.md) — 2026-10-27T16:49:03+03:30
 - [reference/command-line-tools-reference/feature-gates/DisableCloudProviders.md](md/reference/command-line-tools-reference/feature-gates/DisableCloudProviders.md) — 2026-10-27T16:48:58+03:30
 - [reference/command-line-tools-reference/feature-gates/DisableKubeletCloudCredentialProviders.md](md/reference/command-line-tools-reference/feature-gates/DisableKubeletCloudCredentialProviders.md) — 2026-10-27T16:48:57+03:30
-- [reference/command-line-tools-reference/feature-gates/DisableCPUQuotaWithExclusiveCPUs.md](md/reference/command-line-tools-reference/feature-gates/DisableCPUQuotaWithExclusiveCPUs.md) — 2026-10-27T16:48:50+03:30
-- [reference/command-line-tools-reference/feature-gates/DisableAllocatorDualWrite.md](md/reference/command-line-tools-reference/feature-gates/DisableAllocatorDualWrite.md) — 2026-10-27T16:48:46+03:30
-- [reference/command-line-tools-reference/feature-gates/DevicePluginCDIDevices.md](md/reference/command-line-tools-reference/feature-gates/DevicePluginCDIDevices.md) — 2026-10-27T16:48:42+03:30
-- [reference/command-line-tools-reference/feature-gates/DisableAcceleratorUsageMetrics.md](md/reference/command-line-tools-reference/feature-gates/DisableAcceleratorUsageMetrics.md) — 2026-10-27T16:48:39+03:30
-- [reference/command-line-tools-reference/feature-gates/DevicePlugins.md](md/reference/command-line-tools-reference/feature-gates/DevicePlugins.md) — 2026-10-27T16:48:32+03:30
-- [reference/command-line-tools-reference/feature-gates/DetectCacheInconsistency.md](md/reference/command-line-tools-reference/feature-gates/DetectCacheInconsistency.md) — 2026-10-27T16:48:26+03:30
-- [reference/command-line-tools-reference/feature-gates/DeploymentReplicaSetTerminatingReplicas.md](md/reference/command-line-tools-reference/feature-gates/DeploymentReplicaSetTerminatingReplicas.md) — 2026-10-27T16:48:25+03:30
-- [reference/command-line-tools-reference/feature-gates/DefaultPodTopologySpread.md](md/reference/command-line-tools-reference/feature-gates/DefaultPodTopologySpread.md) — 2026-10-27T16:48:17+03:30
-- [reference/command-line-tools-reference/feature-gates/DelegateFSGroupToCSIDriver.md](md/reference/command-line-tools-reference/feature-gates/DelegateFSGroupToCSIDriver.md) — 2026-10-27T16:48:16+03:30
-- [reference/command-line-tools-reference/feature-gates/DefaultPodSysctls.md](md/reference/command-line-tools-reference/feature-gates/DefaultPodSysctls.md) — 2026-10-27T16:48:07+03:30
-- [reference/command-line-tools-reference/feature-gates/DeclarativeValidationTakeover.md](md/reference/command-line-tools-reference/feature-gates/DeclarativeValidationTakeover.md) — 2026-10-27T16:48:00+03:30
-- [reference/command-line-tools-reference/feature-gates/DefaultHostNetworkHostPortsInPodTemplates.md](md/reference/command-line-tools-reference/feature-gates/DefaultHostNetworkHostPortsInPodTemplates.md) — 2026-10-27T16:48:00+03:30
-- [reference/command-line-tools-reference/feature-gates/DeclarativeValidationBeta.md](md/reference/command-line-tools-reference/feature-gates/DeclarativeValidationBeta.md) — 2026-10-27T16:47:51+03:30
-- [reference/command-line-tools-reference/feature-gates/DeclarativeValidation.md](md/reference/command-line-tools-reference/feature-gates/DeclarativeValidation.md) — 2026-10-27T16:47:50+03:30
-- [reference/command-line-tools-reference/feature-gates/DaemonSetUpdateSurge.md](md/reference/command-line-tools-reference/feature-gates/DaemonSetUpdateSurge.md) — 2026-10-27T16:47:44+03:30
 
 </div>
 
