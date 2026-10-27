@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-613 از 1722 صفحه
+628 از 1722 صفحه
 
 
 ## `.`
@@ -749,21 +749,21 @@
 - ✅ [ResourceHealthStatus.md](md/reference/command-line-tools-reference/feature-gates/ResourceHealthStatus.md)
 - ✅ [ResourceLimitsPriorityFunction.md](md/reference/command-line-tools-reference/feature-gates/ResourceLimitsPriorityFunction.md)
 - ✅ [ResourceQuotaScopeSelectors.md](md/reference/command-line-tools-reference/feature-gates/ResourceQuotaScopeSelectors.md)
-- ⏳ `RestartAllContainersOnContainerExits.md`
-- ⏳ `RetroactiveDefaultStorageClass.md`
-- ⏳ `RetryGenerateName.md`
-- ⏳ `RootCAConfigMap.md`
-- ⏳ `RotateKubeletClientCertificate.md`
-- ⏳ `RotateKubeletServerCertificate.md`
-- ⏳ `RunAsGroup.md`
-- ⏳ `RuntimeClass.md`
-- ⏳ `RuntimeClassInImageCriApi.md`
-- ⏳ `SCTPSupport.md`
-- ⏳ `SELinuxChangePolicy.md`
-- ⏳ `SELinuxMount.md`
-- ⏳ `SELinuxMountReadWriteOncePod.md`
-- ⏳ `ScheduleDaemonSetPods.md`
-- ⏳ `SchedulerAsyncAPICalls.md`
+- ✅ [RestartAllContainersOnContainerExits.md](md/reference/command-line-tools-reference/feature-gates/RestartAllContainersOnContainerExits.md)
+- ✅ [RetroactiveDefaultStorageClass.md](md/reference/command-line-tools-reference/feature-gates/RetroactiveDefaultStorageClass.md)
+- ✅ [RetryGenerateName.md](md/reference/command-line-tools-reference/feature-gates/RetryGenerateName.md)
+- ✅ [RootCAConfigMap.md](md/reference/command-line-tools-reference/feature-gates/RootCAConfigMap.md)
+- ✅ [RotateKubeletClientCertificate.md](md/reference/command-line-tools-reference/feature-gates/RotateKubeletClientCertificate.md)
+- ✅ [RotateKubeletServerCertificate.md](md/reference/command-line-tools-reference/feature-gates/RotateKubeletServerCertificate.md)
+- ✅ [RunAsGroup.md](md/reference/command-line-tools-reference/feature-gates/RunAsGroup.md)
+- ✅ [RuntimeClass.md](md/reference/command-line-tools-reference/feature-gates/RuntimeClass.md)
+- ✅ [RuntimeClassInImageCriApi.md](md/reference/command-line-tools-reference/feature-gates/RuntimeClassInImageCriApi.md)
+- ✅ [SCTPSupport.md](md/reference/command-line-tools-reference/feature-gates/SCTPSupport.md)
+- ✅ [SELinuxChangePolicy.md](md/reference/command-line-tools-reference/feature-gates/SELinuxChangePolicy.md)
+- ✅ [SELinuxMount.md](md/reference/command-line-tools-reference/feature-gates/SELinuxMount.md)
+- ✅ [SELinuxMountReadWriteOncePod.md](md/reference/command-line-tools-reference/feature-gates/SELinuxMountReadWriteOncePod.md)
+- ✅ [ScheduleDaemonSetPods.md](md/reference/command-line-tools-reference/feature-gates/ScheduleDaemonSetPods.md)
+- ✅ [SchedulerAsyncAPICalls.md](md/reference/command-line-tools-reference/feature-gates/SchedulerAsyncAPICalls.md)
 - ⏳ `SchedulerAsyncPreemption.md`
 - ⏳ `SchedulerPopFromBackoffQ.md`
 - ⏳ `SchedulerQueueingHints.md`
