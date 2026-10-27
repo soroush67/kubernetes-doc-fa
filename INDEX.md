@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-673 از 1722 صفحه
+688 از 1722 صفحه
 
 
 ## `.`
@@ -809,21 +809,21 @@
 - ✅ [StorageCapacityScoring.md](md/reference/command-line-tools-reference/feature-gates/StorageCapacityScoring.md)
 - ✅ [StorageNamespaceIndex.md](md/reference/command-line-tools-reference/feature-gates/StorageNamespaceIndex.md)
 - ✅ [StorageObjectInUseProtection.md](md/reference/command-line-tools-reference/feature-gates/StorageObjectInUseProtection.md)
-- ⏳ `StorageVersionAPI.md`
-- ⏳ `StorageVersionHash.md`
-- ⏳ `StorageVersionMigrator.md`
-- ⏳ `StreamingCollectionEncodingToJSON.md`
-- ⏳ `StreamingCollectionEncodingToProtobuf.md`
-- ⏳ `StreamingProxyRedirects.md`
-- ⏳ `StrictCostEnforcementForVAP.md`
-- ⏳ `StrictCostEnforcementForWebhooks.md`
-- ⏳ `StrictIPCIDRValidation.md`
-- ⏳ `StructuredAuthenticationConfiguration.md`
-- ⏳ `StructuredAuthenticationConfigurationEgressSelector.md`
-- ⏳ `StructuredAuthenticationConfigurationJWKSMetrics.md`
-- ⏳ `StructuredAuthorizationConfiguration.md`
-- ⏳ `SupplementalGroupsPolicy.md`
-- ⏳ `SupportIPVSProxyMode.md`
+- ✅ [StorageVersionAPI.md](md/reference/command-line-tools-reference/feature-gates/StorageVersionAPI.md)
+- ✅ [StorageVersionHash.md](md/reference/command-line-tools-reference/feature-gates/StorageVersionHash.md)
+- ✅ [StorageVersionMigrator.md](md/reference/command-line-tools-reference/feature-gates/StorageVersionMigrator.md)
+- ✅ [StreamingCollectionEncodingToJSON.md](md/reference/command-line-tools-reference/feature-gates/StreamingCollectionEncodingToJSON.md)
+- ✅ [StreamingCollectionEncodingToProtobuf.md](md/reference/command-line-tools-reference/feature-gates/StreamingCollectionEncodingToProtobuf.md)
+- ✅ [StreamingProxyRedirects.md](md/reference/command-line-tools-reference/feature-gates/StreamingProxyRedirects.md)
+- ✅ [StrictCostEnforcementForVAP.md](md/reference/command-line-tools-reference/feature-gates/StrictCostEnforcementForVAP.md)
+- ✅ [StrictCostEnforcementForWebhooks.md](md/reference/command-line-tools-reference/feature-gates/StrictCostEnforcementForWebhooks.md)
+- ✅ [StrictIPCIDRValidation.md](md/reference/command-line-tools-reference/feature-gates/StrictIPCIDRValidation.md)
+- ✅ [StructuredAuthenticationConfiguration.md](md/reference/command-line-tools-reference/feature-gates/StructuredAuthenticationConfiguration.md)
+- ✅ [StructuredAuthenticationConfigurationEgressSelector.md](md/reference/command-line-tools-reference/feature-gates/StructuredAuthenticationConfigurationEgressSelector.md)
+- ✅ [StructuredAuthenticationConfigurationJWKSMetrics.md](md/reference/command-line-tools-reference/feature-gates/StructuredAuthenticationConfigurationJWKSMetrics.md)
+- ✅ [StructuredAuthorizationConfiguration.md](md/reference/command-line-tools-reference/feature-gates/StructuredAuthorizationConfiguration.md)
+- ✅ [SupplementalGroupsPolicy.md](md/reference/command-line-tools-reference/feature-gates/SupplementalGroupsPolicy.md)
+- ✅ [SupportIPVSProxyMode.md](md/reference/command-line-tools-reference/feature-gates/SupportIPVSProxyMode.md)
 - ⏳ `SupportNodePidsLimit.md`
 - ⏳ `SupportPodPidsLimit.md`
 - ⏳ `SuspendJob.md`
