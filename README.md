@@ -9,7 +9,7 @@
 | | |
 |---|---|
 | پیشرفت (بر اساس کلمات) | **19.5٪** |
-| صفحات ترجمه‌شده | 328 از 1722 |
+| صفحات ترجمه‌شده | 343 از 1722 |
 | صفحات دارای ایراد ساختاری | 9 |
 | نسخه‌ی منبع انگلیسی | `ed70e311737a` |
 
@@ -72,7 +72,7 @@ cd kubernetes-doc-fa
 | `contribute` | 44 | 44 |
 | `doc-contributor-tools` | 1 | 1 |
 | `home` | 2 | 2 |
-| `reference` | 93 | 1198 |
+| `reference` | 108 | 1198 |
 | `setup` | 0 | 22 |
 | `tasks` | 0 | 221 |
 | `tutorials` | 0 | 45 |
@@ -91,26 +91,26 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [reference/command-line-tools-reference/feature-gates/ConstrainedImpersonation.md](md/reference/command-line-tools-reference/feature-gates/ConstrainedImpersonation.md) — 2026-10-27T16:45:10+03:30
+- [reference/command-line-tools-reference/feature-gates/ConsistentListFromCache.md](md/reference/command-line-tools-reference/feature-gates/ConsistentListFromCache.md) — 2026-10-27T16:45:07+03:30
+- [reference/command-line-tools-reference/feature-gates/ConsistentHTTPGetHandlers.md](md/reference/command-line-tools-reference/feature-gates/ConsistentHTTPGetHandlers.md) — 2026-10-27T16:45:04+03:30
+- [reference/command-line-tools-reference/feature-gates/ConfigurableFSGroupPolicy.md](md/reference/command-line-tools-reference/feature-gates/ConfigurableFSGroupPolicy.md) — 2026-10-27T16:44:59+03:30
+- [reference/command-line-tools-reference/feature-gates/ConcurrentWatchObjectDecode.md](md/reference/command-line-tools-reference/feature-gates/ConcurrentWatchObjectDecode.md) — 2026-10-27T16:44:58+03:30
+- [reference/command-line-tools-reference/feature-gates/CompositePodGroup.md](md/reference/command-line-tools-reference/feature-gates/CompositePodGroup.md) — 2026-10-27T16:44:54+03:30
+- [reference/command-line-tools-reference/feature-gates/ComponentStatusz.md](md/reference/command-line-tools-reference/feature-gates/ComponentStatusz.md) — 2026-10-27T16:44:50+03:30
+- [reference/command-line-tools-reference/feature-gates/ComponentSLIs.md](md/reference/command-line-tools-reference/feature-gates/ComponentSLIs.md) — 2026-10-27T16:44:46+03:30
+- [reference/command-line-tools-reference/feature-gates/ComponentFlagz.md](md/reference/command-line-tools-reference/feature-gates/ComponentFlagz.md) — 2026-10-27T16:44:45+03:30
+- [reference/command-line-tools-reference/feature-gates/ClusterTrustBundle.md](md/reference/command-line-tools-reference/feature-gates/ClusterTrustBundle.md) — 2026-10-27T16:44:40+03:30
+- [reference/command-line-tools-reference/feature-gates/ClusterTrustBundleProjection.md](md/reference/command-line-tools-reference/feature-gates/ClusterTrustBundleProjection.md) — 2026-10-27T16:44:39+03:30
+- [reference/command-line-tools-reference/feature-gates/CloudControllerManagerWebhook.md](md/reference/command-line-tools-reference/feature-gates/CloudControllerManagerWebhook.md) — 2026-10-27T16:44:32+03:30
+- [reference/command-line-tools-reference/feature-gates/CloudDualStackNodeIPs.md](md/reference/command-line-tools-reference/feature-gates/CloudDualStackNodeIPs.md) — 2026-10-27T16:44:31+03:30
+- [reference/command-line-tools-reference/feature-gates/CloudControllerManagerWatchBasedRoutesReconciliation.md](md/reference/command-line-tools-reference/feature-gates/CloudControllerManagerWatchBasedRoutesReconciliation.md) — 2026-10-27T16:44:23+03:30
+- [reference/command-line-tools-reference/feature-gates/ClearingNominatedNodeNameAfterBinding.md](md/reference/command-line-tools-reference/feature-gates/ClearingNominatedNodeNameAfterBinding.md) — 2026-10-27T16:44:15+03:30
 - [reference/command-line-tools-reference/feature-gates/ChangeContainerStatusOnKubeletRestart.md](md/reference/command-line-tools-reference/feature-gates/ChangeContainerStatusOnKubeletRestart.md) — 2026-10-27T16:44:13+03:30
 - [reference/command-line-tools-reference/feature-gates/CSIVolumeHealth.md](md/reference/command-line-tools-reference/feature-gates/CSIVolumeHealth.md) — 2026-10-27T16:44:06+03:30
 - [reference/command-line-tools-reference/feature-gates/CSRDuration.md](md/reference/command-line-tools-reference/feature-gates/CSRDuration.md) — 2026-10-27T16:44:05+03:30
 - [reference/command-line-tools-reference/feature-gates/CSIStorageCapacity.md](md/reference/command-line-tools-reference/feature-gates/CSIStorageCapacity.md) — 2026-10-27T16:43:58+03:30
 - [reference/command-line-tools-reference/feature-gates/CSIVolumeFSGroupPolicy.md](md/reference/command-line-tools-reference/feature-gates/CSIVolumeFSGroupPolicy.md) — 2026-10-27T16:43:58+03:30
-- [reference/command-line-tools-reference/feature-gates/CSIServiceAccountToken.md](md/reference/command-line-tools-reference/feature-gates/CSIServiceAccountToken.md) — 2026-10-27T16:43:51+03:30
-- [reference/command-line-tools-reference/feature-gates/CSIServiceAccountTokenSecrets.md](md/reference/command-line-tools-reference/feature-gates/CSIServiceAccountTokenSecrets.md) — 2026-10-27T16:43:51+03:30
-- [reference/command-line-tools-reference/feature-gates/CSIPersistentVolume.md](md/reference/command-line-tools-reference/feature-gates/CSIPersistentVolume.md) — 2026-10-27T16:43:47+03:30
-- [reference/command-line-tools-reference/feature-gates/CSINodeInfo.md](md/reference/command-line-tools-reference/feature-gates/CSINodeInfo.md) — 2026-10-27T16:43:43+03:30
-- [reference/command-line-tools-reference/feature-gates/CSINodeExpandSecret.md](md/reference/command-line-tools-reference/feature-gates/CSINodeExpandSecret.md) — 2026-10-27T16:43:41+03:30
-- [reference/command-line-tools-reference/feature-gates/CSIMigrationvSphereComplete.md](md/reference/command-line-tools-reference/feature-gates/CSIMigrationvSphereComplete.md) — 2026-10-27T16:43:36+03:30
-- [reference/command-line-tools-reference/feature-gates/CSIMigrationvSphere.md](md/reference/command-line-tools-reference/feature-gates/CSIMigrationvSphere.md) — 2026-10-27T16:43:35+03:30
-- [reference/command-line-tools-reference/feature-gates/CSIMigrationRBD.md](md/reference/command-line-tools-reference/feature-gates/CSIMigrationRBD.md) — 2026-10-27T16:43:29+03:30
-- [reference/command-line-tools-reference/feature-gates/CSIMigrationPortworx.md](md/reference/command-line-tools-reference/feature-gates/CSIMigrationPortworx.md) — 2026-10-27T16:43:24+03:30
-- [reference/command-line-tools-reference/feature-gates/CSIMigrationOpenStack.md](md/reference/command-line-tools-reference/feature-gates/CSIMigrationOpenStack.md) — 2026-10-27T16:43:18+03:30
-- [reference/command-line-tools-reference/feature-gates/CSIMigrationOpenStackComplete.md](md/reference/command-line-tools-reference/feature-gates/CSIMigrationOpenStackComplete.md) — 2026-10-27T16:43:18+03:30
-- [reference/command-line-tools-reference/feature-gates/CSIMigrationGCEComplete.md](md/reference/command-line-tools-reference/feature-gates/CSIMigrationGCEComplete.md) — 2026-10-27T16:43:11+03:30
-- [reference/command-line-tools-reference/feature-gates/CSIMigrationGCE.md](md/reference/command-line-tools-reference/feature-gates/CSIMigrationGCE.md) — 2026-10-27T16:43:10+03:30
-- [reference/command-line-tools-reference/feature-gates/CSIMigrationAzureFileComplete.md](md/reference/command-line-tools-reference/feature-gates/CSIMigrationAzureFileComplete.md) — 2026-10-27T16:43:03+03:30
-- [reference/command-line-tools-reference/feature-gates/CSIMigrationAzureFile.md](md/reference/command-line-tools-reference/feature-gates/CSIMigrationAzureFile.md) — 2026-10-27T16:42:58+03:30
 
 </div>
 

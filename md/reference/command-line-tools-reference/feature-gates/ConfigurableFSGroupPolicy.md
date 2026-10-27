@@ -1,0 +1,28 @@
+---
+# Removed from Kubernetes
+title: ConfigurableFSGroupPolicy
+content_type: feature_gate
+
+_build:
+  list: never
+  render: false
+
+stages:
+  - stage: alpha 
+    defaultValue: false
+    fromVersion: "1.18"
+    toVersion: "1.19"
+  - stage: beta 
+    defaultValue: true
+    fromVersion: "1.20"
+    toVersion: "1.22"    
+  - stage: stable
+    defaultValue: true
+    fromVersion: "1.23"
+    toVersion: "1.25"
+
+removed: true  
+---
+به کاربر اجازه می‌دهد سیاست تغییر مجوزهای حجم (volume) را برای fsGroupها هنگام مانت کردن یک حجم در یک Pod پیکربندی کند. برای جزئیات بیشتر، به
+[پیکربندی سیاست تغییر مجوز و مالکیت حجم برای Podها](/docs/tasks/configure-pod-container/security-context/#configure-volume-permission-and-ownership-change-policy-for-pods)
+مراجعه کنید.

@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-328 از 1722 صفحه
+343 از 1722 صفحه
 
 
 ## `.`
@@ -464,21 +464,21 @@
 - ✅ [CSIVolumeHealth.md](md/reference/command-line-tools-reference/feature-gates/CSIVolumeHealth.md)
 - ✅ [CSRDuration.md](md/reference/command-line-tools-reference/feature-gates/CSRDuration.md)
 - ✅ [ChangeContainerStatusOnKubeletRestart.md](md/reference/command-line-tools-reference/feature-gates/ChangeContainerStatusOnKubeletRestart.md)
-- ⏳ `ClearingNominatedNodeNameAfterBinding.md`
-- ⏳ `CloudControllerManagerWatchBasedRoutesReconciliation.md`
-- ⏳ `CloudControllerManagerWebhook.md`
-- ⏳ `CloudDualStackNodeIPs.md`
-- ⏳ `ClusterTrustBundle.md`
-- ⏳ `ClusterTrustBundleProjection.md`
-- ⏳ `ComponentFlagz.md`
-- ⏳ `ComponentSLIs.md`
-- ⏳ `ComponentStatusz.md`
-- ⏳ `CompositePodGroup.md`
-- ⏳ `ConcurrentWatchObjectDecode.md`
-- ⏳ `ConfigurableFSGroupPolicy.md`
-- ⏳ `ConsistentHTTPGetHandlers.md`
-- ⏳ `ConsistentListFromCache.md`
-- ⏳ `ConstrainedImpersonation.md`
+- ✅ [ClearingNominatedNodeNameAfterBinding.md](md/reference/command-line-tools-reference/feature-gates/ClearingNominatedNodeNameAfterBinding.md)
+- ✅ [CloudControllerManagerWatchBasedRoutesReconciliation.md](md/reference/command-line-tools-reference/feature-gates/CloudControllerManagerWatchBasedRoutesReconciliation.md)
+- ✅ [CloudControllerManagerWebhook.md](md/reference/command-line-tools-reference/feature-gates/CloudControllerManagerWebhook.md)
+- ✅ [CloudDualStackNodeIPs.md](md/reference/command-line-tools-reference/feature-gates/CloudDualStackNodeIPs.md)
+- ✅ [ClusterTrustBundle.md](md/reference/command-line-tools-reference/feature-gates/ClusterTrustBundle.md)
+- ✅ [ClusterTrustBundleProjection.md](md/reference/command-line-tools-reference/feature-gates/ClusterTrustBundleProjection.md)
+- ✅ [ComponentFlagz.md](md/reference/command-line-tools-reference/feature-gates/ComponentFlagz.md)
+- ✅ [ComponentSLIs.md](md/reference/command-line-tools-reference/feature-gates/ComponentSLIs.md)
+- ✅ [ComponentStatusz.md](md/reference/command-line-tools-reference/feature-gates/ComponentStatusz.md)
+- ✅ [CompositePodGroup.md](md/reference/command-line-tools-reference/feature-gates/CompositePodGroup.md)
+- ✅ [ConcurrentWatchObjectDecode.md](md/reference/command-line-tools-reference/feature-gates/ConcurrentWatchObjectDecode.md)
+- ✅ [ConfigurableFSGroupPolicy.md](md/reference/command-line-tools-reference/feature-gates/ConfigurableFSGroupPolicy.md)
+- ✅ [ConsistentHTTPGetHandlers.md](md/reference/command-line-tools-reference/feature-gates/ConsistentHTTPGetHandlers.md)
+- ✅ [ConsistentListFromCache.md](md/reference/command-line-tools-reference/feature-gates/ConsistentListFromCache.md)
+- ✅ [ConstrainedImpersonation.md](md/reference/command-line-tools-reference/feature-gates/ConstrainedImpersonation.md)
 - ⏳ `ContainerCheckpoint.md`
 - ⏳ `ContainerRestartRules.md`
 - ⏳ `ContainerStopSignals.md`
