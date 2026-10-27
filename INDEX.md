@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-268 از 1722 صفحه
+283 از 1722 صفحه
 
 
 ## `.`
@@ -404,21 +404,21 @@
 - ✅ [AdmissionWebhookMatchConditions.md](md/reference/command-line-tools-reference/feature-gates/AdmissionWebhookMatchConditions.md)
 - ✅ [AdvancedAuditing.md](md/reference/command-line-tools-reference/feature-gates/AdvancedAuditing.md)
 - ✅ [AffinityInAnnotations.md](md/reference/command-line-tools-reference/feature-gates/AffinityInAnnotations.md)
-- ⏳ `AggregatedDiscoveryEndpoint.md`
-- ⏳ `AllowDNSOnlyNodeCSR.md`
-- ⏳ `AllowExtTrafficLocalEndpoints.md`
-- ⏳ `AllowInsecureBackendProxy.md`
-- ⏳ `AllowInsecureKubeletCertificateSigningRequests.md`
-- ⏳ `AllowParsingUserUIDFromCertAuth.md`
-- ⏳ `AllowServiceExternalIPs.md`
-- ⏳ `AllowServiceLBStatusOnNonLB.md`
-- ⏳ `AllowUnsafeMalformedObjectDeletion.md`
-- ⏳ `AnonymousAuthConfigurableEndpoints.md`
-- ⏳ `AnyVolumeDataSource.md`
-- ⏳ `AppArmor.md`
-- ⏳ `AppArmorFields.md`
-- ⏳ `AtomicFIFO.md`
-- ⏳ `AtomicWriteVolumeUserFields.md`
+- ✅ [AggregatedDiscoveryEndpoint.md](md/reference/command-line-tools-reference/feature-gates/AggregatedDiscoveryEndpoint.md)
+- ✅ [AllowDNSOnlyNodeCSR.md](md/reference/command-line-tools-reference/feature-gates/AllowDNSOnlyNodeCSR.md)
+- ✅ [AllowExtTrafficLocalEndpoints.md](md/reference/command-line-tools-reference/feature-gates/AllowExtTrafficLocalEndpoints.md)
+- ✅ [AllowInsecureBackendProxy.md](md/reference/command-line-tools-reference/feature-gates/AllowInsecureBackendProxy.md)
+- ✅ [AllowInsecureKubeletCertificateSigningRequests.md](md/reference/command-line-tools-reference/feature-gates/AllowInsecureKubeletCertificateSigningRequests.md)
+- ✅ [AllowParsingUserUIDFromCertAuth.md](md/reference/command-line-tools-reference/feature-gates/AllowParsingUserUIDFromCertAuth.md)
+- ✅ [AllowServiceExternalIPs.md](md/reference/command-line-tools-reference/feature-gates/AllowServiceExternalIPs.md)
+- ✅ [AllowServiceLBStatusOnNonLB.md](md/reference/command-line-tools-reference/feature-gates/AllowServiceLBStatusOnNonLB.md)
+- ✅ [AllowUnsafeMalformedObjectDeletion.md](md/reference/command-line-tools-reference/feature-gates/AllowUnsafeMalformedObjectDeletion.md)
+- ✅ [AnonymousAuthConfigurableEndpoints.md](md/reference/command-line-tools-reference/feature-gates/AnonymousAuthConfigurableEndpoints.md)
+- ✅ [AnyVolumeDataSource.md](md/reference/command-line-tools-reference/feature-gates/AnyVolumeDataSource.md)
+- ✅ [AppArmor.md](md/reference/command-line-tools-reference/feature-gates/AppArmor.md)
+- ✅ [AppArmorFields.md](md/reference/command-line-tools-reference/feature-gates/AppArmorFields.md)
+- ✅ [AtomicFIFO.md](md/reference/command-line-tools-reference/feature-gates/AtomicFIFO.md)
+- ✅ [AtomicWriteVolumeUserFields.md](md/reference/command-line-tools-reference/feature-gates/AtomicWriteVolumeUserFields.md)
 - ⏳ `AttachVolumeLimit.md`
 - ⏳ `AuthorizeNodeWithSelectors.md`
 - ⏳ `AuthorizePodWebsocketUpgradeCreatePermission.md`

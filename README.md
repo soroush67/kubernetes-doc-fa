@@ -9,7 +9,7 @@
 | | |
 |---|---|
 | پیشرفت (بر اساس کلمات) | **19.3٪** |
-| صفحات ترجمه‌شده | 268 از 1722 |
+| صفحات ترجمه‌شده | 283 از 1722 |
 | صفحات دارای ایراد ساختاری | 9 |
 | نسخه‌ی منبع انگلیسی | `ed70e311737a` |
 
@@ -72,7 +72,7 @@ cd kubernetes-doc-fa
 | `contribute` | 44 | 44 |
 | `doc-contributor-tools` | 1 | 1 |
 | `home` | 2 | 2 |
-| `reference` | 33 | 1198 |
+| `reference` | 48 | 1198 |
 | `setup` | 0 | 22 |
 | `tasks` | 0 | 221 |
 | `tutorials` | 0 | 45 |
@@ -91,26 +91,26 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [reference/command-line-tools-reference/feature-gates/AppArmorFields.md](md/reference/command-line-tools-reference/feature-gates/AppArmorFields.md) — 2026-10-27T16:41:09+03:30
+- [reference/command-line-tools-reference/feature-gates/AtomicWriteVolumeUserFields.md](md/reference/command-line-tools-reference/feature-gates/AtomicWriteVolumeUserFields.md) — 2026-10-27T16:41:09+03:30
+- [reference/command-line-tools-reference/feature-gates/AtomicFIFO.md](md/reference/command-line-tools-reference/feature-gates/AtomicFIFO.md) — 2026-10-27T16:41:00+03:30
+- [reference/command-line-tools-reference/feature-gates/AppArmor.md](md/reference/command-line-tools-reference/feature-gates/AppArmor.md) — 2026-10-27T16:40:53+03:30
+- [reference/command-line-tools-reference/feature-gates/AnonymousAuthConfigurableEndpoints.md](md/reference/command-line-tools-reference/feature-gates/AnonymousAuthConfigurableEndpoints.md) — 2026-10-27T16:40:48+03:30
+- [reference/command-line-tools-reference/feature-gates/AnyVolumeDataSource.md](md/reference/command-line-tools-reference/feature-gates/AnyVolumeDataSource.md) — 2026-10-27T16:40:47+03:30
+- [reference/command-line-tools-reference/feature-gates/AllowServiceLBStatusOnNonLB.md](md/reference/command-line-tools-reference/feature-gates/AllowServiceLBStatusOnNonLB.md) — 2026-10-27T16:40:41+03:30
+- [reference/command-line-tools-reference/feature-gates/AllowUnsafeMalformedObjectDeletion.md](md/reference/command-line-tools-reference/feature-gates/AllowUnsafeMalformedObjectDeletion.md) — 2026-10-27T16:40:41+03:30
+- [reference/command-line-tools-reference/feature-gates/AllowServiceExternalIPs.md](md/reference/command-line-tools-reference/feature-gates/AllowServiceExternalIPs.md) — 2026-10-27T16:40:34+03:30
+- [reference/command-line-tools-reference/feature-gates/AllowParsingUserUIDFromCertAuth.md](md/reference/command-line-tools-reference/feature-gates/AllowParsingUserUIDFromCertAuth.md) — 2026-10-27T16:40:29+03:30
+- [reference/command-line-tools-reference/feature-gates/AllowExtTrafficLocalEndpoints.md](md/reference/command-line-tools-reference/feature-gates/AllowExtTrafficLocalEndpoints.md) — 2026-10-27T16:40:28+03:30
+- [reference/command-line-tools-reference/feature-gates/AllowInsecureKubeletCertificateSigningRequests.md](md/reference/command-line-tools-reference/feature-gates/AllowInsecureKubeletCertificateSigningRequests.md) — 2026-10-27T16:40:23+03:30
+- [reference/command-line-tools-reference/feature-gates/AllowInsecureBackendProxy.md](md/reference/command-line-tools-reference/feature-gates/AllowInsecureBackendProxy.md) — 2026-10-27T16:40:15+03:30
+- [reference/command-line-tools-reference/feature-gates/AllowDNSOnlyNodeCSR.md](md/reference/command-line-tools-reference/feature-gates/AllowDNSOnlyNodeCSR.md) — 2026-10-27T16:40:11+03:30
+- [reference/command-line-tools-reference/feature-gates/AggregatedDiscoveryEndpoint.md](md/reference/command-line-tools-reference/feature-gates/AggregatedDiscoveryEndpoint.md) — 2026-10-27T16:40:00+03:30
 - [reference/command-line-tools-reference/feature-gates/AdvancedAuditing.md](md/reference/command-line-tools-reference/feature-gates/AdvancedAuditing.md) — 2026-10-27T16:39:53+03:30
 - [reference/command-line-tools-reference/feature-gates/AffinityInAnnotations.md](md/reference/command-line-tools-reference/feature-gates/AffinityInAnnotations.md) — 2026-10-27T16:39:53+03:30
 - [reference/command-line-tools-reference/feature-gates/Accelerators.md](md/reference/command-line-tools-reference/feature-gates/Accelerators.md) — 2026-10-27T16:39:41+03:30
 - [reference/command-line-tools-reference/feature-gates/AdmissionWebhookMatchConditions.md](md/reference/command-line-tools-reference/feature-gates/AdmissionWebhookMatchConditions.md) — 2026-10-27T16:39:41+03:30
 - [reference/access-authn-authz/validating-admission-policy.md](md/reference/access-authn-authz/validating-admission-policy.md) — 2026-10-27T16:39:36+03:30
-- [reference/command-line-tools-reference/feature-gates/APIServingWithRoutine.md](md/reference/command-line-tools-reference/feature-gates/APIServingWithRoutine.md) — 2026-10-27T16:39:35+03:30
-- [reference/command-line-tools-reference/feature-gates/APIServerWebhookAuthenticationToken.md](md/reference/command-line-tools-reference/feature-gates/APIServerWebhookAuthenticationToken.md) — 2026-10-27T16:39:28+03:30
-- [reference/command-line-tools-reference/feature-gates/APIServerTracing.md](md/reference/command-line-tools-reference/feature-gates/APIServerTracing.md) — 2026-10-27T16:39:20+03:30
-- [reference/command-line-tools-reference/feature-gates/APIServerIdentity.md](md/reference/command-line-tools-reference/feature-gates/APIServerIdentity.md) — 2026-10-27T16:39:14+03:30
-- [reference/command-line-tools-reference/feature-gates/APISelfSubjectReview.md](md/reference/command-line-tools-reference/feature-gates/APISelfSubjectReview.md) — 2026-10-27T16:39:07+03:30
-- [reference/command-line-tools-reference/feature-gates/APIResponseCompression.md](md/reference/command-line-tools-reference/feature-gates/APIResponseCompression.md) — 2026-10-27T16:38:59+03:30
-- [reference/command-line-tools-reference/feature-gates/APIPriorityAndFairness.md](md/reference/command-line-tools-reference/feature-gates/APIPriorityAndFairness.md) — 2026-10-27T16:38:52+03:30
-- [reference/command-line-tools-reference/feature-gates/APIListChunking.md](md/reference/command-line-tools-reference/feature-gates/APIListChunking.md) — 2026-10-27T16:38:46+03:30
-- [reference/command-line-tools-reference/_index.md](md/reference/command-line-tools-reference/_index.md) — 2026-10-27T16:38:39+03:30
-- [reference/access-authn-authz/webhook.md](md/reference/access-authn-authz/webhook.md) — 2026-10-27T16:38:33+03:30
-- [reference/access-authn-authz/user-impersonation.md](md/reference/access-authn-authz/user-impersonation.md) — 2026-10-27T16:38:05+03:30
-- [reference/access-authn-authz/service-accounts-admin.md](md/reference/access-authn-authz/service-accounts-admin.md) — 2026-10-27T16:37:48+03:30
-- [reference/access-authn-authz/rbac.md](md/reference/access-authn-authz/rbac.md) — 2026-10-27T16:37:07+03:30
-- [reference/access-authn-authz/psp-to-pod-security-standards.md](md/reference/access-authn-authz/psp-to-pod-security-standards.md) — 2026-10-27T16:36:04+03:30
-- [reference/access-authn-authz/mutating-admission-policy.md](md/reference/access-authn-authz/mutating-admission-policy.md) — 2026-10-27T16:34:32+03:30
 
 </div>
 
