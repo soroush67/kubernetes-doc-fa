@@ -49,6 +49,11 @@ figure{margin:16px 0;text-align:center}
 .index-tree li{margin:2px 0}
 .index-tree .sec{font-weight:700}
 .missing{color:var(--muted)}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
 #theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
 @media (max-width:900px){nav.toc{display:none}main{padding:16px}}
 </style>
@@ -56,9 +61,21 @@ figure{margin:16px 0;text-align:center}
 (function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
 document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
 </script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
 </head>
 <body>
-<header class="top"><a href="../../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">concepts / workloads / controllers</span><button id="theme" type="button">روشن / تاریک</button></header>
+<header class="top"><a href="../../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">concepts / workloads / controllers</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
 <div class="layout">
 <main><h1 dir="rtl">StatefulSetها</h1><p class="page-meta" dir="rtl">یک StatefulSet گروهی از Podها را اجرا می‌کند و برای هر یک از آن Podها هویتی ماندگار حفظ می‌کند. این ویژگی برای مدیریت برنامه‌هایی که به ذخیره‌سازی پایدار یا هویت شبکه‌ای پایدار و یکتا نیاز دارند مفید است.</p><!-- overview -->
 <p dir="rtl">StatefulSet آبجکت API بار کاری است که برای مدیریت برنامه‌های دارای حالت (stateful) به کار می‌رود.</p>
@@ -87,7 +104,7 @@ document.addEventListener('DOMContentLoaded',function(){var b=document.getElemen
 <li dir="rtl">حذف و/یا کاهش مقیاس یک StatefulSet، حجم‌های (volume) مرتبط با
 StatefulSet را حذف <em>نمی‌کند</em>. این کار برای تضمین ایمنی داده‌ها انجام می‌شود که به‌طور کلی ارزشمندتر از
 پاک‌سازی خودکار همه منابع مرتبط با StatefulSet است.</li>
-<li dir="rtl">StatefulSetها در حال حاضر به یک <a href="https://kubernetes.io/docs/concepts/services-networking/service/#headless-services" target="_blank">Headless Service</a>
+<li dir="rtl">StatefulSetها در حال حاضر به یک <a href="../../services-networking/service.html#headless-services">Headless Service</a>
 نیاز دارند که مسئول هویت شبکه‌ای Podها باشد. ایجاد این
 Service بر عهده شماست.</li>
 <li dir="rtl">StatefulSetها هنگام حذف یک StatefulSet، هیچ تضمینی درباره خاتمه Podها ارائه نمی‌دهند.
@@ -211,7 +228,7 @@ PersistentVolume Provisioner تأمین می‌شوند، ذخیره‌سازی 
 و شماره ترتیبی Pod به دست می‌آورد. الگوی نام میزبان ساخته‌شده
 <code dir="ltr">$(statefulset name)-$(ordinal)</code> است. مثال بالا سه Pod
 با نام‌های <code dir="ltr">web-0,web-1,web-2</code> ایجاد می‌کند.
-یک StatefulSet می‌تواند از یک <a href="https://kubernetes.io/docs/concepts/services-networking/service/#headless-services" target="_blank">Headless Service</a>
+یک StatefulSet می‌تواند از یک <a href="../../services-networking/service.html#headless-services">Headless Service</a>
 برای کنترل دامنه Podهای خود استفاده کند. دامنه‌ای که توسط این Service مدیریت می‌شود به این شکل است:
 <code dir="ltr">$(service name).$(namespace).svc.cluster.local</code>، که در آن «cluster.local»
 دامنه کلاستر است.
@@ -230,7 +247,7 @@ PersistentVolume Provisioner تأمین می‌شوند، ذخیره‌سازی 
 config map مربوط به CoreDNS است که در حال حاضر به مدت 30 ثانیه کش می‌کند).</li>
 </ul>
 <p dir="rtl">همان‌طور که در بخش <a href="#limitations">محدودیت‌ها</a> اشاره شد، ایجاد
-<a href="https://kubernetes.io/docs/concepts/services-networking/service/#headless-services" target="_blank">Headless Service</a>
+<a href="../../services-networking/service.html#headless-services">Headless Service</a>
 که مسئول هویت شبکه‌ای Podها است بر عهده شماست.</p>
 <p dir="rtl">در اینجا چند نمونه از انتخاب‌های ممکن برای دامنه کلاستر، نام Service و
 نام StatefulSet، و تأثیر آن‌ها بر نام‌های DNS مربوط به Podهای StatefulSet آمده است.</p>
@@ -566,7 +583,7 @@ StatefulSet را مدیریت می‌کند، <code dir="ltr">.spec.replicas</co
 فیلد <code dir="ltr">.spec.replicas</code> را به‌طور خودکار مدیریت کند.</p>
 <h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
 <ul>
-<li dir="rtl">درباره <a href="https://kubernetes.io/docs/concepts/workloads/pods" target="_blank">Podها</a> بیاموزید.</li>
+<li dir="rtl">درباره <a href="../pods/index.html">Podها</a> بیاموزید.</li>
 <li dir="rtl">با نحوه استفاده از StatefulSetها آشنا شوید
 <ul>
 <li dir="rtl">مثال <a href="https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/" target="_blank">استقرار یک برنامه دارای حالت</a> را دنبال کنید.</li>
@@ -581,7 +598,7 @@ StatefulSet را مدیریت می‌کند، <code dir="ltr">.spec.replicas</co
 <li dir="rtl"><code dir="ltr">StatefulSet</code> یک منبع سطح بالا در REST API کوبرنتیز است.
 تعریف آبجکت
 را بخوانید تا API مربوط به stateful setها را درک کنید.</li>
-<li dir="rtl">درباره <a href="https://kubernetes.io/docs/concepts/workloads/pods/disruptions/" target="_blank">PodDisruptionBudget</a> و اینکه چگونه
+<li dir="rtl">درباره <a href="../pods/disruptions.html">PodDisruptionBudget</a> و اینکه چگونه
 می‌توانید از آن برای مدیریت در دسترس بودن برنامه در هنگام اختلال‌ها استفاده کنید، مطالعه کنید.</li>
 </ul>
 </main>

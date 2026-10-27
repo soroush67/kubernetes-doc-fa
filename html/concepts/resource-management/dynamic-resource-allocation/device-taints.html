@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Taintها و Tolerationهای دستگاه | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body>
+<header class="top"><a href="../../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">concepts / resource-management / dynamic-resource-allocation</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">Taintها و Tolerationهای دستگاه</h1><!-- overview -->
+<p dir="rtl">این صفحه taintها و tolerationهای دستگاه در DRA را شرح می‌دهد که به درایورها و
+مدیران اجازه می‌دهند پادها را از دستگاه‌های مشخصی دور نگه دارند، یا پادهایی را که از قبل از آن‌ها استفاده می‌کنند بیرون برانند.</p>
+<!-- body -->
+<h2 id="taintها-و-tolerationهای-دستگاه-device-taints-and-tolerations" dir="rtl">Taintها و tolerationهای دستگاه {#device-taints-and-tolerations}</h2>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
+<p dir="rtl">taintهای دستگاه مشابه taintهای نود هستند: یک taint یک کلید رشته‌ای، یک مقدار رشته‌ای و یک اثر (effect) دارد.
+این اثر بر ResourceClaimای که از دستگاه دارای taint استفاده می‌کند و بر همهٔ پادهایی که به آن ResourceClaim ارجاع می‌دهند اعمال می‌شود.
+اثر «NoSchedule» از زمان‌بندی آن پادها جلوگیری می‌کند.
+دستگاه‌های دارای taint هنگام تلاش برای تخصیص یک ResourceClaim نادیده گرفته می‌شوند، زیرا استفاده از آن‌ها مانع زمان‌بندی پادها می‌شود.</p>
+<p dir="rtl">اثر «NoExecute» شامل «NoSchedule» نیز می‌شود و علاوه بر آن باعث بیرون‌راندن همهٔ پادهایی
+می‌شود که از قبل زمان‌بندی شده‌اند.
+این بیرون‌راندن در کنترل‌کنندهٔ بیرون‌راندن مبتنی بر taint دستگاه در kube-controller-manager و با حذف پادهای متأثر پیاده‌سازی شده است.</p>
+<p dir="rtl">اثر «None» توسط زمان‌بند و کنترل‌کنندهٔ بیرون‌راندن نادیده گرفته می‌شود.
+درایورهای DRA می‌توانند از آن برای اطلاع‌رسانی موارد استثنایی به مدیران یا کنترل‌کننده‌های دیگر استفاده کنند،
+برای مثال کاهش سلامت یک دستگاه. مدیران نیز می‌توانند از آن برای
+اجرای آزمایشی (dry-run) بیرون‌راندن پاد در DeviceTaintRuleها استفاده کنند (در ادامه بیشتر توضیح داده می‌شود).</p>
+<p dir="rtl">ResourceClaimها می‌توانند taintها را تحمل (tolerate) کنند. اگر یک taint تحمل شود، اثر آن اعمال نمی‌شود.
+یک toleration خالی با همهٔ taintها منطبق می‌شود. یک toleration را می‌توان به اثرهای مشخصی محدود کرد
+و/یا با جفت‌های کلید/مقدار مشخصی منطبق کرد.
+یک toleration می‌تواند بررسی کند که کلید مشخصی، صرف‌نظر از مقدار آن، وجود دارد یا می‌تواند
+مقادیر مشخصی از یک کلید را بررسی کند.
+برای اطلاعات بیشتر دربارهٔ این تطبیق، به
+<a href="../../scheduling-eviction/taint-and-toleration.html#concepts">مفاهیم taint نود</a> مراجعه کنید.</p>
+<p dir="rtl">بیرون‌راندن را می‌توان با تحمل یک taint برای مدت زمان مشخصی به تأخیر انداخت.
+این تأخیر از زمانی آغاز می‌شود که taint به دستگاه اضافه می‌شود و این زمان در یکی از فیلدهای taint ثبت می‌شود.</p>
+<p dir="rtl">taintها همان‌طور که در بالا توضیح داده شد، بر ResourceClaimهایی که «همهٔ» دستگاه‌های یک نود را تخصیص می‌دهند نیز اعمال می‌شوند.
+همهٔ دستگاه‌ها باید بدون taint باشند یا همهٔ taintهای آن‌ها باید تحمل شوند.
+تخصیص یک دستگاه با <a href="https://kubernetes.io/docs/concepts/resource-management/dynamic-resource-allocation/dra-api/#admin-access" target="_blank">دسترسی مدیر</a>
+نیز مستثنا نیست. مدیری که از این حالت استفاده می‌کند باید به‌طور صریح همهٔ taintها را تحمل کند
+تا به دستگاه‌های دارای taint دسترسی پیدا کند.</p>
+<p dir="rtl">می‌توانید به روش‌های زیر، با استفاده از kind ‏DeviceTaintRule در API، taintهایی به دستگاه‌ها اضافه کنید.</p>
+<h3 id="taintهای-تنظیم-شده-توسط-درایور" dir="rtl">Taintهای تنظیم‌شده توسط درایور</h3>
+<p dir="rtl">یک درایور DRA می‌تواند taintهایی را به اطلاعات دستگاهی که در ResourceSliceها منتشر می‌کند اضافه کند.
+برای اینکه بدانید آیا یک درایور DRA از taintها استفاده می‌کند و کلیدها و مقادیر آن‌ها چیست، به مستندات آن درایور مراجعه کنید.</p>
+<h3 id="taintهای-تنظیم-شده-توسط-مدیر" dir="rtl">Taintهای تنظیم‌شده توسط مدیر</h3>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
+<p dir="rtl">یک مدیر یا یک جزء control plane می‌تواند بدون نیاز به اینکه از
+درایور DRA بخواهد taintها را در اطلاعات دستگاه خود در ResourceSliceها بگنجاند، به دستگاه‌ها taint اضافه کند.
+این کار با ایجاد DeviceTaintRuleها انجام می‌شود.
+هر DeviceTaintRule یک taint به دستگاه‌هایی اضافه می‌کند که با انتخابگر دستگاه منطبق باشند.
+بدون چنین انتخابگری، هیچ دستگاهی taint نمی‌شود.
+این امر بیرون‌راندن تصادفی همهٔ پادهایی را که از ResourceClaimها استفاده می‌کنند، در صورت جاافتادن اشتباهی انتخابگر، دشوارتر می‌کند.</p>
+<p dir="rtl">دستگاه‌ها را می‌توان با ارائهٔ نام یک DeviceClass، درایور، pool و/یا دستگاه انتخاب کرد.
+DeviceClass همهٔ دستگاه‌هایی را انتخاب می‌کند که توسط انتخابگرهای آن DeviceClass انتخاب شده‌اند.
+یک مدیر تنها با نام درایور می‌تواند همهٔ دستگاه‌هایی را که آن درایور مدیریت می‌کند taint کند،
+برای مثال هنگام انجام نوعی نگه‌داری از آن درایور در سراسر کلاستر.
+افزودن نام pool می‌تواند taint را به یک نود واحد محدود کند، در صورتی که درایور دستگاه‌های محلی نود را مدیریت کند.</p>
+<p dir="rtl">در نهایت، افزودن نام دستگاه می‌تواند یک دستگاه مشخص را انتخاب کند.
+در صورت تمایل، نام دستگاه و نام pool را می‌توان به‌تنهایی نیز استفاده کرد.
+برای مثال، به درایورهای دستگاه‌های محلی نود توصیه می‌شود از نام نود به‌عنوان نام pool خود استفاده کنند.
+در این صورت taint کردن با آن نام pool به‌طور خودکار همهٔ دستگاه‌های یک نود را taint می‌کند.</p>
+<p dir="rtl">درایورها ممکن است از نام‌های پایداری مانند «gpu-0» استفاده کنند که پنهان می‌کنند کدام دستگاه مشخص در حال حاضر به آن نام اختصاص یافته است.
+برای پشتیبانی از taint کردن یک نمونهٔ سخت‌افزاری مشخص، می‌توان از انتخابگرهای CEL در یک DeviceTaintRule
+برای تطبیق با یک ویژگی شناسهٔ یکتای مخصوص فروشنده استفاده کرد، در صورتی که درایور چنین ویژگی‌ای را برای سخت‌افزار خود پشتیبانی کند.</p>
+<p dir="rtl">taint تا زمانی که DeviceTaintRule وجود دارد اعمال می‌شود.
+آن را می‌توان در هر زمان تغییر داد یا حذف کرد.
+در اینجا یک نمونه از DeviceTaintRule برای یک درایور DRA فرضی آمده است:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: resource.k8s.io/v1
+kind: DeviceTaintRule
+metadata:
+  name: example
+spec:
+  # The entire hardware installation for this
+  # particular driver is broken.
+  # Evict all pods and don't schedule new ones.
+  deviceSelector:
+    driver: dra.example.com
+  taint:
+    key: dra.example.com/unhealthy
+    value: Broken
+    effect: NoExecute
+</code></pre>
+<p dir="rtl">kube-apiserver به‌طور خودکار زمان ایجاد این taint را با تنظیم فیلد
+<code dir="ltr">timeAdded</code> در <code dir="ltr">spec</code> ثبت می‌کند. دورهٔ تحمل از همان مهر زمانی
+آغاز می‌شود. در طول به‌روزرسانی‌هایی که اثر را تغییر می‌دهند (به جریان بیرون‌راندن شبیه‌سازی‌شده
+در ادامه مراجعه کنید)، kube-apiserver مهر زمانی را به‌طور خودکار به‌روزرسانی می‌کند. کاربران می‌توانند
+مهر زمانی را به‌طور صریح کنترل کنند؛ با تنظیم این فیلد هنگام ایجاد یک DeviceTaintRule و
+تغییر آن به مقداری دیگر هنگام به‌روزرسانی.</p>
+<p dir="rtl">وضعیت (status) شامل یک condition است که کنترل‌کنندهٔ بیرون‌راندن اضافه می‌کند:</p>
+<pre dir="ltr"><code dir="ltr">kubectl describe devicetaintrules
+</code></pre>
+<pre dir="ltr"><code dir="ltr">Name:         example
+...
+Spec:
+  Device Selector:
+    Driver:  dra.example.com
+  Taint:
+    Effect:      NoExecute
+    Key:         dra.example.com/unhealthy
+    Time Added:  2025-11-05T18:15:37Z
+    Value:       Broken
+Status:
+  Conditions:
+    Last Transition Time:  2025-11-05T18:15:37Z
+    Message:               1 pod evicted since starting the controller.
+    Observed Generation:   1
+    Reason:                Completed
+    Status:                False
+    Type:                  EvictionInProgress
+Events:                    &lt;none&gt;
+</code></pre>
+<p dir="rtl">پادها با حذف‌شدن بیرون رانده می‌شوند. معمولاً این کار بسیار سریع انجام می‌شود،
+مگر زمانی که یک toleration برای taint آن را برای مدت مشخصی به تأخیر بیندازد یا
+زمانی که پادهای بسیار زیادی باید بیرون رانده شوند. هنگامی که این کار
+بیشتر طول بکشد، پیام اطلاعاتی دربارهٔ وضعیت فعلی ارائه می‌دهد:</p>
+<pre dir="ltr"><code dir="ltr">2 pods need to be evicted in 2 different namespaces. 1 pod evicted since starting the controller.
+</code></pre>
+<p dir="rtl">از این condition می‌توان برای بررسی اینکه آیا بیرون‌راندنی در حال حاضر فعال است استفاده کرد:</p>
+<pre dir="ltr"><code dir="ltr">kubectl wait --for=condition=EvictionInProgress=false DeviceTaintRule/example
+</code></pre>
+<p dir="rtl">مراقب رقابت (race) احتمالی میان زمان‌بند و کنترل‌کننده باشید که taint جدید را
+در زمان‌های متفاوتی مشاهده می‌کنند؛ این امر می‌تواند باعث شود پادها همچنان در زمانی زمان‌بندی شوند
+که کنترل‌کننده تصور می‌کند هیچ پادی برای بیرون‌راندن وجود ندارد
+و در نتیجه این condition را روی <code dir="ltr">False</code> تنظیم می‌کند. در عمل، این رقابت با
+به‌روزرسانی وضعیت تنها پس از یک تأخیر عمدی چندثانیه‌ای بسیار
+نامحتمل شده است.</p>
+<p dir="rtl">برای <code dir="ltr">effect: None</code>، پیام اطلاعاتی دربارهٔ تعداد
+دستگاه‌های متأثر، تعداد دستگاه‌های تخصیص‌یافته از میان آن‌ها و تعداد پادهایی که در صورت
+<code dir="ltr">NoExecute</code> بودن اثر بیرون رانده می‌شدند ارائه می‌دهد. از این اطلاعات می‌توان برای اجرای آزمایشی پیش از
+راه‌اندازی واقعی بیرون‌راندن استفاده کرد:</p>
+<ul>
+<li dir="rtl">
+<p dir="rtl">یک DeviceTaintRule با انتخابگرهای مورد نظر و <code dir="ltr">effect: None</code> ایجاد کنید.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">پیام را بازبینی کنید:</p>
+<pre dir="ltr"><code dir="ltr">3 published devices selected. 1 allocated device selected.
+1 pod would be evicted in 1 namespace if the effect was NoExecute.
+This information will not be updated again. Recreate the DeviceTaintRule to trigger an update.
+</code></pre>
+<p dir="rtl">دستگاه‌های منتشرشده آن‌هایی هستند که در ResourceSliceها فهرست شده‌اند. taint کردن آن‌ها
+از تخصیص برای پادهای جدید جلوگیری می‌کند. فقط دستگاه‌های تخصیص‌یافته باعث
+بیرون‌راندن پادهایی می‌شوند که از آن‌ها استفاده می‌کنند.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">DeviceTaintRule را ویرایش کنید و اثر را به <code dir="ltr">NoExecute</code> تغییر دهید.</p>
+</li>
+</ul>
+</main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#taintها-و-tolerationهای-دستگاه-device-taints-and-tolerations">Taintها و tolerationهای دستگاه {#device-taints-and-tolerations}</a><a class="l3" href="#taintهای-تنظیم-شده-توسط-درایور">Taintهای تنظیم‌شده توسط درایور</a><a class="l3" href="#taintهای-تنظیم-شده-توسط-مدیر">Taintهای تنظیم‌شده توسط مدیر</a></nav>
+</div>
+</body>
+</html>

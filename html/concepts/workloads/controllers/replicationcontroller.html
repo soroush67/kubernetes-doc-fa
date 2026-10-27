@@ -49,6 +49,11 @@ figure{margin:16px 0;text-align:center}
 .index-tree li{margin:2px 0}
 .index-tree .sec{font-weight:700}
 .missing{color:var(--muted)}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
 #theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
 @media (max-width:900px){nav.toc{display:none}main{padding:16px}}
 </style>
@@ -56,9 +61,21 @@ figure{margin:16px 0;text-align:center}
 (function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
 document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
 </script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
 </head>
 <body>
-<header class="top"><a href="../../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">concepts / workloads / controllers</span><button id="theme" type="button">روشن / تاریک</button></header>
+<header class="top"><a href="../../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">concepts / workloads / controllers</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
 <div class="layout">
 <main><h1 dir="ltr" class="ltr">ReplicationController</h1><p class="page-meta" dir="rtl">API قدیمی برای مدیریت بارهای کاری که می‌توانند به‌صورت افقی مقیاس‌پذیر باشند. این API با APIهای Deployment و ReplicaSet جایگزین شده است.</p><!-- overview -->
 <div class="callout note"><div class="callout-title">توجه:</div>
@@ -164,7 +181,7 @@ ReplicationController بخشی از مبنای نام‌گذاری آن Podها 
 <p dir="rtl">یک ReplicationController همچنین به یک <a href="https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status" target="_blank" rel="noopener">بخش <code dir="ltr">.spec</code></a> نیاز دارد.</p>
 <h3 id="قالب-pod" dir="rtl">قالب Pod</h3>
 <p dir="rtl"><code dir="ltr">.spec.template</code> تنها فیلد الزامی <code dir="ltr">.spec</code> است.</p>
-<p dir="rtl"><code dir="ltr">.spec.template</code> یک <a href="https://kubernetes.io/docs/concepts/workloads/pods/#pod-templates" target="_blank">قالب Pod</a> است. این قالب دقیقاً همان طرح‌واره (schema) یک <span class="term" title="pod">Pod</span> را دارد، با این تفاوت که تودرتو است و <code dir="ltr">apiVersion</code> یا <code dir="ltr">kind</code> ندارد.</p>
+<p dir="rtl"><code dir="ltr">.spec.template</code> یک <a href="../pods/index.html#pod-templates">قالب Pod</a> است. این قالب دقیقاً همان طرح‌واره (schema) یک <span class="term" title="pod">Pod</span> را دارد، با این تفاوت که تودرتو است و <code dir="ltr">apiVersion</code> یا <code dir="ltr">kind</code> ندارد.</p>
 <p dir="rtl">افزون بر فیلدهای الزامی یک Pod، قالب Pod در یک ReplicationController باید برچسب‌های مناسب
 و یک سیاست راه‌اندازی مجدد مناسب را مشخص کند. در مورد برچسب‌ها، مطمئن شوید که با کنترل‌کننده‌های دیگر هم‌پوشانی ندارند. به <a href="#pod-selector">انتخابگر Pod</a> مراجعه کنید.</p>
 <p dir="rtl">تنها مقدار مجاز برای <a href="https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#restart-policy" target="_blank"><code dir="ltr">.spec.template.spec.restartPolicy</code></a> برابر با <code dir="ltr">Always</code> است که در صورت مشخص نشدن، مقدار پیش‌فرض نیز هست.</p>
@@ -249,7 +266,7 @@ ReplicationController تصور می‌کند که آن Podهای دیگر را �
 <h3 id="podهای-مستقل-bare-pods" dir="rtl">Podهای مستقل (Bare Pods)</h3>
 <p dir="rtl">برخلاف حالتی که کاربر مستقیماً Podها را ایجاد کرده است، یک ReplicationController Podهایی را که به هر دلیلی حذف شده یا خاتمه یافته‌اند جایگزین می‌کند؛ برای مثال در صورت خرابی نود یا نگهداری مخرب نود، مانند ارتقای کرنل. به همین دلیل، توصیه می‌کنیم حتی اگر برنامه شما تنها به یک Pod نیاز دارد، از یک ReplicationController استفاده کنید. آن را مشابه یک ناظر فرایند در نظر بگیرید، با این تفاوت که به‌جای فرایندهای منفرد روی یک نود، چندین Pod را در چندین نود نظارت می‌کند. یک ReplicationController راه‌اندازی مجدد کانتینرهای محلی را به عاملی روی نود، مانند kubelet، واگذار می‌کند.</p>
 <h3 id="job" dir="ltr" class="ltr">Job</h3>
-<p dir="rtl">برای Podهایی که انتظار می‌رود خودشان خاتمه یابند (یعنی کارهای دسته‌ای یا batch jobs)، به‌جای ReplicationController از یک <a href="https://kubernetes.io/docs/concepts/workloads/controllers/job/" target="_blank"><code dir="ltr">Job</code></a>
+<p dir="rtl">برای Podهایی که انتظار می‌رود خودشان خاتمه یابند (یعنی کارهای دسته‌ای یا batch jobs)، به‌جای ReplicationController از یک <a href="job.html"><code dir="ltr">Job</code></a>
 استفاده کنید.</p>
 <h3 id="daemonset" dir="ltr" class="ltr">DaemonSet</h3>
 <p dir="rtl">برای Podهایی که یک عملکرد در سطح ماشین ارائه می‌دهند، مانند پایش ماشین یا ثبت لاگ ماشین، به‌جای ReplicationController از یک <a href="daemonset.html"><code dir="ltr">DaemonSet</code></a>
@@ -257,7 +274,7 @@ ReplicationController تصور می‌کند که آن Podهای دیگر را �
 خاتمه دادن به آن زمانی که ماشین برای راه‌اندازی مجدد یا خاموش شدن آماده است، بی‌خطر است.</p>
 <h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
 <ul>
-<li dir="rtl">درباره <a href="https://kubernetes.io/docs/concepts/workloads/pods" target="_blank">Podها</a> بیاموزید.</li>
+<li dir="rtl">درباره <a href="../pods/index.html">Podها</a> بیاموزید.</li>
 <li dir="rtl">درباره <a href="deployment.html">Deployment</a>، جایگزین
 ReplicationController، بیاموزید.</li>
 <li dir="rtl"><code dir="ltr">ReplicationController</code> بخشی از REST API کوبرنتیز است.

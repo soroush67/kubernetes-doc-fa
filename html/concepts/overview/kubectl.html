@@ -49,6 +49,11 @@ figure{margin:16px 0;text-align:center}
 .index-tree li{margin:2px 0}
 .index-tree .sec{font-weight:700}
 .missing{color:var(--muted)}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
 #theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
 @media (max-width:900px){nav.toc{display:none}main{padding:16px}}
 </style>
@@ -56,9 +61,21 @@ figure{margin:16px 0;text-align:center}
 (function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
 document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
 </script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
 </head>
 <body>
-<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">concepts / overview</span><button id="theme" type="button">روشن / تاریک</button></header>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">concepts / overview</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
 <div class="layout">
 <main><h1 dir="rtl">ابزار خط فرمان kubectl</h1><p class="page-meta" dir="rtl">kubectl ابزار خط فرمان اصلی برای ارتباط با یک کلاستر کوبرنتیز است. این صفحه نمای کلی‌ای از kubectl و نقش آن در اکوسیستم کوبرنتیز ارائه می‌کند.
 </p><!-- overview -->
@@ -66,8 +83,8 @@ document.addEventListener('DOMContentLoaded',function(){var b=document.getElemen
 <p dir="rtl">ابزار <code dir="ltr">kubectl</code> از طریق <a href="kubernetes-api.html">API کوبرنتیز</a> با کلاستر شما ارتباط برقرار می‌کند.
 <code dir="ltr">kubectl</code> برای پیکربندی، به دنبال فایلی با نام <code dir="ltr">config</code> در دایرکتوری <code dir="ltr">$HOME/.kube</code> می‌گردد.
 می‌توانید با تنظیم متغیر محیطی <code dir="ltr">KUBECONFIG</code> یا با تنظیم فلگ
-<a href="https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/" target="_blank"><code dir="ltr">--kubeconfig</code></a>، فایل‌های
-<a href="https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/" target="_blank">kubeconfig</a> دیگری را مشخص کنید.</p>
+<a href="../configuration/organize-cluster-access-kubeconfig.html"><code dir="ltr">--kubeconfig</code></a>، فایل‌های
+<a href="../configuration/organize-cluster-access-kubeconfig.html">kubeconfig</a> دیگری را مشخص کنید.</p>
 <!-- body -->
 <h2 id="نقش-kubectl" dir="rtl">نقش kubectl</h2>
 <p dir="rtl">ابزار <code dir="ltr">kubectl</code> رابط اصلی برای ایجاد، بررسی، به‌روزرسانی و حذف آبجکت‌های کوبرنتیز است.
@@ -78,7 +95,7 @@ document.addEventListener('DOMContentLoaded',function(){var b=document.getElemen
 مانند <a href="https://headlamp.dev/" target="_blank" rel="noopener">Headlamp</a>، نیز از طریق همین API ارتباط برقرار می‌کنند.</p>
 <h2 id="kubectl-چگونه-کار-می-کند" dir="rtl">kubectl چگونه کار می‌کند</h2>
 <p dir="rtl">ابزار <code dir="ltr">kubectl</code> با استفاده از کلاستر، کاربر و context تعریف‌شده در فایل
-<a href="https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/" target="_blank">kubeconfig</a> شما، به API server متصل می‌شود و احراز هویت می‌کند.
+<a href="../configuration/organize-cluster-access-kubeconfig.html">kubeconfig</a> شما، به API server متصل می‌شود و احراز هویت می‌کند.
 هنگامی که <code dir="ltr">kubectl</code> را از بیرون یک کلاستر اجرا می‌کنید، این ابزار از فایل kubeconfig برای یافتن نشانی API server و اعتبارنامه‌ها استفاده می‌کند.
 هنگامی که <code dir="ltr">kubectl</code> درون یک Pod اجرا می‌شود (برای مثال، در یک خط لوله‌ی CI/CD)، می‌تواند از احراز هویت درون‌کلاستری
 مبتنی بر توکن ServiceAccount که در Pod به‌صورت mount قرار گرفته است استفاده کند.</p>

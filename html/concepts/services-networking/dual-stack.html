@@ -49,6 +49,11 @@ figure{margin:16px 0;text-align:center}
 .index-tree li{margin:2px 0}
 .index-tree .sec{font-weight:700}
 .missing{color:var(--muted)}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
 #theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
 @media (max-width:900px){nav.toc{display:none}main{padding:16px}}
 </style>
@@ -56,9 +61,21 @@ figure{margin:16px 0;text-align:center}
 (function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
 document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
 </script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
 </head>
 <body>
-<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">concepts / services-networking</span><button id="theme" type="button">روشن / تاریک</button></header>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">concepts / services-networking</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
 <div class="layout">
 <main><h1 dir="rtl">پشتهٔ دوگانهٔ IPv4/IPv6</h1><p class="page-meta" dir="rtl">کوبرنتیز به شما امکان می‌دهد شبکهٔ تک‌پشته‌ای IPv4، شبکهٔ تک‌پشته‌ای IPv6 یا شبکهٔ دوپشته‌ای (dual-stack) را با فعال بودن هر دو خانوادهٔ شبکه پیکربندی کنید. این صفحه نحوهٔ انجام آن را توضیح می‌دهد.</p><!-- overview -->
 <div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes v1.23 [stable]</span> (پایدار)</div>
@@ -169,9 +186,9 @@ cluster IP سرویسِ پیکربندی‌شده، یک cluster IP برای Ser
 <ol>
 <li dir="rtl">این مشخصات Service، فیلد <code dir="ltr">.spec.ipFamilyPolicy</code> را صراحتاً تعریف نمی‌کند. هنگامی که
 این Service را ایجاد می‌کنید، کوبرنتیز یک cluster IP را از نخستین
-<code dir="ltr">service-cluster-ip-range</code> پیکربندی‌شده به Service اختصاص می‌دهد و <code dir="ltr">.spec.ipFamilyPolicy</code> را روی <code dir="ltr">SingleStack</code> تنظیم می‌کند. (<a href="https://kubernetes.io/docs/concepts/services-networking/service/#services-without-selectors" target="_blank">Serviceهای
+<code dir="ltr">service-cluster-ip-range</code> پیکربندی‌شده به Service اختصاص می‌دهد و <code dir="ltr">.spec.ipFamilyPolicy</code> را روی <code dir="ltr">SingleStack</code> تنظیم می‌کند. (<a href="service.html#services-without-selectors">Serviceهای
 بدون انتخابگر</a> و
-<a href="https://kubernetes.io/docs/concepts/services-networking/service/#headless-services" target="_blank">Serviceهای headless</a> دارای انتخابگر
+<a href="service.html#headless-services">Serviceهای headless</a> دارای انتخابگر
 نیز به همین شکل رفتار می‌کنند.)</li>
 </ol>
 <div class="code-file ltr" dir="ltr">service/networking/dual-stack-default-svc.yaml</div>
@@ -297,7 +314,7 @@ status:
 </code></pre>
 <ol>
 <li dir="rtl">هنگامی که پشتهٔ دوگانه در یک کلاستر فعال می‌شود، control plane،
-<a href="https://kubernetes.io/docs/concepts/services-networking/service/#headless-services" target="_blank">Serviceهای headless</a> موجودِ دارای انتخابگر را
+<a href="service.html#headless-services">Serviceهای headless</a> موجودِ دارای انتخابگر را
 طوری پیکربندی می‌کند که <code dir="ltr">.spec.ipFamilyPolicy</code> روی <code dir="ltr">SingleStack</code> و
 <code dir="ltr">.spec.ipFamilies</code> روی خانوادهٔ نشانیِ نخستین بازهٔ cluster IP سرویس (که از طریق
 فلگ <code dir="ltr">--service-cluster-ip-range</code> در kube-apiserver پیکربندی می‌شود) تنظیم شود، حتی اگر <code dir="ltr">.spec.clusterIP</code> روی
@@ -367,7 +384,7 @@ Service اکنون نشانی‌های IPv4 و IPv6 داشته باشد.</p>
 </li>
 </ol>
 <h3 id="serviceهای-headless-بدون-انتخابگر" dir="rtl">Serviceهای headless بدون انتخابگر</h3>
-<p dir="rtl">برای <a href="https://kubernetes.io/docs/concepts/services-networking/service/#without-selectors" target="_blank">Serviceهای headless بدون انتخابگر</a>
+<p dir="rtl">برای <a href="service.html#without-selectors">Serviceهای headless بدون انتخابگر</a>
 که <code dir="ltr">.spec.ipFamilyPolicy</code> آن‌ها صراحتاً تنظیم نشده است، مقدار پیش‌فرض فیلد <code dir="ltr">.spec.ipFamilyPolicy</code>
 برابر با <code dir="ltr">RequireDualStack</code> است.</p>
 <h3 id="service-از-نوع-loadbalancer" dir="rtl">Service از نوع LoadBalancer</h3>

@@ -1,17 +1,19 @@
 #!/usr/bin/env python3
-"""Structural completeness check: every translated unit vs its English source.
+"""Structural completeness check: a Persian translation vs its English source.
 
-Fails a unit when headings / fenced code blocks / shortcodes / link targets differ,
+Fails when headings / fenced code blocks / shortcodes / link targets differ,
 when a code block's content changed, when English prose lines were left
 untranslated, or when the translation is suspiciously short (summarised/cut).
-Writes check-report.json and prints a summary.
+
+  check.py            check every translated page, write check-report.json
+  check.py <rel>...   check only these pages (paths under content/en/docs)
 """
 import json
 import re
 import sys
-from pathlib import Path
 
-TR = Path("/home/soroush/kuber-doc/fa-translation")
+from common import EN_DOCS, MD, ROOT, sources
+
 FA = re.compile(r"[؀-ۿ]")
 FENCE = re.compile(r"^\s*(```|~~~)")
 
@@ -60,8 +62,7 @@ def english_lines(lines):
     return out
 
 
-def check(src, dst):
-    en, fa = src.read_text(encoding="utf-8"), dst.read_text(encoding="utf-8")
+def check_text(en, fa):
     ep, ec, _ = split(en)
     fp, fc, _ = split(fa)
     issues = []
@@ -94,27 +95,19 @@ def check(src, dst):
     return issues
 
 
+def check(rel):
+    return check_text((EN_DOCS / rel).read_text(encoding="utf-8"), (MD / rel).read_text(encoding="utf-8"))
+
+
 def main():
-    batches = json.loads((TR / "batches.json").read_text())
-    report, ok, missing = {}, 0, []
-    only = set(int(x) for x in sys.argv[1:])
-    for b in batches:
-        if only and b["id"] not in only:
-            continue
-        for u in b["units"]:
-            dst = TR / "md" / u["dst"]
-            if not dst.exists():
-                missing.append(u["dst"]); continue
-            iss = check(Path(u["src"]), dst)
-            if iss:
-                report[u["dst"]] = {"batch": b["id"], "issues": iss}
-            else:
-                ok += 1
-    if not only:  # per-batch runs (by translation agents) only print
-        (TR / "check-report.json").write_text(json.dumps({"failed": report, "missing": missing}, ensure_ascii=False, indent=1))
-    print(f"ok {ok}  failed {len(report)}  missing {len(missing)}")
+    only = sys.argv[1:]
+    rels = only or [r for r in sources() if (MD / r).exists()]
+    report = {r: iss for r in rels if (iss := check(r))}
+    if not only:
+        (ROOT / "check-report.json").write_text(json.dumps(report, ensure_ascii=False, indent=1))
+    print(f"ok {len(rels) - len(report)}  failed {len(report)}")
     for k, v in list(report.items())[:25]:
-        print(f"  {k}: {'; '.join(v['issues'])}")
+        print(f"  {k}: {'; '.join(v)}")
 
 
 if __name__ == "__main__":

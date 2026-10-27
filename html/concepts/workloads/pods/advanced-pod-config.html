@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>پیکربندی پیشرفته Pod | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body>
+<header class="top"><a href="../../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">concepts / workloads / pods</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">پیکربندی پیشرفته Pod</h1><!-- overview -->
+<p dir="rtl">این صفحه موضوعات پیشرفته پیکربندی Pod، از جمله <a href="#priorityclasses">PriorityClassها</a>، <a href="#runtimeclasses">RuntimeClassها</a> و
+<a href="#security-context">security context</a> درون Podها را پوشش می‌دهد و جنبه‌هایی از <a href="../../scheduling-eviction/index.html#scheduling">زمان‌بندی</a> را معرفی می‌کند.</p>
+<!-- body -->
+<h2 id="priorityclassها" dir="rtl">PriorityClassها</h2>
+<p dir="rtl"><em>PriorityClassها</em> به شما امکان می‌دهند اهمیت Podها را نسبت به سایر Podها تعیین کنید.
+اگر یک priority class به یک Pod اختصاص دهید، کوبرنتیز فیلد <code dir="ltr">.spec.priority</code> آن Pod را
+بر اساس PriorityClass مشخص‌شده تنظیم می‌کند (نمی‌توانید <code dir="ltr">.spec.priority</code> را مستقیماً تنظیم کنید).
+اگر یا هنگامی که یک Pod قابل زمان‌بندی نباشد و مشکل ناشی از کمبود منابع باشد، <span class="term" title="kube-scheduler">kube-scheduler</span>
+تلاش می‌کند Podهای با اولویت پایین‌تر را <span class="term" title="preemption">پیش‌دستی (preempt)</span> کند
+تا زمان‌بندی Pod با اولویت بالاتر ممکن شود.</p>
+<p dir="rtl">PriorityClass یک آبجکت API در سطح کلاستر است که نام یک priority class را به یک مقدار اولویت صحیح نگاشت می‌کند. اعداد بزرگ‌تر نشان‌دهنده اولویت بالاتر هستند.</p>
+<h3 id="تعریف-یک-priorityclass" dir="rtl">تعریف یک PriorityClass</h3>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: high-priority
+value: 10000
+globalDefault: false
+description: "Priority class for high-priority workloads"
+</code></pre>
+<h3 id="مشخص-کردن-اولویت-pod-با-استفاده-از-یک-priorityclass" dir="rtl">مشخص کردن اولویت Pod با استفاده از یک PriorityClass</h3>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+spec:
+  containers:
+  - name: nginx
+    image: nginx
+  priorityClassName: high-priority
+</code></pre>
+<h3 id="priorityclassهای-داخلی" dir="rtl">PriorityClassهای داخلی</h3>
+<p dir="rtl">کوبرنتیز دو PriorityClass داخلی فراهم می‌کند:</p>
+<ul>
+<li dir="rtl"><code dir="ltr">system-cluster-critical</code>: برای مؤلفه‌های سیستمی که برای کلاستر حیاتی هستند</li>
+<li dir="rtl"><code dir="ltr">system-node-critical</code>: برای مؤلفه‌های سیستمی که برای نودهای منفرد حیاتی هستند. این بالاترین اولویتی است که Podها می‌توانند در کوبرنتیز داشته باشند.</li>
+</ul>
+<p dir="rtl">برای اطلاعات بیشتر، به <a href="../../scheduling-eviction/pod-priority-preemption.html">اولویت و پیش‌دستی Pod</a> مراجعه کنید.</p>
+<h2 id="runtimeclassها" dir="rtl">RuntimeClassها</h2>
+<p dir="rtl">یک <em>RuntimeClass</em> به شما امکان می‌دهد محیط اجرای کانتینر سطح پایین را برای یک Pod مشخص کنید. این قابلیت زمانی مفید است که بخواهید برای انواع مختلف Pod، محیط‌های اجرای کانتینر متفاوتی مشخص کنید؛ برای مثال هنگامی که به سطوح جداسازی یا قابلیت‌های محیط اجرای متفاوتی نیاز دارید.</p>
+<h3 id="pod-نمونه-runtimeclass-pod-example" dir="rtl">Pod نمونه {#runtimeclass-pod-example}</h3>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: Pod
+metadata:
+  name: mypod
+spec:
+  runtimeClassName: myclass
+  containers:
+  - name: mycontainer
+    image: nginx
+</code></pre>
+<p dir="rtl">یک <a href="https://kubernetes.io/docs/concepts/containers/runtime-class/" target="_blank">RuntimeClass</a> آبجکتی در سطح کلاستر است که نمایانگر یک محیط اجرای کانتینر است که روی برخی یا همه نودهای شما در دسترس است.</p>
+<p dir="rtl">مدیر کلاستر محیط‌های اجرای مشخصی را که پشتیبان RuntimeClass هستند نصب و پیکربندی می‌کند.</p>
+<p dir="rtl">ممکن است آن پیکربندی ویژه محیط اجرای کانتینر را روی همه نودها، یا شاید تنها روی برخی از آن‌ها، راه‌اندازی کند.</p>
+<p dir="rtl">برای اطلاعات بیشتر، به مستندات <a href="https://kubernetes.io/docs/concepts/containers/runtime-class/" target="_blank">RuntimeClass</a> مراجعه کنید.</p>
+<h2 id="پیکربندی-security-context-در-سطح-pod-و-کانتینر-security-context" dir="rtl">پیکربندی security context در سطح Pod و کانتینر {#security-context}</h2>
+<p dir="rtl">فیلد <code dir="ltr">Security context</code> در مشخصات Pod کنترلی جزئی بر تنظیمات امنیتی Podها و کانتینرها فراهم می‌کند.</p>
+<h3 id="securitycontext-در-سطح-کل-pod-pod-level-security-context" dir="rtl"><code dir="ltr">securityContext</code> در سطح کل Pod {#pod-level-security-context}</h3>
+<p dir="rtl">برخی جنبه‌های امنیتی برای کل Pod اعمال می‌شوند؛ برای جنبه‌های دیگر،
+ممکن است بخواهید یک مقدار پیش‌فرض تنظیم کنید، بدون هیچ بازنویسی در سطح کانتینر.</p>
+<p dir="rtl">در اینجا نمونه‌ای از استفاده از <code dir="ltr">securityContext</code> در سطح Pod آمده است:</p>
+<h4 id="pod-نمونه-pod-level-security-context-example" dir="rtl">Pod نمونه {#pod-level-security-context-example}</h4>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: Pod
+metadata:
+  name: security-context-demo
+spec:
+  securityContext:  # This applies to the entire Pod
+    runAsUser: 1000
+    runAsGroup: 3000
+    fsGroup: 2000
+  containers:
+  - name: sec-ctx-demo
+    image: registry.k8s.io/e2e-test-images/agnhost:2.45
+    command: ["sh", "-c", "sleep 1h"]
+</code></pre>
+<h3 id="security-context-در-سطح-کانتینر-container-level-security-context" dir="rtl">security context در سطح کانتینر {#container-level-security-context}</h3>
+<p dir="rtl">می‌توانید security context را تنها برای یک کانتینر مشخص تعیین کنید.
+در اینجا یک نمونه آمده است:</p>
+<h4 id="pod-نمونه-container-level-security-context-example" dir="rtl">Pod نمونه {#container-level-security-context-example}</h4>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: Pod
+metadata:
+  name: security-context-demo-2
+spec:
+  containers:
+  - name: sec-ctx-demo-2
+    image: gcr.io/google-samples/node-hello:1.0
+    securityContext:
+      allowPrivilegeEscalation: false
+      runAsNonRoot: true
+      runAsUser: 1000
+      capabilities:
+        drop:
+        - ALL
+      seccompProfile:
+        type: RuntimeDefault
+</code></pre>
+<h3 id="گزینه-های-security-context" dir="rtl">گزینه‌های security context</h3>
+<ul>
+<li dir="rtl"><strong>شناسه‌های کاربر و گروه</strong>: کنترل می‌کنند کانتینر با کدام کاربر/گروه اجرا شود</li>
+<li dir="rtl"><strong>Capabilityها</strong>: افزودن یا حذف capabilityهای لینوکس</li>
+<li dir="rtl"><strong>پروفایل‌های Seccomp</strong>: تنظیم پروفایل‌های محاسبات امن (secure computing)</li>
+<li dir="rtl"><strong>گزینه‌های SELinux</strong>: پیکربندی context مربوط به SELinux</li>
+<li dir="rtl"><strong>AppArmor</strong>: پیکربندی پروفایل‌های AppArmor برای کنترل دسترسی بیشتر</li>
+<li dir="rtl"><strong>گزینه‌های Windows</strong>: پیکربندی تنظیمات امنیتی مختص Windows</li>
+</ul>
+<div class="callout caution"><div class="callout-title">احتیاط:</div>
+<p dir="rtl">همچنین می‌توانید از <code dir="ltr">securityContext</code> مربوط به Pod برای مجاز کردن
+<a href="../../security/linux-kernel-security-constraints.html#privileged-containers"><em>حالت ممتاز (privileged mode)</em></a>
+در کانتینرهای لینوکس استفاده کنید. حالت ممتاز بسیاری از تنظیمات امنیتی دیگر در <code dir="ltr">securityContext</code> را بازنویسی می‌کند.
+از این تنظیم استفاده نکنید، مگر اینکه نتوانید مجوزهای معادل را با استفاده از فیلدهای دیگر <code dir="ltr">securityContext</code> اعطا کنید.
+می‌توانید کانتینرهای Windows را نیز در حالتی مشابهِ
+ممتاز اجرا کنید؛ با تنظیم پرچم <code dir="ltr">windowsOptions.hostProcess</code> در
+security context سطح Pod. برای جزئیات و دستورالعمل‌ها، به
+<a href="https://kubernetes.io/docs/tasks/configure-pod-container/create-hostprocess-pod/" target="_blank">ایجاد یک Pod از نوع HostProcess در Windows</a> مراجعه کنید.</p>
+</div>
+<p dir="rtl">برای اطلاعات بیشتر، به <a href="https://kubernetes.io/docs/tasks/configure-pod-container/security-context/" target="_blank">پیکربندی Security Context برای یک Pod یا کانتینر</a> مراجعه کنید.</p>
+<h2 id="تأثیرگذاری-بر-تصمیم-های-زمان-بندی-pod-scheduling" dir="rtl">تأثیرگذاری بر تصمیم‌های زمان‌بندی Pod {#scheduling}</h2>
+<p dir="rtl">کوبرنتیز چندین سازوکار فراهم می‌کند تا کنترل کنید Podهای شما روی کدام نودها زمان‌بندی شوند.</p>
+<h3 id="انتخابگرهای-نود-node-selectors" dir="rtl">انتخابگرهای نود (Node selectors)</h3>
+<p dir="rtl">ساده‌ترین شکل محدودیت انتخاب نود:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+spec:
+  containers:
+  - name: nginx
+    image: nginx
+  nodeSelector:
+    disktype: ssd
+</code></pre>
+<h3 id="وابستگی-نود-node-affinity" dir="rtl">وابستگی نود (Node affinity)</h3>
+<p dir="rtl">وابستگی نود به شما امکان می‌دهد قواعدی مشخص کنید که نودهایی را که Pod شما می‌تواند روی آن‌ها زمان‌بندی شود محدود می‌کنند. در اینجا نمونه‌ای از یک Pod آمده است که ترجیح می‌دهد روی نودهایی اجرا شود که با برچسب قرار داشتن در یک قاره خاص مشخص شده‌اند و انتخاب را بر اساس مقدار برچسب <a href="https://kubernetes.io/docs/reference/labels-annotations-taints/#topologykubernetesiozone" target="_blank"><code dir="ltr">topology.kubernetes.io/zone</code></a> انجام می‌دهد.</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: Pod
+metadata:
+  name: with-node-affinity
+spec:
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: topology.kubernetes.io/zone
+            operator: In
+            values:
+            - antarctica-east1
+            - antarctica-west1
+  containers:
+  - name: with-node-affinity
+    image: registry.k8s.io/pause:3.8
+</code></pre>
+<h3 id="وابستگی-و-ضدوابستگی-pod-pod-affinity-and-anti-affinity" dir="rtl">وابستگی و ضدوابستگی Pod (Pod affinity and anti-affinity)</h3>
+<p dir="rtl">افزون بر وابستگی نود، می‌توانید نودهایی را که یک Pod می‌تواند روی آن‌ها زمان‌بندی شود، بر اساس برچسب‌های <em>Podهای دیگری</em> که از قبل روی نودها در حال اجرا هستند نیز محدود کنید. وابستگی Pod به شما امکان می‌دهد قواعدی درباره محل قرارگیری یک Pod نسبت به سایر Podها مشخص کنید.</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: Pod
+metadata:
+  name: with-pod-affinity
+spec:
+  affinity:
+    podAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+      - labelSelector:
+          matchExpressions:
+          - key: app
+            operator: In
+            values:
+            - database
+        topologyKey: topology.kubernetes.io/zone
+  containers:
+  - name: with-pod-affinity
+    image: registry.k8s.io/pause:3.8
+</code></pre>
+<h3 id="tolerationها" dir="rtl">Tolerationها</h3>
+<p dir="rtl"><em>Tolerationها</em> به Podها امکان می‌دهند روی نودهایی با taintهای منطبق زمان‌بندی شوند:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: Pod
+metadata:
+  name: mypod
+spec:
+  containers:
+  - name: myapp
+    image: nginx
+  tolerations:
+  - key: "key"
+    operator: "Equal"
+    value: "value"
+    effect: "NoSchedule"
+</code></pre>
+<p dir="rtl">برای اطلاعات بیشتر، به <a href="../../scheduling-eviction/assign-pod-node.html">اختصاص Podها به نودها</a> مراجعه کنید.</p>
+<h2 id="سربار-pod-pod-overhead" dir="rtl">سربار Pod (Pod overhead)</h2>
+<p dir="rtl">سربار Pod به شما امکان می‌دهد منابعی را که زیرساخت Pod افزون بر درخواست‌ها و محدودیت‌های کانتینر مصرف می‌کند در نظر بگیرید.</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">---
+apiVersion: node.k8s.io/v1
+kind: RuntimeClass
+metadata:
+  name: kvisor-runtime
+handler: kvisor-runtime
+overhead:
+  podFixed:
+    memory: "2Gi"
+    cpu: "500m"
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mypod
+spec:
+  runtimeClassName: kvisor-runtime
+  containers:
+  - name: myapp
+    image: nginx
+    resources:
+      requests:
+        memory: "64Mi"
+        cpu: "250m"
+      limits:
+        memory: "128Mi"
+        cpu: "500m"
+</code></pre>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<ul>
+<li dir="rtl">درباره <a href="../../scheduling-eviction/pod-priority-preemption.html">اولویت و پیش‌دستی Pod</a> مطالعه کنید</li>
+<li dir="rtl">درباره <a href="https://kubernetes.io/docs/concepts/containers/runtime-class/" target="_blank">RuntimeClassها</a> مطالعه کنید</li>
+<li dir="rtl"><a href="https://kubernetes.io/docs/tasks/configure-pod-container/security-context/" target="_blank">پیکربندی Security Context برای یک Pod یا کانتینر</a> را بررسی کنید</li>
+<li dir="rtl">بیاموزید کوبرنتیز چگونه <a href="../../scheduling-eviction/assign-pod-node.html">Podها را به نودها اختصاص می‌دهد</a></li>
+<li dir="rtl"><a href="../../scheduling-eviction/pod-overhead.html">سربار Pod</a></li>
+</ul>
+</main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#priorityclassها">PriorityClassها</a><a class="l3" href="#تعریف-یک-priorityclass">تعریف یک PriorityClass</a><a class="l3" href="#مشخص-کردن-اولویت-pod-با-استفاده-از-یک-priorityclass">مشخص کردن اولویت Pod با استفاده از یک PriorityClass</a><a class="l3" href="#priorityclassهای-داخلی">PriorityClassهای داخلی</a><a class="l2" href="#runtimeclassها">RuntimeClassها</a><a class="l3" href="#pod-نمونه-runtimeclass-pod-example">Pod نمونه {#runtimeclass-pod-example}</a><a class="l2" href="#پیکربندی-security-context-در-سطح-pod-و-کانتینر-security-context">پیکربندی security context در سطح Pod و کانتینر {#security-context}</a><a class="l3" href="#securitycontext-در-سطح-کل-pod-pod-level-security-context">securityContext در سطح کل Pod {#pod-level-security-context}</a><a class="l3" href="#security-context-در-سطح-کانتینر-container-level-security-context">security context در سطح کانتینر {#container-level-security-context}</a><a class="l3" href="#گزینه-های-security-context">گزینه‌های security context</a><a class="l2" href="#تأثیرگذاری-بر-تصمیم-های-زمان-بندی-pod-scheduling">تأثیرگذاری بر تصمیم‌های زمان‌بندی Pod {#scheduling}</a><a class="l3" href="#انتخابگرهای-نود-node-selectors">انتخابگرهای نود (Node selectors)</a><a class="l3" href="#وابستگی-نود-node-affinity">وابستگی نود (Node affinity)</a><a class="l3" href="#وابستگی-و-ضدوابستگی-pod-pod-affinity-and-anti-affinity">وابستگی و ضدوابستگی Pod (Pod affinity and anti-affinity)</a><a class="l3" href="#tolerationها">Tolerationها</a><a class="l2" href="#سربار-pod-pod-overhead">سربار Pod (Pod overhead)</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>

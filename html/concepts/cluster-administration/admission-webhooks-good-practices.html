@@ -1,0 +1,636 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>روش‌های خوب برای Admission Webhookها | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">concepts / cluster-administration</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">روش‌های خوب برای Admission Webhookها</h1><p class="page-meta" dir="rtl">توصیه‌هایی برای طراحی و استقرار admission webhookها در کوبرنتیز.
+</p><!-- overview -->
+<p dir="rtl">این صفحه روش‌های خوب و ملاحظاتی را برای طراحی
+<em>admission webhookها</em> (وب‌هوک‌های پذیرش) در کوبرنتیز ارائه می‌دهد. این اطلاعات برای
+گردانندگان کلاستری در نظر گرفته شده است که سرورهای admission webhook یا برنامه‌های شخص ثالثی را اجرا می‌کنند
+که درخواست‌های API شما را تغییر می‌دهند یا اعتبارسنجی می‌کنند.</p>
+<p dir="rtl">پیش از خواندن این صفحه، اطمینان حاصل کنید که با مفاهیم زیر
+آشنا هستید:</p>
+<ul>
+<li dir="rtl"><a href="https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/" target="_blank">کنترل‌کننده‌های پذیرش</a></li>
+<li dir="rtl"><a href="https://kubernetes.io/docs/reference/access-authn-authz/extensible-admission-controllers/#what-are-admission-webhooks" target="_blank">Admission webhookها</a></li>
+</ul>
+<!-- body -->
+<h2 id="اهمیت-طراحی-خوب-webhook-why-good-webhook-design-matters" dir="rtl">اهمیت طراحی خوب webhook {#why-good-webhook-design-matters}</h2>
+<p dir="rtl">کنترل پذیرش زمانی رخ می‌دهد که هر درخواست ایجاد، به‌روزرسانی یا حذفی
+به API کوبرنتیز ارسال شود. کنترل‌کننده‌های پذیرش درخواست‌هایی را که با
+معیارهای مشخصی که شما تعریف می‌کنید مطابقت دارند رهگیری می‌کنند. سپس این درخواست‌ها به
+mutating admission webhookها یا validating admission webhookها ارسال می‌شوند. این webhookها
+اغلب برای اطمینان از اینکه فیلدهای مشخصی در مشخصات آبجکت‌ها وجود داشته باشند یا
+مقادیر مجاز مشخصی داشته باشند نوشته می‌شوند.</p>
+<p dir="rtl">Webhookها سازوکاری قدرتمند برای گسترش API کوبرنتیز هستند. webhookهای بدطراحی‌شده
+اغلب به دلیل میزان کنترلی که بر آبجکت‌های کلاستر دارند، به اختلال در بارهای کاری
+منجر می‌شوند. همانند دیگر سازوکارهای گسترش API،
+آزمودن webhookها در مقیاس بزرگ از نظر سازگاری با
+همهٔ بارهای کاری، دیگر webhookها، افزونه‌ها و پلاگین‌ها دشوار است.</p>
+<p dir="rtl">افزون بر این، کوبرنتیز در هر انتشار، API را با قابلیت‌های جدید،
+ارتقای قابلیت‌ها به وضعیت بتا یا پایدار، و منسوخ‌سازی‌ها گسترش می‌دهد یا تغییر می‌دهد. حتی
+APIهای پایدار کوبرنتیز نیز احتمالاً تغییر خواهند کرد. برای نمونه، API مربوط به <code dir="ltr">Pod</code>
+در نسخهٔ v1.29 تغییر کرد تا قابلیت
+<a href="../workloads/pods/sidecar-containers.html">کانتینرهای Sidecar</a> به آن افزوده شود.
+اگرچه به‌ندرت پیش می‌آید که یک آبجکت کوبرنتیز به دلیل یک API جدید کوبرنتیز وارد وضعیت معیوب شود،
+webhookهایی که با نسخه‌های پیشین یک API مطابق انتظار کار می‌کردند،
+ممکن است نتوانند با تغییرات جدیدتر آن API سازگار شوند. این امر ممکن است
+پس از ارتقای کلاسترهایتان به نسخه‌های جدیدتر، به رفتار غیرمنتظره منجر شود.</p>
+<p dir="rtl">این صفحه سناریوهای رایج خرابی webhook و نحوهٔ پرهیز از آن‌ها را با
+طراحی و پیاده‌سازی محتاطانه و سنجیدهٔ webhookها شرح می‌دهد.</p>
+<h2 id="تشخیص-اینکه-آیا-از-admission-webhookها-استفاده-می-کنید-identify-admission-webhooks" dir="rtl">تشخیص اینکه آیا از admission webhookها استفاده می‌کنید {#identify-admission-webhooks}</h2>
+<p dir="rtl">حتی اگر admission webhookهای خودتان را اجرا نکنید، برخی برنامه‌های شخص ثالث
+که در کلاسترهایتان اجرا می‌کنید ممکن است از mutating یا validating admission
+webhookها استفاده کنند.</p>
+<p dir="rtl">برای بررسی اینکه آیا کلاستر شما mutating admission webhookای دارد، فرمان
+زیر را اجرا کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get mutatingwebhookconfigurations
+</code></pre>
+<p dir="rtl">خروجی، همهٔ mutating admission controllerهای موجود در کلاستر را فهرست می‌کند.</p>
+<p dir="rtl">برای بررسی اینکه آیا کلاستر شما validating admission webhookای دارد، فرمان
+زیر را اجرا کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get validatingwebhookconfigurations
+</code></pre>
+<p dir="rtl">خروجی، همهٔ validating admission controllerهای موجود در کلاستر را فهرست می‌کند.</p>
+<h2 id="انتخاب-سازوکار-کنترل-پذیرش-choose-admission-mechanism" dir="rtl">انتخاب سازوکار کنترل پذیرش {#choose-admission-mechanism}</h2>
+<p dir="rtl">کوبرنتیز چندین گزینه برای کنترل پذیرش و اعمال سیاست دارد.
+دانستن اینکه چه زمانی از یک گزینهٔ خاص استفاده کنید، می‌تواند به شما در بهبود تأخیر و
+کارایی، کاهش سربار مدیریتی و پرهیز از مشکلات در طول ارتقای
+نسخه کمک کند. جدول زیر سازوکارهایی را شرح می‌دهد که به شما امکان می‌دهند منابع را در طول پذیرش
+تغییر دهید یا اعتبارسنجی کنید:</p>
+<!-- This table is HTML because it uses unordered lists for readability. -->
+<table>
+  <caption>کنترل پذیرش تغییردهنده و اعتبارسنج در کوبرنتیز</caption>
+  <thead>
+    <tr>
+      <th dir="rtl">سازوکار</th>
+      <th dir="rtl">توضیح</th>
+      <th dir="rtl">موارد کاربرد</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td dir="ltr" class="ltr"><a href="https://kubernetes.io/docs/reference/access-authn-authz/extensible-admission-controllers/" target="_blank">Mutating admission webhook</a></td>
+      <td dir="rtl">رهگیری درخواست‌های API پیش از پذیرش و تغییر آن‌ها در صورت نیاز با استفاده از
+        منطق سفارشی.</td>
+      <td dir="rtl"><ul>
+        <li dir="rtl">اعمال تغییرات حیاتی که باید پیش از پذیرش منبع
+          انجام شوند.</li>
+        <li dir="rtl">اعمال تغییرات پیچیده‌ای که به منطق پیشرفته نیاز دارند، مانند فراخوانی
+          APIهای خارجی.</li>
+      </ul></td>
+    </tr>
+    <tr>
+      <td dir="ltr" class="ltr"><a href="https://kubernetes.io/docs/reference/access-authn-authz/mutating-admission-policy/" target="_blank">Mutating admission policy</a></td>
+      <td dir="rtl">رهگیری درخواست‌های API پیش از پذیرش و تغییر آن‌ها در صورت نیاز با استفاده از
+        عبارت‌های Common Expression Language (CEL).</td>
+      <td dir="rtl"><ul>
+        <li dir="rtl">اعمال تغییرات حیاتی که باید پیش از پذیرش منبع
+          انجام شوند.</li>
+        <li dir="rtl">اعمال تغییرات ساده، مانند تنظیم برچسب‌ها یا تعداد
+        نسخه‌های تکثیرشده.</li>
+      </ul></td>
+    </tr>
+    <tr>
+      <td dir="ltr" class="ltr"><a href="https://kubernetes.io/docs/reference/access-authn-authz/extensible-admission-controllers/" target="_blank">Validating admission webhook</a></td>
+      <td dir="rtl">رهگیری درخواست‌های API پیش از پذیرش و اعتبارسنجی آن‌ها در برابر
+        اعلان‌های سیاستی پیچیده.</td>
+      <td dir="rtl"><ul>
+        <li dir="rtl">اعتبارسنجی پیکربندی‌های حیاتی پیش از پذیرش منبع.</li>
+        <li dir="rtl">اعمال منطق سیاستی پیچیده پیش از پذیرش.</li>
+      </ul></td>
+    </tr>
+    <tr>
+      <td dir="ltr" class="ltr"><a href="https://kubernetes.io/docs/reference/access-authn-authz/validating-admission-policy/" target="_blank">Validating admission policy</a></td>
+      <td dir="rtl">رهگیری درخواست‌های API پیش از پذیرش و اعتبارسنجی آن‌ها در برابر
+        عبارت‌های CEL.</td>
+      <td dir="rtl"><ul>
+        <li dir="rtl">اعتبارسنجی پیکربندی‌های حیاتی پیش از پذیرش منبع.</li>
+        <li dir="rtl">اعمال منطق سیاستی با استفاده از عبارت‌های CEL.</li>
+      </ul></td>
+    </tr>
+  </tbody>
+</table>
+<p dir="rtl">به‌طور کلی، هنگامی که روشی توسعه‌پذیر برای اعلان یا پیکربندی منطق می‌خواهید، از کنترل پذیرش
+مبتنی بر <em>webhook</em> استفاده کنید. هنگامی که می‌خواهید منطق ساده‌تری را بدون سربار اجرای یک سرور webhook
+اعلان کنید، از کنترل پذیرش داخلی مبتنی بر CEL استفاده کنید. پروژهٔ کوبرنتیز توصیه می‌کند در صورت امکان
+از کنترل پذیرش مبتنی بر CEL استفاده کنید.</p>
+<h3 id="استفاده-از-اعتبارسنجی-و-مقداردهی-پیش-فرض-داخلی-برای-customresourcedefinitionها-no-crd-validation-defaulting" dir="rtl">استفاده از اعتبارسنجی و مقداردهی پیش‌فرض داخلی برای CustomResourceDefinitionها {#no-crd-validation-defaulting}</h3>
+<p dir="rtl">اگر از
+<span class="term" title="customresourcedefinition">CustomResourceDefinitionها</span>
+استفاده می‌کنید، از admission webhookها برای اعتبارسنجی مقادیر در مشخصات CustomResourceها
+یا تنظیم مقادیر پیش‌فرض برای فیلدها استفاده نکنید. کوبرنتیز به شما اجازه می‌دهد هنگام ایجاد CustomResourceDefinitionها،
+قواعد اعتبارسنجی و مقادیر پیش‌فرض فیلدها را تعریف کنید.</p>
+<p dir="rtl">برای کسب اطلاعات بیشتر، به منابع زیر مراجعه کنید:</p>
+<ul>
+<li dir="rtl"><a href="https://kubernetes.io/docs/tasks/extend-kubernetes/custom-resources/custom-resource-definitions/#validation-rules" target="_blank">قواعد اعتبارسنجی</a></li>
+<li dir="rtl"><a href="https://kubernetes.io/docs/tasks/extend-kubernetes/custom-resources/custom-resource-definitions/#defaulting" target="_blank">مقداردهی پیش‌فرض</a></li>
+</ul>
+<h2 id="کارایی-و-تأخیر-performance-latency" dir="rtl">کارایی و تأخیر {#performance-latency}</h2>
+<p dir="rtl">این بخش توصیه‌هایی را برای بهبود کارایی و کاهش
+تأخیر شرح می‌دهد. به‌طور خلاصه، این توصیه‌ها عبارت‌اند از:</p>
+<ul>
+<li dir="rtl">webhookها را ادغام کنید و تعداد فراخوانی‌های API در هر webhook را محدود کنید.</li>
+<li dir="rtl">از لاگ‌های ممیزی برای یافتن webhookهایی که به‌طور مکرر یک کار یکسان را انجام می‌دهند استفاده کنید.</li>
+<li dir="rtl">برای دسترس‌پذیری webhook از متعادل‌سازی بار استفاده کنید.</li>
+<li dir="rtl">برای هر webhook مقدار مهلت زمانی (timeout) کوچکی تعیین کنید.</li>
+<li dir="rtl">نیازهای دسترس‌پذیری کلاستر را در طراحی webhook در نظر بگیرید.</li>
+</ul>
+<h3 id="طراحی-admission-webhookها-برای-تأخیر-کم-design-admission-webhooks-low-latency" dir="rtl">طراحی admission webhookها برای تأخیر کم {#design-admission-webhooks-low-latency}</h3>
+<p dir="rtl">mutating admission webhookها به‌صورت متوالی فراخوانی می‌شوند. بسته به پیکربندی
+mutating webhookها، برخی webhookها ممکن است چندین بار فراخوانی شوند. هر فراخوانی mutating
+webhook تأخیری به فرایند پذیرش می‌افزاید. این برخلاف validating
+webhookهاست که به‌صورت موازی فراخوانی می‌شوند.</p>
+<p dir="rtl">هنگام طراحی mutating webhookها، نیازمندی‌ها و میزان تحمل تأخیر خود را
+در نظر بگیرید. هرچه تعداد mutating webhookها در کلاستر شما بیشتر باشد،
+احتمال افزایش تأخیر بیشتر است.</p>
+<p dir="rtl">برای کاهش تأخیر، موارد زیر را در نظر بگیرید:</p>
+<ul>
+<li dir="rtl">webhookهایی را که تغییر مشابهی را روی آبجکت‌های مختلف انجام می‌دهند ادغام کنید.</li>
+<li dir="rtl">تعداد فراخوانی‌های API در منطق سرور mutating webhook را کاهش دهید.</li>
+<li dir="rtl">شرایط تطبیق هر mutating webhook را محدود کنید تا تعداد
+webhookهایی که با یک درخواست API مشخص فعال می‌شوند کاهش یابد.</li>
+<li dir="rtl">webhookهای کوچک را در یک سرور و پیکربندی واحد ادغام کنید تا به
+ترتیب‌دهی و سازمان‌دهی کمک شود.</li>
+</ul>
+<h3 id="جلوگیری-از-حلقه-های-ناشی-از-کنترل-کننده-های-رقیب-prevent-loops-competing-controllers" dir="rtl">جلوگیری از حلقه‌های ناشی از کنترل‌کننده‌های رقیب {#prevent-loops-competing-controllers}</h3>
+<p dir="rtl">هر مؤلفهٔ دیگری را که در کلاستر شما اجرا می‌شود و ممکن است با
+تغییراتی که webhook شما ایجاد می‌کند تعارض داشته باشد در نظر بگیرید. برای نمونه، اگر webhook شما برچسبی اضافه کند
+که کنترل‌کنندهٔ دیگری آن را حذف می‌کند، webhook شما دوباره فراخوانی می‌شود. این امر
+به یک حلقه منجر می‌شود.</p>
+<p dir="rtl">برای تشخیص این حلقه‌ها، موارد زیر را امتحان کنید:</p>
+<ol>
+<li dir="rtl">
+<p dir="rtl">سیاست ممیزی کلاستر خود را به‌روزرسانی کنید تا رویدادهای ممیزی را ثبت کند. از
+پارامترهای زیر استفاده کنید:</p>
+<ul>
+<li dir="ltr" class="ltr"><code dir="ltr">level</code>: <code dir="ltr">RequestResponse</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">verbs</code>: <code dir="ltr">["patch"]</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">omitStages</code>: <code dir="ltr">RequestReceived</code></li>
+</ul>
+<p dir="rtl">قاعدهٔ ممیزی را طوری تنظیم کنید که برای منابع مشخصی که webhook شما
+تغییر می‌دهد رویداد ایجاد کند.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">رویدادهای ممیزی خود را برای یافتن webhookهایی بررسی کنید که چندین بار با
+اعمال یک وصلهٔ (patch) یکسان روی یک آبجکت یکسان دوباره فراخوانی می‌شوند، یا آبجکتی که
+یکی از فیلدهایش چندین بار به‌روزرسانی و بازگردانده می‌شود.</p>
+</li>
+</ol>
+<h3 id="تعیین-مقدار-مهلت-زمانی-کوچک-small-timeout" dir="rtl">تعیین مقدار مهلت زمانی کوچک {#small-timeout}</h3>
+<p dir="rtl">admission webhookها باید تا حد امکان سریع ارزیابی شوند (معمولاً در حد
+میلی‌ثانیه)، زیرا به تأخیر درخواست‌های API می‌افزایند. برای webhookها از مهلت زمانی
+کوچکی استفاده کنید.</p>
+<p dir="rtl">برای جزئیات، به
+<a href="https://kubernetes.io/docs/reference/access-authn-authz/extensible-admission-controllers/#timeouts" target="_blank">مهلت‌های زمانی</a> مراجعه کنید.</p>
+<h3 id="استفاده-از-متعادل-کنندهٔ-بار-برای-تضمین-دسترس-پذیری-webhook-load-balancer-webhook" dir="rtl">استفاده از متعادل‌کنندهٔ بار برای تضمین دسترس‌پذیری webhook {#load-balancer-webhook}</h3>
+<p dir="rtl">admission webhookها باید از شکلی از متعادل‌سازی بار بهره بگیرند تا دسترس‌پذیری بالا
+و مزایای کارایی را فراهم کنند. اگر یک webhook درون
+کلاستر اجرا می‌شود، می‌توانید چندین backend برای webhook را پشت یک Service از نوع
+<code dir="ltr">ClusterIP</code> اجرا کنید.</p>
+<h3 id="استفاده-از-مدل-استقرار-با-دسترس-پذیری-بالا-ha-deployment" dir="rtl">استفاده از مدل استقرار با دسترس‌پذیری بالا {#ha-deployment}</h3>
+<p dir="rtl">هنگام طراحی webhook خود، نیازمندی‌های دسترس‌پذیری کلاستر را در نظر بگیرید.
+برای نمونه، در زمان از کار افتادن نودها یا قطعی‌های یک ناحیه، کوبرنتیز Podها را
+<code dir="ltr">NotReady</code> علامت‌گذاری می‌کند تا متعادل‌کننده‌های بار بتوانند ترافیک را به نواحی و
+نودهای در دسترس هدایت کنند. این به‌روزرسانی‌های Podها ممکن است mutating webhookهای شما را فعال کنند. بسته به
+تعداد Podهای متأثر، سرور mutating webhook در معرض خطر اتمام مهلت زمانی
+یا ایجاد تأخیر در پردازش Podها قرار می‌گیرد. در نتیجه، ترافیک به آن سرعتی که نیاز دارید
+بازمسیریابی نمی‌شود.</p>
+<p dir="rtl">هنگام نوشتن webhookهای خود، وضعیت‌هایی مانند مثال پیشین را در نظر بگیرید.
+عملیاتی را که نتیجهٔ واکنش کوبرنتیز به رویدادهای اجتناب‌ناپذیر است
+مستثنا کنید.</p>
+<h2 id="پالایش-درخواست-ها-request-filtering" dir="rtl">پالایش درخواست‌ها {#request-filtering}</h2>
+<p dir="rtl">این بخش توصیه‌هایی را برای پالایش اینکه کدام درخواست‌ها
+webhookهای مشخصی را فعال کنند ارائه می‌دهد. به‌طور خلاصه، این توصیه‌ها عبارت‌اند از:</p>
+<ul>
+<li dir="rtl">دامنهٔ webhook را محدود کنید تا اجزای سیستمی و درخواست‌های فقط‌خواندنی را در بر نگیرد.</li>
+<li dir="rtl">webhookها را به فضاهای نام مشخصی محدود کنید.</li>
+<li dir="rtl">از شرایط تطبیق (match conditions) برای پالایش ریزدانه‌ی درخواست‌ها استفاده کنید.</li>
+<li dir="rtl">همهٔ نسخه‌های یک آبجکت را تطبیق دهید.</li>
+</ul>
+<h3 id="محدود-کردن-دامنهٔ-هر-webhook-webhook-limit-scope" dir="rtl">محدود کردن دامنهٔ هر webhook {#webhook-limit-scope}</h3>
+<p dir="rtl">admission webhookها تنها زمانی فراخوانی می‌شوند که یک درخواست API با پیکربندی
+webhook متناظر مطابقت داشته باشد. دامنهٔ هر webhook را محدود کنید تا فراخوانی‌های غیرضروری
+سرور webhook کاهش یابد. محدودیت‌های دامنهٔ زیر را در نظر بگیرید:</p>
+<ul>
+<li dir="rtl">از تطبیق آبجکت‌های فضای نام <code dir="ltr">kube-system</code> پرهیز کنید. اگر Podهای خودتان را
+در فضای نام <code dir="ltr">kube-system</code> اجرا می‌کنید، از یک
+<a href="https://kubernetes.io/docs/reference/access-authn-authz/extensible-admission-controllers/#matching-requests-objectselector" target="_blank"><code dir="ltr">objectSelector</code></a>
+استفاده کنید تا از تغییر یک بار کاری حیاتی جلوگیری شود.</li>
+<li dir="rtl">leaseهای نود را که به‌صورت آبجکت‌های Lease در فضای نام سیستمی
+<code dir="ltr">kube-node-lease</code> وجود دارند تغییر ندهید. تغییر leaseهای نود ممکن است به
+شکست ارتقای نودها منجر شود. تنها زمانی کنترل‌های اعتبارسنجی را روی آبجکت‌های Lease در این
+فضای نام اعمال کنید که مطمئن باشید این کنترل‌ها کلاستر شما را به خطر
+نمی‌اندازند.</li>
+<li dir="rtl">TokenReview، SubjectAccessReview یا سایر
+<a href="https://kubernetes.io/docs/reference/access-authn-authz/extensible-admission-controllers/#excluded-virtual-resources" target="_blank">منابع مجازی احراز هویت و مجوزدهی</a> را تطبیق ندهید.
+این‌ها همیشه درخواست‌های فقط‌خواندنی هستند و رهگیری آن‌ها ممکن است کلاستر شما را
+مختل کند. از کوبرنتیز v1.37 به بعد، admission webhookها به‌طور پیش‌فرض برای
+این منابع فراخوانی نمی‌شوند.</li>
+<li dir="rtl">هر webhook را با استفاده از یک
+<a href="https://kubernetes.io/docs/reference/access-authn-authz/extensible-admission-controllers/#matching-requests-namespaceselector" target="_blank"><code dir="ltr">namespaceSelector</code></a> به یک فضای نام مشخص محدود کنید.</li>
+</ul>
+<h3 id="پالایش-درخواست-های-مشخص-با-استفاده-از-شرایط-تطبیق-filter-match-conditions" dir="rtl">پالایش درخواست‌های مشخص با استفاده از شرایط تطبیق {#filter-match-conditions}</h3>
+<p dir="rtl">کنترل‌کننده‌های پذیرش از چندین فیلد پشتیبانی می‌کنند که می‌توانید از آن‌ها برای تطبیق درخواست‌هایی
+که معیارهای مشخصی را برآورده می‌کنند استفاده کنید. برای نمونه، می‌توانید از یک <code dir="ltr">namespaceSelector</code> برای
+پالایش درخواست‌هایی که یک فضای نام مشخص را هدف قرار می‌دهند استفاده کنید.</p>
+<p dir="rtl">برای پالایش ریزدانه‌تر درخواست‌ها، از فیلد <code dir="ltr">matchConditions</code> در
+پیکربندی webhook خود استفاده کنید. این فیلد به شما اجازه می‌دهد چندین عبارت CEL بنویسید که
+برای اینکه یک درخواست admission webhook شما را فعال کند، همگی باید به <code dir="ltr">true</code> ارزیابی شوند. استفاده از
+<code dir="ltr">matchConditions</code> ممکن است تعداد فراخوانی‌های سرور webhook شما را به‌طور چشمگیری
+کاهش دهد.</p>
+<p dir="rtl">برای جزئیات، به
+<a href="https://kubernetes.io/docs/reference/access-authn-authz/extensible-admission-controllers/#matching-requests-matchconditions" target="_blank">تطبیق درخواست‌ها: <code dir="ltr">matchConditions</code></a> مراجعه کنید.</p>
+<h3 id="تطبیق-همهٔ-نسخه-های-یک-api-match-all-versions" dir="rtl">تطبیق همهٔ نسخه‌های یک API {#match-all-versions}</h3>
+<p dir="rtl">به‌طور پیش‌فرض، admission webhookها روی همهٔ نسخه‌های API که یک منبع مشخص را
+تحت تأثیر قرار می‌دهند اجرا می‌شوند. فیلد <code dir="ltr">matchPolicy</code> در پیکربندی webhook این
+رفتار را کنترل می‌کند. مقدار <code dir="ltr">Equivalent</code> را در فیلد <code dir="ltr">matchPolicy</code> تعیین کنید یا
+این فیلد را حذف کنید تا webhook بتواند روی هر نسخه‌ای از API اجرا شود.</p>
+<p dir="rtl">برای جزئیات، به
+<a href="https://kubernetes.io/docs/reference/access-authn-authz/extensible-admission-controllers/#matching-requests-matchpolicy" target="_blank">تطبیق درخواست‌ها: <code dir="ltr">matchPolicy</code></a> مراجعه کنید.</p>
+<h2 id="دامنهٔ-تغییر-و-ملاحظات-فیلدها-mutation-scope-considerations" dir="rtl">دامنهٔ تغییر و ملاحظات فیلدها {#mutation-scope-considerations}</h2>
+<p dir="rtl">این بخش توصیه‌هایی را دربارهٔ دامنهٔ تغییرات و ملاحظات ویژهٔ
+فیلدهای آبجکت ارائه می‌دهد. به‌طور خلاصه، این توصیه‌ها عبارت‌اند از:</p>
+<ul>
+<li dir="rtl">تنها فیلدهایی را وصله کنید که نیاز به وصله دارند.</li>
+<li dir="rtl">مقادیر آرایه‌ها را بازنویسی نکنید.</li>
+<li dir="rtl">در صورت امکان، از اثرات جانبی در تغییرات پرهیز کنید.</li>
+<li dir="rtl">از خودتغییری پرهیز کنید.</li>
+<li dir="rtl">در حالت باز شکست بخورید (fail open) و وضعیت نهایی را اعتبارسنجی کنید.</li>
+<li dir="rtl">برای به‌روزرسانی‌های آیندهٔ فیلدها در نسخه‌های بعدی برنامه‌ریزی کنید.</li>
+<li dir="rtl">از فعال‌شدن webhookها توسط خودشان جلوگیری کنید.</li>
+<li dir="rtl">آبجکت‌های تغییرناپذیر را تغییر ندهید.</li>
+</ul>
+<h3 id="وصله-کردن-تنها-فیلدهای-لازم-patch-required-fields" dir="rtl">وصله‌کردن تنها فیلدهای لازم {#patch-required-fields}</h3>
+<p dir="rtl">سرورهای admission webhook پاسخ‌های HTTP ارسال می‌کنند تا نشان دهند با یک
+درخواست مشخص API کوبرنتیز چه باید کرد. این پاسخ یک آبجکت AdmissionReview است.
+یک mutating webhook می‌تواند با استفاده از فیلد <code dir="ltr">patchType</code> و فیلد <code dir="ltr">patch</code> در پاسخ،
+فیلدهای مشخصی را برای تغییر پیش از اجازهٔ پذیرش اضافه کند. اطمینان حاصل کنید
+که تنها فیلدهایی را تغییر می‌دهید که به تغییر نیاز دارند.</p>
+<p dir="rtl">برای نمونه، یک mutating webhook را در نظر بگیرید که پیکربندی شده است تا اطمینان حاصل کند
+Deploymentهای <code dir="ltr">web-server</code> دست‌کم سه نسخهٔ تکثیرشده دارند. هنگامی که درخواستی برای
+ایجاد یک آبجکت Deployment با پیکربندی webhook شما مطابقت دارد، webhook
+باید تنها مقدار فیلد <code dir="ltr">spec.replicas</code> را به‌روزرسانی کند.</p>
+<h3 id="مقادیر-آرایه-ها-را-بازنویسی-نکنید-dont-overwrite-arrays" dir="rtl">مقادیر آرایه‌ها را بازنویسی نکنید {#dont-overwrite-arrays}</h3>
+<p dir="rtl">فیلدهای موجود در مشخصات آبجکت‌های کوبرنتیز ممکن است شامل آرایه باشند. برخی آرایه‌ها
+جفت‌های key:value دارند (مانند فیلد <code dir="ltr">envVar</code> در مشخصات یک کانتینر)،
+در حالی که برخی دیگر بدون کلید هستند (مانند فیلد <code dir="ltr">readinessGates</code> در مشخصات
+یک Pod). ترتیب مقادیر در یک فیلد آرایه‌ای ممکن است در برخی
+وضعیت‌ها اهمیت داشته باشد. برای نمونه، ترتیب آرگومان‌ها در فیلد <code dir="ltr">args</code> مشخصات
+یک کانتینر ممکن است بر کانتینر اثر بگذارد.</p>
+<p dir="rtl">هنگام تغییر آرایه‌ها، موارد زیر را در نظر بگیرید:</p>
+<ul>
+<li dir="rtl">هر جا که ممکن است، به‌جای <code dir="ltr">replace</code> از عملیات JSONPatch با نام <code dir="ltr">add</code> استفاده کنید تا
+از جایگزینی تصادفی یک مقدار لازم جلوگیری شود.</li>
+<li dir="rtl">با آرایه‌هایی که از جفت‌های key:value استفاده نمی‌کنند همچون مجموعه (set) رفتار کنید.</li>
+<li dir="rtl">اطمینان حاصل کنید که لازم نیست مقادیر فیلدی که تغییر می‌دهید
+ترتیب مشخصی داشته باشند.</li>
+<li dir="rtl">جفت‌های key:value موجود را بازنویسی نکنید، مگر در صورت ضرورت مطلق.</li>
+<li dir="rtl">هنگام تغییر فیلدهای برچسب احتیاط کنید. یک تغییر تصادفی ممکن است
+باعث از کار افتادن انتخابگرهای برچسب شود و به رفتار ناخواسته بینجامد.</li>
+</ul>
+<h3 id="پرهیز-از-اثرات-جانبی-avoid-side-effects" dir="rtl">پرهیز از اثرات جانبی {#avoid-side-effects}</h3>
+<p dir="rtl">اطمینان حاصل کنید که webhookهای شما تنها روی محتوای AdmissionReview
+ارسال‌شده به آن‌ها عمل می‌کنند و تغییرات خارج از این مسیر (out-of-band) ایجاد نمی‌کنند. این تغییرات
+اضافی که <em>اثرات جانبی</em> (side effects) نامیده می‌شوند، اگر به‌درستی هماهنگ نشوند
+ممکن است در طول پذیرش تعارض ایجاد کنند. اگر یک webhook هیچ اثر جانبی‌ای نداشته باشد،
+فیلد <code dir="ltr">.webhooks[].sideEffects</code> باید برابر با <code dir="ltr">None</code> تنظیم شود.</p>
+<p dir="rtl">اگر اثرات جانبی در طول ارزیابی پذیرش لازم باشند، باید هنگام
+پردازش آبجکت AdmissionReview‌ای که <code dir="ltr">dryRun</code> آن برابر با <code dir="ltr">true</code> است سرکوب شوند،
+و فیلد <code dir="ltr">.webhooks[].sideEffects</code> باید برابر با <code dir="ltr">NoneOnDryRun</code> تنظیم شود.</p>
+<p dir="rtl">برای جزئیات، به
+<a href="https://kubernetes.io/docs/reference/access-authn-authz/extensible-admission-controllers/#side-effects" target="_blank">اثرات جانبی</a> مراجعه کنید.</p>
+<h3 id="پرهیز-از-خودتغییری-avoid-self-mutation" dir="rtl">پرهیز از خودتغییری {#avoid-self-mutation}</h3>
+<p dir="rtl">webhookای که درون کلاستر اجرا می‌شود، اگر طوری پیکربندی شده باشد که منابع لازم برای
+راه‌اندازی Podهای خودش را رهگیری کند، ممکن است برای استقرار خودش بن‌بست (deadlock)
+ایجاد کند.</p>
+<p dir="rtl">برای نمونه، یک mutating admission webhook پیکربندی شده است تا درخواست‌های <strong>create</strong> برای Pod
+را تنها در صورتی بپذیرد که برچسب مشخصی (مانند <code dir="ltr">env: prod</code>) در Pod تنظیم شده باشد.
+سرور webhook در یک Deployment اجرا می‌شود که برچسب <code dir="ltr">env</code> را تنظیم نمی‌کند.</p>
+<p dir="rtl">هنگامی که نودی که Podهای سرور webhook را اجرا می‌کند ناسالم می‌شود، Deployment
+مربوط به webhook تلاش می‌کند Podها را روی نود دیگری دوباره زمان‌بندی کند. با این حال، سرور
+webhook موجود درخواست‌ها را رد می‌کند، زیرا برچسب <code dir="ltr">env</code> تنظیم نشده است. در
+نتیجه، جابه‌جایی نمی‌تواند انجام شود.</p>
+<p dir="rtl">فضای نامی را که webhook شما در آن اجرا می‌شود با یک
+<a href="https://kubernetes.io/docs/reference/access-authn-authz/extensible-admission-controllers/#matching-requests-namespaceselector" target="_blank"><code dir="ltr">namespaceSelector</code></a> مستثنا کنید.</p>
+<h3 id="پرهیز-از-حلقه-های-وابستگی-avoid-dependency-loops" dir="rtl">پرهیز از حلقه‌های وابستگی {#avoid-dependency-loops}</h3>
+<p dir="rtl">حلقه‌های وابستگی ممکن است در سناریوهایی مانند موارد زیر رخ دهند:</p>
+<ul>
+<li dir="rtl">دو webhook، Podهای یکدیگر را بررسی می‌کنند. اگر هر دو webhook هم‌زمان
+در دسترس نباشند، هیچ‌یک از آن‌ها نمی‌تواند راه‌اندازی شود.</li>
+<li dir="rtl">webhook شما اجزای افزونه‌ای کلاستر، مانند افزونه‌های شبکه
+یا افزونه‌های ذخیره‌سازی، را که webhook شما به آن‌ها وابسته است رهگیری می‌کند. اگر هم webhook و هم
+افزونهٔ وابسته در دسترس نباشند، هیچ‌یک از این دو مؤلفه نمی‌تواند کار کند.</li>
+</ul>
+<p dir="rtl">برای پرهیز از این حلقه‌های وابستگی، موارد زیر را امتحان کنید:</p>
+<ul>
+<li dir="rtl">از
+<a href="https://kubernetes.io/docs/reference/access-authn-authz/validating-admission-policy/" target="_blank">ValidatingAdmissionPolicyها</a>
+استفاده کنید تا از ایجاد وابستگی‌ها پرهیز شود.</li>
+<li dir="rtl">از اعتبارسنجی یا تغییر webhookهای دیگر توسط webhookها جلوگیری کنید.
+<a href="https://kubernetes.io/docs/reference/access-authn-authz/extensible-admission-controllers/#matching-requests-namespaceselector" target="_blank">مستثنا کردن فضاهای نام مشخص</a>
+از فعال‌سازی webhook خود را در نظر بگیرید.</li>
+<li dir="rtl">با استفاده از یک
+<a href="https://kubernetes.io/docs/reference/access-authn-authz/extensible-admission-controllers/#matching-requests-objectselector" target="_blank"><code dir="ltr">objectSelector</code></a> از عمل‌کردن webhookهای خود روی افزونه‌های وابسته جلوگیری کنید.</li>
+</ul>
+<h3 id="شکست-در-حالت-باز-و-اعتبارسنجی-وضعیت-نهایی-fail-open-validate-final-state" dir="rtl">شکست در حالت باز و اعتبارسنجی وضعیت نهایی {#fail-open-validate-final-state}</h3>
+<p dir="rtl">mutating admission webhookها از فیلد پیکربندی <code dir="ltr">failurePolicy</code> پشتیبانی می‌کنند.
+این فیلد نشان می‌دهد که اگر webhook شکست بخورد، سرور API باید درخواست را بپذیرد یا
+رد کند. شکست webhook ممکن است به دلیل اتمام مهلت زمانی یا خطاهای
+منطق سرور رخ دهد.</p>
+<p dir="rtl">به‌طور پیش‌فرض، admission webhookها فیلد <code dir="ltr">failurePolicy</code> را برابر با Fail قرار می‌دهند. سرور API
+در صورت شکست webhook، درخواست را رد می‌کند. با این حال، رد کردن درخواست‌ها به‌طور
+پیش‌فرض ممکن است باعث شود درخواست‌های منطبق با سیاست‌ها نیز در زمان از کار افتادن webhook
+رد شوند.</p>
+<p dir="rtl">با تنظیم فیلد <code dir="ltr">failurePolicy</code> برابر با Ignore، اجازه دهید mutating webhookهای شما «در حالت باز شکست بخورند»
+(fail open). از یک کنترل‌کنندهٔ اعتبارسنج برای بررسی وضعیت درخواست‌ها استفاده کنید تا اطمینان حاصل شود
+با سیاست‌های شما مطابقت دارند.</p>
+<p dir="rtl">این رویکرد مزایای زیر را دارد:</p>
+<ul>
+<li dir="rtl">از کار افتادن mutating webhook مانع استقرار منابع منطبق با سیاست‌ها نمی‌شود.</li>
+<li dir="rtl">اعمال سیاست در طول کنترل پذیرش اعتبارسنج انجام می‌شود.</li>
+<li dir="rtl">mutating webhookها با دیگر کنترل‌کننده‌های کلاستر تداخل ندارند.</li>
+</ul>
+<h3 id="برنامه-ریزی-برای-به-روزرسانی-های-آیندهٔ-فیلدها-plan-future-field-updates" dir="rtl">برنامه‌ریزی برای به‌روزرسانی‌های آیندهٔ فیلدها {#plan-future-field-updates}</h3>
+<p dir="rtl">به‌طور کلی، webhookهای خود را با این فرض طراحی کنید که APIهای کوبرنتیز ممکن است
+در نسخه‌های بعدی تغییر کنند. سروری ننویسید که پایداری یک
+API را مسلم فرض کند. برای نمونه، انتشار کانتینرهای sidecar در کوبرنتیز
+فیلد <code dir="ltr">restartPolicy</code> را به API مربوط به Pod اضافه کرد.</p>
+<h3 id="جلوگیری-از-فعال-شدن-webhook-توسط-خودش-prevent-webhook-self-trigger" dir="rtl">جلوگیری از فعال‌شدن webhook توسط خودش {#prevent-webhook-self-trigger}</h3>
+<p dir="rtl">mutating webhookهایی که به طیف گسترده‌ای از درخواست‌های API پاسخ می‌دهند ممکن است
+ناخواسته خودشان را فعال کنند. برای نمونه، webhookای را در نظر بگیرید که
+به همهٔ درخواست‌های کلاستر پاسخ می‌دهد. اگر webhook را طوری پیکربندی کنید که برای هر تغییر،
+آبجکت‌های Event ایجاد کند، به درخواست‌های ایجاد آبجکت‌های Event خودش
+پاسخ خواهد داد.</p>
+<p dir="rtl">برای پرهیز از این وضعیت، تنظیم یک برچسب یکتا روی همهٔ منابعی که
+webhook شما ایجاد می‌کند را در نظر بگیرید. این برچسب را از شرایط تطبیق webhook خود مستثنا کنید.</p>
+<h3 id="آبجکت-های-تغییرناپذیر-را-تغییر-ندهید-dont-change-immutable-objects" dir="rtl">آبجکت‌های تغییرناپذیر را تغییر ندهید {#dont-change-immutable-objects}</h3>
+<p dir="rtl">برخی از آبجکت‌های کوبرنتیز در سرور API نمی‌توانند تغییر کنند. برای نمونه، هنگامی که
+یک <span class="term" title="static-pod">Pod ایستا</span> مستقر می‌کنید،
+kubelet روی نود یک
+<span class="term" title="mirror-pod">Pod آینه‌ای</span> در سرور
+API ایجاد می‌کند تا Pod ایستا را دنبال کند. با این حال، تغییرات در Pod آینه‌ای
+به Pod ایستا منتقل نمی‌شوند.</p>
+<p dir="rtl">در طول پذیرش، برای تغییر این آبجکت‌ها تلاش نکنید. همهٔ Podهای آینه‌ای
+حاشیه‌نویسی <code dir="ltr">kubernetes.io/config.mirror</code> را دارند. برای مستثنا کردن Podهای آینه‌ای و در عین حال کاهش
+خطر امنیتی نادیده‌گرفتن یک حاشیه‌نویسی، اجازه دهید Podهای ایستا تنها در
+فضاهای نام مشخصی اجرا شوند.</p>
+<h2 id="ترتیب-و-خودتوانی-idempotence-در-mutating-webhookها-ordering-idempotence" dir="rtl">ترتیب و خودتوانی (idempotence) در mutating webhookها {#ordering-idempotence}</h2>
+<p dir="rtl">این بخش توصیه‌هایی را دربارهٔ ترتیب webhookها و طراحی webhookهای خودتوان (idempotent)
+ارائه می‌دهد. به‌طور خلاصه، این توصیه‌ها عبارت‌اند از:</p>
+<ul>
+<li dir="rtl">به ترتیب اجرای مشخصی متکی نباشید.</li>
+<li dir="rtl">تغییرات را پیش از پذیرش اعتبارسنجی کنید.</li>
+<li dir="rtl">بررسی کنید که آیا تغییرات شما توسط کنترل‌کننده‌های دیگر بازنویسی می‌شوند.</li>
+<li dir="rtl">اطمینان حاصل کنید که مجموعهٔ mutating webhookها خودتوان است، نه فقط
+تک‌تک webhookها.</li>
+</ul>
+<h3 id="به-ترتیب-فراخوانی-mutating-webhookها-متکی-نباشید-dont-rely-webhook-order" dir="rtl">به ترتیب فراخوانی mutating webhookها متکی نباشید {#dont-rely-webhook-order}</h3>
+<p dir="rtl">mutating admission webhookها با ترتیب ثابتی اجرا نمی‌شوند. عوامل گوناگونی
+ممکن است زمان فراخوانی یک webhook مشخص را تغییر دهند. به اجرای webhook خود
+در نقطهٔ مشخصی از فرایند پذیرش متکی نباشید. webhookهای دیگر همچنان ممکن است
+آبجکت تغییرداده‌شدهٔ شما را تغییر دهند.</p>
+<p dir="rtl">توصیه‌های زیر ممکن است به کمینه‌کردن خطر تغییرات ناخواسته
+کمک کنند:</p>
+<ul>
+<li dir="rtl"><a href="#validate-mutations">تغییرات را پیش از پذیرش اعتبارسنجی کنید</a></li>
+<li dir="rtl">از یک سیاست فراخوانی مجدد (reinvocation policy) استفاده کنید تا تغییرات آبجکت توسط افزونه‌های دیگر را مشاهده کنید
+و در صورت نیاز webhook را دوباره اجرا کنید. برای جزئیات، به
+<a href="https://kubernetes.io/docs/reference/access-authn-authz/extensible-admission-controllers/#reinvocation-policy" target="_blank">سیاست فراخوانی مجدد</a> مراجعه کنید.</li>
+</ul>
+<h3 id="اطمینان-از-خودتوان-بودن-mutating-webhookهای-کلاستر-ensure-mutating-webhook-idempotent" dir="rtl">اطمینان از خودتوان بودن mutating webhookهای کلاستر {#ensure-mutating-webhook-idempotent}</h3>
+<p dir="rtl">هر mutating admission webhook باید <em>خودتوان</em> (idempotent) باشد. webhook باید
+بتواند روی آبجکتی که قبلاً تغییر داده است اجرا شود، بدون آنکه فراتر از تغییر اولیه،
+تغییرات بیشتری ایجاد کند.</p>
+<p dir="rtl">افزون بر این، همهٔ mutating webhookهای کلاستر شما باید به‌عنوان یک
+مجموعه خودتوان باشند. پس از پایان مرحلهٔ تغییر در کنترل پذیرش،
+هر mutating webhook منفرد باید بتواند روی یک آبجکت اجرا شود بدون آنکه
+تغییرات بیشتری در آن آبجکت ایجاد کند.</p>
+<p dir="rtl">بسته به محیط شما، تضمین خودتوانی در مقیاس بزرگ ممکن است
+دشوار باشد. توصیه‌های زیر ممکن است کمک کنند:</p>
+<ul>
+<li dir="rtl">از کنترل‌کننده‌های پذیرش اعتبارسنج برای تأیید وضعیت نهایی
+بارهای کاری حیاتی استفاده کنید.</li>
+<li dir="rtl">استقرارهای خود را در یک کلاستر آزمایشی (staging) بیازمایید تا ببینید آیا آبجکتی
+چندین بار توسط یک webhook یکسان تغییر می‌کند یا نه.</li>
+<li dir="rtl">اطمینان حاصل کنید که دامنهٔ هر mutating webhook مشخص و محدود است.</li>
+</ul>
+<p dir="rtl">نمونه‌های زیر منطق تغییر خودتوان را نشان می‌دهند:</p>
+<ol>
+<li dir="rtl">
+<p dir="rtl">برای یک درخواست <strong>create</strong> مربوط به Pod، فیلد
+<code dir="ltr">.spec.securityContext.runAsNonRoot</code> آن Pod را برابر با true قرار دهید.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">برای یک درخواست <strong>create</strong> مربوط به Pod، اگر فیلد
+<code dir="ltr">.spec.containers[].resources.limits</code> یک کانتینر تنظیم نشده باشد، محدودیت‌های منابع
+پیش‌فرض را تنظیم کنید.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">برای یک درخواست <strong>create</strong> مربوط به Pod، اگر کانتینری با نام <code dir="ltr">foo-sidecar</code> از قبل وجود نداشته باشد،
+یک کانتینر sidecar با نام <code dir="ltr">foo-sidecar</code> تزریق کنید.</p>
+</li>
+</ol>
+<p dir="rtl">در این موارد، webhook را می‌توان با ایمنی دوباره فراخوانی کرد، یا می‌تواند آبجکتی را بپذیرد که
+فیلدهایش از قبل تنظیم شده‌اند.</p>
+<p dir="rtl">نمونه‌های زیر منطق تغییر غیرخودتوان را نشان می‌دهند:</p>
+<ol>
+<li dir="rtl">
+<p dir="rtl">برای یک درخواست <strong>create</strong> مربوط به Pod، یک کانتینر sidecar با نام
+<code dir="ltr">foo-sidecar</code> به‌همراه پسوندی از مُهر زمانی فعلی (مانند
+<code dir="ltr">foo-sidecar-19700101-000000</code>) تزریق کنید.</p>
+<p dir="rtl">فراخوانی مجدد webhook ممکن است باعث شود همان sidecar چندین بار
+در یک Pod تزریق شود، هر بار با نام کانتینر متفاوت. به همین ترتیب،
+اگر sidecar از قبل در پادی که کاربر ارائه کرده وجود داشته باشد، webhook ممکن است کانتینرهای تکراری تزریق کند.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">برای یک درخواست <strong>create</strong>/<strong>update</strong> مربوط به Pod، اگر Pod برچسب <code dir="ltr">env</code>
+را داشته باشد آن را رد کنید، و در غیر این صورت برچسب <code dir="ltr">env: prod</code> را به Pod اضافه کنید.</p>
+<p dir="rtl">فراخوانی مجدد webhook باعث می‌شود webhook روی خروجی خودش شکست بخورد.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">برای یک درخواست <strong>create</strong> مربوط به Pod، بدون بررسی اینکه آیا کانتینر <code dir="ltr">foo-sidecar</code>
+وجود دارد یا نه، یک کانتینر sidecar با نام <code dir="ltr">foo-sidecar</code> اضافه کنید.</p>
+<p dir="rtl">فراخوانی مجدد webhook به کانتینرهای تکراری در Pod منجر می‌شود که
+درخواست را نامعتبر می‌کند و سرور API آن را رد می‌کند.</p>
+</li>
+</ol>
+<h2 id="آزمون-و-اعتبارسنجی-تغییرات-mutation-testing-validation" dir="rtl">آزمون و اعتبارسنجی تغییرات {#mutation-testing-validation}</h2>
+<p dir="rtl">این بخش توصیه‌هایی را برای آزمودن mutating webhookها و
+اعتبارسنجی آبجکت‌های تغییریافته ارائه می‌دهد. به‌طور خلاصه، این توصیه‌ها عبارت‌اند از:</p>
+<ul>
+<li dir="rtl">webhookها را در محیط‌های آزمایشی (staging) بیازمایید.</li>
+<li dir="rtl">از تغییراتی که اعتبارسنجی‌ها را نقض می‌کنند پرهیز کنید.</li>
+<li dir="rtl">ارتقاهای نسخهٔ فرعی (minor) را از نظر پسرفت‌ها و تعارض‌ها بیازمایید.</li>
+<li dir="rtl">آبجکت‌های تغییریافته را پیش از پذیرش اعتبارسنجی کنید.</li>
+</ul>
+<h3 id="آزمودن-webhookها-در-محیط-های-آزمایشی-test-in-staging-environments" dir="rtl">آزمودن webhookها در محیط‌های آزمایشی {#test-in-staging-environments}</h3>
+<p dir="rtl">آزمون جامع باید بخش اصلی چرخهٔ انتشار برای webhookهای جدید یا به‌روزشده
+باشد. در صورت امکان، هر تغییری در webhookهای کلاستر خود را در یک محیط آزمایشی
+که شباهت زیادی به کلاسترهای تولیدی شما دارد بیازمایید. دست‌کم،
+استفاده از ابزاری مانند <a href="https://minikube.sigs.k8s.io/docs/" target="_blank" rel="noopener">minikube</a> یا
+<a href="https://kind.sigs.k8s.io/" target="_blank" rel="noopener">kind</a> را برای ایجاد یک کلاستر آزمایشی کوچک برای تغییرات webhook
+در نظر بگیرید.</p>
+<h3 id="اطمینان-از-اینکه-تغییرات-اعتبارسنجی-ها-را-نقض-نمی-کنند-ensure-mutations-dont-violate-validations" dir="rtl">اطمینان از اینکه تغییرات اعتبارسنجی‌ها را نقض نمی‌کنند {#ensure-mutations-dont-violate-validations}</h3>
+<p dir="rtl">mutating webhookهای شما نباید هیچ‌یک از اعتبارسنجی‌هایی را که پیش از پذیرش روی یک
+آبجکت اعمال می‌شوند نقض کنند. برای نمونه، mutating webhookای را در نظر بگیرید که
+درخواست پیش‌فرض CPU یک Pod را برابر با مقدار مشخصی قرار می‌دهد. اگر محدودیت CPU آن Pod
+روی مقداری کمتر از درخواست تغییریافته تنظیم شده باشد، Pod در پذیرش شکست می‌خورد.</p>
+<p dir="rtl">هر mutating webhook را در برابر اعتبارسنجی‌هایی که در کلاستر شما اجرا می‌شوند بیازمایید.</p>
+<h3 id="آزمودن-ارتقاهای-نسخهٔ-فرعی-برای-اطمینان-از-رفتار-سازگار-test-minor-version-upgrades" dir="rtl">آزمودن ارتقاهای نسخهٔ فرعی برای اطمینان از رفتار سازگار {#test-minor-version-upgrades}</h3>
+<p dir="rtl">پیش از ارتقای کلاسترهای تولیدی خود به یک نسخهٔ فرعی جدید، webhookها
+و بارهای کاری خود را در یک محیط آزمایشی بیازمایید. نتایج را مقایسه کنید تا اطمینان حاصل شود
+که webhookهای شما پس از ارتقا همچنان مطابق انتظار کار می‌کنند.</p>
+<p dir="rtl">افزون بر این، از منابع زیر برای آگاهی از تغییرات API استفاده کنید:</p>
+<ul>
+<li dir="rtl"><a href="/releases/">یادداشت‌های انتشار کوبرنتیز</a></li>
+<li dir="rtl"><a href="/blog/">وبلاگ کوبرنتیز</a></li>
+</ul>
+<h3 id="اعتبارسنجی-تغییرات-پیش-از-پذیرش-validate-mutations" dir="rtl">اعتبارسنجی تغییرات پیش از پذیرش {#validate-mutations}</h3>
+<p dir="rtl">mutating webhookها پیش از اجرای هر validating webhookای تا پایان اجرا می‌شوند. هیچ
+ترتیب پایداری برای اعمال تغییرات روی آبجکت‌ها وجود ندارد. در نتیجه،
+تغییرات شما ممکن است توسط mutating webhookای که در زمان بعدی اجرا می‌شود بازنویسی شوند.</p>
+<p dir="rtl">یک کنترل‌کنندهٔ پذیرش اعتبارسنج مانند ValidatingAdmissionWebhook یا
+ValidatingAdmissionPolicy به کلاستر خود اضافه کنید تا اطمینان حاصل شود تغییرات شما
+همچنان وجود دارند. برای نمونه، mutating webhookای را در نظر بگیرید که فیلد
+<code dir="ltr">restartPolicy: Always</code> را به init containerهای مشخصی اضافه می‌کند تا آن‌ها به‌صورت
+کانتینرهای sidecar اجرا شوند. می‌توانید یک validating webhook اجرا کنید تا اطمینان حاصل شود که آن
+init containerها پس از تکمیل همهٔ تغییرات، پیکربندی <code dir="ltr">restartPolicy: Always</code> را
+حفظ کرده‌اند.</p>
+<p dir="rtl">برای جزئیات، به منابع زیر مراجعه کنید:</p>
+<ul>
+<li dir="ltr" class="ltr"><a href="https://kubernetes.io/docs/reference/access-authn-authz/validating-admission-policy/" target="_blank">Validating Admission Policy</a></li>
+<li dir="rtl"><a href="https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/#validatingadmissionwebhook" target="_blank">ValidatingAdmissionWebhookها</a></li>
+</ul>
+<h2 id="استقرار-mutating-webhook-mutating-webhook-deployment" dir="rtl">استقرار mutating webhook {#mutating-webhook-deployment}</h2>
+<p dir="rtl">این بخش توصیه‌هایی را برای استقرار mutating admission
+webhookها ارائه می‌دهد. به‌طور خلاصه، این توصیه‌ها عبارت‌اند از:</p>
+<ul>
+<li dir="rtl">پیکربندی webhook را به‌تدریج منتشر کنید و مشکلات را به تفکیک
+فضای نام پایش کنید.</li>
+<li dir="rtl">دسترسی ویرایش منابع پیکربندی webhook را محدود کنید.</li>
+<li dir="rtl">اگر سرور webhook درون کلاستر است، دسترسی به فضای نامی که سرور webhook را اجرا می‌کند
+محدود کنید.</li>
+</ul>
+<h3 id="نصب-و-فعال-سازی-یک-mutating-webhook-install-enable-mutating-webhook" dir="rtl">نصب و فعال‌سازی یک mutating webhook {#install-enable-mutating-webhook}</h3>
+<p dir="rtl">هنگامی که آمادهٔ استقرار mutating webhook خود در یک کلاستر هستید، عملیات را به
+ترتیب زیر انجام دهید:</p>
+<ol>
+<li dir="rtl">سرور webhook را نصب و راه‌اندازی کنید.</li>
+<li dir="rtl">فیلد <code dir="ltr">failurePolicy</code> را در مانیفست MutatingWebhookConfiguration
+برابر با Ignore قرار دهید. این کار به شما امکان می‌دهد از اختلال‌های ناشی از webhookهای نادرست‌پیکربندی‌شده پرهیز کنید.</li>
+<li dir="rtl">فیلد <code dir="ltr">namespaceSelector</code> را در مانیفست MutatingWebhookConfiguration
+برابر با یک فضای نام آزمایشی قرار دهید.</li>
+<li dir="rtl">MutatingWebhookConfiguration را در کلاستر خود مستقر کنید.</li>
+</ol>
+<p dir="rtl">webhook را در فضای نام آزمایشی پایش کنید تا هر مشکلی را بیابید، سپس
+webhook را در فضاهای نام دیگر منتشر کنید. اگر webhook درخواست API‌ای را رهگیری کند که
+قرار نبوده رهگیری کند، انتشار را متوقف کنید و دامنهٔ پیکربندی
+webhook را اصلاح کنید.</p>
+<h3 id="محدود-کردن-دسترسی-ویرایش-به-mutating-webhookها-limit-edit-access" dir="rtl">محدود کردن دسترسی ویرایش به mutating webhookها {#limit-edit-access}</h3>
+<p dir="rtl">mutating webhookها کنترل‌کننده‌های قدرتمندی در کوبرنتیز هستند. از RBAC یا سازوکار
+مجوزدهی دیگری برای محدود کردن دسترسی به پیکربندی‌ها و سرورهای webhook خود استفاده کنید.
+در RBAC، اطمینان حاصل کنید که دسترسی‌های زیر تنها در اختیار موجودیت‌های قابل‌اعتماد
+قرار دارند:</p>
+<ul>
+<li dir="rtl">فعل‌ها (Verbs): <strong>create</strong>، <strong>update</strong>، <strong>patch</strong>، <strong>delete</strong>، <strong>deletecollection</strong></li>
+<li dir="rtl">گروه API: <code dir="ltr">admissionregistration.k8s.io/v1</code></li>
+<li dir="rtl">نوع API: MutatingWebhookConfigurations</li>
+</ul>
+<p dir="rtl">اگر سرور mutating webhook شما در کلاستر اجرا می‌شود، دسترسی برای ایجاد یا
+تغییر هر منبعی در آن فضای نام را محدود کنید.</p>
+<h2 id="نمونه-هایی-از-پیاده-سازی-های-خوب-example-good-implementations" dir="rtl">نمونه‌هایی از پیاده‌سازی‌های خوب {#example-good-implementations}</h2>
+<p dir="rtl">پروژه‌های زیر نمونه‌هایی از پیاده‌سازی‌های «خوب» سرور webhook سفارشی
+هستند. می‌توانید هنگام طراحی webhookهای خود از آن‌ها به‌عنوان نقطهٔ شروع استفاده کنید.
+از این نمونه‌ها بدون تغییر استفاده نکنید؛ آن‌ها را نقطهٔ شروع قرار دهید و
+webhookهای خود را طوری طراحی کنید که در محیط خاص شما به‌خوبی اجرا شوند.</p>
+<ul>
+<li dir="ltr" class="ltr"><a href="https://github.com/cert-manager/cert-manager/tree/master/internal/webhook" target="_blank" rel="noopener"><code dir="ltr">cert-manager</code></a></li>
+<li dir="ltr" class="ltr"><a href="https://open-policy-agent.github.io/gatekeeper/website/docs/mutation" target="_blank" rel="noopener">Gatekeeper Open Policy Agent (OPA)</a></li>
+</ul>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<ul>
+<li dir="rtl"><a href="https://kubernetes.io/docs/reference/access-authn-authz/webhook/" target="_blank">استفاده از webhookها برای احراز هویت و مجوزدهی</a></li>
+<li dir="rtl"><a href="https://kubernetes.io/docs/reference/access-authn-authz/mutating-admission-policy/" target="_blank">آشنایی با MutatingAdmissionPolicyها</a></li>
+<li dir="rtl"><a href="https://kubernetes.io/docs/reference/access-authn-authz/validating-admission-policy/" target="_blank">آشنایی با ValidatingAdmissionPolicyها</a></li>
+</ul>
+</main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#اهمیت-طراحی-خوب-webhook-why-good-webhook-design-matters">اهمیت طراحی خوب webhook {#why-good-webhook-design-matters}</a><a class="l2" href="#تشخیص-اینکه-آیا-از-admission-webhookها-استفاده-می-کنید-identify-admission-webhooks">تشخیص اینکه آیا از admission webhookها استفاده می‌کنید {#identify-admission-webhooks}</a><a class="l2" href="#انتخاب-سازوکار-کنترل-پذیرش-choose-admission-mechanism">انتخاب سازوکار کنترل پذیرش {#choose-admission-mechanism}</a><a class="l3" href="#استفاده-از-اعتبارسنجی-و-مقداردهی-پیش-فرض-داخلی-برای-customresourcedefinitionها-no-crd-validation-defaulting">استفاده از اعتبارسنجی و مقداردهی پیش‌فرض داخلی برای CustomResourceDefinitionها {#no-crd-validation-defaulting}</a><a class="l2" href="#کارایی-و-تأخیر-performance-latency">کارایی و تأخیر {#performance-latency}</a><a class="l3" href="#طراحی-admission-webhookها-برای-تأخیر-کم-design-admission-webhooks-low-latency">طراحی admission webhookها برای تأخیر کم {#design-admission-webhooks-low-latency}</a><a class="l3" href="#جلوگیری-از-حلقه-های-ناشی-از-کنترل-کننده-های-رقیب-prevent-loops-competing-controllers">جلوگیری از حلقه‌های ناشی از کنترل‌کننده‌های رقیب {#prevent-loops-competing-controllers}</a><a class="l3" href="#تعیین-مقدار-مهلت-زمانی-کوچک-small-timeout">تعیین مقدار مهلت زمانی کوچک {#small-timeout}</a><a class="l3" href="#استفاده-از-متعادل-کنندهٔ-بار-برای-تضمین-دسترس-پذیری-webhook-load-balancer-webhook">استفاده از متعادل‌کنندهٔ بار برای تضمین دسترس‌پذیری webhook {#load-balancer-webhook}</a><a class="l3" href="#استفاده-از-مدل-استقرار-با-دسترس-پذیری-بالا-ha-deployment">استفاده از مدل استقرار با دسترس‌پذیری بالا {#ha-deployment}</a><a class="l2" href="#پالایش-درخواست-ها-request-filtering">پالایش درخواست‌ها {#request-filtering}</a><a class="l3" href="#محدود-کردن-دامنهٔ-هر-webhook-webhook-limit-scope">محدود کردن دامنهٔ هر webhook {#webhook-limit-scope}</a><a class="l3" href="#پالایش-درخواست-های-مشخص-با-استفاده-از-شرایط-تطبیق-filter-match-conditions">پالایش درخواست‌های مشخص با استفاده از شرایط تطبیق {#filter-match-conditions}</a><a class="l3" href="#تطبیق-همهٔ-نسخه-های-یک-api-match-all-versions">تطبیق همهٔ نسخه‌های یک API {#match-all-versions}</a><a class="l2" href="#دامنهٔ-تغییر-و-ملاحظات-فیلدها-mutation-scope-considerations">دامنهٔ تغییر و ملاحظات فیلدها {#mutation-scope-considerations}</a><a class="l3" href="#وصله-کردن-تنها-فیلدهای-لازم-patch-required-fields">وصله‌کردن تنها فیلدهای لازم {#patch-required-fields}</a><a class="l3" href="#مقادیر-آرایه-ها-را-بازنویسی-نکنید-dont-overwrite-arrays">مقادیر آرایه‌ها را بازنویسی نکنید {#dont-overwrite-arrays}</a><a class="l3" href="#پرهیز-از-اثرات-جانبی-avoid-side-effects">پرهیز از اثرات جانبی {#avoid-side-effects}</a><a class="l3" href="#پرهیز-از-خودتغییری-avoid-self-mutation">پرهیز از خودتغییری {#avoid-self-mutation}</a><a class="l3" href="#پرهیز-از-حلقه-های-وابستگی-avoid-dependency-loops">پرهیز از حلقه‌های وابستگی {#avoid-dependency-loops}</a><a class="l3" href="#شکست-در-حالت-باز-و-اعتبارسنجی-وضعیت-نهایی-fail-open-validate-final-state">شکست در حالت باز و اعتبارسنجی وضعیت نهایی {#fail-open-validate-final-state}</a><a class="l3" href="#برنامه-ریزی-برای-به-روزرسانی-های-آیندهٔ-فیلدها-plan-future-field-updates">برنامه‌ریزی برای به‌روزرسانی‌های آیندهٔ فیلدها {#plan-future-field-updates}</a><a class="l3" href="#جلوگیری-از-فعال-شدن-webhook-توسط-خودش-prevent-webhook-self-trigger">جلوگیری از فعال‌شدن webhook توسط خودش {#prevent-webhook-self-trigger}</a><a class="l3" href="#آبجکت-های-تغییرناپذیر-را-تغییر-ندهید-dont-change-immutable-objects">آبجکت‌های تغییرناپذیر را تغییر ندهید {#dont-change-immutable-objects}</a><a class="l2" href="#ترتیب-و-خودتوانی-idempotence-در-mutating-webhookها-ordering-idempotence">ترتیب و خودتوانی (idempotence) در mutating webhookها {#ordering-idempotence}</a><a class="l3" href="#به-ترتیب-فراخوانی-mutating-webhookها-متکی-نباشید-dont-rely-webhook-order">به ترتیب فراخوانی mutating webhookها متکی نباشید {#dont-rely-webhook-order}</a><a class="l3" href="#اطمینان-از-خودتوان-بودن-mutating-webhookهای-کلاستر-ensure-mutating-webhook-idempotent">اطمینان از خودتوان بودن mutating webhookهای کلاستر {#ensure-mutating-webhook-idempotent}</a><a class="l2" href="#آزمون-و-اعتبارسنجی-تغییرات-mutation-testing-validation">آزمون و اعتبارسنجی تغییرات {#mutation-testing-validation}</a><a class="l3" href="#آزمودن-webhookها-در-محیط-های-آزمایشی-test-in-staging-environments">آزمودن webhookها در محیط‌های آزمایشی {#test-in-staging-environments}</a><a class="l3" href="#اطمینان-از-اینکه-تغییرات-اعتبارسنجی-ها-را-نقض-نمی-کنند-ensure-mutations-dont-violate-validations">اطمینان از اینکه تغییرات اعتبارسنجی‌ها را نقض نمی‌کنند {#ensure-mutations-dont-violate-validations}</a><a class="l3" href="#آزمودن-ارتقاهای-نسخهٔ-فرعی-برای-اطمینان-از-رفتار-سازگار-test-minor-version-upgrades">آزمودن ارتقاهای نسخهٔ فرعی برای اطمینان از رفتار سازگار {#test-minor-version-upgrades}</a><a class="l3" href="#اعتبارسنجی-تغییرات-پیش-از-پذیرش-validate-mutations">اعتبارسنجی تغییرات پیش از پذیرش {#validate-mutations}</a><a class="l2" href="#استقرار-mutating-webhook-mutating-webhook-deployment">استقرار mutating webhook {#mutating-webhook-deployment}</a><a class="l3" href="#نصب-و-فعال-سازی-یک-mutating-webhook-install-enable-mutating-webhook">نصب و فعال‌سازی یک mutating webhook {#install-enable-mutating-webhook}</a><a class="l3" href="#محدود-کردن-دسترسی-ویرایش-به-mutating-webhookها-limit-edit-access">محدود کردن دسترسی ویرایش به mutating webhookها {#limit-edit-access}</a><a class="l2" href="#نمونه-هایی-از-پیاده-سازی-های-خوب-example-good-implementations">نمونه‌هایی از پیاده‌سازی‌های خوب {#example-good-implementations}</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>

@@ -49,6 +49,11 @@ figure{margin:16px 0;text-align:center}
 .index-tree li{margin:2px 0}
 .index-tree .sec{font-weight:700}
 .missing{color:var(--muted)}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
 #theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
 @media (max-width:900px){nav.toc{display:none}main{padding:16px}}
 </style>
@@ -56,9 +61,21 @@ figure{margin:16px 0;text-align:center}
 (function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
 document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
 </script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
 </head>
 <body>
-<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">concepts / services-networking</span><button id="theme" type="button">روشن / تاریک</button></header>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">concepts / services-networking</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
 <div class="layout">
 <main><h1 dir="ltr" class="ltr">Ingress</h1><p class="page-meta" dir="rtl">سرویس شبکهٔ HTTP (یا HTTPS) خود را با استفاده از یک سازوکار پیکربندی آگاه از پروتکل در دسترس قرار دهید که مفاهیم وب مانند URIها، hostnameها، مسیرها و موارد دیگر را درک می‌کند. مفهوم Ingress به شما امکان می‌دهد ترافیک را بر اساس قواعدی که از طریق API کوبرنتیز تعریف می‌کنید، به backendهای مختلف نگاشت کنید.</p><!-- overview -->
 <div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes v1.19 [stable]</span> (پایدار)</div>
@@ -104,8 +121,8 @@ API مربوط به Ingress منجمد شده است.</p>
 مسئول تحقق بخشیدن به Ingress است که معمولاً این کار را با یک توزیع‌کنندهٔ بار انجام می‌دهد، هرچند
 ممکن است مسیریاب لبه یا frontendهای اضافی شما را نیز برای کمک به رسیدگی به ترافیک پیکربندی کند.</p>
 <p dir="rtl">یک Ingress پورت‌ها یا پروتکل‌های دلخواه را در دسترس قرار نمی‌دهد. در دسترس قرار دادن سرویس‌هایی غیر از HTTP و HTTPS در اینترنت معمولاً
-با استفاده از سرویسی از نوع <a href="https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport" target="_blank">Service.Type=NodePort</a> یا
-<a href="https://kubernetes.io/docs/concepts/services-networking/service/#loadbalancer" target="_blank">Service.Type=LoadBalancer</a> انجام می‌شود.</p>
+با استفاده از سرویسی از نوع <a href="service.html#type-nodeport">Service.Type=NodePort</a> یا
+<a href="service.html#loadbalancer">Service.Type=LoadBalancer</a> انجام می‌شود.</p>
 <h2 id="پیش-نیازها" dir="rtl">پیش‌نیازها</h2>
 <p dir="rtl">برای تحقق بخشیدن به یک Ingress، باید یک <a href="ingress-controllers.html">کنترل‌کنندهٔ Ingress</a>
 داشته باشید. صرفاً ایجاد یک منبع Ingress هیچ اثری ندارد.</p>
@@ -166,7 +183,7 @@ foo.bar.com)، قواعد بر همان host اعمال می‌شوند.</li>
 Service ارجاع‌شده هدایت کند، هم host و هم مسیر باید با محتوای
 درخواست ورودی مطابقت داشته باشند.</li>
 <li dir="rtl">یک backend ترکیبی از نام‌های Service و پورت است، همان‌گونه که در
-<a href="https://kubernetes.io/docs/concepts/services-networking/service/" target="_blank">مستندات Service</a> توضیح داده شده است، یا یک <a href="#resource-backend">backend منبع سفارشی</a>
+<a href="service.html">مستندات Service</a> توضیح داده شده است، یا یک <a href="#resource-backend">backend منبع سفارشی</a>
 از طریق یک <span class="term" title="CustomResourceDefinition">CRD</span>. درخواست‌های HTTP (و HTTPS) به
 Ingress که با host و مسیر قاعده مطابقت دارند، به backend فهرست‌شده ارسال می‌شوند.</li>
 </ul>
@@ -655,7 +672,7 @@ Events:
 <div class="callout note"><div class="callout-title">توجه:</div>
 <p dir="rtl">بسته به <a href="ingress-controllers.html">کنترل‌کنندهٔ Ingress</a>ای
 که استفاده می‌کنید، ممکن است لازم باشد یک
-<a href="https://kubernetes.io/docs/concepts/services-networking/service/" target="_blank">Service</a> به نام default-http-backend ایجاد کنید.</p>
+<a href="service.html">Service</a> به نام default-http-backend ایجاد کنید.</p>
 </div>
 <h3 id="میزبانی-مجازی-مبتنی-بر-نام" dir="rtl">میزبانی مجازی مبتنی بر نام</h3>
 <p dir="rtl">میزبان‌های مجازی مبتنی بر نام از مسیریابی ترافیک HTTP به چند نام host روی یک نشانی IP یکسان پشتیبانی می‌کنند.</p>
@@ -877,8 +894,8 @@ Events:
 <h2 id="جایگزین-ها" dir="rtl">جایگزین‌ها</h2>
 <p dir="rtl">می‌توانید یک Service را به روش‌های متعددی در دسترس قرار دهید که مستقیماً به منبع Ingress مربوط نیستند:</p>
 <ul>
-<li dir="rtl">از <a href="https://kubernetes.io/docs/concepts/services-networking/service/#loadbalancer" target="_blank">Service.Type=LoadBalancer</a> استفاده کنید</li>
-<li dir="rtl">از <a href="https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport" target="_blank">Service.Type=NodePort</a> استفاده کنید</li>
+<li dir="rtl">از <a href="service.html#loadbalancer">Service.Type=LoadBalancer</a> استفاده کنید</li>
+<li dir="rtl">از <a href="service.html#type-nodeport">Service.Type=NodePort</a> استفاده کنید</li>
 </ul>
 <h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
 <ul>

@@ -49,6 +49,11 @@ figure{margin:16px 0;text-align:center}
 .index-tree li{margin:2px 0}
 .index-tree .sec{font-weight:700}
 .missing{color:var(--muted)}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
 #theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
 @media (max-width:900px){nav.toc{display:none}main{padding:16px}}
 </style>
@@ -56,14 +61,26 @@ figure{margin:16px 0;text-align:center}
 (function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
 document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
 </script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
 </head>
 <body>
-<header class="top"><a href="../../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">concepts / workloads / workload-api</span><button id="theme" type="button">روشن / تاریک</button></header>
+<header class="top"><a href="../../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">concepts / workloads / workload-api</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
 <div class="layout">
 <main><h1 dir="ltr" class="ltr">Workload API</h1><!-- overview -->
 <div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
 <p dir="rtl">منبع API با نام <code dir="ltr">Workload</code> الزامات زمان‌بندی و ساختار یک برنامه‌ی چند-Pod را
-تعریف می‌کند. در حالی که کنترل‌کننده‌های بار کاری مانند <a href="https://kubernetes.io/docs/concepts/workloads/controllers/job/" target="_blank">Job</a>
+تعریف می‌کند. در حالی که کنترل‌کننده‌های بار کاری مانند <a href="../controllers/job.html">Job</a>
 وضعیت زمان اجرای برنامه را مدیریت می‌کنند، <code dir="ltr">Workload</code> مشخص می‌کند که گروه‌هایی از <code dir="ltr">Pods</code>
 چگونه باید زمان‌بندی شوند. کنترل‌کننده‌ی Job تنها کنترل‌کننده‌ی داخلی است که در زمان اجرا
 آبجکت‌های <a href="../podgroup-api/index.html">PodGroup</a> را از
@@ -127,7 +144,7 @@ spec:
 <code dir="ltr">PodGroups</code> تازه‌ایجادشده اثر می‌گذارند، نه بر موارد موجود.</p>
 <h3 id="ارجاع-به-آبجکت-کنترل-کننده-ی-بار-کاری" dir="rtl">ارجاع به آبجکت کنترل‌کننده‌ی بار کاری</h3>
 <p dir="rtl">فیلد <code dir="ltr">controllerRef</code> آن Workload را به آبجکت سطح‌بالای مشخصی که برنامه را تعریف می‌کند پیوند می‌دهد،
-مانند یک <a href="https://kubernetes.io/docs/concepts/workloads/controllers/job/" target="_blank">Job</a> یا یک CRD سفارشی. این کار برای مشاهده‌پذیری و ابزارها مفید است.
+مانند یک <a href="../controllers/job.html">Job</a> یا یک CRD سفارشی. این کار برای مشاهده‌پذیری و ابزارها مفید است.
 این داده برای زمان‌بندی یا مدیریت Workload استفاده نمی‌شود.</p>
 <h3 id="compositepodgrouptemplates" dir="ltr" class="ltr">CompositePodGroupTemplates</h3>
 <div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
@@ -217,7 +234,7 @@ spec:
 <p dir="rtl">هنگامی که feature gate
 <a href="https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/" target="_blank"><code dir="ltr">WorkloadWithJob</code></a>
 فعال باشد، کنترل‌کننده‌ی
-<a href="https://kubernetes.io/docs/concepts/workloads/controllers/job/" target="_blank">Job</a> پیکربندی
+<a href="../controllers/job.html">Job</a> پیکربندی
 <code dir="ltr">.spec.scheduling</code> یک Job را پیش از ایجاد هر Podی به آبجکت‌های <code dir="ltr">Workload</code> و <code dir="ltr">PodGroup</code>
 تبدیل می‌کند. شما با تنظیم
 <code dir="ltr">.spec.scheduling.schedulingPolicy.gang</code> روی Job، زمان‌بندی گروهی را انتخاب می‌کنید؛ اگر <code dir="ltr">gang.minCount</code>
@@ -229,7 +246,7 @@ spec:
 سایر کنترل‌کننده‌های بار کاری (مانند JobSet) ممکن است آبجکت‌های <code dir="ltr">Workload</code> و
 <code dir="ltr">PodGroup</code> خود را به‌طور مستقل مدیریت کنند.</p>
 <p dir="rtl">برای مجموعه‌ی کامل فیلدهای زمان‌بندی و مثال‌ها،
-<a href="https://kubernetes.io/docs/concepts/workloads/controllers/job/#integrate-with-workload-apis" target="_blank">یکپارچه‌سازی با Workload APIها</a> را ببینید.</p>
+<a href="../controllers/job.html#integrate-with-workload-apis">یکپارچه‌سازی با Workload APIها</a> را ببینید.</p>
 <h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
 <ul>
 <li dir="rtl">درباره‌ی <a href="policies.html">سیاست‌های زمان‌بندی PodGroup</a> بیاموزید.</li>

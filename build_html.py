@@ -23,14 +23,10 @@ from mdit_py_plugins.anchors import anchors_plugin
 from mdit_py_plugins.attrs import attrs_plugin
 from mdit_py_plugins.deflist import deflist_plugin
 
-BASE = Path("/home/soroush/kuber-doc")
-SITE = BASE / "website"
-EN_DOCS = SITE / "content/en/docs"
+from common import EN_DOCS, MD, OUT, ROOT as TR, SITE
+
 EXAMPLES = SITE / "content/en/examples"
-TR = BASE / "fa-translation"
-MD = TR / "md"
 INCLUDES_FA = TR / "includes"
-OUT = TR / "html"
 
 VERSION = "v1.37"
 PATCH = "1.37.0"
@@ -53,17 +49,8 @@ md = (MarkdownIt("commonmark", {"html": True, "typographer": False})
 # ---------------------------------------------------------------- sources
 
 def load_pages() -> dict[str, str]:
-    """rel path (as in en/docs) -> full Persian markdown (parts concatenated)."""
-    splits = json.loads((TR / "splits.json").read_text())
-    pages: dict[str, str] = {}
-    for p in sorted(MD.rglob("*.md")):
-        rel = str(p.relative_to(MD))
-        pages[rel] = p.read_text(encoding="utf-8")
-    for rel, parts in splits.items():
-        texts = [(MD / pr).read_text(encoding="utf-8") for pr in parts if (MD / pr).exists()]
-        if len(texts) == len(parts):
-            pages[rel] = "\n".join(texts)
-    return pages
+    """rel path (as in en/docs) -> Persian markdown."""
+    return {str(p.relative_to(MD)): p.read_text(encoding="utf-8") for p in sorted(MD.rglob("*.md"))}
 
 
 def split_front_matter(text: str) -> tuple[dict, str]:
@@ -94,7 +81,7 @@ def sc_args(s: str) -> dict:
 def code_sample(file: str) -> str:
     p = EXAMPLES / file
     lang = Path(file).suffix.lstrip(".") or "text"
-    body = p.read_text(encoding="utf-8") if p.exists() else f"# {file} (not found in content/en/examples)"
+    body = p.read_text(encoding="utf-8") if p.is_file() else f"# {file} (not found in content/en/examples)"
     return f'\n\n<div class="code-file ltr" dir="ltr">{html.escape(file)}</div>\n\n```{lang}\n{body.rstrip()}\n```\n\n'
 
 
@@ -299,12 +286,32 @@ figure{margin:16px 0;text-align:center}
 .index-tree li{margin:2px 0}
 .index-tree .sec{font-weight:700}
 .missing{color:var(--muted)}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
 #theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
 @media (max-width:900px){nav.toc{display:none}main{padding:16px}}
 """
 THEME_JS = """<script>
 (function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
 document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>"""
+
+
+# Update button: only appears when the page is served by service.py (/api/status answers).
+UPDATE_JS = """<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
 </script>"""
 
 
@@ -320,9 +327,10 @@ def page_html(title: str, body: str, toc: str, crumbs: str, depth: int) -> str:
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
 <style>{CSS}</style>
 {THEME_JS}
+{UPDATE_JS}
 </head>
 <body>
-<header class="top"><a href="{up}index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">{crumbs}</span><button id="theme" type="button">روشن / تاریک</button></header>
+<header class="top"><a href="{up}index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">{crumbs}</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
 <div class="layout">
 <main>{body}</main>
 <nav class="toc" aria-label="فهرست این صفحه">{toc}</nav>

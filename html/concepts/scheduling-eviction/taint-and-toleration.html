@@ -49,6 +49,11 @@ figure{margin:16px 0;text-align:center}
 .index-tree li{margin:2px 0}
 .index-tree .sec{font-weight:700}
 .missing{color:var(--muted)}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
 #theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
 @media (max-width:900px){nav.toc{display:none}main{padding:16px}}
 </style>
@@ -56,9 +61,21 @@ figure{margin:16px 0;text-align:center}
 (function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
 document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
 </script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
 </head>
 <body>
-<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">concepts / scheduling-eviction</span><button id="theme" type="button">روشن / تاریک</button></header>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">concepts / scheduling-eviction</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
 <div class="layout">
 <main><h1 dir="rtl">Taintها و Tolerationها</h1><!-- overview -->
 <p dir="rtl"><a href="assign-pod-node.html#affinity-and-anti-affinity"><em>وابستگی نود (Node affinity)</em></a>
@@ -67,7 +84,7 @@ document.addEventListener('DOMContentLoaded',function(){var b=document.getElemen
 الزام سخت). <em>Taintها</em> عکس این عمل می‌کنند؛ آن‌ها به یک نود اجازه می‌دهند مجموعه‌ای از پادها را دفع کند.</p>
 <p dir="rtl"><em>Tolerationها</em> بر پادها اعمال می‌شوند. Tolerationها به زمان‌بند اجازه می‌دهند پادها را روی نودهایی با taintهای منطبق
 زمان‌بندی کند. Tolerationها زمان‌بندی را مجاز می‌کنند اما آن را تضمین نمی‌کنند: زمان‌بند به‌عنوان بخشی از کار خود
-<a href="https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/" target="_blank">پارامترهای دیگری را نیز ارزیابی می‌کند</a>.</p>
+<a href="pod-priority-preemption.html">پارامترهای دیگری را نیز ارزیابی می‌کند</a>.</p>
 <p dir="rtl">Taintها و tolerationها با هم کار می‌کنند تا اطمینان حاصل شود که پادها روی
 نودهای نامناسب زمان‌بندی نمی‌شوند. یک یا چند taint بر یک نود اعمال می‌شود؛ این کار
 مشخص می‌کند که نود نباید هیچ پادی را که آن taintها را تحمل نمی‌کند بپذیرد.</p>
@@ -419,8 +436,8 @@ control plane taint <code dir="ltr">node.kubernetes.io/memory-pressure</code> ر
 tolerationهای دلخواه را به DaemonSetها اضافه کنید.</p>
 <h2 id="taintها-و-tolerationهای-دستگاه" dir="rtl">Taintها و tolerationهای دستگاه</h2>
 <p dir="rtl">به‌جای taint کردن کل نودها، مدیران می‌توانند هنگامی که کلاستر از
-<a href="https://kubernetes.io/docs/concepts/resource-management/dynamic-resource-allocation/" target="_blank">تخصیص پویای منابع</a> برای مدیریت سخت‌افزار ویژه استفاده می‌کند،
-<a href="https://kubernetes.io/docs/concepts/resource-management/dynamic-resource-allocation/device-taints/#device-taints-and-tolerations" target="_blank">دستگاه‌های منفرد را taint کنند</a>.
+<a href="../resource-management/dynamic-resource-allocation/index.html">تخصیص پویای منابع</a> برای مدیریت سخت‌افزار ویژه استفاده می‌کند،
+<a href="../resource-management/dynamic-resource-allocation/device-taints.html#device-taints-and-tolerations">دستگاه‌های منفرد را taint کنند</a>.
 مزیت این روش آن است که taint کردن می‌تواند دقیقاً سخت‌افزاری را هدف بگیرد
 که معیوب است یا به نگهداری نیاز دارد. tolerationها نیز پشتیبانی می‌شوند و می‌توان آن‌ها را هنگام درخواست
 دستگاه‌ها مشخص کرد. tolerationها نیز مانند taintها بر همهٔ پادهایی که یک دستگاه تخصیص‌یافتهٔ مشترک دارند اعمال می‌شوند.</p>
@@ -428,8 +445,8 @@ tolerationهای دلخواه را به DaemonSetها اضافه کنید.</p>
 <ul>
 <li dir="rtl">دربارهٔ <a href="node-pressure-eviction.html">بیرون‌رانی ناشی از فشار نود</a>
 و نحوهٔ پیکربندی آن مطالعه کنید</li>
-<li dir="rtl">دربارهٔ <a href="https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/" target="_blank">اولویت Pod</a> مطالعه کنید</li>
-<li dir="rtl">دربارهٔ <a href="https://kubernetes.io/docs/concepts/resource-management/dynamic-resource-allocation/device-taints/#device-taints-and-tolerations" target="_blank">taintها و tolerationهای دستگاه</a> مطالعه کنید</li>
+<li dir="rtl">دربارهٔ <a href="pod-priority-preemption.html">اولویت Pod</a> مطالعه کنید</li>
+<li dir="rtl">دربارهٔ <a href="../resource-management/dynamic-resource-allocation/device-taints.html#device-taints-and-tolerations">taintها و tolerationهای دستگاه</a> مطالعه کنید</li>
 </ul>
 </main>
 <nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#مفاهیم">مفاهیم</a><a class="l2" href="#عملگرهای-مقایسهٔ-عددی-numeric-comparison-operators">عملگرهای مقایسهٔ عددی {#numeric-comparison-operators}</a><a class="l2" href="#نمونه-هایی-از-موارد-استفاده">نمونه‌هایی از موارد استفاده</a><a class="l2" href="#بیرون-رانی-مبتنی-بر-taint">بیرون‌رانی مبتنی بر taint</a><a class="l2" href="#taint-کردن-نودها-بر-اساس-وضعیت">Taint کردن نودها بر اساس وضعیت</a><a class="l2" href="#taintها-و-tolerationهای-دستگاه">Taintها و tolerationهای دستگاه</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>

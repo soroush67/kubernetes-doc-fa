@@ -49,6 +49,11 @@ figure{margin:16px 0;text-align:center}
 .index-tree li{margin:2px 0}
 .index-tree .sec{font-weight:700}
 .missing{color:var(--muted)}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
 #theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
 @media (max-width:900px){nav.toc{display:none}main{padding:16px}}
 </style>
@@ -56,13 +61,25 @@ figure{margin:16px 0;text-align:center}
 (function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
 document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
 </script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
 </head>
 <body>
-<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">concepts / storage</span><button id="theme" type="button">روشن / تاریک</button></header>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">concepts / storage</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
 <div class="layout">
 <main><h1 dir="rtl">حجم‌های پایدار</h1><!-- overview -->
 <p dir="rtl">این سند <em>حجم‌های پایدار</em> (persistent volumes) را در کوبرنتیز شرح می‌دهد. آشنایی با
-<a href="https://kubernetes.io/docs/concepts/storage/volumes/" target="_blank">حجم‌ها</a>، <a href="storage-classes.html">StorageClassها</a>
+<a href="volumes.html">حجم‌ها</a>، <a href="storage-classes.html">StorageClassها</a>
 و <a href="volume-attributes-classes.html">VolumeAttributesClassها</a> توصیه می‌شود.</p>
 <!-- body -->
 <h2 id="مقدمه" dir="rtl">مقدمه</h2>
@@ -443,40 +460,40 @@ Persistent Volume Claim (PVC) را به‌صورت دستی بازیابی کن�
 <h2 id="انواع-persistent-volumeها" dir="rtl">انواع Persistent Volumeها</h2>
 <p dir="rtl">انواع PersistentVolume به‌صورت پلاگین پیاده‌سازی شده‌اند. کوبرنتیز در حال حاضر از پلاگین‌های زیر پشتیبانی می‌کند:</p>
 <ul>
-<li dir="ltr" class="ltr"><a href="https://kubernetes.io/docs/concepts/storage/volumes/#csi" target="_blank"><code dir="ltr">csi</code></a> - Container Storage Interface (CSI)</li>
-<li dir="rtl"><a href="https://kubernetes.io/docs/concepts/storage/volumes/#fc" target="_blank"><code dir="ltr">fc</code></a> - ذخیره‌سازی Fibre Channel (FC)</li>
-<li dir="rtl"><a href="https://kubernetes.io/docs/concepts/storage/volumes/#hostpath" target="_blank"><code dir="ltr">hostPath</code></a> - حجم HostPath
+<li dir="ltr" class="ltr"><a href="volumes.html#csi"><code dir="ltr">csi</code></a> - Container Storage Interface (CSI)</li>
+<li dir="rtl"><a href="volumes.html#fc"><code dir="ltr">fc</code></a> - ذخیره‌سازی Fibre Channel (FC)</li>
+<li dir="rtl"><a href="volumes.html#hostpath"><code dir="ltr">hostPath</code></a> - حجم HostPath
 (فقط برای آزمایش روی یک نود؛ در یک کلاستر چندنودی کار نخواهد کرد؛
 به‌جای آن استفاده از حجم <code dir="ltr">local</code> را در نظر بگیرید)</li>
-<li dir="rtl"><a href="https://kubernetes.io/docs/concepts/storage/volumes/#iscsi" target="_blank"><code dir="ltr">iscsi</code></a> - ذخیره‌سازی iSCSI (SCSI روی IP)</li>
-<li dir="rtl"><a href="https://kubernetes.io/docs/concepts/storage/volumes/#local" target="_blank"><code dir="ltr">local</code></a> - دستگاه‌های ذخیره‌سازی محلی
+<li dir="rtl"><a href="volumes.html#iscsi"><code dir="ltr">iscsi</code></a> - ذخیره‌سازی iSCSI (SCSI روی IP)</li>
+<li dir="rtl"><a href="volumes.html#local"><code dir="ltr">local</code></a> - دستگاه‌های ذخیره‌سازی محلی
 که روی نودها mount شده‌اند.</li>
-<li dir="rtl"><a href="https://kubernetes.io/docs/concepts/storage/volumes/#nfs" target="_blank"><code dir="ltr">nfs</code></a> - ذخیره‌سازی Network File System (NFS)</li>
+<li dir="rtl"><a href="volumes.html#nfs"><code dir="ltr">nfs</code></a> - ذخیره‌سازی Network File System (NFS)</li>
 </ul>
 <p dir="rtl">انواع PersistentVolume زیر منسوخ شده‌اند اما همچنان در دسترس هستند.
 اگر از این انواع حجم، به‌جز <code dir="ltr">flexVolume</code>، <code dir="ltr">cephfs</code> و <code dir="ltr">rbd</code>، استفاده می‌کنید،
 لطفاً درایورهای CSI متناظر را نصب کنید.</p>
 <ul>
-<li dir="rtl"><a href="https://kubernetes.io/docs/concepts/storage/volumes/#awselasticblockstore" target="_blank"><code dir="ltr">awsElasticBlockStore</code></a> - AWS Elastic Block Store (EBS)
+<li dir="rtl"><a href="volumes.html#awselasticblockstore"><code dir="ltr">awsElasticBlockStore</code></a> - AWS Elastic Block Store (EBS)
 (<strong>مهاجرت به‌طور پیش‌فرض فعال</strong> از v1.23)</li>
-<li dir="rtl"><a href="https://kubernetes.io/docs/concepts/storage/volumes/#azuredisk" target="_blank"><code dir="ltr">azureDisk</code></a> - Azure Disk
+<li dir="rtl"><a href="volumes.html#azuredisk"><code dir="ltr">azureDisk</code></a> - Azure Disk
 (<strong>مهاجرت به‌طور پیش‌فرض فعال</strong> از v1.23)</li>
-<li dir="rtl"><a href="https://kubernetes.io/docs/concepts/storage/volumes/#azurefile" target="_blank"><code dir="ltr">azureFile</code></a> - Azure File
+<li dir="rtl"><a href="volumes.html#azurefile"><code dir="ltr">azureFile</code></a> - Azure File
 (<strong>مهاجرت به‌طور پیش‌فرض فعال</strong> از v1.24)</li>
-<li dir="rtl"><a href="https://kubernetes.io/docs/concepts/storage/volumes/#cinder" target="_blank"><code dir="ltr">cinder</code></a> - Cinder (ذخیره‌سازی بلوکی OpenStack)
+<li dir="rtl"><a href="volumes.html#cinder"><code dir="ltr">cinder</code></a> - Cinder (ذخیره‌سازی بلوکی OpenStack)
 (<strong>مهاجرت به‌طور پیش‌فرض فعال</strong> از v1.21)</li>
-<li dir="rtl"><a href="https://kubernetes.io/docs/concepts/storage/volumes/#flexvolume" target="_blank"><code dir="ltr">flexVolume</code></a> - FlexVolume
+<li dir="rtl"><a href="volumes.html#flexvolume"><code dir="ltr">flexVolume</code></a> - FlexVolume
 (<strong>منسوخ‌شده</strong> از v1.23، بدون برنامهٔ مهاجرت و بدون برنامه برای حذف پشتیبانی)</li>
-<li dir="rtl"><a href="https://kubernetes.io/docs/concepts/storage/volumes/#gcePersistentDisk" target="_blank"><code dir="ltr">gcePersistentDisk</code></a> - GCE Persistent Disk
+<li dir="rtl"><a href="volumes.html#gcePersistentDisk"><code dir="ltr">gcePersistentDisk</code></a> - GCE Persistent Disk
 (<strong>مهاجرت به‌طور پیش‌فرض فعال</strong> از v1.23)</li>
-<li dir="rtl"><a href="https://kubernetes.io/docs/concepts/storage/volumes/#portworxvolume" target="_blank"><code dir="ltr">portworxVolume</code></a> - حجم Portworx
+<li dir="rtl"><a href="volumes.html#portworxvolume"><code dir="ltr">portworxVolume</code></a> - حجم Portworx
 (<strong>مهاجرت به‌طور پیش‌فرض فعال</strong> از v1.31)</li>
-<li dir="rtl"><a href="https://kubernetes.io/docs/concepts/storage/volumes/#vspherevolume" target="_blank"><code dir="ltr">vsphereVolume</code></a> - حجم vSphere VMDK
+<li dir="rtl"><a href="volumes.html#vspherevolume"><code dir="ltr">vsphereVolume</code></a> - حجم vSphere VMDK
 (<strong>مهاجرت به‌طور پیش‌فرض فعال</strong> از v1.25)</li>
 </ul>
 <p dir="rtl">نسخه‌های قدیمی‌تر کوبرنتیز از انواع PersistentVolume درون‌درختی زیر نیز پشتیبانی می‌کردند:</p>
 <ul>
-<li dir="rtl"><a href="https://kubernetes.io/docs/concepts/storage/volumes/#cephfs" target="_blank"><code dir="ltr">cephfs</code></a>
+<li dir="rtl"><a href="volumes.html#cephfs"><code dir="ltr">cephfs</code></a>
 (<strong>در دسترس نیست</strong> از v1.31)</li>
 <li dir="rtl"><code dir="ltr">flocker</code> - ذخیره‌سازی Flocker.
 (<strong>در دسترس نیست</strong> از v1.25)</li>
@@ -486,7 +503,7 @@ Persistent Volume Claim (PVC) را به‌صورت دستی بازیابی کن�
 (<strong>در دسترس نیست</strong> از v1.15)</li>
 <li dir="rtl"><code dir="ltr">quobyte</code> - حجم Quobyte.
 (<strong>در دسترس نیست</strong> از v1.25)</li>
-<li dir="rtl"><a href="https://kubernetes.io/docs/concepts/storage/volumes/#rbd" target="_blank"><code dir="ltr">rbd</code></a> - حجم Rados Block Device (RBD)
+<li dir="rtl"><a href="volumes.html#rbd"><code dir="ltr">rbd</code></a> - حجم Rados Block Device (RBD)
 (<strong>در دسترس نیست</strong> از v1.31)</li>
 <li dir="rtl"><code dir="ltr">scaleIO</code> - حجم ScaleIO.
 (<strong>در دسترس نیست</strong> از v1.21)</li>
@@ -725,7 +742,7 @@ Persistent Volume روی یک نود mount می‌شود مشخص کند.</p>
 <h3 id="node-affinity" dir="ltr" class="ltr">Node Affinity</h3>
 <div class="callout note"><div class="callout-title">توجه:</div>
 <p dir="rtl">برای بیشتر انواع حجم، نیازی به تنظیم این فیلد ندارید.
-برای حجم‌های <a href="https://kubernetes.io/docs/concepts/storage/volumes/#local" target="_blank">local</a> باید این فیلد را به‌صراحت تنظیم کنید.</p>
+برای حجم‌های <a href="volumes.html#local">local</a> باید این فیلد را به‌صراحت تنظیم کنید.</p>
 </div>
 <p dir="rtl">یک PV می‌تواند node affinity مشخص کند تا محدودیت‌هایی تعریف کند که تعیین می‌کنند از کدام نودها
 می‌توان به این حجم دسترسی داشت. Podهایی که از یک PV استفاده می‌کنند تنها روی نودهایی زمان‌بندی می‌شوند
@@ -1077,7 +1094,7 @@ spec:
 <h2 id="پشتیبانی-از-volume-snapshot-و-بازیابی-حجم-از-snapshot" dir="rtl">پشتیبانی از Volume Snapshot و بازیابی حجم از Snapshot</h2>
 <div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes v1.20 [stable]</span> (پایدار)</div>
 <p dir="rtl">Volume snapshotها تنها از پلاگین‌های حجم CSI بیرون‌درختی (out-of-tree) پشتیبانی می‌کنند.
-برای جزئیات، <a href="https://kubernetes.io/docs/concepts/storage/volume-snapshots/" target="_blank">Volume Snapshotها</a> را ببینید.
+برای جزئیات، <a href="volume-snapshots.html">Volume Snapshotها</a> را ببینید.
 پلاگین‌های حجم درون‌درختی منسوخ شده‌اند. می‌توانید دربارهٔ پلاگین‌های حجم منسوخ‌شده
 در <a href="https://github.com/kubernetes/community/blob/main/sig-storage/volume-plugin-faq.md" target="_blank" rel="noopener">پرسش‌های متداول پلاگین حجم</a>
 مطالعه کنید.</p>
@@ -1099,7 +1116,7 @@ spec:
       storage: 10Gi
 </code></pre>
 <h2 id="شبیه-سازی-حجم-volume-cloning" dir="rtl">شبیه‌سازی حجم (Volume Cloning)</h2>
-<p dir="rtl"><a href="https://kubernetes.io/docs/concepts/storage/volume-pvc-datasource/" target="_blank">شبیه‌سازی حجم</a>
+<p dir="rtl"><a href="volume-pvc-datasource.html">شبیه‌سازی حجم</a>
 تنها برای پلاگین‌های حجم CSI در دسترس است.</p>
 <h3 id="ایجاد-persistentvolumeclaim-از-یک-pvc-موجود-create-persistent-volume-claim-from-an-existing-pvc" dir="rtl">ایجاد PersistentVolumeClaim از یک PVC موجود {#create-persistent-volume-claim-from-an-existing-pvc}</h3>
 <pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
@@ -1139,7 +1156,7 @@ spec:
       storage: 10Gi
 </code></pre>
 <p dir="rtl">برای جزئیات، از جمله منابع داده میان فضاهای نام، ببینید:
-<a href="https://kubernetes.io/docs/concepts/storage/volume-populators-and-data-sources/" target="_blank">Volume Populatorها و منابع داده</a>.</p>
+<a href="volume-populators-and-data-sources.html">Volume Populatorها و منابع داده</a>.</p>
 <h2 id="نوشتن-پیکربندی-قابل-حمل" dir="rtl">نوشتن پیکربندی قابل حمل</h2>
 <p dir="rtl">اگر قالب‌ها یا نمونه‌های پیکربندی می‌نویسید که روی طیف گسترده‌ای از کلاسترها اجرا می‌شوند
 و به ذخیره‌سازی پایدار نیاز دارند، توصیه می‌شود از الگوی زیر استفاده کنید:</p>

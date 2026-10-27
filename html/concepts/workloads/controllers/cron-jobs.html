@@ -49,6 +49,11 @@ figure{margin:16px 0;text-align:center}
 .index-tree li{margin:2px 0}
 .index-tree .sec{font-weight:700}
 .missing{color:var(--muted)}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
 #theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
 @media (max-width:900px){nav.toc{display:none}main{padding:16px}}
 </style>
@@ -56,9 +61,21 @@ figure{margin:16px 0;text-align:center}
 (function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
 document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
 </script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
 </head>
 <body>
-<header class="top"><a href="../../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">concepts / workloads / controllers</span><button id="theme" type="button">روشن / تاریک</button></header>
+<header class="top"><a href="../../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">concepts / workloads / controllers</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
 <div class="layout">
 <main><h1 dir="ltr" class="ltr">CronJob</h1><p class="page-meta" dir="rtl">یک CronJob، Jobهای یک‌باره را طبق یک زمان‌بندی تکرارشونده آغاز می‌کند.</p><!-- overview -->
 <div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes v1.21 [stable]</span> (پایدار)</div>
@@ -173,12 +190,12 @@ spec:
 <p dir="rtl">برای تولید عبارت‌های زمان‌بندی CronJob، می‌توانید از ابزارهای وب مانند <a href="https://crontab.guru/" target="_blank" rel="noopener">crontab.guru</a> نیز استفاده کنید.</p>
 <h3 id="قالب-job" dir="rtl">قالب Job</h3>
 <p dir="rtl"><code dir="ltr">.spec.jobTemplate</code> قالبی برای Jobهایی که CronJob ایجاد می‌کند تعریف می‌کند و الزامی است.
-این قالب دقیقاً همان شِمای یک <a href="https://kubernetes.io/docs/concepts/workloads/controllers/job/" target="_blank">Job</a> را دارد، با این تفاوت که
+این قالب دقیقاً همان شِمای یک <a href="job.html">Job</a> را دارد، با این تفاوت که
 تودرتو است و <code dir="ltr">apiVersion</code> یا <code dir="ltr">kind</code> ندارد.
 می‌توانید فراداده‌ی مشترکی برای Jobهای ساخته‌شده از قالب مشخص کنید، مانند
 <span class="term" title="label">برچسب‌ها</span> یا
 <span class="term" title="annotation">حاشیه‌نویسی‌ها</span>.
-برای اطلاعات درباره‌ی نوشتن <code dir="ltr">.spec</code> یک Job، به <a href="https://kubernetes.io/docs/concepts/workloads/controllers/job/#writing-a-job-spec" target="_blank">نوشتن spec یک Job</a> مراجعه کنید.</p>
+برای اطلاعات درباره‌ی نوشتن <code dir="ltr">.spec</code> یک Job، به <a href="job.html#writing-a-job-spec">نوشتن spec یک Job</a> مراجعه کنید.</p>
 <h3 id="مهلت-آغاز-job-با-تأخیر-starting-deadline" dir="rtl">مهلت آغاز Job با تأخیر {#starting-deadline}</h3>
 <p dir="rtl">فیلد <code dir="ltr">.spec.startingDeadlineSeconds</code> اختیاری است.
 این فیلد مهلتی (بر حسب ثانیه‌ی کامل) برای آغاز Job تعریف می‌کند، در صورتی که آن Job به هر دلیلی
@@ -235,7 +252,7 @@ CronJob اجرای Job در حال اجرا را با اجرای یک Job جدی
 </li>
 </ul>
 <p dir="rtl">برای روش دیگری جهت پاک‌سازی خودکار Jobها، به
-<a href="https://kubernetes.io/docs/concepts/workloads/controllers/job/#clean-up-finished-jobs-automatically" target="_blank">پاک‌سازی خودکار Jobهای پایان‌یافته</a> مراجعه کنید.</p>
+<a href="job.html#clean-up-finished-jobs-automatically">پاک‌سازی خودکار Jobهای پایان‌یافته</a> مراجعه کنید.</p>
 <h3 id="مناطق-زمانی" dir="rtl">مناطق زمانی</h3>
 <div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes v1.27 [stable]</span> (پایدار)</div>
 <p dir="rtl">برای CronJobهایی که منطقه‌ی زمانی برایشان مشخص نشده است، <span class="term" title="kube-controller-manager">kube-controller-manager</span>
@@ -290,8 +307,8 @@ Jobهایی که تعریف می‌کنید باید <em>idempotent</em> (خود
 Job نیز به نوبه‌ی خود مسئول مدیریت Podهایی است که نمایندگی می‌کند.</p>
 <h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
 <ul>
-<li dir="rtl">با <a href="https://kubernetes.io/docs/concepts/workloads/pods/" target="_blank">Podها</a> و
-<a href="https://kubernetes.io/docs/concepts/workloads/controllers/job/" target="_blank">Jobها</a> آشنا شوید؛ دو مفهومی
+<li dir="rtl">با <a href="../pods/index.html">Podها</a> و
+<a href="job.html">Jobها</a> آشنا شوید؛ دو مفهومی
 که CronJobها به آن‌ها متکی هستند.</li>
 <li dir="rtl">درباره‌ی <a href="https://pkg.go.dev/github.com/robfig/cron/v3#hdr-CRON_Expression_Format" target="_blank" rel="noopener">قالب</a> دقیق
 فیلدهای <code dir="ltr">.spec.schedule</code> در CronJob بخوانید.</li>

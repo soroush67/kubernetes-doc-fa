@@ -1,0 +1,493 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>اولویت و پس‌گیری Pod | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">concepts / scheduling-eviction</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">اولویت و پس‌گیری Pod</h1><!-- overview -->
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes v1.14 [stable]</span> (پایدار)</div>
+<p dir="rtl"><a href="../workloads/pods/index.html">Podها</a> می‌توانند <em>اولویت</em> داشته باشند. اولویت
+اهمیت یک Pod را نسبت به Podهای دیگر نشان می‌دهد. اگر یک Pod قابل زمان‌بندی نباشد،
+زمان‌بند می‌کوشد Podهای با اولویت پایین‌تر را پس بگیرد (بیرون براند) تا زمان‌بندی
+Pod در انتظار ممکن شود.</p>
+<!-- body -->
+<div class="callout warning"><div class="callout-title">هشدار:</div>
+<p dir="rtl">در کلاستری که همهٔ کاربران آن مورد اعتماد نیستند، یک کاربر بدخواه می‌تواند Podهایی
+با بالاترین اولویت‌های ممکن ایجاد کند و باعث شود Podهای دیگر بیرون رانده شوند یا
+زمان‌بندی نشوند.
+مدیر کلاستر می‌تواند از ResourceQuota برای جلوگیری از ایجاد Podهایی با
+اولویت‌های بالا توسط کاربران استفاده کند.</p>
+<p dir="rtl">برای جزئیات، <a href="../policy/resource-quotas.html#limit-priority-class-consumption-by-default">محدود کردن پیش‌فرض مصرف Priority Class</a>
+را ببینید.</p>
+</div>
+<h2 id="نحوهٔ-استفاده-از-اولویت-و-پس-گیری" dir="rtl">نحوهٔ استفاده از اولویت و پس‌گیری</h2>
+<p dir="rtl">برای استفاده از اولویت و پس‌گیری:</p>
+<ol>
+<li dir="rtl">
+<p dir="rtl">یک یا چند <a href="#priorityclass">PriorityClass</a> اضافه کنید.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">Podهایی ایجاد کنید که <a href="#pod-priority"><code dir="ltr">priorityClassName</code></a> آن‌ها روی یکی از
+PriorityClassهای اضافه‌شده تنظیم شده باشد. البته لازم نیست Podها را مستقیماً ایجاد کنید؛
+معمولاً <code dir="ltr">priorityClassName</code> را به قالب Pod یک
+آبجکت مجموعه‌ای مانند Deployment اضافه می‌کنید.</p>
+</li>
+</ol>
+<p dir="rtl">برای اطلاعات بیشتر دربارهٔ این مراحل، ادامه را بخوانید.</p>
+<h2 id="priorityclass" dir="ltr" class="ltr">PriorityClass</h2>
+<p dir="rtl">PriorityClass آبجکتی مستقل از فضای نام است که نگاشتی از نام کلاس اولویت
+به مقدار عددی صحیح اولویت تعریف می‌کند. نام در
+فیلد <code dir="ltr">name</code> از metadata آبجکت PriorityClass مشخص می‌شود. مقدار در
+فیلد الزامی <code dir="ltr">value</code> مشخص می‌شود. هرچه مقدار بالاتر باشد،
+اولویت بالاتر است.
+نام یک آبجکت PriorityClass باید یک
+<a href="../overview/working-with-objects/names.html#dns-subdomain-names">نام زیردامنهٔ DNS</a> معتبر باشد
+و نمی‌تواند با پیشوند <code dir="ltr">system-</code> آغاز شود.</p>
+<p dir="rtl">یک آبجکت PriorityClass می‌تواند هر مقدار صحیح ۳۲بیتی کوچک‌تر از یا مساوی
+یک میلیارد داشته باشد. این بدان معناست که بازهٔ مقادیر یک آبجکت PriorityClass
+از -2147483648 تا 1000000000 (با احتساب دو سر بازه) است. اعداد بزرگ‌تر برای
+PriorityClassهای داخلی که نمایانگر Podهای حیاتی سیستم هستند، رزرو شده‌اند. مدیر کلاستر
+باید برای هر نگاشتی که می‌خواهد، یک آبجکت PriorityClass ایجاد کند.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">کوبرنتیز از پیش با دو PriorityClass عرضه می‌شود:
+<code dir="ltr">system-cluster-critical</code> و <code dir="ltr">system-node-critical</code>.
+این‌ها کلاس‌های رایجی هستند و برای <a href="https://kubernetes.io/docs/tasks/administer-cluster/guaranteed-scheduling-critical-addon-pods/" target="_blank">اطمینان از اینکه اجزای حیاتی همیشه زودتر از همه زمان‌بندی شوند</a> استفاده می‌شوند.
+در کوبرنتیز v1.37، مقادیر اولویت آن‌ها برای <code dir="ltr">system-cluster-critical</code> برابر 2000000000 و برای <code dir="ltr">system-node-critical</code> برابر 2000001000 است.</p>
+</div>
+<p dir="rtl">PriorityClass همچنین دو فیلد اختیاری دارد: <code dir="ltr">globalDefault</code> و <code dir="ltr">description</code>.
+فیلد <code dir="ltr">globalDefault</code> نشان می‌دهد که مقدار این PriorityClass باید
+برای Podهایی که <code dir="ltr">priorityClassName</code> ندارند، استفاده شود. در سیستم تنها یک PriorityClass با
+<code dir="ltr">globalDefault</code> برابر true می‌تواند وجود داشته باشد. اگر هیچ
+PriorityClassی با <code dir="ltr">globalDefault</code> تنظیم‌شده وجود نداشته باشد، اولویت Podهایی که
+<code dir="ltr">priorityClassName</code> ندارند صفر است.</p>
+<p dir="rtl">فیلد <code dir="ltr">description</code> یک رشتهٔ دلخواه است. هدف آن این است که به کاربران
+کلاستر بگوید چه زمانی باید از این PriorityClass استفاده کنند.</p>
+<h3 id="نکاتی-دربارهٔ-podpriority-و-کلاسترهای-موجود" dir="rtl">نکاتی دربارهٔ PodPriority و کلاسترهای موجود</h3>
+<ul>
+<li dir="rtl">
+<p dir="rtl">اگر یک کلاستر موجود را که این قابلیت را ندارد ارتقا دهید، اولویت
+Podهای موجود شما در عمل صفر است.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">افزودن یک PriorityClass با <code dir="ltr">globalDefault</code> برابر <code dir="ltr">true</code>
+اولویت Podهای موجود را تغییر نمی‌دهد. مقدار چنین PriorityClassی
+تنها برای Podهایی استفاده می‌شود که پس از افزودن PriorityClass ایجاد شوند.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">اگر یک PriorityClass را حذف کنید، Podهای موجودی که از نام
+PriorityClass حذف‌شده استفاده می‌کنند بدون تغییر باقی می‌مانند، اما نمی‌توانید Podهای دیگری ایجاد کنید که
+از نام PriorityClass حذف‌شده استفاده کنند.</p>
+</li>
+</ul>
+<h3 id="نمونهٔ-priorityclass" dir="rtl">نمونهٔ PriorityClass</h3>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: high-priority
+value: 1000000
+globalDefault: false
+description: "This priority class should be used for XYZ service pods only."
+</code></pre>
+<h2 id="priorityclass-بدون-پس-گیری-non-preempting-priority-class" dir="rtl">PriorityClass بدون پس‌گیری {#non-preempting-priority-class}</h2>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes v1.24 [stable]</span> (پایدار)</div>
+<p dir="rtl">Podهایی با <code dir="ltr">preemptionPolicy: Never</code> در صف زمان‌بندی
+جلوتر از Podهای با اولویت پایین‌تر قرار می‌گیرند،
+اما نمی‌توانند Podهای دیگر را پس بگیرند.
+یک Pod بدون پس‌گیری که منتظر زمان‌بندی است، در صف زمان‌بندی می‌ماند
+تا زمانی که منابع کافی آزاد شوند
+و بتواند زمان‌بندی شود.
+Podهای بدون پس‌گیری،
+مانند Podهای دیگر،
+مشمول عقب‌نشینی (back-off) زمان‌بند هستند.
+این بدان معناست که اگر زمان‌بند این Podها را امتحان کند و قابل زمان‌بندی نباشند،
+با فرکانس کمتری دوباره امتحان می‌شوند
+و این امکان فراهم می‌شود که Podهای دیگر با اولویت پایین‌تر پیش از آن‌ها زمان‌بندی شوند.</p>
+<p dir="rtl">Podهای بدون پس‌گیری همچنان ممکن است توسط Podهای دیگرِ
+با اولویت بالا پس گرفته شوند.</p>
+<p dir="rtl">مقدار پیش‌فرض <code dir="ltr">preemptionPolicy</code> برابر <code dir="ltr">PreemptLowerPriority</code> است
+که به Podهای آن PriorityClass اجازه می‌دهد Podهای با اولویت پایین‌تر را پس بگیرند
+(همانند رفتار پیش‌فرض موجود).
+اگر <code dir="ltr">preemptionPolicy</code> روی <code dir="ltr">Never</code> تنظیم شود،
+Podهای آن PriorityClass بدون پس‌گیری خواهند بود.</p>
+<p dir="rtl">یک نمونه مورد استفاده، بارهای کاری علم داده است.
+کاربر ممکن است jobی را ارسال کند که می‌خواهد بالاتر از بارهای کاری دیگر در اولویت قرار گیرد،
+اما نمی‌خواهد با پس‌گیری Podهای در حال اجرا، کار موجود را دور بریزد.
+job با اولویت بالا و <code dir="ltr">preemptionPolicy: Never</code> به محض اینکه منابع کافی کلاستر
+به‌طور «طبیعی» آزاد شوند، جلوتر از
+سایر Podهای در صف زمان‌بندی می‌شود.</p>
+<h3 id="نمونهٔ-priorityclass-بدون-پس-گیری" dir="rtl">نمونهٔ PriorityClass بدون پس‌گیری</h3>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: high-priority-nonpreempting
+value: 1000000
+preemptionPolicy: Never
+globalDefault: false
+description: "This priority class will not cause other pods to be preempted."
+</code></pre>
+<h2 id="اولویت-pod" dir="rtl">اولویت Pod</h2>
+<p dir="rtl">پس از اینکه یک یا چند PriorityClass داشتید، می‌توانید Podهایی ایجاد کنید که یکی
+از آن نام‌های PriorityClass را در مشخصات خود تعیین کنند. کنترل‌کنندهٔ پذیرش
+اولویت از فیلد <code dir="ltr">priorityClassName</code> استفاده می‌کند و مقدار عددی صحیح
+اولویت را مقداردهی می‌کند. اگر کلاس اولویت یافت نشود، Pod رد می‌شود.</p>
+<p dir="rtl">YAML زیر نمونه‌ای از پیکربندی Pod است که از
+PriorityClass ایجادشده در مثال قبلی استفاده می‌کند. کنترل‌کنندهٔ پذیرش
+اولویت مشخصات را بررسی می‌کند و اولویت Pod را
+1000000 تعیین می‌کند.</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+  labels:
+    env: test
+spec:
+  containers:
+  - name: nginx
+    image: nginx
+    imagePullPolicy: IfNotPresent
+  priorityClassName: high-priority
+</code></pre>
+<h3 id="اثر-اولویت-pod-بر-ترتیب-زمان-بندی" dir="rtl">اثر اولویت Pod بر ترتیب زمان‌بندی</h3>
+<p dir="rtl">هنگامی که اولویت Pod فعال باشد، زمان‌بند Podهای در انتظار را بر اساس
+اولویتشان مرتب می‌کند و یک Pod در انتظار، در صف زمان‌بندی جلوتر از Podهای در انتظار دیگر
+با اولویت پایین‌تر قرار می‌گیرد. در نتیجه، Pod با اولویت
+بالاتر ممکن است در صورت برآورده شدن الزامات زمان‌بندی‌اش، زودتر از Podهای با اولویت پایین‌تر
+زمان‌بندی شود. اگر چنین Podی قابل زمان‌بندی نباشد،
+زمان‌بند ادامه می‌دهد و می‌کوشد Podهای دیگر با اولویت پایین‌تر را زمان‌بندی کند.</p>
+<h4 id="podgroupها-و-ترتیب-زمان-بندی" dir="rtl">PodGroupها و ترتیب زمان‌بندی</h4>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
+<p dir="rtl">هنگامی که feature gate با نام <code dir="ltr">GenericWorkload</code> فعال باشد، PodGroupها در صف زمان‌بندی
+با Podهای مستقل درهم قرار می‌گیرند. آبجکت PodGroup فیلد
+<code dir="ltr">priority</code> مخصوص به خود را دارد که برای ترتیب‌بندی نسبت به Podها و
+PodGroupهای دیگر استفاده می‌شود. جزئیات نحوهٔ تعیین اولویت یک PodGroup در صفحهٔ
+<a href="../workloads/workload-api/disruption-and-priority.html">اختلال و اولویت Pod Group</a>
+در دسترس است.</p>
+<h4 id="compositepodgroupها-و-ترتیب-زمان-بندی" dir="rtl">CompositePodGroupها و ترتیب زمان‌بندی</h4>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
+<p dir="rtl">هنگامی که feature gate با نام <code dir="ltr">CompositePodGroup</code> فعال باشد، زمان‌بند آبجکت‌های زیر را به‌عنوان
+واحدهای زمان‌بندی قابل قرار گرفتن در صف در نظر می‌گیرد:</p>
+<ul>
+<li dir="rtl">Podهای مستقل - Podهایی که بخشی از هیچ PodGroupی نیستند،</li>
+<li dir="rtl">PodGroupهای مستقل - PodGroupهایی که <code dir="ltr">ParentCompositePodGroup</code> را مشخص نمی‌کنند،</li>
+<li dir="rtl">CompositePodGroupهای ریشه - CompositePodGroupهایی که <code dir="ltr">ParentCompositePodGroup</code> را مشخص نمی‌کنند.</li>
+</ul>
+<p dir="rtl">این آبجکت‌ها یک فیلد <code dir="ltr">priority</code> مشخص می‌کنند که مقدار آن برای تعیین جایگاهشان در
+صف فعال زمان‌بندی استفاده می‌شود.</p>
+<h2 id="پس-گیری-preemption" dir="rtl">پس‌گیری (Preemption)</h2>
+<p dir="rtl">هنگامی که Podها ایجاد می‌شوند، وارد یک صف می‌شوند و منتظر زمان‌بندی می‌مانند.
+زمان‌بند یک Pod را از صف برمی‌دارد و می‌کوشد آن را روی یک نود زمان‌بندی کند. اگر هیچ
+نودی یافت نشود که همهٔ الزامات مشخص‌شدهٔ Pod را برآورده کند،
+منطق پس‌گیری برای Pod در انتظار فعال می‌شود. Pod در انتظار را P می‌نامیم.
+منطق پس‌گیری می‌کوشد نودی بیابد که حذف یک یا چند Pod با
+اولویت پایین‌تر از P از آن، امکان زمان‌بندی P روی آن نود را فراهم کند. اگر چنین
+نودی یافت شود، یک یا چند Pod با اولویت پایین‌تر از آن نود بیرون رانده می‌شوند. پس از
+رفتن آن Podها، P می‌تواند روی آن نود زمان‌بندی شود.</p>
+<h3 id="پس-گیری-podgroup" dir="rtl">پس‌گیری PodGroup</h3>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
+<p dir="rtl">هنگامی که feature gate با نام <code dir="ltr">GenericWorkload</code> فعال باشد، PodGroupها می‌توانند
+در پس‌گیری یا به‌عنوان آغازگر یا به‌عنوان قربانی مشارکت کنند. هنگامی که یک PodGroup
+پس‌گیری را آغاز می‌کند، از منطق
+<a href="workload-aware-preemption.html">پس‌گیری آگاه از بار کاری</a>
+پیروی می‌کند تا Podها و PodGroupهای دیگر را پس بگیرد و برای خودش جا باز کند.
+هنگامی که یک Pod پس‌گیری را آغاز می‌کند، یک PodGroup می‌تواند قربانی شود. در این حالت،
+فیلد <code dir="ltr">priority</code> مربوط به PodGroup برای ترتیب‌بندی نسبت به سایر قربانیان بالقوه
+و فیلد <code dir="ltr">disruptionMode</code> برای تعیین رفتار اختلال PodGroup استفاده می‌شود.
+توضیح مفصل این فیلدها در صفحهٔ
+<a href="../workloads/workload-api/disruption-and-priority.html">اختلال و اولویت Pod Group</a>
+در دسترس است.</p>
+<h3 id="اطلاعات-در-معرض-دید-کاربر" dir="rtl">اطلاعات در معرض دید کاربر</h3>
+<p dir="rtl">هنگامی که Pod P یک یا چند Pod را روی نود N پس می‌گیرد، فیلد <code dir="ltr">nominatedNodeName</code> در وضعیت
+Pod P روی نام نود N تنظیم می‌شود. این فیلد به زمان‌بند کمک می‌کند منابع
+رزروشده برای Pod P را ردیابی کند و همچنین اطلاعاتی دربارهٔ پس‌گیری‌ها
+در کلاسترشان در اختیار کاربران می‌گذارد.</p>
+<p dir="rtl">لطفاً توجه داشته باشید که Pod P لزوماً روی «نود نامزدشده» زمان‌بندی نمی‌شود.
+زمان‌بند همیشه پیش از پیمایش هر نود دیگری، «نود نامزدشده» را امتحان می‌کند.
+پس از پس‌گیری Podهای قربانی، آن‌ها مهلت خاتمهٔ مؤدبانهٔ خود را دریافت می‌کنند. اگر
+در حالی که زمان‌بند منتظر خاتمهٔ Podهای قربانی است نود دیگری در دسترس شود،
+زمان‌بند ممکن است از آن نود دیگر برای زمان‌بندی Pod P استفاده کند. در نتیجه،
+<code dir="ltr">nominatedNodeName</code> و <code dir="ltr">nodeName</code> در مشخصات Pod همیشه یکسان نیستند. همچنین، اگر
+زمان‌بند Podهایی را روی نود N پس بگیرد، اما سپس یک Pod با اولویت بالاتر از Pod P
+برسد، زمان‌بند ممکن است نود N را به Pod جدید با اولویت بالاتر بدهد. در چنین
+حالتی، زمان‌بند <code dir="ltr">nominatedNodeName</code> مربوط به Pod P را پاک می‌کند. با این کار، زمان‌بند
+Pod P را واجد شرایط پس‌گیری Podها روی نود دیگری می‌کند.</p>
+<h3 id="محدودیت-های-پس-گیری" dir="rtl">محدودیت‌های پس‌گیری</h3>
+<h4 id="خاتمهٔ-مؤدبانهٔ-قربانیان-پس-گیری" dir="rtl">خاتمهٔ مؤدبانهٔ قربانیان پس‌گیری</h4>
+<p dir="rtl">هنگامی که Podها پس گرفته می‌شوند، قربانیان
+<a href="https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#pod-termination" target="_blank">مهلت خاتمهٔ مؤدبانهٔ</a> خود را دریافت می‌کنند.
+آن‌ها به همین اندازه زمان دارند تا کار خود را تمام کنند و خارج شوند. اگر این کار را نکنند،
+کشته می‌شوند. این مهلت خاتمهٔ مؤدبانه یک فاصلهٔ زمانی بین لحظه‌ای
+که زمان‌بند Podها را پس می‌گیرد و زمانی که Pod در انتظار (P) می‌تواند
+روی نود (N) زمان‌بندی شود، ایجاد می‌کند. در این فاصله، زمان‌بند به زمان‌بندی سایر
+Podهای در انتظار ادامه می‌دهد. با خروج یا خاتمهٔ قربانیان، زمان‌بند می‌کوشد
+Podهای موجود در صف انتظار را زمان‌بندی کند. بنابراین، معمولاً یک فاصلهٔ زمانی بین
+لحظه‌ای که زمان‌بند قربانیان را پس می‌گیرد و زمانی که Pod P زمان‌بندی می‌شود وجود دارد. برای
+به حداقل رساندن این فاصله، می‌توان مهلت خاتمهٔ مؤدبانهٔ Podهای با اولویت
+پایین‌تر را روی صفر یا عدد کوچکی تنظیم کرد.</p>
+<h4 id="poddisruptionbudget-پشتیبانی-می-شود،-اما-تضمین-نمی-شود" dir="rtl">PodDisruptionBudget پشتیبانی می‌شود، اما تضمین نمی‌شود</h4>
+<p dir="rtl">یک <a href="../workloads/pods/disruptions.html">PodDisruptionBudget</a> (PDB)
+به مالکان برنامه اجازه می‌دهد تعداد Podهای یک برنامهٔ تکثیرشده را
+که به‌طور همزمان در اثر اختلال‌های داوطلبانه از دسترس خارج می‌شوند، محدود کنند. کوبرنتیز هنگام پس‌گیری Podها
+از PDB پشتیبانی می‌کند، اما رعایت PDB به شیوهٔ بهترین تلاش است. زمان‌بند می‌کوشد
+قربانیانی بیابد که PDB آن‌ها با پس‌گیری نقض نشود، اما اگر چنین قربانیانی
+یافت نشوند، پس‌گیری همچنان انجام می‌شود و Podهای با اولویت پایین‌تر
+به‌رغم نقض PDB آن‌ها حذف می‌شوند.</p>
+<h4 id="وابستگی-بین-podها-روی-podهای-با-اولویت-پایین-تر" dir="rtl">وابستگی بین Podها روی Podهای با اولویت پایین‌تر</h4>
+<p dir="rtl">یک نود تنها زمانی برای پس‌گیری در نظر گرفته می‌شود که پاسخ این پرسش
+مثبت باشد: «اگر همهٔ Podهای با اولویت پایین‌تر از Pod در انتظار از
+نود حذف شوند، آیا Pod در انتظار می‌تواند روی نود زمان‌بندی شود؟»</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">پس‌گیری لزوماً همهٔ Podهای با اولویت پایین‌تر را
+حذف نمی‌کند. اگر Pod در انتظار بتواند با حذف تعدادی کمتر از همهٔ
+Podهای با اولویت پایین‌تر زمان‌بندی شود، تنها بخشی از Podهای با اولویت پایین‌تر حذف می‌شوند.
+با این حال، پاسخ پرسش بالا باید مثبت باشد. اگر پاسخ منفی باشد،
+نود برای پس‌گیری در نظر گرفته نمی‌شود.</p>
+</div>
+<p dir="rtl">اگر یک Pod در انتظار نسبت به یک یا چند Pod با اولویت پایین‌تر روی نود
+<span class="term" title="affinity">وابستگی</span> بین Podها داشته باشد، قاعدهٔ وابستگی بین Podها
+در غیاب آن Podهای با اولویت پایین‌تر قابل برآورده شدن نیست. در این حالت،
+زمان‌بند هیچ Podی را روی نود پس نمی‌گیرد. در عوض، به دنبال نود دیگری
+می‌گردد. زمان‌بند ممکن است نود مناسبی بیابد یا نیابد. هیچ
+تضمینی وجود ندارد که Pod در انتظار بتواند زمان‌بندی شود.</p>
+<p dir="rtl">راه‌حل توصیه‌شدهٔ ما برای این مشکل این است که وابستگی بین Podها را تنها
+نسبت به Podهای با اولویت برابر یا بالاتر ایجاد کنید.</p>
+<h4 id="پس-گیری-میان-نودها" dir="rtl">پس‌گیری میان نودها</h4>
+<p dir="rtl">فرض کنید نود N برای پس‌گیری در نظر گرفته می‌شود تا یک Pod در انتظار P بتواند
+روی N زمان‌بندی شود. P ممکن است تنها در صورتی روی N امکان‌پذیر شود که یک Pod روی نود دیگری
+پس گرفته شود. در اینجا یک مثال آمده است:</p>
+<ul>
+<li dir="rtl">Pod P برای نود N در نظر گرفته می‌شود.</li>
+<li dir="rtl">Pod Q روی نود دیگری در همان ناحیهٔ نود N در حال اجراست.</li>
+<li dir="rtl">Pod P با Pod Q ضدوابستگی در سطح ناحیه دارد (<code dir="ltr">topologyKey: topology.kubernetes.io/zone</code>).</li>
+<li dir="rtl">هیچ مورد دیگری از ضدوابستگی بین Pod P و Podهای دیگر در
+آن ناحیه وجود ندارد.</li>
+<li dir="rtl">برای زمان‌بندی Pod P روی نود N، Pod Q می‌تواند پس گرفته شود، اما زمان‌بند
+پس‌گیری میان نودها را انجام نمی‌دهد. بنابراین، Pod P روی نود N
+غیرقابل زمان‌بندی تلقی می‌شود.</li>
+</ul>
+<p dir="rtl">اگر Pod Q از نود خود حذف می‌شد، نقض ضدوابستگی Pod
+از بین می‌رفت و Pod P احتمالاً می‌توانست روی نود N زمان‌بندی شود.</p>
+<p dir="rtl">ممکن است در نسخه‌های آینده، در صورت وجود تقاضای کافی و یافتن الگوریتمی با کارایی معقول،
+افزودن پس‌گیری میان نودها را بررسی کنیم.</p>
+<h3 id="پس-گیری-برای-تغییر-اندازهٔ-درجای-pod-preemption-for-in-place-pod-resize" dir="rtl">پس‌گیری برای تغییر اندازهٔ درجای Pod {#preemption-for-in-place-pod-resize}</h3>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
+<p dir="rtl">هنگامی که feature gate با نام <code dir="ltr">InPlacePodVerticalScalingSchedulerPreemption</code> فعال باشد،
+پس‌گیری همچنین زمانی اعمال می‌شود که درخواست تغییر اندازهٔ درجای یک Pod در حال اجرا به دلیل
+ظرفیت ناکافی نود در وضعیت <code dir="ltr">Deferred</code> قرار گیرد
+(به این معنا که تغییر اندازهٔ درخواست‌شده موقتاً ممکن نیست، اما ممکن است بعداً
+امکان‌پذیر شود).
+برای جزئیات وضعیت‌های تغییر اندازه،
+<a href="https://kubernetes.io/docs/tasks/configure-pod-container/resize-container-resources/#pod-resize-status" target="_blank">وضعیت تغییر اندازهٔ Pod</a> را ببینید.</p>
+<p dir="rtl">اگر اندازهٔ یک Pod با اولویت بالاتر به دلیل کمبود
+CPU یا حافظهٔ در دسترس روی نودش قابل تغییر درجا نباشد، <code dir="ltr">kube-scheduler</code> می‌کوشد Podهای با اولویت پایین‌تر
+روی آن نود را پس بگیرد تا ظرفیت موردنیاز آزاد شود.</p>
+<p dir="rtl">پس‌گیری برای تغییر اندازهٔ درجای Pod از چند جنبهٔ کلیدی با پس‌گیری استاندارد
+برای جای‌گذاری Pod تفاوت دارد:</p>
+<ul>
+<li dir="rtl"><strong>محدودیت نود</strong>: پس‌گیری به‌طور اکید به نودی محدود است که Pod در حال حاضر
+به آن اختصاص یافته است. زمان‌بند نودهای نامزد دیگر را در سراسر
+کلاستر ارزیابی نمی‌کند.</li>
+<li dir="rtl"><strong>محاسبهٔ تفاضل منابع</strong>: ظرفیت موردنیاز برای پس‌گیری بر اساس
+تفاضل منابع (اختلاف بین منابع مطلوب و
+منابع تخصیص‌یافتهٔ فعلی) محاسبه می‌شود، نه کل درخواست Pod.</li>
+<li dir="rtl"><strong>مسدودسازی منابع</strong>: منابع درخواست‌شدهٔ Podی که در حال تغییر اندازه است،
+در حسابداری منابع زمان‌بند برای آن نود از قبل مصرف‌شده تلقی می‌شوند
+و تا زمانی که تغییر اندازه در نهایت انجام شود یا وضعیت deferred توسط Kubelet حذف شود،
+مانع استفادهٔ Podهای دیگر با اولویت پایین‌تر از آن‌ها می‌شوند.</li>
+<li dir="rtl"><strong>وضعیت نود نامزدشده</strong>: فیلد <code dir="ltr">nominatedNodeName</code> در وضعیت Pod
+تنظیم نمی‌شود، زیرا Pod از قبل به نود مقصد خود اختصاص یافته و روی آن در حال اجراست.</li>
+<li dir="rtl"><strong>اجرای عملی توسط Kubelet</strong>: زمان‌بند پس‌گیری را برای آزاد کردن ظرفیت نود آغاز می‌کند،
+اما Pod را دوباره متصل (re-bind) نمی‌کند. Kubelet ظرفیت تازه آزادشده
+روی نود را تشخیص می‌دهد و تغییر اندازهٔ درجای واقعی را اجرا می‌کند.</li>
+<li dir="rtl"><strong>سیاست پس‌گیری در سطح نود</strong>: پس‌گیری را می‌توان به‌طور مشخص برای
+تغییر اندازه‌های درجا روی نودهای مشخص با استفاده از
+فیلد <code dir="ltr">spec.podPreemptionPolicy.disableResizePreemption</code> در مشخصات نود غیرفعال کرد.
+برخلاف پس‌گیری استاندارد که تنها به‌ازای هر کلاس اولویت و
+با استفاده از <code dir="ltr">preemptionPolicy: Never</code> قابل غیرفعال شدن است، این روش به گردانندگان یا سامانه‌های مقیاس‌دهی خودکار اجازه می‌دهد
+پس‌گیری را روی نودهای منفرد غیرفعال کنند.</li>
+</ul>
+<p dir="rtl">برای جزئیات بیشتر دربارهٔ تغییر اندازهٔ درجای Pod،
+<a href="https://kubernetes.io/docs/tasks/configure-pod-container/resize-container-resources/" target="_blank">تغییر اندازهٔ منابع CPU و حافظهٔ اختصاص‌یافته به کانتینرها</a> را ببینید.</p>
+<h4 id="غیرفعال-کردن-پس-گیری-برای-تغییر-اندازهٔ-درجای-pod-در-سطح-نود-disabling-preemption-for-in-place-pod-resize-at-the-node-level" dir="rtl">غیرفعال کردن پس‌گیری برای تغییر اندازهٔ درجای Pod در سطح نود {#disabling-preemption-for-in-place-pod-resize-at-the-node-level}</h4>
+<p dir="rtl">گردانندگان کلاستر و کنترل‌کننده‌ها می‌توانند پس‌گیری آغازشده توسط زمان‌بند را
+که ناشی از درخواست‌های تغییر اندازهٔ درجای Pod است، روی نودهای مشخص غیرفعال کنند.
+این کار برای نودهای قابل تغییر اندازه یا نودهایی با راه‌حل‌های مقیاس‌دهی خودکار سفارشی مفید است،
+زیرا از بارهای کاری موجود در برابر اختلال محافظت می‌کند و اجازه می‌دهد به‌جای آن، بزرگ‌سازی نود
+کمبود منابع را برطرف کند.</p>
+<p dir="rtl">این کار با استفاده از فیلد <code dir="ltr">spec.podPreemptionPolicy</code> در مشخصات <code dir="ltr">Node</code> پیکربندی می‌شود.
+اگر فهرست <code dir="ltr">disableResizePreemption</code> خالی نباشد، پس‌گیری ناشی از تغییر اندازه
+روی آن نود غیرفعال می‌شود و <code dir="ltr">kube-scheduler</code> تلاش‌های پس‌گیری را
+برای هرگونه تغییر اندازهٔ deferred که روی آن نود در جریان است، نادیده می‌گیرد.</p>
+<p dir="rtl">در اینجا نمونه‌ای از پیکربندی نود آمده است:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: Node
+metadata:
+  name: resizable-node
+spec:
+  podPreemptionPolicy:
+    disableResizePreemption:
+      - autoscaling.k8s.io/cluster-autoscaler
+      - autoscaling.k8s.io/vpa-updater
+</code></pre>
+<p dir="rtl">قیدها و قواعد اعتبارسنجی:</p>
+<ul>
+<li dir="rtl"><strong>قالب برچسب</strong>: هر ورودی در فهرست <code dir="ltr">disableResizePreemption</code> باید از
+قالب استاندارد کلید برچسب کوبرنتیز پیروی کند (برای مثال، یک پیشوند زیردامنهٔ DNS
+و یک نام که با <code dir="ltr">/</code> از هم جدا شده‌اند).</li>
+<li dir="rtl"><strong>حداکثر تعداد اقلام</strong>: فهرست می‌تواند حداکثر ۲۰ ورودی داشته باشد.</li>
+<li dir="rtl"><strong>فهرست غیرخالی</strong>: سیاست در صورتی رعایت می‌شود (پس‌گیری غیرفعال می‌شود) که
+فهرست دست‌کم یک ورودی داشته باشد.
+اگر فهرست خالی باشد یا فیلد <code dir="ltr">podPreemptionPolicy</code> حذف شده باشد،
+پس‌گیری برای تغییر اندازهٔ درجا روی نود فعال است.</li>
+</ul>
+<h2 id="عیب-یابی" dir="rtl">عیب‌یابی</h2>
+<p dir="rtl">اولویت و پس‌گیری Pod می‌توانند اثرات جانبی ناخواسته‌ای داشته باشند. در اینجا چند
+نمونه از مشکلات احتمالی و راه‌های برخورد با آن‌ها آمده است.</p>
+<h3 id="podها-بی-دلیل-پس-گرفته-می-شوند" dir="rtl">Podها بی‌دلیل پس گرفته می‌شوند</h3>
+<p dir="rtl">پس‌گیری، Podهای موجود را از کلاستری که زیر فشار منابع است حذف می‌کند تا برای
+Podهای در انتظار با اولویت بالاتر جا باز شود. اگر به اشتباه به
+برخی Podها اولویت بالا بدهید، این Podهای ناخواسته پراولویت ممکن است باعث
+پس‌گیری در کلاستر شما شوند. اولویت Pod با تنظیم
+فیلد <code dir="ltr">priorityClassName</code> در مشخصات Pod تعیین می‌شود. سپس مقدار عددی صحیح
+اولویت تعیین می‌شود و در فیلد <code dir="ltr">priority</code> از <code dir="ltr">podSpec</code> قرار می‌گیرد.</p>
+<p dir="rtl">برای رفع مشکل، می‌توانید <code dir="ltr">priorityClassName</code> آن Podها را تغییر دهید
+تا از کلاس‌های اولویت پایین‌تر استفاده کنند، یا آن فیلد را خالی بگذارید. یک
+<code dir="ltr">priorityClassName</code> خالی به‌طور پیش‌فرض صفر تعیین می‌شود.</p>
+<p dir="rtl">هنگامی که یک Pod پس گرفته می‌شود، رویدادهایی برای Pod پس‌گرفته‌شده ثبت می‌شود.
+پس‌گیری تنها باید زمانی رخ دهد که کلاستر منابع کافی برای
+یک Pod نداشته باشد. در چنین مواردی، پس‌گیری تنها زمانی رخ می‌دهد که اولویت Pod
+در انتظار (پس‌گیرنده) بالاتر از Podهای قربانی باشد. پس‌گیری نباید زمانی رخ دهد که
+هیچ Pod در انتظاری وجود ندارد، یا زمانی که Podهای در انتظار اولویت برابر یا پایین‌تری
+نسبت به قربانیان دارند. اگر پس‌گیری در چنین سناریوهایی رخ دهد، لطفاً یک issue ثبت کنید.</p>
+<h3 id="podها-پس-گرفته-می-شوند،-اما-پس-گیرنده-زمان-بندی-نمی-شود" dir="rtl">Podها پس گرفته می‌شوند، اما پس‌گیرنده زمان‌بندی نمی‌شود</h3>
+<p dir="rtl">هنگامی که Podها پس گرفته می‌شوند، مهلت خاتمهٔ مؤدبانهٔ درخواست‌شدهٔ خود را
+دریافت می‌کنند که به‌طور پیش‌فرض ۳۰ ثانیه است. اگر Podهای قربانی در این
+مدت خاتمه نیابند، به‌اجبار خاتمه داده می‌شوند. پس از رفتن همهٔ قربانیان،
+Pod پس‌گیرنده می‌تواند زمان‌بندی شود.</p>
+<p dir="rtl">در حالی که Pod پس‌گیرنده منتظر رفتن قربانیان است، ممکن است یک Pod با اولویت بالاتر
+ایجاد شود که روی همان نود جا شود. در این حالت، زمان‌بند
+Pod با اولویت بالاتر را به‌جای پس‌گیرنده زمان‌بندی می‌کند.</p>
+<p dir="rtl">این رفتار مورد انتظار است: Pod با اولویت بالاتر باید جای
+یک Pod با اولویت پایین‌تر را بگیرد.</p>
+<h3 id="podهای-با-اولویت-بالاتر-پیش-از-podهای-با-اولویت-پایین-تر-پس-گرفته-می-شوند" dir="rtl">Podهای با اولویت بالاتر پیش از Podهای با اولویت پایین‌تر پس گرفته می‌شوند</h3>
+<p dir="rtl">زمان‌بند می‌کوشد نودهایی بیابد که بتوانند یک Pod در انتظار را اجرا کنند. اگر هیچ نودی
+یافت نشود، زمان‌بند می‌کوشد Podهای با اولویت پایین‌تر را از یک نود دلخواه
+حذف کند تا برای Pod در انتظار جا باز کند.
+اگر نودی با Podهای کم‌اولویت برای اجرای Pod در انتظار امکان‌پذیر نباشد، زمان‌بند
+ممکن است نود دیگری با Podهای با اولویت بالاتر (در مقایسه با Podهای
+نود دیگر) را برای پس‌گیری انتخاب کند. قربانیان همچنان باید اولویت پایین‌تری از
+Pod پس‌گیرنده داشته باشند.</p>
+<p dir="rtl">هنگامی که چند نود برای پس‌گیری در دسترس باشد، زمان‌بند می‌کوشد
+نودی را انتخاب کند که مجموعه‌ای از Podهای با کمترین اولویت دارد. با این حال، اگر چنین Podهایی
+PodDisruptionBudgetی داشته باشند که در صورت پس‌گیری آن‌ها نقض شود،
+زمان‌بند ممکن است نود دیگری با Podهای با اولویت بالاتر را انتخاب کند.</p>
+<p dir="rtl">هنگامی که چند نود برای پس‌گیری وجود داشته باشد و هیچ‌یک از سناریوهای بالا صدق نکند،
+زمان‌بند نودی با کمترین اولویت را انتخاب می‌کند.</p>
+<h2 id="تعامل-میان-اولویت-pod-و-کیفیت-سرویس-interactions-of-pod-priority-and-qos" dir="rtl">تعامل میان اولویت Pod و کیفیت سرویس {#interactions-of-pod-priority-and-qos}</h2>
+<p dir="rtl">اولویت Pod و <span class="term" title="qos-class">کلاس QoS</span>
+دو قابلیت متعامد هستند که تعامل اندکی با هم دارند و هیچ محدودیت پیش‌فرضی برای
+تعیین اولویت یک Pod بر اساس کلاس‌های QoS آن وجود ندارد. منطق پس‌گیری
+زمان‌بند هنگام انتخاب اهداف پس‌گیری، QoS را در نظر نمی‌گیرد.
+پس‌گیری اولویت Pod را در نظر می‌گیرد و می‌کوشد مجموعه‌ای از اهداف با
+کمترین اولویت را انتخاب کند. Podهای با اولویت بالاتر تنها در صورتی برای پس‌گیری در نظر گرفته می‌شوند که
+حذف Podهای با کمترین اولویت برای اینکه زمان‌بند
+بتواند Pod پس‌گیرنده را زمان‌بندی کند کافی نباشد، یا اگر Podهای با کمترین اولویت توسط
+<code dir="ltr">PodDisruptionBudget</code> محافظت شوند.</p>
+<p dir="rtl">kubelet از اولویت برای تعیین ترتیب Podها در <a href="node-pressure-eviction.html">بیرون‌رانی ناشی از فشار نود</a> استفاده می‌کند.
+می‌توانید از کلاس QoS برای تخمین ترتیبی که Podها به احتمال زیاد
+بیرون رانده می‌شوند، استفاده کنید. kubelet Podها را برای بیرون‌رانی بر اساس عوامل زیر رتبه‌بندی می‌کند:</p>
+<ol>
+<li dir="rtl">اینکه آیا مصرف منبع کمیاب‌شده از درخواست‌ها فراتر می‌رود یا نه</li>
+<li dir="rtl">اولویت Pod</li>
+<li dir="rtl">میزان مصرف منابع نسبت به درخواست‌ها</li>
+</ol>
+<p dir="rtl">برای جزئیات بیشتر، <a href="node-pressure-eviction.html#pod-selection-for-kubelet-eviction">انتخاب Pod برای بیرون‌رانی توسط kubelet</a>
+را ببینید.</p>
+<p dir="rtl">بیرون‌رانی ناشی از فشار نود توسط kubelet، Podهایی را که
+مصرفشان از درخواست‌هایشان فراتر نمی‌رود، بیرون نمی‌راند. اگر یک Pod با اولویت پایین‌تر
+از درخواست‌هایش فراتر نرود، بیرون رانده نمی‌شود. Pod دیگری با اولویت بالاتر
+که از درخواست‌هایش فراتر می‌رود، ممکن است بیرون رانده شود.</p>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<ul>
+<li dir="rtl">دربارهٔ استفاده از ResourceQuotaها در ارتباط با PriorityClassها بخوانید: <a href="../policy/resource-quotas.html#limit-priority-class-consumption-by-default">محدود کردن پیش‌فرض مصرف Priority Class</a></li>
+<li dir="rtl">دربارهٔ <a href="../workloads/pods/disruptions.html">اختلال Pod</a> بیاموزید</li>
+<li dir="rtl">دربارهٔ <a href="api-eviction.html">بیرون‌رانی آغازشده از طریق API</a> بیاموزید</li>
+<li dir="rtl">دربارهٔ <a href="node-pressure-eviction.html">بیرون‌رانی ناشی از فشار نود</a> بیاموزید</li>
+</ul>
+</main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#نحوهٔ-استفاده-از-اولویت-و-پس-گیری">نحوهٔ استفاده از اولویت و پس‌گیری</a><a class="l2" href="#priorityclass">PriorityClass</a><a class="l3" href="#نکاتی-دربارهٔ-podpriority-و-کلاسترهای-موجود">نکاتی دربارهٔ PodPriority و کلاسترهای موجود</a><a class="l3" href="#نمونهٔ-priorityclass">نمونهٔ PriorityClass</a><a class="l2" href="#priorityclass-بدون-پس-گیری-non-preempting-priority-class">PriorityClass بدون پس‌گیری {#non-preempting-priority-class}</a><a class="l3" href="#نمونهٔ-priorityclass-بدون-پس-گیری">نمونهٔ PriorityClass بدون پس‌گیری</a><a class="l2" href="#اولویت-pod">اولویت Pod</a><a class="l3" href="#اثر-اولویت-pod-بر-ترتیب-زمان-بندی">اثر اولویت Pod بر ترتیب زمان‌بندی</a><a class="l2" href="#پس-گیری-preemption">پس‌گیری (Preemption)</a><a class="l3" href="#پس-گیری-podgroup">پس‌گیری PodGroup</a><a class="l3" href="#اطلاعات-در-معرض-دید-کاربر">اطلاعات در معرض دید کاربر</a><a class="l3" href="#محدودیت-های-پس-گیری">محدودیت‌های پس‌گیری</a><a class="l3" href="#پس-گیری-برای-تغییر-اندازهٔ-درجای-pod-preemption-for-in-place-pod-resize">پس‌گیری برای تغییر اندازهٔ درجای Pod {#preemption-for-in-place-pod-resize}</a><a class="l2" href="#عیب-یابی">عیب‌یابی</a><a class="l3" href="#podها-بی-دلیل-پس-گرفته-می-شوند">Podها بی‌دلیل پس گرفته می‌شوند</a><a class="l3" href="#podها-پس-گرفته-می-شوند،-اما-پس-گیرنده-زمان-بندی-نمی-شود">Podها پس گرفته می‌شوند، اما پس‌گیرنده زمان‌بندی نمی‌شود</a><a class="l3" href="#podهای-با-اولویت-بالاتر-پیش-از-podهای-با-اولویت-پایین-تر-پس-گرفته-می-شوند">Podهای با اولویت بالاتر پیش از Podهای با اولویت پایین‌تر پس گرفته می‌شوند</a><a class="l2" href="#تعامل-میان-اولویت-pod-و-کیفیت-سرویس-interactions-of-pod-priority-and-qos">تعامل میان اولویت Pod و کیفیت سرویس {#interactions-of-pod-priority-and-qos}</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>
