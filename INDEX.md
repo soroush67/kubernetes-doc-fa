@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-733 از 1722 صفحه
+748 از 1722 صفحه
 
 
 ## `.`
@@ -384,7 +384,7 @@
 ## `reference/command-line-tools-reference`
 
 - ✅ [_index.md](md/reference/command-line-tools-reference/_index.md)
-- ⏳ `kube-apiserver.md`
+- ⚠️ [kube-apiserver.md](md/reference/command-line-tools-reference/kube-apiserver.md)
 - ⏳ `kube-controller-manager.md`
 - ⏳ `kube-proxy.md`
 - ⏳ `kube-scheduler.md`
@@ -869,23 +869,23 @@
 - ✅ [WatchListClient.md](md/reference/command-line-tools-reference/feature-gates/WatchListClient.md)
 - ✅ [WatchListCompression.md](md/reference/command-line-tools-reference/feature-gates/WatchListCompression.md)
 - ✅ [WinDSR.md](md/reference/command-line-tools-reference/feature-gates/WinDSR.md)
-- ⏳ `WinOverlay.md`
-- ⏳ `WindowsCPUAndMemoryAffinity.md`
-- ⏳ `WindowsEndpointSliceProxying.md`
-- ⏳ `WindowsGMSA.md`
-- ⏳ `WindowsGracefulNodeShutdown.md`
-- ⏳ `WindowsHostNetwork.md`
-- ⏳ `WindowsHostProcessContainers.md`
-- ⏳ `WindowsRunAsUserName.md`
-- ⏳ `WorkloadAwarePreemption.md`
-- ⏳ `WorkloadWithJob.md`
-- ⏳ `ZeroLimitedNominalConcurrencyShares.md`
-- ⏳ `extend-websockets-to-kubelet.md`
-- ⏳ `index.md`
+- ✅ [WinOverlay.md](md/reference/command-line-tools-reference/feature-gates/WinOverlay.md)
+- ✅ [WindowsCPUAndMemoryAffinity.md](md/reference/command-line-tools-reference/feature-gates/WindowsCPUAndMemoryAffinity.md)
+- ✅ [WindowsEndpointSliceProxying.md](md/reference/command-line-tools-reference/feature-gates/WindowsEndpointSliceProxying.md)
+- ✅ [WindowsGMSA.md](md/reference/command-line-tools-reference/feature-gates/WindowsGMSA.md)
+- ✅ [WindowsGracefulNodeShutdown.md](md/reference/command-line-tools-reference/feature-gates/WindowsGracefulNodeShutdown.md)
+- ✅ [WindowsHostNetwork.md](md/reference/command-line-tools-reference/feature-gates/WindowsHostNetwork.md)
+- ✅ [WindowsHostProcessContainers.md](md/reference/command-line-tools-reference/feature-gates/WindowsHostProcessContainers.md)
+- ✅ [WindowsRunAsUserName.md](md/reference/command-line-tools-reference/feature-gates/WindowsRunAsUserName.md)
+- ✅ [WorkloadAwarePreemption.md](md/reference/command-line-tools-reference/feature-gates/WorkloadAwarePreemption.md)
+- ✅ [WorkloadWithJob.md](md/reference/command-line-tools-reference/feature-gates/WorkloadWithJob.md)
+- ✅ [ZeroLimitedNominalConcurrencyShares.md](md/reference/command-line-tools-reference/feature-gates/ZeroLimitedNominalConcurrencyShares.md)
+- ✅ [extend-websockets-to-kubelet.md](md/reference/command-line-tools-reference/feature-gates/extend-websockets-to-kubelet.md)
+- ✅ [index.md](md/reference/command-line-tools-reference/feature-gates/index.md)
 
 ## `reference/command-line-tools-reference/feature-gates-removed`
 
-- ⏳ `index.md`
+- ✅ [index.md](md/reference/command-line-tools-reference/feature-gates-removed/index.md)
 
 ## `reference/config-api`
 

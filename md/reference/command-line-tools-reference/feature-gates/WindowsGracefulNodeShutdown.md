@@ -1,0 +1,22 @@
+---
+title: WindowsGracefulNodeShutdown
+content_type: feature_gate
+_build:
+  list: never
+  render: false
+
+stages:
+  - stage: alpha
+    defaultValue: false
+    fromVersion: "1.32"
+    toVersion: "1.33"
+  - stage: beta
+    defaultValue: true
+    fromVersion: "1.34"
+
+---
+پشتیبانی از خاموش‌شدن ایمن (graceful shutdown) نودهای ویندوزی را در kubelet فعال می‌کند.
+هنگام خاموش‌شدن سیستم، kubelet تلاش می‌کند رویداد خاموش‌شدن را تشخیص دهد
+و Podهای در حال اجرا روی نود را به‌صورت ایمن خاتمه دهد. برای جزئیات بیشتر،
+به [خاموش‌شدن ایمن نود](/docs/concepts/architecture/nodes/#graceful-node-shutdown)
+مراجعه کنید.

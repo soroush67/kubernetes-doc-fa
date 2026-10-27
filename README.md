@@ -8,9 +8,9 @@
 
 | | |
 |---|---|
-| پیشرفت (بر اساس کلمات) | **20.5٪** |
-| صفحات ترجمه‌شده | 733 از 1722 |
-| صفحات دارای ایراد ساختاری | 9 |
+| پیشرفت (بر اساس کلمات) | **21.0٪** |
+| صفحات ترجمه‌شده | 748 از 1722 |
+| صفحات دارای ایراد ساختاری | 10 |
 | نسخه‌ی منبع انگلیسی | `ed70e311737a` |
 
 ## مشاهده
@@ -72,7 +72,7 @@ cd kubernetes-doc-fa
 | `contribute` | 44 | 44 |
 | `doc-contributor-tools` | 1 | 1 |
 | `home` | 2 | 2 |
-| `reference` | 498 | 1198 |
+| `reference` | 513 | 1198 |
 | `setup` | 0 | 22 |
 | `tasks` | 0 | 221 |
 | `tutorials` | 0 | 45 |
@@ -91,26 +91,26 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [reference/command-line-tools-reference/kube-apiserver.md](md/reference/command-line-tools-reference/kube-apiserver.md) — 2026-10-27T17:19:38+03:30
+- [reference/command-line-tools-reference/feature-gates/index.md](md/reference/command-line-tools-reference/feature-gates/index.md) — 2026-10-27T17:11:30+03:30
+- [reference/command-line-tools-reference/feature-gates-removed/index.md](md/reference/command-line-tools-reference/feature-gates-removed/index.md) — 2026-10-27T17:11:18+03:30
+- [reference/command-line-tools-reference/feature-gates/extend-websockets-to-kubelet.md](md/reference/command-line-tools-reference/feature-gates/extend-websockets-to-kubelet.md) — 2026-10-27T17:11:09+03:30
+- [reference/command-line-tools-reference/feature-gates/ZeroLimitedNominalConcurrencyShares.md](md/reference/command-line-tools-reference/feature-gates/ZeroLimitedNominalConcurrencyShares.md) — 2026-10-27T17:11:08+03:30
+- [reference/command-line-tools-reference/feature-gates/WorkloadWithJob.md](md/reference/command-line-tools-reference/feature-gates/WorkloadWithJob.md) — 2026-10-27T17:11:01+03:30
+- [reference/command-line-tools-reference/feature-gates/WorkloadAwarePreemption.md](md/reference/command-line-tools-reference/feature-gates/WorkloadAwarePreemption.md) — 2026-10-27T17:11:00+03:30
+- [reference/command-line-tools-reference/feature-gates/WindowsRunAsUserName.md](md/reference/command-line-tools-reference/feature-gates/WindowsRunAsUserName.md) — 2026-10-27T17:10:54+03:30
+- [reference/command-line-tools-reference/feature-gates/WindowsHostNetwork.md](md/reference/command-line-tools-reference/feature-gates/WindowsHostNetwork.md) — 2026-10-27T17:10:50+03:30
+- [reference/command-line-tools-reference/feature-gates/WindowsHostProcessContainers.md](md/reference/command-line-tools-reference/feature-gates/WindowsHostProcessContainers.md) — 2026-10-27T17:10:49+03:30
+- [reference/command-line-tools-reference/feature-gates/WindowsGracefulNodeShutdown.md](md/reference/command-line-tools-reference/feature-gates/WindowsGracefulNodeShutdown.md) — 2026-10-27T17:10:45+03:30
+- [reference/command-line-tools-reference/feature-gates/WindowsGMSA.md](md/reference/command-line-tools-reference/feature-gates/WindowsGMSA.md) — 2026-10-27T17:10:44+03:30
+- [reference/command-line-tools-reference/feature-gates/WindowsCPUAndMemoryAffinity.md](md/reference/command-line-tools-reference/feature-gates/WindowsCPUAndMemoryAffinity.md) — 2026-10-27T17:10:39+03:30
+- [reference/command-line-tools-reference/feature-gates/WindowsEndpointSliceProxying.md](md/reference/command-line-tools-reference/feature-gates/WindowsEndpointSliceProxying.md) — 2026-10-27T17:10:39+03:30
+- [reference/command-line-tools-reference/feature-gates/WinOverlay.md](md/reference/command-line-tools-reference/feature-gates/WinOverlay.md) — 2026-10-27T17:10:31+03:30
 - [reference/command-line-tools-reference/feature-gates/WinDSR.md](md/reference/command-line-tools-reference/feature-gates/WinDSR.md) — 2026-10-27T17:10:29+03:30
 - [reference/command-line-tools-reference/feature-gates/WatchListCompression.md](md/reference/command-line-tools-reference/feature-gates/WatchListCompression.md) — 2026-10-27T17:10:25+03:30
 - [reference/command-line-tools-reference/feature-gates/WatchListClient.md](md/reference/command-line-tools-reference/feature-gates/WatchListClient.md) — 2026-10-27T17:10:21+03:30
 - [reference/command-line-tools-reference/feature-gates/WatchList.md](md/reference/command-line-tools-reference/feature-gates/WatchList.md) — 2026-10-27T17:10:17+03:30
 - [reference/command-line-tools-reference/feature-gates/WatchFromStorageWithoutResourceVersion.md](md/reference/command-line-tools-reference/feature-gates/WatchFromStorageWithoutResourceVersion.md) — 2026-10-27T17:10:15+03:30
-- [reference/command-line-tools-reference/feature-gates/WatchCacheInitializationPostStartHook.md](md/reference/command-line-tools-reference/feature-gates/WatchCacheInitializationPostStartHook.md) — 2026-10-27T17:10:11+03:30
-- [reference/command-line-tools-reference/feature-gates/WatchBookmark.md](md/reference/command-line-tools-reference/feature-gates/WatchBookmark.md) — 2026-10-27T17:10:09+03:30
-- [reference/command-line-tools-reference/feature-gates/WarningHeaders.md](md/reference/command-line-tools-reference/feature-gates/WarningHeaders.md) — 2026-10-27T17:10:04+03:30
-- [reference/command-line-tools-reference/feature-gates/VolumeSubpathEnvExpansion.md](md/reference/command-line-tools-reference/feature-gates/VolumeSubpathEnvExpansion.md) — 2026-10-27T17:10:03+03:30
-- [reference/command-line-tools-reference/feature-gates/VolumeSubpath.md](md/reference/command-line-tools-reference/feature-gates/VolumeSubpath.md) — 2026-10-27T17:09:59+03:30
-- [reference/command-line-tools-reference/feature-gates/VolumeScheduling.md](md/reference/command-line-tools-reference/feature-gates/VolumeScheduling.md) — 2026-10-27T17:09:54+03:30
-- [reference/command-line-tools-reference/feature-gates/VolumeSnapshotDataSource.md](md/reference/command-line-tools-reference/feature-gates/VolumeSnapshotDataSource.md) — 2026-10-27T17:09:53+03:30
-- [reference/command-line-tools-reference/feature-gates/VolumePVCDataSource.md](md/reference/command-line-tools-reference/feature-gates/VolumePVCDataSource.md) — 2026-10-27T17:09:48+03:30
-- [reference/command-line-tools-reference/feature-gates/VolumeLimitScaling.md](md/reference/command-line-tools-reference/feature-gates/VolumeLimitScaling.md) — 2026-10-27T17:09:45+03:30
-- [reference/command-line-tools-reference/feature-gates/VolumeCapacityPriority.md](md/reference/command-line-tools-reference/feature-gates/VolumeCapacityPriority.md) — 2026-10-27T17:09:43+03:30
-- [reference/command-line-tools-reference/feature-gates/VolumeAttributesClass.md](md/reference/command-line-tools-reference/feature-gates/VolumeAttributesClass.md) — 2026-10-27T17:09:37+03:30
-- [reference/command-line-tools-reference/feature-gates/VolumeBindMountOptions.md](md/reference/command-line-tools-reference/feature-gates/VolumeBindMountOptions.md) — 2026-10-27T17:09:37+03:30
-- [reference/command-line-tools-reference/feature-gates/ValidatingAdmissionPolicy.md](md/reference/command-line-tools-reference/feature-gates/ValidatingAdmissionPolicy.md) — 2026-10-27T17:09:30+03:30
-- [reference/command-line-tools-reference/feature-gates/ValidateProxyRedirects.md](md/reference/command-line-tools-reference/feature-gates/ValidateProxyRedirects.md) — 2026-10-27T17:09:28+03:30
-- [reference/command-line-tools-reference/feature-gates/UserNamespacesSupport.md](md/reference/command-line-tools-reference/feature-gates/UserNamespacesSupport.md) — 2026-10-27T17:09:22+03:30
 
 </div>
 
@@ -127,6 +127,7 @@ cd kubernetes-doc-fa
 - [contribute/style/style-guide.md](md/contribute/style/style-guide.md): chunk 1: 37 untranslated English lines, e.g. "{{< comment >}}[If you're localizing this page, you can omit the point about US English.]{{< /comment >}}"
 - [reference/access-authn-authz/authentication.md](md/reference/access-authn-authz/authentication.md): chunk 3: 54 untranslated English lines, e.g. '#          Do not use this for your own cluster!'
 - [reference/access-authn-authz/psp-to-pod-security-standards.md](md/reference/access-authn-authz/psp-to-pod-security-standards.md): chunk 1: short: 716 words vs 997 source words
+- [reference/command-line-tools-reference/kube-apiserver.md](md/reference/command-line-tools-reference/kube-apiserver.md): chunk 2: short: 1797 words vs 2502 source words; chunk 3: short: 2074 words vs 3387 source words
 
 </div>
 
