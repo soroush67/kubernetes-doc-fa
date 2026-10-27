@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-433 از 1722 صفحه
+448 از 1722 صفحه
 
 
 ## `.`
@@ -569,21 +569,21 @@
 - ✅ [ExternalPolicyForExternalIP.md](md/reference/command-line-tools-reference/feature-gates/ExternalPolicyForExternalIP.md)
 - ✅ [ExternalServiceAccountTokenSigner.md](md/reference/command-line-tools-reference/feature-gates/ExternalServiceAccountTokenSigner.md)
 - ✅ [GCERegionalPersistentDisk.md](md/reference/command-line-tools-reference/feature-gates/GCERegionalPersistentDisk.md)
-- ⏳ `GRPCContainerProbe.md`
-- ⏳ `GRPCContainerProbeTLS.md`
-- ⏳ `GangScheduling.md`
-- ⏳ `GenericEphemeralVolume.md`
-- ⏳ `GenericWorkload.md`
-- ⏳ `GitRepoVolumeDriver.md`
-- ⏳ `GracefulNodeShutdown.md`
-- ⏳ `GracefulNodeShutdownBasedOnPodPriority.md`
-- ⏳ `H2CContainerProbe.md`
-- ⏳ `HPAConfigurableTolerance.md`
-- ⏳ `HPAContainerMetrics.md`
-- ⏳ `HPAScaleToZero.md`
-- ⏳ `HonorPVReclaimPolicy.md`
-- ⏳ `HostnameOverride.md`
-- ⏳ `HugePageStorageMediumSize.md`
+- ✅ [GRPCContainerProbe.md](md/reference/command-line-tools-reference/feature-gates/GRPCContainerProbe.md)
+- ✅ [GRPCContainerProbeTLS.md](md/reference/command-line-tools-reference/feature-gates/GRPCContainerProbeTLS.md)
+- ✅ [GangScheduling.md](md/reference/command-line-tools-reference/feature-gates/GangScheduling.md)
+- ✅ [GenericEphemeralVolume.md](md/reference/command-line-tools-reference/feature-gates/GenericEphemeralVolume.md)
+- ✅ [GenericWorkload.md](md/reference/command-line-tools-reference/feature-gates/GenericWorkload.md)
+- ✅ [GitRepoVolumeDriver.md](md/reference/command-line-tools-reference/feature-gates/GitRepoVolumeDriver.md)
+- ✅ [GracefulNodeShutdown.md](md/reference/command-line-tools-reference/feature-gates/GracefulNodeShutdown.md)
+- ✅ [GracefulNodeShutdownBasedOnPodPriority.md](md/reference/command-line-tools-reference/feature-gates/GracefulNodeShutdownBasedOnPodPriority.md)
+- ✅ [H2CContainerProbe.md](md/reference/command-line-tools-reference/feature-gates/H2CContainerProbe.md)
+- ✅ [HPAConfigurableTolerance.md](md/reference/command-line-tools-reference/feature-gates/HPAConfigurableTolerance.md)
+- ✅ [HPAContainerMetrics.md](md/reference/command-line-tools-reference/feature-gates/HPAContainerMetrics.md)
+- ✅ [HPAScaleToZero.md](md/reference/command-line-tools-reference/feature-gates/HPAScaleToZero.md)
+- ✅ [HonorPVReclaimPolicy.md](md/reference/command-line-tools-reference/feature-gates/HonorPVReclaimPolicy.md)
+- ✅ [HostnameOverride.md](md/reference/command-line-tools-reference/feature-gates/HostnameOverride.md)
+- ✅ [HugePageStorageMediumSize.md](md/reference/command-line-tools-reference/feature-gates/HugePageStorageMediumSize.md)
 - ⏳ `HugePages.md`
 - ⏳ `HugepageAwareEviction.md`
 - ⏳ `HyperVContainer.md`
