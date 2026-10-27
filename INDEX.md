@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-583 از 1722 صفحه
+598 از 1722 صفحه
 
 
 ## `.`
@@ -719,21 +719,21 @@
 - ✅ [PodPriority.md](md/reference/command-line-tools-reference/feature-gates/PodPriority.md)
 - ✅ [PodReadinessGates.md](md/reference/command-line-tools-reference/feature-gates/PodReadinessGates.md)
 - ✅ [PodReadyToStartContainersCondition.md](md/reference/command-line-tools-reference/feature-gates/PodReadyToStartContainersCondition.md)
-- ⏳ `PodSchedulingReadiness.md`
-- ⏳ `PodSecurity.md`
-- ⏳ `PodShareProcessNamespace.md`
-- ⏳ `PodTopologyLabelsAdmission.md`
-- ⏳ `PodsAPI.md`
-- ⏳ `PortForwardWebsockets.md`
-- ⏳ `PreferNominatedNode.md`
-- ⏳ `PreferSameTrafficDistribution.md`
-- ⏳ `PreventStaticPodAPIReferences.md`
-- ⏳ `ProbeTerminationGracePeriod.md`
-- ⏳ `ProcMountType.md`
-- ⏳ `ProxyTerminatingEndpoints.md`
-- ⏳ `QOSReserved.md`
-- ⏳ `ReadOnlyAPIDataVolumes.md`
-- ⏳ `ReadWriteOncePod.md`
+- ✅ [PodSchedulingReadiness.md](md/reference/command-line-tools-reference/feature-gates/PodSchedulingReadiness.md)
+- ✅ [PodSecurity.md](md/reference/command-line-tools-reference/feature-gates/PodSecurity.md)
+- ✅ [PodShareProcessNamespace.md](md/reference/command-line-tools-reference/feature-gates/PodShareProcessNamespace.md)
+- ✅ [PodTopologyLabelsAdmission.md](md/reference/command-line-tools-reference/feature-gates/PodTopologyLabelsAdmission.md)
+- ✅ [PodsAPI.md](md/reference/command-line-tools-reference/feature-gates/PodsAPI.md)
+- ✅ [PortForwardWebsockets.md](md/reference/command-line-tools-reference/feature-gates/PortForwardWebsockets.md)
+- ✅ [PreferNominatedNode.md](md/reference/command-line-tools-reference/feature-gates/PreferNominatedNode.md)
+- ✅ [PreferSameTrafficDistribution.md](md/reference/command-line-tools-reference/feature-gates/PreferSameTrafficDistribution.md)
+- ✅ [PreventStaticPodAPIReferences.md](md/reference/command-line-tools-reference/feature-gates/PreventStaticPodAPIReferences.md)
+- ✅ [ProbeTerminationGracePeriod.md](md/reference/command-line-tools-reference/feature-gates/ProbeTerminationGracePeriod.md)
+- ✅ [ProcMountType.md](md/reference/command-line-tools-reference/feature-gates/ProcMountType.md)
+- ✅ [ProxyTerminatingEndpoints.md](md/reference/command-line-tools-reference/feature-gates/ProxyTerminatingEndpoints.md)
+- ✅ [QOSReserved.md](md/reference/command-line-tools-reference/feature-gates/QOSReserved.md)
+- ✅ [ReadOnlyAPIDataVolumes.md](md/reference/command-line-tools-reference/feature-gates/ReadOnlyAPIDataVolumes.md)
+- ✅ [ReadWriteOncePod.md](md/reference/command-line-tools-reference/feature-gates/ReadWriteOncePod.md)
 - ⏳ `RecoverVolumeExpansionFailure.md`
 - ⏳ `RecursiveReadOnlyMounts.md`
 - ⏳ `ReduceDefaultCrashLoopBackOffDecay.md`
