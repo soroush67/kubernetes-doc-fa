@@ -1,0 +1,370 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>سیاست پذیرش تغییردهنده (Mutating Admission Policy) | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">reference / access-authn-authz</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">سیاست پذیرش تغییردهنده (Mutating Admission Policy)</h1><!-- overview -->
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
+<!-- due to feature gate history, use manual version specification here -->
+<p dir="rtl">این صفحه مروری بر <em>MutatingAdmissionPolicies</em> ارائه می‌دهد.
+MutatingAdmissionPolicies به شما امکان می‌دهند آنچه را که هنگام نوشتن یک تغییر در API کوبرنتیز رخ می‌دهد، تغییر دهید.
+اگر می‌خواهید از سیاست‌های اعلانی (declarative) فقط برای جلوگیری از یک نوع خاص تغییر در منابع استفاده کنید (برای مثال: محافظت از فضاهای نام (namespace) پلتفرم در برابر حذف)،
+<a href="https://kubernetes.io/docs/reference/access-authn-authz/validating-admission-policy/" target="_blank">ValidatingAdmissionPolicy</a>
+جایگزینی ساده‌تر و مؤثرتر است.</p>
+<!-- body -->
+<h2 id="mutatingadmissionpolicies-چیست؟" dir="rtl">MutatingAdmissionPolicies چیست؟</h2>
+<p dir="rtl">سیاست‌های پذیرش تغییردهنده (Mutating admission policies) جایگزینی اعلانی و درون‌فرایندی (in-process) برای webhookهای پذیرش تغییردهنده ارائه می‌کنند.</p>
+<p dir="rtl">سیاست‌های پذیرش تغییردهنده برای تعریف تغییرات منابع از Common Expression Language (CEL) استفاده می‌کنند.
+تغییرات را می‌توان یا با یک <em>apply configuration</em> تعریف کرد که با
+<a href="https://kubernetes.io/docs/reference/using-api/server-side-apply/#merge-strategy" target="_blank">راهبرد ادغام server side apply</a>
+ادغام می‌شود، یا با یک <a href="https://jsonpatch.com/" target="_blank" rel="noopener">JSON patch</a>.</p>
+<p dir="rtl">سیاست‌های پذیرش تغییردهنده بسیار قابل پیکربندی هستند و به نویسندگان سیاست امکان می‌دهند سیاست‌هایی تعریف کنند
+که بتوانند پارامتری شوند و بر حسب نیاز مدیران کلاستر، به منابع مشخصی محدود شوند.</p>
+<h2 id="چه-منابعی-یک-سیاست-را-می-سازند" dir="rtl">چه منابعی یک سیاست را می‌سازند</h2>
+<p dir="rtl">یک سیاست معمولاً از سه منبع تشکیل می‌شود:</p>
+<ul>
+<li dir="rtl">
+<p dir="rtl">MutatingAdmissionPolicy منطق انتزاعی یک سیاست را توصیف می‌کند
+(مثلاً: «این سیاست یک برچسب مشخص را روی یک مقدار مشخص تنظیم می‌کند»).</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">یک <em>منبع پارامتر</em> (parameter resource) اطلاعاتی را در اختیار MutatingAdmissionPolicy قرار می‌دهد تا آن را به یک
+گزاره‌ی مشخص تبدیل کند (مثلاً «برچسب <code dir="ltr">owner</code> را روی مقداری مانند <code dir="ltr">company.example.com</code> تنظیم کن»).
+منابع پارامتر به منابع کوبرنتیز اشاره می‌کنند که در API کوبرنتیز در دسترس هستند. آن‌ها می‌توانند انواع درونی یا افزونه‌ها باشند،
+مانند <span class="term" title="CustomResourceDefinition">CustomResourceDefinition</span> (CRD). برای مثال، می‌توانید از یک ConfigMap به‌عنوان پارامتر استفاده کنید.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">MutatingAdmissionPolicyBinding منابع بالا (MutatingAdmissionPolicy و پارامتر) را به یکدیگر پیوند می‌دهد و دامنه‌بندی را فراهم می‌کند.
+اگر فقط می‌خواهید برچسب <code dir="ltr">owner</code> را برای <code dir="ltr">Pods</code> تنظیم کنید و نه برای سایر انواع API، این تغییر را در binding
+مشخص می‌کنید.</p>
+</li>
+</ul>
+<p dir="rtl">برای اینکه یک سیاست اثر داشته باشد، دست‌کم یک MutatingAdmissionPolicy و یک MutatingAdmissionPolicyBinding متناظر
+باید تعریف شده باشند.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">نام‌هایی که به <code dir="ltr">.static.k8s.io</code> ختم می‌شوند برای
+<a href="manifest-admission-control.html">کنترل پذیرش مبتنی بر مانیفست</a>
+رزرو شده‌اند و نمی‌توان از آن‌ها برای سیاست‌ها یا bindingهای مبتنی بر API استفاده کرد. این رزرو
+زمانی اعمال می‌شود که
+<a href="https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/#ManifestBasedAdmissionControlConfig" target="_blank">feature gate</a> با نام <code dir="ltr">ManifestBasedAdmissionControlConfig</code> فعال باشد.</p>
+</div>
+<p dir="rtl">اگر MutatingAdmissionPolicy نیازی به پیکربندی از طریق پارامترها ندارد، کافی است
+<code dir="ltr">spec.paramKind</code> را در MutatingAdmissionPolicy مشخص نکنید.</p>
+<h2 id="شروع-کار-با-mutatingadmissionpolicies" dir="rtl">شروع کار با MutatingAdmissionPolicies</h2>
+<p dir="rtl">سیاست پذیرش تغییردهنده بخشی از control plane کلاستر است. باید آن‌ها را با نهایت احتیاط بنویسید
+و مستقر کنید. در ادامه شرح داده می‌شود که چگونه می‌توان به‌سرعت با سیاست پذیرش تغییردهنده
+آزمایش کرد.</p>
+<h3 id="ایجاد-یک-mutatingadmissionpolicy" dir="rtl">ایجاد یک MutatingAdmissionPolicy</h3>
+<p dir="rtl">در ادامه نمونه‌ای از یک MutatingAdmissionPolicy آمده است. این سیاست، Podهای تازه‌ایجادشده را طوری تغییر می‌دهد که در صورت نبودن کانتینر sidecar، آن را داشته باشند.</p>
+<div class="code-file ltr" dir="ltr">mutatingadmissionpolicy/applyconfiguration-example.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingAdmissionPolicy
+metadata:
+  name: "sidecar-policy.example.com"
+spec:
+  paramKind:
+    kind: Sidecar
+    apiVersion: mutations.example.com/v1
+  matchConstraints:
+    resourceRules:
+    - apiGroups:   [""]
+      apiVersions: ["v1"]
+      operations:  ["CREATE"]
+      resources:   ["pods"]
+  matchConditions:
+    - name: does-not-already-have-sidecar
+      expression: "!object.spec.initContainers.exists(ic, ic.name == \"mesh-proxy\")"
+  failurePolicy: Fail
+  reinvocationPolicy: IfNeeded
+  mutations:
+    - patchType: "ApplyConfiguration"
+      applyConfiguration:
+        expression: &gt;
+          Object{
+            spec: Object.spec{
+              initContainers: [
+                Object.spec.initContainers{
+                  name: "mesh-proxy",
+                  image: "mesh/proxy:v1.0.0",
+                  args: ["proxy", "sidecar"],
+                  restartPolicy: "Always"
+                }
+              ]
+            }
+          }
+</code></pre>
+<p dir="rtl">فیلد <code dir="ltr">.spec.mutations</code> شامل فهرستی از عبارت‌هاست که به patchهای منبع ارزیابی می‌شوند.
+patchهای تولیدشده می‌توانند <a href="#patch-type-apply-configuration">apply configurationها</a> یا patchهای <a href="#patch-type-json-patch">JSON Patch</a>
+باشند. نمی‌توانید فهرست خالی از mutationها مشخص کنید. پس از ارزیابی همه‌ی
+عبارت‌ها، سرور API آن تغییرات را بر منبعی که از مرحله‌ی پذیرش
+عبور می‌کند اعمال می‌کند.</p>
+<p dir="rtl">برای پیکربندی یک سیاست پذیرش تغییردهنده جهت استفاده در کلاستر، یک binding
+لازم است. MutatingAdmissionPolicy تنها زمانی فعال خواهد بود که binding متناظری
+وجود داشته باشد که <code dir="ltr">spec.policyName</code> ارجاع‌شده در آن با <code dir="ltr">spec.name</code>
+سیاست مطابقت داشته باشد.</p>
+<p dir="rtl">پس از ایجاد binding و سیاست، هر درخواست منبعی که با
+<code dir="ltr">spec.matchConditions</code> سیاست مطابقت داشته باشد، مجموعه‌ی mutationهای تعریف‌شده را فعال می‌کند.</p>
+<p dir="rtl">شرایط تطبیق (match conditions) نمی‌توانند از <code dir="ltr">namespaceObject</code> یا <code dir="ltr">variables</code> استفاده کنند. <code dir="ltr">namespaceObject</code> برای
+شرایط تطبیق مقداردهی نمی‌شود و همیشه به null ارزیابی می‌شود، و به <code dir="ltr">variables</code> نمی‌توان ارجاع داد زیرا
+شرایط تطبیق پیش از بقیه‌ی سیاست ارزیابی می‌شوند. برای انتخاب درخواست‌ها بر اساس برچسب‌های فضای نام،
+از یک <code dir="ltr">namespaceSelector</code> در <code dir="ltr">matchConstraints</code> سیاست یا در <code dir="ltr">matchResources</code> مربوط به binding
+استفاده کنید.</p>
+<p dir="rtl">در مثال بالا، ایجاد یک Pod باعث افزوده‌شدن mutation مربوط به initContainer با نام <code dir="ltr">mesh-proxy</code> می‌شود:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: Pod
+metadata:
+  name: myapp
+  namespace: default
+spec:
+  ...
+  initContainers:
+  - name: mesh-proxy
+    image: mesh/proxy:v1.0.0
+    args: ["proxy", "sidecar"]
+    restartPolicy: Always
+  - name: myapp-initializer
+    image: example/initializer:v1.0.0
+  ...
+</code></pre>
+<h4 id="منابع-پارامتر" dir="rtl">منابع پارامتر</h4>
+<p dir="rtl">منابع پارامتر به پیکربندی سیاست اجازه می‌دهند از تعریف آن جدا باشد.
+یک سیاست می‌تواند <code dir="ltr">paramKind</code> را تعریف کند که GVK منبع پارامتر را مشخص می‌کند،
+و سپس یک binding سیاست، سیاست را با نام (از طریق <code dir="ltr">policyName</code>) به
+یک منبع پارامتر مشخص از طریق <code dir="ltr">paramRef</code> پیوند می‌دهد.</p>
+<p dir="rtl">برای اطلاعات بیشتر به <a href="https://kubernetes.io/docs/reference/access-authn-authz/validating-admission-policy/#parameter-resources" target="_blank">منابع پارامتر</a> مراجعه کنید.</p>
+<h4 id="applyconfiguration-patch-type-apply-configuration" dir="ltr" class="ltr"><code dir="ltr">ApplyConfiguration</code> {#patch-type-apply-configuration}</h4>
+<p dir="rtl">عبارت‌های MutatingAdmissionPolicy همیشه CEL هستند. هر <code dir="ltr">expression</code> از نوع apply configuration
+باید به یک آبجکت CEL ارزیابی شود (که با مقداردهی اولیه‌ی <code dir="ltr">Object()</code> اعلام می‌شود).</p>
+<p dir="rtl">Apply configurationها نمی‌توانند structها، mapها یا آرایه‌های اتمیک (atomic) را تغییر دهند، زیرا خطر حذف ناخواسته‌ی
+مقادیری که در apply configuration نیامده‌اند وجود دارد.</p>
+<p dir="rtl">عبارت‌های CEL به انواع آبجکت لازم برای ساخت apply configurationها دسترسی دارند:</p>
+<ul>
+<li dir="rtl"><code dir="ltr">Object</code> - نوع CEL آبجکت منبع.</li>
+<li dir="rtl"><code dir="ltr">Object.&lt;fieldName&gt;</code> - نوع CEL فیلد آبجکت (مانند <code dir="ltr">Object.spec</code>)</li>
+<li dir="rtl"><code dir="ltr">Object.&lt;fieldName1&gt;.&lt;fieldName2&gt;...&lt;fieldNameN&gt;</code> - نوع CEL فیلد تو در تو (مانند <code dir="ltr">Object.spec.containers</code>)</li>
+</ul>
+<p dir="rtl">عبارت‌های CEL به محتوای درخواست API دسترسی دارند که در قالب متغیرهای CEL سازمان‌دهی شده است، و همچنین به چند متغیر مفید دیگر:</p>
+<ul>
+<li dir="rtl"><code dir="ltr">object</code> - آبجکت موجود در درخواست ورودی. مقدار آن برای درخواست‌های DELETE برابر null است.</li>
+<li dir="rtl"><code dir="ltr">oldObject</code> - آبجکت موجود. مقدار آن برای درخواست‌های CREATE برابر null است.</li>
+<li dir="rtl"><code dir="ltr">request</code> - ویژگی‌های درخواست API.</li>
+<li dir="rtl"><code dir="ltr">params</code> - منبع پارامتری که binding سیاستِ در حال ارزیابی به آن ارجاع می‌دهد. فقط در صورتی مقداردهی می‌شود که سیاست دارای ParamKind باشد.</li>
+<li dir="rtl"><code dir="ltr">namespaceObject</code> - آبجکت فضای نامی که آبجکت ورودی به آن تعلق دارد. مقدار آن برای منابع با دامنه‌ی کلاستر برابر null است.</li>
+<li dir="rtl"><code dir="ltr">variables</code> - نگاشتی از متغیرهای ترکیب‌شده، از نام هر متغیر به مقدار ارزیابی‌شده‌ی تنبل (lazy) آن.
+برای مثال، متغیری با نام <code dir="ltr">foo</code> را می‌توان با <code dir="ltr">variables.foo</code> در دسترس قرار داد.</li>
+<li dir="rtl"><code dir="ltr">authorizer</code> - یک CEL Authorizer. می‌توان از آن برای انجام بررسی‌های مجوزدهی برای principal (کاربر یا حساب سرویس) درخواست استفاده کرد.
+به https://pkg.go.dev/k8s.io/apiserver/pkg/cel/library#Authz مراجعه کنید.</li>
+<li dir="rtl"><code dir="ltr">authorizer.requestResource</code> - یک CEL ResourceCheck که از <code dir="ltr">authorizer</code> ساخته شده و با
+منبع درخواست پیکربندی شده است.</li>
+</ul>
+<p dir="rtl"><code dir="ltr">apiVersion</code>، <code dir="ltr">kind</code>، <code dir="ltr">metadata.name</code>، <code dir="ltr">metadata.generateName</code> و <code dir="ltr">metadata.labels</code> همیشه از ریشه‌ی
+آبجکت در دسترس هستند. هیچ ویژگی دیگری از metadata در دسترس نیست.</p>
+<h4 id="jsonpatch-patch-type-json-patch" dir="ltr" class="ltr"><code dir="ltr">JSONPatch</code> {#patch-type-json-patch}</h4>
+<p dir="rtl">همان mutation را می‌توان به‌صورت <a href="https://jsonpatch.com/" target="_blank" rel="noopener">JSON Patch</a> به شکل زیر نوشت:</p>
+<div class="code-file ltr" dir="ltr">mutatingadmissionpolicy/json-patch-example.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingAdmissionPolicy
+metadata:
+  name: "sidecar-policy.example.com"
+spec:
+  paramKind:
+    kind: Sidecar
+    apiVersion: mutations.example.com/v1
+  matchConstraints:
+    resourceRules:
+    - apiGroups:   [""]
+      apiVersions: ["v1"]
+      operations:  ["CREATE"]
+      resources:   ["pods"]
+  matchConditions:
+    - name: does-not-already-have-sidecar
+      expression: "!object.spec.initContainers.exists(ic, ic.name == \"mesh-proxy\")"
+  failurePolicy: Fail
+  reinvocationPolicy: IfNeeded
+  mutations:
+    - patchType: "JSONPatch"
+      jsonPatch:
+        expression: &gt;
+          [
+            JSONPatch{
+              op: "add", path: "/spec/initContainers/-",
+              value: Object.spec.initContainers{
+                name: "mesh-proxy",
+                image: "mesh-proxy/v1.0.0",
+                restartPolicy: "Always"
+              }
+            }
+          ]
+</code></pre>
+<p dir="rtl">عبارت توسط CEL ارزیابی می‌شود تا یک <a href="https://jsonpatch.com/" target="_blank" rel="noopener">JSON patch</a> ساخته شود.
+مرجع: https://github.com/google/cel-spec</p>
+<p dir="rtl">هر <code dir="ltr">expression</code> ارزیابی‌شده باید آرایه‌ای از مقادیر <code dir="ltr">JSONPatch</code> برگرداند.
+نوع <code dir="ltr">JSONPatch</code> یک عملیات از یک JSON patch را نمایش می‌دهد.</p>
+<p dir="rtl">برای مثال، این عبارت CEL یک JSON patch برمی‌گرداند تا یک مقدار را به‌صورت مشروط تغییر دهد:</p>
+<pre dir="ltr"><code dir="ltr">  [
+    JSONPatch{op: "test", path: "/spec/example", value: "Red"},
+    JSONPatch{op: "replace", path: "/spec/example", value: "Green"}
+  ]
+</code></pre>
+<p dir="rtl">برای تعریف یک آبجکت JSON به‌عنوان <code dir="ltr">value</code> عملیات patch، از انواع <code dir="ltr">Object</code> در CEL استفاده کنید. برای مثال:</p>
+<pre dir="ltr"><code dir="ltr">  [
+    JSONPatch{
+      op: "add",
+      path: "/spec/selector",
+      value: Object.spec.selector{matchLabels: {"environment": "test"}}
+    }
+  ]
+</code></pre>
+<p dir="rtl">برای استفاده از رشته‌های حاوی '/' و '~' به‌عنوان کلیدهای مسیر JSONPatch، از <code dir="ltr">jsonpatch.escapeKey()</code> استفاده کنید. برای مثال:</p>
+<pre dir="ltr"><code dir="ltr">  [
+    JSONPatch{
+      op: "add",
+      path: "/metadata/labels/" + jsonpatch.escapeKey("example.com/environment"),
+      value: "test"
+    },
+  ]
+</code></pre>
+<p dir="rtl">عبارت‌های CEL به انواع لازم برای ساخت JSON patchها و آبجکت‌ها دسترسی دارند:</p>
+<ul>
+<li dir="rtl"><code dir="ltr">JSONPatch</code> - نوع CEL عملیات JSON Patch. JSONPatch دارای فیلدهای <code dir="ltr">op</code>، <code dir="ltr">from</code>، <code dir="ltr">path</code> و <code dir="ltr">value</code> است.
+برای جزئیات بیشتر به <a href="https://jsonpatch.com/" target="_blank" rel="noopener">JSON patch</a> مراجعه کنید. فیلد <code dir="ltr">value</code> را می‌توان روی هر یک از این‌ها تنظیم کرد: رشته،
+عدد صحیح، آرایه، نگاشت (map) یا آبجکت. در صورت تنظیم، فیلدهای <code dir="ltr">path</code> و <code dir="ltr">from</code> باید روی یک رشته‌ی
+<a href="https://datatracker.ietf.org/doc/html/rfc6901/" target="_blank" rel="noopener">JSON pointer</a> تنظیم شوند، که در آن می‌توان از تابع CEL با نام <code dir="ltr">jsonpatch.escapeKey()</code>
+برای escape کردن کلیدهای مسیر حاوی <code dir="ltr">/</code> و <code dir="ltr">~</code> استفاده کرد.</li>
+<li dir="rtl"><code dir="ltr">Object</code> - نوع CEL آبجکت منبع.</li>
+<li dir="rtl"><code dir="ltr">Object.&lt;fieldName&gt;</code> - نوع CEL فیلد آبجکت (مانند <code dir="ltr">Object.spec</code>)</li>
+<li dir="rtl"><code dir="ltr">Object.&lt;fieldName1&gt;.&lt;fieldName2&gt;...&lt;fieldNameN&gt;</code> - نوع CEL فیلد تو در تو (مانند <code dir="ltr">Object.spec.containers</code>)</li>
+</ul>
+<p dir="rtl">عبارت‌های CEL به محتوای درخواست API دسترسی دارند که در قالب متغیرهای CEL سازمان‌دهی شده است، و همچنین به چند متغیر مفید دیگر:</p>
+<ul>
+<li dir="rtl"><code dir="ltr">object</code> - آبجکت موجود در درخواست ورودی. مقدار آن برای درخواست‌های DELETE برابر null است.</li>
+<li dir="rtl"><code dir="ltr">oldObject</code> - آبجکت موجود. مقدار آن برای درخواست‌های CREATE برابر null است.</li>
+<li dir="rtl"><code dir="ltr">request</code> - ویژگی‌های درخواست API.</li>
+<li dir="rtl"><code dir="ltr">params</code> - منبع پارامتری که binding سیاستِ در حال ارزیابی به آن ارجاع می‌دهد. فقط در صورتی مقداردهی می‌شود که سیاست دارای ParamKind باشد.</li>
+<li dir="rtl"><code dir="ltr">namespaceObject</code> - آبجکت فضای نامی که آبجکت ورودی به آن تعلق دارد. مقدار آن برای منابع با دامنه‌ی کلاستر برابر null است.</li>
+<li dir="rtl"><code dir="ltr">variables</code> - نگاشتی از متغیرهای ترکیب‌شده، از نام هر متغیر به مقدار ارزیابی‌شده‌ی تنبل (lazy) آن.
+برای مثال، متغیری با نام <code dir="ltr">foo</code> را می‌توان با <code dir="ltr">variables.foo</code> در دسترس قرار داد.</li>
+<li dir="rtl"><code dir="ltr">authorizer</code> - یک CEL Authorizer. می‌توان از آن برای انجام بررسی‌های مجوزدهی برای principal (کاربر یا حساب سرویس) درخواست استفاده کرد.
+به https://pkg.go.dev/k8s.io/apiserver/pkg/cel/library#Authz مراجعه کنید.</li>
+<li dir="rtl"><code dir="ltr">authorizer.requestResource</code> - یک CEL ResourceCheck که از <code dir="ltr">authorizer</code> ساخته شده و با
+منبع درخواست پیکربندی شده است.</li>
+</ul>
+<p dir="rtl">عبارت‌های CEL به <a href="https://kubernetes.io/docs/reference/using-api/cel/#cel-options-language-features-and-libraries" target="_blank">کتابخانه‌های تابع CEL کوبرنتیز</a>
+دسترسی دارند و همچنین به موارد زیر:</p>
+<ul>
+<li dir="rtl"><code dir="ltr">jsonpatch.escapeKey</code> - escape کردن کلید JSONPatch را انجام می‌دهد. <code dir="ltr">~</code> و <code dir="ltr">/</code> به ترتیب به <code dir="ltr">~0</code> و <code dir="ltr">~1</code> تبدیل می‌شوند.</li>
+</ul>
+<p dir="rtl">فقط نام ویژگی‌هایی با قالب <code dir="ltr">[a-zA-Z_.-/][a-zA-Z0-9_.-/]*</code> در دسترس هستند.</p>
+<h2 id="انواع-api-معاف-از-پذیرش-تغییردهنده" dir="rtl">انواع API معاف از پذیرش تغییردهنده</h2>
+<p dir="rtl">برخی انواع API از تغییر در زمان پذیرش معاف هستند. برای مثال، نمی‌توانید MutatingAdmissionPolicy‌ای ایجاد کنید که یک MutatingAdmissionPolicy را تغییر دهد.</p>
+<p dir="rtl">برای جلوگیری از وابستگی‌های حلقوی، انواع پیکربندی پذیرش زیر از سیاست‌هایی که
+از طریق REST API ایجاد شده‌اند معاف هستند:</p>
+<ul>
+<li dir="ltr" class="ltr"><a href="https://kubernetes.io/docs/reference/kubernetes-api/admissionregistration/validating-admission-policy-v1/" target="_blank">ValidatingAdmissionPolicies</a></li>
+<li dir="ltr" class="ltr"><a href="https://kubernetes.io/docs/reference/kubernetes-api/admissionregistration/validating-admission-policy-binding-v1/" target="_blank">ValidatingAdmissionPolicyBindings</a></li>
+<li dir="ltr" class="ltr">MutatingAdmissionPolicies</li>
+<li dir="ltr" class="ltr">MutatingAdmissionPolicyBindings</li>
+</ul>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">هنگامی که از طریق
+<a href="manifest-admission-control.html">کنترل پذیرش مبتنی بر مانیفست</a>
+پیکربندی شود، یک MutatingAdmissionPolicy می‌تواند انواع پیکربندی پذیرش
+فهرست‌شده در بالا را رهگیری کند. این کار محدودیت‌هایی را که معمولاً بر سیاست‌های
+ایجادشده از طریق REST API اعمال می‌شود دور می‌زند و به شما امکان می‌دهد حتی پیکربندی پذیرش
+و منابع حساس از نظر امنیتی را تغییر دهید. برخلاف REST API، یک سیاست پذیرش مبتنی بر مانیفست معیوب
+که این منابع را رهگیری کند، غیرقابل بازیابی نخواهد بود،
+زیرا روی دیسک تعریف شده است و نه از طریق API.</p>
+</div>
+<p dir="rtl">علاوه بر این، انواع API غیرپایدار (مجازی) احراز هویت و
+مجوزدهی زیر از همه‌ی سیاست‌های پذیرش، از جمله سیاست‌های مبتنی بر مانیفست، معاف هستند، زیرا رهگیری آن‌ها می‌تواند
+کلاستر را از مسیر احراز هویت و مجوزدهی خودش قفل کند:</p>
+<ul>
+<li dir="ltr" class="ltr"><a href="https://kubernetes.io/docs/reference/kubernetes-api/definitions/token-review-v1-authentication/" target="_blank">TokenReviews</a></li>
+<li dir="ltr" class="ltr"><a href="https://kubernetes.io/docs/reference/kubernetes-api/definitions/self-subject-review-v1-authentication/" target="_blank">SelfSubjectReviews</a></li>
+<li dir="ltr" class="ltr"><a href="https://kubernetes.io/docs/reference/kubernetes-api/definitions/local-subject-access-review-v1-authorization/" target="_blank">LocalSubjectAccessReviews</a></li>
+<li dir="ltr" class="ltr"><a href="https://kubernetes.io/docs/reference/kubernetes-api/definitions/self-subject-access-review-v1-authorization/" target="_blank">SelfSubjectAccessReviews</a></li>
+<li dir="ltr" class="ltr"><a href="https://kubernetes.io/docs/reference/kubernetes-api/definitions/self-subject-rules-review-v1-authorization/" target="_blank">SelfSubjectRulesReviews</a></li>
+<li dir="ltr" class="ltr"><a href="https://kubernetes.io/docs/reference/kubernetes-api/definitions/subject-access-review-v1-authorization/" target="_blank">SubjectAccessReviews</a></li>
+</ul>
+<p dir="rtl">از کوبرنتیز v1.37 به بعد،
+<a href="extensible-admission-controllers.html#excluded-virtual-resources">webhookهای پذیرش</a>
+نیز این منابع مجازی را به‌صورت پیش‌فرض مستثنا می‌کنند.</p>
+</main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#mutatingadmissionpolicies-چیست؟">MutatingAdmissionPolicies چیست؟</a><a class="l2" href="#چه-منابعی-یک-سیاست-را-می-سازند">چه منابعی یک سیاست را می‌سازند</a><a class="l2" href="#شروع-کار-با-mutatingadmissionpolicies">شروع کار با MutatingAdmissionPolicies</a><a class="l3" href="#ایجاد-یک-mutatingadmissionpolicy">ایجاد یک MutatingAdmissionPolicy</a><a class="l2" href="#انواع-api-معاف-از-پذیرش-تغییردهنده">انواع API معاف از پذیرش تغییردهنده</a></nav>
+</div>
+</body>
+</html>

@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>استفاده از Node Authorization | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">reference / access-authn-authz</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">استفاده از Node Authorization</h1><!-- overview -->
+<p dir="rtl">Node authorization یک حالت مجوزدهی با کاربرد ویژه است که به‌طور اختصاصی درخواست‌های API را که توسط kubeletها ارسال می‌شوند، مجاز می‌کند.</p>
+<!-- body -->
+<h2 id="مرور-کلی-overview" dir="rtl">مرور کلی {#overview}</h2>
+<p dir="rtl">Node authorizer به kubelet اجازه می‌دهد عملیات API را انجام دهد. این عملیات شامل موارد زیر است:</p>
+<p dir="rtl">عملیات خواندن:</p>
+<ul>
+<li dir="ltr" class="ltr">services</li>
+<li dir="ltr" class="ltr">endpoints</li>
+<li dir="ltr" class="ltr">nodes</li>
+<li dir="ltr" class="ltr">pods</li>
+<li dir="rtl">secrets، configmaps، persistent volume claims و persistent volumeهای مرتبط
+با پادهایی که به نود kubelet متصل (bound) شده‌اند</li>
+</ul>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
+<p dir="rtl">kubeletها فقط به خواندن آبجکت‌های Node مربوط به خودشان و فقط به خواندن پادهایی که به نود آن‌ها متصل شده‌اند محدود می‌شوند.</p>
+<p dir="rtl">عملیات نوشتن:</p>
+<ul>
+<li dir="rtl">nodes و وضعیت node (افزونه admission با نام <code dir="ltr">NodeRestriction</code> را فعال کنید تا
+kubelet فقط بتواند نود خودش را تغییر دهد)</li>
+<li dir="rtl">pods و وضعیت pod (افزونه admission با نام <code dir="ltr">NodeRestriction</code> را فعال کنید تا
+kubelet فقط بتواند پادهای متصل به خودش را تغییر دهد)</li>
+<li dir="ltr" class="ltr">events</li>
+</ul>
+<p dir="rtl">عملیات مرتبط با احراز هویت و مجوزدهی:</p>
+<ul>
+<li dir="rtl">دسترسی خواندن/نوشتن به
+<a href="certificate-signing-requests.html">CertificateSigningRequests API</a>
+برای TLS bootstrapping</li>
+<li dir="rtl">قابلیت ایجاد TokenReview و SubjectAccessReview برای بررسی‌های احراز هویت/مجوزدهی تفویض‌شده</li>
+</ul>
+<p dir="rtl">در نسخه‌های آینده، node authorizer ممکن است مجوزهایی را اضافه یا حذف کند تا اطمینان حاصل شود
+kubeletها حداقل مجموعه مجوزهای لازم برای عملکرد صحیح را دارند.</p>
+<p dir="rtl">برای آنکه kubeletها توسط Node authorizer مجاز شناخته شوند، باید از اعتبارنامه‌ای (credential) استفاده کنند
+که آن‌ها را عضو گروه <code dir="ltr">system:nodes</code> با نام کاربری <code dir="ltr">system:node:&lt;nodeName&gt;</code> معرفی کند.
+قالب این گروه و نام کاربری با هویتی که برای هر kubelet در جریان
+<a href="kubelet-tls-bootstrapping.html">TLS bootstrapping مربوط به kubelet</a>
+ایجاد می‌شود، مطابقت دارد.</p>
+<p dir="rtl">مقدار <code dir="ltr">&lt;nodeName&gt;</code> <strong>باید</strong> دقیقاً با نام نودی که توسط kubelet ثبت شده است مطابقت داشته باشد. به‌طور پیش‌فرض، این مقدار همان نام میزبان (host name) است که توسط <code dir="ltr">hostname</code> ارائه می‌شود، یا با
+<a href="https://kubernetes.io/docs/reference/command-line-tools-reference/kubelet/" target="_blank">گزینه kubelet</a>
+با نام <code dir="ltr">--hostname-override</code> بازنویسی می‌شود. با این حال، هنگام استفاده از گزینه
+<code dir="ltr">--cloud-provider</code> در kubelet، ممکن است نام میزبان مشخص توسط ارائه‌دهنده ابر (cloud provider) تعیین شود و <code dir="ltr">hostname</code> محلی و گزینه <code dir="ltr">--hostname-override</code> نادیده گرفته شوند.
+برای جزئیات بیشتر درباره نحوه تعیین نام میزبان توسط kubelet، به
+<a href="https://kubernetes.io/docs/reference/command-line-tools-reference/kubelet/" target="_blank">مرجع گزینه‌های kubelet</a> مراجعه کنید.</p>
+<p dir="rtl">برای فعال‌سازی Node authorizer، <span class="term" title="kube-apiserver">API server</span> را
+با فلگ <code dir="ltr">--authorization-config</code> اجرا کنید و آن را روی فایلی تنظیم کنید که شامل authorizer با نوع <code dir="ltr">Node</code> باشد؛ برای مثال:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: apiserver.config.k8s.io/v1
+kind: AuthorizationConfiguration
+authorizers:
+  ...
+  - type: Node
+  ...
+</code></pre>
+<p dir="rtl">یا <span class="term" title="kube-apiserver">API server</span> را با
+فلگ <code dir="ltr">--authorization-mode</code> اجرا کنید و آن را روی فهرستی جداشده با ویرگول که شامل <code dir="ltr">Node</code> است تنظیم کنید؛
+برای مثال:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kube-apiserver --authorization-mode=...,Node --other-options --more-options
+</code></pre>
+<p dir="rtl">برای محدود کردن آبجکت‌های API که kubeletها می‌توانند بنویسند، افزونه admission با نام
+<a href="admission-controllers.html#noderestriction">NodeRestriction</a>
+را با اجرای apiserver همراه با
+<code dir="ltr">--enable-admission-plugins=...,NodeRestriction,...</code>
+فعال کنید.</p>
+<h2 id="محدودسازی-audience-توکن-service-account-service-account-token-audience-restriction" dir="rtl">محدودسازی audience توکن service account {#service-account-token-audience-restriction}</h2>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
+<p dir="rtl">زمانی که <a href="https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/" target="_blank">feature gate</a> با نام <code dir="ltr">ServiceAccountNodeAudienceRestriction</code>
+فعال باشد و افزونه admission با نام <code dir="ltr">NodeRestriction</code> نیز فعال باشد، kubelet فقط می‌تواند
+توکن‌های service account را برای audienceهایی درخواست کند که پیش‌تر توسط پادهای در حال اجرا
+روی همان نود ارجاع داده شده‌اند. این کار از دریافت توکن برای audienceهای دلخواه توسط یک نود در معرض خطر (compromised) جلوگیری می‌کند.</p>
+<p dir="rtl">audienceهای مجاز از روی مشخصات pod تعیین می‌شوند:</p>
+<ul>
+<li dir="rtl">audience پیش‌فرض API server (خالی یا audience پیکربندی‌شده در API server).</li>
+<li dir="rtl">audienceهای تعیین‌شده در منابع حجم توکن service account از نوع projected.</li>
+<li dir="rtl">audienceهای پیکربندی‌شده در <code dir="ltr">spec.tokenRequests</code> مربوط به درایور CSI برای هر درایور CSI که
+توسط pod استفاده می‌شود، چه از طریق حجم‌های CSI درون‌خطی (inline)، چه حجم‌های مبتنی بر PersistentVolumeClaim
+و چه حجم‌های ephemeral.</li>
+</ul>
+<p dir="rtl">این موضوع به‌ویژه هنگام استفاده از <a href="https://kubernetes.io/docs/tasks/administer-cluster/kubelet-credential-provider/#service-account-token-for-image-pulls" target="_blank">توکن‌های service account برای ارائه‌دهندگان اعتبارنامه ایمیج</a>
+اهمیت دارد، جایی که kubelet از طرف پادها توکن‌هایی را با audience مختص registry درخواست می‌کند.</p>
+<h3 id="مجاز-کردن-audienceهای-اضافی-با-rbac-allowing-additional-audiences" dir="rtl">مجاز کردن audienceهای اضافی با RBAC {#allowing-additional-audiences}</h3>
+<p dir="rtl">می‌توانید به kubeletها اجازه دهید توکن‌هایی را برای audienceهایی فراتر از آنچه در
+مشخصات pod ارجاع داده شده است درخواست کنند. هنگامی که kubelet توکنی را با audienceای درخواست می‌کند که
+در مشخصات pod یافت نمی‌شود، افزونه admission با نام NodeRestriction با انجام یک بررسی مجوزدهی
+با ویژگی‌های زیر بررسی می‌کند که آیا kubelet مجاز است یا خیر:</p>
+<table>
+<thead>
+<tr>
+<th dir="rtl">ویژگی</th>
+<th dir="rtl">مقدار</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td dir="ltr" class="ltr">Verb</td>
+<td dir="ltr" class="ltr"><code dir="ltr">request-serviceaccounts-token-audience</code></td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr">API Group</td>
+<td dir="rtl">(رشته خالی، به معنی API group هسته (core))</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr">Resource</td>
+<td dir="rtl">مقدار audience درخواست‌شده</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr">Name</td>
+<td dir="rtl">نام service account</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr">Namespace</td>
+<td dir="rtl">فضای نام (namespace) service account</td>
+</tr>
+</tbody>
+</table>
+<p dir="rtl">می‌توانید از قواعد استاندارد RBAC برای مجاز کردن این بررسی‌ها استفاده کنید. فیلد <code dir="ltr">resources</code>
+مشخص می‌کند کدام audienceها مجاز هستند و فیلد <code dir="ltr">resourceNames</code> مشخص می‌کند
+قاعده برای کدام service accountها اعمال می‌شود.</p>
+<p dir="rtl">برای مثال، برای اینکه به kubelet اجازه دهید audience با نام <code dir="ltr">my-registry-audience</code> را برای
+یک service account مشخص درخواست کند:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: node-audience-my-registry
+rules:
+- verbs: ["request-serviceaccounts-token-audience"]
+  apiGroups: [""]
+  resources: ["my-registry-audience"]
+  resourceNames: ["my-service-account"]
+</code></pre>
+<p dir="rtl">حذف <code dir="ltr">resourceNames</code> باعث می‌شود audience برای هر service account مجاز باشد. استفاده از
+علامت wildcard (<code dir="ltr">"*"</code>) برای <code dir="ltr">resources</code> هر audience را مجاز می‌کند:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: node-audience-unrestricted
+rules:
+- verbs: ["request-serviceaccounts-token-audience"]
+  apiGroups: [""]
+  resources: ["*"]  # any audience
+  # no resourceNames: any service account
+</code></pre>
+<p dir="rtl">ClusterRole را به گروه <code dir="ltr">system:nodes</code> متصل (bind) کنید تا برای همه kubeletها اعمال شود:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: node-audience-binding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: node-audience-my-registry
+subjects:
+- kind: Group
+  name: system:nodes
+  apiGroup: rbac.authorization.k8s.io
+</code></pre>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">این محدودیت بخشی از افزونه admission با نام NodeRestriction است و فقط برای
+هویت‌های نود (kubeletها) اعمال می‌شود. این محدودیت، audienceهایی را که سایر فراخوان‌کنندگان
+API با نام <code dir="ltr">TokenRequest</code> می‌توانند درخواست کنند، محدود نمی‌کند. اگر نیاز دارید سایر فراخوان‌کنندگان را محدود کنید، استفاده از <a href="https://kubernetes.io/docs/reference/access-authn-authz/validating-admission-policy/" target="_blank">ValidatingAdmissionPolicy</a> را در نظر بگیرید.</p>
+</div>
+<h2 id="ملاحظات-مهاجرت-migration-considerations" dir="rtl">ملاحظات مهاجرت {#migration-considerations}</h2>
+<h3 id="kubeletهای-خارج-از-گروه-system-nodes-kubelets-outside-the-system-nodes-group" dir="rtl">kubeletهای خارج از گروه <code dir="ltr">system:nodes</code> {#kubelets-outside-the-system-nodes-group}</h3>
+<p dir="rtl">kubeletهای خارج از گروه <code dir="ltr">system:nodes</code> توسط حالت مجوزدهی <code dir="ltr">Node</code> مجاز شناخته نمی‌شوند
+و باید همچنان از طریق هر سازوکاری که در حال حاضر آن‌ها را مجاز می‌کند، مجوز بگیرند.
+افزونه admission مربوط به نود، درخواست‌های این kubeletها را محدود نمی‌کند.</p>
+<h3 id="kubeletهای-دارای-نام-کاربری-غیرمتمایز-kubelets-with-undifferentiated-usernames" dir="rtl">kubeletهای دارای نام کاربری غیرمتمایز {#kubelets-with-undifferentiated-usernames}</h3>
+<p dir="rtl">در برخی استقرارها، kubeletها اعتبارنامه‌هایی دارند که آن‌ها را در گروه <code dir="ltr">system:nodes</code> قرار می‌دهد،
+اما نودی را که با آن مرتبط هستند مشخص نمی‌کند،
+زیرا نام کاربری آن‌ها در قالب <code dir="ltr">system:node:...</code> نیست.
+این kubeletها توسط حالت مجوزدهی <code dir="ltr">Node</code> مجاز شناخته نمی‌شوند
+و باید همچنان از طریق هر سازوکاری که در حال حاضر آن‌ها را مجاز می‌کند، مجوز بگیرند.</p>
+<p dir="rtl">افزونه admission با نام <code dir="ltr">NodeRestriction</code> درخواست‌های این kubeletها را نادیده می‌گیرد،
+زیرا پیاده‌سازی پیش‌فرض شناسایی نود، آن را هویت نود در نظر نمی‌گیرد.</p>
+</main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#مرور-کلی-overview">مرور کلی {#overview}</a><a class="l2" href="#محدودسازی-audience-توکن-service-account-service-account-token-audience-restriction">محدودسازی audience توکن service account {#service-account-token-audience-restriction}</a><a class="l3" href="#مجاز-کردن-audienceهای-اضافی-با-rbac-allowing-additional-audiences">مجاز کردن audienceهای اضافی با RBAC {#allowing-additional-audiences}</a><a class="l2" href="#ملاحظات-مهاجرت-migration-considerations">ملاحظات مهاجرت {#migration-considerations}</a><a class="l3" href="#kubeletهای-خارج-از-گروه-system-nodes-kubelets-outside-the-system-nodes-group">kubeletهای خارج از گروه system:nodes {#kubelets-outside-the-system-nodes-group}</a><a class="l3" href="#kubeletهای-دارای-نام-کاربری-غیرمتمایز-kubelets-with-undifferentiated-usernames">kubeletهای دارای نام کاربری غیرمتمایز {#kubelets-with-undifferentiated-usernames}</a></nav>
+</div>
+</body>
+</html>

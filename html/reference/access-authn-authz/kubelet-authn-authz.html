@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>احراز هویت و مجوزدهی Kubelet | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">reference / access-authn-authz</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">احراز هویت و مجوزدهی Kubelet</h1><h2 id="نمای-کلی-overview" dir="rtl">نمای کلی {#overview}</h2>
+<p dir="rtl">نقطه پایانی HTTPS مربوط به kubelet، APIهایی را در اختیار می‌گذارد که به داده‌هایی با سطوح حساسیت متفاوت دسترسی می‌دهند
+و امکان انجام عملیاتی با سطوح قدرت متفاوت را روی نود و درون کانتینرها فراهم می‌کنند.</p>
+<p dir="rtl">این سند توضیح می‌دهد که چگونه دسترسی به نقطه پایانی HTTPS مربوط به kubelet را احراز هویت و مجوزدهی کنید.</p>
+<h2 id="احراز-هویت-kubelet" dir="rtl">احراز هویت Kubelet</h2>
+<p dir="rtl">به‌طور پیش‌فرض، درخواست‌هایی که به نقطه پایانی HTTPS مربوط به kubelet ارسال می‌شوند و توسط سایر روش‌های احراز هویت پیکربندی‌شده رد نمی‌شوند،
+به‌عنوان درخواست ناشناس (anonymous) در نظر گرفته می‌شوند و نام کاربری <code dir="ltr">system:anonymous</code>
+و گروه <code dir="ltr">system:unauthenticated</code> به آن‌ها داده می‌شود.</p>
+<p dir="rtl">برای غیرفعال کردن دسترسی ناشناس و ارسال پاسخ <code dir="ltr">401 Unauthorized</code> به درخواست‌های فاقد احراز هویت:</p>
+<ul>
+<li dir="rtl">kubelet را با فلگ <code dir="ltr">--anonymous-auth=false</code> راه‌اندازی کنید</li>
+</ul>
+<p dir="rtl">برای فعال‌سازی احراز هویت با گواهی کلاینت X509 در نقطه پایانی HTTPS مربوط به kubelet:</p>
+<ul>
+<li dir="rtl">kubelet را با فلگ <code dir="ltr">--client-ca-file</code> راه‌اندازی کنید و یک بسته CA برای اعتبارسنجی گواهی‌های کلاینت در اختیار آن بگذارید</li>
+<li dir="rtl">apiserver را با فلگ‌های <code dir="ltr">--kubelet-client-certificate</code> و <code dir="ltr">--kubelet-client-key</code> راه‌اندازی کنید</li>
+<li dir="rtl">برای جزئیات بیشتر، <a href="authentication.html#x509-client-certificates">مستندات احراز هویت apiserver</a> را ببینید</li>
+</ul>
+<p dir="rtl">برای فعال‌سازی استفاده از توکن‌های bearer در API (از جمله توکن‌های service account) جهت احراز هویت در نقطه پایانی HTTPS مربوط به kubelet:</p>
+<ul>
+<li dir="rtl">مطمئن شوید گروه API با نام <code dir="ltr">authentication.k8s.io/v1</code> در API server فعال است</li>
+<li dir="rtl">kubelet را با فلگ‌های <code dir="ltr">--authentication-token-webhook</code> و <code dir="ltr">--kubeconfig</code> راه‌اندازی کنید</li>
+<li dir="rtl">kubelet برای تعیین اطلاعات کاربر از روی توکن‌های bearer، API با نام <code dir="ltr">TokenReview</code> را روی API server پیکربندی‌شده فراخوانی می‌کند</li>
+</ul>
+<h2 id="مجوزدهی-kubelet" dir="rtl">مجوزدهی Kubelet</h2>
+<p dir="rtl">هر درخواستی که با موفقیت احراز هویت شود (از جمله درخواست ناشناس)، سپس مجوزدهی می‌شود. حالت پیش‌فرض مجوزدهی <code dir="ltr">AlwaysAllow</code> است که همه درخواست‌ها را مجاز می‌کند.</p>
+<p dir="rtl">دلایل متعددی برای تفکیک دسترسی به API مربوط به kubelet وجود دارد:</p>
+<ul>
+<li dir="rtl">احراز هویت ناشناس فعال است، اما توانایی کاربران ناشناس برای فراخوانی API مربوط به kubelet باید محدود شود</li>
+<li dir="rtl">احراز هویت با توکن bearer فعال است، اما توانایی کاربران دلخواه API (مانند service accountها) برای فراخوانی API مربوط به kubelet باید محدود شود</li>
+<li dir="rtl">احراز هویت با گواهی کلاینت فعال است، اما فقط برخی از گواهی‌های کلاینتی که توسط CA پیکربندی‌شده امضا شده‌اند باید اجازه استفاده از API مربوط به kubelet را داشته باشند</li>
+</ul>
+<p dir="rtl">برای تفکیک دسترسی به API مربوط به kubelet، مجوزدهی را به API server واگذار کنید:</p>
+<ul>
+<li dir="rtl">مطمئن شوید گروه API با نام <code dir="ltr">authorization.k8s.io/v1</code> در API server فعال است</li>
+<li dir="rtl">kubelet را با فلگ‌های <code dir="ltr">--authorization-mode=Webhook</code> و <code dir="ltr">--kubeconfig</code> راه‌اندازی کنید</li>
+<li dir="rtl">kubelet برای تعیین اینکه هر درخواست مجاز است یا خیر، API با نام <code dir="ltr">SubjectAccessReview</code> را روی API server پیکربندی‌شده فراخوانی می‌کند</li>
+</ul>
+<p dir="rtl">kubelet درخواست‌های API را با همان رویکرد <a href="authorization.html#review-your-request-attributes">ویژگی‌های درخواست</a> که apiserver به کار می‌برد، مجوزدهی می‌کند.</p>
+<p dir="rtl">فعل (verb) از روی فعل HTTP درخواست ورودی تعیین می‌شود:</p>
+<table>
+<thead>
+<tr>
+<th dir="rtl">فعل HTTP</th>
+<th dir="rtl">فعل درخواست</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td dir="ltr" class="ltr">POST</td>
+<td dir="ltr" class="ltr">create</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr">GET, HEAD</td>
+<td dir="ltr" class="ltr">get</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr">PUT</td>
+<td dir="ltr" class="ltr">update</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr">PATCH</td>
+<td dir="ltr" class="ltr">patch</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr">DELETE</td>
+<td dir="ltr" class="ltr">delete</td>
+</tr>
+</tbody>
+</table>
+<p dir="rtl">منبع (resource) و زیرمنبع (subresource) از روی مسیر درخواست ورودی تعیین می‌شوند:</p>
+<table>
+<thead>
+<tr>
+<th dir="ltr" class="ltr">Kubelet API</th>
+<th dir="ltr" class="ltr">resource</th>
+<th dir="ltr" class="ltr">subresource</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td dir="ltr" class="ltr">/stats/*</td>
+<td dir="ltr" class="ltr">nodes</td>
+<td dir="ltr" class="ltr">stats</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr">/metrics/*</td>
+<td dir="ltr" class="ltr">nodes</td>
+<td dir="ltr" class="ltr">metrics</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr">/logs/*</td>
+<td dir="ltr" class="ltr">nodes</td>
+<td dir="ltr" class="ltr">log</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr">/spec/*</td>
+<td dir="ltr" class="ltr">nodes</td>
+<td dir="ltr" class="ltr">spec</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr">/checkpoint/*</td>
+<td dir="ltr" class="ltr">nodes</td>
+<td dir="ltr" class="ltr">checkpoint</td>
+</tr>
+<tr>
+<td dir="rtl"><em>همه موارد دیگر</em></td>
+<td dir="ltr" class="ltr">nodes</td>
+<td dir="ltr" class="ltr">proxy</td>
+</tr>
+</tbody>
+</table>
+<p><a name="get-nodes-proxy-warning"></a></p>
+<div class="callout warning"><div class="callout-title">هشدار:</div>
+<p dir="rtl">مجوز <code dir="ltr">nodes/proxy</code> به همه APIهای دیگر kubelet دسترسی می‌دهد.
+این شامل APIهایی است که می‌توان از آن‌ها برای اجرای دستورها در هر کانتینری که روی نود در حال اجراست استفاده کرد.</p>
+<p dir="rtl">برخی از این نقاط پایانی از طریق درخواست‌های HTTP <code dir="ltr">GET</code> از پروتکل‌های Websocket پشتیبانی می‌کنند و با فعل <strong>get</strong> مجوزدهی می‌شوند.
+این بدان معناست که مجوز <strong>get</strong> روی <code dir="ltr">nodes/proxy</code> یک مجوز فقط‌خواندنی نیست
+و اجرای دستورها در هر کانتینری که روی نود در حال اجراست را مجاز می‌کند.</p>
+</div>
+<p dir="rtl">ویژگی‌های فضای نام (namespace) و گروه API همیشه رشته خالی هستند و
+نام منبع همیشه نام آبجکت API از نوع <code dir="ltr">Node</code> مربوط به kubelet است.</p>
+<p dir="rtl">هنگام اجرا در این حالت، مطمئن شوید کاربری که با فلگ‌های <code dir="ltr">--kubelet-client-certificate</code> و <code dir="ltr">--kubelet-client-key</code>
+به apiserver داده شده است، برای ویژگی‌های زیر مجوز دارد:</p>
+<ul>
+<li dir="ltr" class="ltr">verb=*, resource=nodes, subresource=proxy</li>
+<li dir="ltr" class="ltr">verb=*, resource=nodes, subresource=stats</li>
+<li dir="ltr" class="ltr">verb=*, resource=nodes, subresource=log</li>
+<li dir="ltr" class="ltr">verb=*, resource=nodes, subresource=spec</li>
+<li dir="ltr" class="ltr">verb=*, resource=nodes, subresource=metrics</li>
+</ul>
+<h3 id="مجوزدهی-ریزدانه-fine-grained-authorization" dir="rtl">مجوزدهی ریزدانه {#fine-grained-authorization}</h3>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
+<p dir="rtl">kubelet پیش از بازگشت به زیرمنبع <code dir="ltr">proxy</code> برای نقاط پایانی <code dir="ltr">/pods</code>، <code dir="ltr">/runningPods</code>، <code dir="ltr">/configz</code> و <code dir="ltr">/healthz</code>،
+یک بررسی ریزدانه انجام می‌دهد. منبع و زیرمنبع از روی مسیر درخواست ورودی تعیین می‌شوند:</p>
+<table>
+<thead>
+<tr>
+<th dir="ltr" class="ltr">Kubelet API</th>
+<th dir="ltr" class="ltr">resource</th>
+<th dir="ltr" class="ltr">subresource</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td dir="ltr" class="ltr">/stats/*</td>
+<td dir="ltr" class="ltr">nodes</td>
+<td dir="ltr" class="ltr">stats</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr">/metrics/*</td>
+<td dir="ltr" class="ltr">nodes</td>
+<td dir="ltr" class="ltr">metrics</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr">/logs/*</td>
+<td dir="ltr" class="ltr">nodes</td>
+<td dir="ltr" class="ltr">log</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr">/pods</td>
+<td dir="ltr" class="ltr">nodes</td>
+<td dir="ltr" class="ltr">pods, proxy</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr">/runningPods/</td>
+<td dir="ltr" class="ltr">nodes</td>
+<td dir="ltr" class="ltr">pods, proxy</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr">/healthz</td>
+<td dir="ltr" class="ltr">nodes</td>
+<td dir="ltr" class="ltr">healthz, proxy</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr">/configz</td>
+<td dir="ltr" class="ltr">nodes</td>
+<td dir="ltr" class="ltr">configz, proxy</td>
+</tr>
+<tr>
+<td dir="rtl"><em>همه موارد دیگر</em></td>
+<td dir="ltr" class="ltr">nodes</td>
+<td dir="ltr" class="ltr">proxy</td>
+</tr>
+</tbody>
+</table>
+<p dir="rtl">هنگامی که feature gate با نام <code dir="ltr">KubeletFineGrainedAuthz</code> فعال است، مطمئن شوید کاربری که با فلگ‌های
+<code dir="ltr">--kubelet-client-certificate</code> و <code dir="ltr">--kubelet-client-key</code>
+به API server داده شده است، برای ویژگی‌های زیر مجوز دارد:</p>
+<ul>
+<li dir="ltr" class="ltr">verb=*, resource=nodes, subresource=proxy</li>
+<li dir="ltr" class="ltr">verb=*, resource=nodes, subresource=stats</li>
+<li dir="ltr" class="ltr">verb=*, resource=nodes, subresource=log</li>
+<li dir="ltr" class="ltr">verb=*, resource=nodes, subresource=metrics</li>
+<li dir="ltr" class="ltr">verb=*, resource=nodes, subresource=configz</li>
+<li dir="ltr" class="ltr">verb=*, resource=nodes, subresource=healthz</li>
+<li dir="ltr" class="ltr">verb=*, resource=nodes, subresource=pods</li>
+</ul>
+<p dir="rtl">اگر از <a href="rbac.html">مجوزدهی RBAC</a> استفاده می‌شود،
+فعال کردن این gate همچنین تضمین می‌کند که ClusterRole داخلی <code dir="ltr">system:kubelet-api-admin</code>
+با مجوزهای دسترسی به همه زیرمنابع یادشده به‌روزرسانی می‌شود.</p>
+</main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#نمای-کلی-overview">نمای کلی {#overview}</a><a class="l2" href="#احراز-هویت-kubelet">احراز هویت Kubelet</a><a class="l2" href="#مجوزدهی-kubelet">مجوزدهی Kubelet</a><a class="l3" href="#مجوزدهی-ریزدانه-fine-grained-authorization">مجوزدهی ریزدانه {#fine-grained-authorization}</a></nav>
+</div>
+</body>
+</html>

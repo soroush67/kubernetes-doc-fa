@@ -1,0 +1,1171 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>استفاده از مجوزدهی RBAC | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">reference / access-authn-authz</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">استفاده از مجوزدهی RBAC</h1><!-- overview -->
+<p dir="rtl">کنترل دسترسی مبتنی بر نقش (RBAC) روشی برای تنظیم و مدیریت دسترسی به منابع رایانه‌ای یا شبکه‌ای است که بر اساس نقش‌های کاربران منفرد در سازمان شما عمل می‌کند.</p>
+<!-- body -->
+<p dir="rtl">مجوزدهی RBAC از <span class="term" title="api-group">گروه API</span> با نام <code dir="ltr">rbac.authorization.k8s.io</code> برای هدایت تصمیم‌های مجوزدهی استفاده می‌کند و به شما امکان می‌دهد سیاست‌ها را به‌صورت پویا از طریق API کوبرنتیز پیکربندی کنید.</p>
+<p dir="rtl">برای فعال‌سازی RBAC، <span class="term" title="kube-apiserver">سرور API</span> را با فلگ <code dir="ltr">--authorization-config</code> اجرا کنید و مقدار آن را فایلی قرار دهید که شامل authorizer با نوع <code dir="ltr">RBAC</code> باشد؛ برای مثال:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: apiserver.config.k8s.io/v1
+kind: AuthorizationConfiguration
+authorizers:
+  ...
+  - type: RBAC
+  ...
+</code></pre>
+<p dir="rtl">یا <span class="term" title="kube-apiserver">سرور API</span> را با فلگ <code dir="ltr">--authorization-mode</code> اجرا کنید و مقدار آن را فهرستی جداشده با کاما قرار دهید که شامل <code dir="ltr">RBAC</code> باشد؛
+برای مثال:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kube-apiserver --authorization-mode=...,RBAC --other-options --more-options
+</code></pre>
+<h2 id="آبجکت-های-api-api-overview" dir="rtl">آبجکت‌های API {#api-overview}</h2>
+<p dir="rtl">API مربوط به RBAC چهار نوع آبجکت کوبرنتیز را تعریف می‌کند: <em>Role</em>، <em>ClusterRole</em>،
+<em>RoleBinding</em> و <em>ClusterRoleBinding</em>. شما می‌توانید <span class="term" title="object">آبجکت‌های</span> RBAC را مانند هر آبجکت دیگر کوبرنتیز با ابزارهایی مانند <code dir="ltr">kubectl</code> توصیف یا اصلاح کنید.</p>
+<div class="callout caution"><div class="callout-title">احتیاط:</div>
+<p dir="rtl">این آبجکت‌ها بنا به طراحی، محدودیت‌های دسترسی اعمال می‌کنند. اگر در حین یادگیری در یک کلاستر تغییراتی ایجاد می‌کنید، برای درک اینکه این محدودیت‌ها چگونه می‌توانند مانع انجام برخی تغییرات شوند، بخش
+<a href="#privilege-escalation-prevention-and-bootstrapping">پیشگیری از ارتقای سطح دسترسی و راه‌اندازی اولیه</a>
+را مطالعه کنید.</p>
+</div>
+<h3 id="role-و-clusterrole" dir="rtl">Role و ClusterRole</h3>
+<p dir="rtl">یک <em>Role</em> یا <em>ClusterRole</em> در RBAC شامل قواعدی است که مجموعه‌ای از مجوزها را نشان می‌دهند.
+مجوزها صرفاً افزایشی هستند (قاعده‌ای از نوع «deny» وجود ندارد).</p>
+<p dir="rtl">یک Role همیشه مجوزها را درون یک <span class="term" title="namespace">فضای نام</span> مشخص تعیین می‌کند؛
+هنگام ایجاد یک Role باید فضای نامی را که به آن تعلق دارد مشخص کنید.</p>
+<p dir="rtl">در مقابل، ClusterRole یک منبع بدون فضای نام (non-namespaced) است. نام این منابع متفاوت است (Role
+و ClusterRole)، زیرا یک آبجکت کوبرنتیز همیشه باید یا دارای فضای نام باشد یا نباشد؛
+نمی‌تواند هر دو باشد.</p>
+<p dir="rtl">ClusterRoleها کاربردهای متعددی دارند. شما می‌توانید از یک ClusterRole برای موارد زیر استفاده کنید:</p>
+<ol>
+<li dir="rtl">تعریف مجوزها روی منابعی که دارای فضای نام هستند و اعطای دسترسی در یک یا چند فضای نام مشخص</li>
+<li dir="rtl">تعریف مجوزها روی منابعی که دارای فضای نام هستند و اعطای دسترسی در تمام فضاهای نام</li>
+<li dir="rtl">تعریف مجوزها روی منابعی که در سطح کلاستر تعریف می‌شوند</li>
+</ol>
+<p dir="rtl">اگر می‌خواهید نقشی را درون یک فضای نام تعریف کنید، از Role استفاده کنید؛ اگر می‌خواهید
+نقشی را در سطح کل کلاستر تعریف کنید، از ClusterRole استفاده کنید.</p>
+<h4 id="نمونه-role" dir="rtl">نمونه Role</h4>
+<p dir="rtl">در اینجا نمونه‌ای از یک Role در فضای نام «default» آورده شده است که می‌توان از آن برای اعطای دسترسی خواندن به
+<span class="term" title="pod">پادها</span> استفاده کرد:</p>
+<div class="code-file ltr" dir="ltr">access/simple-role.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: default
+  name: pod-reader
+rules:
+- apiGroups: [""] # "" indicates the core API group
+  resources: ["pods"]
+  verbs: ["get", "watch", "list"]
+</code></pre>
+<h4 id="نمونه-clusterrole" dir="rtl">نمونه ClusterRole</h4>
+<p dir="rtl">از یک ClusterRole می‌توان برای اعطای همان مجوزهای یک Role استفاده کرد.
+از آنجا که ClusterRoleها در سطح کلاستر تعریف می‌شوند، می‌توانید از آن‌ها برای اعطای دسترسی به موارد زیر نیز استفاده کنید:</p>
+<ul>
+<li dir="rtl">
+<p dir="rtl">منابع در سطح کلاستر (مانند <span class="term" title="node">نودها</span>)</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">endpointهای غیرمنبعی (مانند <code dir="ltr">/healthz</code>)</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">منابع دارای فضای نام (مانند Pod) در تمام فضاهای نام</p>
+<p dir="rtl">برای مثال: می‌توانید از یک ClusterRole استفاده کنید تا به یک کاربر مشخص اجازه دهید
+دستور <code dir="ltr">kubectl get pods --all-namespaces</code> را اجرا کند.</p>
+</li>
+</ul>
+<p dir="rtl">در ادامه نمونه‌ای از یک ClusterRole آورده شده است که می‌توان از آن برای اعطای دسترسی خواندن به
+<span class="term" title="secret">Secretها</span> در هر فضای نام مشخص،
+یا در تمام فضاهای نام استفاده کرد (بسته به اینکه چگونه <a href="#rolebinding-and-clusterrolebinding">متصل</a> شود):</p>
+<div class="code-file ltr" dir="ltr">access/simple-clusterrole.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  # "namespace" omitted since ClusterRoles are not namespaced
+  name: secret-reader
+rules:
+- apiGroups: [""]
+  #
+  # at the HTTP level, the name of the resource for accessing Secret
+  # objects is "secrets"
+  resources: ["secrets"]
+  verbs: ["get", "watch", "list"]
+</code></pre>
+<p dir="rtl">نام یک آبجکت Role یا ClusterRole باید یک
+<a href="../../concepts/overview/working-with-objects/names.html#path-segment-names">نام معتبر برای path segment</a> باشد.</p>
+<h3 id="rolebinding-و-clusterrolebinding" dir="rtl">RoleBinding و ClusterRoleBinding</h3>
+<p dir="rtl">یک role binding مجوزهای تعریف‌شده در یک role را به یک کاربر یا مجموعه‌ای از کاربران اعطا می‌کند.
+این آبجکت شامل فهرستی از <em>subjectها</em> (کاربران، گروه‌ها یا service accountها) و یک ارجاع به
+role اعطاشده است.
+یک RoleBinding مجوزها را درون یک فضای نام مشخص اعطا می‌کند، در حالی که یک ClusterRoleBinding
+همان دسترسی را در سطح کل کلاستر اعطا می‌کند.</p>
+<p dir="rtl">یک RoleBinding می‌تواند به هر Role موجود در همان فضای نام ارجاع دهد. همچنین یک RoleBinding
+می‌تواند به یک ClusterRole ارجاع دهد و آن ClusterRole را به فضای نام خود RoleBinding متصل کند.
+اگر می‌خواهید یک ClusterRole را به تمام فضاهای نام کلاستر خود متصل کنید، از یک
+ClusterRoleBinding استفاده می‌کنید.</p>
+<p dir="rtl">نام یک آبجکت RoleBinding یا ClusterRoleBinding باید یک
+<a href="../../concepts/overview/working-with-objects/names.html#path-segment-names">نام معتبر برای path segment</a> باشد.</p>
+<h4 id="نمونه-های-rolebinding-rolebinding-example" dir="rtl">نمونه‌های RoleBinding {#rolebinding-example}</h4>
+<p dir="rtl">در ادامه نمونه‌ای از یک RoleBinding آورده شده است که Role با نام «pod-reader» را به کاربر «jane»
+درون فضای نام «default» اعطا می‌کند.
+این کار به «jane» اجازه می‌دهد پادهای فضای نام «default» را بخواند.</p>
+<div class="code-file ltr" dir="ltr">access/simple-rolebinding-with-role.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: rbac.authorization.k8s.io/v1
+# This role binding allows "jane" to read pods in the "default" namespace.
+# You need to already have a Role named "pod-reader" in that namespace.
+kind: RoleBinding
+metadata:
+  name: read-pods
+  namespace: default
+subjects:
+# You can specify more than one "subject"
+- kind: User
+  name: jane # "name" is case sensitive
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  # "roleRef" specifies the binding to a Role / ClusterRole
+  kind: Role #this must be Role or ClusterRole
+  name: pod-reader # this must match the name of the Role or ClusterRole you wish to bind to
+  apiGroup: rbac.authorization.k8s.io
+</code></pre>
+<p dir="rtl">یک RoleBinding همچنین می‌تواند به یک ClusterRole ارجاع دهد تا مجوزهای تعریف‌شده در آن ClusterRole را به منابع درون فضای نام همان RoleBinding اعطا کند. این نوع ارجاع
+به شما امکان می‌دهد مجموعه‌ای از نقش‌های مشترک را در سراسر کلاستر تعریف کنید و سپس آن‌ها را در
+چندین فضای نام دوباره به کار ببرید.</p>
+<p dir="rtl">برای مثال، با اینکه RoleBinding زیر به یک ClusterRole ارجاع می‌دهد،
+کاربر «dave» (subject، حساس به حروف بزرگ و کوچک) فقط می‌تواند Secretها را در فضای نام «development» بخواند،
+زیرا فضای نام RoleBinding (در metadata آن) «development» است.</p>
+<div class="code-file ltr" dir="ltr">access/simple-rolebinding-with-clusterrole.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: rbac.authorization.k8s.io/v1
+# This role binding allows "dave" to read secrets in the "development" namespace.
+# You need to already have a ClusterRole named "secret-reader".
+kind: RoleBinding
+metadata:
+  name: read-secrets
+  #
+  # The namespace of the RoleBinding determines where the permissions are granted.
+  # This only grants permissions within the "development" namespace.
+  namespace: development
+subjects:
+- kind: User
+  name: dave # Name is case sensitive
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: ClusterRole
+  name: secret-reader
+  apiGroup: rbac.authorization.k8s.io
+</code></pre>
+<h4 id="نمونه-clusterrolebinding" dir="rtl">نمونه ClusterRoleBinding</h4>
+<p dir="rtl">برای اعطای مجوزها در سطح کل کلاستر می‌توانید از یک ClusterRoleBinding استفاده کنید.
+ClusterRoleBinding زیر به هر کاربر عضو گروه «manager» اجازه می‌دهد
+Secretها را در هر فضای نام بخواند.</p>
+<div class="code-file ltr" dir="ltr">access/simple-clusterrolebinding.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: rbac.authorization.k8s.io/v1
+# This cluster role binding allows anyone in the "manager" group to read secrets in any namespace.
+kind: ClusterRoleBinding
+metadata:
+  name: read-secrets-global
+subjects:
+- kind: Group
+  name: manager # Name is case sensitive
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: ClusterRole
+  name: secret-reader
+  apiGroup: rbac.authorization.k8s.io
+</code></pre>
+<p dir="rtl">پس از ایجاد یک binding، دیگر نمی‌توانید Role یا ClusterRole ارجاع‌شده در آن را تغییر دهید.
+اگر سعی کنید <code dir="ltr">roleRef</code> یک binding را تغییر دهید، با خطای اعتبارسنجی مواجه می‌شوید. اگر واقعاً می‌خواهید
+<code dir="ltr">roleRef</code> یک binding را تغییر دهید، باید آبجکت binding را حذف کنید و یک جایگزین ایجاد کنید.</p>
+<p dir="rtl">این محدودیت دو دلیل دارد:</p>
+<ol>
+<li dir="rtl">تغییرناپذیر بودن <code dir="ltr">roleRef</code> این امکان را فراهم می‌کند که مجوز <code dir="ltr">update</code> روی یک آبجکت binding موجود به کسی اعطا شود تا بتواند فهرست subjectها را مدیریت کند، بدون اینکه بتواند
+نقشی را که به آن subjectها اعطا شده است تغییر دهد.</li>
+<li dir="rtl">یک binding به نقشی متفاوت، در اصل یک binding کاملاً متفاوت است.
+الزام به حذف و ایجاد مجدد binding برای تغییر <code dir="ltr">roleRef</code>
+تضمین می‌کند که کل فهرست subjectهای موجود در binding واقعاً قرار است
+نقش جدید را دریافت کنند (برخلاف حالتی که فقط <code dir="ltr">roleRef</code> فعال یا به‌طور تصادفی تغییر داده شود،
+بدون اینکه بررسی شود آیا همه subjectهای موجود باید مجوزهای نقش جدید را دریافت کنند).</li>
+</ol>
+<p dir="rtl">ابزار خط فرمان <code dir="ltr">kubectl auth reconcile</code> یک فایل مانیفست حاوی آبجکت‌های RBAC را ایجاد یا به‌روزرسانی می‌کند،
+و در صورت نیاز برای تغییر نقش ارجاع‌شده، حذف و ایجاد مجدد آبجکت‌های binding را نیز انجام می‌دهد.
+برای اطلاعات بیشتر به <a href="#kubectl-auth-reconcile">نحوه استفاده از دستور و نمونه‌ها</a> مراجعه کنید.</p>
+<h3 id="ارجاع-به-منابع-referring-to-resources" dir="rtl">ارجاع به منابع {#referring-to-resources}</h3>
+<p dir="rtl">در API کوبرنتیز، بیشتر منابع با یک نمایش رشته‌ای از نام آبجکت خود نمایش داده می‌شوند و از همین طریق به آن‌ها دسترسی پیدا می‌شود، مانند <code dir="ltr">pods</code> برای یک Pod. RBAC دقیقاً با همان نامی به منابع ارجاع می‌دهد
+که در URL مربوط به endpoint مرتبط API ظاهر می‌شود.
+برخی از APIهای کوبرنتیز شامل یک
+<em>زیرمنبع</em> (subresource) هستند، مانند لاگ‌های یک Pod. درخواست دریافت لاگ‌های یک Pod به این شکل است:</p>
+<pre dir="ltr"><code class="language-http" dir="ltr">GET /api/v1/namespaces/{namespace}/pods/{name}/log
+</code></pre>
+<p dir="rtl">در این مثال، <code dir="ltr">pods</code> منبع دارای فضای نام برای منابع Pod است و <code dir="ltr">log</code> یک
+زیرمنبع از <code dir="ltr">pods</code> است. برای نمایش این موضوع در یک role از نوع RBAC، از یک اسلش (<code dir="ltr">/</code>) برای
+جدا کردن منبع و زیرمنبع استفاده کنید. برای اینکه به یک subject اجازه دهید <code dir="ltr">pods</code> را بخواند و
+همچنین به زیرمنبع <code dir="ltr">log</code> هر یک از آن Podها دسترسی داشته باشد، به این صورت می‌نویسید:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: default
+  name: pod-and-pod-logs-reader
+rules:
+- apiGroups: [""]
+  resources: ["pods", "pods/log"]
+  verbs: ["get", "list"]
+</code></pre>
+<p dir="rtl">همچنین می‌توانید برای برخی درخواست‌ها از طریق فهرست <code dir="ltr">resourceNames</code> بر اساس نام به منابع ارجاع دهید.
+در صورت تعیین این فهرست، درخواست‌ها را می‌توان به نمونه‌های منفرد یک منبع محدود کرد.
+در ادامه نمونه‌ای آورده شده است که subject را فقط به <code dir="ltr">get</code> یا <code dir="ltr">update</code> یک
+<span class="term" title="ConfigMap">ConfigMap</span> با نام <code dir="ltr">my-configmap</code> محدود می‌کند:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: default
+  name: configmap-updater
+rules:
+- apiGroups: [""]
+  #
+  # at the HTTP level, the name of the resource for accessing ConfigMap
+  # objects is "configmaps"
+  resources: ["configmaps"]
+  resourceNames: ["my-configmap"]
+  verbs: ["update", "get"]
+</code></pre>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">شما نمی‌توانید درخواست‌های <strong>deletecollection</strong> یا درخواست‌های <strong>create</strong> سطح بالا را بر اساس نام منبع محدود کنید.
+در مورد <strong>create</strong>، این محدودیت به این دلیل است که ممکن است نام آبجکت جدید در زمان مجوزدهی هنوز مشخص نباشد. با این حال، محدودیت <strong>create</strong> فقط برای منابع سطح بالا اعمال می‌شود، نه زیرمنابع. برای مثال، می‌توانید از فیلد <code dir="ltr">resourceNames</code> با <code dir="ltr">pods/exec</code> استفاده کنید.
+اگر <strong>list</strong> یا <strong>watch</strong> را بر اساس <code dir="ltr">resourceName</code> محدود کنید، کلاینت‌ها باید برای مجاز شدن، یک انتخابگر فیلد (field selector) به نام <code dir="ltr">metadata.name</code> را در درخواست <strong>list</strong> یا <strong>watch</strong> خود قرار دهند (که با <code dir="ltr">resourceName</code> مشخص‌شده مطابقت داشته باشد).
+برای مثال: <code dir="ltr">kubectl get configmaps --field-selector=metadata.name=my-configmap</code></p>
+</div>
+<p dir="rtl">به‌جای ارجاع به <code dir="ltr">resources</code>، <code dir="ltr">apiGroups</code> و <code dir="ltr">verbs</code> به‌صورت منفرد،
+می‌توانید از نماد wildcard یعنی <code dir="ltr">*</code> برای ارجاع به همه این موارد استفاده کنید.
+برای <code dir="ltr">nonResourceURLs</code> می‌توانید از wildcard با نماد <code dir="ltr">*</code> به‌عنوان تطبیق glob پسوندی استفاده کنید.
+برای <code dir="ltr">resourceNames</code>، مجموعه خالی به این معناست که همه چیز مجاز است.
+در ادامه نمونه‌ای آورده شده است که اجازه انجام هر اقدام فعلی و آینده را روی
+تمام منابع فعلی و آینده در گروه API با نام <code dir="ltr">example.com</code> می‌دهد.
+این مشابه نقش داخلی <code dir="ltr">cluster-admin</code> است.</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: default
+  name: example.com-superuser # DO NOT USE THIS ROLE, IT IS JUST AN EXAMPLE
+rules:
+- apiGroups: ["example.com"]
+  resources: ["*"]
+  verbs: ["*"]
+</code></pre>
+<div class="callout caution"><div class="callout-title">احتیاط:</div>
+<p dir="rtl">استفاده از wildcard در ورودی‌های منبع و verb می‌تواند منجر به اعطای دسترسی بیش از حد به منابع حساس شود.
+برای مثال، اگر نوع منبع جدیدی اضافه شود، یا زیرمنبع جدیدی افزوده شود،
+یا یک verb سفارشی جدید بررسی شود، ورودی wildcard به‌طور خودکار دسترسی را اعطا می‌کند، که ممکن است مطلوب نباشد.
+<a href="../../concepts/security/rbac-good-practices.html#least-privilege">اصل حداقل امتیاز</a>
+باید رعایت شود و با استفاده از منابع و verbهای مشخص، تنها مجوزهای موردنیاز برای عملکرد صحیح
+بار کاری اعمال شوند.</p>
+</div>
+<h3 id="clusterroleهای-تجمیعی-aggregated-aggregated-clusterroles" dir="rtl">ClusterRoleهای تجمیعی (Aggregated) {#aggregated-clusterroles}</h3>
+<p dir="rtl">شما می‌توانید چندین ClusterRole را در یک ClusterRole ترکیبی <em>تجمیع</em> (aggregate) کنید.
+یک کنترل‌کننده که به‌عنوان بخشی از control plane کلاستر اجرا می‌شود، آبجکت‌های ClusterRole
+را که <code dir="ltr">aggregationRule</code> روی آن‌ها تنظیم شده است زیر نظر دارد. <code dir="ltr">aggregationRule</code> یک
+<span class="term" title="selector">انتخابگر</span> برچسب تعریف می‌کند که کنترل‌کننده
+از آن برای یافتن سایر آبجکت‌های ClusterRole استفاده می‌کند که باید در فیلد <code dir="ltr">rules</code>
+این ClusterRole ترکیب شوند.</p>
+<div class="callout caution"><div class="callout-title">احتیاط:</div>
+<p dir="rtl">control plane هر مقداری را که به‌صورت دستی در فیلد <code dir="ltr">rules</code> یک ClusterRole تجمیعی مشخص کنید بازنویسی می‌کند. اگر می‌خواهید قواعد را تغییر دهید یا قاعده‌ای اضافه کنید، این کار را در آبجکت‌های <code dir="ltr">ClusterRole</code> انجام دهید
+که توسط <code dir="ltr">aggregationRule</code> انتخاب می‌شوند.</p>
+<p dir="rtl">فیلد <code dir="ltr">rules</code> را از مانیفست‌های ClusterRoleهای تجمیعی حذف کنید. تنظیم این فیلد، حتی با یک
+فهرست خالی، هنگام اعمال مانیفست با
+<a href="https://kubernetes.io/docs/reference/using-api/server-side-apply/" target="_blank">server-side apply</a> مالکیت فیلد را ادعا می‌کند. این مالکیت باعث
+تعارض بین اعمال‌کننده و control plane می‌شود: اعمال‌های بعدی یا با تعارض field manager روی <code dir="ltr">.rules</code> شکست می‌خورند،
+یا (اگر تعارض‌ها به‌اجبار حل شوند، همان‌طور که کنترل‌کننده‌های GitOps معمولاً چنین می‌کنند) قواعد تجمیعی را به‌طور مکرر پاک می‌کنند و control plane دوباره
+آن‌ها را پر می‌کند.</p>
+</div>
+<p dir="rtl">در ادامه نمونه‌ای از یک ClusterRole تجمیعی آورده شده است:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: monitoring
+aggregationRule:
+  clusterRoleSelectors:
+  - matchLabels:
+      rbac.example.com/aggregate-to-monitoring: "true"
+# The control plane automatically fills in the rules
+</code></pre>
+<p dir="rtl">اگر یک ClusterRole جدید ایجاد کنید که با انتخابگر برچسب یک ClusterRole تجمیعی موجود مطابقت داشته باشد،
+این تغییر باعث می‌شود قواعد جدید به ClusterRole تجمیعی اضافه شوند.
+در ادامه نمونه‌ای آورده شده است که با ایجاد یک ClusterRole دیگر با برچسب <code dir="ltr">rbac.example.com/aggregate-to-monitoring: true</code>، قواعدی را به ClusterRole با نام «monitoring» اضافه می‌کند.</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: monitoring-endpointslices
+  labels:
+    rbac.example.com/aggregate-to-monitoring: "true"
+# When you create the "monitoring-endpointslices" ClusterRole,
+# the rules below will be added to the "monitoring" ClusterRole.
+rules:
+- apiGroups: [""]
+  resources: ["services", "pods"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["discovery.k8s.io"]
+  resources: ["endpointslices"]
+  verbs: ["get", "list", "watch"]
+</code></pre>
+<p dir="rtl"><a href="#default-roles-and-role-bindings">نقش‌های پیش‌فرض کاربرمحور</a> از تجمیع ClusterRole استفاده می‌کنند. این امر به شما، به‌عنوان مدیر کلاستر، امکان می‌دهد
+قواعدی را برای منابع سفارشی، مانند منابعی که توسط
+<span class="term" title="CustomResourceDefinition">CustomResourceDefinitionها</span>
+یا سرورهای API تجمیعی ارائه می‌شوند، بگنجانید تا نقش‌های پیش‌فرض را گسترش دهید.</p>
+<p dir="rtl">برای مثال: ClusterRoleهای زیر به نقش‌های پیش‌فرض «admin» و «edit» اجازه می‌دهند منبع سفارشی
+با نام CronTab را مدیریت کنند، در حالی که نقش «view» فقط می‌تواند عملیات خواندن را روی منابع CronTab انجام دهد.
+می‌توانید فرض کنید آبجکت‌های CronTab در URLهایی که سرور API می‌بیند با نام <code dir="ltr">"crontabs"</code> شناخته می‌شوند.</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: aggregate-cron-tabs-edit
+  labels:
+    # Add these permissions to the "admin" and "edit" default roles.
+    rbac.authorization.k8s.io/aggregate-to-admin: "true"
+    rbac.authorization.k8s.io/aggregate-to-edit: "true"
+rules:
+- apiGroups: ["stable.example.com"]
+  resources: ["crontabs"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: aggregate-cron-tabs-view
+  labels:
+    # Add these permissions to the "view" default role.
+    rbac.authorization.k8s.io/aggregate-to-view: "true"
+rules:
+- apiGroups: ["stable.example.com"]
+  resources: ["crontabs"]
+  verbs: ["get", "list", "watch"]
+</code></pre>
+<h4 id="نمونه-های-role" dir="rtl">نمونه‌های Role</h4>
+<p dir="rtl">نمونه‌های زیر گزیده‌هایی از آبجکت‌های Role یا ClusterRole هستند که فقط
+بخش <code dir="ltr">rules</code> را نشان می‌دهند.</p>
+<p dir="rtl">اجازه خواندن منابع <code dir="ltr">"pods"</code> در
+<span class="term" title="api-group">گروه API</span> هسته (core):</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">rules:
+- apiGroups: [""]
+  #
+  # at the HTTP level, the name of the resource for accessing Pod
+  # objects is "pods"
+  resources: ["pods"]
+  verbs: ["get", "list", "watch"]
+</code></pre>
+<p dir="rtl">اجازه خواندن/نوشتن Deploymentها (در سطح HTTP: آبجکت‌هایی که <code dir="ltr">"deployments"</code>
+در بخش منبع URL آن‌ها وجود دارد) در گروه‌های API با نام <code dir="ltr">"apps"</code>:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">rules:
+- apiGroups: ["apps"]
+  #
+  # at the HTTP level, the name of the resource for accessing Deployment
+  # objects is "deployments"
+  resources: ["deployments"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+</code></pre>
+<p dir="rtl">اجازه خواندن Podها در گروه API هسته، و همچنین خواندن یا نوشتن منابع Job
+در گروه API با نام <code dir="ltr">"batch"</code>:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">rules:
+- apiGroups: [""]
+  #
+  # at the HTTP level, the name of the resource for accessing Pod
+  # objects is "pods"
+  resources: ["pods"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["batch"]
+  #
+  # at the HTTP level, the name of the resource for accessing Job
+  # objects is "jobs"
+  resources: ["jobs"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+</code></pre>
+<p dir="rtl">اجازه خواندن یک ConfigMap با نام «my-config» (برای محدود کردن به یک ConfigMap واحد در یک فضای نام واحد،
+باید با یک RoleBinding متصل شود):</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">rules:
+- apiGroups: [""]
+  #
+  # at the HTTP level, the name of the resource for accessing ConfigMap
+  # objects is "configmaps"
+  resources: ["configmaps"]
+  resourceNames: ["my-config"]
+  verbs: ["get"]
+</code></pre>
+<p dir="rtl">اجازه خواندن منبع <code dir="ltr">"nodes"</code> در گروه هسته (از آنجا که Node
+در سطح کلاستر تعریف می‌شود، برای مؤثر بودن باید در یک ClusterRole باشد که با یک
+ClusterRoleBinding متصل شده است):</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">rules:
+- apiGroups: [""]
+  #
+  # at the HTTP level, the name of the resource for accessing Node
+  # objects is "nodes"
+  resources: ["nodes"]
+  verbs: ["get", "list", "watch"]
+</code></pre>
+<p dir="rtl">اجازه درخواست‌های GET و POST به endpoint غیرمنبعی <code dir="ltr">/healthz</code> و
+تمام زیرمسیرهای آن (برای مؤثر بودن باید در یک ClusterRole باشد که با یک ClusterRoleBinding متصل شده است):</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">rules:
+- nonResourceURLs: ["/healthz", "/healthz/*"] # '*' in a nonResourceURL is a suffix glob match
+  verbs: ["get", "post"]
+</code></pre>
+<h3 id="ارجاع-به-subjectها" dir="rtl">ارجاع به subjectها</h3>
+<p dir="rtl">یک RoleBinding یا ClusterRoleBinding یک نقش را به subjectها متصل می‌کند.
+subjectها می‌توانند گروه، کاربر یا
+<span class="term" title="service-account">ServiceAccountها</span> باشند.</p>
+<p dir="rtl">کوبرنتیز نام‌های کاربری را به‌صورت رشته نمایش می‌دهد.
+این نام‌ها می‌توانند نام‌های ساده مانند "alice"، نام‌هایی به سبک ایمیل مانند "bob@example.com"،
+یا شناسه‌های کاربری عددی باشند که به‌صورت رشته نمایش داده می‌شوند. این بر عهده شما به‌عنوان مدیر کلاستر است
+که <a href="authentication.html">ماژول‌های احراز هویت</a> را طوری پیکربندی کنید
+که احراز هویت، نام‌های کاربری را با قالب مورد نظر شما تولید کند.</p>
+<div class="callout caution"><div class="callout-title">احتیاط:</div>
+<p dir="rtl">پیشوند <code dir="ltr">system:</code> برای استفاده سیستمی کوبرنتیز رزرو شده است، بنابراین باید مطمئن شوید
+که به‌طور اتفاقی کاربر یا گروهی با نامی که با <code dir="ltr">system:</code> شروع می‌شود ندارید.
+جدا از این پیشوند ویژه، سیستم مجوزدهی RBAC هیچ قالب خاصی را
+برای نام‌های کاربری الزامی نمی‌کند.</p>
+</div>
+<p dir="rtl">در کوبرنتیز، ماژول‌های Authenticator اطلاعات گروه را فراهم می‌کنند.
+گروه‌ها نیز مانند کاربران به‌صورت رشته نمایش داده می‌شوند و این رشته هیچ الزام قالبی ندارد،
+جز اینکه پیشوند <code dir="ltr">system:</code> رزرو شده است.</p>
+<p dir="rtl"><a href="https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/" target="_blank">ServiceAccountها</a> نام‌هایی با پیشوند
+<code dir="ltr">system:serviceaccount:</code> دارند و به گروه‌هایی تعلق دارند که نام آن‌ها با پیشوند <code dir="ltr">system:serviceaccounts:</code> شروع می‌شود.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<ul>
+<li dir="rtl"><code dir="ltr">system:serviceaccount:</code> (مفرد) پیشوند نام‌های کاربری service account است.</li>
+<li dir="rtl"><code dir="ltr">system:serviceaccounts:</code> (جمع) پیشوند گروه‌های service account است.</li>
+</ul>
+</div>
+<h4 id="نمونه-های-rolebinding-role-binding-examples" dir="rtl">نمونه‌های RoleBinding {#role-binding-examples}</h4>
+<p dir="rtl">نمونه‌های زیر بخش‌هایی از یک <code dir="ltr">RoleBinding</code> هستند که فقط
+بخش <code dir="ltr">subjects</code> را نشان می‌دهند.</p>
+<p dir="rtl">برای کاربری با نام <code dir="ltr">alice@example.com</code>:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">subjects:
+- kind: User
+  name: "alice@example.com"
+  apiGroup: rbac.authorization.k8s.io
+</code></pre>
+<p dir="rtl">برای گروهی با نام <code dir="ltr">frontend-admins</code>:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">subjects:
+- kind: Group
+  name: "frontend-admins"
+  apiGroup: rbac.authorization.k8s.io
+</code></pre>
+<p dir="rtl">برای service account پیش‌فرض در فضای نام (namespace) «kube-system»:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">subjects:
+- kind: ServiceAccount
+  name: default
+  namespace: kube-system
+</code></pre>
+<p dir="rtl">برای همه service accountها در فضای نام «qa»:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">subjects:
+- kind: Group
+  name: system:serviceaccounts:qa
+  apiGroup: rbac.authorization.k8s.io
+</code></pre>
+<p dir="rtl">برای همه service accountها در هر فضای نام:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">subjects:
+- kind: Group
+  name: system:serviceaccounts
+  apiGroup: rbac.authorization.k8s.io
+</code></pre>
+<p dir="rtl">برای همه کاربران احراز هویت‌شده:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">subjects:
+- kind: Group
+  name: system:authenticated
+  apiGroup: rbac.authorization.k8s.io
+</code></pre>
+<p dir="rtl">برای همه کاربران احراز هویت‌نشده:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">subjects:
+- kind: Group
+  name: system:unauthenticated
+  apiGroup: rbac.authorization.k8s.io
+</code></pre>
+<p dir="rtl">برای همه کاربران:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">subjects:
+- kind: Group
+  name: system:authenticated
+  apiGroup: rbac.authorization.k8s.io
+- kind: Group
+  name: system:unauthenticated
+  apiGroup: rbac.authorization.k8s.io
+</code></pre>
+<h2 id="نقش-ها-و-اتصال-های-نقش-پیش-فرض" dir="rtl">نقش‌ها و اتصال‌های نقش پیش‌فرض</h2>
+<p dir="rtl">API serverها مجموعه‌ای از آبجکت‌های ClusterRole و ClusterRoleBinding پیش‌فرض را ایجاد می‌کنند.
+بسیاری از این آبجکت‌ها با پیشوند <code dir="ltr">system:</code> شروع می‌شوند که نشان می‌دهد منبع
+مستقیماً توسط control plane کلاستر مدیریت می‌شود.
+همه ClusterRoleها و ClusterRoleBindingهای پیش‌فرض با برچسب <code dir="ltr">kubernetes.io/bootstrapping=rbac-defaults</code> برچسب‌گذاری شده‌اند.</p>
+<div class="callout caution"><div class="callout-title">احتیاط:</div>
+<p dir="rtl">هنگام تغییر ClusterRoleها و ClusterRoleBindingهایی که نام آن‌ها
+پیشوند <code dir="ltr">system:</code> دارد، دقت کنید.
+تغییر در این منابع می‌تواند باعث از کار افتادن کلاستر شود.</p>
+</div>
+<h3 id="تطبیق-خودکار-auto-reconciliation" dir="rtl">تطبیق خودکار (Auto-reconciliation)</h3>
+<p dir="rtl">در هر بار راه‌اندازی، API server نقش‌های کلاستری پیش‌فرض را با مجوزهای ازدست‌رفته به‌روزرسانی می‌کند
+و اتصال‌های نقش کلاستری پیش‌فرض را با subjectهای ازدست‌رفته به‌روزرسانی می‌کند.
+این کار به کلاستر امکان می‌دهد تغییرات تصادفی را اصلاح کند و کمک می‌کند نقش‌ها و اتصال‌های نقش
+با تغییر مجوزها و subjectها در نسخه‌های جدید کوبرنتیز به‌روز بمانند.</p>
+<p dir="rtl">برای انصراف از این تطبیق، حاشیه‌نویسی (annotation) <code dir="ltr">rbac.authorization.kubernetes.io/autoupdate</code>
+را روی یک نقش کلاستری پیش‌فرض یا یک RoleBinding کلاستری پیش‌فرض برابر <code dir="ltr">false</code> قرار دهید.
+توجه داشته باشید که ازدست‌رفتن مجوزها و subjectهای پیش‌فرض می‌تواند باعث از کار افتادن کلاستر شود.</p>
+<p dir="rtl">اگر RBAC authorizer فعال باشد، تطبیق خودکار به‌طور پیش‌فرض فعال است.</p>
+<h3 id="نقش-های-کشف-api-discovery-roles" dir="rtl">نقش‌های کشف API {#discovery-roles}</h3>
+<p dir="rtl">اتصال‌های نقش کلاستری پیش‌فرض، کاربران احراز هویت‌نشده و احراز هویت‌شده را برای خواندن اطلاعات API
+که امن و قابل دسترسی عمومی تلقی می‌شود (از جمله CustomResourceDefinitionها) مجاز می‌کنند.
+برای غیرفعال‌سازی دسترسی ناشناس احراز هویت‌نشده، پرچم <code dir="ltr">--anonymous-auth=false</code> را به
+پیکربندی API server اضافه کنید.</p>
+<p dir="rtl">برای مشاهده پیکربندی این نقش‌ها از طریق <code dir="ltr">kubectl</code> دستور زیر را اجرا کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get clusterroles system:discovery -o yaml
+</code></pre>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">اگر این ClusterRole را ویرایش کنید، تغییرات شما هنگام راه‌اندازی مجدد API server
+از طریق <a href="#auto-reconciliation">تطبیق خودکار</a> بازنویسی خواهد شد. برای جلوگیری از این بازنویسی،
+یا نقش را به‌صورت دستی ویرایش نکنید یا تطبیق خودکار را غیرفعال کنید.</p>
+</div>
+<table>
+<caption>نقش‌های کشف API در RBAC کوبرنتیز</caption>
+<colgroup><col style="width: 25%;"><col style="width: 25%;"><col></colgroup>
+<thead>
+<tr>
+<th dir="rtl">ClusterRole پیش‌فرض</th>
+<th dir="rtl">ClusterRoleBinding پیش‌فرض</th>
+<th dir="rtl">توضیحات</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td dir="ltr" class="ltr"><b>system:basic-user</b></td>
+<td dir="rtl">گروه <b>system:authenticated</b></td>
+<td dir="rtl">به کاربر اجازه می‌دهد به اطلاعات پایه درباره خودش دسترسی فقط‌خواندنی داشته باشد. پیش از v1.14، این نقش به‌طور پیش‌فرض به <tt>system:unauthenticated</tt> نیز متصل بود.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><b>system:discovery</b></td>
+<td dir="rtl">گروه <b>system:authenticated</b></td>
+<td dir="rtl">دسترسی فقط‌خواندنی به endpointهای کشف API را که برای کشف و مذاکره سطح API لازم هستند، فراهم می‌کند. پیش از v1.14، این نقش به‌طور پیش‌فرض به <tt>system:unauthenticated</tt> نیز متصل بود.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><b>system:public-info-viewer</b></td>
+<td dir="rtl">گروه‌های <b>system:authenticated</b> و <b>system:unauthenticated</b></td>
+<td dir="rtl">دسترسی فقط‌خواندنی به اطلاعات غیرحساس درباره کلاستر را فراهم می‌کند. در کوبرنتیز v1.14 معرفی شد.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="نقش-های-مخصوص-کاربر" dir="rtl">نقش‌های مخصوص کاربر</h3>
+<p dir="rtl">برخی از ClusterRoleهای پیش‌فرض پیشوند <code dir="ltr">system:</code> ندارند. این نقش‌ها برای استفاده مستقیم کاربران در نظر گرفته شده‌اند.
+آن‌ها شامل نقش‌های سوپریوزر (<code dir="ltr">cluster-admin</code>)، نقش‌هایی که قرار است با استفاده از ClusterRoleBindingها
+در سطح کل کلاستر اعطا شوند، و نقش‌هایی که قرار است با استفاده از RoleBindingها در فضاهای نام
+مشخص اعطا شوند (<code dir="ltr">admin</code>، <code dir="ltr">edit</code>، <code dir="ltr">view</code>) هستند.</p>
+<p dir="rtl">ClusterRoleهای مخصوص کاربر از <a href="#aggregated-clusterroles">تجمیع ClusterRole</a> استفاده می‌کنند تا مدیران بتوانند
+قواعد مربوط به منابع سفارشی را به این ClusterRoleها اضافه کنند. برای افزودن قواعد به نقش‌های <code dir="ltr">admin</code>، <code dir="ltr">edit</code> یا <code dir="ltr">view</code>،
+یک ClusterRole با یک یا چند مورد از برچسب‌های زیر ایجاد کنید:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">metadata:
+  labels:
+    rbac.authorization.k8s.io/aggregate-to-admin: "true"
+    rbac.authorization.k8s.io/aggregate-to-edit: "true"
+    rbac.authorization.k8s.io/aggregate-to-view: "true"
+</code></pre>
+<table>
+<colgroup><col style="width: 25%;"><col style="width: 25%;"><col></colgroup>
+<thead>
+<tr>
+<th dir="rtl">ClusterRole پیش‌فرض</th>
+<th dir="rtl">ClusterRoleBinding پیش‌فرض</th>
+<th dir="rtl">توضیحات</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td dir="ltr" class="ltr"><b>cluster-admin</b></td>
+<td dir="rtl">گروه <b>system:masters</b></td>
+<td dir="rtl">دسترسی سوپریوزر را برای انجام هر عملی روی هر منبع فراهم می‌کند.
+هنگامی که در یک <b>ClusterRoleBinding</b> استفاده شود، کنترل کامل بر هر منبع در کلاستر و در همه فضاهای نام را می‌دهد.
+هنگامی که در یک <b>RoleBinding</b> استفاده شود، کنترل کامل بر هر منبع در فضای نام همان اتصال نقش، از جمله خود فضای نام، را می‌دهد.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><b>admin</b></td>
+<td dir="rtl">ندارد</td>
+<td dir="rtl">دسترسی مدیریتی را فراهم می‌کند و قرار است با استفاده از یک <b>RoleBinding</b> در یک فضای نام اعطا شود.
+<p dir="rtl">اگر در یک <b>RoleBinding</b> استفاده شود، دسترسی خواندن/نوشتن به بیشتر منابع در یک فضای نام را می‌دهد،
+از جمله توانایی ایجاد نقش‌ها و اتصال‌های نقش در همان فضای نام.
+این نقش دسترسی نوشتن به resource quota یا به خود فضای نام را نمی‌دهد.
+همچنین این نقش در کلاسترهای ایجادشده با کوبرنتیز v1.22 و بالاتر، دسترسی نوشتن به EndpointSlices را نمی‌دهد.
+اطلاعات بیشتر در
+<a href="#write-access-for-endpoints">بخش «دسترسی نوشتن برای EndpointSlices»</a> موجود است.</p></td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><b>edit</b></td>
+<td dir="rtl">ندارد</td>
+<td dir="rtl">دسترسی خواندن/نوشتن به بیشتر آبجکت‌ها در یک فضای نام را فراهم می‌کند.
+<p dir="rtl">این نقش اجازه مشاهده یا تغییر نقش‌ها یا اتصال‌های نقش را نمی‌دهد.
+با این حال، این نقش امکان دسترسی به Secretها و اجرای Podها با هر ServiceAccount در
+فضای نام را می‌دهد، بنابراین می‌توان از آن برای کسب سطوح دسترسی API هر ServiceAccount در
+فضای نام استفاده کرد. همچنین این نقش در کلاسترهای ایجادشده با کوبرنتیز v1.22 و بالاتر،
+دسترسی نوشتن به EndpointSlices را نمی‌دهد. اطلاعات بیشتر در
+<a href="#write-access-for-endpoints">بخش «دسترسی نوشتن برای EndpointSlices»</a> موجود است.</p></td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><b>view</b></td>
+<td dir="rtl">ندارد</td>
+<td dir="rtl">دسترسی فقط‌خواندنی برای مشاهده بیشتر آبجکت‌ها در یک فضای نام را فراهم می‌کند.
+این نقش اجازه مشاهده نقش‌ها یا اتصال‌های نقش را نمی‌دهد.
+<p dir="rtl">این نقش اجازه مشاهده Secretها را نمی‌دهد، زیرا خواندن
+محتوای Secretها امکان دسترسی به اعتبارنامه‌های ServiceAccount
+در فضای نام را فراهم می‌کند که به‌نوبه خود امکان دسترسی API با هویت هر ServiceAccount
+در فضای نام را می‌دهد (نوعی ارتقای سطح دسترسی).</p></td>
+</tr>
+</tbody>
+</table>
+<h3 id="نقش-های-مؤلفه-های-اصلی" dir="rtl">نقش‌های مؤلفه‌های اصلی</h3>
+<table>
+<colgroup><col style="width: 25%;"><col style="width: 25%;"><col></colgroup>
+<thead>
+<tr>
+<th dir="rtl">ClusterRole پیش‌فرض</th>
+<th dir="rtl">ClusterRoleBinding پیش‌فرض</th>
+<th dir="rtl">توضیحات</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td dir="ltr" class="ltr"><b>system:kube-scheduler</b></td>
+<td dir="rtl">کاربر <b>system:kube-scheduler</b></td>
+<td dir="rtl">دسترسی به منابع موردنیاز مؤلفه <span class="term" title="kube-scheduler">زمان‌بند</span> را فراهم می‌کند.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><b>system:volume-scheduler</b></td>
+<td dir="rtl">کاربر <b>system:kube-scheduler</b></td>
+<td dir="rtl">دسترسی به منابع حجم (volume) موردنیاز مؤلفه kube-scheduler را فراهم می‌کند.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><b>system:kube-controller-manager</b></td>
+<td dir="rtl">کاربر <b>system:kube-controller-manager</b></td>
+<td dir="rtl">دسترسی به منابع موردنیاز مؤلفه <span class="term" title="kube-controller-manager">controller manager</span> را فراهم می‌کند.
+مجوزهای موردنیاز کنترل‌کننده‌های جداگانه در <a href="#controller-roles">نقش‌های کنترل‌کننده</a> به‌تفصیل آمده است.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><b>system:node</b></td>
+<td dir="rtl">ندارد</td>
+<td dir="rtl">دسترسی به منابع موردنیاز kubelet را فراهم می‌کند، <b>از جمله دسترسی خواندن به همه secretها و دسترسی نوشتن به همه آبجکت‌های وضعیت pod</b>.
+<p dir="rtl">به‌جای نقش <tt>system:node</tt> باید از <a href="node.html">Node authorizer</a> و <a href="admission-controllers.html#noderestriction">افزونه پذیرش NodeRestriction</a> استفاده کنید و اعطای دسترسی API به kubeletها را بر اساس Podهایی که زمان‌بندی شده‌اند تا روی آن‌ها اجرا شوند، مجاز کنید.</p>
+<p dir="rtl">نقش <tt>system:node</tt> فقط برای سازگاری با کلاسترهای کوبرنتیز ارتقایافته از نسخه‌های قبل از v1.8 وجود دارد.</p>
+</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><b>system:node-proxier</b></td>
+<td dir="rtl">کاربر <b>system:kube-proxy</b></td>
+<td dir="rtl">دسترسی به منابع موردنیاز مؤلفه <span class="term" title="kube-proxy">kube-proxy</span> را فراهم می‌کند.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="نقش-های-سایر-مؤلفه-ها" dir="rtl">نقش‌های سایر مؤلفه‌ها</h3>
+<table>
+<colgroup><col style="width: 25%;"><col style="width: 25%;"><col></colgroup>
+<thead>
+<tr>
+<th dir="rtl">ClusterRole پیش‌فرض</th>
+<th dir="rtl">ClusterRoleBinding پیش‌فرض</th>
+<th dir="rtl">توضیحات</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td dir="ltr" class="ltr"><b>system:auth-delegator</b></td>
+<td dir="rtl">ندارد</td>
+<td dir="rtl">بررسی‌های احراز هویت و مجوزدهی تفویض‌شده را مجاز می‌کند.
+این نقش معمولاً توسط API serverهای افزونه برای احراز هویت و مجوزدهی یکپارچه استفاده می‌شود.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><b>system:heapster</b></td>
+<td dir="rtl">ندارد</td>
+<td dir="rtl">نقش مربوط به مؤلفه <a href="https://github.com/kubernetes/heapster" target="_blank" rel="noopener">Heapster</a> (منسوخ‌شده).</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><b>system:kube-aggregator</b></td>
+<td dir="rtl">ندارد</td>
+<td dir="rtl">نقش مربوط به مؤلفه <a href="https://github.com/kubernetes/kube-aggregator" target="_blank" rel="noopener">kube-aggregator</a>.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><b>system:kube-dns</b></td>
+<td dir="rtl">service account با نام <b>kube-dns</b> در فضای نام <b>kube-system</b></td>
+<td dir="rtl">نقش مربوط به مؤلفه منسوخ‌شده kube-dns. (<a href="../../concepts/services-networking/dns-pod-service.html">CoreDNS</a> از این نقش استفاده نمی‌کند.)</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><b>system:kubelet-api-admin</b></td>
+<td dir="rtl">ندارد</td>
+<td dir="rtl">دسترسی کامل به API مربوط به kubelet را فراهم می‌کند.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><b>system:node-bootstrapper</b></td>
+<td dir="rtl">ندارد</td>
+<td dir="rtl">دسترسی به منابع موردنیاز برای انجام
+<a href="kubelet-tls-bootstrapping.html">TLS bootstrapping مربوط به kubelet</a> را فراهم می‌کند.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><b>system:node-problem-detector</b></td>
+<td dir="rtl">ندارد</td>
+<td dir="rtl">نقش مربوط به مؤلفه <a href="https://github.com/kubernetes/node-problem-detector" target="_blank" rel="noopener">node-problem-detector</a>.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><b>system:persistent-volume-provisioner</b></td>
+<td dir="rtl">ندارد</td>
+<td dir="rtl">دسترسی به منابع موردنیاز بیشتر <a href="../../concepts/storage/persistent-volumes.html#dynamic">تأمین‌کننده‌های پویای حجم (dynamic volume provisioners)</a> را فراهم می‌کند.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><b>system:monitoring</b></td>
+<td dir="rtl">گروه <b>system:monitoring</b></td>
+<td dir="rtl">دسترسی خواندن به endpointهای پایش control plane (یعنی endpointهای liveness و readiness مربوط به <span class="term" title="kube-apiserver">kube-apiserver</span> (<tt>/healthz</tt>، <tt>/livez</tt>، <tt>/readyz</tt>)، endpointهای بررسی سلامت جداگانه (<tt>/healthz/*</tt>، <tt>/livez/*</tt>، <tt>/readyz/*</tt>) و <tt>/metrics</tt>) را فراهم می‌کند و باعث می‌شود kube-apiserver هدر traceparent ارائه‌شده همراه درخواست‌ها را برای ردیابی (tracing) رعایت کند. توجه داشته باشید که endpointهای بررسی سلامت جداگانه و endpoint مربوط به متریک‌ها ممکن است اطلاعات حساس را افشا کنند.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="نقش-ها-برای-کنترل-کننده-های-داخلی-controller-roles" dir="rtl">نقش‌ها برای کنترل‌کننده‌های داخلی {#controller-roles}</h3>
+<p dir="rtl"><span class="term" title="kube-controller-manager">controller manager</span> کوبرنتیز
+<span class="term" title="controller">کنترل‌کننده‌هایی</span> را اجرا می‌کند که در control plane
+کوبرنتیز تعبیه شده‌اند.
+هنگامی که با <code dir="ltr">--use-service-account-credentials</code> فراخوانی شود، kube-controller-manager هر کنترل‌کننده را
+با یک service account جداگانه راه‌اندازی می‌کند.
+برای هر کنترل‌کننده داخلی نقش متناظری با پیشوند <code dir="ltr">system:controller:</code> وجود دارد.
+اگر controller manager با <code dir="ltr">--use-service-account-credentials</code> راه‌اندازی نشود، تمام حلقه‌های کنترل را
+با اعتبارنامه خودش اجرا می‌کند و باید همه نقش‌های مرتبط به آن اعطا شده باشد.
+این نقش‌ها عبارت‌اند از:</p>
+<ul>
+<li dir="ltr" class="ltr"><code dir="ltr">system:controller:attachdetach-controller</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">system:controller:certificate-controller</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">system:controller:clusterrole-aggregation-controller</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">system:controller:cronjob-controller</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">system:controller:daemon-set-controller</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">system:controller:deployment-controller</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">system:controller:disruption-controller</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">system:controller:endpoint-controller</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">system:controller:expand-controller</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">system:controller:generic-garbage-collector</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">system:controller:horizontal-pod-autoscaler</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">system:controller:job-controller</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">system:controller:namespace-controller</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">system:controller:node-controller</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">system:controller:persistent-volume-binder</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">system:controller:pod-garbage-collector</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">system:controller:pv-protection-controller</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">system:controller:pvc-protection-controller</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">system:controller:replicaset-controller</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">system:controller:replication-controller</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">system:controller:resourcequota-controller</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">system:controller:root-ca-cert-publisher</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">system:controller:route-controller</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">system:controller:service-account-controller</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">system:controller:service-controller</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">system:controller:statefulset-controller</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">system:controller:ttl-controller</code></li>
+</ul>
+<h2 id="پیشگیری-از-ارتقای-سطح-دسترسی-و-bootstrapping" dir="rtl">پیشگیری از ارتقای سطح دسترسی و bootstrapping</h2>
+<p dir="rtl">RBAC API با ویرایش نقش‌ها یا اتصال‌های نقش، از ارتقای سطح دسترسی توسط کاربران جلوگیری می‌کند.
+از آنجا که این محدودیت در سطح API اعمال می‌شود، حتی زمانی که RBAC authorizer استفاده نمی‌شود نیز برقرار است.</p>
+<h3 id="محدودیت-ها-در-ایجاد-یا-به-روزرسانی-نقش" dir="rtl">محدودیت‌ها در ایجاد یا به‌روزرسانی نقش</h3>
+<p dir="rtl">شما فقط در صورتی می‌توانید یک نقش را ایجاد یا به‌روزرسانی کنید که دست‌کم یکی از شرایط زیر برقرار باشد:</p>
+<ol>
+<li dir="rtl">شما از پیش همه مجوزهای موجود در نقش را در همان حوزه‌ای که آبجکت در حال تغییر قرار دارد در اختیار داشته باشید
+(برای ClusterRole در سطح کل کلاستر، برای Role در همان فضای نام یا در سطح کل کلاستر).</li>
+<li dir="rtl">مجوز صریح برای انجام فعل <code dir="ltr">escalate</code> روی منبع <code dir="ltr">roles</code> یا
+<code dir="ltr">clusterroles</code> در گروه API با نام <code dir="ltr">rbac.authorization.k8s.io</code> به شما اعطا شده باشد.</li>
+</ol>
+<p dir="rtl">برای مثال، اگر <code dir="ltr">user-1</code> توانایی فهرست‌کردن Secretها را در سطح کل کلاستر نداشته باشد، نمی‌تواند ClusterRole‌ای
+شامل آن مجوز ایجاد کند. برای اینکه به کاربری اجازه دهید نقش‌ها را ایجاد/به‌روزرسانی کند:</p>
+<ol>
+<li dir="rtl">نقشی به او اعطا کنید که به او اجازه می‌دهد آبجکت‌های Role یا ClusterRole را در صورت نیاز ایجاد/به‌روزرسانی کند.</li>
+<li dir="rtl">به او مجوز دهید که مجوزهای مشخصی را در نقش‌هایی که ایجاد/به‌روزرسانی می‌کند بگنجاند:
+<ul>
+<li dir="rtl">به‌صورت ضمنی، با اعطای همان مجوزها به او (اگر او تلاش کند Role یا
+ClusterRole‌ای با مجوزهایی ایجاد یا تغییر دهد که خودش به آن‌ها دسترسی ندارد، درخواست API ممنوع خواهد شد)</li>
+<li dir="rtl">یا با اعطای مجوز انجام فعل <code dir="ltr">escalate</code> روی منابع <code dir="ltr">roles</code> یا <code dir="ltr">clusterroles</code> در گروه API
+با نام <code dir="ltr">rbac.authorization.k8s.io</code>، به‌صورت صریح اجازه دهید هر مجوزی در یک <code dir="ltr">Role</code> یا <code dir="ltr">ClusterRole</code> مشخص شود</li>
+</ul>
+</li>
+</ol>
+<h3 id="محدودیت-ها-در-ایجاد-یا-به-روزرسانی-role-binding" dir="rtl">محدودیت‌ها در ایجاد یا به‌روزرسانی role binding</h3>
+<p dir="rtl">شما فقط در صورتی می‌توانید یک role binding را ایجاد یا به‌روزرسانی کنید که همه مجوزهای موجود در نقش ارجاع‌شده را (در همان محدوده‌ای که role binding دارد) از قبل داشته باشید، <em>یا</em> مجاز شده باشید که فعل <code dir="ltr">bind</code> را روی نقش ارجاع‌شده اجرا کنید.
+برای مثال، اگر <code dir="ltr">user-1</code> توانایی فهرست‌کردن Secretها را در سطح کل کلاستر نداشته باشد، نمی‌تواند یک ClusterRoleBinding به نقشی ایجاد کند که این مجوز را اعطا می‌کند. برای آنکه به یک کاربر اجازه دهید role bindingها را ایجاد یا به‌روزرسانی کند:</p>
+<ol>
+<li dir="rtl">نقشی به او اعطا کنید که امکان ایجاد یا به‌روزرسانی آبجکت‌های RoleBinding یا ClusterRoleBinding را، بسته به نیاز، فراهم کند.</li>
+<li dir="rtl">مجوزهای لازم برای bind کردن یک نقش مشخص را به او اعطا کنید:
+<ul>
+<li dir="rtl">به‌صورت ضمنی، با دادن مجوزهای موجود در آن نقش به او.</li>
+<li dir="rtl">به‌صورت صریح، با دادن مجوز اجرای فعل <code dir="ltr">bind</code> روی Role (یا ClusterRole) مورد نظر.</li>
+</ul>
+</li>
+</ol>
+<p dir="rtl">برای مثال، این ClusterRole و RoleBinding به <code dir="ltr">user-1</code> اجازه می‌دهند نقش‌های <code dir="ltr">admin</code>، <code dir="ltr">edit</code> و <code dir="ltr">view</code> را در فضای نام (namespace) با نام <code dir="ltr">user-1-namespace</code> به کاربران دیگر اعطا کند:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: role-grantor
+rules:
+- apiGroups: ["rbac.authorization.k8s.io"]
+  resources: ["rolebindings"]
+  verbs: ["create"]
+- apiGroups: ["rbac.authorization.k8s.io"]
+  resources: ["clusterroles"]
+  verbs: ["bind"]
+  # omit resourceNames to allow binding any ClusterRole
+  resourceNames: ["admin","edit","view"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: role-grantor-binding
+  namespace: user-1-namespace
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: role-grantor
+subjects:
+- apiGroup: rbac.authorization.k8s.io
+  kind: User
+  name: user-1
+</code></pre>
+<p dir="rtl">هنگام راه‌اندازی اولیه (bootstrap) نخستین نقش‌ها و role bindingها، لازم است کاربر اولیه مجوزهایی را اعطا کند که خودش هنوز در اختیار ندارد.
+برای راه‌اندازی اولیه نقش‌ها و role bindingها:</p>
+<ul>
+<li dir="rtl">از یک اعتبارنامه (credential) با گروه "system:masters" استفاده کنید؛ این گروه توسط bindingهای پیش‌فرض به نقش مدیر کل "cluster-admin" متصل شده است.</li>
+</ul>
+<h2 id="ابزارهای-خط-فرمان-command-line-utilities" dir="rtl">ابزارهای خط فرمان {#command-line-utilities}</h2>
+<h3 id="kubectl-create-role" dir="ltr" class="ltr"><code dir="ltr">kubectl create role</code></h3>
+<p dir="rtl">یک آبجکت Role ایجاد می‌کند که مجوزها را در یک فضای نام (namespace) واحد تعریف می‌کند. مثال‌ها:</p>
+<ul>
+<li dir="rtl">
+<p dir="rtl">ایجاد یک Role با نام "pod-reader" که به کاربران اجازه می‌دهد روی podها <code dir="ltr">get</code>، <code dir="ltr">watch</code> و <code dir="ltr">list</code> انجام دهند:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl create role pod-reader --verb=get --verb=list --verb=watch --resource=pods
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">ایجاد یک Role با نام "pod-reader" همراه با تعیین resourceNames:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl create role pod-reader --verb=get --resource=pods --resource-name=readablepod --resource-name=anotherpod
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">ایجاد یک Role با نام "foo" همراه با تعیین apiGroups:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl create role foo --verb=get,list,watch --resource=replicasets.apps
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">ایجاد یک Role با نام "foo" همراه با مجوزهای زیرمنبع (subresource):</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl create role foo --verb=get,list,watch --resource=pods,pods/status
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">ایجاد یک Role با نام "my-component-lease-holder" با مجوز get/update روی یک منبع با نام مشخص:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl create role my-component-lease-holder --verb=get,list,watch,update --resource=lease --resource-name=my-component
+</code></pre>
+</li>
+</ul>
+<h3 id="kubectl-create-clusterrole" dir="ltr" class="ltr"><code dir="ltr">kubectl create clusterrole</code></h3>
+<p dir="rtl">یک ClusterRole ایجاد می‌کند. مثال‌ها:</p>
+<ul>
+<li dir="rtl">
+<p dir="rtl">ایجاد یک ClusterRole با نام "pod-reader" که به کاربر اجازه می‌دهد روی podها <code dir="ltr">get</code>، <code dir="ltr">watch</code> و <code dir="ltr">list</code> انجام دهد:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl create clusterrole pod-reader --verb=get,list,watch --resource=pods
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">ایجاد یک ClusterRole با نام "pod-reader" همراه با تعیین resourceNames:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl create clusterrole pod-reader --verb=get --resource=pods --resource-name=readablepod --resource-name=anotherpod
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">ایجاد یک ClusterRole با نام "foo" همراه با تعیین apiGroups:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl create clusterrole foo --verb=get,list,watch --resource=replicasets.apps
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">ایجاد یک ClusterRole با نام "foo" همراه با مجوزهای زیرمنبع (subresource):</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl create clusterrole foo --verb=get,list,watch --resource=pods,pods/status
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">ایجاد یک ClusterRole با نام "foo" همراه با تعیین nonResourceURL:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl create clusterrole "foo" --verb=get --non-resource-url=/logs/*
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">ایجاد یک ClusterRole با نام "monitoring" همراه با تعیین aggregationRule:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl create clusterrole monitoring --aggregation-rule="rbac.example.com/aggregate-to-monitoring=true"
+</code></pre>
+</li>
+</ul>
+<h3 id="kubectl-create-rolebinding" dir="ltr" class="ltr"><code dir="ltr">kubectl create rolebinding</code></h3>
+<p dir="rtl">یک Role یا ClusterRole را در یک فضای نام (namespace) مشخص اعطا می‌کند. مثال‌ها:</p>
+<ul>
+<li dir="rtl">
+<p dir="rtl">در فضای نام "acme"، مجوزهای موجود در ClusterRole با نام "admin" را به کاربری با نام "bob" اعطا کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl create rolebinding bob-admin-binding --clusterrole=admin --user=bob --namespace=acme
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">در فضای نام "acme"، مجوزهای موجود در ClusterRole با نام "view" را به service account با نام "myapp" در فضای نام "acme" اعطا کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl create rolebinding myapp-view-binding --clusterrole=view --serviceaccount=acme:myapp --namespace=acme
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">در فضای نام "acme"، مجوزهای موجود در ClusterRole با نام "view" را به service account با نام "myapp" در فضای نام "myappnamespace" اعطا کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl create rolebinding myappnamespace-myapp-view-binding --clusterrole=view --serviceaccount=myappnamespace:myapp --namespace=acme
+</code></pre>
+</li>
+</ul>
+<h3 id="kubectl-create-clusterrolebinding" dir="ltr" class="ltr"><code dir="ltr">kubectl create clusterrolebinding</code></h3>
+<p dir="rtl">یک ClusterRole را در سراسر کلاستر (همه فضاهای نام) اعطا می‌کند. مثال‌ها:</p>
+<ul>
+<li dir="rtl">
+<p dir="rtl">در سراسر کلاستر، مجوزهای موجود در ClusterRole با نام "cluster-admin" را به کاربری با نام "root" اعطا کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl create clusterrolebinding root-cluster-admin-binding --clusterrole=cluster-admin --user=root
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">در سراسر کلاستر، مجوزهای موجود در ClusterRole با نام "system:node-proxier" را به کاربری با نام "system:kube-proxy" اعطا کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl create clusterrolebinding kube-proxy-binding --clusterrole=system:node-proxier --user=system:kube-proxy
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">در سراسر کلاستر، مجوزهای موجود در ClusterRole با نام "view" را به service account با نام "myapp" در فضای نام "acme" اعطا کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl create clusterrolebinding myapp-view-binding --clusterrole=view --serviceaccount=acme:myapp
+</code></pre>
+</li>
+</ul>
+<h3 id="kubectl-auth-reconcile-kubectl-auth-reconcile" dir="ltr" class="ltr"><code dir="ltr">kubectl auth reconcile</code> {#kubectl-auth-reconcile}</h3>
+<p dir="rtl">آبجکت‌های API از نوع <code dir="ltr">rbac.authorization.k8s.io/v1</code> را از روی یک فایل مانیفست ایجاد یا به‌روزرسانی می‌کند.</p>
+<p dir="rtl">آبجکت‌های ناموجود ایجاد می‌شوند و در صورت لزوم، فضای نام حاوی آن‌ها نیز برای آبجکت‌های دارای فضای نام ایجاد می‌شود.</p>
+<p dir="rtl">نقش‌های موجود به‌روزرسانی می‌شوند تا مجوزهای موجود در آبجکت‌های ورودی را شامل شوند،
+و در صورتی که <code dir="ltr">--remove-extra-permissions</code> مشخص شده باشد، مجوزهای اضافی حذف می‌شوند.</p>
+<p dir="rtl">bindingهای موجود به‌روزرسانی می‌شوند تا subjectهای موجود در آبجکت‌های ورودی را شامل شوند،
+و در صورتی که <code dir="ltr">--remove-extra-subjects</code> مشخص شده باشد، subjectهای اضافی حذف می‌شوند.</p>
+<p dir="rtl">مثال‌ها:</p>
+<ul>
+<li dir="rtl">
+<p dir="rtl">آزمایش اعمال یک فایل مانیفست از آبجکت‌های RBAC و نمایش تغییراتی که اعمال خواهند شد:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl auth reconcile -f my-rbac-rules.yaml --dry-run=client
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">اعمال یک فایل مانیفست از آبجکت‌های RBAC با حفظ هرگونه مجوز اضافی (در نقش‌ها) و هر subject اضافی (در bindingها):</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl auth reconcile -f my-rbac-rules.yaml
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">اعمال یک فایل مانیفست از آبجکت‌های RBAC با حذف هرگونه مجوز اضافی (در نقش‌ها) و هر subject اضافی (در bindingها):</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl auth reconcile -f my-rbac-rules.yaml --remove-extra-subjects --remove-extra-permissions
+</code></pre>
+</li>
+</ul>
+<h2 id="مجوزهای-serviceaccount-service-account-permissions" dir="rtl">مجوزهای ServiceAccount {#service-account-permissions}</h2>
+<p dir="rtl">سیاست‌های پیش‌فرض RBAC مجوزهای محدودشده‌ای را به مؤلفه‌های control plane، نودها
+و کنترل‌کننده‌ها اعطا می‌کنند، اما به service accountهای خارج از فضای نام <code dir="ltr">kube-system</code> <em>هیچ مجوزی</em> اعطا نمی‌کنند
+(فراتر از مجوزهایی که توسط <a href="#discovery-roles">نقش‌های کشف API</a> داده می‌شود).</p>
+<p dir="rtl">این امر به شما امکان می‌دهد در صورت نیاز، نقش‌های مشخصی را به ServiceAccountهای مشخصی اعطا کنید.
+role bindingهای دقیق‌تر امنیت بیشتری فراهم می‌کنند، اما مدیریت آن‌ها به تلاش بیشتری نیاز دارد.
+اعطای مجوزهای گسترده‌تر می‌تواند دسترسی غیرضروری (و بالقوه افزایش‌دهنده سطح دسترسی) به API را برای
+ServiceAccountها فراهم کند، اما مدیریت آن‌ها آسان‌تر است.</p>
+<p dir="rtl">رویکردها، از امن‌ترین به کم‌امن‌ترین، به این ترتیب هستند:</p>
+<ol>
+<li dir="rtl">
+<p dir="rtl">اعطای یک نقش به service account اختصاصی هر برنامه (بهترین روش)</p>
+<p dir="rtl">این رویکرد مستلزم آن است که برنامه در مشخصات pod خود یک <code dir="ltr">serviceAccountName</code> تعیین کند
+و service account ایجاد شده باشد (از طریق API، مانیفست برنامه، <code dir="ltr">kubectl create serviceaccount</code> و غیره).</p>
+<p dir="rtl">برای مثال، مجوز فقط‌خواندنی را در فضای نام "my-namespace" به service account با نام "my-sa" اعطا کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl create rolebinding my-sa-view \
+  --clusterrole=view \
+  --serviceaccount=my-namespace:my-sa \
+  --namespace=my-namespace
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">اعطای یک نقش به service account با نام "default" در یک فضای نام</p>
+<p dir="rtl">اگر برنامه‌ای <code dir="ltr">serviceAccountName</code> را تعیین نکند، از service account با نام "default" استفاده می‌کند.</p>
+</li>
+</ol>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">مجوزهایی که به service account با نام "default" داده می‌شوند، در دسترس هر podی در آن فضای نام
+قرار می‌گیرند که <code dir="ltr">serviceAccountName</code> را تعیین نکرده باشد.</p>
+</div>
+<p dir="rtl">برای مثال، مجوز فقط‌خواندنی را در فضای نام "my-namespace" به service account با نام "default" اعطا کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl create rolebinding default-view \
+  --clusterrole=view \
+  --serviceaccount=my-namespace:default \
+  --namespace=my-namespace
+</code></pre>
+<ol start="3">
+<li dir="rtl">
+<p dir="rtl">اعطای یک نقش به همه service accountها در یک فضای نام</p>
+<p dir="rtl">اگر می‌خواهید همه برنامه‌های یک فضای نام، صرف‌نظر از اینکه از کدام service account استفاده می‌کنند، یک نقش داشته باشند،
+می‌توانید نقش را به گروه service accountهای آن فضای نام اعطا کنید.</p>
+<p dir="rtl">برای مثال، مجوز فقط‌خواندنی را در فضای نام "my-namespace" به همه service accountهای آن فضای نام اعطا کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl create rolebinding serviceaccounts-view \
+  --clusterrole=view \
+  --group=system:serviceaccounts:my-namespace \
+  --namespace=my-namespace
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">اعطای یک نقش محدود به همه service accountها در سطح کل کلاستر (توصیه نمی‌شود)</p>
+<p dir="rtl">اگر نمی‌خواهید مجوزها را به‌ازای هر فضای نام مدیریت کنید، می‌توانید یک نقش در سطح کلاستر را به همه service accountها اعطا کنید.</p>
+<p dir="rtl">برای مثال، مجوز فقط‌خواندنی را در همه فضاهای نام به همه service accountهای کلاستر اعطا کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl create clusterrolebinding serviceaccounts-view \
+  --clusterrole=view \
+ --group=system:serviceaccounts
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">اعطای دسترسی مدیر کل (super-user) به همه service accountها در سطح کل کلاستر (به‌شدت توصیه نمی‌شود)</p>
+<p dir="rtl">اگر اصلاً به تفکیک مجوزها اهمیت نمی‌دهید، می‌توانید دسترسی مدیر کل را به همه service accountها اعطا کنید.</p>
+</li>
+</ol>
+<div class="callout warning"><div class="callout-title">هشدار:</div>
+<p dir="rtl">این کار به هر برنامه‌ای دسترسی کامل به کلاستر شما می‌دهد و همچنین به هر کاربری که دسترسی خواندن به Secretها
+(یا توانایی ایجاد هر pod) داشته باشد، دسترسی کامل به کلاستر شما اعطا می‌کند.</p>
+</div>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl create clusterrolebinding serviceaccounts-cluster-admin \
+  --clusterrole=cluster-admin \
+  --group=system:serviceaccounts
+</code></pre>
+<h2 id="دسترسی-نوشتن-برای-endpointslices-write-access-for-endpoints" dir="rtl">دسترسی نوشتن برای EndpointSlices {#write-access-for-endpoints}</h2>
+<p dir="rtl">کلاسترهای کوبرنتیز که پیش از نسخه v1.22 کوبرنتیز ایجاد شده‌اند، شامل دسترسی نوشتن به
+EndpointSlices (و API منسوخ‌شده Endpoints) در نقش‌های تجمیعی (aggregated) "edit" و "admin" هستند.
+به‌عنوان راهکاری برای کاهش مخاطرات <a href="https://github.com/kubernetes/kubernetes/issues/103675" target="_blank" rel="noopener">CVE-2021-25740</a>،
+این دسترسی در کلاسترهایی که با کوبرنتیز v1.22 یا بالاتر ایجاد می‌کنید، بخشی از نقش‌های تجمیعی نیست.</p>
+<p dir="rtl">کلاسترهای موجودی که به کوبرنتیز v1.22 ارتقا یافته‌اند
+مشمول این تغییر نخواهند بود. <a href="https://github.com/kubernetes/kubernetes/issues/103675" target="_blank" rel="noopener">اطلاعیه
+CVE</a> شامل
+راهنمایی برای محدودکردن این دسترسی در کلاسترهای موجود است.</p>
+<p dir="rtl">اگر می‌خواهید کلاسترهای جدید این سطح از دسترسی را در نقش‌های تجمیعی حفظ کنند،
+می‌توانید ClusterRole زیر را ایجاد کنید:</p>
+<div class="code-file ltr" dir="ltr">access/endpoints-aggregated.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  annotations:
+    kubernetes.io/description: |-
+      Add endpoints write permissions to the edit and admin roles. This was
+      removed by default in 1.22 because of CVE-2021-25740. See
+      https://issue.k8s.io/103675. This can allow writers to direct LoadBalancer
+      or Ingress implementations to expose backend IPs that would not otherwise
+      be accessible, and can circumvent network policies or security controls
+      intended to prevent/isolate access to those backends.
+      EndpointSlices were never included in the edit or admin roles, so there
+      is nothing to restore for the EndpointSlice API.
+  labels:
+    rbac.authorization.k8s.io/aggregate-to-edit: "true"
+  name: custom:aggregate-to-edit:endpoints # you can change this if you wish
+rules:
+  - apiGroups: [""]
+    resources: ["endpoints"]
+    verbs: ["create", "delete", "deletecollection", "patch", "update"]
+</code></pre>
+<h2 id="ارتقا-از-abac-upgrading-from-abac" dir="rtl">ارتقا از ABAC {#upgrading-from-abac}</h2>
+<p dir="rtl">کلاسترهایی که در ابتدا نسخه‌های قدیمی‌تر کوبرنتیز را اجرا می‌کردند، اغلب از
+سیاست‌های ABAC سهل‌گیرانه استفاده می‌کردند، از جمله اعطای دسترسی کامل به API برای همه
+service accountها.</p>
+<p dir="rtl">سیاست‌های پیش‌فرض RBAC مجوزهای محدودشده‌ای را به مؤلفه‌های control plane، نودها
+و کنترل‌کننده‌ها اعطا می‌کنند، اما به service accountهای خارج از فضای نام <code dir="ltr">kube-system</code> <em>هیچ مجوزی</em> اعطا نمی‌کنند
+(فراتر از مجوزهایی که توسط <a href="#discovery-roles">نقش‌های کشف API</a> داده می‌شود).</p>
+<p dir="rtl">اگرچه این رویکرد بسیار امن‌تر است، می‌تواند برای بارهای کاری موجودی که انتظار دارند مجوزهای API را به‌صورت خودکار دریافت کنند، اختلال ایجاد کند.
+در اینجا دو رویکرد برای مدیریت این گذار آورده شده است:</p>
+<h3 id="مجوزدهنده-های-موازی-parallel-authorizers" dir="rtl">مجوزدهنده‌های موازی {#parallel-authorizers}</h3>
+<p dir="rtl">هر دو مجوزدهنده RBAC و ABAC را اجرا کنید و فایل سیاستی مشخص کنید که شامل
+<a href="abac.html#policy-file-format">سیاست قدیمی ABAC</a> باشد:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">--authorization-mode=...,RBAC,ABAC --authorization-policy-file=mypolicy.json
+</code></pre>
+<p dir="rtl">برای توضیح دقیق‌تر گزینه خط فرمان نخست: اگر مجوزدهنده‌های قبلی، مانند Node،
+درخواستی را رد کنند، مجوزدهنده RBAC تلاش می‌کند درخواست API را مجاز کند. اگر RBAC
+نیز آن درخواست API را رد کند، سپس مجوزدهنده ABAC اجرا می‌شود. این بدان معناست که هر درخواستی
+که توسط سیاست‌های RBAC <em>یا</em> ABAC مجاز شده باشد، پذیرفته می‌شود.</p>
+<p dir="rtl">هنگامی که kube-apiserver با سطح لاگ 5 یا بالاتر برای مؤلفه RBAC اجرا شود
+(<code dir="ltr">--vmodule=rbac*=5</code> یا <code dir="ltr">--v=5</code>)، می‌توانید ردهای RBAC را در لاگ API server مشاهده کنید
+(با پیشوند <code dir="ltr">RBAC</code>).
+می‌توانید از این اطلاعات برای تعیین اینکه کدام نقش‌ها باید به کدام کاربران، گروه‌ها یا service accountها اعطا شوند، استفاده کنید.</p>
+<p dir="rtl">پس از آنکه <a href="#service-account-permissions">نقش‌ها را به service accountها اعطا کردید</a> و بارهای کاری
+بدون هیچ پیام رد RBAC در لاگ‌های سرور در حال اجرا هستند، می‌توانید مجوزدهنده ABAC را حذف کنید.</p>
+<h3 id="مجوزهای-سهل-گیرانه-rbac-permissive-rbac-permissions" dir="rtl">مجوزهای سهل‌گیرانه RBAC {#permissive-rbac-permissions}</h3>
+<p dir="rtl">می‌توانید یک سیاست سهل‌گیرانه ABAC را با استفاده از role bindingهای RBAC بازسازی کنید.</p>
+<div class="callout warning"><div class="callout-title">هشدار:</div>
+<p dir="rtl">سیاست زیر به <strong>همه</strong> service accountها اجازه می‌دهد به‌عنوان مدیر کلاستر عمل کنند.
+هر برنامه‌ای که در یک کانتینر اجرا می‌شود، اعتبارنامه‌های service account را به‌صورت خودکار دریافت می‌کند
+و می‌تواند هر عملی را روی API انجام دهد، از جمله مشاهده secretها و تغییر مجوزها.
+این سیاست توصیه نمی‌شود.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl create clusterrolebinding permissive-binding \
+  --clusterrole=cluster-admin \
+  --user=admin \
+  --user=kubelet \
+  --group=system:serviceaccounts
+</code></pre>
+</div>
+<p dir="rtl">پس از آنکه به استفاده از RBAC گذار کردید، باید کنترل‌های دسترسی
+کلاستر خود را تنظیم کنید تا اطمینان یابید که این کنترل‌ها نیازهای امنیت اطلاعات شما را برآورده می‌کنند.</p>
+</main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#آبجکت-های-api-api-overview">آبجکت‌های API {#api-overview}</a><a class="l3" href="#role-و-clusterrole">Role و ClusterRole</a><a class="l3" href="#rolebinding-و-clusterrolebinding">RoleBinding و ClusterRoleBinding</a><a class="l3" href="#ارجاع-به-منابع-referring-to-resources">ارجاع به منابع {#referring-to-resources}</a><a class="l3" href="#clusterroleهای-تجمیعی-aggregated-aggregated-clusterroles">ClusterRoleهای تجمیعی (Aggregated) {#aggregated-clusterroles}</a><a class="l3" href="#ارجاع-به-subjectها">ارجاع به subjectها</a><a class="l2" href="#نقش-ها-و-اتصال-های-نقش-پیش-فرض">نقش‌ها و اتصال‌های نقش پیش‌فرض</a><a class="l3" href="#تطبیق-خودکار-auto-reconciliation">تطبیق خودکار (Auto-reconciliation)</a><a class="l3" href="#نقش-های-کشف-api-discovery-roles">نقش‌های کشف API {#discovery-roles}</a><a class="l3" href="#نقش-های-مخصوص-کاربر">نقش‌های مخصوص کاربر</a><a class="l3" href="#نقش-های-مؤلفه-های-اصلی">نقش‌های مؤلفه‌های اصلی</a><a class="l3" href="#نقش-های-سایر-مؤلفه-ها">نقش‌های سایر مؤلفه‌ها</a><a class="l3" href="#نقش-ها-برای-کنترل-کننده-های-داخلی-controller-roles">نقش‌ها برای کنترل‌کننده‌های داخلی {#controller-roles}</a><a class="l2" href="#پیشگیری-از-ارتقای-سطح-دسترسی-و-bootstrapping">پیشگیری از ارتقای سطح دسترسی و bootstrapping</a><a class="l3" href="#محدودیت-ها-در-ایجاد-یا-به-روزرسانی-نقش">محدودیت‌ها در ایجاد یا به‌روزرسانی نقش</a><a class="l3" href="#محدودیت-ها-در-ایجاد-یا-به-روزرسانی-role-binding">محدودیت‌ها در ایجاد یا به‌روزرسانی role binding</a><a class="l2" href="#ابزارهای-خط-فرمان-command-line-utilities">ابزارهای خط فرمان {#command-line-utilities}</a><a class="l3" href="#kubectl-create-role">kubectl create role</a><a class="l3" href="#kubectl-create-clusterrole">kubectl create clusterrole</a><a class="l3" href="#kubectl-create-rolebinding">kubectl create rolebinding</a><a class="l3" href="#kubectl-create-clusterrolebinding">kubectl create clusterrolebinding</a><a class="l3" href="#kubectl-auth-reconcile-kubectl-auth-reconcile">kubectl auth reconcile {#kubectl-auth-reconcile}</a><a class="l2" href="#مجوزهای-serviceaccount-service-account-permissions">مجوزهای ServiceAccount {#service-account-permissions}</a><a class="l2" href="#دسترسی-نوشتن-برای-endpointslices-write-access-for-endpoints">دسترسی نوشتن برای EndpointSlices {#write-access-for-endpoints}</a><a class="l2" href="#ارتقا-از-abac-upgrading-from-abac">ارتقا از ABAC {#upgrading-from-abac}</a><a class="l3" href="#مجوزدهنده-های-موازی-parallel-authorizers">مجوزدهنده‌های موازی {#parallel-authorizers}</a><a class="l3" href="#مجوزهای-سهل-گیرانه-rbac-permissive-rbac-permissions">مجوزهای سهل‌گیرانه RBAC {#permissive-rbac-permissions}</a></nav>
+</div>
+</body>
+</html>

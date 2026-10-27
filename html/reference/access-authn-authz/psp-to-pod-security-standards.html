@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>نگاشت PodSecurityPolicyها به Pod Security Standards | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">reference / access-authn-authz</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">نگاشت PodSecurityPolicyها به Pod Security Standards</h1><!-- overview -->
+<p dir="rtl">جدول‌های زیر پارامترهای پیکربندی آبجکت‌های <code dir="ltr">PodSecurityPolicy</code> را فهرست می‌کنند، و نشان می‌دهند که
+هر فیلد پادها را تغییر می‌دهد (mutate) و/یا اعتبارسنجی می‌کند، و مقادیر پیکربندی چگونه به
+<a href="../../concepts/security/pod-security-standards.html">Pod Security Standards</a> نگاشت می‌شوند.</p>
+<p dir="rtl">برای هر پارامتر مرتبط، مقادیر مجاز برای پروفایل‌های
+<a href="../../concepts/security/pod-security-standards.html#baseline">Baseline</a> و
+<a href="../../concepts/security/pod-security-standards.html#restricted">Restricted</a> فهرست شده است.
+هر مقداری خارج از مقادیر مجاز آن پروفایل‌ها در دسته‌ی پروفایل
+<a href="../../concepts/security/pod-security-standards.html#privileged">Privileged</a> قرار می‌گیرد. عبارت «No opinion»
+به این معناست که همه‌ی مقادیر در تمامی Pod Security Standards مجاز هستند.</p>
+<p dir="rtl">برای مشاهده‌ی راهنمای گام‌به‌گام مهاجرت، به
+<a href="https://kubernetes.io/docs/tasks/configure-pod-container/migrate-from-psp/" target="_blank">مهاجرت از PodSecurityPolicy به کنترل‌کننده‌ی پذیرش داخلی PodSecurity</a>
+مراجعه کنید.</p>
+<!-- body -->
+<h2 id="مشخصات-podsecuritypolicy-podsecuritypolicy-spec-podsecuritypolicy-spec" dir="rtl">مشخصات PodSecurityPolicy (PodSecurityPolicy Spec) {#podsecuritypolicy-spec}</h2>
+<p dir="rtl">فیلدهای فهرست‌شده در این جدول بخشی از <code dir="ltr">PodSecurityPolicySpec</code> هستند که
+در مسیر فیلد <code dir="ltr">.spec</code> مشخص می‌شود.</p>
+<table class="no-word-break">
+  <caption style="display:none">نگاشت فیلدهای PodSecurityPolicySpec به Pod Security Standards</caption>
+  <tbody>
+    <tr>
+      <th dir="ltr" class="ltr"><code dir="ltr">PodSecurityPolicySpec</code></th>
+      <th dir="rtl">نوع</th>
+      <th dir="rtl">معادل در Pod Security Standards</th>
+    </tr>
+    <tr>
+      <td dir="ltr" class="ltr"><code dir="ltr">privileged</code></td>
+      <td dir="rtl">اعتبارسنجی (Validating)</td>
+      <td dir="rtl"><b>Baseline و Restricted</b>: <code dir="ltr">false</code> / تعریف‌نشده / nil</td>
+    </tr>
+    <tr>
+      <td dir="ltr" class="ltr"><code dir="ltr">defaultAddCapabilities</code></td>
+      <td dir="rtl">تغییر‌دهنده و اعتبارسنج (Mutating &amp; Validating)</td>
+      <td dir="rtl">الزامات با <code dir="ltr">allowedCapabilities</code> در ادامه یکسان است.</td>
+    </tr>
+    <tr>
+      <td dir="ltr" class="ltr"><code dir="ltr">allowedCapabilities</code></td>
+      <td dir="rtl">اعتبارسنجی (Validating)</td>
+      <td dir="rtl">
+        <p dir="rtl"><b>Baseline</b>: زیرمجموعه‌ای از</p>
+        <ul>
+          <li dir="ltr" class="ltr"><code dir="ltr">AUDIT_WRITE</code></li>
+          <li dir="ltr" class="ltr"><code dir="ltr">CHOWN</code></li>
+          <li dir="ltr" class="ltr"><code dir="ltr">DAC_OVERRIDE</code></li>
+          <li dir="ltr" class="ltr"><code dir="ltr">FOWNER</code></li>
+          <li dir="ltr" class="ltr"><code dir="ltr">FSETID</code></li>
+          <li dir="ltr" class="ltr"><code dir="ltr">KILL</code></li>
+          <li dir="ltr" class="ltr"><code dir="ltr">MKNOD</code></li>
+          <li dir="ltr" class="ltr"><code dir="ltr">NET_BIND_SERVICE</code></li>
+          <li dir="ltr" class="ltr"><code dir="ltr">SETFCAP</code></li>
+          <li dir="ltr" class="ltr"><code dir="ltr">SETGID</code></li>
+          <li dir="ltr" class="ltr"><code dir="ltr">SETPCAP</code></li>
+          <li dir="ltr" class="ltr"><code dir="ltr">SETUID</code></li>
+          <li dir="ltr" class="ltr"><code dir="ltr">SYS_CHROOT</code></li>
+        </ul>
+        <p dir="rtl"><b>Restricted</b>: خالی / تعریف‌نشده / nil یا فهرستی که <i>فقط</i> شامل <code dir="ltr">NET_BIND_SERVICE</code> باشد
+      </p></td>
+    </tr>
+    <tr>
+      <td dir="ltr" class="ltr"><code dir="ltr">requiredDropCapabilities</code></td>
+      <td dir="rtl">تغییر‌دهنده و اعتبارسنج (Mutating &amp; Validating)</td>
+      <td dir="rtl">
+        <p dir="rtl"><b>Baseline</b>: بدون نظر (no opinion)</p>
+        <p dir="rtl"><b>Restricted</b>: باید شامل <code dir="ltr">ALL</code> باشد</p>
+      </td>
+    </tr>
+    <tr>
+      <td dir="ltr" class="ltr"><code dir="ltr">volumes</code></td>
+      <td dir="rtl">اعتبارسنجی (Validating)</td>
+      <td dir="rtl">
+        <p dir="rtl"><b>Baseline</b>: هر مقداری به‌جز</p>
+        <ul>
+          <li dir="ltr" class="ltr"><code dir="ltr">hostPath</code></li>
+          <li><code dir="ltr">*</code></li>
+        </ul>
+        <p dir="rtl"><b>Restricted</b>: زیرمجموعه‌ای از</p>
+        <ul>
+          <li dir="ltr" class="ltr"><code dir="ltr">configMap</code></li>
+          <li dir="ltr" class="ltr"><code dir="ltr">csi</code></li>
+          <li dir="ltr" class="ltr"><code dir="ltr">downwardAPI</code></li>
+          <li dir="ltr" class="ltr"><code dir="ltr">emptyDir</code></li>
+          <li dir="ltr" class="ltr"><code dir="ltr">ephemeral</code></li>
+          <li dir="ltr" class="ltr"><code dir="ltr">persistentVolumeClaim</code></li>
+          <li dir="ltr" class="ltr"><code dir="ltr">projected</code></li>
+          <li dir="ltr" class="ltr"><code dir="ltr">secret</code></li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td dir="ltr" class="ltr"><code dir="ltr">hostNetwork</code></td>
+      <td dir="rtl">اعتبارسنجی (Validating)</td>
+      <td dir="rtl"><b>Baseline و Restricted</b>: <code dir="ltr">false</code> / تعریف‌نشده / nil</td>
+    </tr>
+    <tr>
+      <td dir="ltr" class="ltr"><code dir="ltr">hostPorts</code></td>
+      <td dir="rtl">اعتبارسنجی (Validating)</td>
+      <td dir="rtl"><b>Baseline و Restricted</b>: تعریف‌نشده / nil / خالی</td>
+    </tr>
+    <tr>
+      <td dir="ltr" class="ltr"><code dir="ltr">hostPID</code></td>
+      <td dir="rtl">اعتبارسنجی (Validating)</td>
+      <td dir="rtl"><b>Baseline و Restricted</b>: <code dir="ltr">false</code> / تعریف‌نشده / nil</td>
+    </tr>
+    <tr>
+      <td dir="ltr" class="ltr"><code dir="ltr">hostIPC</code></td>
+      <td dir="rtl">اعتبارسنجی (Validating)</td>
+      <td dir="rtl"><b>Baseline و Restricted</b>: <code dir="ltr">false</code> / تعریف‌نشده / nil</td>
+    </tr>
+    <tr>
+      <td dir="ltr" class="ltr"><code dir="ltr">seLinux</code></td>
+      <td dir="rtl">تغییر‌دهنده و اعتبارسنج (Mutating &amp; Validating)</td>
+      <td dir="rtl">
+        <p dir="rtl"><b>Baseline و Restricted</b>:
+        مقدار <code dir="ltr">seLinux.rule</code> برابر <code dir="ltr">MustRunAs</code> است، با <code dir="ltr">options</code> زیر</p>
+        <ul>
+          <li dir="rtl"><code dir="ltr">user</code> تنظیم نشده است (<code dir="ltr">""</code> / تعریف‌نشده / nil)</li>
+          <li dir="rtl"><code dir="ltr">role</code> تنظیم نشده است (<code dir="ltr">""</code> / تعریف‌نشده / nil)</li>
+          <li dir="rtl"><code dir="ltr">type</code> تنظیم نشده است یا یکی از این مقادیر است: <code dir="ltr">container_t, container_init_t, container_kvm_t, container_engine_t</code></li>
+          <li dir="rtl"><code dir="ltr">level</code> هر مقداری می‌تواند باشد</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td dir="ltr" class="ltr"><code dir="ltr">runAsUser</code></td>
+      <td dir="rtl">تغییر‌دهنده و اعتبارسنج (Mutating &amp; Validating)</td>
+      <td dir="rtl">
+        <p dir="rtl"><b>Baseline</b>: هر مقداری</p>
+        <p dir="rtl"><b>Restricted</b>: مقدار <code dir="ltr">rule</code> برابر <code dir="ltr">MustRunAsNonRoot</code> است</p>
+      </td>
+    </tr>
+    <tr>
+      <td dir="ltr" class="ltr"><code dir="ltr">runAsGroup</code></td>
+      <td dir="rtl">تغییر‌دهنده (MustRunAs) و اعتبارسنج (Mutating (MustRunAs) &amp; Validating)</td>
+      <td dir="rtl">
+        <i>بدون نظر (No opinion)</i>
+      </td>
+    </tr>
+    <tr>
+      <td dir="ltr" class="ltr"><code dir="ltr">supplementalGroups</code></td>
+      <td dir="rtl">تغییر‌دهنده و اعتبارسنج (Mutating &amp; Validating)</td>
+      <td dir="rtl">
+        <i>بدون نظر (No opinion)</i>
+      </td>
+    </tr>
+    <tr>
+      <td dir="ltr" class="ltr"><code dir="ltr">fsGroup</code></td>
+      <td dir="rtl">تغییر‌دهنده و اعتبارسنج (Mutating &amp; Validating)</td>
+      <td dir="rtl">
+        <i>بدون نظر (No opinion)</i>
+      </td>
+    </tr>
+    <tr>
+      <td dir="ltr" class="ltr"><code dir="ltr">readOnlyRootFilesystem</code></td>
+      <td dir="rtl">تغییر‌دهنده و اعتبارسنج (Mutating &amp; Validating)</td>
+      <td dir="rtl">
+        <i>بدون نظر (No opinion)</i>
+      </td>
+    </tr>
+    <tr>
+      <td dir="ltr" class="ltr"><code dir="ltr">defaultAllowPrivilegeEscalation</code></td>
+      <td dir="rtl">تغییر‌دهنده (Mutating)</td>
+      <td dir="rtl">
+        <i>بدون نظر (No opinion) (بدون اعتبارسنجی)</i>
+      </td>
+    </tr>
+    <tr>
+      <td dir="ltr" class="ltr"><code dir="ltr">allowPrivilegeEscalation</code></td>
+      <td dir="rtl">تغییر‌دهنده و اعتبارسنج (Mutating &amp; Validating)</td>
+      <td dir="rtl">
+        <p dir="rtl"><i>فقط در صورتی تغییر‌دهنده است که روی <code dir="ltr">false</code> تنظیم شده باشد</i></p>
+        <p dir="rtl"><b>Baseline</b>: بدون نظر (No opinion)</p>
+        <p dir="ltr" class="ltr"><b>Restricted</b>: <code dir="ltr">false</code></p>
+      </td>
+    </tr>
+    <tr>
+      <td dir="ltr" class="ltr"><code dir="ltr">allowedHostPaths</code></td>
+      <td dir="rtl">اعتبارسنجی (Validating)</td>
+      <td dir="rtl"><i>بدون نظر (No opinion) (فیلد volumes اولویت دارد)</i></td>
+    </tr>
+    <tr>
+      <td dir="ltr" class="ltr"><code dir="ltr">allowedFlexVolumes</code></td>
+      <td dir="rtl">اعتبارسنجی (Validating)</td>
+      <td dir="rtl"><i>بدون نظر (No opinion) (فیلد volumes اولویت دارد)</i></td>
+    </tr>
+    <tr>
+      <td dir="ltr" class="ltr"><code dir="ltr">allowedCSIDrivers</code></td>
+      <td dir="rtl">اعتبارسنجی (Validating)</td>
+      <td dir="rtl"><i>بدون نظر (No opinion) (فیلد volumes اولویت دارد)</i></td>
+    </tr>
+    <tr>
+      <td dir="ltr" class="ltr"><code dir="ltr">allowedUnsafeSysctls</code></td>
+      <td dir="rtl">اعتبارسنجی (Validating)</td>
+      <td dir="rtl"><b>Baseline و Restricted</b>: تعریف‌نشده / nil / خالی</td>
+    </tr>
+    <tr>
+      <td dir="ltr" class="ltr"><code dir="ltr">forbiddenSysctls</code></td>
+      <td dir="rtl">اعتبارسنجی (Validating)</td>
+      <td dir="rtl"><i>بدون نظر (No opinion)</i></td>
+    </tr>
+    <tr>
+      <td dir="rtl"><code dir="ltr">allowedProcMountTypes</code><br><i>(قابلیت آلفا)</i></td>
+      <td dir="rtl">اعتبارسنجی (Validating)</td>
+      <td dir="rtl"><b>Baseline و Restricted</b>: <code dir="ltr">["Default"]</code> یا تعریف‌نشده / nil / خالی</td>
+    </tr>
+    <tr>
+      <td dir="ltr" class="ltr"><code dir="ltr">runtimeClass</code><br><code dir="ltr"> .defaultRuntimeClassName</code></td>
+      <td dir="rtl">تغییر‌دهنده (Mutating)</td>
+      <td dir="rtl"><i>بدون نظر (No opinion)</i></td>
+    </tr>
+    <tr>
+      <td dir="ltr" class="ltr"><code dir="ltr">runtimeClass</code><br><code dir="ltr"> .allowedRuntimeClassNames</code></td>
+      <td dir="rtl">اعتبارسنجی (Validating)</td>
+      <td dir="rtl"><i>بدون نظر (No opinion)</i></td>
+    </tr>
+  </tbody>
+</table>
+<h2 id="حاشیه-نویسی-های-podsecuritypolicy-podsecuritypolicy-annotations-podsecuritypolicy-annotations" dir="rtl">حاشیه‌نویسی‌های PodSecurityPolicy (PodSecurityPolicy annotations) {#podsecuritypolicy-annotations}</h2>
+<p dir="rtl"><a href="../../concepts/overview/working-with-objects/annotations.html">حاشیه‌نویسی‌های (annotations)</a> فهرست‌شده در این
+جدول را می‌توان در <code dir="ltr">.metadata.annotations</code> آبجکت PodSecurityPolicy مشخص کرد.</p>
+<table class="no-word-break">
+  <caption style="display:none">نگاشت حاشیه‌نویسی‌های PodSecurityPolicy به Pod Security Standards</caption>
+  <tbody>
+    <tr>
+      <th dir="ltr" class="ltr"><code dir="ltr">PSP Annotation</code></th>
+      <th dir="rtl">نوع</th>
+      <th dir="rtl">معادل در Pod Security Standards</th>
+    </tr>
+    <tr>
+      <td dir="ltr" class="ltr"><code dir="ltr">seccomp.security.alpha.kubernetes.io</code><br><code dir="ltr">/defaultProfileName</code></td>
+      <td dir="rtl">تغییر‌دهنده (Mutating)</td>
+      <td dir="rtl"><i>بدون نظر (No opinion)</i></td>
+    </tr>
+    <tr>
+      <td dir="ltr" class="ltr"><code dir="ltr">seccomp.security.alpha.kubernetes.io</code><br><code dir="ltr">/allowedProfileNames</code></td>
+      <td dir="rtl">اعتبارسنجی (Validating)</td>
+      <td dir="rtl">
+        <p dir="rtl"><b>Baseline</b>: <code dir="ltr">"runtime/default,"</code> <i>(کاما در انتها برای مجاز بودن حالت تنظیم‌نشده)</i></p>
+        <p dir="rtl"><b>Restricted</b>: <code dir="ltr">"runtime/default"</code> <i>(بدون کاما در انتها)</i></p>
+        <p dir="rtl"><i>مقادیر <code dir="ltr">localhost/*</code> نیز برای هر دو پروفایل Baseline و Restricted مجاز هستند.</i></p>
+      </td>
+    </tr>
+    <tr>
+      <td dir="ltr" class="ltr"><code dir="ltr">apparmor.security.beta.kubernetes.io</code><br><code dir="ltr">/defaultProfileName</code></td>
+      <td dir="rtl">تغییر‌دهنده (Mutating)</td>
+      <td dir="rtl"><i>بدون نظر (No opinion)</i></td>
+    </tr>
+    <tr>
+      <td dir="ltr" class="ltr"><code dir="ltr">apparmor.security.beta.kubernetes.io</code><br><code dir="ltr">/allowedProfileNames</code></td>
+      <td dir="rtl">اعتبارسنجی (Validating)</td>
+      <td dir="rtl">
+        <p dir="rtl"><b>Baseline</b>: <code dir="ltr">"runtime/default,"</code> <i>(کاما در انتها برای مجاز بودن حالت تنظیم‌نشده)</i></p>
+        <p dir="rtl"><b>Restricted</b>: <code dir="ltr">"runtime/default"</code> <i>(بدون کاما در انتها)</i></p>
+        <p dir="rtl"><i>مقادیر <code dir="ltr">localhost/*</code> نیز برای هر دو پروفایل Baseline و Restricted مجاز هستند.</i></p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#مشخصات-podsecuritypolicy-podsecuritypolicy-spec-podsecuritypolicy-spec">مشخصات PodSecurityPolicy (PodSecurityPolicy Spec) {#podsecuritypolicy-spec}</a><a class="l2" href="#حاشیه-نویسی-های-podsecuritypolicy-podsecuritypolicy-annotations-podsecuritypolicy-annotations">حاشیه‌نویسی‌های PodSecurityPolicy (PodSecurityPolicy annotations) {#podsecuritypolicy-annotations}</a></nav>
+</div>
+</body>
+</html>

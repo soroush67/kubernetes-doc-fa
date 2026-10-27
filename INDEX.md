@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-238 از 1722 صفحه
+253 از 1722 صفحه
 
 
 ## `.`
@@ -363,21 +363,21 @@
 
 - ✅ [_index.md](md/reference/access-authn-authz/_index.md)
 - ✅ [abac.md](md/reference/access-authn-authz/abac.md)
-- ⏳ `admission-controllers.md`
-- ⏳ `authentication.md`
-- ⏳ `authorization.md`
-- ⏳ `bootstrap-tokens.md`
-- ⏳ `certificate-signing-requests.md`
-- ⏳ `extensible-admission-controllers.md`
-- ⏳ `kubelet-authn-authz.md`
-- ⏳ `kubelet-tls-bootstrapping.md`
-- ⏳ `manifest-admission-control.md`
-- ⏳ `mutating-admission-policy.md`
-- ⏳ `node.md`
-- ⏳ `psp-to-pod-security-standards.md`
-- ⏳ `rbac.md`
-- ⏳ `service-accounts-admin.md`
-- ⏳ `user-impersonation.md`
+- ✅ [admission-controllers.md](md/reference/access-authn-authz/admission-controllers.md)
+- ⚠️ [authentication.md](md/reference/access-authn-authz/authentication.md)
+- ✅ [authorization.md](md/reference/access-authn-authz/authorization.md)
+- ✅ [bootstrap-tokens.md](md/reference/access-authn-authz/bootstrap-tokens.md)
+- ✅ [certificate-signing-requests.md](md/reference/access-authn-authz/certificate-signing-requests.md)
+- ✅ [extensible-admission-controllers.md](md/reference/access-authn-authz/extensible-admission-controllers.md)
+- ✅ [kubelet-authn-authz.md](md/reference/access-authn-authz/kubelet-authn-authz.md)
+- ✅ [kubelet-tls-bootstrapping.md](md/reference/access-authn-authz/kubelet-tls-bootstrapping.md)
+- ✅ [manifest-admission-control.md](md/reference/access-authn-authz/manifest-admission-control.md)
+- ✅ [mutating-admission-policy.md](md/reference/access-authn-authz/mutating-admission-policy.md)
+- ✅ [node.md](md/reference/access-authn-authz/node.md)
+- ⚠️ [psp-to-pod-security-standards.md](md/reference/access-authn-authz/psp-to-pod-security-standards.md)
+- ✅ [rbac.md](md/reference/access-authn-authz/rbac.md)
+- ✅ [service-accounts-admin.md](md/reference/access-authn-authz/service-accounts-admin.md)
+- ✅ [user-impersonation.md](md/reference/access-authn-authz/user-impersonation.md)
 - ⏳ `validating-admission-policy.md`
 - ⏳ `webhook.md`
 

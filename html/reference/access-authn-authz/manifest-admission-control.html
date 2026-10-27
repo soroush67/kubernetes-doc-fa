@@ -1,0 +1,604 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>کنترل پذیرش مبتنی بر مانیفست | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">reference / access-authn-authz</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">کنترل پذیرش مبتنی بر مانیفست</h1><!-- overview -->
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
+<p dir="rtl">این صفحه مروری بر پیکربندی کنترل پذیرش (admission control) مبتنی بر مانیفست ارائه می‌دهد.
+کنترل پذیرش مبتنی بر مانیفست به شما امکان می‌دهد
+<a href="extensible-admission-controllers.html">admission webhookها</a>
+و سیاست‌های پذیرش مبتنی بر CEL را به‌جای API کوبرنتیز، از فایل‌های ایستا روی دیسک بارگذاری کنید.
+این سیاست‌ها از زمان راه‌اندازی API server فعال هستند، مستقل از <span class="term" title="etcd">etcd</span> عمل می‌کنند و می‌توانند از منابع پذیرش مبتنی بر API در برابر تغییر محافظت کنند.</p>
+<p dir="rtl">برای استفاده از این قابلیت، فیلد <code dir="ltr">staticManifestsDir</code> را در فایل
+<a href="https://kubernetes.io/docs/reference/config-api/apiserver-config.v1/#apiserver-k8s-io-v1-AdmissionConfiguration" target="_blank">AdmissionConfiguration</a>
+که از طریق <code dir="ltr">--admission-control-config-file</code> به kube-apiserver داده می‌شود، پیکربندی کنید.
+<a href="https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/#ManifestBasedAdmissionControlConfig" target="_blank">feature gate</a>
+با نام <code dir="ltr">ManifestBasedAdmissionControlConfig</code> باید فعال باشد؛ این feature gate از کوبرنتیز v1.37 به‌صورت پیش‌فرض فعال است.</p>
+<!-- body -->
+<h2 id="چرا-از-کنترل-پذیرش-مبتنی-بر-مانیفست-استفاده-کنیم؟" dir="rtl">چرا از کنترل پذیرش مبتنی بر مانیفست استفاده کنیم؟</h2>
+<p dir="rtl">سیاست‌ها و webhookهای پذیرشی که از طریق API کوبرنتیز ثبت می‌شوند (مانند
+ValidatingAdmissionPolicy، MutatingAdmissionPolicy،
+ValidatingWebhookConfiguration و MutatingWebhookConfiguration) چند محدودیت ذاتی دارند:</p>
+<ul>
+<li dir="rtl"><strong>شکاف راه‌اندازی اولیه (Bootstrap gap)</strong>: اِعمال سیاست مبتنی بر REST مستلزم آن است که آبجکت‌های API
+ایجاد شوند و توسط کنترل‌کننده پذیرش پویا بارگذاری گردند. تا زمانی که این اتفاق نیفتد،
+سیاست‌ها اِعمال نمی‌شوند.</li>
+<li dir="rtl"><strong>شکاف خودمحافظتی (Self-protection gap)</strong>: منابع پیکربندی پذیرش (مانند
+ValidatingWebhookConfiguration) خودشان مشمول پذیرش از طریق webhook نیستند تا از وابستگی‌های دایره‌ای جلوگیری شود. کاربری با سطح دسترسی کافی
+می‌تواند سیاست‌های پذیرش حیاتی را حذف یا تغییر دهد.</li>
+<li dir="rtl"><strong>وابستگی به etcd</strong>: پیکربندی‌های پذیرش مبتنی بر REST به در دسترس بودن etcd وابسته‌اند.
+اگر etcd در دسترس نباشد یا آسیب دیده باشد، ممکن است سیاست‌های پذیرش به‌درستی بارگذاری نشوند.</li>
+</ul>
+<p dir="rtl">کنترل پذیرش مبتنی بر مانیفست با بارگذاری پیکربندی‌ها از فایل‌های روی دیسک، این محدودیت‌ها را برطرف می‌کند. این پیکربندی‌ها:</p>
+<ul>
+<li dir="rtl">به محض آماده شدن API server برای پاسخ‌گویی به درخواست‌ها فعال هستند</li>
+<li dir="rtl">از طریق API کوبرنتیز قابل مشاهده یا تغییر نیستند</li>
+<li dir="rtl">مستقل از در دسترس بودن etcd هستند</li>
+<li dir="rtl">می‌توانند عملیات روی خود منابع پذیرش مبتنی بر API را رهگیری کنند</li>
+</ul>
+<h2 id="انواع-منابع-پشتیبانی-شده" dir="rtl">انواع منابع پشتیبانی‌شده</h2>
+<p dir="rtl">می‌توانید انواع منابع زیر را در فایل‌های مانیفست قرار دهید. فقط نسخه API با نام
+<code dir="ltr">admissionregistration.k8s.io/v1</code> پشتیبانی می‌شود.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left" dir="rtl">نام افزونه</th>
+<th style="text-align:left" dir="rtl">انواع منابع پشتیبانی‌شده</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left" dir="ltr" class="ltr"><code dir="ltr">ValidatingAdmissionWebhook</code></td>
+<td style="text-align:left" dir="ltr" class="ltr">ValidatingWebhookConfiguration</td>
+</tr>
+<tr>
+<td style="text-align:left" dir="ltr" class="ltr"><code dir="ltr">MutatingAdmissionWebhook</code></td>
+<td style="text-align:left" dir="ltr" class="ltr">MutatingWebhookConfiguration</td>
+</tr>
+<tr>
+<td style="text-align:left" dir="ltr" class="ltr"><code dir="ltr">ValidatingAdmissionPolicy</code></td>
+<td style="text-align:left" dir="ltr" class="ltr">ValidatingAdmissionPolicy, ValidatingAdmissionPolicyBinding</td>
+</tr>
+<tr>
+<td style="text-align:left" dir="ltr" class="ltr"><code dir="ltr">MutatingAdmissionPolicy</code></td>
+<td style="text-align:left" dir="ltr" class="ltr">MutatingAdmissionPolicy, MutatingAdmissionPolicyBinding</td>
+</tr>
+</tbody>
+</table>
+<p dir="rtl">همچنین می‌توانید از <code dir="ltr">v1.List</code> برای قرار دادن چند منبع از یک نوع افزونه در یک سند واحد استفاده کنید.</p>
+<p dir="rtl"><code dir="ltr">staticManifestsDir</code> هر افزونه پذیرش باید فقط شامل انواع منابعی باشد
+که برای آن افزونه مجاز است. برای مثال، دایرکتوری پیکربندی‌شده برای افزونه
+<code dir="ltr">ValidatingAdmissionPolicy</code> فقط می‌تواند شامل منابع ValidatingAdmissionPolicy
+و ValidatingAdmissionPolicyBinding باشد.</p>
+<h2 id="پیکربندی-کنترل-پذیرش-مبتنی-بر-مانیفست-configuration" dir="rtl">پیکربندی کنترل پذیرش مبتنی بر مانیفست {#configuration}</h2>
+<p dir="rtl">برای فعال‌سازی کنترل پذیرش مبتنی بر مانیفست به موارد زیر نیاز دارید:</p>
+<ol>
+<li dir="rtl">فعال بودن feature gate با نام <code dir="ltr">ManifestBasedAdmissionControlConfig</code> روی
+kube-apiserver (از کوبرنتیز v1.37 به‌صورت پیش‌فرض فعال است).</li>
+<li dir="rtl">یک فایل <code dir="ltr">AdmissionConfiguration</code> با فیلدهای <code dir="ltr">staticManifestsDir</code> که به
+دایرکتوری‌های حاوی فایل‌های مانیفست شما اشاره می‌کنند.</li>
+<li dir="rtl">خود فایل‌های مانیفست روی دیسک، به‌گونه‌ای که برای فرایند kube-apiserver قابل دسترسی باشند.</li>
+</ol>
+<h3 id="admissionconfiguration" dir="ltr" class="ltr">AdmissionConfiguration</h3>
+<p dir="rtl"><code dir="ltr">staticManifestsDir</code> را به پیکربندی افزونه‌ی هر افزونه پذیرشی که باید مانیفست‌ها را از دیسک بارگذاری کند اضافه کنید.
+هر افزونه به دایرکتوری مخصوص به خود نیاز دارد.</p>
+<div class="code-file ltr" dir="ltr">access/manifest-admission-control/admission-configuration.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr"># This is an example AdmissionConfiguration that configures all four admission
+# plugins to load manifest-based admission control from static files on disk.
+apiVersion: apiserver.config.k8s.io/v1
+kind: AdmissionConfiguration
+plugins:
+- name: ValidatingAdmissionWebhook
+  configuration:
+    apiVersion: apiserver.config.k8s.io/v1
+    kind: WebhookAdmissionConfiguration
+    kubeConfigFile: "&lt;path-to-kubeconfig&gt;"
+    staticManifestsDir: "/etc/kubernetes/admission/validating-webhooks/"
+- name: MutatingAdmissionWebhook
+  configuration:
+    apiVersion: apiserver.config.k8s.io/v1
+    kind: WebhookAdmissionConfiguration
+    kubeConfigFile: "&lt;path-to-kubeconfig&gt;"
+    staticManifestsDir: "/etc/kubernetes/admission/mutating-webhooks/"
+- name: ValidatingAdmissionPolicy
+  configuration:
+    apiVersion: apiserver.config.k8s.io/v1
+    kind: ValidatingAdmissionPolicyConfiguration
+    staticManifestsDir: "/etc/kubernetes/admission/validating-policies/"
+- name: MutatingAdmissionPolicy
+  configuration:
+    apiVersion: apiserver.config.k8s.io/v1
+    kind: MutatingAdmissionPolicyConfiguration
+    staticManifestsDir: "/etc/kubernetes/admission/mutating-policies/"
+</code></pre>
+<p dir="rtl">فیلد <code dir="ltr">staticManifestsDir</code> یک مسیر مطلق به یک دایرکتوری می‌پذیرد. همه‌ی فایل‌های
+مستقیم درون دایرکتوری که پسوند <code dir="ltr">.yaml</code>، <code dir="ltr">.yml</code> یا <code dir="ltr">.json</code> دارند بارگذاری می‌شوند. زیردایرکتوری‌ها و فایل‌هایی با پسوندهای دیگر نادیده گرفته می‌شوند.
+الگوهای glob و مسیرهای نسبی پشتیبانی نمی‌شوند.</p>
+<p dir="rtl">این فایل را با فلگ <code dir="ltr">--admission-control-config-file</code> به kube-apiserver بدهید.</p>
+<h3 id="انواع-پیکربندی" dir="rtl">انواع پیکربندی</h3>
+<p dir="rtl">هر افزونه پذیرش از یک kind پیکربندی مشخص استفاده می‌کند:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left" dir="rtl">افزونه</th>
+<th style="text-align:left" dir="ltr" class="ltr">apiVersion</th>
+<th style="text-align:left" dir="ltr" class="ltr">kind</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left" dir="ltr" class="ltr"><code dir="ltr">ValidatingAdmissionWebhook</code></td>
+<td style="text-align:left" dir="ltr" class="ltr"><code dir="ltr">apiserver.config.k8s.io/v1</code></td>
+<td style="text-align:left" dir="ltr" class="ltr"><code dir="ltr">WebhookAdmissionConfiguration</code></td>
+</tr>
+<tr>
+<td style="text-align:left" dir="ltr" class="ltr"><code dir="ltr">MutatingAdmissionWebhook</code></td>
+<td style="text-align:left" dir="ltr" class="ltr"><code dir="ltr">apiserver.config.k8s.io/v1</code></td>
+<td style="text-align:left" dir="ltr" class="ltr"><code dir="ltr">WebhookAdmissionConfiguration</code></td>
+</tr>
+<tr>
+<td style="text-align:left" dir="ltr" class="ltr"><code dir="ltr">ValidatingAdmissionPolicy</code></td>
+<td style="text-align:left" dir="ltr" class="ltr"><code dir="ltr">apiserver.config.k8s.io/v1</code></td>
+<td style="text-align:left" dir="ltr" class="ltr"><code dir="ltr">ValidatingAdmissionPolicyConfiguration</code></td>
+</tr>
+<tr>
+<td style="text-align:left" dir="ltr" class="ltr"><code dir="ltr">MutatingAdmissionPolicy</code></td>
+<td style="text-align:left" dir="ltr" class="ltr"><code dir="ltr">apiserver.config.k8s.io/v1</code></td>
+<td style="text-align:left" dir="ltr" class="ltr"><code dir="ltr">MutatingAdmissionPolicyConfiguration</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="نوشتن-فایل-های-مانیفست-manifest-files" dir="rtl">نوشتن فایل‌های مانیفست {#manifest-files}</h2>
+<p dir="rtl">فایل‌های مانیفست شامل تعریف‌های استاندارد منابع کوبرنتیز هستند. می‌توانید با استفاده از جداکننده‌های سند YAML (<code dir="ltr">---</code>) چند منبع را در یک فایل قرار دهید.</p>
+<h3 id="قرارداد-نام-گذاری-naming" dir="rtl">قرارداد نام‌گذاری {#naming}</h3>
+<p dir="rtl">نام همه‌ی آبجکت‌ها در فایل‌های مانیفست باید با پسوند <code dir="ltr">.static.k8s.io</code> پایان یابد.
+برای مثال: <code dir="ltr">deny-privileged.static.k8s.io</code>.</p>
+<p dir="rtl">وقتی feature gate با نام <code dir="ltr">ManifestBasedAdmissionControlConfig</code> فعال باشد، ایجاد
+آبجکت‌های پذیرش مبتنی بر API با نام‌هایی که به <code dir="ltr">.static.k8s.io</code> ختم می‌شوند مسدود می‌شود.
+وقتی feature gate غیرفعال باشد، به‌جای آن یک هشدار بازگردانده می‌شود.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">اگر دو فایل مانیفست آبجکت‌هایی از یک نوع با نام یکسان تعریف کنند،
+API server راه‌اندازی نمی‌شود و یک خطای توصیفی نمایش می‌دهد.</p>
+</div>
+<h3 id="محدودیت-ها" dir="rtl">محدودیت‌ها</h3>
+<p dir="rtl">پیکربندی‌های پذیرش مبتنی بر مانیفست به‌صورت مجزا وجود دارند و نمی‌توانند
+به منابع API ارجاع دهند. محدودیت‌های زیر اعمال می‌شوند:</p>
+<ul>
+<li dir="rtl"><strong>Webhookها</strong>: باید از <code dir="ltr">clientConfig.url</code> استفاده کنند. فیلد <code dir="ltr">clientConfig.service</code>
+مجاز نیست، زیرا ممکن است شبکه‌ی سرویس در زمان راه‌اندازی API server در دسترس نباشد.</li>
+<li dir="rtl"><strong>سیاست‌ها</strong>: فیلد <code dir="ltr">spec.paramKind</code> مجاز نیست. سیاست‌ها نمی‌توانند
+برای پارامترها به ConfigMapها یا سایر آبجکت‌های کلاستر ارجاع دهند.</li>
+<li dir="rtl"><strong>Bindingها</strong>: فیلد <code dir="ltr">spec.paramRef</code> مجاز نیست. مقدار <code dir="ltr">spec.policyName</code>
+باید به سیاستی ارجاع دهد که در همان مجموعه فایل‌های مانیفست تعریف شده است و باید با <code dir="ltr">.static.k8s.io</code> پایان یابد.</li>
+</ul>
+<p dir="rtl">فایل‌های مانیفست با استفاده از رمزگشای سخت‌گیر (strict decoder) خوانده می‌شوند که فایل‌های
+دارای فیلدهای تکراری یا فیلدهای ناشناخته را رد می‌کند. هر آبجکت همان مقداردهی پیش‌فرض و اعتبارسنجی‌ای را طی می‌کند که REST API اعمال می‌کند.</p>
+<h2 id="مثال-ها-examples" dir="rtl">مثال‌ها {#examples}</h2>
+<h3 id="محافظت-از-منابع-پذیرش-مبتنی-بر-api-protecting-admission-resources" dir="rtl">محافظت از منابع پذیرش مبتنی بر API {#protecting-admission-resources}</h3>
+<p dir="rtl">یکی از قابلیت‌های کلیدی کنترل پذیرش مبتنی بر مانیفست، توانایی رهگیری
+عملیات روی خود منابع پیکربندی پذیرش است
+(ValidatingAdmissionPolicy، MutatingAdmissionPolicy،
+ValidatingWebhookConfiguration، MutatingWebhookConfiguration و bindingهای آن‌ها).
+webhookها و سیاست‌های پذیرش مبتنی بر REST برای جلوگیری از وابستگی‌های دایره‌ای روی این انواع منابع فراخوانی نمی‌شوند، اما سیاست‌های مبتنی بر مانیفست
+می‌توانند روی آن‌ها قوانین را اِعمال کنند، زیرا این وابستگی دایره‌ای را ندارند.</p>
+<p dir="rtl">مثال زیر از حذف یا تغییر منابع پذیرشی که برچسب
+<code dir="ltr">platform.example.com/protected: "true"</code> را دارند جلوگیری می‌کند:</p>
+<div class="code-file ltr" dir="ltr">access/manifest-admission-control/protect-admission-resources.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr"># This is an example ValidatingAdmissionPolicy that prevents deletion or
+# modification of API-based admission resources with the
+# "platform.example.com/protected: true" label.
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingAdmissionPolicy
+metadata:
+  name: "example-protect-admission-resources.static.k8s.io"
+  annotations:
+    kubernetes.io/description: "Prevent modification or deletion of protected admission resources"
+spec:
+  failurePolicy: Fail
+  matchConstraints:
+    resourceRules:
+    - apiGroups: ["admissionregistration.k8s.io"]
+      apiVersions: ["*"]
+      operations: ["DELETE", "UPDATE"]
+      resources:
+      - "validatingadmissionpolicies"
+      - "validatingadmissionpolicybindings"
+      - "mutatingadmissionpolicies"
+      - "mutatingadmissionpolicybindings"
+      - "validatingwebhookconfigurations"
+      - "mutatingwebhookconfigurations"
+  validations:
+  - expression: &gt;-
+      !has(oldObject.metadata.labels) ||
+      !('platform.example.com/protected' in oldObject.metadata.labels) ||
+      oldObject.metadata.labels['platform.example.com/protected'] != 'true'
+    message: "Protected admission resources cannot be modified or deleted"
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingAdmissionPolicyBinding
+metadata:
+  name: "example-protect-admission-resources-binding.static.k8s.io"
+  annotations:
+    kubernetes.io/description: "Bind protect-admission-resources policy to all admission resources"
+spec:
+  policyName: "example-protect-admission-resources.static.k8s.io"
+  validationActions:
+  - Deny
+</code></pre>
+<h3 id="اِعمال-یک-validatingadmissionpolicy-از-روی-دیسک" dir="rtl">اِعمال یک ValidatingAdmissionPolicy از روی دیسک</h3>
+<p dir="rtl">مثال زیر سیاستی را تعریف می‌کند که کانتینرهای privileged را در همه‌ی
+فضاهای نام (namespace) به‌جز <code dir="ltr">kube-system</code> رد می‌کند:</p>
+<div class="code-file ltr" dir="ltr">access/manifest-admission-control/deny-privileged-policy.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr"># This is an example ValidatingAdmissionPolicy that denies privileged containers
+# in all namespaces except kube-system.
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingAdmissionPolicy
+metadata:
+  name: "example-deny-privileged.static.k8s.io"
+  annotations:
+    kubernetes.io/description: "Deny privileged containers outside kube-system"
+spec:
+  failurePolicy: Fail
+  matchConstraints:
+    resourceRules:
+    - apiGroups: [""]
+      apiVersions: ["v1"]
+      operations: ["CREATE", "UPDATE"]
+      resources: ["pods"]
+  variables:
+  - name: allContainers
+    expression: &gt;-
+      object.spec.containers +
+      (has(object.spec.initContainers) ? object.spec.initContainers : []) +
+      (has(object.spec.ephemeralContainers) ? object.spec.ephemeralContainers : [])
+  validations:
+  - expression: &gt;-
+      !variables.allContainers.exists(c,
+      has(c.securityContext) &amp;&amp; has(c.securityContext.privileged) &amp;&amp;
+      c.securityContext.privileged == true)
+    message: "Privileged containers are not allowed"
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingAdmissionPolicyBinding
+metadata:
+  name: "example-deny-privileged-binding.static.k8s.io"
+  annotations:
+    kubernetes.io/description: "Bind deny-privileged policy to all namespaces except kube-system"
+spec:
+  policyName: "example-deny-privileged.static.k8s.io"
+  validationActions:
+  - Deny
+  matchResources:
+    namespaceSelector:
+      matchExpressions:
+      - key: "kubernetes.io/metadata.name"
+        operator: NotIn
+        values: ["kube-system"]
+</code></pre>
+<p dir="rtl">این فایل را در دایرکتوری‌ای قرار دهید که به‌عنوان <code dir="ltr">staticManifestsDir</code> برای افزونه
+<code dir="ltr">ValidatingAdmissionPolicy</code> پیکربندی شده است. سیاست و binding آن
+با هم و به‌صورت اتمیک بارگذاری می‌شوند.</p>
+<h3 id="پیکربندی-یک-validatingwebhookconfiguration-از-روی-دیسک" dir="rtl">پیکربندی یک ValidatingWebhookConfiguration از روی دیسک</h3>
+<p dir="rtl">مثال زیر یک validating webhook را پیکربندی می‌کند که یک URL خارجی را فراخوانی می‌کند:</p>
+<div class="code-file ltr" dir="ltr">access/manifest-admission-control/validating-webhook.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr"># This is an example ValidatingWebhookConfiguration that calls an external
+# URL-based webhook endpoint to validate pod creation and updates.
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingWebhookConfiguration
+metadata:
+  name: "example-security-webhook.static.k8s.io"
+  annotations:
+    kubernetes.io/description: "Validate pod creation and updates via external webhook"
+webhooks:
+- name: "security.platform.example.com"
+  clientConfig:
+    url: "https://security-webhook.platform.example.com:443/validate"
+    caBundle: "&lt;base64-encoded-CA-bundle&gt;"
+  rules:
+  - apiGroups: [""]
+    apiVersions: ["v1"]
+    operations: ["CREATE", "UPDATE"]
+    resources: ["pods"]
+  admissionReviewVersions: ["v1"]
+  sideEffects: None
+  failurePolicy: Fail
+</code></pre>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">URL webhookها باید در زمان راه‌اندازی از kube-apiserver قابل دسترسی باشند. فقط
+نقاط انتهایی مبتنی بر URL پشتیبانی می‌شوند؛ ارجاع به service در
+پیکربندی‌های webhook مبتنی بر مانیفست مجاز نیست.</p>
+</div>
+<h3 id="استفاده-از-قالب-list" dir="rtl">استفاده از قالب List</h3>
+<p dir="rtl">می‌توانید از <code dir="ltr">v1.List</code> برای گروه‌بندی منابع مرتبط در یک سند واحد استفاده کنید:</p>
+<div class="code-file ltr" dir="ltr">access/manifest-admission-control/list-format-policy.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr"># This is an example of using the v1.List format to group a
+# ValidatingAdmissionPolicy and its binding in a single document.
+apiVersion: v1
+kind: List
+items:
+- apiVersion: admissionregistration.k8s.io/v1
+  kind: ValidatingAdmissionPolicy
+  metadata:
+    name: "example-require-labels.static.k8s.io"
+    annotations:
+      kubernetes.io/description: "Require app.kubernetes.io/name label on all pods"
+  spec:
+    failurePolicy: Fail
+    matchConstraints:
+      resourceRules:
+      - apiGroups: [""]
+        apiVersions: ["v1"]
+        operations: ["CREATE"]
+        resources: ["pods"]
+    validations:
+    - expression: &gt;-
+        has(object.metadata.labels) &amp;&amp;
+        'app.kubernetes.io/name' in object.metadata.labels
+      message: "All pods must have the 'app.kubernetes.io/name' label"
+- apiVersion: admissionregistration.k8s.io/v1
+  kind: ValidatingAdmissionPolicyBinding
+  metadata:
+    name: "example-require-labels-binding.static.k8s.io"
+    annotations:
+      kubernetes.io/description: "Bind require-labels policy to all namespaces except kube-system"
+  spec:
+    policyName: "example-require-labels.static.k8s.io"
+    validationActions:
+    - Deny
+    matchResources:
+      namespaceSelector:
+        matchExpressions:
+        - key: "kubernetes.io/metadata.name"
+          operator: NotIn
+          values: ["kube-system"]
+</code></pre>
+<h2 id="ترتیب-ارزیابی" dir="rtl">ترتیب ارزیابی</h2>
+<p dir="rtl">پیکربندی‌های مبتنی بر مانیفست پیش از پیکربندی‌های مبتنی بر API ارزیابی می‌شوند.
+این تضمین می‌کند که سیاست‌های سطح پلتفرم که از طریق پیکربندی ایستا اِعمال می‌شوند
+بر سیاست‌های مبتنی بر API اولویت دارند.</p>
+<p dir="rtl">برای خود منابع پیکربندی پذیرش (ValidatingAdmissionPolicy،
+MutatingAdmissionPolicy، ValidatingAdmissionPolicyBinding،
+MutatingAdmissionPolicyBinding، ValidatingWebhookConfiguration،
+MutatingWebhookConfiguration) فقط hookهای پذیرش مبتنی بر مانیفست
+ارزیابی می‌شوند. hookهای مبتنی بر API برای این انواع منابع نادیده گرفته می‌شوند تا از
+وابستگی‌های دایره‌ای جلوگیری شود.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">منابع مجازی (غیرپایدار) احراز هویت و مجوزدهی، مانند
+TokenReview و SubjectAccessReview، هم از
+<a href="extensible-admission-controllers.html#excluded-virtual-resources">admission webhookها</a>
+و هم از سیاست‌های پذیرش مستثنا هستند. پیکربندی‌های مبتنی بر مانیفست نیز
+نمی‌توانند آن‌ها را رهگیری کنند، زیرا انجام این کار می‌تواند کلاستر را از مسیر احراز هویت و مجوزدهی خودش قفل کند.</p>
+</div>
+<h2 id="پایش-فایل-و-بارگذاری-مجدد-پویا-dynamic-reloading" dir="rtl">پایش فایل و بارگذاری مجدد پویا {#dynamic-reloading}</h2>
+<p dir="rtl">kube-apiserver دایرکتوری‌های پیکربندی‌شده را برای تغییرات پایش می‌کند:</p>
+<ol>
+<li dir="rtl">
+<p dir="rtl"><strong>بارگذاری اولیه</strong>: در زمان راه‌اندازی، همه‌ی مسیرهای پیکربندی‌شده خوانده و اعتبارسنجی می‌شوند.
+API server تا زمانی که همه‌ی مانیفست‌ها با موفقیت بارگذاری نشوند آماده نمی‌شود.
+مانیفست‌های نامعتبر باعث شکست راه‌اندازی می‌شوند.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><strong>بارگذاری مجدد در زمان اجرا</strong>: تغییرات فایل‌های مانیفست یک چرخه‌ی بارگذاری مجدد را راه‌اندازی می‌کند:</p>
+<ul>
+<li dir="rtl">تغییرات فایل‌ها با استفاده از
+<a href="https://github.com/fsnotify/fsnotify" target="_blank" rel="noopener">fsnotify</a> همراه با یک جایگزین مبتنی بر polling
+(با فاصله‌ی پیش‌فرض ۱ دقیقه) شناسایی می‌شوند، مشابه بارگذاری مجدد سایر فایل‌های پیکربندی در
+kube-apiserver.</li>
+<li dir="rtl">در هر بررسی، یک هش محتوایی از همه‌ی فایل‌های مانیفست محاسبه می‌شود. اگر هش
+تغییر نکرده باشد، بارگذاری مجدد انجام نمی‌شود.</li>
+<li dir="rtl">پیکربندی‌های جدید پیش از اِعمال اعتبارسنجی می‌شوند.</li>
+<li dir="rtl">اگر اعتبارسنجی شکست بخورد، خطا ثبت می‌شود، metricها به‌روزرسانی می‌شوند و
+آخرین پیکربندی معتبر قبلی حفظ می‌شود.</li>
+<li dir="rtl">بارگذاری‌های مجدد موفق، پیکربندی قبلی را به‌صورت اتمیک جایگزین می‌کنند.</li>
+</ul>
+</li>
+</ol>
+<!-- -->
+<ol>
+<li dir="rtl"><strong>به‌روزرسانی اتمیک فایل‌ها</strong>: برای جلوگیری از خوانده شدن ناقص هنگام نوشتن فایل‌ها،
+تغییرات را به‌صورت اتمیک اعمال کنید (برای مثال، در یک فایل موقت بنویسید و سپس نام آن را تغییر دهید).
+این موضوع به‌ویژه هنگام به‌روزرسانی ConfigMapها یا Secretهای mount‌شده در
+محیط‌های کانتینری اهمیت دارد.</li>
+</ol>
+<div class="callout caution"><div class="callout-title">احتیاط:</div>
+<p dir="rtl">اگر هنگام راه‌اندازی یک فایل مانیفست نامعتبر وجود داشته باشد، API server
+راه‌اندازی نمی‌شود. در زمان اجرا، اگر بارگذاری مجدد به‌دلیل خطاهای اعتبارسنجی شکست بخورد، آخرین
+پیکربندی معتبر حفظ می‌شود و خطا ثبت می‌شود.</p>
+</div>
+<h2 id="قابلیت-مشاهده-پذیری-observability" dir="rtl">قابلیت مشاهده‌پذیری {#observability}</h2>
+<h3 id="metricها" dir="rtl">Metricها</h3>
+<p dir="rtl">کنترل پذیرش مبتنی بر مانیفست metricهای زیر را برای پایش سلامت
+بارگذاری مجدد فراهم می‌کند:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left" dir="rtl">نوع</th>
+<th style="text-align:left" dir="rtl">توضیحات</th>
+<th style="text-align:left" dir="ltr" class="ltr">Metric</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left" dir="ltr" class="ltr">Counter</td>
+<td style="text-align:left" dir="rtl">تعداد کل تلاش‌های بارگذاری مجدد، با برچسب‌های <code dir="ltr">status</code> (<code dir="ltr">success</code> یا <code dir="ltr">failure</code>)، <code dir="ltr">plugin</code> و <code dir="ltr">apiserver_id_hash</code>.</td>
+<td style="text-align:left" dir="ltr" class="ltr"><code dir="ltr">apiserver_manifest_admission_config_controller_automatic_reloads_total</code></td>
+</tr>
+<tr>
+<td style="text-align:left" dir="ltr" class="ltr">Gauge</td>
+<td style="text-align:left" dir="rtl">زمان‌مهر آخرین تلاش بارگذاری مجدد، با برچسب‌های <code dir="ltr">status</code>، <code dir="ltr">plugin</code> و <code dir="ltr">apiserver_id_hash</code>.</td>
+<td style="text-align:left" dir="ltr" class="ltr"><code dir="ltr">apiserver_manifest_admission_config_controller_automatic_reload_last_timestamp_seconds</code></td>
+</tr>
+<tr>
+<td style="text-align:left" dir="ltr" class="ltr">Gauge</td>
+<td style="text-align:left" dir="rtl">اطلاعات پیکربندی فعلی (مقدار همیشه ۱ است)، با برچسب‌های <code dir="ltr">plugin</code>، <code dir="ltr">apiserver_id_hash</code> و <code dir="ltr">hash</code>. از برچسب <code dir="ltr">hash</code> برای شناسایی ناهمگونی پیکربندی میان API serverها استفاده کنید.</td>
+<td style="text-align:left" dir="ltr" class="ltr"><code dir="ltr">apiserver_manifest_admission_config_controller_last_config_info</code></td>
+</tr>
+</tbody>
+</table>
+<p dir="rtl">برچسب <code dir="ltr">plugin</code> مشخص می‌کند metric به کدام افزونه پذیرش مربوط است:
+<code dir="ltr">ValidatingAdmissionWebhook</code>، <code dir="ltr">MutatingAdmissionWebhook</code>،
+<code dir="ltr">ValidatingAdmissionPolicy</code> یا <code dir="ltr">MutatingAdmissionPolicy</code>.</p>
+<p dir="rtl">از آنجا که نام آبجکت‌های مبتنی بر مانیفست به <code dir="ltr">.static.k8s.io</code> ختم می‌شود، metricهای پذیرش موجود (مانند <code dir="ltr">apiserver_admission_webhook_rejection_count</code>)
+می‌توانند با فیلتر کردن بر اساس برچسب <code dir="ltr">name</code>، تصمیم‌های مبتنی بر مانیفست را مشخص کنند.</p>
+<h3 id="حاشیه-نویسی-های-ممیزی-audit-annotations" dir="rtl">حاشیه‌نویسی‌های ممیزی (Audit annotations)</h3>
+<p dir="rtl">حاشیه‌نویسی‌های ممیزی موجود (مانند
+<code dir="ltr">validation.policy.admission.k8s.io/validation_failure</code> و
+<code dir="ltr">mutation.webhook.admission.k8s.io/round_0_index_0</code>) شامل نام آبجکت هستند.
+می‌توانید تصمیم‌های پذیرش مبتنی بر مانیفست را با فیلتر کردن نام‌هایی که
+به <code dir="ltr">.static.k8s.io</code> ختم می‌شوند شناسایی کنید.</p>
+<h2 id="ملاحظات-دسترسی-پذیری-بالا-ha-considerations" dir="rtl">ملاحظات دسترسی‌پذیری بالا {#ha-considerations}</h2>
+<p dir="rtl">هر نمونه‌ی kube-apiserver فایل‌های مانیفست خود را به‌طور مستقل بارگذاری می‌کند. در
+محیط‌های دسترسی‌پذیری بالا با چند نمونه API server:</p>
+<ul>
+<li dir="rtl">هر API server باید به‌صورت جداگانه پیکربندی شود. هیچ همگام‌سازی میان API serverها
+برای پیکربندی‌های مبتنی بر مانیفست وجود ندارد.</li>
+<li dir="rtl">از ابزارهای مدیریت پیکربندی خارجی (مانند Ansible، Puppet یا
+mountهای ذخیره‌سازی مشترک) برای حفظ یکسانی فایل‌های مانیفست میان نمونه‌ها استفاده کنید.</li>
+<li dir="rtl">metric با نام <code dir="ltr">apiserver_manifest_admission_config_controller_last_config_info</code>
+یک برچسب <code dir="ltr">hash</code> ارائه می‌دهد که می‌توانید از آن برای شناسایی ناهمگونی پیکربندی میان
+نمونه‌های API server استفاده کنید.</li>
+</ul>
+<p dir="rtl">این رفتار مشابه سایر پیکربندی‌های فایل‌محور kube-apiserver مانند
+<a href="https://kubernetes.io/docs/tasks/administer-cluster/encrypt-data/" target="_blank">رمزنگاری داده‌ها در حالت سکون</a> و
+<a href="authentication.html">احراز هویت</a> است.</p>
+<h2 id="ارتقا-و-تنزل-نسخه-upgrade-downgrade" dir="rtl">ارتقا و تنزل نسخه {#upgrade-downgrade}</h2>
+<p dir="rtl"><strong>ارتقا</strong>: فعال‌سازی این قابلیت و ارائه‌ی پیکربندی مانیفست
+اختیاری است. کلاسترهای موجود که پیکربندی مانیفست ندارند هیچ تغییر رفتاری مشاهده نمی‌کنند.</p>
+<p dir="rtl"><strong>تنزل نسخه</strong>: پیش از تنزل به نسخه‌ای که این قابلیت را ندارد:</p>
+<ol>
+<li dir="rtl">ورودی‌های <code dir="ltr">staticManifestsDir</code> را از فایل <code dir="ltr">AdmissionConfiguration</code> حذف کنید.</li>
+<li dir="rtl">اگر به سیاست‌های مبتنی بر مانیفست متکی هستید، در صورت امکان آن‌ها را به‌صورت آبجکت‌های API دوباره ایجاد کنید.</li>
+<li dir="rtl">kube-apiserver را مجدداً راه‌اندازی کنید.</li>
+</ol>
+<div class="callout warning"><div class="callout-title">هشدار:</div>
+<p dir="rtl">تنزل نسخه بدون حذف پیکربندی <code dir="ltr">staticManifestsDir</code> باعث می‌شود
+API server به‌دلیل فیلدهای پیکربندی ناشناخته راه‌اندازی نشود.</p>
+</div>
+<h2 id="عیب-یابی-troubleshooting" dir="rtl">عیب‌یابی {#troubleshooting}</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:left" dir="rtl">نشانه</th>
+<th style="text-align:left" dir="rtl">علت احتمالی</th>
+<th style="text-align:left" dir="rtl">راه‌حل</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left" dir="rtl">API server راه‌اندازی نمی‌شود</td>
+<td style="text-align:left" dir="rtl">فایل مانیفست نامعتبر در زمان راه‌اندازی</td>
+<td style="text-align:left" dir="rtl">لاگ‌های API server را برای خطاهای اعتبارسنجی بررسی کنید. فایل مانیفست را اصلاح کنید و مجدداً راه‌اندازی کنید.</td>
+</tr>
+<tr>
+<td style="text-align:left" dir="rtl">API server راه‌اندازی نمی‌شود</td>
+<td style="text-align:left" dir="rtl">نام‌های تکراری آبجکت‌ها در فایل‌های مانیفست</td>
+<td style="text-align:left" dir="rtl">مطمئن شوید همه‌ی نام‌های آبجکت در <code dir="ltr">staticManifestsDir</code> هر افزونه یکتا هستند.</td>
+</tr>
+<tr>
+<td style="text-align:left" dir="rtl">سیاست‌ها پس از به‌روزرسانی فایل اِعمال نمی‌شوند</td>
+<td style="text-align:left" dir="rtl">شکست اعتبارسنجی بارگذاری مجدد</td>
+<td style="text-align:left" dir="rtl">metric با نام <code dir="ltr">automatic_reloads_total{status="failure"}</code> و لاگ‌های API server را بررسی کنید. مانیفست را اصلاح کنید و منتظر چرخه‌ی بعدی بارگذاری مجدد بمانید.</td>
+</tr>
+<tr>
+<td style="text-align:left" dir="rtl">درخواست‌های webhook با شکست مواجه می‌شوند</td>
+<td style="text-align:left" dir="rtl">URL مربوط به webhook در دسترس نیست</td>
+<td style="text-align:left" dir="rtl">بررسی کنید که URL مشخص‌شده در <code dir="ltr">clientConfig.url</code> از kube-apiserver قابل دسترسی باشد.</td>
+</tr>
+<tr>
+<td style="text-align:left" dir="rtl">امکان ایجاد آبجکت‌های API با پسوند <code dir="ltr">.static.k8s.io</code> وجود ندارد</td>
+<td style="text-align:left" dir="rtl">پسوند نام توسط feature gate رزرو شده است</td>
+<td style="text-align:left" dir="rtl">وقتی feature gate فعال است، پسوند <code dir="ltr">.static.k8s.io</code> برای پیکربندی‌های مبتنی بر مانیفست رزرو می‌شود. برای آبجکت‌های مبتنی بر API از نام دیگری استفاده کنید.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<ul>
+<li dir="rtl">درباره‌ی <a href="https://kubernetes.io/docs/reference/access-authn-authz/validating-admission-policy/" target="_blank">ValidatingAdmissionPolicy</a>
+برای سیاست‌های اعتبارسنجی مبتنی بر CEL بیاموزید.</li>
+<li dir="rtl">درباره‌ی <a href="mutating-admission-policy.html">MutatingAdmissionPolicy</a>
+برای سیاست‌های تغییر (mutation) مبتنی بر CEL بیاموزید.</li>
+<li dir="rtl">درباره‌ی <a href="extensible-admission-controllers.html">کنترل پذیرش پویا</a>
+برای کنترل پذیرش مبتنی بر webhook بیاموزید.</li>
+<li dir="rtl">سند طراحی <a href="https://github.com/kubernetes/enhancements/tree/master/keps/sig-api-machinery/5793-manifest-based-admission-control-config" target="_blank" rel="noopener">KEP-5793</a>
+را مطالعه کنید.</li>
+</ul>
+</main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#چرا-از-کنترل-پذیرش-مبتنی-بر-مانیفست-استفاده-کنیم؟">چرا از کنترل پذیرش مبتنی بر مانیفست استفاده کنیم؟</a><a class="l2" href="#انواع-منابع-پشتیبانی-شده">انواع منابع پشتیبانی‌شده</a><a class="l2" href="#پیکربندی-کنترل-پذیرش-مبتنی-بر-مانیفست-configuration">پیکربندی کنترل پذیرش مبتنی بر مانیفست {#configuration}</a><a class="l3" href="#admissionconfiguration">AdmissionConfiguration</a><a class="l3" href="#انواع-پیکربندی">انواع پیکربندی</a><a class="l2" href="#نوشتن-فایل-های-مانیفست-manifest-files">نوشتن فایل‌های مانیفست {#manifest-files}</a><a class="l3" href="#قرارداد-نام-گذاری-naming">قرارداد نام‌گذاری {#naming}</a><a class="l3" href="#محدودیت-ها">محدودیت‌ها</a><a class="l2" href="#مثال-ها-examples">مثال‌ها {#examples}</a><a class="l3" href="#محافظت-از-منابع-پذیرش-مبتنی-بر-api-protecting-admission-resources">محافظت از منابع پذیرش مبتنی بر API {#protecting-admission-resources}</a><a class="l3" href="#اِعمال-یک-validatingadmissionpolicy-از-روی-دیسک">اِعمال یک ValidatingAdmissionPolicy از روی دیسک</a><a class="l3" href="#پیکربندی-یک-validatingwebhookconfiguration-از-روی-دیسک">پیکربندی یک ValidatingWebhookConfiguration از روی دیسک</a><a class="l3" href="#استفاده-از-قالب-list">استفاده از قالب List</a><a class="l2" href="#ترتیب-ارزیابی">ترتیب ارزیابی</a><a class="l2" href="#پایش-فایل-و-بارگذاری-مجدد-پویا-dynamic-reloading">پایش فایل و بارگذاری مجدد پویا {#dynamic-reloading}</a><a class="l2" href="#قابلیت-مشاهده-پذیری-observability">قابلیت مشاهده‌پذیری {#observability}</a><a class="l3" href="#metricها">Metricها</a><a class="l3" href="#حاشیه-نویسی-های-ممیزی-audit-annotations">حاشیه‌نویسی‌های ممیزی (Audit annotations)</a><a class="l2" href="#ملاحظات-دسترسی-پذیری-بالا-ha-considerations">ملاحظات دسترسی‌پذیری بالا {#ha-considerations}</a><a class="l2" href="#ارتقا-و-تنزل-نسخه-upgrade-downgrade">ارتقا و تنزل نسخه {#upgrade-downgrade}</a><a class="l2" href="#عیب-یابی-troubleshooting">عیب‌یابی {#troubleshooting}</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>

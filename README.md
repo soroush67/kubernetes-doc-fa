@@ -8,9 +8,9 @@
 
 | | |
 |---|---|
-| پیشرفت (بر اساس کلمات) | **16.5٪** |
-| صفحات ترجمه‌شده | 238 از 1722 |
-| صفحات دارای ایراد ساختاری | 7 |
+| پیشرفت (بر اساس کلمات) | **19.0٪** |
+| صفحات ترجمه‌شده | 253 از 1722 |
+| صفحات دارای ایراد ساختاری | 9 |
 | نسخه‌ی منبع انگلیسی | `ed70e311737a` |
 
 ## مشاهده
@@ -72,7 +72,7 @@ cd kubernetes-doc-fa
 | `contribute` | 44 | 44 |
 | `doc-contributor-tools` | 1 | 1 |
 | `home` | 2 | 2 |
-| `reference` | 3 | 1198 |
+| `reference` | 18 | 1198 |
 | `setup` | 0 | 22 |
 | `tasks` | 0 | 221 |
 | `tutorials` | 0 | 45 |
@@ -91,26 +91,26 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [reference/access-authn-authz/user-impersonation.md](md/reference/access-authn-authz/user-impersonation.md) — 2026-10-27T16:38:05+03:30
+- [reference/access-authn-authz/service-accounts-admin.md](md/reference/access-authn-authz/service-accounts-admin.md) — 2026-10-27T16:37:48+03:30
+- [reference/access-authn-authz/rbac.md](md/reference/access-authn-authz/rbac.md) — 2026-10-27T16:37:07+03:30
+- [reference/access-authn-authz/psp-to-pod-security-standards.md](md/reference/access-authn-authz/psp-to-pod-security-standards.md) — 2026-10-27T16:36:04+03:30
+- [reference/access-authn-authz/mutating-admission-policy.md](md/reference/access-authn-authz/mutating-admission-policy.md) — 2026-10-27T16:34:32+03:30
+- [reference/access-authn-authz/node.md](md/reference/access-authn-authz/node.md) — 2026-10-27T16:34:22+03:30
+- [reference/access-authn-authz/manifest-admission-control.md](md/reference/access-authn-authz/manifest-admission-control.md) — 2026-10-27T16:33:52+03:30
+- [reference/access-authn-authz/extensible-admission-controllers.md](md/reference/access-authn-authz/extensible-admission-controllers.md) — 2026-10-27T16:33:45+03:30
+- [reference/access-authn-authz/kubelet-tls-bootstrapping.md](md/reference/access-authn-authz/kubelet-tls-bootstrapping.md) — 2026-10-27T16:32:53+03:30
+- [reference/access-authn-authz/kubelet-authn-authz.md](md/reference/access-authn-authz/kubelet-authn-authz.md) — 2026-10-27T16:31:28+03:30
+- [reference/access-authn-authz/certificate-signing-requests.md](md/reference/access-authn-authz/certificate-signing-requests.md) — 2026-10-27T16:30:58+03:30
+- [reference/access-authn-authz/authentication.md](md/reference/access-authn-authz/authentication.md) — 2026-10-27T16:30:27+03:30
+- [reference/access-authn-authz/bootstrap-tokens.md](md/reference/access-authn-authz/bootstrap-tokens.md) — 2026-10-27T16:29:02+03:30
+- [reference/access-authn-authz/authorization.md](md/reference/access-authn-authz/authorization.md) — 2026-10-27T16:28:33+03:30
+- [reference/access-authn-authz/admission-controllers.md](md/reference/access-authn-authz/admission-controllers.md) — 2026-10-27T16:25:50+03:30
 - [contribute/style/style-guide.md](md/contribute/style/style-guide.md) — 2026-10-27T16:23:17+03:30
 - [reference/access-authn-authz/abac.md](md/reference/access-authn-authz/abac.md) — 2026-10-27T16:22:53+03:30
 - [reference/access-authn-authz/_index.md](md/reference/access-authn-authz/_index.md) — 2026-10-27T16:22:24+03:30
 - [reference/_index.md](md/reference/_index.md) — 2026-10-27T16:22:12+03:30
 - [home/supported-doc-versions.md](md/home/supported-doc-versions.md) — 2026-10-27T16:21:26+03:30
-- [home/_index.md](md/home/_index.md) — 2026-10-27T16:21:20+03:30
-- [doc-contributor-tools/linkchecker/README.md](md/doc-contributor-tools/linkchecker/README.md) — 2026-10-27T16:21:07+03:30
-- [contribute/suggesting-improvements.md](md/contribute/suggesting-improvements.md) — 2026-10-27T16:20:46+03:30
-- [contribute/style/write-new-topic.md](md/contribute/style/write-new-topic.md) — 2026-10-27T16:20:32+03:30
-- [contribute/style/page-content-types.md](md/contribute/style/page-content-types.md) — 2026-10-27T16:20:00+03:30
-- [contribute/style/hugo-shortcodes/index.md](md/contribute/style/hugo-shortcodes/index.md) — 2026-10-27T16:19:33+03:30
-- [contribute/style/diagram-guide.md](md/contribute/style/diagram-guide.md) — 2026-10-27T16:19:32+03:30
-- [contribute/style/hugo-shortcodes/example2.md](md/contribute/style/hugo-shortcodes/example2.md) — 2026-10-27T16:17:11+03:30
-- [contribute/style/hugo-shortcodes/example1.md](md/contribute/style/hugo-shortcodes/example1.md) — 2026-10-27T16:17:07+03:30
-- [contribute/review/reviewing-prs.md](md/contribute/review/reviewing-prs.md) — 2026-10-27T16:17:00+03:30
-- [contribute/style/content-organization.md](md/contribute/style/content-organization.md) — 2026-10-27T16:15:18+03:30
-- [contribute/style/content-guide.md](md/contribute/style/content-guide.md) — 2026-10-27T16:14:55+03:30
-- [contribute/style/_index.md](md/contribute/style/_index.md) — 2026-10-27T16:14:44+03:30
-- [contribute/review/for-approvers.md](md/contribute/review/for-approvers.md) — 2026-10-27T16:14:36+03:30
-- [contribute/new-content/open-a-pr.md](md/contribute/new-content/open-a-pr.md) — 2026-10-27T16:14:16+03:30
 
 </div>
 
@@ -125,6 +125,8 @@ cd kubernetes-doc-fa
 - [contribute/review/reviewing-prs.md](md/contribute/review/reviewing-prs.md): chunk 1: 5 untranslated English lines, e.g. 'J[read description<br>and comments]--> K[preview changes in<br>Netlify preview build]'
 - [contribute/style/hugo-shortcodes/index.md](md/contribute/style/hugo-shortcodes/index.md): chunk 1: 4 untranslated English lines, e.g. "// If you don't set a tab name, the site supplies one."
 - [contribute/style/style-guide.md](md/contribute/style/style-guide.md): chunk 1: 37 untranslated English lines, e.g. "{{< comment >}}[If you're localizing this page, you can omit the point about US English.]{{< /comment >}}"
+- [reference/access-authn-authz/authentication.md](md/reference/access-authn-authz/authentication.md): chunk 3: 54 untranslated English lines, e.g. '#          Do not use this for your own cluster!'
+- [reference/access-authn-authz/psp-to-pod-security-standards.md](md/reference/access-authn-authz/psp-to-pod-security-standards.md): chunk 1: short: 716 words vs 997 source words
 
 </div>
 

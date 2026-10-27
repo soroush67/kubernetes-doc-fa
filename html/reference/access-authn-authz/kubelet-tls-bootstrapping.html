@@ -1,0 +1,442 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TLS bootstrapping | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">reference / access-authn-authz</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="ltr" class="ltr">TLS bootstrapping</h1><!-- overview -->
+<p dir="rtl">در یک کلاستر کوبرنتیز، مؤلفه‌هایی که روی نودهای کارگر اجرا می‌شوند، یعنی kubelet و kube-proxy، باید
+با مؤلفه‌های control plane کوبرنتیز، به‌طور مشخص kube-apiserver، ارتباط برقرار کنند.
+برای اطمینان از اینکه این ارتباط خصوصی می‌ماند، دستکاری نمی‌شود، و هر مؤلفه از کلاستر
+با یک مؤلفه قابل‌اعتماد دیگر در ارتباط است، به‌شدت توصیه می‌کنیم از گواهی‌های TLS کلاینت روی نودها استفاده کنید.</p>
+<p dir="rtl">فرایند معمول راه‌اندازی اولیه (bootstrapping) این مؤلفه‌ها، به‌ویژه نودهای کارگر که برای ارتباط امن با kube-apiserver
+به گواهی نیاز دارند، می‌تواند فرایندی دشوار باشد، زیرا اغلب خارج از
+حوزه‌ی کوبرنتیز قرار دارد و به کار اضافی قابل‌توجهی نیاز دارد.
+این موضوع به‌نوبه‌ی خود می‌تواند راه‌اندازی یا مقیاس‌دهی یک کلاستر را دشوار کند.</p>
+<p dir="rtl">برای ساده‌سازی این فرایند، از نسخه‌ی 1.4 به بعد، کوبرنتیز یک API برای درخواست گواهی
+و امضای آن معرفی کرد. پیشنهاد مربوط به آن را می‌توانید <a href="https://github.com/kubernetes/kubernetes/pull/20439" target="_blank" rel="noopener">اینجا</a> ببینید.</p>
+<p dir="rtl">این سند فرایند راه‌اندازی اولیه‌ی نود، نحوه‌ی برپایی bootstrapping گواهی کلاینت TLS برای
+kubeletها، و چگونگی عملکرد آن را شرح می‌دهد.</p>
+<!-- body -->
+<h2 id="فرایند-راه-اندازی-اولیه-initialization-process" dir="rtl">فرایند راه‌اندازی اولیه {#initialization-process}</h2>
+<p dir="rtl">هنگامی که یک نود کارگر راه‌اندازی می‌شود، kubelet کارهای زیر را انجام می‌دهد:</p>
+<ol>
+<li dir="rtl">به دنبال فایل <code dir="ltr">kubeconfig</code> خود می‌گردد</li>
+<li dir="rtl">نشانی URL سرور API و اعتبارنامه‌ها، که معمولاً یک کلید TLS و گواهی امضاشده هستند، را از فایل <code dir="ltr">kubeconfig</code> بازیابی می‌کند</li>
+<li dir="rtl">تلاش می‌کند با استفاده از اعتبارنامه‌ها با سرور API ارتباط برقرار کند.</li>
+</ol>
+<p dir="rtl">با فرض اینکه kube-apiserver اعتبارنامه‌های kubelet را با موفقیت اعتبارسنجی کند،
+kubelet را به‌عنوان یک نود معتبر در نظر می‌گیرد و شروع به تخصیص پادها به آن می‌کند.</p>
+<p dir="rtl">توجه داشته باشید که فرایند بالا به موارد زیر وابسته است:</p>
+<ul>
+<li dir="rtl">وجود یک کلید و گواهی روی میزبان محلی در <code dir="ltr">kubeconfig</code></li>
+<li dir="rtl">امضای گواهی توسط یک مرجع صدور گواهی (CA) که مورد اعتماد kube-apiserver است</li>
+</ul>
+<p dir="rtl">همه‌ی موارد زیر بر عهده‌ی کسی است که کلاستر را راه‌اندازی و مدیریت می‌کند:</p>
+<ol>
+<li dir="rtl">ایجاد کلید و گواهی CA</li>
+<li dir="rtl">توزیع گواهی CA به نودهای control plane که kube-apiserver روی آن‌ها اجرا می‌شود</li>
+<li dir="rtl">ایجاد یک کلید و گواهی برای هر kubelet؛ به‌شدت توصیه می‌شود برای هر kubelet یک کلید و گواهی یکتا با CN یکتا وجود داشته باشد</li>
+<li dir="rtl">امضای گواهی kubelet با استفاده از کلید CA</li>
+<li dir="rtl">توزیع کلید kubelet و گواهی امضاشده به نود مشخصی که kubelet روی آن اجرا می‌شود</li>
+</ol>
+<p dir="rtl">TLS Bootstrapping که در این سند شرح داده شده است، با هدف ساده‌سازی و خودکارسازی جزئی یا حتی
+کامل مراحل ۳ به بعد طراحی شده است، زیرا این مراحل در زمان راه‌اندازی یا مقیاس‌دهی
+یک کلاستر بیشترین کاربرد را دارند.</p>
+<h3 id="راه-اندازی-اولیه-با-bootstrap-bootstrap-initialization" dir="rtl">راه‌اندازی اولیه با bootstrap {#bootstrap-initialization}</h3>
+<p dir="rtl">در فرایند راه‌اندازی اولیه با bootstrap، موارد زیر رخ می‌دهد:</p>
+<ol>
+<li dir="rtl">kubelet شروع به کار می‌کند</li>
+<li dir="rtl">kubelet متوجه می‌شود که فایل <code dir="ltr">kubeconfig</code> <em>ندارد</em></li>
+<li dir="rtl">kubelet به دنبال فایل <code dir="ltr">bootstrap-kubeconfig</code> می‌گردد و آن را پیدا می‌کند</li>
+<li dir="rtl">kubelet فایل bootstrap خود را می‌خواند و نشانی URL سرور API و یک «توکن» با کاربرد محدود را بازیابی می‌کند</li>
+<li dir="rtl">kubelet به سرور API متصل می‌شود و با استفاده از توکن احراز هویت می‌کند</li>
+<li dir="rtl">kubelet اکنون اعتبارنامه‌های محدودی برای ایجاد و بازیابی یک درخواست امضای گواهی (CSR) دارد</li>
+<li dir="rtl">kubelet یک CSR برای خود ایجاد می‌کند که مقدار signerName آن <code dir="ltr">kubernetes.io/kube-apiserver-client-kubelet</code> است</li>
+<li dir="rtl">CSR به یکی از دو روش تأیید می‌شود:
+<ul>
+<li dir="rtl">در صورت پیکربندی، kube-controller-manager به‌طور خودکار CSR را تأیید می‌کند</li>
+<li dir="rtl">در صورت پیکربندی، یک فرایند بیرونی، احتمالاً یک شخص، CSR را با استفاده از API کوبرنتیز یا از طریق <code dir="ltr">kubectl</code> تأیید می‌کند</li>
+</ul>
+</li>
+<li dir="rtl">گواهی برای kubelet ایجاد می‌شود</li>
+<li dir="rtl">گواهی به kubelet صادر می‌شود</li>
+<li dir="rtl">kubelet گواهی را بازیابی می‌کند</li>
+<li dir="rtl">kubelet یک <code dir="ltr">kubeconfig</code> مناسب را با کلید و گواهی امضاشده ایجاد می‌کند</li>
+<li dir="rtl">kubelet عملکرد عادی خود را آغاز می‌کند</li>
+<li dir="rtl">اختیاری: در صورت پیکربندی، kubelet هنگامی که گواهی نزدیک به انقضا است، به‌طور خودکار درخواست تمدید آن را می‌دهد</li>
+<li dir="rtl">گواهی تمدیدشده، بسته به پیکربندی، به‌صورت خودکار یا دستی تأیید و صادر می‌شود.</li>
+</ol>
+<p dir="rtl">ادامه‌ی این سند مراحل لازم برای پیکربندی TLS Bootstrapping و محدودیت‌های آن را شرح می‌دهد.</p>
+<h2 id="پیکربندی-configuration" dir="rtl">پیکربندی {#configuration}</h2>
+<p dir="rtl">برای پیکربندی TLS bootstrapping و تأیید خودکار اختیاری، باید گزینه‌هایی را روی مؤلفه‌های زیر پیکربندی کنید:</p>
+<ul>
+<li dir="ltr" class="ltr">kube-apiserver</li>
+<li dir="ltr" class="ltr">kube-controller-manager</li>
+<li dir="ltr" class="ltr">kubelet</li>
+<li dir="rtl">منابع درون کلاستر: <code dir="ltr">ClusterRoleBinding</code> و در صورت نیاز <code dir="ltr">ClusterRole</code></li>
+</ul>
+<p dir="rtl">علاوه بر این، به مرجع صدور گواهی (CA) کوبرنتیز خود نیاز دارید.</p>
+<h2 id="مرجع-صدور-گواهی-certificate-authority" dir="rtl">مرجع صدور گواهی {#certificate-authority}</h2>
+<p dir="rtl">همانند حالت بدون bootstrapping، به کلید و گواهی مرجع صدور گواهی (CA) نیاز خواهید داشت.
+همانند حالت بدون bootstrapping، از این‌ها برای امضای گواهی kubelet استفاده می‌شود. مانند قبل،
+توزیع آن‌ها به نودهای control plane بر عهده‌ی شماست.</p>
+<p dir="rtl">برای اهداف این سند، فرض می‌کنیم این موارد در مسیرهای <code dir="ltr">/var/lib/kubernetes/ca.pem</code> (گواهی) و <code dir="ltr">/var/lib/kubernetes/ca-key.pem</code> (کلید)
+روی نودهای control plane توزیع شده‌اند.
+از این به بعد به آن‌ها «گواهی و کلید CA کوبرنتیز» می‌گوییم.</p>
+<p dir="rtl">همه‌ی مؤلفه‌های کوبرنتیز که از این گواهی‌ها استفاده می‌کنند، یعنی kubelet، kube-apiserver و
+kube-controller-manager، فرض می‌کنند که کلید و گواهی با قالب PEM کدگذاری شده‌اند.</p>
+<h2 id="پیکربندی-kube-apiserver-kube-apiserver-configuration" dir="rtl">پیکربندی kube-apiserver {#kube-apiserver-configuration}</h2>
+<p dir="rtl">kube-apiserver برای فعال‌سازی TLS bootstrapping چند الزام دارد:</p>
+<ul>
+<li dir="rtl">شناسایی CA که گواهی کلاینت را امضا می‌کند</li>
+<li dir="rtl">احراز هویت kubelet در حال bootstrap به‌عنوان عضوی از گروه <code dir="ltr">system:bootstrappers</code></li>
+<li dir="rtl">مجاز کردن kubelet در حال bootstrap برای ایجاد یک درخواست امضای گواهی (CSR)</li>
+</ul>
+<h3 id="شناسایی-گواهی-های-کلاینت-recognizing-client-certificates" dir="rtl">شناسایی گواهی‌های کلاینت {#recognizing-client-certificates}</h3>
+<p dir="rtl">این کار برای همه‌ی انواع احراز هویت با گواهی کلاینت معمول است.
+اگر پیش‌تر تنظیم نشده است، برای فعال‌سازی احراز هویت با گواهی کلاینت، پرچم <code dir="ltr">--client-ca-file=FILENAME</code> را به فرمان kube-apiserver اضافه کنید و
+به یک بسته‌ی مرجع صدور گواهی که شامل گواهی امضاکننده است ارجاع دهید، برای مثال
+<code dir="ltr">--client-ca-file=/var/lib/kubernetes/ca.pem</code>.</p>
+<h3 id="احراز-هویت-اولیه-ی-bootstrap-initial-bootstrap-authentication" dir="rtl">احراز هویت اولیه‌ی bootstrap {#initial-bootstrap-authentication}</h3>
+<p dir="rtl">برای اینکه kubelet در حال bootstrap بتواند به kube-apiserver متصل شود و درخواست گواهی بدهد،
+ابتدا باید نزد سرور احراز هویت شود. می‌توانید از هر
+<a href="authentication.html">احراز هویت‌کننده (authenticator)</a> که بتواند kubelet را احراز هویت کند استفاده کنید.</p>
+<p dir="rtl">اگرچه برای اعتبارنامه‌های اولیه‌ی bootstrap مربوط به kubelet می‌توان از هر راهبرد احراز هویتی استفاده کرد،
+دو احراز هویت‌کننده‌ی زیر برای سهولت در تأمین (provisioning) توصیه می‌شوند.</p>
+<ol>
+<li dir="rtl"><a href="#bootstrap-tokens">توکن‌های Bootstrap</a></li>
+<li dir="rtl"><a href="#token-authentication-file">فایل احراز هویت توکن</a></li>
+</ol>
+<p dir="rtl">استفاده از توکن‌های bootstrap روشی ساده‌تر و آسان‌تر برای مدیریت احراز هویت kubeletهاست
+و هنگام راه‌اندازی kube-apiserver به هیچ پرچم اضافه‌ای نیاز ندارد.</p>
+<p dir="rtl">هر روشی که انتخاب کنید، الزام این است که kubelet بتواند به‌عنوان کاربری احراز هویت شود که حق انجام کارهای زیر را دارد:</p>
+<ol>
+<li dir="rtl">ایجاد و بازیابی CSRها</li>
+<li dir="rtl">در صورت فعال بودن تأیید خودکار، به‌طور خودکار برای درخواست گواهی‌های کلاینت نود تأیید شود.</li>
+</ol>
+<p dir="rtl">kubeletی که با استفاده از توکن‌های bootstrap احراز هویت می‌شود، به‌عنوان کاربری در گروه
+<code dir="ltr">system:bootstrappers</code> احراز هویت می‌شود، که روش استاندارد مورد استفاده است.</p>
+<p dir="rtl">با بالغ‌تر شدن این قابلیت، باید اطمینان حاصل کنید که توکن‌ها به یک سیاست کنترل دسترسی مبتنی بر نقش (RBAC)
+مقید شده‌اند که درخواست‌ها (با استفاده از <a href="bootstrap-tokens.html">توکن bootstrap</a>) را
+صرفاً به درخواست‌های کلاینت مرتبط با تأمین گواهی محدود می‌کند. با وجود RBAC، محدود کردن
+توکن‌ها به یک گروه انعطاف‌پذیری زیادی فراهم می‌کند. برای مثال، می‌توانید پس از اتمام تأمین نودها،
+دسترسی یک گروه bootstrap مشخص را غیرفعال کنید.</p>
+<h4 id="توکن-های-bootstrap-bootstrap-tokens" dir="rtl">توکن‌های Bootstrap {#bootstrap-tokens}</h4>
+<p dir="rtl">توکن‌های bootstrap به‌تفصیل <a href="bootstrap-tokens.html">اینجا</a> شرح داده شده‌اند.
+این‌ها توکن‌هایی هستند که به‌صورت secret در کلاستر کوبرنتیز ذخیره می‌شوند و سپس به kubeletهای مجزا صادر می‌شوند.
+می‌توانید برای کل کلاستر از یک توکن واحد استفاده کنید، یا برای هر نود کارگر یک توکن صادر کنید.</p>
+<p dir="rtl">این فرایند دو بخش دارد:</p>
+<ol>
+<li dir="rtl">یک secret کوبرنتیز با شناسه‌ی توکن، secret و دامنه(های) آن ایجاد کنید.</li>
+<li dir="rtl">توکن را به kubelet صادر کنید</li>
+</ol>
+<p dir="rtl">از دیدگاه kubelet، همه‌ی توکن‌ها مثل هم هستند و معنای خاصی ندارند.
+اما از دیدگاه kube-apiserver، توکن bootstrap خاص است.
+kube-apiserver به‌دلیل <code dir="ltr">type</code>، <code dir="ltr">namespace</code> و <code dir="ltr">name</code> این توکن، آن را به‌عنوان یک توکن ویژه شناسایی می‌کند
+و به هر کسی که با آن توکن احراز هویت شود، حقوق ویژه‌ی bootstrap اعطا می‌کند و به‌طور مشخص
+او را عضوی از گروه <code dir="ltr">system:bootstrappers</code> در نظر می‌گیرد. این کار یکی از الزامات اساسی
+TLS bootstrapping را برآورده می‌کند.</p>
+<p dir="rtl">جزئیات ایجاد secret <a href="bootstrap-tokens.html">اینجا</a> در دسترس است.</p>
+<p dir="rtl">اگر می‌خواهید از توکن‌های bootstrap استفاده کنید، باید آن را با پرچم زیر روی kube-apiserver فعال کنید:</p>
+<pre dir="ltr"><code class="language-console" dir="ltr">--enable-bootstrap-token-auth=true
+</code></pre>
+<h4 id="فایل-احراز-هویت-توکن-token-authentication-file" dir="rtl">فایل احراز هویت توکن {#token-authentication-file}</h4>
+<p dir="rtl">kube-apiserver توانایی پذیرش توکن‌ها برای احراز هویت را دارد.
+این توکن‌ها دلخواه هستند، اما باید دست‌کم ۱۲۸ بیت آنتروپی داشته باشند که از یک
+مولد اعداد تصادفی امن (مانند <code dir="ltr">/dev/urandom</code> در بیشتر سیستم‌های مدرن
+لینوکس) به‌دست آمده باشد. راه‌های مختلفی برای تولید توکن وجود دارد. برای مثال:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">head -c 16 /dev/urandom | od -An -t x | tr -d ' '
+</code></pre>
+<p dir="rtl">این دستور توکن‌هایی شبیه <code dir="ltr">02b50b05283e98dd0fd71db496ef01e8</code> تولید می‌کند.</p>
+<p dir="rtl">فایل توکن باید مشابه مثال زیر باشد، که در آن سه مقدار اول
+می‌توانند هر چیزی باشند و نام گروهِ داخل گیومه باید دقیقاً به همین شکل باشد:</p>
+<pre dir="ltr"><code class="language-console" dir="ltr">02b50b05283e98dd0fd71db496ef01e8,kubelet-bootstrap,10001,"system:bootstrappers"
+</code></pre>
+<p dir="rtl">برای فعال‌سازی فایل توکن، پرچم <code dir="ltr">--token-auth-file=FILENAME</code> را به فرمان kube-apiserver (شاید در
+فایل واحد systemd خود) اضافه کنید. برای جزئیات بیشتر، مستندات
+<a href="authentication.html#static-token-file">اینجا</a> را ببینید.</p>
+<h3 id="مجاز-کردن-kubelet-برای-ایجاد-csr-authorize-kubelet-to-create-csr" dir="rtl">مجاز کردن kubelet برای ایجاد CSR {#authorize-kubelet-to-create-csr}</h3>
+<p dir="rtl">اکنون که نود در حال bootstrap به‌عنوان عضوی از گروه
+<code dir="ltr">system:bootstrappers</code> <em>احراز هویت</em> شده است، باید <em>مجاز</em> شود که یک
+درخواست امضای گواهی (CSR) ایجاد کند و پس از اتمام کار آن را بازیابی کند.
+خوشبختانه کوبرنتیز با یک <code dir="ltr">ClusterRole</code> عرضه می‌شود که دقیقاً همین مجوزها (و
+فقط همین‌ها) را دارد، یعنی <code dir="ltr">system:node-bootstrapper</code>.</p>
+<p dir="rtl">برای این کار، فقط لازم است یک <code dir="ltr">ClusterRoleBinding</code> ایجاد کنید که گروه <code dir="ltr">system:bootstrappers</code>
+را به نقش کلاستری <code dir="ltr">system:node-bootstrapper</code> متصل کند.</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr"># enable bootstrapping nodes to create CSR
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: create-csrs-for-bootstrapping
+subjects:
+- kind: Group
+  name: system:bootstrappers
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: ClusterRole
+  name: system:node-bootstrapper
+  apiGroup: rbac.authorization.k8s.io
+</code></pre>
+<h2 id="پیکربندی-kube-controller-manager-kube-controller-manager-configuration" dir="rtl">پیکربندی kube-controller-manager {#kube-controller-manager-configuration}</h2>
+<p dir="rtl">درحالی‌که apiserver درخواست‌های گواهی را از kubelet دریافت می‌کند و آن درخواست‌ها را احراز هویت می‌کند،
+controller-manager مسئول صدور گواهی‌های امضاشده‌ی واقعی است.</p>
+<p dir="rtl">controller-manager این وظیفه را از طریق یک حلقه‌ی کنترلی صدور گواهی انجام می‌دهد.
+این کار به شکل یک امضاکننده‌ی محلی
+<a href="https://blog.cloudflare.com/introducing-cfssl/" target="_blank" rel="noopener">cfssl</a> و با استفاده از
+دارایی‌های روی دیسک انجام می‌شود. در حال حاضر، همه‌ی گواهی‌های صادرشده یک سال اعتبار دارند و
+مجموعه‌ی پیش‌فرضی از کاربردهای کلید (key usages) دارند.</p>
+<p dir="rtl">برای اینکه controller-manager بتواند گواهی‌ها را امضا کند، به موارد زیر نیاز دارد:</p>
+<ul>
+<li dir="rtl">دسترسی به «کلید و گواهی CA کوبرنتیز» که ایجاد و توزیع کرده‌اید</li>
+<li dir="rtl">فعال‌سازی امضای CSR</li>
+</ul>
+<h3 id="دسترسی-به-کلید-و-گواهی-access-to-key-and-certificate" dir="rtl">دسترسی به کلید و گواهی {#access-to-key-and-certificate}</h3>
+<p dir="rtl">همان‌طور که پیش‌تر شرح داده شد، باید یک کلید و گواهی CA کوبرنتیز ایجاد کنید و آن را به نودهای control plane توزیع کنید.
+controller-manager از این‌ها برای امضای گواهی‌های kubelet استفاده می‌کند.</p>
+<p dir="rtl">از آنجا که این گواهی‌های امضاشده به‌نوبه‌ی خود توسط kubelet برای احراز هویت به‌عنوان یک kubelet عادی
+نزد kube-apiserver استفاده می‌شوند، مهم است که CA ارائه‌شده به controller-manager در این مرحله،
+مورد اعتماد kube-apiserver برای احراز هویت نیز باشد. این CA با پرچم <code dir="ltr">--client-ca-file=FILENAME</code>
+(برای مثال، <code dir="ltr">--client-ca-file=/var/lib/kubernetes/ca.pem</code>) به kube-apiserver داده می‌شود، همان‌طور که در بخش پیکربندی kube-apiserver شرح داده شد.</p>
+<p dir="rtl">برای ارائه‌ی کلید و گواهی CA کوبرنتیز به kube-controller-manager، از پرچم‌های زیر استفاده کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">--cluster-signing-cert-file="/etc/path/to/kubernetes/ca/ca.crt" --cluster-signing-key-file="/etc/path/to/kubernetes/ca/ca.key"
+</code></pre>
+<p dir="rtl">برای مثال:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">--cluster-signing-cert-file="/var/lib/kubernetes/ca.pem" --cluster-signing-key-file="/var/lib/kubernetes/ca-key.pem"
+</code></pre>
+<p dir="rtl">مدت اعتبار گواهی‌های امضاشده را می‌توان با پرچم زیر پیکربندی کرد:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">--cluster-signing-duration
+</code></pre>
+<h3 id="تأیید-approval" dir="rtl">تأیید {#approval}</h3>
+<p dir="rtl">برای تأیید CSRها، باید به controller-manager اعلام کنید که تأیید آن‌ها مجاز است. این کار با اعطای
+مجوزهای RBAC به گروه صحیح انجام می‌شود.</p>
+<p dir="rtl">دو مجموعه‌ی مجوز متمایز وجود دارد:</p>
+<ul>
+<li dir="rtl"><code dir="ltr">nodeclient</code>: اگر نودی در حال ایجاد گواهی جدید برای یک نود است، هنوز گواهی ندارد.
+این نود با یکی از توکن‌های ذکرشده در بالا احراز هویت می‌کند و بنابراین عضوی از گروه <code dir="ltr">system:bootstrappers</code> است.</li>
+<li dir="rtl"><code dir="ltr">selfnodeclient</code>: اگر نودی در حال تمدید گواهی خود است، (طبق تعریف) از قبل گواهی دارد
+و از آن به‌طور مداوم برای احراز هویت به‌عنوان عضوی از گروه <code dir="ltr">system:nodes</code> استفاده می‌کند.</li>
+</ul>
+<p dir="rtl">برای اینکه kubelet بتواند گواهی جدید درخواست کند و دریافت نماید، یک <code dir="ltr">ClusterRoleBinding</code> ایجاد کنید که
+گروهی را که نود در حال bootstrap عضو آن است، یعنی <code dir="ltr">system:bootstrappers</code>، به <code dir="ltr">ClusterRole‌ای</code> که
+این مجوز را به آن می‌دهد، یعنی <code dir="ltr">system:certificates.k8s.io:certificatesigningrequests:nodeclient</code>، متصل کند:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr"># Approve all CSRs for the group "system:bootstrappers"
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: auto-approve-csrs-for-group
+subjects:
+- kind: Group
+  name: system:bootstrappers
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: ClusterRole
+  name: system:certificates.k8s.io:certificatesigningrequests:nodeclient
+  apiGroup: rbac.authorization.k8s.io
+</code></pre>
+<p dir="rtl">برای اینکه kubelet بتواند گواهی کلاینت خود را تمدید کند، یک <code dir="ltr">ClusterRoleBinding</code> ایجاد کنید که
+گروهی را که نود کاملاً فعال عضو آن است، یعنی <code dir="ltr">system:nodes</code>، به <code dir="ltr">ClusterRole‌ای</code> که
+این مجوز را به آن می‌دهد، یعنی <code dir="ltr">system:certificates.k8s.io:certificatesigningrequests:selfnodeclient</code>، متصل کند:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr"># Approve renewal CSRs for the group "system:nodes"
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: auto-approve-renewals-for-nodes
+subjects:
+- kind: Group
+  name: system:nodes
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: ClusterRole
+  name: system:certificates.k8s.io:certificatesigningrequests:selfnodeclient
+  apiGroup: rbac.authorization.k8s.io
+</code></pre>
+<p dir="rtl">کنترل‌کننده‌ی <code dir="ltr">csrapproving</code> که به‌عنوان بخشی از
+<a href="https://kubernetes.io/docs/reference/command-line-tools-reference/kube-controller-manager/" target="_blank">kube-controller-manager</a> عرضه می‌شود، به‌طور پیش‌فرض
+فعال است. این کنترل‌کننده از
+<a href="authorization.html#checking-api-access">API ‏<code dir="ltr">SubjectAccessReview</code></a> استفاده می‌کند تا
+تعیین کند آیا یک کاربر مشخص مجاز به درخواست CSR است یا خیر، و سپس بر اساس
+نتیجه‌ی مجوزدهی، تأیید را انجام می‌دهد. برای جلوگیری از تداخل با سایر تأییدکننده‌ها،
+تأییدکننده‌ی توکار CSRها را صراحتاً رد نمی‌کند و فقط درخواست‌های
+غیرمجاز را نادیده می‌گیرد. این کنترل‌کننده همچنین گواهی‌های منقضی‌شده را به‌عنوان بخشی از
+زباله‌روبی (garbage collection) پاک‌سازی می‌کند.</p>
+<h2 id="پیکربندی-kubelet" dir="rtl">پیکربندی kubelet</h2>
+<p dir="rtl">سرانجام، پس از آنکه نودهای control plane به‌درستی راه‌اندازی شدند و تمام احراز هویت و مجوزدهی لازم برقرار شد، می‌توانیم kubelet را پیکربندی کنیم.</p>
+<p dir="rtl">kubelet برای انجام bootstrap به پیکربندی زیر نیاز دارد:</p>
+<ul>
+<li dir="rtl">مسیری برای ذخیره‌سازی کلید و گواهی‌ای که تولید می‌کند (اختیاری، می‌توان از مقدار پیش‌فرض استفاده کرد)</li>
+<li dir="rtl">مسیری به یک فایل <code dir="ltr">kubeconfig</code> که هنوز وجود ندارد؛ kubelet فایل پیکربندی bootstrap‌شده را در این مسیر قرار می‌دهد</li>
+<li dir="rtl">مسیری به یک فایل <code dir="ltr">kubeconfig</code> برای bootstrap که نشانی سرور و اعتبارنامه‌های bootstrap، برای مثال یک توکن bootstrap، را فراهم می‌کند</li>
+<li dir="rtl">اختیاری: دستورالعمل‌هایی برای چرخش (rotation) گواهی‌ها</li>
+</ul>
+<p dir="rtl">فایل <code dir="ltr">kubeconfig</code> مربوط به bootstrap باید در مسیری قرار داشته باشد که برای kubelet در دسترس است، برای مثال <code dir="ltr">/var/lib/kubelet/bootstrap-kubeconfig</code>.</p>
+<p dir="rtl">قالب آن با یک فایل <code dir="ltr">kubeconfig</code> معمولی یکسان است. یک فایل نمونه می‌تواند به شکل زیر باشد:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: Config
+clusters:
+- cluster:
+    certificate-authority: /var/lib/kubernetes/ca.pem
+    server: https://my.server.example.com:6443
+  name: bootstrap
+contexts:
+- context:
+    cluster: bootstrap
+    user: kubelet-bootstrap
+  name: bootstrap
+current-context: bootstrap
+preferences: {}
+users:
+- name: kubelet-bootstrap
+  user:
+    token: 07401b.f395accd246ae52d
+</code></pre>
+<p dir="rtl">نکات مهمی که باید به آن‌ها توجه کرد عبارت‌اند از:</p>
+<ul>
+<li dir="rtl"><code dir="ltr">certificate-authority</code>: مسیر یک فایل CA که برای اعتبارسنجی گواهی سروری که kube-apiserver ارائه می‌دهد استفاده می‌شود</li>
+<li dir="rtl"><code dir="ltr">server</code>: نشانی URL مربوط به kube-apiserver</li>
+<li dir="rtl"><code dir="ltr">token</code>: توکنی که باید استفاده شود</li>
+</ul>
+<p dir="rtl">قالب توکن اهمیتی ندارد، به شرط آنکه با آنچه kube-apiserver انتظار دارد مطابقت داشته باشد. در مثال بالا از یک توکن bootstrap استفاده کردیم.
+همان‌طور که پیش‌تر گفته شد، <em>هر</em> روش احراز هویت معتبری را می‌توان به کار برد، نه فقط توکن‌ها.</p>
+<p dir="rtl">از آنجا که <code dir="ltr">kubeconfig</code> مربوط به bootstrap <em>خود</em> یک <code dir="ltr">kubeconfig</code> استاندارد است، می‌توانید برای تولید آن از <code dir="ltr">kubectl</code> استفاده کنید. برای ایجاد فایل نمونه بالا:</p>
+<pre dir="ltr"><code dir="ltr">kubectl config --kubeconfig=/var/lib/kubelet/bootstrap-kubeconfig set-cluster bootstrap --server='https://my.server.example.com:6443' --certificate-authority=/var/lib/kubernetes/ca.pem
+kubectl config --kubeconfig=/var/lib/kubelet/bootstrap-kubeconfig set-credentials kubelet-bootstrap --token=07401b.f395accd246ae52d
+kubectl config --kubeconfig=/var/lib/kubelet/bootstrap-kubeconfig set-context bootstrap --user=kubelet-bootstrap --cluster=bootstrap
+kubectl config --kubeconfig=/var/lib/kubelet/bootstrap-kubeconfig use-context bootstrap
+</code></pre>
+<p dir="rtl">برای آنکه به kubelet اعلام کنید از <code dir="ltr">kubeconfig</code> مربوط به bootstrap استفاده کند، از فلگ‌های kubelet زیر استفاده کنید:</p>
+<pre dir="ltr"><code dir="ltr">--bootstrap-kubeconfig="/var/lib/kubelet/bootstrap-kubeconfig" --kubeconfig="/var/lib/kubelet/kubeconfig"
+</code></pre>
+<p dir="rtl">هنگام راه‌اندازی kubelet، اگر فایلی که با <code dir="ltr">--kubeconfig</code> مشخص شده وجود نداشته باشد، از kubeconfig مربوط به bootstrap که با <code dir="ltr">--bootstrap-kubeconfig</code> مشخص شده است برای درخواست یک گواهی کلاینت از API server استفاده می‌شود. پس از تأیید درخواست گواهی و دریافت آن توسط kubelet، یک فایل kubeconfig که به کلید تولیدشده و گواهی دریافت‌شده ارجاع می‌دهد، در مسیر مشخص‌شده با <code dir="ltr">--kubeconfig</code> نوشته می‌شود. فایل‌های گواهی و کلید در دایرکتوری مشخص‌شده با <code dir="ltr">--cert-dir</code> قرار می‌گیرند.</p>
+<h3 id="گواهی-های-کلاینت-و-سرویس-دهی-client-and-serving-certificates" dir="rtl">گواهی‌های کلاینت و سرویس‌دهی {#client-and-serving-certificates}</h3>
+<p dir="rtl">همه موارد بالا به گواهی‌های <em>کلاینت</em> kubelet مربوط می‌شوند، به‌طور مشخص گواهی‌هایی که kubelet برای احراز هویت نزد kube-apiserver از آن‌ها استفاده می‌کند.</p>
+<p dir="rtl">kubelet همچنین می‌تواند از گواهی‌های <em>سرویس‌دهی</em> (serving) استفاده کند. خود kubelet برای برخی قابلیت‌ها یک endpoint از نوع https در دسترس قرار می‌دهد.
+برای ایمن‌سازی این endpointها، kubelet می‌تواند یکی از کارهای زیر را انجام دهد:</p>
+<ul>
+<li dir="rtl">استفاده از کلید و گواهی فراهم‌شده، از طریق فلگ‌های <code dir="ltr">--tls-private-key-file</code> و <code dir="ltr">--tls-cert-file</code></li>
+<li dir="rtl">ایجاد کلید و گواهی خودامضا، در صورتی که کلید و گواهی فراهم نشده باشند</li>
+<li dir="rtl">درخواست گواهی‌های سرویس‌دهی از سرور کلاستر، از طریق CSR API</li>
+</ul>
+<p dir="rtl">گواهی کلاینتی که توسط TLS bootstrapping ارائه می‌شود، به‌طور پیش‌فرض فقط برای <code dir="ltr">client auth</code> امضا می‌شود و بنابراین نمی‌توان از آن به‌عنوان گواهی سرویس‌دهی، یا <code dir="ltr">server auth</code>، استفاده کرد.</p>
+<p dir="rtl">با این حال، شما <em>می‌توانید</em> گواهی سرور آن را، دست‌کم تا حدی، از طریق چرخش گواهی فعال کنید.</p>
+<h3 id="چرخش-گواهی-certificate-rotation-certificate-rotation" dir="rtl">چرخش گواهی (Certificate rotation) {#certificate-rotation}</h3>
+<p dir="rtl">kubelet در کوبرنتیز نسخه 1.8 و بالاتر قابلیت‌هایی را برای فعال‌سازی چرخش گواهی‌های کلاینت و/یا سرویس‌دهی خود پیاده‌سازی می‌کند. توجه کنید که چرخش گواهی سرویس‌دهی یک قابلیت <strong>بتا</strong> است و به feature flag با نام <code dir="ltr">RotateKubeletServerCertificate</code> روی kubelet نیاز دارد (که به‌طور پیش‌فرض فعال است).</p>
+<p dir="rtl">می‌توانید kubelet را طوری پیکربندی کنید که با منقضی شدن اعتبارنامه‌های موجود خود، با ایجاد CSRهای جدید گواهی‌های کلاینت خود را بچرخاند. برای فعال‌سازی این قابلیت، از فیلد <code dir="ltr">rotateCertificates</code> در <a href="https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/" target="_blank">فایل پیکربندی kubelet</a> استفاده کنید
+یا آرگومان خط فرمان زیر را به kubelet بدهید (منسوخ‌شده):</p>
+<pre dir="ltr"><code dir="ltr">--rotate-certificates
+</code></pre>
+<p dir="rtl">فعال کردن <code dir="ltr">RotateKubeletServerCertificate</code> باعث می‌شود kubelet <strong>هم</strong> پس از bootstrap اعتبارنامه‌های کلاینت خود، یک گواهی سرویس‌دهی درخواست کند <strong>و هم</strong> آن گواهی را بچرخاند. برای فعال‌سازی این رفتار، از فیلد <code dir="ltr">serverTLSBootstrap</code> در <a href="https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/" target="_blank">فایل پیکربندی kubelet</a> استفاده کنید
+یا آرگومان خط فرمان زیر را به kubelet بدهید (منسوخ‌شده):</p>
+<pre dir="ltr"><code dir="ltr">--rotate-server-certificates
+</code></pre>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">کنترل‌کننده‌های تأییدکننده CSR که در هسته کوبرنتیز پیاده‌سازی شده‌اند، به <a href="https://github.com/kubernetes/community/pull/1982" target="_blank" rel="noopener">دلایل امنیتی</a> گواهی‌های <em>سرویس‌دهی</em> نود را تأیید نمی‌کنند. برای استفاده از <code dir="ltr">RotateKubeletServerCertificate</code>، اپراتورها باید یک کنترل‌کننده تأییدکننده سفارشی اجرا کنند یا درخواست‌های گواهی سرویس‌دهی را به‌صورت دستی تأیید کنند.</p>
+<p dir="rtl">یک فرایند تأیید مختص هر استقرار برای گواهی‌های سرویس‌دهی kubelet باید معمولاً فقط CSRهایی را تأیید کند که:</p>
+<ol>
+<li dir="rtl">توسط نودها درخواست شده باشند (اطمینان حاصل کنید فیلد <code dir="ltr">spec.username</code> به شکل
+<code dir="ltr">system:node:&lt;nodeName&gt;</code> باشد و <code dir="ltr">spec.groups</code> شامل <code dir="ltr">system:nodes</code> باشد)</li>
+<li dir="rtl">کاربردهای (usages) یک گواهی سرویس‌دهی را درخواست کنند (اطمینان حاصل کنید <code dir="ltr">spec.usages</code> شامل <code dir="ltr">server auth</code> باشد،
+به‌صورت اختیاری شامل <code dir="ltr">digital signature</code> و <code dir="ltr">key encipherment</code> باشد، و هیچ کاربرد دیگری نداشته باشد)</li>
+<li dir="rtl">فقط subjectAltNameهای IP و DNS داشته باشند که متعلق به نود درخواست‌کننده هستند،
+و هیچ subjectAltName از نوع URI و Email نداشته باشند (برای راستی‌آزمایی <code dir="ltr">subjectAltNames</code>، درخواست امضای گواهی x509 را
+در <code dir="ltr">spec.request</code> تجزیه کنید)</li>
+</ol>
+</div>
+<h2 id="سایر-مؤلفه-های-احراز-هویت-کننده-other-authenticating-components" dir="rtl">سایر مؤلفه‌های احراز هویت‌کننده {#other-authenticating-components}</h2>
+<p dir="rtl">تمام TLS bootstrapping که در این سند شرح داده شد به kubelet مربوط است. با این حال، ممکن است مؤلفه‌های دیگر نیز نیاز داشته باشند مستقیماً با kube-apiserver ارتباط برقرار کنند. نمونه شاخص آن kube-proxy است که بخشی از مؤلفه‌های نود کوبرنتیز است و روی هر نود اجرا می‌شود، اما ممکن است مؤلفه‌های دیگری مانند مؤلفه‌های پایش یا شبکه را نیز شامل شود.</p>
+<p dir="rtl">مانند kubelet، این مؤلفه‌های دیگر نیز به روشی برای احراز هویت نزد kube-apiserver نیاز دارند.
+برای تولید این اعتبارنامه‌ها چند گزینه پیش رو دارید:</p>
+<ul>
+<li dir="rtl">روش قدیمی: گواهی‌ها را به همان شیوه‌ای ایجاد و توزیع کنید که پیش از TLS bootstrapping برای kubelet انجام می‌دادید</li>
+<li dir="rtl">DaemonSet: از آنجا که خود kubelet روی هر نود بارگذاری می‌شود و برای راه‌اندازی سرویس‌های پایه کافی است،
+می‌توانید kube-proxy و سایر سرویس‌های مختص نود را نه به‌صورت یک فرایند مستقل، بلکه به‌صورت یک
+DaemonSet در فضای نام (namespace) <code dir="ltr">kube-system</code> اجرا کنید. از آنجا که درون کلاستر خواهد بود، می‌توانید یک service
+account مناسب با مجوزهای لازم برای انجام فعالیت‌هایش به آن بدهید. این ممکن است ساده‌ترین روش برای پیکربندی
+چنین سرویس‌هایی باشد.</li>
+</ul>
+<h2 id="تأیید-با-kubectl-kubectl-approval" dir="rtl">تأیید با kubectl {#kubectl-approval}</h2>
+<p dir="rtl">CSRها را می‌توان خارج از جریان‌های تأییدی که در controller manager تعبیه شده‌اند نیز تأیید کرد.</p>
+<p dir="rtl">کنترل‌کننده امضاکننده (signing controller) بلافاصله همه درخواست‌های گواهی را امضا نمی‌کند.
+در عوض، منتظر می‌ماند تا یک کاربر دارای سطح دسترسی مناسب آن‌ها را با وضعیت «Approved» علامت‌گذاری کند. هدف از این جریان آن است که امکان تأیید خودکار توسط یک کنترل‌کننده تأییدکننده خارجی یا کنترل‌کننده تأییدکننده‌ای که در controller-manager هسته پیاده‌سازی شده است فراهم شود. با این حال، مدیران کلاستر
+می‌توانند درخواست‌های گواهی را به‌صورت دستی نیز با kubectl تأیید کنند. مدیر می‌تواند
+CSRها را با <code dir="ltr">kubectl get csr</code> فهرست کند و یکی را با
+<code dir="ltr">kubectl describe csr &lt;name&gt;</code> به‌طور کامل شرح دهد. مدیر می‌تواند یک CSR را با
+<code dir="ltr">kubectl certificate approve &lt;name&gt;</code> و <code dir="ltr">kubectl certificate deny &lt;name&gt;</code> تأیید یا رد کند.</p>
+</main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#فرایند-راه-اندازی-اولیه-initialization-process">فرایند راه‌اندازی اولیه {#initialization-process}</a><a class="l3" href="#راه-اندازی-اولیه-با-bootstrap-bootstrap-initialization">راه‌اندازی اولیه با bootstrap {#bootstrap-initialization}</a><a class="l2" href="#پیکربندی-configuration">پیکربندی {#configuration}</a><a class="l2" href="#مرجع-صدور-گواهی-certificate-authority">مرجع صدور گواهی {#certificate-authority}</a><a class="l2" href="#پیکربندی-kube-apiserver-kube-apiserver-configuration">پیکربندی kube-apiserver {#kube-apiserver-configuration}</a><a class="l3" href="#شناسایی-گواهی-های-کلاینت-recognizing-client-certificates">شناسایی گواهی‌های کلاینت {#recognizing-client-certificates}</a><a class="l3" href="#احراز-هویت-اولیه-ی-bootstrap-initial-bootstrap-authentication">احراز هویت اولیه‌ی bootstrap {#initial-bootstrap-authentication}</a><a class="l3" href="#مجاز-کردن-kubelet-برای-ایجاد-csr-authorize-kubelet-to-create-csr">مجاز کردن kubelet برای ایجاد CSR {#authorize-kubelet-to-create-csr}</a><a class="l2" href="#پیکربندی-kube-controller-manager-kube-controller-manager-configuration">پیکربندی kube-controller-manager {#kube-controller-manager-configuration}</a><a class="l3" href="#دسترسی-به-کلید-و-گواهی-access-to-key-and-certificate">دسترسی به کلید و گواهی {#access-to-key-and-certificate}</a><a class="l3" href="#تأیید-approval">تأیید {#approval}</a><a class="l2" href="#پیکربندی-kubelet">پیکربندی kubelet</a><a class="l3" href="#گواهی-های-کلاینت-و-سرویس-دهی-client-and-serving-certificates">گواهی‌های کلاینت و سرویس‌دهی {#client-and-serving-certificates}</a><a class="l3" href="#چرخش-گواهی-certificate-rotation-certificate-rotation">چرخش گواهی (Certificate rotation) {#certificate-rotation}</a><a class="l2" href="#سایر-مؤلفه-های-احراز-هویت-کننده-other-authenticating-components">سایر مؤلفه‌های احراز هویت‌کننده {#other-authenticating-components}</a><a class="l2" href="#تأیید-با-kubectl-kubectl-approval">تأیید با kubectl {#kubectl-approval}</a></nav>
+</div>
+</body>
+</html>
