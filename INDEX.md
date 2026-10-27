@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-388 از 1722 صفحه
+403 از 1722 صفحه
 
 
 ## `.`
@@ -524,22 +524,22 @@
 - ✅ [DeclarativeValidationBeta.md](md/reference/command-line-tools-reference/feature-gates/DeclarativeValidationBeta.md)
 - ✅ [DeclarativeValidationTakeover.md](md/reference/command-line-tools-reference/feature-gates/DeclarativeValidationTakeover.md)
 - ✅ [DefaultHostNetworkHostPortsInPodTemplates.md](md/reference/command-line-tools-reference/feature-gates/DefaultHostNetworkHostPortsInPodTemplates.md)
-- ⏳ `DefaultPodSysctls.md`
-- ⏳ `DefaultPodTopologySpread.md`
-- ⏳ `DelegateFSGroupToCSIDriver.md`
-- ⏳ `DeploymentReplicaSetTerminatingReplicas.md`
-- ⏳ `DetectCacheInconsistency.md`
-- ⏳ `DevicePluginCDIDevices.md`
-- ⏳ `DevicePlugins.md`
-- ⏳ `DisableAcceleratorUsageMetrics.md`
-- ⏳ `DisableAllocatorDualWrite.md`
-- ⏳ `DisableCPUQuotaWithExclusiveCPUs.md`
-- ⏳ `DisableCloudProviders.md`
-- ⏳ `DisableKubeletCloudCredentialProviders.md`
-- ⏳ `DisableNodeKubeProxyVersion.md`
-- ⏳ `DownwardAPIHugePages.md`
+- ✅ [DefaultPodSysctls.md](md/reference/command-line-tools-reference/feature-gates/DefaultPodSysctls.md)
+- ✅ [DefaultPodTopologySpread.md](md/reference/command-line-tools-reference/feature-gates/DefaultPodTopologySpread.md)
+- ✅ [DelegateFSGroupToCSIDriver.md](md/reference/command-line-tools-reference/feature-gates/DelegateFSGroupToCSIDriver.md)
+- ✅ [DeploymentReplicaSetTerminatingReplicas.md](md/reference/command-line-tools-reference/feature-gates/DeploymentReplicaSetTerminatingReplicas.md)
+- ✅ [DetectCacheInconsistency.md](md/reference/command-line-tools-reference/feature-gates/DetectCacheInconsistency.md)
+- ✅ [DevicePluginCDIDevices.md](md/reference/command-line-tools-reference/feature-gates/DevicePluginCDIDevices.md)
+- ✅ [DevicePlugins.md](md/reference/command-line-tools-reference/feature-gates/DevicePlugins.md)
+- ✅ [DisableAcceleratorUsageMetrics.md](md/reference/command-line-tools-reference/feature-gates/DisableAcceleratorUsageMetrics.md)
+- ✅ [DisableAllocatorDualWrite.md](md/reference/command-line-tools-reference/feature-gates/DisableAllocatorDualWrite.md)
+- ✅ [DisableCPUQuotaWithExclusiveCPUs.md](md/reference/command-line-tools-reference/feature-gates/DisableCPUQuotaWithExclusiveCPUs.md)
+- ✅ [DisableCloudProviders.md](md/reference/command-line-tools-reference/feature-gates/DisableCloudProviders.md)
+- ✅ [DisableKubeletCloudCredentialProviders.md](md/reference/command-line-tools-reference/feature-gates/DisableKubeletCloudCredentialProviders.md)
+- ✅ [DisableNodeKubeProxyVersion.md](md/reference/command-line-tools-reference/feature-gates/DisableNodeKubeProxyVersion.md)
+- ✅ [DownwardAPIHugePages.md](md/reference/command-line-tools-reference/feature-gates/DownwardAPIHugePages.md)
 - ⏳ `DryRun.md`
-- ⏳ `DynamicAuditing.md`
+- ✅ [DynamicAuditing.md](md/reference/command-line-tools-reference/feature-gates/DynamicAuditing.md)
 - ⏳ `DynamicKubeletConfig.md`
 - ⏳ `DynamicProvisioningScheduling.md`
 - ⏳ `DynamicResourceAllocation.md`
