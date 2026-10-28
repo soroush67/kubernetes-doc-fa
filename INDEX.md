@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-992 از 1722 صفحه
+1007 از 1722 صفحه
 
 
 ## `.`
@@ -1192,30 +1192,30 @@
 - ⚠️ [kubectl_config_get-contexts.md](md/reference/kubectl/generated/kubectl_config/kubectl_config_get-contexts.md)
 - ✅ [kubectl_config_get-users.md](md/reference/kubectl/generated/kubectl_config/kubectl_config_get-users.md)
 - ✅ [kubectl_config_rename-context.md](md/reference/kubectl/generated/kubectl_config/kubectl_config_rename-context.md)
-- ⏳ `kubectl_config_set-cluster.md`
-- ⏳ `kubectl_config_set-context.md`
-- ⏳ `kubectl_config_set-credentials.md`
-- ⏳ `kubectl_config_set.md`
-- ⏳ `kubectl_config_unset.md`
-- ⏳ `kubectl_config_use-context.md`
-- ⏳ `kubectl_config_view.md`
+- ✅ [kubectl_config_set-cluster.md](md/reference/kubectl/generated/kubectl_config/kubectl_config_set-cluster.md)
+- ✅ [kubectl_config_set-context.md](md/reference/kubectl/generated/kubectl_config/kubectl_config_set-context.md)
+- ⚠️ [kubectl_config_set-credentials.md](md/reference/kubectl/generated/kubectl_config/kubectl_config_set-credentials.md)
+- ✅ [kubectl_config_set.md](md/reference/kubectl/generated/kubectl_config/kubectl_config_set.md)
+- ✅ [kubectl_config_unset.md](md/reference/kubectl/generated/kubectl_config/kubectl_config_unset.md)
+- ✅ [kubectl_config_use-context.md](md/reference/kubectl/generated/kubectl_config/kubectl_config_use-context.md)
+- ✅ [kubectl_config_view.md](md/reference/kubectl/generated/kubectl_config/kubectl_config_view.md)
 
 ## `reference/kubectl/generated/kubectl_cordon`
 
-- ⏳ `_index.md`
+- ✅ [_index.md](md/reference/kubectl/generated/kubectl_cordon/_index.md)
 
 ## `reference/kubectl/generated/kubectl_cp`
 
-- ⏳ `_index.md`
+- ✅ [_index.md](md/reference/kubectl/generated/kubectl_cp/_index.md)
 
 ## `reference/kubectl/generated/kubectl_create`
 
-- ⏳ `_index.md`
-- ⏳ `kubectl_create_clusterrole.md`
-- ⏳ `kubectl_create_clusterrolebinding.md`
-- ⏳ `kubectl_create_configmap.md`
-- ⏳ `kubectl_create_cronjob.md`
-- ⏳ `kubectl_create_deployment.md`
+- ✅ [_index.md](md/reference/kubectl/generated/kubectl_create/_index.md)
+- ✅ [kubectl_create_clusterrole.md](md/reference/kubectl/generated/kubectl_create/kubectl_create_clusterrole.md)
+- ✅ [kubectl_create_clusterrolebinding.md](md/reference/kubectl/generated/kubectl_create/kubectl_create_clusterrolebinding.md)
+- ✅ [kubectl_create_configmap.md](md/reference/kubectl/generated/kubectl_create/kubectl_create_configmap.md)
+- ✅ [kubectl_create_cronjob.md](md/reference/kubectl/generated/kubectl_create/kubectl_create_cronjob.md)
+- ✅ [kubectl_create_deployment.md](md/reference/kubectl/generated/kubectl_create/kubectl_create_deployment.md)
 - ⏳ `kubectl_create_ingress.md`
 - ⏳ `kubectl_create_job.md`
 - ⏳ `kubectl_create_namespace.md`
