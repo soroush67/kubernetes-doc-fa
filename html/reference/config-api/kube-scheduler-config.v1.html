@@ -1,0 +1,1245 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>پیکربندی kube-scheduler (v1) | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">reference / config-api</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">پیکربندی kube-scheduler (v1)</h1><h2 id="انواع-منابع-resource-types" dir="rtl">انواع منابع {#resource-types}</h2>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubescheduler-config-k8s-io-v1-DefaultPreemptionArgs">DefaultPreemptionArgs</a></li>
+<li dir="ltr" class="ltr"><a href="#kubescheduler-config-k8s-io-v1-DynamicResourcesArgs">DynamicResourcesArgs</a></li>
+<li dir="ltr" class="ltr"><a href="#kubescheduler-config-k8s-io-v1-InterPodAffinityArgs">InterPodAffinityArgs</a></li>
+<li dir="ltr" class="ltr"><a href="#kubescheduler-config-k8s-io-v1-KubeSchedulerConfiguration">KubeSchedulerConfiguration</a></li>
+<li dir="ltr" class="ltr"><a href="#kubescheduler-config-k8s-io-v1-NodeAffinityArgs">NodeAffinityArgs</a></li>
+<li dir="ltr" class="ltr"><a href="#kubescheduler-config-k8s-io-v1-NodeResourcesBalancedAllocationArgs">NodeResourcesBalancedAllocationArgs</a></li>
+<li dir="ltr" class="ltr"><a href="#kubescheduler-config-k8s-io-v1-NodeResourcesFitArgs">NodeResourcesFitArgs</a></li>
+<li dir="ltr" class="ltr"><a href="#kubescheduler-config-k8s-io-v1-PodTopologySpreadArgs">PodTopologySpreadArgs</a></li>
+<li dir="ltr" class="ltr"><a href="#kubescheduler-config-k8s-io-v1-VolumeBindingArgs">VolumeBindingArgs</a></li>
+</ul>
+<h2 id="clientconnectionconfiguration-clientconnectionconfiguration" dir="ltr" class="ltr"><code dir="ltr">ClientConnectionConfiguration</code>     {#ClientConnectionConfiguration}</h2>
+<p dir="rtl"><strong>ظاهر شده در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubescheduler-config-k8s-io-v1-KubeSchedulerConfiguration">KubeSchedulerConfiguration</a></li>
+</ul>
+<p dir="rtl">ClientConnectionConfiguration شامل جزئیات لازم برای ساخت یک کلاینت است.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="rtl"><code dir="ltr">kubeconfig</code> <b>[الزامی]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">kubeconfig مسیر یک فایل KubeConfig است.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">acceptContentTypes</code> <b>[الزامی]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">acceptContentTypes هدر Accept را که کلاینت‌ها هنگام اتصال به یک سرور ارسال می‌کنند تعریف می‌کند و
+مقدار پیش‌فرض 'application/json' را بازنویسی می‌کند. این فیلد تمام اتصال‌هایی را که یک
+کلاینت مشخص به سرور برقرار می‌کند کنترل می‌کند.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">contentType</code> <b>[الزامی]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">contentType نوع محتوایی است که هنگام ارسال داده از این کلاینت به سرور استفاده می‌شود.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">qps</code> <b>[الزامی]</b><br>
+<code dir="ltr">float32</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">qps تعداد پرس‌وجوهای مجاز در هر ثانیه را برای این اتصال کنترل می‌کند.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">burst</code> <b>[الزامی]</b><br>
+<code dir="ltr">int32</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">burst اجازه می‌دهد زمانی که یک کلاینت از نرخ مجاز خود فراتر می‌رود، پرس‌وجوهای اضافی انباشته شوند.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="debuggingconfiguration-debuggingconfiguration" dir="ltr" class="ltr"><code dir="ltr">DebuggingConfiguration</code>     {#DebuggingConfiguration}</h2>
+<p dir="rtl"><strong>ظاهر شده در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubescheduler-config-k8s-io-v1-KubeSchedulerConfiguration">KubeSchedulerConfiguration</a></li>
+</ul>
+<p dir="rtl">DebuggingConfiguration پیکربندی ویژگی‌های مرتبط با اشکال‌زدایی (Debugging) را نگهداری می‌کند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="rtl"><code dir="ltr">enableProfiling</code> <b>[الزامی]</b><br>
+<code dir="ltr">bool</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">enableProfiling پروفایل‌گیری را از طریق رابط وب در host:port/debug/pprof/ فعال می‌کند.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">enableContentionProfiling</code> <b>[الزامی]</b><br>
+<code dir="ltr">bool</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">enableContentionProfiling در صورتی که
+enableProfiling برابر true باشد، پروفایل‌گیری انسدادها (block profiling) را فعال می‌کند.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="leaderelectionconfiguration-leaderelectionconfiguration" dir="ltr" class="ltr"><code dir="ltr">LeaderElectionConfiguration</code>     {#LeaderElectionConfiguration}</h2>
+<p dir="rtl"><strong>ظاهر شده در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubescheduler-config-k8s-io-v1-KubeSchedulerConfiguration">KubeSchedulerConfiguration</a></li>
+</ul>
+<p dir="rtl">LeaderElectionConfiguration پیکربندی کلاینت‌های انتخاب رهبر (leader election)
+را برای مؤلفه‌هایی که می‌توانند با فعال بودن انتخاب رهبر اجرا شوند تعریف می‌کند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="rtl"><code dir="ltr">leaderElect</code> <b>[الزامی]</b><br>
+<code dir="ltr">bool</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">leaderElect به یک کلاینت انتخاب رهبر امکان می‌دهد پیش از اجرای حلقه اصلی
+رهبری را به دست آورد. هنگام اجرای مؤلفه‌های replicate‌شده برای دسترس‌پذیری بالا،
+این گزینه را فعال کنید.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">leaseDuration</code> <b>[الزامی]</b><br>
+<a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration" target="_blank" rel="noopener"><code dir="ltr">meta/v1.Duration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">leaseDuration مدت زمانی است که کاندیداهای غیررهبر، پس از مشاهده تمدید رهبری،
+منتظر می‌مانند تا برای کسب رهبری یک جایگاه رهبری که اشغال شده اما تمدید نشده است اقدام کنند.
+این مقدار در عمل بیشترین مدتی است که یک رهبر می‌تواند متوقف باشد تا
+کاندیدای دیگری جایگزین آن شود. این مقدار فقط در صورتی کاربرد دارد که انتخاب رهبر
+فعال باشد.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">renewDeadline</code> <b>[الزامی]</b><br>
+<a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration" target="_blank" rel="noopener"><code dir="ltr">meta/v1.Duration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">renewDeadline فاصله زمانی بین تلاش‌های master فعلی برای
+تمدید جایگاه رهبری، پیش از آن است که از رهبری دست بکشد. این مقدار باید کمتر
+از مدت lease یا برابر با آن باشد. این مقدار فقط در صورتی کاربرد دارد که انتخاب
+رهبر فعال باشد.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">retryPeriod</code> <b>[الزامی]</b><br>
+<a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration" target="_blank" rel="noopener"><code dir="ltr">meta/v1.Duration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">retryPeriod مدت زمانی است که کلاینت‌ها باید میان تلاش‌های کسب
+و تمدید رهبری صبر کنند. این مقدار فقط در صورتی کاربرد دارد که
+انتخاب رهبر فعال باشد.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">resourceLock</code> <b>[الزامی]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">resourceLock نوع آبجکت منبعی را مشخص می‌کند که برای قفل کردن
+در چرخه‌های انتخاب رهبر استفاده خواهد شد.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">resourceName</code> <b>[الزامی]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">resourceName نام آبجکت منبعی را مشخص می‌کند که برای قفل کردن
+در چرخه‌های انتخاب رهبر استفاده خواهد شد.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">resourceNamespace</code> <b>[الزامی]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">resourceName فضای نام (namespace) آبجکت منبعی را مشخص می‌کند که برای قفل کردن
+در چرخه‌های انتخاب رهبر استفاده خواهد شد.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="defaultpreemptionargs-kubescheduler-config-k8s-io-v1-defaultpreemptionargs" dir="ltr" class="ltr"><code dir="ltr">DefaultPreemptionArgs</code>     {#kubescheduler-config-k8s-io-v1-DefaultPreemptionArgs}</h2>
+<p dir="rtl">DefaultPreemptionArgs آرگومان‌های مورد استفاده برای پیکربندی
+افزونه DefaultPreemption را نگهداری می‌کند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">apiVersion</code><br>string</td><td dir="ltr" class="ltr"><code dir="ltr">kubescheduler.config.k8s.io/v1</code></td></tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">kind</code><br>string</td><td dir="ltr" class="ltr"><code dir="ltr">DefaultPreemptionArgs</code></td></tr>
+<tr><td dir="rtl"><code dir="ltr">minCandidateNodesPercentage</code> <b>[الزامی]</b><br>
+<code dir="ltr">int32</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">MinCandidateNodesPercentage حداقل تعداد کاندیداها برای
+فهرست کوتاه هنگام اجرای آزمایشی (dry run) پیش‌دستی (preemption) است که به‌صورت درصدی از تعداد نودها بیان می‌شود.
+باید در بازه [0, 100] باشد. در صورت مشخص نشدن، پیش‌فرض آن 10% اندازه کلاستر است.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">minCandidateNodesAbsolute</code> <b>[الزامی]</b><br>
+<code dir="ltr">int32</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">MinCandidateNodesAbsolute حداقل مطلق تعداد کاندیداها برای
+فهرست کوتاه است. تعداد محتمل کاندیداهایی که برای اجرای آزمایشی
+پیش‌دستی برشمرده می‌شوند با این فرمول به دست می‌آید:
+numCandidates = max(numNodes * minCandidateNodesPercentage, minCandidateNodesAbsolute)
+از واژه «محتمل» استفاده می‌کنیم زیرا عوامل دیگری مانند نقض PDB
+نیز در تعداد کاندیداهای فهرست کوتاه نقش دارند. باید دست‌کم
+0 نود باشد. در صورت مشخص نشدن، پیش‌فرض آن 100 نود است.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="dynamicresourcesargs-kubescheduler-config-k8s-io-v1-dynamicresourcesargs" dir="ltr" class="ltr"><code dir="ltr">DynamicResourcesArgs</code>     {#kubescheduler-config-k8s-io-v1-DynamicResourcesArgs}</h2>
+<p dir="rtl">DynamicResourcesArgs آرگومان‌های مورد استفاده برای پیکربندی افزونه DynamicResources را نگهداری می‌کند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">apiVersion</code><br>string</td><td dir="ltr" class="ltr"><code dir="ltr">kubescheduler.config.k8s.io/v1</code></td></tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">kind</code><br>string</td><td dir="ltr" class="ltr"><code dir="ltr">DynamicResourcesArgs</code></td></tr>
+<tr><td dir="rtl"><code dir="ltr">filterTimeout</code> <b>[الزامی]</b><br>
+<a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration" target="_blank" rel="noopener"><code dir="ltr">meta/v1.Duration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">FilterTimeout مدت زمانی را که عملیات فیلتر می‌تواند به ازای هر نود
+برای جست‌وجوی دستگاه‌هایی که می‌توان برای زمان‌بندی یک پاد روی آن نود
+تخصیص داد صرف کند، محدود می‌کند.</p>
+<p dir="rtl">در سناریوهای معمول، این عملیات باید ظرف ۱۰ تا ۲۰۰
+میلی‌ثانیه کامل شود، اما بسته به تعداد
+درخواست‌ها به ازای هر ResourceClaim، تعداد ResourceClaimها، تعداد
+دستگاه‌های منتشرشده در ResourceSliceها و پیچیدگی
+درخواست‌ها می‌تواند طولانی‌تر هم باشد. بررسی‌های دیگری غیر از ارزیابی CEL نیز زمان می‌برند (بررسی‌های
+مصرف، تطبیق ویژگی‌ها و غیره).</p>
+<p dir="rtl">بنابراین افزونه زمان‌بند این مهلت زمانی را اعمال می‌کند. اگر به مهلت زمانی
+برسیم، پاد برای آن نود غیرقابل زمان‌بندی در نظر گرفته می‌شود.
+اگر فیلتر کردن برای نود یا نودهای دیگری موفق باشد، آن‌ها انتخاب می‌شوند.
+اگر فیلتر کردن برای همه آن‌ها شکست بخورد، پاد در
+صف غیرقابل زمان‌بندی قرار می‌گیرد. در صورتی که تغییرات
+مثلاً در ResourceSliceها یا ResourceClaimها نشان دهد که
+تلاش دیگری برای زمان‌بندی ممکن است موفق شود، دوباره بررسی خواهد شد. اگر این کار به‌طور مکرر شکست بخورد،
+backoff نمایی تلاش‌های بعدی را کندتر می‌کند.</p>
+<p dir="rtl">مقدار پیش‌فرض ۱۰ ثانیه است.
+این مقدار برای جلوگیری از بدترین سناریوها کافی است و در عین حال بر
+استفاده عادی از DRA تأثیری نمی‌گذارد. با این حال، فیلتر کردن کند می‌تواند زمان‌بندی پادها را
+حتی برای پادهایی که از DRA استفاده نمی‌کنند نیز کند کند. مدیران می‌توانند مهلت زمانی را
+پس از بررسی معیارهای
+<code dir="ltr">scheduler_framework_extension_point_duration_seconds</code> کاهش دهند.</p>
+<p dir="rtl">تنظیم آن روی صفر، مهلت زمانی را به‌طور کامل غیرفعال می‌کند.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">bindingTimeout</code> <b>[الزامی]</b><br>
+<a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration" target="_blank" rel="noopener"><code dir="ltr">meta/v1.Duration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">BindingTimeout مشخص می‌کند نقطه توسعه PreBind در صورت وجود
+BindingConditionهای دستگاه ResourceClaim حداکثر چه مدت می‌تواند منتظر برآورده شدن آن‌ها بماند.
+در طول انتظار، زمان‌بند به‌طور دوره‌ای وضعیت دستگاه را بررسی می‌کند. اگر مهلت زمانی پیش از آن‌که همه شرط‌های لازم
+برقرار شوند (یا هر یک از bindingFailureConditions برقرار شود) سپری شود، تخصیص
+پاک می‌شود و پاد دوباره وارد صف زمان‌بندی می‌شود. توجه کنید که در صورت امکان، همان نود یا نود دیگری
+ممکن است انتخاب شود؛ در غیر این صورت پاد در صف غیرقابل زمان‌بندی قرار می‌گیرد و
+بر اساس تغییرات کلاستر و backoff دوباره تلاش می‌شود.</p>
+<p dir="rtl">پیش‌فرض‌ها و feature gateها:</p>
+<ul>
+<li dir="rtl">زمانی که feature gate با نام DRADeviceBindingConditions فعال باشد، پیش‌فرض ۱۰ دقیقه است.</li>
+<li dir="rtl">فقط زمانی اثر دارد که هر دو feature gate یعنی DRADeviceBindingConditions و
+DRAResourceClaimDeviceStatus فعال باشند؛ در غیر این صورت این فیلد را حذف کنید.</li>
+<li dir="rtl">زمانی که DRADeviceBindingConditions غیرفعال باشد، تنظیم این فیلد خطا محسوب می‌شود.</li>
+</ul>
+<p dir="rtl">مقادیر معتبر:</p>
+<ul>
+<li dir="rtl">
+<blockquote dir="rtl">
+<p dir="rtl">=1s (غیرصفر). هیچ حد بالایی اعمال نمی‌شود.</p>
+</blockquote>
+</li>
+</ul>
+<p dir="rtl">راهنمای تنظیم:</p>
+<ul>
+<li dir="rtl">مقادیر کمتر، زمان لازم برای تلاش مجدد را در مواقعی که دستگاه‌ها آماده نیستند کاهش می‌دهند، اما اگر
+درایورها معمولاً به زمان بیشتری برای گزارش آماده بودن نیاز داشته باشند، می‌توانند
+نوسان (churn) را افزایش دهند.</li>
+<li dir="rtl">پیش از کاهش این مهلت زمانی، معیارهای تأخیر زمان‌بند (مثلاً مدت PreBind در
+<code dir="ltr">scheduler_framework_extension_point_duration_seconds</code>) و رفتار
+آماده‌سازی درایور را بررسی کنید.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="interpodaffinityargs-kubescheduler-config-k8s-io-v1-interpodaffinityargs" dir="ltr" class="ltr"><code dir="ltr">InterPodAffinityArgs</code>     {#kubescheduler-config-k8s-io-v1-InterPodAffinityArgs}</h2>
+<p dir="rtl">InterPodAffinityArgs آرگومان‌های مورد استفاده برای پیکربندی افزونه InterPodAffinity را نگهداری می‌کند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">apiVersion</code><br>string</td><td dir="ltr" class="ltr"><code dir="ltr">kubescheduler.config.k8s.io/v1</code></td></tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">kind</code><br>string</td><td dir="ltr" class="ltr"><code dir="ltr">InterPodAffinityArgs</code></td></tr>
+<tr><td dir="rtl"><code dir="ltr">hardPodAffinityWeight</code> <b>[الزامی]</b><br>
+<code dir="ltr">int32</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">HardPodAffinityWeight وزن امتیازدهی برای پادهای موجودی است که
+دارای affinity سخت منطبق با پاد ورودی هستند.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">ignorePreferredTermsOfExistingPods</code> <b>[الزامی]</b><br>
+<code dir="ltr">bool</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">IgnorePreferredTermsOfExistingPods زمان‌بند را طوری پیکربندی می‌کند که هنگام امتیازدهی به نودهای کاندیدا،
+قواعد affinity ترجیحی پادهای موجود را نادیده بگیرد، مگر آن‌که پاد ورودی دارای affinity میان پادی باشد.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="kubeschedulerconfiguration-kubescheduler-config-k8s-io-v1-kubeschedulerconfiguration" dir="ltr" class="ltr"><code dir="ltr">KubeSchedulerConfiguration</code>     {#kubescheduler-config-k8s-io-v1-KubeSchedulerConfiguration}</h2>
+<p dir="rtl">KubeSchedulerConfiguration یک زمان‌بند را پیکربندی می‌کند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">apiVersion</code><br>string</td><td dir="ltr" class="ltr"><code dir="ltr">kubescheduler.config.k8s.io/v1</code></td></tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">kind</code><br>string</td><td dir="ltr" class="ltr"><code dir="ltr">KubeSchedulerConfiguration</code></td></tr>
+<tr><td dir="rtl"><code dir="ltr">parallelism</code> <b>[الزامی]</b><br>
+<code dir="ltr">int32</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">Parallelism میزان موازی‌سازی در الگوریتم‌های زمان‌بندی پادها را تعیین می‌کند. باید بزرگ‌تر از 0 باشد. پیش‌فرض 16 است.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">leaderElection</code> <b>[الزامی]</b><br>
+<a href="#LeaderElectionConfiguration"><code dir="ltr">LeaderElectionConfiguration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">LeaderElection پیکربندی کلاینت انتخاب رهبر را تعریف می‌کند.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">clientConnection</code> <b>[الزامی]</b><br>
+<a href="#ClientConnectionConfiguration"><code dir="ltr">ClientConnectionConfiguration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">ClientConnection فایل kubeconfig و تنظیمات اتصال کلاینت را که
+سرور پراکسی هنگام ارتباط با apiserver از آن‌ها استفاده می‌کند مشخص می‌کند.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">DebuggingConfiguration</code> <b>[الزامی]</b><br>
+<a href="#DebuggingConfiguration"><code dir="ltr">DebuggingConfiguration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">DebuggingConfiguration پیکربندی ویژگی‌های مرتبط با اشکال‌زدایی را نگهداری می‌کند.
+TODO: We might wanna make this a substruct like Debugging componentbaseconfigv1alpha1.DebuggingConfiguration</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">percentageOfNodesToScore</code> <b>[الزامی]</b><br>
+<code dir="ltr">int32</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">PercentageOfNodesToScore درصدی از کل نودهاست که پس از یافتن آن تعداد نود مناسب
+برای اجرای یک پاد، زمان‌بند جست‌وجوی خود را برای یافتن نودهای مناسب بیشتر در
+کلاستر متوقف می‌کند. این کار به بهبود کارایی زمان‌بند کمک می‌کند. زمان‌بند همواره می‌کوشد
+دست‌کم «minFeasibleNodesToFind» نود مناسب را بیابد، صرف‌نظر از مقدار این پرچم.
+مثال: اگر اندازه کلاستر 500 نود و مقدار این پرچم 30 باشد،
+زمان‌بند به‌محض یافتن 150 نود مناسب، جست‌وجوی نودهای مناسب بیشتر را متوقف می‌کند.
+وقتی مقدار 0 باشد، درصد پیش‌فرض (۵٪ تا ۵۰٪ بر اساس اندازه کلاستر) از
+نودها امتیازدهی می‌شوند. این مقدار توسط PercentageOfNodesToScore در سطح پروفایل بازنویسی می‌شود.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">podInitialBackoffSeconds</code> <b>[الزامی]</b><br>
+<code dir="ltr">int64</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">PodInitialBackoffSeconds مقدار backoff اولیه برای پادهای غیرقابل زمان‌بندی است.
+در صورت تعیین، باید بزرگ‌تر از 0 باشد. اگر این مقدار null باشد، از مقدار پیش‌فرض (1 ثانیه)
+استفاده خواهد شد.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">podMaxBackoffSeconds</code> <b>[الزامی]</b><br>
+<code dir="ltr">int64</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">PodMaxBackoffSeconds حداکثر backoff برای پادهای غیرقابل زمان‌بندی است.
+در صورت تعیین، باید بزرگ‌تر از podInitialBackoffSeconds باشد. اگر این مقدار null باشد،
+از مقدار پیش‌فرض (10 ثانیه) استفاده خواهد شد.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">profiles</code> <b>[الزامی]</b><br>
+<a href="#kubescheduler-config-k8s-io-v1-KubeSchedulerProfile"><code dir="ltr">[]KubeSchedulerProfile</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">Profiles پروفایل‌های زمان‌بندی‌ای هستند که kube-scheduler از آن‌ها پشتیبانی می‌کند. پادها
+می‌توانند با تنظیم نام زمان‌بند مرتبط، زمان‌بندی تحت یک پروفایل خاص را انتخاب کنند. پادهایی که
+هیچ نام زمان‌بندی مشخص نمی‌کنند، در صورت وجود پروفایل «default-scheduler» در اینجا، با
+آن پروفایل زمان‌بندی می‌شوند.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">extenders</code> <b>[الزامی]</b><br>
+<a href="#kubescheduler-config-k8s-io-v1-Extender"><code dir="ltr">[]Extender</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">Extenders فهرست افزونه‌های توسعه‌دهنده زمان‌بند (extender) هستند که هر یک مقادیر نحوه ارتباط
+با extender را نگهداری می‌کند. این extenderها میان همه پروفایل‌های زمان‌بند مشترک هستند.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">delayCacheUntilActive</code> <b>[الزامی]</b><br>
+<code dir="ltr">bool</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">DelayCacheUntilActive مشخص می‌کند کش‌کردن چه زمانی آغاز شود. اگر این مقدار true باشد و انتخاب رهبر فعال باشد،
+زمان‌بند تا زمانی که رهبر نشده باشد، از پر کردن کش‌های informer خودداری می‌کند. این کار
+منجر به failover کندتر می‌شود، اما در عوض هنگام انتظار برای رهبر شدن مصرف حافظه کمتری دارد.
+پیش‌فرض false است.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="nodeaffinityargs-kubescheduler-config-k8s-io-v1-nodeaffinityargs" dir="ltr" class="ltr"><code dir="ltr">NodeAffinityArgs</code>     {#kubescheduler-config-k8s-io-v1-NodeAffinityArgs}</h2>
+<p dir="rtl">NodeAffinityArgs آرگومان‌های پیکربندی افزونه NodeAffinity را نگهداری می‌کند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">apiVersion</code><br>string</td><td dir="ltr" class="ltr"><code dir="ltr">kubescheduler.config.k8s.io/v1</code></td></tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">kind</code><br>string</td><td dir="ltr" class="ltr"><code dir="ltr">NodeAffinityArgs</code></td></tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">addedAffinity</code><br>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.37/#nodeaffinity-v1-core" target="_blank"><code dir="ltr">core/v1.NodeAffinity</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">AddedAffinity علاوه بر NodeAffinity مشخص‌شده در PodSpec، بر همه پادها اعمال می‌شود.
+یعنی نودها باید هم AddedAffinity و
+هم .spec.NodeAffinity را برآورده کنند. AddedAffinity به‌طور پیش‌فرض خالی است (همه نودها
+منطبق هستند).
+هنگام استفاده از AddedAffinity، برخی پادها که الزامات affinity منطبق با
+یک نود مشخص دارند (مانند پادهای Daemonset) ممکن است غیرقابل زمان‌بندی باقی بمانند.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="noderesourcesbalancedallocationargs-kubescheduler-config-k8s-io-v1-noderesourcesbalancedallocationargs" dir="ltr" class="ltr"><code dir="ltr">NodeResourcesBalancedAllocationArgs</code>     {#kubescheduler-config-k8s-io-v1-NodeResourcesBalancedAllocationArgs}</h2>
+<p dir="rtl">NodeResourcesBalancedAllocationArgs آرگومان‌های مورد استفاده برای پیکربندی افزونه NodeResourcesBalancedAllocation را نگهداری می‌کند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">apiVersion</code><br>string</td><td dir="ltr" class="ltr"><code dir="ltr">kubescheduler.config.k8s.io/v1</code></td></tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">kind</code><br>string</td><td dir="ltr" class="ltr"><code dir="ltr">NodeResourcesBalancedAllocationArgs</code></td></tr>
+<tr><td dir="rtl"><code dir="ltr">resources</code> <b>[الزامی]</b><br>
+<a href="#kubescheduler-config-k8s-io-v1-ResourceSpec"><code dir="ltr">[]ResourceSpec</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">منابعی که باید مدیریت شوند؛ در صورت مشخص نشدن، پیش‌فرض «cpu» و «memory» است.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="noderesourcesfitargs-kubescheduler-config-k8s-io-v1-noderesourcesfitargs" dir="ltr" class="ltr"><code dir="ltr">NodeResourcesFitArgs</code>     {#kubescheduler-config-k8s-io-v1-NodeResourcesFitArgs}</h2>
+<p dir="rtl">NodeResourcesFitArgs آرگومان‌های مورد استفاده برای پیکربندی افزونه NodeResourcesFit را نگه می‌دارد.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="ltr" class="ltr">Field</th><th dir="ltr" class="ltr">Description</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">apiVersion</code><br>string</td><td dir="ltr" class="ltr"><code dir="ltr">kubescheduler.config.k8s.io/v1</code></td></tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">kind</code><br>string</td><td dir="ltr" class="ltr"><code dir="ltr">NodeResourcesFitArgs</code></td></tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">ignoredResources</code> <b>[Required]</b><br>
+<code dir="ltr">[]string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">IgnoredResources فهرست منابعی است که فیلتر NodeResources fit
+باید آن‌ها را نادیده بگیرد. این مورد بر امتیازدهی اعمال نمی‌شود.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">ignoredResourceGroups</code> <b>[Required]</b><br>
+<code dir="ltr">[]string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">IgnoredResourceGroups فهرست گروه‌های منابعی را تعیین می‌کند که فیلتر NodeResources fit باید آن‌ها را نادیده بگیرد.
+برای مثال، اگر گروه برابر ["example.com"] باشد، همه نام‌های منبعی که با
+"example.com" شروع می‌شوند، مانند "example.com/aaa" و "example.com/bbb"، نادیده گرفته می‌شوند.
+نام یک گروه منبع نمی‌تواند شامل '/' باشد. این مورد بر امتیازدهی اعمال نمی‌شود.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">scoringStrategy</code> <b>[Required]</b><br>
+<a href="#kubescheduler-config-k8s-io-v1-ScoringStrategy"><code dir="ltr">ScoringStrategy</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">ScoringStrategy راهبرد امتیازدهی منابع نود را انتخاب می‌کند.
+راهبرد پیش‌فرض LeastAllocated با وزن برابر برای "cpu" و "memory" است.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="podtopologyspreadargs-kubescheduler-config-k8s-io-v1-podtopologyspreadargs" dir="ltr" class="ltr"><code dir="ltr">PodTopologySpreadArgs</code>     {#kubescheduler-config-k8s-io-v1-PodTopologySpreadArgs}</h2>
+<p dir="rtl">PodTopologySpreadArgs آرگومان‌های مورد استفاده برای پیکربندی افزونه PodTopologySpread را نگه می‌دارد.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="ltr" class="ltr">Field</th><th dir="ltr" class="ltr">Description</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">apiVersion</code><br>string</td><td dir="ltr" class="ltr"><code dir="ltr">kubescheduler.config.k8s.io/v1</code></td></tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">kind</code><br>string</td><td dir="ltr" class="ltr"><code dir="ltr">PodTopologySpreadArgs</code></td></tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">defaultConstraints</code><br>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.37/#topologyspreadconstraint-v1-core" target="_blank"><code dir="ltr">[]core/v1.TopologySpreadConstraint</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">DefaultConstraints محدودیت‌های توزیع توپولوژی را تعریف می‌کند که بر
+Podهایی اعمال می‌شوند که هیچ محدودیتی را در <code dir="ltr">pod.spec.topologySpreadConstraints</code> تعریف نکرده‌اند.
+مقدار <code dir="ltr">.defaultConstraints[*].labelSelectors</code> باید خالی باشد، زیرا این مقادیر
+از عضویت Pod در Serviceها، ReplicationControllerها،
+ReplicaSetها یا StatefulSetها استنتاج می‌شوند.
+هنگامی که خالی نباشد، مقدار .defaultingType باید "List" باشد.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">defaultingType</code><br>
+<a href="#kubescheduler-config-k8s-io-v1-PodTopologySpreadConstraintsDefaulting"><code dir="ltr">PodTopologySpreadConstraintsDefaulting</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">DefaultingType مشخص می‌کند که .defaultConstraints چگونه استنتاج شوند. می‌تواند یکی از
+مقادیر "System" یا "List" باشد.</p>
+<ul>
+<li dir="rtl">"System": از محدودیت‌های تعریف‌شده توسط کوبرنتیز استفاده می‌کند که Podها را بین
+نودها و zoneها توزیع می‌کنند.</li>
+<li dir="rtl">"List": از محدودیت‌های تعریف‌شده در .defaultConstraints استفاده می‌کند.</li>
+</ul>
+<p dir="rtl">مقدار پیش‌فرض "System" است.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="volumebindingargs-kubescheduler-config-k8s-io-v1-volumebindingargs" dir="ltr" class="ltr"><code dir="ltr">VolumeBindingArgs</code>     {#kubescheduler-config-k8s-io-v1-VolumeBindingArgs}</h2>
+<p dir="rtl">VolumeBindingArgs آرگومان‌های مورد استفاده برای پیکربندی افزونه VolumeBinding را نگه می‌دارد.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="ltr" class="ltr">Field</th><th dir="ltr" class="ltr">Description</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">apiVersion</code><br>string</td><td dir="ltr" class="ltr"><code dir="ltr">kubescheduler.config.k8s.io/v1</code></td></tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">kind</code><br>string</td><td dir="ltr" class="ltr"><code dir="ltr">VolumeBindingArgs</code></td></tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">bindTimeoutSeconds</code> <b>[Required]</b><br>
+<code dir="ltr">int64</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">BindTimeoutSeconds مهلت زمانی بر حسب ثانیه برای عملیات اتصال حجم (volume binding) است.
+مقدار باید یک عدد صحیح نامنفی باشد. مقدار صفر به معنای عدم انتظار است.
+اگر این مقدار nil باشد، از مقدار پیش‌فرض (600) استفاده خواهد شد.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">shape</code><br>
+<a href="#kubescheduler-config-k8s-io-v1-UtilizationShapePoint"><code dir="ltr">[]UtilizationShapePoint</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">Shape نقاطی را مشخص می‌کند که شکل تابع امتیاز را تعریف می‌کنند؛ این تابع
+برای امتیازدهی به نودها بر اساس میزان استفاده از PVهای تأمین‌شده به کار می‌رود.
+میزان استفاده با تقسیم کل ذخیره‌سازی درخواستی Pod
+بر ظرفیت کل PVهای مناسب روی هر نود محاسبه می‌شود.
+هر نقطه شامل میزان استفاده (در بازه ۰ تا ۱۰۰) و امتیاز
+متناظر آن (در بازه ۰ تا ۱۰) است. می‌توانید با تعیین
+امتیازهای متفاوت برای مقادیر مختلف میزان استفاده، اولویت را تنظیم کنید.
+نقاط شکل پیش‌فرض عبارت‌اند از:</p>
+<ol>
+<li dir="rtl">امتیاز ۱۰ برای میزان استفاده ۰</li>
+<li dir="rtl">امتیاز ۰ برای میزان استفاده ۱۰۰
+همه نقاط باید بر اساس میزان استفاده به‌صورت صعودی مرتب شوند.</li>
+</ol>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="extender-kubescheduler-config-k8s-io-v1-extender" dir="ltr" class="ltr"><code dir="ltr">Extender</code>     {#kubescheduler-config-k8s-io-v1-Extender}</h2>
+<p dir="ltr" class="ltr"><strong>Appears in:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubescheduler-config-k8s-io-v1-KubeSchedulerConfiguration">KubeSchedulerConfiguration</a></li>
+</ul>
+<p dir="rtl">Extender پارامترهای مورد استفاده برای ارتباط با extender را نگه می‌دارد. اگر یک verb مشخص نشده یا خالی باشد،
+فرض بر این است که extender تصمیم گرفته است آن افزونه را ارائه نکند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="ltr" class="ltr">Field</th><th dir="ltr" class="ltr">Description</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">urlPrefix</code> <b>[Required]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">URLPrefix که extender در آن در دسترس است</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">filterVerb</code> <b>[Required]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">Verb مربوط به فراخوانی filter؛ در صورت عدم پشتیبانی خالی است. این verb هنگام ارسال فراخوانی filter به extender به URLPrefix افزوده می‌شود.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">preemptVerb</code> <b>[Required]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">Verb مربوط به فراخوانی preempt؛ در صورت عدم پشتیبانی خالی است. این verb هنگام ارسال فراخوانی preempt به extender به URLPrefix افزوده می‌شود.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">prioritizeVerb</code> <b>[Required]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">Verb مربوط به فراخوانی prioritize؛ در صورت عدم پشتیبانی خالی است. این verb هنگام ارسال فراخوانی prioritize به extender به URLPrefix افزوده می‌شود.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">weight</code> <b>[Required]</b><br>
+<code dir="ltr">int64</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">ضریب عددی برای امتیاز نودهایی که فراخوانی prioritize تولید می‌کند.
+وزن باید یک عدد صحیح مثبت باشد</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">bindVerb</code> <b>[Required]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">Verb مربوط به فراخوانی bind؛ در صورت عدم پشتیبانی خالی است. این verb هنگام ارسال فراخوانی bind به extender به URLPrefix افزوده می‌شود.
+اگر این متد توسط extender پیاده‌سازی شده باشد، مسئولیت اتصال Pod به apiserver بر عهده extender است. تنها یک extender
+می‌تواند این تابع را پیاده‌سازی کند.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">enableHTTPS</code> <b>[Required]</b><br>
+<code dir="ltr">bool</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">EnableHTTPS مشخص می‌کند که آیا برای ارتباط با extender باید از https استفاده شود یا خیر</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">tlsConfig</code> <b>[Required]</b><br>
+<a href="#kubescheduler-config-k8s-io-v1-ExtenderTLSConfig"><code dir="ltr">ExtenderTLSConfig</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">TLSConfig پیکربندی امنیت لایه انتقال را مشخص می‌کند</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">httpTimeout</code> <b>[Required]</b><br>
+<a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration" target="_blank" rel="noopener"><code dir="ltr">meta/v1.Duration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">HTTPTimeout مدت مهلت زمانی برای یک فراخوانی به extender را مشخص می‌کند. انقضای مهلت filter باعث شکست زمان‌بندی Pod می‌شود. انقضای مهلت
+prioritize نادیده گرفته می‌شود و برای انتخاب نود از اولویت‌های k8s یا سایر extenderها استفاده می‌شود.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">nodeCacheCapable</code> <b>[Required]</b><br>
+<code dir="ltr">bool</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">NodeCacheCapable مشخص می‌کند که extender قادر به کش کردن اطلاعات نود است،
+بنابراین زمان‌بند باید تنها اطلاعات حداقلی درباره نودهای واجد شرایط را ارسال کند،
+با این فرض که extender جزئیات کامل همه نودهای کلاستر را پیش‌تر کش کرده است</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">managedResources</code><br>
+<a href="#kubescheduler-config-k8s-io-v1-ExtenderManagedResource"><code dir="ltr">[]ExtenderManagedResource</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">ManagedResources فهرستی از منابع توسعه‌یافته (extended resources) است که توسط
+این extender مدیریت می‌شوند.</p>
+<ul>
+<li dir="rtl">یک Pod در مراحل Filter، Prioritize و Bind
+(اگر extender مسئول bind باشد) تنها در صورتی به extender ارسال می‌شود که Pod دست‌کم
+یکی از منابع توسعه‌یافته موجود در این فهرست را درخواست کرده باشد. اگر خالی یا مشخص‌نشده باشد،
+همه Podها به این extender ارسال خواهند شد.</li>
+<li dir="rtl">اگر IgnoredByScheduler برای یک منبع روی true تنظیم شده باشد، kube-scheduler
+بررسی آن منبع را در predicateها نادیده می‌گیرد.</li>
+</ul>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">ignorable</code> <b>[Required]</b><br>
+<code dir="ltr">bool</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">Ignorable مشخص می‌کند که آیا extender قابل چشم‌پوشی است یا خیر؛ یعنی زمان‌بندی نباید
+هنگامی که extender خطا برمی‌گرداند یا در دسترس نیست، با شکست مواجه شود.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="extendermanagedresource-kubescheduler-config-k8s-io-v1-extendermanagedresource" dir="ltr" class="ltr"><code dir="ltr">ExtenderManagedResource</code>     {#kubescheduler-config-k8s-io-v1-ExtenderManagedResource}</h2>
+<p dir="ltr" class="ltr"><strong>Appears in:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubescheduler-config-k8s-io-v1-Extender">Extender</a></li>
+</ul>
+<p dir="rtl">ExtenderManagedResource آرگومان‌های منابع توسعه‌یافته‌ای را توصیف می‌کند که
+توسط یک extender مدیریت می‌شوند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="ltr" class="ltr">Field</th><th dir="ltr" class="ltr">Description</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">name</code> <b>[Required]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">Name نام منبع توسعه‌یافته است.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">ignoredByScheduler</code> <b>[Required]</b><br>
+<code dir="ltr">bool</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">IgnoredByScheduler مشخص می‌کند که آیا kube-scheduler باید هنگام اعمال predicateها
+این منبع را نادیده بگیرد یا خیر.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="extendertlsconfig-kubescheduler-config-k8s-io-v1-extendertlsconfig" dir="ltr" class="ltr"><code dir="ltr">ExtenderTLSConfig</code>     {#kubescheduler-config-k8s-io-v1-ExtenderTLSConfig}</h2>
+<p dir="ltr" class="ltr"><strong>Appears in:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubescheduler-config-k8s-io-v1-Extender">Extender</a></li>
+</ul>
+<p dir="rtl">ExtenderTLSConfig شامل تنظیمات فعال‌سازی TLS با extender است</p>
+<table class="table">
+<thead><tr><th width="30%" dir="ltr" class="ltr">Field</th><th dir="ltr" class="ltr">Description</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">insecure</code> <b>[Required]</b><br>
+<code dir="ltr">bool</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">دسترسی به سرور بدون تأیید گواهی TLS انجام می‌شود. فقط برای آزمایش.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">serverName</code> <b>[Required]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">ServerName برای SNI به سرور ارسال می‌شود و در کلاینت برای بررسی گواهی‌های
+سرور به کار می‌رود. اگر ServerName خالی باشد، از نام میزبانی که برای ارتباط با
+سرور استفاده شده است، استفاده می‌شود.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">certFile</code> <b>[Required]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">سرور احراز هویت با گواهی کلاینت TLS را الزامی می‌کند</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">keyFile</code> <b>[Required]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">سرور احراز هویت با گواهی کلاینت TLS را الزامی می‌کند</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">caFile</code> <b>[Required]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">گواهی‌های ریشه مورد اعتماد برای سرور</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">certData</code> <b>[Required]</b><br>
+<code dir="ltr">[]byte</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">CertData بایت‌های رمزگذاری‌شده با PEM را نگه می‌دارد (که معمولاً از فایل گواهی کلاینت خوانده می‌شوند).
+CertData بر CertFile اولویت دارد</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">keyData</code> <b>[Required]</b><br>
+<code dir="ltr">[]byte</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">KeyData بایت‌های رمزگذاری‌شده با PEM را نگه می‌دارد (که معمولاً از فایل کلید گواهی کلاینت خوانده می‌شوند).
+KeyData بر KeyFile اولویت دارد</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">caData</code> <b>[Required]</b><br>
+<code dir="ltr">[]byte</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">CAData بایت‌های رمزگذاری‌شده با PEM را نگه می‌دارد (که معمولاً از بسته گواهی‌های ریشه خوانده می‌شوند).
+CAData بر CAFile اولویت دارد</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="kubeschedulerprofile-kubescheduler-config-k8s-io-v1-kubeschedulerprofile" dir="ltr" class="ltr"><code dir="ltr">KubeSchedulerProfile</code>     {#kubescheduler-config-k8s-io-v1-KubeSchedulerProfile}</h2>
+<p dir="ltr" class="ltr"><strong>Appears in:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubescheduler-config-k8s-io-v1-KubeSchedulerConfiguration">KubeSchedulerConfiguration</a></li>
+</ul>
+<p dir="rtl">KubeSchedulerProfile یک پروفایل زمان‌بندی است.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="ltr" class="ltr">Field</th><th dir="ltr" class="ltr">Description</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">schedulerName</code> <b>[Required]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">SchedulerName نام زمان‌بندی است که به این پروفایل مرتبط است.
+اگر SchedulerName با مقدار "spec.schedulerName" در Pod مطابقت داشته باشد، آن Pod
+با این پروفایل زمان‌بندی می‌شود.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">percentageOfNodesToScore</code> <b>[Required]</b><br>
+<code dir="ltr">int32</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">PercentageOfNodesToScore درصدی از کل نودهاست که پس از یافتن آن تعداد نود مناسب برای اجرای یک Pod،
+زمان‌بند جست‌وجو برای نودهای مناسب بیشتر در کلاستر را متوقف می‌کند. این کار به بهبود عملکرد زمان‌بند کمک می‌کند. زمان‌بند همواره می‌کوشد
+دست‌کم "minFeasibleNodesToFind" نود مناسب را بیابد، صرف‌نظر از مقدار این فلگ.
+مثال: اگر اندازه کلاستر ۵۰۰ نود و مقدار این فلگ ۳۰ باشد،
+زمان‌بند پس از یافتن ۱۵۰ نود مناسب، جست‌وجو برای نودهای مناسب بیشتر را متوقف می‌کند.
+وقتی مقدار ۰ باشد، درصد پیش‌فرض (۵٪ تا ۵۰٪ بسته به اندازه کلاستر) از
+نودها امتیازدهی خواهند شد. این مقدار PercentageOfNodesToScore سراسری را بازنویسی می‌کند. اگر خالی باشد،
+از PercentageOfNodesToScore سراسری استفاده خواهد شد.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">plugins</code> <b>[Required]</b><br>
+<a href="#kubescheduler-config-k8s-io-v1-Plugins"><code dir="ltr">Plugins</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">Plugins مجموعه افزونه‌هایی را مشخص می‌کند که باید فعال یا غیرفعال شوند.
+افزونه‌های فعال‌شده آن‌هایی هستند که باید علاوه بر افزونه‌های
+پیش‌فرض فعال شوند. افزونه‌های غیرفعال‌شده هر یک از افزونه‌های پیش‌فرض هستند که
+باید غیرفعال شوند.
+هنگامی که برای یک نقطه توسعه (extension point) هیچ افزونه فعال یا غیرفعالی مشخص نشده باشد،
+در صورت وجود، افزونه‌های پیش‌فرض آن نقطه توسعه استفاده خواهند شد.
+اگر یک افزونه QueueSort مشخص شود، همان افزونه QueueSort و همان
+PluginConfig باید برای همه پروفایل‌ها مشخص شود.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">pluginConfig</code> <b>[Required]</b><br>
+<a href="#kubescheduler-config-k8s-io-v1-PluginConfig"><code dir="ltr">[]PluginConfig</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">PluginConfig مجموعه‌ای اختیاری از آرگومان‌های سفارشی افزونه برای هر افزونه است.
+حذف آرگومان‌های پیکربندی یک افزونه معادل استفاده از پیکربندی پیش‌فرض
+آن افزونه است.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="plugin-kubescheduler-config-k8s-io-v1-plugin" dir="ltr" class="ltr"><code dir="ltr">Plugin</code>     {#kubescheduler-config-k8s-io-v1-Plugin}</h2>
+<p dir="ltr" class="ltr"><strong>Appears in:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubescheduler-config-k8s-io-v1-PluginSet">PluginSet</a></li>
+</ul>
+<p dir="rtl">Plugin نام یک افزونه و در صورت کاربرد، وزن آن را مشخص می‌کند. وزن فقط برای افزونه‌های Score و PlacementScore استفاده می‌شود.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="ltr" class="ltr">Field</th><th dir="ltr" class="ltr">Description</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">name</code> <b>[Required]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">Name نام افزونه را تعریف می‌کند</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">weight</code> <b>[Required]</b><br>
+<code dir="ltr">int32</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">Weight وزن افزونه را تعریف می‌کند و فقط برای افزونه‌های Score و PlacementScore استفاده می‌شود.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="pluginconfig-kubescheduler-config-k8s-io-v1-pluginconfig" dir="ltr" class="ltr"><code dir="ltr">PluginConfig</code>     {#kubescheduler-config-k8s-io-v1-PluginConfig}</h2>
+<p dir="ltr" class="ltr"><strong>Appears in:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubescheduler-config-k8s-io-v1-KubeSchedulerProfile">KubeSchedulerProfile</a></li>
+</ul>
+<p dir="rtl">PluginConfig آرگومان‌هایی را مشخص می‌کند که باید هنگام مقداردهی اولیه به یک افزونه ارسال شوند.
+افزونه‌ای که در چند نقطه توسعه فراخوانی می‌شود، یک‌بار مقداردهی اولیه می‌شود. Args می‌تواند ساختار دلخواه داشته باشد.
+پردازش این Args بر عهده افزونه است.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="ltr" class="ltr">Field</th><th dir="ltr" class="ltr">Description</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">name</code> <b>[Required]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">Name نام افزونه‌ای را که پیکربندی می‌شود تعریف می‌کند</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">args</code> <b>[Required]</b><br>
+<a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/runtime/#RawExtension" target="_blank" rel="noopener"><code dir="ltr">k8s.io/apimachinery/pkg/runtime.RawExtension</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">Args آرگومان‌هایی را تعریف می‌کند که هنگام مقداردهی اولیه به افزونه‌ها ارسال می‌شوند. Args می‌تواند ساختار دلخواه داشته باشد.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="pluginset-kubescheduler-config-k8s-io-v1-pluginset" dir="ltr" class="ltr"><code dir="ltr">PluginSet</code>     {#kubescheduler-config-k8s-io-v1-PluginSet}</h2>
+<p dir="ltr" class="ltr"><strong>Appears in:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubescheduler-config-k8s-io-v1-Plugins">Plugins</a></li>
+</ul>
+<p dir="rtl">PluginSet افزونه‌های فعال و غیرفعال را برای یک نقطه توسعه مشخص می‌کند.
+اگر یک آرایه خالی، فاقد مقدار یا nil باشد، افزونه‌های پیش‌فرض در آن نقطه توسعه استفاده خواهند شد.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="ltr" class="ltr">Field</th><th dir="ltr" class="ltr">Description</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">enabled</code> <b>[Required]</b><br>
+<a href="#kubescheduler-config-k8s-io-v1-Plugin"><code dir="ltr">[]Plugin</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">Enabled افزونه‌هایی را مشخص می‌کند که باید علاوه بر افزونه‌های پیش‌فرض فعال شوند.
+اگر افزونه پیش‌فرض نیز در فایل پیکربندی زمان‌بند تنظیم شده باشد، وزن افزونه
+متناسب با آن بازنویسی می‌شود.
+این افزونه‌ها پس از افزونه‌های پیش‌فرض و به همان ترتیبی که در اینجا مشخص شده است فراخوانی می‌شوند.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">disabled</code> <b>[Required]</b><br>
+<a href="#kubescheduler-config-k8s-io-v1-Plugin"><code dir="ltr">[]Plugin</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">Disabled افزونه‌های پیش‌فرضی را مشخص می‌کند که باید غیرفعال شوند.
+هنگامی که لازم است همه افزونه‌های پیش‌فرض غیرفعال شوند، باید آرایه‌ای تنها شامل یک "*" ارائه شود.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="plugins-kubescheduler-config-k8s-io-v1-plugins" dir="ltr" class="ltr"><code dir="ltr">Plugins</code>     {#kubescheduler-config-k8s-io-v1-Plugins}</h2>
+<p dir="rtl"><strong>ظاهر شده در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubescheduler-config-k8s-io-v1-KubeSchedulerProfile">KubeSchedulerProfile</a></li>
+</ul>
+<p dir="rtl">Plugins شامل چندین نقطه توسعه (extension point) است. در صورت مشخص‌شدن، فهرست افزونه‌ها برای
+یک نقطه توسعه مشخص، تنها افزونه‌هایی است که فعال می‌شوند. اگر یک نقطه توسعه
+در پیکربندی حذف شود، مجموعه پیش‌فرض افزونه‌ها برای آن نقطه توسعه استفاده می‌شود.
+افزونه‌های فعال‌شده به همان ترتیبی که در اینجا مشخص شده است و پس از افزونه‌های پیش‌فرض فراخوانی می‌شوند. اگر لازم باشد
+پیش از افزونه‌های پیش‌فرض فراخوانی شوند، باید افزونه‌های پیش‌فرض غیرفعال شوند و دوباره در اینجا با ترتیب دلخواه فعال شوند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="rtl"><code dir="ltr">preEnqueue</code> <b>[الزامی]</b><br>
+<a href="#kubescheduler-config-k8s-io-v1-PluginSet"><code dir="ltr">PluginSet</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">PreEnqueue فهرستی از افزونه‌هاست که باید پیش از افزودن Podها به صف زمان‌بندی فراخوانی شوند.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">queueSort</code> <b>[الزامی]</b><br>
+<a href="#kubescheduler-config-k8s-io-v1-PluginSet"><code dir="ltr">PluginSet</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">QueueSort فهرستی از افزونه‌هاست که باید هنگام مرتب‌سازی Podها در صف زمان‌بندی فراخوانی شوند.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">preFilter</code> <b>[الزامی]</b><br>
+<a href="#kubescheduler-config-k8s-io-v1-PluginSet"><code dir="ltr">PluginSet</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">PreFilter فهرستی از افزونه‌هاست که باید در نقطه توسعه "PreFilter" چارچوب زمان‌بندی فراخوانی شوند.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">filter</code> <b>[الزامی]</b><br>
+<a href="#kubescheduler-config-k8s-io-v1-PluginSet"><code dir="ltr">PluginSet</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">Filter فهرستی از افزونه‌هاست که باید هنگام حذف نودهایی که نمی‌توانند Pod را اجرا کنند، فراخوانی شوند.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">postFilter</code> <b>[الزامی]</b><br>
+<a href="#kubescheduler-config-k8s-io-v1-PluginSet"><code dir="ltr">PluginSet</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">PostFilter فهرستی از افزونه‌هاست که پس از مرحله فیلتر کردن فراخوانی می‌شوند، اما فقط زمانی که هیچ نود مناسبی برای Pod یافت نشده باشد.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">preScore</code> <b>[الزامی]</b><br>
+<a href="#kubescheduler-config-k8s-io-v1-PluginSet"><code dir="ltr">PluginSet</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">PreScore فهرستی از افزونه‌هاست که پیش از امتیازدهی فراخوانی می‌شوند.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">score</code> <b>[الزامی]</b><br>
+<a href="#kubescheduler-config-k8s-io-v1-PluginSet"><code dir="ltr">PluginSet</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">Score فهرستی از افزونه‌هاست که باید هنگام رتبه‌بندی نودهایی که از مرحله فیلتر کردن گذشته‌اند، فراخوانی شوند.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">reserve</code> <b>[الزامی]</b><br>
+<a href="#kubescheduler-config-k8s-io-v1-PluginSet"><code dir="ltr">PluginSet</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">Reserve فهرستی از افزونه‌هاست که هنگام رزرو کردن یا آزادسازی منابع
+پس از اختصاص یک نود برای اجرای Pod فراخوانی می‌شوند.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">permit</code> <b>[الزامی]</b><br>
+<a href="#kubescheduler-config-k8s-io-v1-PluginSet"><code dir="ltr">PluginSet</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">Permit فهرستی از افزونه‌هاست که اتصال (binding) یک Pod را کنترل می‌کنند. این افزونه‌ها می‌توانند از اتصال یک Pod جلوگیری کنند یا آن را به تأخیر بیندازند.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">preBind</code> <b>[الزامی]</b><br>
+<a href="#kubescheduler-config-k8s-io-v1-PluginSet"><code dir="ltr">PluginSet</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">PreBind فهرستی از افزونه‌هاست که باید پیش از اتصال یک Pod فراخوانی شوند.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">bind</code> <b>[الزامی]</b><br>
+<a href="#kubescheduler-config-k8s-io-v1-PluginSet"><code dir="ltr">PluginSet</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">Bind فهرستی از افزونه‌هاست که باید در نقطه توسعه "Bind" چارچوب زمان‌بندی فراخوانی شوند.
+زمان‌بند این افزونه‌ها را به ترتیب فراخوانی می‌کند. به‌محض اینکه یکی از آن‌ها موفقیت را برگرداند، زمان‌بند از بقیه این افزونه‌ها صرف‌نظر می‌کند.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">postBind</code> <b>[الزامی]</b><br>
+<a href="#kubescheduler-config-k8s-io-v1-PluginSet"><code dir="ltr">PluginSet</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">PostBind فهرستی از افزونه‌هاست که باید پس از اتصال موفقیت‌آمیز یک Pod فراخوانی شوند.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">multiPoint</code> <b>[الزامی]</b><br>
+<a href="#kubescheduler-config-k8s-io-v1-PluginSet"><code dir="ltr">PluginSet</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">MultiPoint یک بخش پیکربندی ساده‌شده برای فعال‌سازی افزونه‌ها در تمام نقاط توسعه معتبر است.
+افزونه‌هایی که از طریق MultiPoint فعال شوند، به‌طور خودکار برای هر یک از نقاط توسعه‌ای که
+افزونه پیاده‌سازی کرده است ثبت می‌شوند. غیرفعال کردن یک افزونه از طریق MultiPoint این رفتار را غیرفعال می‌کند.
+غیرفعال کردن "*" از طریق MultiPoint نیز به همین صورت است (هیچ افزونه پیش‌فرضی به‌طور خودکار ثبت نخواهد شد).
+افزونه‌ها همچنان می‌توانند از طریق نقاط توسعه مجزای خود غیرفعال شوند.</p>
+<p dir="rtl">از نظر اولویت، پیکربندی افزونه از این سلسله‌مراتب پایه پیروی می‌کند:</p>
+<ol>
+<li dir="rtl">نقاط توسعه مشخص</li>
+<li dir="rtl">افزونه‌های MultiPoint که صریحاً پیکربندی شده‌اند</li>
+<li dir="rtl">مجموعه افزونه‌های پیش‌فرض، به‌عنوان افزونه‌های MultiPoint
+این بدان معناست که افزونه‌ای با اولویت بالاتر ابتدا اجرا می‌شود و هر تنظیمی را در MultiPoint بازنویسی می‌کند.
+افزونه‌هایی که کاربر صریحاً پیکربندی کرده است نیز اولویت بالاتری نسبت به افزونه‌های پیش‌فرض دارند.
+در این سلسله‌مراتب، تنظیم Enabled بر Disabled اولویت دارد. برای مثال، اگر یک افزونه
+هم در <code dir="ltr">multiPoint.Enabled</code> و هم در <code dir="ltr">multiPoint.Disabled</code> تنظیم شده باشد، آن افزونه فعال خواهد شد. به همین ترتیب،
+قرار دادن <code dir="ltr">multiPoint.Disabled = '*'</code> و <code dir="ltr">multiPoint.Enabled = pluginA</code> همچنان آن افزونه خاص را
+از طریق MultiPoint ثبت می‌کند. این رفتار مانند سایر پیکربندی‌های نقاط توسعه است.</li>
+</ol>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">placementGenerate</code> <b>[الزامی]</b><br>
+<a href="#kubescheduler-config-k8s-io-v1-PluginSet"><code dir="ltr">PluginSet</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">PlacementGenerate فهرستی از افزونه‌هاست که باید در چرخه زمان‌بندی گروه Pod و هنگام تعیین جایگذاری‌ها (placements) برای یک گروه Pod فراخوانی شوند.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">placementScore</code> <b>[الزامی]</b><br>
+<a href="#kubescheduler-config-k8s-io-v1-PluginSet"><code dir="ltr">PluginSet</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">PlacementScore فهرستی از افزونه‌هاست که باید در چرخه زمان‌بندی بار کاری و هنگام رتبه‌بندی تخصیص‌های گروه Pod فراخوانی شوند.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">podGroupPostFilter</code> <b>[الزامی]</b><br>
+<a href="#kubescheduler-config-k8s-io-v1-PluginSet"><code dir="ltr">PluginSet</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">PodGroupPostFilter فهرستی از افزونه‌هاست که پس از مرحله زمان‌بندی بار کاری فراخوانی می‌شوند،
+اما فقط زمانی که PodGroup قابل زمان‌بندی نباشد (معادل PostFilter برای Podهای منفرد).</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="podtopologyspreadconstraintsdefaulting-kubescheduler-config-k8s-io-v1-podtopologyspreadconstraintsdefaulting" dir="ltr" class="ltr"><code dir="ltr">PodTopologySpreadConstraintsDefaulting</code>     {#kubescheduler-config-k8s-io-v1-PodTopologySpreadConstraintsDefaulting}</h2>
+<p dir="rtl">(نام مستعار برای <code dir="ltr">string</code>)</p>
+<p dir="rtl"><strong>ظاهر شده در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubescheduler-config-k8s-io-v1-PodTopologySpreadArgs">PodTopologySpreadArgs</a></li>
+</ul>
+<p dir="rtl">PodTopologySpreadConstraintsDefaulting تعیین می‌کند که محدودیت‌های پیش‌فرض
+برای افزونه PodTopologySpread چگونه تنظیم شوند.</p>
+<h2 id="requestedtocapacityratioparam-kubescheduler-config-k8s-io-v1-requestedtocapacityratioparam" dir="ltr" class="ltr"><code dir="ltr">RequestedToCapacityRatioParam</code>     {#kubescheduler-config-k8s-io-v1-RequestedToCapacityRatioParam}</h2>
+<p dir="rtl"><strong>ظاهر شده در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubescheduler-config-k8s-io-v1-ScoringStrategy">ScoringStrategy</a></li>
+</ul>
+<p dir="rtl">RequestedToCapacityRatioParam پارامترهای RequestedToCapacityRatio را تعریف می‌کند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="rtl"><code dir="ltr">shape</code> <b>[الزامی]</b><br>
+<a href="#kubescheduler-config-k8s-io-v1-UtilizationShapePoint"><code dir="ltr">[]UtilizationShapePoint</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">Shape فهرستی از نقاط است که شکل تابع امتیازدهی را تعریف می‌کنند.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="resourcespec-kubescheduler-config-k8s-io-v1-resourcespec" dir="ltr" class="ltr"><code dir="ltr">ResourceSpec</code>     {#kubescheduler-config-k8s-io-v1-ResourceSpec}</h2>
+<p dir="rtl"><strong>ظاهر شده در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr">
+<p dir="ltr" class="ltr"><a href="#kubescheduler-config-k8s-io-v1-NodeResourcesBalancedAllocationArgs">NodeResourcesBalancedAllocationArgs</a></p>
+</li>
+<li dir="ltr" class="ltr">
+<p dir="ltr" class="ltr"><a href="#kubescheduler-config-k8s-io-v1-ScoringStrategy">ScoringStrategy</a></p>
+</li>
+</ul>
+<p dir="rtl">ResourceSpec یک منبع واحد را نمایش می‌دهد.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="rtl"><code dir="ltr">name</code> <b>[الزامی]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">نام منبع.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">weight</code> <b>[الزامی]</b><br>
+<code dir="ltr">int64</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">وزن منبع.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="scoringstrategy-kubescheduler-config-k8s-io-v1-scoringstrategy" dir="ltr" class="ltr"><code dir="ltr">ScoringStrategy</code>     {#kubescheduler-config-k8s-io-v1-ScoringStrategy}</h2>
+<p dir="rtl"><strong>ظاهر شده در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubescheduler-config-k8s-io-v1-NodeResourcesFitArgs">NodeResourcesFitArgs</a></li>
+</ul>
+<p dir="rtl">ScoringStrategy نوع راهبرد امتیازدهی (ScoringStrategyType) را برای افزونه منابع نود تعریف می‌کند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="rtl"><code dir="ltr">type</code> <b>[الزامی]</b><br>
+<a href="#kubescheduler-config-k8s-io-v1-ScoringStrategyType"><code dir="ltr">ScoringStrategyType</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">Type مشخص می‌کند کدام راهبرد اجرا شود.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">resources</code> <b>[الزامی]</b><br>
+<a href="#kubescheduler-config-k8s-io-v1-ResourceSpec"><code dir="ltr">[]ResourceSpec</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">منابعی که هنگام امتیازدهی در نظر گرفته می‌شوند.
+مجموعه منابع پیش‌فرض شامل "cpu" و "memory" با وزن برابر است.
+وزن‌های مجاز از ۱ تا ۱۰۰ هستند.
+اگر وزن مشخص نشود یا صریحاً روی ۰ تنظیم شود، مقدار پیش‌فرض آن ۱ است.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">requestedToCapacityRatio</code> <b>[الزامی]</b><br>
+<a href="#kubescheduler-config-k8s-io-v1-RequestedToCapacityRatioParam"><code dir="ltr">RequestedToCapacityRatioParam</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">آرگومان‌های مختص راهبرد RequestedToCapacityRatio.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="scoringstrategytype-kubescheduler-config-k8s-io-v1-scoringstrategytype" dir="ltr" class="ltr"><code dir="ltr">ScoringStrategyType</code>     {#kubescheduler-config-k8s-io-v1-ScoringStrategyType}</h2>
+<p dir="rtl">(نام مستعار برای <code dir="ltr">string</code>)</p>
+<p dir="rtl"><strong>ظاهر شده در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubescheduler-config-k8s-io-v1-ScoringStrategy">ScoringStrategy</a></li>
+</ul>
+<p dir="rtl">ScoringStrategyType نوع راهبرد امتیازدهی است که در افزونه NodeResourcesFit استفاده می‌شود.</p>
+<h2 id="utilizationshapepoint-kubescheduler-config-k8s-io-v1-utilizationshapepoint" dir="ltr" class="ltr"><code dir="ltr">UtilizationShapePoint</code>     {#kubescheduler-config-k8s-io-v1-UtilizationShapePoint}</h2>
+<p dir="rtl"><strong>ظاهر شده در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr">
+<p dir="ltr" class="ltr"><a href="#kubescheduler-config-k8s-io-v1-VolumeBindingArgs">VolumeBindingArgs</a></p>
+</li>
+<li dir="ltr" class="ltr">
+<p dir="ltr" class="ltr"><a href="#kubescheduler-config-k8s-io-v1-RequestedToCapacityRatioParam">RequestedToCapacityRatioParam</a></p>
+</li>
+</ul>
+<p dir="rtl">UtilizationShapePoint یک نقطه واحد از شکل تابع اولویت را نمایش می‌دهد.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="rtl"><code dir="ltr">utilization</code> <b>[الزامی]</b><br>
+<code dir="ltr">int32</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">میزان استفاده (محور x). مقادیر معتبر ۰ تا ۱۰۰ هستند. نودی که کاملاً مورد استفاده قرار گرفته باشد، به ۱۰۰ نگاشت می‌شود.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">score</code> <b>[الزامی]</b><br>
+<code dir="ltr">int32</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">امتیازی که به میزان استفاده داده‌شده اختصاص می‌یابد (محور y). مقادیر معتبر ۰ تا ۱۰ هستند.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#انواع-منابع-resource-types">انواع منابع {#resource-types}</a><a class="l2" href="#clientconnectionconfiguration-clientconnectionconfiguration">ClientConnectionConfiguration     {#ClientConnectionConfiguration}</a><a class="l2" href="#debuggingconfiguration-debuggingconfiguration">DebuggingConfiguration     {#DebuggingConfiguration}</a><a class="l2" href="#leaderelectionconfiguration-leaderelectionconfiguration">LeaderElectionConfiguration     {#LeaderElectionConfiguration}</a><a class="l2" href="#defaultpreemptionargs-kubescheduler-config-k8s-io-v1-defaultpreemptionargs">DefaultPreemptionArgs     {#kubescheduler-config-k8s-io-v1-DefaultPreemptionArgs}</a><a class="l2" href="#dynamicresourcesargs-kubescheduler-config-k8s-io-v1-dynamicresourcesargs">DynamicResourcesArgs     {#kubescheduler-config-k8s-io-v1-DynamicResourcesArgs}</a><a class="l2" href="#interpodaffinityargs-kubescheduler-config-k8s-io-v1-interpodaffinityargs">InterPodAffinityArgs     {#kubescheduler-config-k8s-io-v1-InterPodAffinityArgs}</a><a class="l2" href="#kubeschedulerconfiguration-kubescheduler-config-k8s-io-v1-kubeschedulerconfiguration">KubeSchedulerConfiguration     {#kubescheduler-config-k8s-io-v1-KubeSchedulerConfiguration}</a><a class="l2" href="#nodeaffinityargs-kubescheduler-config-k8s-io-v1-nodeaffinityargs">NodeAffinityArgs     {#kubescheduler-config-k8s-io-v1-NodeAffinityArgs}</a><a class="l2" href="#noderesourcesbalancedallocationargs-kubescheduler-config-k8s-io-v1-noderesourcesbalancedallocationargs">NodeResourcesBalancedAllocationArgs     {#kubescheduler-config-k8s-io-v1-NodeResourcesBalancedAllocationArgs}</a><a class="l2" href="#noderesourcesfitargs-kubescheduler-config-k8s-io-v1-noderesourcesfitargs">NodeResourcesFitArgs     {#kubescheduler-config-k8s-io-v1-NodeResourcesFitArgs}</a><a class="l2" href="#podtopologyspreadargs-kubescheduler-config-k8s-io-v1-podtopologyspreadargs">PodTopologySpreadArgs     {#kubescheduler-config-k8s-io-v1-PodTopologySpreadArgs}</a><a class="l2" href="#volumebindingargs-kubescheduler-config-k8s-io-v1-volumebindingargs">VolumeBindingArgs     {#kubescheduler-config-k8s-io-v1-VolumeBindingArgs}</a><a class="l2" href="#extender-kubescheduler-config-k8s-io-v1-extender">Extender     {#kubescheduler-config-k8s-io-v1-Extender}</a><a class="l2" href="#extendermanagedresource-kubescheduler-config-k8s-io-v1-extendermanagedresource">ExtenderManagedResource     {#kubescheduler-config-k8s-io-v1-ExtenderManagedResource}</a><a class="l2" href="#extendertlsconfig-kubescheduler-config-k8s-io-v1-extendertlsconfig">ExtenderTLSConfig     {#kubescheduler-config-k8s-io-v1-ExtenderTLSConfig}</a><a class="l2" href="#kubeschedulerprofile-kubescheduler-config-k8s-io-v1-kubeschedulerprofile">KubeSchedulerProfile     {#kubescheduler-config-k8s-io-v1-KubeSchedulerProfile}</a><a class="l2" href="#plugin-kubescheduler-config-k8s-io-v1-plugin">Plugin     {#kubescheduler-config-k8s-io-v1-Plugin}</a><a class="l2" href="#pluginconfig-kubescheduler-config-k8s-io-v1-pluginconfig">PluginConfig     {#kubescheduler-config-k8s-io-v1-PluginConfig}</a><a class="l2" href="#pluginset-kubescheduler-config-k8s-io-v1-pluginset">PluginSet     {#kubescheduler-config-k8s-io-v1-PluginSet}</a><a class="l2" href="#plugins-kubescheduler-config-k8s-io-v1-plugins">Plugins     {#kubescheduler-config-k8s-io-v1-Plugins}</a><a class="l2" href="#podtopologyspreadconstraintsdefaulting-kubescheduler-config-k8s-io-v1-podtopologyspreadconstraintsdefaulting">PodTopologySpreadConstraintsDefaulting     {#kubescheduler-config-k8s-io-v1-PodTopologySpreadConstraintsDefaulting}</a><a class="l2" href="#requestedtocapacityratioparam-kubescheduler-config-k8s-io-v1-requestedtocapacityratioparam">RequestedToCapacityRatioParam     {#kubescheduler-config-k8s-io-v1-RequestedToCapacityRatioParam}</a><a class="l2" href="#resourcespec-kubescheduler-config-k8s-io-v1-resourcespec">ResourceSpec     {#kubescheduler-config-k8s-io-v1-ResourceSpec}</a><a class="l2" href="#scoringstrategy-kubescheduler-config-k8s-io-v1-scoringstrategy">ScoringStrategy     {#kubescheduler-config-k8s-io-v1-ScoringStrategy}</a><a class="l2" href="#scoringstrategytype-kubescheduler-config-k8s-io-v1-scoringstrategytype">ScoringStrategyType     {#kubescheduler-config-k8s-io-v1-ScoringStrategyType}</a><a class="l2" href="#utilizationshapepoint-kubescheduler-config-k8s-io-v1-utilizationshapepoint">UtilizationShapePoint     {#kubescheduler-config-k8s-io-v1-UtilizationShapePoint}</a></nav>
+</div>
+</body>
+</html>

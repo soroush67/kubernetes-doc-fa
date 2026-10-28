@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>پیکربندی Kubelet (v1) | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">reference / config-api</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">پیکربندی Kubelet (v1)</h1><h2 id="انواع-منابع-resource-types" dir="rtl">انواع منابع {#resource-types}</h2>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubelet-config-k8s-io-v1-CredentialProviderConfig">CredentialProviderConfig</a></li>
+</ul>
+<h2 id="credentialproviderconfig-kubelet-config-k8s-io-v1-credentialproviderconfig" dir="ltr" class="ltr"><code dir="ltr">CredentialProviderConfig</code>     {#kubelet-config-k8s-io-v1-CredentialProviderConfig}</h2>
+<p dir="rtl">CredentialProviderConfig پیکربندیِ حاوی اطلاعات مربوط به هر یک از
+exec credential providerها است. kubelet این پیکربندی را از دیسک می‌خواند و
+هر provider را مطابق آنچه در نوع CredentialProvider مشخص شده است فعال می‌کند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">apiVersion</code><br>string</td><td dir="ltr" class="ltr"><code dir="ltr">kubelet.config.k8s.io/v1</code></td></tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">kind</code><br>string</td><td dir="ltr" class="ltr"><code dir="ltr">CredentialProviderConfig</code></td></tr>
+<tr><td dir="rtl"><code dir="ltr">providers</code> <b>[الزامی]</b><br>
+<a href="#kubelet-config-k8s-io-v1-CredentialProvider"><code dir="ltr">[]CredentialProvider</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">providers فهرستی از افزونه‌های credential provider است که kubelet آن‌ها را فعال می‌کند.
+چند provider ممکن است با یک ایمیج واحد مطابقت داشته باشند؛ در این صورت اعتبارنامه‌های
+همه‌ی providerها به kubelet بازگردانده می‌شود. اگر برای یک ایمیج واحد چند provider فراخوانی شوند،
+نتایج با هم ترکیب می‌شوند. اگر providerها کلیدهای احراز هویت هم‌پوشان بازگردانند،
+ابتدا مقدارِ provider‌ای که در این فهرست زودتر آمده است امتحان می‌شود.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="credentialprovider-kubelet-config-k8s-io-v1-credentialprovider" dir="ltr" class="ltr"><code dir="ltr">CredentialProvider</code>     {#kubelet-config-k8s-io-v1-CredentialProvider}</h2>
+<p dir="rtl"><strong>در این بخش‌ها ظاهر می‌شود:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubelet-config-k8s-io-v1-CredentialProviderConfig">CredentialProviderConfig</a></li>
+</ul>
+<p dir="rtl">CredentialProvider نمایانگر یک افزونه‌ی exec است که kubelet آن را فراخوانی می‌کند. این افزونه فقط
+زمانی فراخوانی می‌شود که ایمیجی که در حال pull شدن است با ایمیج‌هایی که افزونه مدیریت می‌کند مطابقت داشته باشد (به matchImages مراجعه کنید).</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="rtl"><code dir="ltr">name</code> <b>[الزامی]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">name نام الزامیِ credential provider است. این نام باید با نام فایل اجرایی
+provider، آن‌گونه که kubelet می‌بیند، مطابقت داشته باشد. فایل اجرایی باید در پوشه‌ی bin
+مربوط به kubelet باشد (که با فلگ --image-credential-provider-bin-dir تعیین می‌شود).
+این نام باید در میان همه‌ی providerها یکتا باشد.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">matchImages</code> <b>[الزامی]</b><br>
+<code dir="ltr">[]string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">matchImages فهرست الزامی‌ای از رشته‌ها است که برای تطبیق با ایمیج‌ها به‌کار می‌رود تا
+مشخص شود آیا این provider باید فراخوانی شود یا خیر. اگر یکی از رشته‌ها با ایمیجِ
+درخواست‌شده از سوی kubelet مطابقت داشته باشد، افزونه فراخوانی می‌شود و فرصت می‌یابد
+اعتبارنامه‌ها را ارائه دهد. انتظار می‌رود ایمیج‌ها شامل دامنه‌ی registry
+و مسیر URL باشند.</p>
+<p dir="rtl">هر مورد در matchImages یک الگو است که می‌تواند به‌صورت اختیاری شامل یک پورت و یک مسیر باشد.
+در دامنه می‌توان از glob استفاده کرد، اما در پورت یا مسیر نمی‌توان. globها
+به‌صورت زیردامنه مانند '<em>.k8s.io' یا 'k8s.</em>.io' و نیز دامنه‌های سطح بالا مانند 'k8s.<em>' پشتیبانی می‌شوند.
+تطبیق زیردامنه‌های جزئی مانند 'app</em>.k8s.io' نیز پشتیبانی می‌شود. هر glob فقط می‌تواند با
+یک بخش از زیردامنه مطابقت داشته باشد؛ بنابراین *.io با *.k8s.io مطابقت ندارد.</p>
+<p dir="rtl">زمانی بین یک ایمیج و یک matchImage تطابق وجود دارد که همه‌ی شرایط زیر برقرار باشند:</p>
+<ul>
+<li dir="rtl">هر دو تعداد بخش‌های دامنه یکسانی داشته باشند و هر بخش مطابقت داشته باشد.</li>
+<li dir="rtl">مسیر URL در imageMatch باید پیشوندی از مسیر URL ایمیج هدف باشد.</li>
+<li dir="rtl">اگر imageMatch شامل پورت باشد، پورت باید در ایمیج نیز مطابقت داشته باشد.</li>
+</ul>
+<p dir="rtl">نمونه مقادیر matchImages:</p>
+<ul>
+<li dir="ltr" class="ltr">123456789.dkr.ecr.us-east-1.amazonaws.com</li>
+<li dir="ltr" class="ltr">*.azurecr.io</li>
+<li dir="ltr" class="ltr">gcr.io</li>
+<li dir="ltr" class="ltr"><em>.</em>.registry.io</li>
+<li dir="ltr" class="ltr">registry.io:8080/path</li>
+</ul>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">defaultCacheDuration</code> <b>[الزامی]</b><br>
+<a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration" target="_blank" rel="noopener"><code dir="ltr">meta/v1.Duration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">defaultCacheDuration مدت‌زمان پیش‌فرضی است که افزونه اعتبارنامه‌ها را در حافظه نگهداری (cache) می‌کند،
+در صورتی که مدت‌زمان cache در پاسخ افزونه ارائه نشده باشد. این فیلد الزامی است.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">apiVersion</code> <b>[الزامی]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">نسخه‌ی ورودیِ الزامیِ CredentialProviderRequest از نوع exec. CredentialProviderResponse بازگردانده‌شده
+باید از همان نسخه‌ی رمزگذاری ورودی استفاده کند. مقادیر پشتیبانی‌شده‌ی فعلی عبارت‌اند از:</p>
+<ul>
+<li dir="ltr" class="ltr">credentialprovider.kubelet.k8s.io/v1</li>
+</ul>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">args</code><br>
+<code dir="ltr">[]string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">آرگومان‌هایی که هنگام اجرای فرمان به آن ارسال می‌شوند.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">env</code><br>
+<a href="#kubelet-config-k8s-io-v1-ExecEnvVar"><code dir="ltr">[]ExecEnvVar</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">Env متغیرهای محیطی اضافی را که باید در اختیار فرایند قرار گیرند تعریف می‌کند. این‌ها
+با محیط میزبان و همچنین متغیرهایی که client-go برای
+ارسال آرگومان به افزونه استفاده می‌کند، ادغام (union) می‌شوند.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">tokenAttributes</code><br>
+<a href="#kubelet-config-k8s-io-v1-ServiceAccountTokenAttributes"><code dir="ltr">ServiceAccountTokenAttributes</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">tokenAttributes پیکربندی توکن service account است که به افزونه ارسال می‌شود.
+credential provider با تنظیم این فیلد انتخاب می‌کند که برای pull ایمیج از توکن‌های service account استفاده کند.
+وقتی این فیلد تنظیم شود، kubelet یک توکن service account تولید می‌کند که به Pod‌ای که
+ایمیج برای آن pull می‌شود متصل (bound) است و آن را همراه با سایر
+ویژگی‌های موردنیاز افزونه، به‌عنوان بخشی از CredentialProviderRequest به افزونه ارسال می‌کند.</p>
+<p dir="rtl">فراداده‌ی service account و ویژگی‌های توکن به‌عنوان یک بُعد برای cache کردن
+اعتبارنامه‌ها در kubelet استفاده می‌شوند. کلید cache از ترکیب فراداده‌ی service account
+(namespace، name، UID و کلید+مقدار حاشیه‌نویسی‌ها (annotations) برای کلیدهای تعریف‌شده در
+serviceAccountTokenAttribute.requiredServiceAccountAnnotationKeys و serviceAccountTokenAttribute.optionalServiceAccountAnnotationKeys) ساخته می‌شود.
+فراداده‌ی Pod (namespace، name، UID) که در توکن service account وجود دارد، به‌عنوان یک بُعد
+برای cache کردن اعتبارنامه‌ها در kubelet استفاده نمی‌شود. این بدان معناست که بارهای کاری‌ای که از همان service account استفاده می‌کنند
+ممکن است در نهایت از اعتبارنامه‌های یکسانی برای pull ایمیج استفاده کنند. افزونه‌هایی که این رفتار را نمی‌خواهند، یا
+افزونه‌هایی که در حالت pass-through کار می‌کنند، یعنی توکن service account را همان‌گونه که هست بازمی‌گردانند،
+می‌توانند credentialProviderResponse.cacheDuration را برابر 0 قرار دهند. این کار cache شدن
+اعتبارنامه‌ها را در kubelet غیرفعال می‌کند و افزونه برای هر pull ایمیج فراخوانی می‌شود. این امر
+سربار تولید توکن را برای هر pull ایمیج به همراه دارد، اما تنها راه تضمین این است که
+اعتبارنامه‌ها میان Podها به اشتراک گذاشته نشوند (حتی اگر از همان service account استفاده کنند).</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="execenvvar-kubelet-config-k8s-io-v1-execenvvar" dir="ltr" class="ltr"><code dir="ltr">ExecEnvVar</code>     {#kubelet-config-k8s-io-v1-ExecEnvVar}</h2>
+<p dir="rtl"><strong>در این بخش‌ها ظاهر می‌شود:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubelet-config-k8s-io-v1-CredentialProvider">CredentialProvider</a></li>
+</ul>
+<p dir="rtl">ExecEnvVar برای تنظیم متغیرهای محیطی هنگام اجرای یک افزونه‌ی اعتبارنامه‌ی مبتنی بر
+exec استفاده می‌شود.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="rtl"><code dir="ltr">name</code> <b>[الزامی]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <span class="text-muted">توضیحی ارائه نشده است.</span></td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">value</code> <b>[الزامی]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <span class="text-muted">توضیحی ارائه نشده است.</span></td>
+</tr>
+</tbody>
+</table>
+<h2 id="serviceaccounttokenattributes-kubelet-config-k8s-io-v1-serviceaccounttokenattributes" dir="ltr" class="ltr"><code dir="ltr">ServiceAccountTokenAttributes</code>     {#kubelet-config-k8s-io-v1-ServiceAccountTokenAttributes}</h2>
+<p dir="rtl"><strong>در این بخش‌ها ظاهر می‌شود:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubelet-config-k8s-io-v1-CredentialProvider">CredentialProvider</a></li>
+</ul>
+<p dir="rtl">ServiceAccountTokenAttributes پیکربندی توکن service account است که به افزونه ارسال می‌شود.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="rtl"><code dir="ltr">serviceAccountTokenAudience</code> <b>[الزامی]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">serviceAccountTokenAudience مخاطب موردنظر (audience) برای توکن service account پروجکت‌شده است.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">cacheType</code> <b>[الزامی]</b><br>
+<a href="#kubelet-config-k8s-io-v1-ServiceAccountTokenCacheType"><code dir="ltr">ServiceAccountTokenCacheType</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">cacheType نوع کلید cache را مشخص می‌کند که برای cache کردن اعتبارنامه‌های بازگردانده‌شده توسط افزونه
+به‌کار می‌رود، زمانی که از توکن service account استفاده می‌شود.
+محافظه‌کارانه‌ترین گزینه این است که مقدار آن را "Token" قرار دهید؛ به این معنا که kubelet اعتبارنامه‌های بازگردانده‌شده را
+به‌ازای هر توکن cache می‌کند. اگر طول عمر اعتبارنامه‌ی بازگردانده‌شده محدود به طول عمر
+توکن service account است، باید همین مقدار تنظیم شود.
+اگر منطق دریافت اعتبارنامه در افزونه فقط به service account وابسته است و به claimهای مختص Pod وابسته نیست،
+افزونه می‌تواند این مقدار را "ServiceAccount" قرار دهد. در این حالت، kubelet اعتبارنامه‌های بازگردانده‌شده را
+به‌ازای هر service account، cache می‌کند. از این گزینه زمانی استفاده کنید که اعتبارنامه‌ی بازگردانده‌شده برای همه‌ی Podهایی که از همان service account استفاده می‌کنند معتبر باشد.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">requireServiceAccount</code> <b>[الزامی]</b><br>
+<code dir="ltr">bool</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">requireServiceAccount مشخص می‌کند که آیا افزونه نیاز دارد Pod یک service account داشته باشد یا خیر.
+اگر روی true تنظیم شود، kubelet فقط در صورتی افزونه را فراخوانی می‌کند که Pod دارای service account باشد.
+اگر روی false تنظیم شود، kubelet افزونه را حتی در صورتی که Pod فاقد service account باشد نیز فراخوانی می‌کند
+و در آن سناریو توکنی را در CredentialProviderRequest قرار نمی‌دهد. این برای افزونه‌هایی مفید است که
+برای pull ایمیج Podهای فاقد service account (مثلاً static Podها) استفاده می‌شوند.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">requiredServiceAccountAnnotationKeys</code><br>
+<code dir="ltr">[]string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">requiredServiceAccountAnnotationKeys فهرست کلیدهای حاشیه‌نویسی (annotation) است که افزونه به آن‌ها علاقه‌مند است
+و حضورشان در service account الزامی است.
+کلیدهای تعریف‌شده در این فهرست از service account متناظر استخراج می‌شوند و به‌عنوان بخشی از CredentialProviderRequest
+به افزونه ارسال می‌گردند. اگر هر یک از کلیدهای تعریف‌شده در این فهرست
+در service account وجود نداشته باشد، kubelet افزونه را فراخوانی نمی‌کند و خطا بازمی‌گرداند.
+این فیلد اختیاری است و ممکن است خالی باشد. افزونه‌ها می‌توانند از این فیلد برای استخراج
+اطلاعات اضافیِ موردنیاز برای دریافت اعتبارنامه‌ها یا برای اینکه بارهای کاری بتوانند انتخاب کنند که
+از توکن‌های service account برای pull ایمیج استفاده کنند، بهره ببرند.
+اگر خالی نباشد، requireServiceAccount باید روی true تنظیم شود.
+کلیدهای این فهرست باید یکتا باشند.
+این فهرست باید با optionalServiceAccountAnnotationKeys اشتراکی نداشته باشد (متقابلاً ناسازگار باشد).</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">optionalServiceAccountAnnotationKeys</code><br>
+<code dir="ltr">[]string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">optionalServiceAccountAnnotationKeys فهرست کلیدهای حاشیه‌نویسی (annotation) است که افزونه به آن‌ها علاقه‌مند است
+و حضورشان در service account اختیاری است.
+کلیدهای تعریف‌شده در این فهرست از service account متناظر استخراج می‌شوند و به‌عنوان بخشی از CredentialProviderRequest
+به افزونه ارسال می‌گردند. افزونه مسئول اعتبارسنجیِ
+وجود حاشیه‌نویسی‌ها و مقادیر آن‌ها است.
+این فیلد اختیاری است و ممکن است خالی باشد. افزونه‌ها می‌توانند از این فیلد برای استخراج
+اطلاعات اضافیِ موردنیاز برای دریافت اعتبارنامه‌ها استفاده کنند.
+کلیدهای این فهرست باید یکتا باشند.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="serviceaccounttokencachetype-kubelet-config-k8s-io-v1-serviceaccounttokencachetype" dir="ltr" class="ltr"><code dir="ltr">ServiceAccountTokenCacheType</code>     {#kubelet-config-k8s-io-v1-ServiceAccountTokenCacheType}</h2>
+<p dir="rtl">(نام مستعار برای <code dir="ltr">string</code>)</p>
+<p dir="rtl"><strong>در این بخش‌ها ظاهر می‌شود:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubelet-config-k8s-io-v1-ServiceAccountTokenAttributes">ServiceAccountTokenAttributes</a></li>
+</ul>
+<p dir="rtl">ServiceAccountTokenCacheType نوع کلید cache است که برای cache کردن اعتبارنامه‌های بازگردانده‌شده توسط افزونه
+به‌کار می‌رود، زمانی که از توکن service account استفاده می‌شود.</p>
+</main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#انواع-منابع-resource-types">انواع منابع {#resource-types}</a><a class="l2" href="#credentialproviderconfig-kubelet-config-k8s-io-v1-credentialproviderconfig">CredentialProviderConfig     {#kubelet-config-k8s-io-v1-CredentialProviderConfig}</a><a class="l2" href="#credentialprovider-kubelet-config-k8s-io-v1-credentialprovider">CredentialProvider     {#kubelet-config-k8s-io-v1-CredentialProvider}</a><a class="l2" href="#execenvvar-kubelet-config-k8s-io-v1-execenvvar">ExecEnvVar     {#kubelet-config-k8s-io-v1-ExecEnvVar}</a><a class="l2" href="#serviceaccounttokenattributes-kubelet-config-k8s-io-v1-serviceaccounttokenattributes">ServiceAccountTokenAttributes     {#kubelet-config-k8s-io-v1-ServiceAccountTokenAttributes}</a><a class="l2" href="#serviceaccounttokencachetype-kubelet-config-k8s-io-v1-serviceaccounttokencachetype">ServiceAccountTokenCacheType     {#kubelet-config-k8s-io-v1-ServiceAccountTokenCacheType}</a></nav>
+</div>
+</body>
+</html>

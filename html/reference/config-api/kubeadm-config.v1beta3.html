@@ -1,0 +1,1258 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>kubeadm Configuration (v1beta3) | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">reference / config-api</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="ltr" class="ltr">kubeadm Configuration (v1beta3)</h1><h2 dir="ltr" class="ltr">Overview</h2>
+<p dir="rtl">بسته v1beta3 نسخه v1beta3 از قالب فایل پیکربندی kubeadm را تعریف می‌کند.
+این نسخه با رفع برخی مشکلات جزئی و افزودن چند فیلد جدید، قالب v1beta2 را بهبود می‌بخشد.</p>
+<p dir="rtl">فهرست تغییرات نسبت به v1beta2:</p>
+<ul>
+<li dir="rtl">فیلد منسوخ‌شده "ClusterConfiguration.useHyperKubeImage" حذف شده است.
+kubeadm دیگر از ایمیج hyperkube پشتیبانی نمی‌کند.</li>
+<li dir="rtl">فیلد "ClusterConfiguration.dns.type" حذف شده است، زیرا CoreDNS تنها نوع سرور DNS است که kubeadm از آن پشتیبانی می‌کند.</li>
+<li dir="rtl">تگ‌های "datapolicy" به فیلدهایی که اطلاعات محرمانه را نگه می‌دارند افزوده شده‌اند.
+در نتیجه، هنگام چاپ ساختارهای API با klog، مقادیر این فیلدها حذف می‌شوند.</li>
+<li dir="rtl">فیلدهای "InitConfiguration.skipPhases" و "JoinConfiguration.skipPhases" افزوده شده‌اند تا امکان رد کردن فهرستی از فازها در زمان اجرای دستور kubeadm init/join فراهم شود.</li>
+<li dir="rtl">فیلدهای "InitConfiguration.nodeRegistration.imagePullPolicy" و "JoinConfiguration.nodeRegistration.imagePullPolicy"
+افزوده شده‌اند تا بتوان سیاست دریافت ایمیج‌ها را در زمان اجرای "init" و "join" در kubeadm مشخص کرد.
+مقدار آن باید یکی از "Always"، "Never" یا "IfNotPresent" باشد.
+مقدار پیش‌فرض "IfNotPresent" است که رفتار موجود پیش از این افزوده شدن بوده است.</li>
+<li dir="rtl">فیلدهای "InitConfiguration.patches.directory" و "JoinConfiguration.patches.directory" افزوده شده‌اند تا کاربر بتواند دایرکتوری‌ای را پیکربندی کند که پچ‌های مربوط به مؤلفه‌های مستقرشده توسط kubeadm از آن خوانده می‌شوند.</li>
+<li dir="rtl">BootstrapToken* API و ابزارهای مرتبط با آن از گروه API با نام "kubeadm" به گروه جدیدی با نام "bootstraptoken" منتقل شده‌اند. نسخه v1beta3 از API مربوط به kubeadm دیگر ساختارهای BootstrapToken* را در بر نمی‌گیرد.</li>
+</ul>
+<p dir="rtl">مهاجرت از نسخه‌های قدیمی پیکربندی kubeadm</p>
+<ul>
+<li dir="rtl">kubeadm نسخه v1.15.x و جدیدتر را می‌توان برای مهاجرت از v1beta1 به v1beta2 به کار برد.</li>
+<li dir="rtl">kubeadm نسخه v1.22.x و جدیدتر دیگر از v1beta1 و API های قدیمی‌تر پشتیبانی نمی‌کند، اما می‌توان از آن برای مهاجرت از v1beta2 به v1beta3 استفاده کرد.</li>
+<li dir="rtl">kubeadm نسخه v1.27.x و جدیدتر دیگر از v1beta2 و API های قدیمی‌تر پشتیبانی نمی‌کند،</li>
+</ul>
+<h2 dir="ltr" class="ltr">Basics</h2>
+<p dir="rtl">روش توصیه‌شده برای پیکربندی kubeadm این است که یک فایل پیکربندی YAML با گزینه <code dir="ltr">--config</code> ارسال شود. برخی از
+گزینه‌های پیکربندی تعریف‌شده در فایل پیکربندی kubeadm به‌صورت فلگ‌های خط فرمان نیز در دسترس هستند، اما در این روش
+فقط رایج‌ترین و ساده‌ترین موارد استفاده پشتیبانی می‌شوند.</p>
+<p dir="rtl">یک فایل پیکربندی kubeadm می‌تواند چندین نوع پیکربندی را در خود داشته باشد که با سه خط تیره (<code dir="ltr">---</code>) از یکدیگر جدا می‌شوند.</p>
+<p dir="rtl">kubeadm از انواع پیکربندی زیر پشتیبانی می‌کند:</p>
+<pre style="background-color:#fff" dir="ltr"><span style="color:#000;font-weight:bold">apiVersion</span>:<span style="color:#bbb"> </span>kubeadm.k8s.io/v1beta3<span style="color:#bbb">
+</span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">kind</span>:<span style="color:#bbb"> </span>InitConfiguration<span style="color:#bbb">
+</span><span style="color:#bbb">
+</span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">apiVersion</span>:<span style="color:#bbb"> </span>kubeadm.k8s.io/v1beta3<span style="color:#bbb">
+</span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">kind</span>:<span style="color:#bbb"> </span>ClusterConfiguration<span style="color:#bbb">
+</span><span style="color:#bbb">
+</span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">apiVersion</span>:<span style="color:#bbb"> </span>kubelet.config.k8s.io/v1beta1<span style="color:#bbb">
+</span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">kind</span>:<span style="color:#bbb"> </span>KubeletConfiguration<span style="color:#bbb">
+</span><span style="color:#bbb">
+</span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">apiVersion</span>:<span style="color:#bbb"> </span>kubeproxy.config.k8s.io/v1alpha1<span style="color:#bbb">
+</span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">kind</span>:<span style="color:#bbb"> </span>KubeProxyConfiguration<span style="color:#bbb">
+</span><span style="color:#bbb">
+</span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">apiVersion</span>:<span style="color:#bbb"> </span>kubeadm.k8s.io/v1beta3<span style="color:#bbb">
+</span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">kind</span>:<span style="color:#bbb"> </span>JoinConfiguration<span style="color:#bbb">
+</span></pre><p dir="rtl">برای چاپ مقادیر پیش‌فرض اقدام‌های "init" و "join" از دستورات زیر استفاده کنید:</p>
+<pre style="background-color:#fff" dir="ltr">kubeadm config print init-defaults
+kubeadm config print join-defaults
+</pre><p dir="rtl">فهرست انواع پیکربندی که باید در یک فایل پیکربندی گنجانده شوند، به اقدامی که انجام می‌دهید
+(<code dir="ltr">init</code> یا <code dir="ltr">join</code>) و به گزینه‌های پیکربندی که قصد استفاده از آن‌ها را دارید (مقادیر پیش‌فرض یا سفارشی‌سازی پیشرفته) بستگی دارد.</p>
+<p dir="rtl">اگر برخی انواع پیکربندی ارائه نشوند یا فقط به‌صورت ناقص ارائه شوند، kubeadm از مقادیر پیش‌فرض استفاده می‌کند؛ مقادیر پیش‌فرضی که kubeadm فراهم می‌کند، در صورت نیاز شامل اعمال هماهنگی مقادیر میان مؤلفه‌ها نیز هستند (برای مثال
+فلگ <code dir="ltr">--cluster-cidr</code> در controller manager و <code dir="ltr">clusterCIDR</code> در kube-proxy).</p>
+<p dir="rtl">کاربران همیشه مجاز به بازنویسی مقادیر پیش‌فرض هستند، به‌جز زیرمجموعه کوچکی از تنظیمات که
+از نظر امنیتی اهمیت دارند (برای مثال اعمال اجباری حالت مجوزدهی Node و RBAC در API server).</p>
+<p dir="rtl">اگر کاربر نوع پیکربندی‌ای را ارائه کند که برای اقدام در حال انجام انتظار نمی‌رود، kubeadm
+آن نوع‌ها را نادیده می‌گیرد و یک هشدار چاپ می‌کند.</p>
+<h2 dir="ltr" class="ltr">Kubeadm init configuration types</h2>
+<p dir="rtl">هنگام اجرای kubeadm init با گزینه <code dir="ltr">--config</code>، انواع پیکربندی زیر قابل استفاده هستند:
+InitConfiguration، ClusterConfiguration، KubeProxyConfiguration و KubeletConfiguration، اما تنها وجود یکی
+از InitConfiguration و ClusterConfiguration الزامی است.</p>
+<pre style="background-color:#fff" dir="ltr"><span style="color:#000;font-weight:bold">apiVersion</span>:<span style="color:#bbb"> </span>kubeadm.k8s.io/v1beta3<span style="color:#bbb">
+</span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">kind</span>:<span style="color:#bbb"> </span>InitConfiguration<span style="color:#bbb">
+</span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">bootstrapTokens</span>:<span style="color:#bbb">
+</span><span style="color:#bbb">  </span>...<span style="color:#bbb">
+</span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">nodeRegistration</span>:<span style="color:#bbb">
+</span><span style="color:#bbb">  </span>...<span style="color:#bbb">
+</span></pre><p dir="rtl">نوع InitConfiguration باید برای پیکربندی تنظیمات زمان اجرا استفاده شود که در مورد kubeadm init
+شامل پیکربندی bootstrap token و تمام تنظیماتی است که مختص نودی هستند که kubeadm روی آن اجرا می‌شود، از جمله:</p>
+<ul>
+<li dir="rtl">
+<p dir="rtl">NodeRegistration، که فیلدهای مرتبط با ثبت نود جدید در کلاستر را در بر دارد؛
+از آن برای سفارشی‌سازی نام نود، سوکت CRI مورد استفاده یا هر تنظیم دیگری که باید فقط برای همین
+نود اعمال شود (برای مثال آدرس IP نود) استفاده کنید.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">LocalAPIEndpoint، که نشان‌دهنده endpoint نمونه API server است که باید روی این نود مستقر شود؛
+برای مثال از آن برای سفارشی‌سازی آدرس advertise شده API server استفاده کنید.</p>
+</li>
+</ul>
+<pre style="background-color:#fff" dir="ltr"><span style="color:#000;font-weight:bold">apiVersion</span>:<span style="color:#bbb"> </span>kubeadm.k8s.io/v1beta3<span style="color:#bbb">
+</span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">kind</span>:<span style="color:#bbb"> </span>ClusterConfiguration<span style="color:#bbb">
+</span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">networking</span>:<span style="color:#bbb">
+</span><span style="color:#bbb">  </span>...<span style="color:#bbb">
+</span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">etcd</span>:<span style="color:#bbb">
+</span><span style="color:#bbb">  </span>...<span style="color:#bbb">
+</span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">apiServer</span>:<span style="color:#bbb">
+</span><span style="color:#bbb">  </span><span style="color:#000;font-weight:bold">extraArgs</span>:<span style="color:#bbb">
+</span><span style="color:#bbb">    </span>...<span style="color:#bbb">
+</span><span style="color:#bbb">  </span><span style="color:#000;font-weight:bold">extraVolumes</span>:<span style="color:#bbb">
+</span><span style="color:#bbb">    </span>...<span style="color:#bbb">
+</span><span style="color:#bbb"></span>...<span style="color:#bbb">
+</span></pre><p dir="rtl">نوع ClusterConfiguration باید برای پیکربندی تنظیمات سراسری کلاستر استفاده شود،
+از جمله تنظیمات مربوط به:</p>
+<ul>
+<li dir="rtl">
+<p dir="rtl"><code dir="ltr">networking</code> که پیکربندی توپولوژی شبکه کلاستر را در بر دارد؛ برای مثال از آن برای سفارشی‌سازی
+زیرشبکه Pod یا زیرشبکه سرویس‌ها استفاده کنید.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><code dir="ltr">etcd</code>: برای مثال از آن برای سفارشی‌سازی etcd محلی یا پیکربندی API server
+جهت استفاده از یک کلاستر etcd خارجی استفاده کنید.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">پیکربندی‌های kube-apiserver، kube-scheduler و kube-controller-manager؛ از آن‌ها برای سفارشی‌سازی مؤلفه‌های control plane
+با افزودن تنظیمات سفارشی یا بازنویسی تنظیمات پیش‌فرض kubeadm استفاده کنید.</p>
+</li>
+</ul>
+<pre style="background-color:#fff" dir="ltr"><span style="color:#000;font-weight:bold">apiVersion</span>:<span style="color:#bbb"> </span>kubeproxy.config.k8s.io/v1alpha1<span style="color:#bbb">
+</span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">kind</span>:<span style="color:#bbb"> </span>KubeProxyConfiguration<span style="color:#bbb">
+</span><span style="color:#bbb">  </span>...<span style="color:#bbb">
+</span></pre><p dir="rtl">نوع KubeProxyConfiguration باید برای تغییر پیکربندی‌ای استفاده شود که به نمونه‌های kube-proxy مستقرشده در کلاستر ارسال می‌شود.
+اگر این آبجکت ارائه نشود یا فقط به‌صورت ناقص ارائه شود، kubeadm مقادیر پیش‌فرض را اعمال می‌کند.</p>
+<p dir="rtl">برای مستندات رسمی kube-proxy به https://kubernetes.io/docs/reference/command-line-tools-reference/kube-proxy/ یا
+https://pkg.go.dev/k8s.io/kube-proxy/config/v1alpha1#KubeProxyConfiguration
+مراجعه کنید.</p>
+<pre style="background-color:#fff" dir="ltr"><span style="color:#000;font-weight:bold">apiVersion</span>:<span style="color:#bbb"> </span>kubelet.config.k8s.io/v1beta1<span style="color:#bbb">
+</span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">kind</span>:<span style="color:#bbb"> </span>KubeletConfiguration<span style="color:#bbb">
+</span><span style="color:#bbb">  </span>...<span style="color:#bbb">
+</span></pre><p dir="rtl">نوع KubeletConfiguration باید برای تغییر پیکربندی‌هایی استفاده شود که به تمام نمونه‌های kubelet مستقرشده در کلاستر ارسال می‌شوند.
+اگر این آبجکت ارائه نشود یا فقط به‌صورت ناقص ارائه شود، kubeadm مقادیر پیش‌فرض را اعمال می‌کند.</p>
+<p dir="rtl">برای مستندات رسمی kubelet به https://kubernetes.io/docs/reference/command-line-tools-reference/kubelet/ یا
+https://pkg.go.dev/k8s.io/kubelet/config/v1beta1#KubeletConfiguration
+مراجعه کنید.</p>
+<p dir="rtl">در ادامه یک نمونه کاملاً تکمیل‌شده از یک فایل YAML واحد آمده است که شامل چندین
+نوع پیکربندی است و می‌توان آن را در اجرای <code dir="ltr">kubeadm init</code> به کار برد.</p>
+<pre style="background-color:#fff" dir="ltr"><span style="color:#000;font-weight:bold">apiVersion</span>:<span style="color:#bbb"> </span>kubeadm.k8s.io/v1beta3<span style="color:#bbb">
+</span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">kind</span>:<span style="color:#bbb"> </span>InitConfiguration<span style="color:#bbb">
+</span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">bootstrapTokens</span>:<span style="color:#bbb">
+</span><span style="color:#bbb">  </span>- <span style="color:#000;font-weight:bold">token</span>:<span style="color:#bbb"> </span><span style="color:#d14">"9a08jv.c0izixklcxtmnze7"</span><span style="color:#bbb">
+</span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">description</span>:<span style="color:#bbb"> </span><span style="color:#d14">"kubeadm bootstrap token"</span><span style="color:#bbb">
+</span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">ttl</span>:<span style="color:#bbb"> </span><span style="color:#d14">"24h"</span><span style="color:#bbb">
+</span><span style="color:#bbb">  </span>- <span style="color:#000;font-weight:bold">token</span>:<span style="color:#bbb"> </span><span style="color:#d14">"783bde.3f89s0fje9f38fhf"</span><span style="color:#bbb">
+</span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">description</span>:<span style="color:#bbb"> </span><span style="color:#d14">"another bootstrap token"</span><span style="color:#bbb">
+</span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">usages</span>:<span style="color:#bbb">
+</span><span style="color:#bbb">      </span>- authentication<span style="color:#bbb">
+</span><span style="color:#bbb">      </span>- signing<span style="color:#bbb">
+</span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">groups</span>:<span style="color:#bbb">
+</span><span style="color:#bbb">      </span>- system:bootstrappers:kubeadm:default-node-token<span style="color:#bbb">
+</span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">nodeRegistration</span>:<span style="color:#bbb">
+</span><span style="color:#bbb">  </span><span style="color:#000;font-weight:bold">name</span>:<span style="color:#bbb"> </span><span style="color:#d14">"ec2-10-100-0-1"</span><span style="color:#bbb">
+</span><span style="color:#bbb">  </span><span style="color:#000;font-weight:bold">criSocket</span>:<span style="color:#bbb"> </span><span style="color:#d14">"/var/run/dockershim.sock"</span><span style="color:#bbb">
+</span><span style="color:#bbb">  </span><span style="color:#000;font-weight:bold">taints</span>:<span style="color:#bbb">
+</span><span style="color:#bbb">    </span>- <span style="color:#000;font-weight:bold">key</span>:<span style="color:#bbb"> </span><span style="color:#d14">"kubeadmNode"</span><span style="color:#bbb">
+</span><span style="color:#bbb">      </span><span style="color:#000;font-weight:bold">value</span>:<span style="color:#bbb"> </span><span style="color:#d14">"someValue"</span><span style="color:#bbb">
+</span><span style="color:#bbb">      </span><span style="color:#000;font-weight:bold">effect</span>:<span style="color:#bbb"> </span><span style="color:#d14">"NoSchedule"</span><span style="color:#bbb">
+</span><span style="color:#bbb">  </span><span style="color:#000;font-weight:bold">kubeletExtraArgs</span>:<span style="color:#bbb">
+</span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">v</span>:<span style="color:#bbb"> </span><span style="color:#099">4</span><span style="color:#bbb">
+</span><span style="color:#bbb">  </span><span style="color:#000;font-weight:bold">ignorePreflightErrors</span>:<span style="color:#bbb">
+</span><span style="color:#bbb">    </span>- IsPrivilegedUser<span style="color:#bbb">
+</span><span style="color:#bbb">  </span><span style="color:#000;font-weight:bold">imagePullPolicy</span>:<span style="color:#bbb"> </span><span style="color:#d14">"IfNotPresent"</span><span style="color:#bbb">
+</span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">localAPIEndpoint</span>:<span style="color:#bbb">
+</span><span style="color:#bbb">  </span><span style="color:#000;font-weight:bold">advertiseAddress</span>:<span style="color:#bbb"> </span><span style="color:#d14">"10.100.0.1"</span><span style="color:#bbb">
+</span><span style="color:#bbb">  </span><span style="color:#000;font-weight:bold">bindPort</span>:<span style="color:#bbb"> </span><span style="color:#099">6443</span><span style="color:#bbb">
+</span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">certificateKey</span>:<span style="color:#bbb"> </span><span style="color:#d14">"e6a2eb8581237ab72a4f494f30285ec12a9694d750b9785706a83bfcbbbd2204"</span><span style="color:#bbb">
+</span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">skipPhases</span>:<span style="color:#bbb">
+</span><span style="color:#bbb">  </span>- addon/kube-proxy<span style="color:#bbb">
+</span><span style="color:#bbb"></span>---<span style="color:#bbb">
+</span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">apiVersion</span>:<span style="color:#bbb"> </span>kubeadm.k8s.io/v1beta3<span style="color:#bbb">
+</span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">kind</span>:<span style="color:#bbb"> </span>ClusterConfiguration<span style="color:#bbb">
+</span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">etcd</span>:<span style="color:#bbb">
+</span><span style="color:#bbb">  </span><span style="color:#998;font-style:italic"># one of local or external</span><span style="color:#bbb">
+</span><span style="color:#bbb">  </span><span style="color:#000;font-weight:bold">local</span>:<span style="color:#bbb">
+</span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">imageRepository</span>:<span style="color:#bbb"> </span><span style="color:#d14">"registry.k8s.io"</span><span style="color:#bbb">
+</span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">imageTag</span>:<span style="color:#bbb"> </span><span style="color:#d14">"3.2.24"</span><span style="color:#bbb">
+</span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">dataDir</span>:<span style="color:#bbb"> </span><span style="color:#d14">"/var/lib/etcd"</span><span style="color:#bbb">
+</span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">extraArgs</span>:<span style="color:#bbb">
+</span><span style="color:#bbb">      </span><span style="color:#000;font-weight:bold">listen-client-urls</span>:<span style="color:#bbb"> </span><span style="color:#d14">"http://10.100.0.1:2379"</span><span style="color:#bbb">
+</span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">serverCertSANs</span>:<span style="color:#bbb">
+</span><span style="color:#bbb">      </span>- <span style="color:#bbb"> </span><span style="color:#d14">"ec2-10-100-0-1.compute-1.amazonaws.com"</span><span style="color:#bbb">
+</span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">peerCertSANs</span>:<span style="color:#bbb">
+</span><span style="color:#bbb">      </span>- <span style="color:#d14">"10.100.0.1"</span><span style="color:#bbb">
+</span><span style="color:#bbb">  </span><span style="color:#998;font-style:italic"># external:</span><span style="color:#bbb">
+</span><span style="color:#bbb">    </span><span style="color:#998;font-style:italic"># endpoints:</span><span style="color:#bbb">
+</span><span style="color:#bbb">    </span><span style="color:#998;font-style:italic"># - "10.100.0.1:2379"</span><span style="color:#bbb">
+</span><span style="color:#bbb">    </span><span style="color:#998;font-style:italic"># - "10.100.0.2:2379"</span><span style="color:#bbb">
+</span><span style="color:#bbb">    </span><span style="color:#998;font-style:italic"># caFile: "/etcd/kubernetes/pki/etcd/etcd-ca.crt"</span><span style="color:#bbb">
+</span><span style="color:#bbb">    </span><span style="color:#998;font-style:italic"># certFile: "/etcd/kubernetes/pki/etcd/etcd.crt"</span><span style="color:#bbb">
+</span><span style="color:#bbb">    </span><span style="color:#998;font-style:italic"># keyFile: "/etcd/kubernetes/pki/etcd/etcd.key"</span><span style="color:#bbb">
+</span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">networking</span>:<span style="color:#bbb">
+</span><span style="color:#bbb">  </span><span style="color:#000;font-weight:bold">serviceSubnet</span>:<span style="color:#bbb"> </span><span style="color:#d14">"10.96.0.0/16"</span><span style="color:#bbb">
+</span><span style="color:#bbb">  </span><span style="color:#000;font-weight:bold">podSubnet</span>:<span style="color:#bbb"> </span><span style="color:#d14">"10.244.0.0/24"</span><span style="color:#bbb">
+</span><span style="color:#bbb">  </span><span style="color:#000;font-weight:bold">dnsDomain</span>:<span style="color:#bbb"> </span><span style="color:#d14">"cluster.local"</span><span style="color:#bbb">
+</span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">kubernetesVersion</span>:<span style="color:#bbb"> </span><span style="color:#d14">"v1.21.0"</span><span style="color:#bbb">
+</span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">controlPlaneEndpoint</span>:<span style="color:#bbb"> </span><span style="color:#d14">"10.100.0.1:6443"</span><span style="color:#bbb">
+</span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">apiServer</span>:<span style="color:#bbb">
+</span><span style="color:#bbb">  </span><span style="color:#000;font-weight:bold">extraArgs</span>:<span style="color:#bbb">
+</span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">authorization-mode</span>:<span style="color:#bbb"> </span><span style="color:#d14">"Node,RBAC"</span><span style="color:#bbb">
+</span><span style="color:#bbb">  </span><span style="color:#000;font-weight:bold">extraVolumes</span>:<span style="color:#bbb">
+</span><span style="color:#bbb">    </span>- <span style="color:#000;font-weight:bold">name</span>:<span style="color:#bbb"> </span><span style="color:#d14">"some-volume"</span><span style="color:#bbb">
+</span><span style="color:#bbb">      </span><span style="color:#000;font-weight:bold">hostPath</span>:<span style="color:#bbb"> </span><span style="color:#d14">"/etc/some-path"</span><span style="color:#bbb">
+</span><span style="color:#bbb">      </span><span style="color:#000;font-weight:bold">mountPath</span>:<span style="color:#bbb"> </span><span style="color:#d14">"/etc/some-pod-path"</span><span style="color:#bbb">
+</span><span style="color:#bbb">      </span><span style="color:#000;font-weight:bold">readOnly</span>:<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">false</span><span style="color:#bbb">
+</span><span style="color:#bbb">      </span><span style="color:#000;font-weight:bold">pathType</span>:<span style="color:#bbb"> </span>File<span style="color:#bbb">
+</span><span style="color:#bbb">  </span><span style="color:#000;font-weight:bold">certSANs</span>:<span style="color:#bbb">
+</span><span style="color:#bbb">    </span>- <span style="color:#d14">"10.100.1.1"</span><span style="color:#bbb">
+</span><span style="color:#bbb">    </span>- <span style="color:#d14">"ec2-10-100-0-1.compute-1.amazonaws.com"</span><span style="color:#bbb">
+</span><span style="color:#bbb">  </span><span style="color:#000;font-weight:bold">timeoutForControlPlane</span>:<span style="color:#bbb"> </span>4m0s<span style="color:#bbb">
+</span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">controllerManager</span>:<span style="color:#bbb">
+</span><span style="color:#bbb">  </span><span style="color:#000;font-weight:bold">extraArgs</span>:<span style="color:#bbb">
+</span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">"node-cidr-mask-size": </span><span style="color:#d14">"20"</span><span style="color:#bbb">
+</span><span style="color:#bbb">  </span><span style="color:#000;font-weight:bold">extraVolumes</span>:<span style="color:#bbb">
+</span><span style="color:#bbb">    </span>- <span style="color:#000;font-weight:bold">name</span>:<span style="color:#bbb"> </span><span style="color:#d14">"some-volume"</span><span style="color:#bbb">
+</span><span style="color:#bbb">      </span><span style="color:#000;font-weight:bold">hostPath</span>:<span style="color:#bbb"> </span><span style="color:#d14">"/etc/some-path"</span><span style="color:#bbb">
+</span><span style="color:#bbb">      </span><span style="color:#000;font-weight:bold">mountPath</span>:<span style="color:#bbb"> </span><span style="color:#d14">"/etc/some-pod-path"</span><span style="color:#bbb">
+</span><span style="color:#bbb">      </span><span style="color:#000;font-weight:bold">readOnly</span>:<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">false</span><span style="color:#bbb">
+</span><span style="color:#bbb">      </span><span style="color:#000;font-weight:bold">pathType</span>:<span style="color:#bbb"> </span>File<span style="color:#bbb">
+</span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">scheduler</span>:<span style="color:#bbb">
+</span><span style="color:#bbb">  </span><span style="color:#000;font-weight:bold">extraArgs</span>:<span style="color:#bbb">
+</span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">bind-address</span>:<span style="color:#bbb"> </span><span style="color:#d14">"10.100.0.1"</span><span style="color:#bbb">
+</span><span style="color:#bbb">  </span><span style="color:#000;font-weight:bold">extraVolumes</span>:<span style="color:#bbb">
+</span><span style="color:#bbb">    </span>- <span style="color:#000;font-weight:bold">name</span>:<span style="color:#bbb"> </span><span style="color:#d14">"some-volume"</span><span style="color:#bbb">
+</span><span style="color:#bbb">      </span><span style="color:#000;font-weight:bold">hostPath</span>:<span style="color:#bbb"> </span><span style="color:#d14">"/etc/some-path"</span><span style="color:#bbb">
+</span><span style="color:#bbb">      </span><span style="color:#000;font-weight:bold">mountPath</span>:<span style="color:#bbb"> </span><span style="color:#d14">"/etc/some-pod-path"</span><span style="color:#bbb">
+</span><span style="color:#bbb">      </span><span style="color:#000;font-weight:bold">readOnly</span>:<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">false</span><span style="color:#bbb">
+</span><span style="color:#bbb">      </span><span style="color:#000;font-weight:bold">pathType</span>:<span style="color:#bbb"> </span>File<span style="color:#bbb">
+</span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">certificatesDir</span>:<span style="color:#bbb"> </span><span style="color:#d14">"/etc/kubernetes/pki"</span><span style="color:#bbb">
+</span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">imageRepository</span>:<span style="color:#bbb"> </span><span style="color:#d14">"registry.k8s.io"</span><span style="color:#bbb">
+</span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">clusterName</span>:<span style="color:#bbb"> </span><span style="color:#d14">"example-cluster"</span><span style="color:#bbb">
+</span><span style="color:#bbb"></span>---<span style="color:#bbb">
+</span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">apiVersion</span>:<span style="color:#bbb"> </span>kubelet.config.k8s.io/v1beta1<span style="color:#bbb">
+</span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">kind</span>:<span style="color:#bbb"> </span>KubeletConfiguration<span style="color:#bbb">
+</span><span style="color:#bbb"></span><span style="color:#998;font-style:italic"># kubelet specific options here</span><span style="color:#bbb">
+</span><span style="color:#bbb"></span>---<span style="color:#bbb">
+</span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">apiVersion</span>:<span style="color:#bbb"> </span>kubeproxy.config.k8s.io/v1alpha1<span style="color:#bbb">
+</span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">kind</span>:<span style="color:#bbb"> </span>KubeProxyConfiguration<span style="color:#bbb">
+</span><span style="color:#bbb"></span><span style="color:#998;font-style:italic"># kube-proxy specific options here</span><span style="color:#bbb">
+</span></pre><h2 dir="ltr" class="ltr">Kubeadm join configuration types</h2>
+<p dir="rtl">هنگام اجرای <code dir="ltr">kubeadm join</code> با گزینه <code dir="ltr">--config</code>، باید نوع JoinConfiguration ارائه شود.</p>
+<pre style="background-color:#fff" dir="ltr"><span style="color:#000;font-weight:bold">apiVersion</span>:<span style="color:#bbb"> </span>kubeadm.k8s.io/v1beta3<span style="color:#bbb">
+</span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">kind</span>:<span style="color:#bbb"> </span>JoinConfiguration<span style="color:#bbb">
+</span><span style="color:#bbb">  </span>...<span style="color:#bbb">
+</span></pre><p dir="rtl">نوع JoinConfiguration باید برای پیکربندی تنظیمات زمان اجرا استفاده شود که در مورد <code dir="ltr">kubeadm join</code>
+شامل روش discovery مورد استفاده برای دسترسی به اطلاعات کلاستر و تمام تنظیماتی است که مختص نودی هستند
+که kubeadm روی آن اجرا می‌شود، از جمله:</p>
+<ul>
+<li dir="rtl">
+<p dir="rtl"><code dir="ltr">nodeRegistration</code>، که فیلدهای مرتبط با ثبت نود جدید در کلاستر را در بر دارد؛
+از آن برای سفارشی‌سازی نام نود، سوکت CRI مورد استفاده یا هر تنظیم دیگری که باید فقط برای همین
+نود اعمال شود (برای مثال آدرس IP نود) استفاده کنید.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><code dir="ltr">apiEndpoint</code>، که نشان‌دهنده endpoint نمونه API server است که در نهایت باید روی این نود مستقر شود.</p>
+</li>
+</ul>
+<p dir="rtl">منسوخ‌شده: v1beta3 به نفع v1beta4 منسوخ شده است و در یک نسخه آینده،
+1.34 یا بعد از آن، حذف خواهد شد. لطفاً مهاجرت کنید</p>
+<h2 id="انواع-منابع-resource-types" dir="rtl">انواع منابع (Resource Types)</h2>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubeadm-k8s-io-v1beta3-ClusterConfiguration">ClusterConfiguration</a></li>
+<li dir="ltr" class="ltr"><a href="#kubeadm-k8s-io-v1beta3-InitConfiguration">InitConfiguration</a></li>
+<li dir="ltr" class="ltr"><a href="#kubeadm-k8s-io-v1beta3-JoinConfiguration">JoinConfiguration</a></li>
+</ul>
+<h2 id="bootstraptoken-bootstraptoken" dir="ltr" class="ltr"><code dir="ltr">BootstrapToken</code>     {#BootstrapToken}</h2>
+<p dir="rtl"><strong>در این بخش‌ها ظاهر می‌شود:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubeadm-k8s-io-v1beta3-InitConfiguration">InitConfiguration</a></li>
+</ul>
+<p dir="rtl">BootstrapToken یک توکن بوت‌استرپ را توصیف می‌کند که به‌صورت یک Secret در کلاستر ذخیره می‌شود.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="rtl"><code dir="ltr">token</code> <b>[الزامی]</b><br>
+<a href="#BootstrapTokenString"><code dir="ltr">BootstrapTokenString</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl"><code dir="ltr">token</code> برای برقراری اعتماد دوطرفه بین نودها و control planeها استفاده می‌شود.
+از این توکن برای پیوستن نودها به کلاستر استفاده می‌شود.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">description</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl"><code dir="ltr">description</code> یک پیام خوانا برای انسان تعیین می‌کند که توضیح می‌دهد این توکن چرا وجود دارد و برای چه
+مقصودی استفاده می‌شود، تا سایر مدیران بتوانند هدف آن را بدانند.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">ttl</code><br>
+<a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration" target="_blank" rel="noopener"><code dir="ltr">meta/v1.Duration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl"><code dir="ltr">ttl</code> مدت زمان بقای (time to live) این توکن را تعیین می‌کند. مقدار پیش‌فرض آن <code dir="ltr">24h</code> است.
+فیلدهای <code dir="ltr">expires</code> و <code dir="ltr">ttl</code> متقابلاً ناسازگارند و نمی‌توان هر دو را همزمان تعیین کرد.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">expires</code><br>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.37/#time-v1-meta" target="_blank"><code dir="ltr">meta/v1.Time</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl"><code dir="ltr">expires</code> زمان انقضای این توکن را مشخص می‌کند. به‌طور پیش‌فرض، مقدار آن در زمان اجرا
+و بر اساس <code dir="ltr">ttl</code> به‌صورت پویا تعیین می‌شود. فیلدهای <code dir="ltr">expires</code> و <code dir="ltr">ttl</code> متقابلاً ناسازگارند و نمی‌توان هر دو را همزمان تعیین کرد.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">usages</code><br>
+<code dir="ltr">[]string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl"><code dir="ltr">usages</code> روش‌هایی را که می‌توان از این توکن استفاده کرد توصیف می‌کند. به‌طور پیش‌فرض می‌توان از آن
+برای برقراری اعتماد دوطرفه استفاده کرد، اما می‌توان این رفتار را در اینجا تغییر داد.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">groups</code><br>
+<code dir="ltr">[]string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl"><code dir="ltr">groups</code> گروه‌های اضافی را مشخص می‌کند که در صورت استفاده از این توکن برای احراز هویت،
+این توکن با آن گروه‌ها احراز هویت خواهد شد.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="bootstraptokenstring-bootstraptokenstring" dir="ltr" class="ltr"><code dir="ltr">BootstrapTokenString</code>     {#BootstrapTokenString}</h2>
+<p dir="rtl"><strong>در این بخش‌ها ظاهر می‌شود:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#BootstrapToken">BootstrapToken</a></li>
+</ul>
+<p dir="rtl">BootstrapTokenString توکنی با قالب <code dir="ltr">abcdef.abcdef0123456789</code> است که هم برای اعتبارسنجی در دسترس‌بودن عملی
+API server از دیدگاه نودِ در حال پیوستن، و هم به‌عنوان روش احراز هویت نود در مرحله بوت‌استرپ
+دستور "kubeadm join" استفاده می‌شود. این توکن کوتاه‌مدت است و باید کوتاه‌مدت باشد.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="rtl"><code dir="ltr">-</code> <b>[الزامی]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <span class="text-muted">توضیحی ارائه نشده است.</span></td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">-</code> <b>[الزامی]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <span class="text-muted">توضیحی ارائه نشده است.</span></td>
+</tr>
+</tbody>
+</table>
+<h2 id="clusterconfiguration-kubeadm-k8s-io-v1beta3-clusterconfiguration" dir="ltr" class="ltr"><code dir="ltr">ClusterConfiguration</code>     {#kubeadm-k8s-io-v1beta3-ClusterConfiguration}</h2>
+<p dir="rtl">ClusterConfiguration شامل پیکربندی سراسری کلاستر برای یک کلاستر kubeadm است.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">apiVersion</code><br>string</td><td dir="ltr" class="ltr"><code dir="ltr">kubeadm.k8s.io/v1beta3</code></td></tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">kind</code><br>string</td><td dir="ltr" class="ltr"><code dir="ltr">ClusterConfiguration</code></td></tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">etcd</code><br>
+<a href="#kubeadm-k8s-io-v1beta3-Etcd"><code dir="ltr">Etcd</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl"><code dir="ltr">etcd</code> پیکربندی etcd را در بر دارد.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">networking</code><br>
+<a href="#kubeadm-k8s-io-v1beta3-Networking"><code dir="ltr">Networking</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl"><code dir="ltr">networking</code> پیکربندی توپولوژی شبکه کلاستر را در بر دارد.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">kubernetesVersion</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl"><code dir="ltr">kubernetesVersion</code> نسخه هدف control plane است.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">controlPlaneEndpoint</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl"><code dir="ltr">controlPlaneEndpoint</code> یک آدرس IP یا نام DNS پایدار برای control plane تعیین می‌کند.
+مقدار آن می‌تواند یک آدرس IP معتبر یا یک زیردامنه DNS مطابق RFC-1123 باشد که هر دو می‌توانند یک پورت TCP اختیاری داشته باشند.
+اگر <code dir="ltr">controlPlaneEndpoint</code> مشخص نشده باشد، از <code dir="ltr">advertiseAddress</code> + <code dir="ltr">bindPort</code>
+استفاده می‌شود؛ اگر <code dir="ltr">controlPlaneEndpoint</code> بدون پورت TCP مشخص شده باشد،
+از <code dir="ltr">bindPort</code> استفاده می‌شود.
+کاربردهای ممکن عبارت‌اند از:</p>
+<ul>
+<li dir="rtl">در یک کلاستر با بیش از یک نمونه control plane، آدرس
+load balancer خارجیِ مستقر در جلوی نمونه‌های control plane
+باید به این فیلد اختصاص داده شود.</li>
+<li dir="rtl">در محیط‌هایی که بازیافت اجباری نودها اعمال می‌شود، می‌توان از <code dir="ltr">controlPlaneEndpoint</code>
+برای اختصاص یک DNS پایدار به control plane استفاده کرد.</li>
+</ul>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">apiServer</code><br>
+<a href="#kubeadm-k8s-io-v1beta3-APIServer"><code dir="ltr">APIServer</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl"><code dir="ltr">apiServer</code> شامل تنظیمات اضافی برای API server است.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">controllerManager</code><br>
+<a href="#kubeadm-k8s-io-v1beta3-ControlPlaneComponent"><code dir="ltr">ControlPlaneComponent</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl"><code dir="ltr">controllerManager</code> شامل تنظیمات اضافی برای controller manager است.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">scheduler</code><br>
+<a href="#kubeadm-k8s-io-v1beta3-ControlPlaneComponent"><code dir="ltr">ControlPlaneComponent</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl"><code dir="ltr">scheduler</code> شامل تنظیمات اضافی برای زمان‌بند (scheduler) است.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">dns</code><br>
+<a href="#kubeadm-k8s-io-v1beta3-DNS"><code dir="ltr">DNS</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl"><code dir="ltr">dns</code> گزینه‌های افزونه DNS نصب‌شده در کلاستر را تعریف می‌کند.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">certificatesDir</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl"><code dir="ltr">certificatesDir</code> مشخص می‌کند که همه گواهی‌های موردنیاز در کجا ذخیره می‌شوند یا از کجا جست‌وجو می‌شوند.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">imageRepository</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl"><code dir="ltr">imageRepository</code> رجیستری کانتینری را که ایمیج‌ها از آن دریافت می‌شوند تعیین می‌کند.
+اگر خالی باشد، به‌طور پیش‌فرض از <code dir="ltr">registry.k8s.io</code> استفاده می‌شود.
+اگر نسخه کوبرنتیز یک بیلد CI باشد (نسخه کوبرنتیز با <code dir="ltr">ci/</code> شروع شود)،
+<code dir="ltr">gcr.io/k8s-staging-ci-images</code> به‌طور پیش‌فرض برای مؤلفه‌های control plane
+و برای kube-proxy استفاده می‌شود، در حالی که <code dir="ltr">registry.k8s.io</code> برای سایر ایمیج‌ها استفاده خواهد شد.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">featureGates</code><br>
+<code dir="ltr">map[string]bool</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl"><code dir="ltr">featureGates</code> شامل feature gateهای مختص kubeadm است که کاربر آن‌ها را فعال کرده است.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">clusterName</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">نام کلاستر.
+این نام در فایل‌های kubeconfig تولیدشده توسط kubeadm استفاده می‌شود و همچنین به‌عنوان مقدار
+فلگ <code dir="ltr">--cluster-name</code> در kube-controller-manager ارسال می‌شود.
+مقدار پیش‌فرض آن <code dir="ltr">"kubernetes"</code> است.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="initconfiguration-kubeadm-k8s-io-v1beta3-initconfiguration" dir="ltr" class="ltr"><code dir="ltr">InitConfiguration</code>     {#kubeadm-k8s-io-v1beta3-InitConfiguration}</h2>
+<p dir="rtl">InitConfiguration شامل فهرستی از عناصر است که اطلاعات زمان اجرای مختص "kubeadm init" را در بر دارند.
+اطلاعات مختص <code dir="ltr">kubeadm init</code>. این فیلدها فقط در اولین اجرای <code dir="ltr">kubeadm init</code> استفاده می‌شوند.
+پس از آن، اطلاعات این فیلدها در ConfigMap با نام <code dir="ltr">kubeadm-config</code> بارگذاری نمی‌شود؛
+ConfigMap ای که برای نمونه توسط <code dir="ltr">kubeadm upgrade</code> استفاده می‌شود. این فیلدها باید omitempty باشند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">apiVersion</code><br>string</td><td dir="ltr" class="ltr"><code dir="ltr">kubeadm.k8s.io/v1beta3</code></td></tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">kind</code><br>string</td><td dir="ltr" class="ltr"><code dir="ltr">InitConfiguration</code></td></tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">bootstrapTokens</code><br>
+<a href="#BootstrapToken"><code dir="ltr">[]BootstrapToken</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl"><code dir="ltr">bootstrapTokens</code> در زمان اجرای <code dir="ltr">kubeadm init</code> در نظر گرفته می‌شود و مجموعه‌ای از Bootstrap Tokenها را برای ایجاد توصیف می‌کند.
+این اطلاعات در configmap کلاستر kubeadm بارگذاری نمی‌شود، که بخشی از دلیل آن ماهیت حساس این اطلاعات است.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">nodeRegistration</code><br>
+<a href="#kubeadm-k8s-io-v1beta3-NodeRegistrationOptions"><code dir="ltr">NodeRegistrationOptions</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl"><code dir="ltr">nodeRegistration</code> شامل فیلدهایی است که به ثبت نود control plane جدید
+در کلاستر مربوط می‌شوند.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">localAPIEndpoint</code><br>
+<a href="#kubeadm-k8s-io-v1beta3-APIEndpoint"><code dir="ltr">APIEndpoint</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl"><code dir="ltr">localAPIEndpoint</code> نشانی endpoint نمونه API server را نشان می‌دهد که روی این نود
+control plane مستقر شده است. در برپایی‌های HA، این فیلد با <code dir="ltr">ClusterConfiguration.controlPlaneEndpoint</code>
+از این جهت تفاوت دارد که <code dir="ltr">controlPlaneEndpoint</code> endpoint سراسری کلاستر است که سپس
+درخواست‌ها را میان API serverهای مجزا توزیع بار (load-balance) می‌کند.
+این آبجکت پیکربندی به شما امکان می‌دهد تعیین کنید API server محلی چه IP/نام DNS و پورتی را
+به‌عنوان نشانی دسترسی به خود اعلام کند. به‌طور پیش‌فرض، kubeadm تلاش می‌کند IP رابط پیش‌فرض
+را به‌صورت خودکار تشخیص دهد و از آن استفاده کند، اما اگر این فرایند ناموفق بود، می‌توانید مقدار موردنظر را در اینجا تعیین کنید.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">certificateKey</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl"><code dir="ltr">certificateKey</code> کلیدی را تعیین می‌کند که گواهی‌ها و کلیدها پیش از بارگذاری در یک Secret در کلاستر
+در طول فاز <code dir="ltr">uploadcerts init</code> با آن رمزگذاری می‌شوند.
+کلید گواهی یک رشته با کدگذاری هگزادسیمال است که یک کلید AES با اندازه ۳۲ بایت است.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">skipPhases</code><br>
+<code dir="ltr">[]string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl"><code dir="ltr">skipPhases</code> فهرستی از فازهاست که در طول اجرای دستور نادیده گرفته می‌شوند.
+فهرست فازها را می‌توان با دستور <code dir="ltr">kubeadm init --help</code> به دست آورد.
+فلگ "--skip-phases" بر این فیلد اولویت دارد.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">patches</code><br>
+<a href="#kubeadm-k8s-io-v1beta3-Patches"><code dir="ltr">Patches</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl"><code dir="ltr">patches</code> شامل گزینه‌های مربوط به اعمال پچ‌ها بر مؤلفه‌هایی است که kubeadm در طول
+<code dir="ltr">kubeadm init</code> مستقر می‌کند.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="joinconfiguration-kubeadm-k8s-io-v1beta3-joinconfiguration" dir="ltr" class="ltr"><code dir="ltr">JoinConfiguration</code>     {#kubeadm-k8s-io-v1beta3-JoinConfiguration}</h2>
+<p dir="rtl">JoinConfiguration شامل عناصری است که یک نود مشخص را توصیف می‌کنند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">apiVersion</code><br>string</td><td dir="ltr" class="ltr"><code dir="ltr">kubeadm.k8s.io/v1beta3</code></td></tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">kind</code><br>string</td><td dir="ltr" class="ltr"><code dir="ltr">JoinConfiguration</code></td></tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">nodeRegistration</code><br>
+<a href="#kubeadm-k8s-io-v1beta3-NodeRegistrationOptions"><code dir="ltr">NodeRegistrationOptions</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl"><code dir="ltr">nodeRegistration</code> شامل فیلدهایی است که به ثبت نود
+control plane جدید در کلاستر مربوط می‌شوند.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">caCertPath</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl"><code dir="ltr">caCertPath</code> مسیر مرجع صدور گواهی SSL است که برای ایمن‌سازی
+ارتباطات بین یک نود و control plane استفاده می‌شود.
+مقدار پیش‌فرض آن "/etc/kubernetes/pki/ca.crt" است.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">discovery</code> <b>[الزامی]</b><br>
+<a href="#kubeadm-k8s-io-v1beta3-Discovery"><code dir="ltr">Discovery</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl"><code dir="ltr">discovery</code> گزینه‌هایی را مشخص می‌کند که kubelet در طول فرایند بوت‌استرپ TLS
+از آن‌ها استفاده می‌کند.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">controlPlane</code><br>
+<a href="#kubeadm-k8s-io-v1beta3-JoinControlPlane"><code dir="ltr">JoinControlPlane</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl"><code dir="ltr">controlPlane</code> نمونه control plane اضافی را تعریف می‌کند که باید روی نود در حال پیوستن مستقر شود.
+اگر nil باشد، هیچ نمونه control plane اضافی مستقر نخواهد شد.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">skipPhases</code><br>
+<code dir="ltr">[]string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl"><code dir="ltr">skipPhases</code> فهرستی از فازهاست که در طول اجرای دستور نادیده گرفته می‌شوند.
+فهرست فازها را می‌توان با دستور <code dir="ltr">kubeadm join --help</code> به دست آورد.
+فلگ <code dir="ltr">--skip-phases</code> بر این فیلد اولویت دارد.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">patches</code><br>
+<a href="#kubeadm-k8s-io-v1beta3-Patches"><code dir="ltr">Patches</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl"><code dir="ltr">patches</code> شامل گزینه‌های مربوط به اعمال پچ‌ها بر مؤلفه‌هایی است که
+kubeadm در طول <code dir="ltr">kubeadm join</code> مستقر می‌کند.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="apiendpoint-kubeadm-k8s-io-v1beta3-apiendpoint" dir="ltr" class="ltr"><code dir="ltr">APIEndpoint</code>     {#kubeadm-k8s-io-v1beta3-APIEndpoint}</h2>
+<p dir="rtl"><strong>در این بخش‌ها ظاهر می‌شود:</strong></p>
+<ul>
+<li dir="ltr" class="ltr">
+<p dir="ltr" class="ltr"><a href="#kubeadm-k8s-io-v1beta3-InitConfiguration">InitConfiguration</a></p>
+</li>
+<li dir="ltr" class="ltr">
+<p dir="ltr" class="ltr"><a href="#kubeadm-k8s-io-v1beta3-JoinControlPlane">JoinControlPlane</a></p>
+</li>
+</ul>
+<p dir="rtl">ساختار APIEndpoint شامل عناصر نمونه API server است که روی یک نود مستقر شده است.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">advertiseAddress</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl"><code dir="ltr">advertiseAddress</code> آدرس IP را تعیین می‌کند که API server آن را اعلام (advertise) می‌کند.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">bindPort</code><br>
+<code dir="ltr">int32</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl"><code dir="ltr">bindPort</code> پورت امنی را تعیین می‌کند که API Server به آن متصل (bind) می‌شود.
+مقدار پیش‌فرض آن 6443 است.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="apiserver-kubeadm-k8s-io-v1beta3-apiserver" dir="ltr" class="ltr"><code dir="ltr">APIServer</code>     {#kubeadm-k8s-io-v1beta3-APIServer}</h2>
+<p dir="rtl"><strong>در این بخش‌ها ظاهر می‌شود:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubeadm-k8s-io-v1beta3-ClusterConfiguration">ClusterConfiguration</a></li>
+</ul>
+<p dir="rtl">APIServer شامل تنظیمات لازم برای استقرار API server در کلاستر است.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="rtl"><code dir="ltr">ControlPlaneComponent</code> <b>[الزامی]</b><br>
+<a href="#kubeadm-k8s-io-v1beta3-ControlPlaneComponent"><code dir="ltr">ControlPlaneComponent</code></a>
+</td>
+<td dir="rtl">(اعضای <code dir="ltr">ControlPlaneComponent</code> در این نوع تعبیه شده‌اند.)
+   <span class="text-muted">توضیحی ارائه نشده است.</span></td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">certSANs</code><br>
+<code dir="ltr">[]string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl"><code dir="ltr">certSANs</code> نام‌های جایگزین موضوع (Subject Alternative Names یا SANs) اضافی را برای
+گواهی امضای API Server تعیین می‌کند.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">timeoutForControlPlane</code><br>
+<a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration" target="_blank" rel="noopener"><code dir="ltr">meta/v1.Duration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl"><code dir="ltr">timeoutForControlPlane</code> مهلت انتظار برای ظاهر شدن API server را کنترل می‌کند.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="bootstraptokendiscovery-kubeadm-k8s-io-v1beta3-bootstraptokendiscovery" dir="ltr" class="ltr"><code dir="ltr">BootstrapTokenDiscovery</code>     {#kubeadm-k8s-io-v1beta3-BootstrapTokenDiscovery}</h2>
+<p dir="rtl"><strong>در این بخش‌ها ظاهر می‌شود:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubeadm-k8s-io-v1beta3-Discovery">Discovery</a></li>
+</ul>
+<p dir="rtl">BootstrapTokenDiscovery برای تعیین گزینه‌های کشف (discovery) مبتنی بر bootstrap token استفاده می‌شود.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="rtl"><code dir="ltr">token</code> <b>[الزامی]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl"><code dir="ltr">token</code> توکنی است که برای اعتبارسنجی اطلاعات کلاستر دریافت‌شده از
+control plane استفاده می‌شود.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">apiServerEndpoint</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl"><code dir="ltr">apiServerEndpoint</code> یک IP یا نام دامنه برای API server است که اطلاعات
+از آن دریافت خواهد شد.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">caCertHashes</code><br>
+<code dir="ltr">[]string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl"><code dir="ltr">caCertHashes</code> مجموعه‌ای از pinهای کلید عمومی را مشخص می‌کند که در صورت استفاده از کشف مبتنی بر توکن
+باید راستی‌آزمایی شوند. CA ریشه‌ای که در طول کشف یافت می‌شود باید با یکی از این مقادیر مطابقت داشته باشد.
+تعیین یک مجموعه خالی، pin کردن CA ریشه را غیرفعال می‌کند که می‌تواند ناامن باشد.
+هر هش به‌صورت <code dir="ltr">&lt;type&gt;:&lt;value&gt;</code> مشخص می‌شود که تنها نوع پشتیبانی‌شده فعلی
+"sha256" است. این مقدار یک هش SHA-256 با کدگذاری هگزادسیمال از آبجکت Subject Public Key Info (SPKI)
+در قالب ASN.1 با کدگذاری DER است. این هش‌ها را می‌توان برای مثال با OpenSSL محاسبه کرد.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">unsafeSkipCAVerification</code><br>
+<code dir="ltr">bool</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl"><code dir="ltr">unsafeSkipCAVerification</code> کشف مبتنی بر توکن را بدون راستی‌آزمایی CA
+از طریق <code dir="ltr">caCertHashes</code> مجاز می‌کند. این کار می‌تواند امنیت kubeadm را تضعیف کند، زیرا سایر نودها می‌توانند
+خود را به‌جای control plane جا بزنند.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="controlplanecomponent-kubeadm-k8s-io-v1beta3-controlplanecomponent" dir="ltr" class="ltr"><code dir="ltr">ControlPlaneComponent</code>     {#kubeadm-k8s-io-v1beta3-ControlPlaneComponent}</h2>
+<p dir="rtl"><strong>در این بخش‌ها ظاهر می‌شود:</strong></p>
+<ul>
+<li dir="ltr" class="ltr">
+<p dir="ltr" class="ltr"><a href="#kubeadm-k8s-io-v1beta3-ClusterConfiguration">ClusterConfiguration</a></p>
+</li>
+<li dir="ltr" class="ltr">
+<p dir="ltr" class="ltr"><a href="#kubeadm-k8s-io-v1beta3-APIServer">APIServer</a></p>
+</li>
+</ul>
+<p dir="rtl">ControlPlaneComponent شامل تنظیمات مشترک مؤلفه‌های control plane کلاستر است.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">extraArgs</code><br>
+<code dir="ltr">map[string]string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl"><code dir="ltr">extraArgs</code> مجموعه‌ای از فلگ‌های اضافی است که به مؤلفه control plane ارسال می‌شود.
+کلید در این map نام فلگ است، همان‌گونه که در خط فرمان ظاهر می‌شود، اما
+بدون خط تیره(های) ابتدایی.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">extraVolumes</code><br>
+<a href="#kubeadm-k8s-io-v1beta3-HostPathMount"><code dir="ltr">[]HostPathMount</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl"><code dir="ltr">extraVolumes</code> مجموعه‌ای از حجم‌های (volume) اضافی میزبان است که روی مؤلفه control plane مونت می‌شوند.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="dns-kubeadm-k8s-io-v1beta3-dns" dir="ltr" class="ltr"><code dir="ltr">DNS</code>     {#kubeadm-k8s-io-v1beta3-DNS}</h2>
+<p dir="rtl"><strong>در این بخش‌ها ظاهر می‌شود:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubeadm-k8s-io-v1beta3-ClusterConfiguration">ClusterConfiguration</a></li>
+</ul>
+<p dir="rtl">DNS افزونه DNS را تعریف می‌کند که باید در کلاستر استفاده شود.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="rtl"><code dir="ltr">ImageMeta</code> <b>[الزامی]</b><br>
+<a href="#kubeadm-k8s-io-v1beta3-ImageMeta"><code dir="ltr">ImageMeta</code></a>
+</td>
+<td dir="rtl">(اعضای <code dir="ltr">ImageMeta</code> در این نوع تعبیه شده‌اند.)
+   <p dir="rtl"><code dir="ltr">imageMeta</code> امکان سفارشی‌سازی ایمیج مورد استفاده برای مؤلفه DNS را فراهم می‌کند.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="discovery-kubeadm-k8s-io-v1beta3-discovery" dir="ltr" class="ltr"><code dir="ltr">Discovery</code>     {#kubeadm-k8s-io-v1beta3-Discovery}</h2>
+<p dir="rtl"><strong>نمایش داده می‌شود در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubeadm-k8s-io-v1beta3-JoinConfiguration">JoinConfiguration</a></li>
+</ul>
+<p dir="rtl">Discovery گزینه‌هایی را مشخص می‌کند که kubelet در طول فرایند TLS Bootstrap از آن‌ها استفاده می‌کند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">bootstrapToken</code><br>
+<a href="#kubeadm-k8s-io-v1beta3-BootstrapTokenDiscovery"><code dir="ltr">BootstrapTokenDiscovery</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">فیلد <code dir="ltr">bootstrapToken</code> برای تنظیم گزینه‌های discovery مبتنی بر bootstrap token به کار می‌رود.
+فیلدهای <code dir="ltr">bootstrapToken</code> و <code dir="ltr">file</code> متقابلاً ناسازگارند و نمی‌توان هر دو را همزمان تنظیم کرد.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">file</code><br>
+<a href="#kubeadm-k8s-io-v1beta3-FileDiscovery"><code dir="ltr">FileDiscovery</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">فیلد <code dir="ltr">file</code> برای مشخص کردن یک فایل یا یک URL به فایل kubeconfig به کار می‌رود که اطلاعات
+کلاستر از آن بارگذاری می‌شود.
+فیلدهای <code dir="ltr">bootstrapToken</code> و <code dir="ltr">file</code> متقابلاً ناسازگارند و نمی‌توان هر دو را همزمان تنظیم کرد.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">tlsBootstrapToken</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">فیلد <code dir="ltr">tlsBootstrapToken</code> توکنی است که برای TLS bootstrapping استفاده می‌شود.
+اگر <code dir="ltr">bootstrapToken</code> تنظیم شده باشد، مقدار پیش‌فرض این فیلد <code dir="ltr">.bootstrapToken.token</code> است، اما
+می‌توان آن را بازنویسی کرد. اگر <code dir="ltr">file</code> تنظیم شده باشد و KubeConfigFile
+حاوی هیچ اطلاعات احراز هویت دیگری نباشد، این فیلد <strong>باید تنظیم شود</strong>.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">timeout</code><br>
+<a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration" target="_blank" rel="noopener"><code dir="ltr">meta/v1.Duration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">فیلد <code dir="ltr">timeout</code> مهلت زمانی discovery را تغییر می‌دهد.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="etcd-kubeadm-k8s-io-v1beta3-etcd" dir="ltr" class="ltr"><code dir="ltr">Etcd</code>     {#kubeadm-k8s-io-v1beta3-Etcd}</h2>
+<p dir="rtl"><strong>نمایش داده می‌شود در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubeadm-k8s-io-v1beta3-ClusterConfiguration">ClusterConfiguration</a></li>
+</ul>
+<p dir="rtl">Etcd شامل عناصری است که پیکربندی Etcd را توصیف می‌کنند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">local</code><br>
+<a href="#kubeadm-k8s-io-v1beta3-LocalEtcd"><code dir="ltr">LocalEtcd</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">فیلد <code dir="ltr">local</code> گزینه‌های پیکربندی نمونه etcd محلی را فراهم می‌کند.
+فیلدهای <code dir="ltr">local</code> و <code dir="ltr">external</code> متقابلاً ناسازگارند و نمی‌توان هر دو را همزمان تنظیم کرد.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">external</code><br>
+<a href="#kubeadm-k8s-io-v1beta3-ExternalEtcd"><code dir="ltr">ExternalEtcd</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">فیلد <code dir="ltr">external</code> نحوه اتصال به یک کلاستر etcd خارجی را توصیف می‌کند.
+فیلدهای <code dir="ltr">local</code> و <code dir="ltr">external</code> متقابلاً ناسازگارند و نمی‌توان هر دو را همزمان تنظیم کرد.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="externaletcd-kubeadm-k8s-io-v1beta3-externaletcd" dir="ltr" class="ltr"><code dir="ltr">ExternalEtcd</code>     {#kubeadm-k8s-io-v1beta3-ExternalEtcd}</h2>
+<p dir="rtl"><strong>نمایش داده می‌شود در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubeadm-k8s-io-v1beta3-Etcd">Etcd</a></li>
+</ul>
+<p dir="rtl">ExternalEtcd یک کلاستر etcd خارجی را توصیف می‌کند.
+kubeadm هیچ اطلاعی از محل قرارگیری فایل‌های گواهی ندارد و این فایل‌ها باید فراهم شوند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">endpoints</code> <b>[Required]</b><br>
+<code dir="ltr">[]string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">فیلد <code dir="ltr">endpoints</code> شامل فهرست اعضای etcd است.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">caFile</code> <b>[Required]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">فیلد <code dir="ltr">caFile</code> یک فایل SSL Certificate Authority (CA) است که برای ایمن‌سازی ارتباط etcd استفاده می‌شود.
+در صورت استفاده از اتصال TLS الزامی است.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">certFile</code> <b>[Required]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">فیلد <code dir="ltr">certFile</code> یک فایل گواهی SSL است که برای ایمن‌سازی ارتباط etcd استفاده می‌شود.
+در صورت استفاده از اتصال TLS الزامی است.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">keyFile</code> <b>[Required]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">فیلد <code dir="ltr">keyFile</code> یک فایل کلید SSL است که برای ایمن‌سازی ارتباط etcd استفاده می‌شود.
+در صورت استفاده از اتصال TLS الزامی است.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="filediscovery-kubeadm-k8s-io-v1beta3-filediscovery" dir="ltr" class="ltr"><code dir="ltr">FileDiscovery</code>     {#kubeadm-k8s-io-v1beta3-FileDiscovery}</h2>
+<p dir="rtl"><strong>نمایش داده می‌شود در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubeadm-k8s-io-v1beta3-Discovery">Discovery</a></li>
+</ul>
+<p dir="rtl">FileDiscovery برای مشخص کردن یک فایل یا یک URL به فایل kubeconfig به کار می‌رود که اطلاعات
+کلاستر از آن بارگذاری می‌شود.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">kubeConfigPath</code> <b>[Required]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">فیلد <code dir="ltr">kubeConfigPath</code> برای مشخص کردن مسیر واقعی فایل یا URL فایل kubeconfig به کار می‌رود
+که اطلاعات کلاستر از آن بارگذاری می‌شود.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="hostpathmount-kubeadm-k8s-io-v1beta3-hostpathmount" dir="ltr" class="ltr"><code dir="ltr">HostPathMount</code>     {#kubeadm-k8s-io-v1beta3-HostPathMount}</h2>
+<p dir="rtl"><strong>نمایش داده می‌شود در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubeadm-k8s-io-v1beta3-ControlPlaneComponent">ControlPlaneComponent</a></li>
+</ul>
+<p dir="rtl">HostPathMount شامل عناصری است که حجم‌هایی (volumes) را توصیف می‌کنند که از میزبان mount می‌شوند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">name</code> <b>[Required]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">فیلد <code dir="ltr">name</code> نام حجم (volume) درون قالب Pod است.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">hostPath</code> <b>[Required]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">فیلد <code dir="ltr">hostPath</code> مسیری در میزبان است که درون Pod mount خواهد شد.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">mountPath</code> <b>[Required]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">فیلد <code dir="ltr">mountPath</code> مسیری درون Pod است که <code dir="ltr">hostPath</code> در آن mount خواهد شد.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">readOnly</code><br>
+<code dir="ltr">bool</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">فیلد <code dir="ltr">readOnly</code> دسترسی نوشتن به حجم (volume) را کنترل می‌کند.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">pathType</code><br>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.37/#hostpathtype-v1-core" target="_blank"><code dir="ltr">core/v1.HostPathType</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">فیلد <code dir="ltr">pathType</code> نوع <code dir="ltr">hostPath</code> است.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="imagemeta-kubeadm-k8s-io-v1beta3-imagemeta" dir="ltr" class="ltr"><code dir="ltr">ImageMeta</code>     {#kubeadm-k8s-io-v1beta3-ImageMeta}</h2>
+<p dir="rtl"><strong>نمایش داده می‌شود در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr">
+<p dir="ltr" class="ltr"><a href="#kubeadm-k8s-io-v1beta3-DNS">DNS</a></p>
+</li>
+<li dir="ltr" class="ltr">
+<p dir="ltr" class="ltr"><a href="#kubeadm-k8s-io-v1beta3-LocalEtcd">LocalEtcd</a></p>
+</li>
+</ul>
+<p dir="rtl">ImageMeta امکان سفارشی‌سازی ایمیج مورد استفاده برای مؤلفه‌هایی را فراهم می‌کند که
+از فرایند انتشار Kubernetes/Kubernetes منشأ نگرفته‌اند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">imageRepository</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">فیلد <code dir="ltr">imageRepository</code> رجیستری کانتینری را تعیین می‌کند که ایمیج‌ها از آن دریافت (pull) می‌شوند.
+اگر تنظیم نشود، به‌جای آن از <code dir="ltr">imageRepository</code> تعریف‌شده در ClusterConfiguration استفاده خواهد شد.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">imageTag</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">فیلد <code dir="ltr">imageTag</code> امکان تعیین یک تگ برای ایمیج را فراهم می‌کند.
+در صورت تنظیم این مقدار، kubeadm هنگام ارتقا نسخه مؤلفه‌های یادشده را
+به‌طور خودکار تغییر نمی‌دهد.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="joincontrolplane-kubeadm-k8s-io-v1beta3-joincontrolplane" dir="ltr" class="ltr"><code dir="ltr">JoinControlPlane</code>     {#kubeadm-k8s-io-v1beta3-JoinControlPlane}</h2>
+<p dir="rtl"><strong>نمایش داده می‌شود در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubeadm-k8s-io-v1beta3-JoinConfiguration">JoinConfiguration</a></li>
+</ul>
+<p dir="rtl">JoinControlPlane شامل عناصری است که یک نمونه control plane اضافی را توصیف می‌کنند
+که باید روی نود در حال پیوستن مستقر شود.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">localAPIEndpoint</code><br>
+<a href="#kubeadm-k8s-io-v1beta3-APIEndpoint"><code dir="ltr">APIEndpoint</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">فیلد <code dir="ltr">localAPIEndpoint</code> نقطه انتهایی (endpoint) نمونه API server را نشان می‌دهد که باید
+روی این نود مستقر شود.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">certificateKey</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">فیلد <code dir="ltr">certificateKey</code> کلیدی است که برای رمزگشایی گواهی‌ها پس از
+دریافت آن‌ها از secret هنگام پیوستن یک نود control plane جدید استفاده می‌شود.
+کلید رمزنگاری متناظر در InitConfiguration قرار دارد.
+کلید گواهی یک رشته با کدگذاری هگزادسیمال است که یک کلید AES با اندازه ۳۲ بایت است.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="localetcd-kubeadm-k8s-io-v1beta3-localetcd" dir="ltr" class="ltr"><code dir="ltr">LocalEtcd</code>     {#kubeadm-k8s-io-v1beta3-LocalEtcd}</h2>
+<p dir="rtl"><strong>نمایش داده می‌شود در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubeadm-k8s-io-v1beta3-Etcd">Etcd</a></li>
+</ul>
+<p dir="rtl">LocalEtcd مشخص می‌کند که kubeadm باید یک کلاستر etcd را به‌صورت محلی اجرا کند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">ImageMeta</code> <b>[Required]</b><br>
+<a href="#kubeadm-k8s-io-v1beta3-ImageMeta"><code dir="ltr">ImageMeta</code></a>
+</td>
+<td dir="rtl">(اعضای <code dir="ltr">ImageMeta</code> در این نوع تعبیه شده‌اند.)
+   <p dir="rtl">ImageMeta امکان سفارشی‌سازی ایمیج کانتینر مورد استفاده برای etcd را فراهم می‌کند.
+مشخص کردن یک ایمیج سفارشی etcd به <code dir="ltr">kubeadm upgrade</code> اعلام می‌کند که این ایمیج توسط کاربر مدیریت می‌شود
+و ارتقای آن باید نادیده گرفته شود.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">dataDir</code> <b>[Required]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">فیلد <code dir="ltr">dataDir</code> دایرکتوری‌ای است که etcd داده‌های خود را در آن قرار می‌دهد.
+مقدار پیش‌فرض آن "/var/lib/etcd" است.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">extraArgs</code><br>
+<code dir="ltr">map[string]string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">فیلد <code dir="ltr">extraArgs</code> آرگومان‌های اضافی است که هنگام اجرای فایل باینری etcd
+درون یک static Pod به آن داده می‌شود. هر کلید در این map نام فلگ است، همان‌گونه که در
+خط فرمان ظاهر می‌شود، اما بدون خط تیره(های) ابتدایی.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">serverCertSANs</code><br>
+<code dir="ltr">[]string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">فیلد <code dir="ltr">serverCertSANs</code> نام‌های جایگزین موضوع (SAN) اضافی را برای گواهی امضای
+سرور etcd تعیین می‌کند.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">peerCertSANs</code><br>
+<code dir="ltr">[]string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">فیلد <code dir="ltr">peerCertSANs</code> نام‌های جایگزین موضوع (SAN) اضافی را برای گواهی امضای
+peer در etcd تعیین می‌کند.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="networking-kubeadm-k8s-io-v1beta3-networking" dir="ltr" class="ltr"><code dir="ltr">Networking</code>     {#kubeadm-k8s-io-v1beta3-Networking}</h2>
+<p dir="rtl"><strong>نمایش داده می‌شود در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubeadm-k8s-io-v1beta3-ClusterConfiguration">ClusterConfiguration</a></li>
+</ul>
+<p dir="rtl">Networking شامل عناصری است که پیکربندی شبکه کلاستر را توصیف می‌کنند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">serviceSubnet</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">فیلد <code dir="ltr">serviceSubnet</code> زیرشبکه‌ای است که Serviceهای کوبرنتیز از آن استفاده می‌کنند. مقدار پیش‌فرض آن "10.96.0.0/12" است.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">podSubnet</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">فیلد <code dir="ltr">podSubnet</code> زیرشبکه‌ای است که Podها از آن استفاده می‌کنند.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">dnsDomain</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">فیلد <code dir="ltr">dnsDomain</code> دامنه DNS است که Serviceهای کوبرنتیز از آن استفاده می‌کنند. مقدار پیش‌فرض آن "cluster.local" است.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="noderegistrationoptions-kubeadm-k8s-io-v1beta3-noderegistrationoptions" dir="ltr" class="ltr"><code dir="ltr">NodeRegistrationOptions</code>     {#kubeadm-k8s-io-v1beta3-NodeRegistrationOptions}</h2>
+<p dir="rtl"><strong>نمایش داده می‌شود در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr">
+<p dir="ltr" class="ltr"><a href="#kubeadm-k8s-io-v1beta3-InitConfiguration">InitConfiguration</a></p>
+</li>
+<li dir="ltr" class="ltr">
+<p dir="ltr" class="ltr"><a href="#kubeadm-k8s-io-v1beta3-JoinConfiguration">JoinConfiguration</a></p>
+</li>
+</ul>
+<p dir="rtl">NodeRegistrationOptions شامل فیلدهایی است که به ثبت یک control-plane یا نود جدید
+در کلاستر، چه از طریق <code dir="ltr">kubeadm init</code> و چه از طریق <code dir="ltr">kubeadm join</code>، مربوط می‌شوند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">name</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">فیلد <code dir="ltr">name</code> همان فیلد <code dir="ltr">.metadata.name</code> آبجکت Node API است که در این
+عملیات <code dir="ltr">kubeadm init</code> یا <code dir="ltr">kubeadm join</code> ایجاد خواهد شد.
+این فیلد همچنین در فیلد <code dir="ltr">CommonName</code> گواهی کلاینت kubelet برای
+API server استفاده می‌شود.
+در صورت ارائه نشدن، مقدار پیش‌فرض آن نام میزبان (hostname) نود است.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">criSocket</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">فیلد <code dir="ltr">criSocket</code> برای دریافت اطلاعات container runtime به کار می‌رود.
+این اطلاعات برای استفاده مجدد در آینده، به‌صورت annotation روی آبجکت Node API درج خواهد شد.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">taints</code> <b>[Required]</b><br>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.37/#taint-v1-core" target="_blank"><code dir="ltr">[]core/v1.Taint</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">فیلد <code dir="ltr">taints</code> taintهایی را مشخص می‌کند که آبجکت Node API باید با آن‌ها ثبت شود.
+اگر این فیلد تنظیم نشده باشد، یعنی nil باشد، برای نودهای control-plane مقدار پیش‌فرض آن یک taint مربوط به control-plane خواهد بود.
+اگر نمی‌خواهید نود control-plane شما taint داشته باشد، این فیلد را روی یک فهرست خالی تنظیم کنید،
+یعنی در فایل YAML مقدار <code dir="ltr">taints: []</code> را بنویسید. این فیلد صرفاً برای ثبت Node استفاده می‌شود.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">kubeletExtraArgs</code><br>
+<code dir="ltr">map[string]string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">فیلد <code dir="ltr">kubeletExtraArgs</code> آرگومان‌های اضافی را به kubelet منتقل می‌کند.
+آرگومان‌های این فیلد از طریق فایل محیطی (environment file) که kubeadm در زمان اجرا می‌نویسد
+و kubelet آن را بارگذاری می‌کند، به خط فرمان kubelet داده می‌شوند.
+این مقادیر، پیکربندی عمومی در سطح پایه موجود در ConfigMap با نام <code dir="ltr">kubelet-config</code> را بازنویسی می‌کنند.
+هنگام تجزیه (parse)، فلگ‌ها اولویت بالاتری دارند. این مقادیر محلی هستند و مختص نودی‌اند که
+kubeadm روی آن در حال اجراست. هر کلید در این map نام فلگ است، همان‌گونه که در
+خط فرمان ظاهر می‌شود، اما بدون خط تیره(های) ابتدایی.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">ignorePreflightErrors</code><br>
+<code dir="ltr">[]string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">فیلد <code dir="ltr">ignorePreflightErrors</code> فهرستی از خطاهای pre-flight را فراهم می‌کند که هنگام
+ثبت نود جاری نادیده گرفته می‌شوند، برای مثال <code dir="ltr">IsPrevilegedUser,Swap</code>.
+مقدار <code dir="ltr">all</code> خطاهای همه بررسی‌ها را نادیده می‌گیرد.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">imagePullPolicy</code><br>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.37/#pullpolicy-v1-core" target="_blank"><code dir="ltr">core/v1.PullPolicy</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">فیلد <code dir="ltr">imagePullPolicy</code> سیاست دریافت ایمیج را در طول عملیات "init" و
+"join" در kubeadm مشخص می‌کند.
+مقدار این فیلد باید یکی از "Always"، "IfNotPresent" یا "Never" باشد.
+اگر این فیلد تنظیم نشود، kubeadm مقدار پیش‌فرض آن را "IfNotPresent" قرار می‌دهد، یعنی در صورت نبودن
+ایمیج‌های موردنیاز روی میزبان، آن‌ها را دریافت می‌کند.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="patches-kubeadm-k8s-io-v1beta3-patches" dir="ltr" class="ltr"><code dir="ltr">Patches</code>     {#kubeadm-k8s-io-v1beta3-Patches}</h2>
+<p dir="rtl"><strong>نمایش داده می‌شود در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr">
+<p dir="ltr" class="ltr"><a href="#kubeadm-k8s-io-v1beta3-InitConfiguration">InitConfiguration</a></p>
+</li>
+<li dir="ltr" class="ltr">
+<p dir="ltr" class="ltr"><a href="#kubeadm-k8s-io-v1beta3-JoinConfiguration">JoinConfiguration</a></p>
+</li>
+</ul>
+<p dir="rtl">Patches شامل گزینه‌های مربوط به اعمال patch بر مؤلفه‌هایی است که توسط kubeadm مستقر می‌شوند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">directory</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">فیلد <code dir="ltr">directory</code> مسیر دایرکتوری‌ای است که شامل فایل‌هایی با نام
+"target[suffix][+patchtype].extension" است.
+برای مثال، "kube-apiserver0+merge.yaml" یا فقط "etcd.json". مقدار "target" می‌تواند یکی از
+"kube-apiserver"، "kube-controller-manager"، "kube-scheduler"، "etcd"، "kubeletconfiguration" و
+"corednsdeployment" باشد. مقدار "patchtype" می‌تواند یکی از "strategic"، "merge" یا "json" باشد و
+این مقادیر با قالب‌های patch پشتیبانی‌شده توسط kubectl مطابقت دارند.
+مقدار پیش‌فرض "patchtype" برابر "strategic" است. مقدار "extension" باید "json" یا "yaml" باشد.
+مقدار "suffix" یک رشته اختیاری است که می‌توان از آن برای تعیین این‌که کدام patchها
+زودتر و بر اساس ترتیب الفبایی-عددی اعمال شوند، استفاده کرد.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#انواع-منابع-resource-types">انواع منابع (Resource Types)</a><a class="l2" href="#bootstraptoken-bootstraptoken">BootstrapToken     {#BootstrapToken}</a><a class="l2" href="#bootstraptokenstring-bootstraptokenstring">BootstrapTokenString     {#BootstrapTokenString}</a><a class="l2" href="#clusterconfiguration-kubeadm-k8s-io-v1beta3-clusterconfiguration">ClusterConfiguration     {#kubeadm-k8s-io-v1beta3-ClusterConfiguration}</a><a class="l2" href="#initconfiguration-kubeadm-k8s-io-v1beta3-initconfiguration">InitConfiguration     {#kubeadm-k8s-io-v1beta3-InitConfiguration}</a><a class="l2" href="#joinconfiguration-kubeadm-k8s-io-v1beta3-joinconfiguration">JoinConfiguration     {#kubeadm-k8s-io-v1beta3-JoinConfiguration}</a><a class="l2" href="#apiendpoint-kubeadm-k8s-io-v1beta3-apiendpoint">APIEndpoint     {#kubeadm-k8s-io-v1beta3-APIEndpoint}</a><a class="l2" href="#apiserver-kubeadm-k8s-io-v1beta3-apiserver">APIServer     {#kubeadm-k8s-io-v1beta3-APIServer}</a><a class="l2" href="#bootstraptokendiscovery-kubeadm-k8s-io-v1beta3-bootstraptokendiscovery">BootstrapTokenDiscovery     {#kubeadm-k8s-io-v1beta3-BootstrapTokenDiscovery}</a><a class="l2" href="#controlplanecomponent-kubeadm-k8s-io-v1beta3-controlplanecomponent">ControlPlaneComponent     {#kubeadm-k8s-io-v1beta3-ControlPlaneComponent}</a><a class="l2" href="#dns-kubeadm-k8s-io-v1beta3-dns">DNS     {#kubeadm-k8s-io-v1beta3-DNS}</a><a class="l2" href="#discovery-kubeadm-k8s-io-v1beta3-discovery">Discovery     {#kubeadm-k8s-io-v1beta3-Discovery}</a><a class="l2" href="#etcd-kubeadm-k8s-io-v1beta3-etcd">Etcd     {#kubeadm-k8s-io-v1beta3-Etcd}</a><a class="l2" href="#externaletcd-kubeadm-k8s-io-v1beta3-externaletcd">ExternalEtcd     {#kubeadm-k8s-io-v1beta3-ExternalEtcd}</a><a class="l2" href="#filediscovery-kubeadm-k8s-io-v1beta3-filediscovery">FileDiscovery     {#kubeadm-k8s-io-v1beta3-FileDiscovery}</a><a class="l2" href="#hostpathmount-kubeadm-k8s-io-v1beta3-hostpathmount">HostPathMount     {#kubeadm-k8s-io-v1beta3-HostPathMount}</a><a class="l2" href="#imagemeta-kubeadm-k8s-io-v1beta3-imagemeta">ImageMeta     {#kubeadm-k8s-io-v1beta3-ImageMeta}</a><a class="l2" href="#joincontrolplane-kubeadm-k8s-io-v1beta3-joincontrolplane">JoinControlPlane     {#kubeadm-k8s-io-v1beta3-JoinControlPlane}</a><a class="l2" href="#localetcd-kubeadm-k8s-io-v1beta3-localetcd">LocalEtcd     {#kubeadm-k8s-io-v1beta3-LocalEtcd}</a><a class="l2" href="#networking-kubeadm-k8s-io-v1beta3-networking">Networking     {#kubeadm-k8s-io-v1beta3-Networking}</a><a class="l2" href="#noderegistrationoptions-kubeadm-k8s-io-v1beta3-noderegistrationoptions">NodeRegistrationOptions     {#kubeadm-k8s-io-v1beta3-NodeRegistrationOptions}</a><a class="l2" href="#patches-kubeadm-k8s-io-v1beta3-patches">Patches     {#kubeadm-k8s-io-v1beta3-Patches}</a></nav>
+</div>
+</body>
+</html>

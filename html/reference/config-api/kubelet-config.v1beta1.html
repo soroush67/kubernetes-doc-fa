@@ -1,0 +1,2293 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>پیکربندی Kubelet (v1beta1) | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">reference / config-api</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">پیکربندی Kubelet (v1beta1)</h1><h2 id="انواع-منابع-resource-types" dir="rtl">انواع منابع {#resource-types}</h2>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubelet-config-k8s-io-v1beta1-CredentialProviderConfig">CredentialProviderConfig</a></li>
+<li dir="ltr" class="ltr"><a href="#kubelet-config-k8s-io-v1beta1-ImagePullIntent">ImagePullIntent</a></li>
+<li dir="ltr" class="ltr"><a href="#kubelet-config-k8s-io-v1beta1-ImagePulledRecord">ImagePulledRecord</a></li>
+<li dir="ltr" class="ltr"><a href="#kubelet-config-k8s-io-v1beta1-KubeletConfiguration">KubeletConfiguration</a></li>
+<li dir="ltr" class="ltr"><a href="#kubelet-config-k8s-io-v1beta1-SerializedNodeConfigSource">SerializedNodeConfigSource</a></li>
+</ul>
+<h2 id="formatoptions-formatoptions" dir="ltr" class="ltr"><code dir="ltr">FormatOptions</code>     {#FormatOptions}</h2>
+<p dir="rtl"><strong>نمایش داده‌شده در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#LoggingConfiguration">LoggingConfiguration</a></li>
+</ul>
+<p dir="rtl">FormatOptions شامل گزینه‌هایی برای قالب‌های مختلف لاگ‌گیری است.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="ltr" class="ltr">Field</th><th dir="ltr" class="ltr">Description</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">text</code> <b>[Required]</b><br>
+<a href="#TextOptions"><code dir="ltr">TextOptions</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">[آلفا] Text شامل گزینه‌هایی برای قالب لاگ‌گیری "text" است.
+فقط در صورتی در دسترس است که feature gate با نام LoggingAlphaOptions فعال باشد.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">json</code> <b>[Required]</b><br>
+<a href="#JSONOptions"><code dir="ltr">JSONOptions</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">[آلفا] JSON شامل گزینه‌هایی برای قالب لاگ‌گیری "json" است.
+فقط در صورتی در دسترس است که feature gate با نام LoggingAlphaOptions فعال باشد.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="jsonoptions-jsonoptions" dir="ltr" class="ltr"><code dir="ltr">JSONOptions</code>     {#JSONOptions}</h2>
+<p dir="rtl"><strong>نمایش داده‌شده در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#FormatOptions">FormatOptions</a></li>
+</ul>
+<p dir="rtl">JSONOptions شامل گزینه‌هایی برای قالب لاگ‌گیری "json" است.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="ltr" class="ltr">Field</th><th dir="ltr" class="ltr">Description</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">OutputRoutingOptions</code> <b>[Required]</b><br>
+<a href="#OutputRoutingOptions"><code dir="ltr">OutputRoutingOptions</code></a>
+</td>
+<td dir="rtl">
+   <span class="text-muted">توضیحی ارائه نشده است.</span></td>
+</tr>
+</tbody>
+</table>
+<h2 id="logformatfactory-logformatfactory" dir="ltr" class="ltr"><code dir="ltr">LogFormatFactory</code>     {#LogFormatFactory}</h2>
+<p dir="rtl">LogFormatFactory پشتیبانی از یک قالب لاگ اضافی و غیرپیش‌فرض مشخص را فراهم می‌کند.</p>
+<h2 id="loggingconfiguration-loggingconfiguration" dir="ltr" class="ltr"><code dir="ltr">LoggingConfiguration</code>     {#LoggingConfiguration}</h2>
+<p dir="rtl"><strong>نمایش داده‌شده در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubelet-config-k8s-io-v1beta1-KubeletConfiguration">KubeletConfiguration</a></li>
+</ul>
+<p dir="rtl">LoggingConfiguration شامل گزینه‌های لاگ‌گیری است.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="ltr" class="ltr">Field</th><th dir="ltr" class="ltr">Description</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">format</code> <b>[Required]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">Format Flag ساختار پیام‌های لاگ را مشخص می‌کند.
+مقدار پیش‌فرض format برابر <code dir="ltr">text</code> است.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">flushFrequency</code> <b>[Required]</b><br>
+<a href="#TimeOrMetaDuration"><code dir="ltr">TimeOrMetaDuration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">بیشینه زمان بین دو عملیات flush لاگ.
+اگر مقدار از نوع رشته باشد، به‌صورت یک بازه زمانی (duration) تفسیر می‌شود (مثلاً "1s").
+اگر مقدار از نوع عدد صحیح باشد، بیشینه تعداد نانوثانیه‌ها را مشخص می‌کند (مثلاً 1s = 1000000000).
+اگر بک‌اند لاگ‌گیری انتخاب‌شده پیام‌های لاگ را بدون بافر بنویسد، این مقدار نادیده گرفته می‌شود.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">verbosity</code> <b>[Required]</b><br>
+<a href="#VerbosityLevel"><code dir="ltr">VerbosityLevel</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">Verbosity آستانه‌ای است که تعیین می‌کند کدام پیام‌های لاگ
+ثبت شوند. مقدار پیش‌فرض صفر است که فقط مهم‌ترین
+پیام‌ها را ثبت می‌کند. مقادیر بالاتر پیام‌های بیشتری را فعال می‌کنند. پیام‌های خطا
+همیشه ثبت می‌شوند.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">vmodule</code> <b>[Required]</b><br>
+<a href="#VModuleConfiguration"><code dir="ltr">VModuleConfiguration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">VModule آستانه verbosity را برای فایل‌های منفرد بازنویسی می‌کند.
+فقط برای قالب لاگ "text" پشتیبانی می‌شود.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">options</code> <b>[Required]</b><br>
+<a href="#FormatOptions"><code dir="ltr">FormatOptions</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">[آلفا] Options شامل پارامترهای اضافی مختص
+قالب‌های مختلف لاگ‌گیری است. فقط گزینه‌های مربوط به قالب
+انتخاب‌شده به کار گرفته می‌شوند، اما همه آن‌ها اعتبارسنجی می‌شوند.
+فقط در صورتی در دسترس است که feature gate با نام LoggingAlphaOptions فعال باشد.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="loggingoptions-loggingoptions" dir="ltr" class="ltr"><code dir="ltr">LoggingOptions</code>     {#LoggingOptions}</h2>
+<p dir="rtl">LoggingOptions را می‌توان همراه با ValidateAndApplyWithOptions برای بازنویسی
+برخی مقادیر پیش‌فرض سراسری به کار برد.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="ltr" class="ltr">Field</th><th dir="ltr" class="ltr">Description</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">ErrorStream</code> <b>[Required]</b><br>
+<a href="https://pkg.go.dev/io#Writer" target="_blank" rel="noopener"><code dir="ltr">io.Writer</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">ErrorStream را می‌توان برای بازنویسی مقدار پیش‌فرض os.Stderr به کار برد.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">InfoStream</code> <b>[Required]</b><br>
+<a href="https://pkg.go.dev/io#Writer" target="_blank" rel="noopener"><code dir="ltr">io.Writer</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">InfoStream را می‌توان برای بازنویسی مقدار پیش‌فرض os.Stdout به کار برد.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="outputroutingoptions-outputroutingoptions" dir="ltr" class="ltr"><code dir="ltr">OutputRoutingOptions</code>     {#OutputRoutingOptions}</h2>
+<p dir="rtl"><strong>نمایش داده‌شده در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr">
+<p dir="ltr" class="ltr"><a href="#JSONOptions">JSONOptions</a></p>
+</li>
+<li dir="ltr" class="ltr">
+<p dir="ltr" class="ltr"><a href="#TextOptions">TextOptions</a></p>
+</li>
+</ul>
+<p dir="rtl">OutputRoutingOptions شامل گزینه‌هایی است که هم توسط "text" و هم توسط "json" پشتیبانی می‌شوند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="ltr" class="ltr">Field</th><th dir="ltr" class="ltr">Description</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">splitStream</code> <b>[Required]</b><br>
+<code dir="ltr">bool</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">[آلفا] SplitStream پیام‌های خطا را به stderr هدایت می‌کند، در حالی که
+پیام‌های اطلاعاتی با استفاده از بافر به stdout می‌روند. رفتار پیش‌فرض نوشتن
+هر دو نوع پیام در stdout و بدون بافر است. فقط در صورتی در دسترس است که
+feature gate با نام LoggingAlphaOptions فعال باشد.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">infoBufferSize</code> <b>[Required]</b><br>
+<a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/api/resource#QuantityValue" target="_blank" rel="noopener"><code dir="ltr">k8s.io/apimachinery/pkg/api/resource.QuantityValue</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">[آلفا] InfoBufferSize اندازه جریان اطلاعات (info stream) را هنگام
+استفاده از جریان‌های جداشده تعیین می‌کند. مقدار پیش‌فرض صفر است که بافر کردن را غیرفعال می‌کند.
+فقط در صورتی در دسترس است که feature gate با نام LoggingAlphaOptions فعال باشد.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="textoptions-textoptions" dir="ltr" class="ltr"><code dir="ltr">TextOptions</code>     {#TextOptions}</h2>
+<p dir="rtl"><strong>نمایش داده‌شده در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#FormatOptions">FormatOptions</a></li>
+</ul>
+<p dir="rtl">TextOptions شامل گزینه‌هایی برای قالب لاگ‌گیری "text" است.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="ltr" class="ltr">Field</th><th dir="ltr" class="ltr">Description</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">OutputRoutingOptions</code> <b>[Required]</b><br>
+<a href="#OutputRoutingOptions"><code dir="ltr">OutputRoutingOptions</code></a>
+</td>
+<td dir="rtl">
+   <span class="text-muted">توضیحی ارائه نشده است.</span></td>
+</tr>
+</tbody>
+</table>
+<h2 id="timeormetaduration-timeormetaduration" dir="ltr" class="ltr"><code dir="ltr">TimeOrMetaDuration</code>     {#TimeOrMetaDuration}</h2>
+<p dir="rtl"><strong>نمایش داده‌شده در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#LoggingConfiguration">LoggingConfiguration</a></li>
+</ul>
+<p dir="rtl">TimeOrMetaDuration صرفاً برای سازگاری با نسخه‌های قبلی برای فیلد
+flushFrequency وجود دارد و فیلدهای جدید باید از metav1.Duration استفاده کنند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="ltr" class="ltr">Field</th><th dir="ltr" class="ltr">Description</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">Duration</code> <b>[Required]</b><br>
+<a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration" target="_blank" rel="noopener"><code dir="ltr">meta/v1.Duration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">Duration مقدار بازه زمانی را نگه می‌دارد.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">-</code> <b>[Required]</b><br>
+<code dir="ltr">bool</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">SerializeAsString مشخص می‌کند که مقدار به‌صورت رشته سریال‌سازی شود یا به‌صورت عدد صحیح.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="tracingconfiguration-tracingconfiguration" dir="ltr" class="ltr"><code dir="ltr">TracingConfiguration</code>     {#TracingConfiguration}</h2>
+<p dir="rtl"><strong>نمایش داده‌شده در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubelet-config-k8s-io-v1beta1-KubeletConfiguration">KubeletConfiguration</a></li>
+</ul>
+<p dir="rtl">TracingConfiguration پیکربندی نسخه‌دار را برای کلاینت‌های ردیابی (tracing) OpenTelemetry فراهم می‌کند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="ltr" class="ltr">Field</th><th dir="ltr" class="ltr">Description</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">endpoint</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">Endpoint مربوط به collector که این مؤلفه ردیابی‌ها (traces) را به آن گزارش می‌دهد.
+اتصال ناامن است و در حال حاضر از TLS پشتیبانی نمی‌کند.
+توصیه می‌شود این مقدار تنظیم نشود و endpoint همان مقدار پیش‌فرض otlp grpc یعنی localhost:4317 باشد.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">samplingRatePerMillion</code><br>
+<code dir="ltr">int32</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">SamplingRatePerMillion تعداد نمونه‌هایی است که به ازای هر یک میلیون span جمع‌آوری می‌شود.
+توصیه می‌شود این مقدار تنظیم نشود. در صورت تنظیم نشدن، نمونه‌بردار (sampler) از نرخ نمونه‌برداری
+span والد خود پیروی می‌کند، ولی در غیر این صورت هرگز نمونه‌برداری نمی‌کند.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="vmoduleconfiguration-vmoduleconfiguration" dir="ltr" class="ltr"><code dir="ltr">VModuleConfiguration</code>     {#VModuleConfiguration}</h2>
+<p dir="rtl">(نام مستعار برای <code dir="ltr">[]k8s.io/component-base/logs/api/v1.VModuleItem</code>)</p>
+<p dir="rtl"><strong>نمایش داده‌شده در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#LoggingConfiguration">LoggingConfiguration</a></li>
+</ul>
+<p dir="rtl">VModuleConfiguration مجموعه‌ای از نام فایل‌ها یا الگوهای منفرد
+و آستانه verbosity متناظر با هرکدام است.</p>
+<h2 id="verbositylevel-verbositylevel" dir="ltr" class="ltr"><code dir="ltr">VerbosityLevel</code>     {#VerbosityLevel}</h2>
+<p dir="rtl">(نام مستعار برای <code dir="ltr">uint32</code>)</p>
+<p dir="rtl"><strong>نمایش داده‌شده در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#LoggingConfiguration">LoggingConfiguration</a></li>
+</ul>
+<p dir="rtl">VerbosityLevel نشان‌دهنده یک آستانه verbosity در klog یا logr است.</p>
+<h2 id="credentialproviderconfig-kubelet-config-k8s-io-v1beta1-credentialproviderconfig" dir="ltr" class="ltr"><code dir="ltr">CredentialProviderConfig</code>     {#kubelet-config-k8s-io-v1beta1-CredentialProviderConfig}</h2>
+<p dir="rtl">CredentialProviderConfig پیکربندی‌ای است که اطلاعات مربوط به
+هر ارائه‌دهنده اعتبارنامه از نوع exec را در بر دارد. Kubelet این پیکربندی را از دیسک می‌خواند و
+هر ارائه‌دهنده را بر اساس آنچه در نوع CredentialProvider مشخص شده است فعال می‌کند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="ltr" class="ltr">Field</th><th dir="ltr" class="ltr">Description</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">apiVersion</code><br>string</td><td dir="ltr" class="ltr"><code dir="ltr">kubelet.config.k8s.io/v1beta1</code></td></tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">kind</code><br>string</td><td dir="ltr" class="ltr"><code dir="ltr">CredentialProviderConfig</code></td></tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">providers</code> <b>[Required]</b><br>
+<a href="#kubelet-config-k8s-io-v1beta1-CredentialProvider"><code dir="ltr">[]CredentialProvider</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">providers فهرستی از افزونه‌های ارائه‌دهنده اعتبارنامه است که توسط kubelet فعال می‌شوند.
+چند ارائه‌دهنده ممکن است با یک ایمیج واحد مطابقت داشته باشند؛ در این صورت اعتبارنامه‌های
+همه ارائه‌دهندگان به kubelet بازگردانده می‌شود. اگر برای یک ایمیج واحد چند ارائه‌دهنده فراخوانی شوند،
+نتایج با هم ترکیب می‌شوند. اگر ارائه‌دهندگان کلیدهای احراز هویت هم‌پوشان بازگردانند،
+مقدار ارائه‌دهنده‌ای که در این فهرست زودتر آمده است ابتدا امتحان می‌شود.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="imagepullintent-kubelet-config-k8s-io-v1beta1-imagepullintent" dir="ltr" class="ltr"><code dir="ltr">ImagePullIntent</code>     {#kubelet-config-k8s-io-v1beta1-ImagePullIntent}</h2>
+<p dir="rtl">ImagePullIntent رکوردی از تلاش kubelet برای pull کردن یک ایمیج است.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="ltr" class="ltr">Field</th><th dir="ltr" class="ltr">Description</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">apiVersion</code><br>string</td><td dir="ltr" class="ltr"><code dir="ltr">kubelet.config.k8s.io/v1beta1</code></td></tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">kind</code><br>string</td><td dir="ltr" class="ltr"><code dir="ltr">ImagePullIntent</code></td></tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">image</code> <b>[Required]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">Image مشخصات ایمیج است که از فیلد <code dir="ltr">image</code> یک Container گرفته می‌شود.
+نام فایل، هش SHA-256 این مقدار است. این کار برای پرهیز از وجود
+نویسه‌های نامناسب برای نام فایل مانند ':' و '/' انجام می‌شود.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="imagepulledrecord-kubelet-config-k8s-io-v1beta1-imagepulledrecord" dir="ltr" class="ltr"><code dir="ltr">ImagePulledRecord</code>     {#kubelet-config-k8s-io-v1beta1-ImagePulledRecord}</h2>
+<p dir="rtl">ImagePullRecord رکوردی از ایمیجی است که توسط kubelet pull شده است.</p>
+<p dir="rtl">اگر در فیلد <code dir="ltr">kubernetesSecrets</code> هیچ رکوردی وجود نداشته باشد و هر دو فیلد <code dir="ltr">nodeWideCredentials</code>
+و <code dir="ltr">anonymous</code> برابر <code dir="ltr">false</code> باشند، اعتبارنامه‌ها باید در دفعه بعدی که
+ایمیجِ نمایش‌داده‌شده توسط این رکورد درخواست می‌شود، دوباره بررسی شوند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="ltr" class="ltr">Field</th><th dir="ltr" class="ltr">Description</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">apiVersion</code><br>string</td><td dir="ltr" class="ltr"><code dir="ltr">kubelet.config.k8s.io/v1beta1</code></td></tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">kind</code><br>string</td><td dir="ltr" class="ltr"><code dir="ltr">ImagePulledRecord</code></td></tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">lastUpdatedTime</code> <b>[Required]</b><br>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.37/#time-v1-meta" target="_blank"><code dir="ltr">meta/v1.Time</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">LastUpdatedTime زمان آخرین به‌روزرسانی این رکورد است.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">imageRef</code> <b>[Required]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">ImageRef ارجاعی به ایمیجی است که این فایل نمایش می‌دهد و
+از CRI دریافت شده است.
+نام فایل، هش SHA-256 این مقدار است. این کار برای پرهیز از وجود
+نویسه‌های نامناسب برای نام فایل مانند ':' و '/' انجام می‌شود.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">credentialMapping</code> <b>[Required]</b><br>
+<a href="#kubelet-config-k8s-io-v1beta1-ImagePullCredentials"><code dir="ltr">map[string]ImagePullCredentials</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">CredentialMapping مقدار <code dir="ltr">image</code> را به مجموعه اعتبارنامه‌هایی نگاشت می‌کند که
+پیش‌تر با آن‌ها pull شده است.
+<code dir="ltr">image</code> در اینجا محتوای فیلد <code dir="ltr">image</code> کانتینر یک Pod است که
+تگ/digest آن حذف شده است.</p>
+<p dir="rtl">مثال:
+کانتینر ایمیج <code dir="ltr">hello-world:latest@sha256:91fb4b041da273d5a3273b6d587d62d518300a6ad268b28628f74997b93171b2</code> را درخواست می‌کند:
+"credentialMapping": {
+"hello-world": { "nodePodsAccessible": true }
+}</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="kubeletconfiguration-kubelet-config-k8s-io-v1beta1-kubeletconfiguration" dir="ltr" class="ltr"><code dir="ltr">KubeletConfiguration</code>     {#kubelet-config-k8s-io-v1beta1-KubeletConfiguration}</h2>
+<p dir="rtl">KubeletConfiguration شامل پیکربندی Kubelet است.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">apiVersion</code><br>string</td><td dir="ltr" class="ltr"><code dir="ltr">kubelet.config.k8s.io/v1beta1</code></td></tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">kind</code><br>string</td><td dir="ltr" class="ltr"><code dir="ltr">KubeletConfiguration</code></td></tr>
+<tr><td dir="rtl"><code dir="ltr">enableServer</code> <b>[الزامی]</b><br>
+<code dir="ltr">bool</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">enableServer سرور امن Kubelet را فعال می‌کند.
+توجه: پورت ناامن Kubelet توسط گزینه readOnlyPort کنترل می‌شود.
+پیش‌فرض: true</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">staticPodPath</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">staticPodPath مسیر دایرکتوری حاوی Podهای محلی (ایستا) برای اجرا،
+یا مسیر یک فایل Pod ایستای منفرد است.
+پیش‌فرض: ""</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">podLogsDir</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">podLogsDir مسیر دایرکتوری ریشهٔ سفارشی است که kubelet برای قرار دادن فایل‌های لاگ Pod از آن استفاده می‌کند.
+پیش‌فرض: "/var/log/pods/"
+توجه: استفاده از پوشهٔ موقت به‌عنوان دایرکتوری لاگ توصیه نمی‌شود، زیرا ممکن است
+در بسیاری از بخش‌ها رفتار پیش‌بینی‌نشده‌ای ایجاد کند.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">syncFrequency</code><br>
+<a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration" target="_blank" rel="noopener"><code dir="ltr">meta/v1.Duration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">syncFrequency بیشینهٔ فاصلهٔ زمانی بین همگام‌سازی کانتینرهای در حال اجرا
+و پیکربندی است.
+پیش‌فرض: "1m"</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">fileCheckFrequency</code><br>
+<a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration" target="_blank" rel="noopener"><code dir="ltr">meta/v1.Duration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">fileCheckFrequency فاصلهٔ زمانی بین بررسی فایل‌های پیکربندی برای
+یافتن داده‌های جدید است.
+پیش‌فرض: "20s"</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">httpCheckFrequency</code><br>
+<a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration" target="_blank" rel="noopener"><code dir="ltr">meta/v1.Duration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">httpCheckFrequency فاصلهٔ زمانی بین بررسی http برای یافتن داده‌های جدید است.
+پیش‌فرض: "20s"</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">staticPodURL</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">staticPodURL نشانی URL برای دسترسی به Podهای ایستا جهت اجراست.
+پیش‌فرض: ""</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">staticPodURLHeader</code><br>
+<code dir="ltr">map[string][]string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">staticPodURLHeader نگاشتی از لیست‌هاست که شامل سرآیندهای HTTP برای استفاده هنگام دسترسی به podURL است.
+پیش‌فرض: nil</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">address</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">address نشانی IP است که Kubelet روی آن سرویس‌دهی می‌کند (برای همهٔ
+رابط‌ها روی 0.0.0.0 تنظیم کنید).
+پیش‌فرض: "0.0.0.0"</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">port</code><br>
+<code dir="ltr">int32</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">port پورتی است که Kubelet روی آن سرویس‌دهی می‌کند.
+شمارهٔ پورت باید بین 1 تا 65535 (شامل هر دو مقدار) باشد.
+پیش‌فرض: 10250</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">readOnlyPort</code><br>
+<code dir="ltr">int32</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">readOnlyPort پورت فقط‌خواندنی است که Kubelet بدون
+احراز هویت/مجوزدهی روی آن سرویس‌دهی می‌کند.
+شمارهٔ پورت باید بین 1 تا 65535 (شامل هر دو مقدار) باشد.
+تنظیم این فیلد روی 0 سرویس فقط‌خواندنی را غیرفعال می‌کند.
+پیش‌فرض: 0 (غیرفعال)</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">tlsCertFile</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">tlsCertFile فایل حاوی گواهی x509 برای HTTPS است (گواهی CA، در صورت وجود،
+پس از گواهی سرور الحاق می‌شود). اگر tlsCertFile و
+tlsPrivateKeyFile ارائه نشوند، یک گواهی و کلید خودامضا
+برای نشانی عمومی تولید می‌شود و در دایرکتوری ارسال‌شده به پرچم --cert-dir
+در Kubelet ذخیره می‌گردد.
+پیش‌فرض: ""</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">tlsPrivateKeyFile</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">tlsPrivateKeyFile فایل حاوی کلید خصوصی x509 مطابق با tlsCertFile است.
+پیش‌فرض: ""</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">tlsCipherSuites</code><br>
+<code dir="ltr">[]string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">tlsCipherSuites فهرست cipher suiteهای مجاز برای سرور است.
+توجه کنید که cipher suiteهای TLS 1.3 قابل پیکربندی نیستند.
+مقادیر از ثابت‌های بستهٔ tls گرفته می‌شوند (https://golang.org/pkg/crypto/tls/#pkg-constants).
+پیش‌فرض: nil</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">tlsCurvePreferences</code><br>
+<code dir="ltr">[]int32</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">tlsCurvePreferences مجموعهٔ سازوکارهای مجاز تبادل کلید برای سرور است
+که به‌صورت مقادیر عددی CurveID در crypto/tls زبان Go مشخص می‌شود.
+مقادیر پشتیبانی‌شده به نسخهٔ Go مورد استفاده بستگی دارد.
+برای مقادیر پشتیبانی‌شده در هر نسخهٔ Go به https://pkg.go.dev/crypto/tls#CurveID مراجعه کنید.
+ترتیب فهرست نادیده گرفته می‌شود و سازوکارهای تبادل کلید
+با استفاده از یک ترتیب ترجیحی داخلی توسط Go از میان این فهرست انتخاب می‌شوند.
+اگر خالی باشد، منحنی‌های پیش‌فرض Go استفاده می‌شوند.
+پیش‌فرض: nil</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">tlsMinVersion</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">tlsMinVersion حداقل نسخهٔ پشتیبانی‌شدهٔ TLS است.
+مقادیر از ثابت‌های بستهٔ tls گرفته می‌شوند (https://golang.org/pkg/crypto/tls/#pkg-constants).
+پیش‌فرض: ""</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">rotateCertificates</code><br>
+<code dir="ltr">bool</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">rotateCertificates چرخش گواهی کلاینت را فعال می‌کند. Kubelet یک
+گواهی جدید از API مربوط به certificates.k8s.io درخواست می‌کند. این کار نیازمند یک تأییدکننده است تا
+درخواست‌های امضای گواهی را تأیید کند.
+پیش‌فرض: false</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">serverTLSBootstrap</code><br>
+<code dir="ltr">bool</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">serverTLSBootstrap راه‌اندازی اولیهٔ گواهی سرور را فعال می‌کند. به‌جای امضای
+خودکار گواهی سرویس‌دهی، Kubelet یک گواهی از
+API مربوط به 'certificates.k8s.io' درخواست می‌کند. این کار نیازمند یک تأییدکننده است تا
+درخواست‌های امضای گواهی (CSR) را تأیید کند. هنگام تنظیم این فیلد، ویژگی
+RotateKubeletServerCertificate باید فعال باشد.
+پیش‌فرض: false</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">authentication</code><br>
+<a href="#kubelet-config-k8s-io-v1beta1-KubeletAuthentication"><code dir="ltr">KubeletAuthentication</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">authentication مشخص می‌کند درخواست‌ها به سرور Kubelet چگونه احراز هویت می‌شوند.
+پیش‌فرض‌ها:
+anonymous:
+enabled: false
+webhook:
+enabled: true
+cacheTTL: "2m"</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">authorization</code><br>
+<a href="#kubelet-config-k8s-io-v1beta1-KubeletAuthorization"><code dir="ltr">KubeletAuthorization</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">authorization مشخص می‌کند درخواست‌ها به سرور Kubelet چگونه مجوزدهی می‌شوند.
+پیش‌فرض‌ها:
+mode: Webhook
+webhook:
+cacheAuthorizedTTL: "5m"
+cacheUnauthorizedTTL: "30s"</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">registryPullQPS</code><br>
+<code dir="ltr">int32</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">registryPullQPS حد مجاز pull از رجیستری در هر ثانیه است.
+مقدار نباید عددی منفی باشد.
+تنظیم آن روی 0 به معنای نبود محدودیت است.
+پیش‌فرض: 5</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">registryBurst</code><br>
+<code dir="ltr">int32</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">registryBurst بیشینهٔ اندازهٔ pullهای انفجاری است و به‌طور موقت اجازه می‌دهد
+pullها تا این عدد افزایش یابند، بدون آنکه همچنان از registryPullQPS فراتر روند.
+مقدار نباید عددی منفی باشد.
+فقط زمانی استفاده می‌شود که registryPullQPS بزرگ‌تر از 0 باشد.
+پیش‌فرض: 10</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">imagePullCredentialsVerificationPolicy</code><br>
+<a href="#kubelet-config-k8s-io-v1beta1-ImagePullCredentialsVerificationPolicy"><code dir="ltr">ImagePullCredentialsVerificationPolicy</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">imagePullCredentialsVerificationPolicy تعیین می‌کند هنگامی که یک Pod ایمیجی را درخواست می‌کند که از قبل روی نود وجود دارد،
+اعتبارنامه‌ها چگونه باید تأیید شوند:</p>
+<ul>
+<li dir="rtl">NeverVerify
+<ul>
+<li dir="rtl">هر کسی روی نود می‌تواند از هر ایمیج موجود روی نود استفاده کند</li>
+</ul>
+</li>
+<li dir="rtl">NeverVerifyPreloadedImages
+<ul>
+<li dir="rtl">ایمیج‌هایی که توسط چیزی غیر از kubelet روی نود pull شده‌اند
+بدون تأیید مجدد اعتبارنامه‌های pull قابل استفاده‌اند</li>
+</ul>
+</li>
+<li dir="rtl">NeverVerifyAllowlistedImages
+<ul>
+<li dir="rtl">مانند "NeverVerifyPreloadedImages" اما فقط ایمیج‌های نود موجود در
+<code dir="ltr">preloadedImagesVerificationAllowlist</code> نیازی به تأیید مجدد ندارند</li>
+</ul>
+</li>
+<li dir="rtl">AlwaysVerify
+<ul>
+<li dir="rtl">همهٔ ایمیج‌ها نیازمند تأیید مجدد اعتبارنامه هستند</li>
+</ul>
+</li>
+</ul>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">preloadedImagesVerificationAllowlist</code><br>
+<code dir="ltr">[]string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">preloadedImagesVerificationAllowlist فهرستی از ایمیج‌ها را مشخص می‌کند که برای
+<code dir="ltr">imagePullCredentialsVerificationPolicy</code> با مقدار "NeverVerifyAllowlistedImages"
+از تأیید مجدد اعتبارنامه معاف هستند.
+این فهرست یک پسوند wildcard برای کل بخش مسیر، یعنی "/*"، را می‌پذیرد.
+فقط از مشخصات ایمیج بدون تگ یا digest استفاده کنید.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">eventRecordQPS</code><br>
+<code dir="ltr">int32</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">eventRecordQPS بیشینهٔ تعداد رویدادهای ایجادشده در هر ثانیه است. اگر 0 باشد،
+هیچ محدودیتی اعمال نمی‌شود. مقدار نمی‌تواند عددی منفی باشد.
+پیش‌فرض: 50</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">eventBurst</code><br>
+<code dir="ltr">int32</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">eventBurst بیشینهٔ اندازهٔ یک انفجار از ایجاد رویدادهاست و به‌طور موقت
+اجازه می‌دهد ایجاد رویدادها تا این عدد افزایش یابد، بدون آنکه همچنان از
+eventRecordQPS فراتر رود. این فیلد نمی‌تواند عددی منفی باشد و فقط
+زمانی استفاده می‌شود که eventRecordQPS &gt; 0 باشد.
+پیش‌فرض: 100</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">enableDebuggingHandlers</code><br>
+<code dir="ltr">bool</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">enableDebuggingHandlers نقاط انتهایی سرور را برای دسترسی به لاگ
+و اجرای محلی کانتینرها و دستورات، از جمله قابلیت‌های exec،
+attach، logs و portforward، فعال می‌کند.
+پیش‌فرض: true</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">enableContentionProfiling</code><br>
+<code dir="ltr">bool</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">enableContentionProfiling در صورتی که enableDebuggingHandlers برابر true باشد، block profiling را فعال می‌کند.
+پیش‌فرض: false</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">healthzPort</code><br>
+<code dir="ltr">int32</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">healthzPort پورت نقطهٔ انتهایی healthz روی localhost است (برای غیرفعال‌سازی روی 0 تنظیم کنید).
+عدد معتبر بین 1 تا 65535 است.
+پیش‌فرض: 10248</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">healthzBindAddress</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">healthzBindAddress نشانی IP است که سرور healthz روی آن سرویس‌دهی می‌کند.
+پیش‌فرض: "127.0.0.1"</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">oomScoreAdj</code><br>
+<code dir="ltr">int32</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">oomScoreAdj مقدار oom-score-adj برای فرایند kubelet است. مقادیر
+باید در بازهٔ [-1000, 1000] باشند.
+پیش‌فرض: -999</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">clusterDomain</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">clusterDomain دامنهٔ DNS این کلاستر است. در صورت تنظیم، kubelet
+همهٔ کانتینرها را طوری پیکربندی می‌کند که علاوه بر دامنه‌های جست‌وجوی
+میزبان، این دامنه را نیز جست‌وجو کنند.
+پیش‌فرض: ""</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">clusterDNS</code><br>
+<code dir="ltr">[]string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">clusterDNS فهرستی از نشانی‌های IP برای سرور DNS کلاستر است. در صورت تنظیم،
+kubelet همهٔ کانتینرها را طوری پیکربندی می‌کند که برای تفکیک DNS از این سرور
+به‌جای سرورهای DNS میزبان استفاده کنند.
+پیش‌فرض: nil</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">streamingConnectionIdleTimeout</code><br>
+<a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration" target="_blank" rel="noopener"><code dir="ltr">meta/v1.Duration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">streamingConnectionIdleTimeout بیشترین زمانی است که یک اتصال جریانی
+می‌تواند بیکار بماند، پیش از آنکه اتصال به‌طور خودکار بسته شود.
+منسوخ‌شده: دیگر هیچ تأثیری ندارد.
+پیش‌فرض: "4h"</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">nodeStatusUpdateFrequency</code><br>
+<a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration" target="_blank" rel="noopener"><code dir="ltr">meta/v1.Duration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">nodeStatusUpdateFrequency فرکانسی است که kubelet وضعیت نود را محاسبه می‌کند
+و بررسی می‌کند که آیا به‌روزرسانی در API server لازم است یا خیر. وضعیت
+یا هنگام تغییر یا زمانی که از آخرین گزارش به اندازهٔ
+nodeStatusReportFrequency گذشته باشد، به API server ارسال می‌شود.
+پیش‌فرض: "10s"</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">nodeStatusReportFrequency</code><br>
+<a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration" target="_blank" rel="noopener"><code dir="ltr">meta/v1.Duration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">nodeStatusReportFrequency فرکانسی است که kubelet در صورت تغییر نکردن وضعیت نود،
+آن را به API server ارسال می‌کند. در صورت شناسایی هر تغییری، Kubelet
+این فرکانس را نادیده می‌گیرد و وضعیت نود را بلافاصله ارسال می‌کند.
+مقدار پیش‌فرض nodeStatusReportFrequency برابر 5m است. اما اگر
+nodeStatusUpdateFrequency به‌صراحت تنظیم شده باشد،
+مقدار پیش‌فرض nodeStatusReportFrequency برای سازگاری با نسخه‌های قبلی برابر
+nodeStatusUpdateFrequency خواهد بود.
+پیش‌فرض: "5m"</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">nodeLeaseDurationSeconds</code><br>
+<code dir="ltr">int32</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">nodeLeaseDurationSeconds مدت زمانی است که Kubelet روی Lease متناظر با خود تنظیم می‌کند.
+NodeLease با ایجاد یک lease توسط Kubelet و تمدید دوره‌ای آن، که به نام نود
+در فضای نام kube-node-lease نام‌گذاری شده است، شاخصی از سلامت نود فراهم می‌کند.
+اگر lease منقضی شود، نود را می‌توان ناسالم در نظر گرفت.
+در حال حاضر lease طبق KEP-0009 هر 10 ثانیه تمدید می‌شود. در آینده، بازهٔ تمدید lease
+ممکن است بر اساس مدت lease تنظیم شود.
+مقدار فیلد باید بزرگ‌تر از 0 باشد.
+پیش‌فرض: 40</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">imageMinimumGCAge</code><br>
+<a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration" target="_blank" rel="noopener"><code dir="ltr">meta/v1.Duration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">imageMinimumGCAge حداقل سن یک ایمیج استفاده‌نشده است، پیش از آنکه
+garbage collection روی آن انجام شود.
+مقدار فیلد باید بزرگ‌تر از 0 باشد.
+اگر تنظیم نشده یا 0 باشد، پیش‌فرض 2m است.
+پیش‌فرض: "2m"</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">imageMaximumGCAge</code><br>
+<a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration" target="_blank" rel="noopener"><code dir="ltr">meta/v1.Duration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">imageMaximumGCAge بیشترین مدتی است که یک ایمیج می‌تواند استفاده نشده باقی بماند، پیش از آنکه garbage collection روی آن انجام شود.
+پیش‌فرض این فیلد "0s" است که این فیلد را غیرفعال می‌کند؛ یعنی ایمیج‌ها
+بر اساس مدت طولانی استفاده‌نشدن، garbage collect نخواهند شد.
+پیش‌فرض: "0s" (غیرفعال)</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">imageGCHighThresholdPercent</code><br>
+<code dir="ltr">int32</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">imageGCHighThresholdPercent درصد استفاده از دیسک است که پس از آن
+garbage collection ایمیج همیشه اجرا می‌شود. این درصد با
+تقسیم مقدار این فیلد بر 100 محاسبه می‌شود، بنابراین این فیلد باید بین 0 تا
+100 (شامل هر دو مقدار) باشد. در صورت تعیین، مقدار باید بزرگ‌تر از
+imageGCLowThresholdPercent باشد.
+پیش‌فرض: 85</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">imageGCLowThresholdPercent</code><br>
+<code dir="ltr">int32</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">imageGCLowThresholdPercent درصد استفاده از دیسک است که پیش از آن
+garbage collection ایمیج هرگز اجرا نمی‌شود. کمترین میزان استفاده از دیسک برای
+garbage collection. این درصد با تقسیم مقدار این فیلد بر 100 محاسبه می‌شود،
+بنابراین مقدار فیلد باید بین 0 تا 100 (شامل هر دو مقدار) باشد. در صورت تعیین،
+مقدار باید کمتر از imageGCHighThresholdPercent باشد.
+پیش‌فرض: 80</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">volumeStatsAggPeriod</code><br>
+<a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration" target="_blank" rel="noopener"><code dir="ltr">meta/v1.Duration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">volumeStatsAggPeriod فرکانس محاسبه و ذخیرهٔ موقت (cache) میزان استفاده از دیسک حجم‌ها
+برای همهٔ Podهاست.
+پیش‌فرض: "1m"</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">kubeletCgroups</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">kubeletCgroups نام مطلق cgroupهایی است که kubelet در آن‌ها ایزوله می‌شود.
+پیش‌فرض: ""</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">systemCgroups</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">systemCgroups نام مطلق cgroupهایی است که همهٔ فرایندهای غیرهسته‌ای که
+هنوز در یک کانتینر نیستند در آن‌ها قرار داده می‌شوند. خالی بودن آن
+به معنای نبود کانتینر است. بازگرداندن این پرچم به حالت قبل نیازمند راه‌اندازی مجدد است.
+اگر این فیلد خالی نباشد، باید cgroupRoot مشخص شود.
+پیش‌فرض: ""</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">cgroupRoot</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">cgroupRoot همان cgroup ریشه برای استفاده توسط Podهاست. این مورد توسط
+container runtime و در حد امکان (best effort) مدیریت می‌شود.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">cgroupsPerQOS</code><br>
+<code dir="ltr">bool</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">cgroupsPerQOS سلسله‌مراتب CGroup مبتنی بر QoS را فعال می‌کند: CGroupهای سطح بالا برای کلاس‌های QoS
+و همهٔ Podهای Burstable و BestEffort زیر CGroup سطح بالای QoS مخصوص خود بالا آورده می‌شوند.
+پیش‌فرض: true</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">cgroupDriver</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">cgroupDriver درایوری است که kubelet برای مدیریت CGroupها روی میزبان استفاده می‌کند (cgroupfs
+یا systemd).
+پیش‌فرض: "cgroupfs"</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">cpuManagerPolicy</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">cpuManagerPolicy نام سیاستی است که باید استفاده شود.
+پیش‌فرض: "None"</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">singleProcessOOMKill</code><br>
+<code dir="ltr">bool</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">singleProcessOOMKill، در صورت true بودن، از تنظیم شدن پرچم <code dir="ltr">memory.oom.group</code> برای cgroupهای
+کانتینر در cgroups v2 جلوگیری می‌کند. این امر باعث می‌شود فرایندهای درون کانتینر به‌جای OOM kill شدن به‌صورت گروهی،
+به‌صورت جداگانه OOM kill شوند. یعنی اگر true باشد، رفتار با رفتار cgroups v1 هم‌راستا می‌شود.
+در صورت عدم تعیین، مقدار پیش‌فرض به‌طور خودکار تعیین می‌شود.
+در سیستم‌عامل‌های غیرلینوکسی مانند ویندوز، فقط null / absent مجاز است.
+در لینوکس با cgroup v1، فقط null / absent و true مجازند.
+در لینوکس با cgroup v2، null / absent، true و false مجازند. مقدار پیش‌فرض false است.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">cpuManagerPolicyOptions</code><br>
+<code dir="ltr">map[string]string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">cpuManagerPolicyOptions مجموعه‌ای از key=value است که امکان تنظیم گزینه‌های اضافی
+برای تنظیم دقیق رفتار سیاست‌های cpu manager را فراهم می‌کند.
+پیش‌فرض: nil</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">cpuManagerReconcilePeriod</code><br>
+<a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration" target="_blank" rel="noopener"><code dir="ltr">meta/v1.Duration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">cpuManagerReconcilePeriod دورهٔ تطبیق (reconciliation) برای CPU Manager است.
+پیش‌فرض: "10s"</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">memoryManagerPolicy</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">memoryManagerPolicy نام سیاستی است که memory manager باید استفاده کند.
+نیازمند فعال بودن feature gate با نام MemoryManager است.
+پیش‌فرض: "none"</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">topologyManagerPolicy</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">topologyManagerPolicy نام سیاست topology manager برای استفاده است.
+مقادیر معتبر عبارت‌اند از:</p>
+<ul>
+<li dir="rtl"><code dir="ltr">restricted</code>: kubelet فقط Podهایی را مجاز می‌داند که برای منابع درخواست‌شده
+هم‌ترازی بهینهٔ نود NUMA دارند؛</li>
+<li dir="rtl"><code dir="ltr">best-effort</code>: kubelet Podهایی را که هم‌ترازی NUMA برای منابع CPU و دستگاه دارند
+ترجیح می‌دهد؛</li>
+<li dir="rtl"><code dir="ltr">none</code>: kubelet هیچ اطلاعی از هم‌ترازی NUMA منابع CPU و دستگاه یک Pod ندارد.</li>
+<li dir="rtl"><code dir="ltr">single-numa-node</code>: kubelet فقط Podهایی را مجاز می‌داند که یک هم‌ترازی NUMA واحد
+برای منابع CPU و دستگاه دارند.</li>
+</ul>
+<p dir="rtl">پیش‌فرض: "none"</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">topologyManagerScope</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">topologyManagerScope دامنهٔ تولید topology hint را نشان می‌دهد
+که topology manager درخواست می‌کند و hint providerها تولید می‌کنند. مقادیر معتبر عبارت‌اند از:</p>
+<ul>
+<li dir="rtl"><code dir="ltr">container</code>: سیاست توپولوژی به‌صورت جداگانه برای هر کانتینر اعمال می‌شود.</li>
+<li dir="rtl"><code dir="ltr">pod</code>: سیاست توپولوژی به‌صورت جداگانه برای هر Pod اعمال می‌شود.</li>
+</ul>
+<p dir="rtl">پیش‌فرض: "container"</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">topologyManagerPolicyOptions</code><br>
+<code dir="ltr">map[string]string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">TopologyManagerPolicyOptions مجموعه‌ای از key=value است که امکان تنظیم گزینه‌های اضافی
+برای تنظیم دقیق رفتار سیاست‌های topology manager را فراهم می‌کند.
+نیازمند فعال بودن هر دو feature gate با نام‌های "TopologyManager" و "TopologyManagerPolicyOptions" است.
+پیش‌فرض: nil</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">qosReserved</code><br>
+<code dir="ltr">map[string]string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">qosReserved مجموعه‌ای از جفت‌های نام منبع به درصد است که
+حداقل درصدی از یک منبع را که برای استفادهٔ انحصاری
+لایهٔ QoS از نوع guaranteed رزرو شده است مشخص می‌کند.
+منابع پشتیبانی‌شده در حال حاضر: "memory"
+نیازمند فعال بودن feature gate با نام QOSReserved است.
+پیش‌فرض: nil</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">runtimeRequestTimeout</code><br>
+<a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration" target="_blank" rel="noopener"><code dir="ltr">meta/v1.Duration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">runtimeRequestTimeout مهلت زمانی برای همهٔ درخواست‌های runtime به‌جز درخواست‌های
+طولانی‌مدت - pull، logs، exec و attach است.
+پیش‌فرض: "2m"</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">hairpinMode</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">hairpinMode مشخص می‌کند Kubelet چگونه باید bridge کانتینر را
+برای بسته‌های hairpin پیکربندی کند.
+تنظیم این پرچم به endpointهای یک Service اجازه می‌دهد در صورتی که بخواهند به Service خودشان دسترسی پیدا کنند،
+بار را به خودشان توزیع کنند. مقادیر:</p>
+<ul>
+<li dir="rtl">"promiscuous-bridge": bridge کانتینر را promiscuous می‌کند.</li>
+<li dir="rtl">"hairpin-veth":       پرچم hairpin را روی رابط‌های veth کانتینر تنظیم می‌کند.</li>
+<li dir="rtl">"none":               هیچ کاری انجام نمی‌دهد.</li>
+</ul>
+<p dir="rtl">به‌طور کلی، برای دستیابی به hairpin NAT باید <code dir="ltr">--hairpin-mode=hairpin-veth to</code> را تنظیم کرد،
+زیرا promiscuous-bridge وجود یک bridge کانتینر با نام cbr0 را فرض می‌کند.
+پیش‌فرض: "promiscuous-bridge"</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">maxPods</code><br>
+<code dir="ltr">int32</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">maxPods بیشینهٔ تعداد Podهایی است که می‌توانند روی این Kubelet اجرا شوند.
+مقدار باید عددی صحیح و نامنفی باشد.
+پیش‌فرض: 110</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">podCIDR</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">podCIDR همان CIDR برای استفاده در نشانی‌های IP پاد است و فقط در حالت مستقل (standalone) استفاده می‌شود.
+در حالت کلاستر، این مقدار از control plane به‌دست می‌آید.
+پیش‌فرض: ""</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">podPidsLimit</code><br>
+<code dir="ltr">int64</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">podPidsLimit بیشینهٔ تعداد PIDها در هر Pod است.
+پیش‌فرض: -1</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">resolvConf</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">resolvConf فایل پیکربندی resolver است که به‌عنوان مبنای
+پیکربندی تفکیک DNS کانتینر استفاده می‌شود.
+اگر روی رشتهٔ خالی تنظیم شود، پیش‌فرض را بازنویسی می‌کند و عملاً جست‌وجوهای DNS را غیرفعال می‌کند.
+پیش‌فرض: "/etc/resolv.conf"</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">runOnce</code><br>
+<code dir="ltr">bool</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">runOnce باعث می‌شود Kubelet یک بار API server را برای Podها بررسی کند،
+آن‌ها را علاوه بر Podهای مشخص‌شده توسط فایل‌های Pod ایستا اجرا کند و خارج شود.
+پیش‌فرض: false</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">cpuCFSQuota</code><br>
+<code dir="ltr">bool</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">cpuCFSQuota اعمال سهمیهٔ CPU CFS را برای کانتینرهایی که
+محدودیت CPU مشخص می‌کنند فعال می‌کند.
+پیش‌فرض: true</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">cpuCFSQuotaPeriod</code><br>
+<a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration" target="_blank" rel="noopener"><code dir="ltr">meta/v1.Duration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">cpuCFSQuotaPeriod مقدار دورهٔ سهمیهٔ CPU CFS یعنی <code dir="ltr">cpu.cfs_period_us</code> است.
+مقدار باید بین 1 میلی‌ثانیه و 1 ثانیه (شامل هر دو مقدار) باشد.
+نیازمند فعال بودن feature gate با نام CustomCPUCFSQuotaPeriod است.
+پیش‌فرض: "100ms"</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">nodeStatusMaxImages</code><br>
+<code dir="ltr">int32</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">nodeStatusMaxImages تعداد ایمیج‌های گزارش‌شده در Node.status.images را محدود می‌کند.
+مقدار باید بزرگ‌تر از 2- باشد.
+توجه: اگر 1- مشخص شود، هیچ سقفی اعمال نمی‌شود. اگر 0 مشخص شود، هیچ ایمیجی بازگردانده نمی‌شود.
+پیش‌فرض: 50</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">maxOpenFiles</code><br>
+<code dir="ltr">int64</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">maxOpenFiles تعداد فایل‌هایی است که فرایند Kubelet می‌تواند باز کند.
+مقدار باید عددی نامنفی باشد.
+پیش‌فرض: 1000000</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">contentType</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">contentType نوع محتوای درخواست‌های ارسالی به apiserver است.
+پیش‌فرض: "application/vnd.kubernetes.protobuf"</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">kubeAPIQPS</code><br>
+<code dir="ltr">int32</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">kubeAPIQPS مقدار QPS برای استفاده هنگام ارتباط با apiserver کوبرنتیز است.
+پیش‌فرض: 50</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">kubeAPIBurst</code><br>
+<code dir="ltr">int32</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">kubeAPIBurst مقدار burst مجاز هنگام ارتباط با API server کوبرنتیز است.
+این فیلد نمی‌تواند عددی منفی باشد.
+پیش‌فرض: 100</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">serializeImagePulls</code><br>
+<code dir="ltr">bool</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">serializeImagePulls در صورت فعال بودن، به Kubelet می‌گوید ایمیج‌ها را یکی‌یکی
+pull کند. توصیه می‌کنیم مقدار پیش‌فرض را روی نودهایی که
+docker daemon با نسخهٔ &lt; 1.9 یا backend ذخیره‌سازی Aufs اجرا می‌کنند
+<em>تغییر ندهید</em>.
+جزئیات بیشتر در Issue #10959 آمده است.
+پیش‌فرض: true</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">maxParallelImagePulls</code><br>
+<code dir="ltr">int32</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">MaxParallelImagePulls بیشینهٔ تعداد pullهای هم‌زمان ایمیج را تعیین می‌کند.
+اگر SerializeImagePulls برابر true باشد، این فیلد را نمی‌توان تنظیم کرد.
+تنظیم آن روی nil به معنای نبود محدودیت است.
+پیش‌فرض: nil</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">evictionHard</code><br>
+<code dir="ltr">map[string]string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">evictionHard نگاشتی از نام سیگنال‌ها به مقادیر است که آستانه‌های eviction سخت را تعریف می‌کند.
+برای مثال: <code dir="ltr">{"memory.available": "300Mi"}</code>.
+برای غیرفعال‌سازی صریح، یک آستانهٔ 0% یا 100% را روی یک منبع دلخواه ارسال کنید.
+پیش‌فرض:
+memory.available:  "100Mi"
+nodefs.available:  "10%"
+nodefs.inodesFree: "5%"
+imagefs.available: "15%"</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">evictionSoft</code><br>
+<code dir="ltr">map[string]string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">evictionSoft نگاشتی از نام سیگنال‌ها به مقادیر است که آستانه‌های eviction نرم را تعریف می‌کند.
+برای مثال: <code dir="ltr">{"memory.available": "300Mi"}</code>.
+پیش‌فرض: nil</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">evictionSoftGracePeriod</code><br>
+<code dir="ltr">map[string]string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">evictionSoftGracePeriod نگاشتی از نام سیگنال‌ها به مقادیر است که مهلت‌های
+(grace period) هر سیگنال eviction نرم را تعریف می‌کند. برای مثال: <code dir="ltr">{"memory.available": "30s"}</code>.
+پیش‌فرض: nil</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">evictionPressureTransitionPeriod</code><br>
+<a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration" target="_blank" rel="noopener"><code dir="ltr">meta/v1.Duration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">evictionPressureTransitionPeriod مدت زمانی است که kubelet باید صبر کند
+پیش از آنکه از وضعیت فشار eviction خارج شود.
+مدت 0s به مقدار پیش‌فرض 5m تبدیل می‌شود.
+پیش‌فرض: "5m"</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">evictionMaxPodGracePeriod</code><br>
+<code dir="ltr">int32</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">evictionMaxPodGracePeriod بیشینهٔ مهلت مجاز (به ثانیه) برای استفاده
+هنگام خاتمه دادن به Podها در واکنش به رسیدن به یک آستانهٔ eviction نرم است. این مقدار
+در عمل مقدار terminationGracePeriodSeconds مربوط به Pod را در طول evictionهای نرم محدود می‌کند.
+پیش‌فرض: 0</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">evictionMinimumReclaim</code><br>
+<code dir="ltr">map[string]string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">evictionMinimumReclaim نگاشتی از نام سیگنال‌ها به مقادیر است که حداقل میزان بازیابی (reclaim) را تعریف می‌کند؛
+این مقادیر حداقل مقدار یک منبع مشخص را توصیف می‌کنند که kubelet هنگام
+انجام eviction یک Pod، در حالی که آن منبع تحت فشار است، بازیابی خواهد کرد.
+برای مثال: <code dir="ltr">{"imagefs.available": "2Gi"}</code>.
+پیش‌فرض: nil</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">mergeDefaultEvictionSettings</code><br>
+<code dir="ltr">bool</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">mergeDefaultEvictionSettings نشان می‌دهد که پیش‌فرض‌های فیلدهای evictionHard، evictionSoft، evictionSoftGracePeriod و evictionMinimumReclaim
+باید با مقادیر مشخص‌شده برای آن فیلدها در این پیکربندی ادغام شوند.
+سیگنال‌های مشخص‌شده در این پیکربندی اولویت دارند.
+سیگنال‌هایی که در این پیکربندی مشخص نشده‌اند، پیش‌فرض‌های خود را به ارث می‌برند.
+اگر false باشد و هر سیگنالی در این پیکربندی مشخص شده باشد، سایر سیگنال‌هایی که
+در این پیکربندی مشخص نشده‌اند روی 0 تنظیم می‌شوند.
+این مورد برای ادغام فیلدهایی اعمال می‌شود که پیش‌فرض دارند، و در حال حاضر فقط evictionHard مقادیر پیش‌فرض دارد.
+پیش‌فرض: false</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">podsPerCore</code><br>
+<code dir="ltr">int32</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">podsPerCore بیشینهٔ تعداد Podها به‌ازای هر هسته است. نمی‌تواند از maxPods بیشتر شود.
+مقدار باید عددی صحیح و نامنفی باشد.
+اگر 0 باشد، محدودیتی برای تعداد Podها وجود ندارد.
+پیش‌فرض: 0</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">enableControllerAttachDetach</code><br>
+<code dir="ltr">bool</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">enableControllerAttachDetach کنترل‌کنندهٔ Attach/Detach را فعال می‌کند تا
+اتصال/جداسازی حجم‌های زمان‌بندی‌شده روی این نود را مدیریت کند، و
+kubelet را از اجرای هرگونه عملیات attach/detach بازمی‌دارد.
+توجه: اتصال/جداسازی حجم‌های CSI توسط kubelet پشتیبانی نمی‌شود،
+بنابراین برای این مورد استفاده باید این گزینه true باشد.
+پیش‌فرض: true</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">protectKernelDefaults</code><br>
+<code dir="ltr">bool</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">protectKernelDefaults، در صورت true بودن، باعث می‌شود Kubelet در صورتی که پرچم‌های
+کرنل مطابق انتظارش نباشند خطا بدهد. در غیر این صورت Kubelet تلاش می‌کند
+پرچم‌های کرنل را طوری تغییر دهد که با انتظارش مطابقت داشته باشند.
+پیش‌فرض: false</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">makeIPTablesUtilChains</code><br>
+<code dir="ltr">bool</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">makeIPTablesUtilChains، در صورت true بودن، باعث می‌شود Kubelet زنجیرهٔ
+KUBE-IPTABLES-HINT را در iptables ایجاد کند تا به‌عنوان یک راهنما برای سایر مؤلفه‌ها دربارهٔ
+پیکربندی iptables روی سیستم عمل کند.
+پیش‌فرض: true</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">iptablesMasqueradeBit</code><br>
+<code dir="ltr">int32</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">iptablesMasqueradeBit پیش‌تر ایجاد زنجیرهٔ KUBE-MARK-MASQ
+را کنترل می‌کرد.
+منسوخ‌شده: دیگر هیچ تأثیری ندارد.
+پیش‌فرض: 14</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">iptablesDropBit</code><br>
+<code dir="ltr">int32</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">iptablesDropBit پیش‌تر ایجاد زنجیرهٔ KUBE-MARK-DROP را کنترل می‌کرد.
+منسوخ‌شده: دیگر هیچ تأثیری ندارد.
+پیش‌فرض: 15</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">featureGates</code><br>
+<code dir="ltr">map[string]bool</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">featureGates نگاشتی از نام ویژگی‌ها به مقادیر bool است که ویژگی‌های آزمایشی را فعال یا غیرفعال می‌کند.
+این فیلد مقادیر پیش‌فرض داخلی موجود در
+"k8s.io/kubernetes/pkg/features/kube_features.go" را به‌صورت تکه‌تکه تغییر می‌دهد.
+پیش‌فرض: nil</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">failSwapOn</code><br>
+<code dir="ltr">bool</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">failSwapOn به Kubelet می‌گوید در صورت فعال بودن swap روی نود، راه‌اندازی نشود.
+پیش‌فرض: true</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">memorySwap</code><br>
+<a href="#kubelet-config-k8s-io-v1beta1-MemorySwapConfiguration"><code dir="ltr">MemorySwapConfiguration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">memorySwap حافظهٔ swap در دسترس برای بارهای کاری کانتینر را پیکربندی می‌کند.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">containerLogMaxSize</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">containerLogMaxSize یک مقدار (quantity) است که بیشینهٔ اندازهٔ فایل لاگ کانتینر را
+پیش از چرخش (rotate) تعیین می‌کند. برای مثال: "5Mi" یا "256Ki".
+پیش‌فرض: "10Mi"</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">containerLogMaxFiles</code><br>
+<code dir="ltr">int32</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">containerLogMaxFiles بیشینهٔ تعداد فایل‌های لاگ کانتینر را مشخص می‌کند که می‌توانند
+برای یک کانتینر وجود داشته باشند.
+پیش‌فرض: 5</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">containerLogMaxWorkers</code><br>
+<code dir="ltr">int32</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">ContainerLogMaxWorkers بیشینهٔ تعداد workerهای هم‌زمان را که برای انجام
+عملیات چرخش لاگ ایجاد می‌شوند مشخص می‌کند. برای غیرفعال کردن
+جریان‌های کاری چرخش هم‌زمان لاگ، این عدد را روی 1 تنظیم کنید.
+پیش‌فرض: 1</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">containerLogMonitorInterval</code><br>
+<a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration" target="_blank" rel="noopener"><code dir="ltr">meta/v1.Duration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">ContainerLogMonitorInterval مدت زمانی را مشخص می‌کند که در هر بار، لاگ‌های کانتینر برای
+انجام عملیات چرخش لاگ پایش می‌شوند. مقدار پیش‌فرض آن 10 * time.Seconds است، اما می‌توان آن را
+بر اساس نرخ تولید لاگ و اندازه‌ای که باید چرخش بر اساس آن انجام شود، به مقداری کوچک‌تر سفارشی کرد.
+پیش‌فرض: 10s</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">configMapAndSecretChangeDetectionStrategy</code><br>
+<a href="#kubelet-config-k8s-io-v1beta1-ResourceChangeDetectionStrategy"><code dir="ltr">ResourceChangeDetectionStrategy</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">configMapAndSecretChangeDetectionStrategy حالتی است که مدیرهای ConfigMap و Secret
+در آن اجرا می‌شوند. مقادیر معتبر عبارت‌اند از:</p>
+<ul>
+<li dir="rtl"><code dir="ltr">Get</code>: kubelet آبجکت‌های لازم را مستقیماً از API server دریافت می‌کند؛</li>
+<li dir="rtl"><code dir="ltr">Cache</code>: kubelet برای آبجکت‌های دریافت‌شده از API server از cache مبتنی بر TTL استفاده می‌کند؛</li>
+<li dir="rtl"><code dir="ltr">Watch</code>: kubelet از watchها برای مشاهدهٔ تغییرات آبجکت‌هایی که به آن‌ها علاقه‌مند است استفاده می‌کند.</li>
+</ul>
+<p dir="rtl">پیش‌فرض: "Watch"</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">systemReserved</code><br>
+<code dir="ltr">map[string]string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">systemReserved مجموعه‌ای از جفت‌های ResourceName=ResourceQuantity (مثلاً cpu=200m,memory=150G) است
+که منابع رزروشده برای مؤلفه‌های غیرکوبرنتیز را توصیف می‌کنند.
+در حال حاضر فقط cpu و memory پشتیبانی می‌شوند.
+برای جزئیات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/reserve-compute-resources مراجعه کنید.
+پیش‌فرض: nil</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">kubeReserved</code><br>
+<code dir="ltr">map[string]string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">kubeReserved مجموعه‌ای از جفت‌های ResourceName=ResourceQuantity (مثلاً cpu=200m,memory=150G) است
+که منابع رزروشده برای مؤلفه‌های سیستمی کوبرنتیز را توصیف می‌کنند.
+در حال حاضر cpu، memory و ذخیره‌سازی محلی برای فایل‌سیستم ریشه پشتیبانی می‌شوند.
+برای جزئیات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/reserve-compute-resources
+مراجعه کنید.
+پیش‌فرض: nil</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">reservedSystemCPUs</code> <b>[الزامی]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">گزینهٔ reservedSystemCPUs فهرست CPUهای رزروشده برای threadهای سیستمی سطح میزبان
+و threadهای مرتبط با کوبرنتیز را مشخص می‌کند. این گزینه به‌جای فهرست «پویا» که توسط systemReserved و kubeReserved ایجاد می‌شود،
+یک فهرست CPU «ایستا» فراهم می‌کند.
+این گزینه از systemReservedCgroup یا kubeReservedCgroup پشتیبانی نمی‌کند.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">showHiddenMetricsForVersion</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">showHiddenMetricsForVersion نسخهٔ قبلی است که می‌خواهید معیارهای پنهان آن را نمایش دهید.
+فقط نسخهٔ minor قبلی معنادار است و مقادیر دیگر مجاز نخواهند بود.
+قالب آن <code dir="ltr">&lt;major&gt;.&lt;minor&gt;</code> است، مثلاً: <code dir="ltr">1.16</code>.
+هدف از این قالب آن است که مطمئن شوید فرصت دارید متوجه شوید
+آیا نسخهٔ بعدی معیارهای بیشتری را پنهان می‌کند، تا اینکه
+هنگام حذف دائمی آن‌ها در نسخهٔ پس از آن غافلگیر شوید.
+پیش‌فرض: ""</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">systemReservedCgroup</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">systemReservedCgroup به kubelet کمک می‌کند نام مطلق CGroup سطح بالا را که برای اعمال
+رزرو منابع محاسباتی <code dir="ltr">systemReserved</code> برای daemonهای سیستم‌عامل استفاده می‌شود شناسایی کند.
+برای اطلاعات بیشتر به مستند <a href="https://kubernetes.io/docs/tasks/administer-cluster/reserve-compute-resources/#node-allocatable" target="_blank">Node Allocatable</a>
+مراجعه کنید.
+پیش‌فرض: ""</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">kubeReservedCgroup</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">kubeReservedCgroup به kubelet کمک می‌کند نام مطلق CGroup سطح بالا را که برای اعمال
+رزرو منابع محاسباتی <code dir="ltr">KubeReserved</code> برای daemonهای سیستمی نود کوبرنتیز استفاده می‌شود شناسایی کند.
+برای اطلاعات بیشتر به مستند <a href="https://kubernetes.io/docs/tasks/administer-cluster/reserve-compute-resources/#node-allocatable" target="_blank">Node Allocatable</a>
+مراجعه کنید.
+پیش‌فرض: ""</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">enforceNodeAllocatable</code><br>
+<code dir="ltr">[]string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">این پرچم اعمال‌های مختلف Node Allocatable را که Kubelet باید انجام دهد مشخص می‌کند.
+این پرچم فهرستی از گزینه‌ها را می‌پذیرد. گزینه‌های قابل قبول عبارت‌اند از <code dir="ltr">none</code>، <code dir="ltr">pods</code>،
+<code dir="ltr">system-reserved</code>، <code dir="ltr">system-reserved-compressible</code>، <code dir="ltr">kube-reserved</code> و <code dir="ltr">kube-reserved-compressible</code>.
+اگر <code dir="ltr">none</code> مشخص شود، هیچ گزینهٔ دیگری نباید مشخص شود.
+هنگامی که گزینهٔ <code dir="ltr">system-reserved</code> در فهرست باشد، باید systemReservedCgroup مشخص شود.
+هنگامی که گزینهٔ <code dir="ltr">kube-reserved</code> در فهرست باشد، باید kubeReservedCgroup مشخص شود.
+اگر یک گزینهٔ <code dir="ltr">compressible</code> مشخص شود، گزینهٔ غیرقابل‌فشرده‌سازی متناظر نباید مشخص شود.
+این فیلد فقط زمانی پشتیبانی می‌شود که <code dir="ltr">cgroupsPerQOS</code> روی true تنظیم شده باشد.
+برای اطلاعات بیشتر به <a href="https://kubernetes.io/docs/tasks/administer-cluster/reserve-compute-resources/#node-allocatable" target="_blank">Node Allocatable</a>
+مراجعه کنید.
+پیش‌فرض: ["pods"]</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">allowedUnsafeSysctls</code><br>
+<code dir="ltr">[]string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">یک فهرست مجاز (whitelist) جداشده با کاما از sysctlهای ناامن یا الگوهای sysctl (که به <code dir="ltr">*</code> ختم می‌شوند).
+گروه‌های sysctl ناامن عبارت‌اند از <code dir="ltr">kernel.shm*</code>، <code dir="ltr">kernel.msg*</code>، <code dir="ltr">kernel.sem</code>، <code dir="ltr">fs.mqueue.*</code>
+و <code dir="ltr">net.*</code>. برای مثال: "<code dir="ltr">kernel.msg*,net.ipv4.route.min_pmtu</code>"
+پیش‌فرض: []</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">defaultPodSysctls</code><br>
+<code dir="ltr">map[string]string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">DefaultPodSysctls مجموعه‌ای از sysctlهای پیش‌فرض است که روی همهٔ Podها اعمال می‌شود.
+می‌توان آن را با sysctlهای تنظیم‌شده در pod spec.securityContext.sysctls بازنویسی کرد.
+گروه‌های دارای namespace پشتیبانی‌شده: <code dir="ltr">kernel.shm*</code>، <code dir="ltr">kernel.msg*</code>، <code dir="ltr">kernel.sem</code>، <code dir="ltr">fs.mqueue.*</code>، <code dir="ltr">net.*</code>، <code dir="ltr">kernel.domainname</code> و <code dir="ltr">user.*</code>.
+برای مثال: {"net.ipv4.ip_forward": "1", "kernel.shmall": "1048576"}</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">volumePluginDir</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">volumePluginDir مسیر کامل دایرکتوری است که در آن به‌دنبال افزونه‌های
+حجم شخص ثالث اضافی جست‌وجو می‌شود.
+پیش‌فرض: "/usr/libexec/kubernetes/kubelet-plugins/volume/exec/"</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">providerID</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">providerID، در صورت تنظیم، شناسهٔ یکتای نمونه‌ای را تعیین می‌کند که یک
+provider خارجی (مثلاً cloudprovider) می‌تواند از آن برای شناسایی یک نود مشخص استفاده کند.
+پیش‌فرض: ""</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">kernelMemcgNotification</code><br>
+<code dir="ltr">bool</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">kernelMemcgNotification، در صورت تنظیم، به kubelet دستور می‌دهد برای تعیین اینکه آیا آستانه‌های eviction حافظه
+فراتر رفته‌اند، به‌جای polling با اعلان memcg کرنل یکپارچه شود.
+پیش‌فرض: false</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">logging</code> <b>[الزامی]</b><br>
+<a href="#LoggingConfiguration"><code dir="ltr">LoggingConfiguration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">logging گزینه‌های لاگ‌گیری را مشخص می‌کند.
+برای اطلاعات بیشتر به <a href="https://github.com/kubernetes/component-base/blob/master/logs/options.go" target="_blank" rel="noopener">Logs Options</a>
+مراجعه کنید.
+پیش‌فرض:
+Format: text</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">enableSystemLogHandler</code><br>
+<code dir="ltr">bool</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">enableSystemLogHandler لاگ‌های سیستم را از طریق رابط وب در host:port/logs/ فعال می‌کند.
+پیش‌فرض: true</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">enableSystemLogQuery</code><br>
+<code dir="ltr">bool</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">enableSystemLogQuery قابلیت پرس‌وجوی لاگ نود را روی نقطهٔ انتهایی /logs فعال می‌کند.
+برای کارکرد این قابلیت، EnableSystemLogHandler نیز باید فعال باشد.
+فعال کردن این قابلیت پیامدهای امنیتی دارد. توصیه می‌شود آن را فقط در صورت نیاز و برای اهداف اشکال‌زدایی
+فعال کرده و در غیر این صورت غیرفعال نگه دارید.
+پیش‌فرض: false</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">shutdownGracePeriod</code><br>
+<a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration" target="_blank" rel="noopener"><code dir="ltr">meta/v1.Duration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">shutdownGracePeriod مجموع مدتی را مشخص می‌کند که نود باید خاموش شدن را به تأخیر بیندازد،
+و نیز مجموع مهلت خاتمهٔ Podها در طول خاموش شدن نود را.
+پیش‌فرض: "0s"</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">shutdownGracePeriodCriticalPods</code><br>
+<a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration" target="_blank" rel="noopener"><code dir="ltr">meta/v1.Duration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">shutdownGracePeriodCriticalPods مدت زمانی را مشخص می‌کند که برای خاتمه دادن به Podهای
+حیاتی در طول خاموش شدن نود استفاده می‌شود. این مقدار باید کمتر از shutdownGracePeriod باشد.
+برای مثال، اگر shutdownGracePeriod=30s و shutdownGracePeriodCriticalPods=10s باشد،
+در طول خاموش شدن نود، 20 ثانیهٔ اول برای خاتمهٔ مؤدبانهٔ Podهای عادی رزرو می‌شود و 10 ثانیهٔ آخر
+برای خاتمه دادن به Podهای حیاتی رزرو می‌شود.
+پیش‌فرض: "0s"</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">shutdownGracePeriodByPodPriority</code><br>
+<a href="#kubelet-config-k8s-io-v1beta1-ShutdownGracePeriodByPodPriority"><code dir="ltr">[]ShutdownGracePeriodByPodPriority</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">shutdownGracePeriodByPodPriority مهلت خاموش شدن Podها را بر اساس
+مقدار priority class مرتبط با آن‌ها مشخص می‌کند.
+هنگامی که درخواست خاموش شدن دریافت می‌شود، Kubelet خاموش شدن همهٔ Podهای در حال اجرا روی نود را
+با مهلتی که به اولویت Pod بستگی دارد آغاز می‌کند
+و سپس منتظر می‌ماند همهٔ Podها خارج شوند.
+هر ورودی در آرایه، زمان خاموش شدن مؤدبانهٔ یک Pod را نشان می‌دهد که مقدار priority class آن
+در بازهٔ بین آن مقدار و ورودی بالاتر بعدی در فهرست قرار دارد، در زمانی که نود در حال خاموش شدن است.
+برای مثال، برای اینکه به Podهای حیاتی 10 ثانیه، به Podهای با priority&gt;=10000 مدت 20 ثانیه و به
+همهٔ Podهای باقی‌مانده 30 ثانیه برای خاموش شدن مهلت داده شود:</p>
+<p dir="ltr" class="ltr">shutdownGracePeriodByPodPriority:</p>
+<ul>
+<li dir="ltr" class="ltr">priority: 2000000000
+shutdownGracePeriodSeconds: 10</li>
+<li dir="ltr" class="ltr">priority: 10000
+shutdownGracePeriodSeconds: 20</li>
+<li dir="ltr" class="ltr">priority: 0
+shutdownGracePeriodSeconds: 30</li>
+</ul>
+<p dir="rtl">زمانی که Kubelet پیش از خروج منتظر می‌ماند حداکثر برابر بیشینهٔ همهٔ
+مقادیر shutdownGracePeriodSeconds برای هر بازهٔ priority class حاضر روی نود خواهد بود.
+هنگامی که همهٔ Podها خارج شدند یا به مهلت خود رسیدند، Kubelet قفل مهار خاموش شدن
+(shutdown inhibit lock) را آزاد می‌کند.
+نیازمند فعال بودن feature gate با نام GracefulNodeShutdown است.
+اگر ShutdownGracePeriod یا ShutdownGracePeriodCriticalPods تنظیم شده باشد، این پیکربندی باید خالی باشد.
+پیش‌فرض: nil</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">crashLoopBackOff</code><br>
+<a href="#kubelet-config-k8s-io-v1beta1-CrashLoopBackOffConfig"><code dir="ltr">CrashLoopBackOffConfig</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">CrashLoopBackOff شامل پیکربندی برای تغییر پارامترهای سطح نود در
+رفتار راه‌اندازی مجدد کانتینر است.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">reservedMemory</code><br>
+<a href="#kubelet-config-k8s-io-v1beta1-MemoryReservation"><code dir="ltr">[]MemoryReservation</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">reservedMemory فهرستی جداشده با کاما از رزروهای حافظه برای نودهای NUMA را مشخص می‌کند.
+این پارامتر فقط در بستر قابلیت memory manager معنا دارد.
+memory manager حافظهٔ رزروشده را برای بارهای کاری کانتینر تخصیص نخواهد داد.
+برای مثال، اگر یک NUMA0 با 10Gi حافظه دارید و reservedMemory
+برای رزرو 1Gi حافظه در NUMA0 مشخص شده باشد، memory manager فرض می‌کند
+که فقط 9Gi برای تخصیص در دسترس است.
+می‌توانید تعداد و انواع حافظهٔ متفاوتی از نودهای NUMA را مشخص کنید.
+می‌توانید این پارامتر را به‌کلی حذف کنید، اما باید توجه داشته باشید که مقدار
+حافظهٔ رزروشده از همهٔ نودهای NUMA باید برابر با مقدار حافظه‌ای باشد که
+توسط <a href="https://kubernetes.io/docs/tasks/administer-cluster/reserve-compute-resources/#node-allocatable" target="_blank">node allocatable</a> مشخص شده است.
+اگر دست‌کم یک پارامتر node allocatable مقداری غیرصفر داشته باشد، لازم است
+دست‌کم یک نود NUMA را مشخص کنید.
+همچنین از مشخص کردن موارد زیر خودداری کنید:</p>
+<ol>
+<li dir="rtl">موارد تکراری، یعنی همان نود NUMA و همان نوع حافظه، اما با مقداری متفاوت.</li>
+<li dir="rtl">محدودیت صفر برای هر نوع حافظه.</li>
+<li dir="rtl">شناسه‌های نودهای NUMA که روی ماشین وجود ندارند.</li>
+<li dir="rtl">انواع حافظه‌ای به‌جز memory و hugepages-<!-- raw HTML omitted --></li>
+</ol>
+<p dir="rtl">پیش‌فرض: nil</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">enableProfilingHandler</code><br>
+<code dir="ltr">bool</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">enableProfilingHandler پروفایل‌گیری را از طریق رابط وب در host:port/debug/pprof/ فعال می‌کند.
+پیش‌فرض: true</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">enableDebugFlagsHandler</code><br>
+<code dir="ltr">bool</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">enableDebugFlagsHandler نقطهٔ انتهایی flags را از طریق رابط وب در host:port/debug/flags/v فعال می‌کند.
+پیش‌فرض: true</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">seccompDefault</code><br>
+<code dir="ltr">bool</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">SeccompDefault استفاده از <code dir="ltr">RuntimeDefault</code> را به‌عنوان پروفایل seccomp پیش‌فرض برای همهٔ بارهای کاری فعال می‌کند.
+پیش‌فرض: false</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">memoryThrottlingFactor</code><br>
+<code dir="ltr">float64</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">MemoryThrottlingFactor ضریبی را مشخص می‌کند که در محدودیت حافظه یا حافظهٔ قابل تخصیص نود ضرب می‌شود
+تا هنگام تنظیم مقدار memory.high در cgroupv2 برای اعمال MemoryQoS به کار رود.
+کاهش این ضریب، محدودیت high پایین‌تری برای cgroupهای کانتینر تعیین می‌کند و فشار بازیابی (reclaim) سنگین‌تری وارد می‌کند،
+در حالی که افزایش آن فشار بازیابی کمتری وارد می‌کند. اگر nil باشد، memory.high تنظیم نمی‌شود.
+برای جزئیات بیشتر به https://kep.k8s.io/2570 مراجعه کنید.
+پیش‌فرض: nil</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">memoryReservationPolicy</code><br>
+<a href="#kubelet-config-k8s-io-v1beta1-MemoryReservationPolicy"><code dir="ltr">MemoryReservationPolicy</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">MemoryReservationPolicy نحوهٔ اعمال محافظت حافظهٔ cgroup v2 توسط kubelet را کنترل می‌کند.
+"None" (پیش‌فرض): kubelet مقدار memory.min را برای کانتینرها و Podها تنظیم نمی‌کند،
+و تضمین می‌کند که هیچ حافظهٔ سختی توسط کرنل قفل نشود.
+"TieredReservation": kubelet بر اساس درخواست‌های حافظه، memory.min را برای Podهای Guaranteed و memory.low را برای Podهای Burstable در cgroup v2 تنظیم می‌کند.
+حافظهٔ Guaranteed هرگز توسط کرنل بازیابی نمی‌شود؛ حافظهٔ Burstable ترجیحاً حفظ می‌شود اما ممکن است تحت فشار شدید بازیابی شود.
+برای جزئیات بیشتر به https://kep.k8s.io/2570 مراجعه کنید.
+پیش‌فرض: None</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">registerWithTaints</code><br>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.37/#taint-v1-core" target="_blank"><code dir="ltr">[]core/v1.Taint</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">registerWithTaints آرایه‌ای از taintها است که هنگام ثبت خود kubelet به آبجکت نود اضافه می‌شوند.
+این فیلد فقط زمانی اثر دارد که registerNode برابر true باشد
+و هنگام ثبت اولیهٔ نود.
+پیش‌فرض: nil</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">registerNode</code><br>
+<code dir="ltr">bool</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">registerNode ثبت خودکار نزد apiserver را فعال می‌کند.
+پیش‌فرض: true</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">tracing</code><br>
+<a href="#TracingConfiguration"><code dir="ltr">TracingConfiguration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">Tracing پیکربندی نسخه‌بندی‌شده برای کلاینت‌های ردیابی OpenTelemetry را مشخص می‌کند.
+برای جزئیات بیشتر به https://kep.k8s.io/2832 مراجعه کنید.
+پیش‌فرض: nil</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">localStorageCapacityIsolation</code><br>
+<code dir="ltr">bool</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">LocalStorageCapacityIsolation قابلیت ایزوله‌سازی ذخیره‌سازی موقت محلی را فعال می‌کند. تنظیم پیش‌فرض true است.
+این قابلیت به کاربران اجازه می‌دهد برای ذخیره‌سازی موقت کانتینر request/limit تعیین کنند و آن را به روشی مشابه
+cpu و memory مدیریت کنند. همچنین امکان تنظیم sizeLimit را برای حجم emptyDir فراهم می‌کند که در صورت
+فراتر رفتن میزان استفاده از دیسک توسط حجم از این محدودیت، eviction Pod را فعال می‌کند.
+این قابلیت به توانایی تشخیص صحیح میزان استفاده از دیسک فایل‌سیستم ریشه وابسته است. برای برخی سیستم‌ها،
+مانند kind rootless، اگر این توانایی پشتیبانی نشود، ویژگی LocalStorageCapacityIsolation باید
+غیرفعال شود. پس از غیرفعال شدن، کاربر نباید برای ذخیره‌سازی موقت کانتینر request/limit یا برای emptyDir مقدار sizeLimit تنظیم کند.
+پیش‌فرض: true</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">containerRuntimeEndpoint</code> <b>[الزامی]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">ContainerRuntimeEndpoint نقطهٔ انتهایی container runtime است.
+Unix Domain Socketها در لینوکس پشتیبانی می‌شوند، در حالی که نقاط انتهایی npipe و tcp در ویندوز پشتیبانی می‌شوند.
+مثال‌ها: 'unix:///path/to/runtime.sock'، 'npipe:////./pipe/runtime'</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">imageServiceEndpoint</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">ImageServiceEndpoint نقطهٔ انتهایی سرویس ایمیج کانتینر است.
+Unix Domain Socketها در لینوکس پشتیبانی می‌شوند، در حالی که نقاط انتهایی npipe و tcp در ویندوز پشتیبانی می‌شوند.
+مثال‌ها: 'unix:///path/to/runtime.sock'، 'npipe:////./pipe/runtime'.
+اگر مشخص نشود، مقدار موجود در containerRuntimeEndpoint استفاده می‌شود.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">failCgroupV1</code><br>
+<code dir="ltr">bool</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">FailCgroupV1 از راه‌اندازی شدن kubelet روی میزبان‌هایی که
+از cgroup v1 استفاده می‌کنند جلوگیری می‌کند. به‌طور پیش‌فرض، این مقدار روی 'true' تنظیم شده است، یعنی
+kubelet روی میزبان‌های cgroup v1 راه‌اندازی نخواهد شد، مگر اینکه این
+گزینه به‌صراحت غیرفعال شود.
+پیش‌فرض: true</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">userNamespaces</code><br>
+<a href="#kubelet-config-k8s-io-v1beta1-UserNamespaces"><code dir="ltr">UserNamespaces</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">UserNamespaces شامل پیکربندی‌های User Namespace است.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="serializednodeconfigsource-kubelet-config-k8s-io-v1beta1-serializednodeconfigsource" dir="ltr" class="ltr"><code dir="ltr">SerializedNodeConfigSource</code>     {#kubelet-config-k8s-io-v1beta1-SerializedNodeConfigSource}</h2>
+<p dir="rtl">SerializedNodeConfigSource امکان سریال‌سازی v1.NodeConfigSource را فراهم می‌کند.
+این نوع به‌صورت داخلی توسط Kubelet برای ردیابی پیکربندی‌های پویای checkpoint‌شده استفاده می‌شود.
+این نوع در گروه API با نام kubeletconfig وجود دارد، زیرا به‌عنوان یک ورودی نسخه‌دار برای Kubelet طبقه‌بندی می‌شود.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="ltr" class="ltr">Field</th><th dir="ltr" class="ltr">Description</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">apiVersion</code><br>string</td><td dir="ltr" class="ltr"><code dir="ltr">kubelet.config.k8s.io/v1beta1</code></td></tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">kind</code><br>string</td><td dir="ltr" class="ltr"><code dir="ltr">SerializedNodeConfigSource</code></td></tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">source</code><br>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.37/#nodeconfigsource-v1-core" target="_blank"><code dir="ltr">core/v1.NodeConfigSource</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">source منبعی است که در حال سریال‌سازی آن هستیم.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="crashloopbackoffconfig-kubelet-config-k8s-io-v1beta1-crashloopbackoffconfig" dir="ltr" class="ltr"><code dir="ltr">CrashLoopBackOffConfig</code>     {#kubelet-config-k8s-io-v1beta1-CrashLoopBackOffConfig}</h2>
+<p dir="ltr" class="ltr"><strong>Appears in:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubelet-config-k8s-io-v1beta1-KubeletConfiguration">KubeletConfiguration</a></li>
+</ul>
+<table class="table">
+<thead><tr><th width="30%" dir="ltr" class="ltr">Field</th><th dir="ltr" class="ltr">Description</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">maxContainerRestartPeriod</code><br>
+<a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration" target="_blank" rel="noopener"><code dir="ltr">meta/v1.Duration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">maxContainerRestartPeriod حداکثر مدتی است که تأخیر backoff برای راه‌اندازی مجدد کانتینرها
+می‌تواند تا آن مقدار افزایش یابد؛ حداقل ۱ ثانیه و حداکثر ۳۰۰ ثانیه. در صورت تنظیم نشدن،
+مقدار پیش‌فرض برابر با حداکثر داخلی crashloopbackoff (۳۰۰ ثانیه) است.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="credentialprovider-kubelet-config-k8s-io-v1beta1-credentialprovider" dir="ltr" class="ltr"><code dir="ltr">CredentialProvider</code>     {#kubelet-config-k8s-io-v1beta1-CredentialProvider}</h2>
+<p dir="ltr" class="ltr"><strong>Appears in:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubelet-config-k8s-io-v1beta1-CredentialProviderConfig">CredentialProviderConfig</a></li>
+</ul>
+<p dir="rtl">CredentialProvider یک افزونه exec را نشان می‌دهد که kubelet آن را فراخوانی می‌کند. این افزونه تنها
+زمانی فراخوانی می‌شود که ایمیجی که در حال pull شدن است با ایمیج‌هایی که افزونه مدیریت می‌کند مطابقت داشته باشد (به matchImages مراجعه کنید).</p>
+<table class="table">
+<thead><tr><th width="30%" dir="ltr" class="ltr">Field</th><th dir="ltr" class="ltr">Description</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">name</code> <b>[Required]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">name نام الزامی ارائه‌دهنده اعتبارنامه (credential provider) است. این نام باید با نام
+فایل اجرایی ارائه‌دهنده، آن‌گونه که kubelet می‌بیند، مطابقت داشته باشد. فایل اجرایی باید در
+پوشه bin مربوط به kubelet باشد (که با فلگ --image-credential-provider-bin-dir تنظیم می‌شود).
+این نام باید در میان همه ارائه‌دهندگان یکتا باشد.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">matchImages</code> <b>[Required]</b><br>
+<code dir="ltr">[]string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">matchImages فهرستی الزامی از رشته‌هاست که برای تطبیق با ایمیج‌ها به‌کار می‌رود تا
+مشخص شود آیا این ارائه‌دهنده باید فراخوانی شود یا خیر. اگر یکی از رشته‌ها با ایمیج
+درخواست‌شده از سوی kubelet مطابقت داشته باشد، افزونه فراخوانی می‌شود و فرصت می‌یابد
+اعتبارنامه‌ها را ارائه دهد. انتظار می‌رود ایمیج‌ها شامل دامنه رجیستری
+و مسیر URL باشند.</p>
+<p dir="rtl">هر مدخل در matchImages یک الگو است که می‌تواند به‌صورت اختیاری شامل پورت و مسیر باشد.
+در دامنه می‌توان از glob استفاده کرد، اما در پورت یا مسیر نمی‌توان. globها به‌صورت
+زیردامنه مانند '<em>.k8s.io' یا 'k8s.</em>.io' و دامنه‌های سطح بالا مانند 'k8s.<em>' پشتیبانی می‌شوند.
+تطبیق زیردامنه‌های جزئی مانند 'app</em>.k8s.io' نیز پشتیبانی می‌شود. هر glob فقط می‌تواند با
+یک بخش زیردامنه مطابقت داشته باشد، بنابراین *.io با *.k8s.io مطابقت ندارد.</p>
+<p dir="rtl">زمانی بین یک ایمیج و یک matchImage تطابق وجود دارد که همه موارد زیر برقرار باشند:</p>
+<ul>
+<li dir="rtl">هر دو تعداد بخش‌های دامنه یکسانی داشته باشند و هر بخش مطابقت داشته باشد.</li>
+<li dir="rtl">مسیر URL در imageMatch باید پیشوندی از مسیر URL ایمیج هدف باشد.</li>
+<li dir="rtl">اگر imageMatch شامل پورت باشد، پورت باید در ایمیج نیز مطابقت داشته باشد.</li>
+</ul>
+<p dir="rtl">نمونه مقادیر matchImages:</p>
+<ul>
+<li dir="ltr" class="ltr">123456789.dkr.ecr.us-east-1.amazonaws.com</li>
+<li dir="ltr" class="ltr">*.azurecr.io</li>
+<li dir="ltr" class="ltr">gcr.io</li>
+<li dir="ltr" class="ltr"><em>.</em>.registry.io</li>
+<li dir="ltr" class="ltr">registry.io:8080/path</li>
+</ul>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">defaultCacheDuration</code> <b>[Required]</b><br>
+<a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration" target="_blank" rel="noopener"><code dir="ltr">meta/v1.Duration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">defaultCacheDuration مدت‌زمان پیش‌فرضی است که افزونه اعتبارنامه‌ها را در حافظه نگه می‌دارد
+(cache) در صورتی که مدت‌زمان cache در پاسخ افزونه ارائه نشده باشد. این فیلد الزامی است.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">apiVersion</code> <b>[Required]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">نسخه ورودی الزامی برای CredentialProviderRequest مربوط به exec. CredentialProviderResponse بازگردانده‌شده
+باید از همان نسخه کدگذاری ورودی استفاده کند. مقادیر پشتیبانی‌شده فعلی عبارت‌اند از:</p>
+<ul>
+<li dir="ltr" class="ltr">credentialprovider.kubelet.k8s.io/v1beta1</li>
+</ul>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">args</code><br>
+<code dir="ltr">[]string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">آرگومان‌هایی که هنگام اجرای فرمان به آن ارسال می‌شوند.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">env</code><br>
+<a href="#kubelet-config-k8s-io-v1beta1-ExecEnvVar"><code dir="ltr">[]ExecEnvVar</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">Env متغیرهای محیطی اضافی را تعریف می‌کند که در اختیار فرایند قرار می‌گیرند. این
+متغیرها با محیط میزبان و همچنین متغیرهایی که client-go برای
+ارسال آرگومان به افزونه استفاده می‌کند، ادغام (union) می‌شوند.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="execenvvar-kubelet-config-k8s-io-v1beta1-execenvvar" dir="ltr" class="ltr"><code dir="ltr">ExecEnvVar</code>     {#kubelet-config-k8s-io-v1beta1-ExecEnvVar}</h2>
+<p dir="ltr" class="ltr"><strong>Appears in:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubelet-config-k8s-io-v1beta1-CredentialProvider">CredentialProvider</a></li>
+</ul>
+<p dir="rtl">ExecEnvVar برای تنظیم متغیرهای محیطی هنگام اجرای افزونه اعتبارنامه مبتنی بر exec
+استفاده می‌شود.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="ltr" class="ltr">Field</th><th dir="ltr" class="ltr">Description</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">name</code> <b>[Required]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <span class="text-muted">توضیحی ارائه نشده است.</span></td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">value</code> <b>[Required]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <span class="text-muted">توضیحی ارائه نشده است.</span></td>
+</tr>
+</tbody>
+</table>
+<h2 id="imagepullcredentials-kubelet-config-k8s-io-v1beta1-imagepullcredentials" dir="ltr" class="ltr"><code dir="ltr">ImagePullCredentials</code>     {#kubelet-config-k8s-io-v1beta1-ImagePullCredentials}</h2>
+<p dir="ltr" class="ltr"><strong>Appears in:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubelet-config-k8s-io-v1beta1-ImagePulledRecord">ImagePulledRecord</a></li>
+</ul>
+<p dir="rtl">ImagePullCredentials اعتبارنامه‌هایی را توصیف می‌کند که می‌توان از آن‌ها برای pull کردن یک ایمیج استفاده کرد.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="ltr" class="ltr">Field</th><th dir="ltr" class="ltr">Description</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">kubernetesSecrets</code><br>
+<a href="#kubelet-config-k8s-io-v1beta1-ImagePullSecret"><code dir="ltr">[]ImagePullSecret</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">KubernetesSecretCoordinates فهرستی از مختصات همه Secretهای کوبرنتیز است
+که برای pull کردن ایمیج استفاده شده‌اند.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">kubernetesServiceAccounts</code><br>
+<a href="#kubelet-config-k8s-io-v1beta1-ImagePullServiceAccount"><code dir="ltr">[]ImagePullServiceAccount</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">KubernetesServiceAccounts فهرستی از مختصات همه حساب‌های سرویس (service account) کوبرنتیز
+است که برای pull کردن ایمیج استفاده شده‌اند.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">nodePodsAccessible</code><br>
+<code dir="ltr">bool</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">NodePodsAccessible پرچمی است که نشان می‌دهد اعتبارنامه‌های pull برای همه Podهای روی نود
+قابل دسترس هستند، یا اینکه برای pull به هیچ اعتبارنامه‌ای نیاز نیست.</p>
+<p dir="rtl">اگر مقدار آن true باشد، با فیلد <code dir="ltr">kubernetesSecrets</code> متقابلاً ناسازگار است (mutually exclusive).</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="imagepullcredentialsverificationpolicy-kubelet-config-k8s-io-v1beta1-imagepullcredentialsverificationpolicy" dir="ltr" class="ltr"><code dir="ltr">ImagePullCredentialsVerificationPolicy</code>     {#kubelet-config-k8s-io-v1beta1-ImagePullCredentialsVerificationPolicy}</h2>
+<p dir="ltr" class="ltr">(Alias of <code dir="ltr">string</code>)</p>
+<p dir="ltr" class="ltr"><strong>Appears in:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubelet-config-k8s-io-v1beta1-KubeletConfiguration">KubeletConfiguration</a></li>
+</ul>
+<p dir="rtl">ImagePullCredentialsVerificationPolicy یک enum برای سیاستی است که زمانی اعمال می‌شود
+که یک Pod ایمیجی را درخواست می‌کند که از قبل روی سیستم وجود دارد.</p>
+<h2 id="imagepullsecret-kubelet-config-k8s-io-v1beta1-imagepullsecret" dir="ltr" class="ltr"><code dir="ltr">ImagePullSecret</code>     {#kubelet-config-k8s-io-v1beta1-ImagePullSecret}</h2>
+<p dir="ltr" class="ltr"><strong>Appears in:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubelet-config-k8s-io-v1beta1-ImagePullCredentials">ImagePullCredentials</a></li>
+</ul>
+<p dir="rtl">ImagePullSecret نمایشی از مختصات یک آبجکت Secret کوبرنتیز است، همراه با
+یک هش اعتبارنامه از اعتبارنامه‌های pull که این آبجکت در بر دارد.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="ltr" class="ltr">Field</th><th dir="ltr" class="ltr">Description</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">uid</code> <b>[Required]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <span class="text-muted">توضیحی ارائه نشده است.</span></td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">namespace</code> <b>[Required]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <span class="text-muted">توضیحی ارائه نشده است.</span></td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">name</code> <b>[Required]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <span class="text-muted">توضیحی ارائه نشده است.</span></td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">credentialHash</code> <b>[Required]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">CredentialHash یک مقدار SHA-256 است که با هش کردن محتوای اعتبارنامه‌های pull ایمیج
+در Secret مشخص‌شده با مختصات UID/Namespace/Name به دست می‌آید.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="imagepullserviceaccount-kubelet-config-k8s-io-v1beta1-imagepullserviceaccount" dir="ltr" class="ltr"><code dir="ltr">ImagePullServiceAccount</code>     {#kubelet-config-k8s-io-v1beta1-ImagePullServiceAccount}</h2>
+<p dir="ltr" class="ltr"><strong>Appears in:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubelet-config-k8s-io-v1beta1-ImagePullCredentials">ImagePullCredentials</a></li>
+</ul>
+<p dir="rtl">ImagePullServiceAccount نمایشی از مختصات یک آبجکت حساب سرویس (service account) کوبرنتیز است
+که kubelet برای آن توکن حساب سرویس را برای دریافت اعتبارنامه‌های pull ایمیج به افزونه ارائه‌دهنده اعتبارنامه ارسال کرده است.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="ltr" class="ltr">Field</th><th dir="ltr" class="ltr">Description</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">uid</code> <b>[Required]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <span class="text-muted">توضیحی ارائه نشده است.</span></td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">namespace</code> <b>[Required]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <span class="text-muted">توضیحی ارائه نشده است.</span></td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">name</code> <b>[Required]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <span class="text-muted">توضیحی ارائه نشده است.</span></td>
+</tr>
+</tbody>
+</table>
+<h2 id="kubeletanonymousauthentication-kubelet-config-k8s-io-v1beta1-kubeletanonymousauthentication" dir="ltr" class="ltr"><code dir="ltr">KubeletAnonymousAuthentication</code>     {#kubelet-config-k8s-io-v1beta1-KubeletAnonymousAuthentication}</h2>
+<p dir="ltr" class="ltr"><strong>Appears in:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubelet-config-k8s-io-v1beta1-KubeletAuthentication">KubeletAuthentication</a></li>
+</ul>
+<table class="table">
+<thead><tr><th width="30%" dir="ltr" class="ltr">Field</th><th dir="ltr" class="ltr">Description</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">enabled</code><br>
+<code dir="ltr">bool</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">enabled درخواست‌های ناشناس (anonymous) به سرور kubelet را مجاز می‌کند.
+درخواست‌هایی که توسط روش احراز هویت دیگری رد نشوند، به‌عنوان
+درخواست ناشناس در نظر گرفته می‌شوند.
+درخواست‌های ناشناس نام کاربری <code dir="ltr">system:anonymous</code> و نام گروه
+<code dir="ltr">system:unauthenticated</code> دارند.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="kubeletauthentication-kubelet-config-k8s-io-v1beta1-kubeletauthentication" dir="ltr" class="ltr"><code dir="ltr">KubeletAuthentication</code>     {#kubelet-config-k8s-io-v1beta1-KubeletAuthentication}</h2>
+<p dir="ltr" class="ltr"><strong>Appears in:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubelet-config-k8s-io-v1beta1-KubeletConfiguration">KubeletConfiguration</a></li>
+</ul>
+<table class="table">
+<thead><tr><th width="30%" dir="ltr" class="ltr">Field</th><th dir="ltr" class="ltr">Description</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">x509</code><br>
+<a href="#kubelet-config-k8s-io-v1beta1-KubeletX509Authentication"><code dir="ltr">KubeletX509Authentication</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">x509 شامل تنظیمات مربوط به احراز هویت با گواهی کلاینت x509 است.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">webhook</code><br>
+<a href="#kubelet-config-k8s-io-v1beta1-KubeletWebhookAuthentication"><code dir="ltr">KubeletWebhookAuthentication</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">webhook شامل تنظیمات مربوط به احراز هویت با توکن bearer از طریق webhook است.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">anonymous</code><br>
+<a href="#kubelet-config-k8s-io-v1beta1-KubeletAnonymousAuthentication"><code dir="ltr">KubeletAnonymousAuthentication</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">anonymous شامل تنظیمات مربوط به احراز هویت ناشناس است.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="kubeletauthorization-kubelet-config-k8s-io-v1beta1-kubeletauthorization" dir="ltr" class="ltr"><code dir="ltr">KubeletAuthorization</code>     {#kubelet-config-k8s-io-v1beta1-KubeletAuthorization}</h2>
+<p dir="ltr" class="ltr"><strong>Appears in:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubelet-config-k8s-io-v1beta1-KubeletConfiguration">KubeletConfiguration</a></li>
+</ul>
+<table class="table">
+<thead><tr><th width="30%" dir="ltr" class="ltr">Field</th><th dir="ltr" class="ltr">Description</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">mode</code><br>
+<a href="#kubelet-config-k8s-io-v1beta1-KubeletAuthorizationMode"><code dir="ltr">KubeletAuthorizationMode</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">mode حالت مجوزدهی (authorization) است که بر درخواست‌های ارسالی به سرور kubelet اعمال می‌شود.
+مقادیر معتبر <code dir="ltr">AlwaysAllow</code> و <code dir="ltr">Webhook</code> هستند.
+حالت Webhook برای تعیین مجوز از API مربوط به SubjectAccessReview استفاده می‌کند.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">webhook</code><br>
+<a href="#kubelet-config-k8s-io-v1beta1-KubeletWebhookAuthorization"><code dir="ltr">KubeletWebhookAuthorization</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">webhook شامل تنظیمات مربوط به مجوزدهی Webhook است.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="kubeletauthorizationmode-kubelet-config-k8s-io-v1beta1-kubeletauthorizationmode" dir="ltr" class="ltr"><code dir="ltr">KubeletAuthorizationMode</code>     {#kubelet-config-k8s-io-v1beta1-KubeletAuthorizationMode}</h2>
+<p dir="ltr" class="ltr">(Alias of <code dir="ltr">string</code>)</p>
+<p dir="ltr" class="ltr"><strong>Appears in:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubelet-config-k8s-io-v1beta1-KubeletAuthorization">KubeletAuthorization</a></li>
+</ul>
+<h2 id="kubeletwebhookauthentication-kubelet-config-k8s-io-v1beta1-kubeletwebhookauthentication" dir="ltr" class="ltr"><code dir="ltr">KubeletWebhookAuthentication</code>     {#kubelet-config-k8s-io-v1beta1-KubeletWebhookAuthentication}</h2>
+<p dir="ltr" class="ltr"><strong>Appears in:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubelet-config-k8s-io-v1beta1-KubeletAuthentication">KubeletAuthentication</a></li>
+</ul>
+<table class="table">
+<thead><tr><th width="30%" dir="ltr" class="ltr">Field</th><th dir="ltr" class="ltr">Description</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">enabled</code><br>
+<code dir="ltr">bool</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">enabled احراز هویت با توکن bearer را که توسط API مربوط به
+tokenreviews.authentication.k8s.io پشتیبانی می‌شود، فعال می‌کند.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">cacheTTL</code><br>
+<a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration" target="_blank" rel="noopener"><code dir="ltr">meta/v1.Duration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">cacheTTL ذخیره موقت (cache) نتایج احراز هویت را فعال می‌کند.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="kubeletwebhookauthorization-kubelet-config-k8s-io-v1beta1-kubeletwebhookauthorization" dir="ltr" class="ltr"><code dir="ltr">KubeletWebhookAuthorization</code>     {#kubelet-config-k8s-io-v1beta1-KubeletWebhookAuthorization}</h2>
+<p dir="ltr" class="ltr"><strong>Appears in:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubelet-config-k8s-io-v1beta1-KubeletAuthorization">KubeletAuthorization</a></li>
+</ul>
+<table class="table">
+<thead><tr><th width="30%" dir="ltr" class="ltr">Field</th><th dir="ltr" class="ltr">Description</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">cacheAuthorizedTTL</code><br>
+<a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration" target="_blank" rel="noopener"><code dir="ltr">meta/v1.Duration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">cacheAuthorizedTTL مدت‌زمان ذخیره موقت (cache) پاسخ‌های «مجاز» (authorized) از
+مجوزدهنده webhook است.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">cacheUnauthorizedTTL</code><br>
+<a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration" target="_blank" rel="noopener"><code dir="ltr">meta/v1.Duration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">cacheUnauthorizedTTL مدت‌زمان ذخیره موقت (cache) پاسخ‌های «غیرمجاز» (unauthorized) از
+مجوزدهنده webhook است.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="kubeletx509authentication-kubelet-config-k8s-io-v1beta1-kubeletx509authentication" dir="ltr" class="ltr"><code dir="ltr">KubeletX509Authentication</code>     {#kubelet-config-k8s-io-v1beta1-KubeletX509Authentication}</h2>
+<p dir="ltr" class="ltr"><strong>Appears in:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubelet-config-k8s-io-v1beta1-KubeletAuthentication">KubeletAuthentication</a></li>
+</ul>
+<table class="table">
+<thead><tr><th width="30%" dir="ltr" class="ltr">Field</th><th dir="ltr" class="ltr">Description</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">clientCAFile</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">clientCAFile مسیر یک بسته گواهی با کدگذاری PEM است. در صورت تنظیم، هر درخواستی
+که گواهی کلاینتی ارائه دهد که توسط یکی از مراجع موجود در این بسته امضا شده باشد،
+با نام کاربری متناظر با CommonName
+و گروه‌های متناظر با Organization در گواهی کلاینت احراز هویت می‌شود.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="memoryreservation-kubelet-config-k8s-io-v1beta1-memoryreservation" dir="ltr" class="ltr"><code dir="ltr">MemoryReservation</code>     {#kubelet-config-k8s-io-v1beta1-MemoryReservation}</h2>
+<p dir="ltr" class="ltr"><strong>Appears in:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubelet-config-k8s-io-v1beta1-KubeletConfiguration">KubeletConfiguration</a></li>
+</ul>
+<p dir="rtl">MemoryReservation رزرو حافظه از انواع مختلف را برای هر نود NUMA مشخص می‌کند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="ltr" class="ltr">Field</th><th dir="ltr" class="ltr">Description</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">numaNode</code> <b>[Required]</b><br>
+<code dir="ltr">int32</code>
+</td>
+<td dir="rtl">
+   <span class="text-muted">توضیحی ارائه نشده است.</span></td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">limits</code> <b>[Required]</b><br>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.37/#resourcelist-v1-core" target="_blank"><code dir="ltr">core/v1.ResourceList</code></a>
+</td>
+<td dir="rtl">
+   <span class="text-muted">توضیحی ارائه نشده است.</span></td>
+</tr>
+</tbody>
+</table>
+<h2 id="memoryreservationpolicy-kubelet-config-k8s-io-v1beta1-memoryreservationpolicy" dir="ltr" class="ltr"><code dir="ltr">MemoryReservationPolicy</code>     {#kubelet-config-k8s-io-v1beta1-MemoryReservationPolicy}</h2>
+<p dir="ltr" class="ltr">(Alias of <code dir="ltr">string</code>)</p>
+<p dir="ltr" class="ltr"><strong>Appears in:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubelet-config-k8s-io-v1beta1-KubeletConfiguration">KubeletConfiguration</a></li>
+</ul>
+<p dir="rtl">MemoryReservationPolicy تعریف می‌کند که kubelet چگونه حفاظت حافظه در cgroup v2 را اعمال کند.</p>
+<h2 id="memoryswapconfiguration-kubelet-config-k8s-io-v1beta1-memoryswapconfiguration" dir="ltr" class="ltr"><code dir="ltr">MemorySwapConfiguration</code>     {#kubelet-config-k8s-io-v1beta1-MemorySwapConfiguration}</h2>
+<p dir="ltr" class="ltr"><strong>Appears in:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubelet-config-k8s-io-v1beta1-KubeletConfiguration">KubeletConfiguration</a></li>
+</ul>
+<table class="table">
+<thead><tr><th width="30%" dir="ltr" class="ltr">Field</th><th dir="ltr" class="ltr">Description</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">swapBehavior</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">swapBehavior میزان حافظه swap در دسترس بارهای کاری کانتینر را پیکربندی می‌کند. مقدار آن می‌تواند یکی از موارد زیر باشد:
+""، "NoSwap": بارهای کاری نمی‌توانند از swap استفاده کنند؛ این گزینه پیش‌فرض است.
+"LimitedSwap": میزان استفاده بار کاری از swap محدود است. سقف swap متناسب با درخواست حافظه (memory request) کانتینر است.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="resourcechangedetectionstrategy-kubelet-config-k8s-io-v1beta1-resourcechangedetectionstrategy" dir="ltr" class="ltr"><code dir="ltr">ResourceChangeDetectionStrategy</code>     {#kubelet-config-k8s-io-v1beta1-ResourceChangeDetectionStrategy}</h2>
+<p dir="ltr" class="ltr">(Alias of <code dir="ltr">string</code>)</p>
+<p dir="ltr" class="ltr"><strong>Appears in:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubelet-config-k8s-io-v1beta1-KubeletConfiguration">KubeletConfiguration</a></li>
+</ul>
+<p dir="rtl">ResourceChangeDetectionStrategy حالتی را مشخص می‌کند که در آن
+مدیرهای داخلی (secret و configmap) تغییرات آبجکت‌ها را شناسایی می‌کنند.</p>
+<h2 id="shutdowngraceperiodbypodpriority-kubelet-config-k8s-io-v1beta1-shutdowngraceperiodbypodpriority" dir="ltr" class="ltr"><code dir="ltr">ShutdownGracePeriodByPodPriority</code>     {#kubelet-config-k8s-io-v1beta1-ShutdownGracePeriodByPodPriority}</h2>
+<p dir="ltr" class="ltr"><strong>Appears in:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubelet-config-k8s-io-v1beta1-KubeletConfiguration">KubeletConfiguration</a></li>
+</ul>
+<p dir="rtl">ShutdownGracePeriodByPodPriority مهلت خاموش‌سازی (shutdown grace period) را برای Podها بر اساس مقدار priority class مرتبط با آن‌ها مشخص می‌کند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="ltr" class="ltr">Field</th><th dir="ltr" class="ltr">Description</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">priority</code> <b>[Required]</b><br>
+<code dir="ltr">int32</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">priority مقدار اولویتی است که با مهلت خاموش‌سازی مرتبط است.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">shutdownGracePeriodSeconds</code> <b>[Required]</b><br>
+<code dir="ltr">int64</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">shutdownGracePeriodSeconds مهلت خاموش‌سازی بر حسب ثانیه است.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="usernamespaces-kubelet-config-k8s-io-v1beta1-usernamespaces" dir="ltr" class="ltr"><code dir="ltr">UserNamespaces</code>     {#kubelet-config-k8s-io-v1beta1-UserNamespaces}</h2>
+<p dir="ltr" class="ltr"><strong>Appears in:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubelet-config-k8s-io-v1beta1-KubeletConfiguration">KubeletConfiguration</a></li>
+</ul>
+<p dir="rtl">UserNamespaces شامل پیکربندی‌های فضای نام کاربر (User Namespace) است.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="ltr" class="ltr">Field</th><th dir="ltr" class="ltr">Description</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">idsPerPod</code><br>
+<code dir="ltr">int64</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">IDsPerPod طول نگاشت UIDها و GIDهاست.
+این طول باید مضربی از ۶۵۵۳۶ و کمتر از 1&lt;&lt;32 باشد.
+در سیستم‌عامل‌های غیر لینوکسی مانند ویندوز، فقط مقدار null یا نبودن مقدار مجاز است.</p>
+<p dir="rtl">تغییر این مقدار ممکن است نیازمند ایجاد مجدد همه کانتینرهای روی نود باشد.</p>
+<p dir="ltr" class="ltr">Default: 65536</p>
+</td>
+</tr>
+</tbody>
+</table>
+</main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#انواع-منابع-resource-types">انواع منابع {#resource-types}</a><a class="l2" href="#formatoptions-formatoptions">FormatOptions     {#FormatOptions}</a><a class="l2" href="#jsonoptions-jsonoptions">JSONOptions     {#JSONOptions}</a><a class="l2" href="#logformatfactory-logformatfactory">LogFormatFactory     {#LogFormatFactory}</a><a class="l2" href="#loggingconfiguration-loggingconfiguration">LoggingConfiguration     {#LoggingConfiguration}</a><a class="l2" href="#loggingoptions-loggingoptions">LoggingOptions     {#LoggingOptions}</a><a class="l2" href="#outputroutingoptions-outputroutingoptions">OutputRoutingOptions     {#OutputRoutingOptions}</a><a class="l2" href="#textoptions-textoptions">TextOptions     {#TextOptions}</a><a class="l2" href="#timeormetaduration-timeormetaduration">TimeOrMetaDuration     {#TimeOrMetaDuration}</a><a class="l2" href="#tracingconfiguration-tracingconfiguration">TracingConfiguration     {#TracingConfiguration}</a><a class="l2" href="#vmoduleconfiguration-vmoduleconfiguration">VModuleConfiguration     {#VModuleConfiguration}</a><a class="l2" href="#verbositylevel-verbositylevel">VerbosityLevel     {#VerbosityLevel}</a><a class="l2" href="#credentialproviderconfig-kubelet-config-k8s-io-v1beta1-credentialproviderconfig">CredentialProviderConfig     {#kubelet-config-k8s-io-v1beta1-CredentialProviderConfig}</a><a class="l2" href="#imagepullintent-kubelet-config-k8s-io-v1beta1-imagepullintent">ImagePullIntent     {#kubelet-config-k8s-io-v1beta1-ImagePullIntent}</a><a class="l2" href="#imagepulledrecord-kubelet-config-k8s-io-v1beta1-imagepulledrecord">ImagePulledRecord     {#kubelet-config-k8s-io-v1beta1-ImagePulledRecord}</a><a class="l2" href="#kubeletconfiguration-kubelet-config-k8s-io-v1beta1-kubeletconfiguration">KubeletConfiguration     {#kubelet-config-k8s-io-v1beta1-KubeletConfiguration}</a><a class="l2" href="#serializednodeconfigsource-kubelet-config-k8s-io-v1beta1-serializednodeconfigsource">SerializedNodeConfigSource     {#kubelet-config-k8s-io-v1beta1-SerializedNodeConfigSource}</a><a class="l2" href="#crashloopbackoffconfig-kubelet-config-k8s-io-v1beta1-crashloopbackoffconfig">CrashLoopBackOffConfig     {#kubelet-config-k8s-io-v1beta1-CrashLoopBackOffConfig}</a><a class="l2" href="#credentialprovider-kubelet-config-k8s-io-v1beta1-credentialprovider">CredentialProvider     {#kubelet-config-k8s-io-v1beta1-CredentialProvider}</a><a class="l2" href="#execenvvar-kubelet-config-k8s-io-v1beta1-execenvvar">ExecEnvVar     {#kubelet-config-k8s-io-v1beta1-ExecEnvVar}</a><a class="l2" href="#imagepullcredentials-kubelet-config-k8s-io-v1beta1-imagepullcredentials">ImagePullCredentials     {#kubelet-config-k8s-io-v1beta1-ImagePullCredentials}</a><a class="l2" href="#imagepullcredentialsverificationpolicy-kubelet-config-k8s-io-v1beta1-imagepullcredentialsverificationpolicy">ImagePullCredentialsVerificationPolicy     {#kubelet-config-k8s-io-v1beta1-ImagePullCredentialsVerificationPolicy}</a><a class="l2" href="#imagepullsecret-kubelet-config-k8s-io-v1beta1-imagepullsecret">ImagePullSecret     {#kubelet-config-k8s-io-v1beta1-ImagePullSecret}</a><a class="l2" href="#imagepullserviceaccount-kubelet-config-k8s-io-v1beta1-imagepullserviceaccount">ImagePullServiceAccount     {#kubelet-config-k8s-io-v1beta1-ImagePullServiceAccount}</a><a class="l2" href="#kubeletanonymousauthentication-kubelet-config-k8s-io-v1beta1-kubeletanonymousauthentication">KubeletAnonymousAuthentication     {#kubelet-config-k8s-io-v1beta1-KubeletAnonymousAuthentication}</a><a class="l2" href="#kubeletauthentication-kubelet-config-k8s-io-v1beta1-kubeletauthentication">KubeletAuthentication     {#kubelet-config-k8s-io-v1beta1-KubeletAuthentication}</a><a class="l2" href="#kubeletauthorization-kubelet-config-k8s-io-v1beta1-kubeletauthorization">KubeletAuthorization     {#kubelet-config-k8s-io-v1beta1-KubeletAuthorization}</a><a class="l2" href="#kubeletauthorizationmode-kubelet-config-k8s-io-v1beta1-kubeletauthorizationmode">KubeletAuthorizationMode     {#kubelet-config-k8s-io-v1beta1-KubeletAuthorizationMode}</a><a class="l2" href="#kubeletwebhookauthentication-kubelet-config-k8s-io-v1beta1-kubeletwebhookauthentication">KubeletWebhookAuthentication     {#kubelet-config-k8s-io-v1beta1-KubeletWebhookAuthentication}</a><a class="l2" href="#kubeletwebhookauthorization-kubelet-config-k8s-io-v1beta1-kubeletwebhookauthorization">KubeletWebhookAuthorization     {#kubelet-config-k8s-io-v1beta1-KubeletWebhookAuthorization}</a><a class="l2" href="#kubeletx509authentication-kubelet-config-k8s-io-v1beta1-kubeletx509authentication">KubeletX509Authentication     {#kubelet-config-k8s-io-v1beta1-KubeletX509Authentication}</a><a class="l2" href="#memoryreservation-kubelet-config-k8s-io-v1beta1-memoryreservation">MemoryReservation     {#kubelet-config-k8s-io-v1beta1-MemoryReservation}</a><a class="l2" href="#memoryreservationpolicy-kubelet-config-k8s-io-v1beta1-memoryreservationpolicy">MemoryReservationPolicy     {#kubelet-config-k8s-io-v1beta1-MemoryReservationPolicy}</a><a class="l2" href="#memoryswapconfiguration-kubelet-config-k8s-io-v1beta1-memoryswapconfiguration">MemorySwapConfiguration     {#kubelet-config-k8s-io-v1beta1-MemorySwapConfiguration}</a><a class="l2" href="#resourcechangedetectionstrategy-kubelet-config-k8s-io-v1beta1-resourcechangedetectionstrategy">ResourceChangeDetectionStrategy     {#kubelet-config-k8s-io-v1beta1-ResourceChangeDetectionStrategy}</a><a class="l2" href="#shutdowngraceperiodbypodpriority-kubelet-config-k8s-io-v1beta1-shutdowngraceperiodbypodpriority">ShutdownGracePeriodByPodPriority     {#kubelet-config-k8s-io-v1beta1-ShutdownGracePeriodByPodPriority}</a><a class="l2" href="#usernamespaces-kubelet-config-k8s-io-v1beta1-usernamespaces">UserNamespaces     {#kubelet-config-k8s-io-v1beta1-UserNamespaces}</a></nav>
+</div>
+</body>
+</html>

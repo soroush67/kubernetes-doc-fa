@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-764 از 1722 صفحه
+779 از 1722 صفحه
 
 
 ## `.`
@@ -900,28 +900,28 @@
 - ✅ [client-authentication.v1.md](md/reference/config-api/client-authentication.v1.md)
 - ✅ [client-authentication.v1beta1.md](md/reference/config-api/client-authentication.v1beta1.md)
 - ⚠️ [imagepolicy.v1alpha1.md](md/reference/config-api/imagepolicy.v1alpha1.md)
-- ⏳ `kube-controller-manager-config.v1alpha1.md`
+- ✅ [kube-controller-manager-config.v1alpha1.md](md/reference/config-api/kube-controller-manager-config.v1alpha1.md)
 - ✅ [kube-proxy-config.v1alpha1.md](md/reference/config-api/kube-proxy-config.v1alpha1.md)
-- ⏳ `kube-scheduler-config.v1.md`
-- ⏳ `kubeadm-config.v1beta3.md`
-- ⏳ `kubeadm-config.v1beta4.md`
-- ⏳ `kubeconfig.v1.md`
-- ⏳ `kubelet-config.v1.md`
-- ⏳ `kubelet-config.v1alpha1.md`
-- ⏳ `kubelet-config.v1beta1.md`
-- ⏳ `kubelet-credentialprovider.v1.md`
-- ⏳ `kuberc.v1alpha1.md`
-- ⏳ `kuberc.v1beta1.md`
+- ✅ [kube-scheduler-config.v1.md](md/reference/config-api/kube-scheduler-config.v1.md)
+- ⚠️ [kubeadm-config.v1beta3.md](md/reference/config-api/kubeadm-config.v1beta3.md)
+- ⚠️ [kubeadm-config.v1beta4.md](md/reference/config-api/kubeadm-config.v1beta4.md)
+- ✅ [kubeconfig.v1.md](md/reference/config-api/kubeconfig.v1.md)
+- ✅ [kubelet-config.v1.md](md/reference/config-api/kubelet-config.v1.md)
+- ⚠️ [kubelet-config.v1alpha1.md](md/reference/config-api/kubelet-config.v1alpha1.md)
+- ✅ [kubelet-config.v1beta1.md](md/reference/config-api/kubelet-config.v1beta1.md)
+- ✅ [kubelet-credentialprovider.v1.md](md/reference/config-api/kubelet-credentialprovider.v1.md)
+- ✅ [kuberc.v1alpha1.md](md/reference/config-api/kuberc.v1alpha1.md)
+- ✅ [kuberc.v1beta1.md](md/reference/config-api/kuberc.v1beta1.md)
 
 ## `reference/debug-cluster`
 
-- ⏳ `_index.md`
-- ⏳ `flow-control.md`
+- ✅ [_index.md](md/reference/debug-cluster/_index.md)
+- ✅ [flow-control.md](md/reference/debug-cluster/flow-control.md)
 
 ## `reference/encodings`
 
-- ⏳ `_index.md`
-- ⏳ `kyaml.md`
+- ✅ [_index.md](md/reference/encodings/_index.md)
+- ✅ [kyaml.md](md/reference/encodings/kyaml.md)
 
 ## `reference/external-api`
 

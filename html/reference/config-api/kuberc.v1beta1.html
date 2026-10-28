@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>kuberc (v1beta1) | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">reference / config-api</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="ltr" class="ltr">kuberc (v1beta1)</h1><h2 id="انواع-منابع-resource-types" dir="rtl">انواع منابع (Resource Types)</h2>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubectl-config-k8s-io-v1beta1-Preference">Preference</a></li>
+</ul>
+<h2 id="preference-kubectl-config-k8s-io-v1beta1-preference" dir="ltr" class="ltr"><code dir="ltr">Preference</code>     {#kubectl-config-k8s-io-v1beta1-Preference}</h2>
+<p dir="rtl">Preference عناصر فایل پیکربندی KubeRC را ذخیره می‌کند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="ltr" class="ltr">Field</th><th dir="ltr" class="ltr">Description</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">apiVersion</code><br>string</td><td dir="ltr" class="ltr"><code dir="ltr">kubectl.config.k8s.io/v1beta1</code></td></tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">kind</code><br>string</td><td dir="ltr" class="ltr"><code dir="ltr">Preference</code></td></tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">defaults</code> <b>[Required]</b><br>
+<a href="#kubectl-config-k8s-io-v1beta1-CommandDefaults"><code dir="ltr">[]CommandDefaults</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">defaults امکان تغییر مقادیر پیش‌فرض گزینه‌های دستورها را فراهم می‌کند.
+این قابلیت به‌ویژه زمانی مفید است که کاربر نمی‌خواهد هر بار گزینه‌ها را
+به‌صورت صریح تنظیم کند.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">aliases</code> <b>[Required]</b><br>
+<a href="#kubectl-config-k8s-io-v1beta1-AliasOverride"><code dir="ltr">[]AliasOverride</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">aliases امکان تعریف نام‌های مستعار (alias) برای دستورهای موجود kubectl را، همراه با مقادیر پیش‌فرض اختیاری برای گزینه‌ها، فراهم می‌کند.
+اگر نام alias با یک دستور داخلی تداخل داشته باشد، دستور داخلی همیشه اولویت دارد.
+بازنویسی‌های گزینه‌ها که در بخش defaults تعریف شده‌اند، بر aliasهای مربوط به همان دستور اعمال نمی‌شوند.
+عبارت kubectl [ALIAS NAME] [USER_OPTIONS] [USER_EXPLICIT_ARGS] به شکل زیر گسترش می‌یابد:
+kubectl [COMMAND] # دستور داخلی که alias به آن اشاره می‌کند
+[KUBERC_PREPEND_ARGS]
+[USER_OPTIONS]
+[KUBERC_OPTIONS] # سایر گزینه‌هایی که کاربر در [USER_OPTIONS] ارسال نکرده است
+[USER_EXPLICIT_ARGS]
+[KUBERC_APPEND_ARGS]
+برای مثال:</p>
+<ul>
+<li dir="rtl">name: runx
+command: run
+options:
+<ul>
+<li dir="ltr" class="ltr">name: image
+default: nginx
+appendArgs:</li>
+</ul>
+<hr>
+<ul>
+<li dir="rtl">custom-arg1
+برای مثال، اگر کاربر دستور "kubectl runx test-pod" را اجرا کند،
+این دستور به "kubectl run --image=nginx test-pod -- custom-arg1" گسترش می‌یابد.</li>
+</ul>
+</li>
+<li dir="rtl">name: getn
+command: get
+options:
+<ul>
+<li dir="ltr" class="ltr">name: output
+default: wide
+prependArgs:</li>
+<li dir="rtl">node
+دستور "kubectl getn control-plane-1" به "kubectl get node control-plane-1 --output=wide" گسترش می‌یابد.
+دستور "kubectl getn control-plane-1 --output=json" به "kubectl get node --output=json control-plane-1" گسترش می‌یابد.</li>
+</ul>
+</li>
+</ul>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">credentialPluginPolicy</code><br>
+<a href="#kubectl-config-k8s-io-v1beta1-CredentialPluginPolicy"><code dir="ltr">CredentialPluginPolicy</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">credentialPluginPolicy سیاستی را مشخص می‌کند که تعیین می‌کند کدام یک از افزونه‌های اعتبارنامه (credential plugin) در client-go، در صورت وجود، اجازه اجرا دارند. مقدار آن باید یکی از { "", "AllowAll", "DenyAll", "Allowlist" } باشد.
+اگر سیاست برابر "" باشد، به "AllowAll" بازمی‌گردد (این کار برای حفظ سازگاری با نسخه‌های قبلی لازم است). اگر سیاست DenyAll باشد، هیچ
+افزونه اعتبارنامه‌ای اجازه اجرا نخواهد داشت. اگر سیاست Allowlist باشد، فقط افزونه‌هایی
+اجازه اجرا دارند که معیارهای مشخص‌شده در فیلد <code dir="ltr">credentialPluginAllowlist</code>
+را برآورده کنند.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">credentialPluginAllowlist</code><br>
+<a href="#kubectl-config-k8s-io-v1beta1-AllowlistEntry"><code dir="ltr">[]AllowlistEntry</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">Allowlist فهرستی از ورودی‌های allowlist است. اگر هر یک از آن‌ها مطابقت داشته باشد،
+فایل اجرایی مورد نظر اجازه اجرا دارد. یعنی نتیجه، OR منطقی
+همه ورودی‌های allowlist است. اگر سیاست برابر "Allowlist" نباشد، این فهرست نباید
+ارائه شود.</p>
+<p dir="rtl">برای مثال:
+credentialPluginAllowlist:</p>
+<ul>
+<li dir="ltr" class="ltr">name: cloud-provider-plugin</li>
+<li dir="rtl">name: /usr/local/bin/my-plugin
+در مثال بالا، کاربر به افزونه‌های اعتبارنامه
+<code dir="ltr">cloud-provider-plugin</code> (که در جایی از PATH یافت می‌شود) و افزونه‌ای که در
+مسیر صریح <code dir="ltr">/usr/local/bin/my-plugin</code> قرار دارد، اجازه اجرا می‌دهد.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="aliasoverride-kubectl-config-k8s-io-v1beta1-aliasoverride" dir="ltr" class="ltr"><code dir="ltr">AliasOverride</code>     {#kubectl-config-k8s-io-v1beta1-AliasOverride}</h2>
+<p dir="ltr" class="ltr"><strong>Appears in:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubectl-config-k8s-io-v1beta1-Preference">Preference</a></li>
+</ul>
+<p dir="rtl">AliasOverride تعریف‌های alias را ذخیره می‌کند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="ltr" class="ltr">Field</th><th dir="ltr" class="ltr">Description</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">name</code> <b>[Required]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">name نام alias است که فقط می‌تواند شامل نویسه‌های الفبایی باشد.
+اگر نام alias با یک دستور داخلی تداخل داشته باشد،
+دستور داخلی استفاده می‌شود.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">command</code> <b>[Required]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">command یک دستور یا مجموعه‌ای از دستورها برای اجراست، مانند "set env" یا "create".</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">prependArgs</code> <b>[Required]</b><br>
+<code dir="ltr">[]string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">prependArgs آرگومان‌هایی مانند نام منابع و غیره را ذخیره می‌کند.
+این آرگومان‌ها پس از نام alias درج می‌شوند.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">appendArgs</code> <b>[Required]</b><br>
+<code dir="ltr">[]string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">appendArgs آرگومان‌هایی مانند نام منابع و غیره را ذخیره می‌کند.
+این آرگومان‌ها به انتهای USER_ARGS افزوده می‌شوند.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">options</code> <b>[Required]</b><br>
+<a href="#kubectl-config-k8s-io-v1beta1-CommandOptionDefault"><code dir="ltr">[]CommandOptionDefault</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">options برای ذخیره تعریف‌های گزینه‌های alias در نظر گرفته شده است.
+options فقط مقدار پیش‌فرض گزینه را تغییر می‌دهد و اگر
+کاربر مقداری را به‌صورت صریح ارسال کند، مقدار صریح استفاده می‌شود.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="allowlistentry-kubectl-config-k8s-io-v1beta1-allowlistentry" dir="ltr" class="ltr"><code dir="ltr">AllowlistEntry</code>     {#kubectl-config-k8s-io-v1beta1-AllowlistEntry}</h2>
+<p dir="ltr" class="ltr"><strong>Appears in:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubectl-config-k8s-io-v1beta1-Preference">Preference</a></li>
+</ul>
+<p dir="rtl">AllowlistEntry یک ورودی در allowlist است. برای هر مورد allowlist، دست‌کم
+یک فیلد باید غیرخالی باشد. ساختاری که همه فیلدهای آن خالی باشد
+خطای پیکربندی نادرست محسوب می‌شود. هر فیلد یک معیار برای
+اجراست. اگر چند فیلد مشخص شده باشد، معیارهای همه
+فیلدهای مشخص‌شده باید برآورده شوند. یعنی نتیجه یک ورودی منفرد
+AND منطقی همه بررسی‌های متناظر با فیلدهای مشخص‌شده در
+همان ورودی است.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="ltr" class="ltr">Field</th><th dir="ltr" class="ltr">Description</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">name</code> <b>[Required]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">تطبیق نام به این صورت انجام می‌شود که ابتدا مسیر مطلق هر دو مورد، یعنی افزونه
+و نام موجود در ورودی allowlist، با استفاده از <code dir="ltr">exec.LookPath</code> تعیین می‌شود. این
+تابع برای هر دو فراخوانی می‌شود و رشته‌های حاصل باید برابر باشند. اگر
+هر یک از فراخوانی‌های <code dir="ltr">exec.LookPath</code> به خطا منجر شود، بررسی <code dir="ltr">Name</code>
+شکست‌خورده در نظر گرفته می‌شود.</p>
+<p dir="rtl">منسوخ‌شده: به‌جای آن از Command استفاده کنید.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">command</code> <b>[Required]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">تطبیق دستور به این صورت انجام می‌شود که ابتدا مسیر مطلق هر دو مورد، یعنی افزونه
+و نام موجود در ورودی allowlist، با استفاده از <code dir="ltr">exec.LookPath</code> تعیین می‌شود. این
+تابع برای هر دو فراخوانی می‌شود و رشته‌های حاصل باید برابر باشند. اگر
+هر یک از فراخوانی‌های <code dir="ltr">exec.LookPath</code> به خطا منجر شود، بررسی <code dir="ltr">Command</code>
+شکست‌خورده در نظر گرفته می‌شود.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="commanddefaults-kubectl-config-k8s-io-v1beta1-commanddefaults" dir="ltr" class="ltr"><code dir="ltr">CommandDefaults</code>     {#kubectl-config-k8s-io-v1beta1-CommandDefaults}</h2>
+<p dir="ltr" class="ltr"><strong>Appears in:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubectl-config-k8s-io-v1beta1-Preference">Preference</a></li>
+</ul>
+<p dir="rtl">CommandDefaults دستورها و مقادیر پیش‌فرض گزینه‌های مرتبط با آن‌ها را
+ذخیره می‌کند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="ltr" class="ltr">Field</th><th dir="ltr" class="ltr">Description</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">command</code> <b>[Required]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">command به دستوری اشاره دارد که مقدار پیش‌فرض گزینه‌های آن تغییر می‌کند.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">options</code> <b>[Required]</b><br>
+<a href="#kubectl-config-k8s-io-v1beta1-CommandOptionDefault"><code dir="ltr">[]CommandOptionDefault</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">options فهرستی از گزینه‌هاست که مقادیر پیش‌فرض متفاوتی را ذخیره می‌کنند.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="commandoptiondefault-kubectl-config-k8s-io-v1beta1-commandoptiondefault" dir="ltr" class="ltr"><code dir="ltr">CommandOptionDefault</code>     {#kubectl-config-k8s-io-v1beta1-CommandOptionDefault}</h2>
+<p dir="ltr" class="ltr"><strong>Appears in:</strong></p>
+<ul>
+<li dir="ltr" class="ltr">
+<p dir="ltr" class="ltr"><a href="#kubectl-config-k8s-io-v1beta1-AliasOverride">AliasOverride</a></p>
+</li>
+<li dir="ltr" class="ltr">
+<p dir="ltr" class="ltr"><a href="#kubectl-config-k8s-io-v1beta1-CommandDefaults">CommandDefaults</a></p>
+</li>
+</ul>
+<p dir="rtl">CommandOptionDefault نام و مقدار پیش‌فرض مشخص‌شده
+یک گزینه را ذخیره می‌کند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="ltr" class="ltr">Field</th><th dir="ltr" class="ltr">Description</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">name</code> <b>[Required]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">نام گزینه (به شکل بلند، بدون خط تیره).</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">default</code> <b>[Required]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">مقدار پیش‌فرض به‌صورت رشته. kubectl آن را
+به مقدار سازگار با گزینه تبدیل (parse) می‌کند.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="credentialpluginpolicy-kubectl-config-k8s-io-v1beta1-credentialpluginpolicy" dir="ltr" class="ltr"><code dir="ltr">CredentialPluginPolicy</code>     {#kubectl-config-k8s-io-v1beta1-CredentialPluginPolicy}</h2>
+<p dir="ltr" class="ltr">(Alias of <code dir="ltr">string</code>)</p>
+<p dir="ltr" class="ltr"><strong>Appears in:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubectl-config-k8s-io-v1beta1-Preference">Preference</a></li>
+</ul>
+<p dir="rtl">CredentialPluginPolicy سیاستی را مشخص می‌کند که تعیین می‌کند کدام یک از افزونه‌های اعتبارنامه (credential plugin) در client-go، در صورت وجود، اجازه اجرا دارند. مقدار آن باید یکی از { "", "AllowAll", "DenyAll", "Allowlist" } باشد.
+اگر سیاست برابر "" باشد، به "AllowAll" بازمی‌گردد (این کار برای حفظ سازگاری با نسخه‌های قبلی لازم است). اگر سیاست DenyAll باشد، هیچ
+افزونه اعتبارنامه‌ای اجازه اجرا نخواهد داشت. اگر سیاست Allowlist باشد، فقط افزونه‌هایی
+اجازه اجرا دارند که معیارهای مشخص‌شده در فیلد <code dir="ltr">credentialPluginAllowlist</code>
+را برآورده کنند. اگر سیاست <code dir="ltr">Allowlist</code> نباشد اما allowlist ارائه شده باشد،
+این وضعیت خطای پیکربندی محسوب می‌شود.</p>
+</main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#انواع-منابع-resource-types">انواع منابع (Resource Types)</a><a class="l2" href="#preference-kubectl-config-k8s-io-v1beta1-preference">Preference     {#kubectl-config-k8s-io-v1beta1-Preference}</a><a class="l2" href="#aliasoverride-kubectl-config-k8s-io-v1beta1-aliasoverride">AliasOverride     {#kubectl-config-k8s-io-v1beta1-AliasOverride}</a><a class="l2" href="#allowlistentry-kubectl-config-k8s-io-v1beta1-allowlistentry">AllowlistEntry     {#kubectl-config-k8s-io-v1beta1-AllowlistEntry}</a><a class="l2" href="#commanddefaults-kubectl-config-k8s-io-v1beta1-commanddefaults">CommandDefaults     {#kubectl-config-k8s-io-v1beta1-CommandDefaults}</a><a class="l2" href="#commandoptiondefault-kubectl-config-k8s-io-v1beta1-commandoptiondefault">CommandOptionDefault     {#kubectl-config-k8s-io-v1beta1-CommandOptionDefault}</a><a class="l2" href="#credentialpluginpolicy-kubectl-config-k8s-io-v1beta1-credentialpluginpolicy">CredentialPluginPolicy     {#kubectl-config-k8s-io-v1beta1-CredentialPluginPolicy}</a></nav>
+</div>
+</body>
+</html>

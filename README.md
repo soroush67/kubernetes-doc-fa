@@ -8,9 +8,9 @@
 
 | | |
 |---|---|
-| پیشرفت (بر اساس کلمات) | **23.6٪** |
-| صفحات ترجمه‌شده | 764 از 1722 |
-| صفحات دارای ایراد ساختاری | 16 |
+| پیشرفت (بر اساس کلمات) | **26.1٪** |
+| صفحات ترجمه‌شده | 779 از 1722 |
+| صفحات دارای ایراد ساختاری | 19 |
 | نسخه‌ی منبع انگلیسی | `ed70e311737a` |
 
 ## مشاهده
@@ -72,7 +72,7 @@ cd kubernetes-doc-fa
 | `contribute` | 44 | 44 |
 | `doc-contributor-tools` | 1 | 1 |
 | `home` | 2 | 2 |
-| `reference` | 529 | 1198 |
+| `reference` | 544 | 1198 |
 | `setup` | 0 | 22 |
 | `tasks` | 0 | 221 |
 | `tutorials` | 0 | 45 |
@@ -91,26 +91,26 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [reference/encodings/kyaml.md](md/reference/encodings/kyaml.md) — 2026-10-28T11:33:23+03:30
+- [reference/encodings/_index.md](md/reference/encodings/_index.md) — 2026-10-28T11:33:14+03:30
+- [reference/debug-cluster/flow-control.md](md/reference/debug-cluster/flow-control.md) — 2026-10-28T11:33:09+03:30
+- [reference/debug-cluster/_index.md](md/reference/debug-cluster/_index.md) — 2026-10-28T11:32:31+03:30
+- [reference/config-api/kuberc.v1beta1.md](md/reference/config-api/kuberc.v1beta1.md) — 2026-10-28T11:32:27+03:30
+- [reference/config-api/kubelet-config.v1beta1.md](md/reference/config-api/kubelet-config.v1beta1.md) — 2026-10-28T11:32:21+03:30
+- [reference/config-api/kuberc.v1alpha1.md](md/reference/config-api/kuberc.v1alpha1.md) — 2026-10-28T11:31:51+03:30
+- [reference/config-api/kubelet-credentialprovider.v1.md](md/reference/config-api/kubelet-credentialprovider.v1.md) — 2026-10-28T11:31:03+03:30
+- [reference/config-api/kubeadm-config.v1beta4.md](md/reference/config-api/kubeadm-config.v1beta4.md) — 2026-10-28T11:30:33+03:30
+- [reference/config-api/kubelet-config.v1alpha1.md](md/reference/config-api/kubelet-config.v1alpha1.md) — 2026-10-28T11:28:09+03:30
+- [reference/config-api/kubelet-config.v1.md](md/reference/config-api/kubelet-config.v1.md) — 2026-10-28T11:26:04+03:30
+- [reference/config-api/kubeconfig.v1.md](md/reference/config-api/kubeconfig.v1.md) — 2026-10-28T11:25:22+03:30
+- [reference/config-api/kubeadm-config.v1beta3.md](md/reference/config-api/kubeadm-config.v1beta3.md) — 2026-10-28T11:24:33+03:30
+- [reference/config-api/kube-scheduler-config.v1.md](md/reference/config-api/kube-scheduler-config.v1.md) — 2026-10-28T11:20:07+03:30
+- [reference/config-api/kube-controller-manager-config.v1alpha1.md](md/reference/config-api/kube-controller-manager-config.v1alpha1.md) — 2026-10-28T11:18:16+03:30
 - [reference/config-api/kube-proxy-config.v1alpha1.md](md/reference/config-api/kube-proxy-config.v1alpha1.md) — 2026-10-28T11:17:19+03:30
 - [reference/config-api/imagepolicy.v1alpha1.md](md/reference/config-api/imagepolicy.v1alpha1.md) — 2026-10-28T11:15:25+03:30
 - [reference/config-api/apiserver-config.v1beta1.md](md/reference/config-api/apiserver-config.v1beta1.md) — 2026-10-28T11:14:50+03:30
 - [reference/config-api/client-authentication.v1beta1.md](md/reference/config-api/client-authentication.v1beta1.md) — 2026-10-28T11:14:32+03:30
 - [reference/config-api/client-authentication.v1.md](md/reference/config-api/client-authentication.v1.md) — 2026-10-28T11:14:06+03:30
-- [reference/config-api/apiserver-webhookadmission.v1.md](md/reference/config-api/apiserver-webhookadmission.v1.md) — 2026-10-28T11:13:41+03:30
-- [reference/config-api/apiserver-eventratelimit.v1alpha1.md](md/reference/config-api/apiserver-eventratelimit.v1alpha1.md) — 2026-10-28T11:13:30+03:30
-- [reference/config-api/apiserver-config.v1alpha1.md](md/reference/config-api/apiserver-config.v1alpha1.md) — 2026-10-28T11:13:14+03:30
-- [reference/config-api/apiserver-config.v1.md](md/reference/config-api/apiserver-config.v1.md) — 2026-10-28T11:12:34+03:30
-- [reference/command-line-tools-reference/kubelet.md](md/reference/command-line-tools-reference/kubelet.md) — 2026-10-28T11:09:04+03:30
-- [reference/config-api/apiserver-audit.v1.md](md/reference/config-api/apiserver-audit.v1.md) — 2026-10-28T11:06:38+03:30
-- [reference/config-api/apiserver-admission.v1.md](md/reference/config-api/apiserver-admission.v1.md) — 2026-10-28T11:05:42+03:30
-- [reference/config-api/_index.md](md/reference/config-api/_index.md) — 2026-10-28T11:05:07+03:30
-- [reference/command-line-tools-reference/kube-scheduler.md](md/reference/command-line-tools-reference/kube-scheduler.md) — 2026-10-28T11:05:01+03:30
-- [reference/command-line-tools-reference/kube-proxy.md](md/reference/command-line-tools-reference/kube-proxy.md) — 2026-10-28T11:03:24+03:30
-- [reference/command-line-tools-reference/kube-controller-manager.md](md/reference/command-line-tools-reference/kube-controller-manager.md) — 2026-10-27T17:21:44+03:30
-- [reference/command-line-tools-reference/kube-apiserver.md](md/reference/command-line-tools-reference/kube-apiserver.md) — 2026-10-27T17:19:38+03:30
-- [reference/command-line-tools-reference/feature-gates/index.md](md/reference/command-line-tools-reference/feature-gates/index.md) — 2026-10-27T17:11:30+03:30
-- [reference/command-line-tools-reference/feature-gates-removed/index.md](md/reference/command-line-tools-reference/feature-gates-removed/index.md) — 2026-10-27T17:11:18+03:30
-- [reference/command-line-tools-reference/feature-gates/extend-websockets-to-kubelet.md](md/reference/command-line-tools-reference/feature-gates/extend-websockets-to-kubelet.md) — 2026-10-27T17:11:09+03:30
 
 </div>
 
@@ -134,6 +134,9 @@ cd kubernetes-doc-fa
 - [reference/command-line-tools-reference/kubelet.md](md/reference/command-line-tools-reference/kubelet.md): chunk 3: short: 1550 words vs 2364 source words
 - [reference/config-api/apiserver-config.v1.md](md/reference/config-api/apiserver-config.v1.md): chunk 1: 3 untranslated English lines, e.g. '&quot;iss&quot;: &quot;https://issuer.example.com&quot;,'
 - [reference/config-api/imagepolicy.v1alpha1.md](md/reference/config-api/imagepolicy.v1alpha1.md): chunk 1: short: 354 words vs 514 source words
+- [reference/config-api/kubeadm-config.v1beta3.md](md/reference/config-api/kubeadm-config.v1beta3.md): chunk 1: short: 1881 words vs 4131 source words
+- [reference/config-api/kubeadm-config.v1beta4.md](md/reference/config-api/kubeadm-config.v1beta4.md): chunk 1: short: 2508 words vs 5597 source words; chunk 2: short: 1496 words vs 2029 source words
+- [reference/config-api/kubelet-config.v1alpha1.md](md/reference/config-api/kubelet-config.v1alpha1.md): chunk 1: short: 1158 words vs 1573 source words
 
 </div>
 

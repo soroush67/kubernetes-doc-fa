@@ -1,0 +1,389 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>پیکربندی Kubelet (v1alpha1) | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">reference / config-api</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">پیکربندی Kubelet (v1alpha1)</h1><h2 id="انواع-منابع-resource-types" dir="rtl">انواع منابع {#resource-types}</h2>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubelet-config-k8s-io-v1alpha1-CredentialProviderConfig">CredentialProviderConfig</a></li>
+<li dir="ltr" class="ltr"><a href="#kubelet-config-k8s-io-v1alpha1-ImagePullIntent">ImagePullIntent</a></li>
+<li dir="ltr" class="ltr"><a href="#kubelet-config-k8s-io-v1alpha1-ImagePulledRecord">ImagePulledRecord</a></li>
+</ul>
+<h2 id="credentialproviderconfig-kubelet-config-k8s-io-v1alpha1-credentialproviderconfig" dir="ltr" class="ltr"><code dir="ltr">CredentialProviderConfig</code>     {#kubelet-config-k8s-io-v1alpha1-CredentialProviderConfig}</h2>
+<p dir="rtl">CredentialProviderConfig پیکربندی‌ای است که اطلاعات مربوط به هر یک از
+ارائه‌دهندگان اعتبارنامه مبتنی بر exec را در بر دارد. Kubelet این پیکربندی را از دیسک می‌خواند و
+هر ارائه‌دهنده را مطابق با آنچه توسط نوع CredentialProvider مشخص شده است فعال می‌کند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">apiVersion</code><br>string</td><td dir="ltr" class="ltr"><code dir="ltr">kubelet.config.k8s.io/v1alpha1</code></td></tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">kind</code><br>string</td><td dir="ltr" class="ltr"><code dir="ltr">CredentialProviderConfig</code></td></tr>
+<tr><td dir="rtl"><code dir="ltr">providers</code> <b>[الزامی]</b><br>
+<a href="#kubelet-config-k8s-io-v1alpha1-CredentialProvider"><code dir="ltr">[]CredentialProvider</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">providers فهرستی از افزونه‌های ارائه‌دهنده اعتبارنامه است که توسط kubelet فعال خواهند شد.
+چند ارائه‌دهنده ممکن است با یک ایمیج واحد مطابقت پیدا کنند؛ در این صورت اعتبارنامه‌های
+همه ارائه‌دهندگان به kubelet بازگردانده می‌شود. اگر برای یک ایمیج واحد چند ارائه‌دهنده فراخوانی شوند،
+نتایج با یکدیگر ترکیب می‌شوند. اگر ارائه‌دهندگان کلیدهای احراز هویت هم‌پوشان بازگردانند،
+مقدار ارائه‌دهنده‌ای که در این فهرست زودتر آمده است ابتدا امتحان می‌شود.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="imagepullintent-kubelet-config-k8s-io-v1alpha1-imagepullintent" dir="ltr" class="ltr"><code dir="ltr">ImagePullIntent</code>     {#kubelet-config-k8s-io-v1alpha1-ImagePullIntent}</h2>
+<p dir="rtl">ImagePullIntent رکوردی از تلاش kubelet برای pull کردن یک ایمیج است.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">apiVersion</code><br>string</td><td dir="ltr" class="ltr"><code dir="ltr">kubelet.config.k8s.io/v1alpha1</code></td></tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">kind</code><br>string</td><td dir="ltr" class="ltr"><code dir="ltr">ImagePullIntent</code></td></tr>
+<tr><td dir="rtl"><code dir="ltr">image</code> <b>[الزامی]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">Image مشخصات ایمیج است که از فیلد <code dir="ltr">image</code> یک کانتینر گرفته می‌شود.
+نام فایل، هش SHA-256 این مقدار است. این کار برای پرهیز از کاراکترهایی است که
+در نام فایل ناامن‌اند، مانند ':' و '/'.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="imagepulledrecord-kubelet-config-k8s-io-v1alpha1-imagepulledrecord" dir="ltr" class="ltr"><code dir="ltr">ImagePulledRecord</code>     {#kubelet-config-k8s-io-v1alpha1-ImagePulledRecord}</h2>
+<p dir="rtl">ImagePullRecord رکوردی از یک ایمیج است که توسط kubelet pull شده است.</p>
+<p dir="rtl">اگر هیچ رکوردی در فیلد <code dir="ltr">kubernetesSecrets</code> وجود نداشته باشد و هر دو فیلد <code dir="ltr">nodeWideCredentials</code>
+و <code dir="ltr">anonymous</code> برابر <code dir="ltr">false</code> باشند، اعتبارنامه‌ها باید در دفعه بعدی که
+ایمیجِ نمایان‌شده توسط این رکورد درخواست می‌شود، دوباره بررسی شوند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">apiVersion</code><br>string</td><td dir="ltr" class="ltr"><code dir="ltr">kubelet.config.k8s.io/v1alpha1</code></td></tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">kind</code><br>string</td><td dir="ltr" class="ltr"><code dir="ltr">ImagePulledRecord</code></td></tr>
+<tr><td dir="rtl"><code dir="ltr">lastUpdatedTime</code> <b>[الزامی]</b><br>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.37/#time-v1-meta" target="_blank"><code dir="ltr">meta/v1.Time</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">LastUpdatedTime زمان آخرین به‌روزرسانی این رکورد است.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">imageRef</code> <b>[الزامی]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">ImageRef ارجاعی به ایمیجی است که این فایل نمایانگر آن است و
+از CRI دریافت شده است.
+نام فایل، هش SHA-256 این مقدار است. این کار برای پرهیز از کاراکترهایی است که
+در نام فایل ناامن‌اند، مانند ':' و '/'.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">credentialMapping</code> <b>[الزامی]</b><br>
+<a href="#kubelet-config-k8s-io-v1alpha1-ImagePullCredentials"><code dir="ltr">map[string]ImagePullCredentials</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">CredentialMapping مقدار <code dir="ltr">image</code> را به مجموعه اعتبارنامه‌هایی نگاشت می‌کند که
+پیش‌تر با آن‌ها pull شده است.
+<code dir="ltr">image</code> در این‌جا محتوای فیلد <code dir="ltr">image</code> کانتینر یک Pod است که
+تگ/digest آن حذف شده است.</p>
+<p dir="rtl">مثال:
+کانتینر ایمیج <code dir="ltr">hello-world:latest@sha256:91fb4b041da273d5a3273b6d587d62d518300a6ad268b28628f74997b93171b2</code> را درخواست می‌کند:
+"credentialMapping": {
+"hello-world": { "nodePodsAccessible": true }
+}</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="credentialprovider-kubelet-config-k8s-io-v1alpha1-credentialprovider" dir="ltr" class="ltr"><code dir="ltr">CredentialProvider</code>     {#kubelet-config-k8s-io-v1alpha1-CredentialProvider}</h2>
+<p dir="rtl"><strong>نمایش داده شده در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubelet-config-k8s-io-v1alpha1-CredentialProviderConfig">CredentialProviderConfig</a></li>
+</ul>
+<p dir="rtl">CredentialProvider نمایانگر یک افزونه exec است که kubelet آن را فراخوانی می‌کند. افزونه فقط
+زمانی فراخوانی می‌شود که ایمیجِ در حال pull با ایمیج‌هایی که افزونه مدیریت می‌کند مطابقت داشته باشد (به matchImages مراجعه کنید).</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="rtl"><code dir="ltr">name</code> <b>[الزامی]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">name نام الزامی ارائه‌دهنده اعتبارنامه است. این نام باید با نام فایل اجرایی
+ارائه‌دهنده، آن‌گونه که kubelet می‌بیند، مطابقت داشته باشد. فایل اجرایی باید در دایرکتوری bin
+مربوط به kubelet باشد (که با فلگ --image-credential-provider-bin-dir تنظیم می‌شود).
+این نام باید میان همه ارائه‌دهندگان یکتا باشد.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">matchImages</code> <b>[الزامی]</b><br>
+<code dir="ltr">[]string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">matchImages فهرستی الزامی از رشته‌هاست که برای تطبیق با ایمیج‌ها به کار می‌رود تا
+مشخص شود آیا این ارائه‌دهنده باید فراخوانی شود یا نه. اگر یکی از رشته‌ها با
+ایمیج درخواست‌شده از سوی kubelet مطابقت داشته باشد، افزونه فراخوانی می‌شود و فرصت می‌یابد
+اعتبارنامه ارائه دهد. انتظار می‌رود ایمیج‌ها شامل دامنه رجیستری
+و مسیر URL باشند.</p>
+<p dir="rtl">هر مورد در matchImages یک الگو است که می‌تواند به‌طور اختیاری شامل پورت و مسیر باشد.
+Globها را می‌توان در دامنه به کار برد، اما در پورت یا مسیر نمی‌توان. Globها
+به‌صورت زیردامنه‌هایی مانند <code dir="ltr">*.k8s.io</code> یا <code dir="ltr">k8s.*.io</code> و دامنه‌های سطح بالا مانند <code dir="ltr">k8s.*</code> پشتیبانی می‌شوند.
+تطبیق زیردامنه‌های جزئی مانند <code dir="ltr">app*.k8s.io</code> نیز پشتیبانی می‌شود. هر glob فقط می‌تواند با
+یک بخش زیردامنه مطابقت پیدا کند، بنابراین <code dir="ltr">*.io</code> با <code dir="ltr">*.k8s.io</code> مطابقت ندارد.</p>
+<p dir="rtl">میان یک ایمیج و یک matchImage زمانی تطبیق وجود دارد که همه شرایط زیر برقرار باشند:</p>
+<ul>
+<li dir="rtl">هر دو تعداد بخش‌های دامنه یکسانی داشته باشند و هر بخش مطابقت داشته باشد.</li>
+<li dir="rtl">مسیر URL مربوط به imageMatch باید پیشوندی از مسیر URL ایمیج هدف باشد.</li>
+<li dir="rtl">اگر imageMatch شامل پورت باشد، پورت باید در ایمیج نیز مطابقت داشته باشد.</li>
+</ul>
+<p dir="rtl">نمونه مقادیر matchImages:</p>
+<ul>
+<li dir="ltr" class="ltr"><code dir="ltr">123456789.dkr.ecr.us-east-1.amazonaws.com</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">*.azurecr.io</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">gcr.io</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">*.*.registry.io</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">registry.io:8080/path</code></li>
+</ul>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">defaultCacheDuration</code> <b>[الزامی]</b><br>
+<a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration" target="_blank" rel="noopener"><code dir="ltr">meta/v1.Duration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">defaultCacheDuration مدت زمان پیش‌فرضی است که افزونه اعتبارنامه‌ها را در حافظه نگهداری (cache) می‌کند،
+در صورتی که مدت نگهداری در پاسخ افزونه ارائه نشده باشد. این فیلد الزامی است.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">apiVersion</code> <b>[الزامی]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">نسخه ورودی الزامی برای CredentialProviderRequest مربوط به exec. CredentialProviderResponse بازگردانده‌شده
+باید حتماً از همان نسخه کدگذاری ورودی استفاده کند. مقادیر پشتیبانی‌شده فعلی عبارت‌اند از:</p>
+<ul>
+<li dir="ltr" class="ltr">credentialprovider.kubelet.k8s.io/v1alpha1</li>
+</ul>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">args</code><br>
+<code dir="ltr">[]string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">آرگومان‌هایی که هنگام اجرای دستور به آن ارسال می‌شوند.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">env</code><br>
+<a href="#kubelet-config-k8s-io-v1alpha1-ExecEnvVar"><code dir="ltr">[]ExecEnvVar</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">Env متغیرهای محیطی اضافی را که باید در اختیار پروسه قرار گیرند تعریف می‌کند. این‌ها
+با محیط میزبان و همچنین متغیرهایی که client-go برای
+ارسال آرگومان به افزونه استفاده می‌کند، اجتماع می‌شوند.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="execenvvar-kubelet-config-k8s-io-v1alpha1-execenvvar" dir="ltr" class="ltr"><code dir="ltr">ExecEnvVar</code>     {#kubelet-config-k8s-io-v1alpha1-ExecEnvVar}</h2>
+<p dir="rtl"><strong>نمایش داده شده در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubelet-config-k8s-io-v1alpha1-CredentialProvider">CredentialProvider</a></li>
+</ul>
+<p dir="rtl">ExecEnvVar برای تنظیم متغیرهای محیطی هنگام اجرای افزونه اعتبارنامه
+مبتنی بر exec استفاده می‌شود.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="rtl"><code dir="ltr">name</code> <b>[الزامی]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <span class="text-muted">توضیحی ارائه نشده است.</span></td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">value</code> <b>[الزامی]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <span class="text-muted">توضیحی ارائه نشده است.</span></td>
+</tr>
+</tbody>
+</table>
+<h2 id="imagepullcredentials-kubelet-config-k8s-io-v1alpha1-imagepullcredentials" dir="ltr" class="ltr"><code dir="ltr">ImagePullCredentials</code>     {#kubelet-config-k8s-io-v1alpha1-ImagePullCredentials}</h2>
+<p dir="rtl"><strong>نمایش داده شده در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubelet-config-k8s-io-v1alpha1-ImagePulledRecord">ImagePulledRecord</a></li>
+</ul>
+<p dir="rtl">ImagePullCredentials اعتبارنامه‌هایی را توصیف می‌کند که می‌توان برای pull کردن یک ایمیج از آن‌ها استفاده کرد.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">kubernetesSecrets</code><br>
+<a href="#kubelet-config-k8s-io-v1alpha1-ImagePullSecret"><code dir="ltr">[]ImagePullSecret</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">KuberneteSecretCoordinates فهرستی از مختصات همه Secretهای کوبرنتیز است
+که برای pull کردن ایمیج استفاده شده‌اند.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">kubernetesServiceAccounts</code><br>
+<a href="#kubelet-config-k8s-io-v1alpha1-ImagePullServiceAccount"><code dir="ltr">[]ImagePullServiceAccount</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">KubernetesServiceAccounts فهرستی از مختصات همه service accountهای کوبرنتیز است
+که برای pull کردن ایمیج استفاده شده‌اند.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">nodePodsAccessible</code><br>
+<code dir="ltr">bool</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">NodePodsAccessible پرچمی است که نشان می‌دهد اعتبارنامه‌های pull برای
+همه Podهای روی نود قابل دسترسی‌اند، یا اینکه برای pull به هیچ اعتبارنامه‌ای نیاز نیست.</p>
+<p dir="rtl">اگر true باشد، با فیلد <code dir="ltr">kubernetesSecrets</code> متقابلاً ناسازگار است (نمی‌توانند هم‌زمان تنظیم شوند).</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="imagepullsecret-kubelet-config-k8s-io-v1alpha1-imagepullsecret" dir="ltr" class="ltr"><code dir="ltr">ImagePullSecret</code>     {#kubelet-config-k8s-io-v1alpha1-ImagePullSecret}</h2>
+<p dir="rtl"><strong>نمایش داده شده در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubelet-config-k8s-io-v1alpha1-ImagePullCredentials">ImagePullCredentials</a></li>
+</ul>
+<p dir="rtl">ImagePullSecret نمایشی از مختصات یک آبجکت Secret کوبرنتیز است، به‌همراه
+هش اعتبارنامه‌ای از اعتبارنامه‌های pull secret که این آبجکت در بر دارد.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="rtl"><code dir="ltr">uid</code> <b>[الزامی]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <span class="text-muted">توضیحی ارائه نشده است.</span></td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">namespace</code> <b>[الزامی]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <span class="text-muted">توضیحی ارائه نشده است.</span></td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">name</code> <b>[الزامی]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <span class="text-muted">توضیحی ارائه نشده است.</span></td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">credentialHash</code> <b>[الزامی]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">CredentialHash مقدار SHA-256 است که از هش کردن محتوای اعتبارنامه‌های pull ایمیج
+در Secretِ مشخص‌شده با مختصات UID/Namespace/Name به دست می‌آید.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="imagepullserviceaccount-kubelet-config-k8s-io-v1alpha1-imagepullserviceaccount" dir="ltr" class="ltr"><code dir="ltr">ImagePullServiceAccount</code>     {#kubelet-config-k8s-io-v1alpha1-ImagePullServiceAccount}</h2>
+<p dir="rtl"><strong>نمایش داده شده در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubelet-config-k8s-io-v1alpha1-ImagePullCredentials">ImagePullCredentials</a></li>
+</ul>
+<p dir="rtl">ImagePullServiceAccount نمایشی از مختصات یک آبجکت service account کوبرنتیز است
+که kubelet برای آن، توکن service account را برای دریافت اعتبارنامه‌های pull ایمیج به افزونه ارائه‌دهنده اعتبارنامه ارسال کرده است.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="rtl"><code dir="ltr">uid</code> <b>[الزامی]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <span class="text-muted">توضیحی ارائه نشده است.</span></td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">namespace</code> <b>[الزامی]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <span class="text-muted">توضیحی ارائه نشده است.</span></td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">name</code> <b>[الزامی]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <span class="text-muted">توضیحی ارائه نشده است.</span></td>
+</tr>
+</tbody>
+</table>
+</main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#انواع-منابع-resource-types">انواع منابع {#resource-types}</a><a class="l2" href="#credentialproviderconfig-kubelet-config-k8s-io-v1alpha1-credentialproviderconfig">CredentialProviderConfig     {#kubelet-config-k8s-io-v1alpha1-CredentialProviderConfig}</a><a class="l2" href="#imagepullintent-kubelet-config-k8s-io-v1alpha1-imagepullintent">ImagePullIntent     {#kubelet-config-k8s-io-v1alpha1-ImagePullIntent}</a><a class="l2" href="#imagepulledrecord-kubelet-config-k8s-io-v1alpha1-imagepulledrecord">ImagePulledRecord     {#kubelet-config-k8s-io-v1alpha1-ImagePulledRecord}</a><a class="l2" href="#credentialprovider-kubelet-config-k8s-io-v1alpha1-credentialprovider">CredentialProvider     {#kubelet-config-k8s-io-v1alpha1-CredentialProvider}</a><a class="l2" href="#execenvvar-kubelet-config-k8s-io-v1alpha1-execenvvar">ExecEnvVar     {#kubelet-config-k8s-io-v1alpha1-ExecEnvVar}</a><a class="l2" href="#imagepullcredentials-kubelet-config-k8s-io-v1alpha1-imagepullcredentials">ImagePullCredentials     {#kubelet-config-k8s-io-v1alpha1-ImagePullCredentials}</a><a class="l2" href="#imagepullsecret-kubelet-config-k8s-io-v1alpha1-imagepullsecret">ImagePullSecret     {#kubelet-config-k8s-io-v1alpha1-ImagePullSecret}</a><a class="l2" href="#imagepullserviceaccount-kubelet-config-k8s-io-v1alpha1-imagepullserviceaccount">ImagePullServiceAccount     {#kubelet-config-k8s-io-v1alpha1-ImagePullServiceAccount}</a></nav>
+</div>
+</body>
+</html>

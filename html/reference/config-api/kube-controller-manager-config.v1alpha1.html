@@ -1,0 +1,1908 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>پیکربندی kube-controller-manager (v1alpha1) | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">reference / config-api</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">پیکربندی kube-controller-manager (v1alpha1)</h1><h2 id="انواع-منابع-resource-types" dir="rtl">انواع منابع {#resource-types}</h2>
+<ul>
+<li dir="ltr" class="ltr"><a href="#cloudcontrollermanager-config-k8s-io-v1alpha1-CloudControllerManagerConfiguration">CloudControllerManagerConfiguration</a></li>
+<li dir="ltr" class="ltr"><a href="#controllermanager-config-k8s-io-v1alpha1-LeaderMigrationConfiguration">LeaderMigrationConfiguration</a></li>
+<li dir="ltr" class="ltr"><a href="#kubecontrollermanager-config-k8s-io-v1alpha1-KubeControllerManagerConfiguration">KubeControllerManagerConfiguration</a></li>
+</ul>
+<h2 id="clientconnectionconfiguration-clientconnectionconfiguration" dir="ltr" class="ltr"><code dir="ltr">ClientConnectionConfiguration</code>     {#ClientConnectionConfiguration}</h2>
+<p dir="rtl"><strong>در این بخش‌ها ظاهر می‌شود:</strong></p>
+<ul>
+<li dir="ltr" class="ltr">
+<p dir="ltr" class="ltr"><a href="#kubescheduler-config-k8s-io-v1-KubeSchedulerConfiguration">KubeSchedulerConfiguration</a></p>
+</li>
+<li dir="ltr" class="ltr">
+<p dir="ltr" class="ltr"><a href="#controllermanager-config-k8s-io-v1alpha1-GenericControllerManagerConfiguration">GenericControllerManagerConfiguration</a></p>
+</li>
+</ul>
+<p dir="rtl">ClientConnectionConfiguration شامل جزئیات لازم برای ساخت یک کلاینت است.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="rtl"><code dir="ltr">kubeconfig</code> <b>[الزامی]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">kubeconfig مسیر یک فایل KubeConfig است.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">acceptContentTypes</code> <b>[الزامی]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">acceptContentTypes هدر Accept را که کلاینت‌ها هنگام اتصال به یک سرور ارسال می‌کنند تعریف می‌کند و مقدار پیش‌فرض
+'application/json' را بازنویسی می‌کند. این فیلد تمام اتصال‌هایی را که یک کلاینت مشخص به سرور برقرار می‌کند کنترل می‌کند.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">contentType</code> <b>[الزامی]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">contentType نوع محتوایی است که هنگام ارسال داده از این کلاینت به سرور استفاده می‌شود.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">qps</code> <b>[الزامی]</b><br>
+<code dir="ltr">float32</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">qps تعداد کوئری‌های مجاز در هر ثانیه برای این اتصال را کنترل می‌کند.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">burst</code> <b>[الزامی]</b><br>
+<code dir="ltr">int32</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">burst در صورتی که کلاینت از نرخ مجاز خود فراتر برود، اجازه می‌دهد کوئری‌های اضافی انباشته شوند.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="debuggingconfiguration-debuggingconfiguration" dir="ltr" class="ltr"><code dir="ltr">DebuggingConfiguration</code>     {#DebuggingConfiguration}</h2>
+<p dir="rtl"><strong>در این بخش‌ها ظاهر می‌شود:</strong></p>
+<ul>
+<li dir="ltr" class="ltr">
+<p dir="ltr" class="ltr"><a href="#kubescheduler-config-k8s-io-v1-KubeSchedulerConfiguration">KubeSchedulerConfiguration</a></p>
+</li>
+<li dir="ltr" class="ltr">
+<p dir="ltr" class="ltr"><a href="#controllermanager-config-k8s-io-v1alpha1-GenericControllerManagerConfiguration">GenericControllerManagerConfiguration</a></p>
+</li>
+</ul>
+<p dir="rtl">DebuggingConfiguration پیکربندی ویژگی‌های مرتبط با اشکال‌زدایی (Debugging) را نگه می‌دارد.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="rtl"><code dir="ltr">enableProfiling</code> <b>[الزامی]</b><br>
+<code dir="ltr">bool</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">enableProfiling پروفایل‌گیری را از طریق رابط وب در host:port/debug/pprof/ فعال می‌کند.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">enableContentionProfiling</code> <b>[الزامی]</b><br>
+<code dir="ltr">bool</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">enableContentionProfiling در صورتی که
+enableProfiling برابر true باشد، پروفایل‌گیری مسدودسازی (block profiling) را فعال می‌کند.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="leaderelectionconfiguration-leaderelectionconfiguration" dir="ltr" class="ltr"><code dir="ltr">LeaderElectionConfiguration</code>     {#LeaderElectionConfiguration}</h2>
+<p dir="rtl"><strong>در این بخش‌ها ظاهر می‌شود:</strong></p>
+<ul>
+<li dir="ltr" class="ltr">
+<p dir="ltr" class="ltr"><a href="#kubescheduler-config-k8s-io-v1-KubeSchedulerConfiguration">KubeSchedulerConfiguration</a></p>
+</li>
+<li dir="ltr" class="ltr">
+<p dir="ltr" class="ltr"><a href="#controllermanager-config-k8s-io-v1alpha1-GenericControllerManagerConfiguration">GenericControllerManagerConfiguration</a></p>
+</li>
+</ul>
+<p dir="rtl">LeaderElectionConfiguration پیکربندی کلاینت‌های انتخاب رهبر (leader election)
+را برای مؤلفه‌هایی تعریف می‌کند که می‌توانند با فعال بودن انتخاب رهبر اجرا شوند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="rtl"><code dir="ltr">leaderElect</code> <b>[الزامی]</b><br>
+<code dir="ltr">bool</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">leaderElect باعث می‌شود یک کلاینت انتخاب رهبر پیش از اجرای حلقه اصلی، رهبری را به دست آورد.
+هنگام اجرای مؤلفه‌های تکثیرشده برای دسترس‌پذیری بالا، این گزینه را فعال کنید.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">leaseDuration</code> <b>[الزامی]</b><br>
+<a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration" target="_blank" rel="noopener"><code dir="ltr">meta/v1.Duration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">leaseDuration مدت زمانی است که کاندیداهای غیررهبر، پس از مشاهده تمدید رهبری،
+منتظر می‌مانند تا برای به دست آوردن رهبری یک جایگاه رهبری که اشغال شده اما تمدید نشده است اقدام کنند.
+این مقدار در عمل بیشترین مدت زمانی است که یک رهبر می‌تواند متوقف باشد تا
+کاندیدای دیگری جایگزین او شود. این فیلد فقط زمانی کاربرد دارد که انتخاب رهبر
+فعال باشد.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">renewDeadline</code> <b>[الزامی]</b><br>
+<a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration" target="_blank" rel="noopener"><code dir="ltr">meta/v1.Duration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">renewDeadline فاصله زمانی بین تلاش‌های رهبر فعلی (acting master) برای
+تمدید جایگاه رهبری است، پیش از آنکه از رهبری دست بکشد. این مقدار باید کمتر
+از مدت lease یا برابر با آن باشد. این فیلد فقط زمانی کاربرد دارد که انتخاب
+رهبر فعال باشد.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">retryPeriod</code> <b>[الزامی]</b><br>
+<a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration" target="_blank" rel="noopener"><code dir="ltr">meta/v1.Duration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">retryPeriod مدت زمانی است که کلاینت‌ها باید بین تلاش‌های کسب و تمدید رهبری
+منتظر بمانند. این فیلد فقط زمانی کاربرد دارد که
+انتخاب رهبر فعال باشد.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">resourceLock</code> <b>[الزامی]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">resourceLock نوع آبجکت منبعی را مشخص می‌کند که برای قفل‌کردن
+در چرخه‌های انتخاب رهبر استفاده می‌شود.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">resourceName</code> <b>[الزامی]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">resourceName نام آبجکت منبعی را مشخص می‌کند که برای قفل‌کردن
+در چرخه‌های انتخاب رهبر استفاده می‌شود.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">resourceNamespace</code> <b>[الزامی]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">resourceName فضای نام (namespace) آبجکت منبعی را مشخص می‌کند که برای قفل‌کردن
+در چرخه‌های انتخاب رهبر استفاده می‌شود.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="nodecontrollerconfiguration-nodecontrollerconfiguration" dir="ltr" class="ltr"><code dir="ltr">NodeControllerConfiguration</code>     {#NodeControllerConfiguration}</h2>
+<p dir="rtl"><strong>در این بخش‌ها ظاهر می‌شود:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#cloudcontrollermanager-config-k8s-io-v1alpha1-CloudControllerManagerConfiguration">CloudControllerManagerConfiguration</a></li>
+</ul>
+<p dir="rtl">NodeControllerConfiguration شامل عناصری است که NodeController را توصیف می‌کنند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="rtl"><code dir="ltr">ConcurrentNodeSyncs</code> <b>[الزامی]</b><br>
+<code dir="ltr">int32</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">ConcurrentNodeSyncs تعداد workerهایی است که
+نودها را به‌صورت همزمان همگام‌سازی می‌کنند.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">ConcurrentNodeStatusUpdates</code> <b>[الزامی]</b><br>
+<code dir="ltr">int32</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">ConcurrentNodeStatusUpdates تعداد workerهایی است که
+وضعیت نودها را به‌صورت همزمان به‌روزرسانی می‌کنند.
+اگر مشخص نشده باشد یا برابر 0 باشد، به‌جای آن از ConcurrentNodeSyncs استفاده می‌شود.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="servicecontrollerconfiguration-servicecontrollerconfiguration" dir="ltr" class="ltr"><code dir="ltr">ServiceControllerConfiguration</code>     {#ServiceControllerConfiguration}</h2>
+<p dir="rtl"><strong>در این بخش‌ها ظاهر می‌شود:</strong></p>
+<ul>
+<li dir="ltr" class="ltr">
+<p dir="ltr" class="ltr"><a href="#cloudcontrollermanager-config-k8s-io-v1alpha1-CloudControllerManagerConfiguration">CloudControllerManagerConfiguration</a></p>
+</li>
+<li dir="ltr" class="ltr">
+<p dir="ltr" class="ltr"><a href="#kubecontrollermanager-config-k8s-io-v1alpha1-KubeControllerManagerConfiguration">KubeControllerManagerConfiguration</a></p>
+</li>
+</ul>
+<p dir="rtl">ServiceControllerConfiguration شامل عناصری است که ServiceController را توصیف می‌کنند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="rtl"><code dir="ltr">ConcurrentServiceSyncs</code> <b>[الزامی]</b><br>
+<code dir="ltr">int32</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">concurrentServiceSyncs تعداد سرویس‌هایی است که
+مجاز به همگام‌سازی همزمان هستند. عدد بزرگ‌تر = مدیریت پاسخگوتر سرویس،
+اما بار بیشتر روی CPU (و شبکه).</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="cloudcontrollermanagerconfiguration-cloudcontrollermanager-config-k8s-io-v1alpha1-cloudcontrollermanagerconfiguration" dir="ltr" class="ltr"><code dir="ltr">CloudControllerManagerConfiguration</code>     {#cloudcontrollermanager-config-k8s-io-v1alpha1-CloudControllerManagerConfiguration}</h2>
+<p dir="rtl">CloudControllerManagerConfiguration شامل عناصری است که cloud-controller manager را توصیف می‌کنند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">apiVersion</code><br>string</td><td dir="ltr" class="ltr"><code dir="ltr">cloudcontrollermanager.config.k8s.io/v1alpha1</code></td></tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">kind</code><br>string</td><td dir="ltr" class="ltr"><code dir="ltr">CloudControllerManagerConfiguration</code></td></tr>
+<tr><td dir="rtl"><code dir="ltr">Generic</code> <b>[الزامی]</b><br>
+<a href="#controllermanager-config-k8s-io-v1alpha1-GenericControllerManagerConfiguration"><code dir="ltr">GenericControllerManagerConfiguration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">Generic پیکربندی یک controller-manager عمومی را نگه می‌دارد.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">KubeCloudShared</code> <b>[الزامی]</b><br>
+<a href="#cloudcontrollermanager-config-k8s-io-v1alpha1-KubeCloudSharedConfiguration"><code dir="ltr">KubeCloudSharedConfiguration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">KubeCloudSharedConfiguration پیکربندی ویژگی‌های مشترک را،
+هم در cloud controller manager و هم در kube-controller manager، نگه می‌دارد.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">NodeController</code> <b>[الزامی]</b><br>
+<a href="#NodeControllerConfiguration"><code dir="ltr">NodeControllerConfiguration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">NodeController پیکربندی ویژگی‌های مرتبط با کنترل‌کننده نود
+را نگه می‌دارد.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">NodeLifecycleController</code> <b>[الزامی]</b><br>
+<code dir="ltr">k8s.io/cloud-provider/controllers/nodelifecycle/config/v1alpha1.NodeLifecycleControllerConfiguration</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">NodeLifecycleController پیکربندی ویژگی‌های مرتبط با کنترل‌کننده چرخه عمر نود
+را نگه می‌دارد.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">ServiceController</code> <b>[الزامی]</b><br>
+<a href="#ServiceControllerConfiguration"><code dir="ltr">ServiceControllerConfiguration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">ServiceControllerConfiguration پیکربندی ویژگی‌های مرتبط با ServiceController
+را نگه می‌دارد.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">NodeStatusUpdateFrequency</code> <b>[الزامی]</b><br>
+<a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration" target="_blank" rel="noopener"><code dir="ltr">meta/v1.Duration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">NodeStatusUpdateFrequency فرکانسی است که کنترل‌کننده وضعیت نودها را با آن به‌روزرسانی می‌کند.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">Webhook</code> <b>[الزامی]</b><br>
+<a href="#cloudcontrollermanager-config-k8s-io-v1alpha1-WebhookConfiguration"><code dir="ltr">WebhookConfiguration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">Webhook پیکربندی webhookهای میزبانی‌شده توسط cloud-controller-manager است.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="cloudproviderconfiguration-cloudcontrollermanager-config-k8s-io-v1alpha1-cloudproviderconfiguration" dir="ltr" class="ltr"><code dir="ltr">CloudProviderConfiguration</code>     {#cloudcontrollermanager-config-k8s-io-v1alpha1-CloudProviderConfiguration}</h2>
+<p dir="rtl"><strong>در این بخش‌ها ظاهر می‌شود:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#cloudcontrollermanager-config-k8s-io-v1alpha1-KubeCloudSharedConfiguration">KubeCloudSharedConfiguration</a></li>
+</ul>
+<p dir="rtl">CloudProviderConfiguration عمدتاً شامل عناصر مربوط به ارائه‌دهنده ابری (cloud provider) است.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="rtl"><code dir="ltr">Name</code> <b>[الزامی]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">Name ارائه‌دهنده سرویس‌های ابری است.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">CloudConfigFile</code> <b>[الزامی]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">cloudConfigFile مسیر فایل پیکربندی ارائه‌دهنده ابری است.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="kubecloudsharedconfiguration-cloudcontrollermanager-config-k8s-io-v1alpha1-kubecloudsharedconfiguration" dir="ltr" class="ltr"><code dir="ltr">KubeCloudSharedConfiguration</code>     {#cloudcontrollermanager-config-k8s-io-v1alpha1-KubeCloudSharedConfiguration}</h2>
+<p dir="rtl"><strong>در این بخش‌ها ظاهر می‌شود:</strong></p>
+<ul>
+<li dir="ltr" class="ltr">
+<p dir="ltr" class="ltr"><a href="#cloudcontrollermanager-config-k8s-io-v1alpha1-CloudControllerManagerConfiguration">CloudControllerManagerConfiguration</a></p>
+</li>
+<li dir="ltr" class="ltr">
+<p dir="ltr" class="ltr"><a href="#kubecontrollermanager-config-k8s-io-v1alpha1-KubeControllerManagerConfiguration">KubeControllerManagerConfiguration</a></p>
+</li>
+</ul>
+<p dir="rtl">KubeCloudSharedConfiguration شامل عناصری است که میان kube-controller manager
+و cloud-controller manager مشترک هستند، اما جزو genericconfig نیستند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="rtl"><code dir="ltr">CloudProvider</code> <b>[الزامی]</b><br>
+<a href="#cloudcontrollermanager-config-k8s-io-v1alpha1-CloudProviderConfiguration"><code dir="ltr">CloudProviderConfiguration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">CloudProviderConfiguration پیکربندی ویژگی‌های مرتبط با CloudProvider را نگه می‌دارد.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">ExternalCloudVolumePlugin</code> <b>[الزامی]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">externalCloudVolumePlugin افزونه‌ای را مشخص می‌کند که هنگامی که cloudProvider برابر "external" است باید استفاده شود.
+در حال حاضر ارائه‌دهندگان ابری موجود در مخزن (in repo) از آن برای مدیریت نود و حجم (volume) در KCM استفاده می‌کنند.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">UseServiceAccountCredentials</code> <b>[الزامی]</b><br>
+<code dir="ltr">bool</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">useServiceAccountCredentials مشخص می‌کند که آیا کنترل‌کننده‌ها باید با
+اعتبارنامه‌های جداگانه service account اجرا شوند یا خیر.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">AllowUntaggedCloud</code> <b>[الزامی]</b><br>
+<code dir="ltr">bool</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">اجرا با نمونه‌های ابری بدون برچسب (untagged)</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">RouteReconciliationPeriod</code> <b>[الزامی]</b><br>
+<a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration" target="_blank" rel="noopener"><code dir="ltr">meta/v1.Duration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">routeReconciliationPeriod دوره زمانی تطبیق (reconcile) مسیرهایی است که ارائه‌دهنده ابری برای نودها ایجاد کرده است.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">ClusterName</code> <b>[الزامی]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">clusterName پیشوند نمونه‌ها (instance prefix) برای کلاستر است.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">ClusterCIDR</code> <b>[الزامی]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">clusterCIDR محدوده CIDR برای Podها در کلاستر است.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">AllocateNodeCIDRs</code> <b>[الزامی]</b><br>
+<code dir="ltr">bool</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">AllocateNodeCIDRs امکان تخصیص CIDRها برای Podها را فراهم می‌کند و در صورتی که
+ConfigureCloudRoutes برابر true باشد، امکان تنظیم آن‌ها روی ارائه‌دهنده ابری را نیز فراهم می‌کند.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">CIDRAllocatorType</code> <b>[الزامی]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">CIDRAllocatorType تعیین می‌کند از چه نوع تخصیص‌دهنده CIDR برای Pod استفاده شود.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">ConfigureCloudRoutes</code> <b>[الزامی]</b><br>
+<code dir="ltr">bool</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">configureCloudRoutes باعث می‌شود CIDRهای تخصیص‌یافته با allocateNodeCIDRs
+روی ارائه‌دهنده ابری پیکربندی شوند.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">NodeSyncPeriod</code> <b>[الزامی]</b><br>
+<a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration" target="_blank" rel="noopener"><code dir="ltr">meta/v1.Duration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">nodeSyncPeriod دوره زمانی همگام‌سازی نودها از cloudprovider است. دوره‌های طولانی‌تر
+باعث کاهش تعداد فراخوانی‌ها به ارائه‌دهنده ابری می‌شوند، اما ممکن است افزودن
+نودهای جدید به کلاستر را به تأخیر بیندازند.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="webhookconfiguration-cloudcontrollermanager-config-k8s-io-v1alpha1-webhookconfiguration" dir="ltr" class="ltr"><code dir="ltr">WebhookConfiguration</code>     {#cloudcontrollermanager-config-k8s-io-v1alpha1-WebhookConfiguration}</h2>
+<p dir="rtl"><strong>در این بخش‌ها ظاهر می‌شود:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#cloudcontrollermanager-config-k8s-io-v1alpha1-CloudControllerManagerConfiguration">CloudControllerManagerConfiguration</a></li>
+</ul>
+<p dir="rtl">WebhookConfiguration شامل پیکربندی مربوط به
+webhookهای میزبانی‌شده توسط cloud-controller-manager است.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="rtl"><code dir="ltr">Webhooks</code> <b>[الزامی]</b><br>
+<code dir="ltr">[]string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">Webhooks فهرست webhookهایی است که باید فعال یا غیرفعال شوند.
+'*' به معنای "همه webhookهایی که به‌طور پیش‌فرض فعال هستند" است.
+'foo' به معنای "فعال‌کردن 'foo'" است.
+'-foo' به معنای "غیرفعال‌کردن 'foo'" است.
+نخستین مورد برای یک نام مشخص برنده می‌شود.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="leadermigrationconfiguration-controllermanager-config-k8s-io-v1alpha1-leadermigrationconfiguration" dir="ltr" class="ltr"><code dir="ltr">LeaderMigrationConfiguration</code>     {#controllermanager-config-k8s-io-v1alpha1-LeaderMigrationConfiguration}</h2>
+<p dir="rtl"><strong>در این بخش‌ها ظاهر می‌شود:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#controllermanager-config-k8s-io-v1alpha1-GenericControllerManagerConfiguration">GenericControllerManagerConfiguration</a></li>
+</ul>
+<p dir="rtl">LeaderMigrationConfiguration پیکربندی نسخه‌بندی‌شده برای تمام قفل‌های رهبر در حال مهاجرت را فراهم می‌کند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">apiVersion</code><br>string</td><td dir="ltr" class="ltr"><code dir="ltr">controllermanager.config.k8s.io/v1alpha1</code></td></tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">kind</code><br>string</td><td dir="ltr" class="ltr"><code dir="ltr">LeaderMigrationConfiguration</code></td></tr>
+<tr><td dir="rtl"><code dir="ltr">leaderName</code> <b>[الزامی]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">LeaderName نام منبع انتخاب رهبر است که از مهاجرت محافظت می‌کند.
+برای مثال 1-20-KCM-to-1-21-CCM</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">resourceLock</code> <b>[الزامی]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">ResourceLock نوع آبجکت منبعی را مشخص می‌کند که برای قفل‌کردن استفاده می‌شود.
+باید "leases" یا "endpoints" باشد.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">controllerLeaders</code> <b>[الزامی]</b><br>
+<a href="#controllermanager-config-k8s-io-v1alpha1-ControllerLeaderConfiguration"><code dir="ltr">[]ControllerLeaderConfiguration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">ControllerLeaders شامل فهرستی از پیکربندی‌های قفل رهبر در حال مهاجرت است.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="controllerleaderconfiguration-controllermanager-config-k8s-io-v1alpha1-controllerleaderconfiguration" dir="ltr" class="ltr"><code dir="ltr">ControllerLeaderConfiguration</code>     {#controllermanager-config-k8s-io-v1alpha1-ControllerLeaderConfiguration}</h2>
+<p dir="rtl"><strong>در این بخش‌ها ظاهر می‌شود:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#controllermanager-config-k8s-io-v1alpha1-LeaderMigrationConfiguration">LeaderMigrationConfiguration</a></li>
+</ul>
+<p dir="rtl">ControllerLeaderConfiguration پیکربندی یک قفل رهبر در حال مهاجرت را فراهم می‌کند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="rtl"><code dir="ltr">name</code> <b>[الزامی]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">Name نام کنترل‌کننده‌ای است که در حال مهاجرت است.
+برای مثال service-controller، route-controller، cloud-node-controller و غیره</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">component</code> <b>[الزامی]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">Component نام مؤلفه‌ای است که کنترل‌کننده باید در آن اجرا شود.
+برای مثال kube-controller-manager، cloud-controller-manager و غیره
+یا '*' به این معنا که کنترل‌کننده می‌تواند تحت هر مؤلفه‌ای که در مهاجرت مشارکت دارد اجرا شود.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="genericcontrollermanagerconfiguration-controllermanager-config-k8s-io-v1alpha1-genericcontrollermanagerconfiguration" dir="ltr" class="ltr"><code dir="ltr">GenericControllerManagerConfiguration</code>     {#controllermanager-config-k8s-io-v1alpha1-GenericControllerManagerConfiguration}</h2>
+<p dir="rtl"><strong>در این بخش‌ها ظاهر می‌شود:</strong></p>
+<ul>
+<li dir="ltr" class="ltr">
+<p dir="ltr" class="ltr"><a href="#cloudcontrollermanager-config-k8s-io-v1alpha1-CloudControllerManagerConfiguration">CloudControllerManagerConfiguration</a></p>
+</li>
+<li dir="ltr" class="ltr">
+<p dir="ltr" class="ltr"><a href="#kubecontrollermanager-config-k8s-io-v1alpha1-KubeControllerManagerConfiguration">KubeControllerManagerConfiguration</a></p>
+</li>
+</ul>
+<p dir="rtl">GenericControllerManagerConfiguration پیکربندی یک controller-manager عمومی را نگه می‌دارد.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="rtl"><code dir="ltr">Port</code> <b>[الزامی]</b><br>
+<code dir="ltr">int32</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">port درگاهی است که سرویس http مربوط به controller-manager روی آن اجرا می‌شود.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">Address</code> <b>[الزامی]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">address آدرس IP است که سرویس روی آن ارائه می‌شود (برای همه رابط‌ها روی 0.0.0.0 تنظیم کنید).</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">MinResyncPeriod</code> <b>[الزامی]</b><br>
+<a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration" target="_blank" rel="noopener"><code dir="ltr">meta/v1.Duration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">minResyncPeriod دوره همگام‌سازی مجدد (resync) در reflectorها است؛ مقدار آن به‌صورت تصادفی بین
+minResyncPeriod و 2*minResyncPeriod خواهد بود.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">ClientConnection</code> <b>[الزامی]</b><br>
+<a href="#ClientConnectionConfiguration"><code dir="ltr">ClientConnectionConfiguration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">ClientConnection فایل kubeconfig و تنظیمات اتصال کلاینت را مشخص می‌کند
+که سرور پراکسی هنگام ارتباط با apiserver از آن‌ها استفاده می‌کند.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">ControllerStartInterval</code> <b>[الزامی]</b><br>
+<a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration" target="_blank" rel="noopener"><code dir="ltr">meta/v1.Duration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">مدت زمانی که باید بین راه‌اندازی controller managerها منتظر ماند</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">LeaderElection</code> <b>[الزامی]</b><br>
+<a href="#LeaderElectionConfiguration"><code dir="ltr">LeaderElectionConfiguration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">leaderElection پیکربندی کلاینت انتخاب رهبر را تعریف می‌کند.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">Controllers</code> <b>[الزامی]</b><br>
+<code dir="ltr">[]string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">Controllers فهرست کنترل‌کننده‌هایی است که باید فعال یا غیرفعال شوند.
+'*' به معنای "همه کنترل‌کننده‌هایی که به‌طور پیش‌فرض فعال هستند" است.
+'foo' به معنای "فعال‌کردن 'foo'" است.
+'-foo' به معنای "غیرفعال‌کردن 'foo'" است.
+نخستین مورد برای یک نام مشخص برنده می‌شود.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">Debugging</code> <b>[الزامی]</b><br>
+<a href="#DebuggingConfiguration"><code dir="ltr">DebuggingConfiguration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">DebuggingConfiguration پیکربندی ویژگی‌های مرتبط با اشکال‌زدایی (Debugging) را نگه می‌دارد.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">LeaderMigrationEnabled</code> <b>[الزامی]</b><br>
+<code dir="ltr">bool</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">LeaderMigrationEnabled مشخص می‌کند که آیا Leader Migration باید برای controller manager فعال باشد یا خیر.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">LeaderMigration</code> <b>[الزامی]</b><br>
+<a href="#controllermanager-config-k8s-io-v1alpha1-LeaderMigrationConfiguration"><code dir="ltr">LeaderMigrationConfiguration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">LeaderMigration پیکربندی Leader Migration را نگه می‌دارد.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="kubecontrollermanagerconfiguration-kubecontrollermanager-config-k8s-io-v1alpha1-kubecontrollermanagerconfiguration" dir="ltr" class="ltr"><code dir="ltr">KubeControllerManagerConfiguration</code>     {#kubecontrollermanager-config-k8s-io-v1alpha1-KubeControllerManagerConfiguration}</h2>
+<p dir="rtl">KubeControllerManagerConfiguration شامل عناصری است که kube-controller manager را توصیف می‌کنند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">apiVersion</code><br>string</td><td dir="ltr" class="ltr"><code dir="ltr">kubecontrollermanager.config.k8s.io/v1alpha1</code></td></tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">kind</code><br>string</td><td dir="ltr" class="ltr"><code dir="ltr">KubeControllerManagerConfiguration</code></td></tr>
+<tr><td dir="rtl"><code dir="ltr">Generic</code> <b>[الزامی]</b><br>
+<a href="#controllermanager-config-k8s-io-v1alpha1-GenericControllerManagerConfiguration"><code dir="ltr">GenericControllerManagerConfiguration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">Generic پیکربندی یک controller-manager عمومی را در بر دارد.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">KubeCloudShared</code> <b>[الزامی]</b><br>
+<a href="#cloudcontrollermanager-config-k8s-io-v1alpha1-KubeCloudSharedConfiguration"><code dir="ltr">KubeCloudSharedConfiguration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">KubeCloudSharedConfiguration پیکربندی قابلیت‌های مشترک را، هم برای cloud controller manager
+و هم برای kube-controller manager، در بر دارد.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">AttachDetachController</code> <b>[الزامی]</b><br>
+<a href="#kubecontrollermanager-config-k8s-io-v1alpha1-AttachDetachControllerConfiguration"><code dir="ltr">AttachDetachControllerConfiguration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">AttachDetachControllerConfiguration پیکربندی قابلیت‌های مرتبط با
+AttachDetachController را در بر دارد.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">CSRSigningController</code> <b>[الزامی]</b><br>
+<a href="#kubecontrollermanager-config-k8s-io-v1alpha1-CSRSigningControllerConfiguration"><code dir="ltr">CSRSigningControllerConfiguration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">CSRSigningControllerConfiguration پیکربندی قابلیت‌های مرتبط با
+CSRSigningController را در بر دارد.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">DaemonSetController</code> <b>[الزامی]</b><br>
+<a href="#kubecontrollermanager-config-k8s-io-v1alpha1-DaemonSetControllerConfiguration"><code dir="ltr">DaemonSetControllerConfiguration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">DaemonSetControllerConfiguration پیکربندی قابلیت‌های مرتبط با DaemonSetController
+را در بر دارد.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">DeploymentController</code> <b>[الزامی]</b><br>
+<a href="#kubecontrollermanager-config-k8s-io-v1alpha1-DeploymentControllerConfiguration"><code dir="ltr">DeploymentControllerConfiguration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">DeploymentControllerConfiguration پیکربندی قابلیت‌های مرتبط با
+DeploymentController را در بر دارد.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">DisruptionController</code> <b>[الزامی]</b><br>
+<a href="#kubecontrollermanager-config-k8s-io-v1alpha1-DisruptionControllerConfiguration"><code dir="ltr">DisruptionControllerConfiguration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">DisruptionControllerConfiguration پیکربندی قابلیت‌های مرتبط با
+DisruptionController را در بر دارد.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">StatefulSetController</code> <b>[الزامی]</b><br>
+<a href="#kubecontrollermanager-config-k8s-io-v1alpha1-StatefulSetControllerConfiguration"><code dir="ltr">StatefulSetControllerConfiguration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">StatefulSetControllerConfiguration پیکربندی قابلیت‌های مرتبط با
+StatefulSetController را در بر دارد.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">DeprecatedController</code> <b>[الزامی]</b><br>
+<a href="#kubecontrollermanager-config-k8s-io-v1alpha1-DeprecatedControllerConfiguration"><code dir="ltr">DeprecatedControllerConfiguration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">DeprecatedControllerConfiguration پیکربندی برخی از قابلیت‌های منسوخ‌شده را
+در بر دارد.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">EndpointController</code> <b>[الزامی]</b><br>
+<a href="#kubecontrollermanager-config-k8s-io-v1alpha1-EndpointControllerConfiguration"><code dir="ltr">EndpointControllerConfiguration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">EndpointControllerConfiguration پیکربندی قابلیت‌های مرتبط با EndpointController
+را در بر دارد.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">EndpointSliceController</code> <b>[الزامی]</b><br>
+<a href="#kubecontrollermanager-config-k8s-io-v1alpha1-EndpointSliceControllerConfiguration"><code dir="ltr">EndpointSliceControllerConfiguration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">EndpointSliceControllerConfiguration پیکربندی قابلیت‌های مرتبط با
+EndpointSliceController را در بر دارد.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">EndpointSliceMirroringController</code> <b>[الزامی]</b><br>
+<a href="#kubecontrollermanager-config-k8s-io-v1alpha1-EndpointSliceMirroringControllerConfiguration"><code dir="ltr">EndpointSliceMirroringControllerConfiguration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">EndpointSliceMirroringControllerConfiguration پیکربندی قابلیت‌های مرتبط با
+EndpointSliceMirroringController را در بر دارد.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">EphemeralVolumeController</code> <b>[الزامی]</b><br>
+<a href="#kubecontrollermanager-config-k8s-io-v1alpha1-EphemeralVolumeControllerConfiguration"><code dir="ltr">EphemeralVolumeControllerConfiguration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">EphemeralVolumeControllerConfiguration پیکربندی قابلیت‌های مرتبط با EphemeralVolumeController
+را در بر دارد.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">GarbageCollectorController</code> <b>[الزامی]</b><br>
+<a href="#kubecontrollermanager-config-k8s-io-v1alpha1-GarbageCollectorControllerConfiguration"><code dir="ltr">GarbageCollectorControllerConfiguration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">GarbageCollectorControllerConfiguration پیکربندی قابلیت‌های مرتبط با
+GarbageCollectorController را در بر دارد.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">HPAController</code> <b>[الزامی]</b><br>
+<a href="#kubecontrollermanager-config-k8s-io-v1alpha1-HPAControllerConfiguration"><code dir="ltr">HPAControllerConfiguration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">HPAControllerConfiguration پیکربندی قابلیت‌های مرتبط با HPAController را در بر دارد.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">JobController</code> <b>[الزامی]</b><br>
+<a href="#kubecontrollermanager-config-k8s-io-v1alpha1-JobControllerConfiguration"><code dir="ltr">JobControllerConfiguration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">JobControllerConfiguration پیکربندی قابلیت‌های مرتبط با JobController را در بر دارد.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">CronJobController</code> <b>[الزامی]</b><br>
+<a href="#kubecontrollermanager-config-k8s-io-v1alpha1-CronJobControllerConfiguration"><code dir="ltr">CronJobControllerConfiguration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">CronJobControllerConfiguration پیکربندی قابلیت‌های مرتبط با CronJobController را در بر دارد.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">LegacySATokenCleaner</code> <b>[الزامی]</b><br>
+<a href="#kubecontrollermanager-config-k8s-io-v1alpha1-LegacySATokenCleanerConfiguration"><code dir="ltr">LegacySATokenCleanerConfiguration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">LegacySATokenCleanerConfiguration پیکربندی قابلیت‌های مرتبط با LegacySATokenCleaner را در بر دارد.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">NamespaceController</code> <b>[الزامی]</b><br>
+<a href="#kubecontrollermanager-config-k8s-io-v1alpha1-NamespaceControllerConfiguration"><code dir="ltr">NamespaceControllerConfiguration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">NamespaceControllerConfiguration پیکربندی قابلیت‌های مرتبط با NamespaceController
+را در بر دارد.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">NodeIPAMController</code> <b>[الزامی]</b><br>
+<a href="#kubecontrollermanager-config-k8s-io-v1alpha1-NodeIPAMControllerConfiguration"><code dir="ltr">NodeIPAMControllerConfiguration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">NodeIPAMControllerConfiguration پیکربندی قابلیت‌های مرتبط با NodeIPAMController
+را در بر دارد.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">NodeLifecycleController</code> <b>[الزامی]</b><br>
+<a href="#kubecontrollermanager-config-k8s-io-v1alpha1-NodeLifecycleControllerConfiguration"><code dir="ltr">NodeLifecycleControllerConfiguration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">NodeLifecycleControllerConfiguration پیکربندی قابلیت‌های مرتبط با
+NodeLifecycleController را در بر دارد.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">PersistentVolumeBinderController</code> <b>[الزامی]</b><br>
+<a href="#kubecontrollermanager-config-k8s-io-v1alpha1-PersistentVolumeBinderControllerConfiguration"><code dir="ltr">PersistentVolumeBinderControllerConfiguration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">PersistentVolumeBinderControllerConfiguration پیکربندی قابلیت‌های مرتبط با
+PersistentVolumeBinderController را در بر دارد.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">PodGCController</code> <b>[الزامی]</b><br>
+<a href="#kubecontrollermanager-config-k8s-io-v1alpha1-PodGCControllerConfiguration"><code dir="ltr">PodGCControllerConfiguration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">PodGCControllerConfiguration پیکربندی قابلیت‌های مرتبط با PodGCController
+را در بر دارد.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">ReplicaSetController</code> <b>[الزامی]</b><br>
+<a href="#kubecontrollermanager-config-k8s-io-v1alpha1-ReplicaSetControllerConfiguration"><code dir="ltr">ReplicaSetControllerConfiguration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">ReplicaSetControllerConfiguration پیکربندی قابلیت‌های مرتبط با ReplicaSet را در بر دارد.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">ReplicationController</code> <b>[الزامی]</b><br>
+<a href="#kubecontrollermanager-config-k8s-io-v1alpha1-ReplicationControllerConfiguration"><code dir="ltr">ReplicationControllerConfiguration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">ReplicationControllerConfiguration پیکربندی قابلیت‌های مرتبط با
+ReplicationController را در بر دارد.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">ResourceQuotaController</code> <b>[الزامی]</b><br>
+<a href="#kubecontrollermanager-config-k8s-io-v1alpha1-ResourceQuotaControllerConfiguration"><code dir="ltr">ResourceQuotaControllerConfiguration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">ResourceQuotaControllerConfiguration پیکربندی قابلیت‌های مرتبط با
+ResourceQuotaController را در بر دارد.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">SAController</code> <b>[الزامی]</b><br>
+<a href="#kubecontrollermanager-config-k8s-io-v1alpha1-SAControllerConfiguration"><code dir="ltr">SAControllerConfiguration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">SAControllerConfiguration پیکربندی قابلیت‌های مرتبط با ServiceAccountController
+را در بر دارد.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">ServiceController</code> <b>[الزامی]</b><br>
+<a href="#ServiceControllerConfiguration"><code dir="ltr">ServiceControllerConfiguration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">ServiceControllerConfiguration پیکربندی قابلیت‌های مرتبط با ServiceController
+را در بر دارد.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">TTLAfterFinishedController</code> <b>[الزامی]</b><br>
+<a href="#kubecontrollermanager-config-k8s-io-v1alpha1-TTLAfterFinishedControllerConfiguration"><code dir="ltr">TTLAfterFinishedControllerConfiguration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">TTLAfterFinishedControllerConfiguration پیکربندی قابلیت‌های مرتبط با
+TTLAfterFinishedController را در بر دارد.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">ValidatingAdmissionPolicyStatusController</code> <b>[الزامی]</b><br>
+<a href="#kubecontrollermanager-config-k8s-io-v1alpha1-ValidatingAdmissionPolicyStatusControllerConfiguration"><code dir="ltr">ValidatingAdmissionPolicyStatusControllerConfiguration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">ValidatingAdmissionPolicyStatusControllerConfiguration پیکربندی قابلیت‌های مرتبط با
+ValidatingAdmissionPolicyStatusController را در بر دارد.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">DeviceTaintEvictionController</code> <b>[الزامی]</b><br>
+<a href="#kubecontrollermanager-config-k8s-io-v1alpha1-DeviceTaintEvictionControllerConfiguration"><code dir="ltr">DeviceTaintEvictionControllerConfiguration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">DeviceTaintEvictionControllerConfiguration شامل عناصری است که کنترل‌کننده تخلیه ناشی از device taint را پیکربندی می‌کنند.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">ResourceClaimController</code> <b>[الزامی]</b><br>
+<a href="#kubecontrollermanager-config-k8s-io-v1alpha1-ResourceClaimControllerConfiguration"><code dir="ltr">ResourceClaimControllerConfiguration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">ResourceClaimControllerConfiguration شامل عناصری است که کنترل‌کننده resource claim را پیکربندی می‌کنند.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="attachdetachcontrollerconfiguration-kubecontrollermanager-config-k8s-io-v1alpha1-attachdetachcontrollerconfiguration" dir="ltr" class="ltr"><code dir="ltr">AttachDetachControllerConfiguration</code>     {#kubecontrollermanager-config-k8s-io-v1alpha1-AttachDetachControllerConfiguration}</h2>
+<p dir="rtl"><strong>ظاهر شده در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubecontrollermanager-config-k8s-io-v1alpha1-KubeControllerManagerConfiguration">KubeControllerManagerConfiguration</a></li>
+</ul>
+<p dir="rtl">AttachDetachControllerConfiguration شامل عناصری است که AttachDetachController را توصیف می‌کنند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="rtl"><code dir="ltr">DisableAttachDetachReconcilerSync</code> <b>[الزامی]</b><br>
+<code dir="ltr">bool</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">Reconciler یک حلقه دوره‌ای اجرا می‌کند تا با راه‌اندازی عملیات attach و detach،
+وضعیت مطلوب را با وضعیت واقعی سیستم هماهنگ کند.
+این پرچم، این هماهنگ‌سازی (reconcile) را فعال یا غیرفعال می‌کند. مقدار پیش‌فرض آن false است و بنابراین فعال است.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">ReconcilerSyncLoopPeriod</code> <b>[الزامی]</b><br>
+<a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration" target="_blank" rel="noopener"><code dir="ltr">meta/v1.Duration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">ReconcilerSyncLoopPeriod مدت زمانی است که حلقه همگام‌سازی وضعیت‌های reconciler
+میان اجراهای متوالی منتظر می‌ماند. مقدار پیش‌فرض آن ۶۰ ثانیه است.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">disableForceDetachOnTimeout</code> <b>[الزامی]</b><br>
+<code dir="ltr">bool</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">DisableForceDetachOnTimeout در صورت فراتر رفتن از حداکثر زمان unmount،
+detach اجباری را غیرفعال می‌کند. مقدار پیش‌فرض آن false است و بنابراین
+detach اجباری هنگام unmount فعال است.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="csrsigningconfiguration-kubecontrollermanager-config-k8s-io-v1alpha1-csrsigningconfiguration" dir="ltr" class="ltr"><code dir="ltr">CSRSigningConfiguration</code>     {#kubecontrollermanager-config-k8s-io-v1alpha1-CSRSigningConfiguration}</h2>
+<p dir="rtl"><strong>ظاهر شده در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubecontrollermanager-config-k8s-io-v1alpha1-CSRSigningControllerConfiguration">CSRSigningControllerConfiguration</a></li>
+</ul>
+<p dir="rtl">CSRSigningConfiguration اطلاعات مربوط به یک امضاکننده CSR مشخص را در بر دارد.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="rtl"><code dir="ltr">CertFile</code> <b>[الزامی]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">certFile نام فایلی است که حاوی گواهی X509 CA با کدگذاری PEM است
+و برای صدور گواهی‌ها استفاده می‌شود.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">KeyFile</code> <b>[الزامی]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">keyFile نام فایلی است که حاوی کلید خصوصی RSA یا ECDSA با کدگذاری PEM است
+و برای صدور گواهی‌ها استفاده می‌شود.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="csrsigningcontrollerconfiguration-kubecontrollermanager-config-k8s-io-v1alpha1-csrsigningcontrollerconfiguration" dir="ltr" class="ltr"><code dir="ltr">CSRSigningControllerConfiguration</code>     {#kubecontrollermanager-config-k8s-io-v1alpha1-CSRSigningControllerConfiguration}</h2>
+<p dir="rtl"><strong>ظاهر شده در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubecontrollermanager-config-k8s-io-v1alpha1-KubeControllerManagerConfiguration">KubeControllerManagerConfiguration</a></li>
+</ul>
+<p dir="rtl">CSRSigningControllerConfiguration شامل عناصری است که CSRSigningController را توصیف می‌کنند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="rtl"><code dir="ltr">ClusterSigningCertFile</code> <b>[الزامی]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">clusterSigningCertFile نام فایلی است که حاوی گواهی X509 CA با کدگذاری PEM است
+و برای صدور گواهی‌های با دامنه کلاستر استفاده می‌شود.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">ClusterSigningKeyFile</code> <b>[الزامی]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">clusterSigningCertFile نام فایلی است که حاوی کلید خصوصی RSA یا ECDSA با کدگذاری PEM است
+و برای صدور گواهی‌های با دامنه کلاستر استفاده می‌شود.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">KubeletServingSignerConfiguration</code> <b>[الزامی]</b><br>
+<a href="#kubecontrollermanager-config-k8s-io-v1alpha1-CSRSigningConfiguration"><code dir="ltr">CSRSigningConfiguration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">kubeletServingSignerConfiguration گواهی و کلیدی را در بر دارد که برای صدور گواهی‌ها برای امضاکننده kubernetes.io/kubelet-serving استفاده می‌شود.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">KubeletClientSignerConfiguration</code> <b>[الزامی]</b><br>
+<a href="#kubecontrollermanager-config-k8s-io-v1alpha1-CSRSigningConfiguration"><code dir="ltr">CSRSigningConfiguration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">kubeletClientSignerConfiguration گواهی و کلیدی را در بر دارد که برای صدور گواهی‌ها برای kubernetes.io/kube-apiserver-client-kubelet استفاده می‌شود.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">KubeAPIServerClientSignerConfiguration</code> <b>[الزامی]</b><br>
+<a href="#kubecontrollermanager-config-k8s-io-v1alpha1-CSRSigningConfiguration"><code dir="ltr">CSRSigningConfiguration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">kubeAPIServerClientSignerConfiguration گواهی و کلیدی را در بر دارد که برای صدور گواهی‌ها برای kubernetes.io/kube-apiserver-client استفاده می‌شود.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">LegacyUnknownSignerConfiguration</code> <b>[الزامی]</b><br>
+<a href="#kubecontrollermanager-config-k8s-io-v1alpha1-CSRSigningConfiguration"><code dir="ltr">CSRSigningConfiguration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">legacyUnknownSignerConfiguration گواهی و کلیدی را در بر دارد که برای صدور گواهی‌ها برای kubernetes.io/legacy-unknown استفاده می‌شود.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">ClusterSigningDuration</code> <b>[الزامی]</b><br>
+<a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration" target="_blank" rel="noopener"><code dir="ltr">meta/v1.Duration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">clusterSigningDuration حداکثر مدت اعتباری است که به گواهی‌های امضاشده داده می‌شود.
+هر CSR می‌تواند با تنظیم spec.expirationSeconds گواهی‌هایی با اعتبار کوتاه‌تر درخواست کند.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="cronjobcontrollerconfiguration-kubecontrollermanager-config-k8s-io-v1alpha1-cronjobcontrollerconfiguration" dir="ltr" class="ltr"><code dir="ltr">CronJobControllerConfiguration</code>     {#kubecontrollermanager-config-k8s-io-v1alpha1-CronJobControllerConfiguration}</h2>
+<p dir="rtl"><strong>ظاهر شده در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubecontrollermanager-config-k8s-io-v1alpha1-KubeControllerManagerConfiguration">KubeControllerManagerConfiguration</a></li>
+</ul>
+<p dir="rtl">CronJobControllerConfiguration شامل عناصری است که CrongJob2Controller را توصیف می‌کنند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="rtl"><code dir="ltr">ConcurrentCronJobSyncs</code> <b>[الزامی]</b><br>
+<code dir="ltr">int32</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">concurrentCronJobSyncs تعداد آبجکت‌های job است که مجاز به
+همگام‌سازی هم‌زمان هستند. عدد بزرگ‌تر = jobهای پاسخگوتر،
+اما بار بیشتر بر CPU (و شبکه).</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="daemonsetcontrollerconfiguration-kubecontrollermanager-config-k8s-io-v1alpha1-daemonsetcontrollerconfiguration" dir="ltr" class="ltr"><code dir="ltr">DaemonSetControllerConfiguration</code>     {#kubecontrollermanager-config-k8s-io-v1alpha1-DaemonSetControllerConfiguration}</h2>
+<p dir="rtl"><strong>ظاهر شده در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubecontrollermanager-config-k8s-io-v1alpha1-KubeControllerManagerConfiguration">KubeControllerManagerConfiguration</a></li>
+</ul>
+<p dir="rtl">DaemonSetControllerConfiguration شامل عناصری است که DaemonSetController را توصیف می‌کنند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="rtl"><code dir="ltr">ConcurrentDaemonSetSyncs</code> <b>[الزامی]</b><br>
+<code dir="ltr">int32</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">concurrentDaemonSetSyncs تعداد آبجکت‌های daemonset است که مجاز به
+همگام‌سازی هم‌زمان هستند. عدد بزرگ‌تر = daemonsetهای پاسخگوتر،
+اما بار بیشتر بر CPU (و شبکه).</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="deploymentcontrollerconfiguration-kubecontrollermanager-config-k8s-io-v1alpha1-deploymentcontrollerconfiguration" dir="ltr" class="ltr"><code dir="ltr">DeploymentControllerConfiguration</code>     {#kubecontrollermanager-config-k8s-io-v1alpha1-DeploymentControllerConfiguration}</h2>
+<p dir="rtl"><strong>ظاهر شده در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubecontrollermanager-config-k8s-io-v1alpha1-KubeControllerManagerConfiguration">KubeControllerManagerConfiguration</a></li>
+</ul>
+<p dir="rtl">DeploymentControllerConfiguration شامل عناصری است که DeploymentController را توصیف می‌کنند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="rtl"><code dir="ltr">ConcurrentDeploymentSyncs</code> <b>[الزامی]</b><br>
+<code dir="ltr">int32</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">concurrentDeploymentSyncs تعداد آبجکت‌های deployment است که مجاز به
+همگام‌سازی هم‌زمان هستند. عدد بزرگ‌تر = deploymentهای پاسخگوتر،
+اما بار بیشتر بر CPU (و شبکه).</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="deprecatedcontrollerconfiguration-kubecontrollermanager-config-k8s-io-v1alpha1-deprecatedcontrollerconfiguration" dir="ltr" class="ltr"><code dir="ltr">DeprecatedControllerConfiguration</code>     {#kubecontrollermanager-config-k8s-io-v1alpha1-DeprecatedControllerConfiguration}</h2>
+<p dir="rtl"><strong>ظاهر شده در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubecontrollermanager-config-k8s-io-v1alpha1-KubeControllerManagerConfiguration">KubeControllerManagerConfiguration</a></li>
+</ul>
+<p dir="rtl">DeprecatedControllerConfiguration شامل عناصری است که قرار است منسوخ شوند.</p>
+<h2 id="devicetaintevictioncontrollerconfiguration-kubecontrollermanager-config-k8s-io-v1alpha1-devicetaintevictioncontrollerconfiguration" dir="ltr" class="ltr"><code dir="ltr">DeviceTaintEvictionControllerConfiguration</code>     {#kubecontrollermanager-config-k8s-io-v1alpha1-DeviceTaintEvictionControllerConfiguration}</h2>
+<p dir="rtl"><strong>ظاهر شده در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubecontrollermanager-config-k8s-io-v1alpha1-KubeControllerManagerConfiguration">KubeControllerManagerConfiguration</a></li>
+</ul>
+<p dir="rtl">DeviceTaintEvictionControllerConfiguration شامل عناصری است که کنترل‌کننده تخلیه ناشی از device taint را پیکربندی می‌کنند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="rtl"><code dir="ltr">ConcurrentSyncs</code> <b>[الزامی]</b><br>
+<code dir="ltr">int32</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">ConcurrentSyncs تعداد عملیات‌هایی (مانند حذف یک pod، به‌روزرسانی وضعیت ResourcClaim و غیره) است
+که به‌صورت هم‌زمان انجام می‌شوند. عدد بزرگ‌تر = پردازش بیشتر، اما بار بیشتر بر CPU (و شبکه).</p>
+<p dir="rtl">مقدار پیش‌فرض ۱۰ است.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="disruptioncontrollerconfiguration-kubecontrollermanager-config-k8s-io-v1alpha1-disruptioncontrollerconfiguration" dir="ltr" class="ltr"><code dir="ltr">DisruptionControllerConfiguration</code>     {#kubecontrollermanager-config-k8s-io-v1alpha1-DisruptionControllerConfiguration}</h2>
+<p dir="rtl"><strong>ظاهر شده در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubecontrollermanager-config-k8s-io-v1alpha1-KubeControllerManagerConfiguration">KubeControllerManagerConfiguration</a></li>
+</ul>
+<p dir="rtl">DisruptionControllerConfiguration شامل عناصری است که DisruptionController را توصیف می‌کنند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="rtl"><code dir="ltr">ConcurrentDisruptionSyncs</code> <b>[الزامی]</b><br>
+<code dir="ltr">int32</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">concurrentDisruptionSyncs تعداد آبجکت‌های PodDisruptionBudget است که
+مجاز به همگام‌سازی هم‌زمان هستند. عدد بزرگ‌تر = به‌روزرسانی‌های PDB
+پاسخگوتر، اما بار بیشتر بر CPU (و شبکه).</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="endpointcontrollerconfiguration-kubecontrollermanager-config-k8s-io-v1alpha1-endpointcontrollerconfiguration" dir="ltr" class="ltr"><code dir="ltr">EndpointControllerConfiguration</code>     {#kubecontrollermanager-config-k8s-io-v1alpha1-EndpointControllerConfiguration}</h2>
+<p dir="rtl"><strong>ظاهر شده در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubecontrollermanager-config-k8s-io-v1alpha1-KubeControllerManagerConfiguration">KubeControllerManagerConfiguration</a></li>
+</ul>
+<p dir="rtl">EndpointControllerConfiguration شامل عناصری است که EndpointController را توصیف می‌کنند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="rtl"><code dir="ltr">ConcurrentEndpointSyncs</code> <b>[الزامی]</b><br>
+<code dir="ltr">int32</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">concurrentEndpointSyncs تعداد عملیات همگام‌سازی endpoint است که
+به‌صورت هم‌زمان انجام می‌شوند. عدد بزرگ‌تر = به‌روزرسانی سریع‌تر endpointها،
+اما بار بیشتر بر CPU (و شبکه).</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">EndpointUpdatesBatchPeriod</code> <b>[الزامی]</b><br>
+<a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration" target="_blank" rel="noopener"><code dir="ltr">meta/v1.Duration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">EndpointUpdatesBatchPeriod طول دوره دسته‌بندی به‌روزرسانی‌های endpoint را مشخص می‌کند.
+پردازش تغییرات pod به اندازه این مدت به تأخیر می‌افتد تا با به‌روزرسانی‌های احتمالی
+بعدی ترکیب شود و تعداد کل به‌روزرسانی‌های endpoint کاهش یابد.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="endpointslicecontrollerconfiguration-kubecontrollermanager-config-k8s-io-v1alpha1-endpointslicecontrollerconfiguration" dir="ltr" class="ltr"><code dir="ltr">EndpointSliceControllerConfiguration</code>     {#kubecontrollermanager-config-k8s-io-v1alpha1-EndpointSliceControllerConfiguration}</h2>
+<p dir="rtl"><strong>ظاهر شده در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubecontrollermanager-config-k8s-io-v1alpha1-KubeControllerManagerConfiguration">KubeControllerManagerConfiguration</a></li>
+</ul>
+<p dir="rtl">EndpointSliceControllerConfiguration شامل عناصری است که
+EndpointSliceController را توصیف می‌کنند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="rtl"><code dir="ltr">ConcurrentServiceEndpointSyncs</code> <b>[الزامی]</b><br>
+<code dir="ltr">int32</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">concurrentServiceEndpointSyncs تعداد عملیات همگام‌سازی endpoint سرویس است
+که به‌صورت هم‌زمان انجام می‌شوند. عدد بزرگ‌تر = به‌روزرسانی سریع‌تر
+endpoint sliceها، اما بار بیشتر بر CPU (و شبکه).</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">MaxEndpointsPerSlice</code> <b>[الزامی]</b><br>
+<code dir="ltr">int32</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">maxEndpointsPerSlice حداکثر تعداد endpointهایی است که به یک EndpointSlice
+افزوده می‌شود. تعداد بیشتر endpoint در هر slice به معنای endpoint sliceهای
+کمتر و بزرگ‌تر، اما منابع بزرگ‌تر است.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">EndpointUpdatesBatchPeriod</code> <b>[الزامی]</b><br>
+<a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration" target="_blank" rel="noopener"><code dir="ltr">meta/v1.Duration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">EndpointUpdatesBatchPeriod طول دوره دسته‌بندی به‌روزرسانی‌های endpoint را مشخص می‌کند.
+پردازش تغییرات pod به اندازه این مدت به تأخیر می‌افتد تا با به‌روزرسانی‌های احتمالی
+بعدی ترکیب شود و تعداد کل به‌روزرسانی‌های endpoint کاهش یابد.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="endpointslicemirroringcontrollerconfiguration-kubecontrollermanager-config-k8s-io-v1alpha1-endpointslicemirroringcontrollerconfiguration" dir="ltr" class="ltr"><code dir="ltr">EndpointSliceMirroringControllerConfiguration</code>     {#kubecontrollermanager-config-k8s-io-v1alpha1-EndpointSliceMirroringControllerConfiguration}</h2>
+<p dir="rtl"><strong>ظاهر شده در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubecontrollermanager-config-k8s-io-v1alpha1-KubeControllerManagerConfiguration">KubeControllerManagerConfiguration</a></li>
+</ul>
+<p dir="rtl">EndpointSliceMirroringControllerConfiguration شامل عناصری است که
+EndpointSliceMirroringController را توصیف می‌کنند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="rtl"><code dir="ltr">MirroringConcurrentServiceEndpointSyncs</code> <b>[الزامی]</b><br>
+<code dir="ltr">int32</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">mirroringConcurrentServiceEndpointSyncs تعداد عملیات همگام‌سازی endpoint سرویس
+است که به‌صورت هم‌زمان انجام می‌شوند. عدد بزرگ‌تر = به‌روزرسانی سریع‌تر
+endpoint sliceها، اما بار بیشتر بر CPU (و شبکه).</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">MirroringMaxEndpointsPerSubset</code> <b>[الزامی]</b><br>
+<code dir="ltr">int32</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">mirroringMaxEndpointsPerSubset حداکثر تعداد endpointهایی است که
+برای یک EndpointSubset در یک EndpointSlice بازتاب (mirror) داده می‌شود.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">MirroringEndpointUpdatesBatchPeriod</code> <b>[الزامی]</b><br>
+<a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration" target="_blank" rel="noopener"><code dir="ltr">meta/v1.Duration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">mirroringEndpointUpdatesBatchPeriod را می‌توان برای دسته‌بندی به‌روزرسانی‌های EndpointSlice
+به کار برد. همه به‌روزرسانی‌هایی که با تغییرات EndpointSlice آغاز می‌شوند، تا حداکثر
+'mirroringEndpointUpdatesBatchPeriod' به تأخیر می‌افتند. اگر در این بازه، آدرس‌های دیگری
+در همان منبع Endpoints تغییر کنند، در قالب یک به‌روزرسانی واحد EndpointSlice
+دسته‌بندی می‌شوند. مقدار پیش‌فرض ۰ به این معناست که هر به‌روزرسانی Endpoints
+یک به‌روزرسانی EndpointSlice را راه‌اندازی می‌کند.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="ephemeralvolumecontrollerconfiguration-kubecontrollermanager-config-k8s-io-v1alpha1-ephemeralvolumecontrollerconfiguration" dir="ltr" class="ltr"><code dir="ltr">EphemeralVolumeControllerConfiguration</code>     {#kubecontrollermanager-config-k8s-io-v1alpha1-EphemeralVolumeControllerConfiguration}</h2>
+<p dir="rtl"><strong>ظاهر شده در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubecontrollermanager-config-k8s-io-v1alpha1-KubeControllerManagerConfiguration">KubeControllerManagerConfiguration</a></li>
+</ul>
+<p dir="rtl">EphemeralVolumeControllerConfiguration شامل عناصری است که EphemeralVolumeController را توصیف می‌کنند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="rtl"><code dir="ltr">ConcurrentEphemeralVolumeSyncs</code> <b>[الزامی]</b><br>
+<code dir="ltr">int32</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">ConcurrentEphemeralVolumeSyncseSyncs تعداد عملیات همگام‌سازی حجم موقت (ephemeral volume) است
+که به‌صورت هم‌زمان انجام می‌شوند. عدد بزرگ‌تر = به‌روزرسانی سریع‌تر حجم‌های موقت،
+اما بار بیشتر بر CPU (و شبکه).</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="garbagecollectorcontrollerconfiguration-kubecontrollermanager-config-k8s-io-v1alpha1-garbagecollectorcontrollerconfiguration" dir="ltr" class="ltr"><code dir="ltr">GarbageCollectorControllerConfiguration</code>     {#kubecontrollermanager-config-k8s-io-v1alpha1-GarbageCollectorControllerConfiguration}</h2>
+<p dir="rtl"><strong>ظاهر شده در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubecontrollermanager-config-k8s-io-v1alpha1-KubeControllerManagerConfiguration">KubeControllerManagerConfiguration</a></li>
+</ul>
+<p dir="rtl">GarbageCollectorControllerConfiguration شامل عناصری است که GarbageCollectorController را توصیف می‌کنند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="rtl"><code dir="ltr">EnableGarbageCollector</code> <b>[الزامی]</b><br>
+<code dir="ltr">bool</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">زباله‌روب (garbage collector) عمومی را فعال می‌کند. این مقدار حتماً باید با فلگ متناظر آن در kube-apiserver هماهنگ باشد. هشدار: زباله‌روب عمومی یک قابلیت آلفا است.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">ConcurrentGCSyncs</code> <b>[الزامی]</b><br>
+<code dir="ltr">int32</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">concurrentGCSyncs تعداد workerهای garbage collector است که مجاز به همگام‌سازی هم‌زمان هستند.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">GCIgnoredResources</code> <b>[الزامی]</b><br>
+<a href="#kubecontrollermanager-config-k8s-io-v1alpha1-GroupResource"><code dir="ltr">[]GroupResource</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">gcIgnoredResources فهرست GroupResourceهایی است که garbage collection باید آن‌ها را نادیده بگیرد.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="groupresource-kubecontrollermanager-config-k8s-io-v1alpha1-groupresource" dir="ltr" class="ltr"><code dir="ltr">GroupResource</code>     {#kubecontrollermanager-config-k8s-io-v1alpha1-GroupResource}</h2>
+<p dir="rtl"><strong>ظاهر شده در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubecontrollermanager-config-k8s-io-v1alpha1-GarbageCollectorControllerConfiguration">GarbageCollectorControllerConfiguration</a></li>
+</ul>
+<p dir="rtl">GroupResource یک منبع گروهی (group resource) را توصیف می‌کند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="rtl"><code dir="ltr">Group</code> <b>[الزامی]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">group بخش گروه (group) از GroupResource است.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">Resource</code> <b>[الزامی]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">resource بخش منبع (resource) از GroupResource است.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="hpacontrollerconfiguration-kubecontrollermanager-config-k8s-io-v1alpha1-hpacontrollerconfiguration" dir="ltr" class="ltr"><code dir="ltr">HPAControllerConfiguration</code>     {#kubecontrollermanager-config-k8s-io-v1alpha1-HPAControllerConfiguration}</h2>
+<p dir="rtl"><strong>ظاهر شده در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubecontrollermanager-config-k8s-io-v1alpha1-KubeControllerManagerConfiguration">KubeControllerManagerConfiguration</a></li>
+</ul>
+<p dir="rtl">HPAControllerConfiguration شامل عناصری است که HPAController را توصیف می‌کنند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="rtl"><code dir="ltr">ConcurrentHorizontalPodAutoscalerSyncs</code> <b>[الزامی]</b><br>
+<code dir="ltr">int32</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">ConcurrentHorizontalPodAutoscalerSyncs تعداد آبجکت‌های HPA است که مجاز به همگام‌سازی هم‌زمان هستند.
+عدد بزرگ‌تر = پردازش پاسخگوتر HPA، اما بار CPU (و شبکه) بیشتر.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">HorizontalPodAutoscalerSyncPeriod</code> <b>[الزامی]</b><br>
+<a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration" target="_blank" rel="noopener"><code dir="ltr">meta/v1.Duration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">HorizontalPodAutoscalerSyncPeriod بازه زمانی همگام‌سازی تعداد Podها در horizontal pod autoscaler است.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">HorizontalPodAutoscalerDownscaleStabilizationWindow</code> <b>[الزامی]</b><br>
+<a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration" target="_blank" rel="noopener"><code dir="ltr">meta/v1.Duration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">HorizontalPodAutoscalerDowncaleStabilizationWindow بازه‌ای زمانی است که autoscaler در طول آن به عقب نگاه می‌کند و تعداد را به کمتر از هر توصیه‌ای که در آن بازه ارائه کرده است کاهش نمی‌دهد.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">HorizontalPodAutoscalerTolerance</code> <b>[الزامی]</b><br>
+<code dir="ltr">float64</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">HorizontalPodAutoscalerTolerance میزان تحمل (tolerance) را هنگامی تعیین می‌کند که مصرف منابع پیشنهاد افزایش یا کاهش مقیاس را می‌دهد.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">HorizontalPodAutoscalerCPUInitializationPeriod</code> <b>[الزامی]</b><br>
+<a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration" target="_blank" rel="noopener"><code dir="ltr">meta/v1.Duration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">HorizontalPodAutoscalerCPUInitializationPeriod بازه زمانی پس از شروع Pod است که در آن ممکن است نمونه‌های CPU نادیده گرفته شوند.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">HorizontalPodAutoscalerInitialReadinessDelay</code> <b>[الزامی]</b><br>
+<a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration" target="_blank" rel="noopener"><code dir="ltr">meta/v1.Duration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">HorizontalPodAutoscalerInitialReadinessDelay بازه زمانی پس از شروع Pod است که در طول آن، تغییرات آمادگی (readiness) به‌گونه‌ای در نظر گرفته می‌شوند که گویی آمادگی برای نخستین بار تنظیم شده است. تنها اثر این موضوع آن است که
+HPA نمونه‌های CPU مربوط به Podهای آماده‌نشده‌ای را که آخرین تغییر آمادگی آن‌ها در همین
+بازه رخ داده است نادیده می‌گیرد.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="jobcontrollerconfiguration-kubecontrollermanager-config-k8s-io-v1alpha1-jobcontrollerconfiguration" dir="ltr" class="ltr"><code dir="ltr">JobControllerConfiguration</code>     {#kubecontrollermanager-config-k8s-io-v1alpha1-JobControllerConfiguration}</h2>
+<p dir="rtl"><strong>ظاهر شده در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubecontrollermanager-config-k8s-io-v1alpha1-KubeControllerManagerConfiguration">KubeControllerManagerConfiguration</a></li>
+</ul>
+<p dir="rtl">JobControllerConfiguration شامل عناصری است که JobController را توصیف می‌کنند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="rtl"><code dir="ltr">ConcurrentJobSyncs</code> <b>[الزامی]</b><br>
+<code dir="ltr">int32</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">concurrentJobSyncs تعداد آبجکت‌های Job است که مجاز به همگام‌سازی هم‌زمان هستند. عدد بزرگ‌تر = Jobهای پاسخگوتر،
+اما بار CPU (و شبکه) بیشتر.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="legacysatokencleanerconfiguration-kubecontrollermanager-config-k8s-io-v1alpha1-legacysatokencleanerconfiguration" dir="ltr" class="ltr"><code dir="ltr">LegacySATokenCleanerConfiguration</code>     {#kubecontrollermanager-config-k8s-io-v1alpha1-LegacySATokenCleanerConfiguration}</h2>
+<p dir="rtl"><strong>ظاهر شده در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubecontrollermanager-config-k8s-io-v1alpha1-KubeControllerManagerConfiguration">KubeControllerManagerConfiguration</a></li>
+</ul>
+<p dir="rtl">LegacySATokenCleanerConfiguration شامل عناصری است که LegacySATokenCleaner را توصیف می‌کنند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="rtl"><code dir="ltr">CleanUpPeriod</code> <b>[الزامی]</b><br>
+<a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration" target="_blank" rel="noopener"><code dir="ltr">meta/v1.Duration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">CleanUpPeriod مدت زمانی است که باید از آخرین استفاده از یک توکن حساب سرویس (service account) تولیدشده به‌صورت خودکار بگذرد تا بتوان آن را حذف کرد.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="namespacecontrollerconfiguration-kubecontrollermanager-config-k8s-io-v1alpha1-namespacecontrollerconfiguration" dir="ltr" class="ltr"><code dir="ltr">NamespaceControllerConfiguration</code>     {#kubecontrollermanager-config-k8s-io-v1alpha1-NamespaceControllerConfiguration}</h2>
+<p dir="rtl"><strong>ظاهر شده در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubecontrollermanager-config-k8s-io-v1alpha1-KubeControllerManagerConfiguration">KubeControllerManagerConfiguration</a></li>
+</ul>
+<p dir="rtl">NamespaceControllerConfiguration شامل عناصری است که NamespaceController را توصیف می‌کنند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="rtl"><code dir="ltr">NamespaceSyncPeriod</code> <b>[الزامی]</b><br>
+<a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration" target="_blank" rel="noopener"><code dir="ltr">meta/v1.Duration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">namespaceSyncPeriod بازه زمانی همگام‌سازی به‌روزرسانی‌های چرخه عمر فضای نام (namespace) است.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">ConcurrentNamespaceSyncs</code> <b>[الزامی]</b><br>
+<code dir="ltr">int32</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">concurrentNamespaceSyncs تعداد آبجکت‌های namespace است که مجاز به همگام‌سازی هم‌زمان هستند.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="nodeipamcontrollerconfiguration-kubecontrollermanager-config-k8s-io-v1alpha1-nodeipamcontrollerconfiguration" dir="ltr" class="ltr"><code dir="ltr">NodeIPAMControllerConfiguration</code>     {#kubecontrollermanager-config-k8s-io-v1alpha1-NodeIPAMControllerConfiguration}</h2>
+<p dir="rtl"><strong>ظاهر شده در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubecontrollermanager-config-k8s-io-v1alpha1-KubeControllerManagerConfiguration">KubeControllerManagerConfiguration</a></li>
+</ul>
+<p dir="rtl">NodeIPAMControllerConfiguration شامل عناصری است که NodeIpamController را توصیف می‌کنند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="rtl"><code dir="ltr">ServiceCIDR</code> <b>[الزامی]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">serviceCIDR محدوده CIDR برای Serviceها در کلاستر است.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">SecondaryServiceCIDR</code> <b>[الزامی]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">secondaryServiceCIDR محدوده CIDR برای Serviceها در کلاستر است. این مقدار در کلاسترهای dual stack استفاده می‌شود. SecondaryServiceCIDR باید از خانواده IP متفاوتی نسبت به ServiceCIDR باشد.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">NodeCIDRMaskSize</code> <b>[الزامی]</b><br>
+<code dir="ltr">int32</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">NodeCIDRMaskSize اندازه ماسک (mask) برای CIDR نودها در کلاستر است.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">NodeCIDRMaskSizeIPv4</code> <b>[الزامی]</b><br>
+<code dir="ltr">int32</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">NodeCIDRMaskSizeIPv4 اندازه ماسک برای CIDR نودها در کلاستر dual-stack است.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">NodeCIDRMaskSizeIPv6</code> <b>[الزامی]</b><br>
+<code dir="ltr">int32</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">NodeCIDRMaskSizeIPv6 اندازه ماسک برای CIDR نودها در کلاستر dual-stack است.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="nodelifecyclecontrollerconfiguration-kubecontrollermanager-config-k8s-io-v1alpha1-nodelifecyclecontrollerconfiguration" dir="ltr" class="ltr"><code dir="ltr">NodeLifecycleControllerConfiguration</code>     {#kubecontrollermanager-config-k8s-io-v1alpha1-NodeLifecycleControllerConfiguration}</h2>
+<p dir="rtl"><strong>ظاهر شده در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubecontrollermanager-config-k8s-io-v1alpha1-KubeControllerManagerConfiguration">KubeControllerManagerConfiguration</a></li>
+</ul>
+<p dir="rtl">NodeLifecycleControllerConfiguration شامل عناصری است که NodeLifecycleController را توصیف می‌کنند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="rtl"><code dir="ltr">NodeEvictionRate</code> <b>[الزامی]</b><br>
+<code dir="ltr">float32</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">nodeEvictionRate تعداد نودهایی در هر ثانیه است که در صورت خرابی نود، هنگامی که یک zone سالم است، Podهای روی آن‌ها حذف می‌شوند.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">SecondaryNodeEvictionRate</code> <b>[الزامی]</b><br>
+<code dir="ltr">float32</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">secondaryNodeEvictionRate تعداد نودهایی در هر ثانیه است که در صورت خرابی نود، هنگامی که یک zone ناسالم است، Podهای روی آن‌ها حذف می‌شوند.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">NodeStartupGracePeriod</code> <b>[الزامی]</b><br>
+<a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration" target="_blank" rel="noopener"><code dir="ltr">meta/v1.Duration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">nodeStartupGracePeriod مدت زمانی است که اجازه می‌دهیم یک نودِ در حال راه‌اندازی بدون پاسخ بماند، پیش از آنکه آن را ناسالم علامت‌گذاری کنیم.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">NodeMonitorGracePeriod</code> <b>[الزامی]</b><br>
+<a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration" target="_blank" rel="noopener"><code dir="ltr">meta/v1.Duration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">nodeMontiorGracePeriod مدت زمانی است که اجازه می‌دهیم یک نودِ در حال اجرا بدون پاسخ بماند، پیش از آنکه آن را ناسالم علامت‌گذاری کنیم. این مقدار باید N برابر nodeStatusUpdateFrequency در kubelet باشد، که در آن N بیانگر تعداد دفعات مجاز تلاش مجدد برای ارسال وضعیت نود توسط kubelet است. این مقدار همچنین باید از مجموع
+HTTP2_PING_TIMEOUT_SECONDS و HTTP2_READ_IDLE_TIMEOUT_SECONDS بزرگ‌تر باشد.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">PodEvictionTimeout</code> <b>[الزامی]</b><br>
+<a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration" target="_blank" rel="noopener"><code dir="ltr">meta/v1.Duration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">podEvictionTimeout مهلت (grace period) حذف Podها روی نودهای خراب است.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">LargeClusterSizeThreshold</code> <b>[الزامی]</b><br>
+<code dir="ltr">int32</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">secondaryNodeEvictionRate برای کلاسترهایی که اندازه آن‌ها کوچک‌تر یا مساوی largeClusterSizeThreshold است، به‌طور ضمنی با مقدار 0 بازنویسی می‌شود.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">UnhealthyZoneThreshold</code> <b>[الزامی]</b><br>
+<code dir="ltr">float32</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">یک zone در nodeEvictionRate و secondaryNodeEvictionRate ناسالم در نظر گرفته می‌شود، هنگامی که دست‌کم
+unhealthyZoneThreshold (نه کمتر از ۳) از نودهای آن zone در وضعیت NotReady باشند.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">NodeMonitorPeriod</code> <b>[الزامی]</b><br>
+<a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration" target="_blank" rel="noopener"><code dir="ltr">meta/v1.Duration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">NodeMonitorPeriod بازه زمانی همگام‌سازی NodeStatus در NodeLifecycleController است.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="persistentvolumebindercontrollerconfiguration-kubecontrollermanager-config-k8s-io-v1alpha1-persistentvolumebindercontrollerconfiguration" dir="ltr" class="ltr"><code dir="ltr">PersistentVolumeBinderControllerConfiguration</code>     {#kubecontrollermanager-config-k8s-io-v1alpha1-PersistentVolumeBinderControllerConfiguration}</h2>
+<p dir="rtl"><strong>ظاهر شده در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubecontrollermanager-config-k8s-io-v1alpha1-KubeControllerManagerConfiguration">KubeControllerManagerConfiguration</a></li>
+</ul>
+<p dir="rtl">PersistentVolumeBinderControllerConfiguration شامل عناصری است که
+PersistentVolumeBinderController را توصیف می‌کنند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="rtl"><code dir="ltr">PVClaimBinderSyncPeriod</code> <b>[الزامی]</b><br>
+<a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration" target="_blank" rel="noopener"><code dir="ltr">meta/v1.Duration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">pvClaimBinderSyncPeriod بازه زمانی همگام‌سازی persistent volumeها و persistent volume claimها است.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">VolumeConfiguration</code> <b>[الزامی]</b><br>
+<a href="#kubecontrollermanager-config-k8s-io-v1alpha1-VolumeConfiguration"><code dir="ltr">VolumeConfiguration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">volumeConfiguration پیکربندی قابلیت‌های مرتبط با حجم (volume) را نگه می‌دارد.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="persistentvolumerecyclerconfiguration-kubecontrollermanager-config-k8s-io-v1alpha1-persistentvolumerecyclerconfiguration" dir="ltr" class="ltr"><code dir="ltr">PersistentVolumeRecyclerConfiguration</code>     {#kubecontrollermanager-config-k8s-io-v1alpha1-PersistentVolumeRecyclerConfiguration}</h2>
+<p dir="rtl"><strong>ظاهر شده در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubecontrollermanager-config-k8s-io-v1alpha1-VolumeConfiguration">VolumeConfiguration</a></li>
+</ul>
+<p dir="rtl">PersistentVolumeRecyclerConfiguration شامل عناصری است که افزونه‌های persistent volume را توصیف می‌کنند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="rtl"><code dir="ltr">MaximumRetry</code> <b>[الزامی]</b><br>
+<code dir="ltr">int32</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">maximumRetry تعداد دفعات تلاش مجددی است که PV recycler در صورت شکست در بازیافت PV انجام می‌دهد.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">MinimumTimeoutNFS</code> <b>[الزامی]</b><br>
+<code dir="ltr">int32</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">minimumTimeoutNFS حداقل مقدار ActiveDeadlineSeconds برای استفاده در یک Pod بازیافت‌کننده (Recycler) از نوع NFS است.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">PodTemplateFilePathNFS</code> <b>[الزامی]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">podTemplateFilePathNFS مسیر فایل تعریف Pod است که به‌عنوان قالب برای بازیافت persistent volume از نوع NFS استفاده می‌شود.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">IncrementTimeoutNFS</code> <b>[الزامی]</b><br>
+<code dir="ltr">int32</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">incrementTimeoutNFS مقدار زمانی است که به ازای هر Gi به ActiveDeadlineSeconds برای یک Pod پاک‌سازی‌کننده (scrubber) از نوع NFS افزوده می‌شود.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">PodTemplateFilePathHostPath</code> <b>[الزامی]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">podTemplateFilePathHostPath مسیر فایل تعریف Pod است که به‌عنوان قالب برای بازیافت persistent volume از نوع HostPath استفاده می‌شود. این گزینه صرفاً برای توسعه و آزمایش است و
+در کلاستر چندنودی کار نخواهد کرد.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">MinimumTimeoutHostPath</code> <b>[الزامی]</b><br>
+<code dir="ltr">int32</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">minimumTimeoutHostPath حداقل مقدار ActiveDeadlineSeconds برای استفاده در یک Pod بازیافت‌کننده (Recycler) از نوع HostPath است. این گزینه صرفاً برای توسعه و آزمایش است و در کلاستر چندنودی کار نخواهد کرد.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">IncrementTimeoutHostPath</code> <b>[الزامی]</b><br>
+<code dir="ltr">int32</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">incrementTimeoutHostPath مقدار زمانی است که به ازای هر Gi به ActiveDeadlineSeconds برای یک Pod پاک‌سازی‌کننده (scrubber) از نوع HostPath افزوده می‌شود. این گزینه صرفاً برای توسعه و آزمایش است و در کلاستر چندنودی کار نخواهد کرد.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="podgccontrollerconfiguration-kubecontrollermanager-config-k8s-io-v1alpha1-podgccontrollerconfiguration" dir="ltr" class="ltr"><code dir="ltr">PodGCControllerConfiguration</code>     {#kubecontrollermanager-config-k8s-io-v1alpha1-PodGCControllerConfiguration}</h2>
+<p dir="rtl"><strong>ظاهر شده در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubecontrollermanager-config-k8s-io-v1alpha1-KubeControllerManagerConfiguration">KubeControllerManagerConfiguration</a></li>
+</ul>
+<p dir="rtl">PodGCControllerConfiguration شامل عناصری است که PodGCController را توصیف می‌کنند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="rtl"><code dir="ltr">TerminatedPodGCThreshold</code> <b>[الزامی]</b><br>
+<code dir="ltr">int32</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">terminatedPodGCThreshold تعداد Podهای خاتمه‌یافته‌ای است که می‌توانند وجود داشته باشند،
+پیش از آنکه garbage collector مربوط به Podهای خاتمه‌یافته شروع به حذف آن‌ها کند.
+اگر مقدار آن &lt;= 0 باشد، garbage collector مربوط به Podهای خاتمه‌یافته غیرفعال است.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="replicasetcontrollerconfiguration-kubecontrollermanager-config-k8s-io-v1alpha1-replicasetcontrollerconfiguration" dir="ltr" class="ltr"><code dir="ltr">ReplicaSetControllerConfiguration</code>     {#kubecontrollermanager-config-k8s-io-v1alpha1-ReplicaSetControllerConfiguration}</h2>
+<p dir="rtl"><strong>ظاهر شده در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubecontrollermanager-config-k8s-io-v1alpha1-KubeControllerManagerConfiguration">KubeControllerManagerConfiguration</a></li>
+</ul>
+<p dir="rtl">ReplicaSetControllerConfiguration شامل عناصری است که ReplicaSetController را توصیف می‌کنند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="rtl"><code dir="ltr">ConcurrentRSSyncs</code> <b>[الزامی]</b><br>
+<code dir="ltr">int32</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">concurrentRSSyncs تعداد ReplicaSetهایی است که مجاز به همگام‌سازی هم‌زمان هستند. عدد بزرگ‌تر = مدیریت پاسخگوتر replicaها، اما بار CPU (و شبکه) بیشتر.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="replicationcontrollerconfiguration-kubecontrollermanager-config-k8s-io-v1alpha1-replicationcontrollerconfiguration" dir="ltr" class="ltr"><code dir="ltr">ReplicationControllerConfiguration</code>     {#kubecontrollermanager-config-k8s-io-v1alpha1-ReplicationControllerConfiguration}</h2>
+<p dir="rtl"><strong>ظاهر شده در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubecontrollermanager-config-k8s-io-v1alpha1-KubeControllerManagerConfiguration">KubeControllerManagerConfiguration</a></li>
+</ul>
+<p dir="rtl">ReplicationControllerConfiguration شامل عناصری است که ReplicationController را توصیف می‌کنند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="rtl"><code dir="ltr">ConcurrentRCSyncs</code> <b>[الزامی]</b><br>
+<code dir="ltr">int32</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">concurrentRCSyncs تعداد replication controllerهایی است که مجاز به همگام‌سازی هم‌زمان هستند. عدد بزرگ‌تر = مدیریت پاسخگوتر replicaها،
+اما بار CPU (و شبکه) بیشتر.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="resourceclaimcontrollerconfiguration-kubecontrollermanager-config-k8s-io-v1alpha1-resourceclaimcontrollerconfiguration" dir="ltr" class="ltr"><code dir="ltr">ResourceClaimControllerConfiguration</code>     {#kubecontrollermanager-config-k8s-io-v1alpha1-ResourceClaimControllerConfiguration}</h2>
+<p dir="rtl"><strong>ظاهر شده در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubecontrollermanager-config-k8s-io-v1alpha1-KubeControllerManagerConfiguration">KubeControllerManagerConfiguration</a></li>
+</ul>
+<p dir="rtl">ResourceClaimControllerConfiguration شامل عناصری است که کنترل‌کننده resource claim را پیکربندی می‌کنند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="rtl"><code dir="ltr">ConcurrentSyncs</code> <b>[الزامی]</b><br>
+<code dir="ltr">int32</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">ConcurrentSyncs تعداد عملیاتی (مانند حذف یک Pod، به‌روزرسانی وضعیت ResourcClaim و غیره) است
+که به‌صورت هم‌زمان انجام می‌شوند. عدد بزرگ‌تر = پردازش بیشتر، اما بار CPU (و شبکه) بیشتر.</p>
+<p dir="rtl">مقدار پیش‌فرض ۵۰ است.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="resourcequotacontrollerconfiguration-kubecontrollermanager-config-k8s-io-v1alpha1-resourcequotacontrollerconfiguration" dir="ltr" class="ltr"><code dir="ltr">ResourceQuotaControllerConfiguration</code>     {#kubecontrollermanager-config-k8s-io-v1alpha1-ResourceQuotaControllerConfiguration}</h2>
+<p dir="rtl"><strong>ظاهر شده در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubecontrollermanager-config-k8s-io-v1alpha1-KubeControllerManagerConfiguration">KubeControllerManagerConfiguration</a></li>
+</ul>
+<p dir="rtl">ResourceQuotaControllerConfiguration شامل عناصری است که ResourceQuotaController را توصیف می‌کنند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="rtl"><code dir="ltr">ResourceQuotaSyncPeriod</code> <b>[الزامی]</b><br>
+<a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration" target="_blank" rel="noopener"><code dir="ltr">meta/v1.Duration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">resourceQuotaSyncPeriod بازه زمانی همگام‌سازی وضعیت مصرف سهمیه (quota) در سامانه است.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">ConcurrentResourceQuotaSyncs</code> <b>[الزامی]</b><br>
+<code dir="ltr">int32</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">concurrentResourceQuotaSyncs تعداد resource quotaهایی است که مجاز به همگام‌سازی هم‌زمان هستند. عدد بزرگ‌تر = مدیریت پاسخگوتر سهمیه،
+اما بار CPU (و شبکه) بیشتر.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="sacontrollerconfiguration-kubecontrollermanager-config-k8s-io-v1alpha1-sacontrollerconfiguration" dir="ltr" class="ltr"><code dir="ltr">SAControllerConfiguration</code>     {#kubecontrollermanager-config-k8s-io-v1alpha1-SAControllerConfiguration}</h2>
+<p dir="rtl"><strong>ظاهر شده در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubecontrollermanager-config-k8s-io-v1alpha1-KubeControllerManagerConfiguration">KubeControllerManagerConfiguration</a></li>
+</ul>
+<p dir="rtl">SAControllerConfiguration شامل عناصری است که ServiceAccountController را توصیف می‌کنند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="rtl"><code dir="ltr">ServiceAccountKeyFile</code> <b>[الزامی]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">serviceAccountKeyFile نام فایلی است که شامل یک کلید خصوصی RSA با کدگذاری PEM است
+و برای امضای توکن‌های service account استفاده می‌شود.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">ConcurrentSATokenSyncs</code> <b>[الزامی]</b><br>
+<code dir="ltr">int32</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">concurrentSATokenSyncs تعداد عملیات همگام‌سازی توکن service account است
+که به‌صورت هم‌زمان انجام می‌شوند.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">RootCAFile</code> <b>[الزامی]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">rootCAFile مرجع صدور گواهی ریشه (root certificate authority) است که در Secret توکن service account درج می‌شود. این مقدار باید یک بسته CA معتبر با کدگذاری PEM باشد.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="statefulsetcontrollerconfiguration-kubecontrollermanager-config-k8s-io-v1alpha1-statefulsetcontrollerconfiguration" dir="ltr" class="ltr"><code dir="ltr">StatefulSetControllerConfiguration</code>     {#kubecontrollermanager-config-k8s-io-v1alpha1-StatefulSetControllerConfiguration}</h2>
+<p dir="rtl"><strong>ظاهر شده در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubecontrollermanager-config-k8s-io-v1alpha1-KubeControllerManagerConfiguration">KubeControllerManagerConfiguration</a></li>
+</ul>
+<p dir="rtl">StatefulSetControllerConfiguration شامل عناصری است که StatefulSetController را توصیف می‌کنند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="rtl"><code dir="ltr">ConcurrentStatefulSetSyncs</code> <b>[الزامی]</b><br>
+<code dir="ltr">int32</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">concurrentStatefulSetSyncs تعداد آبجکت‌های StatefulSet است که مجاز به همگام‌سازی هم‌زمان هستند. عدد بزرگ‌تر = StatefulSetهای پاسخگوتر،
+اما بار CPU (و شبکه) بیشتر.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="ttlafterfinishedcontrollerconfiguration-kubecontrollermanager-config-k8s-io-v1alpha1-ttlafterfinishedcontrollerconfiguration" dir="ltr" class="ltr"><code dir="ltr">TTLAfterFinishedControllerConfiguration</code>     {#kubecontrollermanager-config-k8s-io-v1alpha1-TTLAfterFinishedControllerConfiguration}</h2>
+<p dir="rtl"><strong>ظاهر شده در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubecontrollermanager-config-k8s-io-v1alpha1-KubeControllerManagerConfiguration">KubeControllerManagerConfiguration</a></li>
+</ul>
+<p dir="rtl">TTLAfterFinishedControllerConfiguration شامل عناصری است که TTLAfterFinishedController را توصیف می‌کنند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="rtl"><code dir="ltr">ConcurrentTTLSyncs</code> <b>[الزامی]</b><br>
+<code dir="ltr">int32</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">concurrentTTLSyncs تعداد workerهای collector مربوط به TTL-after-finished است که مجاز به همگام‌سازی هم‌زمان هستند.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="validatingadmissionpolicystatuscontrollerconfiguration-kubecontrollermanager-config-k8s-io-v1alpha1-validatingadmissionpolicystatuscontrollerconfiguration" dir="ltr" class="ltr"><code dir="ltr">ValidatingAdmissionPolicyStatusControllerConfiguration</code>     {#kubecontrollermanager-config-k8s-io-v1alpha1-ValidatingAdmissionPolicyStatusControllerConfiguration}</h2>
+<p dir="rtl"><strong>ظاهر شده در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubecontrollermanager-config-k8s-io-v1alpha1-KubeControllerManagerConfiguration">KubeControllerManagerConfiguration</a></li>
+</ul>
+<p dir="rtl">ValidatingAdmissionPolicyStatusControllerConfiguration شامل عناصری است که ValidatingAdmissionPolicyStatusController را توصیف می‌کنند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="rtl"><code dir="ltr">ConcurrentPolicySyncs</code> <b>[الزامی]</b><br>
+<code dir="ltr">int32</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">ConcurrentPolicySyncs تعداد آبجکت‌های policy است که مجاز به همگام‌سازی هم‌زمان هستند. عدد بزرگ‌تر = بررسی سریع‌تر نوع (type checking)،
+اما بار CPU (و شبکه) بیشتر.
+مقدار پیش‌فرض ۵ است.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="volumeconfiguration-kubecontrollermanager-config-k8s-io-v1alpha1-volumeconfiguration" dir="ltr" class="ltr"><code dir="ltr">VolumeConfiguration</code>     {#kubecontrollermanager-config-k8s-io-v1alpha1-VolumeConfiguration}</h2>
+<p dir="rtl"><strong>ظاهر شده در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#kubecontrollermanager-config-k8s-io-v1alpha1-PersistentVolumeBinderControllerConfiguration">PersistentVolumeBinderControllerConfiguration</a></li>
+</ul>
+<p dir="rtl">VolumeConfiguration شامل <em>تمام</em> فلگ‌های برشمرده‌شده‌ای است که برای پیکربندی همه‌ی افزونه‌های حجم (volume) در نظر گرفته شده‌اند. بر اساس این پیکربندی، باینری controller-manager نمونه‌های متعددی از
+volume.VolumeConfig ایجاد می‌کند که هر یک فقط شامل پیکربندی موردنیاز همان افزونه است و سپس
+به افزونه‌ی مربوطه ارسال می‌شود. باینری ControllerManager تنها بخشی از کد است
+که می‌داند چه افزونه‌هایی پشتیبانی می‌شوند و هر فلگ به کدام افزونه مربوط است.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="rtl"><code dir="ltr">EnableHostPathProvisioning</code> <b>[الزامی]</b><br>
+<code dir="ltr">bool</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">enableHostPathProvisioning تأمین (provisioning) PV از نوع HostPath را هنگام اجرا بدون
+ارائه‌دهنده‌ی ابری فعال می‌کند. این امر امکان آزمایش و توسعه‌ی قابلیت‌های تأمین را فراهم می‌کند. تأمین HostPath
+به هیچ وجه پشتیبانی نمی‌شود، در کلاستر چندنودی کار نخواهد کرد و
+نباید برای هیچ منظوری جز آزمایش یا توسعه استفاده شود.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">EnableDynamicProvisioning</code> <b>[الزامی]</b><br>
+<code dir="ltr">bool</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">enableDynamicProvisioning تأمین حجم‌ها (volumes) را هنگام اجرا در محیطی که
+از تأمین پویا پشتیبانی می‌کند فعال می‌کند. مقدار پیش‌فرض true است.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">PersistentVolumeRecyclerConfiguration</code> <b>[الزامی]</b><br>
+<a href="#kubecontrollermanager-config-k8s-io-v1alpha1-PersistentVolumeRecyclerConfiguration"><code dir="ltr">PersistentVolumeRecyclerConfiguration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">persistentVolumeRecyclerConfiguration پیکربندی افزونه‌های حجم پایدار (persistent volume) را در بر دارد.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">FlexVolumePluginDir</code> <b>[الزامی]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">volumePluginDir مسیر کامل دایرکتوری‌ای است که افزونه‌ی حجم flex
+باید در آن به جست‌وجوی افزونه‌های حجم اضافیِ شخص ثالث بپردازد.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#انواع-منابع-resource-types">انواع منابع {#resource-types}</a><a class="l2" href="#clientconnectionconfiguration-clientconnectionconfiguration">ClientConnectionConfiguration     {#ClientConnectionConfiguration}</a><a class="l2" href="#debuggingconfiguration-debuggingconfiguration">DebuggingConfiguration     {#DebuggingConfiguration}</a><a class="l2" href="#leaderelectionconfiguration-leaderelectionconfiguration">LeaderElectionConfiguration     {#LeaderElectionConfiguration}</a><a class="l2" href="#nodecontrollerconfiguration-nodecontrollerconfiguration">NodeControllerConfiguration     {#NodeControllerConfiguration}</a><a class="l2" href="#servicecontrollerconfiguration-servicecontrollerconfiguration">ServiceControllerConfiguration     {#ServiceControllerConfiguration}</a><a class="l2" href="#cloudcontrollermanagerconfiguration-cloudcontrollermanager-config-k8s-io-v1alpha1-cloudcontrollermanagerconfiguration">CloudControllerManagerConfiguration     {#cloudcontrollermanager-config-k8s-io-v1alpha1-CloudControllerManagerConfiguration}</a><a class="l2" href="#cloudproviderconfiguration-cloudcontrollermanager-config-k8s-io-v1alpha1-cloudproviderconfiguration">CloudProviderConfiguration     {#cloudcontrollermanager-config-k8s-io-v1alpha1-CloudProviderConfiguration}</a><a class="l2" href="#kubecloudsharedconfiguration-cloudcontrollermanager-config-k8s-io-v1alpha1-kubecloudsharedconfiguration">KubeCloudSharedConfiguration     {#cloudcontrollermanager-config-k8s-io-v1alpha1-KubeCloudSharedConfiguration}</a><a class="l2" href="#webhookconfiguration-cloudcontrollermanager-config-k8s-io-v1alpha1-webhookconfiguration">WebhookConfiguration     {#cloudcontrollermanager-config-k8s-io-v1alpha1-WebhookConfiguration}</a><a class="l2" href="#leadermigrationconfiguration-controllermanager-config-k8s-io-v1alpha1-leadermigrationconfiguration">LeaderMigrationConfiguration     {#controllermanager-config-k8s-io-v1alpha1-LeaderMigrationConfiguration}</a><a class="l2" href="#controllerleaderconfiguration-controllermanager-config-k8s-io-v1alpha1-controllerleaderconfiguration">ControllerLeaderConfiguration     {#controllermanager-config-k8s-io-v1alpha1-ControllerLeaderConfiguration}</a><a class="l2" href="#genericcontrollermanagerconfiguration-controllermanager-config-k8s-io-v1alpha1-genericcontrollermanagerconfiguration">GenericControllerManagerConfiguration     {#controllermanager-config-k8s-io-v1alpha1-GenericControllerManagerConfiguration}</a><a class="l2" href="#kubecontrollermanagerconfiguration-kubecontrollermanager-config-k8s-io-v1alpha1-kubecontrollermanagerconfiguration">KubeControllerManagerConfiguration     {#kubecontrollermanager-config-k8s-io-v1alpha1-KubeControllerManagerConfiguration}</a><a class="l2" href="#attachdetachcontrollerconfiguration-kubecontrollermanager-config-k8s-io-v1alpha1-attachdetachcontrollerconfiguration">AttachDetachControllerConfiguration     {#kubecontrollermanager-config-k8s-io-v1alpha1-AttachDetachControllerConfiguration}</a><a class="l2" href="#csrsigningconfiguration-kubecontrollermanager-config-k8s-io-v1alpha1-csrsigningconfiguration">CSRSigningConfiguration     {#kubecontrollermanager-config-k8s-io-v1alpha1-CSRSigningConfiguration}</a><a class="l2" href="#csrsigningcontrollerconfiguration-kubecontrollermanager-config-k8s-io-v1alpha1-csrsigningcontrollerconfiguration">CSRSigningControllerConfiguration     {#kubecontrollermanager-config-k8s-io-v1alpha1-CSRSigningControllerConfiguration}</a><a class="l2" href="#cronjobcontrollerconfiguration-kubecontrollermanager-config-k8s-io-v1alpha1-cronjobcontrollerconfiguration">CronJobControllerConfiguration     {#kubecontrollermanager-config-k8s-io-v1alpha1-CronJobControllerConfiguration}</a><a class="l2" href="#daemonsetcontrollerconfiguration-kubecontrollermanager-config-k8s-io-v1alpha1-daemonsetcontrollerconfiguration">DaemonSetControllerConfiguration     {#kubecontrollermanager-config-k8s-io-v1alpha1-DaemonSetControllerConfiguration}</a><a class="l2" href="#deploymentcontrollerconfiguration-kubecontrollermanager-config-k8s-io-v1alpha1-deploymentcontrollerconfiguration">DeploymentControllerConfiguration     {#kubecontrollermanager-config-k8s-io-v1alpha1-DeploymentControllerConfiguration}</a><a class="l2" href="#deprecatedcontrollerconfiguration-kubecontrollermanager-config-k8s-io-v1alpha1-deprecatedcontrollerconfiguration">DeprecatedControllerConfiguration     {#kubecontrollermanager-config-k8s-io-v1alpha1-DeprecatedControllerConfiguration}</a><a class="l2" href="#devicetaintevictioncontrollerconfiguration-kubecontrollermanager-config-k8s-io-v1alpha1-devicetaintevictioncontrollerconfiguration">DeviceTaintEvictionControllerConfiguration     {#kubecontrollermanager-config-k8s-io-v1alpha1-DeviceTaintEvictionControllerConfiguration}</a><a class="l2" href="#disruptioncontrollerconfiguration-kubecontrollermanager-config-k8s-io-v1alpha1-disruptioncontrollerconfiguration">DisruptionControllerConfiguration     {#kubecontrollermanager-config-k8s-io-v1alpha1-DisruptionControllerConfiguration}</a><a class="l2" href="#endpointcontrollerconfiguration-kubecontrollermanager-config-k8s-io-v1alpha1-endpointcontrollerconfiguration">EndpointControllerConfiguration     {#kubecontrollermanager-config-k8s-io-v1alpha1-EndpointControllerConfiguration}</a><a class="l2" href="#endpointslicecontrollerconfiguration-kubecontrollermanager-config-k8s-io-v1alpha1-endpointslicecontrollerconfiguration">EndpointSliceControllerConfiguration     {#kubecontrollermanager-config-k8s-io-v1alpha1-EndpointSliceControllerConfiguration}</a><a class="l2" href="#endpointslicemirroringcontrollerconfiguration-kubecontrollermanager-config-k8s-io-v1alpha1-endpointslicemirroringcontrollerconfiguration">EndpointSliceMirroringControllerConfiguration     {#kubecontrollermanager-config-k8s-io-v1alpha1-EndpointSliceMirroringControllerConfiguration}</a><a class="l2" href="#ephemeralvolumecontrollerconfiguration-kubecontrollermanager-config-k8s-io-v1alpha1-ephemeralvolumecontrollerconfiguration">EphemeralVolumeControllerConfiguration     {#kubecontrollermanager-config-k8s-io-v1alpha1-EphemeralVolumeControllerConfiguration}</a><a class="l2" href="#garbagecollectorcontrollerconfiguration-kubecontrollermanager-config-k8s-io-v1alpha1-garbagecollectorcontrollerconfiguration">GarbageCollectorControllerConfiguration     {#kubecontrollermanager-config-k8s-io-v1alpha1-GarbageCollectorControllerConfiguration}</a><a class="l2" href="#groupresource-kubecontrollermanager-config-k8s-io-v1alpha1-groupresource">GroupResource     {#kubecontrollermanager-config-k8s-io-v1alpha1-GroupResource}</a><a class="l2" href="#hpacontrollerconfiguration-kubecontrollermanager-config-k8s-io-v1alpha1-hpacontrollerconfiguration">HPAControllerConfiguration     {#kubecontrollermanager-config-k8s-io-v1alpha1-HPAControllerConfiguration}</a><a class="l2" href="#jobcontrollerconfiguration-kubecontrollermanager-config-k8s-io-v1alpha1-jobcontrollerconfiguration">JobControllerConfiguration     {#kubecontrollermanager-config-k8s-io-v1alpha1-JobControllerConfiguration}</a><a class="l2" href="#legacysatokencleanerconfiguration-kubecontrollermanager-config-k8s-io-v1alpha1-legacysatokencleanerconfiguration">LegacySATokenCleanerConfiguration     {#kubecontrollermanager-config-k8s-io-v1alpha1-LegacySATokenCleanerConfiguration}</a><a class="l2" href="#namespacecontrollerconfiguration-kubecontrollermanager-config-k8s-io-v1alpha1-namespacecontrollerconfiguration">NamespaceControllerConfiguration     {#kubecontrollermanager-config-k8s-io-v1alpha1-NamespaceControllerConfiguration}</a><a class="l2" href="#nodeipamcontrollerconfiguration-kubecontrollermanager-config-k8s-io-v1alpha1-nodeipamcontrollerconfiguration">NodeIPAMControllerConfiguration     {#kubecontrollermanager-config-k8s-io-v1alpha1-NodeIPAMControllerConfiguration}</a><a class="l2" href="#nodelifecyclecontrollerconfiguration-kubecontrollermanager-config-k8s-io-v1alpha1-nodelifecyclecontrollerconfiguration">NodeLifecycleControllerConfiguration     {#kubecontrollermanager-config-k8s-io-v1alpha1-NodeLifecycleControllerConfiguration}</a><a class="l2" href="#persistentvolumebindercontrollerconfiguration-kubecontrollermanager-config-k8s-io-v1alpha1-persistentvolumebindercontrollerconfiguration">PersistentVolumeBinderControllerConfiguration     {#kubecontrollermanager-config-k8s-io-v1alpha1-PersistentVolumeBinderControllerConfiguration}</a><a class="l2" href="#persistentvolumerecyclerconfiguration-kubecontrollermanager-config-k8s-io-v1alpha1-persistentvolumerecyclerconfiguration">PersistentVolumeRecyclerConfiguration     {#kubecontrollermanager-config-k8s-io-v1alpha1-PersistentVolumeRecyclerConfiguration}</a><a class="l2" href="#podgccontrollerconfiguration-kubecontrollermanager-config-k8s-io-v1alpha1-podgccontrollerconfiguration">PodGCControllerConfiguration     {#kubecontrollermanager-config-k8s-io-v1alpha1-PodGCControllerConfiguration}</a><a class="l2" href="#replicasetcontrollerconfiguration-kubecontrollermanager-config-k8s-io-v1alpha1-replicasetcontrollerconfiguration">ReplicaSetControllerConfiguration     {#kubecontrollermanager-config-k8s-io-v1alpha1-ReplicaSetControllerConfiguration}</a><a class="l2" href="#replicationcontrollerconfiguration-kubecontrollermanager-config-k8s-io-v1alpha1-replicationcontrollerconfiguration">ReplicationControllerConfiguration     {#kubecontrollermanager-config-k8s-io-v1alpha1-ReplicationControllerConfiguration}</a><a class="l2" href="#resourceclaimcontrollerconfiguration-kubecontrollermanager-config-k8s-io-v1alpha1-resourceclaimcontrollerconfiguration">ResourceClaimControllerConfiguration     {#kubecontrollermanager-config-k8s-io-v1alpha1-ResourceClaimControllerConfiguration}</a><a class="l2" href="#resourcequotacontrollerconfiguration-kubecontrollermanager-config-k8s-io-v1alpha1-resourcequotacontrollerconfiguration">ResourceQuotaControllerConfiguration     {#kubecontrollermanager-config-k8s-io-v1alpha1-ResourceQuotaControllerConfiguration}</a><a class="l2" href="#sacontrollerconfiguration-kubecontrollermanager-config-k8s-io-v1alpha1-sacontrollerconfiguration">SAControllerConfiguration     {#kubecontrollermanager-config-k8s-io-v1alpha1-SAControllerConfiguration}</a><a class="l2" href="#statefulsetcontrollerconfiguration-kubecontrollermanager-config-k8s-io-v1alpha1-statefulsetcontrollerconfiguration">StatefulSetControllerConfiguration     {#kubecontrollermanager-config-k8s-io-v1alpha1-StatefulSetControllerConfiguration}</a><a class="l2" href="#ttlafterfinishedcontrollerconfiguration-kubecontrollermanager-config-k8s-io-v1alpha1-ttlafterfinishedcontrollerconfiguration">TTLAfterFinishedControllerConfiguration     {#kubecontrollermanager-config-k8s-io-v1alpha1-TTLAfterFinishedControllerConfiguration}</a><a class="l2" href="#validatingadmissionpolicystatuscontrollerconfiguration-kubecontrollermanager-config-k8s-io-v1alpha1-validatingadmissionpolicystatuscontrollerconfiguration">ValidatingAdmissionPolicyStatusControllerConfiguration     {#kubecontrollermanager-config-k8s-io-v1alpha1-ValidatingAdmissionPolicyStatusControllerConfiguration}</a><a class="l2" href="#volumeconfiguration-kubecontrollermanager-config-k8s-io-v1alpha1-volumeconfiguration">VolumeConfiguration     {#kubecontrollermanager-config-k8s-io-v1alpha1-VolumeConfiguration}</a></nav>
+</div>
+</body>
+</html>
