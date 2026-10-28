@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-929 از 1722 صفحه
+944 از 1722 صفحه
 
 
 ## `.`
@@ -1077,21 +1077,21 @@
 - ✅ [selector.md](md/reference/glossary/selector.md)
 - ✅ [service-account.md](md/reference/glossary/service-account.md)
 - ✅ [service-catalog.md](md/reference/glossary/service-catalog.md)
-- ⏳ `service.md`
-- ⏳ `shuffle-sharding.md`
-- ⏳ `sidecar-container.md`
-- ⏳ `sig.md`
-- ⏳ `spec.md`
-- ⏳ `statefulset.md`
-- ⏳ `static-pod.md`
-- ⏳ `storage-class.md`
-- ⏳ `sysctl.md`
-- ⏳ `taint.md`
-- ⏳ `toleration.md`
-- ⏳ `uid.md`
-- ⏳ `upstream.md`
-- ⏳ `userns.md`
-- ⏳ `volume-plugin.md`
+- ✅ [service.md](md/reference/glossary/service.md)
+- ✅ [shuffle-sharding.md](md/reference/glossary/shuffle-sharding.md)
+- ✅ [sidecar-container.md](md/reference/glossary/sidecar-container.md)
+- ✅ [sig.md](md/reference/glossary/sig.md)
+- ✅ [spec.md](md/reference/glossary/spec.md)
+- ✅ [statefulset.md](md/reference/glossary/statefulset.md)
+- ✅ [static-pod.md](md/reference/glossary/static-pod.md)
+- ✅ [storage-class.md](md/reference/glossary/storage-class.md)
+- ✅ [sysctl.md](md/reference/glossary/sysctl.md)
+- ✅ [taint.md](md/reference/glossary/taint.md)
+- ✅ [toleration.md](md/reference/glossary/toleration.md)
+- ✅ [uid.md](md/reference/glossary/uid.md)
+- ✅ [upstream.md](md/reference/glossary/upstream.md)
+- ✅ [userns.md](md/reference/glossary/userns.md)
+- ✅ [volume-plugin.md](md/reference/glossary/volume-plugin.md)
 - ⏳ `volume.md`
 - ⏳ `watch.md`
 - ⏳ `wg.md`

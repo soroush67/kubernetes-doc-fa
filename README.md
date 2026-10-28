@@ -8,8 +8,8 @@
 
 | | |
 |---|---|
-| پیشرفت (بر اساس کلمات) | **27.0٪** |
-| صفحات ترجمه‌شده | 929 از 1722 |
+| پیشرفت (بر اساس کلمات) | **27.1٪** |
+| صفحات ترجمه‌شده | 944 از 1722 |
 | صفحات دارای ایراد ساختاری | 23 |
 | نسخه‌ی منبع انگلیسی | `ed70e311737a` |
 
@@ -72,7 +72,7 @@ cd kubernetes-doc-fa
 | `contribute` | 44 | 44 |
 | `doc-contributor-tools` | 1 | 1 |
 | `home` | 2 | 2 |
-| `reference` | 694 | 1198 |
+| `reference` | 709 | 1198 |
 | `setup` | 0 | 22 |
 | `tasks` | 0 | 221 |
 | `tutorials` | 0 | 45 |
@@ -91,26 +91,26 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [reference/glossary/userns.md](md/reference/glossary/userns.md) — 2026-10-28T11:47:54+03:30
+- [reference/glossary/volume-plugin.md](md/reference/glossary/volume-plugin.md) — 2026-10-28T11:47:54+03:30
+- [reference/glossary/upstream.md](md/reference/glossary/upstream.md) — 2026-10-28T11:47:48+03:30
+- [reference/glossary/toleration.md](md/reference/glossary/toleration.md) — 2026-10-28T11:47:46+03:30
+- [reference/glossary/uid.md](md/reference/glossary/uid.md) — 2026-10-28T11:47:41+03:30
+- [reference/glossary/taint.md](md/reference/glossary/taint.md) — 2026-10-28T11:47:32+03:30
+- [reference/glossary/storage-class.md](md/reference/glossary/storage-class.md) — 2026-10-28T11:47:29+03:30
+- [reference/glossary/sysctl.md](md/reference/glossary/sysctl.md) — 2026-10-28T11:47:26+03:30
+- [reference/glossary/static-pod.md](md/reference/glossary/static-pod.md) — 2026-10-28T11:47:21+03:30
+- [reference/glossary/statefulset.md](md/reference/glossary/statefulset.md) — 2026-10-28T11:47:20+03:30
+- [reference/glossary/spec.md](md/reference/glossary/spec.md) — 2026-10-28T11:47:16+03:30
+- [reference/glossary/sig.md](md/reference/glossary/sig.md) — 2026-10-28T11:47:11+03:30
+- [reference/glossary/shuffle-sharding.md](md/reference/glossary/shuffle-sharding.md) — 2026-10-28T11:47:07+03:30
+- [reference/glossary/sidecar-container.md](md/reference/glossary/sidecar-container.md) — 2026-10-28T11:47:04+03:30
+- [reference/glossary/service.md](md/reference/glossary/service.md) — 2026-10-28T11:46:55+03:30
 - [reference/glossary/service-catalog.md](md/reference/glossary/service-catalog.md) — 2026-10-28T11:46:52+03:30
 - [reference/glossary/service-account.md](md/reference/glossary/service-account.md) — 2026-10-28T11:46:49+03:30
 - [reference/glossary/selector.md](md/reference/glossary/selector.md) — 2026-10-28T11:46:46+03:30
 - [reference/glossary/security-context.md](md/reference/glossary/security-context.md) — 2026-10-28T11:46:44+03:30
 - [reference/glossary/secret.md](md/reference/glossary/secret.md) — 2026-10-28T11:46:40+03:30
-- [reference/glossary/san.md](md/reference/glossary/san.md) — 2026-10-28T11:46:38+03:30
-- [reference/glossary/resourceslice.md](md/reference/glossary/resourceslice.md) — 2026-10-28T11:46:33+03:30
-- [reference/glossary/reviewer.md](md/reference/glossary/reviewer.md) — 2026-10-28T11:46:32+03:30
-- [reference/glossary/resourceclaimtemplate.md](md/reference/glossary/resourceclaimtemplate.md) — 2026-10-28T11:46:28+03:30
-- [reference/glossary/resourceclaim.md](md/reference/glossary/resourceclaim.md) — 2026-10-28T11:46:26+03:30
-- [reference/glossary/replication-controller.md](md/reference/glossary/replication-controller.md) — 2026-10-28T11:46:20+03:30
-- [reference/glossary/resource-quota.md](md/reference/glossary/resource-quota.md) — 2026-10-28T11:46:20+03:30
-- [reference/glossary/replica.md](md/reference/glossary/replica.md) — 2026-10-28T11:46:13+03:30
-- [reference/glossary/replica-set.md](md/reference/glossary/replica-set.md) — 2026-10-28T11:46:09+03:30
-- [reference/glossary/rbac.md](md/reference/glossary/rbac.md) — 2026-10-28T11:45:59+03:30
-- [reference/glossary/quantity.md](md/reference/glossary/quantity.md) — 2026-10-28T11:45:55+03:30
-- [reference/glossary/proxy.md](md/reference/glossary/proxy.md) — 2026-10-28T11:45:49+03:30
-- [reference/glossary/qos-class.md](md/reference/glossary/qos-class.md) — 2026-10-28T11:45:46+03:30
-- [reference/glossary/probe.md](md/reference/glossary/probe.md) — 2026-10-28T11:45:39+03:30
-- [reference/glossary/priority-class.md](md/reference/glossary/priority-class.md) — 2026-10-28T11:45:37+03:30
 
 </div>
 
