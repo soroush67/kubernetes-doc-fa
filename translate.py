@@ -44,7 +44,11 @@ class Limiter:
             raise Stopped
 
     def hit(self, message: str):
-        self.until = max(self.until, reset_time(message))
+        until = reset_time(message)
+        if until > self.until:
+            print(f"{time.strftime('%H:%M:%S')} subscription limit hit, waiting until "
+                  f"{time.strftime('%H:%M', time.localtime(until))}: {message[:120]}", flush=True)
+        self.until = max(self.until, until)
 
 
 def reset_time(message: str) -> float:
