@@ -8,9 +8,9 @@
 
 | | |
 |---|---|
-| پیشرفت (بر اساس کلمات) | **27.4٪** |
-| صفحات ترجمه‌شده | 959 از 1722 |
-| صفحات دارای ایراد ساختاری | 23 |
+| پیشرفت (بر اساس کلمات) | **27.9٪** |
+| صفحات ترجمه‌شده | 966 از 1722 |
+| صفحات دارای ایراد ساختاری | 24 |
 | نسخه‌ی منبع انگلیسی | `ed70e311737a` |
 
 ## مشاهده
@@ -72,7 +72,7 @@ cd kubernetes-doc-fa
 | `contribute` | 44 | 44 |
 | `doc-contributor-tools` | 1 | 1 |
 | `home` | 2 | 2 |
-| `reference` | 724 | 1198 |
+| `reference` | 731 | 1198 |
 | `setup` | 0 | 22 |
 | `tasks` | 0 | 221 |
 | `tutorials` | 0 | 45 |
@@ -83,7 +83,9 @@ cd kubernetes-doc-fa
 
 ## آخرین اجراها
 
-هنوز اجرایی ثبت نشده است.
+| شروع | پایان | ترجمه‌شده | با ایراد | نتیجه |
+|---|---|---|---|---|
+| 2026-10-28T11:00:04+03:30 | 2026-10-28T11:56:52+03:30 | 217 | 13 | stopped |
 
 </div>
 
@@ -91,6 +93,13 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [reference/kubectl/generated/kubectl_api-resources/_index.md](md/reference/kubectl/generated/kubectl_api-resources/_index.md) — 2026-10-28T11:56:52+03:30
+- [reference/kubectl/generated/kubectl_annotate/_index.md](md/reference/kubectl/generated/kubectl_annotate/_index.md) — 2026-10-28T11:55:01+03:30
+- [reference/kubectl/generated/kubectl.md](md/reference/kubectl/generated/kubectl.md) — 2026-10-28T11:54:16+03:30
+- [reference/kubectl/generated/_index.md](md/reference/kubectl/generated/_index.md) — 2026-10-28T11:53:40+03:30
+- [reference/kubectl/docker-cli-to-kubectl.md](md/reference/kubectl/docker-cli-to-kubectl.md) — 2026-10-28T11:53:36+03:30
+- [reference/kubectl/conventions.md](md/reference/kubectl/conventions.md) — 2026-10-28T11:53:01+03:30
+- [reference/kubectl/_index.md](md/reference/kubectl/_index.md) — 2026-10-28T11:52:45+03:30
 - [reference/issues-security/security.md](md/reference/issues-security/security.md) — 2026-10-28T11:51:12+03:30
 - [reference/issues-security/official-cve-feed.md](md/reference/issues-security/official-cve-feed.md) — 2026-10-28T11:50:53+03:30
 - [reference/issues-security/issues.md](md/reference/issues-security/issues.md) — 2026-10-28T11:50:44+03:30
@@ -104,13 +113,6 @@ cd kubernetes-doc-fa
 - [reference/instrumentation/_index.md](md/reference/instrumentation/_index.md) — 2026-10-28T11:48:12+03:30
 - [reference/glossary/workload.md](md/reference/glossary/workload.md) — 2026-10-28T11:48:11+03:30
 - [reference/glossary/wg.md](md/reference/glossary/wg.md) — 2026-10-28T11:48:07+03:30
-- [reference/glossary/watch.md](md/reference/glossary/watch.md) — 2026-10-28T11:48:05+03:30
-- [reference/glossary/volume.md](md/reference/glossary/volume.md) — 2026-10-28T11:48:01+03:30
-- [reference/glossary/userns.md](md/reference/glossary/userns.md) — 2026-10-28T11:47:54+03:30
-- [reference/glossary/volume-plugin.md](md/reference/glossary/volume-plugin.md) — 2026-10-28T11:47:54+03:30
-- [reference/glossary/upstream.md](md/reference/glossary/upstream.md) — 2026-10-28T11:47:48+03:30
-- [reference/glossary/toleration.md](md/reference/glossary/toleration.md) — 2026-10-28T11:47:46+03:30
-- [reference/glossary/uid.md](md/reference/glossary/uid.md) — 2026-10-28T11:47:41+03:30
 
 </div>
 
@@ -141,6 +143,7 @@ cd kubernetes-doc-fa
 - [reference/external-api/external-metrics.v1beta1.md](md/reference/external-api/external-metrics.v1beta1.md): chunk 1: short: 224 words vs 345 source words
 - [reference/external-api/metrics.v1.md](md/reference/external-api/metrics.v1.md): chunk 1: short: 374 words vs 606 source words
 - [reference/external-api/metrics.v1beta1.md](md/reference/external-api/metrics.v1beta1.md): chunk 1: short: 388 words vs 620 source words
+- [reference/kubectl/generated/kubectl_api-resources/_index.md](md/reference/kubectl/generated/kubectl_api-resources/_index.md): chunk 1: short: 1121 words vs 1550 source words
 
 </div>
 

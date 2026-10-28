@@ -1,0 +1,1107 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ابزار خط فرمان (kubectl) | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">reference / kubectl</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">ابزار خط فرمان (kubectl)</h1><!-- overview -->
+<p dir="rtl"><em>(تعریف واژه‌نامه: kubectl)</em></p>
+<p dir="rtl">نام این ابزار <code dir="ltr">kubectl</code> است.</p>
+<p dir="rtl">برای پیکربندی، <code dir="ltr">kubectl</code> به دنبال فایلی با نام <code dir="ltr">config</code> در مسیر <code dir="ltr">$HOME/.kube</code> می‌گردد.
+می‌توانید فایل‌های <a href="../../concepts/configuration/organize-cluster-access-kubeconfig.html">kubeconfig</a> دیگری را
+با تنظیم متغیر محیطی <code dir="ltr">KUBECONFIG</code> یا با تنظیم فلگ
+<a href="../../concepts/configuration/organize-cluster-access-kubeconfig.html"><code dir="ltr">--kubeconfig</code></a> مشخص کنید.</p>
+<p dir="rtl">این مرور کلی، نحو (syntax) دستور <code dir="ltr">kubectl</code> را پوشش می‌دهد، عملیات دستورها را توضیح می‌دهد و مثال‌های رایج ارائه می‌کند.
+برای جزئیات هر دستور، شامل تمام فلگ‌ها و زیردستورهای پشتیبانی‌شده، به مستندات مرجع
+<a href="generated/kubectl.html">kubectl</a> مراجعه کنید.</p>
+<p dir="rtl">برای مرور کلی، <a href="../../concepts/overview/kubectl.html">ابزار خط فرمان kubectl</a> را ببینید.
+برای دستورالعمل‌های نصب، <a href="https://kubernetes.io/docs/tasks/tools/#kubectl" target="_blank">نصب kubectl</a> را ببینید؛
+برای یک راهنمای سریع، <a href="https://kubernetes.io/docs/reference/kubectl/quick-reference/" target="_blank">برگه تقلب (cheat sheet)</a> را ببینید.
+اگر به استفاده از ابزار خط فرمان <code dir="ltr">docker</code> عادت دارید،
+<a href="docker-cli-to-kubectl.html"><code dir="ltr">kubectl</code> برای کاربران Docker</a> برخی دستورهای معادل در کوبرنتیز را توضیح می‌دهد.</p>
+<!-- body -->
+<h2 id="نحو-syntax-syntax" dir="rtl">نحو (Syntax) {#syntax}</h2>
+<p dir="rtl">برای اجرای دستورهای <code dir="ltr">kubectl</code> از پنجره ترمینال خود، از نحو زیر استفاده کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl [command] [TYPE] [NAME] [flags]
+</code></pre>
+<p dir="rtl">که در آن <code dir="ltr">command</code>، <code dir="ltr">TYPE</code>، <code dir="ltr">NAME</code> و <code dir="ltr">flags</code> عبارت‌اند از:</p>
+<ul>
+<li dir="rtl">
+<p dir="rtl"><code dir="ltr">command</code>: عملیاتی را که می‌خواهید روی یک یا چند منبع انجام دهید مشخص می‌کند،
+برای مثال <code dir="ltr">create</code>، <code dir="ltr">get</code>، <code dir="ltr">describe</code>، <code dir="ltr">delete</code>.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><code dir="ltr">TYPE</code>: <a href="#resource-types">نوع منبع</a> را مشخص می‌کند. نوع‌های منبع به حروف بزرگ و کوچک حساس نیستند و
+می‌توانید شکل مفرد، جمع یا مخفف آن‌ها را به کار ببرید.
+برای مثال، دستورهای زیر خروجی یکسانی تولید می‌کنند:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pod pod1
+kubectl get pods pod1
+kubectl get po pod1
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl"><code dir="ltr">NAME</code>: نام منبع را مشخص می‌کند. نام‌ها به حروف بزرگ و کوچک حساس هستند. اگر نام حذف شود،
+جزئیات تمام منابع نمایش داده می‌شود، برای مثال <code dir="ltr">kubectl get pods</code>.</p>
+<p dir="rtl">هنگام انجام یک عملیات روی چند منبع، می‌توانید هر منبع را با
+نوع و نام آن مشخص کنید یا یک یا چند فایل را مشخص نمایید:</p>
+<ul>
+<li dir="rtl">
+<p dir="rtl">برای مشخص کردن منابع با نوع و نام:</p>
+<ul>
+<li dir="rtl">
+<p dir="rtl">برای گروه‌بندی منابع در صورتی که همگی از یک نوع باشند:  <code dir="ltr">TYPE1 name1 name2 name&lt;#&gt;</code>.<br>
+مثال: <code dir="ltr">kubectl get pod example-pod1 example-pod2</code></p>
+</li>
+<li dir="rtl">
+<p dir="rtl">برای مشخص کردن جداگانه چند نوع منبع:  <code dir="ltr">TYPE1/name1 TYPE1/name2 TYPE2/name3 TYPE&lt;#&gt;/name&lt;#&gt;</code>.<br>
+مثال: <code dir="ltr">kubectl get pod/example-pod1 replicationcontroller/example-rc1</code></p>
+</li>
+</ul>
+</li>
+<li dir="rtl">
+<p dir="rtl">برای مشخص کردن منابع با یک یا چند فایل:  <code dir="ltr">-f file1 -f file2 -f file&lt;#&gt;</code></p>
+<ul>
+<li dir="rtl">به جای JSON از YAML استفاده کنید،
+زیرا YAML معمولاً کاربرپسندتر است، به‌ویژه برای فایل‌های پیکربندی.<br>
+مثال: <code dir="ltr">kubectl get -f ./pod.yaml</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li dir="rtl">
+<p dir="rtl"><code dir="ltr">flags</code>: فلگ‌های اختیاری را مشخص می‌کند. برای مثال، می‌توانید از فلگ‌های <code dir="ltr">-s</code> یا <code dir="ltr">--server</code>
+برای مشخص کردن نشانی و پورت سرور API کوبرنتیز استفاده کنید.<br></p>
+</li>
+</ul>
+<div class="callout caution"><div class="callout-title">احتیاط:</div>
+<p dir="rtl">فلگ‌هایی که از خط فرمان مشخص می‌کنید، مقادیر پیش‌فرض و هر متغیر محیطی متناظر را بازنویسی (override) می‌کنند.</p>
+</div>
+<p dir="rtl">اگر به کمک نیاز دارید، دستور <code dir="ltr">kubectl help</code> را در پنجره ترمینال اجرا کنید.</p>
+<h2 id="احراز-هویت-درون-کلاستر-و-بازنویسی-فضای-نام-in-cluster-authentication-and-namespace-overrides" dir="rtl">احراز هویت درون کلاستر و بازنویسی فضای نام {#in-cluster-authentication-and-namespace-overrides}</h2>
+<p dir="rtl">به‌طور پیش‌فرض <code dir="ltr">kubectl</code> ابتدا تشخیص می‌دهد که آیا درون یک Pod و در نتیجه درون یک کلاستر در حال اجراست یا خیر.
+این کار را با بررسی متغیرهای محیطی <code dir="ltr">KUBERNETES_SERVICE_HOST</code> و <code dir="ltr">KUBERNETES_SERVICE_PORT</code>
+و وجود یک فایل توکن service account در مسیر <code dir="ltr">/var/run/secrets/kubernetes.io/serviceaccount/token</code> آغاز می‌کند.
+اگر هر سه مورد یافت شوند، فرض بر احراز هویت درون کلاستر است.</p>
+<p dir="rtl">برای حفظ سازگاری با نسخه‌های قبلی، اگر متغیر محیطی <code dir="ltr">POD_NAMESPACE</code> در هنگام
+احراز هویت درون کلاستر تنظیم شده باشد، فضای نام پیش‌فرض برگرفته از توکن
+service account را بازنویسی می‌کند. هر مانیفست یا ابزاری که به فضای نام پیش‌فرض متکی باشد از این موضوع تأثیر می‌پذیرد.</p>
+<p dir="rtl"><strong>متغیر محیطی <code dir="ltr">POD_NAMESPACE</code></strong></p>
+<p dir="rtl">اگر متغیر محیطی <code dir="ltr">POD_NAMESPACE</code> تنظیم شده باشد، عملیات خط فرمان روی منابع دارای فضای نام
+به‌طور پیش‌فرض از مقدار این متغیر استفاده می‌کنند. برای مثال، اگر مقدار متغیر <code dir="ltr">seattle</code> باشد،
+دستور <code dir="ltr">kubectl get pods</code>، Podهای فضای نام <code dir="ltr">seattle</code> را برمی‌گرداند. دلیل این است که Podها
+منبعی دارای فضای نام هستند و در دستور هیچ فضای نامی مشخص نشده است. برای تعیین اینکه یک منبع دارای فضای نام است یا خیر،
+خروجی <code dir="ltr">kubectl api-resources</code> را بررسی کنید.</p>
+<p dir="rtl">استفاده صریح از <code dir="ltr">--namespace &lt;value&gt;</code> این رفتار را بازنویسی می‌کند.</p>
+<p dir="rtl"><strong>نحوه برخورد kubectl با توکن‌های ServiceAccount</strong></p>
+<p dir="rtl">اگر:</p>
+<ul>
+<li dir="rtl">یک فایل توکن service account کوبرنتیز در مسیر
+<code dir="ltr">/var/run/secrets/kubernetes.io/serviceaccount/token</code> mount شده باشد، و</li>
+<li dir="rtl">متغیر محیطی <code dir="ltr">KUBERNETES_SERVICE_HOST</code> تنظیم شده باشد، و</li>
+<li dir="rtl">متغیر محیطی <code dir="ltr">KUBERNETES_SERVICE_PORT</code> تنظیم شده باشد، و</li>
+<li dir="rtl">در خط فرمان kubectl صراحتاً فضای نامی مشخص نکرده باشید،</li>
+</ul>
+<p dir="rtl">آنگاه kubectl فرض می‌کند که درون کلاستر شما در حال اجراست. ابزار kubectl
+فضای نام آن ServiceAccount را (که با فضای نام Pod یکسان است) پیدا می‌کند
+و روی آن فضای نام عمل می‌کند. این با آنچه خارج از یک
+کلاستر رخ می‌دهد متفاوت است؛ وقتی kubectl خارج از کلاستر اجرا می‌شود و فضای نامی مشخص نمی‌کنید،
+دستور kubectl روی فضای نام تنظیم‌شده برای context فعلی در
+پیکربندی کلاینت شما عمل می‌کند. برای تغییر فضای نام پیش‌فرض kubectl می‌توانید از
+دستور زیر استفاده کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl config set-context --current --namespace=&lt;namespace-name&gt;
+</code></pre>
+<h2 id="عملیات-operations" dir="rtl">عملیات {#operations}</h2>
+<p dir="rtl">جدول زیر شامل توضیحات کوتاه و نحو کلی تمام عملیات <code dir="ltr">kubectl</code> است:</p>
+<table>
+<thead>
+<tr>
+<th dir="ltr" class="ltr">Operation</th>
+<th dir="ltr" class="ltr">Syntax</th>
+<th dir="ltr" class="ltr">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">alpha</code></td>
+<td dir="ltr" class="ltr"><code dir="ltr">kubectl alpha SUBCOMMAND [flags]</code></td>
+<td dir="rtl">دستورهای موجود مربوط به قابلیت‌های آلفا را فهرست می‌کند؛ این قابلیت‌ها به‌طور پیش‌فرض در کلاسترهای کوبرنتیز فعال نیستند.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">annotate</code></td>
+<td dir="ltr" class="ltr"><code dir="ltr">kubectl annotate (-f FILENAME | TYPE NAME | TYPE/NAME) KEY_1=VAL_1 ... KEY_N=VAL_N [--overwrite] [--all] [--resource-version=version] [flags]</code></td>
+<td dir="rtl">حاشیه‌نویسی‌های (annotation) یک یا چند منبع را اضافه یا به‌روزرسانی می‌کند.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">api-resources</code></td>
+<td dir="ltr" class="ltr"><code dir="ltr">kubectl api-resources [flags]</code></td>
+<td dir="rtl">منابع API موجود را فهرست می‌کند.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">api-versions</code></td>
+<td dir="ltr" class="ltr"><code dir="ltr">kubectl api-versions [flags]</code></td>
+<td dir="rtl">نسخه‌های API موجود را فهرست می‌کند.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">apply</code></td>
+<td dir="ltr" class="ltr"><code dir="ltr">kubectl apply -f FILENAME [flags]</code></td>
+<td dir="rtl">یک تغییر پیکربندی را از یک فایل یا stdin روی یک منبع اعمال می‌کند.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">attach</code></td>
+<td dir="ltr" class="ltr"><code dir="ltr">kubectl attach POD -c CONTAINER [-i] [-t] [flags]</code></td>
+<td dir="rtl">به یک کانتینر در حال اجرا متصل می‌شود تا جریان خروجی را مشاهده کند یا با کانتینر (stdin) تعامل داشته باشد.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">auth</code></td>
+<td dir="ltr" class="ltr"><code dir="ltr">kubectl auth [flags] [options]</code></td>
+<td dir="rtl">مجوزدهی (authorization) را بررسی می‌کند.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">autoscale</code></td>
+<td dir="ltr" class="ltr"><code dir="ltr">kubectl autoscale (-f FILENAME | TYPE NAME | TYPE/NAME) [--min=MINPODS] --max=MAXPODS [--cpu=CPU] [flags]</code></td>
+<td dir="rtl">مجموعه Podهایی را که توسط یک replication controller مدیریت می‌شوند به‌طور خودکار مقیاس می‌دهد.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">certificate</code></td>
+<td dir="ltr" class="ltr"><code dir="ltr">kubectl certificate SUBCOMMAND [options]</code></td>
+<td dir="rtl">منابع گواهی (certificate) را تغییر می‌دهد.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">cluster-info</code></td>
+<td dir="ltr" class="ltr"><code dir="ltr">kubectl cluster-info [flags]</code></td>
+<td dir="rtl">اطلاعات نقطه پایانی (endpoint) مربوط به master و سرویس‌های کلاستر را نمایش می‌دهد.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">completion</code></td>
+<td dir="ltr" class="ltr"><code dir="ltr">kubectl completion SHELL [options]</code></td>
+<td dir="rtl">کد تکمیل خودکار shell را برای shell مشخص‌شده (bash یا zsh) خروجی می‌دهد.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">config</code></td>
+<td dir="ltr" class="ltr"><code dir="ltr">kubectl config SUBCOMMAND [flags]</code></td>
+<td dir="rtl">فایل‌های kubeconfig را تغییر می‌دهد. برای جزئیات، زیردستورهای مربوطه را ببینید.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">convert</code></td>
+<td dir="ltr" class="ltr"><code dir="ltr">kubectl convert -f FILENAME [options]</code></td>
+<td dir="rtl">فایل‌های پیکربندی را بین نسخه‌های مختلف API تبدیل می‌کند. هر دو قالب YAML و JSON پذیرفته می‌شوند. توجه - نیازمند نصب افزونه <code dir="ltr">kubectl-convert</code> است.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">cordon</code></td>
+<td dir="ltr" class="ltr"><code dir="ltr">kubectl cordon NODE [options]</code></td>
+<td dir="rtl">نود را به‌عنوان غیرقابل زمان‌بندی علامت‌گذاری می‌کند.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">cp</code></td>
+<td dir="ltr" class="ltr"><code dir="ltr">kubectl cp &lt;file-spec-src&gt; &lt;file-spec-dest&gt; [options]</code></td>
+<td dir="rtl">فایل‌ها و دایرکتوری‌ها را از/به کانتینرها کپی می‌کند.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">create</code></td>
+<td dir="ltr" class="ltr"><code dir="ltr">kubectl create -f FILENAME [flags]</code></td>
+<td dir="rtl">یک یا چند منبع را از یک فایل یا stdin ایجاد می‌کند.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">delete</code></td>
+<td dir="ltr" class="ltr"><code dir="ltr">kubectl delete (-f FILENAME | TYPE [NAME | /NAME | -l label | --all]) [flags]</code></td>
+<td dir="rtl">منابع را از یک فایل یا stdin حذف می‌کند، یا با مشخص کردن انتخابگرهای برچسب، نام‌ها، انتخابگرهای منبع یا منابع.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">describe</code></td>
+<td dir="ltr" class="ltr"><code dir="ltr">kubectl describe (-f FILENAME | TYPE [NAME_PREFIX | /NAME | -l label]) [flags]</code></td>
+<td dir="rtl">وضعیت تفصیلی یک یا چند منبع را نمایش می‌دهد.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">diff</code></td>
+<td dir="ltr" class="ltr"><code dir="ltr">kubectl diff -f FILENAME [flags]</code></td>
+<td dir="rtl">فایل یا stdin را با پیکربندی زنده مقایسه می‌کند و تفاوت‌ها را نشان می‌دهد.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">drain</code></td>
+<td dir="ltr" class="ltr"><code dir="ltr">kubectl drain NODE [options]</code></td>
+<td dir="rtl">نود را برای آماده‌سازی جهت نگهداری تخلیه (drain) می‌کند.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">edit</code></td>
+<td dir="ltr" class="ltr"><code dir="ltr">kubectl edit (-f FILENAME | TYPE NAME | TYPE/NAME) [flags]</code></td>
+<td dir="rtl">تعریف یک یا چند منبع را روی سرور با استفاده از ویرایشگر پیش‌فرض ویرایش و به‌روزرسانی می‌کند.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">events</code></td>
+<td dir="ltr" class="ltr"><code dir="ltr">kubectl events</code></td>
+<td dir="rtl">رویدادها (events) را فهرست می‌کند.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">exec</code></td>
+<td dir="ltr" class="ltr"><code dir="ltr">kubectl exec POD [-c CONTAINER] [-i] [-t] [flags] [-- COMMAND [args...]]</code></td>
+<td dir="rtl">یک دستور را روی یک کانتینر در یک Pod اجرا می‌کند.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">explain</code></td>
+<td dir="ltr" class="ltr"><code dir="ltr">kubectl explain TYPE [--recursive=false] [flags]</code></td>
+<td dir="rtl">مستندات منابع مختلف را دریافت می‌کند. برای مثال Podها، نودها، سرویس‌ها و غیره.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">expose</code></td>
+<td dir="ltr" class="ltr"><code dir="ltr">kubectl expose (-f FILENAME | TYPE NAME | TYPE/NAME) [--port=port] [--protocol=TCP|UDP] [--target-port=number-or-name] [--name=name] [--external-ip=external-ip-of-service] [--type=type] [flags]</code></td>
+<td dir="rtl">یک replication controller، سرویس یا Pod را به‌صورت یک Service جدید کوبرنتیز در دسترس قرار می‌دهد.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">get</code></td>
+<td dir="ltr" class="ltr"><code dir="ltr">kubectl get (-f FILENAME | TYPE [NAME | /NAME | -l label]) [--watch] [--sort-by=FIELD] [[-o | --output]=OUTPUT_FORMAT] [flags]</code></td>
+<td dir="rtl">یک یا چند منبع را فهرست می‌کند.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">kustomize</code></td>
+<td dir="ltr" class="ltr"><code dir="ltr">kubectl kustomize &lt;dir&gt; [flags] [options]</code></td>
+<td dir="rtl">مجموعه‌ای از منابع API را که از دستورالعمل‌های موجود در یک فایل kustomization.yaml تولید شده‌اند فهرست می‌کند. آرگومان باید مسیر دایرکتوری حاوی فایل باشد، یا نشانی یک مخزن git همراه با پسوند مسیر که همان را نسبت به ریشه مخزن مشخص می‌کند.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">label</code></td>
+<td dir="ltr" class="ltr"><code dir="ltr">kubectl label (-f FILENAME | TYPE NAME | TYPE/NAME) KEY_1=VAL_1 ... KEY_N=VAL_N [--overwrite] [--all] [--resource-version=version] [flags]</code></td>
+<td dir="rtl">برچسب‌های یک یا چند منبع را اضافه یا به‌روزرسانی می‌کند.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">logs</code></td>
+<td dir="ltr" class="ltr"><code dir="ltr">kubectl logs POD [-c CONTAINER] [--follow] [flags]</code></td>
+<td dir="rtl">لاگ‌های یک کانتینر در یک Pod را چاپ می‌کند.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">options</code></td>
+<td dir="ltr" class="ltr"><code dir="ltr">kubectl options</code></td>
+<td dir="rtl">فهرست گزینه‌های سراسری خط فرمان را نمایش می‌دهد که برای تمام دستورها اعمال می‌شوند.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">patch</code></td>
+<td dir="ltr" class="ltr"><code dir="ltr">kubectl patch (-f FILENAME | TYPE NAME | TYPE/NAME) --patch PATCH [flags]</code></td>
+<td dir="rtl">یک یا چند فیلد از یک منبع را با استفاده از فرایند strategic merge patch به‌روزرسانی می‌کند.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">plugin</code></td>
+<td dir="ltr" class="ltr"><code dir="ltr">kubectl plugin [flags] [options]</code></td>
+<td dir="rtl">ابزارهایی برای تعامل با افزونه‌ها (plugins) فراهم می‌کند.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">port-forward</code></td>
+<td dir="ltr" class="ltr"><code dir="ltr">kubectl port-forward POD [LOCAL_PORT:]REMOTE_PORT [...[LOCAL_PORT_N:]REMOTE_PORT_N] [flags]</code></td>
+<td dir="rtl">یک یا چند پورت محلی را به یک Pod هدایت (forward) می‌کند.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">proxy</code></td>
+<td dir="ltr" class="ltr"><code dir="ltr">kubectl proxy [--port=PORT] [--www=static-dir] [--www-prefix=prefix] [--api-prefix=prefix] [flags]</code></td>
+<td dir="rtl">یک پراکسی به سرور API کوبرنتیز اجرا می‌کند.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">replace</code></td>
+<td dir="ltr" class="ltr"><code dir="ltr">kubectl replace -f FILENAME</code></td>
+<td dir="rtl">یک منبع را از یک فایل یا stdin جایگزین می‌کند.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">rollout</code></td>
+<td dir="ltr" class="ltr"><code dir="ltr">kubectl rollout SUBCOMMAND [options]</code></td>
+<td dir="rtl">عرضه تدریجی (rollout) یک منبع را مدیریت می‌کند. نوع‌های منبع معتبر عبارت‌اند از: deployments، daemonsets و statefulsets.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">run</code></td>
+<td dir="ltr" class="ltr"><code dir="ltr">kubectl run NAME --image=image [--env="key=value"] [--port=port] [--dry-run=server|client|none] [--overrides=inline-json] [flags]</code></td>
+<td dir="rtl">یک ایمیج مشخص‌شده را روی کلاستر اجرا می‌کند.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">scale</code></td>
+<td dir="ltr" class="ltr"><code dir="ltr">kubectl scale (-f FILENAME | TYPE NAME | TYPE/NAME) --replicas=COUNT [--resource-version=version] [--current-replicas=count] [flags]</code></td>
+<td dir="rtl">اندازه replication controller مشخص‌شده را به‌روزرسانی می‌کند.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">set</code></td>
+<td dir="ltr" class="ltr"><code dir="ltr">kubectl set SUBCOMMAND [options]</code></td>
+<td dir="rtl">منابع برنامه کاربردی را پیکربندی می‌کند.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">taint</code></td>
+<td dir="ltr" class="ltr"><code dir="ltr">kubectl taint NODE NAME KEY_1=VAL_1:TAINT_EFFECT_1 ... KEY_N=VAL_N:TAINT_EFFECT_N [options]</code></td>
+<td dir="rtl">taintهای یک یا چند نود را به‌روزرسانی می‌کند.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">top</code></td>
+<td dir="ltr" class="ltr"><code dir="ltr">kubectl top (POD | NODE) [flags] [options]</code></td>
+<td dir="rtl">میزان مصرف منابع (CPU/حافظه/ذخیره‌سازی) یک Pod یا نود را نمایش می‌دهد.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">uncordon</code></td>
+<td dir="ltr" class="ltr"><code dir="ltr">kubectl uncordon NODE [options]</code></td>
+<td dir="rtl">نود را به‌عنوان قابل زمان‌بندی علامت‌گذاری می‌کند.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">version</code></td>
+<td dir="ltr" class="ltr"><code dir="ltr">kubectl version [--client] [flags]</code></td>
+<td dir="rtl">نسخه کوبرنتیز در حال اجرا روی کلاینت و سرور را نمایش می‌دهد.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">wait</code></td>
+<td dir="ltr" class="ltr"><code dir="ltr">kubectl wait ([-f FILENAME] | resource.group/resource.name | resource.group [(-l label | --all)]) [--for=delete|--for condition=available] [options]</code></td>
+<td dir="rtl">آزمایشی: منتظر یک شرط مشخص روی یک یا چند منبع می‌ماند.</td>
+</tr>
+</tbody>
+</table>
+<p dir="rtl">برای کسب اطلاعات بیشتر درباره عملیات دستورها، مستندات مرجع <a href="https://kubernetes.io/docs/reference/kubectl/kubectl/" target="_blank">kubectl</a> را ببینید.</p>
+<h2 id="انواع-منبع-resource-types" dir="rtl">انواع منبع {#resource-types}</h2>
+<p dir="rtl">جدول زیر شامل فهرستی از تمام انواع منبع پشتیبانی‌شده و نام‌های مستعار مخفف آن‌هاست.</p>
+<p dir="rtl">(این خروجی را می‌توان از <code dir="ltr">kubectl api-resources</code> دریافت کرد و در زمان کوبرنتیز 1.25.0 دقیق بود)</p>
+<table dir="ltr">
+<thead>
+<tr>
+<th dir="ltr" class="ltr">NAME</th>
+<th dir="ltr" class="ltr">SHORTNAMES</th>
+<th dir="ltr" class="ltr">APIVERSION</th>
+<th dir="ltr" class="ltr">NAMESPACED</th>
+<th dir="ltr" class="ltr">KIND</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">bindings</code></td>
+<td></td>
+<td dir="ltr" class="ltr">v1</td>
+<td dir="ltr" class="ltr">true</td>
+<td dir="ltr" class="ltr">Binding</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">componentstatuses</code></td>
+<td dir="ltr" class="ltr"><code dir="ltr">cs</code></td>
+<td dir="ltr" class="ltr">v1</td>
+<td dir="ltr" class="ltr">false</td>
+<td dir="ltr" class="ltr">ComponentStatus</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">configmaps</code></td>
+<td dir="ltr" class="ltr"><code dir="ltr">cm</code></td>
+<td dir="ltr" class="ltr">v1</td>
+<td dir="ltr" class="ltr">true</td>
+<td dir="ltr" class="ltr">ConfigMap</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">endpoints</code></td>
+<td dir="ltr" class="ltr"><code dir="ltr">ep</code></td>
+<td dir="ltr" class="ltr">v1</td>
+<td dir="ltr" class="ltr">true</td>
+<td dir="ltr" class="ltr">Endpoints</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">events</code></td>
+<td dir="ltr" class="ltr"><code dir="ltr">ev</code></td>
+<td dir="ltr" class="ltr">v1</td>
+<td dir="ltr" class="ltr">true</td>
+<td dir="ltr" class="ltr">Event</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">limitranges</code></td>
+<td dir="ltr" class="ltr"><code dir="ltr">limits</code></td>
+<td dir="ltr" class="ltr">v1</td>
+<td dir="ltr" class="ltr">true</td>
+<td dir="ltr" class="ltr">LimitRange</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">namespaces</code></td>
+<td dir="ltr" class="ltr"><code dir="ltr">ns</code></td>
+<td dir="ltr" class="ltr">v1</td>
+<td dir="ltr" class="ltr">false</td>
+<td dir="ltr" class="ltr">Namespace</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">nodes</code></td>
+<td dir="ltr" class="ltr"><code dir="ltr">no</code></td>
+<td dir="ltr" class="ltr">v1</td>
+<td dir="ltr" class="ltr">false</td>
+<td dir="ltr" class="ltr">Node</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">persistentvolumeclaims</code></td>
+<td dir="ltr" class="ltr"><code dir="ltr">pvc</code></td>
+<td dir="ltr" class="ltr">v1</td>
+<td dir="ltr" class="ltr">true</td>
+<td dir="ltr" class="ltr">PersistentVolumeClaim</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">persistentvolumes</code></td>
+<td dir="ltr" class="ltr"><code dir="ltr">pv</code></td>
+<td dir="ltr" class="ltr">v1</td>
+<td dir="ltr" class="ltr">false</td>
+<td dir="ltr" class="ltr">PersistentVolume</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">pods</code></td>
+<td dir="ltr" class="ltr"><code dir="ltr">po</code></td>
+<td dir="ltr" class="ltr">v1</td>
+<td dir="ltr" class="ltr">true</td>
+<td dir="ltr" class="ltr">Pod</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">podtemplates</code></td>
+<td></td>
+<td dir="ltr" class="ltr">v1</td>
+<td dir="ltr" class="ltr">true</td>
+<td dir="ltr" class="ltr">PodTemplate</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">replicationcontrollers</code></td>
+<td dir="ltr" class="ltr"><code dir="ltr">rc</code></td>
+<td dir="ltr" class="ltr">v1</td>
+<td dir="ltr" class="ltr">true</td>
+<td dir="ltr" class="ltr">ReplicationController</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">resourcequotas</code></td>
+<td dir="ltr" class="ltr"><code dir="ltr">quota</code></td>
+<td dir="ltr" class="ltr">v1</td>
+<td dir="ltr" class="ltr">true</td>
+<td dir="ltr" class="ltr">ResourceQuota</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">secrets</code></td>
+<td></td>
+<td dir="ltr" class="ltr">v1</td>
+<td dir="ltr" class="ltr">true</td>
+<td dir="ltr" class="ltr">Secret</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">serviceaccounts</code></td>
+<td dir="ltr" class="ltr"><code dir="ltr">sa</code></td>
+<td dir="ltr" class="ltr">v1</td>
+<td dir="ltr" class="ltr">true</td>
+<td dir="ltr" class="ltr">ServiceAccount</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">services</code></td>
+<td dir="ltr" class="ltr"><code dir="ltr">svc</code></td>
+<td dir="ltr" class="ltr">v1</td>
+<td dir="ltr" class="ltr">true</td>
+<td dir="ltr" class="ltr">Service</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">mutatingwebhookconfigurations</code></td>
+<td></td>
+<td dir="ltr" class="ltr">admissionregistration.k8s.io/v1</td>
+<td dir="ltr" class="ltr">false</td>
+<td dir="ltr" class="ltr">MutatingWebhookConfiguration</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">validatingwebhookconfigurations</code></td>
+<td></td>
+<td dir="ltr" class="ltr">admissionregistration.k8s.io/v1</td>
+<td dir="ltr" class="ltr">false</td>
+<td dir="ltr" class="ltr">ValidatingWebhookConfiguration</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">customresourcedefinitions</code></td>
+<td dir="ltr" class="ltr"><code dir="ltr">crd,crds</code></td>
+<td dir="ltr" class="ltr">apiextensions.k8s.io/v1</td>
+<td dir="ltr" class="ltr">false</td>
+<td dir="ltr" class="ltr">CustomResourceDefinition</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">apiservices</code></td>
+<td></td>
+<td dir="ltr" class="ltr">apiregistration.k8s.io/v1</td>
+<td dir="ltr" class="ltr">false</td>
+<td dir="ltr" class="ltr">APIService</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">controllerrevisions</code></td>
+<td></td>
+<td dir="ltr" class="ltr">apps/v1</td>
+<td dir="ltr" class="ltr">true</td>
+<td dir="ltr" class="ltr">ControllerRevision</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">daemonsets</code></td>
+<td dir="ltr" class="ltr"><code dir="ltr">ds</code></td>
+<td dir="ltr" class="ltr">apps/v1</td>
+<td dir="ltr" class="ltr">true</td>
+<td dir="ltr" class="ltr">DaemonSet</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">deployments</code></td>
+<td dir="ltr" class="ltr"><code dir="ltr">deploy</code></td>
+<td dir="ltr" class="ltr">apps/v1</td>
+<td dir="ltr" class="ltr">true</td>
+<td dir="ltr" class="ltr">Deployment</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">replicasets</code></td>
+<td dir="ltr" class="ltr"><code dir="ltr">rs</code></td>
+<td dir="ltr" class="ltr">apps/v1</td>
+<td dir="ltr" class="ltr">true</td>
+<td dir="ltr" class="ltr">ReplicaSet</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">statefulsets</code></td>
+<td dir="ltr" class="ltr"><code dir="ltr">sts</code></td>
+<td dir="ltr" class="ltr">apps/v1</td>
+<td dir="ltr" class="ltr">true</td>
+<td dir="ltr" class="ltr">StatefulSet</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">tokenreviews</code></td>
+<td></td>
+<td dir="ltr" class="ltr">authentication.k8s.io/v1</td>
+<td dir="ltr" class="ltr">false</td>
+<td dir="ltr" class="ltr">TokenReview</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">localsubjectaccessreviews</code></td>
+<td></td>
+<td dir="ltr" class="ltr">authorization.k8s.io/v1</td>
+<td dir="ltr" class="ltr">true</td>
+<td dir="ltr" class="ltr">LocalSubjectAccessReview</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">selfsubjectaccessreviews</code></td>
+<td></td>
+<td dir="ltr" class="ltr">authorization.k8s.io/v1</td>
+<td dir="ltr" class="ltr">false</td>
+<td dir="ltr" class="ltr">SelfSubjectAccessReview</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">selfsubjectrulesreviews</code></td>
+<td></td>
+<td dir="ltr" class="ltr">authorization.k8s.io/v1</td>
+<td dir="ltr" class="ltr">false</td>
+<td dir="ltr" class="ltr">SelfSubjectRulesReview</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">subjectaccessreviews</code></td>
+<td></td>
+<td dir="ltr" class="ltr">authorization.k8s.io/v1</td>
+<td dir="ltr" class="ltr">false</td>
+<td dir="ltr" class="ltr">SubjectAccessReview</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">horizontalpodautoscalers</code></td>
+<td dir="ltr" class="ltr"><code dir="ltr">hpa</code></td>
+<td dir="ltr" class="ltr">autoscaling/v2</td>
+<td dir="ltr" class="ltr">true</td>
+<td dir="ltr" class="ltr">HorizontalPodAutoscaler</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">cronjobs</code></td>
+<td dir="ltr" class="ltr"><code dir="ltr">cj</code></td>
+<td dir="ltr" class="ltr">batch/v1</td>
+<td dir="ltr" class="ltr">true</td>
+<td dir="ltr" class="ltr">CronJob</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">jobs</code></td>
+<td></td>
+<td dir="ltr" class="ltr">batch/v1</td>
+<td dir="ltr" class="ltr">true</td>
+<td dir="ltr" class="ltr">Job</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">certificatesigningrequests</code></td>
+<td dir="ltr" class="ltr"><code dir="ltr">csr</code></td>
+<td dir="ltr" class="ltr">certificates.k8s.io/v1</td>
+<td dir="ltr" class="ltr">false</td>
+<td dir="ltr" class="ltr">CertificateSigningRequest</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">leases</code></td>
+<td></td>
+<td dir="ltr" class="ltr">coordination.k8s.io/v1</td>
+<td dir="ltr" class="ltr">true</td>
+<td dir="ltr" class="ltr">Lease</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">endpointslices</code></td>
+<td></td>
+<td dir="ltr" class="ltr">discovery.k8s.io/v1</td>
+<td dir="ltr" class="ltr">true</td>
+<td dir="ltr" class="ltr">EndpointSlice</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">events</code></td>
+<td dir="ltr" class="ltr"><code dir="ltr">ev</code></td>
+<td dir="ltr" class="ltr">events.k8s.io/v1</td>
+<td dir="ltr" class="ltr">true</td>
+<td dir="ltr" class="ltr">Event</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">flowschemas</code></td>
+<td></td>
+<td dir="ltr" class="ltr">flowcontrol.apiserver.k8s.io/v1beta2</td>
+<td dir="ltr" class="ltr">false</td>
+<td dir="ltr" class="ltr">FlowSchema</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">prioritylevelconfigurations</code></td>
+<td></td>
+<td dir="ltr" class="ltr">flowcontrol.apiserver.k8s.io/v1beta2</td>
+<td dir="ltr" class="ltr">false</td>
+<td dir="ltr" class="ltr">PriorityLevelConfiguration</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">ingressclasses</code></td>
+<td></td>
+<td dir="ltr" class="ltr">networking.k8s.io/v1</td>
+<td dir="ltr" class="ltr">false</td>
+<td dir="ltr" class="ltr">IngressClass</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">ingresses</code></td>
+<td dir="ltr" class="ltr"><code dir="ltr">ing</code></td>
+<td dir="ltr" class="ltr">networking.k8s.io/v1</td>
+<td dir="ltr" class="ltr">true</td>
+<td dir="ltr" class="ltr">Ingress</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">networkpolicies</code></td>
+<td dir="ltr" class="ltr"><code dir="ltr">netpol</code></td>
+<td dir="ltr" class="ltr">networking.k8s.io/v1</td>
+<td dir="ltr" class="ltr">true</td>
+<td dir="ltr" class="ltr">NetworkPolicy</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">runtimeclasses</code></td>
+<td></td>
+<td dir="ltr" class="ltr">node.k8s.io/v1</td>
+<td dir="ltr" class="ltr">false</td>
+<td dir="ltr" class="ltr">RuntimeClass</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">poddisruptionbudgets</code></td>
+<td dir="ltr" class="ltr"><code dir="ltr">pdb</code></td>
+<td dir="ltr" class="ltr">policy/v1</td>
+<td dir="ltr" class="ltr">true</td>
+<td dir="ltr" class="ltr">PodDisruptionBudget</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">podsecuritypolicies</code></td>
+<td dir="ltr" class="ltr"><code dir="ltr">psp</code></td>
+<td dir="ltr" class="ltr">policy/v1beta1</td>
+<td dir="ltr" class="ltr">false</td>
+<td dir="ltr" class="ltr">PodSecurityPolicy</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">clusterrolebindings</code></td>
+<td></td>
+<td dir="ltr" class="ltr">rbac.authorization.k8s.io/v1</td>
+<td dir="ltr" class="ltr">false</td>
+<td dir="ltr" class="ltr">ClusterRoleBinding</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">clusterroles</code></td>
+<td></td>
+<td dir="ltr" class="ltr">rbac.authorization.k8s.io/v1</td>
+<td dir="ltr" class="ltr">false</td>
+<td dir="ltr" class="ltr">ClusterRole</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">rolebindings</code></td>
+<td></td>
+<td dir="ltr" class="ltr">rbac.authorization.k8s.io/v1</td>
+<td dir="ltr" class="ltr">true</td>
+<td dir="ltr" class="ltr">RoleBinding</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">roles</code></td>
+<td></td>
+<td dir="ltr" class="ltr">rbac.authorization.k8s.io/v1</td>
+<td dir="ltr" class="ltr">true</td>
+<td dir="ltr" class="ltr">Role</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">priorityclasses</code></td>
+<td dir="ltr" class="ltr"><code dir="ltr">pc</code></td>
+<td dir="ltr" class="ltr">scheduling.k8s.io/v1</td>
+<td dir="ltr" class="ltr">false</td>
+<td dir="ltr" class="ltr">PriorityClass</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">csidrivers</code></td>
+<td></td>
+<td dir="ltr" class="ltr">storage.k8s.io/v1</td>
+<td dir="ltr" class="ltr">false</td>
+<td dir="ltr" class="ltr">CSIDriver</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">csinodes</code></td>
+<td></td>
+<td dir="ltr" class="ltr">storage.k8s.io/v1</td>
+<td dir="ltr" class="ltr">false</td>
+<td dir="ltr" class="ltr">CSINode</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">csistoragecapacities</code></td>
+<td></td>
+<td dir="ltr" class="ltr">storage.k8s.io/v1</td>
+<td dir="ltr" class="ltr">true</td>
+<td dir="ltr" class="ltr">CSIStorageCapacity</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">storageclasses</code></td>
+<td dir="ltr" class="ltr"><code dir="ltr">sc</code></td>
+<td dir="ltr" class="ltr">storage.k8s.io/v1</td>
+<td dir="ltr" class="ltr">false</td>
+<td dir="ltr" class="ltr">StorageClass</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">volumeattachments</code></td>
+<td></td>
+<td dir="ltr" class="ltr">storage.k8s.io/v1</td>
+<td dir="ltr" class="ltr">false</td>
+<td dir="ltr" class="ltr">VolumeAttachment</td>
+</tr>
+</tbody>
+</table>
+<h2 id="گزینه-های-خروجی-output-options" dir="rtl">گزینه‌های خروجی {#output-options}</h2>
+<p dir="rtl">از بخش‌های زیر برای کسب اطلاعات درباره نحوه قالب‌بندی یا مرتب‌سازی خروجی
+برخی دستورها استفاده کنید. برای جزئیات اینکه کدام دستورها از گزینه‌های مختلف خروجی پشتیبانی می‌کنند،
+مستندات مرجع <a href="https://kubernetes.io/docs/reference/kubectl/kubectl/" target="_blank">kubectl</a> را ببینید.</p>
+<h3 id="قالب-بندی-خروجی-formatting-output" dir="rtl">قالب‌بندی خروجی {#formatting-output}</h3>
+<p dir="rtl">قالب پیش‌فرض خروجی تمام دستورهای <code dir="ltr">kubectl</code>، قالب متن ساده قابل‌خواندن برای انسان است.
+برای نمایش جزئیات در پنجره ترمینال با یک قالب مشخص، می‌توانید فلگ <code dir="ltr">-o</code>
+یا <code dir="ltr">--output</code> را به یک دستور <code dir="ltr">kubectl</code> پشتیبانی‌شده اضافه کنید.</p>
+<h4 id="نحو-syntax-syntax-1" dir="rtl">نحو (Syntax) {#syntax-1}</h4>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl [command] [TYPE] [NAME] -o &lt;output_format&gt;
+</code></pre>
+<p dir="rtl">بسته به عملیات <code dir="ltr">kubectl</code>، قالب‌های خروجی زیر پشتیبانی می‌شوند:</p>
+<table>
+<thead>
+<tr>
+<th dir="ltr" class="ltr">Output format</th>
+<th dir="ltr" class="ltr">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">-o custom-columns=&lt;spec&gt;</code></td>
+<td dir="rtl">یک جدول را با استفاده از فهرست جداشده با کاما از <a href="#custom-columns">ستون‌های سفارشی</a> چاپ می‌کند.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">-o custom-columns-file=&lt;filename&gt;</code></td>
+<td dir="rtl">یک جدول را با استفاده از قالب <a href="#custom-columns">ستون‌های سفارشی</a> موجود در فایل <code dir="ltr">&lt;filename&gt;</code> چاپ می‌کند.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">-o json</code></td>
+<td dir="rtl">یک آبجکت API با قالب JSON را خروجی می‌دهد.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">-o jsonpath=&lt;template&gt;</code></td>
+<td dir="rtl">فیلدهای تعریف‌شده در یک عبارت <a href="https://kubernetes.io/docs/reference/kubectl/jsonpath/" target="_blank">jsonpath</a> را چاپ می‌کند.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">-o jsonpath-file=&lt;filename&gt;</code></td>
+<td dir="rtl">فیلدهای تعریف‌شده توسط عبارت <a href="https://kubernetes.io/docs/reference/kubectl/jsonpath/" target="_blank">jsonpath</a> موجود در فایل <code dir="ltr">&lt;filename&gt;</code> را چاپ می‌کند.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">-o kyaml</code></td>
+<td dir="rtl">یک آبجکت API با قالب <a href="../encodings/kyaml.html">KYAML</a> را خروجی می‌دهد.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">-o name</code></td>
+<td dir="rtl">فقط نام منبع را چاپ می‌کند و چیز دیگری چاپ نمی‌کند.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">-o wide</code></td>
+<td dir="rtl">خروجی را با قالب متن ساده همراه با اطلاعات اضافی نمایش می‌دهد. برای Podها، نام نود نیز درج می‌شود.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">-o yaml</code></td>
+<td dir="rtl">یک آبجکت API با قالب YAML را خروجی می‌دهد. KYAML گونه‌ای از YAML مختص کوبرنتیز است و می‌توان آن را به‌عنوان YAML تجزیه (parse) کرد.</td>
+</tr>
+</tbody>
+</table>
+<h5 dir="rtl">مثال {#example}</h5>
+<p dir="rtl">در این مثال، دستور زیر جزئیات یک Pod را به‌صورت یک آبجکت با قالب YAML خروجی می‌دهد:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pod web-pod-13je7 -o yaml
+</code></pre>
+<p dir="rtl">به یاد داشته باشید: برای جزئیات اینکه هر دستور از کدام قالب خروجی پشتیبانی می‌کند،
+مستندات مرجع <a href="https://kubernetes.io/docs/reference/kubectl/kubectl/" target="_blank">kubectl</a> را ببینید.</p>
+<h4 id="ستون-های-سفارشی-custom-columns" dir="rtl">ستون‌های سفارشی {#custom-columns}</h4>
+<p dir="rtl">برای تعریف ستون‌های سفارشی و خروجی گرفتن فقط از جزئیات موردنظر خود در یک جدول، می‌توانید از گزینه <code dir="ltr">custom-columns</code> استفاده کنید.
+می‌توانید ستون‌های سفارشی را به‌صورت درون‌خطی (inline) تعریف کنید یا از یک فایل قالب استفاده کنید: <code dir="ltr">-o custom-columns=&lt;spec&gt;</code> یا <code dir="ltr">-o custom-columns-file=&lt;filename&gt;</code>.</p>
+<h5 dir="rtl">مثال‌ها {#examples}</h5>
+<p dir="rtl">درون‌خطی:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pods &lt;pod-name&gt; -o custom-columns=NAME:.metadata.name,RSRC:.metadata.resourceVersion
+</code></pre>
+<p dir="rtl">فایل قالب:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pods &lt;pod-name&gt; -o custom-columns-file=template.txt
+</code></pre>
+<p dir="rtl">که در آن فایل <code dir="ltr">template.txt</code> شامل موارد زیر است:</p>
+<pre dir="ltr"><code dir="ltr">NAME          RSRC
+metadata.name metadata.resourceVersion
+</code></pre>
+<p dir="rtl">نتیجه اجرای هر یک از این دو دستور مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">NAME           RSRC
+submit-queue   610995
+</code></pre>
+<h4 id="ستون-های-سمت-سرور-server-side-columns" dir="rtl">ستون‌های سمت سرور {#server-side-columns}</h4>
+<p dir="rtl"><code dir="ltr">kubectl</code> از دریافت اطلاعات ستون‌های مشخص درباره آبجکت‌ها از سرور پشتیبانی می‌کند.
+این بدان معناست که برای هر منبع مشخص، سرور ستون‌ها و ردیف‌های مرتبط با آن منبع را برمی‌گرداند تا کلاینت آن‌ها را چاپ کند.
+این کار با آنکه سرور جزئیات چاپ را کپسوله می‌کند، امکان خروجی یکدست و قابل‌خواندن برای انسان را در کلاینت‌های مختلفی که روی یک کلاستر استفاده می‌شوند فراهم می‌کند.</p>
+<p dir="rtl">این قابلیت به‌طور پیش‌فرض فعال است. برای غیرفعال کردن آن، فلگ
+<code dir="ltr">--server-print=false</code> را به دستور <code dir="ltr">kubectl get</code> اضافه کنید.</p>
+<h5 dir="rtl">مثال‌ها {#examples-1}</h5>
+<p dir="rtl">برای چاپ اطلاعات مربوط به وضعیت یک Pod، از دستوری مانند دستور زیر استفاده کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pods &lt;pod-name&gt; --server-print=false
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">NAME       AGE
+pod-name   1m
+</code></pre>
+<h3 id="مرتب-سازی-آبجکت-های-فهرست" dir="rtl">مرتب‌سازی آبجکت‌های فهرست</h3>
+<p dir="rtl">برای نمایش آبجکت‌ها به‌صورت یک فهرست مرتب‌شده در پنجرهٔ ترمینال، می‌توانید فلگ <code dir="ltr">--sort-by</code> را به یکی از دستورهای پشتیبانی‌شدهٔ <code dir="ltr">kubectl</code> اضافه کنید. آبجکت‌های خود را با تعیین هر فیلد عددی یا رشته‌ای توسط فلگ <code dir="ltr">--sort-by</code> مرتب کنید. برای تعیین فیلد، از یک عبارت <a href="https://kubernetes.io/docs/reference/kubectl/jsonpath/" target="_blank">jsonpath</a> استفاده کنید.</p>
+<h4 id="نحو" dir="rtl">نحو</h4>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl [command] [TYPE] [NAME] --sort-by=&lt;jsonpath_exp&gt;
+</code></pre>
+<h5 dir="rtl">مثال</h5>
+<p dir="rtl">برای چاپ فهرستی از Podها که بر اساس نام مرتب شده‌اند، دستور زیر را اجرا کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pods --sort-by=.metadata.name
+</code></pre>
+<h2 id="مثال-ها-عملیات-رایج" dir="rtl">مثال‌ها: عملیات رایج</h2>
+<p dir="rtl">از مجموعه مثال‌های زیر برای آشنایی با اجرای عملیات پرکاربرد <code dir="ltr">kubectl</code> استفاده کنید:</p>
+<p dir="rtl"><code dir="ltr">kubectl apply</code> - اعمال یا به‌روزرسانی یک منبع از یک فایل یا stdin.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># Create a service using the definition in example-service.yaml.
+kubectl apply -f example-service.yaml
+
+# Create a replication controller using the definition in example-controller.yaml.
+kubectl apply -f example-controller.yaml
+
+# Create the objects that are defined in any .yaml, .yml, or .json file within the &lt;directory&gt; directory.
+kubectl apply -f &lt;directory&gt;
+</code></pre>
+<p dir="rtl"><code dir="ltr">kubectl get</code> - فهرست‌کردن یک یا چند منبع.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># List all pods in plain-text output format.
+kubectl get pods
+
+# List all pods in plain-text output format and include additional information (such as node name).
+kubectl get pods -o wide
+
+# List the replication controller with the specified name in plain-text output format. Tip: You can shorten and replace the 'replicationcontroller' resource type with the alias 'rc'.
+kubectl get replicationcontroller &lt;rc-name&gt;
+
+# List all replication controllers and services together in plain-text output format.
+kubectl get rc,services
+
+# List all daemon sets in plain-text output format.
+kubectl get ds
+
+# List all pods running on node server01
+kubectl get pods --field-selector=spec.nodeName=server01
+</code></pre>
+<p dir="rtl"><code dir="ltr">kubectl describe</code> - نمایش وضعیت تفصیلی یک یا چند منبع، که به‌طور پیش‌فرض منابع مقداردهی‌نشده (uninitialized) را نیز شامل می‌شود.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># Display the details of the node with name &lt;node-name&gt;.
+kubectl describe nodes &lt;node-name&gt;
+
+# Display the details of the pod with name &lt;pod-name&gt;.
+kubectl describe pods/&lt;pod-name&gt;
+
+# Display the details of all the pods that are managed by the replication controller named &lt;rc-name&gt;.
+# Remember: Any pods that are created by the replication controller get prefixed with the name of the replication controller.
+kubectl describe pods &lt;rc-name&gt;
+
+# Describe all pods
+kubectl describe pods
+</code></pre>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">دستور <code dir="ltr">kubectl get</code> معمولاً برای بازیابی یک یا چند منبع از یک نوع منبع به کار می‌رود. این دستور مجموعه‌ای غنی از فلگ‌ها دارد که برای مثال به شما امکان می‌دهد قالب خروجی را با فلگ <code dir="ltr">-o</code> یا <code dir="ltr">--output</code> سفارشی کنید.
+می‌توانید با تعیین فلگ <code dir="ltr">-w</code> یا <code dir="ltr">--watch</code>، پایش به‌روزرسانی‌های یک آبجکت مشخص را آغاز کنید. دستور <code dir="ltr">kubectl describe</code> بیشتر بر توصیف جنبه‌های مرتبط و متعدد یک منبع مشخص تمرکز دارد. این دستور ممکن است برای ساخت یک نمای کامل برای کاربر، چندین فراخوانی API به API server انجام دهد. برای مثال، دستور <code dir="ltr">kubectl describe node</code> نه‌تنها اطلاعات مربوط به نود، بلکه خلاصه‌ای از Podهای در حال اجرا روی آن، رویدادهای تولیدشده برای نود و موارد مشابه را نیز بازیابی می‌کند.</p>
+</div>
+<p dir="rtl"><code dir="ltr">kubectl delete</code> - حذف منابع از یک فایل یا stdin، یا با تعیین انتخابگرهای برچسب (label selector)، نام‌ها، انتخابگرهای منبع یا خود منابع.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># Delete a pod using the type and name specified in the pod.yaml file.
+kubectl delete -f pod.yaml
+
+# Delete all the pods and services that have the label '&lt;label-key&gt;=&lt;label-value&gt;'.
+kubectl delete pods,services -l &lt;label-key&gt;=&lt;label-value&gt;
+
+# Delete all pods, including uninitialized ones.
+kubectl delete pods --all
+</code></pre>
+<p dir="rtl"><code dir="ltr">kubectl exec</code> - اجرای یک دستور در یک کانتینر درون یک Pod.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># Get output from running 'date' from pod &lt;pod-name&gt;. By default, output is from the first container.
+kubectl exec &lt;pod-name&gt; -- date
+
+# Get output from running 'date' in container &lt;container-name&gt; of pod &lt;pod-name&gt;.
+kubectl exec &lt;pod-name&gt; -c &lt;container-name&gt; -- date
+
+# Get an interactive TTY and run /bin/bash from pod &lt;pod-name&gt;. By default, output is from the first container.
+kubectl exec -ti &lt;pod-name&gt; -- /bin/bash
+</code></pre>
+<p dir="rtl"><code dir="ltr">kubectl logs</code> - چاپ لاگ‌های یک کانتینر درون یک Pod.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># Return a snapshot of the logs from pod &lt;pod-name&gt;.
+kubectl logs &lt;pod-name&gt;
+
+# Start streaming the logs from pod &lt;pod-name&gt;. This is similar to the 'tail -f' Linux command.
+kubectl logs -f &lt;pod-name&gt;
+</code></pre>
+<p dir="rtl"><code dir="ltr">kubectl diff</code> - مشاهدهٔ تفاوت (diff) به‌روزرسانی‌های پیشنهادی برای یک کلاستر.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># Diff resources included in "pod.json".
+kubectl diff -f pod.json
+
+# Diff file read from stdin.
+cat service.yaml | kubectl diff -f -
+</code></pre>
+<h2 id="مثال-ها-ایجاد-و-استفاده-از-افزونه-ها" dir="rtl">مثال‌ها: ایجاد و استفاده از افزونه‌ها</h2>
+<p dir="rtl">از مجموعه مثال‌های زیر برای آشنایی با نوشتن و استفاده از افزونه‌های (plugin) <code dir="ltr">kubectl</code> استفاده کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># create a simple plugin in any language and name the resulting executable file
+# so that it begins with the prefix "kubectl-"
+cat ./kubectl-hello
+</code></pre>
+<pre dir="ltr"><code class="language-shell" dir="ltr">#!/bin/sh
+
+# this plugin prints the words "hello world"
+echo "hello world"
+</code></pre>
+<p dir="rtl">پس از نوشتن افزونه، آن را اجرایی می‌کنیم:</p>
+<pre dir="ltr"><code class="language-bash" dir="ltr">chmod a+x ./kubectl-hello
+
+# and move it to a location in our PATH
+sudo mv ./kubectl-hello /usr/local/bin
+sudo chown root:root /usr/local/bin
+
+# You have now created and "installed" a kubectl plugin.
+# You can begin using this plugin by invoking it from kubectl as if it were a regular command
+kubectl hello
+</code></pre>
+<pre dir="ltr"><code dir="ltr">hello world
+</code></pre>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># You can "uninstall" a plugin, by removing it from the folder in your
+# $PATH where you placed it
+sudo rm /usr/local/bin/kubectl-hello
+</code></pre>
+<p dir="rtl">برای مشاهدهٔ همهٔ افزونه‌هایی که در دسترس <code dir="ltr">kubectl</code> هستند، از زیردستور <code dir="ltr">kubectl plugin list</code> استفاده کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl plugin list
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">The following kubectl-compatible plugins are available:
+
+/usr/local/bin/kubectl-hello
+/usr/local/bin/kubectl-foo
+/usr/local/bin/kubectl-bar
+</code></pre>
+<p dir="rtl">دستور <code dir="ltr">kubectl plugin list</code> همچنین دربارهٔ افزونه‌هایی که اجرایی نیستند یا توسط افزونه‌های دیگر پوشانده شده‌اند هشدار می‌دهد؛ برای مثال:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">sudo chmod -x /usr/local/bin/kubectl-foo # remove execute permission
+kubectl plugin list
+</code></pre>
+<pre dir="ltr"><code dir="ltr">The following kubectl-compatible plugins are available:
+
+/usr/local/bin/kubectl-hello
+/usr/local/bin/kubectl-foo
+  - warning: /usr/local/bin/kubectl-foo identified as a plugin, but it is not executable
+/usr/local/bin/kubectl-bar
+
+error: one plugin warning was found
+</code></pre>
+<p dir="rtl">می‌توانید افزونه‌ها را وسیله‌ای برای ساخت قابلیت‌های پیچیده‌تر بر پایهٔ دستورهای موجود kubectl در نظر بگیرید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">cat ./kubectl-whoami
+</code></pre>
+<p dir="rtl">مثال‌های بعدی فرض می‌کنند که فایل <code dir="ltr">kubectl-whoami</code> را با محتوای زیر ساخته‌اید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">#!/bin/bash
+
+# this plugin makes use of the `kubectl config` command in order to output
+# information about the current user, based on the currently selected context
+kubectl config view --template='{{ range .contexts }}{{ if eq .name "'$(kubectl config current-context)'" }}Current user: {{ printf "%s\n" .context.user }}{{ end }}{{ end }}'
+</code></pre>
+<p dir="rtl">اجرای دستور بالا خروجی‌ای حاوی کاربر مربوط به context فعلی در فایل KUBECONFIG شما تولید می‌کند:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># make the file executable
+sudo chmod +x ./kubectl-whoami
+
+# and move it into your PATH
+sudo mv ./kubectl-whoami /usr/local/bin
+
+kubectl whoami
+Current user: plugins-user
+</code></pre>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<ul>
+<li dir="rtl">مستندات مرجع <code dir="ltr">kubectl</code> را بخوانید:
+<ul>
+<li dir="rtl"><a href="https://kubernetes.io/docs/reference/kubectl/kubectl/" target="_blank">مرجع دستورها</a> در kubectl</li>
+<li dir="rtl">مرجع <a href="generated/kubectl.html">آرگومان‌های خط فرمان</a></li>
+</ul>
+</li>
+<li dir="rtl">دربارهٔ <a href="conventions.html">قراردادهای استفاده از <code dir="ltr">kubectl</code></a> بیاموزید</li>
+<li dir="rtl">دربارهٔ <a href="https://kubernetes.io/docs/reference/kubectl/jsonpath/" target="_blank">پشتیبانی از JSONPath</a> در kubectl مطالعه کنید</li>
+<li dir="rtl">دربارهٔ چگونگی <a href="https://kubernetes.io/docs/tasks/extend-kubectl/kubectl-plugins" target="_blank">گسترش kubectl با افزونه‌ها</a> مطالعه کنید
+<ul>
+<li dir="rtl">برای آگاهی بیشتر دربارهٔ افزونه‌ها، <a href="https://github.com/kubernetes/sample-cli-plugin" target="_blank" rel="noopener">نمونهٔ افزونهٔ CLI</a> را ببینید.</li>
+</ul>
+</li>
+</ul>
+</main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#نحو-syntax-syntax">نحو (Syntax) {#syntax}</a><a class="l2" href="#احراز-هویت-درون-کلاستر-و-بازنویسی-فضای-نام-in-cluster-authentication-and-namespace-overrides">احراز هویت درون کلاستر و بازنویسی فضای نام {#in-cluster-authentication-and-namespace-overrides}</a><a class="l2" href="#عملیات-operations">عملیات {#operations}</a><a class="l2" href="#انواع-منبع-resource-types">انواع منبع {#resource-types}</a><a class="l2" href="#گزینه-های-خروجی-output-options">گزینه‌های خروجی {#output-options}</a><a class="l3" href="#قالب-بندی-خروجی-formatting-output">قالب‌بندی خروجی {#formatting-output}</a><a class="l3" href="#مرتب-سازی-آبجکت-های-فهرست">مرتب‌سازی آبجکت‌های فهرست</a><a class="l2" href="#مثال-ها-عملیات-رایج">مثال‌ها: عملیات رایج</a><a class="l2" href="#مثال-ها-ایجاد-و-استفاده-از-افزونه-ها">مثال‌ها: ایجاد و استفاده از افزونه‌ها</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>

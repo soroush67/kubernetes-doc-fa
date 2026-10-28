@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>kubectl برای کاربران Docker | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">reference / kubectl</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">kubectl برای کاربران Docker</h1><!-- overview -->
+<p dir="rtl">می‌توانید از ابزار خط فرمان کوبرنتیز، یعنی <code dir="ltr">kubectl</code>، برای تعامل با API Server استفاده کنید. اگر با ابزار خط فرمان Docker آشنا باشید، استفاده از kubectl ساده است. با این حال، میان دستورهای Docker و دستورهای kubectl چند تفاوت وجود دارد. در بخش‌های زیر یک زیردستور Docker نشان داده می‌شود و دستور معادل آن در <code dir="ltr">kubectl</code> شرح داده می‌شود.</p>
+<!-- body -->
+<h2 id="docker-run" dir="ltr" class="ltr">docker run</h2>
+<p dir="rtl">برای اجرای یک Deployment از nginx و در دسترس قرار دادن آن، به <a href="https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#-em-deployment-em-" target="_blank">kubectl create deployment</a> مراجعه کنید.</p>
+<p dir="ltr" class="ltr">docker:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">docker run -d --restart=always -e DOMAIN=cluster --name nginx-app -p 80:80 nginx
+</code></pre>
+<pre dir="ltr"><code dir="ltr">55c103fa129692154a7652490236fee9be47d70a8dd562281ae7d2f9a339a6db
+</code></pre>
+<pre dir="ltr"><code class="language-shell" dir="ltr">docker ps
+</code></pre>
+<pre dir="ltr"><code dir="ltr">CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                NAMES
+55c103fa1296        nginx               "nginx -g 'daemon of…"   9 seconds ago       Up 9 seconds        0.0.0.0:80-&gt;80/tcp   nginx-app
+</code></pre>
+<p dir="ltr" class="ltr">kubectl:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># start the pod running nginx
+kubectl create deployment --image=nginx nginx-app
+</code></pre>
+<pre dir="ltr"><code dir="ltr">deployment.apps/nginx-app created
+</code></pre>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># add env to nginx-app
+kubectl set env deployment/nginx-app  DOMAIN=cluster
+</code></pre>
+<pre dir="ltr"><code dir="ltr">deployment.apps/nginx-app env updated
+</code></pre>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">دستورهای <code dir="ltr">kubectl</code> نوع و نام منبعی را که ایجاد یا تغییر داده‌اند چاپ می‌کنند و می‌توان از آن‌ها در دستورهای بعدی استفاده کرد. پس از ایجاد یک Deployment می‌توانید یک Service جدید را در دسترس قرار دهید.</p>
+</div>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># expose a port through with a service
+kubectl expose deployment nginx-app --port=80 --name=nginx-http
+</code></pre>
+<pre dir="ltr"><code dir="ltr">service "nginx-http" exposed
+</code></pre>
+<p dir="rtl">با استفاده از kubectl می‌توانید یک <a href="../../concepts/workloads/controllers/deployment.html">Deployment</a> ایجاد کنید تا اطمینان حاصل شود که N پاد nginx را اجرا می‌کنند؛ در اینجا N تعداد replicaهایی است که در spec مشخص شده است و مقدار پیش‌فرض آن 1 است. همچنین می‌توانید یک <a href="../../concepts/services-networking/service.html">service</a> با یک انتخابگر (selector) ایجاد کنید که با برچسب‌های پادها مطابقت داشته باشد. برای اطلاعات بیشتر، به <a href="https://kubernetes.io/docs/tasks/access-application-cluster/service-access-application-cluster" target="_blank">استفاده از Service برای دسترسی به یک برنامه در کلاستر</a> مراجعه کنید.</p>
+<p dir="rtl">به‌طور پیش‌فرض، ایمیج‌ها در پس‌زمینه اجرا می‌شوند، مشابه <code dir="ltr">docker run -d ...</code>. برای اجرای آن‌ها در پیش‌زمینه، از <a href="https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands/#run" target="_blank"><code dir="ltr">kubectl run</code></a> برای ایجاد پاد استفاده کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl run [-i] [--tty] --attach &lt;name&gt; --image=&lt;image&gt;
+</code></pre>
+<p dir="rtl">برخلاف <code dir="ltr">docker run ...</code>، اگر <code dir="ltr">--attach</code> را مشخص کنید، <code dir="ltr">stdin</code>، <code dir="ltr">stdout</code> و <code dir="ltr">stderr</code> متصل می‌شوند. نمی‌توانید کنترل کنید که کدام جریان‌ها متصل شوند (<code dir="ltr">docker -a ...</code>).
+برای جدا شدن از کانتینر، می‌توانید دنباله escape یعنی Ctrl+P و سپس Ctrl+Q را وارد کنید.</p>
+<h2 id="docker-ps" dir="ltr" class="ltr">docker ps</h2>
+<p dir="rtl">برای فهرست کردن آنچه در حال حاضر در حال اجراست، به <a href="https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands/#get" target="_blank">kubectl get</a> مراجعه کنید.</p>
+<p dir="ltr" class="ltr">docker:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">docker ps -a
+</code></pre>
+<pre dir="ltr"><code dir="ltr">CONTAINER ID        IMAGE               COMMAND                  CREATED              STATUS                     PORTS                NAMES
+14636241935f        ubuntu:16.04        "echo test"              5 seconds ago        Exited (0) 5 seconds ago                        cocky_fermi
+55c103fa1296        nginx               "nginx -g 'daemon of…"   About a minute ago   Up About a minute          0.0.0.0:80-&gt;80/tcp   nginx-app
+</code></pre>
+<p dir="ltr" class="ltr">kubectl:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get po
+</code></pre>
+<pre dir="ltr"><code dir="ltr">NAME                        READY     STATUS      RESTARTS   AGE
+nginx-app-8df569cb7-4gd89   1/1       Running     0          3m
+ubuntu                      0/1       Completed   0          20s
+</code></pre>
+<h2 id="docker-attach" dir="ltr" class="ltr">docker attach</h2>
+<p dir="rtl">برای اتصال به فرایندی که از قبل در یک کانتینر در حال اجراست، به <a href="https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands/#attach" target="_blank">kubectl attach</a> مراجعه کنید.</p>
+<p dir="ltr" class="ltr">docker:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">docker ps
+</code></pre>
+<pre dir="ltr"><code dir="ltr">CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                NAMES
+55c103fa1296        nginx               "nginx -g 'daemon of…"   5 minutes ago       Up 5 minutes        0.0.0.0:80-&gt;80/tcp   nginx-app
+</code></pre>
+<pre dir="ltr"><code class="language-shell" dir="ltr">docker attach 55c103fa1296
+...
+</code></pre>
+<p dir="ltr" class="ltr">kubectl:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pods
+</code></pre>
+<pre dir="ltr"><code dir="ltr">NAME              READY     STATUS    RESTARTS   AGE
+nginx-app-5jyvm   1/1       Running   0          10m
+</code></pre>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl attach -it nginx-app-5jyvm
+...
+</code></pre>
+<p dir="rtl">برای جدا شدن از کانتینر، می‌توانید دنباله escape یعنی Ctrl+P و سپس Ctrl+Q را وارد کنید.</p>
+<h2 id="docker-exec" dir="ltr" class="ltr">docker exec</h2>
+<p dir="rtl">برای اجرای یک دستور در یک کانتینر، به <a href="https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands/#exec" target="_blank">kubectl exec</a> مراجعه کنید.</p>
+<p dir="ltr" class="ltr">docker:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">docker ps
+</code></pre>
+<pre dir="ltr"><code dir="ltr">CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                NAMES
+55c103fa1296        nginx               "nginx -g 'daemon of…"   6 minutes ago       Up 6 minutes        0.0.0.0:80-&gt;80/tcp   nginx-app
+</code></pre>
+<pre dir="ltr"><code class="language-shell" dir="ltr">docker exec 55c103fa1296 cat /etc/hostname
+</code></pre>
+<pre dir="ltr"><code dir="ltr">55c103fa1296
+</code></pre>
+<p dir="ltr" class="ltr">kubectl:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get po
+</code></pre>
+<pre dir="ltr"><code dir="ltr">NAME              READY     STATUS    RESTARTS   AGE
+nginx-app-5jyvm   1/1       Running   0          10m
+</code></pre>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl exec nginx-app-5jyvm -- cat /etc/hostname
+</code></pre>
+<pre dir="ltr"><code dir="ltr">nginx-app-5jyvm
+</code></pre>
+<p dir="rtl">برای استفاده از دستورهای تعاملی:</p>
+<p dir="ltr" class="ltr">docker:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">docker exec -ti 55c103fa1296 /bin/sh
+# exit
+</code></pre>
+<p dir="ltr" class="ltr">kubectl:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl exec -ti nginx-app-5jyvm -- /bin/sh
+# exit
+</code></pre>
+<p dir="rtl">برای اطلاعات بیشتر، به <a href="https://kubernetes.io/docs/tasks/debug/debug-application/get-shell-running-container/" target="_blank">دریافت یک شل در کانتینر در حال اجرا</a> مراجعه کنید.</p>
+<h2 id="docker-logs" dir="ltr" class="ltr">docker logs</h2>
+<p dir="rtl">برای دنبال کردن stdout/stderr یک فرایند در حال اجرا، به <a href="https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands/#logs" target="_blank">kubectl logs</a> مراجعه کنید.</p>
+<p dir="ltr" class="ltr">docker:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">docker logs -f a9e
+</code></pre>
+<pre dir="ltr"><code dir="ltr">192.168.9.1 - - [14/Jul/2015:01:04:02 +0000] "GET / HTTP/1.1" 200 612 "-" "curl/7.35.0" "-"
+192.168.9.1 - - [14/Jul/2015:01:04:03 +0000] "GET / HTTP/1.1" 200 612 "-" "curl/7.35.0" "-"
+</code></pre>
+<p dir="ltr" class="ltr">kubectl:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl logs -f nginx-app-zibvs
+</code></pre>
+<pre dir="ltr"><code dir="ltr">10.240.63.110 - - [14/Jul/2015:01:09:01 +0000] "GET / HTTP/1.1" 200 612 "-" "curl/7.26.0" "-"
+10.240.63.110 - - [14/Jul/2015:01:09:02 +0000] "GET / HTTP/1.1" 200 612 "-" "curl/7.26.0" "-"
+</code></pre>
+<p dir="rtl">میان پادها و کانتینرها تفاوت اندکی وجود دارد؛ به‌طور پیش‌فرض، پادها در صورت خروج فرایندهایشان خاتمه نمی‌یابند. در عوض، پادها فرایند را دوباره راه‌اندازی می‌کنند. این رفتار مشابه گزینه <code dir="ltr">--restart=always</code> در docker run است، با یک تفاوت عمده: در docker، خروجی هر بار اجرای فرایند به خروجی قبلی افزوده می‌شود، اما در کوبرنتیز هر بار اجرا جداگانه است. برای مشاهده خروجی اجرای قبلی در کوبرنتیز، به این صورت عمل کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl logs --previous nginx-app-zibvs
+</code></pre>
+<pre dir="ltr"><code dir="ltr">10.240.63.110 - - [14/Jul/2015:01:09:01 +0000] "GET / HTTP/1.1" 200 612 "-" "curl/7.26.0" "-"
+10.240.63.110 - - [14/Jul/2015:01:09:02 +0000] "GET / HTTP/1.1" 200 612 "-" "curl/7.26.0" "-"
+</code></pre>
+<p dir="rtl">برای اطلاعات بیشتر، به <a href="../../concepts/cluster-administration/logging.html">معماری ثبت لاگ</a> مراجعه کنید.</p>
+<h2 id="docker-stop-and-docker-rm" dir="ltr" class="ltr">docker stop and docker rm</h2>
+<p dir="rtl">برای متوقف کردن و حذف یک فرایند در حال اجرا، به <a href="https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands/#delete" target="_blank">kubectl delete</a> مراجعه کنید.</p>
+<p dir="ltr" class="ltr">docker:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">docker ps
+</code></pre>
+<pre dir="ltr"><code dir="ltr">CONTAINER ID        IMAGE               COMMAND                CREATED             STATUS              PORTS                         NAMES
+a9ec34d98787        nginx               "nginx -g 'daemon of"  22 hours ago        Up 22 hours         0.0.0.0:80-&gt;80/tcp, 443/tcp   nginx-app
+</code></pre>
+<pre dir="ltr"><code class="language-shell" dir="ltr">docker stop a9ec34d98787
+</code></pre>
+<pre dir="ltr"><code dir="ltr">a9ec34d98787
+</code></pre>
+<pre dir="ltr"><code class="language-shell" dir="ltr">docker rm a9ec34d98787
+</code></pre>
+<pre dir="ltr"><code dir="ltr">a9ec34d98787
+</code></pre>
+<p dir="ltr" class="ltr">kubectl:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get deployment nginx-app
+</code></pre>
+<pre dir="ltr"><code dir="ltr">NAME         READY   UP-TO-DATE   AVAILABLE   AGE
+nginx-app    1/1     1            1           2m
+</code></pre>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get po -l app=nginx-app
+</code></pre>
+<pre dir="ltr"><code dir="ltr">NAME                         READY     STATUS    RESTARTS   AGE
+nginx-app-2883164633-aklf7   1/1       Running   0          2m
+</code></pre>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl delete deployment nginx-app
+</code></pre>
+<pre dir="ltr"><code dir="ltr">deployment "nginx-app" deleted
+</code></pre>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get po -l app=nginx-app
+# Return nothing
+</code></pre>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">هنگام استفاده از kubectl، پاد را مستقیماً حذف نمی‌کنید. ابتدا باید Deployment مالک آن پاد را حذف کنید. اگر پاد را مستقیماً حذف کنید، Deployment آن را دوباره ایجاد می‌کند.</p>
+</div>
+<h2 id="docker-login" dir="ltr" class="ltr">docker login</h2>
+<p dir="rtl">در kubectl معادل مستقیمی برای <code dir="ltr">docker login</code> وجود ندارد. اگر می‌خواهید کوبرنتیز را با یک رجیستری خصوصی به کار ببرید، به <a href="../../concepts/containers/images.html#using-a-private-registry">استفاده از رجیستری خصوصی</a> مراجعه کنید.</p>
+<h2 id="docker-version" dir="ltr" class="ltr">docker version</h2>
+<p dir="rtl">برای دریافت نسخه کلاینت و سرور، به <a href="https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands/#version" target="_blank">kubectl version</a> مراجعه کنید.</p>
+<p dir="ltr" class="ltr">docker:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">docker version
+</code></pre>
+<pre dir="ltr"><code dir="ltr">Client version: 1.7.0
+Client API version: 1.19
+Go version (client): go1.4.2
+Git commit (client): 0baf609
+OS/Arch (client): linux/amd64
+Server version: 1.7.0
+Server API version: 1.19
+Go version (server): go1.4.2
+Git commit (server): 0baf609
+OS/Arch (server): linux/amd64
+</code></pre>
+<p dir="ltr" class="ltr">kubectl:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl version
+</code></pre>
+<pre dir="ltr"><code dir="ltr">Client Version: version.Info{Major:"1", Minor:"6", GitVersion:"v1.6.9+a3d1dfa6f4335", GitCommit:"9b77fed11a9843ce3780f70dd251e92901c43072", GitTreeState:"dirty", BuildDate:"2017-08-29T20:32:58Z", OpenPaasKubernetesVersion:"v1.03.02", GoVersion:"go1.7.5", Compiler:"gc", Platform:"linux/amd64"}
+Server Version: version.Info{Major:"1", Minor:"6", GitVersion:"v1.6.9+a3d1dfa6f4335", GitCommit:"9b77fed11a9843ce3780f70dd251e92901c43072", GitTreeState:"dirty", BuildDate:"2017-08-29T20:32:58Z", OpenPaasKubernetesVersion:"v1.03.02", GoVersion:"go1.7.5", Compiler:"gc", Platform:"linux/amd64"}
+</code></pre>
+<h2 id="docker-info" dir="ltr" class="ltr">docker info</h2>
+<p dir="rtl">برای دریافت اطلاعات متفرقه درباره محیط و پیکربندی، به <a href="https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands/#cluster-info" target="_blank">kubectl cluster-info</a> مراجعه کنید.</p>
+<p dir="ltr" class="ltr">docker:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">docker info
+</code></pre>
+<pre dir="ltr"><code dir="ltr">Containers: 40
+Images: 168
+Storage Driver: aufs
+ Root Dir: /usr/local/google/docker/aufs
+ Backing Filesystem: extfs
+ Dirs: 248
+ Dirperm1 Supported: false
+Execution Driver: native-0.2
+Logging Driver: json-file
+Kernel Version: 3.13.0-53-generic
+Operating System: Ubuntu 14.04.2 LTS
+CPUs: 12
+Total Memory: 31.32 GiB
+Name: k8s-is-fun.mtv.corp.google.com
+ID: ADUV:GCYR:B3VJ:HMPO:LNPQ:KD5S:YKFQ:76VN:IANZ:7TFV:ZBF4:BYJO
+WARNING: No swap limit support
+</code></pre>
+<p dir="ltr" class="ltr">kubectl:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl cluster-info
+</code></pre>
+<pre dir="ltr"><code dir="ltr">Kubernetes master is running at https://203.0.113.141
+CoreDNS is running at https://203.0.113.141/api/v1/namespaces/kube-system/services/kube-dns/proxy
+kubernetes-dashboard is running at https://203.0.113.141/api/v1/namespaces/kube-system/services/kubernetes-dashboard/proxy
+Grafana is running at https://203.0.113.141/api/v1/namespaces/kube-system/services/monitoring-grafana/proxy
+Heapster is running at https://203.0.113.141/api/v1/namespaces/kube-system/services/monitoring-heapster/proxy
+InfluxDB is running at https://203.0.113.141/api/v1/namespaces/kube-system/services/monitoring-influxdb/proxy
+</code></pre>
+</main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#docker-run">docker run</a><a class="l2" href="#docker-ps">docker ps</a><a class="l2" href="#docker-attach">docker attach</a><a class="l2" href="#docker-exec">docker exec</a><a class="l2" href="#docker-logs">docker logs</a><a class="l2" href="#docker-stop-and-docker-rm">docker stop and docker rm</a><a class="l2" href="#docker-login">docker login</a><a class="l2" href="#docker-version">docker version</a><a class="l2" href="#docker-info">docker info</a></nav>
+</div>
+</body>
+</html>

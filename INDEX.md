@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-959 از 1722 صفحه
+966 از 1722 صفحه
 
 
 ## `.`
@@ -1117,9 +1117,9 @@
 
 ## `reference/kubectl`
 
-- ⏳ `_index.md`
-- ⏳ `conventions.md`
-- ⏳ `docker-cli-to-kubectl.md`
+- ✅ [_index.md](md/reference/kubectl/_index.md)
+- ✅ [conventions.md](md/reference/kubectl/conventions.md)
+- ✅ [docker-cli-to-kubectl.md](md/reference/kubectl/docker-cli-to-kubectl.md)
 - ⏳ `introduction.md`
 - ⏳ `jsonpath.md`
 - ⏳ `kubectl-cmds.md`
@@ -1129,16 +1129,16 @@
 
 ## `reference/kubectl/generated`
 
-- ⏳ `_index.md`
-- ⏳ `kubectl.md`
+- ✅ [_index.md](md/reference/kubectl/generated/_index.md)
+- ✅ [kubectl.md](md/reference/kubectl/generated/kubectl.md)
 
 ## `reference/kubectl/generated/kubectl_annotate`
 
-- ⏳ `_index.md`
+- ✅ [_index.md](md/reference/kubectl/generated/kubectl_annotate/_index.md)
 
 ## `reference/kubectl/generated/kubectl_api-resources`
 
-- ⏳ `_index.md`
+- ⚠️ [_index.md](md/reference/kubectl/generated/kubectl_api-resources/_index.md)
 
 ## `reference/kubectl/generated/kubectl_api-versions`
 
