@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-809 از 1722 صفحه
+824 از 1722 صفحه
 
 
 ## `.`
@@ -957,21 +957,21 @@
 - ✅ [cloud-provider.md](md/reference/glossary/cloud-provider.md)
 - ✅ [cluster-architect.md](md/reference/glossary/cluster-architect.md)
 - ✅ [cluster-infrastructure.md](md/reference/glossary/cluster-infrastructure.md)
-- ⏳ `cluster-operations.md`
-- ⏳ `cluster-operator.md`
-- ⏳ `cluster.md`
-- ⏳ `cncf.md`
-- ⏳ `cni.md`
-- ⏳ `code-contributor.md`
-- ⏳ `condition.md`
-- ⏳ `configmap.md`
-- ⏳ `container-env-variables.md`
-- ⏳ `container-lifecycle-hooks.md`
-- ⏳ `container-runtime.md`
-- ⏳ `container.md`
-- ⏳ `containerd.md`
-- ⏳ `contributor.md`
-- ⏳ `control-plane.md`
+- ✅ [cluster-operations.md](md/reference/glossary/cluster-operations.md)
+- ✅ [cluster-operator.md](md/reference/glossary/cluster-operator.md)
+- ✅ [cluster.md](md/reference/glossary/cluster.md)
+- ✅ [cncf.md](md/reference/glossary/cncf.md)
+- ✅ [cni.md](md/reference/glossary/cni.md)
+- ✅ [code-contributor.md](md/reference/glossary/code-contributor.md)
+- ✅ [condition.md](md/reference/glossary/condition.md)
+- ✅ [configmap.md](md/reference/glossary/configmap.md)
+- ✅ [container-env-variables.md](md/reference/glossary/container-env-variables.md)
+- ✅ [container-lifecycle-hooks.md](md/reference/glossary/container-lifecycle-hooks.md)
+- ✅ [container-runtime.md](md/reference/glossary/container-runtime.md)
+- ✅ [container.md](md/reference/glossary/container.md)
+- ✅ [containerd.md](md/reference/glossary/containerd.md)
+- ✅ [contributor.md](md/reference/glossary/contributor.md)
+- ✅ [control-plane.md](md/reference/glossary/control-plane.md)
 - ⏳ `controller.md`
 - ⏳ `cri-o.md`
 - ⏳ `cri.md`

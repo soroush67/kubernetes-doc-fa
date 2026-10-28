@@ -9,7 +9,7 @@
 | | |
 |---|---|
 | پیشرفت (بر اساس کلمات) | **26.5٪** |
-| صفحات ترجمه‌شده | 809 از 1722 |
+| صفحات ترجمه‌شده | 824 از 1722 |
 | صفحات دارای ایراد ساختاری | 23 |
 | نسخه‌ی منبع انگلیسی | `ed70e311737a` |
 
@@ -72,7 +72,7 @@ cd kubernetes-doc-fa
 | `contribute` | 44 | 44 |
 | `doc-contributor-tools` | 1 | 1 |
 | `home` | 2 | 2 |
-| `reference` | 574 | 1198 |
+| `reference` | 589 | 1198 |
 | `setup` | 0 | 22 |
 | `tasks` | 0 | 221 |
 | `tutorials` | 0 | 45 |
@@ -91,26 +91,26 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [reference/glossary/control-plane.md](md/reference/glossary/control-plane.md) — 2026-10-28T11:38:01+03:30
+- [reference/glossary/contributor.md](md/reference/glossary/contributor.md) — 2026-10-28T11:37:56+03:30
+- [reference/glossary/containerd.md](md/reference/glossary/containerd.md) — 2026-10-28T11:37:51+03:30
+- [reference/glossary/container.md](md/reference/glossary/container.md) — 2026-10-28T11:37:47+03:30
+- [reference/glossary/container-runtime.md](md/reference/glossary/container-runtime.md) — 2026-10-28T11:37:43+03:30
+- [reference/glossary/container-lifecycle-hooks.md](md/reference/glossary/container-lifecycle-hooks.md) — 2026-10-28T11:37:42+03:30
+- [reference/glossary/container-env-variables.md](md/reference/glossary/container-env-variables.md) — 2026-10-28T11:37:37+03:30
+- [reference/glossary/configmap.md](md/reference/glossary/configmap.md) — 2026-10-28T11:37:34+03:30
+- [reference/glossary/condition.md](md/reference/glossary/condition.md) — 2026-10-28T11:37:31+03:30
+- [reference/glossary/code-contributor.md](md/reference/glossary/code-contributor.md) — 2026-10-28T11:37:28+03:30
+- [reference/glossary/cni.md](md/reference/glossary/cni.md) — 2026-10-28T11:37:25+03:30
+- [reference/glossary/cncf.md](md/reference/glossary/cncf.md) — 2026-10-28T11:37:21+03:30
+- [reference/glossary/cluster.md](md/reference/glossary/cluster.md) — 2026-10-28T11:37:18+03:30
+- [reference/glossary/cluster-operator.md](md/reference/glossary/cluster-operator.md) — 2026-10-28T11:37:15+03:30
+- [reference/glossary/cluster-operations.md](md/reference/glossary/cluster-operations.md) — 2026-10-28T11:37:10+03:30
 - [reference/glossary/cluster-architect.md](md/reference/glossary/cluster-architect.md) — 2026-10-28T11:37:04+03:30
 - [reference/glossary/cluster-infrastructure.md](md/reference/glossary/cluster-infrastructure.md) — 2026-10-28T11:37:04+03:30
 - [reference/glossary/cloud-controller-manager.md](md/reference/glossary/cloud-controller-manager.md) — 2026-10-28T11:36:59+03:30
 - [reference/glossary/cloud-provider.md](md/reference/glossary/cloud-provider.md) — 2026-10-28T11:36:59+03:30
 - [reference/glossary/cidr.md](md/reference/glossary/cidr.md) — 2026-10-28T11:36:52+03:30
-- [reference/glossary/cla.md](md/reference/glossary/cla.md) — 2026-10-28T11:36:52+03:30
-- [reference/glossary/cgroup.md](md/reference/glossary/cgroup.md) — 2026-10-28T11:36:47+03:30
-- [reference/glossary/certificate.md](md/reference/glossary/certificate.md) — 2026-10-28T11:36:45+03:30
-- [reference/glossary/cel.md](md/reference/glossary/cel.md) — 2026-10-28T11:36:42+03:30
-- [reference/glossary/cdi.md](md/reference/glossary/cdi.md) — 2026-10-28T11:36:40+03:30
-- [reference/glossary/cadvisor.md](md/reference/glossary/cadvisor.md) — 2026-10-28T11:36:35+03:30
-- [reference/glossary/approver.md](md/reference/glossary/approver.md) — 2026-10-28T11:36:33+03:30
-- [reference/glossary/application-developer.md](md/reference/glossary/application-developer.md) — 2026-10-28T11:36:26+03:30
-- [reference/glossary/applications.md](md/reference/glossary/applications.md) — 2026-10-28T11:36:24+03:30
-- [reference/glossary/application-architect.md](md/reference/glossary/application-architect.md) — 2026-10-28T11:36:17+03:30
-- [reference/glossary/app-container.md](md/reference/glossary/app-container.md) — 2026-10-28T11:36:14+03:30
-- [reference/glossary/api-resource.md](md/reference/glossary/api-resource.md) — 2026-10-28T11:36:11+03:30
-- [reference/glossary/api-group.md](md/reference/glossary/api-group.md) — 2026-10-28T11:36:06+03:30
-- [reference/glossary/api-eviction.md](md/reference/glossary/api-eviction.md) — 2026-10-28T11:36:05+03:30
-- [reference/glossary/annotation.md](md/reference/glossary/annotation.md) — 2026-10-28T11:35:59+03:30
 
 </div>
 
