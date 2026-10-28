@@ -8,8 +8,8 @@
 
 | | |
 |---|---|
-| پیشرفت (بر اساس کلمات) | **26.6٪** |
-| صفحات ترجمه‌شده | 839 از 1722 |
+| پیشرفت (بر اساس کلمات) | **26.7٪** |
+| صفحات ترجمه‌شده | 854 از 1722 |
 | صفحات دارای ایراد ساختاری | 23 |
 | نسخه‌ی منبع انگلیسی | `ed70e311737a` |
 
@@ -72,7 +72,7 @@ cd kubernetes-doc-fa
 | `contribute` | 44 | 44 |
 | `doc-contributor-tools` | 1 | 1 |
 | `home` | 2 | 2 |
-| `reference` | 604 | 1198 |
+| `reference` | 619 | 1198 |
 | `setup` | 0 | 22 |
 | `tasks` | 0 | 221 |
 | `tutorials` | 0 | 45 |
@@ -91,26 +91,26 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [reference/glossary/extensions.md](md/reference/glossary/extensions.md) — 2026-10-28T11:39:49+03:30
+- [reference/glossary/feature-gates.md](md/reference/glossary/feature-gates.md) — 2026-10-28T11:39:49+03:30
+- [reference/glossary/event.md](md/reference/glossary/event.md) — 2026-10-28T11:39:43+03:30
+- [reference/glossary/eviction.md](md/reference/glossary/eviction.md) — 2026-10-28T11:39:43+03:30
+- [reference/glossary/ephemeral-container.md](md/reference/glossary/ephemeral-container.md) — 2026-10-28T11:39:37+03:30
+- [reference/glossary/etcd.md](md/reference/glossary/etcd.md) — 2026-10-28T11:39:37+03:30
+- [reference/glossary/endpoint-slice.md](md/reference/glossary/endpoint-slice.md) — 2026-10-28T11:39:30+03:30
+- [reference/glossary/endpoint.md](md/reference/glossary/endpoint.md) — 2026-10-28T11:39:30+03:30
+- [reference/glossary/duration.md](md/reference/glossary/duration.md) — 2026-10-28T11:39:23+03:30
+- [reference/glossary/dynamic-volume-provisioning.md](md/reference/glossary/dynamic-volume-provisioning.md) — 2026-10-28T11:39:23+03:30
+- [reference/glossary/drain.md](md/reference/glossary/drain.md) — 2026-10-28T11:39:16+03:30
+- [reference/glossary/dra.md](md/reference/glossary/dra.md) — 2026-10-28T11:39:15+03:30
+- [reference/glossary/downward-api.md](md/reference/glossary/downward-api.md) — 2026-10-28T11:39:08+03:30
+- [reference/glossary/downstream.md](md/reference/glossary/downstream.md) — 2026-10-28T11:39:06+03:30
+- [reference/glossary/dockershim.md](md/reference/glossary/dockershim.md) — 2026-10-28T11:39:01+03:30
 - [reference/glossary/docker.md](md/reference/glossary/docker.md) — 2026-10-28T11:38:55+03:30
 - [reference/glossary/disruption.md](md/reference/glossary/disruption.md) — 2026-10-28T11:38:53+03:30
 - [reference/glossary/deviceclass.md](md/reference/glossary/deviceclass.md) — 2026-10-28T11:38:48+03:30
 - [reference/glossary/device.md](md/reference/glossary/device.md) — 2026-10-28T11:38:45+03:30
 - [reference/glossary/device-plugin.md](md/reference/glossary/device-plugin.md) — 2026-10-28T11:38:41+03:30
-- [reference/glossary/developer.md](md/reference/glossary/developer.md) — 2026-10-28T11:38:38+03:30
-- [reference/glossary/deployment.md](md/reference/glossary/deployment.md) — 2026-10-28T11:38:33+03:30
-- [reference/glossary/data-plane.md](md/reference/glossary/data-plane.md) — 2026-10-28T11:38:32+03:30
-- [reference/glossary/customresourcedefinition.md](md/reference/glossary/customresourcedefinition.md) — 2026-10-28T11:38:26+03:30
-- [reference/glossary/daemonset.md](md/reference/glossary/daemonset.md) — 2026-10-28T11:38:26+03:30
-- [reference/glossary/cronjob.md](md/reference/glossary/cronjob.md) — 2026-10-28T11:38:20+03:30
-- [reference/glossary/csi.md](md/reference/glossary/csi.md) — 2026-10-28T11:38:20+03:30
-- [reference/glossary/cri.md](md/reference/glossary/cri.md) — 2026-10-28T11:38:14+03:30
-- [reference/glossary/cri-o.md](md/reference/glossary/cri-o.md) — 2026-10-28T11:38:13+03:30
-- [reference/glossary/controller.md](md/reference/glossary/controller.md) — 2026-10-28T11:38:03+03:30
-- [reference/glossary/control-plane.md](md/reference/glossary/control-plane.md) — 2026-10-28T11:38:01+03:30
-- [reference/glossary/contributor.md](md/reference/glossary/contributor.md) — 2026-10-28T11:37:56+03:30
-- [reference/glossary/containerd.md](md/reference/glossary/containerd.md) — 2026-10-28T11:37:51+03:30
-- [reference/glossary/container.md](md/reference/glossary/container.md) — 2026-10-28T11:37:47+03:30
-- [reference/glossary/container-runtime.md](md/reference/glossary/container-runtime.md) — 2026-10-28T11:37:43+03:30
 
 </div>
 

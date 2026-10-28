@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-839 از 1722 صفحه
+854 از 1722 صفحه
 
 
 ## `.`
@@ -987,21 +987,21 @@
 - ✅ [deviceclass.md](md/reference/glossary/deviceclass.md)
 - ✅ [disruption.md](md/reference/glossary/disruption.md)
 - ✅ [docker.md](md/reference/glossary/docker.md)
-- ⏳ `dockershim.md`
-- ⏳ `downstream.md`
-- ⏳ `downward-api.md`
-- ⏳ `dra.md`
-- ⏳ `drain.md`
-- ⏳ `duration.md`
-- ⏳ `dynamic-volume-provisioning.md`
-- ⏳ `endpoint-slice.md`
-- ⏳ `endpoint.md`
-- ⏳ `ephemeral-container.md`
-- ⏳ `etcd.md`
-- ⏳ `event.md`
-- ⏳ `eviction.md`
-- ⏳ `extensions.md`
-- ⏳ `feature-gates.md`
+- ✅ [dockershim.md](md/reference/glossary/dockershim.md)
+- ✅ [downstream.md](md/reference/glossary/downstream.md)
+- ✅ [downward-api.md](md/reference/glossary/downward-api.md)
+- ✅ [dra.md](md/reference/glossary/dra.md)
+- ✅ [drain.md](md/reference/glossary/drain.md)
+- ✅ [duration.md](md/reference/glossary/duration.md)
+- ✅ [dynamic-volume-provisioning.md](md/reference/glossary/dynamic-volume-provisioning.md)
+- ✅ [endpoint-slice.md](md/reference/glossary/endpoint-slice.md)
+- ✅ [endpoint.md](md/reference/glossary/endpoint.md)
+- ✅ [ephemeral-container.md](md/reference/glossary/ephemeral-container.md)
+- ✅ [etcd.md](md/reference/glossary/etcd.md)
+- ✅ [event.md](md/reference/glossary/event.md)
+- ✅ [eviction.md](md/reference/glossary/eviction.md)
+- ✅ [extensions.md](md/reference/glossary/extensions.md)
+- ✅ [feature-gates.md](md/reference/glossary/feature-gates.md)
 - ⏳ `finalizer.md`
 - ⏳ `flexvolume.md`
 - ⏳ `garbage-collection.md`
