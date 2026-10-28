@@ -8,9 +8,9 @@
 
 | | |
 |---|---|
-| پیشرفت (بر اساس کلمات) | **26.1٪** |
-| صفحات ترجمه‌شده | 779 از 1722 |
-| صفحات دارای ایراد ساختاری | 19 |
+| پیشرفت (بر اساس کلمات) | **26.4٪** |
+| صفحات ترجمه‌شده | 794 از 1722 |
+| صفحات دارای ایراد ساختاری | 23 |
 | نسخه‌ی منبع انگلیسی | `ed70e311737a` |
 
 ## مشاهده
@@ -72,7 +72,7 @@ cd kubernetes-doc-fa
 | `contribute` | 44 | 44 |
 | `doc-contributor-tools` | 1 | 1 |
 | `home` | 2 | 2 |
-| `reference` | 544 | 1198 |
+| `reference` | 559 | 1198 |
 | `setup` | 0 | 22 |
 | `tasks` | 0 | 221 |
 | `tutorials` | 0 | 45 |
@@ -91,26 +91,26 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [reference/glossary/app-container.md](md/reference/glossary/app-container.md) — 2026-10-28T11:36:14+03:30
+- [reference/glossary/api-resource.md](md/reference/glossary/api-resource.md) — 2026-10-28T11:36:11+03:30
+- [reference/glossary/api-group.md](md/reference/glossary/api-group.md) — 2026-10-28T11:36:06+03:30
+- [reference/glossary/api-eviction.md](md/reference/glossary/api-eviction.md) — 2026-10-28T11:36:05+03:30
+- [reference/glossary/annotation.md](md/reference/glossary/annotation.md) — 2026-10-28T11:35:59+03:30
+- [reference/glossary/aggregation-layer.md](md/reference/glossary/aggregation-layer.md) — 2026-10-28T11:35:57+03:30
+- [reference/glossary/affinity.md](md/reference/glossary/affinity.md) — 2026-10-28T11:35:54+03:30
+- [reference/glossary/admission-controller.md](md/reference/glossary/admission-controller.md) — 2026-10-28T11:35:51+03:30
+- [reference/glossary/addons.md](md/reference/glossary/addons.md) — 2026-10-28T11:35:47+03:30
+- [reference/external-api/metrics.v1beta1.md](md/reference/external-api/metrics.v1beta1.md) — 2026-10-28T11:35:43+03:30
+- [reference/external-api/metrics.v1.md](md/reference/external-api/metrics.v1.md) — 2026-10-28T11:35:42+03:30
+- [reference/external-api/custom-metrics.v1beta2.md](md/reference/external-api/custom-metrics.v1beta2.md) — 2026-10-28T11:34:40+03:30
+- [reference/external-api/external-metrics.v1beta1.md](md/reference/external-api/external-metrics.v1beta1.md) — 2026-10-28T11:34:38+03:30
+- [reference/deprecation-policy.md](md/reference/deprecation-policy.md) — 2026-10-28T11:33:57+03:30
+- [reference/external-api/_index.md](md/reference/external-api/_index.md) — 2026-10-28T11:33:38+03:30
 - [reference/encodings/kyaml.md](md/reference/encodings/kyaml.md) — 2026-10-28T11:33:23+03:30
 - [reference/encodings/_index.md](md/reference/encodings/_index.md) — 2026-10-28T11:33:14+03:30
 - [reference/debug-cluster/flow-control.md](md/reference/debug-cluster/flow-control.md) — 2026-10-28T11:33:09+03:30
 - [reference/debug-cluster/_index.md](md/reference/debug-cluster/_index.md) — 2026-10-28T11:32:31+03:30
 - [reference/config-api/kuberc.v1beta1.md](md/reference/config-api/kuberc.v1beta1.md) — 2026-10-28T11:32:27+03:30
-- [reference/config-api/kubelet-config.v1beta1.md](md/reference/config-api/kubelet-config.v1beta1.md) — 2026-10-28T11:32:21+03:30
-- [reference/config-api/kuberc.v1alpha1.md](md/reference/config-api/kuberc.v1alpha1.md) — 2026-10-28T11:31:51+03:30
-- [reference/config-api/kubelet-credentialprovider.v1.md](md/reference/config-api/kubelet-credentialprovider.v1.md) — 2026-10-28T11:31:03+03:30
-- [reference/config-api/kubeadm-config.v1beta4.md](md/reference/config-api/kubeadm-config.v1beta4.md) — 2026-10-28T11:30:33+03:30
-- [reference/config-api/kubelet-config.v1alpha1.md](md/reference/config-api/kubelet-config.v1alpha1.md) — 2026-10-28T11:28:09+03:30
-- [reference/config-api/kubelet-config.v1.md](md/reference/config-api/kubelet-config.v1.md) — 2026-10-28T11:26:04+03:30
-- [reference/config-api/kubeconfig.v1.md](md/reference/config-api/kubeconfig.v1.md) — 2026-10-28T11:25:22+03:30
-- [reference/config-api/kubeadm-config.v1beta3.md](md/reference/config-api/kubeadm-config.v1beta3.md) — 2026-10-28T11:24:33+03:30
-- [reference/config-api/kube-scheduler-config.v1.md](md/reference/config-api/kube-scheduler-config.v1.md) — 2026-10-28T11:20:07+03:30
-- [reference/config-api/kube-controller-manager-config.v1alpha1.md](md/reference/config-api/kube-controller-manager-config.v1alpha1.md) — 2026-10-28T11:18:16+03:30
-- [reference/config-api/kube-proxy-config.v1alpha1.md](md/reference/config-api/kube-proxy-config.v1alpha1.md) — 2026-10-28T11:17:19+03:30
-- [reference/config-api/imagepolicy.v1alpha1.md](md/reference/config-api/imagepolicy.v1alpha1.md) — 2026-10-28T11:15:25+03:30
-- [reference/config-api/apiserver-config.v1beta1.md](md/reference/config-api/apiserver-config.v1beta1.md) — 2026-10-28T11:14:50+03:30
-- [reference/config-api/client-authentication.v1beta1.md](md/reference/config-api/client-authentication.v1beta1.md) — 2026-10-28T11:14:32+03:30
-- [reference/config-api/client-authentication.v1.md](md/reference/config-api/client-authentication.v1.md) — 2026-10-28T11:14:06+03:30
 
 </div>
 
@@ -137,6 +137,10 @@ cd kubernetes-doc-fa
 - [reference/config-api/kubeadm-config.v1beta3.md](md/reference/config-api/kubeadm-config.v1beta3.md): chunk 1: short: 1881 words vs 4131 source words
 - [reference/config-api/kubeadm-config.v1beta4.md](md/reference/config-api/kubeadm-config.v1beta4.md): chunk 1: short: 2508 words vs 5597 source words; chunk 2: short: 1496 words vs 2029 source words
 - [reference/config-api/kubelet-config.v1alpha1.md](md/reference/config-api/kubelet-config.v1alpha1.md): chunk 1: short: 1158 words vs 1573 source words
+- [reference/external-api/custom-metrics.v1beta2.md](md/reference/external-api/custom-metrics.v1beta2.md): chunk 1: short: 351 words vs 548 source words
+- [reference/external-api/external-metrics.v1beta1.md](md/reference/external-api/external-metrics.v1beta1.md): chunk 1: short: 224 words vs 345 source words
+- [reference/external-api/metrics.v1.md](md/reference/external-api/metrics.v1.md): chunk 1: short: 374 words vs 606 source words
+- [reference/external-api/metrics.v1beta1.md](md/reference/external-api/metrics.v1beta1.md): chunk 1: short: 388 words vs 620 source words
 
 </div>
 

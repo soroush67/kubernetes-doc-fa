@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-779 از 1722 صفحه
+794 از 1722 صفحه
 
 
 ## `.`
@@ -357,7 +357,7 @@
 ## `reference`
 
 - ✅ [_index.md](md/reference/_index.md)
-- ⏳ `deprecation-policy.md`
+- ✅ [deprecation-policy.md](md/reference/deprecation-policy.md)
 
 ## `reference/access-authn-authz`
 
@@ -925,23 +925,23 @@
 
 ## `reference/external-api`
 
-- ⏳ `_index.md`
-- ⏳ `custom-metrics.v1beta2.md`
-- ⏳ `external-metrics.v1beta1.md`
-- ⏳ `metrics.v1.md`
-- ⏳ `metrics.v1beta1.md`
+- ✅ [_index.md](md/reference/external-api/_index.md)
+- ⚠️ [custom-metrics.v1beta2.md](md/reference/external-api/custom-metrics.v1beta2.md)
+- ⚠️ [external-metrics.v1beta1.md](md/reference/external-api/external-metrics.v1beta1.md)
+- ⚠️ [metrics.v1.md](md/reference/external-api/metrics.v1.md)
+- ⚠️ [metrics.v1beta1.md](md/reference/external-api/metrics.v1beta1.md)
 
 ## `reference/glossary`
 
-- ⏳ `addons.md`
-- ⏳ `admission-controller.md`
-- ⏳ `affinity.md`
-- ⏳ `aggregation-layer.md`
-- ⏳ `annotation.md`
-- ⏳ `api-eviction.md`
-- ⏳ `api-group.md`
-- ⏳ `api-resource.md`
-- ⏳ `app-container.md`
+- ✅ [addons.md](md/reference/glossary/addons.md)
+- ✅ [admission-controller.md](md/reference/glossary/admission-controller.md)
+- ✅ [affinity.md](md/reference/glossary/affinity.md)
+- ✅ [aggregation-layer.md](md/reference/glossary/aggregation-layer.md)
+- ✅ [annotation.md](md/reference/glossary/annotation.md)
+- ✅ [api-eviction.md](md/reference/glossary/api-eviction.md)
+- ✅ [api-group.md](md/reference/glossary/api-group.md)
+- ✅ [api-resource.md](md/reference/glossary/api-resource.md)
+- ✅ [app-container.md](md/reference/glossary/app-container.md)
 - ⏳ `application-architect.md`
 - ⏳ `application-developer.md`
 - ⏳ `applications.md`
