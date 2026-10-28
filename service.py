@@ -28,6 +28,8 @@ from translate import MODEL, Limiter, Stopped, translate_page
 
 WORKERS = int(os.environ.get("WORKERS", "2"))
 COMMIT_EVERY = int(os.environ.get("COMMIT_EVERY", "15"))
+# pages translated by these models are redone (Sonnet output read too stiffly)
+REDO_MODELS = set(filter(None, os.environ.get("REDO_MODELS", "sonnet").split(",")))
 
 
 def sh(*cmd, cwd=ROOT, check=True):
@@ -156,7 +158,7 @@ class Runner:
         sh("git", "add", "-A", "md", "html", "manifest.json", "README.md", "INDEX.md")
         if subprocess.run(["git", "diff", "--cached", "--quiet"], cwd=ROOT).returncode == 0:
             return
-        sh("git", "commit", "-qm", f"{message}\n\nCo-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>")
+        sh("git", "commit", "-qm", f"{message}\n\nCo-Authored-By: Claude {MODEL.capitalize()} 5.5 <noreply@anthropic.com>")
         push = subprocess.run(["git", "push", "-q"], cwd=ROOT, capture_output=True, text=True)
         self.say(f"committed: {message}" + ("" if push.returncode == 0 else f" (push failed: {push.stderr.strip()[-200:]})"))
 
@@ -188,12 +190,14 @@ def plan(m, retry_issues, say):
     todo = []
     for rel, path in src.items():
         h, e = sha(path.read_text(encoding="utf-8")), files.get(rel)
-        if e and e["sha"] == h and (MD / rel).exists() and (e["status"] == "ok" or not retry_issues):
+        if (e and e["sha"] == h and (MD / rel).exists() and (e["status"] == "ok" or not retry_issues)
+                and e["model"] not in REDO_MODELS):
             continue
         if not e and (MD / rel).exists() and not check(rel):
             files[rel] = {"sha": h, "status": "ok", "issues": [], "model": "opus (agents)", "at": now()}
             continue
         todo.append(rel)
+    todo.sort(key=lambda r: r in files)  # untranslated pages first, then redos
     say(f"plan: {len(src)} pages, {len(todo)} to translate, {len(removed)} removed upstream")
     return todo, len(removed)
 

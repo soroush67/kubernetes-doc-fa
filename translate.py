@@ -18,7 +18,7 @@ from zoneinfo import ZoneInfo
 from check import check_text
 from common import ROOT, STATE, words
 
-MODEL = os.environ.get("TRANSLATE_MODEL", "sonnet")
+MODEL = os.environ.get("TRANSLATE_MODEL", "opus")
 CHUNK_WORDS = int(os.environ.get("CHUNK_WORDS", "2500"))
 RETRIES = 2
 PROMPT = (ROOT / "prompt.md").read_text(encoding="utf-8")

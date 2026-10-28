@@ -74,6 +74,8 @@ def check_text(en, fa):
         changed = sum(1 for a, b in zip(ec, fc) if a != b)
         if changed:
             issues.append(f"{changed} code block(s) changed")
+    if sorted(re.findall(r"\{#[^}]+\}", "\n".join(ep))) != sorted(re.findall(r"\{#[^}]+\}", "\n".join(fp))):
+        issues.append("heading anchors {#...} differ")
     if shortcodes(en) != shortcodes(fa):
         issues.append("shortcodes differ")
     te, tf = targets(ep), targets(fp)
