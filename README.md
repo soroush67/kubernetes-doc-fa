@@ -8,9 +8,9 @@
 
 | | |
 |---|---|
-| پیشرفت (بر اساس کلمات) | **28.8٪** |
-| صفحات ترجمه‌شده | 977 از 1722 |
-| صفحات دارای ایراد ساختاری | 26 |
+| پیشرفت (بر اساس کلمات) | **29.8٪** |
+| صفحات ترجمه‌شده | 992 از 1722 |
+| صفحات دارای ایراد ساختاری | 27 |
 | نسخه‌ی منبع انگلیسی | `ed70e311737a` |
 
 ## مشاهده
@@ -72,7 +72,7 @@ cd kubernetes-doc-fa
 | `contribute` | 44 | 44 |
 | `doc-contributor-tools` | 1 | 1 |
 | `home` | 2 | 2 |
-| `reference` | 742 | 1198 |
+| `reference` | 757 | 1198 |
 | `setup` | 0 | 22 |
 | `tasks` | 0 | 221 |
 | `tutorials` | 0 | 45 |
@@ -93,26 +93,26 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [reference/kubectl/generated/kubectl_config/kubectl_config_rename-context.md](md/reference/kubectl/generated/kubectl_config/kubectl_config_rename-context.md) — 2026-10-28T16:17:15+03:30
+- [reference/kubectl/generated/kubectl_config/kubectl_config_get-users.md](md/reference/kubectl/generated/kubectl_config/kubectl_config_get-users.md) — 2026-10-28T16:15:55+03:30
+- [reference/kubectl/generated/kubectl_config/kubectl_config_get-contexts.md](md/reference/kubectl/generated/kubectl_config/kubectl_config_get-contexts.md) — 2026-10-28T16:14:35+03:30
+- [reference/kubectl/generated/kubectl_config/kubectl_config_get-clusters.md](md/reference/kubectl/generated/kubectl_config/kubectl_config_get-clusters.md) — 2026-10-28T16:12:30+03:30
+- [reference/kubectl/generated/kubectl_config/kubectl_config_delete-user.md](md/reference/kubectl/generated/kubectl_config/kubectl_config_delete-user.md) — 2026-10-28T16:11:14+03:30
+- [reference/kubectl/generated/kubectl_config/kubectl_config_delete-context.md](md/reference/kubectl/generated/kubectl_config/kubectl_config_delete-context.md) — 2026-10-28T16:09:55+03:30
+- [reference/kubectl/generated/kubectl_config/kubectl_config_delete-cluster.md](md/reference/kubectl/generated/kubectl_config/kubectl_config_delete-cluster.md) — 2026-10-28T16:07:52+03:30
+- [reference/kubectl/generated/kubectl_config/kubectl_config_current-context.md](md/reference/kubectl/generated/kubectl_config/kubectl_config_current-context.md) — 2026-10-28T16:06:34+03:30
+- [reference/kubectl/generated/kubectl_config/_index.md](md/reference/kubectl/generated/kubectl_config/_index.md) — 2026-10-28T16:05:15+03:30
+- [reference/kubectl/generated/kubectl_completion/_index.md](md/reference/kubectl/generated/kubectl_completion/_index.md) — 2026-10-28T16:04:30+03:30
+- [reference/kubectl/generated/kubectl_cluster-info/kubectl_cluster-info_dump.md](md/reference/kubectl/generated/kubectl_cluster-info/kubectl_cluster-info_dump.md) — 2026-10-28T16:02:37+03:30
+- [reference/kubectl/generated/kubectl_cluster-info/_index.md](md/reference/kubectl/generated/kubectl_cluster-info/_index.md) — 2026-10-28T16:00:51+03:30
+- [reference/kubectl/generated/kubectl_certificate/kubectl_certificate_deny.md](md/reference/kubectl/generated/kubectl_certificate/kubectl_certificate_deny.md) — 2026-10-28T15:59:29+03:30
+- [reference/kubectl/generated/kubectl_certificate/kubectl_certificate_approve.md](md/reference/kubectl/generated/kubectl_certificate/kubectl_certificate_approve.md) — 2026-10-28T15:57:45+03:30
+- [reference/kubectl/generated/kubectl_certificate/_index.md](md/reference/kubectl/generated/kubectl_certificate/_index.md) — 2026-10-28T15:56:06+03:30
 - [reference/kubectl/generated/kubectl_autoscale/_index.md](md/reference/kubectl/generated/kubectl_autoscale/_index.md) — 2026-10-28T15:54:36+03:30
 - [reference/kubectl/generated/kubectl_auth/kubectl_auth_whoami.md](md/reference/kubectl/generated/kubectl_auth/kubectl_auth_whoami.md) — 2026-10-28T15:53:33+03:30
 - [reference/kubectl/generated/kubectl_auth/kubectl_auth_reconcile.md](md/reference/kubectl/generated/kubectl_auth/kubectl_auth_reconcile.md) — 2026-10-28T12:25:37+03:30
 - [reference/kubectl/generated/kubectl_auth/kubectl_auth_can-i.md](md/reference/kubectl/generated/kubectl_auth/kubectl_auth_can-i.md) — 2026-10-28T12:24:36+03:30
 - [reference/kubectl/generated/kubectl_auth/_index.md](md/reference/kubectl/generated/kubectl_auth/_index.md) — 2026-10-28T12:22:49+03:30
-- [reference/kubectl/generated/kubectl_attach/_index.md](md/reference/kubectl/generated/kubectl_attach/_index.md) — 2026-10-28T12:21:24+03:30
-- [reference/kubectl/generated/kubectl_apply/kubectl_apply_view-last-applied.md](md/reference/kubectl/generated/kubectl_apply/kubectl_apply_view-last-applied.md) — 2026-10-28T12:19:46+03:30
-- [reference/kubectl/generated/kubectl_apply/kubectl_apply_set-last-applied.md](md/reference/kubectl/generated/kubectl_apply/kubectl_apply_set-last-applied.md) — 2026-10-28T12:18:10+03:30
-- [reference/kubectl/generated/kubectl_apply/kubectl_apply_edit-last-applied.md](md/reference/kubectl/generated/kubectl_apply/kubectl_apply_edit-last-applied.md) — 2026-10-28T12:16:27+03:30
-- [reference/kubectl/generated/kubectl_apply/_index.md](md/reference/kubectl/generated/kubectl_apply/_index.md) — 2026-10-28T12:15:27+03:30
-- [reference/kubectl/generated/kubectl_api-versions/_index.md](md/reference/kubectl/generated/kubectl_api-versions/_index.md) — 2026-10-28T12:12:21+03:30
-- [concepts/extend-kubernetes/api-extension/custom-resources.md](md/concepts/extend-kubernetes/api-extension/custom-resources.md) — 2026-10-28T12:10:20+03:30
-- [concepts/policy/resource-quotas.md](md/concepts/policy/resource-quotas.md) — 2026-10-28T12:09:50+03:30
-- [concepts/overview/working-with-objects/names.md](md/concepts/overview/working-with-objects/names.md) — 2026-10-28T12:07:35+03:30
-- [concepts/extend-kubernetes/compute-storage-net/device-plugins.md](md/concepts/extend-kubernetes/compute-storage-net/device-plugins.md) — 2026-10-28T12:07:08+03:30
-- [reference/kubectl/generated/kubectl_api-resources/_index.md](md/reference/kubectl/generated/kubectl_api-resources/_index.md) — 2026-10-28T11:56:52+03:30
-- [reference/kubectl/generated/kubectl_annotate/_index.md](md/reference/kubectl/generated/kubectl_annotate/_index.md) — 2026-10-28T11:55:01+03:30
-- [reference/kubectl/generated/kubectl.md](md/reference/kubectl/generated/kubectl.md) — 2026-10-28T11:54:16+03:30
-- [reference/kubectl/generated/_index.md](md/reference/kubectl/generated/_index.md) — 2026-10-28T11:53:40+03:30
-- [reference/kubectl/docker-cli-to-kubectl.md](md/reference/kubectl/docker-cli-to-kubectl.md) — 2026-10-28T11:53:36+03:30
 
 </div>
 
@@ -146,6 +146,7 @@ cd kubernetes-doc-fa
 - [reference/kubectl/generated/kubectl_api-resources/_index.md](md/reference/kubectl/generated/kubectl_api-resources/_index.md): chunk 1: short: 1121 words vs 1550 source words
 - [reference/kubectl/generated/kubectl_api-versions/_index.md](md/reference/kubectl/generated/kubectl_api-versions/_index.md): chunk 1: short: 903 words vs 1266 source words
 - [reference/kubectl/generated/kubectl_apply/_index.md](md/reference/kubectl/generated/kubectl_apply/_index.md): chunk 2: short: 887 words vs 1254 source words
+- [reference/kubectl/generated/kubectl_config/kubectl_config_get-contexts.md](md/reference/kubectl/generated/kubectl_config/kubectl_config_get-contexts.md): chunk 1: short: 938 words vs 1313 source words
 
 </div>
 

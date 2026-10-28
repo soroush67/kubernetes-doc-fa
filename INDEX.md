@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-977 از 1722 صفحه
+992 از 1722 صفحه
 
 
 ## `.`
@@ -1168,30 +1168,30 @@
 
 ## `reference/kubectl/generated/kubectl_certificate`
 
-- ⏳ `_index.md`
-- ⏳ `kubectl_certificate_approve.md`
-- ⏳ `kubectl_certificate_deny.md`
+- ✅ [_index.md](md/reference/kubectl/generated/kubectl_certificate/_index.md)
+- ✅ [kubectl_certificate_approve.md](md/reference/kubectl/generated/kubectl_certificate/kubectl_certificate_approve.md)
+- ✅ [kubectl_certificate_deny.md](md/reference/kubectl/generated/kubectl_certificate/kubectl_certificate_deny.md)
 
 ## `reference/kubectl/generated/kubectl_cluster-info`
 
-- ⏳ `_index.md`
-- ⏳ `kubectl_cluster-info_dump.md`
+- ✅ [_index.md](md/reference/kubectl/generated/kubectl_cluster-info/_index.md)
+- ✅ [kubectl_cluster-info_dump.md](md/reference/kubectl/generated/kubectl_cluster-info/kubectl_cluster-info_dump.md)
 
 ## `reference/kubectl/generated/kubectl_completion`
 
-- ⏳ `_index.md`
+- ✅ [_index.md](md/reference/kubectl/generated/kubectl_completion/_index.md)
 
 ## `reference/kubectl/generated/kubectl_config`
 
-- ⏳ `_index.md`
-- ⏳ `kubectl_config_current-context.md`
-- ⏳ `kubectl_config_delete-cluster.md`
-- ⏳ `kubectl_config_delete-context.md`
-- ⏳ `kubectl_config_delete-user.md`
-- ⏳ `kubectl_config_get-clusters.md`
-- ⏳ `kubectl_config_get-contexts.md`
-- ⏳ `kubectl_config_get-users.md`
-- ⏳ `kubectl_config_rename-context.md`
+- ✅ [_index.md](md/reference/kubectl/generated/kubectl_config/_index.md)
+- ✅ [kubectl_config_current-context.md](md/reference/kubectl/generated/kubectl_config/kubectl_config_current-context.md)
+- ✅ [kubectl_config_delete-cluster.md](md/reference/kubectl/generated/kubectl_config/kubectl_config_delete-cluster.md)
+- ✅ [kubectl_config_delete-context.md](md/reference/kubectl/generated/kubectl_config/kubectl_config_delete-context.md)
+- ✅ [kubectl_config_delete-user.md](md/reference/kubectl/generated/kubectl_config/kubectl_config_delete-user.md)
+- ✅ [kubectl_config_get-clusters.md](md/reference/kubectl/generated/kubectl_config/kubectl_config_get-clusters.md)
+- ⚠️ [kubectl_config_get-contexts.md](md/reference/kubectl/generated/kubectl_config/kubectl_config_get-contexts.md)
+- ✅ [kubectl_config_get-users.md](md/reference/kubectl/generated/kubectl_config/kubectl_config_get-users.md)
+- ✅ [kubectl_config_rename-context.md](md/reference/kubectl/generated/kubectl_config/kubectl_config_rename-context.md)
 - ⏳ `kubectl_config_set-cluster.md`
 - ⏳ `kubectl_config_set-context.md`
 - ⏳ `kubectl_config_set-credentials.md`
