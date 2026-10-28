@@ -8,8 +8,8 @@
 
 | | |
 |---|---|
-| پیشرفت (بر اساس کلمات) | **26.9٪** |
-| صفحات ترجمه‌شده | 914 از 1722 |
+| پیشرفت (بر اساس کلمات) | **27.0٪** |
+| صفحات ترجمه‌شده | 929 از 1722 |
 | صفحات دارای ایراد ساختاری | 23 |
 | نسخه‌ی منبع انگلیسی | `ed70e311737a` |
 
@@ -72,7 +72,7 @@ cd kubernetes-doc-fa
 | `contribute` | 44 | 44 |
 | `doc-contributor-tools` | 1 | 1 |
 | `home` | 2 | 2 |
-| `reference` | 679 | 1198 |
+| `reference` | 694 | 1198 |
 | `setup` | 0 | 22 |
 | `tasks` | 0 | 221 |
 | `tutorials` | 0 | 45 |
@@ -91,26 +91,26 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [reference/glossary/service-catalog.md](md/reference/glossary/service-catalog.md) — 2026-10-28T11:46:52+03:30
+- [reference/glossary/service-account.md](md/reference/glossary/service-account.md) — 2026-10-28T11:46:49+03:30
+- [reference/glossary/selector.md](md/reference/glossary/selector.md) — 2026-10-28T11:46:46+03:30
+- [reference/glossary/security-context.md](md/reference/glossary/security-context.md) — 2026-10-28T11:46:44+03:30
+- [reference/glossary/secret.md](md/reference/glossary/secret.md) — 2026-10-28T11:46:40+03:30
+- [reference/glossary/san.md](md/reference/glossary/san.md) — 2026-10-28T11:46:38+03:30
+- [reference/glossary/resourceslice.md](md/reference/glossary/resourceslice.md) — 2026-10-28T11:46:33+03:30
+- [reference/glossary/reviewer.md](md/reference/glossary/reviewer.md) — 2026-10-28T11:46:32+03:30
+- [reference/glossary/resourceclaimtemplate.md](md/reference/glossary/resourceclaimtemplate.md) — 2026-10-28T11:46:28+03:30
+- [reference/glossary/resourceclaim.md](md/reference/glossary/resourceclaim.md) — 2026-10-28T11:46:26+03:30
+- [reference/glossary/replication-controller.md](md/reference/glossary/replication-controller.md) — 2026-10-28T11:46:20+03:30
+- [reference/glossary/resource-quota.md](md/reference/glossary/resource-quota.md) — 2026-10-28T11:46:20+03:30
+- [reference/glossary/replica.md](md/reference/glossary/replica.md) — 2026-10-28T11:46:13+03:30
+- [reference/glossary/replica-set.md](md/reference/glossary/replica-set.md) — 2026-10-28T11:46:09+03:30
+- [reference/glossary/rbac.md](md/reference/glossary/rbac.md) — 2026-10-28T11:45:59+03:30
 - [reference/glossary/quantity.md](md/reference/glossary/quantity.md) — 2026-10-28T11:45:55+03:30
 - [reference/glossary/proxy.md](md/reference/glossary/proxy.md) — 2026-10-28T11:45:49+03:30
 - [reference/glossary/qos-class.md](md/reference/glossary/qos-class.md) — 2026-10-28T11:45:46+03:30
 - [reference/glossary/probe.md](md/reference/glossary/probe.md) — 2026-10-28T11:45:39+03:30
 - [reference/glossary/priority-class.md](md/reference/glossary/priority-class.md) — 2026-10-28T11:45:37+03:30
-- [reference/glossary/preemption.md](md/reference/glossary/preemption.md) — 2026-10-28T11:45:33+03:30
-- [reference/glossary/podgroup.md](md/reference/glossary/podgroup.md) — 2026-10-28T11:45:30+03:30
-- [reference/glossary/pod.md](md/reference/glossary/pod.md) — 2026-10-28T11:45:23+03:30
-- [reference/glossary/pod-security-policy.md](md/reference/glossary/pod-security-policy.md) — 2026-10-28T11:45:19+03:30
-- [reference/glossary/pod-template.md](md/reference/glossary/pod-template.md) — 2026-10-28T11:45:17+03:30
-- [reference/glossary/pod-priority.md](md/reference/glossary/pod-priority.md) — 2026-10-28T11:45:08+03:30
-- [reference/glossary/pod-lifecycle.md](md/reference/glossary/pod-lifecycle.md) — 2026-10-28T11:45:04+03:30
-- [reference/glossary/pod-disruption.md](md/reference/glossary/pod-disruption.md) — 2026-10-28T11:44:58+03:30
-- [reference/glossary/pod-disruption-budget.md](md/reference/glossary/pod-disruption-budget.md) — 2026-10-28T11:44:56+03:30
-- [reference/glossary/platform-developer.md](md/reference/glossary/platform-developer.md) — 2026-10-28T11:44:50+03:30
-- [reference/glossary/persistent-volume.md](md/reference/glossary/persistent-volume.md) — 2026-10-28T11:44:44+03:30
-- [reference/glossary/persistent-volume-claim.md](md/reference/glossary/persistent-volume-claim.md) — 2026-10-28T11:44:37+03:30
-- [reference/glossary/operator-pattern.md](md/reference/glossary/operator-pattern.md) — 2026-10-28T11:44:32+03:30
-- [reference/glossary/object.md](md/reference/glossary/object.md) — 2026-10-28T11:44:25+03:30
-- [reference/glossary/node.md](md/reference/glossary/node.md) — 2026-10-28T11:44:19+03:30
 
 </div>
 

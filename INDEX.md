@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-914 از 1722 صفحه
+929 از 1722 صفحه
 
 
 ## `.`
@@ -1062,21 +1062,21 @@
 - ✅ [proxy.md](md/reference/glossary/proxy.md)
 - ✅ [qos-class.md](md/reference/glossary/qos-class.md)
 - ✅ [quantity.md](md/reference/glossary/quantity.md)
-- ⏳ `rbac.md`
-- ⏳ `replica-set.md`
-- ⏳ `replica.md`
-- ⏳ `replication-controller.md`
-- ⏳ `resource-quota.md`
-- ⏳ `resourceclaim.md`
-- ⏳ `resourceclaimtemplate.md`
-- ⏳ `resourceslice.md`
-- ⏳ `reviewer.md`
-- ⏳ `san.md`
-- ⏳ `secret.md`
-- ⏳ `security-context.md`
-- ⏳ `selector.md`
-- ⏳ `service-account.md`
-- ⏳ `service-catalog.md`
+- ✅ [rbac.md](md/reference/glossary/rbac.md)
+- ✅ [replica-set.md](md/reference/glossary/replica-set.md)
+- ✅ [replica.md](md/reference/glossary/replica.md)
+- ✅ [replication-controller.md](md/reference/glossary/replication-controller.md)
+- ✅ [resource-quota.md](md/reference/glossary/resource-quota.md)
+- ✅ [resourceclaim.md](md/reference/glossary/resourceclaim.md)
+- ✅ [resourceclaimtemplate.md](md/reference/glossary/resourceclaimtemplate.md)
+- ✅ [resourceslice.md](md/reference/glossary/resourceslice.md)
+- ✅ [reviewer.md](md/reference/glossary/reviewer.md)
+- ✅ [san.md](md/reference/glossary/san.md)
+- ✅ [secret.md](md/reference/glossary/secret.md)
+- ✅ [security-context.md](md/reference/glossary/security-context.md)
+- ✅ [selector.md](md/reference/glossary/selector.md)
+- ✅ [service-account.md](md/reference/glossary/service-account.md)
+- ✅ [service-catalog.md](md/reference/glossary/service-catalog.md)
 - ⏳ `service.md`
 - ⏳ `shuffle-sharding.md`
 - ⏳ `sidecar-container.md`
