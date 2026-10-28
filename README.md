@@ -8,8 +8,8 @@
 
 | | |
 |---|---|
-| پیشرفت (بر اساس کلمات) | **26.7٪** |
-| صفحات ترجمه‌شده | 854 از 1722 |
+| پیشرفت (بر اساس کلمات) | **26.9٪** |
+| صفحات ترجمه‌شده | 914 از 1722 |
 | صفحات دارای ایراد ساختاری | 23 |
 | نسخه‌ی منبع انگلیسی | `ed70e311737a` |
 
@@ -72,7 +72,7 @@ cd kubernetes-doc-fa
 | `contribute` | 44 | 44 |
 | `doc-contributor-tools` | 1 | 1 |
 | `home` | 2 | 2 |
-| `reference` | 619 | 1198 |
+| `reference` | 679 | 1198 |
 | `setup` | 0 | 22 |
 | `tasks` | 0 | 221 |
 | `tutorials` | 0 | 45 |
@@ -91,26 +91,26 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
-- [reference/glossary/extensions.md](md/reference/glossary/extensions.md) — 2026-10-28T11:39:49+03:30
-- [reference/glossary/feature-gates.md](md/reference/glossary/feature-gates.md) — 2026-10-28T11:39:49+03:30
-- [reference/glossary/event.md](md/reference/glossary/event.md) — 2026-10-28T11:39:43+03:30
-- [reference/glossary/eviction.md](md/reference/glossary/eviction.md) — 2026-10-28T11:39:43+03:30
-- [reference/glossary/ephemeral-container.md](md/reference/glossary/ephemeral-container.md) — 2026-10-28T11:39:37+03:30
-- [reference/glossary/etcd.md](md/reference/glossary/etcd.md) — 2026-10-28T11:39:37+03:30
-- [reference/glossary/endpoint-slice.md](md/reference/glossary/endpoint-slice.md) — 2026-10-28T11:39:30+03:30
-- [reference/glossary/endpoint.md](md/reference/glossary/endpoint.md) — 2026-10-28T11:39:30+03:30
-- [reference/glossary/duration.md](md/reference/glossary/duration.md) — 2026-10-28T11:39:23+03:30
-- [reference/glossary/dynamic-volume-provisioning.md](md/reference/glossary/dynamic-volume-provisioning.md) — 2026-10-28T11:39:23+03:30
-- [reference/glossary/drain.md](md/reference/glossary/drain.md) — 2026-10-28T11:39:16+03:30
-- [reference/glossary/dra.md](md/reference/glossary/dra.md) — 2026-10-28T11:39:15+03:30
-- [reference/glossary/downward-api.md](md/reference/glossary/downward-api.md) — 2026-10-28T11:39:08+03:30
-- [reference/glossary/downstream.md](md/reference/glossary/downstream.md) — 2026-10-28T11:39:06+03:30
-- [reference/glossary/dockershim.md](md/reference/glossary/dockershim.md) — 2026-10-28T11:39:01+03:30
-- [reference/glossary/docker.md](md/reference/glossary/docker.md) — 2026-10-28T11:38:55+03:30
-- [reference/glossary/disruption.md](md/reference/glossary/disruption.md) — 2026-10-28T11:38:53+03:30
-- [reference/glossary/deviceclass.md](md/reference/glossary/deviceclass.md) — 2026-10-28T11:38:48+03:30
-- [reference/glossary/device.md](md/reference/glossary/device.md) — 2026-10-28T11:38:45+03:30
-- [reference/glossary/device-plugin.md](md/reference/glossary/device-plugin.md) — 2026-10-28T11:38:41+03:30
+- [reference/glossary/quantity.md](md/reference/glossary/quantity.md) — 2026-10-28T11:45:55+03:30
+- [reference/glossary/proxy.md](md/reference/glossary/proxy.md) — 2026-10-28T11:45:49+03:30
+- [reference/glossary/qos-class.md](md/reference/glossary/qos-class.md) — 2026-10-28T11:45:46+03:30
+- [reference/glossary/probe.md](md/reference/glossary/probe.md) — 2026-10-28T11:45:39+03:30
+- [reference/glossary/priority-class.md](md/reference/glossary/priority-class.md) — 2026-10-28T11:45:37+03:30
+- [reference/glossary/preemption.md](md/reference/glossary/preemption.md) — 2026-10-28T11:45:33+03:30
+- [reference/glossary/podgroup.md](md/reference/glossary/podgroup.md) — 2026-10-28T11:45:30+03:30
+- [reference/glossary/pod.md](md/reference/glossary/pod.md) — 2026-10-28T11:45:23+03:30
+- [reference/glossary/pod-security-policy.md](md/reference/glossary/pod-security-policy.md) — 2026-10-28T11:45:19+03:30
+- [reference/glossary/pod-template.md](md/reference/glossary/pod-template.md) — 2026-10-28T11:45:17+03:30
+- [reference/glossary/pod-priority.md](md/reference/glossary/pod-priority.md) — 2026-10-28T11:45:08+03:30
+- [reference/glossary/pod-lifecycle.md](md/reference/glossary/pod-lifecycle.md) — 2026-10-28T11:45:04+03:30
+- [reference/glossary/pod-disruption.md](md/reference/glossary/pod-disruption.md) — 2026-10-28T11:44:58+03:30
+- [reference/glossary/pod-disruption-budget.md](md/reference/glossary/pod-disruption-budget.md) — 2026-10-28T11:44:56+03:30
+- [reference/glossary/platform-developer.md](md/reference/glossary/platform-developer.md) — 2026-10-28T11:44:50+03:30
+- [reference/glossary/persistent-volume.md](md/reference/glossary/persistent-volume.md) — 2026-10-28T11:44:44+03:30
+- [reference/glossary/persistent-volume-claim.md](md/reference/glossary/persistent-volume-claim.md) — 2026-10-28T11:44:37+03:30
+- [reference/glossary/operator-pattern.md](md/reference/glossary/operator-pattern.md) — 2026-10-28T11:44:32+03:30
+- [reference/glossary/object.md](md/reference/glossary/object.md) — 2026-10-28T11:44:25+03:30
+- [reference/glossary/node.md](md/reference/glossary/node.md) — 2026-10-28T11:44:19+03:30
 
 </div>
 
