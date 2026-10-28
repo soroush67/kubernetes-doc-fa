@@ -49,6 +49,10 @@ figure{margin:16px 0;text-align:center}
 .index-tree li{margin:2px 0}
 .index-tree .sec{font-weight:700}
 .missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
 #upd[hidden]{display:none}
 #upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
 #upd:not([hidden])+#theme{margin-inline-start:8px}
@@ -74,7 +78,8 @@ function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;re
 document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
 </script>
 </head>
-<body>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
 <header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">concepts / scheduling-eviction</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
 <div class="layout">
 <main><h1 dir="rtl">اولویت و پس‌گیری Pod</h1><!-- overview -->
@@ -486,7 +491,7 @@ PodDisruptionBudgetی داشته باشند که در صورت پس‌گیری �
 <li dir="rtl">دربارهٔ <a href="api-eviction.html">بیرون‌رانی آغازشده از طریق API</a> بیاموزید</li>
 <li dir="rtl">دربارهٔ <a href="node-pressure-eviction.html">بیرون‌رانی ناشی از فشار نود</a> بیاموزید</li>
 </ul>
-</main>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
 <nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#نحوهٔ-استفاده-از-اولویت-و-پس-گیری">نحوهٔ استفاده از اولویت و پس‌گیری</a><a class="l2" href="#priorityclass">PriorityClass</a><a class="l3" href="#نکاتی-دربارهٔ-podpriority-و-کلاسترهای-موجود">نکاتی دربارهٔ PodPriority و کلاسترهای موجود</a><a class="l3" href="#نمونهٔ-priorityclass">نمونهٔ PriorityClass</a><a class="l2" href="#priorityclass-بدون-پس-گیری-non-preempting-priority-class">PriorityClass بدون پس‌گیری {#non-preempting-priority-class}</a><a class="l3" href="#نمونهٔ-priorityclass-بدون-پس-گیری">نمونهٔ PriorityClass بدون پس‌گیری</a><a class="l2" href="#اولویت-pod">اولویت Pod</a><a class="l3" href="#اثر-اولویت-pod-بر-ترتیب-زمان-بندی">اثر اولویت Pod بر ترتیب زمان‌بندی</a><a class="l2" href="#پس-گیری-preemption">پس‌گیری (Preemption)</a><a class="l3" href="#پس-گیری-podgroup">پس‌گیری PodGroup</a><a class="l3" href="#اطلاعات-در-معرض-دید-کاربر">اطلاعات در معرض دید کاربر</a><a class="l3" href="#محدودیت-های-پس-گیری">محدودیت‌های پس‌گیری</a><a class="l3" href="#پس-گیری-برای-تغییر-اندازهٔ-درجای-pod-preemption-for-in-place-pod-resize">پس‌گیری برای تغییر اندازهٔ درجای Pod {#preemption-for-in-place-pod-resize}</a><a class="l2" href="#عیب-یابی">عیب‌یابی</a><a class="l3" href="#podها-بی-دلیل-پس-گرفته-می-شوند">Podها بی‌دلیل پس گرفته می‌شوند</a><a class="l3" href="#podها-پس-گرفته-می-شوند،-اما-پس-گیرنده-زمان-بندی-نمی-شود">Podها پس گرفته می‌شوند، اما پس‌گیرنده زمان‌بندی نمی‌شود</a><a class="l3" href="#podهای-با-اولویت-بالاتر-پیش-از-podهای-با-اولویت-پایین-تر-پس-گرفته-می-شوند">Podهای با اولویت بالاتر پیش از Podهای با اولویت پایین‌تر پس گرفته می‌شوند</a><a class="l2" href="#تعامل-میان-اولویت-pod-و-کیفیت-سرویس-interactions-of-pod-priority-and-qos">تعامل میان اولویت Pod و کیفیت سرویس {#interactions-of-pod-priority-and-qos}</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
 </div>
 </body>

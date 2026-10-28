@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-966 از 1722 صفحه
+977 از 1722 صفحه
 
 
 ## `.`
@@ -1142,29 +1142,29 @@
 
 ## `reference/kubectl/generated/kubectl_api-versions`
 
-- ⏳ `_index.md`
+- ⚠️ [_index.md](md/reference/kubectl/generated/kubectl_api-versions/_index.md)
 
 ## `reference/kubectl/generated/kubectl_apply`
 
-- ⏳ `_index.md`
-- ⏳ `kubectl_apply_edit-last-applied.md`
-- ⏳ `kubectl_apply_set-last-applied.md`
-- ⏳ `kubectl_apply_view-last-applied.md`
+- ⚠️ [_index.md](md/reference/kubectl/generated/kubectl_apply/_index.md)
+- ✅ [kubectl_apply_edit-last-applied.md](md/reference/kubectl/generated/kubectl_apply/kubectl_apply_edit-last-applied.md)
+- ✅ [kubectl_apply_set-last-applied.md](md/reference/kubectl/generated/kubectl_apply/kubectl_apply_set-last-applied.md)
+- ✅ [kubectl_apply_view-last-applied.md](md/reference/kubectl/generated/kubectl_apply/kubectl_apply_view-last-applied.md)
 
 ## `reference/kubectl/generated/kubectl_attach`
 
-- ⏳ `_index.md`
+- ✅ [_index.md](md/reference/kubectl/generated/kubectl_attach/_index.md)
 
 ## `reference/kubectl/generated/kubectl_auth`
 
-- ⏳ `_index.md`
-- ⏳ `kubectl_auth_can-i.md`
-- ⏳ `kubectl_auth_reconcile.md`
-- ⏳ `kubectl_auth_whoami.md`
+- ✅ [_index.md](md/reference/kubectl/generated/kubectl_auth/_index.md)
+- ✅ [kubectl_auth_can-i.md](md/reference/kubectl/generated/kubectl_auth/kubectl_auth_can-i.md)
+- ✅ [kubectl_auth_reconcile.md](md/reference/kubectl/generated/kubectl_auth/kubectl_auth_reconcile.md)
+- ✅ [kubectl_auth_whoami.md](md/reference/kubectl/generated/kubectl_auth/kubectl_auth_whoami.md)
 
 ## `reference/kubectl/generated/kubectl_autoscale`
 
-- ⏳ `_index.md`
+- ✅ [_index.md](md/reference/kubectl/generated/kubectl_autoscale/_index.md)
 
 ## `reference/kubectl/generated/kubectl_certificate`
 

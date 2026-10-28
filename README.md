@@ -8,9 +8,9 @@
 
 | | |
 |---|---|
-| پیشرفت (بر اساس کلمات) | **27.9٪** |
-| صفحات ترجمه‌شده | 966 از 1722 |
-| صفحات دارای ایراد ساختاری | 24 |
+| پیشرفت (بر اساس کلمات) | **28.8٪** |
+| صفحات ترجمه‌شده | 977 از 1722 |
+| صفحات دارای ایراد ساختاری | 26 |
 | نسخه‌ی منبع انگلیسی | `ed70e311737a` |
 
 ## مشاهده
@@ -23,7 +23,7 @@
 
 1. منبع انگلیسی از `kubernetes/website` به‌روز می‌شود (فقط `content/en`).
 2. برای هر صفحه، hash منبع با `manifest.json` مقایسه می‌شود؛ فقط صفحات **جدید، تغییرکرده یا ترجمه‌نشده** ترجمه می‌شوند و کار هیچ‌وقت از اول شروع نمی‌شود. صفحاتی که از منبع حذف شده‌اند حذف می‌شوند.
-3. ترجمه با `claude -p` (Claude Code، مدل Sonnet، روی اشتراک خودتان، بدون ابزار و با system prompt کوتاه) و در تکه‌های حدود ۲۵۰۰ کلمه انجام می‌شود. هر تکه با `check.py` بررسی و در صورت ایراد دوباره ترجمه می‌شود.
+3. ترجمه با `claude -p` (Claude Code، مدل Opus، روی اشتراک خودتان، بدون ابزار و با system prompt کوتاه) و در تکه‌های حدود ۲۵۰۰ کلمه انجام می‌شود. هر تکه با `check.py` بررسی و در صورت ایراد دوباره ترجمه می‌شود.
 4. اگر سقف مصرف اشتراک پر شود، سرویس تا زمان ریست صبر می‌کند و خودش ادامه می‌دهد.
 5. هر ۱۵ صفحه و در پایان کار: `html/`، `README.md` و `INDEX.md` دوباره ساخته می‌شوند و commit و push انجام می‌شود. تاریخچه‌ی کامل در `git log` است.
 
@@ -72,7 +72,7 @@ cd kubernetes-doc-fa
 | `contribute` | 44 | 44 |
 | `doc-contributor-tools` | 1 | 1 |
 | `home` | 2 | 2 |
-| `reference` | 731 | 1198 |
+| `reference` | 742 | 1198 |
 | `setup` | 0 | 22 |
 | `tasks` | 0 | 221 |
 | `tutorials` | 0 | 45 |
@@ -93,26 +93,26 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [reference/kubectl/generated/kubectl_autoscale/_index.md](md/reference/kubectl/generated/kubectl_autoscale/_index.md) — 2026-10-28T15:54:36+03:30
+- [reference/kubectl/generated/kubectl_auth/kubectl_auth_whoami.md](md/reference/kubectl/generated/kubectl_auth/kubectl_auth_whoami.md) — 2026-10-28T15:53:33+03:30
+- [reference/kubectl/generated/kubectl_auth/kubectl_auth_reconcile.md](md/reference/kubectl/generated/kubectl_auth/kubectl_auth_reconcile.md) — 2026-10-28T12:25:37+03:30
+- [reference/kubectl/generated/kubectl_auth/kubectl_auth_can-i.md](md/reference/kubectl/generated/kubectl_auth/kubectl_auth_can-i.md) — 2026-10-28T12:24:36+03:30
+- [reference/kubectl/generated/kubectl_auth/_index.md](md/reference/kubectl/generated/kubectl_auth/_index.md) — 2026-10-28T12:22:49+03:30
+- [reference/kubectl/generated/kubectl_attach/_index.md](md/reference/kubectl/generated/kubectl_attach/_index.md) — 2026-10-28T12:21:24+03:30
+- [reference/kubectl/generated/kubectl_apply/kubectl_apply_view-last-applied.md](md/reference/kubectl/generated/kubectl_apply/kubectl_apply_view-last-applied.md) — 2026-10-28T12:19:46+03:30
+- [reference/kubectl/generated/kubectl_apply/kubectl_apply_set-last-applied.md](md/reference/kubectl/generated/kubectl_apply/kubectl_apply_set-last-applied.md) — 2026-10-28T12:18:10+03:30
+- [reference/kubectl/generated/kubectl_apply/kubectl_apply_edit-last-applied.md](md/reference/kubectl/generated/kubectl_apply/kubectl_apply_edit-last-applied.md) — 2026-10-28T12:16:27+03:30
+- [reference/kubectl/generated/kubectl_apply/_index.md](md/reference/kubectl/generated/kubectl_apply/_index.md) — 2026-10-28T12:15:27+03:30
+- [reference/kubectl/generated/kubectl_api-versions/_index.md](md/reference/kubectl/generated/kubectl_api-versions/_index.md) — 2026-10-28T12:12:21+03:30
+- [concepts/extend-kubernetes/api-extension/custom-resources.md](md/concepts/extend-kubernetes/api-extension/custom-resources.md) — 2026-10-28T12:10:20+03:30
+- [concepts/policy/resource-quotas.md](md/concepts/policy/resource-quotas.md) — 2026-10-28T12:09:50+03:30
+- [concepts/overview/working-with-objects/names.md](md/concepts/overview/working-with-objects/names.md) — 2026-10-28T12:07:35+03:30
+- [concepts/extend-kubernetes/compute-storage-net/device-plugins.md](md/concepts/extend-kubernetes/compute-storage-net/device-plugins.md) — 2026-10-28T12:07:08+03:30
 - [reference/kubectl/generated/kubectl_api-resources/_index.md](md/reference/kubectl/generated/kubectl_api-resources/_index.md) — 2026-10-28T11:56:52+03:30
 - [reference/kubectl/generated/kubectl_annotate/_index.md](md/reference/kubectl/generated/kubectl_annotate/_index.md) — 2026-10-28T11:55:01+03:30
 - [reference/kubectl/generated/kubectl.md](md/reference/kubectl/generated/kubectl.md) — 2026-10-28T11:54:16+03:30
 - [reference/kubectl/generated/_index.md](md/reference/kubectl/generated/_index.md) — 2026-10-28T11:53:40+03:30
 - [reference/kubectl/docker-cli-to-kubectl.md](md/reference/kubectl/docker-cli-to-kubectl.md) — 2026-10-28T11:53:36+03:30
-- [reference/kubectl/conventions.md](md/reference/kubectl/conventions.md) — 2026-10-28T11:53:01+03:30
-- [reference/kubectl/_index.md](md/reference/kubectl/_index.md) — 2026-10-28T11:52:45+03:30
-- [reference/issues-security/security.md](md/reference/issues-security/security.md) — 2026-10-28T11:51:12+03:30
-- [reference/issues-security/official-cve-feed.md](md/reference/issues-security/official-cve-feed.md) — 2026-10-28T11:50:53+03:30
-- [reference/issues-security/issues.md](md/reference/issues-security/issues.md) — 2026-10-28T11:50:44+03:30
-- [reference/issues-security/_index.md](md/reference/issues-security/_index.md) — 2026-10-28T11:50:36+03:30
-- [reference/instrumentation/zpages.md](md/reference/instrumentation/zpages.md) — 2026-10-28T11:50:32+03:30
-- [reference/instrumentation/understand-psi-metrics.md](md/reference/instrumentation/understand-psi-metrics.md) — 2026-10-28T11:50:08+03:30
-- [reference/instrumentation/slis.md](md/reference/instrumentation/slis.md) — 2026-10-28T11:49:32+03:30
-- [reference/instrumentation/node-metrics.md](md/reference/instrumentation/node-metrics.md) — 2026-10-28T11:49:20+03:30
-- [reference/instrumentation/native-histograms.md](md/reference/instrumentation/native-histograms.md) — 2026-10-28T11:49:08+03:30
-- [reference/instrumentation/cri-pod-container-metrics.md](md/reference/instrumentation/cri-pod-container-metrics.md) — 2026-10-28T11:48:32+03:30
-- [reference/instrumentation/_index.md](md/reference/instrumentation/_index.md) — 2026-10-28T11:48:12+03:30
-- [reference/glossary/workload.md](md/reference/glossary/workload.md) — 2026-10-28T11:48:11+03:30
-- [reference/glossary/wg.md](md/reference/glossary/wg.md) — 2026-10-28T11:48:07+03:30
 
 </div>
 
@@ -144,6 +144,8 @@ cd kubernetes-doc-fa
 - [reference/external-api/metrics.v1.md](md/reference/external-api/metrics.v1.md): chunk 1: short: 374 words vs 606 source words
 - [reference/external-api/metrics.v1beta1.md](md/reference/external-api/metrics.v1beta1.md): chunk 1: short: 388 words vs 620 source words
 - [reference/kubectl/generated/kubectl_api-resources/_index.md](md/reference/kubectl/generated/kubectl_api-resources/_index.md): chunk 1: short: 1121 words vs 1550 source words
+- [reference/kubectl/generated/kubectl_api-versions/_index.md](md/reference/kubectl/generated/kubectl_api-versions/_index.md): chunk 1: short: 903 words vs 1266 source words
+- [reference/kubectl/generated/kubectl_apply/_index.md](md/reference/kubectl/generated/kubectl_apply/_index.md): chunk 2: short: 887 words vs 1254 source words
 
 </div>
 

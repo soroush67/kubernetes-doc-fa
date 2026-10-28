@@ -49,6 +49,10 @@ figure{margin:16px 0;text-align:center}
 .index-tree li{margin:2px 0}
 .index-tree .sec{font-weight:700}
 .missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
 #upd[hidden]{display:none}
 #upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
 #upd:not([hidden])+#theme{margin-inline-start:8px}
@@ -74,7 +78,8 @@ function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;re
 document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
 </script>
 </head>
-<body>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
 <header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">concepts / cluster-administration</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
 <div class="layout">
 <main><h1 dir="rtl">مدیریت حافظهٔ swap</h1><!-- overview -->
@@ -384,7 +389,7 @@ Podهای با QoS از نوع <code dir="ltr">BestEffort</code> الگوهای 
 <li dir="rtl">برای اطلاعات پیش‌زمینه، لطفاً KEP اصلی، یعنی <a href="https://github.com/kubernetes/enhancements/tree/master/keps/sig-node/2400-node-swap" target="_blank" rel="noopener">KEP-2400</a>،
 و <a href="https://github.com/kubernetes/enhancements/blob/master/keps/sig-node/2400-node-swap/README.md" target="_blank" rel="noopener">طراحی</a> آن را ببینید.</li>
 </ul>
-</main>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
 <nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#پشتیبانی-سیستم-عامل">پشتیبانی سیستم‌عامل</a><a class="l2" href="#این-قابلیت-چگونه-کار-می-کند؟">این قابلیت چگونه کار می‌کند؟</a><a class="l3" href="#رفتارهای-swap">رفتارهای swap</a><a class="l3" href="#یکپارچگی-با-زمان-اجرای-کانتینر">یکپارچگی با زمان اجرای کانتینر</a><a class="l2" href="#مشاهده-پذیری-استفاده-از-swap">مشاهده‌پذیری استفاده از swap</a><a class="l3" href="#آمار-متریک-ها-در-سطح-نود-و-کانتینر">آمار متریک‌ها در سطح نود و کانتینر</a><a class="l3" href="#استفاده-از-kubectl-top---show-swap">استفاده از kubectl top --show-swap</a><a class="l3" href="#گزارش-ظرفیت-swap-نودها-به-عنوان-بخشی-از-وضعیت-نود">گزارش ظرفیت swap نودها به‌عنوان بخشی از وضعیت نود</a><a class="l3" href="#کشف-swap-با-استفاده-از-node-feature-discovery-nfd-node-feature-discovery">کشف swap با استفاده از Node Feature Discovery (NFD) {#node-feature-discovery}</a><a class="l2" href="#ریسک-ها-و-ملاحظات">ریسک‌ها و ملاحظات</a><a class="l3" href="#حجم-های-مبتنی-بر-حافظه">حجم‌های مبتنی بر حافظه</a><a class="l3" href="#بیرون-رانی-ها-evictions">بیرون‌رانی‌ها (Evictions)</a><a class="l3" href="#فضای-swap-بلااستفاده">فضای swap بلااستفاده</a><a class="l2" href="#روش-های-خوب-برای-استفاده-از-swap-در-یک-کلاستر-کوبرنتیز">روش‌های خوب برای استفاده از swap در یک کلاستر کوبرنتیز</a><a class="l3" href="#غیرفعال-سازی-swap-برای-daemonهای-حیاتی-سیستم">غیرفعال‌سازی swap برای daemonهای حیاتی سیستم</a><a class="l3" href="#محافظت-از-daemonهای-حیاتی-سیستم-از-نظر-تأخیر-i-o">محافظت از daemonهای حیاتی سیستم از نظر تأخیر I/O</a><a class="l3" href="#swap-و-نودهای-control-plane">swap و نودهای control plane</a><a class="l3" href="#استفاده-از-یک-دیسک-اختصاصی-برای-swap">استفاده از یک دیسک اختصاصی برای swap</a><a class="l3" href="#زمان-بندی-آگاه-از-swap">زمان‌بندی آگاه از swap</a><a class="l3" href="#انتخاب-ذخیره-سازی-برای-کارایی-بهینه">انتخاب ذخیره‌سازی برای کارایی بهینه</a><a class="l2" href="#جزئیات-رفتار-swap">جزئیات رفتار swap</a><a class="l3" href="#حد-swap-در-limitedswap-چگونه-تعیین-می-شود؟">حد swap در LimitedSwap چگونه تعیین می‌شود؟</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
 </div>
 </body>

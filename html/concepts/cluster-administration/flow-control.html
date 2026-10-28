@@ -49,6 +49,10 @@ figure{margin:16px 0;text-align:center}
 .index-tree li{margin:2px 0}
 .index-tree .sec{font-weight:700}
 .missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
 #upd[hidden]{display:none}
 #upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
 #upd:not([hidden])+#theme{margin-inline-start:8px}
@@ -74,7 +78,8 @@ function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;re
 document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
 </script>
 </head>
-<body>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
 <header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">concepts / cluster-administration</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
 <div class="layout">
 <main><h1 dir="rtl">اولویت و انصاف API</h1><!-- overview -->
@@ -838,7 +843,7 @@ service-accounts.</li>
 <li dir="rtl">می‌توانید پیشنهادها و درخواست‌های قابلیت خود را از طریق <a href="https://github.com/kubernetes/community/tree/main/sig-api-machinery" target="_blank" rel="noopener">SIG API Machinery</a>
 یا <a href="https://kubernetes.slack.com/messages/api-priority-and-fairness" target="_blank" rel="noopener">کانال slack</a> این قابلیت مطرح کنید.</li>
 </ul>
-</main>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
 <nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#فعال-غیرفعال-کردن-اولویت-و-انصاف-api-enabling-disabling-api-priority-and-fairness">فعال/غیرفعال کردن اولویت و انصاف API {#enabling-disabling-api-priority-and-fairness}</a><a class="l2" href="#سناریوهای-بازگشتی-سرور-recursive-server-scenarios">سناریوهای بازگشتی سرور {#recursive-server-scenarios}</a><a class="l2" href="#مفاهیم-concepts">مفاهیم {#concepts}</a><a class="l3" href="#سطوح-اولویت-priority-levels">سطوح اولویت {#priority-levels}</a><a class="l3" href="#صندلی-های-اشغال-شده-توسط-یک-درخواست-seats-occupied-by-a-request">صندلی‌های اشغال‌شده توسط یک درخواست {#seats-occupied-by-a-request}</a><a class="l3" href="#تنظیمات-زمان-اجرا-برای-درخواست-های-watch-execution-time-tweaks-for-watch-requests">تنظیمات زمان اجرا برای درخواست‌های watch {#execution-time-tweaks-for-watch-requests}</a><a class="l3" href="#صف-بندی-queuing">صف‌بندی {#queuing}</a><a class="l3" href="#درخواست-های-معاف-exempt-requests">درخواست‌های معاف {#exempt-requests}</a><a class="l2" href="#منابع-resources">منابع {#resources}</a><a class="l3" href="#prioritylevelconfiguration-prioritylevelconfiguration">PriorityLevelConfiguration {#prioritylevelconfiguration}</a><a class="l3" href="#flowschema">FlowSchema</a><a class="l2" href="#مقادیر-پیش-فرض-defaults">مقادیر پیش‌فرض {#defaults}</a><a class="l3" href="#آبجکت-های-پیکربندی-اجباری">آبجکت‌های پیکربندی اجباری</a><a class="l3" href="#آبجکت-های-پیکربندی-پیشنهادی">آبجکت‌های پیکربندی پیشنهادی</a><a class="l3" href="#نگهداری-آبجکت-های-پیکربندی-اجباری-و-پیشنهادی">نگهداری آبجکت‌های پیکربندی اجباری و پیشنهادی</a><a class="l2" href="#معافیت-درخواست-های-بررسی-سلامت-از-محدودیت-هم-زمانی-health-check-concurrency-exemption">معافیت درخواست‌های بررسی سلامت از محدودیت هم‌زمانی {#health-check-concurrency-exemption}</a><a class="l2" href="#قابلیت-مشاهده-پذیری-observability-observability">قابلیت مشاهده‌پذیری (Observability) {#observability}</a><a class="l3" href="#متریک-ها-metrics">متریک‌ها {#metrics}</a><a class="l2" href="#روش-های-توصیه-شده-برای-استفاده-از-api-priority-and-fairness-good-practices-for-using-api-priority-and-fairness">روش‌های توصیه‌شده برای استفاده از API Priority and Fairness {#good-practices-for-using-api-priority-and-fairness}</a><a class="l3" href="#تغییرات-بار-کاری-good-practice-workload-modifications">تغییرات بار کاری {#good-practice-workload-modifications}</a><a class="l3" href="#تنظیمات-اولویت-و-انصاف-good-practice-apf-settings">تنظیمات اولویت و انصاف {#good-practice-apf-settings}</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
 </div>
 </body>

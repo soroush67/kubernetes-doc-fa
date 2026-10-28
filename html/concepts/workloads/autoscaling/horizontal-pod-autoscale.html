@@ -49,6 +49,10 @@ figure{margin:16px 0;text-align:center}
 .index-tree li{margin:2px 0}
 .index-tree .sec{font-weight:700}
 .missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
 #upd[hidden]{display:none}
 #upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
 #upd:not([hidden])+#theme{margin-inline-start:8px}
@@ -74,7 +78,8 @@ function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;re
 document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
 </script>
 </head>
-<body>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
 <header class="top"><a href="../../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">concepts / workloads / autoscaling</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
 <div class="layout">
 <main><h1 dir="rtl">مقیاس‌دهی خودکار افقی Pod</h1><!-- overview -->
@@ -649,7 +654,7 @@ Deployment و / یا StatefulSet از
 <a href="https://github.com/kubernetes-sigs/custom-metrics-apiserver" target="_blank" rel="noopener">boilerplate</a> را بررسی کنید.</li>
 <li dir="rtl"><a href="https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/horizontal-pod-autoscaler-v2/" target="_blank">مرجع API</a> مربوط به HorizontalPodAutoscaler را بخوانید.</li>
 </ul>
-</main>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
 <nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#horizontalpodautoscaler-چگونه-کار-می-کند؟">HorizontalPodAutoscaler چگونه کار می‌کند؟</a><a class="l3" href="#جزئیات-الگوریتم">جزئیات الگوریتم</a><a class="l2" href="#آمادگی-pod-و-متریک-های-مقیاس-دهی-خودکار">آمادگی Pod و متریک‌های مقیاس‌دهی خودکار</a><a class="l3" href="#رفتارهای-کلیدی-برای-آمادگی-pod-pod-readiness-key-behaviors">رفتارهای کلیدی برای آمادگی Pod {#pod-readiness-key-behaviors}</a><a class="l3" href="#روش-مناسب-برای-آمادگی-pod-pod-readiness-good-practices">روش مناسب برای آمادگی Pod {#pod-readiness-good-practices}</a><a class="l2" href="#آبجکت-api">آبجکت API</a><a class="l2" href="#پایداری-مقیاس-بار-کاری-flapping">پایداری مقیاس بار کاری {#flapping}</a><a class="l2" href="#مقیاس-دهی-خودکار-در-هنگام-به-روزرسانی-تدریجی">مقیاس‌دهی خودکار در هنگام به‌روزرسانی تدریجی</a><a class="l2" href="#پشتیبانی-از-متریک-های-منابع">پشتیبانی از متریک‌های منابع</a><a class="l3" href="#متریک-های-منابع-کانتینر">متریک‌های منابع کانتینر</a><a class="l2" href="#مقیاس-دهی-بر-اساس-متریک-های-سفارشی">مقیاس‌دهی بر اساس متریک‌های سفارشی</a><a class="l2" href="#مقیاس-دهی-بر-اساس-چند-متریک">مقیاس‌دهی بر اساس چند متریک</a><a class="l2" href="#پشتیبانی-از-apiهای-متریک">پشتیبانی از APIهای متریک</a><a class="l2" href="#رفتار-مقیاس-دهی-قابل-پیکربندی">رفتار مقیاس‌دهی قابل پیکربندی</a><a class="l3" href="#سیاست-های-مقیاس-دهی">سیاست‌های مقیاس‌دهی</a><a class="l3" href="#پنجره-ی-پایدارسازی">پنجره‌ی پایدارسازی</a><a class="l3" href="#رواداری-tolerance">رواداری {#tolerance}</a><a class="l3" href="#رفتار-پیش-فرض">رفتار پیش‌فرض</a><a class="l3" href="#مثال-تغییر-پنجره-ی-پایدارسازی-کاهش-مقیاس">مثال: تغییر پنجره‌ی پایدارسازی کاهش مقیاس</a><a class="l3" href="#مثال-محدود-کردن-نرخ-کاهش-مقیاس">مثال: محدود کردن نرخ کاهش مقیاس</a><a class="l3" href="#مثال-غیرفعال-کردن-کاهش-مقیاس">مثال: غیرفعال کردن کاهش مقیاس</a><a class="l2" href="#پشتیبانی-از-horizontalpodautoscaler-در-kubectl">پشتیبانی از HorizontalPodAutoscaler در kubectl</a><a class="l2" href="#مقیاس-دهی-به-صفر-و-از-صفر">مقیاس‌دهی به صفر و از صفر</a><a class="l2" href="#غیرفعال-سازی-ضمنی-در-حالت-نگهداری">غیرفعال‌سازی ضمنی در حالت نگهداری</a><a class="l3" href="#مهاجرت-deploymentها-و-statefulsetها-به-مقیاس-دهی-خودکار-افقی">مهاجرت Deploymentها و StatefulSetها به مقیاس‌دهی خودکار افقی</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
 </div>
 </body>

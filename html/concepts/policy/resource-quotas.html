@@ -49,6 +49,10 @@ figure{margin:16px 0;text-align:center}
 .index-tree li{margin:2px 0}
 .index-tree .sec{font-weight:700}
 .missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
 #upd[hidden]{display:none}
 #upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
 #upd:not([hidden])+#theme{margin-inline-start:8px}
@@ -74,132 +78,128 @@ function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;re
 document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
 </script>
 </head>
-<body>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
 <header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">concepts / policy</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
 <div class="layout">
 <main><h1 dir="rtl">سهمیه‌های منابع</h1><!-- overview -->
-<p dir="rtl">هنگامی که چند کاربر یا تیم یک کلاستر با تعداد ثابتی از نودها را به اشتراک می‌گذارند،
+<p dir="rtl">وقتی چند کاربر یا تیم از یک کلاستر با تعداد ثابتی نود به‌طور مشترک استفاده می‌کنند،
 این نگرانی وجود دارد که یک تیم بیش از سهم منصفانهٔ خود از منابع استفاده کند.</p>
-<p dir="rtl"><em>سهمیه‌های منابع</em> (resource quotas) ابزاری برای مدیران هستند تا به این نگرانی رسیدگی کنند.</p>
-<p dir="rtl">یک سهمیهٔ منبع که با یک آبجکت ResourceQuota تعریف می‌شود، محدودیت‌هایی فراهم می‌کند که
-مصرف تجمیعی منابع را برای هر <span class="term" title="namespace">فضای نام</span> محدود می‌کنند. یک ResourceQuota همچنین می‌تواند
-<a href="#quota-on-object-count">تعداد آبجکت‌هایی را که می‌توان در یک فضای نام ایجاد کرد</a> بر اساس kind در API، و نیز مقدار کل
-<span class="term" title="infrastructure-resource">منابع زیرساختی</span> را که آبجکت‌های API موجود در آن فضای نام
-ممکن است مصرف کنند، محدود کند.</p>
+<p dir="rtl"><em>سهمیه‌های منابع</em> (resource quotas) ابزاری است که مدیران کلاستر برای رفع این نگرانی در اختیار دارند.</p>
+<p dir="rtl">هر سهمیهٔ منبع با یک آبجکت ResourceQuota تعریف می‌شود و محدودیت‌هایی فراهم می‌کند که مجموع مصرف منابع را در هر <span class="term" title="namespace">فضای نام</span> محدود می‌کند. یک ResourceQuota همچنین می‌تواند
+<a href="#quota-on-object-count">تعداد آبجکت‌هایی را که می‌توان در یک فضای نام ایجاد کرد</a> بر اساس نوع API محدود کند. افزون بر این، می‌تواند مقدار کل
+<span class="term" title="infrastructure-resource">منابع زیرساختی</span> را که آبجکت‌های API موجود در آن فضای نام مصرف می‌کنند نیز محدود کند.</p>
 <div class="callout caution"><div class="callout-title">احتیاط:</div>
-<p dir="rtl">نه رقابت بر سر منابع و نه تغییرات سهمیه بر منابعی که از قبل ایجاد شده‌اند تأثیر نخواهند گذاشت.</p>
+<p dir="rtl">نه رقابت بر سر منابع و نه تغییر سهمیه‌ها، هیچ‌کدام بر منابعی که از قبل ایجاد شده‌اند اثری ندارد.</p>
 </div>
 <!-- body -->
-<h2 id="resourcequotaهای-کوبرنتیز-چگونه-کار-می-کنند" dir="rtl">ResourceQuotaهای کوبرنتیز چگونه کار می‌کنند</h2>
-<p dir="rtl">ResourceQuotaها به این صورت کار می‌کنند:</p>
+<h2 id="نحوهٔ-کار-resourcequotaها-در-کوبرنتیز" dir="rtl">نحوهٔ کار ResourceQuotaها در کوبرنتیز</h2>
+<p dir="rtl">ResourceQuotaها به این شکل کار می‌کنند:</p>
 <ul>
 <li dir="rtl">
-<p dir="rtl">تیم‌های مختلف در فضاهای نام مختلف کار می‌کنند. این تفکیک را می‌توان با
-<a href="../../reference/access-authn-authz/rbac.html">RBAC</a> یا هر سازوکار <a href="../../reference/access-authn-authz/authorization.html">مجوزدهی</a>
-دیگری الزامی کرد.</p>
+<p dir="rtl">تیم‌های مختلف در فضاهای نام مختلف کار می‌کنند. این جداسازی را می‌توان با
+<a href="../../reference/access-authn-authz/rbac.html">RBAC</a> یا هر سازوکار <a href="../../reference/access-authn-authz/authorization.html">مجوزدهی</a> دیگری
+اعمال کرد.</p>
 </li>
 <li dir="rtl">
 <p dir="rtl">مدیر کلاستر برای هر فضای نام دست‌کم یک ResourceQuota ایجاد می‌کند.</p>
 <ul>
-<li dir="rtl">برای اطمینان از اینکه این الزام پابرجا می‌ماند، مدیر کلاستر باید دسترسی برای حذف یا به‌روزرسانی
+<li dir="rtl">برای اطمینان از اینکه این محدودیت همچنان اعمال شود، مدیر کلاستر باید دسترسی به حذف یا به‌روزرسانی
 آن ResourceQuota را نیز محدود کند؛ برای مثال، با تعریف یک <a href="../../reference/access-authn-authz/validating-admission-policy.html">ValidatingAdmissionPolicy</a>.</li>
 </ul>
 </li>
 <li dir="rtl">
-<p dir="rtl">کاربران منابعی (پادها، سرویس‌ها و غیره) را در فضای نام ایجاد می‌کنند و سیستم سهمیه
-مصرف را دنبال می‌کند تا اطمینان حاصل کند از محدودیت‌های سخت منابع تعریف‌شده در ResourceQuota فراتر نمی‌رود.</p>
-<p dir="rtl">می‌توانید یک <a href="#quota-scopes">محدوده (scope)</a> را بر ResourceQuota اعمال کنید تا مشخص کنید کجا اعمال شود،</p>
+<p dir="rtl">کاربران منابعی (مانند پادها، سرویس‌ها و غیره) را در فضای نام ایجاد می‌کنند و سیستم سهمیه
+میزان مصرف را پیگیری می‌کند تا مطمئن شود از محدودیت‌های سخت (hard limits) تعریف‌شده در ResourceQuota فراتر نمی‌رود.</p>
+<p dir="rtl">می‌توانید یک <a href="#quota-scopes">دامنه</a> (scope) به ResourceQuota اعمال کنید تا محدودهٔ اعمال آن را مشخص کنید.</p>
 </li>
 <li dir="rtl">
-<p dir="rtl">اگر ایجاد یا به‌روزرسانی یک منبع یکی از محدودیت‌های سهمیه را نقض کند، control plane آن درخواست را با کد وضعیت HTTP
-<code dir="ltr">403 Forbidden</code> رد می‌کند. خطا شامل پیامی است که محدودیتی را که نقض می‌شد توضیح می‌دهد.</p>
+<p dir="rtl">اگر ایجاد یا به‌روزرسانی یک منبع، یکی از محدودیت‌های سهمیه را نقض کند، control plane آن درخواست را با کد وضعیت HTTP
+<code dir="ltr">403 Forbidden</code> رد می‌کند. این خطا شامل پیامی است که محدودیتِ نقض‌شده را توضیح می‌دهد.</p>
 </li>
 <li dir="rtl">
-<p dir="rtl">اگر سهمیه‌ها در یک فضای نام برای <span class="term" title="infrastructure-resource">منبعی</span>
-مانند <code dir="ltr">cpu</code> و <code dir="ltr">memory</code> فعال باشند، کاربران هنگام تعریف یک Pod باید requestها یا limitهایی برای آن مقادیر مشخص کنند؛ در غیر این صورت،
-سیستم سهمیه ممکن است ایجاد پاد را رد کند.</p>
+<p dir="rtl">اگر سهمیه در یک فضای نام برای <span class="term" title="infrastructure-resource">منابعی</span>
+مانند <code dir="ltr">cpu</code> و <code dir="ltr">memory</code> فعال باشد، کاربران هنگام تعریف یک Pod باید درخواست‌ها (requests) یا محدودیت‌ها (limits) را برای این مقادیر مشخص کنند؛ در غیر این صورت،
+ممکن است سیستم سهمیه ایجاد پاد را رد کند.</p>
 <p dir="rtl"><a href="https://kubernetes.io/docs/tasks/administer-cluster/manage-resources/quota-memory-cpu-namespace/" target="_blank">راهنمای گام‌به‌گام</a> سهمیهٔ منابع
-نمونه‌ای از نحوهٔ اجتناب از این مشکل را نشان می‌دهد.</p>
+نمونه‌ای از نحوهٔ پرهیز از این مشکل را نشان می‌دهد.</p>
 </li>
 </ul>
 <div class="callout note"><div class="callout-title">توجه:</div>
 <ul>
 <li dir="rtl">می‌توانید یک <a href="limit-range.html">LimitRange</a> تعریف کنید
-تا مقادیر پیش‌فرض را بر پادهایی که هیچ الزام منبع محاسباتی ندارند تحمیل کند (تا کاربران مجبور نباشند انجام این کار را به خاطر بسپارند).</li>
+تا برای پادهایی که هیچ نیازمندی منابع محاسباتی مشخص نکرده‌اند، مقادیر پیش‌فرض اعمال شود (تا کاربران مجبور نباشند این کار را به خاطر بسپارند).</li>
 </ul>
 </div>
-<p dir="rtl">اغلب پادها را مستقیماً ایجاد نمی‌کنید؛ برای مثال، معمولاً یک آبجکت <a href="../workloads/controllers/index.html">مدیریت بار کاری</a>
-مانند یک <span class="term" title="deployment">deployment</span> ایجاد می‌کنید. اگر Deploymentای ایجاد کنید که تلاش می‌کند بیش از
-منابع موجود استفاده کند، ایجاد Deployment (یا سایر آبجکت‌های مدیریت بار کاری) <strong>موفق می‌شود</strong>، اما
-ممکن است Deployment نتواند همهٔ پادهایی را که مدیریت می‌کند ایجاد کند. در این حالت می‌توانید وضعیت
+<p dir="rtl">معمولاً پادها را مستقیماً ایجاد نمی‌کنید؛ برای مثال، بیشتر یک آبجکت <a href="../workloads/controllers/index.html">مدیریت بار کاری</a>
+مانند یک <span class="term" title="deployment">deployment</span> ایجاد می‌کنید. اگر Deploymentای ایجاد کنید که بخواهد بیش از
+منابع موجود استفاده کند، ایجاد آن Deployment (یا هر آبجکت مدیریت بار کاری دیگر) <strong>موفقیت‌آمیز است</strong>، اما
+ممکن است آن Deployment نتواند همهٔ پادهایی را که مدیریت می‌کند ایجاد کند. در این حالت می‌توانید وضعیت
 Deployment را، برای مثال با <code dir="ltr">kubectl describe</code>، بررسی کنید تا ببینید چه اتفاقی افتاده است.</p>
 <ul>
 <li dir="rtl">برای منابع <code dir="ltr">cpu</code> و <code dir="ltr">memory</code>، ResourceQuotaها الزام می‌کنند که <strong>هر</strong>
-پاد (جدید) در آن فضای نام یک limit برای آن منبع تنظیم کند.
-اگر سهمیهٔ منبعی را در یک فضای نام برای <code dir="ltr">cpu</code> یا <code dir="ltr">memory</code> الزامی کنید،
-شما و سایر کلاینت‌ها <strong>باید</strong> برای هر Pod جدیدی که ارسال می‌کنید، <code dir="ltr">requests</code> یا <code dir="ltr">limits</code> را برای آن منبع
-مشخص کنید. اگر چنین نکنید، control plane ممکن است پذیرش
-آن Pod را رد کند.</li>
-<li dir="rtl">برای سایر منابع: ResourceQuota کار می‌کند و پادهایی را در فضای نام که
-limit یا request برای آن منبع تنظیم نکرده‌اند نادیده می‌گیرد. این بدان معناست که می‌توانید یک پاد جدید
-بدون limit/request برای ذخیره‌سازی موقت ایجاد کنید، حتی اگر سهمیهٔ منبع، ذخیره‌سازی موقت
-این فضای نام را محدود کرده باشد.</li>
+پاد (جدید) در آن فضای نام، محدودیتی برای آن منبع تعیین کند.
+اگر در یک فضای نام سهمیهٔ منبعی برای <code dir="ltr">cpu</code> یا <code dir="ltr">memory</code> اعمال کنید،
+شما و سایر کلاینت‌ها <strong>باید</strong> برای هر Pod جدیدی که ارسال می‌کنید، <code dir="ltr">requests</code> یا <code dir="ltr">limits</code> را برای آن منبع مشخص کنید.
+در غیر این صورت، ممکن است control plane پذیرش آن Pod را رد کند.</li>
+<li dir="rtl">برای سایر منابع: ResourceQuota کار می‌کند و پادهایی را در فضای نام که محدودیت یا درخواستی برای آن منبع
+تعیین نکرده‌اند نادیده می‌گیرد. این یعنی اگر سهمیهٔ منبع، ذخیره‌سازی موقت (ephemeral storage) این فضای نام را محدود کرده باشد،
+باز هم می‌توانید پاد جدیدی بدون محدودیت یا درخواست برای ذخیره‌سازی موقت ایجاد کنید.</li>
 </ul>
-<p dir="rtl">می‌توانید از یک <a href="limit-range.html">LimitRange</a> برای تنظیم خودکار
-یک request پیش‌فرض برای این منابع استفاده کنید.</p>
-<p dir="rtl">نام یک آبجکت ResourceQuota باید یک
+<p dir="rtl">می‌توانید از یک <a href="limit-range.html">LimitRange</a> استفاده کنید تا برای این منابع
+به‌طور خودکار یک درخواست پیش‌فرض تعیین شود.</p>
+<p dir="rtl">نام هر آبجکت ResourceQuota باید یک
 <a href="../overview/working-with-objects/names.html#dns-subdomain-names">نام زیردامنهٔ DNS</a> معتبر باشد.</p>
 <p dir="rtl">نمونه‌هایی از سیاست‌هایی که می‌توان با استفاده از فضاهای نام و سهمیه‌ها ایجاد کرد عبارت‌اند از:</p>
 <ul>
-<li dir="rtl">در یک کلاستر با ظرفیت 32 GiB RAM و ۱۶ هسته، به تیم A اجازه دهید از 20 GiB و ۱۰ هسته استفاده کند،
-به تیم B اجازه دهید از 10GiB و ۴ هسته استفاده کند، و 2GiB و ۲ هسته را برای تخصیص‌های آینده ذخیره نگه دارید.</li>
-<li dir="rtl">فضای نام «testing» را به استفاده از ۱ هسته و 1GiB RAM محدود کنید. اجازه دهید فضای نام «production»
-هر مقداری را استفاده کند.</li>
+<li dir="rtl">در کلاستری با ظرفیت ۳۲ گیبی‌بایت RAM و ۱۶ هسته، به تیم A اجازه دهید ۲۰ گیبی‌بایت و ۱۰ هسته استفاده کند،
+به تیم B اجازه دهید ۱۰ گیبی‌بایت و ۴ هسته استفاده کند و ۲ گیبی‌بایت و ۲ هسته را برای تخصیص‌های آینده رزرو کنید.</li>
+<li dir="rtl">فضای نام «testing» را به استفاده از ۱ هسته و ۱ گیبی‌بایت RAM محدود کنید و اجازه دهید فضای نام «production»
+به هر میزانی استفاده کند.</li>
 </ul>
 <p dir="rtl">در حالتی که ظرفیت کل کلاستر کمتر از مجموع سهمیه‌های فضاهای نام باشد،
-ممکن است رقابت بر سر منابع رخ دهد. این وضعیت بر اساس اصل «اولویت با کسی است که زودتر بیاید» مدیریت می‌شود.</p>
+ممکن است بر سر منابع رقابت ایجاد شود. این وضعیت بر اساس اصل «اولویت با کسی است که زودتر بیاید» مدیریت می‌شود.</p>
 <h2 id="فعال-سازی-سهمیهٔ-منابع" dir="rtl">فعال‌سازی سهمیهٔ منابع</h2>
-<p dir="rtl">پشتیبانی از ResourceQuota در بسیاری از توزیع‌های کوبرنتیز به‌طور پیش‌فرض فعال است. این پشتیبانی
-زمانی فعال است که پرچم <code dir="ltr">--enable-admission-plugins=</code> در <span class="term" title="kube-apiserver">سرور API</span>
-<code dir="ltr">ResourceQuota</code> را به‌عنوان
-یکی از آرگومان‌های خود داشته باشد.</p>
-<p dir="rtl">یک سهمیهٔ منبع زمانی در یک فضای نام مشخص الزامی می‌شود که یک
+<p dir="rtl">پشتیبانی از ResourceQuota در بسیاری از توزیع‌های کوبرنتیز به‌طور پیش‌فرض فعال است. این قابلیت
+زمانی فعال است که فلگ <code dir="ltr">--enable-admission-plugins=</code> در <span class="term" title="kube-apiserver">سرور API</span>
+مقدار <code dir="ltr">ResourceQuota</code> را به‌عنوان یکی از آرگومان‌های خود داشته باشد.</p>
+<p dir="rtl">سهمیهٔ منابع زمانی در یک فضای نام خاص اعمال می‌شود که یک
 ResourceQuota در آن فضای نام وجود داشته باشد.</p>
 <h2 id="انواع-سهمیهٔ-منابع" dir="rtl">انواع سهمیهٔ منابع</h2>
-<p dir="rtl">سازوکار ResourceQuota به شما اجازه می‌دهد انواع مختلفی از محدودیت‌ها را الزامی کنید. این
-بخش انواع محدودیتی را که می‌توانید الزامی کنید شرح می‌دهد.</p>
+<p dir="rtl">سازوکار ResourceQuota امکان اعمال انواع مختلفی از محدودیت‌ها را فراهم می‌کند. این
+بخش انواع محدودیت‌هایی را که می‌توانید اعمال کنید شرح می‌دهد.</p>
 <h3 id="سهمیه-برای-منابع-زیرساختی-compute-resource-quota" dir="rtl">سهمیه برای منابع زیرساختی {#compute-resource-quota}</h3>
 <p dir="rtl">می‌توانید مجموع کل
 <a href="../configuration/manage-resources-containers.html">منابع محاسباتی</a>
 را که می‌توان در یک فضای نام مشخص درخواست کرد محدود کنید.</p>
-<p dir="rtl">انواع منبع زیر پشتیبانی می‌شوند:</p>
+<p dir="rtl">انواع منابع زیر پشتیبانی می‌شوند:</p>
 <table>
 <thead>
 <tr>
 <th dir="rtl">نام منبع</th>
-<th dir="rtl">توضیح</th>
+<th dir="rtl">توضیحات</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td dir="ltr" class="ltr"><code dir="ltr">limits.cpu</code></td>
-<td dir="rtl">در میان همهٔ پادهایی که در وضعیت پایانی نیستند، مجموع limitهای CPU نمی‌تواند از این مقدار بیشتر شود.</td>
+<td dir="rtl">در میان همهٔ پادهایی که در وضعیت غیرپایانی هستند، مجموع محدودیت‌های CPU نمی‌تواند از این مقدار بیشتر شود.</td>
 </tr>
 <tr>
 <td dir="ltr" class="ltr"><code dir="ltr">limits.memory</code></td>
-<td dir="rtl">در میان همهٔ پادهایی که در وضعیت پایانی نیستند، مجموع limitهای حافظه نمی‌تواند از این مقدار بیشتر شود.</td>
+<td dir="rtl">در میان همهٔ پادهایی که در وضعیت غیرپایانی هستند، مجموع محدودیت‌های حافظه نمی‌تواند از این مقدار بیشتر شود.</td>
 </tr>
 <tr>
 <td dir="ltr" class="ltr"><code dir="ltr">requests.cpu</code></td>
-<td dir="rtl">در میان همهٔ پادهایی که در وضعیت پایانی نیستند، مجموع requestهای CPU نمی‌تواند از این مقدار بیشتر شود.</td>
+<td dir="rtl">در میان همهٔ پادهایی که در وضعیت غیرپایانی هستند، مجموع درخواست‌های CPU نمی‌تواند از این مقدار بیشتر شود.</td>
 </tr>
 <tr>
 <td dir="ltr" class="ltr"><code dir="ltr">requests.memory</code></td>
-<td dir="rtl">در میان همهٔ پادهایی که در وضعیت پایانی نیستند، مجموع requestهای حافظه نمی‌تواند از این مقدار بیشتر شود.</td>
+<td dir="rtl">در میان همهٔ پادهایی که در وضعیت غیرپایانی هستند، مجموع درخواست‌های حافظه نمی‌تواند از این مقدار بیشتر شود.</td>
 </tr>
 <tr>
 <td dir="ltr" class="ltr"><code dir="ltr">hugepages-&lt;size&gt;</code></td>
-<td dir="rtl">در میان همهٔ پادهایی که در وضعیت پایانی نیستند، تعداد requestهای huge page با اندازهٔ مشخص‌شده نمی‌تواند از این مقدار بیشتر شود.</td>
+<td dir="rtl">در میان همهٔ پادهایی که در وضعیت غیرپایانی هستند، تعداد درخواست‌های huge page با اندازهٔ مشخص‌شده نمی‌تواند از این مقدار بیشتر شود.</td>
 </tr>
 <tr>
 <td dir="ltr" class="ltr"><code dir="ltr">cpu</code></td>
@@ -212,55 +212,55 @@ ResourceQuota در آن فضای نام وجود داشته باشد.</p>
 </tbody>
 </table>
 <h3 id="سهمیه-برای-منابع-توسعه-یافته" dir="rtl">سهمیه برای منابع توسعه‌یافته</h3>
-<p dir="rtl">علاوه بر منابع ذکرشده در بالا، در نسخهٔ 1.10، پشتیبانی سهمیه برای
-<a href="../configuration/manage-resources-containers.html#extended-resources">منابع توسعه‌یافته</a> اضافه شده است.</p>
-<p dir="rtl">از آنجا که تخصیص بیش از ظرفیت (overcommit) برای منابع توسعه‌یافته مجاز نیست، مشخص‌کردن هم‌زمان <code dir="ltr">requests</code>
-و <code dir="ltr">limits</code> برای یک منبع توسعه‌یافتهٔ یکسان در یک سهمیه معنایی ندارد. بنابراین برای منابع توسعه‌یافته، فقط اقلام سهمیه
-با پیشوند <code dir="ltr">requests.</code> مجاز هستند.</p>
-<p dir="rtl">منبع GPU را به‌عنوان مثال در نظر بگیرید؛ اگر نام منبع <code dir="ltr">nvidia.com/gpu</code> باشد و بخواهید
-تعداد کل GPUهای درخواست‌شده در یک فضای نام را به ۴ محدود کنید، می‌توانید سهمیه‌ای به شکل زیر تعریف کنید:</p>
+<p dir="rtl">علاوه بر منابعی که در بالا ذکر شد، در نسخهٔ 1.10 پشتیبانی از سهمیه برای
+<a href="../configuration/manage-resources-containers.html#extended-resources">منابع توسعه‌یافته</a> (extended resources) اضافه شده است.</p>
+<p dir="rtl">از آنجا که تخصیص بیش از ظرفیت (overcommit) برای منابع توسعه‌یافته مجاز نیست، تعیین هم‌زمان <code dir="ltr">requests</code>
+و <code dir="ltr">limits</code> برای یک منبع توسعه‌یافتهٔ واحد در یک سهمیه معنایی ندارد. بنابراین برای منابع توسعه‌یافته، فقط آیتم‌های سهمیه‌ای
+مجاز هستند که پیشوند <code dir="ltr">requests.</code> دارند.</p>
+<p dir="rtl">منبع GPU را به‌عنوان مثال در نظر بگیرید. اگر نام منبع <code dir="ltr">nvidia.com/gpu</code> باشد و بخواهید
+تعداد کل GPUهای درخواست‌شده در یک فضای نام را به ۴ محدود کنید، می‌توانید سهمیه را به این صورت تعریف کنید:</p>
 <ul>
 <li dir="ltr" class="ltr"><code dir="ltr">requests.nvidia.com/gpu: 4</code></li>
 </ul>
-<p dir="rtl">برای جزئیات بیشتر به <a href="#viewing-and-setting-quotas">مشاهده و تنظیم سهمیه‌ها</a> مراجعه کنید.</p>
-<h3 id="سهمیه-برای-resource-claimهای-dra" dir="rtl">سهمیه برای resource claimهای DRA</h3>
-<p dir="rtl">resource claimهای DRA (تخصیص پویای منابع) می‌توانند منابع DRA را بر اساس device class درخواست کنند. برای یک
-device class نمونه با نام <code dir="ltr">examplegpu</code>، اگر بخواهید تعداد کل GPUهای درخواست‌شده در یک فضای نام را به ۴ محدود کنید،
-می‌توانید سهمیه‌ای به شکل زیر تعریف کنید:</p>
+<p dir="rtl">برای جزئیات بیشتر، <a href="#viewing-and-setting-quotas">مشاهده و تنظیم سهمیه‌ها</a> را ببینید.</p>
+<h3 id="سهمیه-برای-درخواست-های-منبع-dra" dir="rtl">سهمیه برای درخواست‌های منبع DRA</h3>
+<p dir="rtl">درخواست‌های منبع (resource claims) در DRA (تخصیص پویای منابع یا Dynamic Resource Allocation) می‌توانند منابع DRA را بر اساس کلاس دستگاه (device class) درخواست کنند. برای مثال، فرض کنید
+یک کلاس دستگاه به نام <code dir="ltr">examplegpu</code> دارید و می‌خواهید تعداد کل GPUهای درخواست‌شده در یک فضای نام را به ۴ محدود کنید.
+در این صورت می‌توانید سهمیه را به این صورت تعریف کنید:</p>
 <ul>
 <li dir="ltr" class="ltr"><code dir="ltr">examplegpu.deviceclass.resource.k8s.io/devices: 4</code></li>
 </ul>
-<p dir="rtl">هنگامی که <a href="../resource-management/dynamic-resource-allocation/dra-features.html#extended-resource">تخصیص منابع توسعه‌یافته توسط DRA</a>
-فعال باشد، همان device class با نام <code dir="ltr">examplegpu</code> را می‌توان از طریق منبع توسعه‌یافته درخواست کرد؛ یا به‌صورت صریح،
-زمانی که فیلد ExtendedResourceName در device class مقداری مانند <code dir="ltr">example.com/gpu</code> داشته باشد، که در این صورت می‌توانید سهمیه‌ای به شکل زیر تعریف کنید:</p>
+<p dir="rtl">وقتی <a href="../resource-management/dynamic-resource-allocation/dra-features.html#extended-resource">تخصیص منابع توسعه‌یافته با DRA</a>
+فعال باشد، همان کلاس دستگاه با نام <code dir="ltr">examplegpu</code> را می‌توان از طریق منبع توسعه‌یافته درخواست کرد. این کار یا به‌صورت صریح انجام می‌شود،
+یعنی زمانی که فیلد ExtendedResourceName کلاس دستگاه مقداری مانند <code dir="ltr">example.com/gpu</code> داشته باشد؛ در این حالت می‌توانید سهمیه را به این صورت تعریف کنید:</p>
 <ul>
 <li dir="ltr" class="ltr"><code dir="ltr">requests.example.com/gpu: 4</code></li>
 </ul>
-<p dir="rtl">یا به‌صورت ضمنی با استفاده از نام منبع توسعه‌یافتهٔ مشتق‌شده از نام device class ‏<code dir="ltr">examplegpu</code>، که در این صورت می‌توانید
-سهمیه‌ای به شکل زیر تعریف کنید:</p>
+<p dir="rtl">یا به‌صورت ضمنی، با استفاده از نام منبع توسعه‌یافته‌ای که از نام کلاس دستگاه <code dir="ltr">examplegpu</code> مشتق می‌شود؛ در این حالت می‌توانید
+سهمیه را به این صورت تعریف کنید:</p>
 <ul>
 <li dir="ltr" class="ltr"><code dir="ltr">requests.deviceclass.resource.kubernetes.io/examplegpu: 4</code></li>
 </ul>
-<p dir="rtl">همهٔ دستگاه‌هایی که از طریق resource claimها یا منابع توسعه‌یافته درخواست می‌شوند، در هر سه سهمیهٔ
+<p dir="rtl">همهٔ دستگاه‌هایی که از طریق درخواست‌های منبع یا منابع توسعه‌یافته درخواست می‌شوند، در هر سه سهمیهٔ
 فهرست‌شده در بالا محاسبه می‌شوند. سهمیهٔ منبع توسعه‌یافته، برای مثال <code dir="ltr">requests.example.com/gpu: 4</code>، دستگاه‌هایی را که
-افزونهٔ دستگاه فراهم می‌کند نیز محاسبه می‌کند.</p>
-<p dir="rtl">برای جزئیات بیشتر به <a href="#viewing-and-setting-quotas">مشاهده و تنظیم سهمیه‌ها</a> مراجعه کنید.</p>
+افزونهٔ دستگاه (device plugin) فراهم می‌کند نیز محاسبه می‌کند.</p>
+<p dir="rtl">برای جزئیات بیشتر، <a href="#viewing-and-setting-quotas">مشاهده و تنظیم سهمیه‌ها</a> را ببینید.</p>
 <h3 id="سهمیه-برای-ذخیره-سازی" dir="rtl">سهمیه برای ذخیره‌سازی</h3>
-<p dir="rtl">می‌توانید مجموع کل <a href="../storage/persistent-volumes.html">ذخیره‌سازی</a> حجم‌هایی را
-که می‌توان در یک فضای نام مشخص درخواست کرد محدود کنید.</p>
-<p dir="rtl">علاوه بر این، می‌توانید مصرف منابع ذخیره‌سازی را بر اساس
-<a href="../storage/storage-classes.html">StorageClass</a> مرتبط محدود کنید.</p>
+<p dir="rtl">می‌توانید مجموع کل <a href="../storage/persistent-volumes.html">ذخیره‌سازی</a> حجم‌هایی (volumes)
+را که می‌توان در یک فضای نام مشخص درخواست کرد محدود کنید.</p>
+<p dir="rtl">افزون بر این، می‌توانید مصرف منابع ذخیره‌سازی را بر اساس
+<a href="../storage/storage-classes.html">StorageClass</a> مرتبط با آن‌ها محدود کنید.</p>
 <table>
 <thead>
 <tr>
 <th dir="rtl">نام منبع</th>
-<th dir="rtl">توضیح</th>
+<th dir="rtl">توضیحات</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td dir="ltr" class="ltr"><code dir="ltr">requests.storage</code></td>
-<td dir="rtl">در میان همهٔ persistent volume claimها، مجموع requestهای ذخیره‌سازی نمی‌تواند از این مقدار بیشتر شود.</td>
+<td dir="rtl">در میان همهٔ درخواست‌های حجم ماندگار (persistent volume claims)، مجموع درخواست‌های ذخیره‌سازی نمی‌تواند از این مقدار بیشتر شود.</td>
 </tr>
 <tr>
 <td dir="ltr" class="ltr"><code dir="ltr">persistentvolumeclaims</code></td>
@@ -268,16 +268,16 @@ device class نمونه با نام <code dir="ltr">examplegpu</code>، اگر �
 </tr>
 <tr>
 <td dir="ltr" class="ltr"><code dir="ltr">&lt;storage-class-name&gt;.storageclass.storage.k8s.io/requests.storage</code></td>
-<td dir="rtl">در میان همهٔ persistent volume claimهای مرتبط با <code dir="ltr">&lt;storage-class-name&gt;</code>، مجموع requestهای ذخیره‌سازی نمی‌تواند از این مقدار بیشتر شود.</td>
+<td dir="rtl">در میان همهٔ درخواست‌های حجم ماندگار مرتبط با <code dir="ltr">&lt;storage-class-name&gt;</code>، مجموع درخواست‌های ذخیره‌سازی نمی‌تواند از این مقدار بیشتر شود.</td>
 </tr>
 <tr>
 <td dir="ltr" class="ltr"><code dir="ltr">&lt;storage-class-name&gt;.storageclass.storage.k8s.io/persistentvolumeclaims</code></td>
-<td dir="rtl">در میان همهٔ persistent volume claimهای مرتبط با <code dir="ltr">&lt;storage-class-name&gt;</code>، تعداد کل <a href="../storage/persistent-volumes.html#persistentvolumeclaims">persistent volume claimها</a> که می‌توانند در فضای نام وجود داشته باشند.</td>
+<td dir="rtl">در میان همهٔ درخواست‌های حجم ماندگار مرتبط با <code dir="ltr">&lt;storage-class-name&gt;</code>، تعداد کل <a href="../storage/persistent-volumes.html#persistentvolumeclaims">درخواست‌های حجم ماندگار</a> که می‌توانند در فضای نام وجود داشته باشند.</td>
 </tr>
 </tbody>
 </table>
-<p dir="rtl">برای مثال، اگر بخواهید ذخیره‌سازی با StorageClass ‏<code dir="ltr">gold</code> را جدا از
-StorageClass ‏<code dir="ltr">bronze</code> سهمیه‌بندی کنید، می‌توانید سهمیه‌ای به شکل زیر تعریف کنید:</p>
+<p dir="rtl">برای مثال، اگر بخواهید برای ذخیره‌سازی با StorageClass <code dir="ltr">gold</code> سهمیه‌ای جدا از
+StorageClass <code dir="ltr">bronze</code> تعیین کنید، می‌توانید سهمیه را به این صورت تعریف کنید:</p>
 <ul>
 <li dir="ltr" class="ltr"><code dir="ltr">gold.storageclass.storage.k8s.io/requests.storage: 500Gi</code></li>
 <li dir="ltr" class="ltr"><code dir="ltr">bronze.storageclass.storage.k8s.io/requests.storage: 100Gi</code></li>
@@ -288,17 +288,17 @@ StorageClass ‏<code dir="ltr">bronze</code> سهمیه‌بندی کنید، �
 <thead>
 <tr>
 <th dir="rtl">نام منبع</th>
-<th dir="rtl">توضیح</th>
+<th dir="rtl">توضیحات</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td dir="ltr" class="ltr"><code dir="ltr">requests.ephemeral-storage</code></td>
-<td dir="rtl">در میان همهٔ پادهای فضای نام، مجموع requestهای ذخیره‌سازی موقت محلی نمی‌تواند از این مقدار بیشتر شود.</td>
+<td dir="rtl">در میان همهٔ پادهای فضای نام، مجموع درخواست‌های ذخیره‌سازی موقت محلی نمی‌تواند از این مقدار بیشتر شود.</td>
 </tr>
 <tr>
 <td dir="ltr" class="ltr"><code dir="ltr">limits.ephemeral-storage</code></td>
-<td dir="rtl">در میان همهٔ پادهای فضای نام، مجموع limitهای ذخیره‌سازی موقت محلی نمی‌تواند از این مقدار بیشتر شود.</td>
+<td dir="rtl">در میان همهٔ پادهای فضای نام، مجموع محدودیت‌های ذخیره‌سازی موقت محلی نمی‌تواند از این مقدار بیشتر شود.</td>
 </tr>
 <tr>
 <td dir="ltr" class="ltr"><code dir="ltr">ephemeral-storage</code></td>
@@ -307,33 +307,34 @@ StorageClass ‏<code dir="ltr">bronze</code> سهمیه‌بندی کنید، �
 </tbody>
 </table>
 <div class="callout note"><div class="callout-title">توجه:</div>
-<p dir="rtl">هنگام استفاده از یک محیط اجرای کانتینر CRI، لاگ‌های کانتینر در سهمیهٔ ذخیره‌سازی موقت محاسبه می‌شوند.
-این امر می‌تواند به بیرون‌راندن غیرمنتظرهٔ پادهایی منجر شود که سهمیهٔ ذخیره‌سازی خود را تمام کرده‌اند.</p>
-<p dir="rtl">برای جزئیات به <a href="../cluster-administration/logging.html">معماری لاگ‌گیری</a> مراجعه کنید.</p>
+<p dir="rtl">هنگام استفاده از یک محیط اجرای کانتینر مبتنی بر CRI، لاگ‌های کانتینر نیز جزو سهمیهٔ ذخیره‌سازی موقت محاسبه می‌شوند.
+این موضوع ممکن است به بیرون‌راندن (eviction) غیرمنتظرهٔ پادهایی منجر شود که سهمیهٔ ذخیره‌سازی خود را به پایان رسانده‌اند.</p>
+<p dir="rtl">برای جزئیات بیشتر به <a href="../cluster-administration/logging.html">معماری لاگ‌گیری</a> مراجعه کنید.</p>
 </div>
-<h3 id="سهمیه-بر-تعداد-آبجکت-ها-quota-on-object-count" dir="rtl">سهمیه بر تعداد آبجکت‌ها {#quota-on-object-count}</h3>
-<p dir="rtl">می‌توانید با استفاده از نحو زیر، برای <em>تعداد کل یک kind مشخص از <span class="term" title="api-resource">منبع</span></em> در API کوبرنتیز سهمیه تعیین کنید:</p>
+<h3 id="سهمیه-برای-تعداد-آبجکت-ها" dir="rtl">سهمیه برای تعداد آبجکت‌ها</h3>
+<p dir="rtl">می‌توانید برای <em>تعداد کل یک نوع خاص از <span class="term" title="api-resource">منبع</span></em> در API کوبرنتیز سهمیه تعیین کنید.
+برای این کار از نحو زیر استفاده کنید:</p>
 <ul>
-<li dir="rtl"><code dir="ltr">count/&lt;resource&gt;.&lt;group&gt;</code> برای منابع گروه‌های API غیرهسته</li>
-<li dir="rtl"><code dir="ltr">count/&lt;resource&gt;</code> برای منابع گروه API هسته</li>
+<li dir="rtl"><code dir="ltr">count/&lt;resource&gt;.&lt;group&gt;</code> برای منابعی که به گروه‌های API غیرهسته‌ای تعلق دارند</li>
+<li dir="rtl"><code dir="ltr">count/&lt;resource&gt;</code> برای منابعی که به گروه API هسته تعلق دارند</li>
 </ul>
-<p dir="rtl">برای مثال، API ‏PodTemplate در گروه API هسته قرار دارد؛ بنابراین اگر بخواهید تعداد
+<p dir="rtl">برای مثال، API مربوط به PodTemplate در گروه API هسته قرار دارد؛ بنابراین اگر بخواهید تعداد
 آبجکت‌های PodTemplate را در یک فضای نام محدود کنید، از <code dir="ltr">count/podtemplates</code> استفاده می‌کنید.</p>
-<p dir="rtl">این انواع سهمیه برای محافظت در برابر اتمام فضای ذخیره‌سازی control plane مفید هستند. برای مثال، ممکن است
+<p dir="rtl">این نوع سهمیه‌ها برای جلوگیری از تمام شدن فضای ذخیره‌سازی control plane مفید هستند. برای مثال، ممکن است
 بخواهید با توجه به حجم زیاد Secretها، تعداد آن‌ها را در یک سرور محدود کنید. وجود تعداد بیش از حد Secret در یک کلاستر
-در واقع می‌تواند از راه‌اندازی سرورها و کنترل‌کننده‌ها جلوگیری کند. می‌توانید برای Jobها سهمیه تعیین کنید تا در برابر
-یک CronJob با پیکربندی نادرست محافظت شوید. CronJobهایی که تعداد بیش از حدی Job در یک فضای نام ایجاد می‌کنند، می‌توانند به منع سرویس (denial of service) منجر شوند.</p>
-<p dir="rtl">اگر سهمیه‌ای را به این روش تعریف کنید، بر APIهای کوبرنتیز که بخشی از سرور API هستند و
-بر هر منبع سفارشی مبتنی بر CustomResourceDefinition اعمال می‌شود.
-برای مثال، برای ایجاد سهمیه بر منبع سفارشی <code dir="ltr">widgets</code> در گروه API ‏<code dir="ltr">example.com</code>،
+در عمل می‌تواند مانع راه‌اندازی سرورها و کنترل‌کننده‌ها شود. همچنین می‌توانید برای Jobها سهمیه تعیین کنید تا از
+خطرات یک CronJob با پیکربندی نادرست در امان بمانید. CronJobهایی که Jobهای بیش از حدی در یک فضای نام ایجاد می‌کنند، می‌توانند به حملهٔ منع سرویس (denial of service) منجر شوند.</p>
+<p dir="rtl">اگر سهمیه را به این روش تعریف کنید، این سهمیه بر APIهای کوبرنتیز که بخشی از سرور API هستند و
+نیز بر هر منبع سفارشی مبتنی بر CustomResourceDefinition اعمال می‌شود.
+برای مثال، برای ایجاد سهمیه روی منبع سفارشی <code dir="ltr">widgets</code> در گروه API <code dir="ltr">example.com</code>،
 از <code dir="ltr">count/widgets.example.com</code> استفاده کنید.
-اگر از <a href="../extend-kubernetes/api-extension/apiserver-aggregation.html">تجمیع API</a> برای
-افزودن APIهای سفارشی بیشتری استفاده کنید که به‌صورت CustomResourceDefinition تعریف نشده‌اند، control plane اصلی کوبرنتیز
-سهمیه را برای API تجمیع‌شده الزامی نمی‌کند. انتظار می‌رود سرور API افزونه،
-در صورتی که برای API سفارشی مناسب باشد، الزام سهمیه را فراهم کند.</p>
+اگر از <a href="../extend-kubernetes/api-extension/apiserver-aggregation.html">تجمیع API</a> (API aggregation) برای
+افزودن APIهای سفارشی دیگری استفاده کنید که به‌صورت CustomResourceDefinition تعریف نشده‌اند، control plane هستهٔ کوبرنتیز
+سهمیه را برای API تجمیع‌شده اعمال نمی‌کند. انتظار می‌رود سرور API افزونه، در صورتی که برای API سفارشی مناسب باشد،
+اعمال سهمیه را خودش فراهم کند.</p>
 <h5 dir="rtl">نحو عمومی {#resource-quota-object-count-generic}</h5>
-<p dir="rtl">این فهرستی از نمونه‌های رایج انواع آبجکتی است که ممکن است بخواهید تحت سهمیهٔ تعداد آبجکت قرار دهید،
-که بر اساس رشتهٔ پیکربندی مورد استفاده فهرست شده‌اند.</p>
+<p dir="rtl">فهرست زیر نمونه‌هایی رایج از انواع آبجکت‌هایی است که ممکن است بخواهید تحت سهمیهٔ تعداد آبجکت قرار دهید.
+این نمونه‌ها بر اساس رشتهٔ پیکربندی‌ای که باید استفاده کنید فهرست شده‌اند.</p>
 <ul>
 <li dir="ltr" class="ltr"><code dir="ltr">count/pods</code></li>
 <li dir="ltr" class="ltr"><code dir="ltr">count/persistentvolumeclaims</code></li>
@@ -347,13 +348,13 @@ StorageClass ‏<code dir="ltr">bronze</code> سهمیه‌بندی کنید، �
 <li dir="ltr" class="ltr"><code dir="ltr">count/cronjobs.batch</code></li>
 </ul>
 <h5 dir="rtl">نحو تخصصی {#resource-quota-object-count-specialized}</h5>
-<p dir="rtl">نحو دیگری فقط برای تعیین همین نوع سهمیه وجود دارد که فقط برای برخی kindهای API کار می‌کند.
+<p dir="rtl">نحو دیگری نیز برای تعیین همین نوع سهمیه وجود دارد که فقط برای برخی از انواع API کار می‌کند.
 انواع زیر پشتیبانی می‌شوند:</p>
 <table>
 <thead>
 <tr>
 <th dir="rtl">نام منبع</th>
-<th dir="rtl">توضیح</th>
+<th dir="rtl">توضیحات</th>
 </tr>
 </thead>
 <tbody>
@@ -367,7 +368,7 @@ StorageClass ‏<code dir="ltr">bronze</code> سهمیه‌بندی کنید، �
 </tr>
 <tr>
 <td dir="ltr" class="ltr"><code dir="ltr">pods</code></td>
-<td dir="rtl">تعداد کل پادهایی در وضعیت غیرپایانی که می‌توانند در فضای نام وجود داشته باشند. یک پاد در صورتی در وضعیت پایانی است که <code dir="ltr">.status.phase in (Failed, Succeeded)</code> درست باشد.</td>
+<td dir="rtl">تعداد کل پادهایی در وضعیت غیرپایانی که می‌توانند در فضای نام وجود داشته باشند. یک پاد زمانی در وضعیت پایانی است که عبارت <code dir="ltr">.status.phase in (Failed, Succeeded)</code> درست باشد.</td>
 </tr>
 <tr>
 <td dir="ltr" class="ltr"><code dir="ltr">replicationcontrollers</code></td>
@@ -395,13 +396,13 @@ StorageClass ‏<code dir="ltr">bronze</code> سهمیه‌بندی کنید، �
 </tr>
 </tbody>
 </table>
-<p dir="rtl">برای مثال، سهمیهٔ <code dir="ltr">pods</code> تعداد <code dir="ltr">pods</code> غیرپایانیِ ایجادشده در یک فضای نام واحد را
-می‌شمارد و حداکثری بر آن الزامی می‌کند. ممکن است بخواهید سهمیهٔ <code dir="ltr">pods</code>
-را بر یک فضای نام تعیین کنید تا از حالتی جلوگیری کنید که کاربری پادهای کوچک بسیاری ایجاد کند و
-ذخیرهٔ IPهای Pod در کلاستر را تمام کند.</p>
+<p dir="rtl">برای مثال، سهمیهٔ <code dir="ltr">pods</code> تعداد <code dir="ltr">pods</code> غیرپایانیِ ایجادشده در یک فضای نام را می‌شمارد
+و سقفی برای آن اعمال می‌کند. ممکن است بخواهید سهمیهٔ <code dir="ltr">pods</code> را روی یک فضای نام تعیین کنید
+تا از وضعیتی جلوگیری کنید که در آن کاربری تعداد زیادی پاد کوچک ایجاد می‌کند و
+ذخیرهٔ IPهای پاد در کلاستر را به پایان می‌رساند.</p>
 <p dir="rtl">نمونه‌های بیشتری را می‌توانید در <a href="#viewing-and-setting-quotas">مشاهده و تنظیم سهمیه‌ها</a> بیابید.</p>
-<h2 id="مشاهده-و-تنظیم-سهمیه-ها-viewing-and-setting-quotas" dir="rtl">مشاهده و تنظیم سهمیه‌ها {#viewing-and-setting-quotas}</h2>
-<p dir="rtl">kubectl از ایجاد، به‌روزرسانی و مشاهدهٔ سهمیه‌ها پشتیبانی می‌کند:</p>
+<h2 id="مشاهده-و-تنظیم-سهمیه-ها" dir="rtl">مشاهده و تنظیم سهمیه‌ها</h2>
+<p dir="rtl">ابزار kubectl از ایجاد، به‌روزرسانی و مشاهدهٔ سهمیه‌ها پشتیبانی می‌کند:</p>
 <pre dir="ltr"><code class="language-shell" dir="ltr">kubectl create namespace myspace
 </code></pre>
 <pre dir="ltr"><code class="language-shell" dir="ltr">cat &lt;&lt;EOF &gt; compute-resources.yaml
@@ -470,8 +471,8 @@ secrets                 1       10
 services                0       10
 services.loadbalancers  0       2
 </code></pre>
-<p dir="rtl">kubectl همچنین از سهمیهٔ تعداد آبجکت برای همهٔ منابع استاندارد وابسته به فضای نام
-با استفاده از نحو <code dir="ltr">count/&lt;resource&gt;.&lt;group&gt;</code> پشتیبانی می‌کند:</p>
+<p dir="rtl">ابزار kubectl همچنین با استفاده از نحو <code dir="ltr">count/&lt;resource&gt;.&lt;group&gt;</code> از سهمیهٔ تعداد آبجکت برای همهٔ
+منابع استاندارد وابسته به فضای نام پشتیبانی می‌کند:</p>
 <pre dir="ltr"><code class="language-shell" dir="ltr">kubectl create namespace myspace
 </code></pre>
 <pre dir="ltr"><code class="language-shell" dir="ltr">kubectl create quota test --hard=count/deployments.apps=2,count/replicasets.apps=4,count/pods=3,count/secrets=4 --namespace=myspace
@@ -490,81 +491,77 @@ count/replicasets.apps        1     4
 count/secrets                 1     4
 </code></pre>
 <h2 id="سهمیه-و-ظرفیت-کلاستر" dir="rtl">سهمیه و ظرفیت کلاستر</h2>
-<p dir="rtl">ResourceQuotaها مستقل از ظرفیت کلاستر هستند. آن‌ها
-در قالب واحدهای مطلق بیان می‌شوند. بنابراین، اگر نودهایی به کلاستر خود اضافه کنید، این کار به‌طور خودکار
-به هر فضای نام توانایی مصرف منابع بیشتر را <em>نمی‌دهد</em>.</p>
+<p dir="rtl">ResourceQuotaها مستقل از ظرفیت کلاستر هستند و با واحدهای مطلق بیان می‌شوند.
+بنابراین اگر نودهایی به کلاستر خود اضافه کنید، این کار به‌طور خودکار به هر فضای نام
+امکان مصرف منابع بیشتر را <em>نمی‌دهد</em>.</p>
 <p dir="rtl">گاهی ممکن است سیاست‌های پیچیده‌تری مورد نیاز باشد، مانند:</p>
 <ul>
 <li dir="rtl">تقسیم متناسب کل منابع کلاستر میان چند تیم.</li>
-<li dir="rtl">اجازه به هر مستأجر (tenant) برای افزایش مصرف منابع در صورت نیاز، اما با یک
-محدودیت سخاوتمندانه برای جلوگیری از اتمام تصادفی منابع.</li>
-<li dir="rtl">تشخیص تقاضا از یک فضای نام، افزودن نودها و افزایش سهمیه.</li>
+<li dir="rtl">اجازه دادن به هر مستأجر (tenant) برای افزایش مصرف منابع در صورت نیاز، همراه با یک
+محدودیت سخاوتمندانه برای جلوگیری از تمام شدن تصادفی منابع.</li>
+<li dir="rtl">تشخیص تقاضا در یک فضای نام، افزودن نود و افزایش سهمیه.</li>
 </ul>
-<p dir="rtl">چنین سیاست‌هایی را می‌توان با استفاده از <code dir="ltr">ResourceQuotas</code> به‌عنوان اجزای سازنده پیاده‌سازی کرد،
-با نوشتن یک «کنترل‌کننده» که مصرف سهمیه را زیر نظر می‌گیرد و محدودیت‌های سخت سهمیهٔ
-هر فضای نام را بر اساس سیگنال‌های دیگر تنظیم می‌کند.</p>
-<p dir="rtl">توجه داشته باشید که سهمیهٔ منابع، منابع تجمیعی کلاستر را تقسیم می‌کند، اما هیچ
-محدودیتی در مورد نودها ایجاد نمی‌کند: پادهایی از چند فضای نام ممکن است روی یک نود اجرا شوند.</p>
-<h2 id="محدوده-های-سهمیه-quota-scopes" dir="rtl">محدوده‌های سهمیه {#quota-scopes}</h2>
-<p dir="rtl">هر سهمیه می‌تواند مجموعه‌ای از <code dir="ltr">scopes</code> مرتبط داشته باشد. یک سهمیه فقط زمانی مصرف یک منبع را اندازه می‌گیرد که آن منبع با
-اشتراک محدوده‌های برشمرده منطبق باشد.</p>
-<p dir="rtl">هنگامی که یک محدوده به سهمیه اضافه می‌شود، تعداد منابعی را که سهمیه پشتیبانی می‌کند به منابع مربوط به آن محدوده محدود می‌کند.
-مشخص‌کردن منابعی در سهمیه که بیرون از مجموعهٔ مجاز باشند، به خطای اعتبارسنجی منجر می‌شود.</p>
-<p dir="rtl">کوبرنتیز 1.37 از محدوده‌های زیر پشتیبانی می‌کند:</p>
+<p dir="rtl">چنین سیاست‌هایی را می‌توان با استفاده از <code dir="ltr">ResourceQuotas</code> به‌عنوان اجزای سازنده پیاده‌سازی کرد؛
+به این صورت که یک «کنترل‌کننده» نوشته شود که میزان مصرف سهمیه را زیر نظر بگیرد و محدودیت‌های سخت
+سهمیهٔ هر فضای نام را بر اساس سیگنال‌های دیگر تنظیم کند.</p>
+<p dir="rtl">توجه کنید که سهمیهٔ منابع، مجموع منابع کلاستر را تقسیم می‌کند، اما هیچ محدودیتی
+در مورد نودها ایجاد نمی‌کند: پادهایی از چند فضای نام مختلف ممکن است روی یک نود اجرا شوند.</p>
+<h2 id="دامنه-های-سهمیه" dir="rtl">دامنه‌های سهمیه</h2>
+<p dir="rtl">هر سهمیه می‌تواند مجموعه‌ای از <code dir="ltr">scopes</code> (دامنه‌ها) داشته باشد. سهمیه مصرف یک منبع را فقط زمانی اندازه می‌گیرد که آن منبع با اشتراک دامنه‌های فهرست‌شده مطابقت داشته باشد.</p>
+<p dir="rtl">وقتی دامنه‌ای به سهمیه افزوده می‌شود، منابعی که سهمیه پشتیبانی می‌کند به منابع مرتبط با آن دامنه محدود می‌شوند. اگر در سهمیه منابعی خارج از این مجموعهٔ مجاز مشخص شود، خطای اعتبارسنجی رخ می‌دهد.</p>
+<p dir="rtl">کوبرنتیز 1.37 از دامنه‌های زیر پشتیبانی می‌کند:</p>
 <table>
 <thead>
 <tr>
-<th dir="rtl">محدوده</th>
+<th dir="rtl">دامنه</th>
 <th dir="rtl">توضیح</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td dir="ltr" class="ltr"><a href="#quota-scope-best-effort"><code dir="ltr">BestEffort</code></a></td>
-<td dir="rtl">با پادهایی منطبق می‌شود که کیفیت سرویس best effort دارند.</td>
+<td dir="rtl">با پادهایی مطابقت دارد که کیفیت سرویس best effort دارند.</td>
 </tr>
 <tr>
 <td dir="ltr" class="ltr"><a href="#cross-namespace-pod-affinity-scope"><code dir="ltr">CrossNamespacePodAffinity</code></a></td>
-<td dir="rtl">با پادهایی منطبق می‌شود که <a href="../scheduling-eviction/assign-pod-node.html">عبارت‌های (ضد)وابستگی</a> پاد میان فضاهای نام دارند.</td>
+<td dir="rtl">با پادهایی مطابقت دارد که <a href="../scheduling-eviction/assign-pod-node.html">شرط‌های affinity (یا anti-affinity)</a> بین‌فضای‌نامی دارند.</td>
 </tr>
 <tr>
 <td dir="ltr" class="ltr"><a href="#quota-scope-non-best-effort"><code dir="ltr">NotBestEffort</code></a></td>
-<td dir="rtl">با پادهایی منطبق می‌شود که کیفیت سرویس best effort ندارند.</td>
+<td dir="rtl">با پادهایی مطابقت دارد که کیفیت سرویس best effort ندارند.</td>
 </tr>
 <tr>
 <td dir="ltr" class="ltr"><a href="#quota-scope-non-terminating"><code dir="ltr">NotTerminating</code></a></td>
-<td dir="rtl">با پادهایی منطبق می‌شود که <code dir="ltr">.spec.activeDeadlineSeconds</code> آن‌ها <code dir="ltr">nil</code> است</td>
+<td dir="rtl">با پادهایی مطابقت دارد که مقدار <code dir="ltr">.spec.activeDeadlineSeconds</code> در آن‌ها <code dir="ltr">nil</code> است.</td>
 </tr>
 <tr>
 <td dir="ltr" class="ltr"><a href="#resource-quota-per-priorityclass"><code dir="ltr">PriorityClass</code></a></td>
-<td dir="rtl">با پادهایی منطبق می‌شود که به <a href="../scheduling-eviction/pod-priority-preemption.html">priority class</a> مشخص‌شده ارجاع می‌دهند.</td>
+<td dir="rtl">با پادهایی مطابقت دارد که به <a href="../scheduling-eviction/pod-priority-preemption.html">کلاس اولویت</a> مشخص‌شده ارجاع می‌دهند.</td>
 </tr>
 <tr>
 <td dir="ltr" class="ltr"><a href="#quota-scope-terminating"><code dir="ltr">Terminating</code></a></td>
-<td dir="rtl">با پادهایی منطبق می‌شود که <code dir="ltr">.spec.activeDeadlineSeconds</code> آن‌ها &gt;= <code dir="ltr">0</code> است</td>
+<td dir="rtl">با پادهایی مطابقت دارد که در آن‌ها <code dir="ltr">.spec.activeDeadlineSeconds</code> &gt;= <code dir="ltr">0</code> است.</td>
 </tr>
 <tr>
 <td dir="ltr" class="ltr"><a href="#quota-scope-volume-attributes-class"><code dir="ltr">VolumeAttributesClass</code></a></td>
-<td dir="rtl">با PersistentVolumeClaimهایی منطبق می‌شود که به <a href="../storage/volume-attributes-classes.html">volume attributes class</a> مشخص‌شده ارجاع می‌دهند.</td>
+<td dir="rtl">با PersistentVolumeClaimهایی مطابقت دارد که به <a href="../storage/volume-attributes-classes.html">کلاس ویژگی‌های حجم</a> مشخص‌شده ارجاع می‌دهند.</td>
 </tr>
 </tbody>
 </table>
-<p dir="rtl">ResourceQuotaهایی که محدوده‌ای برایشان تنظیم شده است می‌توانند یک فیلد اختیاری <code dir="ltr">scopeSelector</code> نیز داشته باشند. یک یا چند <em>عبارت تطبیق</em> (match expression) تعریف می‌کنید
-که یک <code dir="ltr">operators</code> و در صورت لزوم مجموعه‌ای از <code dir="ltr">values</code> را برای تطبیق مشخص می‌کنند. برای مثال:</p>
+<p dir="rtl">آبجکت‌های ResourceQuota که دامنه برایشان تعیین شده است، می‌توانند فیلد اختیاری <code dir="ltr">scopeSelector</code> نیز داشته باشند. در این فیلد یک یا چند <em>عبارت تطبیق</em> (match expression) تعریف می‌کنید که هر کدام یک <code dir="ltr">operators</code> و در صورت لزوم مجموعه‌ای از <code dir="ltr">values</code> را برای تطبیق مشخص می‌کند. برای مثال:</p>
 <pre dir="ltr"><code class="language-yaml" dir="ltr">  scopeSelector:
     matchExpressions:
       - scopeName: BestEffort # Match pods that have best effort quality of service
         operator: Exists # optional; "Exists" is implied for BestEffort scope
 </code></pre>
-<p dir="rtl"><code dir="ltr">scopeSelector</code> از مقادیر زیر در فیلد <code dir="ltr">operator</code> پشتیبانی می‌کند:</p>
+<p dir="rtl">فیلد <code dir="ltr">scopeSelector</code> از مقادیر زیر در فیلد <code dir="ltr">operator</code> پشتیبانی می‌کند:</p>
 <ul>
 <li dir="ltr" class="ltr"><code dir="ltr">In</code></li>
 <li dir="ltr" class="ltr"><code dir="ltr">NotIn</code></li>
 <li dir="ltr" class="ltr"><code dir="ltr">Exists</code></li>
 <li dir="ltr" class="ltr"><code dir="ltr">DoesNotExist</code></li>
 </ul>
-<p dir="rtl">اگر <code dir="ltr">operator</code> برابر <code dir="ltr">In</code> یا <code dir="ltr">NotIn</code> باشد، فیلد <code dir="ltr">values</code> باید دست‌کم
-یک مقدار داشته باشد. برای مثال:</p>
+<p dir="rtl">اگر مقدار <code dir="ltr">operator</code> برابر <code dir="ltr">In</code> یا <code dir="ltr">NotIn</code> باشد، فیلد <code dir="ltr">values</code> باید دست‌کم یک مقدار داشته باشد. برای مثال:</p>
 <pre dir="ltr"><code class="language-yaml" dir="ltr">  scopeSelector:
     matchExpressions:
       - scopeName: PriorityClass
@@ -572,24 +569,21 @@ count/secrets                 1     4
         values:
           - middle
 </code></pre>
-<p dir="rtl">اگر <code dir="ltr">operator</code> برابر <code dir="ltr">Exists</code> یا <code dir="ltr">DoesNotExist</code> باشد، فیلد <code dir="ltr">values</code> <em>نباید</em>
-مشخص شود.</p>
-<h3 id="محدودهٔ-پادهای-best-effort-quota-scope-best-effort" dir="rtl">محدودهٔ پادهای Best effort {#quota-scope-best-effort}</h3>
-<p dir="rtl">این محدوده فقط سهمیهٔ مصرف‌شده توسط پادها را دنبال می‌کند.
-فقط با پادهایی منطبق می‌شود که <a href="../workloads/pods/pod-qos.html">کلاس QoS</a>
-<a href="../workloads/pods/pod-qos.html#besteffort">best effort</a> دارند.</p>
-<p dir="rtl"><code dir="ltr">operator</code> برای یک <code dir="ltr">scopeSelector</code> باید <code dir="ltr">Exists</code> باشد.</p>
-<h3 id="محدودهٔ-پادهای-غیر-best-effort-quota-scope-non-best-effort" dir="rtl">محدودهٔ پادهای غیر Best effort {#quota-scope-non-best-effort}</h3>
-<p dir="rtl">این محدوده فقط سهمیهٔ مصرف‌شده توسط پادها را دنبال می‌کند.
-فقط با پادهایی منطبق می‌شود که <a href="../workloads/pods/pod-qos.html">کلاس QoS</a>
-<a href="../workloads/pods/pod-qos.html#guaranteed">Guaranteed</a>
-یا <a href="../workloads/pods/pod-qos.html#burstable">Burstable</a> دارند.</p>
-<p dir="rtl"><code dir="ltr">operator</code> برای یک <code dir="ltr">scopeSelector</code> باید <code dir="ltr">Exists</code> باشد.</p>
-<h3 id="محدودهٔ-پادهای-غیر-terminating-quota-scope-non-terminating" dir="rtl">محدودهٔ پادهای غیر Terminating {#quota-scope-non-terminating}</h3>
-<p dir="rtl">این محدوده فقط سهمیهٔ مصرف‌شده توسط پادهایی را دنبال می‌کند که terminating نیستند. <code dir="ltr">operator</code> برای یک <code dir="ltr">scopeSelector</code>
-باید <code dir="ltr">Exists</code> باشد.</p>
-<p dir="rtl">یک Pod در صورتی terminating نیست که فیلد <code dir="ltr">.spec.activeDeadlineSeconds</code> آن تنظیم نشده باشد.</p>
-<p dir="rtl">می‌توانید از یک ResourceQuota با این محدوده برای مدیریت منابع زیر استفاده کنید:</p>
+<p dir="rtl">اگر مقدار <code dir="ltr">operator</code> برابر <code dir="ltr">Exists</code> یا <code dir="ltr">DoesNotExist</code> باشد، فیلد <code dir="ltr">values</code> <em>نباید</em> مشخص شود.</p>
+<h3 id="دامنهٔ-پادهای-best-effort-quota-scope-best-effort" dir="rtl">دامنهٔ پادهای best effort {#quota-scope-best-effort}</h3>
+<p dir="rtl">این دامنه فقط سهمیهٔ مصرف‌شده توسط پادها را ردیابی می‌کند و فقط با پادهایی مطابقت دارد که
+<a href="../workloads/pods/pod-qos.html">کلاس QoS</a> آن‌ها <a href="../workloads/pods/pod-qos.html#besteffort">best effort</a> است.</p>
+<p dir="rtl">مقدار <code dir="ltr">operator</code> در <code dir="ltr">scopeSelector</code> باید <code dir="ltr">Exists</code> باشد.</p>
+<h3 id="دامنهٔ-پادهای-غیر-best-effort-quota-scope-non-best-effort" dir="rtl">دامنهٔ پادهای غیر best effort {#quota-scope-non-best-effort}</h3>
+<p dir="rtl">این دامنه فقط سهمیهٔ مصرف‌شده توسط پادها را ردیابی می‌کند و فقط با پادهایی مطابقت دارد که
+<a href="../workloads/pods/pod-qos.html">کلاس QoS</a> آن‌ها <a href="../workloads/pods/pod-qos.html#guaranteed">Guaranteed</a>
+یا <a href="../workloads/pods/pod-qos.html#burstable">Burstable</a> است.</p>
+<p dir="rtl">مقدار <code dir="ltr">operator</code> در <code dir="ltr">scopeSelector</code> باید <code dir="ltr">Exists</code> باشد.</p>
+<h3 id="دامنهٔ-پادهای-غیرپایان-یابنده-quota-scope-non-terminating" dir="rtl">دامنهٔ پادهای غیرپایان‌یابنده {#quota-scope-non-terminating}</h3>
+<p dir="rtl">این دامنه فقط سهمیهٔ مصرف‌شده توسط پادهایی را ردیابی می‌کند که پایان‌یابنده نیستند. مقدار <code dir="ltr">operator</code> در
+<code dir="ltr">scopeSelector</code> باید <code dir="ltr">Exists</code> باشد.</p>
+<p dir="rtl">پادی که فیلد <code dir="ltr">.spec.activeDeadlineSeconds</code> آن تنظیم نشده باشد، پایان‌یابنده به شمار نمی‌آید.</p>
+<p dir="rtl">با یک ResourceQuota با این دامنه می‌توانید منابع زیر را مدیریت کنید:</p>
 <ul>
 <li dir="ltr" class="ltr"><code dir="ltr">count.pods</code></li>
 <li dir="ltr" class="ltr"><code dir="ltr">pods</code></li>
@@ -600,11 +594,11 @@ count/secrets                 1     4
 <li dir="ltr" class="ltr"><code dir="ltr">limits.cpu</code></li>
 <li dir="ltr" class="ltr"><code dir="ltr">limits.memory</code></li>
 </ul>
-<h3 id="محدودهٔ-پادهای-terminating-quota-scope-terminating" dir="rtl">محدودهٔ پادهای Terminating {#quota-scope-terminating}</h3>
-<p dir="rtl">این محدوده فقط سهمیهٔ مصرف‌شده توسط پادهایی را دنبال می‌کند که terminating هستند. <code dir="ltr">operator</code> برای یک <code dir="ltr">scopeSelector</code>
-باید <code dir="ltr">Exists</code> باشد.</p>
-<p dir="rtl">یک Pod در صورتی <em>terminating</em> در نظر گرفته می‌شود که فیلد <code dir="ltr">.spec.activeDeadlineSeconds</code> آن روی هر عددی تنظیم شده باشد.</p>
-<p dir="rtl">می‌توانید از یک ResourceQuota با این محدوده برای مدیریت منابع زیر استفاده کنید:</p>
+<h3 id="دامنهٔ-پادهای-پایان-یابنده-quota-scope-terminating" dir="rtl">دامنهٔ پادهای پایان‌یابنده {#quota-scope-terminating}</h3>
+<p dir="rtl">این دامنه فقط سهمیهٔ مصرف‌شده توسط پادهای پایان‌یابنده را ردیابی می‌کند. مقدار <code dir="ltr">operator</code> در
+<code dir="ltr">scopeSelector</code> باید <code dir="ltr">Exists</code> باشد.</p>
+<p dir="rtl">پادی که فیلد <code dir="ltr">.spec.activeDeadlineSeconds</code> آن روی هر عددی تنظیم شده باشد، <em>پایان‌یابنده</em> به شمار می‌آید.</p>
+<p dir="rtl">با یک ResourceQuota با این دامنه می‌توانید منابع زیر را مدیریت کنید:</p>
 <ul>
 <li dir="ltr" class="ltr"><code dir="ltr">count.pods</code></li>
 <li dir="ltr" class="ltr"><code dir="ltr">pods</code></li>
@@ -615,17 +609,17 @@ count/secrets                 1     4
 <li dir="ltr" class="ltr"><code dir="ltr">limits.cpu</code></li>
 <li dir="ltr" class="ltr"><code dir="ltr">limits.memory</code></li>
 </ul>
-<h3 id="محدودهٔ-وابستگی-پاد-میان-فضاهای-نام-cross-namespace-pod-affinity-scope" dir="rtl">محدودهٔ وابستگی پاد میان فضاهای نام {#cross-namespace-pod-affinity-scope}</h3>
+<h3 id="دامنهٔ-affinity-بین-فضای-نامی-پاد" dir="rtl">دامنهٔ affinity بین‌فضای‌نامی پاد</h3>
 <div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes v1.24 [stable]</span> (پایدار)</div>
-<p dir="rtl">می‌توانید از <a href="#quota-scopes">محدودهٔ سهمیهٔ</a> <code dir="ltr">CrossNamespacePodAffinity</code> برای محدودکردن اینکه کدام فضاهای نام مجاز به
-داشتن پادهایی با عبارت‌های وابستگی (affinity) میان فضاهای نام هستند استفاده کنید. به‌طور خاص، این محدوده کنترل می‌کند کدام پادها مجازند
-فیلدهای <code dir="ltr">namespaces</code> یا <code dir="ltr">namespaceSelector</code> را در <a href="../scheduling-eviction/assign-pod-node.html">عبارت‌های (ضد)وابستگی</a> پاد تنظیم کنند.</p>
-<p dir="rtl">جلوگیری از استفادهٔ کاربران از عبارت‌های وابستگی میان فضاهای نام ممکن است مطلوب باشد، زیرا یک پاد
-با محدودیت‌های ضدوابستگی می‌تواند مانع زمان‌بندی پادهای همهٔ فضاهای نام دیگر
+<p dir="rtl">با <a href="#quota-scopes">دامنهٔ سهمیهٔ</a> <code dir="ltr">CrossNamespacePodAffinity</code> می‌توانید تعیین کنید کدام فضاهای نام اجازه دارند
+پادهایی با شرط‌های affinity بین‌فضای‌نامی داشته باشند. به‌طور مشخص، این دامنه تعیین می‌کند کدام پادها مجازند
+فیلدهای <code dir="ltr">namespaces</code> یا <code dir="ltr">namespaceSelector</code> را در <a href="../scheduling-eviction/assign-pod-node.html">شرط‌های affinity (یا anti-affinity)</a> پاد تنظیم کنند.</p>
+<p dir="rtl">ممکن است بخواهید کاربران را از به‌کاربردن شرط‌های affinity بین‌فضای‌نامی بازدارید، زیرا پادی که
+محدودیت‌های anti-affinity دارد می‌تواند مانع زمان‌بندی پادهای همهٔ فضاهای نام دیگر
 در یک دامنهٔ خرابی (failure domain) شود.</p>
-<p dir="rtl">با استفاده از این محدوده، شما (به‌عنوان مدیر کلاستر) می‌توانید از اینکه فضاهای نام مشخصی - مانند <code dir="ltr">foo-ns</code> در مثال زیر -
-پادهایی داشته باشند که از وابستگی پاد میان فضاهای نام استفاده می‌کنند جلوگیری کنید. این را با ایجاد یک آبجکت ResourceQuota در
-آن فضای نام با محدودهٔ <code dir="ltr">CrossNamespacePodAffinity</code> و محدودیت سخت 0 پیکربندی می‌کنید:</p>
+<p dir="rtl">با این دامنه، شما (به‌عنوان مدیر کلاستر) می‌توانید مانع شوید که برخی فضاهای نام، مانند <code dir="ltr">foo-ns</code> در مثال زیر،
+پادهایی با affinity بین‌فضای‌نامی داشته باشند. برای این کار یک آبجکت ResourceQuota با دامنهٔ
+<code dir="ltr">CrossNamespacePodAffinity</code> و حد سخت ۰ در آن فضای نام ایجاد می‌کنید:</p>
 <pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
 kind: ResourceQuota
 metadata:
@@ -639,9 +633,9 @@ spec:
     - scopeName: CrossNamespacePodAffinity
       operator: Exists
 </code></pre>
-<p dir="rtl">اگر می‌خواهید استفاده از <code dir="ltr">namespaces</code> و <code dir="ltr">namespaceSelector</code> را به‌طور پیش‌فرض ممنوع کنید و
-فقط برای فضاهای نام مشخصی مجاز بدانید، می‌توانید <code dir="ltr">CrossNamespacePodAffinity</code>
-را به‌عنوان یک منبع محدودشده پیکربندی کنید؛ برای این کار پرچم <code dir="ltr">--admission-control-config-file</code> در kube-apiserver
+<p dir="rtl">اگر می‌خواهید استفاده از <code dir="ltr">namespaces</code> و <code dir="ltr">namespaceSelector</code> به‌طور پیش‌فرض ممنوع باشد و
+فقط برای فضاهای نام مشخصی مجاز شود، می‌توانید <code dir="ltr">CrossNamespacePodAffinity</code> را به‌عنوان
+یک منبع محدود پیکربندی کنید. برای این کار فلگ <code dir="ltr">--admission-control-config-file</code> در kube-apiserver
 را روی مسیر فایل پیکربندی زیر تنظیم کنید:</p>
 <pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: apiserver.config.k8s.io/v1
 kind: AdmissionConfiguration
@@ -656,19 +650,19 @@ plugins:
       - scopeName: CrossNamespacePodAffinity
         operator: Exists
 </code></pre>
-<p dir="rtl">با پیکربندی بالا، پادها فقط در صورتی می‌توانند از <code dir="ltr">namespaces</code> و <code dir="ltr">namespaceSelector</code> در وابستگی پاد استفاده کنند
-که فضای نامی که در آن ایجاد می‌شوند یک آبجکت سهمیهٔ منبع با
-محدودهٔ <code dir="ltr">CrossNamespacePodAffinity</code> و محدودیت سختی بزرگ‌تر یا مساوی با تعداد پادهایی که از آن فیلدها استفاده می‌کنند داشته باشد.</p>
-<h3 id="محدودهٔ-priorityclass-resource-quota-per-priorityclass" dir="rtl">محدودهٔ PriorityClass {#resource-quota-per-priorityclass}</h3>
+<p dir="rtl">با پیکربندی بالا، پادها فقط زمانی می‌توانند از <code dir="ltr">namespaces</code> و <code dir="ltr">namespaceSelector</code> در affinity پاد استفاده کنند
+که در فضای نامی که در آن ایجاد می‌شوند یک آبجکت سهمیهٔ منبع با دامنهٔ
+<code dir="ltr">CrossNamespacePodAffinity</code> وجود داشته باشد و حد سخت آن بزرگ‌تر یا مساوی تعداد پادهایی باشد که از این فیلدها استفاده می‌کنند.</p>
+<h3 id="دامنهٔ-priorityclass-resource-quota-per-priorityclass" dir="rtl">دامنهٔ PriorityClass {#resource-quota-per-priorityclass}</h3>
 <div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes v1.17 [stable]</span> (پایدار)</div>
-<p dir="rtl">یک ResourceQuota با محدودهٔ PriorityClass فقط با پادهایی منطبق می‌شود که
-<a href="../scheduling-eviction/pod-priority-preemption.html">priority class</a> مشخصی دارند، و فقط
-در صورتی که یکی از <code dir="ltr">scopeSelector</code>های موجود در مشخصات سهمیه، آن Pod مشخص را انتخاب کند.</p>
-<p dir="rtl">پادها را می‌توان با یک <a href="../scheduling-eviction/pod-priority-preemption.html#pod-priority">اولویت</a> مشخص ایجاد کرد.
-می‌توانید با استفاده از فیلد <code dir="ltr">scopeSelector</code> در مشخصات سهمیه، مصرف منابع سیستم توسط یک پاد را بر اساس اولویت آن
-کنترل کنید.</p>
-<p dir="rtl">هنگامی که سهمیه با استفاده از فیلد <code dir="ltr">scopeSelector</code> برای PriorityClass محدوده‌بندی شود، ResourceQuota
-فقط می‌تواند منابع زیر را دنبال (و محدود) کند:</p>
+<p dir="rtl">یک ResourceQuota با دامنهٔ PriorityClass فقط با پادهایی مطابقت دارد که
+<a href="../scheduling-eviction/pod-priority-preemption.html">کلاس اولویت</a> مشخصی دارند، و آن هم فقط
+در صورتی که یکی از <code dir="ltr">scopeSelector</code>های مشخصات سهمیه آن پاد را انتخاب کند.</p>
+<p dir="rtl">پادها را می‌توان با <a href="../scheduling-eviction/pod-priority-preemption.html#pod-priority">اولویت</a> مشخصی ایجاد کرد.
+با استفاده از فیلد <code dir="ltr">scopeSelector</code> در مشخصات سهمیه، می‌توانید مصرف منابع سیستم توسط هر پاد را
+بر اساس اولویت آن کنترل کنید.</p>
+<p dir="rtl">وقتی دامنهٔ سهمیه با فیلد <code dir="ltr">scopeSelector</code> به PriorityClass محدود شود، ResourceQuota
+فقط می‌تواند منابع زیر را ردیابی (و محدود) کند:</p>
 <ul>
 <li dir="ltr" class="ltr"><code dir="ltr">pods</code></li>
 <li dir="ltr" class="ltr"><code dir="ltr">cpu</code></li>
@@ -682,12 +676,12 @@ plugins:
 <li dir="ltr" class="ltr"><code dir="ltr">requests.ephemeral-storage</code></li>
 </ul>
 <h4 id="مثال-quota-scope-priorityclass-example" dir="rtl">مثال {#quota-scope-priorityclass-example}</h4>
-<p dir="rtl">این مثال یک ResourceQuota ایجاد می‌کند و آن را با پادهایی با اولویت‌های مشخص منطبق می‌کند. این مثال
-به این صورت کار می‌کند:</p>
+<p dir="rtl">در این مثال یک ResourceQuota ایجاد می‌شود و با پادهایی با اولویت‌های مشخص تطبیق داده می‌شود.
+روند مثال به این صورت است:</p>
 <ul>
 <li dir="rtl">پادهای کلاستر یکی از سه <a href="../scheduling-eviction/pod-priority-preemption.html#priorityclass">PriorityClass</a> «low»، «medium» و «high» را دارند.
 <ul>
-<li dir="rtl">اگر می‌خواهید این را امتحان کنید، از یک کلاستر آزمایشی استفاده کنید و پیش از ادامه، آن سه PriorityClass را راه‌اندازی کنید.</li>
+<li dir="rtl">اگر می‌خواهید این مثال را امتحان کنید، از یک کلاستر آزمایشی استفاده کنید و پیش از ادامه، این سه PriorityClass را راه‌اندازی کنید.</li>
 </ul>
 </li>
 <li dir="rtl">برای هر اولویت یک آبجکت سهمیه ایجاد می‌شود.</li>
@@ -739,14 +733,14 @@ spec:
       scopeName: PriorityClass
       values: ["low"]
 </code></pre>
-<p dir="rtl">YAML را با استفاده از <code dir="ltr">kubectl create</code> اعمال کنید.</p>
+<p dir="rtl">فایل YAML را با <code dir="ltr">kubectl create</code> اعمال کنید.</p>
 <pre dir="ltr"><code class="language-shell" dir="ltr">kubectl create -f https://k8s.io/examples/policy/quota.yaml
 </code></pre>
 <pre dir="ltr"><code dir="ltr">resourcequota/pods-high created
 resourcequota/pods-medium created
 resourcequota/pods-low created
 </code></pre>
-<p dir="rtl">با استفاده از <code dir="ltr">kubectl describe quota</code> تأیید کنید که سهمیهٔ <code dir="ltr">Used</code> برابر <code dir="ltr">0</code> است.</p>
+<p dir="rtl">با <code dir="ltr">kubectl describe quota</code> بررسی کنید که مقدار <code dir="ltr">Used</code> سهمیه برابر <code dir="ltr">0</code> است.</p>
 <pre dir="ltr"><code class="language-shell" dir="ltr">kubectl describe quota
 </code></pre>
 <pre dir="ltr"><code dir="ltr">Name:       pods-high
@@ -796,12 +790,12 @@ spec:
         cpu: "500m"
   priorityClassName: high
 </code></pre>
-<p dir="rtl">برای ایجاد Pod:</p>
+<p dir="rtl">برای ایجاد پاد:</p>
 <pre dir="ltr"><code class="language-shell" dir="ltr">kubectl create -f https://k8s.io/examples/policy/high-priority-pod.yaml
 
 </code></pre>
-<p dir="rtl">تأیید کنید که آمار «Used» برای سهمیهٔ اولویت «high»، یعنی <code dir="ltr">pods-high</code>، تغییر کرده است و
-دو سهمیهٔ دیگر بدون تغییر باقی مانده‌اند.</p>
+<p dir="rtl">بررسی کنید که آمار «Used» برای سهمیهٔ اولویت «high»، یعنی <code dir="ltr">pods-high</code>، تغییر کرده و
+دو سهمیهٔ دیگر بدون تغییر مانده‌اند.</p>
 <pre dir="ltr"><code class="language-shell" dir="ltr">kubectl describe quota
 </code></pre>
 <pre dir="ltr"><code dir="ltr">Name:       pods-high
@@ -831,13 +825,12 @@ memory      0     20Gi
 pods        0     10
 </code></pre>
 <h4 id="محدودکردن-پیش-فرض-مصرف-priorityclass" dir="rtl">محدودکردن پیش‌فرض مصرف PriorityClass</h4>
-<p dir="rtl">ممکن است مطلوب باشد که پادهایی با یک اولویت مشخص، مانند «cluster-services»،
-در یک فضای نام فقط و فقط در صورتی مجاز باشند که یک آبجکت سهمیهٔ منطبق وجود داشته باشد.</p>
-<p dir="rtl">با این سازوکار، اپراتورها می‌توانند استفاده از برخی priority classهای با اولویت بالا را
-به تعداد محدودی از فضاهای نام محدود کنند و همهٔ فضاهای نام
-به‌طور پیش‌فرض قادر به مصرف این priority classها نخواهند بود.</p>
-<p dir="rtl">برای الزامی‌کردن این موضوع، باید از پرچم <code dir="ltr">--admission-control-config-file</code> در <code dir="ltr">kube-apiserver</code>
-برای ارسال مسیر فایل پیکربندی زیر استفاده کرد:</p>
+<p dir="rtl">گاهی لازم است پادهایی با اولویتی مشخص، مانند «cluster-services»، فقط و فقط در صورتی
+در یک فضای نام مجاز باشند که یک آبجکت سهمیهٔ متناظر در آن وجود داشته باشد.</p>
+<p dir="rtl">با این سازوکار، اپراتورها می‌توانند استفاده از برخی کلاس‌های اولویت بالا را به تعداد محدودی
+از فضاهای نام منحصر کنند، و همهٔ فضاهای نام به‌طور پیش‌فرض نمی‌توانند این کلاس‌های اولویت را مصرف کنند.</p>
+<p dir="rtl">برای اعمال این محدودیت، باید با فلگ <code dir="ltr">--admission-control-config-file</code> در <code dir="ltr">kube-apiserver</code>
+مسیر فایل پیکربندی زیر را ارسال کنید:</p>
 <pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: apiserver.config.k8s.io/v1
 kind: AdmissionConfiguration
 plugins:
@@ -869,46 +862,46 @@ spec:
 </code></pre>
 <pre dir="ltr"><code class="language-none" dir="ltr">resourcequota/pods-cluster-services created
 </code></pre>
-<p dir="rtl">در این حالت، ایجاد یک پاد در صورتی مجاز خواهد بود که:</p>
+<p dir="rtl">در این حالت، ایجاد پاد در موارد زیر مجاز است:</p>
 <ol>
-<li dir="rtl"><code dir="ltr">priorityClassName</code> مربوط به Pod مشخص نشده باشد.</li>
-<li dir="rtl"><code dir="ltr">priorityClassName</code> مربوط به Pod روی مقداری غیر از <code dir="ltr">cluster-services</code> تنظیم شده باشد.</li>
-<li dir="rtl"><code dir="ltr">priorityClassName</code> مربوط به Pod روی <code dir="ltr">cluster-services</code> تنظیم شده باشد، قرار باشد Pod
-در فضای نام <code dir="ltr">kube-system</code> ایجاد شود و از بررسی سهمیهٔ منبع گذشته باشد.</li>
+<li dir="rtl">فیلد <code dir="ltr">priorityClassName</code> پاد مشخص نشده باشد.</li>
+<li dir="rtl">فیلد <code dir="ltr">priorityClassName</code> پاد مقداری غیر از <code dir="ltr">cluster-services</code> داشته باشد.</li>
+<li dir="rtl">فیلد <code dir="ltr">priorityClassName</code> پاد روی <code dir="ltr">cluster-services</code> تنظیم شده باشد، پاد قرار باشد
+در فضای نام <code dir="ltr">kube-system</code> ایجاد شود و بررسی سهمیهٔ منبع را با موفقیت گذرانده باشد.</li>
 </ol>
-<p dir="rtl">درخواست ایجاد یک Pod در صورتی رد می‌شود که <code dir="ltr">priorityClassName</code> آن روی <code dir="ltr">cluster-services</code> تنظیم شده باشد
-و قرار باشد در فضای نامی غیر از <code dir="ltr">kube-system</code> ایجاد شود.</p>
-<h3 id="محدودهٔ-volumeattributesclass-quota-scope-volume-attributes-class" dir="rtl">محدودهٔ VolumeAttributesClass {#quota-scope-volume-attributes-class}</h3>
+<p dir="rtl">اگر <code dir="ltr">priorityClassName</code> پاد روی <code dir="ltr">cluster-services</code> تنظیم شده باشد و پاد قرار باشد
+در فضای نامی غیر از <code dir="ltr">kube-system</code> ایجاد شود، درخواست ایجاد آن رد می‌شود.</p>
+<h3 id="دامنهٔ-volumeattributesclass-quota-scope-volume-attributes-class" dir="rtl">دامنهٔ VolumeAttributesClass {#quota-scope-volume-attributes-class}</h3>
 <div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
-<p dir="rtl">این محدوده فقط سهمیهٔ مصرف‌شده توسط PersistentVolumeClaimها را دنبال می‌کند.</p>
-<p dir="rtl">PersistentVolumeClaimها را می‌توان با یک
-<a href="../storage/volume-attributes-classes.html">VolumeAttributesClass</a> مشخص ایجاد کرد و ممکن است پس از ایجاد تغییر کنند.
-می‌توانید با استفاده از فیلد <code dir="ltr">scopeSelector</code> در مشخصات سهمیه، مصرف منابع ذخیره‌سازی توسط یک PVC را بر اساس
-VolumeAttributesClassهای مرتبط کنترل کنید.</p>
-<p dir="rtl">PVC از طریق فیلدهای زیر به VolumeAttributesClass مرتبط ارجاع می‌دهد:</p>
+<p dir="rtl">این دامنه فقط سهمیهٔ مصرف‌شده توسط PersistentVolumeClaimها را ردیابی می‌کند.</p>
+<p dir="rtl">هر PersistentVolumeClaim را می‌توان با یک
+<a href="../storage/volume-attributes-classes.html">VolumeAttributesClass</a> مشخص ایجاد کرد و ممکن است پس از ایجاد تغییر کند.
+با استفاده از فیلد <code dir="ltr">scopeSelector</code> در مشخصات سهمیه، می‌توانید مصرف منابع ذخیره‌سازی توسط هر PVC را
+بر اساس VolumeAttributesClassهای مرتبط با آن کنترل کنید.</p>
+<p dir="rtl">هر PVC از طریق فیلدهای زیر به VolumeAttributesClass مرتبط ارجاع می‌دهد:</p>
 <ul>
 <li dir="ltr" class="ltr"><code dir="ltr">spec.volumeAttributesClassName</code></li>
 <li dir="ltr" class="ltr"><code dir="ltr">status.currentVolumeAttributesClassName</code></li>
 <li dir="ltr" class="ltr"><code dir="ltr">status.modifyVolumeStatus.targetVolumeAttributesClassName</code></li>
 </ul>
-<p dir="rtl">یک ResourceQuota مرتبط فقط در صورتی منطبق و مصرف می‌شود که ResourceQuota یک <code dir="ltr">scopeSelector</code> داشته باشد که PVC را انتخاب کند.</p>
-<p dir="rtl">هنگامی که سهمیه با استفاده از فیلد <code dir="ltr">scopeSelector</code> برای volume attributes class محدوده‌بندی شود، آبجکت سهمیه محدود می‌شود به اینکه فقط منابع زیر را دنبال کند:</p>
+<p dir="rtl">یک ResourceQuota مرتبط فقط زمانی تطبیق داده و مصرف می‌شود که <code dir="ltr">scopeSelector</code> آن، PVC را انتخاب کند.</p>
+<p dir="rtl">وقتی دامنهٔ سهمیه با فیلد <code dir="ltr">scopeSelector</code> به کلاس ویژگی‌های حجم محدود شود، آبجکت سهمیه فقط می‌تواند منابع زیر را ردیابی کند:</p>
 <ul>
 <li dir="ltr" class="ltr"><code dir="ltr">persistentvolumeclaims</code></li>
 <li dir="ltr" class="ltr"><code dir="ltr">requests.storage</code></li>
 </ul>
-<p dir="rtl">برای آشنایی بیشتر با این موضوع، <a href="https://kubernetes.io/docs/tasks/administer-cluster/limit-storage-consumption/" target="_blank">محدودکردن مصرف ذخیره‌سازی</a> را بخوانید.</p>
+<p dir="rtl">برای اطلاعات بیشتر، <a href="https://kubernetes.io/docs/tasks/administer-cluster/limit-storage-consumption/" target="_blank">محدودکردن مصرف ذخیره‌سازی</a> را بخوانید.</p>
 <h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
 <ul>
-<li dir="rtl">یک <a href="https://kubernetes.io/docs/tasks/administer-cluster/quota-api-object/" target="_blank">مثال مفصل از نحوهٔ استفاده از سهمیهٔ منابع</a> را ببینید.</li>
-<li dir="rtl"><a href="https://kubernetes.io/docs/reference/kubernetes-api/core/resource-quota-v1/" target="_blank">مرجع API</a> مربوط به ResourceQuota را بخوانید</li>
-<li dir="rtl">دربارهٔ <a href="limit-range.html">LimitRangeها</a> بیاموزید</li>
-<li dir="rtl">برای اطلاعات بیشتر می‌توانید <a href="https://git.k8s.io/design-proposals-archive/resource-management/admission_control_resource_quota.md" target="_blank" rel="noopener">سند طراحی ResourceQuota</a>
-تاریخی را بخوانید.</li>
-<li dir="rtl">همچنین می‌توانید <a href="https://git.k8s.io/design-proposals-archive/scheduling/pod-priority-resourcequota.md" target="_blank" rel="noopener">سند طراحی پشتیبانی سهمیه برای priority class</a> را بخوانید.</li>
+<li dir="rtl"><a href="https://kubernetes.io/docs/tasks/administer-cluster/quota-api-object/" target="_blank">مثالی مفصل از نحوهٔ استفاده از سهمیهٔ منبع</a> را ببینید.</li>
+<li dir="rtl"><a href="https://kubernetes.io/docs/reference/kubernetes-api/core/resource-quota-v1/" target="_blank">مرجع API</a> مربوط به ResourceQuota را بخوانید.</li>
+<li dir="rtl">دربارهٔ <a href="limit-range.html">LimitRangeها</a> بیاموزید.</li>
+<li dir="rtl">برای اطلاعات بیشتر می‌توانید <a href="https://git.k8s.io/design-proposals-archive/resource-management/admission_control_resource_quota.md" target="_blank" rel="noopener">سند طراحی تاریخی ResourceQuota</a>
+را بخوانید.</li>
+<li dir="rtl">همچنین می‌توانید <a href="https://git.k8s.io/design-proposals-archive/scheduling/pod-priority-resourcequota.md" target="_blank" rel="noopener">سند طراحی پشتیبانی سهمیه از کلاس اولویت</a> را بخوانید.</li>
 </ul>
-</main>
-<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#resourcequotaهای-کوبرنتیز-چگونه-کار-می-کنند">ResourceQuotaهای کوبرنتیز چگونه کار می‌کنند</a><a class="l2" href="#فعال-سازی-سهمیهٔ-منابع">فعال‌سازی سهمیهٔ منابع</a><a class="l2" href="#انواع-سهمیهٔ-منابع">انواع سهمیهٔ منابع</a><a class="l3" href="#سهمیه-برای-منابع-زیرساختی-compute-resource-quota">سهمیه برای منابع زیرساختی {#compute-resource-quota}</a><a class="l3" href="#سهمیه-برای-منابع-توسعه-یافته">سهمیه برای منابع توسعه‌یافته</a><a class="l3" href="#سهمیه-برای-resource-claimهای-dra">سهمیه برای resource claimهای DRA</a><a class="l3" href="#سهمیه-برای-ذخیره-سازی">سهمیه برای ذخیره‌سازی</a><a class="l3" href="#سهمیه-بر-تعداد-آبجکت-ها-quota-on-object-count">سهمیه بر تعداد آبجکت‌ها {#quota-on-object-count}</a><a class="l2" href="#مشاهده-و-تنظیم-سهمیه-ها-viewing-and-setting-quotas">مشاهده و تنظیم سهمیه‌ها {#viewing-and-setting-quotas}</a><a class="l2" href="#سهمیه-و-ظرفیت-کلاستر">سهمیه و ظرفیت کلاستر</a><a class="l2" href="#محدوده-های-سهمیه-quota-scopes">محدوده‌های سهمیه {#quota-scopes}</a><a class="l3" href="#محدودهٔ-پادهای-best-effort-quota-scope-best-effort">محدودهٔ پادهای Best effort {#quota-scope-best-effort}</a><a class="l3" href="#محدودهٔ-پادهای-غیر-best-effort-quota-scope-non-best-effort">محدودهٔ پادهای غیر Best effort {#quota-scope-non-best-effort}</a><a class="l3" href="#محدودهٔ-پادهای-غیر-terminating-quota-scope-non-terminating">محدودهٔ پادهای غیر Terminating {#quota-scope-non-terminating}</a><a class="l3" href="#محدودهٔ-پادهای-terminating-quota-scope-terminating">محدودهٔ پادهای Terminating {#quota-scope-terminating}</a><a class="l3" href="#محدودهٔ-وابستگی-پاد-میان-فضاهای-نام-cross-namespace-pod-affinity-scope">محدودهٔ وابستگی پاد میان فضاهای نام {#cross-namespace-pod-affinity-scope}</a><a class="l3" href="#محدودهٔ-priorityclass-resource-quota-per-priorityclass">محدودهٔ PriorityClass {#resource-quota-per-priorityclass}</a><a class="l3" href="#محدودهٔ-volumeattributesclass-quota-scope-volume-attributes-class">محدودهٔ VolumeAttributesClass {#quota-scope-volume-attributes-class}</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#نحوهٔ-کار-resourcequotaها-در-کوبرنتیز">نحوهٔ کار ResourceQuotaها در کوبرنتیز</a><a class="l2" href="#فعال-سازی-سهمیهٔ-منابع">فعال‌سازی سهمیهٔ منابع</a><a class="l2" href="#انواع-سهمیهٔ-منابع">انواع سهمیهٔ منابع</a><a class="l3" href="#سهمیه-برای-منابع-زیرساختی-compute-resource-quota">سهمیه برای منابع زیرساختی {#compute-resource-quota}</a><a class="l3" href="#سهمیه-برای-منابع-توسعه-یافته">سهمیه برای منابع توسعه‌یافته</a><a class="l3" href="#سهمیه-برای-درخواست-های-منبع-dra">سهمیه برای درخواست‌های منبع DRA</a><a class="l3" href="#سهمیه-برای-ذخیره-سازی">سهمیه برای ذخیره‌سازی</a><a class="l3" href="#سهمیه-برای-تعداد-آبجکت-ها">سهمیه برای تعداد آبجکت‌ها</a><a class="l2" href="#مشاهده-و-تنظیم-سهمیه-ها">مشاهده و تنظیم سهمیه‌ها</a><a class="l2" href="#سهمیه-و-ظرفیت-کلاستر">سهمیه و ظرفیت کلاستر</a><a class="l2" href="#دامنه-های-سهمیه">دامنه‌های سهمیه</a><a class="l3" href="#دامنهٔ-پادهای-best-effort-quota-scope-best-effort">دامنهٔ پادهای best effort {#quota-scope-best-effort}</a><a class="l3" href="#دامنهٔ-پادهای-غیر-best-effort-quota-scope-non-best-effort">دامنهٔ پادهای غیر best effort {#quota-scope-non-best-effort}</a><a class="l3" href="#دامنهٔ-پادهای-غیرپایان-یابنده-quota-scope-non-terminating">دامنهٔ پادهای غیرپایان‌یابنده {#quota-scope-non-terminating}</a><a class="l3" href="#دامنهٔ-پادهای-پایان-یابنده-quota-scope-terminating">دامنهٔ پادهای پایان‌یابنده {#quota-scope-terminating}</a><a class="l3" href="#دامنهٔ-affinity-بین-فضای-نامی-پاد">دامنهٔ affinity بین‌فضای‌نامی پاد</a><a class="l3" href="#دامنهٔ-priorityclass-resource-quota-per-priorityclass">دامنهٔ PriorityClass {#resource-quota-per-priorityclass}</a><a class="l3" href="#دامنهٔ-volumeattributesclass-quota-scope-volume-attributes-class">دامنهٔ VolumeAttributesClass {#quota-scope-volume-attributes-class}</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
 </div>
 </body>
 </html>

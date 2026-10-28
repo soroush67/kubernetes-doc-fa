@@ -49,6 +49,10 @@ figure{margin:16px 0;text-align:center}
 .index-tree li{margin:2px 0}
 .index-tree .sec{font-weight:700}
 .missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
 #upd[hidden]{display:none}
 #upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
 #upd:not([hidden])+#theme{margin-inline-start:8px}
@@ -74,53 +78,39 @@ function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;re
 document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
 </script>
 </head>
-<body>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
 <header class="top"><a href="../../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">concepts / extend-kubernetes / compute-storage-net</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
 <div class="layout">
-<main><h1 dir="rtl">افزونه‌های دستگاه</h1><p class="page-meta" dir="rtl">افزونه‌های دستگاه به شما اجازه می‌دهند کلاستر خود را با پشتیبانی از دستگاه‌ها یا منابعی پیکربندی کنید که به راه‌اندازی مخصوص فروشنده نیاز دارند، مانند GPUها، NICها، FPGAها یا حافظهٔ اصلی غیرفرار.
+<main><h1 dir="rtl">افزونه‌های دستگاه</h1><p class="page-meta" dir="rtl">با افزونه‌های دستگاه می‌توانید کلاستر خود را برای پشتیبانی از دستگاه‌ها یا منابعی پیکربندی کنید که به راه‌اندازی مختص فروشنده نیاز دارند، مانند GPUها، NICها، FPGAها یا حافظهٔ اصلی غیرفرار.
 </p><!-- overview -->
 <div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes v1.26 [stable]</span> (پایدار)</div>
-<p dir="rtl">کوبرنتیز یک چارچوب افزونهٔ دستگاه (device plugin) فراهم می‌کند که می‌توانید از آن برای اعلام منابع سخت‌افزاری سیستم
-به <span class="term" title="kubelet">kubelet</span> استفاده کنید.</p>
-<p dir="rtl">فروشندگان به‌جای سفارشی‌سازی کد خود کوبرنتیز، می‌توانند یک
-افزونهٔ دستگاه پیاده‌سازی کنند که شما آن را یا به‌صورت دستی یا به‌صورت یک <span class="term" title="daemonset">daemonset</span> مستقر می‌کنید.
-دستگاه‌های هدف شامل GPUها، NICهای با کارایی بالا، FPGAها، آداپتورهای InfiniBand
-و سایر منابع محاسباتی مشابهی هستند که ممکن است به مقداردهی اولیه و راه‌اندازی
-مخصوص فروشنده نیاز داشته باشند.</p>
+<p dir="rtl">کوبرنتیز چارچوبی برای افزونه‌های دستگاه (device plugin) فراهم می‌کند. با این چارچوب می‌توانید منابع سخت‌افزاری سیستم را به <span class="term" title="kubelet">kubelet</span> اعلام کنید.</p>
+<p dir="rtl">فروشندگان به‌جای سفارشی‌سازی کد خود کوبرنتیز، می‌توانند یک افزونهٔ دستگاه پیاده‌سازی کنند. شما این افزونه را یا به‌صورت دستی یا به‌صورت یک <span class="term" title="daemonset">daemonset</span> مستقر می‌کنید. دستگاه‌های هدف شامل GPUها، NICهای پرکارایی، FPGAها، آداپتورهای InfiniBand و سایر منابع محاسباتی مشابهی هستند که ممکن است به راه‌اندازی اولیه و پیکربندی مختص فروشنده نیاز داشته باشند.</p>
 <!-- body -->
 <h2 id="ثبت-افزونهٔ-دستگاه" dir="rtl">ثبت افزونهٔ دستگاه</h2>
-<p dir="rtl">kubelet یک سرویس gRPC با نام <code dir="ltr">Registration</code> ارائه می‌دهد:</p>
+<p dir="rtl">سرویس gRPC با نام <code dir="ltr">Registration</code> را kubelet در اختیار قرار می‌دهد:</p>
 <pre dir="ltr"><code class="language-gRPC" dir="ltr">service Registration {
 	rpc Register(RegisterRequest) returns (Empty) {}
 }
 </code></pre>
-<p dir="rtl">یک افزونهٔ دستگاه می‌تواند از طریق این سرویس gRPC خود را در kubelet ثبت کند.
-در طول ثبت، افزونهٔ دستگاه باید موارد زیر را ارسال کند:</p>
+<p dir="rtl">یک افزونهٔ دستگاه می‌تواند از طریق این سرویس gRPC خود را در kubelet ثبت کند. افزونهٔ دستگاه هنگام ثبت باید موارد زیر را ارسال کند:</p>
 <ul>
-<li dir="rtl">نام سوکت Unix خود.</li>
-<li dir="rtl">نسخهٔ API افزونهٔ دستگاه که بر اساس آن ساخته شده است.</li>
-<li dir="rtl"><code dir="ltr">ResourceName</code> که می‌خواهد اعلام کند. در اینجا <code dir="ltr">ResourceName</code> باید از
+<li dir="rtl">نام سوکت یونیکس (Unix socket) خود.</li>
+<li dir="rtl">نسخه‌ای از API افزونهٔ دستگاه که افزونه بر اساس آن ساخته شده است.</li>
+<li dir="rtl">مقدار <code dir="ltr">ResourceName</code> که می‌خواهد اعلام کند. این مقدار باید از
 <a href="../../configuration/manage-resources-containers.html#extended-resources">طرح نام‌گذاری منابع توسعه‌یافته</a>
-به شکل <code dir="ltr">vendor-domain/resourcetype</code> پیروی کند.
+و به شکل <code dir="ltr">vendor-domain/resourcetype</code> پیروی کند.
 (برای مثال، یک GPU از NVIDIA با نام <code dir="ltr">nvidia.com/gpu</code> اعلام می‌شود.)</li>
 </ul>
-<p dir="rtl">پس از ثبت موفق، افزونهٔ دستگاه فهرست دستگاه‌هایی را که مدیریت می‌کند
-به kubelet ارسال می‌کند و سپس kubelet مسئول اعلام آن منابع
-به سرور API، به‌عنوان بخشی از به‌روزرسانی وضعیت نود توسط kubelet، است.
-برای مثال، پس از اینکه یک افزونهٔ دستگاه <code dir="ltr">hardware-vendor.example/foo</code> را در kubelet ثبت کند
-و دو دستگاه سالم را روی یک نود گزارش دهد، وضعیت نود به‌روزرسانی می‌شود
-تا اعلام کند که نود ۲ دستگاه «Foo» نصب‌شده و در دسترس دارد.</p>
-<p dir="rtl">سپس کاربران می‌توانند دستگاه‌ها را به‌عنوان بخشی از مشخصات یک Pod درخواست کنند
-(به <a href="https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#Container" target="_blank"><code dir="ltr">container</code></a> مراجعه کنید).
-درخواست منابع توسعه‌یافته مشابه نحوهٔ مدیریت درخواست‌ها (requests) و محدودیت‌ها (limits) برای
-سایر منابع است، با تفاوت‌های زیر:</p>
+<p dir="rtl">پس از ثبت موفق، افزونهٔ دستگاه فهرست دستگاه‌هایی را که مدیریت می‌کند برای kubelet می‌فرستد. از آن پس kubelet مسئول است این منابع را، به‌عنوان بخشی از به‌روزرسانی وضعیت نود، به سرور API اعلام کند. برای مثال، پس از آنکه یک افزونهٔ دستگاه منبع <code dir="ltr">hardware-vendor.example/foo</code> را در kubelet ثبت کرد و دو دستگاه سالم را روی یک نود گزارش داد، وضعیت نود به‌روزرسانی می‌شود تا نشان دهد ۲ دستگاه «Foo» روی آن نود نصب شده و در دسترس است.</p>
+<p dir="rtl">سپس کاربران می‌توانند دستگاه‌ها را به‌عنوان بخشی از مشخصات Pod درخواست کنند (به <a href="https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#Container" target="_blank"><code dir="ltr">container</code></a> مراجعه کنید). درخواست منابع توسعه‌یافته مشابه شیوهٔ مدیریت درخواست‌ها (requests) و محدودیت‌ها (limits) برای سایر منابع است، با این تفاوت‌ها:</p>
 <ul>
 <li dir="rtl">منابع توسعه‌یافته فقط به‌صورت منابع عدد صحیح پشتیبانی می‌شوند و نمی‌توان آن‌ها را بیش از ظرفیت تخصیص داد (overcommit).</li>
 <li dir="rtl">دستگاه‌ها را نمی‌توان میان کانتینرها به اشتراک گذاشت.</li>
 </ul>
 <h3 id="مثال-example-pod" dir="rtl">مثال {#example-pod}</h3>
-<p dir="rtl">فرض کنید یک کلاستر کوبرنتیز افزونهٔ دستگاهی را اجرا می‌کند که منبع <code dir="ltr">hardware-vendor.example/foo</code>
-را روی برخی نودها اعلام می‌کند. در اینجا مثالی از یک پاد آمده است که این منبع را برای اجرای یک بار کاری نمایشی درخواست می‌کند:</p>
+<p dir="rtl">فرض کنید در یک کلاستر کوبرنتیز، افزونهٔ دستگاهی اجرا می‌شود که منبع <code dir="ltr">hardware-vendor.example/foo</code> را روی برخی نودها اعلام می‌کند. در ادامه نمونه‌ای از یک Pod آمده است که این منبع را برای اجرای یک بار کاری نمایشی درخواست می‌کند:</p>
 <pre dir="ltr"><code class="language-yaml" dir="ltr">---
 apiVersion: v1
 kind: Pod
@@ -145,14 +135,10 @@ spec:
 <p dir="rtl">گردش کار کلی یک افزونهٔ دستگاه شامل مراحل زیر است:</p>
 <ol>
 <li dir="rtl">
-<p dir="rtl">مقداردهی اولیه. در این مرحله، افزونهٔ دستگاه مقداردهی اولیه و راه‌اندازی مخصوص فروشنده را
-انجام می‌دهد تا اطمینان حاصل کند دستگاه‌ها در وضعیت آماده قرار دارند.</p>
+<p dir="rtl">راه‌اندازی اولیه. در این مرحله، افزونهٔ دستگاه راه‌اندازی اولیه و پیکربندی مختص فروشنده را انجام می‌دهد تا از آماده بودن دستگاه‌ها اطمینان حاصل کند.</p>
 </li>
 <li dir="rtl">
-<p dir="rtl">افزونه یک سرویس gRPC را با یک سوکت Unix در مسیر میزبان
-<code dir="ltr">/var/lib/kubelet/device-plugins/</code> راه‌اندازی می‌کند (این مسیر به‌صورت ثابت در کد تعریف شده است و
-تحت تأثیر <code dir="ltr">--root-dir</code> در kubelet یا هر پیکربندی دیگری قرار نمی‌گیرد) که
-رابط‌های زیر را پیاده‌سازی می‌کند:</p>
+<p dir="rtl">افزونه یک سرویس gRPC را با یک سوکت یونیکس در مسیر میزبان <code dir="ltr">/var/lib/kubelet/device-plugins/</code> راه‌اندازی می‌کند که رابط‌های زیر را پیاده‌سازی می‌کند (این مسیر به‌صورت ثابت در کد تعریف شده است و نه فلگ <code dir="ltr">--root-dir</code> در kubelet و نه هیچ پیکربندی دیگری بر آن اثری ندارد):</p>
 <pre dir="ltr"><code class="language-gRPC" dir="ltr">service DevicePlugin {
       // GetDevicePluginOptions returns options to be communicated with Device Manager.
       rpc GetDevicePluginOptions(Empty) returns (DevicePluginOptions) {}
@@ -183,115 +169,59 @@ spec:
 </li>
 </ol>
 <div class="callout note"><div class="callout-title">توجه:</div>
-<p dir="rtl">افزونه‌ها ملزم نیستند پیاده‌سازی‌های کاربردی برای
-<code dir="ltr">GetPreferredAllocation()</code> یا <code dir="ltr">PreStartContainer()</code> ارائه دهند. پرچم‌هایی که در دسترس بودن
-این فراخوانی‌ها را نشان می‌دهند، در صورت وجود، باید در پیام <code dir="ltr">DevicePluginOptions</code>
-که در پاسخ به فراخوانی <code dir="ltr">GetDevicePluginOptions()</code> بازگردانده می‌شود تنظیم شوند. <code dir="ltr">kubelet</code>
-همواره پیش از فراخوانی مستقیم هر یک از توابع اختیاری، <code dir="ltr">GetDevicePluginOptions()</code> را فراخوانی می‌کند تا ببیند
-کدام‌یک در دسترس هستند.</p>
+<p dir="rtl">لازم نیست افزونه‌ها برای <code dir="ltr">GetPreferredAllocation()</code> یا <code dir="ltr">PreStartContainer()</code> پیاده‌سازی کاربردی ارائه دهند. فلگ‌هایی که در دسترس بودن این فراخوانی‌ها را نشان می‌دهند، در صورت وجود، باید در پیام <code dir="ltr">DevicePluginOptions</code> تنظیم شوند؛ این پیام در پاسخ به فراخوانی <code dir="ltr">GetDevicePluginOptions()</code> بازگردانده می‌شود. پیش از فراخوانی مستقیم هر یک از این توابع اختیاری، <code dir="ltr">kubelet</code> همیشه <code dir="ltr">GetDevicePluginOptions()</code> را فراخوانی می‌کند تا ببیند کدام‌یک در دسترس هستند.</p>
 </div>
 <ol>
-<li dir="rtl">افزونه خود را از طریق سوکت Unix در مسیر میزبان
-<code dir="ltr">/var/lib/kubelet/device-plugins/kubelet.sock</code> در kubelet ثبت می‌کند.</li>
+<li dir="rtl">افزونه از طریق سوکت یونیکس در مسیر میزبان <code dir="ltr">/var/lib/kubelet/device-plugins/kubelet.sock</code> خود را در kubelet ثبت می‌کند.</li>
 </ol>
 <div class="callout note"><div class="callout-title">توجه:</div>
-<p dir="rtl">ترتیب گردش کار اهمیت دارد. برای ثبت موفق، افزونه باید پیش از ثبت خود در kubelet
-ارائهٔ سرویس gRPC را آغاز کرده باشد.</p>
+<p dir="rtl">ترتیب این گردش کار اهمیت دارد. برای ثبت موفق، افزونه حتماً باید پیش از ثبت خود در kubelet، ارائهٔ سرویس gRPC را آغاز کرده باشد.</p>
 </div>
 <ol>
 <li dir="rtl">
-<p dir="rtl">پس از ثبت موفق، افزونهٔ دستگاه در حالت ارائهٔ سرویس اجرا می‌شود و در این مدت
-سلامت دستگاه‌ها را پیوسته پایش می‌کند و هرگونه تغییر در وضعیت دستگاه را به kubelet گزارش می‌دهد.
-همچنین مسئول پاسخ‌گویی به درخواست‌های gRPC از نوع <code dir="ltr">Allocate</code> است. در طول <code dir="ltr">Allocate</code>، افزونهٔ دستگاه ممکن است
-آماده‌سازی مخصوص دستگاه را انجام دهد؛ برای مثال، پاک‌سازی GPU یا مقداردهی اولیهٔ QRNG.
-اگر عملیات موفق باشند، افزونهٔ دستگاه یک <code dir="ltr">AllocateResponse</code> بازمی‌گرداند که شامل پیکربندی‌های
-محیط اجرای کانتینر برای دسترسی به دستگاه‌های تخصیص‌یافته است. kubelet این اطلاعات را
-به محیط اجرای کانتینر منتقل می‌کند.</p>
-<p dir="rtl">یک <code dir="ltr">AllocateResponse</code> شامل صفر یا چند آبجکت <code dir="ltr">ContainerAllocateResponse</code> است. در این آبجکت‌ها،
-افزونهٔ دستگاه تغییراتی را تعریف می‌کند که باید در تعریف یک کانتینر اعمال شوند تا
-دسترسی به دستگاه فراهم شود. این تغییرات شامل موارد زیر است:</p>
+<p dir="rtl">پس از ثبت موفق، افزونهٔ دستگاه در حالت سرویس‌دهی اجرا می‌شود. در این حالت، افزونه پیوسته سلامت دستگاه‌ها را پایش می‌کند و هر تغییری را در وضعیت دستگاه‌ها به kubelet گزارش می‌دهد. پاسخ‌گویی به درخواست‌های gRPC از نوع <code dir="ltr">Allocate</code> نیز بر عهدهٔ آن است. افزونهٔ دستگاه ممکن است در طول <code dir="ltr">Allocate</code> آماده‌سازی‌های مختص دستگاه را انجام دهد؛ برای مثال، پاک‌سازی GPU یا راه‌اندازی اولیهٔ QRNG. اگر این عملیات موفق باشد، افزونهٔ دستگاه یک <code dir="ltr">AllocateResponse</code> بازمی‌گرداند که پیکربندی‌های محیط اجرای کانتینر را برای دسترسی به دستگاه‌های تخصیص‌یافته در بر دارد. سپس kubelet این اطلاعات را به محیط اجرای کانتینر منتقل می‌کند.</p>
+<p dir="rtl">هر <code dir="ltr">AllocateResponse</code> شامل صفر یا چند آبجکت <code dir="ltr">ContainerAllocateResponse</code> است. افزونهٔ دستگاه در این آبجکت‌ها تغییراتی را تعریف می‌کند که باید در تعریف کانتینر اعمال شوند تا دسترسی به دستگاه فراهم شود. این تغییرات عبارت‌اند از:</p>
 <ul>
-<li dir="rtl"><a href="../../overview/working-with-objects/annotations.html">حاشیه‌نویسی‌ها</a></li>
-<li dir="rtl">نودهای دستگاه (device nodes)</li>
+<li dir="rtl"><a href="../../overview/working-with-objects/annotations.html">حاشیه‌نویسی‌ها (annotations)</a></li>
+<li dir="rtl">فایل‌های دستگاه (device nodes)</li>
 <li dir="rtl">متغیرهای محیطی</li>
-<li dir="rtl">mountها</li>
-<li dir="rtl">نام‌های کاملاً مشخص دستگاه CDI</li>
+<li dir="rtl">اتصال‌ها (mounts)</li>
+<li dir="rtl">نام‌های کامل دستگاه CDI</li>
 </ul>
 </li>
 </ol>
 <div class="callout note"><div class="callout-title">توجه:</div>
-<p dir="rtl">پردازش نام‌های کاملاً مشخص دستگاه CDI توسط Device Manager مستلزم آن است
-که <a href="https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/" target="_blank">feature gate</a> با نام <code dir="ltr">DevicePluginCDIDevices</code>
-هم برای kubelet و هم برای kube-apiserver فعال باشد. این قابلیت در کوبرنتیز v1.28 به‌عنوان قابلیت آلفا
-اضافه شد، در v1.29 به بتا و در v1.31 به GA ارتقا یافت.</p>
+<p dir="rtl">برای آنکه Device Manager (مدیر دستگاه) بتواند نام‌های کامل دستگاه CDI را پردازش کند، باید <a href="https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/" target="_blank">feature gate</a> با نام <code dir="ltr">DevicePluginCDIDevices</code> هم در kubelet و هم در kube-apiserver فعال باشد. این قابلیت در نسخهٔ v1.28 کوبرنتیز به‌صورت آلفا اضافه شد، در v1.29 به بتا و در v1.31 به GA ارتقا یافت.</p>
 </div>
 <h3 id="مدیریت-راه-اندازی-مجدد-kubelet" dir="rtl">مدیریت راه‌اندازی مجدد kubelet</h3>
-<p dir="rtl">انتظار می‌رود یک افزونهٔ دستگاه راه‌اندازی مجدد kubelet را تشخیص دهد و خود را دوباره در نمونهٔ جدید
-kubelet ثبت کند. یک نمونهٔ جدید kubelet هنگام شروع، همهٔ سوکت‌های Unix موجود در
-<code dir="ltr">/var/lib/kubelet/device-plugins</code> (مسیر ثابت افزونه‌های دستگاه) را حذف می‌کند. یک افزونهٔ دستگاه می‌تواند حذف
-سوکت Unix خود را پایش کند و پس از وقوع چنین رویدادی خود را دوباره ثبت کند.</p>
+<p dir="rtl">از افزونهٔ دستگاه انتظار می‌رود راه‌اندازی مجدد kubelet را تشخیص دهد و خود را دوباره در نمونهٔ جدید kubelet ثبت کند. هر نمونهٔ جدید kubelet هنگام شروع، همهٔ سوکت‌های یونیکس موجود در مسیر <code dir="ltr">/var/lib/kubelet/device-plugins</code> (مسیر ثابت افزونه‌های دستگاه) را حذف می‌کند. افزونهٔ دستگاه می‌تواند حذف سوکت یونیکس خود را پایش کند و با رخ دادن چنین رویدادی، خود را دوباره ثبت کند.</p>
 <h3 id="افزونهٔ-دستگاه-و-دستگاه-های-ناسالم" dir="rtl">افزونهٔ دستگاه و دستگاه‌های ناسالم</h3>
-<p dir="rtl">مواردی پیش می‌آید که دستگاه‌ها دچار خرابی می‌شوند یا خاموش می‌شوند. مسئولیت افزونهٔ دستگاه
-در این حالت، اطلاع‌دادن این وضعیت به kubelet با استفاده از API ‏<code dir="ltr">ListAndWatchResponse</code> است.</p>
-<p dir="rtl">هنگامی که یک دستگاه ناسالم علامت‌گذاری شود، kubelet تعداد قابل تخصیص (allocatable)
-این منبع را روی Node کاهش می‌دهد تا نشان دهد چه تعداد دستگاه برای زمان‌بندی پادهای جدید قابل استفاده است.
-تعداد ظرفیت (capacity) منبع تغییر نخواهد کرد.</p>
-<p dir="rtl">پادهایی که به دستگاه‌های خراب اختصاص داده شده بودند، همچنان به این دستگاه اختصاص‌یافته باقی می‌مانند.
-معمولاً کدی که به دستگاه متکی است شروع به خطا کردن می‌کند و اگر <code dir="ltr">restartPolicy</code> برای Pod
-برابر <code dir="ltr">Always</code> نباشد، ممکن است Pod به فاز Failed وارد شود، و در غیر این صورت وارد حلقهٔ crash شود.</p>
-<p dir="rtl">پیش از کوبرنتیز v1.31، راه دانستن اینکه آیا یک Pod با
-دستگاه خراب مرتبط است یا نه، استفاده از <a href="#monitoring-device-plugin-resources">PodResources API</a> بود.</p>
+<p dir="rtl">گاهی دستگاه‌ها از کار می‌افتند یا خاموش می‌شوند. در این حالت، افزونهٔ دستگاه مسئول است kubelet را با استفاده از API مربوط به <code dir="ltr">ListAndWatchResponse</code> از این وضعیت آگاه کند.</p>
+<p dir="rtl">وقتی دستگاهی ناسالم علامت‌گذاری شود، kubelet تعداد قابل‌تخصیص (allocatable) این منبع را روی نود کاهش می‌دهد تا نشان دهد چند دستگاه برای زمان‌بندی Podهای جدید قابل استفاده است. تعداد ظرفیت (capacity) این منبع تغییری نمی‌کند.</p>
+<p dir="rtl">آن دسته از Podهایی که به دستگاه‌های خراب تخصیص داده شده بودند، همچنان به همان دستگاه تخصیص‌یافته باقی می‌مانند. معمولاً کدی که به دستگاه وابسته است شروع به خطا دادن می‌کند. در این حالت، اگر <code dir="ltr">restartPolicy</code> آن Pod برابر <code dir="ltr">Always</code> نباشد، ممکن است Pod به فاز Failed برود؛ در غیر این صورت، وارد حلقهٔ خرابی (crash loop) می‌شود.</p>
+<p dir="rtl">پیش از نسخهٔ v1.31 کوبرنتیز، راه تشخیص اینکه آیا یک Pod با دستگاه خراب مرتبط است یا نه، استفاده از <a href="#monitoring-device-plugin-resources">API مربوط به PodResources</a> بود.</p>
 <div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
-<p dir="rtl">هنگامی که feature gate با نام <code dir="ltr">ResourceHealthStatus</code> فعال باشد (از v1.36 در وضعیت بتا و به‌طور پیش‌فرض فعال)،
-فیلد <code dir="ltr">allocatedResourcesStatus</code>
-به وضعیت هر کانتینر، درون <code dir="ltr">.status</code> هر Pod، اضافه می‌شود. فیلد <code dir="ltr">allocatedResourcesStatus</code>
-اطلاعات سلامت هر دستگاه اختصاص‌یافته به کانتینر را گزارش می‌دهد.
-هر ورودی سلامت منبع می‌تواند شامل یک فیلد اختیاری <code dir="ltr">message</code> با زمینهٔ تکمیلی و
-قابل‌خواندن برای انسان دربارهٔ وضعیت سلامت باشد، مانند جزئیات خطا یا دلایل خرابی.</p>
-<p dir="rtl">برای یک Pod ناموفق، یا در مواردی که به وجود خطا مشکوک هستید، می‌توانید از این وضعیت استفاده کنید تا دریابید آیا
-رفتار Pod ممکن است با خرابی دستگاه مرتبط باشد یا نه. برای مثال، اگر یک شتاب‌دهنده
-رویداد دمای بیش از حد را گزارش دهد، فیلد <code dir="ltr">allocatedResourcesStatus</code> ممکن است آن را گزارش کند.</p>
-<h2 id="استقرار-افزونهٔ-دستگاه-device-plugin-deployment" dir="rtl">استقرار افزونهٔ دستگاه {#device-plugin-deployment}</h2>
-<p dir="rtl">می‌توانید یک افزونهٔ دستگاه را به‌صورت یک DaemonSet، به‌صورت یک بسته برای سیستم‌عامل نود خود،
-یا به‌صورت دستی مستقر کنید.</p>
-<p dir="rtl">دایرکتوری استاندارد <code dir="ltr">/var/lib/kubelet/device-plugins</code> (که در kubelet به‌صورت ثابت تعریف شده است) به دسترسی ممتاز (privileged) نیاز دارد،
-بنابراین یک افزونهٔ دستگاه باید در یک زمینهٔ امنیتی ممتاز اجرا شود.
-اگر افزونهٔ دستگاه را به‌صورت یک DaemonSet مستقر می‌کنید، <code dir="ltr">/var/lib/kubelet/device-plugins</code>
-باید به‌عنوان یک <span class="term" title="volume">volume</span>
-در <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.37/#podspec-v1-core" target="_blank">PodSpec</a> افزونه mount شود.</p>
-<p dir="rtl">اگر رویکرد DaemonSet را انتخاب کنید، می‌توانید برای این کارها به کوبرنتیز تکیه کنید: قراردادن Pod
-افزونهٔ دستگاه روی Nodeها، راه‌اندازی مجدد Pod دیمن پس از خرابی، و کمک به خودکارسازی ارتقاها.</p>
+<p dir="rtl">وقتی feature gate با نام <code dir="ltr">ResourceHealthStatus</code> فعال باشد (این قابلیت از نسخهٔ v1.36 در وضعیت بتا است و به‌طور پیش‌فرض فعال است)، فیلد <code dir="ltr">allocatedResourcesStatus</code> به وضعیت هر کانتینر، درون <code dir="ltr">.status</code> هر Pod، افزوده می‌شود. فیلد <code dir="ltr">allocatedResourcesStatus</code> اطلاعات سلامت هر دستگاهی را که به کانتینر تخصیص داده شده است گزارش می‌دهد. هر مدخل سلامت منبع می‌تواند یک فیلد اختیاری <code dir="ltr">message</code> نیز داشته باشد که توضیحات بیشتری را به زبانی خوانا برای انسان دربارهٔ وضعیت سلامت ارائه می‌دهد، مانند جزئیات خطا یا دلایل خرابی.</p>
+<p dir="rtl">برای یک Pod ناموفق، یا هنگامی که به وجود خطایی مشکوک هستید، می‌توانید از این وضعیت استفاده کنید تا دریابید آیا رفتار Pod ممکن است با خرابی دستگاه مرتبط باشد یا نه. برای مثال، اگر یک شتاب‌دهنده رویداد دمای بیش از حد را گزارش دهد، فیلد <code dir="ltr">allocatedResourcesStatus</code> ممکن است این موضوع را نشان دهد.</p>
+<h2 id="استقرار-افزونهٔ-دستگاه" dir="rtl">استقرار افزونهٔ دستگاه</h2>
+<p dir="rtl">می‌توانید افزونهٔ دستگاه را به‌صورت یک DaemonSet، به‌صورت یک بسته برای سیستم‌عامل نود، یا به‌صورت دستی مستقر کنید.</p>
+<p dir="rtl">دایرکتوری استاندارد <code dir="ltr">/var/lib/kubelet/device-plugins</code> (که در kubelet به‌صورت ثابت تعریف شده است) به دسترسی ممتاز نیاز دارد؛ بنابراین افزونهٔ دستگاه باید در یک زمینهٔ امنیتی ممتاز (privileged security context) اجرا شود. اگر افزونهٔ دستگاه را به‌صورت DaemonSet مستقر می‌کنید، مسیر <code dir="ltr">/var/lib/kubelet/device-plugins</code> باید به‌صورت یک <span class="term" title="volume">volume</span> در <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.37/#podspec-v1-core" target="_blank">PodSpec</a> افزونه متصل (mount) شود.</p>
+<p dir="rtl">اگر رویکرد DaemonSet را انتخاب کنید، می‌توانید برای این کارها به کوبرنتیز تکیه کنید: قرار دادن Pod افزونهٔ دستگاه روی نودها، راه‌اندازی مجدد Pod دیمن پس از خرابی، و کمک به خودکارسازی ارتقاها.</p>
 <h2 id="سازگاری-api" dir="rtl">سازگاری API</h2>
-<p dir="rtl">پیش‌تر، طرح نسخه‌گذاری مستلزم آن بود که نسخهٔ API افزونهٔ دستگاه دقیقاً با
-نسخهٔ Kubelet مطابقت داشته باشد. از زمان ارتقای این قابلیت به بتا در v1.12،
-این دیگر یک الزام قطعی نیست. API نسخه‌گذاری شده است و از زمان ارتقای این قابلیت به بتا
-پایدار بوده است. به همین دلیل، ارتقاهای kubelet باید بدون مشکل انجام شوند،
-اما ممکن است همچنان پیش از پایدارسازی تغییراتی در API رخ دهد و در نتیجه تضمین نمی‌شود
-که ارتقاها بدون ایجاد ناسازگاری باشند.</p>
+<p dir="rtl">پیش‌تر، طرح نسخه‌گذاری ایجاب می‌کرد که نسخهٔ API افزونهٔ دستگاه دقیقاً با نسخهٔ kubelet مطابقت داشته باشد. از زمانی که این قابلیت در نسخهٔ v1.12 به بتا ارتقا یافت، این دیگر یک الزام قطعی نیست. این API نسخه‌گذاری شده است و از زمان ارتقای این قابلیت به بتا پایدار بوده است. به همین دلیل، ارتقای kubelet باید بدون مشکل انجام شود؛ با این حال، ممکن است پیش از پایدارسازی همچنان تغییراتی در API رخ دهد و از این رو تضمینی وجود ندارد که ارتقاها بدون ناسازگاری انجام شوند.</p>
 <div class="callout note"><div class="callout-title">توجه:</div>
-<p dir="rtl">اگرچه جزء Device Manager در کوبرنتیز یک قابلیت با دسترس‌پذیری عمومی است،
-<em>API افزونهٔ دستگاه</em> پایدار نیست. برای اطلاعات دربارهٔ API افزونهٔ دستگاه و
-سازگاری نسخه‌ها، <a href="https://kubernetes.io/docs/reference/node/device-plugin-api-versions/" target="_blank">نسخه‌های API افزونهٔ دستگاه</a> را بخوانید.</p>
+<p dir="rtl">اگرچه مؤلفهٔ Device Manager در کوبرنتیز قابلیتی با دسترس‌پذیری عمومی (GA) است، <em>API افزونهٔ دستگاه</em> پایدار نیست. برای اطلاعات دربارهٔ API افزونهٔ دستگاه و سازگاری نسخه‌ها، <a href="https://kubernetes.io/docs/reference/node/device-plugin-api-versions/" target="_blank">نسخه‌های API افزونهٔ دستگاه</a> را بخوانید.</p>
 </div>
-<p dir="rtl">کوبرنتیز، به‌عنوان یک پروژه، به توسعه‌دهندگان افزونه‌های دستگاه توصیه می‌کند که:</p>
+<p dir="rtl">کوبرنتیز به‌عنوان یک پروژه به توسعه‌دهندگان افزونه‌های دستگاه توصیه می‌کند که:</p>
 <ul>
 <li dir="rtl">تغییرات API افزونهٔ دستگاه را در نسخه‌های آینده دنبال کنند.</li>
-<li dir="rtl">از چند نسخه از API افزونهٔ دستگاه برای سازگاری رو به عقب/رو به جلو پشتیبانی کنند.</li>
+<li dir="rtl">از چند نسخهٔ API افزونهٔ دستگاه پشتیبانی کنند تا سازگاری رو به عقب و رو به جلو حفظ شود.</li>
 </ul>
-<p dir="rtl">برای اجرای افزونه‌های دستگاه روی نودهایی که باید به نسخه‌ای از کوبرنتیز با
-نسخهٔ جدیدتری از API افزونهٔ دستگاه ارتقا یابند، پیش از ارتقای این نودها، افزونه‌های دستگاه خود را
-طوری ارتقا دهید که از هر دو نسخه پشتیبانی کنند. این رویکرد عملکرد پیوستهٔ
-تخصیص دستگاه‌ها را در طول ارتقا تضمین می‌کند.</p>
-<h2 id="پایش-منابع-افزونهٔ-دستگاه-monitoring-device-plugin-resources" dir="rtl">پایش منابع افزونهٔ دستگاه {#monitoring-device-plugin-resources}</h2>
+<p dir="rtl">برای اجرای افزونه‌های دستگاه روی نودهایی که باید به نسخه‌ای از کوبرنتیز با نسخهٔ جدیدتری از API افزونهٔ دستگاه ارتقا یابند، پیش از ارتقای این نودها، افزونه‌های دستگاه خود را طوری ارتقا دهید که از هر دو نسخه پشتیبانی کنند. با این رویکرد، تخصیص دستگاه‌ها در طول ارتقا بدون وقفه ادامه خواهد یافت.</p>
+<h2 id="پایش-منابع-افزونه-های-دستگاه" dir="rtl">پایش منابع افزونه‌های دستگاه</h2>
 <div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes v1.28 [stable]</span> (پایدار)</div>
-<p dir="rtl">برای پایش منابعی که افزونه‌های دستگاه فراهم می‌کنند، عامل‌های پایش باید بتوانند
-مجموعهٔ دستگاه‌های در حال استفاده روی نود را کشف کنند و فراداده‌ای به دست آورند که مشخص کند
-متریک باید به کدام کانتینر مرتبط شود. متریک‌های <a href="https://prometheus.io/" target="_blank" rel="noopener">Prometheus</a>
-که عامل‌های پایش دستگاه ارائه می‌دهند باید از
-<a href="https://github.com/kubernetes/community/blob/main/contributors/devel/sig-instrumentation/metric-instrumentation.md" target="_blank" rel="noopener">رهنمودهای ابزارگذاری کوبرنتیز</a>
-پیروی کنند و کانتینرها را با استفاده از برچسب‌های prometheus به نام‌های <code dir="ltr">pod</code>، <code dir="ltr">namespace</code> و <code dir="ltr">container</code> شناسایی کنند.</p>
-<p dir="rtl">kubelet یک سرویس gRPC فراهم می‌کند تا کشف دستگاه‌های در حال استفاده و ارائهٔ فراداده
-برای این دستگاه‌ها را ممکن سازد:</p>
+<p dir="rtl">برای پایش منابعی که افزونه‌های دستگاه فراهم می‌کنند، عامل‌های پایش (monitoring agents) باید بتوانند مجموعهٔ دستگاه‌های در حال استفاده روی نود را کشف کنند و فراداده‌ای به دست آورند که مشخص کند هر معیار (metric) باید به کدام کانتینر مرتبط شود. معیارهای <a href="https://prometheus.io/" target="_blank" rel="noopener">Prometheus</a> که عامل‌های پایش دستگاه ارائه می‌دهند باید از <a href="https://github.com/kubernetes/community/blob/main/contributors/devel/sig-instrumentation/metric-instrumentation.md" target="_blank" rel="noopener">رهنمودهای ابزارگذاری کوبرنتیز</a> پیروی کنند و کانتینرها را با برچسب‌های Prometheus با نام‌های <code dir="ltr">pod</code>، <code dir="ltr">namespace</code> و <code dir="ltr">container</code> شناسایی کنند.</p>
+<p dir="rtl">برای کشف دستگاه‌های در حال استفاده و ارائهٔ فراداده برای این دستگاه‌ها، kubelet یک سرویس gRPC فراهم می‌کند:</p>
 <pre dir="ltr"><code class="language-gRPC" dir="ltr">// PodResourcesLister is a service provided by the kubelet that provides information about the
 // node resources consumed by pods and containers on the node
 service PodResourcesLister {
@@ -300,14 +230,9 @@ service PodResourcesLister {
     rpc Get(GetPodResourcesRequest) returns (GetPodResourcesResponse) {}
 }
 </code></pre>
-<h3 id="نقطهٔ-پایانی-grpc-list-grpc-endpoint-list" dir="rtl">نقطهٔ پایانی gRPC ‏<code dir="ltr">List</code> {#grpc-endpoint-list}</h3>
-<p dir="rtl">نقطهٔ پایانی <code dir="ltr">List</code> اطلاعاتی دربارهٔ منابع پادهای در حال اجرا ارائه می‌دهد، با جزئیاتی مانند
-شناسهٔ CPUهای تخصیص‌یافتهٔ انحصاری، شناسهٔ دستگاه به همان شکلی که افزونه‌های دستگاه گزارش کرده‌اند و شناسهٔ
-نود NUMA که این دستگاه‌ها در آن تخصیص یافته‌اند. همچنین برای ماشین‌های مبتنی بر NUMA، شامل
-اطلاعاتی دربارهٔ حافظه و hugepageهای رزروشده برای یک کانتینر است.</p>
-<p dir="rtl">از کوبرنتیز v1.27 به بعد، نقطهٔ پایانی <code dir="ltr">List</code> می‌تواند اطلاعاتی دربارهٔ منابع
-پادهای در حال اجرا ارائه دهد که در <code dir="ltr">ResourceClaims</code> توسط API ‏<code dir="ltr">DynamicResourceAllocation</code> تخصیص یافته‌اند.
-از کوبرنتیز v1.34 به بعد، این قابلیت به‌طور پیش‌فرض فعال است.</p>
+<h3 id="نقطهٔ-پایانی-grpc-با-نام-list-grpc-endpoint-list" dir="rtl">نقطهٔ پایانی gRPC با نام <code dir="ltr">List</code> {#grpc-endpoint-list}</h3>
+<p dir="rtl">نقطهٔ پایانی <code dir="ltr">List</code> اطلاعاتی دربارهٔ منابع Podهای در حال اجرا ارائه می‌دهد؛ از جمله جزئیاتی مانند شناسهٔ CPUهایی که به‌طور انحصاری تخصیص یافته‌اند، شناسهٔ دستگاه همان‌گونه که افزونه‌های دستگاه گزارش کرده‌اند، و شناسهٔ نود NUMA که این دستگاه‌ها در آن تخصیص یافته‌اند. همچنین در ماشین‌های مبتنی بر NUMA، اطلاعات مربوط به حافظه و hugepageهای رزروشده برای هر کانتینر را نیز در بر دارد.</p>
+<p dir="rtl">از نسخهٔ v1.27 کوبرنتیز، نقطهٔ پایانی <code dir="ltr">List</code> می‌تواند اطلاعاتی دربارهٔ آن دسته از منابع Podهای در حال اجرا ارائه دهد که از طریق API مربوط به <code dir="ltr">DynamicResourceAllocation</code> در <code dir="ltr">ResourceClaims</code> تخصیص یافته‌اند. از نسخهٔ v1.34 کوبرنتیز، این قابلیت به‌طور پیش‌فرض فعال است.</p>
 <pre dir="ltr"><code class="language-gRPC" dir="ltr">// ListPodResourcesResponse is the response returned by List function
 message ListPodResourcesResponse {
     repeated PodResources pod_resources = 1;
@@ -376,29 +301,19 @@ message CDIDevice {
 }
 </code></pre>
 <div class="callout note"><div class="callout-title">توجه:</div>
-<p dir="rtl">cpu_ids در <code dir="ltr">ContainerResources</code> در نقطهٔ پایانی <code dir="ltr">List</code> متناظر با CPUهای انحصاری تخصیص‌یافته
-به یک کانتینر مشخص است. اگر هدف ارزیابی CPUهایی باشد که به مخزن مشترک تعلق دارند، نقطهٔ پایانی <code dir="ltr">List</code>
-باید همراه با نقطهٔ پایانی <code dir="ltr">GetAllocatableResources</code> و به شکلی که در ادامه
-توضیح داده شده است استفاده شود:</p>
+<p dir="rtl">مقدار cpu_ids در <code dir="ltr">ContainerResources</code> نقطهٔ پایانی <code dir="ltr">List</code> با CPUهای انحصاری‌ای متناظر است که به یک کانتینر مشخص تخصیص یافته‌اند. اگر هدف، ارزیابی CPUهایی باشد که به مخزن مشترک (shared pool) تعلق دارند، باید نقطهٔ پایانی <code dir="ltr">List</code> را همراه با نقطهٔ پایانی <code dir="ltr">GetAllocatableResources</code> به کار برد، همان‌طور که در ادامه توضیح داده شده است:</p>
 <ol>
-<li dir="rtl"><code dir="ltr">GetAllocatableResources</code> را فراخوانی کنید تا فهرستی از همهٔ CPUهای قابل تخصیص به دست آورید</li>
-<li dir="rtl"><code dir="ltr">GetCpuIds</code> را روی همهٔ <code dir="ltr">ContainerResources</code> موجود در سیستم فراخوانی کنید</li>
-<li dir="rtl">همهٔ CPUهای حاصل از فراخوانی‌های <code dir="ltr">GetCpuIds</code> را از نتیجهٔ فراخوانی <code dir="ltr">GetAllocatableResources</code> کم کنید</li>
+<li dir="rtl">تابع <code dir="ltr">GetAllocatableResources</code> را فراخوانی کنید تا فهرست همهٔ CPUهای قابل‌تخصیص را به دست آورید.</li>
+<li dir="rtl">تابع <code dir="ltr">GetCpuIds</code> را روی همهٔ <code dir="ltr">ContainerResources</code>های سیستم فراخوانی کنید.</li>
+<li dir="rtl">همهٔ CPUهای حاصل از فراخوانی‌های <code dir="ltr">GetCpuIds</code> را از نتیجهٔ فراخوانی <code dir="ltr">GetAllocatableResources</code> کم کنید.</li>
 </ol>
 </div>
-<h3 id="نقطهٔ-پایانی-grpc-getallocatableresources-grpc-endpoint-getallocatableresources" dir="rtl">نقطهٔ پایانی gRPC ‏<code dir="ltr">GetAllocatableResources</code> {#grpc-endpoint-getallocatableresources}</h3>
+<h3 id="نقطهٔ-پایانی-grpc-با-نام-getallocatableresources-grpc-endpoint-getallocatableresources" dir="rtl">نقطهٔ پایانی gRPC با نام <code dir="ltr">GetAllocatableResources</code> {#grpc-endpoint-getallocatableresources}</h3>
 <div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes v1.28 [stable]</span> (پایدار)</div>
-<p dir="rtl">GetAllocatableResources اطلاعاتی دربارهٔ منابعی ارائه می‌دهد که در ابتدا روی نود کارگر در دسترس هستند.
-این نقطهٔ پایانی اطلاعاتی بیش از آنچه kubelet به APIServer ارائه می‌دهد فراهم می‌کند.</p>
+<p dir="rtl">نقطهٔ پایانی GetAllocatableResources اطلاعاتی دربارهٔ منابعی ارائه می‌دهد که در ابتدا روی نود کارگر در دسترس هستند. این نقطهٔ پایانی اطلاعاتی بیش از آنچه kubelet به APIServer صادر می‌کند در اختیار می‌گذارد.</p>
 <div class="callout note"><div class="callout-title">توجه:</div>
-<p dir="rtl"><code dir="ltr">GetAllocatableResources</code> فقط باید برای ارزیابی منابع <a href="https://kubernetes.io/docs/tasks/administer-cluster/reserve-compute-resources/#node-allocatable" target="_blank">قابل تخصیص</a>
-روی یک نود استفاده شود. اگر هدف ارزیابی منابع آزاد/تخصیص‌نیافته باشد، باید
-همراه با نقطهٔ پایانی List() استفاده شود. نتیجهٔ به‌دست‌آمده از <code dir="ltr">GetAllocatableResources</code>
-ثابت باقی می‌ماند، مگر اینکه منابع زیربنایی ارائه‌شده به kubelet تغییر کنند. این اتفاق به‌ندرت رخ می‌دهد، اما هنگامی
-که رخ دهد (برای مثال: hotplug/hotunplug یا تغییر در سلامت دستگاه)، انتظار می‌رود کلاینت
-نقطهٔ پایانی <code dir="ltr">GetAllocatableResources</code> را فراخوانی کند.</p>
-<p dir="rtl">با این حال، در صورت به‌روزرسانی cpu و/یا حافظه، فراخوانی نقطهٔ پایانی <code dir="ltr">GetAllocatableResources</code> کافی نیست
-و Kubelet باید دوباره راه‌اندازی شود تا ظرفیت و مقدار قابل تخصیص صحیح منابع را منعکس کند.</p>
+<p dir="rtl">از <code dir="ltr">GetAllocatableResources</code> فقط باید برای ارزیابی منابع <a href="https://kubernetes.io/docs/tasks/administer-cluster/reserve-compute-resources/#node-allocatable" target="_blank">قابل‌تخصیص</a> (allocatable) یک نود استفاده کرد. اگر هدف ارزیابی منابع آزاد یا تخصیص‌نیافته است، باید آن را همراه با نقطهٔ پایانی List() به کار برد. نتیجه‌ای که از <code dir="ltr">GetAllocatableResources</code> به دست می‌آید ثابت می‌ماند، مگر آنکه منابع زیربنایی که در اختیار kubelet قرار گرفته‌اند تغییر کنند. این اتفاق به‌ندرت رخ می‌دهد، اما هنگامی که رخ دهد (برای نمونه: اتصال یا جداسازی داغ (hotplug/hotunplug) یا تغییر وضعیت سلامت دستگاه)، انتظار می‌رود کلاینت نقطهٔ پایانی <code dir="ltr">GetAllocatableResources</code> را فراخوانی کند.</p>
+<p dir="rtl">با این حال، در صورت به‌روزرسانی CPU یا حافظه یا هر دو، فراخوانی نقطهٔ پایانی <code dir="ltr">GetAllocatableResources</code> کافی نیست و برای بازتاب ظرفیت و مقدار قابل‌تخصیص صحیح منابع، باید Kubelet را دوباره راه‌اندازی کرد.</p>
 </div>
 <pre dir="ltr"><code class="language-gRPC" dir="ltr">// AllocatableResourcesResponses contains information about all the devices known by the kubelet
 message AllocatableResourcesResponse {
@@ -407,52 +322,26 @@ message AllocatableResourcesResponse {
     repeated ContainerMemory memory = 3;
 }
 </code></pre>
-<p dir="rtl"><code dir="ltr">ContainerDevices</code> اطلاعات توپولوژی را ارائه می‌دهند و اعلام می‌کنند که دستگاه به کدام سلول‌های NUMA
-وابستگی (affinity) دارد. سلول‌های NUMA با استفاده از یک شناسهٔ عدد صحیح مبهم (opaque) شناسایی می‌شوند که مقدار آن با
-آنچه افزونه‌های دستگاه
-<a href="device-plugins.html#device-plugin-integration-with-the-topology-manager">هنگام ثبت خود در kubelet</a> گزارش می‌دهند سازگار است.</p>
-<p dir="rtl">سرویس gRPC از طریق یک سوکت unix در مسیر <code dir="ltr">pod-resources/kubelet.sock</code> درون
-دایرکتوری ریشهٔ kubelet (معمولاً <code dir="ltr">/var/lib/kubelet/pod-resources/kubelet.sock</code>) ارائه می‌شود.
-عامل‌های پایش منابع افزونهٔ دستگاه را می‌توان به‌صورت یک دیمن یا به‌صورت یک DaemonSet مستقر کرد.
-دایرکتوری استاندارد <code dir="ltr">pod-resources</code> درون دایرکتوری ریشهٔ kubelet (معمولاً
-<code dir="ltr">/var/lib/kubelet/pod-resources</code>) به دسترسی ممتاز نیاز دارد، بنابراین عامل‌های پایش
-باید در یک زمینهٔ امنیتی ممتاز اجرا شوند. اگر یک عامل پایش دستگاه به‌صورت
-DaemonSet اجرا می‌شود، دایرکتوری <code dir="ltr">pod-resources</code> باید به‌عنوان یک
-<span class="term" title="volume">volume</span> در
-<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.37/#podspec-v1-core" target="_blank">PodSpec</a> عامل پایش دستگاه mount شود.</p>
+<p dir="rtl">ساختار <code dir="ltr">ContainerDevices</code> اطلاعات توپولوژی را نیز ارائه می‌دهد و مشخص می‌کند که دستگاه به کدام سلول‌های NUMA وابستگی (affinity) دارد. سلول‌های NUMA با یک شناسهٔ عددی مبهم (opaque) شناسایی می‌شوند که مقدار آن با آنچه پلاگین‌های دستگاه <a href="device-plugins.html#device-plugin-integration-with-the-topology-manager">هنگام ثبت خود در kubelet</a> گزارش می‌کنند سازگار است.</p>
+<p dir="rtl">این سرویس gRPC از طریق یک سوکت یونیکس در مسیر <code dir="ltr">pod-resources/kubelet.sock</code> درون دایرکتوری ریشهٔ kubelet (معمولاً <code dir="ltr">/var/lib/kubelet/pod-resources/kubelet.sock</code>) ارائه می‌شود. عامل‌های پایش منابع پلاگین دستگاه را می‌توان به‌صورت یک daemon یا یک DaemonSet مستقر کرد. دسترسی به دایرکتوری استاندارد <code dir="ltr">pod-resources</code> درون دایرکتوری ریشهٔ kubelet (معمولاً <code dir="ltr">/var/lib/kubelet/pod-resources</code>) به مجوز ممتاز نیاز دارد؛ بنابراین عامل‌های پایش باید در یک زمینهٔ امنیتی ممتاز (privileged security context) اجرا شوند. اگر عامل پایش دستگاه به‌صورت DaemonSet اجرا می‌شود، دایرکتوری <code dir="ltr">pod-resources</code> باید به‌عنوان یک <span class="term" title="volume">volume</span> در <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.37/#podspec-v1-core" target="_blank">PodSpec</a> عامل پایش دستگاه mount شود.</p>
 <div class="callout note"><div class="callout-title">توجه:</div>
-<p dir="rtl">هنگام دسترسی به <code dir="ltr">pod-resources/kubelet.sock</code> از یک DaemonSet
-یا هر برنامهٔ دیگری که به‌صورت کانتینر روی میزبان مستقر شده و سوکت را به‌عنوان
-یک حجم mount می‌کند، روش خوب این است که به‌جای خود فایل سوکت، دایرکتوری <code dir="ltr">pod-resources</code>
-را mount کنید. این کار تضمین می‌کند
-که پس از راه‌اندازی مجدد kubelet، کانتینر بتواند دوباره به این سوکت متصل شود.</p>
-<p dir="rtl">روی یک نود لینوکسی معمولی، این به معنای mount کردن <code dir="ltr">/var/lib/kubelet/pod-resources/</code>
-به‌جای <code dir="ltr">/var/lib/kubelet/pod-resources/kubelet.sock</code> است.</p>
-<p dir="rtl">mountهای کانتینر از طریق inode‌ای مدیریت می‌شوند که به سوکت یا دایرکتوری ارجاع می‌دهد،
-بسته به اینکه چه چیزی mount شده باشد. هنگامی که kubelet دوباره راه‌اندازی می‌شود، سوکت حذف می‌شود
-و سوکت جدیدی ایجاد می‌شود، در حالی که دایرکتوری دست‌نخورده باقی می‌ماند.
-بنابراین inode اصلی سوکت غیرقابل استفاده می‌شود، اما inode دایرکتوری
-همچنان کار خواهد کرد.</p>
+<p dir="rtl">هنگام دسترسی به <code dir="ltr">pod-resources/kubelet.sock</code> از یک DaemonSet یا هر برنامهٔ دیگری که به‌صورت کانتینر روی میزبان مستقر شده و سوکت را به‌عنوان حجم mount می‌کند، بهتر است به‌جای خود فایل سوکت، دایرکتوری <code dir="ltr">pod-resources</code> را mount کنید. با این کار اطمینان حاصل می‌شود که کانتینر پس از راه‌اندازی دوبارهٔ kubelet می‌تواند دوباره به این سوکت متصل شود.</p>
+<p dir="rtl">روی یک نود لینوکسی معمولی، این به معنای mount کردن <code dir="ltr">/var/lib/kubelet/pod-resources/</code> به‌جای <code dir="ltr">/var/lib/kubelet/pod-resources/kubelet.sock</code> است.</p>
+<p dir="rtl">‏mountهای کانتینر، بسته به آنچه mount شده است، از طریق inode ارجاع‌دهنده به سوکت یا دایرکتوری مدیریت می‌شوند. هنگامی که kubelet دوباره راه‌اندازی می‌شود، سوکت حذف و سوکت جدیدی ایجاد می‌شود، در حالی که دایرکتوری دست‌نخورده باقی می‌ماند. در نتیجه inode اصلی سوکت غیرقابل‌استفاده می‌شود، اما inode دایرکتوری همچنان کار خواهد کرد.</p>
 </div>
-<h3 id="نقطهٔ-پایانی-grpc-get-grpc-endpoint-get" dir="rtl">نقطهٔ پایانی gRPC ‏<code dir="ltr">Get</code> {#grpc-endpoint-get}</h3>
+<h3 id="نقطهٔ-پایانی-grpc-با-نام-get-grpc-endpoint-get" dir="rtl">نقطهٔ پایانی gRPC با نام <code dir="ltr">Get</code> {#grpc-endpoint-get}</h3>
 <div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes v1.34 [beta]</span> (بتا)</div>
-<p dir="rtl">نقطهٔ پایانی <code dir="ltr">Get</code> اطلاعاتی دربارهٔ منابع یک Pod در حال اجرا ارائه می‌دهد. این نقطهٔ پایانی اطلاعاتی
-مشابه آنچه در نقطهٔ پایانی <code dir="ltr">List</code> توضیح داده شد ارائه می‌کند. نقطهٔ پایانی <code dir="ltr">Get</code> به <code dir="ltr">PodName</code>
-و <code dir="ltr">PodNamespace</code> مربوط به Pod در حال اجرا نیاز دارد.</p>
+<p dir="rtl">نقطهٔ پایانی <code dir="ltr">Get</code> اطلاعاتی دربارهٔ منابع یک Pod در حال اجرا ارائه می‌دهد. اطلاعاتی که این نقطهٔ پایانی در اختیار می‌گذارد مشابه اطلاعاتی است که در نقطهٔ پایانی <code dir="ltr">List</code> توضیح داده شد. نقطهٔ پایانی <code dir="ltr">Get</code> به <code dir="ltr">PodName</code> و <code dir="ltr">PodNamespace</code> مربوط به Pod در حال اجرا نیاز دارد.</p>
 <pre dir="ltr"><code class="language-gRPC" dir="ltr">// GetPodResourcesRequest contains information about the pod
 message GetPodResourcesRequest {
     string pod_name = 1;
     string pod_namespace = 2;
 }
 </code></pre>
-<p dir="rtl">نقطهٔ پایانی <code dir="ltr">Get</code> می‌تواند اطلاعات Pod مرتبط با منابع پویایی را ارائه دهد
-که توسط API تخصیص پویای منابع تخصیص یافته‌اند.
-از کوبرنتیز v1.34 به بعد، این قابلیت به‌طور پیش‌فرض فعال است.</p>
-<h2 id="یکپارچگی-افزونهٔ-دستگاه-با-topology-manager-device-plugin-integration-with-the-topology-manager" dir="rtl">یکپارچگی افزونهٔ دستگاه با Topology Manager {#device-plugin-integration-with-the-topology-manager}</h2>
+<p dir="rtl">نقطهٔ پایانی <code dir="ltr">Get</code> می‌تواند اطلاعات Pod مربوط به منابع پویایی را که از طریق API تخصیص پویای منابع (dynamic resource allocation) تخصیص یافته‌اند ارائه دهد. از کوبرنتیز v1.34، این قابلیت به‌طور پیش‌فرض فعال است.</p>
+<h2 id="یکپارچگی-پلاگین-دستگاه-با-مدیر-توپولوژی" dir="rtl">یکپارچگی پلاگین دستگاه با مدیر توپولوژی</h2>
 <div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes v1.27 [stable]</span> (پایدار)</div>
-<p dir="rtl">Topology Manager جزئی از Kubelet است که اجازه می‌دهد منابع به شیوه‌ای هم‌راستا با توپولوژی
-هماهنگ شوند. برای این منظور، API افزونهٔ دستگاه گسترش یافت تا یک
-struct با نام <code dir="ltr">TopologyInfo</code> را شامل شود.</p>
+<p dir="rtl">مدیر توپولوژی (Topology Manager) یکی از مؤلفه‌های Kubelet است که امکان هماهنگ‌سازی منابع را به شیوه‌ای همسو با توپولوژی فراهم می‌کند. برای این منظور، API پلاگین دستگاه گسترش یافت تا ساختار <code dir="ltr">TopologyInfo</code> را در بر بگیرد.</p>
 <pre dir="ltr"><code class="language-gRPC" dir="ltr">message TopologyInfo {
     repeated NUMANode nodes = 1;
 }
@@ -461,50 +350,39 @@ message NUMANode {
     int64 ID = 1;
 }
 </code></pre>
-<p dir="rtl">افزونه‌های دستگاهی که می‌خواهند از Topology Manager بهره ببرند، می‌توانند یک struct ‏TopologyInfo
-پرشده را به‌عنوان بخشی از ثبت دستگاه، همراه با شناسه‌های دستگاه و وضعیت سلامت دستگاه، بازگردانند.
-سپس device manager از این اطلاعات برای مشورت با Topology Manager و اتخاذ
-تصمیمات تخصیص منابع استفاده می‌کند.</p>
-<p dir="rtl"><code dir="ltr">TopologyInfo</code> از تنظیم فیلد <code dir="ltr">nodes</code> به <code dir="ltr">nil</code> یا به فهرستی از نودهای NUMA پشتیبانی می‌کند. این
-امکان به افزونهٔ دستگاه اجازه می‌دهد دستگاهی را اعلام کند که چند نود NUMA را در بر می‌گیرد.</p>
-<p dir="rtl">تنظیم <code dir="ltr">TopologyInfo</code> به <code dir="ltr">nil</code> یا ارائهٔ فهرستی خالی از نودهای NUMA برای یک دستگاه مشخص
-نشان می‌دهد که افزونهٔ دستگاه هیچ ترجیحی برای وابستگی NUMA آن دستگاه ندارد.</p>
-<p dir="rtl">مثالی از یک struct ‏<code dir="ltr">TopologyInfo</code> که توسط یک افزونهٔ دستگاه برای یک دستگاه پر شده است:</p>
+<p dir="rtl">پلاگین‌های دستگاهی که می‌خواهند از مدیر توپولوژی بهره ببرند، می‌توانند هنگام ثبت دستگاه، یک ساختار TopologyInfo پرشده را همراه با شناسه‌های دستگاه و وضعیت سلامت آن بازگردانند. سپس مدیر دستگاه از این اطلاعات برای مشورت با مدیر توپولوژی و گرفتن تصمیم‌های مربوط به تخصیص منابع استفاده می‌کند.</p>
+<p dir="rtl">ساختار <code dir="ltr">TopologyInfo</code> از تنظیم فیلد <code dir="ltr">nodes</code> با مقدار <code dir="ltr">nil</code> یا فهرستی از نودهای NUMA پشتیبانی می‌کند. با این کار، پلاگین دستگاه می‌تواند دستگاهی را اعلام کند که چندین نود NUMA را در بر می‌گیرد.</p>
+<p dir="rtl">تنظیم <code dir="ltr">TopologyInfo</code> روی <code dir="ltr">nil</code> یا ارائهٔ فهرستی خالی از نودهای NUMA برای یک دستگاه مشخص، نشان می‌دهد که پلاگین دستگاه برای آن دستگاه هیچ ترجیحی از نظر وابستگی NUMA ندارد.</p>
+<p dir="rtl">نمونه‌ای از یک ساختار <code dir="ltr">TopologyInfo</code> که یک پلاگین دستگاه برای یک دستگاه پر کرده است:</p>
 <pre dir="ltr"><code dir="ltr">pluginapi.Device{ID: "25102017", Health: pluginapi.Healthy, Topology:&amp;pluginapi.TopologyInfo{Nodes: []*pluginapi.NUMANode{&amp;pluginapi.NUMANode{ID: 0,},}}}
 </code></pre>
-<h2 id="نمونه-هایی-از-افزونه-های-دستگاه-examples" dir="rtl">نمونه‌هایی از افزونه‌های دستگاه {#examples}</h2>
-<p dir="rtl">در اینجا چند نمونه از پیاده‌سازی‌های افزونهٔ دستگاه آمده است:</p>
+<h2 id="نمونه-هایی-از-پلاگین-های-دستگاه-examples" dir="rtl">نمونه‌هایی از پلاگین‌های دستگاه {#examples}</h2>
+<p dir="rtl">در ادامه چند نمونه از پیاده‌سازی‌های پلاگین دستگاه آمده است:</p>
 <ul>
-<li dir="rtl"><a href="https://github.com/project-akri/akri" target="_blank" rel="noopener">Akri</a> که به شما اجازه می‌دهد دستگاه‌های پایانی ناهمگون (مانند دوربین‌های IP و دستگاه‌های USB) را به‌آسانی در دسترس قرار دهید.</li>
-<li dir="rtl"><a href="https://github.com/ROCm/k8s-device-plugin" target="_blank" rel="noopener">افزونهٔ دستگاه AMD GPU</a></li>
-<li dir="rtl"><a href="https://github.com/squat/generic-device-plugin" target="_blank" rel="noopener">افزونهٔ دستگاه عمومی</a> برای دستگاه‌های عمومی لینوکس و دستگاه‌های USB</li>
-<li dir="rtl"><a href="https://github.com/Project-HAMi/HAMi" target="_blank" rel="noopener">HAMi</a> برای میان‌افزار مجازی‌سازی محاسبات ناهمگون هوش مصنوعی (برای مثال، NVIDIA، Cambricon، Hygon، Iluvatar، MThreads، Ascend، Metax)</li>
-<li dir="rtl"><a href="https://github.com/intel/intel-device-plugins-for-kubernetes" target="_blank" rel="noopener">افزونه‌های دستگاه Intel</a> برای
-دستگاه‌های Intel GPU، FPGA، QAT، VPU، SGX، DSA، DLB و IAA</li>
-<li dir="rtl"><a href="https://github.com/kubevirt/kubernetes-device-plugins" target="_blank" rel="noopener">افزونه‌های دستگاه KubeVirt</a> برای
-مجازی‌سازی با پشتیبانی سخت‌افزاری</li>
-<li dir="rtl"><a href="https://github.com/NVIDIA/k8s-device-plugin" target="_blank" rel="noopener">افزونهٔ دستگاه NVIDIA GPU</a>، افزونهٔ دستگاه رسمی
-NVIDIA برای در دسترس قرار دادن GPUهای NVIDIA و پایش سلامت GPU</li>
-<li dir="rtl"><a href="https://github.com/GoogleCloudPlatform/container-engine-accelerators/tree/master/cmd/nvidia_gpu" target="_blank" rel="noopener">افزونهٔ دستگاه NVIDIA GPU برای Container-Optimized OS</a></li>
-<li dir="rtl"><a href="https://github.com/hustcat/k8s-rdma-device-plugin" target="_blank" rel="noopener">افزونهٔ دستگاه RDMA</a></li>
-<li dir="rtl"><a href="https://github.com/collabora/k8s-socketcan" target="_blank" rel="noopener">افزونهٔ دستگاه SocketCAN</a></li>
-<li dir="rtl"><a href="https://github.com/vikaschoudhary16/sfc-device-plugin" target="_blank" rel="noopener">افزونهٔ دستگاه Solarflare</a></li>
-<li dir="rtl"><a href="https://github.com/intel/sriov-network-device-plugin" target="_blank" rel="noopener">افزونهٔ دستگاه شبکهٔ SR-IOV</a></li>
-<li dir="rtl"><a href="https://github.com/Xilinx/FPGA_as_a_Service/tree/master/k8s-device-plugin" target="_blank" rel="noopener">افزونه‌های دستگاه Xilinx FPGA</a> برای دستگاه‌های Xilinx FPGA</li>
+<li dir="rtl">‏<a href="https://github.com/project-akri/akri" target="_blank" rel="noopener">Akri</a>، که به شما امکان می‌دهد دستگاه‌های لبه‌ای ناهمگون (مانند دوربین‌های IP و دستگاه‌های USB) را به‌سادگی در دسترس قرار دهید.</li>
+<li dir="rtl"><a href="https://github.com/ROCm/k8s-device-plugin" target="_blank" rel="noopener">پلاگین دستگاه AMD GPU</a></li>
+<li dir="rtl"><a href="https://github.com/squat/generic-device-plugin" target="_blank" rel="noopener">پلاگین دستگاه عمومی</a> برای دستگاه‌های عمومی لینوکس و دستگاه‌های USB</li>
+<li dir="rtl">‏<a href="https://github.com/Project-HAMi/HAMi" target="_blank" rel="noopener">HAMi</a>، میان‌افزار مجازی‌سازی محاسبات ناهمگون هوش مصنوعی (برای نمونه NVIDIA، Cambricon، Hygon، Iluvatar، MThreads، Ascend و Metax)</li>
+<li dir="rtl"><a href="https://github.com/intel/intel-device-plugins-for-kubernetes" target="_blank" rel="noopener">پلاگین‌های دستگاه Intel</a> برای دستگاه‌های GPU، FPGA، QAT، VPU، SGX، DSA، DLB و IAA شرکت Intel</li>
+<li dir="rtl"><a href="https://github.com/kubevirt/kubernetes-device-plugins" target="_blank" rel="noopener">پلاگین‌های دستگاه KubeVirt</a> برای مجازی‌سازی با پشتیبانی سخت‌افزاری</li>
+<li dir="rtl"><a href="https://github.com/NVIDIA/k8s-device-plugin" target="_blank" rel="noopener">پلاگین دستگاه NVIDIA GPU</a>، پلاگین دستگاه رسمی NVIDIA برای در دسترس قرار دادن GPUهای NVIDIA و پایش سلامت آن‌ها</li>
+<li dir="rtl"><a href="https://github.com/GoogleCloudPlatform/container-engine-accelerators/tree/master/cmd/nvidia_gpu" target="_blank" rel="noopener">پلاگین دستگاه NVIDIA GPU برای Container-Optimized OS</a></li>
+<li dir="rtl"><a href="https://github.com/hustcat/k8s-rdma-device-plugin" target="_blank" rel="noopener">پلاگین دستگاه RDMA</a></li>
+<li dir="rtl"><a href="https://github.com/collabora/k8s-socketcan" target="_blank" rel="noopener">پلاگین دستگاه SocketCAN</a></li>
+<li dir="rtl"><a href="https://github.com/vikaschoudhary16/sfc-device-plugin" target="_blank" rel="noopener">پلاگین دستگاه Solarflare</a></li>
+<li dir="rtl"><a href="https://github.com/intel/sriov-network-device-plugin" target="_blank" rel="noopener">پلاگین دستگاه شبکهٔ SR-IOV</a></li>
+<li dir="rtl"><a href="https://github.com/Xilinx/FPGA_as_a_Service/tree/master/k8s-device-plugin" target="_blank" rel="noopener">پلاگین‌های دستگاه Xilinx FPGA</a> برای دستگاه‌های FPGA شرکت Xilinx</li>
 </ul>
 <h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
 <ul>
-<li dir="rtl">دربارهٔ <a href="https://kubernetes.io/docs/tasks/manage-gpus/scheduling-gpus/" target="_blank">زمان‌بندی منابع GPU</a> با استفاده از افزونه‌های
-دستگاه بیاموزید</li>
-<li dir="rtl">دربارهٔ <a href="https://kubernetes.io/docs/tasks/administer-cluster/extended-resource-node/" target="_blank">اعلام منابع توسعه‌یافته</a>
-روی یک نود بیاموزید</li>
-<li dir="rtl">دربارهٔ <a href="https://kubernetes.io/docs/tasks/administer-cluster/topology-manager/" target="_blank">Topology Manager</a> بیاموزید</li>
-<li dir="rtl">دربارهٔ استفاده از <a href="/blog/2019/04/24/hardware-accelerated-ssl/tls-termination-in-ingress-controllers-using-kubernetes-device-plugins-and-runtimeclass/">شتاب‌دهی سخت‌افزاری برای TLS ingress</a>
-در کوبرنتیز بخوانید</li>
-<li dir="rtl">دربارهٔ <a href="../../resource-management/dynamic-resource-allocation/dra-features.html#extended-resource">تخصیص منابع توسعه‌یافته توسط DRA</a> بیشتر بخوانید</li>
+<li dir="rtl">دربارهٔ <a href="https://kubernetes.io/docs/tasks/manage-gpus/scheduling-gpus/" target="_blank">زمان‌بندی منابع GPU</a> با استفاده از پلاگین‌های دستگاه بیاموزید.</li>
+<li dir="rtl">دربارهٔ <a href="https://kubernetes.io/docs/tasks/administer-cluster/extended-resource-node/" target="_blank">اعلام منابع توسعه‌یافته</a> روی یک نود بیاموزید.</li>
+<li dir="rtl">دربارهٔ <a href="https://kubernetes.io/docs/tasks/administer-cluster/topology-manager/" target="_blank">مدیر توپولوژی</a> بیاموزید.</li>
+<li dir="rtl">دربارهٔ استفاده از <a href="/blog/2019/04/24/hardware-accelerated-ssl/tls-termination-in-ingress-controllers-using-kubernetes-device-plugins-and-runtimeclass/">شتاب‌دهی سخت‌افزاری برای TLS در ingress</a> در کوبرنتیز مطالعه کنید.</li>
+<li dir="rtl">دربارهٔ <a href="../../resource-management/dynamic-resource-allocation/dra-features.html#extended-resource">تخصیص منابع توسعه‌یافته با DRA</a> بیشتر بخوانید.</li>
 </ul>
-</main>
-<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#ثبت-افزونهٔ-دستگاه">ثبت افزونهٔ دستگاه</a><a class="l3" href="#مثال-example-pod">مثال {#example-pod}</a><a class="l2" href="#پیاده-سازی-افزونهٔ-دستگاه">پیاده‌سازی افزونهٔ دستگاه</a><a class="l3" href="#مدیریت-راه-اندازی-مجدد-kubelet">مدیریت راه‌اندازی مجدد kubelet</a><a class="l3" href="#افزونهٔ-دستگاه-و-دستگاه-های-ناسالم">افزونهٔ دستگاه و دستگاه‌های ناسالم</a><a class="l2" href="#استقرار-افزونهٔ-دستگاه-device-plugin-deployment">استقرار افزونهٔ دستگاه {#device-plugin-deployment}</a><a class="l2" href="#سازگاری-api">سازگاری API</a><a class="l2" href="#پایش-منابع-افزونهٔ-دستگاه-monitoring-device-plugin-resources">پایش منابع افزونهٔ دستگاه {#monitoring-device-plugin-resources}</a><a class="l3" href="#نقطهٔ-پایانی-grpc-list-grpc-endpoint-list">نقطهٔ پایانی gRPC ‏List {#grpc-endpoint-list}</a><a class="l3" href="#نقطهٔ-پایانی-grpc-getallocatableresources-grpc-endpoint-getallocatableresources">نقطهٔ پایانی gRPC ‏GetAllocatableResources {#grpc-endpoint-getallocatableresources}</a><a class="l3" href="#نقطهٔ-پایانی-grpc-get-grpc-endpoint-get">نقطهٔ پایانی gRPC ‏Get {#grpc-endpoint-get}</a><a class="l2" href="#یکپارچگی-افزونهٔ-دستگاه-با-topology-manager-device-plugin-integration-with-the-topology-manager">یکپارچگی افزونهٔ دستگاه با Topology Manager {#device-plugin-integration-with-the-topology-manager}</a><a class="l2" href="#نمونه-هایی-از-افزونه-های-دستگاه-examples">نمونه‌هایی از افزونه‌های دستگاه {#examples}</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#ثبت-افزونهٔ-دستگاه">ثبت افزونهٔ دستگاه</a><a class="l3" href="#مثال-example-pod">مثال {#example-pod}</a><a class="l2" href="#پیاده-سازی-افزونهٔ-دستگاه">پیاده‌سازی افزونهٔ دستگاه</a><a class="l3" href="#مدیریت-راه-اندازی-مجدد-kubelet">مدیریت راه‌اندازی مجدد kubelet</a><a class="l3" href="#افزونهٔ-دستگاه-و-دستگاه-های-ناسالم">افزونهٔ دستگاه و دستگاه‌های ناسالم</a><a class="l2" href="#استقرار-افزونهٔ-دستگاه">استقرار افزونهٔ دستگاه</a><a class="l2" href="#سازگاری-api">سازگاری API</a><a class="l2" href="#پایش-منابع-افزونه-های-دستگاه">پایش منابع افزونه‌های دستگاه</a><a class="l3" href="#نقطهٔ-پایانی-grpc-با-نام-list-grpc-endpoint-list">نقطهٔ پایانی gRPC با نام List {#grpc-endpoint-list}</a><a class="l3" href="#نقطهٔ-پایانی-grpc-با-نام-getallocatableresources-grpc-endpoint-getallocatableresources">نقطهٔ پایانی gRPC با نام GetAllocatableResources {#grpc-endpoint-getallocatableresources}</a><a class="l3" href="#نقطهٔ-پایانی-grpc-با-نام-get-grpc-endpoint-get">نقطهٔ پایانی gRPC با نام Get {#grpc-endpoint-get}</a><a class="l2" href="#یکپارچگی-پلاگین-دستگاه-با-مدیر-توپولوژی">یکپارچگی پلاگین دستگاه با مدیر توپولوژی</a><a class="l2" href="#نمونه-هایی-از-پلاگین-های-دستگاه-examples">نمونه‌هایی از پلاگین‌های دستگاه {#examples}</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
 </div>
 </body>
 </html>

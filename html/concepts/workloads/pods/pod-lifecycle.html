@@ -49,6 +49,10 @@ figure{margin:16px 0;text-align:center}
 .index-tree li{margin:2px 0}
 .index-tree .sec{font-weight:700}
 .missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
 #upd[hidden]{display:none}
 #upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
 #upd:not([hidden])+#theme{margin-inline-start:8px}
@@ -74,7 +78,8 @@ function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;re
 document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
 </script>
 </head>
-<body>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
 <header class="top"><a href="../../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">concepts / workloads / pods</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
 <div class="layout">
 <main><h1 dir="rtl">چرخه حیات Pod</h1><!-- overview -->
@@ -1004,7 +1009,7 @@ kubelet را متوقف کرده‌اید و سپس بعداً آن را راه�
 که <a href="https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#PodStatus" target="_blank"><code dir="ltr">status</code></a> مربوط به Pod را پوشش می‌دهد، مراجعه کنید.</p>
 </li>
 </ul>
-</main>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
 <nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#طول-عمر-pod-pod-lifetime">طول عمر Pod {#pod-lifetime}</a><a class="l3" href="#podها-و-بازیابی-از-خطا-pod-fault-recovery">Podها و بازیابی از خطا {#pod-fault-recovery}</a><a class="l3" href="#طول-عمرهای-وابسته-associated-lifetimes">طول عمرهای وابسته {#associated-lifetimes}</a><a class="l2" href="#فاز-pod-pod-phase">فاز Pod {#pod-phase}</a><a class="l2" href="#وضعیت-های-کانتینر-container-states">وضعیت‌های کانتینر {#container-states}</a><a class="l3" href="#waiting-container-state-waiting">Waiting {#container-state-waiting}</a><a class="l3" href="#running-container-state-running">Running {#container-state-running}</a><a class="l3" href="#terminated-container-state-terminated">Terminated {#container-state-terminated}</a><a class="l2" href="#نحوه-ی-برخورد-podها-با-مشکلات-کانتینرها-container-restarts">نحوه‌ی برخورد Podها با مشکلات کانتینرها {#container-restarts}</a><a class="l3" href="#راه-اندازی-مجدد-کانتینرها-restart-policy">راه‌اندازی مجدد کانتینرها {#restart-policy}</a><a class="l3" href="#کاهش-تأخیر-راه-اندازی-مجدد-کانتینر">کاهش تأخیر راه‌اندازی مجدد کانتینر</a><a class="l3" href="#تأخیر-راه-اندازی-مجدد-کانتینر-قابل-پیکربندی">تأخیر راه‌اندازی مجدد کانتینر قابل پیکربندی</a><a class="l2" href="#شرایط-pod-pod-conditions-pod-conditions">شرایط Pod (Pod conditions) {#pod-conditions}</a><a class="l3" href="#آمادگی-pod-pod-readiness-gate">آمادگی Pod {#pod-readiness-gate}</a><a class="l3" href="#وضعیت-آمادگی-pod-pod-readiness-status">وضعیت آمادگی Pod {#pod-readiness-status}</a><a class="l3" href="#آمادگی-pod-برای-شروع-کانتینرها-pod-ready-to-start-containers">آمادگی Pod برای شروع کانتینرها {#pod-ready-to-start-containers}</a><a class="l2" href="#تغییر-اندازهٔ-podها-pod-resize">تغییر اندازهٔ Podها {#pod-resize}</a><a class="l3" href="#تغییر-اندازهٔ-درجای-pod-pod-resize-inplace">تغییر اندازهٔ درجای Pod {#pod-resize-inplace}</a><a class="l3" href="#تغییر-اندازه-با-راه-اندازی-podهای-جایگزین">تغییر اندازه با راه‌اندازی Podهای جایگزین</a><a class="l2" href="#پروب-های-کانتینر-container-probes">پروب‌های کانتینر {#container-probes}</a><a class="l3" href="#پروب-startup-startup-probe">پروب Startup {#startup-probe}</a><a class="l3" href="#پروب-liveness-liveness-probe">پروب Liveness {#liveness-probe}</a><a class="l3" href="#پروب-readiness-readiness-probe">پروب Readiness {#readiness-probe}</a><a class="l2" href="#خاتمه-یافتن-podها-pod-termination">خاتمه یافتن Podها {#pod-termination}</a><a class="l3" href="#سیگنال-های-توقف-pod-termination-stop-signals">سیگنال‌های توقف {#pod-termination-stop-signals}</a><a class="l3" href="#تعریف-سیگنال-های-توقف-سفارشی-defining-custom-stop-signals">تعریف سیگنال‌های توقف سفارشی {#defining-custom-stop-signals}</a><a class="l3" href="#جریان-خاتمهٔ-pod-pod-termination-flow">جریان خاتمهٔ Pod {#pod-termination-flow}</a><a class="l3" href="#حذف-اجباری-pod-pod-termination-forced">حذف اجباری Pod {#pod-termination-forced}</a><a class="l3" href="#خاموش-شدن-pod-و-کانتینرهای-sidecar-termination-with-sidecars">خاموش شدن Pod و کانتینرهای sidecar {#termination-with-sidecars}</a><a class="l3" href="#پاک-سازی-garbage-collection-podها-pod-garbage-collection">پاک‌سازی (Garbage collection) Podها {#pod-garbage-collection}</a><a class="l2" href="#رفتار-pod-هنگام-راه-اندازی-مجدد-kubelet-kubelet-restarts">رفتار Pod هنگام راه‌اندازی مجدد kubelet {#kubelet-restarts}</a><a class="l3" href="#تشخیص-راه-اندازی-مجدد-kubelet">تشخیص راه‌اندازی مجدد kubelet</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
 </div>
 </body>

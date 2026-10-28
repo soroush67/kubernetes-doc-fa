@@ -49,6 +49,10 @@ figure{margin:16px 0;text-align:center}
 .index-tree li{margin:2px 0}
 .index-tree .sec{font-weight:700}
 .missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
 #upd[hidden]{display:none}
 #upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
 #upd:not([hidden])+#theme{margin-inline-start:8px}
@@ -74,7 +78,8 @@ function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;re
 document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
 </script>
 </head>
-<body>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
 <header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">concepts / storage</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
 <div class="layout">
 <main><h1 dir="rtl">حجم‌های پایدار</h1><!-- overview -->
@@ -1197,7 +1202,7 @@ PVC با storage class درست مطابقت پیدا کند.</li>
 <li dir="ltr" class="ltr"><a href="https://kubernetes.io/docs/reference/kubernetes-api/config-and-storage-resources/persistent-volume-v1/" target="_blank"><code dir="ltr">PersistentVolume</code></a></li>
 <li dir="ltr" class="ltr"><a href="https://kubernetes.io/docs/reference/kubernetes-api/config-and-storage-resources/persistent-volume-claim-v1/" target="_blank"><code dir="ltr">PersistentVolumeClaim</code></a></li>
 </ul>
-</main>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
 <nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#مقدمه">مقدمه</a><a class="l2" href="#چرخهٔ-عمر-یک-حجم-و-claim">چرخهٔ عمر یک حجم و claim</a><a class="l3" href="#تأمین-provisioning">تأمین (Provisioning)</a><a class="l3" href="#اتصال-binding">اتصال (Binding)</a><a class="l3" href="#استفاده">استفاده</a><a class="l3" href="#محافظت-از-آبجکت-ذخیره-سازی-در-حال-استفاده">محافظت از آبجکت ذخیره‌سازی در حال استفاده</a><a class="l3" href="#بازپس-گیری-reclaiming">بازپس‌گیری (Reclaiming)</a><a class="l3" href="#finalizer-محافظت-از-حذف-persistentvolume">finalizer محافظت از حذف PersistentVolume</a><a class="l3" href="#رزرو-کردن-یک-persistentvolume">رزرو کردن یک PersistentVolume</a><a class="l3" href="#گسترش-persistent-volumes-claimها">گسترش Persistent Volumes Claimها</a><a class="l2" href="#انواع-persistent-volumeها">انواع Persistent Volumeها</a><a class="l2" href="#persistent-volumeها">Persistent Volumeها</a><a class="l3" href="#ظرفیت">ظرفیت</a><a class="l3" href="#حالت-حجم-volume-mode">حالت حجم (Volume Mode)</a><a class="l3" href="#حالت-های-دسترسی-access-modes">حالت‌های دسترسی (Access Modes)</a><a class="l3" href="#کلاس">کلاس</a><a class="l3" href="#سیاست-بازپس-گیری">سیاست بازپس‌گیری</a><a class="l3" href="#گزینه-های-mount">گزینه‌های mount</a><a class="l3" href="#node-affinity">Node Affinity</a><a class="l3" href="#فاز-phase">فاز (Phase)</a><a class="l2" href="#persistentvolumeclaimها">PersistentVolumeClaimها</a><a class="l3" href="#حالت-های-دسترسی">حالت‌های دسترسی</a><a class="l3" href="#حالت-های-حجم">حالت‌های حجم</a><a class="l3" href="#نام-حجم">نام حجم</a><a class="l3" href="#منابع">منابع</a><a class="l3" href="#انتخابگر-selector">انتخابگر (Selector)</a><a class="l3" href="#کلاس-1">کلاس</a><a class="l3" href="#ردیابی-pvcهای-استفاده-نشده">ردیابی PVCهای استفاده‌نشده</a><a class="l2" href="#claimها-به-عنوان-حجم">Claimها به‌عنوان حجم</a><a class="l3" href="#نکته-ای-دربارهٔ-فضاهای-نام">نکته‌ای دربارهٔ فضاهای نام</a><a class="l3" href="#persistentvolumeهای-از-نوع-hostpath">PersistentVolumeهای از نوع hostPath</a><a class="l2" href="#پشتیبانی-از-حجم-بلوکی-خام">پشتیبانی از حجم بلوکی خام</a><a class="l3" href="#persistentvolume-با-استفاده-از-یک-حجم-بلوکی-خام-persistent-volume-using-a-raw-block-volume">PersistentVolume با استفاده از یک حجم بلوکی خام {#persistent-volume-using-a-raw-block-volume}</a><a class="l3" href="#persistentvolumeclaim-درخواست-کنندهٔ-یک-حجم-بلوکی-خام-persistent-volume-claim-requesting-a-raw-block-volume">PersistentVolumeClaim درخواست‌کنندهٔ یک حجم بلوکی خام {#persistent-volume-claim-requesting-a-raw-block-volume}</a><a class="l3" href="#مشخصات-pod-با-افزودن-مسیر-دستگاه-بلوکی-خام-در-کانتینر">مشخصات Pod با افزودن مسیر دستگاه بلوکی خام در کانتینر</a><a class="l3" href="#اتصال-حجم-های-بلوکی">اتصال حجم‌های بلوکی</a><a class="l2" href="#پشتیبانی-از-volume-snapshot-و-بازیابی-حجم-از-snapshot">پشتیبانی از Volume Snapshot و بازیابی حجم از Snapshot</a><a class="l3" href="#ایجاد-یک-persistentvolumeclaim-از-یک-volume-snapshot-create-persistent-volume-claim-from-volume-snapshot">ایجاد یک PersistentVolumeClaim از یک Volume Snapshot {#create-persistent-volume-claim-from-volume-snapshot}</a><a class="l2" href="#شبیه-سازی-حجم-volume-cloning">شبیه‌سازی حجم (Volume Cloning)</a><a class="l3" href="#ایجاد-persistentvolumeclaim-از-یک-pvc-موجود-create-persistent-volume-claim-from-an-existing-pvc">ایجاد PersistentVolumeClaim از یک PVC موجود {#create-persistent-volume-claim-from-an-existing-pvc}</a><a class="l2" href="#volume-populatorها-و-منابع-داده">Volume populatorها و منابع داده</a><a class="l2" href="#نوشتن-پیکربندی-قابل-حمل">نوشتن پیکربندی قابل حمل</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a><a class="l3" href="#مراجع-api-reference">مراجع API {#reference}</a></nav>
 </div>
 </body>

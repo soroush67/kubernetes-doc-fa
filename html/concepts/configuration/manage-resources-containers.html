@@ -49,6 +49,10 @@ figure{margin:16px 0;text-align:center}
 .index-tree li{margin:2px 0}
 .index-tree .sec{font-weight:700}
 .missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
 #upd[hidden]{display:none}
 #upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
 #upd:not([hidden])+#theme{margin-inline-start:8px}
@@ -74,7 +78,8 @@ function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;re
 document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
 </script>
 </head>
-<body>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
 <header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">concepts / configuration</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
 <div class="layout">
 <main><h1 dir="rtl">مدیریت منابع برای Podها و کانتینرها</h1><!-- overview -->
@@ -721,7 +726,7 @@ Events:
 <li dir="rtl">دربارهٔ <a href="../workloads/pods/pod-qos.html">کلاس‌های کیفیت سرویس (QoS) برای Podها</a> بیشتر بخوانید</li>
 <li dir="rtl">دربارهٔ <a href="../resource-management/dynamic-resource-allocation/dra-features.html#extended-resource">تخصیص منابع توسعه‌یافته توسط DRA</a> بیشتر بخوانید</li>
 </ul>
-</main>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
 <nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#درخواست-ها-و-حدها">درخواست‌ها و حدها</a><a class="l2" href="#انواع-منابع">انواع منابع</a><a class="l3" href="#صفحه-های-بزرگ-huge-pages">صفحه‌های بزرگ (Huge pages)</a><a class="l2" href="#درخواست-ها-و-حدهای-منابع-pod-و-کانتینر">درخواست‌ها و حدهای منابع Pod و کانتینر</a><a class="l2" href="#مشخص-کردن-منابع-در-سطح-pod">مشخص کردن منابع در سطح Pod</a><a class="l2" href="#واحدهای-منابع-در-کوبرنتیز">واحدهای منابع در کوبرنتیز</a><a class="l3" href="#واحدهای-منبع-cpu-meaning-of-cpu">واحدهای منبع CPU {#meaning-of-cpu}</a><a class="l3" href="#واحدهای-منبع-حافظه-meaning-of-memory">واحدهای منبع حافظه {#meaning-of-memory}</a><a class="l2" href="#نمونهٔ-منابع-کانتینر-example-1">نمونهٔ منابع کانتینر {#example-1}</a><a class="l2" href="#نمونهٔ-منابع-pod-example-2">نمونهٔ منابع Pod {#example-2}</a><a class="l2" href="#podهای-دارای-درخواست-منابع-چگونه-زمان-بندی-می-شوند">Podهای دارای درخواست منابع چگونه زمان‌بندی می‌شوند</a><a class="l2" href="#کوبرنتیز-درخواست-ها-و-حدهای-منابع-را-چگونه-اعمال-می-کند-how-pods-with-resource-limits-are-run">کوبرنتیز درخواست‌ها و حدهای منابع را چگونه اعمال می‌کند {#how-pods-with-resource-limits-are-run}</a><a class="l3" href="#تغییر-اندازهٔ-منابع-کانتینر">تغییر اندازهٔ منابع کانتینر</a><a class="l3" href="#پایش-مصرف-منابع-محاسباتی-و-حافظه">پایش مصرف منابع محاسباتی و حافظه</a><a class="l3" href="#ملاحظات-مربوط-به-حجم-های-emptydir-مبتنی-بر-حافظه-memory-backed-emptydir">ملاحظات مربوط به حجم‌های emptyDir مبتنی بر حافظه {#memory-backed-emptydir}</a><a class="l2" href="#ذخیره-سازی-موقت-محلی">ذخیره‌سازی موقت محلی</a><a class="l3" href="#پایش-منابع-برای-ذخیره-سازی-موقت-محلی">پایش منابع برای ذخیره‌سازی موقت محلی</a><a class="l2" href="#منابع-توسعه-یافته-extended-resources">منابع توسعه‌یافته (Extended resources)</a><a class="l3" href="#مدیریت-منابع-توسعه-یافته">مدیریت منابع توسعه‌یافته</a><a class="l3" href="#مصرف-منابع-توسعه-یافته">مصرف منابع توسعه‌یافته</a><a class="l2" href="#محدودسازی-pid">محدودسازی PID</a><a class="l2" href="#عیب-یابی">عیب‌یابی</a><a class="l3" href="#podهای-من-با-پیام-رویداد-failedscheduling-در-وضعیت-pending-هستند">Podهای من با پیام رویداد FailedScheduling در وضعیت pending هستند</a><a class="l3" href="#کانتینر-من-خاتمه-یافته-است">کانتینر من خاتمه یافته است</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
 </div>
 </body>
