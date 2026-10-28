@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-944 از 1722 صفحه
+959 از 1722 صفحه
 
 
 ## `.`
@@ -1092,28 +1092,28 @@
 - ✅ [upstream.md](md/reference/glossary/upstream.md)
 - ✅ [userns.md](md/reference/glossary/userns.md)
 - ✅ [volume-plugin.md](md/reference/glossary/volume-plugin.md)
-- ⏳ `volume.md`
-- ⏳ `watch.md`
-- ⏳ `wg.md`
-- ⏳ `workload.md`
+- ✅ [volume.md](md/reference/glossary/volume.md)
+- ✅ [watch.md](md/reference/glossary/watch.md)
+- ✅ [wg.md](md/reference/glossary/wg.md)
+- ✅ [workload.md](md/reference/glossary/workload.md)
 
 ## `reference/instrumentation`
 
-- ⏳ `_index.md`
-- ⏳ `cri-pod-container-metrics.md`
+- ✅ [_index.md](md/reference/instrumentation/_index.md)
+- ✅ [cri-pod-container-metrics.md](md/reference/instrumentation/cri-pod-container-metrics.md)
 - ⏳ `metrics.md`
-- ⏳ `native-histograms.md`
-- ⏳ `node-metrics.md`
-- ⏳ `slis.md`
-- ⏳ `understand-psi-metrics.md`
-- ⏳ `zpages.md`
+- ✅ [native-histograms.md](md/reference/instrumentation/native-histograms.md)
+- ✅ [node-metrics.md](md/reference/instrumentation/node-metrics.md)
+- ✅ [slis.md](md/reference/instrumentation/slis.md)
+- ✅ [understand-psi-metrics.md](md/reference/instrumentation/understand-psi-metrics.md)
+- ✅ [zpages.md](md/reference/instrumentation/zpages.md)
 
 ## `reference/issues-security`
 
-- ⏳ `_index.md`
-- ⏳ `issues.md`
-- ⏳ `official-cve-feed.md`
-- ⏳ `security.md`
+- ✅ [_index.md](md/reference/issues-security/_index.md)
+- ✅ [issues.md](md/reference/issues-security/issues.md)
+- ✅ [official-cve-feed.md](md/reference/issues-security/official-cve-feed.md)
+- ✅ [security.md](md/reference/issues-security/security.md)
 
 ## `reference/kubectl`
 
