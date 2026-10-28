@@ -1,0 +1,983 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>kube-controller-manager | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">reference / command-line-tools-reference</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="ltr" class="ltr">kube-controller-manager</h1><!--
+The file is auto-generated from the Go source code of the component using a generic
+[generator](https://github.com/kubernetes-sigs/reference-docs/). To learn how
+to generate the reference documentation, please read
+[Contributing to the reference documentation](/docs/contribute/generate-ref-docs/).
+To update the reference content, please follow the
+[Contributing upstream](/docs/contribute/generate-ref-docs/contribute-upstream/)
+guide. You can file document formatting bugs against the
+[reference-docs](https://github.com/kubernetes-sigs/reference-docs/) project.
+-->
+<h2 id="خلاصه" dir="rtl">خلاصه</h2>
+<p dir="rtl">kube-controller-manager کوبرنتیز یک daemon است که حلقه‌های کنترل اصلی عرضه‌شده همراه با کوبرنتیز را در خود جای داده است. در کاربردهای رباتیک و اتوماسیون، حلقهٔ کنترل (control loop) حلقه‌ای بی‌پایان است که وضعیت یک سیستم را تنظیم و تثبیت می‌کند. در کوبرنتیز، کنترل‌کننده (controller) یک حلقهٔ کنترل است که وضعیت مشترک کلاستر را از طریق apiserver زیر نظر می‌گیرد و تغییراتی اعمال می‌کند تا وضعیت فعلی را به وضعیت مطلوب نزدیک کند. نمونه‌هایی از کنترل‌کننده‌هایی که امروزه همراه با کوبرنتیز عرضه می‌شوند عبارت‌اند از: replication controller، endpoints controller، namespace controller و serviceaccounts controller.</p>
+<pre dir="ltr"><code dir="ltr">kube-controller-manager [flags]
+</code></pre>
+<h2 id="گزینه-ها" dir="rtl">گزینه‌ها</h2>
+   <table style="width: 100%; table-layout: fixed;">
+<colgroup>
+<col span="1" style="width: 10px;">
+<col span="1">
+</colgroup>
+<tbody>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--allocate-node-cidrs</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مشخص می‌کند که آیا CIDRها برای Podها باید اختصاص داده شوند و روی ارائه‌دهنده ابری تنظیم شوند یا خیر. نیازمند --cluster-cidr است.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--allow-metric-labels stringToString     Default: []</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نگاشت از برچسب متریک (metric-label) به فهرست مقادیر مجاز آن برچسب. قالب کلید به‌صورت &lt;MetricName&gt;,&lt;LabelName&gt; است. قالب مقدار به‌صورت &lt;allowed_value&gt;,&lt;allowed_value&gt;... است؛ برای مثال metric1,label1='v1,v2,v3', metric1,label2='v1,v2,v3' metric2,label1='v1,v2,v3'.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--allow-metric-labels-manifest string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مسیر فایل مانیفستی که نگاشت فهرست مجاز را در بر دارد. قالب این فایل مانند قالب فلگ --allow-metric-labels است، یعنی:<br>allowListMapping:<br>"metric1,label1": "value11,value12"<br>"metric2,label2": ""<br>توجه داشته باشید که فلگ --allow-metric-labels بر فایل مانیفست اولویت دارد و آن را بازنویسی می‌کند.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--attach-detach-reconcile-sync-period duration     Default: 1m0s</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">زمان انتظار هم‌گام‌سازی reconciler میان اتصال (attach) و جداسازی (detach) حجم‌ها. این مدت باید بیشتر از یک ثانیه باشد و افزایش این مقدار نسبت به مقدار پیش‌فرض ممکن است باعث ناهماهنگی حجم‌ها با Podها شود.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--authentication-kubeconfig string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">فایل kubeconfig که به سرور «core» کوبرنتیز اشاره می‌کند و دسترسی کافی برای ایجاد tokenreviews.authentication.k8s.io را دارد. این گزینه اختیاری است. اگر خالی باشد، تمام درخواست‌های توکن ناشناس در نظر گرفته می‌شوند و هیچ CA کلاینتی در کلاستر جست‌وجو نمی‌شود.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--authentication-skip-lookup</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">اگر false باشد، از authentication-kubeconfig برای جست‌وجوی پیکربندی احراز هویت مفقود از کلاستر استفاده می‌شود.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--authentication-token-webhook-cache-ttl duration     Default: 10s</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مدت زمان نگهداری پاسخ‌های احراز‌کننده توکن مبتنی بر webhook در حافظه نهان.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--authentication-tolerate-lookup-failure</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">اگر true باشد، شکست در جست‌وجوی پیکربندی احراز هویت مفقود از کلاستر مهلک در نظر گرفته نمی‌شود. توجه داشته باشید که این امر می‌تواند منجر به احراز هویتی شود که با همه درخواست‌ها به‌صورت ناشناس رفتار می‌کند.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--authorization-always-allow-paths strings     Default: "/healthz,/readyz,/livez"</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">فهرستی از مسیرهای HTTP که در حین مجوزدهی نادیده گرفته می‌شوند؛ یعنی این مسیرها بدون تماس با سرور «core» کوبرنتیز مجاز شمرده می‌شوند.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--authorization-kubeconfig string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">فایل kubeconfig که به سرور «core» کوبرنتیز اشاره می‌کند و دسترسی کافی برای ایجاد subjectaccessreviews.authorization.k8s.io را دارد. این گزینه اختیاری است. اگر خالی باشد، تمام درخواست‌هایی که از مجوزدهی معاف نشده‌اند ممنوع می‌شوند.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--authorization-webhook-cache-authorized-ttl duration     Default: 10s</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مدت زمان نگهداری پاسخ‌های «مجاز» (authorized) از مجوزدهنده webhook در حافظه نهان.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--authorization-webhook-cache-unauthorized-ttl duration     Default: 10s</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مدت زمان نگهداری پاسخ‌های «غیرمجاز» (unauthorized) از مجوزدهنده webhook در حافظه نهان.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--bind-address string     Default: 0.0.0.0</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">آدرس IP که روی آن برای پورت --secure-port گوش داده می‌شود. اینترفیس‌های مرتبط باید برای سایر بخش‌های کلاستر و برای کلاینت‌های CLI/وب قابل دسترسی باشند. اگر خالی باشد یا آدرس نامشخص (0.0.0.0 یا ::) باشد، تمام اینترفیس‌ها و خانواده‌های آدرس IP مورد استفاده قرار می‌گیرند.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--cert-dir string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">دایرکتوری که گواهی‌های TLS در آن قرار دارند. اگر --tls-cert-file و --tls-private-key-file مشخص شده باشند، این فلگ نادیده گرفته می‌شود.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--cidr-allocator-type string     Default: "RangeAllocator"</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نوع تخصیص‌دهنده CIDR که باید استفاده شود</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--client-ca-file string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">اگر تنظیم شود، هر درخواستی که گواهی کلاینتی ارائه کند که توسط یکی از مراجع موجود در client-ca-file امضا شده باشد، با هویتی متناظر با CommonName گواهی کلاینت احراز هویت می‌شود.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--cloud-config string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مسیر فایل پیکربندی ارائه‌دهنده ابری. رشته خالی به معنای نبود فایل پیکربندی است.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--cloud-provider string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">ارائه‌دهنده سرویس‌های ابری. رشته خالی به معنای نبود ارائه‌دهنده است.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--cluster-cidr string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">محدوده CIDR برای Podها در کلاستر. فقط زمانی استفاده می‌شود که --allocate-node-cidrs=true باشد؛ اگر false باشد، این گزینه نادیده گرفته می‌شود.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--cluster-name string     Default: "kubernetes"</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">پیشوند نمونه (instance) برای کلاستر.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--cluster-signing-cert-file string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نام فایلی که حاوی گواهی CA از نوع X509 با کدگذاری PEM است و برای صدور گواهی‌های با دامنه کلاستر استفاده می‌شود. اگر این گزینه مشخص شود، هیچ فلگ اختصاصی‌تر --cluster-signing-* نباید مشخص شود.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--cluster-signing-duration duration     Default: 8760h0m0s</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">حداکثر مدت اعتباری که به گواهی‌های امضاشده داده می‌شود. هر CSR می‌تواند با تنظیم spec.expirationSeconds گواهی‌هایی با مدت کوتاه‌تر درخواست کند.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--cluster-signing-key-file string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نام فایلی که حاوی کلید خصوصی RSA یا ECDSA با کدگذاری PEM است و برای امضای گواهی‌های با دامنه کلاستر استفاده می‌شود. اگر این گزینه مشخص شود، هیچ فلگ اختصاصی‌تر --cluster-signing-* نباید مشخص شود.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--cluster-signing-kube-apiserver-client-cert-file string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نام فایلی که حاوی گواهی CA از نوع X509 با کدگذاری PEM است و برای صدور گواهی‌ها برای امضاکننده (signer) با نام kubernetes.io/kube-apiserver-client استفاده می‌شود. اگر این گزینه مشخص شود، --cluster-signing-{cert,key}-file نباید تنظیم شده باشد.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--cluster-signing-kube-apiserver-client-key-file string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نام فایلی که حاوی کلید خصوصی RSA یا ECDSA با کدگذاری PEM است و برای امضای گواهی‌ها برای امضاکننده (signer) با نام kubernetes.io/kube-apiserver-client استفاده می‌شود. اگر این گزینه مشخص شود، --cluster-signing-{cert,key}-file نباید تنظیم شده باشد.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--cluster-signing-kubelet-client-cert-file string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نام فایلی که حاوی گواهی CA از نوع X509 با کدگذاری PEM است و برای صدور گواهی‌ها برای امضاکننده (signer) با نام kubernetes.io/kube-apiserver-client-kubelet استفاده می‌شود. اگر این گزینه مشخص شود، --cluster-signing-{cert,key}-file نباید تنظیم شده باشد.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--cluster-signing-kubelet-client-key-file string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نام فایلی که حاوی کلید خصوصی RSA یا ECDSA با کدگذاری PEM است و برای امضای گواهی‌ها برای امضاکننده (signer) با نام kubernetes.io/kube-apiserver-client-kubelet استفاده می‌شود. اگر این گزینه مشخص شود، --cluster-signing-{cert,key}-file نباید تنظیم شده باشد.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--cluster-signing-kubelet-serving-cert-file string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نام فایلی که حاوی گواهی CA از نوع X509 با کدگذاری PEM است و برای صدور گواهی‌ها برای امضاکننده (signer) با نام kubernetes.io/kubelet-serving استفاده می‌شود. اگر این گزینه مشخص شود، --cluster-signing-{cert,key}-file نباید تنظیم شده باشد.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--cluster-signing-kubelet-serving-key-file string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نام فایلی که حاوی کلید خصوصی RSA یا ECDSA با کدگذاری PEM است و برای امضای گواهی‌ها برای امضاکننده (signer) با نام kubernetes.io/kubelet-serving استفاده می‌شود. اگر این گزینه مشخص شود، --cluster-signing-{cert,key}-file نباید تنظیم شده باشد.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--cluster-signing-legacy-unknown-cert-file string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نام فایلی که حاوی گواهی CA از نوع X509 با کدگذاری PEM است و برای صدور گواهی‌ها برای امضاکننده (signer) با نام kubernetes.io/legacy-unknown استفاده می‌شود. اگر این گزینه مشخص شود، --cluster-signing-{cert,key}-file نباید تنظیم شده باشد.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--cluster-signing-legacy-unknown-key-file string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نام فایلی که حاوی کلید خصوصی RSA یا ECDSA با کدگذاری PEM است و برای امضای گواهی‌ها برای امضاکننده (signer) با نام kubernetes.io/legacy-unknown استفاده می‌شود. اگر این گزینه مشخص شود، --cluster-signing-{cert,key}-file نباید تنظیم شده باشد.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--concurrent-cron-job-syncs int32     Default: 5</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">تعداد آبجکت‌های cron job که اجازه دارند به‌صورت همزمان هم‌گام‌سازی شوند. عدد بزرگ‌تر = Jobهایی با پاسخ‌گویی بیشتر، اما بار CPU (و شبکه) بیشتر</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--concurrent-daemonset-syncs int32     Default: 2</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">تعداد آبجکت‌های daemonset که اجازه دارند به‌صورت همزمان هم‌گام‌سازی شوند. عدد بزرگ‌تر = daemonsetهایی با پاسخ‌گویی بیشتر، اما بار CPU (و شبکه) بیشتر</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--concurrent-deployment-syncs int32     Default: 5</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">تعداد آبجکت‌های deployment که اجازه دارند به‌صورت همزمان هم‌گام‌سازی شوند. عدد بزرگ‌تر = deploymentهایی با پاسخ‌گویی بیشتر، اما بار CPU (و شبکه) بیشتر</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--concurrent-device-taint-eviction-syncs int32     Default: 8</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">تعداد عملیات‌هایی (خارج‌کردن Podها، به‌روزرسانی وضعیت DeviceTaintRule) که اجازه دارند به‌صورت همزمان اجرا شوند. عدد بزرگ‌تر = پاسخ‌گویی بیشتر، اما بار CPU (و شبکه) بیشتر</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--concurrent-disruption-syncs int32     Default: 1</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">تعداد آبجکت‌های PDB که اجازه دارند به‌صورت همزمان هم‌گام‌سازی شوند. عدد بزرگ‌تر = به‌روزرسانی‌های PDB با پاسخ‌گویی بیشتر، اما بار CPU (و شبکه) بیشتر</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--concurrent-endpoint-syncs int32     Default: 5</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">تعداد عملیات‌های هم‌گام‌سازی endpoint که به‌صورت همزمان انجام می‌شوند. عدد بزرگ‌تر = به‌روزرسانی سریع‌تر endpointها، اما بار CPU (و شبکه) بیشتر</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--concurrent-ephemeralvolume-syncs int32     Default: 5</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">تعداد عملیات‌های هم‌گام‌سازی حجم موقت (ephemeral volume) که به‌صورت همزمان انجام می‌شوند. عدد بزرگ‌تر = به‌روزرسانی سریع‌تر حجم‌های موقت، اما بار CPU (و شبکه) بیشتر</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--concurrent-gc-syncs int32     Default: 20</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">تعداد workerهای garbage collector که اجازه دارند به‌صورت همزمان هم‌گام‌سازی شوند.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--concurrent-horizontal-pod-autoscaler-syncs int32     Default: 5</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">تعداد آبجکت‌های horizontal pod autoscaler که اجازه دارند به‌صورت همزمان هم‌گام‌سازی شوند. عدد بزرگ‌تر = پردازش آبجکت‌های horizontal pod autoscaler با پاسخ‌گویی بیشتر، اما بار CPU (و شبکه) بیشتر.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--concurrent-job-syncs int32     Default: 5</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">تعداد آبجکت‌های job که اجازه دارند به‌صورت همزمان هم‌گام‌سازی شوند. عدد بزرگ‌تر = Jobهایی با پاسخ‌گویی بیشتر، اما بار CPU (و شبکه) بیشتر</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--concurrent-namespace-syncs int32     Default: 10</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">تعداد آبجکت‌های namespace که اجازه دارند به‌صورت همزمان هم‌گام‌سازی شوند. عدد بزرگ‌تر = خاتمه سریع‌تر فضای نام (namespace)، اما بار CPU (و شبکه) بیشتر</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--concurrent-rc-syncs int32     Default: 5</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">تعداد replication controllerهایی که اجازه دارند به‌صورت همزمان هم‌گام‌سازی شوند. عدد بزرگ‌تر = مدیریت replica با پاسخ‌گویی بیشتر، اما بار CPU (و شبکه) بیشتر</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--concurrent-replicaset-syncs int32     Default: 5</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">تعداد replica setهایی که اجازه دارند به‌صورت همزمان هم‌گام‌سازی شوند. عدد بزرگ‌تر = مدیریت replica با پاسخ‌گویی بیشتر، اما بار CPU (و شبکه) بیشتر</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--concurrent-resource-quota-syncs int32     Default: 5</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">تعداد resource quotaهایی که اجازه دارند به‌صورت همزمان هم‌گام‌سازی شوند. عدد بزرگ‌تر = مدیریت سهمیه با پاسخ‌گویی بیشتر، اما بار CPU (و شبکه) بیشتر</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--concurrent-resourceclaim-syncs int32     Default: 50</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">تعداد عملیات‌هایی (ایجاد یا حذف ResourceClaimها) که اجازه دارند به‌صورت همزمان اجرا شوند. عدد بزرگ‌تر = پاسخ‌گویی بیشتر، اما بار CPU (و شبکه) بیشتر</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--concurrent-service-endpoint-syncs int32     Default: 5</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">تعداد عملیات‌های هم‌گام‌سازی endpoint سرویس که به‌صورت همزمان انجام می‌شوند. عدد بزرگ‌تر = به‌روزرسانی سریع‌تر endpoint sliceها، اما بار CPU (و شبکه) بیشتر. مقدار پیش‌فرض 5 است.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--concurrent-serviceaccount-token-syncs int32     Default: 5</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">تعداد آبجکت‌های توکن service account که اجازه دارند به‌صورت همزمان هم‌گام‌سازی شوند. عدد بزرگ‌تر = تولید توکن با پاسخ‌گویی بیشتر، اما بار CPU (و شبکه) بیشتر</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--concurrent-statefulset-syncs int32     Default: 5</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">تعداد آبجکت‌های statefulset که اجازه دارند به‌صورت همزمان هم‌گام‌سازی شوند. عدد بزرگ‌تر = statefulsetهایی با پاسخ‌گویی بیشتر، اما بار CPU (و شبکه) بیشتر</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--concurrent-ttl-after-finished-syncs int32     Default: 5</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">تعداد workerهای ttl-after-finished-controller که اجازه دارند به‌صورت همزمان هم‌گام‌سازی شوند.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--concurrent-validating-admission-policy-status-syncs int32     Default: 5</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">تعداد worker‌های ValidatingAdmissionPolicyStatusController که مجاز به همگام‌سازی هم‌زمان هستند.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--configure-cloud-routes     Default: true</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">تعیین می‌کند که آیا CIDRهای تخصیص‌یافته توسط allocate-node-cidrs باید روی ارائه‌دهنده ابری پیکربندی شوند یا خیر.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--contention-profiling</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">در صورت فعال بودن profiling، پروفایل‌گیری از block را فعال می‌کند.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--controller-shutdown-timeout duration     Default: 10s</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مدت زمان انتظار برای خاموش شدن کنترل‌کننده‌ها پیش از پایان دادن به فایل اجرایی</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--controller-start-interval duration</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">فاصله زمانی بین راه‌اندازی controller managerها.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--controllers strings     Default: "*"</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">فهرستی از کنترل‌کننده‌هایی که باید فعال شوند. '*' همه کنترل‌کننده‌هایی را که به‌طور پیش‌فرض فعال هستند فعال می‌کند، 'foo' کنترل‌کننده‌ای با نام 'foo' را فعال می‌کند و '-foo' کنترل‌کننده‌ای با نام 'foo' را غیرفعال می‌کند.<br>همه کنترل‌کننده‌ها: bootstrap-signer-controller, certificatesigningrequest-approving-controller, certificatesigningrequest-cleaner-controller, certificatesigningrequest-signing-controller, clusterrole-aggregation-controller, cronjob-controller, daemonset-controller, deployment-controller, device-taint-eviction-controller, disruption-controller, endpoints-controller, endpointslice-controller, endpointslice-mirroring-controller, ephemeral-volume-controller, garbage-collector-controller, horizontal-pod-autoscaler-controller, job-controller, kube-apiserver-serving-clustertrustbundle-publisher-controller, legacy-serviceaccount-token-cleaner-controller, namespace-controller, node-ipam-controller, node-lifecycle-controller, persistentvolume-attach-detach-controller, persistentvolume-binder-controller, persistentvolume-expander-controller, persistentvolume-protection-controller, persistentvolumeclaim-protection-controller, pod-garbage-collector-controller, podcertificaterequest-cleaner-controller, podgroup-protection-controller, replicaset-controller, replicationcontroller-controller, resourceclaim-controller, resourcepoolstatusrequest-controller, resourcequota-controller, root-ca-certificate-publisher-controller, selinux-warning-controller, service-cidr-controller, serviceaccount-controller, serviceaccount-token-controller, statefulset-controller, storage-version-migrator-controller, storageversion-garbage-collector-controller, taint-eviction-controller, token-cleaner-controller, ttl-after-finished-controller, ttl-controller, validatingadmissionpolicy-status-controller, volumeattributesclass-protection-controller<br>کنترل‌کننده‌هایی که به‌طور پیش‌فرض غیرفعال هستند: bootstrap-signer-controller, selinux-warning-controller, token-cleaner-controller</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--disable-attach-detach-reconcile-sync</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">همگام‌سازی reconciler مربوط به attach و detach حجم (volume) را غیرفعال می‌کند. غیرفعال کردن این گزینه ممکن است باعث ناهماهنگی بین حجم‌ها و Podها شود. با احتیاط از آن استفاده کنید.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--disable-force-detach-on-timeout</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">از جداسازی اجباری (force detach) حجم‌ها بر اساس حداکثر زمان unmount و وضعیت نود جلوگیری می‌کند. اگر این پرچم روی true تنظیم شود، برای بازیابی از خرابی نود باید از قابلیت خاموش شدن غیرمنتظم نود (non-graceful node shutdown) استفاده کرد. به https://k8s.io/docs/storage-disable-force-detach-on-timeout/ مراجعه کنید.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--disable-http2-serving</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">اگر true باشد، سرویس‌دهی HTTP2 غیرفعال خواهد شد [default=false]</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--disabled-metrics strings</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">این پرچم راهی اضطراری برای متریک‌هایی است که رفتار نادرست دارند. برای غیرفعال کردن یک متریک باید نام کامل (fully qualified) آن را وارد کنید. توجه: غیرفعال کردن متریک‌ها اولویت بالاتری نسبت به نمایش متریک‌های پنهان دارد.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--emulated-version strings</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نسخه‌هایی که اجزای مختلف قابلیت‌های خود (APIها، ویژگی‌ها و ...) را بر اساس آن‌ها شبیه‌سازی می‌کنند.<br>در صورت تنظیم، جزء مورد نظر به‌جای نسخه باینری زیربنایی، رفتار این نسخه را شبیه‌سازی می‌کند.<br>قالب نسخه فقط می‌تواند major.minor باشد، برای مثال: '--emulated-version=wardle=1.2,kube=1.31'.<br>گزینه‌ها عبارت‌اند از: kube=1.34..1.37(default:1.37)<br>اگر جزء مشخص نشود، به‌طور پیش‌فرض «kube» در نظر گرفته می‌شود</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--enable-dynamic-provisioning     Default: true</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">تأمین پویا (dynamic provisioning) را برای محیط‌هایی که از آن پشتیبانی می‌کنند فعال می‌کند.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--enable-garbage-collector     Default: true</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">garbage collector عمومی را فعال می‌کند. این مقدار باید با پرچم متناظر در kube-apiserver هماهنگ باشد.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--enable-hostpath-provisioner</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">هنگام اجرا بدون ارائه‌دهنده ابری، تأمین PV از نوع HostPath را فعال می‌کند. این امر امکان آزمایش و توسعه قابلیت‌های تأمین را فراهم می‌کند. تأمین HostPath به هیچ شکلی پشتیبانی نمی‌شود، در کلاستر چندنودی کار نخواهد کرد و نباید برای هیچ منظوری جز آزمایش یا توسعه استفاده شود.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--enable-leader-migration</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">تعیین می‌کند که آیا مهاجرت leader کنترل‌کننده (controller leader migration) فعال شود یا خیر.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--endpoint-updates-batch-period duration</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">طول بازه دسته‌بندی به‌روزرسانی‌های endpoint. پردازش تغییرات Pod به‌اندازه این مدت به تأخیر می‌افتد تا با به‌روزرسانی‌های احتمالی بعدی ترکیب شود و تعداد کلی به‌روزرسانی‌های endpoint کاهش یابد. عدد بزرگ‌تر = تأخیر بیشتر در برنامه‌ریزی endpoint، اما تعداد کمتر نسخه‌های endpoint تولیدشده</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--endpointslice-updates-batch-period duration</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">طول بازه دسته‌بندی به‌روزرسانی‌های endpoint slice. پردازش تغییرات Pod به‌اندازه این مدت به تأخیر می‌افتد تا با به‌روزرسانی‌های احتمالی بعدی ترکیب شود و تعداد کلی به‌روزرسانی‌های endpoint کاهش یابد. عدد بزرگ‌تر = تأخیر بیشتر در برنامه‌ریزی endpoint، اما تعداد کمتر نسخه‌های endpoint تولیدشده</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--external-cloud-volume-plugin string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">افزونه‌ای که هنگام تنظیم cloud provider روی external استفاده می‌شود. می‌تواند خالی باشد و فقط زمانی باید تنظیم شود که cloud-provider برابر external است. در حال حاضر برای این استفاده می‌شود که node-ipam-controller، persistentvolume-binder-controller، persistentvolume-expander-controller و attach-detach-controller بتوانند با ارائه‌دهندگان ابری درون‌درخت (in-tree) کار کنند.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--feature-gates colonSeparatedMultimapStringString</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">فهرستی جداشده با کاما از جفت‌های component:key=value که feature gateهای ویژگی‌های آلفا/آزمایشی اجزای مختلف را توصیف می‌کنند.<br>اگر جزء مشخص نشود، به‌طور پیش‌فرض «kube» در نظر گرفته می‌شود. این پرچم را می‌توان چندین بار به کار برد. برای مثال: --feature-gates 'wardle:featureA=true,wardle:featureB=false' --feature-gates 'kube:featureC=true'. گزینه‌ها عبارت‌اند از:<br>kube:APIResponseCompression=true|false (BETA - default=true)<br>kube:APIServerIdentity=true|false (BETA - default=true)<br>kube:APIServerWebhookAuthenticationToken=true|false (ALPHA - default=false)<br>kube:APIServingWithRoutine=true|false (ALPHA - default=false)<br>kube:AllAlpha=true|false (ALPHA - default=false)<br>kube:AllBeta=true|false (BETA - default=false)<br>kube:AllowParsingUserUIDFromCertAuth=true|false (BETA - default=true)<br>kube:AllowUnsafeMalformedObjectDeletion=true|false (BETA - default=true)<br>kube:AtomicFIFO=true|false (BETA - default=true)<br>kube:AtomicWriteVolumeUserFields=true|false (ALPHA - default=false)<br>kube:AuthorizePodWebsocketUpgradeCreatePermission=true|false (BETA - default=true)<br>kube:CBORServingAndStorage=true|false (ALPHA - default=false)<br>kube:CPUManagerPolicyAlphaOptions=true|false (ALPHA - default=false)<br>kube:CPUManagerPolicyBetaOptions=true|false (BETA - default=true)<br>kube:CRDObservedGenerationTracking=true|false (BETA - default=true)<br>kube:CRIListStreaming=true|false (ALPHA - default=false)<br>kube:CSIVolumeHealth=true|false (ALPHA - default=false)<br>kube:ClearingNominatedNodeNameAfterBinding=true|false (BETA - default=true)<br>kube:ClientsAllowCARotation=true|false (BETA - default=true)<br>kube:ClientsAllowCBOR=true|false (ALPHA - default=false)<br>kube:ClientsAllowTLSCacheGC=true|false (BETA - default=true)<br>kube:ClientsPreferCBOR=true|false (ALPHA - default=false)<br>kube:CloudControllerManagerWatchBasedRoutesReconciliation=true|false (ALPHA - default=false)<br>kube:CloudControllerManagerWebhook=true|false (ALPHA - default=false)<br>kube:ComponentFlagz=true|false (BETA - default=true)<br>kube:ComponentStatusz=true|false (BETA - default=true)<br>kube:CompositePodGroup=true|false (ALPHA - default=false)<br>kube:ConcurrentWatchObjectDecode=true|false (BETA - default=true)<br>kube:ConsistentListFromCacheSkipTimeoutFallback=true|false (ALPHA - default=false)<br>kube:ConstrainedImpersonation=true|false (BETA - default=true)<br>kube:ContainerCheckpoint=true|false (BETA - default=true)<br>kube:ContainerRestartRules=true|false (BETA - default=true)<br>kube:ContainerStopSignals=true|false (ALPHA - default=false)<br>kube:ContextualLogging=true|false (BETA - default=true)<br>kube:ControllerManagerReleaseLeaderElectionLockOnExit=true|false (ALPHA - default=false)<br>kube:CoordinatedLeaderElection=true|false (BETA - default=false)<br>kube:CrossNamespaceVolumeDataSource=true|false (ALPHA - default=false)<br>kube:DRAConsumableCapacity=true|false (BETA - default=true)<br>kube:DRADerivedAttributes=true|false (ALPHA - default=false)<br>kube:DRADeviceBindingConditions=true|false (BETA - default=true)<br>kube:DRADeviceCompatibilityGroups=true|false (ALPHA - default=false)<br>kube:DRAFractionalCapacityRange=true|false (BETA - default=false)، یا DRAFractionalCapacityRange=true|false (BETA - default=true) اگر --min-compatibility-version&gt;=1.37<br>kube:DRAListTypeAttributes=true|false (ALPHA - default=false)<br>kube:DRANodeAllocatableResources=true|false (ALPHA - default=false)<br>kube:DRAOptionalNodeOperations=true|false (ALPHA - default=false)<br>kube:DRAPartitionableDevices=true|false (BETA - default=true)<br>kube:DRAPartitionableDevicesType=true|false (ALPHA - default=false)<br>kube:DRAResourceClaimGranularStatusAuthorization=true|false (BETA - default=true)<br>kube:DRAResourcePoolStatus=true|false (ALPHA - default=false)<br>kube:DRASchedulerFilterTimeout=true|false (BETA - default=true)<br>kube:DRAWorkloadResourceClaims=true|false (BETA - default=false)<br>kube:DeclarativeValidationBeta=true|false (BETA - default=true)<br>kube:DefaultPodSysctls=true|false (ALPHA - default=false)<br>kube:DeploymentReplicaSetTerminatingReplicas=true|false (BETA - default=true)<br>kube:DetectCacheInconsistency=true|false (BETA - default=true)<br>kube:EmptyDirVolumeMode=true|false (ALPHA - default=false)<br>kube:EnvFiles=true|false (BETA - default=true)<br>kube:EtcdRangeStream=true|false (BETA - default=true)<br>kube:EventedPLEG=true|false (ALPHA - default=false)<br>kube:EvictionRequestAPI=true|false (ALPHA - default=false)<br>kube:ExcludeAdmissionWebhookVirtualResources=true|false (BETA - default=true)<br>kube:ExtendWebSocketsToKubelet=true|false (BETA - default=true)<br>kube:GRPCContainerProbeTLS=true|false (ALPHA - default=false)<br>kube:GenericWorkload=true|false (BETA - default=false)<br>kube:GracefulNodeShutdown=true|false (BETA - default=true)<br>kube:GracefulNodeShutdownBasedOnPodPriority=true|false (BETA - default=true)<br>kube:H2CContainerProbe=true|false (ALPHA - default=false)<br>kube:HPAGeneration=true|false (BETA - default=true)<br>kube:HPAOptimizedSelectorStore=true|false (BETA - default=true)<br>kube:HPAScaleToZero=true|false (BETA - default=true)<br>kube:HugepageAwareEviction=true|false (BETA - default=true)<br>kube:ImageVolumeWithDigest=true|false (ALPHA - default=false)<br>kube:InOrderInformersBatchProcess=true|false (BETA - default=true)<br>kube:InPlacePodLevelResourcesVerticalScaling=true|false (BETA - default=true)<br>kube:InPlacePodVerticalScalingExclusiveCPUs=true|false (ALPHA - default=false)<br>kube:InPlacePodVerticalScalingExclusiveMemory=true|false (ALPHA - default=false)<br>kube:InPlacePodVerticalScalingMemoryBackedVolumes=true|false (ALPHA - default=false)<br>kube:InPlacePodVerticalScalingSchedulerPreemption=true|false (ALPHA - default=false)<br>kube:InterPodAffinityHostnameFastPath=true|false (ALPHA - default=false)<br>kube:KubeProxyNFTablesLocalhostNodePorts=true|false (ALPHA - default=false)<br>kube:KubeletAllocatedPodsEndpoint=true|false (ALPHA - default=false)<br>kube:KubeletCrashLoopBackOffMax=true|false (BETA - default=true)<br>kube:KubeletEnsureSecretPulledImages=true|false (BETA - default=true)<br>kube:KubeletInUserNamespace=true|false (BETA - default=true)<br>kube:KubeletSeparateDiskGC=true|false (BETA - default=true)<br>kube:KubeletServiceAccountTokenForCredentialProviders=true|false (BETA - default=true)<br>kube:ListFromCacheSnapshot=true|false (BETA - default=true)<br>kube:LocalStorageCapacityIsolationFSQuotaMonitoring=true|false (BETA - default=false)<br>kube:LoggingAlphaOptions=true|false (ALPHA - default=false)<br>kube:LoggingBetaOptions=true|false (BETA - default=true)<br>kube:ManifestBasedAdmissionControlConfig=true|false (BETA - default=true)<br>kube:MatchLabelKeysInPodTopologySpread=true|false (BETA - default=true)<br>kube:MatchLabelKeysInPodTopologySpreadSelectorMerge=true|false (BETA - default=true)<br>kube:MaxUnavailableStatefulSet=true|false (BETA - default=true)<br>kube:MemoryQoS=true|false (BETA - default=true)<br>kube:MutablePVNodeAffinity=true|false (ALPHA - default=false)<br>kube:MutablePodResourcesForSuspendedJobs=true|false (BETA - default=true)<br>kube:MutableSchedulingDirectivesForSuspendedJobs=true|false (BETA - default=true)<br>kube:NFTablesNetlink=true|false (BETA - default=true)<br>kube:NativeHistograms=true|false (BETA - default=true)<br>kube:NodeControllerLeaseCircuitBreaker=true|false (BETA - default=true)<br>kube:NodeLifecycleConditions=true|false (ALPHA - default=false)<br>kube:NominatedNodeNameForExpectation=true|false (BETA - default=true)<br>kube:OpenAPIEnums=true|false (BETA - default=true)<br>kube:OpportunisticBatching=true|false (BETA - default=true)<br>kube:PersistentVolumeClaimUnusedSinceTime=true|false (BETA - default=true)<br>kube:PodAndContainerStatsFromCRI=true|false (BETA - default=false)<br>kube:PodDeletionCost=true|false (BETA - default=true)<br>kube:PodGroupPreemptionPolicy=true|false (ALPHA - default=false)<br>kube:PodLevelResourceManagers=true|false (BETA - default=false)<br>kube:PodLevelResources=true|false (BETA - default=true)<br>kube:PodLevelResourcesFixDefaulting=true|false (BETA - default=true)<br>kube:PodLevelResourcesFixKubeletQOSClass=true|false (BETA - default=true)<br>kube:PodLogsQuerySplitStreams=true|false (ALPHA - default=false)<br>kube:PodTopologyLabelsAdmission=true|false (BETA - default=true)<br>kube:PodsAPI=true|false (BETA - default=true)<br>kube:PortForwardWebsockets=true|false (BETA - default=true)<br>kube:QOSReserved=true|false (ALPHA - default=false)<br>kube:ReduceDefaultCrashLoopBackOffDecay=true|false (ALPHA - default=false)<br>kube:ReloadKubeletClientCAFile=true|false (BETA - default=true)<br>kube:ReloadKubeletServerCertificateFile=true|false (BETA - default=true)<br>kube:RemoteRequestHeaderUID=true|false (BETA - default=true)<br>kube:ResourceHealthStatus=true|false (BETA - default=true)<br>kube:ResourceHealthStatusMessage=true|false (BETA - default=true)<br>kube:RestartAllContainersOnContainerExits=true|false (BETA - default=true)<br>kube:RotateKubeletServerCertificate=true|false (BETA - default=true)<br>kube:RuntimeClassInImageCriApi=true|false (ALPHA - default=false)<br>kube:SchedulerAsyncAPICalls=true|false (BETA - default=false)<br>kube:SchedulerAsyncPreemption=true|false (BETA - default=true)<br>kube:SchedulerPopFromBackoffQ=true|false (BETA - default=true)<br>kube:SchedulerPreQueueingHints=true|false (ALPHA - default=false)<br>kube:ServiceAccountNodeAudienceRestriction=true|false (BETA - default=true)<br>kube:ShardedListAndWatch=true|false (ALPHA - default=false)<br>kube:SizeBasedListCostEstimate=true|false (BETA - default=true)<br>kube:StaleControllerConsistencyDaemonSet=true|false (BETA - default=true)<br>kube:StaleControllerConsistencyHPA=true|false (BETA - default=true)<br>kube:StaleControllerConsistencyJob=true|false (BETA - default=true)<br>kube:StaleControllerConsistencyReplicaSet=true|false (BETA - default=true)<br>kube:StaleControllerConsistencyStatefulSet=true|false (BETA - default=true)<br>kube:StatefulSetRecreateStrategy=true|false (ALPHA - default=false)<br>kube:StatefulSetSemanticRevisionComparison=true|false (BETA - default=true)<br>kube:StorageCapacityScoring=true|false (BETA - default=true)<br>kube:StorageVersionAPI=true|false (ALPHA - default=false)<br>kube:StorageVersionHash=true|false (BETA - default=true)<br>kube:StrictIPCIDRValidation=true|false (BETA - default=true)<br>kube:StructuredAuthenticationConfigurationEgressSelector=true|false (BETA - default=true)<br>kube:StructuredAuthenticationConfigurationJWKSMetrics=true|false (BETA - default=true)<br>kube:TaintTolerationComparisonOperators=true|false (ALPHA - default=false)<br>kube:TokenRequestServiceAccountUIDValidation=true|false (BETA - default=true)<br>kube:TopologyAwareWorkloadScheduling=true|false (ALPHA - default=false)<br>kube:TopologyManagerPolicyAlphaOptions=true|false (ALPHA - default=false)<br>kube:TopologyManagerPolicyBetaOptions=true|false (BETA - default=true)<br>kube:TranslateStreamCloseWebsocketRequests=true|false (BETA - default=true)<br>kube:UnauthenticatedHTTP2DOSMitigation=true|false (BETA - default=true)<br>kube:UnknownVersionInteroperabilityProxy=true|false (BETA - default=true)<br>kube:UnlockWhileProcessingFIFO=true|false (BETA - default=true)<br>kube:UserNamespacesHostNetworkSupport=true|false (ALPHA - default=false)<br>kube:VolumeBindMountOptions=true|false (ALPHA - default=false)<br>kube:VolumeLimitScaling=true|false (BETA - default=true)<br>kube:WatchList=true|false (BETA - default=true)<br>kube:WatchListClient=true|false (BETA - default=true)<br>kube:WatchListCompression=true|false (BETA - default=true)<br>kube:WebhookRoundTripLoadBalancing=true|false (BETA - default=true)<br>kube:WindowsCPUAndMemoryAffinity=true|false (ALPHA - default=false)<br>kube:WindowsGracefulNodeShutdown=true|false (BETA - default=true)<br>kube:WorkloadWithJob=true|false (ALPHA - default=false)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--flex-volume-plugin-dir string     Default: "/usr/libexec/kubernetes/kubelet-plugins/volume/exec/"</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مسیر کامل دایرکتوری‌ای که افزونه flex volume باید در آن به‌دنبال افزونه‌های حجم (volume) شخص ثالث اضافی بگردد.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">-h, --help</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">راهنما برای kube-controller-manager</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--horizontal-pod-autoscaler-cpu-initialization-period duration     Default: 5m0s</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">بازه زمانی پس از شروع به کار Pod که طی آن ممکن است نمونه‌های CPU نادیده گرفته شوند.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--horizontal-pod-autoscaler-downscale-stabilization duration     Default: 5m0s</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">بازه زمانی که autoscaler در آن به عقب نگاه می‌کند و تعداد replicaها را به کمتر از هر توصیه‌ای که در آن بازه ارائه کرده است کاهش نمی‌دهد.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--horizontal-pod-autoscaler-initial-readiness-delay duration     Default: 30s</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">بازه زمانی پس از شروع به کار Pod که طی آن تغییرات آمادگی (readiness) به‌عنوان آمادگی اولیه در نظر گرفته می‌شوند.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--horizontal-pod-autoscaler-sync-period duration     Default: 15s</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">بازه زمانی همگام‌سازی تعداد Podها در horizontal pod autoscaler.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--horizontal-pod-autoscaler-tolerance float     Default: 0.1</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">حداقل تغییر (نسبت به 1.0) در نسبت متریک‌های مطلوب به واقعی که horizontal pod autoscaler برای در نظر گرفتن مقیاس‌دهی لازم دارد.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--http2-max-streams-per-connection int</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">حد بیشینه تعداد streamها در یک اتصال HTTP/2 که سرور به کلاینت‌ها اعلام می‌کند. مقدار صفر به معنی استفاده از مقدار پیش‌فرض golang است.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--kube-api-burst int32     Default: 30</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مقدار burst برای ارتباط با kubernetes apiserver.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--kube-api-content-type string     Default: "application/vnd.kubernetes.protobuf"</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نوع محتوای درخواست‌های ارسالی به apiserver.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--kube-api-qps float     Default: 20</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مقدار QPS برای ارتباط با kubernetes apiserver.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--kubeconfig string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مسیر فایل kubeconfig که شامل اطلاعات احراز مجوز و نشانی master است (نشانی master را می‌توان با پرچم master بازنویسی کرد).</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--large-cluster-size-threshold int32     Default: 50</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">تعداد نودهایی که از آن به بعد node-lifecycle-controller برای منطق جابه‌جایی (eviction) کلاستر را بزرگ در نظر می‌گیرد. برای کلاسترهایی با این اندازه یا کوچک‌تر، مقدار --secondary-node-eviction-rate به‌طور ضمنی با 0 بازنویسی می‌شود. توجه: اگر نودها در چندین zone قرار داشته باشند، این آستانه برای هر zone به‌عنوان آستانه اندازه نودهای آن zone در نظر گرفته می‌شود تا نرخ جابه‌جایی نودها به‌صورت مستقل تعیین شود.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--leader-elect     Default: true</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">پیش از اجرای حلقه اصلی، یک کلاینت انتخاب رهبر (leader election) راه‌اندازی می‌کند و رهبری را به دست می‌گیرد. هنگام اجرای مؤلفه‌های replicate‌شده برای دسترس‌پذیری بالا، این گزینه را فعال کنید.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--leader-elect-lease-duration duration     Default: 15s</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مدت زمانی که کاندیداهای غیررهبر پس از مشاهده تمدید رهبری صبر می‌کنند تا برای تصاحب رهبری یک slot رهبری که اشغال شده اما تمدید نشده است اقدام کنند. این مقدار در واقع بیشینه مدتی است که یک رهبر می‌تواند متوقف باشد تا کاندیدای دیگری جایگزین آن شود. این گزینه فقط در صورتی کاربرد دارد که انتخاب رهبر فعال باشد.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--leader-elect-renew-deadline duration     Default: 10s</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">فاصله زمانی بین تلاش‌های master فعلی برای تمدید slot رهبری پیش از آنکه از رهبری دست بکشد. این مقدار باید کمتر از مدت lease باشد. این گزینه فقط در صورتی کاربرد دارد که انتخاب رهبر فعال باشد.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--leader-elect-resource-lock string     Default: "leases"</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نوع آبجکت منبعی که برای قفل‌گذاری در هنگام انتخاب رهبر استفاده می‌شود. گزینه‌های پشتیبانی‌شده: 'leases'.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--leader-elect-resource-name string     Default: "kube-controller-manager"</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نام آبجکت منبعی که برای قفل‌گذاری در هنگام انتخاب رهبر استفاده می‌شود.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--leader-elect-resource-namespace string     Default: "kube-system"</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">فضای نام (namespace) آبجکت منبعی که برای قفل‌گذاری در هنگام انتخاب رهبر استفاده می‌شود.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--leader-elect-retry-period duration     Default: 2s</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مدت زمانی که کلاینت‌ها باید بین تلاش‌های کسب و تمدید رهبری صبر کنند. این گزینه فقط در صورتی کاربرد دارد که انتخاب رهبر فعال باشد.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--leader-migration-config string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مسیر فایل پیکربندی برای مهاجرت رهبر (leader migration) کنترل‌کننده‌ها، یا خالی بگذارید تا از مقداری استفاده شود که پیکربندی پیش‌فرض controller manager را منعکس می‌کند. فایل پیکربندی باید از نوع LeaderMigrationConfiguration، گروه controllermanager.config.k8s.io و نسخه v1alpha1 باشد.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--legacy-service-account-token-clean-up-period duration     Default: 8760h0m0s</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مدت زمانی که باید از آخرین استفاده از یک توکن legacy service account بگذرد تا بتوان آن را حذف کرد.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--log-flush-frequency duration     Default: 5s</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">بیشینه تعداد ثانیه‌ها بین دو flush متوالی لاگ‌ها</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--log-text-info-buffer-size quantity</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">[آلفا] در قالب متنی با جریان‌های خروجی جداشده، پیام‌های info را می‌توان برای مدتی بافر کرد تا کارایی افزایش یابد. مقدار پیش‌فرض صفر بایت، بافرکردن را غیرفعال می‌کند. اندازه را می‌توان به‌صورت تعداد بایت (512)، مضرب‌های 1000 (1K)، مضرب‌های 1024 (2Ki) یا توان‌های آن‌ها (3M، 4G، 5Mi، 6Gi) مشخص کرد. برای استفاده از این گزینه، feature gate با نام LoggingAlphaOptions را فعال کنید.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--log-text-split-stream</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">[آلفا] در قالب متنی، پیام‌های خطا را در stderr و پیام‌های info را در stdout می‌نویسد. رفتار پیش‌فرض نوشتن یک جریان واحد در stdout است. برای استفاده از این گزینه، feature gate با نام LoggingAlphaOptions را فعال کنید.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--logging-format string     Default: "text"</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">قالب لاگ را تعیین می‌کند. قالب‌های مجاز: "text".</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--master string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نشانی سرور API کوبرنتیز (هر مقداری را که در kubeconfig آمده است بازنویسی می‌کند).</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--max-endpoints-per-slice int32     Default: 100</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">بیشینه تعداد endpointهایی که به یک EndpointSlice اضافه می‌شود. تعداد بیشتر endpoint در هر slice منجر به تعداد کمتر EndpointSlice اما منابع بزرگ‌تر می‌شود. مقدار پیش‌فرض 100 است.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--min-compatibility-version strings</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">حداقل نسخه مؤلفه‌های control plane که سرور باید با آن سازگار باشد.<br>باید کمتر از emulated-version یا برابر با آن باشد. قالب نسخه فقط می‌تواند major.minor باشد، برای مثال: '--min-compatibility-version=wardle=1.2,kube=1.31'.<br>گزینه‌ها: kube=1.34..1.37(default:1.36)<br>اگر مؤلفه مشخص نشود، مقدار پیش‌فرض "kube" است</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--min-resync-period duration     Default: 12h0m0s</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">بازه همگام‌سازی مجدد (resync) در reflectorها به‌صورت تصادفی بین MinResyncPeriod و 2*MinResyncPeriod خواهد بود.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--mirroring-concurrent-service-endpoint-syncs int32     Default: 5</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">تعداد عملیات همگام‌سازی endpoint سرویس که endpointslice-mirroring-controller به‌صورت همزمان انجام می‌دهد. عدد بزرگ‌تر = به‌روزرسانی سریع‌تر EndpointSlice، اما بار CPU (و شبکه) بیشتر. مقدار پیش‌فرض 5 است.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--mirroring-endpointslice-updates-batch-period duration</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">طول بازه دسته‌بندی به‌روزرسانی‌های EndpointSlice برای endpointslice-mirroring-controller. پردازش تغییرات EndpointSlice به اندازه این مدت به تأخیر می‌افتد تا با به‌روزرسانی‌های احتمالی پیش‌رو ترکیب شود و تعداد کل به‌روزرسانی‌های EndpointSlice کاهش یابد. عدد بزرگ‌تر = تأخیر بیشتر در برنامه‌ریزی endpointها، اما تعداد کمتر نسخه‌های endpoint تولیدشده</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--mirroring-max-endpoints-per-subset int32     Default: 1000</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">بیشینه تعداد endpointهایی که endpointslice-mirroring-controller به یک EndpointSlice اضافه می‌کند. تعداد بیشتر endpoint در هر slice منجر به تعداد کمتر EndpointSlice اما منابع بزرگ‌تر می‌شود. مقدار پیش‌فرض 100 است.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--namespace-sync-period duration     Default: 5m0s</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">بازه زمانی همگام‌سازی به‌روزرسانی‌های چرخه حیات فضای نام (namespace)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--node-cidr-mask-size int32</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">اندازه ماسک CIDR نود در کلاستر. مقدار پیش‌فرض برای IPv4 برابر 24 و برای IPv6 برابر 64 است.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--node-cidr-mask-size-ipv4 int32</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">اندازه ماسک CIDR نود برای IPv4 در کلاستر dual-stack. مقدار پیش‌فرض 24 است.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--node-cidr-mask-size-ipv6 int32</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">اندازه ماسک CIDR نود برای IPv6 در کلاستر dual-stack. مقدار پیش‌فرض 64 است.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--node-eviction-rate float     Default: 0.1</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">تعداد نودها در ثانیه که در صورت خرابی نود، Podهای آن‌ها حذف می‌شود، در حالی که zone سالم است (برای تعریف سالم/ناسالم به --unhealthy-zone-threshold مراجعه کنید). در کلاسترهای غیرچندزونه، zone به کل کلاستر اشاره دارد.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--node-monitor-grace-period duration     Default: 50s</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مدت زمانی که اجازه می‌دهیم یک نود در حال اجرا پاسخگو نباشد، پیش از آنکه ناسالم علامت‌گذاری شود. این مقدار باید N برابر nodeStatusUpdateFrequency در kubelet باشد، که N تعداد دفعات مجاز تلاش مجدد kubelet برای ارسال وضعیت نود است. این مقدار همچنین باید از مجموع HTTP2_PING_TIMEOUT_SECONDS و HTTP2_READ_IDLE_TIMEOUT_SECONDS بزرگ‌تر باشد</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--node-monitor-period duration     Default: 5s</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">بازه زمانی همگام‌سازی NodeStatus در NodeLifecycleController.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--node-startup-grace-period duration     Default: 1m0s</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مدت زمانی که اجازه می‌دهیم یک نودِ در حال راه‌اندازی پاسخگو نباشد، پیش از آنکه ناسالم علامت‌گذاری شود.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--permit-address-sharing</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">اگر true باشد، هنگام bind کردن پورت از SO_REUSEADDR استفاده می‌شود. این کار امکان bind همزمان به IPهای wildcard مانند 0.0.0.0 و IPهای مشخص را فراهم می‌کند و از انتظار برای آزادشدن socketهای در حالت TIME_WAIT توسط کرنل جلوگیری می‌کند. [default=false]</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--permit-port-sharing</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">اگر true باشد، هنگام bind کردن پورت از SO_REUSEPORT استفاده می‌شود که اجازه می‌دهد بیش از یک نمونه روی یک نشانی و پورت یکسان bind شوند. [default=false]</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--profiling     Default: true</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">فعال‌سازی profiling از طریق رابط وب در host:port/debug/pprof/</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--pv-recycler-increment-timeout-nfs int32     Default: 30</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مقدار زمانی که به ازای هر Gi به ActiveDeadlineSeconds برای یک Pod پاک‌کننده (scrubber) مربوط به NFS افزوده می‌شود</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--pv-recycler-minimum-timeout-hostpath int32     Default: 60</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">حداقل مقدار ActiveDeadlineSeconds برای یک Pod بازیافت‌کننده (Recycler) از نوع HostPath. این گزینه فقط برای توسعه و آزمایش است و در کلاستر چندنودی کار نخواهد کرد.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--pv-recycler-minimum-timeout-nfs int32     Default: 300</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">حداقل مقدار ActiveDeadlineSeconds برای یک Pod بازیافت‌کننده (Recycler) از نوع NFS</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--pv-recycler-pod-template-filepath-hostpath string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مسیر فایل تعریف Pod که به‌عنوان قالب برای بازیافت persistent volume از نوع HostPath استفاده می‌شود. این گزینه فقط برای توسعه و آزمایش است و در کلاستر چندنودی کار نخواهد کرد.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--pv-recycler-pod-template-filepath-nfs string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مسیر فایل تعریف Pod که به‌عنوان قالب برای بازیافت persistent volume از نوع NFS استفاده می‌شود</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--pv-recycler-timeout-increment-hostpath int32     Default: 30</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مقدار زمانی که به ازای هر Gi به ActiveDeadlineSeconds برای یک Pod پاک‌کننده (scrubber) از نوع HostPath افزوده می‌شود. این گزینه فقط برای توسعه و آزمایش است و در کلاستر چندنودی کار نخواهد کرد.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--pvclaimbinder-sync-period duration     Default: 15s</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">بازه زمانی همگام‌سازی persistent volumeها و persistent volume claimها</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--requestheader-allowed-names strings</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">فهرست common nameهای گواهی کلاینت که مجاز به ارائه نام کاربری در هدرهای مشخص‌شده با --requestheader-username-headers هستند. اگر خالی باشد، هر گواهی کلاینتی که توسط مراجع موجود در --requestheader-client-ca-file اعتبارسنجی شده باشد مجاز است.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--requestheader-client-ca-file string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">بسته گواهی ریشه (root certificate bundle) که برای تأیید گواهی‌های کلاینت در درخواست‌های ورودی استفاده می‌شود، پیش از آنکه به نام‌های کاربری موجود در هدرهای مشخص‌شده با --requestheader-username-headers اعتماد شود. هشدار: به‌طور کلی نباید به این وابسته بود که احراز مجوز (authorization) برای درخواست‌های ورودی از قبل انجام شده است.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--requestheader-extra-headers-prefix strings     Default: "x-remote-extra-"</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">فهرست پیشوندهای هدر درخواست که باید بررسی شوند. پیشنهاد می‌شود X-Remote-Extra- استفاده شود.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--requestheader-group-headers strings     Default: "x-remote-group"</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">فهرست هدرهای درخواست که برای تعیین گروه‌ها بررسی می‌شوند. پیشنهاد می‌شود X-Remote-Group استفاده شود.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--requestheader-uid-headers strings</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">فهرست هدرهای درخواست که برای تعیین UIDها بررسی می‌شوند. پیشنهاد می‌شود X-Remote-Uid استفاده شود. نیازمند فعال بودن قابلیت RemoteRequestHeaderUID است.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--requestheader-username-headers strings     Default: "x-remote-user"</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">فهرست هدرهای درخواست که برای تعیین نام‌های کاربری بررسی می‌شوند. X-Remote-User رایج است.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--resource-quota-sync-period duration     Default: 5m0s</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">بازه زمانی همگام‌سازی وضعیت مصرف سهمیه (quota) در سیستم</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--root-ca-file string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">در صورت تنظیم، این مرجع گواهی ریشه (root certificate authority) در Secret مربوط به توکن service account گنجانده می‌شود. این مقدار باید یک بسته CA معتبر با کدگذاری PEM باشد.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--route-reconciliation-period duration     Default: 10s</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">بازه زمانی تطبیق (reconcile) مسیرهایی که توسط ارائه‌دهنده ابری برای نودها ایجاد شده‌اند.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--secondary-node-eviction-rate float     Default: 0.01</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">تعداد نودهایی که در هر ثانیه Podهای آن‌ها در صورت خرابی نود حذف می‌شوند، هنگامی که یک zone ناسالم است (برای تعریف سالم/ناسالم به --unhealthy-zone-threshold مراجعه کنید). در کلاسترهای غیرچندzone، zone به کل کلاستر اشاره دارد. اگر اندازه کلاستر از --large-cluster-size-threshold کوچک‌تر باشد، این مقدار به‌طور ضمنی با 0 جایگزین می‌شود.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--secure-port int     Default: 10257</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">پورتی که HTTPS همراه با احراز هویت و احراز مجوز روی آن ارائه می‌شود. اگر 0 باشد، HTTPS اصلاً ارائه نمی‌شود.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--service-account-private-key-file string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">در صورت تنظیم، توکن‌های قدیمی مبتنی بر Secret را فعال می‌کند. نام فایلی که حاوی کلید خصوصی RSA یا ECDSA با کدگذاری PEM است و برای امضای توکن‌های service account استفاده می‌شود.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--service-cluster-ip-range string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">محدوده CIDR برای Serviceها در کلاستر. فقط زمانی استفاده می‌شود که --allocate-node-cidrs=true باشد؛ در غیر این صورت این گزینه نادیده گرفته می‌شود.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--show-hidden-metrics-for-version string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نسخه قبلی که می‌خواهید معیارهای (metrics) پنهان آن نمایش داده شود. فقط نسخه فرعی (minor) قبلی معنا دارد و مقادیر دیگر پذیرفته نخواهند شد. قالب آن &lt;major&gt;.&lt;minor&gt; است، برای مثال: '1.16'. هدف از این قالب آن است که اگر انتشار بعدی معیارهای بیشتری را پنهان کند، فرصت داشته باشید متوجه شوید، و هنگام حذف دائمی آن‌ها در انتشار پس از آن غافلگیر نشوید.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--terminated-pod-gc-threshold int32     Default: 12500</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">تعداد Podهای خاتمه‌یافته‌ای که می‌توانند وجود داشته باشند، پیش از آنکه garbage collector مربوط به Podهای خاتمه‌یافته شروع به حذف آن‌ها کند. اگر مقدار &lt;= 0 باشد، garbage collector مربوط به Podهای خاتمه‌یافته غیرفعال است.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--tls-cert-file string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">فایل حاوی گواهی x509 پیش‌فرض برای HTTPS. (گواهی CA، در صورت وجود، پس از گواهی سرور الحاق می‌شود). اگر ارائه HTTPS فعال باشد و --tls-cert-file و --tls-private-key-file مشخص نشده باشند، یک گواهی و کلید خودامضا برای نشانی عمومی تولید شده و در دایرکتوری مشخص‌شده با --cert-dir ذخیره می‌شود.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--tls-cipher-suites strings</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">فهرست مجموعه رمزنگاری‌ها (cipher suites) برای سرور، جداشده با ویرگول. اگر مشخص نشود، از cipher suiteهای پیش‌فرض Go استفاده می‌شود.<br>مقادیر توصیه‌شده: TLS_AES_128_GCM_SHA256, TLS_AES_256_GCM_SHA384, TLS_CHACHA20_POLY1305_SHA256, TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA, TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256, TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA, TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384, TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305, TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256, TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA, TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256, TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA, TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384, TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305, TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256.<br>مقادیر ناامن: TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256, TLS_ECDHE_ECDSA_WITH_RC4_128_SHA, TLS_ECDHE_RSA_WITH_3DES_EDE_CBC_SHA, TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256, TLS_ECDHE_RSA_WITH_RC4_128_SHA, TLS_RSA_WITH_3DES_EDE_CBC_SHA, TLS_RSA_WITH_AES_128_CBC_SHA, TLS_RSA_WITH_AES_128_CBC_SHA256, TLS_RSA_WITH_AES_128_GCM_SHA256, TLS_RSA_WITH_AES_256_CBC_SHA, TLS_RSA_WITH_AES_256_GCM_SHA384, TLS_RSA_WITH_RC4_128_SHA.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--tls-curve-preferences int32Slice     Default: []</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">فهرستی از مقادیر عددی CurveID در crypto/tls زبان Go، جداشده با ویرگول، به‌عنوان سازوکارهای مجاز تبادل کلید برای سرور. مقادیر پشتیبانی‌شده به نسخه Go مورد استفاده بستگی دارد. برای مقادیر پشتیبانی‌شده در هر نسخه Go به https://pkg.go.dev/crypto/tls#CurveID مراجعه کنید. ترتیب فهرست نادیده گرفته می‌شود و Go سازوکارهای تبادل کلید را از میان این فهرست با استفاده از یک ترتیب ترجیحی داخلی انتخاب می‌کند. اگر مشخص نشود، از curveهای پیش‌فرض Go استفاده می‌شود.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--tls-min-version string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">حداقل نسخه TLS پشتیبانی‌شده. مقادیر ممکن: VersionTLS10, VersionTLS11, VersionTLS12, VersionTLS13</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--tls-private-key-file string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">فایل حاوی کلید خصوصی x509 پیش‌فرض که با --tls-cert-file مطابقت دارد.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--tls-sni-cert-key string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">یک جفت مسیر فایل گواهی x509 و کلید خصوصی که می‌تواند به‌صورت اختیاری با فهرستی از الگوهای دامنه (domain patterns) پایان یابد؛ این الگوها نام‌های دامنه کاملاً معتبر (fully qualified) هستند و ممکن است بخش‌های wildcard در ابتدا داشته باشند. الگوهای دامنه نشانی‌های IP را نیز می‌پذیرند، اما IP فقط زمانی باید استفاده شود که apiserver به نشانی IP درخواست‌شده توسط کلاینت دسترسی داشته باشد. اگر الگوی دامنه‌ای ارائه نشود، نام‌های موجود در گواهی استخراج می‌شوند. تطابق‌های بدون wildcard بر تطابق‌های wildcard اولویت دارند و الگوهای دامنه صریح بر نام‌های استخراج‌شده اولویت دارند. برای چند جفت کلید/گواهی، --tls-sni-cert-key را چندین بار استفاده کنید. مثال‌ها: "example.crt,example.key" یا "foo.crt,foo.key:*.foo.com,foo.com".</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--unhealthy-zone-threshold float     Default: 0.55</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">کسری از نودهای یک zone که باید در وضعیت Ready نباشند (حداقل ۳) تا آن zone ناسالم تلقی شود.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--use-service-account-credentials</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">اگر true باشد، برای هر کنترل‌کننده از اعتبارنامه‌های جداگانه service account استفاده می‌شود.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">-v, --v int</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">عدد مربوط به سطح جزئیات لاگ (log level verbosity)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--version version[=true]</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">--version و --version=raw اطلاعات نسخه را چاپ کرده و خارج می‌شوند؛ --version=vX.Y.Z... نسخه گزارش‌شده را تنظیم می‌کند</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--vmodule pattern=N,...</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">فهرست تنظیمات pattern=N جداشده با ویرگول برای لاگ‌گیری فیلترشده بر اساس فایل (فقط برای قالب لاگ متنی کار می‌کند)</p></td>
+</tr>
+</tbody>
+</table>
+</main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#خلاصه">خلاصه</a><a class="l2" href="#گزینه-ها">گزینه‌ها</a></nav>
+</div>
+</body>
+</html>

@@ -1,0 +1,504 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>kube-proxy | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">reference / command-line-tools-reference</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="ltr" class="ltr">kube-proxy</h1><!--
+The file is auto-generated from the Go source code of the component using a generic
+[generator](https://github.com/kubernetes-sigs/reference-docs/). To learn how
+to generate the reference documentation, please read
+[Contributing to the reference documentation](/docs/contribute/generate-ref-docs/).
+To update the reference content, please follow the
+[Contributing upstream](/docs/contribute/generate-ref-docs/contribute-upstream/)
+guide. You can file document formatting bugs against the
+[reference-docs](https://github.com/kubernetes-sigs/reference-docs/) project.
+-->
+<h2 id="خلاصه" dir="rtl">خلاصه</h2>
+<p dir="rtl">پراکسی شبکه کوبرنتیز روی هر نود اجرا می‌شود. این پراکسی Serviceهای تعریف‌شده در API کوبرنتیز را روی هر نود بازتاب می‌دهد و می‌تواند ارسال ساده جریان‌های TCP، UDP و SCTP را انجام دهد یا ارسال TCP، UDP و SCTP را به‌صورت round robin میان مجموعه‌ای از بک‌اندها انجام دهد.
+IPهای کلاستر و پورت‌های Service در حال حاضر از طریق متغیرهای محیطی سازگار با Docker-links پیدا می‌شوند که پورت‌های بازشده توسط پراکسی Service را مشخص می‌کنند. یک افزونه (addon) اختیاری نیز وجود دارد که DNS کلاستر را برای این IPهای کلاستر فراهم می‌کند. کاربر باید با استفاده از API سرور API (apiserver) یک Service ایجاد کند تا پراکسی را پیکربندی کند.</p>
+<pre dir="ltr"><code dir="ltr">kube-proxy [flags]
+</code></pre>
+<h2 id="گزینه-ها" dir="rtl">گزینه‌ها</h2>
+   <table style="width: 100%; table-layout: fixed;">
+<colgroup>
+<col span="1" style="width: 10px;">
+<col span="1">
+</colgroup>
+<tbody>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--add_dir_header</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">در صورت true بودن، مسیر دایرکتوری فایل به سرایند (header) پیام‌های لاگ اضافه می‌شود.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--alsologtostderr</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">لاگ‌ها علاوه بر فایل‌ها، در خروجی خطای استاندارد نیز نوشته می‌شوند (در صورت true بودن -logtostderr بی‌تأثیر است).</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--alsologtostderrthreshold int</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">در صورتی که -alsologtostderr برابر true باشد، لاگ‌هایی که سطح آن‌ها برابر با این آستانه یا بالاتر از آن باشد به stderr ارسال می‌شوند (در صورت true بودن -logtostderr بی‌تأثیر است).</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--bind-address string     Default: 0.0.0.0</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">برداشت kube-proxy از IP اصلی نود خود را بازنویسی می‌کند. توجه کنید که این نام یک یادگار تاریخی است و kube-proxy در واقع هیچ سوکتی را به این IP متصل (bind) نمی‌کند. در صورتی که فایل پیکربندی با --config مشخص شده باشد، این پارامتر نادیده گرفته می‌شود.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--bind-address-hard-fail</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">در صورت true بودن، kube-proxy شکست در اتصال به یک پورت را خطای مهلک تلقی می‌کند و خارج می‌شود.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--cleanup</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">در صورت true بودن، قوانین iptables و ipvs پاک‌سازی می‌شوند و برنامه خارج می‌شود.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--cluster-cidr string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">محدوده CIDR پادهای کلاستر. (برای کلاسترهای dual-stack می‌تواند یک جفت محدوده CIDR dual-stack جداشده با کاما باشد.) وقتی --detect-local-mode روی ClusterCIDR تنظیم شده باشد، kube-proxy ترافیکی را محلی در نظر می‌گیرد که IP مبدأ آن در این محدوده باشد. (در غیر این صورت استفاده نمی‌شود.) در صورتی که فایل پیکربندی با --config مشخص شده باشد، این پارامتر نادیده گرفته می‌شود.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--config string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مسیر فایل پیکربندی.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--config-sync-period duration     Default: 15m0s</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">تناوب به‌روزرسانی پیکربندی دریافتی از apiserver. باید بزرگ‌تر از 0 باشد.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--conntrack-max-per-core int32     Default: 32768</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">بیشترین تعداد اتصال‌های NAT که به‌ازای هر هسته CPU ردیابی می‌شود (مقدار 0 محدودیت را بدون تغییر باقی می‌گذارد و conntrack-min را نادیده می‌گیرد).</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--conntrack-min int32     Default: 131072</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">کمترین تعداد ورودی‌های conntrack که صرف‌نظر از conntrack-max-per-core تخصیص داده می‌شود (برای بدون تغییر ماندن محدودیت، conntrack-max-per-core=0 را تنظیم کنید).</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--conntrack-tcp-be-liberal</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">با تنظیم nf_conntrack_tcp_be_liberal روی 1، حالت آسان‌گیرانه (liberal) برای ردیابی بسته‌های TCP فعال می‌شود.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--conntrack-tcp-timeout-close-wait duration     Default: 1h0m0s</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مهلت NAT برای اتصال‌های TCP در وضعیت CLOSE_WAIT</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--conntrack-tcp-timeout-established duration     Default: 24h0m0s</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مهلت بیکاری برای اتصال‌های TCP برقرارشده (مقدار 0 بدون تغییر باقی می‌گذارد)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--conntrack-udp-timeout duration</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مهلت بیکاری برای اتصال‌های UDP از نوع UNREPLIED (مقدار 0 بدون تغییر باقی می‌گذارد)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--conntrack-udp-timeout-stream duration</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مهلت بیکاری برای اتصال‌های UDP از نوع ASSURED (مقدار 0 بدون تغییر باقی می‌گذارد)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--detect-local-mode LocalMode</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">حالتی که برای تشخیص ترافیک محلی استفاده می‌شود. در صورتی که فایل پیکربندی با --config مشخص شده باشد، این پارامتر نادیده گرفته می‌شود.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--feature-gates &lt;comma-separated 'key=True|False' pairs&gt;</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مجموعه‌ای از جفت‌های key=value که feature gateهای قابلیت‌های آلفا/آزمایشی را توصیف می‌کنند. گزینه‌ها عبارت‌اند از:<br>APIResponseCompression=true|false (BETA - default=true)<br>APIServerIdentity=true|false (BETA - default=true)<br>APIServerWebhookAuthenticationToken=true|false (ALPHA - default=false)<br>APIServingWithRoutine=true|false (ALPHA - default=false)<br>AllAlpha=true|false (ALPHA - default=false)<br>AllBeta=true|false (BETA - default=false)<br>AllowParsingUserUIDFromCertAuth=true|false (BETA - default=true)<br>AllowUnsafeMalformedObjectDeletion=true|false (BETA - default=true)<br>AtomicFIFO=true|false (BETA - default=true)<br>AtomicWriteVolumeUserFields=true|false (ALPHA - default=false)<br>AuthorizePodWebsocketUpgradeCreatePermission=true|false (BETA - default=true)<br>CBORServingAndStorage=true|false (ALPHA - default=false)<br>CPUManagerPolicyAlphaOptions=true|false (ALPHA - default=false)<br>CPUManagerPolicyBetaOptions=true|false (BETA - default=true)<br>CRDObservedGenerationTracking=true|false (BETA - default=true)<br>CRIListStreaming=true|false (ALPHA - default=false)<br>CSIVolumeHealth=true|false (ALPHA - default=false)<br>ClearingNominatedNodeNameAfterBinding=true|false (BETA - default=true)<br>ClientsAllowCARotation=true|false (BETA - default=true)<br>ClientsAllowCBOR=true|false (ALPHA - default=false)<br>ClientsAllowTLSCacheGC=true|false (BETA - default=true)<br>ClientsPreferCBOR=true|false (ALPHA - default=false)<br>CloudControllerManagerWatchBasedRoutesReconciliation=true|false (ALPHA - default=false)<br>CloudControllerManagerWebhook=true|false (ALPHA - default=false)<br>ComponentFlagz=true|false (BETA - default=true)<br>ComponentStatusz=true|false (BETA - default=true)<br>CompositePodGroup=true|false (ALPHA - default=false)<br>ConcurrentWatchObjectDecode=true|false (BETA - default=true)<br>ConsistentListFromCacheSkipTimeoutFallback=true|false (ALPHA - default=false)<br>ConstrainedImpersonation=true|false (BETA - default=true)<br>ContainerCheckpoint=true|false (BETA - default=true)<br>ContainerRestartRules=true|false (BETA - default=true)<br>ContainerStopSignals=true|false (ALPHA - default=false)<br>ContextualLogging=true|false (BETA - default=true)<br>ControllerManagerReleaseLeaderElectionLockOnExit=true|false (ALPHA - default=false)<br>CoordinatedLeaderElection=true|false (BETA - default=false)<br>CrossNamespaceVolumeDataSource=true|false (ALPHA - default=false)<br>DRAConsumableCapacity=true|false (BETA - default=true)<br>DRADerivedAttributes=true|false (ALPHA - default=false)<br>DRADeviceBindingConditions=true|false (BETA - default=true)<br>DRADeviceCompatibilityGroups=true|false (ALPHA - default=false)<br>DRAFractionalCapacityRange=true|false (BETA - default=false), or DRAFractionalCapacityRange=true|false (BETA - default=true) if --min-compatibility-version&gt;=1.37<br>DRAListTypeAttributes=true|false (ALPHA - default=false)<br>DRANodeAllocatableResources=true|false (ALPHA - default=false)<br>DRAOptionalNodeOperations=true|false (ALPHA - default=false)<br>DRAPartitionableDevices=true|false (BETA - default=true)<br>DRAPartitionableDevicesType=true|false (ALPHA - default=false)<br>DRAResourceClaimGranularStatusAuthorization=true|false (BETA - default=true)<br>DRAResourcePoolStatus=true|false (ALPHA - default=false)<br>DRASchedulerFilterTimeout=true|false (BETA - default=true)<br>DRAWorkloadResourceClaims=true|false (BETA - default=false)<br>DeclarativeValidationBeta=true|false (BETA - default=true)<br>DefaultPodSysctls=true|false (ALPHA - default=false)<br>DeploymentReplicaSetTerminatingReplicas=true|false (BETA - default=true)<br>DetectCacheInconsistency=true|false (BETA - default=true)<br>EmptyDirVolumeMode=true|false (ALPHA - default=false)<br>EnvFiles=true|false (BETA - default=true)<br>EtcdRangeStream=true|false (BETA - default=true)<br>EventedPLEG=true|false (ALPHA - default=false)<br>EvictionRequestAPI=true|false (ALPHA - default=false)<br>ExcludeAdmissionWebhookVirtualResources=true|false (BETA - default=true)<br>ExtendWebSocketsToKubelet=true|false (BETA - default=true)<br>GRPCContainerProbeTLS=true|false (ALPHA - default=false)<br>GenericWorkload=true|false (BETA - default=false)<br>GracefulNodeShutdown=true|false (BETA - default=true)<br>GracefulNodeShutdownBasedOnPodPriority=true|false (BETA - default=true)<br>H2CContainerProbe=true|false (ALPHA - default=false)<br>HPAGeneration=true|false (BETA - default=true)<br>HPAOptimizedSelectorStore=true|false (BETA - default=true)<br>HPAScaleToZero=true|false (BETA - default=true)<br>HugepageAwareEviction=true|false (BETA - default=true)<br>ImageVolumeWithDigest=true|false (ALPHA - default=false)<br>InOrderInformersBatchProcess=true|false (BETA - default=true)<br>InPlacePodLevelResourcesVerticalScaling=true|false (BETA - default=true)<br>InPlacePodVerticalScalingExclusiveCPUs=true|false (ALPHA - default=false)<br>InPlacePodVerticalScalingExclusiveMemory=true|false (ALPHA - default=false)<br>InPlacePodVerticalScalingMemoryBackedVolumes=true|false (ALPHA - default=false)<br>InPlacePodVerticalScalingSchedulerPreemption=true|false (ALPHA - default=false)<br>InterPodAffinityHostnameFastPath=true|false (ALPHA - default=false)<br>KubeProxyNFTablesLocalhostNodePorts=true|false (ALPHA - default=false)<br>KubeletAllocatedPodsEndpoint=true|false (ALPHA - default=false)<br>KubeletCrashLoopBackOffMax=true|false (BETA - default=true)<br>KubeletEnsureSecretPulledImages=true|false (BETA - default=true)<br>KubeletInUserNamespace=true|false (BETA - default=true)<br>KubeletSeparateDiskGC=true|false (BETA - default=true)<br>KubeletServiceAccountTokenForCredentialProviders=true|false (BETA - default=true)<br>ListFromCacheSnapshot=true|false (BETA - default=true)<br>LocalStorageCapacityIsolationFSQuotaMonitoring=true|false (BETA - default=false)<br>LoggingAlphaOptions=true|false (ALPHA - default=false)<br>LoggingBetaOptions=true|false (BETA - default=true)<br>ManifestBasedAdmissionControlConfig=true|false (BETA - default=true)<br>MatchLabelKeysInPodTopologySpread=true|false (BETA - default=true)<br>MatchLabelKeysInPodTopologySpreadSelectorMerge=true|false (BETA - default=true)<br>MaxUnavailableStatefulSet=true|false (BETA - default=true)<br>MemoryQoS=true|false (BETA - default=true)<br>MutablePVNodeAffinity=true|false (ALPHA - default=false)<br>MutablePodResourcesForSuspendedJobs=true|false (BETA - default=true)<br>MutableSchedulingDirectivesForSuspendedJobs=true|false (BETA - default=true)<br>NFTablesNetlink=true|false (BETA - default=true)<br>NativeHistograms=true|false (BETA - default=true)<br>NodeControllerLeaseCircuitBreaker=true|false (BETA - default=true)<br>NodeLifecycleConditions=true|false (ALPHA - default=false)<br>NominatedNodeNameForExpectation=true|false (BETA - default=true)<br>OpenAPIEnums=true|false (BETA - default=true)<br>OpportunisticBatching=true|false (BETA - default=true)<br>PersistentVolumeClaimUnusedSinceTime=true|false (BETA - default=true)<br>PodAndContainerStatsFromCRI=true|false (BETA - default=false)<br>PodDeletionCost=true|false (BETA - default=true)<br>PodGroupPreemptionPolicy=true|false (ALPHA - default=false)<br>PodLevelResourceManagers=true|false (BETA - default=false)<br>PodLevelResources=true|false (BETA - default=true)<br>PodLevelResourcesFixDefaulting=true|false (BETA - default=true)<br>PodLevelResourcesFixKubeletQOSClass=true|false (BETA - default=true)<br>PodLogsQuerySplitStreams=true|false (ALPHA - default=false)<br>PodTopologyLabelsAdmission=true|false (BETA - default=true)<br>PodsAPI=true|false (BETA - default=true)<br>PortForwardWebsockets=true|false (BETA - default=true)<br>QOSReserved=true|false (ALPHA - default=false)<br>ReduceDefaultCrashLoopBackOffDecay=true|false (ALPHA - default=false)<br>ReloadKubeletClientCAFile=true|false (BETA - default=true)<br>ReloadKubeletServerCertificateFile=true|false (BETA - default=true)<br>RemoteRequestHeaderUID=true|false (BETA - default=true)<br>ResourceHealthStatus=true|false (BETA - default=true)<br>ResourceHealthStatusMessage=true|false (BETA - default=true)<br>RestartAllContainersOnContainerExits=true|false (BETA - default=true)<br>RotateKubeletServerCertificate=true|false (BETA - default=true)<br>RuntimeClassInImageCriApi=true|false (ALPHA - default=false)<br>SchedulerAsyncAPICalls=true|false (BETA - default=false)<br>SchedulerAsyncPreemption=true|false (BETA - default=true)<br>SchedulerPopFromBackoffQ=true|false (BETA - default=true)<br>SchedulerPreQueueingHints=true|false (ALPHA - default=false)<br>ServiceAccountNodeAudienceRestriction=true|false (BETA - default=true)<br>ShardedListAndWatch=true|false (ALPHA - default=false)<br>SizeBasedListCostEstimate=true|false (BETA - default=true)<br>StaleControllerConsistencyDaemonSet=true|false (BETA - default=true)<br>StaleControllerConsistencyHPA=true|false (BETA - default=true)<br>StaleControllerConsistencyJob=true|false (BETA - default=true)<br>StaleControllerConsistencyReplicaSet=true|false (BETA - default=true)<br>StaleControllerConsistencyStatefulSet=true|false (BETA - default=true)<br>StatefulSetRecreateStrategy=true|false (ALPHA - default=false)<br>StatefulSetSemanticRevisionComparison=true|false (BETA - default=true)<br>StorageCapacityScoring=true|false (BETA - default=true)<br>StorageVersionAPI=true|false (ALPHA - default=false)<br>StorageVersionHash=true|false (BETA - default=true)<br>StrictIPCIDRValidation=true|false (BETA - default=true)<br>StructuredAuthenticationConfigurationEgressSelector=true|false (BETA - default=true)<br>StructuredAuthenticationConfigurationJWKSMetrics=true|false (BETA - default=true)<br>TaintTolerationComparisonOperators=true|false (ALPHA - default=false)<br>TokenRequestServiceAccountUIDValidation=true|false (BETA - default=true)<br>TopologyAwareWorkloadScheduling=true|false (ALPHA - default=false)<br>TopologyManagerPolicyAlphaOptions=true|false (ALPHA - default=false)<br>TopologyManagerPolicyBetaOptions=true|false (BETA - default=true)<br>TranslateStreamCloseWebsocketRequests=true|false (BETA - default=true)<br>UnauthenticatedHTTP2DOSMitigation=true|false (BETA - default=true)<br>UnknownVersionInteroperabilityProxy=true|false (BETA - default=true)<br>UnlockWhileProcessingFIFO=true|false (BETA - default=true)<br>UserNamespacesHostNetworkSupport=true|false (ALPHA - default=false)<br>VolumeBindMountOptions=true|false (ALPHA - default=false)<br>VolumeLimitScaling=true|false (BETA - default=true)<br>WatchList=true|false (BETA - default=true)<br>WatchListClient=true|false (BETA - default=true)<br>WatchListCompression=true|false (BETA - default=true)<br>WebhookRoundTripLoadBalancing=true|false (BETA - default=true)<br>WindowsCPUAndMemoryAffinity=true|false (ALPHA - default=false)<br>WindowsGracefulNodeShutdown=true|false (BETA - default=true)<br>WorkloadWithJob=true|false (ALPHA - default=false)<br>در صورتی که فایل پیکربندی با --config مشخص شده باشد، این پارامتر نادیده گرفته می‌شود.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--healthz-bind-address ipport     Default: 0.0.0.0:10256</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">آدرس IP و پورتی که سرور بررسی سلامت (health check) روی آن سرویس می‌دهد؛ مقدار پیش‌فرض "0.0.0.0:10256" است. در صورتی که فایل پیکربندی با --config مشخص شده باشد، این پارامتر نادیده گرفته می‌شود.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">-h, --help</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">راهنمای kube-proxy</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--hostname-override string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">در صورت غیرخالی بودن، به‌عنوان نام Node‌ای که kube-proxy روی آن اجرا می‌شود استفاده می‌گردد. در صورت تنظیم نشدن، فرض می‌شود نام نود با نام میزبان (hostname) آن یکسان است.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--init-only</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">در صورت true بودن، هر گام راه‌اندازی اولیه‌ای که باید با دسترسی کامل root انجام شود اجرا می‌شود و سپس برنامه خارج می‌شود. پس از این کار، می‌توانید kube-proxy را دوباره و تنها با قابلیت (capability) CAP_NET_ADMIN اجرا کنید.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--iptables-localhost-nodeports     Default: true</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">در صورت false بودن، kube-proxy رفتار قدیمی (legacy) مجاز بودن دسترسی به سرویس‌های NodePort از طریق localhost را غیرفعال می‌کند. (فقط در حالت iptables و برای IPv4 اعمال می‌شود؛ NodePortهای localhost در سایر حالت‌های پروکسی یا با IPv6 هرگز مجاز نیستند.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--iptables-masquerade-bit int32     Default: 14</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">در صورت استفاده از حالت پروکسی iptables یا ipvs، بیتی از فضای fwmark که بسته‌های نیازمند SNAT با آن علامت‌گذاری می‌شوند. باید در بازه [0, 31] باشد.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--iptables-min-sync-period duration     Default: 1s</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">کمترین فاصله زمانی میان همگام‌سازی‌های مجدد قوانین iptables (برای مثال '5s'، '1m'، '2h22m'). مقدار 0 به این معناست که هر تغییر در Service یا EndpointSlice بلافاصله به یک همگام‌سازی مجدد iptables منجر می‌شود.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--iptables-sync-period duration     Default: 30s</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">فاصله زمانی (برای مثال '5s'، '1m'، '2h22m') که نشان می‌دهد عملیات مختلف همگام‌سازی مجدد و پاک‌سازی هر چند وقت یک بار انجام می‌شوند. باید بزرگ‌تر از 0 باشد.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--ipvs-exclude-cidrs strings</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">فهرستی از CIDRها، جداشده با کاما، که ipvs proxier هنگام پاک‌سازی قوانین IPVS نباید به آن‌ها دست بزند.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--ipvs-min-sync-period duration     Default: 1s</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">کمترین فاصله زمانی میان همگام‌سازی‌های مجدد قوانین IPVS (برای مثال '5s'، '1m'، '2h22m'). مقدار 0 به این معناست که هر تغییر در Service یا EndpointSlice بلافاصله به یک همگام‌سازی مجدد IPVS منجر می‌شود.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--ipvs-scheduler string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نوع زمان‌بند ipvs در زمانی که حالت پروکسی ipvs است</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--ipvs-strict-arp</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">با تنظیم arp_ignore روی 1 و arp_announce روی 2، ARP سخت‌گیرانه (strict ARP) فعال می‌شود.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--ipvs-sync-period duration     Default: 30s</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">بازه‌ای زمانی (مثلاً '5s'، '1m'، '2h22m') که مشخص می‌کند عملیات مختلف همگام‌سازی مجدد و پاک‌سازی هر چند وقت یک‌بار انجام شوند. مقدار آن باید بزرگ‌تر از 0 باشد.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--ipvs-tcp-timeout duration</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مهلت زمانی برای اتصال‌های TCP بیکار در IPVS؛ مقدار 0 مقدار فعلی را بدون تغییر نگه می‌دارد. (مثلاً '5s'، '1m'، '2h22m').</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--ipvs-tcpfin-timeout duration</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مهلت زمانی برای اتصال‌های TCP در IPVS پس از دریافت بسته FIN؛ مقدار 0 مقدار فعلی را بدون تغییر نگه می‌دارد. (مثلاً '5s'، '1m'، '2h22m').</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--ipvs-udp-timeout duration</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مهلت زمانی برای بسته‌های UDP در IPVS؛ مقدار 0 مقدار فعلی را بدون تغییر نگه می‌دارد. (مثلاً '5s'، '1m'، '2h22m').</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--kube-api-burst int32     Default: 10</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مقدار burst که هنگام ارتباط با apiserver کوبرنتیز استفاده می‌شود.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--kube-api-content-type string     Default: "application/vnd.kubernetes.protobuf"</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نوع محتوای درخواست‌هایی که به apiserver ارسال می‌شوند.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--kube-api-qps float     Default: 5</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مقدار QPS که هنگام ارتباط با apiserver کوبرنتیز استفاده می‌شود.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--kubeconfig string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مسیر فایل kubeconfig حاوی اطلاعات احراز هویت و مجوزدهی (نشانی master را می‌توان با پرچم master بازنویسی کرد).</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--legacy_stderr_threshold_behavior     Default: true</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">اگر true باشد، در حالتی که logtostderr=true است، stderrthreshold نادیده گرفته می‌شود (رفتار قدیمی). اگر false باشد، stderrthreshold حتی زمانی که logtostderr=true است نیز اعمال می‌شود.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--log-flush-frequency duration     Default: 5s</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">حداکثر تعداد ثانیه‌های بین دو بار تخلیه (flush) لاگ‌ها</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--log-text-info-buffer-size quantity</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">[آلفا] در قالب متنی با جریان‌های خروجی جداشده، پیام‌های اطلاعاتی را می‌توان برای مدتی بافر کرد تا کارایی افزایش یابد. مقدار پیش‌فرض صفر بایت است که بافر کردن را غیرفعال می‌کند. اندازه را می‌توان به‌صورت تعداد بایت (512)، مضرب‌هایی از 1000 (1K)، مضرب‌هایی از 1024 (2Ki) یا توان‌های آن‌ها (3M، 4G، 5Mi، 6Gi) مشخص کرد. برای استفاده از این گزینه، feature gate با نام LoggingAlphaOptions را فعال کنید.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--log-text-split-stream</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">[آلفا] در قالب متنی، پیام‌های خطا را در stderr و پیام‌های اطلاعاتی را در stdout می‌نویسد. به‌طور پیش‌فرض یک جریان واحد در stdout نوشته می‌شود. برای استفاده از این گزینه، feature gate با نام LoggingAlphaOptions را فعال کنید.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--log_backtrace_at &lt;a string in the form 'file:N'&gt;     Default: :0</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">هنگامی که لاگ‌گذاری به خط file:N برسد، یک stack trace تولید می‌شود</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--log_dir string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">اگر خالی نباشد، فایل‌های لاگ در این دایرکتوری نوشته می‌شوند (در صورت logtostderr=true بی‌اثر است)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--log_file string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">اگر خالی نباشد، از این فایل لاگ استفاده می‌شود (در صورت logtostderr=true بی‌اثر است)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--log_file_max_size uint     Default: 1800</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">حداکثر اندازه‌ای را که یک فایل لاگ می‌تواند به آن برسد تعیین می‌کند (در صورت logtostderr=true بی‌اثر است). واحد آن مگابایت است. اگر مقدار 0 باشد، حداکثر اندازه فایل نامحدود است.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--logging-format string     Default: "text"</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">قالب لاگ را تعیین می‌کند. قالب‌های مجاز: "text".</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--logtostderr     Default: true</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">لاگ‌ها به‌جای فایل‌ها در خروجی خطای استاندارد نوشته می‌شوند</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--masquerade-all</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">برای تمام ترافیکی که از طریق IPهای کلاستر Service ارسال می‌شود، SNAT انجام می‌دهد. ممکن است در برخی افزونه‌های CNI لازم باشد. فقط در لینوکس پشتیبانی می‌شود.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--master string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نشانی سرور API کوبرنتیز (هر مقدار موجود در kubeconfig را بازنویسی می‌کند)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--metrics-bind-address ipport     Default: 127.0.0.1:10249</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نشانی IP و پورتی که سرور متریک‌ها روی آن سرویس‌دهی می‌کند؛ مقدار پیش‌فرض "127.0.0.1:10249" است. (برای اتصال به همه اینترفیس‌ها، آن را روی "0.0.0.0:10249" / "[::]:10249" تنظیم کنید.) اگر فایل پیکربندی با --config مشخص شده باشد، این پارامتر نادیده گرفته می‌شود.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--nodeport-addresses strings</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">فهرستی از محدوده‌های CIDR و/یا کلیدواژه‌هایی که به محدوده‌های CIDR گسترش می‌یابند. سرویس‌های NodePort فقط روی IPهای نودی که در این فهرست قرار می‌گیرند در دسترس هستند. کلیدواژه‌های پشتیبانی‌شده: 'primary' (نشانی‌های IPv4 و/یا IPv6 اصلی آبجکت Node)، 'localhost' (127.0.0.0/8 و ::1/128) و 'all' (0.0.0.0/0 و ::/0). هر ترکیبی از کلیدواژه‌ها و CIDRهای معتبر را می‌توان در فهرست قرار داد. سرویس‌دهی NodePortها روی IPهای loopback فقط در حالت iptables پشتیبانی می‌شود (فقط IPv4، به --iptables-localhost-nodeports مراجعه کنید)، و فقط برای TCP در حالت nftables، زمانی که feature gate با نام KubeProxyNFTablesLocalhostNodePorts فعال باشد و فهرست به‌صراحت loopback را شامل شود (مثلاً 'localhost'). اگر تنظیم نشود، مقدار پیش‌فرض در حالت‌های iptables و ipvs برابر 'all' و در حالت nftables برابر 'primary' است. اگر فایل پیکربندی با --config مشخص شده باشد، این پارامتر نادیده گرفته می‌شود.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--one_output</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">اگر true باشد، لاگ‌ها فقط در سطح شدت اصلی خود نوشته می‌شوند (به‌جای نوشته شدن در هر سطح شدت پایین‌تر نیز؛ در صورت logtostderr=true بی‌اثر است)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--oom-score-adj int32     Default: -999</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مقدار oom-score-adj برای فرایند kube-proxy. مقادیر باید در بازه [-1000, 1000] باشند. اگر فایل پیکربندی با --config مشخص شده باشد، این پارامتر نادیده گرفته می‌شود.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--pod-bridge-interface string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نام یک اینترفیس bridge. زمانی که --detect-local-mode روی BridgeInterface تنظیم شده باشد، kube-proxy ترافیکی را که از این bridge سرچشمه بگیرد محلی در نظر می‌گیرد.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--pod-interface-name-prefix string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">پیشوند نام اینترفیس. زمانی که --detect-local-mode روی InterfaceNamePrefix تنظیم شده باشد، kube-proxy ترافیکی را که از هر اینترفیسی با نامی که با این پیشوند آغاز می‌شود سرچشمه بگیرد محلی در نظر می‌گیرد.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--profiling</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">اگر true باشد، پروفایل‌گیری از طریق رابط وب روی handler با مسیر /debug/pprof فعال می‌شود. اگر فایل پیکربندی با --config مشخص شده باشد، این پارامتر نادیده گرفته می‌شود.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--proxy-mode ProxyMode</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">حالت پراکسی مورد استفاده: در لینوکس می‌تواند 'iptables' (پیش‌فرض)، 'ipvs' یا 'nftables' باشد. در ویندوز تنها مقدار پشتیبانی‌شده 'kernelspace' است. اگر فایل پیکربندی با --config مشخص شده باشد، این پارامتر نادیده گرفته می‌شود.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--show-hidden-metrics-for-version string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نسخه قبلی که می‌خواهید متریک‌های پنهان‌شده آن نمایش داده شوند. فقط نسخه فرعی (minor) قبلی معنا دارد و مقادیر دیگر پذیرفته نمی‌شوند. قالب آن &lt;major&gt;.&lt;minor&gt; است، مثلاً: '1.16'. هدف از این قالب آن است که اگر انتشار بعدی متریک‌های بیشتری را پنهان کرد، فرصت داشته باشید متوجه شوید و هنگام حذف دائمی آن‌ها در انتشار پس از آن غافلگیر نشوید. اگر فایل پیکربندی با --config مشخص شده باشد، این پارامتر نادیده گرفته می‌شود.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--skip_headers</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">اگر true باشد، از افزودن پیشوند سرصفحه (header) به پیام‌های لاگ خودداری می‌شود</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--skip_log_headers</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">اگر true باشد، هنگام باز کردن فایل‌های لاگ از نوشتن سرصفحه‌ها خودداری می‌شود (در صورت logtostderr=true بی‌اثر است)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--stderrthreshold int     Default: 2</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">لاگ‌هایی که در این آستانه یا بالاتر از آن باشند، هنگام نوشتن همزمان در فایل‌ها و stderr به stderr ارسال می‌شوند (در صورت logtostderr=true یا alsologtostderr=true بی‌اثر است، مگر آنکه legacy_stderr_threshold_behavior=false باشد)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">-v, --v int</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">عددی برای سطح جزئیات (verbosity) لاگ</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--version version[=true]</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">--version و --version=raw اطلاعات نسخه را چاپ کرده و خارج می‌شوند؛ --version=vX.Y.Z... نسخه گزارش‌شده را تنظیم می‌کند</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--vmodule pattern=N,...</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">فهرستی جداشده با کاما از تنظیمات pattern=N برای لاگ‌گذاری فیلترشده بر اساس فایل (فقط برای قالب لاگ متنی کار می‌کند)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--write-config-to string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">اگر تنظیم شود، مقادیر پیش‌فرض پیکربندی را در این فایل می‌نویسد و خارج می‌شود.</p></td>
+</tr>
+</tbody>
+</table>
+</main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#خلاصه">خلاصه</a><a class="l2" href="#گزینه-ها">گزینه‌ها</a></nav>
+</div>
+</body>
+</html>

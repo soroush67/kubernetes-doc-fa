@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-748 از 1722 صفحه
+764 از 1722 صفحه
 
 
 ## `.`
@@ -385,10 +385,10 @@
 
 - ✅ [_index.md](md/reference/command-line-tools-reference/_index.md)
 - ⚠️ [kube-apiserver.md](md/reference/command-line-tools-reference/kube-apiserver.md)
-- ⏳ `kube-controller-manager.md`
-- ⏳ `kube-proxy.md`
-- ⏳ `kube-scheduler.md`
-- ⏳ `kubelet.md`
+- ⚠️ [kube-controller-manager.md](md/reference/command-line-tools-reference/kube-controller-manager.md)
+- ⚠️ [kube-proxy.md](md/reference/command-line-tools-reference/kube-proxy.md)
+- ⚠️ [kube-scheduler.md](md/reference/command-line-tools-reference/kube-scheduler.md)
+- ⚠️ [kubelet.md](md/reference/command-line-tools-reference/kubelet.md)
 
 ## `reference/command-line-tools-reference/feature-gates`
 
@@ -889,19 +889,19 @@
 
 ## `reference/config-api`
 
-- ⏳ `_index.md`
-- ⏳ `apiserver-admission.v1.md`
-- ⏳ `apiserver-audit.v1.md`
-- ⏳ `apiserver-config.v1.md`
-- ⏳ `apiserver-config.v1alpha1.md`
-- ⏳ `apiserver-config.v1beta1.md`
-- ⏳ `apiserver-eventratelimit.v1alpha1.md`
-- ⏳ `apiserver-webhookadmission.v1.md`
-- ⏳ `client-authentication.v1.md`
-- ⏳ `client-authentication.v1beta1.md`
-- ⏳ `imagepolicy.v1alpha1.md`
+- ✅ [_index.md](md/reference/config-api/_index.md)
+- ✅ [apiserver-admission.v1.md](md/reference/config-api/apiserver-admission.v1.md)
+- ✅ [apiserver-audit.v1.md](md/reference/config-api/apiserver-audit.v1.md)
+- ⚠️ [apiserver-config.v1.md](md/reference/config-api/apiserver-config.v1.md)
+- ✅ [apiserver-config.v1alpha1.md](md/reference/config-api/apiserver-config.v1alpha1.md)
+- ✅ [apiserver-config.v1beta1.md](md/reference/config-api/apiserver-config.v1beta1.md)
+- ✅ [apiserver-eventratelimit.v1alpha1.md](md/reference/config-api/apiserver-eventratelimit.v1alpha1.md)
+- ✅ [apiserver-webhookadmission.v1.md](md/reference/config-api/apiserver-webhookadmission.v1.md)
+- ✅ [client-authentication.v1.md](md/reference/config-api/client-authentication.v1.md)
+- ✅ [client-authentication.v1beta1.md](md/reference/config-api/client-authentication.v1beta1.md)
+- ⚠️ [imagepolicy.v1alpha1.md](md/reference/config-api/imagepolicy.v1alpha1.md)
 - ⏳ `kube-controller-manager-config.v1alpha1.md`
-- ⏳ `kube-proxy-config.v1alpha1.md`
+- ✅ [kube-proxy-config.v1alpha1.md](md/reference/config-api/kube-proxy-config.v1alpha1.md)
 - ⏳ `kube-scheduler-config.v1.md`
 - ⏳ `kubeadm-config.v1beta3.md`
 - ⏳ `kubeadm-config.v1beta4.md`

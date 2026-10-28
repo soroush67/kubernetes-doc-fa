@@ -1,0 +1,879 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>kubelet | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">reference / command-line-tools-reference</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="ltr" class="ltr">kubelet</h1><!--
+The file is auto-generated from the Go source code of the component using a generic
+[generator](https://github.com/kubernetes-sigs/reference-docs/). To learn how
+to generate the reference documentation, please read
+[Contributing to the reference documentation](/docs/contribute/generate-ref-docs/).
+To update the reference content, please follow the
+[Contributing upstream](/docs/contribute/generate-ref-docs/contribute-upstream/)
+guide. You can file document formatting bugs against the
+[reference-docs](https://github.com/kubernetes-sigs/reference-docs/) project.
+-->
+<h2 id="خلاصه" dir="rtl">خلاصه</h2>
+<p dir="rtl">kubelet عامل اصلی «نود» (node agent) است که روی هر نود اجرا می‌شود. این مؤلفه می‌تواند نود را با یکی از روش‌های زیر در apiserver ثبت کند: با استفاده از نام میزبان (hostname)؛ با استفاده از یک پرچم (flag) که نام میزبان را بازنویسی می‌کند؛ یا با استفاده از منطق مخصوص یک ارائه‌دهنده ابری (cloud provider).</p>
+<p dir="rtl">kubelet بر اساس PodSpec کار می‌کند. PodSpec یک آبجکت YAML یا JSON است که یک pod را توصیف می‌کند. kubelet مجموعه‌ای از PodSpecها را که از طریق سازوکارهای گوناگون (عمدتاً از طریق apiserver) در اختیارش قرار می‌گیرد دریافت می‌کند و اطمینان می‌دهد که کانتینرهای توصیف‌شده در این PodSpecها در حال اجرا و سالم باشند. kubelet کانتینرهایی را که توسط کوبرنتیز ایجاد نشده‌اند مدیریت نمی‌کند.</p>
+<p dir="rtl">علاوه بر PodSpec دریافتی از apiserver، دو روش دیگر نیز برای ارائه مانیفست کانتینر به kubelet وجود دارد.</p>
+<p dir="rtl">فایل: مسیری که به‌صورت یک پرچم در خط فرمان داده می‌شود. فایل‌های موجود در این مسیر به‌طور دوره‌ای برای یافتن به‌روزرسانی‌ها پایش می‌شوند. بازه پایش به‌طور پیش‌فرض ۲۰ ثانیه است و از طریق یک پرچم قابل پیکربندی است.</p>
+<p dir="rtl">نقطه پایانی HTTP (HTTP endpoint): نقطه پایانی HTTP که به‌صورت یک پارامتر در خط فرمان داده می‌شود. این نقطه پایانی هر ۲۰ ثانیه بررسی می‌شود (این بازه نیز با یک پرچم قابل پیکربندی است).</p>
+<pre dir="ltr"><code dir="ltr">kubelet [flags]
+</code></pre>
+<h2 id="گزینه-ها" dir="rtl">گزینه‌ها</h2>
+   <table style="width: 100%; table-layout: fixed;">
+<colgroup>
+<col span="1" style="width: 10px;">
+<col span="1">
+</colgroup>
+<tbody>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--address string     Default: 0.0.0.0</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">آدرس IP که Kubelet روی آن سرویس‌دهی می‌کند (برای گوش دادن روی تمام اینترفیس‌ها و خانواده‌های آدرس IP مقدار '0.0.0.0' یا '::' را تنظیم کنید) (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با پرچم --config مربوط به Kubelet مشخص می‌شود تنظیم شود. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--allowed-unsafe-sysctls strings</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">فهرست مجاز، جداشده با کاما، از sysctlهای ناایمن یا الگوهای sysctl ناایمن (که به * ختم می‌شوند). استفاده از این موارد با مسئولیت خودتان است. (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با پرچم --config مربوط به Kubelet مشخص می‌شود تنظیم شود. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--anonymous-auth     Default: true</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">درخواست‌های ناشناس به سرور Kubelet را فعال می‌کند. درخواست‌هایی که توسط روش احراز هویت دیگری رد نشوند، به‌عنوان درخواست ناشناس در نظر گرفته می‌شوند. درخواست‌های ناشناس دارای نام کاربری system:anonymous و نام گروه system:unauthenticated هستند. (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با پرچم --config مربوط به Kubelet مشخص می‌شود تنظیم شود. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--authentication-token-webhook</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">برای تعیین احراز هویت توکن‌های bearer از TokenReview API استفاده می‌کند. (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با پرچم --config مربوط به Kubelet مشخص می‌شود تنظیم شود. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--authentication-token-webhook-cache-ttl duration     Default: 2m0s</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مدت زمان نگهداری پاسخ‌های احراز‌کننده توکن webhook در حافظه نهان. (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با پرچم --config مربوط به Kubelet مشخص می‌شود تنظیم شود. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--authorization-mode string     Default: "AlwaysAllow"</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">حالت مجوزدهی برای سرور Kubelet. گزینه‌های معتبر AlwaysAllow یا Webhook هستند. حالت Webhook برای تعیین مجوزدهی از SubjectAccessReview API استفاده می‌کند. (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با پرچم --config مربوط به Kubelet مشخص می‌شود تنظیم شود. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--authorization-webhook-cache-authorized-ttl duration     Default: 5m0s</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مدت زمان نگهداری پاسخ‌های «مجاز» (authorized) از مجوزدهنده webhook در حافظه نهان. (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با پرچم --config مربوط به Kubelet مشخص می‌شود تنظیم شود. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--authorization-webhook-cache-unauthorized-ttl duration     Default: 30s</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مدت زمان نگهداری پاسخ‌های «غیرمجاز» (unauthorized) از مجوزدهنده webhook در حافظه نهان. (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با پرچم --config مربوط به Kubelet مشخص می‌شود تنظیم شود. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--bootstrap-kubeconfig string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مسیر یک فایل kubeconfig که برای دریافت گواهی کلاینت برای kubelet استفاده می‌شود. اگر فایل مشخص‌شده با --kubeconfig وجود نداشته باشد، از bootstrap kubeconfig برای درخواست گواهی کلاینت از API server استفاده می‌شود. در صورت موفقیت، یک فایل kubeconfig که به گواهی کلاینت و کلید تولیدشده ارجاع می‌دهد در مسیر مشخص‌شده با --kubeconfig نوشته می‌شود. فایل گواهی کلاینت و کلید در دایرکتوری مشخص‌شده با --cert-dir ذخیره خواهد شد.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--cert-dir string     Default: "/var/lib/kubelet/pki"</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">دایرکتوری که گواهی‌های TLS در آن قرار دارند. اگر --tls-cert-file و --tls-private-key-file ارائه شده باشند، این پرچم نادیده گرفته می‌شود.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--cgroup-driver string     Default: "cgroupfs"</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">درایوری که kubelet برای مدیریت cgroupها روی میزبان از آن استفاده می‌کند. مقادیر ممکن: 'cgroupfs'، 'systemd' (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با پرچم --config مربوط به Kubelet مشخص می‌شود تنظیم شود. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--cgroup-root string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">cgroup ریشه اختیاری برای استفاده توسط podها. این مورد توسط container runtime و در حد امکان (best effort) مدیریت می‌شود. مقدار پیش‌فرض: '' که به معنای استفاده از مقدار پیش‌فرض container runtime است. (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با پرچم --config مربوط به Kubelet مشخص می‌شود تنظیم شود. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--cgroups-per-qos     Default: true</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">ایجاد سلسله‌مراتب cgroup مربوط به QoS را فعال می‌کند؛ در صورت true بودن، cgroupهای سطح بالای QoS و cgroupهای podها ایجاد می‌شوند. (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با پرچم --config مربوط به Kubelet مشخص می‌شود تنظیم شود. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--client-ca-file string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">در صورت تنظیم، هر درخواستی که گواهی کلاینتی ارائه کند که توسط یکی از مراجع موجود در client-ca-file امضا شده باشد، با هویتی متناظر با CommonName گواهی کلاینت احراز هویت می‌شود. (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با پرچم --config مربوط به Kubelet مشخص می‌شود تنظیم شود. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--cloud-provider string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">ارائه‌دهنده سرویس‌های ابری. برای اجرا بدون ارائه‌دهنده ابری، آن را روی رشته خالی تنظیم کنید. برای اجرا با یک ارائه‌دهنده ابری خارجی، آن را روی 'external' تنظیم کنید.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--cluster-dns strings</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">فهرست آدرس‌های IP سرورهای DNS، جداشده با کاما. این مقدار برای سرور DNS کانتینرها در Podهایی با "dnsPolicy=ClusterFirst" استفاده می‌شود. توجه: تمام سرورهای DNS موجود در این فهرست باید مجموعه رکوردهای یکسانی را ارائه کنند، در غیر این صورت ممکن است تفکیک نام در داخل کلاستر به‌درستی کار نکند. هیچ تضمینی وجود ندارد که برای تفکیک نام با کدام سرور DNS ارتباط برقرار شود. (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با پرچم --config مربوط به Kubelet مشخص می‌شود تنظیم شود. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--cluster-domain string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">دامنه این کلاستر. در صورت تنظیم، kubelet تمام کانتینرها را طوری پیکربندی می‌کند که علاوه بر دامنه‌های جست‌وجوی میزبان، این دامنه را نیز جست‌وجو کنند. (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با پرچم --config مربوط به Kubelet مشخص می‌شود تنظیم شود. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--config string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">Kubelet پیکربندی اولیه خود را از این فایل بارگذاری می‌کند. مسیر می‌تواند مطلق یا نسبی باشد؛ مسیرهای نسبی از دایرکتوری کاری فعلی Kubelet شروع می‌شوند. برای استفاده از مقادیر پیش‌فرض داخلی پیکربندی، این پرچم را حذف کنید. پرچم‌های خط فرمان، پیکربندی این فایل را بازنویسی می‌کنند.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--config-dir string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مسیر دایرکتوری حاوی فایل‌های پیکربندی drop-in که تنظیمات مقادیر پیش‌فرض و فایل --config را بازنویسی می‌کنند. مسیر می‌تواند مطلق یا نسبی باشد؛ مسیرهای نسبی از دایرکتوری کاری فعلی Kubelet شروع می‌شوند. فایل‌های drop-in باید پسوند '.conf' داشته باشند (مثلاً '99-kubelet-address.conf') و به ترتیب واژه‌نامه‌ای (lexical) پردازش می‌شوند. فقط فایل‌های '.conf' بارگذاری می‌شوند و سایر فایل‌ها نادیده گرفته می‌شوند. تمام فایل‌های .conf موجود در دایرکتوری و زیردایرکتوری‌های آن به ترتیب واژه‌نامه‌ای پردازش می‌شوند. [default='']</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--container-log-max-files int32     Default: 5</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">&lt;هشدار: قابلیت بتا&gt; حداکثر تعداد فایل‌های لاگ کانتینر را که می‌توانند برای یک کانتینر وجود داشته باشند تعیین می‌کند. این عدد باید &gt;= 2 باشد. (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با پرچم --config مربوط به Kubelet مشخص می‌شود تنظیم شود. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--container-log-max-size string     Default: "10Mi"</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">&lt;هشدار: قابلیت بتا&gt; حداکثر اندازه (مثلاً 10Mi) فایل لاگ کانتینر را پیش از چرخش (rotate) تعیین می‌کند. (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با پرچم --config مربوط به Kubelet مشخص می‌شود تنظیم شود. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--container-runtime-endpoint string     Default: "unix:///run/containerd/containerd.sock"</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نقطه پایانی (endpoint) سرویس container runtime. Unix Domain Socketها در لینوکس پشتیبانی می‌شوند، در حالی که endpointهای npipe و tcp در ویندوز پشتیبانی می‌شوند. مثال‌ها: 'unix:///path/to/runtime.sock'، 'npipe:////./pipe/runtime' (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با پرچم --config مربوط به Kubelet مشخص می‌شود تنظیم شود. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--contention-profiling</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">در صورت فعال بودن profiling، پروفایل‌گیری از بلاک‌ها (block profiling) را فعال می‌کند. (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با پرچم --config مربوط به Kubelet مشخص می‌شود تنظیم شود. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--cpu-cfs-quota     Default: true</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">اعمال سهمیه CPU CFS را برای کانتینرهایی که محدودیت CPU مشخص می‌کنند فعال می‌کند. (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با پرچم --config مربوط به Kubelet مشخص می‌شود تنظیم شود. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--cpu-cfs-quota-period duration     Default: 100ms</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مقدار دوره سهمیه CPU CFS (cpu.cfs_period_us) را تنظیم می‌کند. مقدار پیش‌فرض برابر با مقدار پیش‌فرض هسته لینوکس است. برای تنظیم مقادیر غیرپیش‌فرض، feature gate با نام CustomCPUCFSQuotaPeriod لازم است. (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با پرچم --config مربوط به Kubelet مشخص می‌شود تنظیم شود. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--cpu-manager-policy string     Default: "none"</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">سیاست CPU Manager مورد استفاده. مقادیر ممکن: 'none'، 'static'. (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با پرچم --config مربوط به Kubelet مشخص می‌شود تنظیم شود. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--cpu-manager-policy-options &lt;comma-separated 'key=value' pairs&gt;</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مجموعه‌ای از گزینه‌های سیاست CPU Manager به‌صورت key=value برای تنظیم دقیق رفتار آن‌ها. در صورت ارائه نشدن، رفتار پیش‌فرض حفظ می‌شود. (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با پرچم --config مربوط به Kubelet مشخص می‌شود تنظیم شود. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--cpu-manager-reconcile-period duration     Default: 10s</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">&lt;هشدار: قابلیت آلفا&gt; دوره تطبیق (reconciliation) در CPU Manager. مثال‌ها: '10s' یا '1m'. در صورت ارائه نشدن، مقدار پیش‌فرض برابر با 'NodeStatusUpdateFrequency' است. (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با پرچم --config مربوط به Kubelet مشخص می‌شود تنظیم شود. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--enable-controller-attach-detach     Default: true</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">کنترل‌کننده Attach/Detach را برای مدیریت اتصال و جداسازی حجم‌های (volume) زمان‌بندی‌شده روی این نود فعال می‌کند و اجرای هرگونه عملیات attach/detach را توسط kubelet غیرفعال می‌کند. (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با پرچم --config مربوط به Kubelet مشخص می‌شود تنظیم شود. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--enable-debugging-handlers     Default: true</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">endpointهای سرور را برای جمع‌آوری لاگ و اجرای محلی کانتینرها و دستورها فعال می‌کند. (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با پرچم --config مربوط به Kubelet مشخص می‌شود تنظیم شود. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--enable-server     Default: true</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">سرور Kubelet را فعال می‌کند. (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با پرچم --config مربوط به Kubelet مشخص می‌شود تنظیم شود. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--enforce-node-allocatable strings     Default: "pods"</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">فهرستی جداشده با کاما از سطوح اعمال node allocatable که باید توسط kubelet اعمال شوند. گزینه‌های قابل قبول عبارت‌اند از 'none'، 'pods'، 'system-reserved'، 'system-reserved-compressible'، 'kube-reserved' و 'kube-reserved-compressible'. اگر هر یک از چهار گزینه آخر مشخص شود، باید به‌ترتیب '--system-reserved-cgroup' و '--kube-reserved-cgroup' نیز تنظیم شوند. اگر 'none' مشخص شود، نباید هیچ گزینه دیگری تنظیم شود. برای جزئیات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/reserve-compute-resources/ مراجعه کنید. (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با پرچم --config مربوط به Kubelet مشخص می‌شود تنظیم شود. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--event-burst int32     Default: 100</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">حداکثر اندازه رکوردهای رویداد در حالت انفجاری (burst)؛ به‌طور موقت اجازه می‌دهد رکوردهای رویداد تا این عدد به‌صورت burst ارسال شوند، بدون آن‌که از event-qps فراتر روند. این عدد باید &gt;= 0 باشد. اگر 0 باشد، از DefaultBurst با مقدار 100 استفاده می‌شود. (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با پرچم --config مربوط به Kubelet مشخص می‌شود تنظیم شود. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--event-qps int32     Default: 50</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نرخ QPS برای محدود کردن ایجاد رویدادها (event). این عدد باید بزرگ‌تر یا مساوی 0 باشد. اگر 0 باشد، هیچ محدودیتی اعمال نمی‌شود. توجه: اگر تنظیم نشود، مقدار پیش‌فرض پیکربندی kubelet اعمال می‌شود که در حال حاضر 50 است. (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با پرچم --config مربوط به kubelet مشخص می‌شود تنظیم گردد. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--eviction-hard &lt;comma-separated 'key=value' pairs&gt;</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مجموعه‌ای از آستانه‌های تخلیه (eviction) (برای مثال memory.available&lt;1Gi) که در صورت برقرار شدن، تخلیه Pod را فعال می‌کنند. (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با پرچم --config مربوط به kubelet مشخص می‌شود تنظیم گردد. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--eviction-max-pod-grace-period int32</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">حداکثر مهلت مجاز (به ثانیه) برای خاتمه دادن به Podها هنگامی که یک آستانه تخلیه نرم (soft eviction) برقرار شده است. اگر مقدار منفی باشد، مقدار مشخص‌شده در Pod ملاک خواهد بود. (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با پرچم --config مربوط به kubelet مشخص می‌شود تنظیم گردد. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--eviction-minimum-reclaim &lt;comma-separated 'key=value' pairs&gt;</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مجموعه‌ای از حداقل مقادیر بازیابی (برای مثال imagefs.available=2Gi) که مشخص می‌کند kubelet هنگام انجام تخلیه Pod، در صورتی که منبع مربوطه تحت فشار باشد، حداقل چه مقدار از آن منبع را بازیابی خواهد کرد. (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با پرچم --config مربوط به kubelet مشخص می‌شود تنظیم گردد. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--eviction-pressure-transition-period duration     Default: 5m0s</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مدت زمانی که kubelet باید پیش از خروج از وضعیت فشار تخلیه (eviction pressure) صبر کند. (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با پرچم --config مربوط به kubelet مشخص می‌شود تنظیم گردد. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--eviction-soft &lt;comma-separated 'key=value' pairs&gt;</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مجموعه‌ای از آستانه‌های تخلیه (برای مثال memory.available&lt;1.5Gi) که در صورت برقرار بودن در طول یک مهلت متناظر، تخلیه Pod را فعال می‌کنند. (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با پرچم --config مربوط به kubelet مشخص می‌شود تنظیم گردد. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--eviction-soft-grace-period &lt;comma-separated 'key=value' pairs&gt;</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مجموعه‌ای از مهلت‌های تخلیه (برای مثال memory.available=1m30s) که مشخص می‌کنند یک آستانه تخلیه نرم باید چه مدت برقرار بماند تا تخلیه Pod فعال شود. (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با پرچم --config مربوط به kubelet مشخص می‌شود تنظیم گردد. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--exit-on-lock-contention</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مشخص می‌کند که آیا kubelet باید در صورت بروز تداخل بر سر فایل قفل (lock-file) خارج شود یا خیر.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--experimental-allocatable-ignore-eviction</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">وقتی روی 'true' تنظیم شود، آستانه‌های تخلیه سخت (Hard Eviction Thresholds) هنگام محاسبه Node Allocatable نادیده گرفته می‌شوند. برای جزئیات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/reserve-compute-resources/ مراجعه کنید. [default=false] (منسوخ‌شده: در نسخه 1.25 یا نسخه‌های بعدی حذف خواهد شد.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--experimental-mounter-path string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">[آزمایشی] مسیر فایل اجرایی mounter. برای استفاده از mount پیش‌فرض، آن را خالی بگذارید. (منسوخ‌شده: در نسخه 1.25 یا نسخه‌های بعدی به نفع استفاده از CSI حذف خواهد شد.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--fail-cgroupv1     Default: true</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">از راه‌اندازی kubelet روی میزبانی که از cgroup v1 استفاده می‌کند جلوگیری می‌کند.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--fail-swap-on     Default: true</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">باعث می‌شود در صورت فعال بودن swap روی نود، راه‌اندازی kubelet با شکست مواجه شود. (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با پرچم --config مربوط به kubelet مشخص می‌شود تنظیم گردد. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--feature-gates &lt;comma-separated 'key=True|False' pairs&gt;</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مجموعه‌ای از جفت‌های key=value که feature gateهای مربوط به قابلیت‌های آلفا/آزمایشی را توصیف می‌کنند. گزینه‌ها عبارت‌اند از:<br>APIResponseCompression=true|false (BETA - default=true)<br>APIServerIdentity=true|false (BETA - default=true)<br>APIServerWebhookAuthenticationToken=true|false (ALPHA - default=false)<br>APIServingWithRoutine=true|false (ALPHA - default=false)<br>AllAlpha=true|false (ALPHA - default=false)<br>AllBeta=true|false (BETA - default=false)<br>AllowParsingUserUIDFromCertAuth=true|false (BETA - default=true)<br>AllowUnsafeMalformedObjectDeletion=true|false (BETA - default=true)<br>AtomicFIFO=true|false (BETA - default=true)<br>AtomicWriteVolumeUserFields=true|false (ALPHA - default=false)<br>AuthorizePodWebsocketUpgradeCreatePermission=true|false (BETA - default=true)<br>CBORServingAndStorage=true|false (ALPHA - default=false)<br>CPUManagerPolicyAlphaOptions=true|false (ALPHA - default=false)<br>CPUManagerPolicyBetaOptions=true|false (BETA - default=true)<br>CRDObservedGenerationTracking=true|false (BETA - default=true)<br>CRIListStreaming=true|false (ALPHA - default=false)<br>CSIVolumeHealth=true|false (ALPHA - default=false)<br>ClearingNominatedNodeNameAfterBinding=true|false (BETA - default=true)<br>ClientsAllowCARotation=true|false (BETA - default=true)<br>ClientsAllowCBOR=true|false (ALPHA - default=false)<br>ClientsAllowTLSCacheGC=true|false (BETA - default=true)<br>ClientsPreferCBOR=true|false (ALPHA - default=false)<br>CloudControllerManagerWatchBasedRoutesReconciliation=true|false (ALPHA - default=false)<br>CloudControllerManagerWebhook=true|false (ALPHA - default=false)<br>ComponentFlagz=true|false (BETA - default=true)<br>ComponentStatusz=true|false (BETA - default=true)<br>CompositePodGroup=true|false (ALPHA - default=false)<br>ConcurrentWatchObjectDecode=true|false (BETA - default=true)<br>ConsistentListFromCacheSkipTimeoutFallback=true|false (ALPHA - default=false)<br>ConstrainedImpersonation=true|false (BETA - default=true)<br>ContainerCheckpoint=true|false (BETA - default=true)<br>ContainerRestartRules=true|false (BETA - default=true)<br>ContainerStopSignals=true|false (ALPHA - default=false)<br>ContextualLogging=true|false (BETA - default=true)<br>ControllerManagerReleaseLeaderElectionLockOnExit=true|false (ALPHA - default=false)<br>CoordinatedLeaderElection=true|false (BETA - default=false)<br>CrossNamespaceVolumeDataSource=true|false (ALPHA - default=false)<br>DRAConsumableCapacity=true|false (BETA - default=true)<br>DRADerivedAttributes=true|false (ALPHA - default=false)<br>DRADeviceBindingConditions=true|false (BETA - default=true)<br>DRADeviceCompatibilityGroups=true|false (ALPHA - default=false)<br>DRAFractionalCapacityRange=true|false (BETA - default=false)، یا DRAFractionalCapacityRange=true|false (BETA - default=true) اگر --min-compatibility-version&gt;=1.37 باشد<br>DRAListTypeAttributes=true|false (ALPHA - default=false)<br>DRANodeAllocatableResources=true|false (ALPHA - default=false)<br>DRAOptionalNodeOperations=true|false (ALPHA - default=false)<br>DRAPartitionableDevices=true|false (BETA - default=true)<br>DRAPartitionableDevicesType=true|false (ALPHA - default=false)<br>DRAResourceClaimGranularStatusAuthorization=true|false (BETA - default=true)<br>DRAResourcePoolStatus=true|false (ALPHA - default=false)<br>DRASchedulerFilterTimeout=true|false (BETA - default=true)<br>DRAWorkloadResourceClaims=true|false (BETA - default=false)<br>DeclarativeValidationBeta=true|false (BETA - default=true)<br>DefaultPodSysctls=true|false (ALPHA - default=false)<br>DeploymentReplicaSetTerminatingReplicas=true|false (BETA - default=true)<br>DetectCacheInconsistency=true|false (BETA - default=true)<br>EmptyDirVolumeMode=true|false (ALPHA - default=false)<br>EnvFiles=true|false (BETA - default=true)<br>EtcdRangeStream=true|false (BETA - default=true)<br>EventedPLEG=true|false (ALPHA - default=false)<br>EvictionRequestAPI=true|false (ALPHA - default=false)<br>ExcludeAdmissionWebhookVirtualResources=true|false (BETA - default=true)<br>ExtendWebSocketsToKubelet=true|false (BETA - default=true)<br>GRPCContainerProbeTLS=true|false (ALPHA - default=false)<br>GenericWorkload=true|false (BETA - default=false)<br>GracefulNodeShutdown=true|false (BETA - default=true)<br>GracefulNodeShutdownBasedOnPodPriority=true|false (BETA - default=true)<br>H2CContainerProbe=true|false (ALPHA - default=false)<br>HPAGeneration=true|false (BETA - default=true)<br>HPAOptimizedSelectorStore=true|false (BETA - default=true)<br>HPAScaleToZero=true|false (BETA - default=true)<br>HugepageAwareEviction=true|false (BETA - default=true)<br>ImageVolumeWithDigest=true|false (ALPHA - default=false)<br>InOrderInformersBatchProcess=true|false (BETA - default=true)<br>InPlacePodLevelResourcesVerticalScaling=true|false (BETA - default=true)<br>InPlacePodVerticalScalingExclusiveCPUs=true|false (ALPHA - default=false)<br>InPlacePodVerticalScalingExclusiveMemory=true|false (ALPHA - default=false)<br>InPlacePodVerticalScalingMemoryBackedVolumes=true|false (ALPHA - default=false)<br>InPlacePodVerticalScalingSchedulerPreemption=true|false (ALPHA - default=false)<br>InterPodAffinityHostnameFastPath=true|false (ALPHA - default=false)<br>KubeProxyNFTablesLocalhostNodePorts=true|false (ALPHA - default=false)<br>KubeletAllocatedPodsEndpoint=true|false (ALPHA - default=false)<br>KubeletCrashLoopBackOffMax=true|false (BETA - default=true)<br>KubeletEnsureSecretPulledImages=true|false (BETA - default=true)<br>KubeletInUserNamespace=true|false (BETA - default=true)<br>KubeletSeparateDiskGC=true|false (BETA - default=true)<br>KubeletServiceAccountTokenForCredentialProviders=true|false (BETA - default=true)<br>ListFromCacheSnapshot=true|false (BETA - default=true)<br>LocalStorageCapacityIsolationFSQuotaMonitoring=true|false (BETA - default=false)<br>LoggingAlphaOptions=true|false (ALPHA - default=false)<br>LoggingBetaOptions=true|false (BETA - default=true)<br>ManifestBasedAdmissionControlConfig=true|false (BETA - default=true)<br>MatchLabelKeysInPodTopologySpread=true|false (BETA - default=true)<br>MatchLabelKeysInPodTopologySpreadSelectorMerge=true|false (BETA - default=true)<br>MaxUnavailableStatefulSet=true|false (BETA - default=true)<br>MemoryQoS=true|false (BETA - default=true)<br>MutablePVNodeAffinity=true|false (ALPHA - default=false)<br>MutablePodResourcesForSuspendedJobs=true|false (BETA - default=true)<br>MutableSchedulingDirectivesForSuspendedJobs=true|false (BETA - default=true)<br>NFTablesNetlink=true|false (BETA - default=true)<br>NativeHistograms=true|false (BETA - default=true)<br>NodeControllerLeaseCircuitBreaker=true|false (BETA - default=true)<br>NodeLifecycleConditions=true|false (ALPHA - default=false)<br>NominatedNodeNameForExpectation=true|false (BETA - default=true)<br>OpenAPIEnums=true|false (BETA - default=true)<br>OpportunisticBatching=true|false (BETA - default=true)<br>PersistentVolumeClaimUnusedSinceTime=true|false (BETA - default=true)<br>PodAndContainerStatsFromCRI=true|false (BETA - default=false)<br>PodDeletionCost=true|false (BETA - default=true)<br>PodGroupPreemptionPolicy=true|false (ALPHA - default=false)<br>PodLevelResourceManagers=true|false (BETA - default=false)<br>PodLevelResources=true|false (BETA - default=true)<br>PodLevelResourcesFixDefaulting=true|false (BETA - default=true)<br>PodLevelResourcesFixKubeletQOSClass=true|false (BETA - default=true)<br>PodLogsQuerySplitStreams=true|false (ALPHA - default=false)<br>PodTopologyLabelsAdmission=true|false (BETA - default=true)<br>PodsAPI=true|false (BETA - default=true)<br>PortForwardWebsockets=true|false (BETA - default=true)<br>QOSReserved=true|false (ALPHA - default=false)<br>ReduceDefaultCrashLoopBackOffDecay=true|false (ALPHA - default=false)<br>ReloadKubeletClientCAFile=true|false (BETA - default=true)<br>ReloadKubeletServerCertificateFile=true|false (BETA - default=true)<br>RemoteRequestHeaderUID=true|false (BETA - default=true)<br>ResourceHealthStatus=true|false (BETA - default=true)<br>ResourceHealthStatusMessage=true|false (BETA - default=true)<br>RestartAllContainersOnContainerExits=true|false (BETA - default=true)<br>RotateKubeletServerCertificate=true|false (BETA - default=true)<br>RuntimeClassInImageCriApi=true|false (ALPHA - default=false)<br>SchedulerAsyncAPICalls=true|false (BETA - default=false)<br>SchedulerAsyncPreemption=true|false (BETA - default=true)<br>SchedulerPopFromBackoffQ=true|false (BETA - default=true)<br>SchedulerPreQueueingHints=true|false (ALPHA - default=false)<br>ServiceAccountNodeAudienceRestriction=true|false (BETA - default=true)<br>ShardedListAndWatch=true|false (ALPHA - default=false)<br>SizeBasedListCostEstimate=true|false (BETA - default=true)<br>StaleControllerConsistencyDaemonSet=true|false (BETA - default=true)<br>StaleControllerConsistencyHPA=true|false (BETA - default=true)<br>StaleControllerConsistencyJob=true|false (BETA - default=true)<br>StaleControllerConsistencyReplicaSet=true|false (BETA - default=true)<br>StaleControllerConsistencyStatefulSet=true|false (BETA - default=true)<br>StatefulSetRecreateStrategy=true|false (ALPHA - default=false)<br>StatefulSetSemanticRevisionComparison=true|false (BETA - default=true)<br>StorageCapacityScoring=true|false (BETA - default=true)<br>StorageVersionAPI=true|false (ALPHA - default=false)<br>StorageVersionHash=true|false (BETA - default=true)<br>StrictIPCIDRValidation=true|false (BETA - default=true)<br>StructuredAuthenticationConfigurationEgressSelector=true|false (BETA - default=true)<br>StructuredAuthenticationConfigurationJWKSMetrics=true|false (BETA - default=true)<br>TaintTolerationComparisonOperators=true|false (ALPHA - default=false)<br>TokenRequestServiceAccountUIDValidation=true|false (BETA - default=true)<br>TopologyAwareWorkloadScheduling=true|false (ALPHA - default=false)<br>TopologyManagerPolicyAlphaOptions=true|false (ALPHA - default=false)<br>TopologyManagerPolicyBetaOptions=true|false (BETA - default=true)<br>TranslateStreamCloseWebsocketRequests=true|false (BETA - default=true)<br>UnauthenticatedHTTP2DOSMitigation=true|false (BETA - default=true)<br>UnknownVersionInteroperabilityProxy=true|false (BETA - default=true)<br>UnlockWhileProcessingFIFO=true|false (BETA - default=true)<br>UserNamespacesHostNetworkSupport=true|false (ALPHA - default=false)<br>VolumeBindMountOptions=true|false (ALPHA - default=false)<br>VolumeLimitScaling=true|false (BETA - default=true)<br>WatchList=true|false (BETA - default=true)<br>WatchListClient=true|false (BETA - default=true)<br>WatchListCompression=true|false (BETA - default=true)<br>WebhookRoundTripLoadBalancing=true|false (BETA - default=true)<br>WindowsCPUAndMemoryAffinity=true|false (ALPHA - default=false)<br>WindowsGracefulNodeShutdown=true|false (BETA - default=true)<br>WorkloadWithJob=true|false (ALPHA - default=false) (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با پرچم --config مربوط به kubelet مشخص می‌شود تنظیم گردد. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--file-check-frequency duration     Default: 20s</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">فاصله زمانی بین بررسی‌های فایل‌های پیکربندی برای یافتن داده‌های جدید (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با پرچم --config مربوط به kubelet مشخص می‌شود تنظیم گردد. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--hairpin-mode string     Default: "promiscuous-bridge"</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نحوه راه‌اندازی hairpin NAT توسط kubelet. این قابلیت به endpointهای یک Service اجازه می‌دهد در صورتی که بخواهند به Service خودشان دسترسی پیدا کنند، ترافیک را به خودشان متعادل‌سازی بار (loadbalance) کنند. مقادیر معتبر عبارت‌اند از "promiscuous-bridge"، "hairpin-veth" و "none". (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با پرچم --config مربوط به kubelet مشخص می‌شود تنظیم گردد. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--healthz-bind-address string     Default: 127.0.0.1</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نشانی IP که سرور healthz روی آن سرویس‌دهی می‌کند (برای گوش دادن روی همه رابط‌ها و خانواده‌های نشانی IP، آن را روی '0.0.0.0' یا '::' تنظیم کنید) (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با پرچم --config مربوط به kubelet مشخص می‌شود تنظیم گردد. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--healthz-port int32     Default: 10248</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">پورت endpoint مربوط به healthz روی localhost (برای غیرفعال کردن، روی 0 تنظیم کنید) (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با پرچم --config مربوط به kubelet مشخص می‌شود تنظیم گردد. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">-h, --help</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">راهنما برای kubelet</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--hostname-override string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">اگر مقدار آن خالی نباشد، از این رشته به‌جای نام میزبان (hostname) واقعی برای شناسایی استفاده خواهد شد.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--http-check-frequency duration     Default: 20s</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">فاصله زمانی بین بررسی‌های http برای یافتن داده‌های جدید (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با پرچم --config مربوط به kubelet مشخص می‌شود تنظیم گردد. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--image-credential-provider-bin-dir string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مسیر دایرکتوری که فایل‌های اجرایی افزونه‌های ارائه‌دهنده اعتبارنامه (credential provider) در آن قرار دارند.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--image-credential-provider-config string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مسیر یک فایل پیکربندی افزونه ارائه‌دهنده اعتبارنامه (JSON/YAML/YML) یا یک دایرکتوری از چنین فایل‌هایی (که به ترتیب الفبایی ادغام می‌شوند؛ جستجو به‌صورت غیربازگشتی انجام می‌شود).</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--image-gc-high-threshold int32     Default: 85</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">درصد استفاده از دیسک که پس از رسیدن به آن، زباله‌روبی (garbage collection) ایمیج‌ها همواره اجرا می‌شود. مقادیر باید در بازه [0, 100] باشند. برای غیرفعال کردن زباله‌روبی ایمیج‌ها، مقدار را روی 100 تنظیم کنید. (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با پرچم --config کوبلت مشخص می‌شود تنظیم گردد. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--image-gc-low-threshold int32     Default: 80</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">درصد استفاده از دیسک که زباله‌روبی ایمیج‌ها پیش از رسیدن به آن هرگز اجرا نمی‌شود. کمترین میزان استفاده از دیسک که زباله‌روبی تا آن ادامه می‌یابد. مقادیر باید در بازه [0, 100] باشند و باید کمتر از مقدار --image-gc-high-threshold باشند. (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با پرچم --config کوبلت مشخص می‌شود تنظیم گردد. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--image-service-endpoint string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نقطه پایانی (endpoint) سرویس ایمیج کانتینر. در صورت مشخص نشدن، به‌طور پیش‌فرض همان مقدار --container-runtime-endpoint خواهد بود. در لینوکس از Unix Domain Socket پشتیبانی می‌شود، در حالی که در ویندوز نقاط پایانی npipe و tcp پشتیبانی می‌شوند. نمونه‌ها: 'unix:///path/to/runtime.sock'، 'npipe:////./pipe/runtime' (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با پرچم --config کوبلت مشخص می‌شود تنظیم گردد. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--kernel-memcg-notification</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">در صورت فعال بودن، kubelet برای تشخیص عبور از آستانه‌های اخراج (eviction) حافظه، به‌جای نظرسنجی دوره‌ای (polling)، با اعلان memcg هسته یکپارچه می‌شود. (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با پرچم --config کوبلت مشخص می‌شود تنظیم گردد. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--kube-api-burst int32     Default: 100</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مقدار burst هنگام ارتباط با kube-apiserver کوبرنتیز. این عدد باید بزرگ‌تر یا مساوی 0 باشد. اگر 0 باشد از DefaultBurst با مقدار 100 استفاده می‌شود. این مقدار رویدادها (events) و APIهای ضربان قلب (heartbeat) نود را شامل نمی‌شود؛ محدودسازی نرخ آن‌ها با مجموعه‌ای دیگر از پرچم‌ها کنترل می‌شود. (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با پرچم --config کوبلت مشخص می‌شود تنظیم گردد. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--kube-api-content-type string     Default: "application/vnd.kubernetes.protobuf"</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نوع محتوای (content type) درخواست‌های ارسالی به kube-apiserver. (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با پرچم --config کوبلت مشخص می‌شود تنظیم گردد. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--kube-api-qps int32     Default: 50</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مقدار QPS هنگام ارتباط با kube-apiserver کوبرنتیز. این عدد باید بزرگ‌تر یا مساوی 0 باشد. اگر 0 باشد از DefaultQPS با مقدار 50 استفاده می‌شود. این مقدار رویدادها (events) و APIهای ضربان قلب (heartbeat) نود را شامل نمی‌شود؛ محدودسازی نرخ آن‌ها با مجموعه‌ای دیگر از پرچم‌ها کنترل می‌شود. (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با پرچم --config کوبلت مشخص می‌شود تنظیم گردد. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--kube-reserved &lt;comma-separated 'key=value' pairs&gt;</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مجموعه‌ای از جفت‌های ResourceName=ResourceQuantity (برای مثال cpu=200m,memory=500Mi,ephemeral-storage=1Gi,pid=1000) که منابع رزروشده برای مؤلفه‌های سیستمی کوبرنتیز را توصیف می‌کنند. در حال حاضر فقط cpu، memory، pid و ذخیره‌سازی موقت محلی (local ephemeral storage) برای فایل‌سیستم ریشه پشتیبانی می‌شوند. برای جزئیات بیشتر به https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/ مراجعه کنید. [default=none] (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با پرچم --config کوبلت مشخص می‌شود تنظیم گردد. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--kube-reserved-cgroup string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نام مطلق cgroup سطح بالا که برای مدیریت مؤلفه‌های کوبرنتیز استفاده می‌شود و منابع محاسباتی آن‌ها از طریق پرچم '--kube-reserved' رزرو شده است. برای مثال '/kube-reserved'. [default=''] (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با پرچم --config کوبلت مشخص می‌شود تنظیم گردد. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--kubeconfig string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مسیر یک فایل kubeconfig که نحوه اتصال به API server را مشخص می‌کند. ارائه --kubeconfig حالت API server را فعال می‌کند و حذف آن حالت مستقل (standalone) را فعال می‌کند.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--kubelet-cgroups string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نام مطلق اختیاری cgroupها برای ایجاد و اجرای kubelet در آن‌ها. (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با پرچم --config کوبلت مشخص می‌شود تنظیم گردد. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--local-storage-capacity-isolation     Default: true</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">اگر true باشد، جداسازی ذخیره‌سازی موقت محلی فعال است. در غیر این صورت، قابلیت جداسازی ذخیره‌سازی محلی غیرفعال خواهد شد. (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با پرچم --config کوبلت مشخص می‌شود تنظیم گردد. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--lock-file string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">&lt;هشدار: قابلیت آلفا&gt; مسیر فایلی که kubelet به‌عنوان فایل قفل از آن استفاده می‌کند.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--log-flush-frequency duration     Default: 5s</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">حداکثر تعداد ثانیه‌ها بین دو بار تخلیه (flush) لاگ‌ها</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--log-text-info-buffer-size quantity</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">[آلفا] در قالب متنی با جریان‌های خروجی تفکیک‌شده، پیام‌های اطلاعاتی را می‌توان برای مدتی بافر کرد تا کارایی افزایش یابد. مقدار پیش‌فرض صفر بایت، بافر کردن را غیرفعال می‌کند. اندازه را می‌توان به‌صورت تعداد بایت (512)، مضرب‌های 1000 (1K)، مضرب‌های 1024 (2Ki) یا توان‌های آن‌ها (3M، 4G، 5Mi، 6Gi) مشخص کرد. برای استفاده از این گزینه، feature gate با نام LoggingAlphaOptions را فعال کنید. (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با پرچم --config کوبلت مشخص می‌شود تنظیم گردد. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--log-text-split-stream</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">[آلفا] در قالب متنی، پیام‌های خطا را در stderr و پیام‌های اطلاعاتی را در stdout می‌نویسد. رفتار پیش‌فرض نوشتن یک جریان واحد در stdout است. برای استفاده از این گزینه، feature gate با نام LoggingAlphaOptions را فعال کنید. (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با پرچم --config کوبلت مشخص می‌شود تنظیم گردد. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--logging-format string     Default: "text"</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">قالب لاگ را تعیین می‌کند. قالب‌های مجاز: "text". (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با پرچم --config کوبلت مشخص می‌شود تنظیم گردد. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--make-iptables-util-chains     Default: true</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">اگر true باشد، kubelet اطمینان حاصل می‌کند که قوانین کمکی iptables روی میزبان وجود دارند. (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با پرچم --config کوبلت مشخص می‌شود تنظیم گردد. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--manifest-url string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نشانی URL برای دسترسی به مشخصات (specification) اضافی Podهایی که باید اجرا شوند. (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با پرچم --config کوبلت مشخص می‌شود تنظیم گردد. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--manifest-url-header colonSeparatedMultimapStringString</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">فهرست هدرهای HTTP جداشده با کاما که هنگام دسترسی به نشانی ارائه‌شده در --manifest-url استفاده می‌شوند. چند هدر با نام یکسان به همان ترتیبی که ارائه شده‌اند افزوده می‌شوند. این پرچم را می‌توان چندین بار به کار برد. برای مثال: --manifest-url-header 'a:hello,b:again,c:world' --manifest-url-header 'b:beautiful' (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با پرچم --config کوبلت مشخص می‌شود تنظیم گردد. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--max-open-files int     Default: 1000000</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">تعداد فایل‌هایی که فرایند kubelet می‌تواند باز کند. (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با پرچم --config کوبلت مشخص می‌شود تنظیم گردد. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--max-pods int32     Default: 110</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">تعداد Podهایی که می‌توانند روی این kubelet اجرا شوند. (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با پرچم --config کوبلت مشخص می‌شود تنظیم گردد. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--maximum-dead-containers int32     Default: -1</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">حداکثر تعداد نمونه‌های قدیمی کانتینرها که به‌صورت سراسری نگهداری می‌شوند. هر کانتینر مقداری فضای دیسک اشغال می‌کند. برای غیرفعال کردن، یک عدد منفی تنظیم کنید. (منسوخ‌شده: به‌جای آن از --eviction-hard یا --eviction-soft استفاده کنید. در نسخه‌ای در آینده حذف خواهد شد.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--maximum-dead-containers-per-container int32     Default: 1</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">حداکثر تعداد نمونه‌های قدیمی که برای هر کانتینر نگهداری می‌شوند. هر کانتینر مقداری فضای دیسک اشغال می‌کند. (منسوخ‌شده: به‌جای آن از --eviction-hard یا --eviction-soft استفاده کنید. در نسخه‌ای در آینده حذف خواهد شد.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--memory-manager-policy string     Default: "None"</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">سیاست Memory Manager که باید استفاده شود. مقادیر ممکن: 'None'، 'Static'. (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با پرچم --config کوبلت مشخص می‌شود تنظیم گردد. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--minimum-container-ttl-duration duration</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">حداقل عمر یک کانتینر خاتمه‌یافته پیش از آنکه زباله‌روبی شود. نمونه‌ها: '300ms'، '10s' یا '2h45m' (منسوخ‌شده: به‌جای آن از --eviction-hard یا --eviction-soft استفاده کنید. در نسخه‌ای در آینده حذف خواهد شد.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--minimum-image-ttl-duration duration     Default: 2m0s</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">حداقل عمر یک ایمیج استفاده‌نشده پیش از آنکه زباله‌روبی شود. نمونه‌ها: '300ms'، '10s' یا '2h45m'. (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با پرچم --config کوبلت مشخص می‌شود تنظیم گردد. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--node-ip string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نشانی IP نود (یا نشانی‌های IP دوپشته (dual-stack) جداشده با کاما). اگر تنظیم نشود، kubelet از نشانی IPv4 پیش‌فرض نود، در صورت وجود، و در غیر این صورت از نشانی IPv6 پیش‌فرض آن، در صورتی که نشانی IPv4 نداشته باشد، استفاده می‌کند. می‌توانید '::' را مشخص کنید تا نشانی IPv6 پیش‌فرض به نشانی IPv4 پیش‌فرض ترجیح داده شود. اگر cloud-provider روی external تنظیم شده باشد، این پرچم به راه‌اندازی اولیه (bootstrap) نود با IP متناظر کمک می‌کند.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--node-labels &lt;comma-separated 'key=value' pairs&gt;</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">برچسب‌هایی که هنگام ثبت نود در کلاستر افزوده می‌شوند. برچسب‌ها باید جفت‌های key=value باشند که با ',' از هم جدا شده‌اند. برچسب‌ها در فضای نام 'kubernetes.io' باید با یک پیشوند مجاز (kubelet.kubernetes.io، node.kubernetes.io) شروع شوند یا در مجموعه مجاز مشخص‌شده باشند (beta.kubernetes.io/arch، beta.kubernetes.io/instance-type، beta.kubernetes.io/os، failure-domain.beta.kubernetes.io/region، failure-domain.beta.kubernetes.io/zone، kubernetes.io/arch، kubernetes.io/hostname، kubernetes.io/os، node.kubernetes.io/instance-type، topology.kubernetes.io/region، topology.kubernetes.io/zone)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--node-status-max-images int32     Default: 50</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">حداکثر تعداد ایمیج‌هایی که در Node.Status.Images گزارش می‌شوند. اگر -1 مشخص شود، هیچ سقفی اعمال نخواهد شد. (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با پرچم --config کوبلت مشخص می‌شود تنظیم گردد. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--node-status-update-frequency duration     Default: 10s</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مشخص می‌کند kubelet هر چند وقت یک‌بار وضعیت نود را به master ارسال کند. توجه: هنگام تغییر این مقدار ثابت احتیاط کنید؛ این مقدار باید با nodeMonitorGracePeriod در nodecontroller سازگار باشد. (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با پرچم --config کوبلت مشخص می‌شود تنظیم گردد. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--oom-score-adj int32     Default: -999</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مقدار oom-score-adj برای فرایند kubelet. مقادیر باید در بازه [-1000, 1000] باشند. (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با پرچم --config کوبلت مشخص می‌شود تنظیم گردد. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--pod-cidr string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">CIDR مورد استفاده برای نشانی‌های IP پادها، که فقط در حالت مستقل (standalone) به کار می‌رود. در حالت کلاستر، این مقدار از master دریافت می‌شود. برای IPv6، حداکثر تعداد IPهای اختصاص‌یافته 65536 است. (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با پرچم --config کوبلت مشخص می‌شود تنظیم گردد. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--pod-manifest-path string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مسیر دایرکتوری حاوی فایل‌های static pod که باید اجرا شوند، یا مسیر یک فایل static pod منفرد. فایل‌هایی که نام آن‌ها با نقطه شروع می‌شود نادیده گرفته می‌شوند. (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با فلگ <code dir="ltr">--config</code> کوبلت مشخص می‌شود تنظیم شود. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--pod-max-pids int     Default: -1</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">حداکثر تعداد پردازه‌ها به‌ازای هر Pod را تعیین می‌کند. اگر مقدار آن -1 باشد، kubelet به‌طور پیش‌فرض از ظرفیت pid قابل تخصیص نود استفاده می‌کند. (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با فلگ <code dir="ltr">--config</code> کوبلت مشخص می‌شود تنظیم شود. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--pods-per-core int32</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">تعداد Podهایی که به‌ازای هر هسته می‌توانند روی این kubelet اجرا شوند. مجموع Podها روی این kubelet نمی‌تواند از max-pods بیشتر شود؛ بنابراین اگر این محاسبه به تعداد Pod مجاز بیشتری روی kubelet منجر شود، از max-pods استفاده خواهد شد. مقدار 0 این محدودیت را غیرفعال می‌کند. (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با فلگ <code dir="ltr">--config</code> کوبلت مشخص می‌شود تنظیم شود. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--port int32     Default: 10250</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">پورتی که kubelet روی آن سرویس‌دهی می‌کند. (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با فلگ <code dir="ltr">--config</code> کوبلت مشخص می‌شود تنظیم شود. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--protect-kernel-defaults</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">رفتار پیش‌فرض kubelet برای تنظیم هسته. اگر این گزینه تنظیم شود و هر یک از پارامترهای قابل تنظیم هسته با مقادیر پیش‌فرض kubelet متفاوت باشد، kubelet خطا می‌دهد. (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با فلگ <code dir="ltr">--config</code> کوبلت مشخص می‌شود تنظیم شود. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--provider-id string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">شناسه یکتا برای شناسایی نود در پایگاه داده ماشین‌ها، یعنی cloudprovider.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--qos-reserved &lt;comma-separated 'key=value' pairs&gt;</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">&lt;هشدار: قابلیت آلفا&gt; مجموعه‌ای از جفت‌های ResourceName=Percentage (مثلاً memory=50%) که توضیح می‌دهد درخواست‌های منابع Pod در سطح QoS چگونه رزرو می‌شوند. در حال حاضر فقط memory پشتیبانی می‌شود. فعال بودن feature gate با نام QOSReserved الزامی است. (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با فلگ <code dir="ltr">--config</code> کوبلت مشخص می‌شود تنظیم شود. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--read-only-port int32     Default: 10255</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">پورت فقط‌خواندنی که kubelet بدون احراز هویت/مجوزدهی روی آن سرویس‌دهی می‌کند (برای غیرفعال کردن، مقدار 0 را تنظیم کنید). (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با فلگ <code dir="ltr">--config</code> کوبلت مشخص می‌شود تنظیم شود. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--register-node     Default: true</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نود را در apiserver ثبت می‌کند. اگر <code dir="ltr">--kubeconfig</code> ارائه نشده باشد، این فلگ بی‌اثر است، زیرا kubelet هیچ apiserver‌ای برای ثبت‌نام در اختیار نخواهد داشت. (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با فلگ <code dir="ltr">--config</code> کوبلت مشخص می‌شود تنظیم شود. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--register-with-taints []v1.Taint</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نود را با فهرست داده‌شده‌ای از taintها ثبت می‌کند (جداشده با ویرگول، به‌صورت "&lt;key&gt;=&lt;value&gt;:&lt;effect&gt;"). اگر register-node برابر false باشد، بی‌اثر است. (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با فلگ <code dir="ltr">--config</code> کوبلت مشخص می‌شود تنظیم شود. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--registry-burst int32     Default: 10</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">حداکثر اندازه pullهای ناگهانی (bursty). به‌طور موقت اجازه می‌دهد pullها تا این تعداد افزایش ناگهانی داشته باشند، بدون آنکه از registry-qps فراتر روند. فقط در صورتی استفاده می‌شود که <code dir="ltr">--registry-qps</code> &gt; 0 باشد. (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با فلگ <code dir="ltr">--config</code> کوبلت مشخص می‌شود تنظیم شود. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--registry-qps int32     Default: 5</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">اگر مقدار بزرگ‌تر از 0 باشد، QPS دریافت (pull) از registry را به این مقدار محدود می‌کند. اگر 0 باشد، محدودیتی وجود ندارد. (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با فلگ <code dir="ltr">--config</code> کوبلت مشخص می‌شود تنظیم شود. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--reserved-cpus string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">فهرستی جداشده با ویرگول از CPUها یا بازه‌های CPU که برای استفاده سیستم و کوبرنتیز رزرو شده‌اند. این فهرست مشخص بر تعداد CPU تعیین‌شده در <code dir="ltr">--system-reserved</code> و <code dir="ltr">--kube-reserved</code> اولویت دارد. (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با فلگ <code dir="ltr">--config</code> کوبلت مشخص می‌شود تنظیم شود. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--reserved-memory reserved-memory</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">فهرستی جداشده با ویرگول از رزروهای حافظه برای نودهای NUMA (مثلاً <code dir="ltr">--reserved-memory 0:memory=1Gi,hugepages-1M=2Gi --reserved-memory 1:memory=2Gi</code>). مجموع کل برای هر نوع حافظه باید برابر با مجموع kube-reserved، system-reserved و eviction-threshold باشد. برای جزئیات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/memory-manager/#reserved-memory-flag مراجعه کنید. (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با فلگ <code dir="ltr">--config</code> کوبلت مشخص می‌شود تنظیم شود. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--resolv-conf string     Default: "/etc/resolv.conf"</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">فایل پیکربندی resolver که به‌عنوان مبنای پیکربندی تفکیک DNS کانتینرها استفاده می‌شود. (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با فلگ <code dir="ltr">--config</code> کوبلت مشخص می‌شود تنظیم شود. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--root-dir string     Default: "/var/lib/kubelet"</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مسیر دایرکتوری برای مدیریت فایل‌های kubelet (مانت‌های حجم (volume) و غیره).</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--rotate-certificates</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">گواهی‌های کلاینت kubelet را هنگام نزدیک شدن به زمان انقضا، با درخواست گواهی‌های جدید از kube-apiserver به‌طور خودکار چرخش (rotate) می‌دهد. (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با فلگ <code dir="ltr">--config</code> کوبلت مشخص می‌شود تنظیم شود. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--rotate-server-certificates</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">گواهی‌های سرویس‌دهی kubelet را هنگام نزدیک شدن به زمان انقضا، با درخواست گواهی‌های جدید از kube-apiserver به‌طور خودکار درخواست و چرخش می‌دهد. فعال بودن feature gate با نام RotateKubeletServerCertificate و تأیید آبجکت‌های CertificateSigningRequest ارسال‌شده الزامی است. (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با فلگ <code dir="ltr">--config</code> کوبلت مشخص می‌شود تنظیم شود. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--runonce</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">اگر true باشد، پس از ایجاد Podها از فایل‌های static pod یا URLهای راه دور، خارج می‌شود. با <code dir="ltr">--enable-server</code> ناسازگار است (استفاده هم‌زمان ممکن نیست). (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با فلگ <code dir="ltr">--config</code> کوبلت مشخص می‌شود تنظیم شود. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--runtime-cgroups string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نام مطلق اختیاری cgroupها برای ایجاد و اجرای runtime در آن‌ها.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--runtime-request-timeout duration     Default: 2m0s</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">زمان انتظار (timeout) همه درخواست‌های runtime به‌جز درخواست‌های طولانی‌مدت، یعنی pull، logs، exec و attach. هنگام عبور از این مهلت، kubelet درخواست را لغو می‌کند، خطا برمی‌گرداند و بعداً دوباره تلاش می‌کند. (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با فلگ <code dir="ltr">--config</code> کوبلت مشخص می‌شود تنظیم شود. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--seccomp-default RuntimeDefault</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">استفاده از RuntimeDefault را به‌عنوان پروفایل پیش‌فرض seccomp برای همه بارهای کاری فعال می‌کند.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--serialize-image-pulls     Default: true</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">ایمیج‌ها را یکی‌یکی دریافت (pull) می‌کند. توصیه می‌کنیم مقدار پیش‌فرض را روی نودهایی که docker daemon با نسخه &lt; 1.9 یا پشتیبان ذخیره‌سازی Aufs اجرا می‌کنند، تغییر <em>ندهید</em>. جزئیات بیشتر در Issue #10959 آمده است. (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با فلگ <code dir="ltr">--config</code> کوبلت مشخص می‌شود تنظیم شود. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--streaming-connection-idle-timeout duration     Default: 4h0m0s</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">حداکثر مدتی که یک اتصال جریانی (streaming) می‌تواند بیکار باشد، پیش از آنکه اتصال به‌طور خودکار بسته شود. مقدار 0 به معنای نبود محدودیت زمانی است. مثال: '5m'. توجه: همه اتصال‌ها به سرور kubelet حداکثر مدت‌زمان 4 ساعت دارند. (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با فلگ <code dir="ltr">--config</code> کوبلت مشخص می‌شود تنظیم شود. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--sync-frequency duration     Default: 1m0s</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">حداکثر فاصله زمانی بین همگام‌سازی کانتینرهای در حال اجرا و پیکربندی. (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با فلگ <code dir="ltr">--config</code> کوبلت مشخص می‌شود تنظیم شود. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--system-cgroups string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نام مطلق اختیاری cgroupهایی که همه پردازه‌های غیرهسته‌ای که هنوز درون یک cgroup زیر '/' قرار ندارند، در آن‌ها قرار داده می‌شوند. برای نبود کانتینر، خالی بگذارید. بازگرداندن این فلگ به حالت قبل نیازمند راه‌اندازی مجدد است. (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با فلگ <code dir="ltr">--config</code> کوبلت مشخص می‌شود تنظیم شود. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--system-reserved &lt;comma-separated 'key=value' pairs&gt;</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مجموعه‌ای از جفت‌های ResourceName=ResourceQuantity (مثلاً cpu=200m,memory=500Mi,ephemeral-storage=1Gi,pid=1000) که منابع رزروشده برای اجزای غیرکوبرنتیزی را توصیف می‌کنند. در حال حاضر فقط cpu، memory، pid و ذخیره‌سازی موقت محلی (local ephemeral storage) برای فایل‌سیستم ریشه پشتیبانی می‌شوند. برای جزئیات بیشتر به https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/ مراجعه کنید. [default=none] (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با فلگ <code dir="ltr">--config</code> کوبلت مشخص می‌شود تنظیم شود. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--system-reserved-cgroup string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نام مطلق cgroup سطح بالا که برای مدیریت اجزای غیرکوبرنتیزی استفاده می‌شود و منابع محاسباتی آن‌ها از طریق فلگ '--system-reserved' رزرو شده است. مثال: '/system-reserved'. [default=''] (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با فلگ <code dir="ltr">--config</code> کوبلت مشخص می‌شود تنظیم شود. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--tls-cert-file string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">فایل حاوی گواهی x509 که برای سرویس‌دهی HTTPS استفاده می‌شود (در صورت وجود، گواهی‌های میانی پس از گواهی سرور به آن الحاق می‌شوند). اگر <code dir="ltr">--tls-cert-file</code> و <code dir="ltr">--tls-private-key-file</code> ارائه نشوند، یک گواهی و کلید خودامضا برای آدرس عمومی تولید می‌شود و در دایرکتوری تعیین‌شده با <code dir="ltr">--cert-dir</code> ذخیره می‌گردد. (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با فلگ <code dir="ltr">--config</code> کوبلت مشخص می‌شود تنظیم شود. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--tls-cipher-suites strings</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">فهرستی جداشده با ویرگول از cipher suiteها برای سرور. اگر حذف شود، cipher suiteهای پیش‌فرض Go استفاده خواهند شد.<br>مقادیر توصیه‌شده: TLS_AES_128_GCM_SHA256, TLS_AES_256_GCM_SHA384, TLS_CHACHA20_POLY1305_SHA256, TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA, TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256, TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA, TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384, TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305, TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256, TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA, TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256, TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA, TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384, TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305, TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256.<br>مقادیر ناامن: TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256, TLS_ECDHE_ECDSA_WITH_RC4_128_SHA, TLS_ECDHE_RSA_WITH_3DES_EDE_CBC_SHA, TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256, TLS_ECDHE_RSA_WITH_RC4_128_SHA, TLS_RSA_WITH_3DES_EDE_CBC_SHA, TLS_RSA_WITH_AES_128_CBC_SHA, TLS_RSA_WITH_AES_128_CBC_SHA256, TLS_RSA_WITH_AES_128_GCM_SHA256, TLS_RSA_WITH_AES_256_CBC_SHA, TLS_RSA_WITH_AES_256_GCM_SHA384, TLS_RSA_WITH_RC4_128_SHA. (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با فلگ <code dir="ltr">--config</code> کوبلت مشخص می‌شود تنظیم شود. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--tls-min-version string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">حداقل نسخه TLS پشتیبانی‌شده. مقادیر ممکن: VersionTLS10, VersionTLS11, VersionTLS12, VersionTLS13 (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با فلگ <code dir="ltr">--config</code> کوبلت مشخص می‌شود تنظیم شود. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--tls-private-key-file string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">فایل حاوی کلید خصوصی x509 که با <code dir="ltr">--tls-cert-file</code> مطابقت دارد. (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با فلگ <code dir="ltr">--config</code> کوبلت مشخص می‌شود تنظیم شود. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--topology-manager-policy string     Default: "none"</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">سیاست Topology Manager که باید استفاده شود. مقادیر ممکن: 'none'، 'best-effort'، 'restricted'، 'single-numa-node'. (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با پرچم --config مربوط به Kubelet مشخص می‌شود تنظیم گردد. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--topology-manager-policy-options &lt;comma-separated 'key=value' pairs&gt;</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مجموعه‌ای از گزینه‌های سیاست Topology Manager به‌صورت key=value که برای تنظیم دقیق رفتار آن استفاده می‌شود. در صورت مشخص نشدن، رفتار پیش‌فرض حفظ می‌شود. (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با پرچم --config مربوط به Kubelet مشخص می‌شود تنظیم گردد. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--topology-manager-scope string     Default: "container"</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">دامنه‌ای که راهنمایی‌های توپولوژی (topology hints) در آن اعمال می‌شوند. Topology Manager راهنمایی‌ها را از Hint Providerها جمع‌آوری می‌کند و برای تضمین پذیرش Pod آن‌ها را در دامنه تعریف‌شده اعمال می‌کند. مقادیر ممکن: 'container'، 'pod'. (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با پرچم --config مربوط به Kubelet مشخص می‌شود تنظیم گردد. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">-v, --v int</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">عدد مربوط به سطح جزئیات لاگ‌ها</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--version version[=true]</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">--version و --version=raw اطلاعات نسخه را چاپ می‌کنند و خارج می‌شوند؛ --version=vX.Y.Z... نسخه گزارش‌شده را تنظیم می‌کند</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--vmodule pattern=N,...</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">فهرستی از تنظیمات pattern=N که با کاما جدا شده‌اند، برای ثبت لاگ با فیلتر بر اساس فایل (فقط برای قالب لاگ متنی کار می‌کند)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--volume-plugin-dir string     Default: "/usr/libexec/kubernetes/kubelet-plugins/volume/exec/"</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مسیر کامل دایرکتوری‌ای که برای جست‌وجوی افزونه‌های حجم (volume) شخص ثالث اضافی در آن جست‌وجو می‌شود. (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با پرچم --config مربوط به Kubelet مشخص می‌شود تنظیم گردد. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--volume-stats-agg-period duration     Default: 1m0s</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">بازه‌ای را مشخص می‌کند که kubelet در آن میزان استفاده از دیسک حجم‌ها را برای همه Podها و حجم‌ها محاسبه و ذخیره موقت (cache) می‌کند. برای غیرفعال کردن محاسبات حجم، یک عدد منفی تنظیم کنید. (منسوخ‌شده: این پارامتر باید از طریق فایل پیکربندی که با پرچم --config مربوط به Kubelet مشخص می‌شود تنظیم گردد. برای اطلاعات بیشتر به https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ مراجعه کنید.)</p></td>
+</tr>
+</tbody>
+</table>
+</main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#خلاصه">خلاصه</a><a class="l2" href="#گزینه-ها">گزینه‌ها</a></nav>
+</div>
+</body>
+</html>

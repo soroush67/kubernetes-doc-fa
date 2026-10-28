@@ -1,0 +1,1126 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>پیکربندی kube-apiserver (v1beta1) | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">reference / config-api</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">پیکربندی kube-apiserver (v1beta1)</h1><p dir="rtl">بسته v1beta1 نسخهٔ v1beta1 از API است.</p>
+<h2 id="انواع-منابع" dir="rtl">انواع منابع</h2>
+<ul>
+<li dir="ltr" class="ltr"><a href="#apiserver-k8s-io-v1beta1-AuthenticationConfiguration">AuthenticationConfiguration</a></li>
+<li dir="ltr" class="ltr"><a href="#apiserver-k8s-io-v1beta1-AuthorizationConfiguration">AuthorizationConfiguration</a></li>
+<li dir="ltr" class="ltr"><a href="#apiserver-k8s-io-v1beta1-EgressSelectorConfiguration">EgressSelectorConfiguration</a></li>
+<li dir="ltr" class="ltr"><a href="#apiserver-k8s-io-v1beta1-TracingConfiguration">TracingConfiguration</a></li>
+</ul>
+<h2 id="tracingconfiguration-tracingconfiguration" dir="ltr" class="ltr"><code dir="ltr">TracingConfiguration</code>     {#TracingConfiguration}</h2>
+<p dir="rtl"><strong>در این موارد ظاهر می‌شود:</strong></p>
+<ul>
+<li dir="ltr" class="ltr">
+<p dir="ltr" class="ltr"><a href="#kubelet-config-k8s-io-v1beta1-KubeletConfiguration">KubeletConfiguration</a></p>
+</li>
+<li dir="ltr" class="ltr">
+<p dir="ltr" class="ltr"><a href="#apiserver-k8s-io-v1alpha1-TracingConfiguration">TracingConfiguration</a></p>
+</li>
+<li dir="ltr" class="ltr">
+<p dir="ltr" class="ltr"><a href="#apiserver-k8s-io-v1beta1-TracingConfiguration">TracingConfiguration</a></p>
+</li>
+</ul>
+<p dir="rtl">TracingConfiguration پیکربندی نسخه‌بندی‌شده را برای کلاینت‌های ردیابی OpenTelemetry فراهم می‌کند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">endpoint</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">نقطه پایانی (Endpoint) کالکتوری که این مؤلفه ردیابی‌ها (traces) را به آن گزارش می‌کند.
+اتصال ناامن است و در حال حاضر از TLS پشتیبانی نمی‌کند.
+توصیه می‌شود این مقدار تنظیم نشود و endpoint همان مقدار پیش‌فرض otlp grpc، یعنی localhost:4317، باشد.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">samplingRatePerMillion</code><br>
+<code dir="ltr">int32</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">SamplingRatePerMillion تعداد نمونه‌هایی است که به ازای هر یک میلیون span جمع‌آوری می‌شود.
+توصیه می‌شود این مقدار تنظیم نشود. اگر تنظیم نشده باشد، نمونه‌بردار (sampler) از نرخ نمونه‌برداری
+span والد خود پیروی می‌کند، اما در غیر این صورت هرگز نمونه‌برداری نمی‌کند.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="authenticationconfiguration-apiserver-k8s-io-v1beta1-authenticationconfiguration" dir="ltr" class="ltr"><code dir="ltr">AuthenticationConfiguration</code>     {#apiserver-k8s-io-v1beta1-AuthenticationConfiguration}</h2>
+<p dir="rtl">AuthenticationConfiguration پیکربندی نسخه‌بندی‌شده را برای احراز هویت فراهم می‌کند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">apiVersion</code><br>string</td><td dir="ltr" class="ltr"><code dir="ltr">apiserver.k8s.io/v1beta1</code></td></tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">kind</code><br>string</td><td dir="ltr" class="ltr"><code dir="ltr">AuthenticationConfiguration</code></td></tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">jwt</code> <b>[Required]</b><br>
+<a href="#apiserver-k8s-io-v1beta1-JWTAuthenticator"><code dir="ltr">[]JWTAuthenticator</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">jwt فهرستی از احراز هویت‌کننده‌ها (authenticator) برای احراز هویت کاربران کوبرنتیز
+با استفاده از توکن‌های سازگار با JWT است. احراز هویت‌کننده تلاش می‌کند یک توکن ID خام را تجزیه کند
+و بررسی کند که توسط صادرکنندهٔ (issuer) پیکربندی‌شده امضا شده باشد. کلید عمومی لازم برای تأیید
+امضا از نقطه پایانی عمومی صادرکننده با استفاده از OIDC discovery به دست می‌آید.
+برای یک توکن ورودی، هر احراز هویت‌کنندهٔ JWT به ترتیبی که در این فهرست مشخص شده است
+آزموده می‌شود. توجه کنید که
+احراز هویت‌کننده‌های دیگر ممکن است پیش از احراز هویت‌کننده‌های JWT یا پس از آن‌ها اجرا شوند.
+جایگاه دقیق احراز هویت‌کننده‌های JWT نسبت به سایر
+احراز هویت‌کننده‌ها نه تعریف شده است و نه در نسخه‌های مختلف پایدار است. از آنجا که
+هر احراز هویت‌کنندهٔ JWT باید نشانی صادرکنندهٔ منحصربه‌فرد داشته باشد، حداکثر یک
+احراز هویت‌کنندهٔ JWT تلاش می‌کند توکن را از نظر رمزنگاری اعتبارسنجی کند.</p>
+<p dir="rtl">حداقل بار (payload) معتبر JWT باید شامل claimهای زیر باشد:
+{
+"iss": "https://issuer.example.com",
+"aud": ["audience"],
+"exp": 1234567890,
+"<!-- raw HTML omitted -->": "username"
+}</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">anonymous</code> <b>[Required]</b><br>
+<a href="#apiserver-k8s-io-v1beta1-AnonymousAuthConfig"><code dir="ltr">AnonymousAuthConfig</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">در صورت وجود، نباید --anonymous-auth تنظیم شده باشد</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="authorizationconfiguration-apiserver-k8s-io-v1beta1-authorizationconfiguration" dir="ltr" class="ltr"><code dir="ltr">AuthorizationConfiguration</code>     {#apiserver-k8s-io-v1beta1-AuthorizationConfiguration}</h2>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">apiVersion</code><br>string</td><td dir="ltr" class="ltr"><code dir="ltr">apiserver.k8s.io/v1beta1</code></td></tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">kind</code><br>string</td><td dir="ltr" class="ltr"><code dir="ltr">AuthorizationConfiguration</code></td></tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">authorizers</code> <b>[Required]</b><br>
+<a href="#apiserver-k8s-io-v1beta1-AuthorizerConfiguration"><code dir="ltr">[]AuthorizerConfiguration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">Authorizers فهرستی مرتب از مجوزدهنده‌ها (authorizer) است که
+درخواست‌ها بر اساس آن‌ها مجاز می‌شوند.
+این مشابه فلگ --authorization-modes در kube-apiserver است.
+باید دست‌کم یک مورد وجود داشته باشد.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="egressselectorconfiguration-apiserver-k8s-io-v1beta1-egressselectorconfiguration" dir="ltr" class="ltr"><code dir="ltr">EgressSelectorConfiguration</code>     {#apiserver-k8s-io-v1beta1-EgressSelectorConfiguration}</h2>
+<p dir="rtl">EgressSelectorConfiguration پیکربندی نسخه‌بندی‌شده را برای کلاینت‌های egress selector فراهم می‌کند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">apiVersion</code><br>string</td><td dir="ltr" class="ltr"><code dir="ltr">apiserver.k8s.io/v1beta1</code></td></tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">kind</code><br>string</td><td dir="ltr" class="ltr"><code dir="ltr">EgressSelectorConfiguration</code></td></tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">egressSelections</code> <b>[Required]</b><br>
+<a href="#apiserver-k8s-io-v1beta1-EgressSelection"><code dir="ltr">[]EgressSelection</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">connectionServices شامل فهرستی از پیکربندی‌های کلاینت egress selection است</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="tracingconfiguration-apiserver-k8s-io-v1beta1-tracingconfiguration" dir="ltr" class="ltr"><code dir="ltr">TracingConfiguration</code>     {#apiserver-k8s-io-v1beta1-TracingConfiguration}</h2>
+<p dir="rtl">TracingConfiguration پیکربندی نسخه‌بندی‌شده را برای کلاینت‌های ردیابی فراهم می‌کند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">apiVersion</code><br>string</td><td dir="ltr" class="ltr"><code dir="ltr">apiserver.k8s.io/v1beta1</code></td></tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">kind</code><br>string</td><td dir="ltr" class="ltr"><code dir="ltr">TracingConfiguration</code></td></tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">TracingConfiguration</code> <b>[Required]</b><br>
+<a href="#TracingConfiguration"><code dir="ltr">TracingConfiguration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">ساختار (struct) پیکربندی ردیابی پیکربندی مؤلفه را درون خود جاسازی کنید</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="anonymousauthcondition-apiserver-k8s-io-v1beta1-anonymousauthcondition" dir="ltr" class="ltr"><code dir="ltr">AnonymousAuthCondition</code>     {#apiserver-k8s-io-v1beta1-AnonymousAuthCondition}</h2>
+<p dir="rtl"><strong>در این موارد ظاهر می‌شود:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#apiserver-k8s-io-v1beta1-AnonymousAuthConfig">AnonymousAuthConfig</a></li>
+</ul>
+<p dir="rtl">AnonymousAuthCondition شرطی را توصیف می‌کند که تحت آن احراز هویت ناشناس
+باید فعال شود.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">path</code> <b>[Required]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">مسیری که احراز هویت ناشناس برای آن فعال است.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="anonymousauthconfig-apiserver-k8s-io-v1beta1-anonymousauthconfig" dir="ltr" class="ltr"><code dir="ltr">AnonymousAuthConfig</code>     {#apiserver-k8s-io-v1beta1-AnonymousAuthConfig}</h2>
+<p dir="rtl"><strong>در این موارد ظاهر می‌شود:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#apiserver-k8s-io-v1beta1-AuthenticationConfiguration">AuthenticationConfiguration</a></li>
+</ul>
+<p dir="rtl">AnonymousAuthConfig پیکربندی احراز هویت‌کنندهٔ ناشناس را فراهم می‌کند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">enabled</code> <b>[Required]</b><br>
+<code dir="ltr">bool</code>
+</td>
+<td dir="rtl">
+   <span class="text-muted">توضیحی ارائه نشده است.</span></td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">conditions</code> <b>[Required]</b><br>
+<a href="#apiserver-k8s-io-v1beta1-AnonymousAuthCondition"><code dir="ltr">[]AnonymousAuthCondition</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">در صورت تنظیم، احراز هویت ناشناس تنها زمانی مجاز است که درخواست یکی از
+شرط‌ها را برآورده کند.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="audiencematchpolicytype-apiserver-k8s-io-v1beta1-audiencematchpolicytype" dir="ltr" class="ltr"><code dir="ltr">AudienceMatchPolicyType</code>     {#apiserver-k8s-io-v1beta1-AudienceMatchPolicyType}</h2>
+<p dir="rtl">(نام مستعار برای <code dir="ltr">string</code>)</p>
+<p dir="rtl"><strong>در این موارد ظاهر می‌شود:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#apiserver-k8s-io-v1beta1-Issuer">Issuer</a></li>
+</ul>
+<p dir="rtl">AudienceMatchPolicyType مجموعه‌ای از مقادیر معتبر برای issuer.audienceMatchPolicy است</p>
+<h2 id="authorizerconfiguration-apiserver-k8s-io-v1beta1-authorizerconfiguration" dir="ltr" class="ltr"><code dir="ltr">AuthorizerConfiguration</code>     {#apiserver-k8s-io-v1beta1-AuthorizerConfiguration}</h2>
+<p dir="rtl"><strong>در این موارد ظاهر می‌شود:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#apiserver-k8s-io-v1beta1-AuthorizationConfiguration">AuthorizationConfiguration</a></li>
+</ul>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">type</code> <b>[Required]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">Type به نوع مجوزدهنده (authorizer) اشاره دارد.
+"Webhook" در API server عمومی پشتیبانی می‌شود.
+سایر API serverها ممکن است از انواع مجوزدهندهٔ اضافی
+مانند Node، RBAC، ABAC و غیره پشتیبانی کنند.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">name</code> <b>[Required]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">Name برای توصیف webhook به کار می‌رود.
+این نام به‌صراحت در سازوکار پایش برای متریک‌ها استفاده می‌شود.
+توجه: نام‌ها باید برچسب‌های DNS1123 مانند <code dir="ltr">myauthorizername</code> یا
+زیردامنه‌هایی مانند <code dir="ltr">myauthorizer.example.domain</code> باشند.
+الزامی است و مقدار پیش‌فرض ندارد.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">webhook</code> <b>[Required]</b><br>
+<a href="#apiserver-k8s-io-v1beta1-WebhookConfiguration"><code dir="ltr">WebhookConfiguration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">Webhook پیکربندی مجوزدهندهٔ Webhook را تعریف می‌کند.
+وقتی Type=Webhook است باید تعریف شود.
+وقتی Type!=Webhook است نباید تعریف شود.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="claimmappings-apiserver-k8s-io-v1beta1-claimmappings" dir="ltr" class="ltr"><code dir="ltr">ClaimMappings</code>     {#apiserver-k8s-io-v1beta1-ClaimMappings}</h2>
+<p dir="rtl"><strong>در این موارد ظاهر می‌شود:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#apiserver-k8s-io-v1beta1-JWTAuthenticator">JWTAuthenticator</a></li>
+</ul>
+<p dir="rtl">ClaimMappings پیکربندی نگاشت claim را فراهم می‌کند</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">username</code> <b>[Required]</b><br>
+<a href="#apiserver-k8s-io-v1beta1-PrefixedClaimOrExpression"><code dir="ltr">PrefixedClaimOrExpression</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">username گزینه‌ای برای صفت username است.
+مقدار claim باید یک رشتهٔ منفرد باشد.
+معادل فلگ‌های --oidc-username-claim و --oidc-username-prefix است.
+اگر username.expression تنظیم شده باشد، عبارت باید یک مقدار رشته‌ای تولید کند.
+اگر username.expression از 'claims.email' استفاده کند، آنگاه 'claims.email_verified' باید در
+username.expression یا extra[<em>].valueExpression یا claimValidationRules[</em>].expression استفاده شود.
+نمونه‌ای از عبارت قاعدهٔ اعتبارسنجی claim که با اعتبارسنجی‌ای که به‌طور خودکار
+هنگام تنظیم username.claim روی 'email' اعمال می‌شود مطابقت دارد، عبارت 'claims.?email_verified.orValue(true) == true' است. با مقایسهٔ صریح
+مقدار با true، به بررسی نوع (type-checking) اجازه می‌دهیم ببیند نتیجه یک مقدار بولی خواهد بود، و اطمینان حاصل می‌کنیم که
+claim غیربولی email_verified در زمان اجرا شناسایی می‌شود.</p>
+<p dir="rtl">در رویکرد مبتنی بر فلگ، --oidc-username-claim و --oidc-username-prefix اختیاری هستند. اگر --oidc-username-claim تنظیم نشده باشد،
+مقدار پیش‌فرض "sub" است. در پیکربندی احراز هویت، برای claim یا prefix مقدار پیش‌فرضی وجود ندارد. claim و prefix باید به‌صراحت تنظیم شوند.
+برای claim، اگر --oidc-username-claim در رویکرد قدیمی مبتنی بر فلگ تنظیم نشده بود، در پیکربندی احراز هویت username.claim="sub" را پیکربندی کنید.
+برای prefix:
+(1) --oidc-username-prefix="-"، هیچ پیشوندی به username افزوده نمی‌شد. برای رفتار یکسان با استفاده از پیکربندی احراز هویت،
+username.prefix="" را تنظیم کنید
+(2) --oidc-username-prefix="" و  --oidc-username-claim != "email"، پیشوند "&lt;value of --oidc-issuer-url&gt;#" بود. برای
+رفتار یکسان با استفاده از پیکربندی احراز هویت، username.prefix="<!-- raw HTML omitted -->#" را تنظیم کنید
+(3) --oidc-username-prefix="<!-- raw HTML omitted -->". برای رفتار یکسان با استفاده از پیکربندی احراز هویت، username.prefix="<!-- raw HTML omitted -->" را تنظیم کنید</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">groups</code><br>
+<a href="#apiserver-k8s-io-v1beta1-PrefixedClaimOrExpression"><code dir="ltr">PrefixedClaimOrExpression</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">groups گزینه‌ای برای صفت groups است.
+مقدار claim باید یک رشته یا آرایه‌ای از رشته‌ها باشد.
+اگر groups.claim تنظیم شده باشد، prefix باید مشخص شود (و می‌تواند رشتهٔ خالی باشد).
+اگر groups.expression تنظیم شده باشد، عبارت باید یک رشته یا آرایه‌ای از رشته‌ها تولید کند.
+مقادیر ""، [] و null به این معنا در نظر گرفته می‌شوند که نگاشت گروه وجود ندارد.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">uid</code><br>
+<a href="#apiserver-k8s-io-v1beta1-ClaimOrExpression"><code dir="ltr">ClaimOrExpression</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">uid گزینه‌ای برای صفت uid است.
+claim باید یک claim رشته‌ای منفرد باشد.
+اگر uid.expression تنظیم شده باشد، عبارت باید یک مقدار رشته‌ای تولید کند.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">extra</code><br>
+<a href="#apiserver-k8s-io-v1beta1-ExtraMapping"><code dir="ltr">[]ExtraMapping</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">extra گزینه‌ای برای صفت extra است.
+expression باید یک رشته یا آرایه‌ای از رشته‌ها تولید کند.
+اگر مقدار خالی باشد، نگاشت extra وجود نخواهد داشت.</p>
+<p dir="rtl">کلید/مقدار extra ثابت (hard-coded)</p>
+<ul>
+<li dir="rtl">key: "foo"
+valueExpression: "'bar'"
+این به یک صفت extra با مقدار foo: ["bar"] منجر می‌شود</li>
+</ul>
+<p dir="rtl">کلید ثابت، مقدار کپی‌شده از مقدار claim</p>
+<ul>
+<li dir="rtl">key: "foo"
+valueExpression: "claims.some_claim"
+این به یک صفت extra با مقدار foo: [value of some_claim] منجر می‌شود</li>
+</ul>
+<p dir="rtl">کلید ثابت، مقدار مشتق‌شده از مقدار claim</p>
+<ul>
+<li dir="rtl">key: "admin"
+valueExpression: '(has(claims.is_admin) &amp;&amp; claims.is_admin) ? "true":""'
+این به نتایج زیر منجر می‌شود:</li>
+<li dir="rtl">اگر claim با نام is_admin وجود داشته باشد و true باشد، صفت extra به صورت admin: ["true"]</li>
+<li dir="rtl">اگر claim با نام is_admin وجود داشته باشد و false باشد یا claim با نام is_admin وجود نداشته باشد، هیچ صفت extra اضافه نخواهد شد</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="claimorexpression-apiserver-k8s-io-v1beta1-claimorexpression" dir="ltr" class="ltr"><code dir="ltr">ClaimOrExpression</code>     {#apiserver-k8s-io-v1beta1-ClaimOrExpression}</h2>
+<p dir="rtl"><strong>در این موارد ظاهر می‌شود:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#apiserver-k8s-io-v1beta1-ClaimMappings">ClaimMappings</a></li>
+</ul>
+<p dir="rtl">ClaimOrExpression پیکربندی یک claim یا عبارت منفرد را فراهم می‌کند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">claim</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">claim همان claim از JWT است که باید استفاده شود.
+یکی از claim یا expression باید تنظیم شود.
+با expression متقابلاً ناسازگار است (mutually exclusive).</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">expression</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">expression عبارتی را نشان می‌دهد که توسط CEL ارزیابی خواهد شد.</p>
+<p dir="rtl">عبارت‌های CEL به محتوای claimهای توکن دسترسی دارند که در قالب متغیر CEL سازمان‌دهی شده‌اند:</p>
+<ul>
+<li dir="rtl">'claims' نگاشتی از نام claimها به مقادیر claim است.
+برای مثال، متغیری با نام 'sub' را می‌توان با 'claims.sub' در دسترس قرار داد.
+claimهای تودرتو را می‌توان با نمادگذاری نقطه‌ای در دسترس قرار داد، مثلاً 'claims.foo.bar'.</li>
+</ul>
+<p dir="rtl">مستندات CEL: https://kubernetes.io/docs/reference/using-api/cel/</p>
+<p dir="rtl">با claim متقابلاً ناسازگار است.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="claimvalidationrule-apiserver-k8s-io-v1beta1-claimvalidationrule" dir="ltr" class="ltr"><code dir="ltr">ClaimValidationRule</code>     {#apiserver-k8s-io-v1beta1-ClaimValidationRule}</h2>
+<p dir="rtl"><strong>در این موارد ظاهر می‌شود:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#apiserver-k8s-io-v1beta1-JWTAuthenticator">JWTAuthenticator</a></li>
+</ul>
+<p dir="rtl">ClaimValidationRule پیکربندی یک قاعدهٔ اعتبارسنجی claim منفرد را فراهم می‌کند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">claim</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">claim نام یک claim الزامی است.
+معادل فلگ --oidc-required-claim است.
+فقط کلیدهای claim از نوع رشته پشتیبانی می‌شوند.
+با expression و message متقابلاً ناسازگار است.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">requiredValue</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">requiredValue مقدار یک claim الزامی است.
+معادل فلگ --oidc-required-claim است.
+فقط مقادیر claim از نوع رشته پشتیبانی می‌شوند.
+اگر claim تنظیم شده باشد و requiredValue تنظیم نشده باشد، claim باید با مقداری برابر رشتهٔ خالی وجود داشته باشد.
+با expression و message متقابلاً ناسازگار است.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">expression</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">expression عبارتی را نشان می‌دهد که توسط CEL ارزیابی خواهد شد.
+باید یک مقدار بولی تولید کند.</p>
+<p dir="rtl">عبارت‌های CEL به محتوای claimهای توکن دسترسی دارند که در قالب متغیر CEL سازمان‌دهی شده‌اند:</p>
+<ul>
+<li dir="rtl">'claims' نگاشتی از نام claimها به مقادیر claim است.
+برای مثال، متغیری با نام 'sub' را می‌توان با 'claims.sub' در دسترس قرار داد.
+claimهای تودرتو را می‌توان با نمادگذاری نقطه‌ای در دسترس قرار داد، مثلاً 'claims.foo.bar'.
+برای موفقیت اعتبارسنجی باید true برگرداند.</li>
+</ul>
+<p dir="rtl">مستندات CEL: https://kubernetes.io/docs/reference/using-api/cel/</p>
+<p dir="rtl">با claim و requiredValue متقابلاً ناسازگار است.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">message</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">message پیام خطای برگردانده‌شده را زمانی که expression مقدار false برگرداند سفارشی می‌کند.
+message یک رشتهٔ لفظی (literal) است.
+با claim و requiredValue متقابلاً ناسازگار است.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="connection-apiserver-k8s-io-v1beta1-connection" dir="ltr" class="ltr"><code dir="ltr">Connection</code>     {#apiserver-k8s-io-v1beta1-Connection}</h2>
+<p dir="rtl"><strong>در این موارد ظاهر می‌شود:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#apiserver-k8s-io-v1beta1-EgressSelection">EgressSelection</a></li>
+</ul>
+<p dir="rtl">Connection پیکربندی یک کلاینت egress selection منفرد را فراهم می‌کند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">proxyProtocol</code> <b>[Required]</b><br>
+<a href="#apiserver-k8s-io-v1beta1-ProtocolType"><code dir="ltr">ProtocolType</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">Protocol پروتکلی است که برای اتصال از کلاینت به سرور konnectivity استفاده می‌شود.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">transport</code><br>
+<a href="#apiserver-k8s-io-v1beta1-Transport"><code dir="ltr">Transport</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">Transport پیکربندی‌های انتقال (transport) را تعریف می‌کند که برای اتصال به سرور konnectivity استفاده می‌کنیم.
+اگر ProxyProtocol برابر HTTPConnect یا GRPC باشد، این مقدار الزامی است.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="egressselection-apiserver-k8s-io-v1beta1-egressselection" dir="ltr" class="ltr"><code dir="ltr">EgressSelection</code>     {#apiserver-k8s-io-v1beta1-EgressSelection}</h2>
+<p dir="rtl"><strong>در این موارد ظاهر می‌شود:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#apiserver-k8s-io-v1beta1-EgressSelectorConfiguration">EgressSelectorConfiguration</a></li>
+</ul>
+<p dir="rtl">EgressSelection پیکربندی یک کلاینت egress selection منفرد را فراهم می‌کند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">name</code> <b>[Required]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">name نام egress selection است.
+مقادیر پشتیبانی‌شده در حال حاضر "controlplane"، "master"، "etcd" و "cluster" هستند.
+egress selector با نام "master" به نفع "controlplane" منسوخ شده است</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">connection</code> <b>[Required]</b><br>
+<a href="#apiserver-k8s-io-v1beta1-Connection"><code dir="ltr">Connection</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">connection اطلاعات دقیقی است که برای پیکربندی egress selection استفاده می‌شود</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="egressselectortype-apiserver-k8s-io-v1beta1-egressselectortype" dir="ltr" class="ltr"><code dir="ltr">EgressSelectorType</code>     {#apiserver-k8s-io-v1beta1-EgressSelectorType}</h2>
+<p dir="rtl">(نام مستعار برای <code dir="ltr">string</code>)</p>
+<p dir="rtl"><strong>در این موارد ظاهر می‌شود:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#apiserver-k8s-io-v1beta1-Issuer">Issuer</a></li>
+</ul>
+<p dir="rtl">EgressSelectorType نشان‌دهندهٔ این است که کدام egress selection باید برای ارسال ترافیک استفاده شود.</p>
+<h2 id="extramapping-apiserver-k8s-io-v1beta1-extramapping" dir="ltr" class="ltr"><code dir="ltr">ExtraMapping</code>     {#apiserver-k8s-io-v1beta1-ExtraMapping}</h2>
+<p dir="rtl"><strong>نمایش داده می‌شود در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#apiserver-k8s-io-v1beta1-ClaimMappings">ClaimMappings</a></li>
+</ul>
+<p dir="rtl">ExtraMapping پیکربندی یک نگاشت extra منفرد را فراهم می‌کند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="rtl"><code dir="ltr">key</code> <b>[الزامی]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">key رشته‌ای است که به‌عنوان کلید ویژگی extra استفاده می‌شود.
+key باید یک مسیر دارای پیشوند دامنه باشد (برای مثال example.org/foo). تمام نویسه‌های پیش از اولین «/» باید یک
+زیردامنه معتبر مطابق RFC 1123 باشند. تمام نویسه‌های پس از اولین «/» باید
+نویسه‌های معتبر مسیر HTTP مطابق RFC 3986 باشند.
+key باید با حروف کوچک نوشته شود.
+یکتا بودن آن الزامی است.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">valueExpression</code> <b>[الزامی]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">valueExpression یک عبارت CEL برای استخراج مقدار ویژگی extra است.
+valueExpression باید یک مقدار رشته‌ای یا آرایه‌ای از رشته‌ها تولید کند.
+مقادیر «""»، [] و null به این معنا در نظر گرفته می‌شوند که نگاشت extra وجود ندارد.
+مقادیر رشته خالی که درون یک آرایه رشته‌ای قرار دارند، فیلتر و حذف می‌شوند.</p>
+<p dir="rtl">عبارت‌های CEL به محتوای claims توکن دسترسی دارند که در قالب متغیر CEL سازمان‌دهی شده است:</p>
+<ul>
+<li dir="rtl">'claims' نگاشتی از نام claimها به مقادیر claim است.
+برای مثال، متغیری با نام 'sub' از طریق 'claims.sub' قابل دسترسی است.
+claimهای تو در تو را می‌توان با نمادگذاری نقطه‌ای مانند 'claims.foo.bar' در دسترس قرار داد.</li>
+</ul>
+<p dir="rtl">مستندات CEL: https://kubernetes.io/docs/reference/using-api/cel/</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="issuer-apiserver-k8s-io-v1beta1-issuer" dir="ltr" class="ltr"><code dir="ltr">Issuer</code>     {#apiserver-k8s-io-v1beta1-Issuer}</h2>
+<p dir="rtl"><strong>نمایش داده می‌شود در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#apiserver-k8s-io-v1beta1-JWTAuthenticator">JWTAuthenticator</a></li>
+</ul>
+<p dir="rtl">Issuer پیکربندی تنظیمات مختص یک ارائه‌دهنده خارجی را فراهم می‌کند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="rtl"><code dir="ltr">url</code> <b>[الزامی]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">url به نشانی issuer با قالب https://url یا https://url/path اشاره می‌کند.
+این مقدار باید با claim با نام «iss» در JWT ارائه‌شده و با issuer بازگردانده‌شده از discovery مطابقت داشته باشد.
+مقدار آن با پرچم --oidc-issuer-url یکسان است.
+اطلاعات discovery از «{url}/.well-known/openid-configuration» دریافت می‌شود، مگر اینکه با discoveryURL بازنویسی شده باشد.
+این مقدار باید میان تمام authenticatorهای JWT یکتا باشد.
+توجه کنید که پیکربندی egress selection برای این اتصال شبکه‌ای استفاده نمی‌شود.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">discoveryURL</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">discoveryURL، در صورت مشخص شدن، نشانی مورد استفاده برای دریافت اطلاعات discovery را
+به‌جای «{url}/.well-known/openid-configuration» بازنویسی می‌کند.
+مقدار مشخص‌شده دقیقاً به همان صورت استفاده می‌شود؛ بنابراین در صورت نیاز باید
+«/.well-known/openid-configuration» در discoveryURL گنجانده شود.</p>
+<p dir="rtl">فیلد «issuer» در اطلاعات discovery دریافت‌شده باید با فیلد «issuer.url»
+در AuthenticationConfiguration مطابقت داشته باشد و برای اعتبارسنجی claim با نام «iss» در JWT ارائه‌شده استفاده می‌شود.
+این برای سناریوهایی است که در آن‌ها endpointهای well-known و jwks در مکانی متفاوت از issuer
+(مثلاً به‌صورت محلی در کلاستر) میزبانی می‌شوند.</p>
+<p dir="rtl">مثال:
+نشانی discovery که با استفاده از Service کوبرنتیز با نام 'oidc' در فضای نام (namespace) با نام 'oidc-namespace' در دسترس قرار گرفته است
+و اطلاعات discovery در '/.well-known/openid-configuration' در دسترس است.
+discoveryURL: "https://oidc.oidc-namespace/.well-known/openid-configuration"
+certificateAuthority برای تأیید اتصال TLS استفاده می‌شود و نام میزبان در گواهی برگ (leaf)
+باید روی 'oidc.oidc-namespace' تنظیم شده باشد.</p>
+<p dir="ltr" class="ltr">curl https://oidc.oidc-namespace/.well-known/openid-configuration (.discoveryURL field)
+{
+issuer: "https://oidc.example.com" (.url field)
+}</p>
+<p dir="rtl">discoveryURL باید با url متفاوت باشد.
+این مقدار باید میان تمام authenticatorهای JWT یکتا باشد.
+توجه کنید که پیکربندی egress selection برای این اتصال شبکه‌ای استفاده نمی‌شود.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">certificateAuthority</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">certificateAuthority شامل گواهی‌های مرجع گواهی (certificate authority) با کدگذاری PEM است
+که برای اعتبارسنجی اتصال هنگام دریافت اطلاعات discovery استفاده می‌شود.
+در صورت تنظیم نشدن، از تأییدکننده سیستم استفاده می‌شود.
+مقدار آن با محتوای فایلی که پرچم --oidc-ca-file به آن اشاره می‌کند یکسان است.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">audiences</code> <b>[الزامی]</b><br>
+<code dir="ltr">[]string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">audiences مجموعه مخاطبان (audience) قابل‌قبولی است که JWT باید برای آن‌ها صادر شده باشد.
+دست‌کم یکی از مدخل‌ها باید با claim با نام «aud» در JWTهای ارائه‌شده مطابقت داشته باشد.
+مقدار آن با پرچم --oidc-client-id یکسان است (هرچند این فیلد از آرایه پشتیبانی می‌کند).
+باید غیرخالی باشد.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">audienceMatchPolicy</code><br>
+<a href="#apiserver-k8s-io-v1beta1-AudienceMatchPolicyType"><code dir="ltr">AudienceMatchPolicyType</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">audienceMatchPolicy تعیین می‌کند فیلد «audiences» چگونه برای تطبیق با claim با نام «aud» در JWT ارائه‌شده استفاده شود.
+مقادیر مجاز عبارت‌اند از:</p>
+<ol>
+<li dir="rtl">«MatchAny» هنگامی که چند audience مشخص شده باشد و</li>
+<li dir="rtl">خالی (یا تنظیم‌نشده) یا «MatchAny» هنگامی که یک audience مشخص شده باشد.</li>
+</ol>
+<ul>
+<li dir="rtl">
+<p dir="rtl">MatchAny: claim با نام «aud» در JWT ارائه‌شده باید دست‌کم با یکی از مدخل‌های فیلد «audiences» مطابقت داشته باشد.
+برای مثال، اگر «audiences» برابر ["foo", "bar"] باشد، claim با نام «aud» در JWT ارائه‌شده باید شامل «foo» یا «bar» باشد (و ممکن است شامل هر دو باشد).</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">"": هنگامی که در فیلد «audiences» یک audience مشخص شده باشد، سیاست تطبیق می‌تواند خالی (یا تنظیم‌نشده) باشد. claim با نام «aud» در JWT ارائه‌شده باید شامل همان audience واحد باشد (و ممکن است شامل موارد دیگر نیز باشد).</p>
+</li>
+</ul>
+<p dir="rtl">برای اعتبارسنجی دقیق‌تر audience، از claimValidationRules استفاده کنید.
+مثال: claimValidationRule[].expression: 'sets.equivalent(claims.aud, ["bar", "foo", "baz"])' برای الزام به تطابق دقیق.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">egressSelectorType</code><br>
+<a href="#apiserver-k8s-io-v1beta1-EgressSelectorType"><code dir="ltr">EgressSelectorType</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">egressSelectorType نشان‌دهنده آن است که کدام egress selection باید برای ارسال تمام ترافیک مربوط
+به این issuer (discovery، JWKS، claimهای توزیع‌شده و غیره) استفاده شود. در صورت مشخص نشدن، هیچ dialer سفارشی استفاده نمی‌شود.
+در صورت مشخص شدن، گزینه‌های معتبر «controlplane» و «cluster» هستند. این‌ها با
+مقادیر متناظر در --egress-selector-config-file مطابقت دارند.</p>
+<ul>
+<li dir="rtl">
+<p dir="rtl">controlplane: برای ترافیکی که قرار است به control plane برود.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">cluster: برای ترافیکی که قرار است به سامانه تحت مدیریت کوبرنتیز برود.</p>
+</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="jwtauthenticator-apiserver-k8s-io-v1beta1-jwtauthenticator" dir="ltr" class="ltr"><code dir="ltr">JWTAuthenticator</code>     {#apiserver-k8s-io-v1beta1-JWTAuthenticator}</h2>
+<p dir="rtl"><strong>نمایش داده می‌شود در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#apiserver-k8s-io-v1beta1-AuthenticationConfiguration">AuthenticationConfiguration</a></li>
+</ul>
+<p dir="rtl">JWTAuthenticator پیکربندی یک authenticator منفرد JWT را فراهم می‌کند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="rtl"><code dir="ltr">issuer</code> <b>[الزامی]</b><br>
+<a href="#apiserver-k8s-io-v1beta1-Issuer"><code dir="ltr">Issuer</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">issuer شامل گزینه‌های پایه اتصال به ارائه‌دهنده OIDC است.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">claimValidationRules</code><br>
+<a href="#apiserver-k8s-io-v1beta1-ClaimValidationRule"><code dir="ltr">[]ClaimValidationRule</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">claimValidationRules قواعدی هستند که برای اعتبارسنجی claimهای توکن به‌منظور احراز هویت کاربران اعمال می‌شوند.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">claimMappings</code> <b>[الزامی]</b><br>
+<a href="#apiserver-k8s-io-v1beta1-ClaimMappings"><code dir="ltr">ClaimMappings</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">claimMappings مشخص می‌کند کدام claimهای یک توکن به‌عنوان ویژگی‌های کاربر در نظر گرفته شوند.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">userValidationRules</code><br>
+<a href="#apiserver-k8s-io-v1beta1-UserValidationRule"><code dir="ltr">[]UserValidationRule</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">userValidationRules قواعدی هستند که پیش از تکمیل احراز هویت بر کاربر نهایی اعمال می‌شوند.
+این قواعد امکان اعمال شرایط ثابت (invariant) بر هویت‌های ورودی را فراهم می‌کنند، مانند جلوگیری از
+استفاده از پیشوند system: که معمولاً توسط مؤلفه‌های کوبرنتیز استفاده می‌شود.
+قواعد اعتبارسنجی از نظر منطقی با AND با هم ترکیب می‌شوند و برای موفقیت اعتبارسنجی همگی باید true برگردانند.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="prefixedclaimorexpression-apiserver-k8s-io-v1beta1-prefixedclaimorexpression" dir="ltr" class="ltr"><code dir="ltr">PrefixedClaimOrExpression</code>     {#apiserver-k8s-io-v1beta1-PrefixedClaimOrExpression}</h2>
+<p dir="rtl"><strong>نمایش داده می‌شود در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#apiserver-k8s-io-v1beta1-ClaimMappings">ClaimMappings</a></li>
+</ul>
+<p dir="rtl">PrefixedClaimOrExpression پیکربندی یک claim دارای پیشوند یا یک عبارت منفرد را فراهم می‌کند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">claim</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">claim همان claim از JWT است که باید استفاده شود.
+با expression متقابلاً ناسازگار است (mutually exclusive).</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">prefix</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">prefix به ابتدای مقدار claim افزوده می‌شود تا از تداخل با نام‌های موجود جلوگیری شود.
+اگر claim تنظیم شده باشد، prefix نیز باید تنظیم شود و می‌تواند رشته خالی باشد.
+با expression متقابلاً ناسازگار است.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">expression</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">expression نمایانگر عبارتی است که توسط CEL ارزیابی خواهد شد.</p>
+<p dir="rtl">عبارت‌های CEL به محتوای claims توکن دسترسی دارند که در قالب متغیر CEL سازمان‌دهی شده است:</p>
+<ul>
+<li dir="rtl">'claims' نگاشتی از نام claimها به مقادیر claim است.
+برای مثال، متغیری با نام 'sub' از طریق 'claims.sub' قابل دسترسی است.
+claimهای تو در تو را می‌توان با نمادگذاری نقطه‌ای مانند 'claims.foo.bar' در دسترس قرار داد.</li>
+</ul>
+<p dir="rtl">مستندات CEL: https://kubernetes.io/docs/reference/using-api/cel/</p>
+<p dir="rtl">با claim و prefix متقابلاً ناسازگار است.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="protocoltype-apiserver-k8s-io-v1beta1-protocoltype" dir="ltr" class="ltr"><code dir="ltr">ProtocolType</code>     {#apiserver-k8s-io-v1beta1-ProtocolType}</h2>
+<p dir="rtl">(نام مستعار برای <code dir="ltr">string</code>)</p>
+<p dir="rtl"><strong>نمایش داده می‌شود در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#apiserver-k8s-io-v1beta1-Connection">Connection</a></li>
+</ul>
+<p dir="rtl">ProtocolType مجموعه‌ای از مقادیر معتبر برای Connection.ProtocolType است.</p>
+<h2 id="tcptransport-apiserver-k8s-io-v1beta1-tcptransport" dir="ltr" class="ltr"><code dir="ltr">TCPTransport</code>     {#apiserver-k8s-io-v1beta1-TCPTransport}</h2>
+<p dir="rtl"><strong>نمایش داده می‌شود در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#apiserver-k8s-io-v1beta1-Transport">Transport</a></li>
+</ul>
+<p dir="rtl">TCPTransport اطلاعات لازم برای اتصال به سرور konnectivity از طریق TCP را فراهم می‌کند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="rtl"><code dir="ltr">url</code> <b>[الزامی]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">URL نشانی سرور konnectivity است که باید به آن متصل شد.
+برای مثال می‌تواند "https://127.0.0.1:8131" باشد.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">tlsConfig</code><br>
+<a href="#apiserver-k8s-io-v1beta1-TLSConfig"><code dir="ltr">TLSConfig</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">TLSConfig پیکربندی لازم برای استفاده از TLS هنگام اتصال به سرور konnectivity است.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="tlsconfig-apiserver-k8s-io-v1beta1-tlsconfig" dir="ltr" class="ltr"><code dir="ltr">TLSConfig</code>     {#apiserver-k8s-io-v1beta1-TLSConfig}</h2>
+<p dir="rtl"><strong>نمایش داده می‌شود در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#apiserver-k8s-io-v1beta1-TCPTransport">TCPTransport</a></li>
+</ul>
+<p dir="rtl">TLSConfig اطلاعات احراز هویت لازم برای اتصال به سرور konnectivity را فراهم می‌کند.
+فقط همراه با TCPTransport استفاده می‌شود.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">caBundle</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">caBundle مسیر فایل مرجع گواهی (CA) است که برای تعیین اعتماد به سرور konnectivity استفاده می‌شود.
+اگر TCPTransport.URL با http:// آغاز شده باشد، باید موجود نباشد یا خالی باشد.
+اگر TCPTransport.URL با https:// آغاز شده باشد و این مقدار تعیین نشده باشد، از ریشه‌های اعتماد سیستم استفاده می‌شود.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">clientKey</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">clientKey مسیر فایل کلید کلاینت است که در handshakeهای mtls با سرور konnectivity استفاده می‌شود.
+اگر TCPTransport.URL با http:// آغاز شده باشد، باید موجود نباشد یا خالی باشد.
+اگر TCPTransport.URL با https:// آغاز شده باشد، باید پیکربندی شود.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">clientCert</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">clientCert مسیر فایل گواهی کلاینت است که در handshakeهای mtls با سرور konnectivity استفاده می‌شود.
+اگر TCPTransport.URL با http:// آغاز شده باشد، باید موجود نباشد یا خالی باشد.
+اگر TCPTransport.URL با https:// آغاز شده باشد، باید پیکربندی شود.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">tlsServerName</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">tlsServerName برای بررسی گواهی سرور استفاده می‌شود. اگر tlsServerName خالی باشد، از نام میزبانی که برای تماس با سرور استفاده شده است، استفاده می‌شود.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="transport-apiserver-k8s-io-v1beta1-transport" dir="ltr" class="ltr"><code dir="ltr">Transport</code>     {#apiserver-k8s-io-v1beta1-Transport}</h2>
+<p dir="rtl"><strong>نمایش داده می‌شود در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#apiserver-k8s-io-v1beta1-Connection">Connection</a></li>
+</ul>
+<p dir="rtl">Transport پیکربندی‌های انتقالی را تعریف می‌کند که برای برقراری اتصال با سرور konnectivity استفاده می‌کنیم.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">tcp</code><br>
+<a href="#apiserver-k8s-io-v1beta1-TCPTransport"><code dir="ltr">TCPTransport</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">TCP پیکربندی TCP برای ارتباط با سرور konnectivity از طریق TCP است.
+ProxyProtocol مربوط به GRPC در حال حاضر با انتقال TCP پشتیبانی نمی‌شود.
+نیازمند آن است که دست‌کم یکی از TCP یا UDS تنظیم شده باشد.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">uds</code><br>
+<a href="#apiserver-k8s-io-v1beta1-UDSTransport"><code dir="ltr">UDSTransport</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">UDS پیکربندی UDS برای ارتباط با سرور konnectivity از طریق UDS است.
+نیازمند آن است که دست‌کم یکی از TCP یا UDS تنظیم شده باشد.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="udstransport-apiserver-k8s-io-v1beta1-udstransport" dir="ltr" class="ltr"><code dir="ltr">UDSTransport</code>     {#apiserver-k8s-io-v1beta1-UDSTransport}</h2>
+<p dir="rtl"><strong>نمایش داده می‌شود در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#apiserver-k8s-io-v1beta1-Transport">Transport</a></li>
+</ul>
+<p dir="rtl">UDSTransport اطلاعات لازم برای اتصال به سرور konnectivity از طریق UDS را فراهم می‌کند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="rtl"><code dir="ltr">udsName</code> <b>[الزامی]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">UDSName نام unix domain socket است که برای اتصال به سرور konnectivity استفاده می‌شود.
+این مقدار از پیشوند unix:// استفاده نمی‌کند. (برای مثال: /etc/srv/kubernetes/konnectivity-server/konnectivity-server.socket)</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="uservalidationrule-apiserver-k8s-io-v1beta1-uservalidationrule" dir="ltr" class="ltr"><code dir="ltr">UserValidationRule</code>     {#apiserver-k8s-io-v1beta1-UserValidationRule}</h2>
+<p dir="rtl"><strong>نمایش داده می‌شود در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#apiserver-k8s-io-v1beta1-JWTAuthenticator">JWTAuthenticator</a></li>
+</ul>
+<p dir="rtl">UserValidationRule پیکربندی یک قاعده اعتبارسنجی منفرد برای اطلاعات کاربر (user info) را فراهم می‌کند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="rtl"><code dir="ltr">expression</code> <b>[الزامی]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">expression نمایانگر عبارتی است که توسط CEL ارزیابی خواهد شد.
+برای موفقیت اعتبارسنجی باید true برگرداند.</p>
+<p dir="rtl">عبارت‌های CEL به محتوای UserInfo دسترسی دارند که در قالب متغیر CEL سازمان‌دهی شده است:</p>
+<ul>
+<li dir="rtl">'user' - آبجکت authentication.k8s.io/v1، Kind=UserInfo
+برای تعریف آن به https://github.com/kubernetes/api/blob/release-1.28/authentication/v1/types.go#L105-L122 مراجعه کنید.
+مستندات API: https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.28/#userinfo-v1-authentication-k8s-io</li>
+</ul>
+<p dir="rtl">مستندات CEL: https://kubernetes.io/docs/reference/using-api/cel/</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">message</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">message پیام خطای بازگردانده‌شده را زمانی که قاعده false برمی‌گرداند، سفارشی می‌کند.
+message یک رشته literal است.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="webhookconfiguration-apiserver-k8s-io-v1beta1-webhookconfiguration" dir="ltr" class="ltr"><code dir="ltr">WebhookConfiguration</code>     {#apiserver-k8s-io-v1beta1-WebhookConfiguration}</h2>
+<p dir="ltr" class="ltr"><strong>Appears in:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#apiserver-k8s-io-v1beta1-AuthorizerConfiguration">AuthorizerConfiguration</a></li>
+</ul>
+<table class="table">
+<thead><tr><th width="30%" dir="ltr" class="ltr">Field</th><th dir="ltr" class="ltr">Description</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">authorizedTTL</code> <b>[Required]</b><br>
+<a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration" target="_blank" rel="noopener"><code dir="ltr">meta/v1.Duration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">مدت زمان نگهداری (cache) پاسخ‌های «authorized» از authorizer مبتنی بر webhook.
+معادل تنظیم فلگ <code dir="ltr">--authorization-webhook-cache-authorized-ttl</code> است.
+مقدار پیش‌فرض: 5m0s</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">cacheAuthorizedRequests</code><br>
+<code dir="ltr">bool</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">CacheAuthorizedRequests مشخص می‌کند که آیا درخواست‌های مجاز باید cache شوند یا خیر.
+اگر روی true تنظیم شود، TTL تصمیم‌های ذخیره‌شده در cache را می‌توان از طریق
+فیلد AuthorizedTTL پیکربندی کرد.
+مقدار پیش‌فرض: true</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">unauthorizedTTL</code> <b>[Required]</b><br>
+<a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration" target="_blank" rel="noopener"><code dir="ltr">meta/v1.Duration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">مدت زمان نگهداری (cache) پاسخ‌های «unauthorized» از authorizer مبتنی بر webhook.
+معادل تنظیم فلگ <code dir="ltr">--authorization-webhook-cache-unauthorized-ttl</code> است.
+مقدار پیش‌فرض: 30s</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">cacheUnauthorizedRequests</code><br>
+<code dir="ltr">bool</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">CacheUnauthorizedRequests مشخص می‌کند که آیا درخواست‌های غیرمجاز باید cache شوند یا خیر.
+اگر روی true تنظیم شود، TTL تصمیم‌های ذخیره‌شده در cache را می‌توان از طریق
+فیلد UnauthorizedTTL پیکربندی کرد.
+مقدار پیش‌فرض: true</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">timeout</code> <b>[Required]</b><br>
+<a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration" target="_blank" rel="noopener"><code dir="ltr">meta/v1.Duration</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">مهلت زمانی (timeout) درخواست webhook.
+حداکثر مقدار مجاز 30s است.
+الزامی است و مقدار پیش‌فرض ندارد.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">subjectAccessReviewVersion</code> <b>[Required]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">نسخه API مربوط به SubjectAccessReview از authorization.k8s.io که باید
+به webhook ارسال شود و از آن انتظار می‌رود.
+معادل تنظیم فلگ <code dir="ltr">--authorization-webhook-version</code> است.
+مقادیر معتبر: v1beta1، v1
+الزامی است و مقدار پیش‌فرض ندارد.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">matchConditionSubjectAccessReviewVersion</code> <b>[Required]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">MatchConditionSubjectAccessReviewVersion نسخه‌ای از SubjectAccessReview را مشخص می‌کند
+که عبارت‌های CEL بر اساس آن ارزیابی می‌شوند.
+مقادیر معتبر: v1
+الزامی است و مقدار پیش‌فرض ندارد.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">failurePolicy</code> <b>[Required]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">تصمیم مجوزدهی را زمانی کنترل می‌کند که درخواست webhook به پایان نرسد،
+پاسخی نامعتبر برگرداند یا ارزیابی matchConditions با خطا مواجه شود.
+مقادیر معتبر:</p>
+<ul>
+<li dir="rtl">NoOpinion: ادامه به authorizerهای بعدی تا بررسی شود که آیا یکی از
+آن‌ها درخواست را مجاز می‌کند یا خیر</li>
+<li dir="rtl">Deny: رد درخواست بدون مراجعه به authorizerهای بعدی
+الزامی است و مقدار پیش‌فرض ندارد.</li>
+</ul>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">connectionInfo</code> <b>[Required]</b><br>
+<a href="#apiserver-k8s-io-v1beta1-WebhookConnectionInfo"><code dir="ltr">WebhookConnectionInfo</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">ConnectionInfo نحوه ارتباط با webhook را تعریف می‌کند.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">matchConditions</code> <b>[Required]</b><br>
+<a href="#apiserver-k8s-io-v1beta1-WebhookMatchCondition"><code dir="ltr">[]WebhookMatchCondition</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">matchConditions فهرستی از شرایطی است که باید برقرار باشند تا یک درخواست به این
+webhook ارسال شود. فهرست خالی matchConditions با همه درخواست‌ها مطابقت دارد.
+حداکثر ۶۴ شرط تطبیق مجاز است.</p>
+<p dir="rtl">منطق دقیق تطبیق به این ترتیب است:</p>
+<ol>
+<li dir="rtl">اگر دست‌کم یک matchCondition برابر FALSE ارزیابی شود، webhook نادیده گرفته می‌شود.</li>
+<li dir="rtl">اگر همه matchConditionها برابر TRUE ارزیابی شوند، webhook فراخوانی می‌شود.</li>
+<li dir="rtl">اگر دست‌کم یک matchCondition با خطا ارزیابی شود (اما هیچ‌کدام FALSE نباشند):
+<ul>
+<li dir="rtl">اگر failurePolicy=Deny باشد، webhook درخواست را رد می‌کند</li>
+<li dir="rtl">اگر failurePolicy=NoOpinion باشد، خطا نادیده گرفته می‌شود و webhook رد می‌شود (فراخوانی نمی‌شود)</li>
+</ul>
+</li>
+</ol>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="webhookconnectioninfo-apiserver-k8s-io-v1beta1-webhookconnectioninfo" dir="ltr" class="ltr"><code dir="ltr">WebhookConnectionInfo</code>     {#apiserver-k8s-io-v1beta1-WebhookConnectionInfo}</h2>
+<p dir="ltr" class="ltr"><strong>Appears in:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#apiserver-k8s-io-v1beta1-WebhookConfiguration">WebhookConfiguration</a></li>
+</ul>
+<table class="table">
+<thead><tr><th width="30%" dir="ltr" class="ltr">Field</th><th dir="ltr" class="ltr">Description</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">type</code> <b>[Required]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">نحوه ارتباط webhook با سرور را کنترل می‌کند.
+مقادیر معتبر:</p>
+<ul>
+<li dir="rtl">KubeConfigFile: از فایل مشخص‌شده در kubeConfigFile برای یافتن
+سرور استفاده می‌شود.</li>
+<li dir="rtl">InClusterConfig: از پیکربندی درون‌کلاستری برای فراخوانی
+SubjectAccessReview API که توسط kube-apiserver ارائه می‌شود استفاده می‌شود. این حالت
+برای kube-apiserver مجاز نیست.</li>
+</ul>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">kubeConfigFile</code> <b>[Required]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">مسیر KubeConfigFile برای اطلاعات اتصال.
+اگر connectionInfo.Type برابر KubeConfig باشد، الزامی است.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="webhookmatchcondition-apiserver-k8s-io-v1beta1-webhookmatchcondition" dir="ltr" class="ltr"><code dir="ltr">WebhookMatchCondition</code>     {#apiserver-k8s-io-v1beta1-WebhookMatchCondition}</h2>
+<p dir="ltr" class="ltr"><strong>Appears in:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#apiserver-k8s-io-v1beta1-WebhookConfiguration">WebhookConfiguration</a></li>
+</ul>
+<table class="table">
+<thead><tr><th width="30%" dir="ltr" class="ltr">Field</th><th dir="ltr" class="ltr">Description</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">expression</code> <b>[Required]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">expression عبارتی است که توسط CEL ارزیابی خواهد شد و باید نتیجه آن از نوع bool باشد.
+عبارت‌های CEL به محتوای SubjectAccessReview در نسخه v1 دسترسی دارند.
+اگر نسخه مشخص‌شده توسط subjectAccessReviewVersion در متغیر request برابر v1beta1 باشد،
+محتوا پیش از ارزیابی عبارت CEL به نسخه v1 تبدیل می‌شود.</p>
+<ul>
+<li dir="rtl">'resourceAttributes' اطلاعات مربوط به یک درخواست دسترسی به منبع را توصیف می‌کند و برای درخواست‌های غیرمنبعی تنظیم نمی‌شود. برای مثال: has(request.resourceAttributes) &amp;&amp; request.resourceAttributes.namespace == 'default'</li>
+<li dir="rtl">'nonResourceAttributes' اطلاعات مربوط به یک درخواست دسترسی غیرمنبعی را توصیف می‌کند و برای درخواست‌های منبعی تنظیم نمی‌شود. برای مثال: has(request.nonResourceAttributes) &amp;&amp; request.nonResourceAttributes.path == '/healthz'.</li>
+<li dir="rtl">'user' کاربری است که باید بررسی شود. برای مثال: request.user == 'alice'</li>
+<li dir="rtl">'groups' گروه‌هایی است که باید بررسی شوند. برای مثال: ('group1' in request.groups)</li>
+<li dir="rtl">'extra' با متد user.Info.GetExtra() از authenticator متناظر است.</li>
+<li dir="rtl">'uid' اطلاعات مربوط به کاربر درخواست‌کننده است. برای مثال: request.uid == '1'</li>
+</ul>
+<p dir="rtl">مستندات CEL: https://kubernetes.io/docs/reference/using-api/cel/</p>
+</td>
+</tr>
+</tbody>
+</table>
+</main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#انواع-منابع">انواع منابع</a><a class="l2" href="#tracingconfiguration-tracingconfiguration">TracingConfiguration     {#TracingConfiguration}</a><a class="l2" href="#authenticationconfiguration-apiserver-k8s-io-v1beta1-authenticationconfiguration">AuthenticationConfiguration     {#apiserver-k8s-io-v1beta1-AuthenticationConfiguration}</a><a class="l2" href="#authorizationconfiguration-apiserver-k8s-io-v1beta1-authorizationconfiguration">AuthorizationConfiguration     {#apiserver-k8s-io-v1beta1-AuthorizationConfiguration}</a><a class="l2" href="#egressselectorconfiguration-apiserver-k8s-io-v1beta1-egressselectorconfiguration">EgressSelectorConfiguration     {#apiserver-k8s-io-v1beta1-EgressSelectorConfiguration}</a><a class="l2" href="#tracingconfiguration-apiserver-k8s-io-v1beta1-tracingconfiguration">TracingConfiguration     {#apiserver-k8s-io-v1beta1-TracingConfiguration}</a><a class="l2" href="#anonymousauthcondition-apiserver-k8s-io-v1beta1-anonymousauthcondition">AnonymousAuthCondition     {#apiserver-k8s-io-v1beta1-AnonymousAuthCondition}</a><a class="l2" href="#anonymousauthconfig-apiserver-k8s-io-v1beta1-anonymousauthconfig">AnonymousAuthConfig     {#apiserver-k8s-io-v1beta1-AnonymousAuthConfig}</a><a class="l2" href="#audiencematchpolicytype-apiserver-k8s-io-v1beta1-audiencematchpolicytype">AudienceMatchPolicyType     {#apiserver-k8s-io-v1beta1-AudienceMatchPolicyType}</a><a class="l2" href="#authorizerconfiguration-apiserver-k8s-io-v1beta1-authorizerconfiguration">AuthorizerConfiguration     {#apiserver-k8s-io-v1beta1-AuthorizerConfiguration}</a><a class="l2" href="#claimmappings-apiserver-k8s-io-v1beta1-claimmappings">ClaimMappings     {#apiserver-k8s-io-v1beta1-ClaimMappings}</a><a class="l2" href="#claimorexpression-apiserver-k8s-io-v1beta1-claimorexpression">ClaimOrExpression     {#apiserver-k8s-io-v1beta1-ClaimOrExpression}</a><a class="l2" href="#claimvalidationrule-apiserver-k8s-io-v1beta1-claimvalidationrule">ClaimValidationRule     {#apiserver-k8s-io-v1beta1-ClaimValidationRule}</a><a class="l2" href="#connection-apiserver-k8s-io-v1beta1-connection">Connection     {#apiserver-k8s-io-v1beta1-Connection}</a><a class="l2" href="#egressselection-apiserver-k8s-io-v1beta1-egressselection">EgressSelection     {#apiserver-k8s-io-v1beta1-EgressSelection}</a><a class="l2" href="#egressselectortype-apiserver-k8s-io-v1beta1-egressselectortype">EgressSelectorType     {#apiserver-k8s-io-v1beta1-EgressSelectorType}</a><a class="l2" href="#extramapping-apiserver-k8s-io-v1beta1-extramapping">ExtraMapping     {#apiserver-k8s-io-v1beta1-ExtraMapping}</a><a class="l2" href="#issuer-apiserver-k8s-io-v1beta1-issuer">Issuer     {#apiserver-k8s-io-v1beta1-Issuer}</a><a class="l2" href="#jwtauthenticator-apiserver-k8s-io-v1beta1-jwtauthenticator">JWTAuthenticator     {#apiserver-k8s-io-v1beta1-JWTAuthenticator}</a><a class="l2" href="#prefixedclaimorexpression-apiserver-k8s-io-v1beta1-prefixedclaimorexpression">PrefixedClaimOrExpression     {#apiserver-k8s-io-v1beta1-PrefixedClaimOrExpression}</a><a class="l2" href="#protocoltype-apiserver-k8s-io-v1beta1-protocoltype">ProtocolType     {#apiserver-k8s-io-v1beta1-ProtocolType}</a><a class="l2" href="#tcptransport-apiserver-k8s-io-v1beta1-tcptransport">TCPTransport     {#apiserver-k8s-io-v1beta1-TCPTransport}</a><a class="l2" href="#tlsconfig-apiserver-k8s-io-v1beta1-tlsconfig">TLSConfig     {#apiserver-k8s-io-v1beta1-TLSConfig}</a><a class="l2" href="#transport-apiserver-k8s-io-v1beta1-transport">Transport     {#apiserver-k8s-io-v1beta1-Transport}</a><a class="l2" href="#udstransport-apiserver-k8s-io-v1beta1-udstransport">UDSTransport     {#apiserver-k8s-io-v1beta1-UDSTransport}</a><a class="l2" href="#uservalidationrule-apiserver-k8s-io-v1beta1-uservalidationrule">UserValidationRule     {#apiserver-k8s-io-v1beta1-UserValidationRule}</a><a class="l2" href="#webhookconfiguration-apiserver-k8s-io-v1beta1-webhookconfiguration">WebhookConfiguration     {#apiserver-k8s-io-v1beta1-WebhookConfiguration}</a><a class="l2" href="#webhookconnectioninfo-apiserver-k8s-io-v1beta1-webhookconnectioninfo">WebhookConnectionInfo     {#apiserver-k8s-io-v1beta1-WebhookConnectionInfo}</a><a class="l2" href="#webhookmatchcondition-apiserver-k8s-io-v1beta1-webhookmatchcondition">WebhookMatchCondition     {#apiserver-k8s-io-v1beta1-WebhookMatchCondition}</a></nav>
+</div>
+</body>
+</html>

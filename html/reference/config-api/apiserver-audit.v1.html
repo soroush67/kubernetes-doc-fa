@@ -1,0 +1,591 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>پیکربندی ممیزی (Audit) در kube-apiserver (v1) | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">reference / config-api</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">پیکربندی ممیزی (Audit) در kube-apiserver (v1)</h1><h2 id="انواع-منابع" dir="rtl">انواع منابع</h2>
+<ul>
+<li dir="ltr" class="ltr"><a href="#audit-k8s-io-v1-Event">Event</a></li>
+<li dir="ltr" class="ltr"><a href="#audit-k8s-io-v1-EventList">EventList</a></li>
+<li dir="ltr" class="ltr"><a href="#audit-k8s-io-v1-Policy">Policy</a></li>
+<li dir="ltr" class="ltr"><a href="#audit-k8s-io-v1-PolicyList">PolicyList</a></li>
+</ul>
+<h2 id="event-audit-k8s-io-v1-event" dir="ltr" class="ltr"><code dir="ltr">Event</code>     {#audit-k8s-io-v1-Event}</h2>
+<p dir="rtl"><strong>در این بخش‌ها ظاهر می‌شود:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#audit-k8s-io-v1-EventList">EventList</a></li>
+</ul>
+<p dir="rtl">Event تمام اطلاعاتی را که می‌توان در یک لاگ ممیزی API گنجاند، ثبت می‌کند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">apiVersion</code><br>string</td><td dir="ltr" class="ltr"><code dir="ltr">audit.k8s.io/v1</code></td></tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">kind</code><br>string</td><td dir="ltr" class="ltr"><code dir="ltr">Event</code></td></tr>
+<tr><td dir="rtl"><code dir="ltr">level</code> <b>[الزامی]</b><br>
+<a href="#audit-k8s-io-v1-Level"><code dir="ltr">Level</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">سطح ممیزی (AuditLevel) که رویداد در آن تولید شده است.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">auditID</code> <b>[الزامی]</b><br>
+<a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/types#UID" target="_blank" rel="noopener"><code dir="ltr">k8s.io/apimachinery/pkg/types.UID</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">شناسه یکتای ممیزی که برای هر درخواست تولید می‌شود.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">stage</code> <b>[الزامی]</b><br>
+<a href="#audit-k8s-io-v1-Stage"><code dir="ltr">Stage</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">مرحله‌ای از پردازش درخواست که این نمونه از رویداد در آن تولید شده است.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">requestURI</code> <b>[الزامی]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">RequestURI همان URI درخواست است که کلاینت به سرور ارسال کرده است.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">verb</code> <b>[الزامی]</b><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">Verb فعل (verb) کوبرنتیز مرتبط با درخواست است.
+برای درخواست‌های غیرمنبعی، این مقدار همان متد HTTP با حروف کوچک است.</p>
+</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">user</code> <b>[الزامی]</b><br>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.37/#userinfo-v1-authentication-k8s-io" target="_blank"><code dir="ltr">authentication/v1.UserInfo</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">اطلاعات کاربر احراز هویت‌شده.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">impersonatedUser</code><br>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.37/#userinfo-v1-authentication-k8s-io" target="_blank"><code dir="ltr">authentication/v1.UserInfo</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">اطلاعات کاربری که هویت او جعل (impersonate) شده است.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">authenticationMetadata</code><br>
+<a href="#audit-k8s-io-v1-AuthenticationMetadata"><code dir="ltr">AuthenticationMetadata</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">AuthenticationMetadata شامل جزئیاتی درباره نحوه احراز هویت درخواست است.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">sourceIPs</code><br>
+<code dir="ltr">[]string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">IPهای مبدأ، یعنی جایی که درخواست از آن آغاز شده و پروکسی‌های میانی.
+IPهای مبدأ به ترتیب زیر فهرست می‌شوند:</p>
+<ol>
+<li dir="rtl">IPهای موجود در هدر درخواست X-Forwarded-For</li>
+<li dir="rtl">هدر X-Real-Ip، در صورتی که در فهرست X-Forwarded-For وجود نداشته باشد</li>
+<li dir="rtl">آدرس راه دور (remote address) اتصال، در صورتی که با آخرین
+IP موجود در فهرست تا این مرحله (X-Forwarded-For یا X-Real-Ip) مطابقت نداشته باشد.
+توجه: همه IPها به‌جز آخرین مورد می‌توانند به‌صورت دلخواه توسط کلاینت تنظیم شوند.</li>
+</ol>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">userAgent</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">UserAgent رشته user agent گزارش‌شده توسط کلاینت را ثبت می‌کند.
+توجه کنید که UserAgent را کلاینت ارائه می‌کند و نباید به آن اعتماد کرد.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">objectRef</code><br>
+<a href="#audit-k8s-io-v1-ObjectReference"><code dir="ltr">ObjectReference</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">ارجاع به آبجکتی که این درخواست آن را هدف قرار داده است.
+برای درخواست‌های از نوع List یا درخواست‌های غیرمنبعی کاربرد ندارد.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">responseStatus</code><br>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.37/#status-v1-meta" target="_blank"><code dir="ltr">meta/v1.Status</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">وضعیت پاسخ؛ حتی زمانی که ResponseObject از نوع Status نباشد نیز مقداردهی می‌شود.
+برای پاسخ‌های موفق، این مقدار فقط شامل Code و StatusSuccess خواهد بود.
+برای پاسخ‌های خطا که از نوع status نیستند، این مقدار به‌صورت خودکار با Message خطا پر می‌شود.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">requestObject</code><br>
+<a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/runtime#Unknown" target="_blank" rel="noopener"><code dir="ltr">k8s.io/apimachinery/pkg/runtime.Unknown</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">آبجکت API موجود در درخواست، با قالب JSON. RequestObject همان‌گونه که در درخواست آمده است
+(و احتمالاً دوباره با JSON کدگذاری شده) و پیش از تبدیل نسخه، اعمال مقادیر پیش‌فرض، admission یا
+ادغام (merge) ثبت می‌شود. این یک نوع آبجکت نسخه‌دار خارجی است و ممکن است به‌تنهایی آبجکتی معتبر نباشد.
+برای درخواست‌های غیرمنبعی حذف می‌شود. فقط در سطح Request و بالاتر ثبت می‌شود.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">responseObject</code><br>
+<a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/runtime#Unknown" target="_blank" rel="noopener"><code dir="ltr">k8s.io/apimachinery/pkg/runtime.Unknown</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">آبجکت API بازگردانده‌شده در پاسخ، با قالب JSON. ResponseObject پس از تبدیل
+به نوع خارجی ثبت و به‌صورت JSON سریالایز می‌شود. برای درخواست‌های غیرمنبعی حذف می‌شود. فقط
+در سطح Response ثبت می‌شود.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">requestReceivedTimestamp</code><br>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.37/#microtime-v1-meta" target="_blank"><code dir="ltr">meta/v1.MicroTime</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">زمانی که درخواست به apiserver رسیده است.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">stageTimestamp</code><br>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.37/#microtime-v1-meta" target="_blank"><code dir="ltr">meta/v1.MicroTime</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">زمانی که درخواست به مرحله ممیزی فعلی رسیده است.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">annotations</code><br>
+<code dir="ltr">map[string]string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">Annotations یک نگاشت کلید-مقدار بدون ساختار است که همراه با رویداد ممیزی ذخیره می‌شود و ممکن است
+توسط افزونه‌های فراخوانی‌شده در زنجیره پاسخ‌گویی به درخواست، از جمله افزونه‌های احراز هویت، مجوزدهی و
+admission تنظیم شود. توجه کنید که این annotationها مربوط به رویداد ممیزی هستند و با
+metadata.annotations آبجکت ارسال‌شده متناظر نیستند. کلیدها باید مؤلفه اطلاع‌دهنده را به‌طور یکتا مشخص کنند
+تا از تداخل نام‌ها جلوگیری شود (برای مثال podsecuritypolicy.admission.k8s.io/policy). مقادیر
+باید کوتاه باشند. Annotationها در سطح Metadata گنجانده می‌شوند.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="eventlist-audit-k8s-io-v1-eventlist" dir="ltr" class="ltr"><code dir="ltr">EventList</code>     {#audit-k8s-io-v1-EventList}</h2>
+<p dir="rtl">EventList فهرستی از Eventهای ممیزی است.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">apiVersion</code><br>string</td><td dir="ltr" class="ltr"><code dir="ltr">audit.k8s.io/v1</code></td></tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">kind</code><br>string</td><td dir="ltr" class="ltr"><code dir="ltr">EventList</code></td></tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">metadata</code><br>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.37/#listmeta-v1-meta" target="_blank"><code dir="ltr">meta/v1.ListMeta</code></a>
+</td>
+<td dir="rtl">
+   <span class="text-muted">توضیحاتی ارائه نشده است.</span></td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">items</code> <b>[الزامی]</b><br>
+<a href="#audit-k8s-io-v1-Event"><code dir="ltr">[]Event</code></a>
+</td>
+<td dir="rtl">
+   <span class="text-muted">توضیحاتی ارائه نشده است.</span></td>
+</tr>
+</tbody>
+</table>
+<h2 id="policy-audit-k8s-io-v1-policy" dir="ltr" class="ltr"><code dir="ltr">Policy</code>     {#audit-k8s-io-v1-Policy}</h2>
+<p dir="rtl"><strong>در این بخش‌ها ظاهر می‌شود:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#audit-k8s-io-v1-PolicyList">PolicyList</a></li>
+</ul>
+<p dir="rtl">Policy پیکربندی ثبت لاگ ممیزی و قوانین مربوط به نحوه ثبت دسته‌های مختلف
+درخواست‌ها را تعریف می‌کند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">apiVersion</code><br>string</td><td dir="ltr" class="ltr"><code dir="ltr">audit.k8s.io/v1</code></td></tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">kind</code><br>string</td><td dir="ltr" class="ltr"><code dir="ltr">Policy</code></td></tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">metadata</code><br>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.37/#objectmeta-v1-meta" target="_blank"><code dir="ltr">meta/v1.ObjectMeta</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">ObjectMeta برای سازگاری با زیرساخت API گنجانده شده است.</p>
+برای فیلدهای <code dir="ltr">metadata</code> به مستندات API کوبرنتیز مراجعه کنید.</td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">rules</code> <b>[الزامی]</b><br>
+<a href="#audit-k8s-io-v1-PolicyRule"><code dir="ltr">[]PolicyRule</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">Rules مشخص می‌کنند که یک درخواست باید در کدام سطح ممیزی (Level) ثبت شود.
+یک درخواست ممکن است با چندین قانون مطابقت داشته باشد؛ در این صورت، اولین قانون منطبق استفاده می‌شود.
+سطح ممیزی پیش‌فرض None است، اما می‌توان آن را با یک قانون فراگیر (catch-all) در انتهای فهرست بازنویسی کرد.
+PolicyRuleها کاملاً مرتب‌شده هستند.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">omitStages</code><br>
+<a href="#audit-k8s-io-v1-Stage"><code dir="ltr">[]Stage</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">OmitStages فهرستی از مراحل است که برای آن‌ها هیچ رویدادی ایجاد نمی‌شود. توجه کنید که این مورد را
+می‌توان برای هر قانون نیز مشخص کرد؛ در آن صورت، اجتماع هر دو حذف می‌شود.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">omitManagedFields</code><br>
+<code dir="ltr">bool</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">OmitManagedFields مشخص می‌کند که آیا فیلدهای مدیریت‌شده (managed fields) در بدنه درخواست
+و پاسخ از نوشته شدن در لاگ ممیزی API حذف شوند یا خیر.
+این فیلد به‌عنوان مقدار پیش‌فرض سراسری استفاده می‌شود؛ مقدار 'true' فیلدهای مدیریت‌شده را حذف می‌کند،
+و در غیر این صورت فیلدهای مدیریت‌شده در لاگ ممیزی API گنجانده می‌شوند.
+توجه کنید که این مورد را می‌توان برای هر قانون نیز مشخص کرد؛ در آن صورت مقداری که در یک قانون
+تعیین شده است، مقدار پیش‌فرض سراسری را بازنویسی می‌کند.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="policylist-audit-k8s-io-v1-policylist" dir="ltr" class="ltr"><code dir="ltr">PolicyList</code>     {#audit-k8s-io-v1-PolicyList}</h2>
+<p dir="rtl">PolicyList فهرستی از Policyهای ممیزی است.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">apiVersion</code><br>string</td><td dir="ltr" class="ltr"><code dir="ltr">audit.k8s.io/v1</code></td></tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">kind</code><br>string</td><td dir="ltr" class="ltr"><code dir="ltr">PolicyList</code></td></tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">metadata</code><br>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.37/#listmeta-v1-meta" target="_blank"><code dir="ltr">meta/v1.ListMeta</code></a>
+</td>
+<td dir="rtl">
+   <span class="text-muted">توضیحاتی ارائه نشده است.</span></td>
+</tr>
+<tr><td dir="rtl"><code dir="ltr">items</code> <b>[الزامی]</b><br>
+<a href="#audit-k8s-io-v1-Policy"><code dir="ltr">[]Policy</code></a>
+</td>
+<td dir="rtl">
+   <span class="text-muted">توضیحاتی ارائه نشده است.</span></td>
+</tr>
+</tbody>
+</table>
+<h2 id="authenticationmetadata-audit-k8s-io-v1-authenticationmetadata" dir="ltr" class="ltr"><code dir="ltr">AuthenticationMetadata</code>     {#audit-k8s-io-v1-AuthenticationMetadata}</h2>
+<p dir="rtl"><strong>در این بخش‌ها ظاهر می‌شود:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#audit-k8s-io-v1-Event">Event</a></li>
+</ul>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">impersonationConstraint</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">ImpersonationConstraint فعلی (verb) است که با حالت جعل هویت محدودشده (constrained impersonation) مرتبط است و برای مجوزدهی
+به ImpersonatedUser مرتبط با این رویداد ممیزی استفاده شده است. این فیلد فقط زمانی مقداردهی می‌شود که از جعل هویت محدودشده استفاده شده باشد.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="groupresources-audit-k8s-io-v1-groupresources" dir="ltr" class="ltr"><code dir="ltr">GroupResources</code>     {#audit-k8s-io-v1-GroupResources}</h2>
+<p dir="rtl"><strong>در این بخش‌ها ظاهر می‌شود:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#audit-k8s-io-v1-PolicyRule">PolicyRule</a></li>
+</ul>
+<p dir="rtl">GroupResources نشان‌دهنده انواع منابع در یک گروه API است.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">group</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">Group نام گروه API است که منابع را در بر می‌گیرد.
+رشته خالی نشان‌دهنده گروه API هسته (core) است.
+<code dir="ltr">*</code> با همه گروه‌ها مطابقت دارد.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">resources</code><br>
+<code dir="ltr">[]string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">Resources فهرستی از منابعی است که این قانون روی آن‌ها اعمال می‌شود.</p>
+<p dir="rtl">برای مثال:</p>
+<ul>
+<li dir="rtl"><code dir="ltr">pods</code> با podها مطابقت دارد.</li>
+<li dir="rtl"><code dir="ltr">pods/log</code> با زیرمنبع log مربوط به podها مطابقت دارد.</li>
+<li dir="rtl"><code dir="ltr">*</code> با همه منابع و زیرمنابع آن‌ها مطابقت دارد.</li>
+<li dir="rtl"><code dir="ltr">pods/*</code> با همه زیرمنابع podها مطابقت دارد.</li>
+<li dir="rtl"><code dir="ltr">*/scale</code> با همه زیرمنابع scale مطابقت دارد.</li>
+</ul>
+<p dir="rtl">اگر wildcard وجود داشته باشد، قانون اعتبارسنجی اطمینان حاصل می‌کند که منابع
+با یکدیگر همپوشانی نداشته باشند.</p>
+<p dir="rtl">فهرست خالی به این معناست که همه منابع و زیرمنابع در این گروه‌های API اعمال می‌شوند.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">resourceNames</code><br>
+<code dir="ltr">[]string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">ResourceNames فهرستی از نام نمونه‌های منبع است که سیاست با آن‌ها مطابقت دارد.
+استفاده از این فیلد مستلزم مشخص کردن Resources است.
+فهرست خالی به این معناست که با هر نمونه از منبع مطابقت دارد.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="level-audit-k8s-io-v1-level" dir="ltr" class="ltr"><code dir="ltr">Level</code>     {#audit-k8s-io-v1-Level}</h2>
+<p dir="rtl">(نام مستعار برای <code dir="ltr">string</code>)</p>
+<p dir="rtl"><strong>در این بخش‌ها ظاهر می‌شود:</strong></p>
+<ul>
+<li dir="ltr" class="ltr">
+<p dir="ltr" class="ltr"><a href="#audit-k8s-io-v1-Event">Event</a></p>
+</li>
+<li dir="ltr" class="ltr">
+<p dir="ltr" class="ltr"><a href="#audit-k8s-io-v1-PolicyRule">PolicyRule</a></p>
+</li>
+</ul>
+<p dir="rtl">Level میزان اطلاعاتی را که در طول ممیزی ثبت می‌شود تعریف می‌کند.</p>
+<h2 id="objectreference-audit-k8s-io-v1-objectreference" dir="ltr" class="ltr"><code dir="ltr">ObjectReference</code>     {#audit-k8s-io-v1-ObjectReference}</h2>
+<p dir="rtl"><strong>در این بخش‌ها ظاهر می‌شود:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#audit-k8s-io-v1-Event">Event</a></li>
+</ul>
+<p dir="rtl">ObjectReference اطلاعات کافی را در اختیار شما قرار می‌دهد تا بتوانید آبجکت ارجاع‌شده را بررسی یا اصلاح کنید.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">resource</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <span class="text-muted">توضیحاتی ارائه نشده است.</span></td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">namespace</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <span class="text-muted">توضیحاتی ارائه نشده است.</span></td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">name</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <span class="text-muted">توضیحاتی ارائه نشده است.</span></td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">uid</code><br>
+<a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/types#UID" target="_blank" rel="noopener"><code dir="ltr">k8s.io/apimachinery/pkg/types.UID</code></a>
+</td>
+<td dir="rtl">
+   <span class="text-muted">توضیحاتی ارائه نشده است.</span></td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">apiGroup</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">APIGroup نام گروه API است که آبجکت ارجاع‌شده را در بر می‌گیرد.
+رشته خالی نشان‌دهنده گروه API هسته (core) است.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">apiVersion</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">APIVersion نسخه‌ای از گروه API است که آبجکت ارجاع‌شده را در بر می‌گیرد.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">resourceVersion</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <span class="text-muted">توضیحاتی ارائه نشده است.</span></td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">subresource</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <span class="text-muted">توضیحاتی ارائه نشده است.</span></td>
+</tr>
+</tbody>
+</table>
+<h2 id="policyrule-audit-k8s-io-v1-policyrule" dir="ltr" class="ltr"><code dir="ltr">PolicyRule</code>     {#audit-k8s-io-v1-PolicyRule}</h2>
+<p dir="rtl"><strong>در این بخش‌ها ظاهر می‌شود:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#audit-k8s-io-v1-Policy">Policy</a></li>
+</ul>
+<p dir="rtl">PolicyRule درخواست‌ها را بر اساس فراداده (metadata) به یک سطح ممیزی (Level) نگاشت می‌کند.
+درخواست‌ها باید با قوانین هر فیلد مطابقت داشته باشند (اشتراک قوانین).</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="rtl"><code dir="ltr">level</code> <b>[الزامی]</b><br>
+<a href="#audit-k8s-io-v1-Level"><code dir="ltr">Level</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">سطحی (Level) که درخواست‌های منطبق با این قانون در آن ثبت می‌شوند.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">users</code><br>
+<code dir="ltr">[]string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">کاربرانی (بر اساس نام کاربر احراز هویت‌شده) که این قانون روی آن‌ها اعمال می‌شود.
+فهرست خالی به این معناست که همه کاربران را شامل می‌شود.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">userGroups</code><br>
+<code dir="ltr">[]string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">گروه‌های کاربری که این قانون روی آن‌ها اعمال می‌شود. کاربر در صورتی منطبق در نظر گرفته می‌شود
+که عضو هر یک از UserGroups باشد.
+فهرست خالی به این معناست که همه گروه‌های کاربری را شامل می‌شود.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">verbs</code><br>
+<code dir="ltr">[]string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">فعل‌هایی (verbs) که با این قانون مطابقت دارند.
+فهرست خالی به این معناست که همه فعل‌ها را شامل می‌شود.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">resources</code><br>
+<a href="#audit-k8s-io-v1-GroupResources"><code dir="ltr">[]GroupResources</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">منابعی که این قانون با آن‌ها مطابقت دارد. فهرست خالی به این معناست که همه انواع در همه گروه‌های API را شامل می‌شود.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">namespaces</code><br>
+<code dir="ltr">[]string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">فضاهای نام (Namespaces) که این قانون با آن‌ها مطابقت دارد.
+رشته خالی "" با منابعی که به فضای نام تعلق ندارند (non-namespaced) مطابقت دارد.
+فهرست خالی به این معناست که همه فضاهای نام را شامل می‌شود.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">nonResourceURLs</code><br>
+<code dir="ltr">[]string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">NonResourceURLs مجموعه‌ای از مسیرهای URL است که باید ممیزی شوند.
+استفاده از <code dir="ltr">*</code> مجاز است، اما فقط به‌عنوان گام کامل و پایانی مسیر.
+مثال‌ها:</p>
+<ul>
+<li dir="rtl"><code dir="ltr">/metrics</code> - ثبت درخواست‌های مربوط به متریک‌های apiserver</li>
+<li dir="rtl"><code dir="ltr">/healthz*</code> - ثبت همه بررسی‌های سلامت (health checks)</li>
+</ul>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">omitStages</code><br>
+<a href="#audit-k8s-io-v1-Stage"><code dir="ltr">[]Stage</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">OmitStages فهرستی از مراحل است که برای آن‌ها هیچ رویدادی ایجاد نمی‌شود. توجه کنید که این مورد را
+می‌توان در سطح کل سیاست نیز مشخص کرد؛ در آن صورت، اجتماع هر دو حذف می‌شود.
+فهرست خالی به این معناست که هیچ محدودیتی اعمال نخواهد شد.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">omitManagedFields</code><br>
+<code dir="ltr">bool</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">OmitManagedFields مشخص می‌کند که آیا فیلدهای مدیریت‌شده (managed fields) در بدنه درخواست
+و پاسخ از نوشته شدن در لاگ ممیزی API حذف شوند یا خیر.</p>
+<ul>
+<li dir="rtl">مقدار 'true' فیلدهای مدیریت‌شده را از لاگ ممیزی API حذف می‌کند</li>
+<li dir="rtl">مقدار 'false' نشان می‌دهد که فیلدهای مدیریت‌شده باید در لاگ ممیزی API
+گنجانده شوند
+توجه کنید که مقدار مشخص‌شده در این قانون، در صورت وجود، مقدار پیش‌فرض سراسری را بازنویسی می‌کند
+و اگر مقداری مشخص نشده باشد، مقدار پیش‌فرض سراسری که در
+Policy.OmitManagedFields تعیین شده است معتبر خواهد بود.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="stage-audit-k8s-io-v1-stage" dir="ltr" class="ltr"><code dir="ltr">Stage</code>     {#audit-k8s-io-v1-Stage}</h2>
+<p dir="rtl">(نام مستعار برای <code dir="ltr">string</code>)</p>
+<p dir="rtl"><strong>در این بخش‌ها ظاهر می‌شود:</strong></p>
+<ul>
+<li dir="ltr" class="ltr">
+<p dir="ltr" class="ltr"><a href="#audit-k8s-io-v1-Event">Event</a></p>
+</li>
+<li dir="ltr" class="ltr">
+<p dir="ltr" class="ltr"><a href="#audit-k8s-io-v1-Policy">Policy</a></p>
+</li>
+<li dir="ltr" class="ltr">
+<p dir="ltr" class="ltr"><a href="#audit-k8s-io-v1-PolicyRule">PolicyRule</a></p>
+</li>
+</ul>
+<p dir="rtl">Stage مراحلی از پردازش درخواست را تعریف می‌کند که رویدادهای ممیزی ممکن است در آن‌ها تولید شوند.</p>
+</main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#انواع-منابع">انواع منابع</a><a class="l2" href="#event-audit-k8s-io-v1-event">Event     {#audit-k8s-io-v1-Event}</a><a class="l2" href="#eventlist-audit-k8s-io-v1-eventlist">EventList     {#audit-k8s-io-v1-EventList}</a><a class="l2" href="#policy-audit-k8s-io-v1-policy">Policy     {#audit-k8s-io-v1-Policy}</a><a class="l2" href="#policylist-audit-k8s-io-v1-policylist">PolicyList     {#audit-k8s-io-v1-PolicyList}</a><a class="l2" href="#authenticationmetadata-audit-k8s-io-v1-authenticationmetadata">AuthenticationMetadata     {#audit-k8s-io-v1-AuthenticationMetadata}</a><a class="l2" href="#groupresources-audit-k8s-io-v1-groupresources">GroupResources     {#audit-k8s-io-v1-GroupResources}</a><a class="l2" href="#level-audit-k8s-io-v1-level">Level     {#audit-k8s-io-v1-Level}</a><a class="l2" href="#objectreference-audit-k8s-io-v1-objectreference">ObjectReference     {#audit-k8s-io-v1-ObjectReference}</a><a class="l2" href="#policyrule-audit-k8s-io-v1-policyrule">PolicyRule     {#audit-k8s-io-v1-PolicyRule}</a><a class="l2" href="#stage-audit-k8s-io-v1-stage">Stage     {#audit-k8s-io-v1-Stage}</a></nav>
+</div>
+</body>
+</html>

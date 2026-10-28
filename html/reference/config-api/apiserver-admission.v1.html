@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>kube-apiserver Admission (v1) | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">reference / config-api</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="ltr" class="ltr">kube-apiserver Admission (v1)</h1><h2 id="انواع-منابع-resource-types" dir="rtl">انواع منابع {#resource-types}</h2>
+<ul>
+<li dir="ltr" class="ltr"><a href="#admission-k8s-io-v1-AdmissionReview">AdmissionReview</a></li>
+</ul>
+<h2 id="admissionreview-admission-k8s-io-v1-admissionreview" dir="ltr" class="ltr"><code dir="ltr">AdmissionReview</code>     {#admission-k8s-io-v1-AdmissionReview}</h2>
+<p dir="rtl">AdmissionReview یک درخواست/پاسخ بازبینی پذیرش (admission review) را توصیف می‌کند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">apiVersion</code><br>string</td><td dir="ltr" class="ltr"><code dir="ltr">admission.k8s.io/v1</code></td></tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">kind</code><br>string</td><td dir="ltr" class="ltr"><code dir="ltr">AdmissionReview</code></td></tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">request</code><br>
+<a href="#admission-k8s-io-v1-AdmissionRequest"><code dir="ltr">AdmissionRequest</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">request ویژگی‌های درخواست پذیرش را توصیف می‌کند.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">response</code><br>
+<a href="#admission-k8s-io-v1-AdmissionResponse"><code dir="ltr">AdmissionResponse</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">response ویژگی‌های پاسخ پذیرش را توصیف می‌کند.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="admissionrequest-admission-k8s-io-v1-admissionrequest" dir="ltr" class="ltr"><code dir="ltr">AdmissionRequest</code>     {#admission-k8s-io-v1-AdmissionRequest}</h2>
+<p dir="rtl"><strong>نمایش داده‌شده در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#admission-k8s-io-v1-AdmissionReview">AdmissionReview</a></li>
+</ul>
+<p dir="rtl">AdmissionRequest مقدار admission.Attributes را برای درخواست پذیرش توصیف می‌کند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">uid</code><br>
+<a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/types#UID" target="_blank" rel="noopener"><code dir="ltr">k8s.io/apimachinery/pkg/types.UID</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">uid شناسه‌ای برای هر درخواست/پاسخ مجزا است. این شناسه امکان تمایز نمونه‌های درخواستی را فراهم می‌کند که در غیر این صورت یکسان هستند
+(درخواست‌های موازی، درخواست‌هایی که درخواست‌های قبلی آن‌ها چیزی را تغییر نداده‌اند و غیره).
+UID برای ردیابی رفت‌وبرگشت (درخواست/پاسخ) میان KAS و WebHook در نظر گرفته شده است، نه درخواست کاربر.
+این شناسه برای تطبیق ورودی‌های لاگ میان webhook و apiserver، چه برای ممیزی (auditing) و چه برای اشکال‌زدایی، مناسب است.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">kind</code><br>
+<a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#GroupVersionKind" target="_blank" rel="noopener"><code dir="ltr">meta/v1.GroupVersionKind</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">kind نوع کاملاً مشخص‌شده (fully-qualified) آبجکتی است که ارسال می‌شود (برای مثال v1.Pod یا autoscaling.v1.Scale)</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">resource</code><br>
+<a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#GroupVersionResource" target="_blank" rel="noopener"><code dir="ltr">meta/v1.GroupVersionResource</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">resource منبع کاملاً مشخص‌شده‌ای است که درخواست شده است (برای مثال v1.pods)</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">subResource</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">subResource زیرمنبعی است که درخواست شده است، در صورت وجود (برای مثال "status" یا "scale")</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">requestKind</code><br>
+<a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#GroupVersionKind" target="_blank" rel="noopener"><code dir="ltr">meta/v1.GroupVersionKind</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">requestKind نوع کاملاً مشخص‌شده درخواست اولیه API است (برای مثال v1.Pod یا autoscaling.v1.Scale).
+اگر این مقدار مشخص شده باشد و با مقدار موجود در "kind" تفاوت داشته باشد، تطبیق و تبدیل معادل انجام شده است.</p>
+<p dir="rtl">برای مثال، اگر Deploymentها را بتوان از طریق apps/v1 و apps/v1beta1 تغییر داد، و یک webhook قاعده‌ای با مقدار
+<code dir="ltr">apiGroups:["apps"], apiVersions:["v1"], resources: ["deployments"]</code> و <code dir="ltr">matchPolicy: Equivalent</code> ثبت کرده باشد،
+یک درخواست API به Deploymentهای apps/v1beta1 تبدیل می‌شود و به webhook ارسال می‌گردد
+با <code dir="ltr">kind: {group:"apps", version:"v1", kind:"Deployment"}</code> (مطابق قاعده‌ای که webhook برای آن ثبت شده است)،
+و <code dir="ltr">requestKind: {group:"apps", version:"v1beta1", kind:"Deployment"}</code> (که نشان‌دهنده نوع درخواست اولیه API است).</p>
+<p dir="rtl">برای جزئیات بیشتر، مستندات فیلد "matchPolicy" را در نوع پیکربندی webhook ببینید.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">requestResource</code><br>
+<a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#GroupVersionResource" target="_blank" rel="noopener"><code dir="ltr">meta/v1.GroupVersionResource</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">requestResource منبع کاملاً مشخص‌شده درخواست اولیه API است (برای مثال v1.pods).
+اگر این مقدار مشخص شده باشد و با مقدار موجود در "resource" تفاوت داشته باشد، تطبیق و تبدیل معادل انجام شده است.</p>
+<p dir="rtl">برای مثال، اگر Deploymentها را بتوان از طریق apps/v1 و apps/v1beta1 تغییر داد، و یک webhook قاعده‌ای با مقدار
+<code dir="ltr">apiGroups:["apps"], apiVersions:["v1"], resources: ["deployments"]</code> و <code dir="ltr">matchPolicy: Equivalent</code> ثبت کرده باشد،
+یک درخواست API به Deploymentهای apps/v1beta1 تبدیل می‌شود و به webhook ارسال می‌گردد
+با <code dir="ltr">resource: {group:"apps", version:"v1", resource:"deployments"}</code> (مطابق منبعی که webhook برای آن ثبت شده است)،
+و <code dir="ltr">requestResource: {group:"apps", version:"v1beta1", resource:"deployments"}</code> (که نشان‌دهنده منبع درخواست اولیه API است).</p>
+<p dir="rtl">مستندات فیلد "matchPolicy" را در نوع پیکربندی webhook ببینید.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">requestSubResource</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">requestSubResource نام زیرمنبع درخواست اولیه API است، در صورت وجود (برای مثال "status" یا "scale").
+اگر این مقدار مشخص شده باشد و با مقدار موجود در "subResource" تفاوت داشته باشد، تطبیق و تبدیل معادل انجام شده است.
+مستندات فیلد "matchPolicy" را در نوع پیکربندی webhook ببینید.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">name</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">name نام آبجکت است، همان‌گونه که در درخواست ارائه شده است. در عملیات CREATE، کلاینت می‌تواند name را حذف کند و
+تولید نام را به سرور واگذار کند. در این صورت، این فیلد حاوی یک رشته خالی خواهد بود.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">namespace</code><br>
+<code dir="ltr">string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">namespace فضای نامی (namespace) است که با درخواست مرتبط است (در صورت وجود).</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">operation</code><br>
+<a href="#admission-k8s-io-v1-Operation"><code dir="ltr">Operation</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">operation عملیاتی است که در حال انجام است. این عملیات ممکن است با عملیات درخواست‌شده متفاوت باشد.
+برای مثال، یک patch می‌تواند به عملیات CREATE یا UPDATE منجر شود.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">userInfo</code><br>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.37/#userinfo-v1-authentication-k8s-io" target="_blank"><code dir="ltr">authentication/v1.UserInfo</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">userInfo اطلاعاتی درباره کاربر درخواست‌دهنده است</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">object</code><br>
+<a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/runtime/#RawExtension" target="_blank" rel="noopener"><code dir="ltr">k8s.io/apimachinery/pkg/runtime.RawExtension</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">object آبجکتی است که در درخواست ورودی قرار دارد.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">oldObject</code><br>
+<a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/runtime/#RawExtension" target="_blank" rel="noopener"><code dir="ltr">k8s.io/apimachinery/pkg/runtime.RawExtension</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">oldObject آبجکت موجود است. فقط برای درخواست‌های DELETE و UPDATE مقداردهی می‌شود.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">dryRun</code><br>
+<code dir="ltr">bool</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">dryRun نشان می‌دهد که تغییرات برای این درخواست قطعاً پایدار (persist) نخواهند شد.
+مقدار پیش‌فرض آن false است.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">options</code><br>
+<a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/runtime/#RawExtension" target="_blank" rel="noopener"><code dir="ltr">k8s.io/apimachinery/pkg/runtime.RawExtension</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">options ساختار گزینه‌های عملیاتی است که در حال انجام است.
+برای مثال <code dir="ltr">meta.k8s.io/v1.DeleteOptions</code> یا <code dir="ltr">meta.k8s.io/v1.CreateOptions</code>. این مقدار ممکن است
+با گزینه‌هایی که فراخواننده ارائه کرده است متفاوت باشد. برای مثال، در یک درخواست patch
+عملیات انجام‌شده ممکن است CREATE باشد؛ در این صورت Options از نوع
+<code dir="ltr">meta.k8s.io/v1.CreateOptions</code> خواهد بود، حتی اگر فراخواننده <code dir="ltr">meta.k8s.io/v1.PatchOptions</code> را ارائه کرده باشد.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="admissionresponse-admission-k8s-io-v1-admissionresponse" dir="ltr" class="ltr"><code dir="ltr">AdmissionResponse</code>     {#admission-k8s-io-v1-AdmissionResponse}</h2>
+<p dir="rtl"><strong>نمایش داده‌شده در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#admission-k8s-io-v1-AdmissionReview">AdmissionReview</a></li>
+</ul>
+<p dir="rtl">AdmissionResponse یک پاسخ پذیرش را توصیف می‌کند.</p>
+<table class="table">
+<thead><tr><th width="30%" dir="rtl">فیلد</th><th dir="rtl">توضیحات</th></tr></thead>
+<tbody>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">uid</code><br>
+<a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/types#UID" target="_blank" rel="noopener"><code dir="ltr">k8s.io/apimachinery/pkg/types.UID</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">uid شناسه‌ای برای هر درخواست/پاسخ مجزا است.
+این مقدار باید از AdmissionRequest متناظر کپی شود.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">allowed</code><br>
+<code dir="ltr">bool</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">allowed نشان می‌دهد که درخواست پذیرش مجاز شمرده شده است یا خیر.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">status</code><br>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.37/#status-v1-meta" target="_blank"><code dir="ltr">meta/v1.Status</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">status نتیجه‌ای است که جزئیات اضافی درباره دلیل رد شدن یک درخواست پذیرش را در بر دارد.
+اگر مقدار "Allowed" برابر "true" باشد، این فیلد به هیچ وجه بررسی نمی‌شود.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">patch</code><br>
+<code dir="ltr">[]byte</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">patch بدنه وصله (patch) است. در حال حاضر فقط "JSONPatch" پشتیبانی می‌شود که RFC 6902 را پیاده‌سازی می‌کند.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">patchType</code><br>
+<a href="#admission-k8s-io-v1-PatchType"><code dir="ltr">PatchType</code></a>
+</td>
+<td dir="rtl">
+   <p dir="rtl">patchType نوع Patch است. در حال حاضر فقط "JSONPatch" مجاز است.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">auditAnnotations</code><br>
+<code dir="ltr">map[string]string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">auditAnnotations یک نگاشت کلید-مقدار بدون ساختار است که توسط admission controller راه دور تنظیم می‌شود (برای مثال error=image-blacklisted).
+admission controllerهای MutatingAdmissionWebhook و ValidatingAdmissionWebhook کلیدها را با
+نام admission webhook پیشوندگذاری می‌کنند (برای مثال imagepolicy.example.com/error=image-blacklisted). AuditAnnotations توسط
+admission webhook ارائه می‌شود تا زمینه اضافی را به لاگ ممیزی این درخواست بیفزاید.</p>
+</td>
+</tr>
+<tr><td dir="ltr" class="ltr"><code dir="ltr">warnings</code><br>
+<code dir="ltr">[]string</code>
+</td>
+<td dir="rtl">
+   <p dir="rtl">warnings فهرستی از پیام‌های هشدار است که به کلاینت API درخواست‌دهنده بازگردانده می‌شود.
+پیام‌های هشدار مشکلی را توصیف می‌کنند که کلاینتِ ارسال‌کننده درخواست API باید آن را اصلاح کند یا از آن آگاه باشد.
+در صورت امکان، هشدارها را به ۱۲۰ نویسه محدود کنید.
+هشدارهای بیش از ۲۵۶ نویسه و تعداد زیاد هشدارها ممکن است کوتاه (truncate) شوند.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="operation-admission-k8s-io-v1-operation" dir="ltr" class="ltr"><code dir="ltr">Operation</code>     {#admission-k8s-io-v1-Operation}</h2>
+<p dir="rtl">(نام مستعار برای <code dir="ltr">string</code>)</p>
+<p dir="rtl"><strong>نمایش داده‌شده در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#admission-k8s-io-v1-AdmissionRequest">AdmissionRequest</a></li>
+</ul>
+<p dir="rtl">Operation نوع عملیات منبعی است که برای کنترل پذیرش بررسی می‌شود</p>
+<h2 id="patchtype-admission-k8s-io-v1-patchtype" dir="ltr" class="ltr"><code dir="ltr">PatchType</code>     {#admission-k8s-io-v1-PatchType}</h2>
+<p dir="rtl">(نام مستعار برای <code dir="ltr">string</code>)</p>
+<p dir="rtl"><strong>نمایش داده‌شده در:</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#admission-k8s-io-v1-AdmissionResponse">AdmissionResponse</a></li>
+</ul>
+<p dir="rtl">PatchType نوع وصله‌ای است که برای نمایش آبجکت تغییریافته استفاده می‌شود</p>
+</main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#انواع-منابع-resource-types">انواع منابع {#resource-types}</a><a class="l2" href="#admissionreview-admission-k8s-io-v1-admissionreview">AdmissionReview     {#admission-k8s-io-v1-AdmissionReview}</a><a class="l2" href="#admissionrequest-admission-k8s-io-v1-admissionrequest">AdmissionRequest     {#admission-k8s-io-v1-AdmissionRequest}</a><a class="l2" href="#admissionresponse-admission-k8s-io-v1-admissionresponse">AdmissionResponse     {#admission-k8s-io-v1-AdmissionResponse}</a><a class="l2" href="#operation-admission-k8s-io-v1-operation">Operation     {#admission-k8s-io-v1-Operation}</a><a class="l2" href="#patchtype-admission-k8s-io-v1-patchtype">PatchType     {#admission-k8s-io-v1-PatchType}</a></nav>
+</div>
+</body>
+</html>
