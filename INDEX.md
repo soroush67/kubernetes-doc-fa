@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-794 از 1722 صفحه
+809 از 1722 صفحه
 
 
 ## `.`
@@ -942,21 +942,21 @@
 - ✅ [api-group.md](md/reference/glossary/api-group.md)
 - ✅ [api-resource.md](md/reference/glossary/api-resource.md)
 - ✅ [app-container.md](md/reference/glossary/app-container.md)
-- ⏳ `application-architect.md`
-- ⏳ `application-developer.md`
-- ⏳ `applications.md`
-- ⏳ `approver.md`
-- ⏳ `cadvisor.md`
-- ⏳ `cdi.md`
-- ⏳ `cel.md`
-- ⏳ `certificate.md`
-- ⏳ `cgroup.md`
-- ⏳ `cidr.md`
-- ⏳ `cla.md`
-- ⏳ `cloud-controller-manager.md`
-- ⏳ `cloud-provider.md`
-- ⏳ `cluster-architect.md`
-- ⏳ `cluster-infrastructure.md`
+- ✅ [application-architect.md](md/reference/glossary/application-architect.md)
+- ✅ [application-developer.md](md/reference/glossary/application-developer.md)
+- ✅ [applications.md](md/reference/glossary/applications.md)
+- ✅ [approver.md](md/reference/glossary/approver.md)
+- ✅ [cadvisor.md](md/reference/glossary/cadvisor.md)
+- ✅ [cdi.md](md/reference/glossary/cdi.md)
+- ✅ [cel.md](md/reference/glossary/cel.md)
+- ✅ [certificate.md](md/reference/glossary/certificate.md)
+- ✅ [cgroup.md](md/reference/glossary/cgroup.md)
+- ✅ [cidr.md](md/reference/glossary/cidr.md)
+- ✅ [cla.md](md/reference/glossary/cla.md)
+- ✅ [cloud-controller-manager.md](md/reference/glossary/cloud-controller-manager.md)
+- ✅ [cloud-provider.md](md/reference/glossary/cloud-provider.md)
+- ✅ [cluster-architect.md](md/reference/glossary/cluster-architect.md)
+- ✅ [cluster-infrastructure.md](md/reference/glossary/cluster-infrastructure.md)
 - ⏳ `cluster-operations.md`
 - ⏳ `cluster-operator.md`
 - ⏳ `cluster.md`

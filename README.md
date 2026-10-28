@@ -8,8 +8,8 @@
 
 | | |
 |---|---|
-| پیشرفت (بر اساس کلمات) | **26.4٪** |
-| صفحات ترجمه‌شده | 794 از 1722 |
+| پیشرفت (بر اساس کلمات) | **26.5٪** |
+| صفحات ترجمه‌شده | 809 از 1722 |
 | صفحات دارای ایراد ساختاری | 23 |
 | نسخه‌ی منبع انگلیسی | `ed70e311737a` |
 
@@ -72,7 +72,7 @@ cd kubernetes-doc-fa
 | `contribute` | 44 | 44 |
 | `doc-contributor-tools` | 1 | 1 |
 | `home` | 2 | 2 |
-| `reference` | 559 | 1198 |
+| `reference` | 574 | 1198 |
 | `setup` | 0 | 22 |
 | `tasks` | 0 | 221 |
 | `tutorials` | 0 | 45 |
@@ -91,26 +91,26 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [reference/glossary/cluster-architect.md](md/reference/glossary/cluster-architect.md) — 2026-10-28T11:37:04+03:30
+- [reference/glossary/cluster-infrastructure.md](md/reference/glossary/cluster-infrastructure.md) — 2026-10-28T11:37:04+03:30
+- [reference/glossary/cloud-controller-manager.md](md/reference/glossary/cloud-controller-manager.md) — 2026-10-28T11:36:59+03:30
+- [reference/glossary/cloud-provider.md](md/reference/glossary/cloud-provider.md) — 2026-10-28T11:36:59+03:30
+- [reference/glossary/cidr.md](md/reference/glossary/cidr.md) — 2026-10-28T11:36:52+03:30
+- [reference/glossary/cla.md](md/reference/glossary/cla.md) — 2026-10-28T11:36:52+03:30
+- [reference/glossary/cgroup.md](md/reference/glossary/cgroup.md) — 2026-10-28T11:36:47+03:30
+- [reference/glossary/certificate.md](md/reference/glossary/certificate.md) — 2026-10-28T11:36:45+03:30
+- [reference/glossary/cel.md](md/reference/glossary/cel.md) — 2026-10-28T11:36:42+03:30
+- [reference/glossary/cdi.md](md/reference/glossary/cdi.md) — 2026-10-28T11:36:40+03:30
+- [reference/glossary/cadvisor.md](md/reference/glossary/cadvisor.md) — 2026-10-28T11:36:35+03:30
+- [reference/glossary/approver.md](md/reference/glossary/approver.md) — 2026-10-28T11:36:33+03:30
+- [reference/glossary/application-developer.md](md/reference/glossary/application-developer.md) — 2026-10-28T11:36:26+03:30
+- [reference/glossary/applications.md](md/reference/glossary/applications.md) — 2026-10-28T11:36:24+03:30
+- [reference/glossary/application-architect.md](md/reference/glossary/application-architect.md) — 2026-10-28T11:36:17+03:30
 - [reference/glossary/app-container.md](md/reference/glossary/app-container.md) — 2026-10-28T11:36:14+03:30
 - [reference/glossary/api-resource.md](md/reference/glossary/api-resource.md) — 2026-10-28T11:36:11+03:30
 - [reference/glossary/api-group.md](md/reference/glossary/api-group.md) — 2026-10-28T11:36:06+03:30
 - [reference/glossary/api-eviction.md](md/reference/glossary/api-eviction.md) — 2026-10-28T11:36:05+03:30
 - [reference/glossary/annotation.md](md/reference/glossary/annotation.md) — 2026-10-28T11:35:59+03:30
-- [reference/glossary/aggregation-layer.md](md/reference/glossary/aggregation-layer.md) — 2026-10-28T11:35:57+03:30
-- [reference/glossary/affinity.md](md/reference/glossary/affinity.md) — 2026-10-28T11:35:54+03:30
-- [reference/glossary/admission-controller.md](md/reference/glossary/admission-controller.md) — 2026-10-28T11:35:51+03:30
-- [reference/glossary/addons.md](md/reference/glossary/addons.md) — 2026-10-28T11:35:47+03:30
-- [reference/external-api/metrics.v1beta1.md](md/reference/external-api/metrics.v1beta1.md) — 2026-10-28T11:35:43+03:30
-- [reference/external-api/metrics.v1.md](md/reference/external-api/metrics.v1.md) — 2026-10-28T11:35:42+03:30
-- [reference/external-api/custom-metrics.v1beta2.md](md/reference/external-api/custom-metrics.v1beta2.md) — 2026-10-28T11:34:40+03:30
-- [reference/external-api/external-metrics.v1beta1.md](md/reference/external-api/external-metrics.v1beta1.md) — 2026-10-28T11:34:38+03:30
-- [reference/deprecation-policy.md](md/reference/deprecation-policy.md) — 2026-10-28T11:33:57+03:30
-- [reference/external-api/_index.md](md/reference/external-api/_index.md) — 2026-10-28T11:33:38+03:30
-- [reference/encodings/kyaml.md](md/reference/encodings/kyaml.md) — 2026-10-28T11:33:23+03:30
-- [reference/encodings/_index.md](md/reference/encodings/_index.md) — 2026-10-28T11:33:14+03:30
-- [reference/debug-cluster/flow-control.md](md/reference/debug-cluster/flow-control.md) — 2026-10-28T11:33:09+03:30
-- [reference/debug-cluster/_index.md](md/reference/debug-cluster/_index.md) — 2026-10-28T11:32:31+03:30
-- [reference/config-api/kuberc.v1beta1.md](md/reference/config-api/kuberc.v1beta1.md) — 2026-10-28T11:32:27+03:30
 
 </div>
 
