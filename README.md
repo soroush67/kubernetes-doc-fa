@@ -8,8 +8,8 @@
 
 | | |
 |---|---|
-| پیشرفت (بر اساس کلمات) | **26.5٪** |
-| صفحات ترجمه‌شده | 824 از 1722 |
+| پیشرفت (بر اساس کلمات) | **26.6٪** |
+| صفحات ترجمه‌شده | 839 از 1722 |
 | صفحات دارای ایراد ساختاری | 23 |
 | نسخه‌ی منبع انگلیسی | `ed70e311737a` |
 
@@ -72,7 +72,7 @@ cd kubernetes-doc-fa
 | `contribute` | 44 | 44 |
 | `doc-contributor-tools` | 1 | 1 |
 | `home` | 2 | 2 |
-| `reference` | 589 | 1198 |
+| `reference` | 604 | 1198 |
 | `setup` | 0 | 22 |
 | `tasks` | 0 | 221 |
 | `tutorials` | 0 | 45 |
@@ -91,26 +91,26 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [reference/glossary/docker.md](md/reference/glossary/docker.md) — 2026-10-28T11:38:55+03:30
+- [reference/glossary/disruption.md](md/reference/glossary/disruption.md) — 2026-10-28T11:38:53+03:30
+- [reference/glossary/deviceclass.md](md/reference/glossary/deviceclass.md) — 2026-10-28T11:38:48+03:30
+- [reference/glossary/device.md](md/reference/glossary/device.md) — 2026-10-28T11:38:45+03:30
+- [reference/glossary/device-plugin.md](md/reference/glossary/device-plugin.md) — 2026-10-28T11:38:41+03:30
+- [reference/glossary/developer.md](md/reference/glossary/developer.md) — 2026-10-28T11:38:38+03:30
+- [reference/glossary/deployment.md](md/reference/glossary/deployment.md) — 2026-10-28T11:38:33+03:30
+- [reference/glossary/data-plane.md](md/reference/glossary/data-plane.md) — 2026-10-28T11:38:32+03:30
+- [reference/glossary/customresourcedefinition.md](md/reference/glossary/customresourcedefinition.md) — 2026-10-28T11:38:26+03:30
+- [reference/glossary/daemonset.md](md/reference/glossary/daemonset.md) — 2026-10-28T11:38:26+03:30
+- [reference/glossary/cronjob.md](md/reference/glossary/cronjob.md) — 2026-10-28T11:38:20+03:30
+- [reference/glossary/csi.md](md/reference/glossary/csi.md) — 2026-10-28T11:38:20+03:30
+- [reference/glossary/cri.md](md/reference/glossary/cri.md) — 2026-10-28T11:38:14+03:30
+- [reference/glossary/cri-o.md](md/reference/glossary/cri-o.md) — 2026-10-28T11:38:13+03:30
+- [reference/glossary/controller.md](md/reference/glossary/controller.md) — 2026-10-28T11:38:03+03:30
 - [reference/glossary/control-plane.md](md/reference/glossary/control-plane.md) — 2026-10-28T11:38:01+03:30
 - [reference/glossary/contributor.md](md/reference/glossary/contributor.md) — 2026-10-28T11:37:56+03:30
 - [reference/glossary/containerd.md](md/reference/glossary/containerd.md) — 2026-10-28T11:37:51+03:30
 - [reference/glossary/container.md](md/reference/glossary/container.md) — 2026-10-28T11:37:47+03:30
 - [reference/glossary/container-runtime.md](md/reference/glossary/container-runtime.md) — 2026-10-28T11:37:43+03:30
-- [reference/glossary/container-lifecycle-hooks.md](md/reference/glossary/container-lifecycle-hooks.md) — 2026-10-28T11:37:42+03:30
-- [reference/glossary/container-env-variables.md](md/reference/glossary/container-env-variables.md) — 2026-10-28T11:37:37+03:30
-- [reference/glossary/configmap.md](md/reference/glossary/configmap.md) — 2026-10-28T11:37:34+03:30
-- [reference/glossary/condition.md](md/reference/glossary/condition.md) — 2026-10-28T11:37:31+03:30
-- [reference/glossary/code-contributor.md](md/reference/glossary/code-contributor.md) — 2026-10-28T11:37:28+03:30
-- [reference/glossary/cni.md](md/reference/glossary/cni.md) — 2026-10-28T11:37:25+03:30
-- [reference/glossary/cncf.md](md/reference/glossary/cncf.md) — 2026-10-28T11:37:21+03:30
-- [reference/glossary/cluster.md](md/reference/glossary/cluster.md) — 2026-10-28T11:37:18+03:30
-- [reference/glossary/cluster-operator.md](md/reference/glossary/cluster-operator.md) — 2026-10-28T11:37:15+03:30
-- [reference/glossary/cluster-operations.md](md/reference/glossary/cluster-operations.md) — 2026-10-28T11:37:10+03:30
-- [reference/glossary/cluster-architect.md](md/reference/glossary/cluster-architect.md) — 2026-10-28T11:37:04+03:30
-- [reference/glossary/cluster-infrastructure.md](md/reference/glossary/cluster-infrastructure.md) — 2026-10-28T11:37:04+03:30
-- [reference/glossary/cloud-controller-manager.md](md/reference/glossary/cloud-controller-manager.md) — 2026-10-28T11:36:59+03:30
-- [reference/glossary/cloud-provider.md](md/reference/glossary/cloud-provider.md) — 2026-10-28T11:36:59+03:30
-- [reference/glossary/cidr.md](md/reference/glossary/cidr.md) — 2026-10-28T11:36:52+03:30
 
 </div>
 

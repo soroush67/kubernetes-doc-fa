@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-824 از 1722 صفحه
+839 از 1722 صفحه
 
 
 ## `.`
@@ -972,21 +972,21 @@
 - ✅ [containerd.md](md/reference/glossary/containerd.md)
 - ✅ [contributor.md](md/reference/glossary/contributor.md)
 - ✅ [control-plane.md](md/reference/glossary/control-plane.md)
-- ⏳ `controller.md`
-- ⏳ `cri-o.md`
-- ⏳ `cri.md`
-- ⏳ `cronjob.md`
-- ⏳ `csi.md`
-- ⏳ `customresourcedefinition.md`
-- ⏳ `daemonset.md`
-- ⏳ `data-plane.md`
-- ⏳ `deployment.md`
-- ⏳ `developer.md`
-- ⏳ `device-plugin.md`
-- ⏳ `device.md`
-- ⏳ `deviceclass.md`
-- ⏳ `disruption.md`
-- ⏳ `docker.md`
+- ✅ [controller.md](md/reference/glossary/controller.md)
+- ✅ [cri-o.md](md/reference/glossary/cri-o.md)
+- ✅ [cri.md](md/reference/glossary/cri.md)
+- ✅ [cronjob.md](md/reference/glossary/cronjob.md)
+- ✅ [csi.md](md/reference/glossary/csi.md)
+- ✅ [customresourcedefinition.md](md/reference/glossary/customresourcedefinition.md)
+- ✅ [daemonset.md](md/reference/glossary/daemonset.md)
+- ✅ [data-plane.md](md/reference/glossary/data-plane.md)
+- ✅ [deployment.md](md/reference/glossary/deployment.md)
+- ✅ [developer.md](md/reference/glossary/developer.md)
+- ✅ [device-plugin.md](md/reference/glossary/device-plugin.md)
+- ✅ [device.md](md/reference/glossary/device.md)
+- ✅ [deviceclass.md](md/reference/glossary/deviceclass.md)
+- ✅ [disruption.md](md/reference/glossary/disruption.md)
+- ✅ [docker.md](md/reference/glossary/docker.md)
 - ⏳ `dockershim.md`
 - ⏳ `downstream.md`
 - ⏳ `downward-api.md`
