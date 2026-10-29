@@ -1,0 +1,2306 @@
+---
+title: مرجع متریک‌های کوبرنتیز
+content_type: reference
+auto_generated: true
+description: >-
+  جزئیات داده‌های متریکی که مؤلفه‌های کوبرنتیز صادر می‌کنند.
+---
+
+## متریک‌ها (v1.37)
+
+<!-- (auto-generated 2026 Aug 28) -->
+<!-- (auto-generated v1.37) -->
+این صفحه متریک‌هایی را که مؤلفه‌های مختلف کوبرنتیز صادر می‌کنند، به‌تفصیل شرح می‌دهد. می‌توانید با یک درخواست HTTP از نوع scrape، نقطهٔ پایانی (endpoint) متریک‌های این مؤلفه‌ها را پرس‌وجو کنید و داده‌های فعلی متریک‌ها را در قالب Prometheus دریافت کنید.
+
+### فهرست سنجه‌های پایدار کوبرنتیز
+
+سنجه‌های (metric) پایدار از قراردادهای سخت‌گیرانهٔ API پیروی می‌کنند و در طول عمر آن‌ها نمی‌توان هیچ برچسبی به آن‌ها افزود یا از آن‌ها حذف کرد.
+
+<div class="metrics"><div class="metric" data-stability="stable">
+	<div class="metric_name">apiserver_admission_controller_admission_duration_seconds</div>
+	<div class="metric_help">هیستوگرام تأخیر کنترل‌کننده‌های پذیرش (admission controller) بر حسب ثانیه که بر اساس نام شناسایی می‌شود و به تفکیک هر عملیات، منبع API و نوع (validate یا admit) ارائه می‌شود.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">STABLE</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">name</span><span class="metric_label">operation</span><span class="metric_label">rejected</span><span class="metric_label">type</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-apiserver (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="stable">
+	<div class="metric_name">apiserver_admission_step_admission_duration_seconds</div>
+	<div class="metric_help">هیستوگرام تأخیر زیرمرحله‌های پذیرش بر حسب ثانیه، به تفکیک هر عملیات، منبع API و نوع مرحله (validate یا admit).</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">STABLE</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">operation</span><span class="metric_label">rejected</span><span class="metric_label">type</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-apiserver (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="stable">
+	<div class="metric_name">apiserver_admission_webhook_admission_duration_seconds</div>
+	<div class="metric_help">هیستوگرام تأخیر وب‌هوک‌های پذیرش (admission webhook) بر حسب ثانیه که بر اساس نام شناسایی می‌شود و به تفکیک هر عملیات، منبع API و نوع (validate یا admit) ارائه می‌شود.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">STABLE</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">name</span><span class="metric_label">operation</span><span class="metric_label">rejected</span><span class="metric_label">type</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-apiserver (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="stable">
+	<div class="metric_name">apiserver_current_inflight_requests</div>
+	<div class="metric_help">بیشینهٔ مقدار استفاده‌شده از سقف درخواست‌های در حال پردازش (inflight) این apiserver در ثانیهٔ گذشته، به تفکیک نوع درخواست.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">STABLE</span></li>
+	<li data-type="gauge"><label class="metric_detail">نوع:</label> <span class="metric_type">Gauge</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">request_kind</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-apiserver (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="stable">
+	<div class="metric_name">apiserver_longrunning_requests</div>
+	<div class="metric_help">سنجه‌ای از نوع Gauge برای همهٔ درخواست‌های فعال و طولانی‌مدت apiserver، به تفکیک verb، گروه، نسخه، منبع، دامنه (scope) و مؤلفه. همهٔ درخواست‌ها به این روش ردیابی نمی‌شوند.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">STABLE</span></li>
+	<li data-type="gauge"><label class="metric_detail">نوع:</label> <span class="metric_type">Gauge</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">component</span><span class="metric_label">group</span><span class="metric_label">resource</span><span class="metric_label">scope</span><span class="metric_label">subresource</span><span class="metric_label">verb</span><span class="metric_label">version</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-apiserver (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="stable">
+	<div class="metric_name">apiserver_request_duration_seconds</div>
+	<div class="metric_help">توزیع تأخیر پاسخ بر حسب ثانیه برای هر verb، مقدار dry run، گروه، نسخه، منبع، زیرمنبع، دامنه و مؤلفه.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">STABLE</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">component</span><span class="metric_label">dry_run</span><span class="metric_label">group</span><span class="metric_label">resource</span><span class="metric_label">scope</span><span class="metric_label">subresource</span><span class="metric_label">verb</span><span class="metric_label">version</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-apiserver (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="stable">
+	<div class="metric_name">apiserver_request_total</div>
+	<div class="metric_help">شمارندهٔ درخواست‌های apiserver به تفکیک هر verb، مقدار dry run، گروه، نسخه، منبع، دامنه، مؤلفه و کد پاسخ HTTP.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">STABLE</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">code</span><span class="metric_label">component</span><span class="metric_label">dry_run</span><span class="metric_label">group</span><span class="metric_label">resource</span><span class="metric_label">scope</span><span class="metric_label">subresource</span><span class="metric_label">verb</span><span class="metric_label">version</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-apiserver (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="stable">
+	<div class="metric_name">apiserver_requested_deprecated_apis</div>
+	<div class="metric_help">سنجه‌ای از نوع Gauge برای APIهای منسوخ‌شده‌ای که درخواست شده‌اند، به تفکیک گروه API، نسخه، منبع، زیرمنبع و removed_release.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">STABLE</span></li>
+	<li data-type="gauge"><label class="metric_detail">نوع:</label> <span class="metric_type">Gauge</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">group</span><span class="metric_label">removed_release</span><span class="metric_label">resource</span><span class="metric_label">subresource</span><span class="metric_label">version</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-apiserver (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="stable">
+	<div class="metric_name">apiserver_response_sizes</div>
+	<div class="metric_help">توزیع اندازهٔ پاسخ بر حسب بایت برای هر گروه، نسخه، verb، منبع، زیرمنبع، دامنه و مؤلفه.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">STABLE</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">component</span><span class="metric_label">group</span><span class="metric_label">resource</span><span class="metric_label">scope</span><span class="metric_label">subresource</span><span class="metric_label">verb</span><span class="metric_label">version</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-apiserver (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="stable">
+	<div class="metric_name">apiserver_storage_objects</div>
+	<div class="metric_help">[منسوخ‌شده؛ به‌جای آن از apiserver_resource_objects استفاده کنید] تعداد آبجکت‌های ذخیره‌شده در زمان آخرین بررسی، به تفکیک نوع (kind). اگر هنگام واکشی خطایی رخ دهد، مقدار آن ‎-1 خواهد بود.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">STABLE</span></li>
+	<li data-type="gauge"><label class="metric_detail">نوع:</label> <span class="metric_type">Gauge</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">resource</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-apiserver (/metrics)</li></ul></li><li class="metric_deprecated_version"><label class="metric_detail">نسخه‌های منسوخ‌شده:</label><span>1.34.0</span></li></ul>
+	</div><div class="metric" data-stability="stable">
+	<div class="metric_name">apiserver_storage_size_bytes</div>
+	<div class="metric_help">اندازهٔ فضایی که به‌طور فیزیکی به فایل پایگاه دادهٔ ذخیره‌سازی تخصیص یافته است، بر حسب بایت.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">STABLE</span></li>
+	<li data-type="custom"><label class="metric_detail">نوع:</label> <span class="metric_type">Custom</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">storage_cluster_id</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-apiserver (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="stable">
+	<div class="metric_name">container_cpu_usage_seconds_total</div>
+	<div class="metric_help">زمان تجمعی CPU که کانتینر مصرف کرده است، بر حسب هسته-ثانیه (core-second)</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">STABLE</span></li>
+	<li data-type="custom"><label class="metric_detail">نوع:</label> <span class="metric_type">Custom</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">container</span><span class="metric_label">pod</span><span class="metric_label">namespace</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics/resource)</li></ul></li></ul>
+	</div><div class="metric" data-stability="stable">
+	<div class="metric_name">container_memory_working_set_bytes</div>
+	<div class="metric_help">مجموعهٔ کاری (working set) فعلی کانتینر بر حسب بایت</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">STABLE</span></li>
+	<li data-type="custom"><label class="metric_detail">نوع:</label> <span class="metric_type">Custom</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">container</span><span class="metric_label">pod</span><span class="metric_label">namespace</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics/resource)</li></ul></li></ul>
+	</div><div class="metric" data-stability="stable">
+	<div class="metric_name">container_start_time_seconds</div>
+	<div class="metric_help">زمان شروع کانتینر بر حسب ثانیه از مبدأ زمانی یونیکس (unix epoch)</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">STABLE</span></li>
+	<li data-type="custom"><label class="metric_detail">نوع:</label> <span class="metric_type">Custom</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">container</span><span class="metric_label">pod</span><span class="metric_label">namespace</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics/resource)</li></ul></li></ul>
+	</div><div class="metric" data-stability="stable">
+	<div class="metric_name">cronjob_controller_job_creation_skew_duration_seconds</div>
+	<div class="metric_help">فاصلهٔ زمانی میان لحظه‌ای که اجرای یک CronJob برای آن زمان‌بندی شده است و لحظه‌ای که Job متناظر با آن ایجاد می‌شود</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">STABLE</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-controller-manager (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="stable">
+	<div class="metric_name">job_controller_job_pods_finished_total</div>
+	<div class="metric_help">تعداد Podهای پایان‌یافته‌ای که به‌طور کامل ردیابی شده‌اند</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">STABLE</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">completion_mode</span><span class="metric_label">result</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-controller-manager (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="stable">
+	<div class="metric_name">job_controller_job_sync_duration_seconds</div>
+	<div class="metric_help">مدت زمانی که همگام‌سازی یک Job طول کشیده است</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">STABLE</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">action</span><span class="metric_label">completion_mode</span><span class="metric_label">result</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-controller-manager (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="stable">
+	<div class="metric_name">job_controller_job_syncs_total</div>
+	<div class="metric_help">تعداد همگام‌سازی‌های Job</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">STABLE</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">action</span><span class="metric_label">completion_mode</span><span class="metric_label">result</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-controller-manager (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="stable">
+	<div class="metric_name">job_controller_jobs_finished_total</div>
+	<div class="metric_help">تعداد Jobهای پایان‌یافته</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">STABLE</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">completion_mode</span><span class="metric_label">reason</span><span class="metric_label">result</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-controller-manager (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="stable">
+	<div class="metric_name">kube_pod_resource_limit</div>
+	<div class="metric_help">سقف منابع بارهای کاری کلاستر، به تفکیک Pod. این سنجه میزان مصرف منابعی را نشان می‌دهد که زمان‌بند و kubelet برای هر Pod انتظار دارند و در صورت وجود، واحد هر منبع را نیز نشان می‌دهد.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">STABLE</span></li>
+	<li data-type="custom"><label class="metric_detail">نوع:</label> <span class="metric_type">Custom</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">namespace</span><span class="metric_label">pod</span><span class="metric_label">node</span><span class="metric_label">scheduler</span><span class="metric_label">priority</span><span class="metric_label">resource</span><span class="metric_label">unit</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-scheduler (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="stable">
+	<div class="metric_name">kube_pod_resource_request</div>
+	<div class="metric_help">منابعی که بارهای کاری کلاستر درخواست کرده‌اند، به تفکیک Pod. این سنجه میزان مصرف منابعی را نشان می‌دهد که زمان‌بند و kubelet برای هر Pod انتظار دارند و در صورت وجود، واحد هر منبع را نیز نشان می‌دهد.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">STABLE</span></li>
+	<li data-type="custom"><label class="metric_detail">نوع:</label> <span class="metric_type">Custom</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">namespace</span><span class="metric_label">pod</span><span class="metric_label">node</span><span class="metric_label">scheduler</span><span class="metric_label">priority</span><span class="metric_label">resource</span><span class="metric_label">unit</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-scheduler (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="stable">
+	<div class="metric_name">kubernetes_healthcheck</div>
+	<div class="metric_help">این سنجه نتیجهٔ یک بررسی سلامت (healthcheck) را ثبت می‌کند.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">STABLE</span></li>
+	<li data-type="gauge"><label class="metric_detail">نوع:</label> <span class="metric_type">Gauge</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">name</span><span class="metric_label">type</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>cloud-controller-manager (/metrics/slis)</li><li>kube-apiserver (/metrics/slis)</li><li>kube-controller-manager (/metrics/slis)</li><li>kube-proxy (/metrics/slis)</li><li>kube-scheduler (/metrics/slis)</li><li>kubelet (/metrics/slis)</li></ul></li></ul>
+	</div><div class="metric" data-stability="stable">
+	<div class="metric_name">kubernetes_healthchecks_total</div>
+	<div class="metric_help">این سنجه نتایج همهٔ بررسی‌های سلامت را ثبت می‌کند.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">STABLE</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">name</span><span class="metric_label">status</span><span class="metric_label">type</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>cloud-controller-manager (/metrics/slis)</li><li>kube-apiserver (/metrics/slis)</li><li>kube-controller-manager (/metrics/slis)</li><li>kube-proxy (/metrics/slis)</li><li>kube-scheduler (/metrics/slis)</li><li>kubelet (/metrics/slis)</li></ul></li></ul>
+	</div><div class="metric" data-stability="stable">
+	<div class="metric_name">node_collector_evictions_total</div>
+	<div class="metric_help">تعداد بیرون‌رانی‌های (eviction) نود که از زمان آغاز به کار نمونهٔ فعلی NodeController رخ داده است.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">STABLE</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">zone</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-controller-manager (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="stable">
+	<div class="metric_name">node_cpu_usage_seconds_total</div>
+	<div class="metric_help">زمان تجمعی CPU که نود مصرف کرده است، بر حسب هسته-ثانیه</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">STABLE</span></li>
+	<li data-type="custom"><label class="metric_detail">نوع:</label> <span class="metric_type">Custom</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics/resource)</li></ul></li></ul>
+	</div><div class="metric" data-stability="stable">
+	<div class="metric_name">node_memory_working_set_bytes</div>
+	<div class="metric_help">مجموعهٔ کاری فعلی نود بر حسب بایت</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">STABLE</span></li>
+	<li data-type="custom"><label class="metric_detail">نوع:</label> <span class="metric_type">Custom</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics/resource)</li></ul></li></ul>
+	</div><div class="metric" data-stability="stable">
+	<div class="metric_name">pod_cpu_usage_seconds_total</div>
+	<div class="metric_help">زمان تجمعی CPU که Pod مصرف کرده است، بر حسب هسته-ثانیه</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">STABLE</span></li>
+	<li data-type="custom"><label class="metric_detail">نوع:</label> <span class="metric_type">Custom</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">pod</span><span class="metric_label">namespace</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics/resource)</li></ul></li></ul>
+	</div><div class="metric" data-stability="stable">
+	<div class="metric_name">pod_memory_working_set_bytes</div>
+	<div class="metric_help">مجموعهٔ کاری فعلی Pod بر حسب بایت</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">STABLE</span></li>
+	<li data-type="custom"><label class="metric_detail">نوع:</label> <span class="metric_type">Custom</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">pod</span><span class="metric_label">namespace</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics/resource)</li></ul></li></ul>
+	</div><div class="metric" data-stability="stable">
+	<div class="metric_name">resource_scrape_error</div>
+	<div class="metric_help">اگر هنگام دریافت سنجه‌های کانتینر خطایی رخ داده باشد مقدار آن 1 و در غیر این صورت 0 است</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">STABLE</span></li>
+	<li data-type="custom"><label class="metric_detail">نوع:</label> <span class="metric_type">Custom</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics/resource)</li></ul></li></ul>
+	</div><div class="metric" data-stability="stable">
+	<div class="metric_name">scheduler_framework_extension_point_duration_seconds</div>
+	<div class="metric_help">تأخیر اجرای همهٔ افزونه‌های (plugin) یک نقطهٔ توسعهٔ (extension point) مشخص.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">STABLE</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">extension_point</span><span class="metric_label">profile</span><span class="metric_label">status</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-scheduler (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="stable">
+	<div class="metric_name">scheduler_pending_pods</div>
+	<div class="metric_help">تعداد Podهای در انتظار، به تفکیک نوع صف. مقدار 'active' یعنی تعداد Podهای موجود در activeQ؛ 'backoff' یعنی تعداد Podهای موجود در backoffQ؛ 'unschedulable' یعنی تعداد Podهای موجود در unschedulableEntities که زمان‌بند برای زمان‌بندی آن‌ها تلاش کرده و ناموفق بوده است؛ 'gated' تعداد Podهای زمان‌بندی‌نشدنی است که زمان‌بند هرگز برای زمان‌بندی آن‌ها تلاش نکرده است، زیرا دروازهٔ زمان‌بندی (scheduling gate) دارند؛ 'incomplete' یعنی تعداد Podهای موجود در incompletePodGroupPods؛ و 'pending' یعنی تعداد Podهای موجود در pendingPodGroupPods.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">STABLE</span></li>
+	<li data-type="gauge"><label class="metric_detail">نوع:</label> <span class="metric_type">Gauge</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">queue</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-scheduler (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="stable">
+	<div class="metric_name">scheduler_pod_scheduling_attempts</div>
+	<div class="metric_help">تعداد تلاش‌ها تا زمان‌بندی موفق یک Pod.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">STABLE</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-scheduler (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="stable">
+	<div class="metric_name">scheduler_preemption_attempts_total</div>
+	<div class="metric_help">مجموع تلاش‌های پیش‌دستی (preemption) در کلاستر تا این لحظه</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">STABLE</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-scheduler (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="stable">
+	<div class="metric_name">scheduler_preemption_victims</div>
+	<div class="metric_help">تعداد قربانیان انتخاب‌شده برای پیش‌دستی‌ای که یک Pod واحد آغاز کرده است</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">STABLE</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-scheduler (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="stable">
+	<div class="metric_name">scheduler_queue_incoming_pods_total</div>
+	<div class="metric_help">تعداد Podهای افزوده‌شده به صف‌های زمان‌بندی، به تفکیک رویداد و نوع صف.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">STABLE</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">event</span><span class="metric_label">queue</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-scheduler (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="stable">
+	<div class="metric_name">scheduler_schedule_attempts_total</div>
+	<div class="metric_help">تعداد تلاش‌ها برای زمان‌بندی Podها، به تفکیک نتیجه. مقدار 'unschedulable' یعنی یک Pod قابل زمان‌بندی نبوده است، در حالی که 'error' به معنای بروز مشکلی داخلی در زمان‌بند است.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">STABLE</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">profile</span><span class="metric_label">result</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-scheduler (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="stable">
+	<div class="metric_name">scheduler_scheduling_attempt_duration_seconds</div>
+	<div class="metric_help">تأخیر هر تلاش زمان‌بندی بر حسب ثانیه (الگوریتم زمان‌بندی به‌علاوهٔ اتصال یا binding)</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">STABLE</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">profile</span><span class="metric_label">result</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-scheduler (/metrics)</li></ul></li></ul>
+	</div>
+</div>
+
+### فهرست متریک‌های بتای کوبرنتیز
+
+متریک‌های بتا از قرارداد API سهل‌گیرانه‌تری نسبت به همتایان پایدار خود پیروی می‌کنند. در طول عمر یک متریک بتا هیچ برچسبی را نمی‌توان از آن حذف کرد، اما تا زمانی که متریک در مرحلهٔ بتا است، می‌توان برچسب‌های جدیدی به آن افزود. به این ترتیب تضمین می‌شود که متریک‌های بتا با داشبوردها و هشدارهای موجود سازگار بمانند و در عین حال امکان اصلاح آن‌ها در آینده نیز وجود داشته باشد.
+
+<div class="metrics"><div class="metric" data-stability="beta">
+	<div class="metric_name">apiserver_authentication_config_controller_automatic_reload_last_timestamp_seconds</div>
+	<div class="metric_help">مُهر زمانی آخرین بارگذاری مجدد خودکار پیکربندی احراز هویت، به تفکیک وضعیت و هویت apiserver.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">BETA</span></li>
+	<li data-type="gauge"><label class="metric_detail">نوع:</label> <span class="metric_type">Gauge</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">apiserver_id_hash</span><span class="metric_label">status</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-apiserver (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="beta">
+	<div class="metric_name">apiserver_authentication_config_controller_automatic_reloads_total</div>
+	<div class="metric_help">تعداد کل بارگذاری‌های مجدد خودکار پیکربندی احراز هویت، به تفکیک وضعیت و هویت apiserver.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">BETA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">apiserver_id_hash</span><span class="metric_label">status</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-apiserver (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="beta">
+	<div class="metric_name">apiserver_authorization_config_controller_automatic_reload_last_timestamp_seconds</div>
+	<div class="metric_help">مُهر زمانی آخرین بارگذاری مجدد خودکار پیکربندی مجوزدهی، به تفکیک وضعیت و هویت apiserver.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">BETA</span></li>
+	<li data-type="gauge"><label class="metric_detail">نوع:</label> <span class="metric_type">Gauge</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">apiserver_id_hash</span><span class="metric_label">status</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-apiserver (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="beta">
+	<div class="metric_name">apiserver_authorization_config_controller_automatic_reloads_total</div>
+	<div class="metric_help">تعداد کل بارگذاری‌های مجدد خودکار پیکربندی مجوزدهی، به تفکیک وضعیت و هویت apiserver.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">BETA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">apiserver_id_hash</span><span class="metric_label">status</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-apiserver (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="beta">
+	<div class="metric_name">apiserver_cel_compilation_duration_seconds</div>
+	<div class="metric_help">زمان کامپایل CEL بر حسب ثانیه.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">BETA</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-apiserver (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="beta">
+	<div class="metric_name">apiserver_cel_evaluation_duration_seconds</div>
+	<div class="metric_help">زمان ارزیابی CEL بر حسب ثانیه.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">BETA</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-apiserver (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="beta">
+	<div class="metric_name">apiserver_flowcontrol_current_executing_requests</div>
+	<div class="metric_help">تعداد درخواست‌هایی که در زیرسیستم اولویت و انصاف API (API Priority and Fairness) در مرحلهٔ اجرای اولیه (برای WATCH) یا در هر مرحلهٔ اجرایی (برای درخواست‌های غیر WATCH) قرار دارند</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">BETA</span></li>
+	<li data-type="gauge"><label class="metric_detail">نوع:</label> <span class="metric_type">Gauge</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">flow_schema</span><span class="metric_label">priority_level</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-apiserver (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="beta">
+	<div class="metric_name">apiserver_flowcontrol_current_executing_seats</div>
+	<div class="metric_help">میزان همروندی (تعداد صندلی‌ها) که درخواست‌های در حال اجرا (در مرحلهٔ اولیه برای WATCH و در هر مرحله در سایر موارد) در زیرسیستم اولویت و انصاف API اشغال کرده‌اند</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">BETA</span></li>
+	<li data-type="gauge"><label class="metric_detail">نوع:</label> <span class="metric_type">Gauge</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">flow_schema</span><span class="metric_label">priority_level</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-apiserver (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="beta">
+	<div class="metric_name">apiserver_flowcontrol_current_inqueue_requests</div>
+	<div class="metric_help">تعداد درخواست‌هایی که در حال حاضر در صف‌های زیرسیستم اولویت و انصاف API در انتظار هستند</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">BETA</span></li>
+	<li data-type="gauge"><label class="metric_detail">نوع:</label> <span class="metric_type">Gauge</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">flow_schema</span><span class="metric_label">priority_level</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-apiserver (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="beta">
+	<div class="metric_name">apiserver_flowcontrol_dispatched_requests_total</div>
+	<div class="metric_help">تعداد درخواست‌هایی که زیرسیستم اولویت و انصاف API اجرا کرده است</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">BETA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">flow_schema</span><span class="metric_label">priority_level</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-apiserver (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="beta">
+	<div class="metric_name">apiserver_flowcontrol_nominal_limit_seats</div>
+	<div class="metric_help">تعداد اسمی صندلی‌های اجرایی که برای هر سطح اولویت پیکربندی شده است</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">BETA</span></li>
+	<li data-type="gauge"><label class="metric_detail">نوع:</label> <span class="metric_type">Gauge</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">priority_level</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-apiserver (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="beta">
+	<div class="metric_name">apiserver_flowcontrol_rejected_requests_total</div>
+	<div class="metric_help">تعداد درخواست‌هایی که زیرسیستم اولویت و انصاف API رد کرده است</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">BETA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">flow_schema</span><span class="metric_label">priority_level</span><span class="metric_label">reason</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-apiserver (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="beta">
+	<div class="metric_name">apiserver_flowcontrol_request_wait_duration_seconds</div>
+	<div class="metric_help">مدت زمانی که یک درخواست در صف خود منتظر مانده است</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">BETA</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">execute</span><span class="metric_label">flow_schema</span><span class="metric_label">priority_level</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-apiserver (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="beta">
+	<div class="metric_name">apiserver_storage_events_received_total</div>
+	<div class="metric_help">تعداد رویدادهای دریافت‌شده از etcd، به تفکیک نوع.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">BETA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">group</span><span class="metric_label">resource</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-apiserver (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="beta">
+	<div class="metric_name">apiserver_validating_admission_policy_check_duration_seconds</div>
+	<div class="metric_help">تأخیر پذیرش اعتبارسنجی برای هر یک از عبارت‌های اعتبارسنجی بر حسب ثانیه، که بر اساس سیاست برچسب‌گذاری شده و علاوه بر آن، اتصال (binding) و اقدام اعمال‌شده را نیز در بر می‌گیرد.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">BETA</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">enforcement_action</span><span class="metric_label">error_type</span><span class="metric_label">policy</span><span class="metric_label">policy_binding</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-apiserver (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="beta">
+	<div class="metric_name">apiserver_validating_admission_policy_check_total</div>
+	<div class="metric_help">تعداد کل بررسی‌های سیاست پذیرش اعتبارسنجی، که بر اساس سیاست برچسب‌گذاری شده و علاوه بر آن با اتصال و اقدام اعمال‌شده مشخص می‌شود.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">BETA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">enforcement_action</span><span class="metric_label">error_type</span><span class="metric_label">policy</span><span class="metric_label">policy_binding</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-apiserver (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="beta">
+	<div class="metric_name">apiserver_validation_declarative_validation_mismatch_total</div>
+	<div class="metric_help">تعداد دفعاتی که نتایج اعتبارسنجی اعلانی (declarative) برای انواع هسته با نتایج اعتبارسنجی دست‌نویس متفاوت بوده است.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">BETA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-apiserver (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="beta">
+	<div class="metric_name">apiserver_validation_declarative_validation_panic_total</div>
+	<div class="metric_help">تعداد دفعاتی که اعتبارسنجی اعلانی در حین اعتبارسنجی دچار panic شده است.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">BETA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-apiserver (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="beta">
+	<div class="metric_name">apiserver_watch_events_sizes</div>
+	<div class="metric_help">توزیع اندازهٔ رویدادهای watch بر حسب بایت</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">BETA</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">group</span><span class="metric_label">resource</span><span class="metric_label">version</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-apiserver (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="beta">
+	<div class="metric_name">apiserver_watch_events_total</div>
+	<div class="metric_help">تعداد رویدادهای ارسال‌شده به کلاینت‌های watch</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">BETA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">group</span><span class="metric_label">resource</span><span class="metric_label">version</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-apiserver (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="beta">
+	<div class="metric_name">apiserver_watch_list_duration_seconds</div>
+	<div class="metric_help">توزیع تأخیر پاسخ بر حسب ثانیه برای درخواست‌های watch list، به تفکیک گروه، نسخه، منبع و دامنه (scope).</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">BETA</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">group</span><span class="metric_label">resource</span><span class="metric_label">scope</span><span class="metric_label">version</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-apiserver (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="beta">
+	<div class="metric_name">apiserver_webhooks_x509_insecure_sha1_total</div>
+	<div class="metric_help">تعداد درخواست‌ها به سرورهایی را که گواهی سرویس‌دهی آن‌ها امضای ناامن SHA1 دارد، یا تعداد شکست‌های اتصال به‌دلیل امضاهای ناامن SHA1 را می‌شمارد (بسته به محیط اجرا، یکی از این دو)</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">BETA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-apiserver (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="beta">
+	<div class="metric_name">apiserver_webhooks_x509_missing_san_total</div>
+	<div class="metric_help">تعداد درخواست‌ها به سرورهایی را که گواهی سرویس‌دهی آن‌ها فاقد افزونهٔ SAN است، یا تعداد شکست‌های اتصال به‌دلیل نبود افزونهٔ SAN در گواهی x509 را می‌شمارد (بسته به محیط اجرا، یکی از این دو)</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">BETA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-apiserver (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="beta">
+	<div class="metric_name">disabled_metrics_total</div>
+	<div class="metric_help">تعداد متریک‌های غیرفعال‌شده.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">BETA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>cloud-controller-manager (/metrics)</li><li>kube-apiserver (/metrics)</li><li>kube-controller-manager (/metrics)</li><li>kube-proxy (/metrics)</li><li>kube-scheduler (/metrics)</li><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="beta">
+	<div class="metric_name">endpoint_slice_controller_desired_endpoint_slices</div>
+	<div class="metric_help">تعداد EndpointSliceهایی که در صورت تخصیص بی‌نقص endpointها وجود می‌داشت</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">BETA</span></li>
+	<li data-type="gauge"><label class="metric_detail">نوع:</label> <span class="metric_type">Gauge</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-controller-manager (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="beta">
+	<div class="metric_name">endpoint_slice_controller_endpoints_added_per_sync</div>
+	<div class="metric_help">تعداد endpointهای افزوده‌شده در هر همگام‌سازی Service</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">BETA</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-controller-manager (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="beta">
+	<div class="metric_name">endpoint_slice_controller_endpoints_desired</div>
+	<div class="metric_help">تعداد endpointهای مطلوب</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">BETA</span></li>
+	<li data-type="gauge"><label class="metric_detail">نوع:</label> <span class="metric_type">Gauge</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-controller-manager (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="beta">
+	<div class="metric_name">endpoint_slice_controller_endpoints_removed_per_sync</div>
+	<div class="metric_help">تعداد endpointهای حذف‌شده در هر همگام‌سازی Service</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">BETA</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-controller-manager (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="beta">
+	<div class="metric_name">endpoint_slice_controller_num_endpoint_slices</div>
+	<div class="metric_help">تعداد EndpointSliceها</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">BETA</span></li>
+	<li data-type="gauge"><label class="metric_detail">نوع:</label> <span class="metric_type">Gauge</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-controller-manager (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="beta">
+	<div class="metric_name">endpoint_slice_controller_services_count_by_traffic_distribution</div>
+	<div class="metric_help">تعداد Serviceهایی که از یک trafficDistribution مشخص استفاده می‌کنند</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">BETA</span></li>
+	<li data-type="gauge"><label class="metric_detail">نوع:</label> <span class="metric_type">Gauge</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">traffic_distribution</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-controller-manager (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="beta">
+	<div class="metric_name">hidden_metrics_total</div>
+	<div class="metric_help">تعداد متریک‌های پنهان.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">BETA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>cloud-controller-manager (/metrics)</li><li>kube-apiserver (/metrics)</li><li>kube-controller-manager (/metrics)</li><li>kube-proxy (/metrics)</li><li>kube-scheduler (/metrics)</li><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="beta">
+	<div class="metric_name">horizontal_pod_autoscaler_controller_metric_computation_duration_seconds</div>
+	<div class="metric_help">زمانی (بر حسب ثانیه) که کنترل‌کنندهٔ HPA برای محاسبهٔ یک متریک صرف می‌کند. مقدار برچسب 'action' باید یکی از 'scale_down'، 'scale_up' یا 'none' باشد. مقدار برچسب 'error' باید یکی از 'spec'، 'internal' یا 'none' باشد. برچسب 'metric_type' متناظر با HPA.spec.metrics[*].type است</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">BETA</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">action</span><span class="metric_label">error</span><span class="metric_label">metric_type</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-controller-manager (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="beta">
+	<div class="metric_name">horizontal_pod_autoscaler_controller_metric_computation_total</div>
+	<div class="metric_help">تعداد محاسبات متریک. مقدار برچسب 'action' باید یکی از 'scale_down'، 'scale_up' یا 'none' باشد. همچنین مقدار برچسب 'error' باید یکی از 'spec'، 'internal' یا 'none' باشد. برچسب 'metric_type' متناظر با HPA.spec.metrics[*].type است</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">BETA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">action</span><span class="metric_label">error</span><span class="metric_label">metric_type</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-controller-manager (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="beta">
+	<div class="metric_name">horizontal_pod_autoscaler_controller_reconciliation_duration_seconds</div>
+	<div class="metric_help">زمانی (بر حسب ثانیه) که کنترل‌کنندهٔ HPA برای یک بار تطبیق (reconcile) صرف می‌کند. مقدار برچسب 'action' باید یکی از 'scale_down'، 'scale_up' یا 'none' باشد. همچنین مقدار برچسب 'error' باید یکی از 'spec'، 'internal' یا 'none' باشد. توجه کنید که اگر در یک تطبیق هم خطای spec و هم خطای internal رخ دهد، نخستین خطای رخ‌داده در برچسب `error` گزارش می‌شود.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">BETA</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">action</span><span class="metric_label">error</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-controller-manager (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="beta">
+	<div class="metric_name">horizontal_pod_autoscaler_controller_reconciliations_total</div>
+	<div class="metric_help">تعداد تطبیق‌های کنترل‌کنندهٔ HPA. مقدار برچسب 'action' باید یکی از 'scale_down'، 'scale_up' یا 'none' باشد. همچنین مقدار برچسب 'error' باید یکی از 'spec'، 'internal' یا 'none' باشد. توجه کنید که اگر در یک تطبیق هم خطای spec و هم خطای internal رخ دهد، نخستین خطای رخ‌داده در برچسب `error` گزارش می‌شود.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">BETA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">action</span><span class="metric_label">error</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-controller-manager (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="beta">
+	<div class="metric_name">job_controller_pod_failures_handled_by_failure_policy_total</div>
+	<div class="metric_help">`The number of failed Pods handled by failure policy with, 			respect to the failure policy action applied based on the matched, 			rule. Possible values of the action label correspond to the, 			possible values for the failure policy rule action, which are:, 			"FailJob", "Ignore" and "Count".`</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">BETA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">action</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-controller-manager (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="beta">
+	<div class="metric_name">job_controller_terminated_pods_tracking_finalizer_total</div>
+	<div class="metric_help">`The number of terminated pods (phase=Failed|Succeeded), that have the finalizer batch.kubernetes.io/job-tracking, The event label can be "add" or "delete".`</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">BETA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">event</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-controller-manager (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="beta">
+	<div class="metric_name">kubelet_image_volume_mounted_errors_total</div>
+	<div class="metric_help">تعداد اتصال‌های (mount) ناموفق حجم‌های ایمیج.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">BETA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="beta">
+	<div class="metric_name">kubelet_image_volume_mounted_succeed_total</div>
+	<div class="metric_help">تعداد اتصال‌های موفق حجم‌های ایمیج.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">BETA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="beta">
+	<div class="metric_name">kubelet_image_volume_requested_total</div>
+	<div class="metric_help">تعداد حجم‌های ایمیج درخواست‌شده.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">BETA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="beta">
+	<div class="metric_name">kubernetes_build_info</div>
+	<div class="metric_help">متریکی با مقدار ثابت '1' که با نسخهٔ اصلی (major)، نسخهٔ فرعی (minor)، نسخهٔ git، کامیت git، وضعیت درخت git، تاریخ ساخت، نسخهٔ Go و کامپایلری که کوبرنتیز با آن ساخته شده است، و نیز سکویی که روی آن اجرا می‌شود، برچسب‌گذاری شده است.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">BETA</span></li>
+	<li data-type="gauge"><label class="metric_detail">نوع:</label> <span class="metric_type">Gauge</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">build_date</span><span class="metric_label">compiler</span><span class="metric_label">git_commit</span><span class="metric_label">git_tree_state</span><span class="metric_label">git_version</span><span class="metric_label">go_version</span><span class="metric_label">major</span><span class="metric_label">minor</span><span class="metric_label">platform</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>cloud-controller-manager (/metrics)</li><li>kube-apiserver (/metrics)</li><li>kube-controller-manager (/metrics)</li><li>kube-proxy (/metrics)</li><li>kube-scheduler (/metrics)</li><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="beta">
+	<div class="metric_name">kubernetes_feature_enabled</div>
+	<div class="metric_help">این متریک داده‌های مربوط به مرحله و وضعیت فعال‌بودن یک قابلیت کوبرنتیز را ثبت می‌کند.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">BETA</span></li>
+	<li data-type="gauge"><label class="metric_detail">نوع:</label> <span class="metric_type">Gauge</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">name</span><span class="metric_label">stage</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>cloud-controller-manager (/metrics)</li><li>kube-apiserver (/metrics)</li><li>kube-controller-manager (/metrics)</li><li>kube-proxy (/metrics)</li><li>kube-scheduler (/metrics)</li><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="beta">
+	<div class="metric_name">prober_probe_total</div>
+	<div class="metric_help">تعداد تجمعی کاوش‌های liveness، readiness یا startup برای یک کانتینر، به تفکیک نتیجه.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">BETA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">container</span><span class="metric_label">namespace</span><span class="metric_label">pod</span><span class="metric_label">pod_uid</span><span class="metric_label">probe_type</span><span class="metric_label">result</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics/probes)</li></ul></li></ul>
+	</div><div class="metric" data-stability="beta">
+	<div class="metric_name">registered_metrics_total</div>
+	<div class="metric_help">تعداد متریک‌های ثبت‌شده، به تفکیک سطح پایداری و نسخهٔ منسوخ‌شدن.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">BETA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">deprecated_version</span><span class="metric_label">stability_level</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>cloud-controller-manager (/metrics)</li><li>kube-apiserver (/metrics)</li><li>kube-controller-manager (/metrics)</li><li>kube-proxy (/metrics)</li><li>kube-scheduler (/metrics)</li><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="beta">
+	<div class="metric_name">running_managed_controllers</div>
+	<div class="metric_help">نشان می‌دهد که نمونه‌های یک کنترل‌کننده در حال حاضر کجا اجرا می‌شوند</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">BETA</span></li>
+	<li data-type="gauge"><label class="metric_detail">نوع:</label> <span class="metric_type">Gauge</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">manager</span><span class="metric_label">name</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>cloud-controller-manager (/metrics)</li><li>kube-apiserver (/metrics)</li><li>kube-controller-manager (/metrics)</li><li>kube-proxy (/metrics)</li><li>kube-scheduler (/metrics)</li><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="beta">
+	<div class="metric_name">scheduler_goroutines</div>
+	<div class="metric_help">تعداد goroutineهای در حال اجرا، به تفکیک کاری که انجام می‌دهند، مانند اتصال (binding).</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">BETA</span></li>
+	<li data-type="gauge"><label class="metric_detail">نوع:</label> <span class="metric_type">Gauge</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">operation</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-scheduler (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="beta">
+	<div class="metric_name">scheduler_permit_wait_duration_seconds</div>
+	<div class="metric_help">مدت زمان انتظار در مرحلهٔ permit.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">BETA</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">result</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-scheduler (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="beta">
+	<div class="metric_name">scheduler_plugin_evaluation_total</div>
+	<div class="metric_help">تعداد تلاش‌ها برای زمان‌بندی پادها، به تفکیک هر افزونه و نقطهٔ توسعه (فقط در PreFilter، Filter، PreScore و Score در دسترس است).</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">BETA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">extension_point</span><span class="metric_label">plugin</span><span class="metric_label">profile</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-scheduler (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="beta">
+	<div class="metric_name">scheduler_plugin_execution_duration_seconds</div>
+	<div class="metric_help">مدت زمان اجرای یک افزونه در یک نقطهٔ توسعهٔ مشخص.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">BETA</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">extension_point</span><span class="metric_label">plugin</span><span class="metric_label">status</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-scheduler (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="beta">
+	<div class="metric_name">scheduler_pod_scheduling_sli_duration_seconds</div>
+	<div class="metric_help">تأخیر سرتاسری (E2E) زمان‌بندی یک پاد، از لحظه‌ای که پاد وارد صف زمان‌بندی می‌شود؛ این فرایند ممکن است شامل چندین تلاش زمان‌بندی باشد.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">BETA</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">attempts</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-scheduler (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="beta">
+	<div class="metric_name">scheduler_scheduling_algorithm_duration_seconds</div>
+	<div class="metric_help">تأخیر الگوریتم زمان‌بندی بر حسب ثانیه</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">BETA</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-scheduler (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="beta">
+	<div class="metric_name">scheduler_unschedulable_pods</div>
+	<div class="metric_help">تعداد پادهای غیرقابل‌زمان‌بندی، به تفکیک نام افزونه. هر پاد مقدار این gauge را برای همهٔ افزونه‌هایی که مانع زمان‌بندی آن شده‌اند افزایش می‌دهد؛ از این رو این متریک فقط هنگام تفکیک بر اساس افزونه معنا دارد.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">BETA</span></li>
+	<li data-type="gauge"><label class="metric_detail">نوع:</label> <span class="metric_type">Gauge</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">plugin</span><span class="metric_label">profile</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-scheduler (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="beta">
+	<div class="metric_name">serviceaccount_legacy_tokens_total</div>
+	<div class="metric_help">تعداد تجمعی توکن‌های قدیمی (legacy) حساب سرویس که استفاده شده‌اند</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">BETA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-apiserver (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="beta">
+	<div class="metric_name">serviceaccount_stale_tokens_total</div>
+	<div class="metric_help">تعداد تجمعی توکن‌های projected منقضی‌شده (stale) حساب سرویس که استفاده شده‌اند</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">BETA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-apiserver (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="beta">
+	<div class="metric_name">serviceaccount_valid_tokens_total</div>
+	<div class="metric_help">تعداد تجمعی توکن‌های projected معتبر حساب سرویس که استفاده شده‌اند</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">BETA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-apiserver (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="beta">
+	<div class="metric_name">storage_operation_duration_seconds</div>
+	<div class="metric_help">مدت زمان عملیات ذخیره‌سازی</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">BETA</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">migrated</span><span class="metric_label">operation_name</span><span class="metric_label">status</span><span class="metric_label">volume_plugin</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="beta">
+	<div class="metric_name">volume_operation_total_seconds</div>
+	<div class="metric_help">مدت زمان سرتاسری عملیات ذخیره‌سازی بر حسب ثانیه</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">BETA</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">operation_name</span><span class="metric_label">plugin_name</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="beta">
+	<div class="metric_name">workqueue_adds_total</div>
+	<div class="metric_help">تعداد کل افزودن‌هایی که workqueue پردازش کرده است</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">BETA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">name</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>cloud-controller-manager (/metrics)</li><li>kube-apiserver (/metrics)</li><li>kube-controller-manager (/metrics)</li><li>kube-proxy (/metrics)</li><li>kube-scheduler (/metrics)</li><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="beta">
+	<div class="metric_name">workqueue_depth</div>
+	<div class="metric_help">عمق فعلی workqueue</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">BETA</span></li>
+	<li data-type="gauge"><label class="metric_detail">نوع:</label> <span class="metric_type">Gauge</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">name</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>cloud-controller-manager (/metrics)</li><li>kube-apiserver (/metrics)</li><li>kube-controller-manager (/metrics)</li><li>kube-proxy (/metrics)</li><li>kube-scheduler (/metrics)</li><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="beta">
+	<div class="metric_name">workqueue_longest_running_processor_seconds</div>
+	<div class="metric_help">مدت زمانی (بر حسب ثانیه) که طولانی‌ترین پردازندهٔ در حال اجرای workqueue در حال اجرا بوده است.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">BETA</span></li>
+	<li data-type="gauge"><label class="metric_detail">نوع:</label> <span class="metric_type">Gauge</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">name</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>cloud-controller-manager (/metrics)</li><li>kube-apiserver (/metrics)</li><li>kube-controller-manager (/metrics)</li><li>kube-proxy (/metrics)</li><li>kube-scheduler (/metrics)</li><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="beta">
+	<div class="metric_name">workqueue_queue_duration_seconds</div>
+	<div class="metric_help">مدت زمانی (بر حسب ثانیه) که یک آیتم پیش از درخواست‌شدن در workqueue باقی می‌ماند.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">BETA</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">name</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>cloud-controller-manager (/metrics)</li><li>kube-apiserver (/metrics)</li><li>kube-controller-manager (/metrics)</li><li>kube-proxy (/metrics)</li><li>kube-scheduler (/metrics)</li><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="beta">
+	<div class="metric_name">workqueue_retries_total</div>
+	<div class="metric_help">تعداد کل تلاش‌های مجددی که workqueue پردازش کرده است</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">BETA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">name</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>cloud-controller-manager (/metrics)</li><li>kube-apiserver (/metrics)</li><li>kube-controller-manager (/metrics)</li><li>kube-proxy (/metrics)</li><li>kube-scheduler (/metrics)</li><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="beta">
+	<div class="metric_name">workqueue_unfinished_work_seconds</div>
+	<div class="metric_help">مقدار کار انجام‌شده (بر حسب ثانیه) که هنوز در جریان است و work_duration آن را ثبت نکرده است. مقادیر بزرگ نشان‌دهندهٔ رشته‌های (thread) گیرکرده است. با مشاهدهٔ نرخ افزایش این مقدار می‌توان تعداد رشته‌های گیرکرده را استنباط کرد.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">BETA</span></li>
+	<li data-type="gauge"><label class="metric_detail">نوع:</label> <span class="metric_type">Gauge</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">name</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>cloud-controller-manager (/metrics)</li><li>kube-apiserver (/metrics)</li><li>kube-controller-manager (/metrics)</li><li>kube-proxy (/metrics)</li><li>kube-scheduler (/metrics)</li><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="beta">
+	<div class="metric_name">workqueue_work_duration_seconds</div>
+	<div class="metric_help">مدت زمانی (بر حسب ثانیه) که پردازش یک آیتم از workqueue طول می‌کشد.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">BETA</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">name</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>cloud-controller-manager (/metrics)</li><li>kube-apiserver (/metrics)</li><li>kube-controller-manager (/metrics)</li><li>kube-proxy (/metrics)</li><li>kube-scheduler (/metrics)</li><li>kubelet (/metrics)</li></ul></li></ul>
+	</div>
+</div>
+
+="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubelet_node_startup_post_registration_duration_seconds</div>
+	<div class="metric_help">مدت زمان راه‌اندازی نود پس از ثبت، بر حسب ثانیه.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="gauge"><label class="metric_detail">نوع:</label> <span class="metric_type">Gauge</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubelet_node_startup_pre_kubelet_duration_seconds</div>
+	<div class="metric_help">مدت زمان راه‌اندازی نود پیش از شروع kubelet، بر حسب ثانیه.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="gauge"><label class="metric_detail">نوع:</label> <span class="metric_type">Gauge</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubelet_node_startup_pre_registration_duration_seconds</div>
+	<div class="metric_help">مدت زمان راه‌اندازی نود پیش از ثبت، بر حسب ثانیه.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="gauge"><label class="metric_detail">نوع:</label> <span class="metric_type">Gauge</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubelet_node_startup_registration_duration_seconds</div>
+	<div class="metric_help">مدت زمان راه‌اندازی نود در طول ثبت، بر حسب ثانیه.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="gauge"><label class="metric_detail">نوع:</label> <span class="metric_type">Gauge</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubelet_orphan_pod_cleaned_volumes</div>
+	<div class="metric_help">تعداد کل Podهای یتیمی که حجم‌هایشان در آخرین پاک‌سازی دوره‌ای پاک شده است.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="gauge"><label class="metric_detail">نوع:</label> <span class="metric_type">Gauge</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubelet_orphan_pod_cleaned_volumes_errors</div>
+	<div class="metric_help">تعداد Podهای یتیمی که پاک‌سازی حجم‌هایشان در آخرین پاک‌سازی دوره‌ای شکست خورده است.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="gauge"><label class="metric_detail">نوع:</label> <span class="metric_type">Gauge</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubelet_orphaned_runtime_pods_total</div>
+	<div class="metric_help">تعداد Podهایی که در محیط اجرای کانتینر شناسایی شده‌اند، بی‌آنکه pod worker از قبل از وجود آن‌ها آگاه باشد. این معمولاً نشان می‌دهد که kubelet در زمانی راه‌اندازی مجدد شده است که یک Pod در API یا در پیکربندی محلی به‌صورت اجباری حذف شده بود؛ وضعیتی که غیرمعمول است.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubelet_pleg_discard_events</div>
+	<div class="metric_help">تعداد رویدادهای دورریخته‌شده در PLEG.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubelet_pleg_last_seen_seconds</div>
+	<div class="metric_help">مُهر زمانی بر حسب ثانیه از آخرین باری که PLEG فعال دیده شده است.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="gauge"><label class="metric_detail">نوع:</label> <span class="metric_type">Gauge</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubelet_pleg_pod_relist_duration_seconds</div>
+	<div class="metric_help">مدت زمان فهرست‌گیری مجدد یک Pod واحد در PLEG، بر حسب ثانیه.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubelet_pleg_relist_duration_seconds</div>
+	<div class="metric_help">مدت زمان فهرست‌گیری مجدد Podها در PLEG، بر حسب ثانیه.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubelet_pleg_relist_interval_seconds</div>
+	<div class="metric_help">فاصلهٔ زمانی بین فهرست‌گیری‌های مجدد در PLEG، بر حسب ثانیه.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubelet_pod_deferred_accepted_resizes_total</div>
+	<div class="metric_help">تعداد تجمعی تغییر اندازه‌هایی که پس از به تعویق افتادن پذیرفته شده‌اند.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">retry_trigger</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubelet_pod_deferred_resize_duration_seconds</div>
+	<div class="metric_help">مدت زمانی بر حسب ثانیه که تغییر اندازهٔ یک Pod پیش از تکمیل در حالت تعویق باقی می‌ماند. برچسب 'priority_bucket' اولویت Pod را دسته‌بندی می‌کند (system-critical: >=2000000000، high: 100000..1999999999، medium: 1..99999، normal: 0/default، low: -999..-1، very-low: <=-1000، unknown: nil pod). برچسب 'resolution' توضیح می‌دهد که تغییر اندازهٔ به‌تعویق‌افتاده چگونه حل شده است (accepted، reverted، terminated).</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">priority_bucket</span><span class="metric_label">resolution</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubelet_pod_in_progress_resizes</div>
+	<div class="metric_help">تعداد تغییر اندازه‌های در حال انجام برای Podها.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="gauge"><label class="metric_detail">نوع:</label> <span class="metric_type">Gauge</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubelet_pod_infeasible_resizes_total</div>
+	<div class="metric_help">تعداد تغییر اندازه‌های ناممکن برای Podها.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">reason_detail</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubelet_pod_level_resources_admission_total</div>
+	<div class="metric_help">تعداد کل Podهای پذیرفته‌شده در مرحلهٔ پذیرش Kubelet، دسته‌بندی‌شده بر اساس حالت پیکربندی منابع (pod_and_container_level، pod_level، container_level، یا خالی برای حالت پیکربندی‌نشده/BestEffort) و کلاس QoS.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">config_mode</span><span class="metric_label">qos_class</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubelet_pod_pending_resizes</div>
+	<div class="metric_help">تعداد تغییر اندازه‌های معلق برای Podها. برچسب 'priority_bucket' اولویت Pod را دسته‌بندی می‌کند (system-critical: >=2000000000، high: 100000..1999999999، medium: 1..99999، normal: 0/default، low: -999..-1، very-low: <=-1000، unknown: nil pod). برچسب 'reason' وضعیت را توصیف می‌کند (deferred، infeasible).</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="gauge"><label class="metric_detail">نوع:</label> <span class="metric_type">Gauge</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">priority_bucket</span><span class="metric_label">reason</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubelet_pod_requests_get_total</div>
+	<div class="metric_help">تعداد درخواست‌ها به endpoint مربوط به Get در PodsAPI، به تفکیک نسخهٔ API سرور و کد وضعیت.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">server_api_version</span><span class="metric_label">status_code</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubelet_pod_requests_list_total</div>
+	<div class="metric_help">تعداد درخواست‌ها به endpoint مربوط به List در PodsAPI، به تفکیک نسخهٔ API سرور و کد وضعیت.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">server_api_version</span><span class="metric_label">status_code</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubelet_pod_requests_total</div>
+	<div class="metric_help">تعداد تجمعی درخواست‌ها به endpoint ‏PodsAPI، به تفکیک نسخهٔ API سرور و کد وضعیت.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">server_api_version</span><span class="metric_label">status_code</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubelet_pod_requests_watch_total</div>
+	<div class="metric_help">تعداد درخواست‌ها به endpoint مربوط به Watch در PodsAPI، به تفکیک نسخهٔ API سرور و کد وضعیت.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">server_api_version</span><span class="metric_label">status_code</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubelet_pod_resize_duration_milliseconds</div>
+	<div class="metric_help">مدت زمان اعمال تغییر اندازهٔ یک Pod، بر حسب میلی‌ثانیه</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">success</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubelet_pod_resources_endpoint_errors_get</div>
+	<div class="metric_help">تعداد درخواست‌ها به endpoint مربوط به Get در PodResource که خطا برگردانده‌اند، به تفکیک نسخهٔ API سرور.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">server_api_version</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubelet_pod_resources_endpoint_errors_get_allocatable</div>
+	<div class="metric_help">تعداد درخواست‌ها به endpoint مربوط به GetAllocatableResources در PodResource که خطا برگردانده‌اند، به تفکیک نسخهٔ API سرور.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">server_api_version</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubelet_pod_resources_endpoint_errors_list</div>
+	<div class="metric_help">تعداد درخواست‌ها به endpoint مربوط به List در PodResource که خطا برگردانده‌اند، به تفکیک نسخهٔ API سرور.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">server_api_version</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubelet_pod_resources_endpoint_requests_get</div>
+	<div class="metric_help">تعداد درخواست‌ها به endpoint مربوط به Get در PodResource، به تفکیک نسخهٔ API سرور.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">server_api_version</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubelet_pod_resources_endpoint_requests_get_allocatable</div>
+	<div class="metric_help">تعداد درخواست‌ها به endpoint مربوط به GetAllocatableResources در PodResource، به تفکیک نسخهٔ API سرور.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">server_api_version</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubelet_pod_resources_endpoint_requests_list</div>
+	<div class="metric_help">تعداد درخواست‌ها به endpoint مربوط به List در PodResource، به تفکیک نسخهٔ API سرور.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">server_api_version</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubelet_pod_resources_endpoint_requests_total</div>
+	<div class="metric_help">تعداد تجمعی درخواست‌ها به endpoint ‏PodResource، به تفکیک نسخهٔ API سرور.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">server_api_version</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubelet_pod_start_duration_seconds</div>
+	<div class="metric_help">مدت زمان از اولین باری که kubelet یک Pod را می‌بیند تا آغاز اجرای آن، بر حسب ثانیه</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubelet_pod_start_sli_duration_seconds</div>
+	<div class="metric_help">مدت زمان شروع یک Pod بر حسب ثانیه، بدون احتساب زمان دریافت ایمیج‌ها و اجرای کانتینرهای init؛ این زمان از مُهر زمانی ایجاد Pod تا لحظه‌ای اندازه‌گیری می‌شود که همهٔ کانتینرهای آن به‌عنوان شروع‌شده گزارش و از طریق watch مشاهده شوند</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubelet_pod_start_total_duration_seconds</div>
+	<div class="metric_help">مدت زمان شروع یک Pod از زمان ایجاد بر حسب ثانیه، با احتساب زمان دریافت ایمیج‌ها و اجرای کانتینرهای init؛ این زمان از مُهر زمانی ایجاد Pod تا لحظه‌ای اندازه‌گیری می‌شود که همهٔ کانتینرهای آن به‌عنوان شروع‌شده گزارش و از طریق watch مشاهده شوند</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubelet_pod_status_sync_duration_seconds</div>
+	<div class="metric_help">مدت زمان همگام‌سازی یک به‌روزرسانی وضعیت Pod بر حسب ثانیه. این متریک زمان از تشخیص یک تغییر در وضعیت Pod تا به‌روزرسانی موفق API برای آن Pod را اندازه می‌گیرد، حتی اگر در این فاصله چندین تغییر دیگر در وضعیت Pod رخ دهد.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubelet_pod_watch_events_dropped_total</div>
+	<div class="metric_help">تعداد تجمعی رویدادهای watch مربوط به Pod که کنار گذاشته شده‌اند.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubelet_pod_worker_duration_seconds</div>
+	<div class="metric_help">مدت زمان همگام‌سازی یک Pod واحد بر حسب ثانیه، به تفکیک نوع عملیات: create، update یا sync</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">operation_type</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubelet_pod_worker_start_duration_seconds</div>
+	<div class="metric_help">مدت زمان از دیده شدن یک Pod توسط kubelet تا شروع یک worker، بر حسب ثانیه.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubelet_podcertificate_states</div>
+	<div class="metric_help">بردار سنجه‌ای که تعداد منابع حجم projected از نوع گواهی Pod را به تفکیک signer_name و state گزارش می‌کند.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="custom"><label class="metric_detail">نوع:</label> <span class="metric_type">Custom</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">signer_name</span><span class="metric_label">state</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubelet_preemptions</div>
+	<div class="metric_help">تعداد تجمعی پیش‌دستی‌ها (preemption) روی Podها به تفکیک منبع پیش‌دستی</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">preemption_signal</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubelet_resource_manager_allocation_errors_total</div>
+	<div class="metric_help">تعداد خطاهایی که در طول تخصیص انحصاری منابع رخ داده است.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">resource_name</span><span class="metric_label">source</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubelet_resource_manager_allocations_total</div>
+	<div class="metric_help">تعداد تخصیص‌های انحصاری منابع که یک مدیر منابع انجام داده است.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">resource_name</span><span class="metric_label">source</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubelet_resource_manager_container_assignments_total</div>
+	<div class="metric_help">تعداد کانتینرهایی که نوع مشخصی از تخصیص منبع دارند.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">assignment_type</span><span class="metric_label">resource_name</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubelet_restarted_pods_total</div>
+	<div class="metric_help">تعداد Podهایی که راه‌اندازی مجدد شده‌اند، زیرا در حالی که kubelet آن‌ها را زیر نظر داشت، حذف و با همان UID دوباره ایجاد شده‌اند (این وضعیت برای Podهای ایستا رایج و برای Podهای API بسیار نادر است)</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">static</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubelet_run_podsandbox_duration_seconds</div>
+	<div class="metric_help">مدت زمان عملیات run_podsandbox بر حسب ثانیه، به تفکیک RuntimeClass.Handler.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">runtime_handler</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubelet_run_podsandbox_errors_total</div>
+	<div class="metric_help">تعداد تجمعی خطاهای عملیات run_podsandbox به تفکیک RuntimeClass.Handler.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">runtime_handler</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubelet_running_containers</div>
+	<div class="metric_help">تعداد کانتینرهایی که در حال حاضر در حال اجرا هستند</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="gauge"><label class="metric_detail">نوع:</label> <span class="metric_type">Gauge</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">container_state</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubelet_running_pods</div>
+	<div class="metric_help">تعداد Podهایی که یک pod sandbox در حال اجرا دارند</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="gauge"><label class="metric_detail">نوع:</label> <span class="metric_type">Gauge</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubelet_runtime_operations_duration_seconds</div>
+	<div class="metric_help">مدت زمان عملیات محیط اجرا بر حسب ثانیه، به تفکیک نوع عملیات.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">operation_type</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubelet_runtime_operations_errors_total</div>
+	<div class="metric_help">تعداد تجمعی خطاهای عملیات محیط اجرا به تفکیک نوع عملیات.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">operation_type</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubelet_runtime_operations_total</div>
+	<div class="metric_help">تعداد تجمعی عملیات محیط اجرا به تفکیک نوع عملیات.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">operation_type</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubelet_server_expiration_renew_errors</div>
+	<div class="metric_help">شمارندهٔ خطاهای تمدید گواهی.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubelet_sleep_action_terminated_early_total</div>
+	<div class="metric_help">تعداد دفعاتی که handler خواب (sleep) چرخهٔ حیات پیش از پایان کارش خاتمه یافته است</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubelet_started_containers_errors_total</div>
+	<div class="metric_help">تعداد تجمعی خطاها هنگام شروع کانتینرها</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">code</span><span class="metric_label">container_type</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubelet_started_containers_total</div>
+	<div class="metric_help">تعداد تجمعی کانتینرهای شروع‌شده</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">container_type</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubelet_started_host_process_containers_errors_total</div>
+	<div class="metric_help">تعداد تجمعی خطاها هنگام شروع کانتینرهای hostprocess. این متریک فقط در ویندوز جمع‌آوری می‌شود.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">code</span><span class="metric_label">container_type</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubelet_started_host_process_containers_total</div>
+	<div class="metric_help">تعداد تجمعی کانتینرهای hostprocess شروع‌شده. این متریک فقط در ویندوز جمع‌آوری می‌شود.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">container_type</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubelet_started_pods_errors_total</div>
+	<div class="metric_help">تعداد تجمعی خطاها هنگام شروع Podها</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubelet_started_pods_total</div>
+	<div class="metric_help">تعداد تجمعی Podهای شروع‌شده</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubelet_started_user_namespaced_pods_errors_total</div>
+	<div class="metric_help">تعداد تجمعی خطاها هنگام شروع Podهای دارای فضای نام کاربری (user namespace). این متریک فقط در لینوکس جمع‌آوری می‌شود.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubelet_started_user_namespaced_pods_total</div>
+	<div class="metric_help">تعداد تجمعی Podهای دارای فضای نام کاربری که شروع شده‌اند. این متریک فقط در لینوکس جمع‌آوری می‌شود.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubelet_terminated_containers_total</div>
+	<div class="metric_help">تعداد تجمعی خاتمه‌های کانتینر.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">container_type</span><span class="metric_label">exit_code</span><span class="metric_label">reason</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubelet_topology_manager_admission_duration_ms</div>
+	<div class="metric_help">مدت زمان پاسخ‌گویی به یک درخواست پذیرش Pod، بر حسب میلی‌ثانیه.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubelet_topology_manager_admission_errors_total</div>
+	<div class="metric_help">تعداد شکست‌های درخواست پذیرش که در آن‌ها منابع هم‌تراز نشدند.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubelet_topology_manager_admission_requests_total</div>
+	<div class="metric_help">تعداد درخواست‌های پذیرش که در آن‌ها منابع باید هم‌تراز شوند.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubelet_volume_metric_collection_duration_seconds</div>
+	<div class="metric_help">مدت زمان محاسبهٔ آمار حجم، بر حسب ثانیه</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">metric_source</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubelet_volume_stats_available_bytes</div>
+	<div class="metric_help">تعداد بایت‌های در دسترس در حجم</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="custom"><label class="metric_detail">نوع:</label> <span class="metric_type">Custom</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">namespace</span><span class="metric_label">persistentvolumeclaim</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubelet_volume_stats_capacity_bytes</div>
+	<div class="metric_help">ظرفیت حجم بر حسب بایت</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="custom"><label class="metric_detail">نوع:</label> <span class="metric_type">Custom</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">namespace</span><span class="metric_label">persistentvolumeclaim</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubelet_volume_stats_inodes</div>
+	<div class="metric_help">بیشینهٔ تعداد inodeها در حجم</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="custom"><label class="metric_detail">نوع:</label> <span class="metric_type">Custom</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">namespace</span><span class="metric_label">persistentvolumeclaim</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubelet_volume_stats_inodes_free</div>
+	<div class="metric_help">تعداد inodeهای آزاد در حجم</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="custom"><label class="metric_detail">نوع:</label> <span class="metric_type">Custom</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">namespace</span><span class="metric_label">persistentvolumeclaim</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubelet_volume_stats_inodes_used</div>
+	<div class="metric_help">تعداد inodeهای استفاده‌شده در حجم</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="custom"><label class="metric_detail">نوع:</label> <span class="metric_type">Custom</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">namespace</span><span class="metric_label">persistentvolumeclaim</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubelet_volume_stats_used_bytes</div>
+	<div class="metric_help">تعداد بایت‌های استفاده‌شده در حجم</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="custom"><label class="metric_detail">نوع:</label> <span class="metric_type">Custom</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">namespace</span><span class="metric_label">persistentvolumeclaim</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubelet_websocket_streaming_requests_total</div>
+	<div class="metric_help">تعداد کل درخواست‌های جریانی WebSocket (exec/attach/portforward) که kubelet دریافت کرده است.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">subresource</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubelet_working_pods</div>
+	<div class="metric_help">تعداد Podهایی که kubelet واقعاً در حال اجرای آن‌هاست، به تفکیک فاز چرخهٔ حیات، اینکه Pod مطلوب، یتیم یا فقط در محیط اجرا (و در نتیجه یتیم) است، و اینکه Pod ایستاست یا نه. یک Pod یتیم از پیکربندی محلی حذف شده یا در API به‌صورت اجباری حذف شده است و منابعی مصرف می‌کند که از راه دیگری قابل مشاهده نیستند.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="gauge"><label class="metric_detail">نوع:</label> <span class="metric_type">Gauge</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">config</span><span class="metric_label">lifecycle</span><span class="metric_label">static</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubeproxy_conntrack_reconciler_deleted_entries_total</div>
+	<div class="metric_help">تعداد تجمعی جریان‌های conntrack که هماهنگ‌کنندهٔ conntrack حذف کرده است</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">ip_family</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-proxy (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubeproxy_conntrack_reconciler_sync_duration_seconds</div>
+	<div class="metric_help">تأخیر ReconcileConntrackFlowsLatency بر حسب ثانیه</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">ip_family</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-proxy (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubeproxy_iptables_ct_state_invalid_dropped_packets_total</div>
+	<div class="metric_help">بسته‌هایی که iptables برای دور زدن مشکلات conntrack کنار گذاشته است</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="custom"><label class="metric_detail">نوع:</label> <span class="metric_type">Custom</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-proxy (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubeproxy_iptables_localhost_nodeports_accepted_packets_total</div>
+	<div class="metric_help">تعداد بسته‌های پذیرفته‌شده روی nodeportهای رابط loopback</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="custom"><label class="metric_detail">نوع:</label> <span class="metric_type">Custom</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-proxy (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubeproxy_network_programming_duration_seconds</div>
+	<div class="metric_help">تأخیر برنامه‌ریزی شبکه درون کلاستر، بر حسب ثانیه</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">ip_family</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-proxy (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubeproxy_nftables_localhost_nodeport_listener_creation_failures_total</div>
+	<div class="metric_help">تعداد شکست‌ها در ایجاد شنوندهٔ پراکسی فضای کاربر برای NodePortهای localhost.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">ip_family</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-proxy (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubeproxy_nftables_localhost_nodeport_listeners</div>
+	<div class="metric_help">تعداد شنونده‌های فعال پراکسی فضای کاربر برای NodePortهای localhost.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="gauge"><label class="metric_detail">نوع:</label> <span class="metric_type">Gauge</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">ip_family</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-proxy (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubeproxy_nftables_localhost_nodeport_rejected_packets_total</div>
+	<div class="metric_help">تعداد بسته‌های ردشده روی NodePortهای localhost. بسته‌های UDP و SCTP همیشه رد می‌شوند؛ بسته‌های TCP زمانی رد می‌شوند که پراکسی NodePort مربوط به localhost در حال اجرا نباشد</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="custom"><label class="metric_detail">نوع:</label> <span class="metric_type">Custom</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">ip_family</span><span class="metric_label">protocol</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-proxy (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubeproxy_proxy_healthz_total</div>
+	<div class="metric_help">وضعیت تجمعی HTTP برای healthz پراکسی</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">code</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-proxy (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubeproxy_proxy_livez_total</div>
+	<div class="metric_help">وضعیت تجمعی HTTP برای livez پراکسی</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">code</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-proxy (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubeproxy_sync_full_proxy_rules_duration_seconds</div>
+	<div class="metric_help">تأخیر SyncProxyRules بر حسب ثانیه برای همگام‌سازی‌های مجدد کامل</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">ip_family</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-proxy (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubeproxy_sync_partial_proxy_rules_duration_seconds</div>
+	<div class="metric_help">تأخیر SyncProxyRules بر حسب ثانیه برای همگام‌سازی‌های مجدد جزئی</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">ip_family</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-proxy (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubeproxy_sync_proxy_rules_duration_seconds</div>
+	<div class="metric_help">تأخیر SyncProxyRules بر حسب ثانیه</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">ip_family</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-proxy (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubeproxy_sync_proxy_rules_endpoint_changes_pending</div>
+	<div class="metric_help">تغییرات معلق Endpoint در قواعد پراکسی</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="gauge"><label class="metric_detail">نوع:</label> <span class="metric_type">Gauge</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-proxy (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubeproxy_sync_proxy_rules_endpoint_changes_total</div>
+	<div class="metric_help">تغییرات تجمعی Endpoint در قواعد پراکسی</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-proxy (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubeproxy_sync_proxy_rules_iptables_last</div>
+	<div class="metric_help">تعداد قواعد iptables که kube-proxy در آخرین همگام‌سازی نوشته است</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="gauge"><label class="metric_detail">نوع:</label> <span class="metric_type">Gauge</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">ip_family</span><span class="metric_label">table</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-proxy (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubeproxy_sync_proxy_rules_iptables_partial_restore_failures_total</div>
+	<div class="metric_help">تعداد تجمعی شکست‌های بازیابی جزئی iptables در پراکسی</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">ip_family</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-proxy (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubeproxy_sync_proxy_rules_iptables_restore_failures_total</div>
+	<div class="metric_help">تعداد تجمعی شکست‌های بازیابی iptables در پراکسی</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">ip_family</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-proxy (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubeproxy_sync_proxy_rules_iptables_total</div>
+	<div class="metric_help">تعداد کل قواعد iptables که متعلق به kube-proxy هستند</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="gauge"><label class="metric_detail">نوع:</label> <span class="metric_type">Gauge</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">ip_family</span><span class="metric_label">table</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-proxy (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubeproxy_sync_proxy_rules_last_queued_timestamp_seconds</div>
+	<div class="metric_help">آخرین زمانی که یک همگام‌سازی قواعد پراکسی در صف قرار گرفته است</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="gauge"><label class="metric_detail">نوع:</label> <span class="metric_type">Gauge</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">ip_family</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-proxy (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubeproxy_sync_proxy_rules_last_timestamp_seconds</div>
+	<div class="metric_help">آخرین زمانی که قواعد پراکسی با موفقیت همگام‌سازی شده‌اند</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="gauge"><label class="metric_detail">نوع:</label> <span class="metric_type">Gauge</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">ip_family</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-proxy (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubeproxy_sync_proxy_rules_nftables_cleanup_failures_total</div>
+	<div class="metric_help">تعداد تجمعی شکست‌های پاک‌سازی nftables در پراکسی</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">ip_family</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-proxy (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubeproxy_sync_proxy_rules_nftables_sync_failures_total</div>
+	<div class="metric_help">تعداد تجمعی شکست‌های همگام‌سازی nftables در پراکسی</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">ip_family</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-proxy (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubeproxy_sync_proxy_rules_no_local_endpoints_total</div>
+	<div class="metric_help">تعداد سرویس‌هایی که سیاست ترافیک Local دارند و هیچ endpointی ندارند</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="gauge"><label class="metric_detail">نوع:</label> <span class="metric_type">Gauge</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">ip_family</span><span class="metric_label">traffic_policy</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-proxy (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubeproxy_sync_proxy_rules_service_changes_pending</div>
+	<div class="metric_help">تغییرات معلق Service در قواعد پراکسی</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="gauge"><label class="metric_detail">نوع:</label> <span class="metric_type">Gauge</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-proxy (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubeproxy_sync_proxy_rules_service_changes_total</div>
+	<div class="metric_help">تغییرات تجمعی Service در قواعد پراکسی</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-proxy (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubeproxy_sync_proxy_rules_winkernel_lb_create_failures_total</div>
+	<div class="metric_help">تعداد تجمعی شکست‌های ایجاد lb در winkernel پراکسی</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">error</span><span class="metric_label">ip_family</span><span class="metric_label">lb_type</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-proxy (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubeproxy_sync_proxy_rules_winkernel_lb_delete_failures_total</div>
+	<div class="metric_help">تعداد تجمعی شکست‌های حذف lb در winkernel پراکسی</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">error</span><span class="metric_label">ip_family</span><span class="metric_label">lb_type</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-proxy (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">kubeproxy_sync_proxy_rules_winkernel_lb_update_failures_total</div>
+	<div class="metric_help">تعداد تجمعی شکست‌های به‌روزرسانی lb در winkernel پراکسی</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">error</span><span class="metric_label">ip_family</span><span class="metric_label">lb_type</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-proxy (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">leader_election_master_status</div>
+	<div class="metric_help">سنجه‌ای که نشان می‌دهد آیا سیستم گزارش‌دهنده master در lease مربوط است یا نه؛ مقدار 0 به معنای پشتیبان و 1 به معنای master است. مقدار 'name' رشته‌ای است که برای شناسایی lease استفاده می‌شود. حتماً بر اساس name گروه‌بندی کنید.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="gauge"><label class="metric_detail">نوع:</label> <span class="metric_type">Gauge</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">name</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>cloud-controller-manager (/metrics)</li><li>kube-apiserver (/metrics)</li><li>kube-controller-manager (/metrics)</li><li>kube-proxy (/metrics)</li><li>kube-scheduler (/metrics)</li><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">leader_election_slowpath_total</div>
+	<div class="metric_help">تعداد کل دفعاتی که در تمدید leaseهای رهبر، مسیر کند (slow path) پیموده شده است. مقدار 'name' رشته‌ای است که برای شناسایی lease استفاده می‌شود. حتماً بر اساس name گروه‌بندی کنید.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">name</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>cloud-controller-manager (/metrics)</li><li>kube-apiserver (/metrics)</li><li>kube-controller-manager (/metrics)</li><li>kube-proxy (/metrics)</li><li>kube-scheduler (/metrics)</li><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">node_authorizer_graph_actions_duration_seconds</div>
+	<div class="metric_help">هیستوگرام مدت زمان کنش‌های گراف در مجوزدهندهٔ نود.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">operation</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-apiserver (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">node_collector_unhealthy_nodes_in_zone</div>
+	<div class="metric_help">سنجه‌ای که تعداد نودهای غیر Ready را در هر ناحیه (zone) اندازه می‌گیرد.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="gauge"><label class="metric_detail">نوع:</label> <span class="metric_type">Gauge</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">zone</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-controller-manager (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">node_collector_update_all_nodes_health_duration_seconds</div>
+	<div class="metric_help">مدت زمانی بر حسب ثانیه که NodeController برای به‌روزرسانی سلامت همهٔ نودها صرف می‌کند.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-controller-manager (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">node_collector_update_node_health_duration_seconds</div>
+	<div class="metric_help">مدت زمانی بر حسب ثانیه که NodeController برای به‌روزرسانی سلامت یک نود واحد صرف می‌کند.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-controller-manager (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">node_collector_zone_health</div>
+	<div class="metric_help">سنجه‌ای که درصد نودهای سالم را در هر ناحیه اندازه می‌گیرد.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="gauge"><label class="metric_detail">نوع:</label> <span class="metric_type">Gauge</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">zone</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-controller-manager (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">node_collector_zone_size</div>
+	<div class="metric_help">سنجه‌ای که تعداد نودهای ثبت‌شده را در هر ناحیه اندازه می‌گیرد.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="gauge"><label class="metric_detail">نوع:</label> <span class="metric_type">Gauge</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">zone</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-controller-manager (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">node_controller_cloud_provider_taint_removal_delay_seconds</div>
+	<div class="metric_help">تعداد ثانیه‌های سپری‌شده پس از ایجاد نود تا زمانی که NodeController ‏taint مربوط به cloud-provider را از یک نود حذف کرده است.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>cloud-controller-manager (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">node_controller_initial_node_sync_delay_seconds</div>
+	<div class="metric_help">تعداد ثانیه‌های سپری‌شده پس از ایجاد نود تا زمانی که NodeController همگام‌سازی اولیهٔ یک نود را به پایان رسانده است.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>cloud-controller-manager (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">node_ipam_controller_cidrset_allocation_tries_per_request</div>
+	<div class="metric_help">تعداد endpointهای اضافه‌شده در هر همگام‌سازی Service</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">clusterCIDR</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-controller-manager (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">node_ipam_controller_cidrset_cidrs_allocations_total</div>
+	<div class="metric_help">شمارنده‌ای که تعداد کل تخصیص‌های CIDR را اندازه می‌گیرد.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">clusterCIDR</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-controller-manager (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">node_ipam_controller_cidrset_cidrs_releases_total</div>
+	<div class="metric_help">شمارنده‌ای که تعداد کل آزادسازی‌های CIDR را اندازه می‌گیرد.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">clusterCIDR</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-controller-manager (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">node_ipam_controller_cidrset_usage_cidrs</div>
+	<div class="metric_help">سنجه‌ای که درصد CIDRهای تخصیص‌یافته را اندازه می‌گیرد.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="gauge"><label class="metric_detail">نوع:</label> <span class="metric_type">Gauge</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">clusterCIDR</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-controller-manager (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">node_ipam_controller_cirdset_max_cidrs</div>
+	<div class="metric_help">بیشینهٔ تعداد CIDRهایی که می‌توان تخصیص داد.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="gauge"><label class="metric_detail">نوع:</label> <span class="metric_type">Gauge</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">clusterCIDR</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-controller-manager (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">node_swap_usage_bytes</div>
+	<div class="metric_help">میزان فعلی استفادهٔ نود از swap بر حسب بایت. فقط در سیستم‌های غیر ویندوزی گزارش می‌شود</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="custom"><label class="metric_detail">نوع:</label> <span class="metric_type">Custom</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics/resource)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">plugin_manager_total_plugins</div>
+	<div class="metric_help">تعداد افزونه‌ها در Plugin Manager</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="custom"><label class="metric_detail">نوع:</label> <span class="metric_type">Custom</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">socket_path</span><span class="metric_label">state</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">pod_gc_collector_force_delete_pod_errors_total</div>
+	<div class="metric_help">تعداد خطاهایی که از زمان شروع به کار Pod GC Controller هنگام حذف اجباری Podها رخ داده است.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">namespace</span><span class="metric_label">reason</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-controller-manager (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">pod_gc_collector_force_delete_pods_total</div>
+	<div class="metric_help">تعداد Podهایی که از زمان شروع به کار Pod GC Controller به‌صورت اجباری حذف می‌شوند.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">namespace</span><span class="metric_label">reason</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-controller-manager (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">pod_security_errors_total</div>
+	<div class="metric_help">تعداد خطاهایی که مانع ارزیابی عادی می‌شوند. خطاهای غیرمهلک ممکن است باعث شوند جدیدترین پروفایل restricted برای ارزیابی به کار رود.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">fatal</span><span class="metric_label">request_operation</span><span class="metric_label">resource</span><span class="metric_label">subresource</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-apiserver (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">pod_security_evaluations_total</div>
+	<div class="metric_help">تعداد ارزیابی‌های سیاست انجام‌شده، بدون احتساب درخواست‌های نادیده‌گرفته‌شده یا معاف.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">decision</span><span class="metric_label">mode</span><span class="metric_label">policy_level</span><span class="metric_label">policy_version</span><span class="metric_label">request_operation</span><span class="metric_label">resource</span><span class="metric_label">subresource</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-apiserver (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">pod_security_exemptions_total</div>
+	<div class="metric_help">تعداد درخواست‌های معاف، بدون احتساب درخواست‌های نادیده‌گرفته‌شده یا خارج از دامنه.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">request_operation</span><span class="metric_label">resource</span><span class="metric_label">subresource</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-apiserver (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">pod_swap_usage_bytes</div>
+	<div class="metric_help">مقدار فعلی استفادهٔ Pod از swap بر حسب بایت. فقط در سیستم‌های غیر ویندوزی گزارش می‌شود</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="custom"><label class="metric_detail">نوع:</label> <span class="metric_type">Custom</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">pod</span><span class="metric_label">namespace</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics/resource)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">prober_probe_duration_seconds</div>
+	<div class="metric_help">مدت زمان پاسخ یک probe، بر حسب ثانیه.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">container</span><span class="metric_label">namespace</span><span class="metric_label">pod</span><span class="metric_label">probe_type</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics/probes)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">pv_collector_bound_pv_count</div>
+	<div class="metric_help">سنجه‌ای که تعداد حجم‌های پایدار (persistent volume) متصل‌شدهٔ فعلی را اندازه می‌گیرد</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="custom"><label class="metric_detail">نوع:</label> <span class="metric_type">Custom</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">storage_class</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-controller-manager (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">pv_collector_bound_pvc_count</div>
+	<div class="metric_help">سنجه‌ای که تعداد درخواست‌های حجم پایدار (persistent volume claim) متصل‌شدهٔ فعلی را اندازه می‌گیرد</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="custom"><label class="metric_detail">نوع:</label> <span class="metric_type">Custom</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">namespace</span><span class="metric_label">storage_class</span><span class="metric_label">volume_attributes_class</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-controller-manager (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">pv_collector_total_pv_count</div>
+	<div class="metric_help">سنجه‌ای که تعداد کل حجم‌های پایدار را اندازه می‌گیرد</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="custom"><label class="metric_detail">نوع:</label> <span class="metric_type">Custom</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">plugin_name</span><span class="metric_label">volume_mode</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-controller-manager (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">pv_collector_unbound_pv_count</div>
+	<div class="metric_help">سنجه‌ای که تعداد حجم‌های پایدار نامتصل فعلی را اندازه می‌گیرد</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="custom"><label class="metric_detail">نوع:</label> <span class="metric_type">Custom</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">storage_class</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-controller-manager (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">pv_collector_unbound_pvc_count</div>
+	<div class="metric_help">سنجه‌ای که تعداد درخواست‌های حجم پایدار نامتصل فعلی را اندازه می‌گیرد</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="custom"><label class="metric_detail">نوع:</label> <span class="metric_type">Custom</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">namespace</span><span class="metric_label">storage_class</span><span class="metric_label">volume_attributes_class</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-controller-manager (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">reconstruct_volume_operations_errors_total</div>
+	<div class="metric_help">تعداد حجم‌هایی که بازسازی آن‌ها از سیستم‌عامل در هنگام راه‌اندازی kubelet شکست خورده است.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">reconstruct_volume_operations_total</div>
+	<div class="metric_help">تعداد حجم‌هایی که در هنگام راه‌اندازی kubelet برای بازسازی آن‌ها از سیستم‌عامل تلاش شده است. این مقدار هم بازسازی‌های موفق و هم ناموفق را در بر می‌گیرد.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">replicaset_controller_sorting_deletion_age_ratio</div>
+	<div class="metric_help">نسبت عمر Podهای انتخاب‌شده برای حذف به عمر جوان‌ترین Pod فعلی (در آن لحظه). این مقدار باید کمتر از 2 باشد. هدف این متریک اندازه‌گیری تقریبی کارایی مرتب‌سازی (و حذف) Podها هنگام کاهش مقیاس یک replicaset است. در محاسبه و گزارش، فقط Podهای Ready در نظر گرفته می‌شوند.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-controller-manager (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">replicaset_controller_stale_sync_skips_total</div>
+	<div class="metric_help">تعداد کل همگام‌سازی‌های ReplicaSet که به دلیل کهنه بودن watch cache نادیده گرفته شده‌اند.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">group</span><span class="metric_label">resource</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-controller-manager (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">resourcepoolstatusrequest_controller_request_processing_duration_seconds</div>
+	<div class="metric_help">زمان صرف‌شده برای پردازش یک ResourcePoolStatusRequest</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">driver_name</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-controller-manager (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">resourcepoolstatusrequest_controller_request_processing_errors_total</div>
+	<div class="metric_help">تعداد کل خطاهایی که هنگام پردازش ResourcePoolStatusRequestها رخ داده است</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">driver_name</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-controller-manager (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">resourcepoolstatusrequest_controller_requests_processed_total</div>
+	<div class="metric_help">تعداد کل ResourcePoolStatusRequestهای پردازش‌شده</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">driver_name</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-controller-manager (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">rest_client_dns_resolution_duration_seconds</div>
+	<div class="metric_help">تأخیر تفکیک‌کنندهٔ DNS بر حسب ثانیه، به تفکیک میزبان.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">host</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>cloud-controller-manager (/metrics)</li><li>kube-apiserver (/metrics)</li><li>kube-controller-manager (/metrics)</li><li>kube-proxy (/metrics)</li><li>kube-scheduler (/metrics)</li><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">rest_client_exec_plugin_call_total</div>
+	<div class="metric_help">تعداد فراخوانی‌های یک افزونهٔ exec، به تفکیک نوع رویداد رخ‌داده (no_error، plugin_execution_error، plugin_not_found_error، client_internal_error) و یک کد خروج اختیاری. کد خروج فقط و فقط زمانی 0 خواهد بود که فراخوانی افزونه موفق باشد.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">call_status</span><span class="metric_label">code</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>cloud-controller-manager (/metrics)</li><li>kube-apiserver (/metrics)</li><li>kube-controller-manager (/metrics)</li><li>kube-proxy (/metrics)</li><li>kube-scheduler (/metrics)</li><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">rest_client_exec_plugin_certificate_rotation_age</div>
+	<div class="metric_help">هیستوگرام تعداد ثانیه‌هایی که آخرین گواهی کلاینتِ افزونهٔ exec احراز هویت پیش از چرخش معتبر بوده است. اگر از گواهی‌های کلاینتِ افزونهٔ exec احراز هویت استفاده نشود، هیستوگرام هیچ داده‌ای نخواهد داشت.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>cloud-controller-manager (/metrics)</li><li>kube-apiserver (/metrics)</li><li>kube-controller-manager (/metrics)</li><li>kube-proxy (/metrics)</li><li>kube-scheduler (/metrics)</li><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">rest_client_exec_plugin_policy_call_total</div>
+	<div class="metric_help">تعداد مقایسه‌های یک افزونهٔ exec با سیاست افزونه و فهرست مجاز (در صورت وجود)، به تفکیک اینکه سیاست به افزونه اجازه می‌دهد یا نه</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">allowed</span><span class="metric_label">denied</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>cloud-controller-manager (/metrics)</li><li>kube-apiserver (/metrics)</li><li>kube-controller-manager (/metrics)</li><li>kube-proxy (/metrics)</li><li>kube-scheduler (/metrics)</li><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">rest_client_exec_plugin_ttl_seconds</div>
+	<div class="metric_help">سنجهٔ کوتاه‌ترین TTL (طول عمر) گواهی یا گواهی‌های کلاینت که افزونهٔ exec احراز هویت مدیریت می‌کند. مقدار آن تعداد ثانیه‌های باقی‌مانده تا انقضای گواهی است (اگر گواهی پیش‌تر منقضی شده باشد، منفی است). اگر از افزونه‌های exec احراز هویت استفاده نشود یا هیچ گواهی TLS را مدیریت نکنند، مقدار ‎+INF خواهد بود.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="gauge"><label class="metric_detail">نوع:</label> <span class="metric_type">Gauge</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>cloud-controller-manager (/metrics)</li><li>kube-apiserver (/metrics)</li><li>kube-controller-manager (/metrics)</li><li>kube-proxy (/metrics)</li><li>kube-scheduler (/metrics)</li><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">rest_client_rate_limiter_duration_seconds</div>
+	<div class="metric_help">تأخیر محدودکنندهٔ نرخ سمت کلاینت بر حسب ثانیه، به تفکیک فعل و میزبان.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">host</span><span class="metric_label">verb</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>cloud-controller-manager (/metrics)</li><li>kube-apiserver (/metrics)</li><li>kube-controller-manager (/metrics)</li><li>kube-proxy (/metrics)</li><li>kube-scheduler (/metrics)</li><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">rest_client_request_duration_seconds</div>
+	<div class="metric_help">تأخیر درخواست بر حسب ثانیه، به تفکیک فعل و میزبان.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">host</span><span class="metric_label">verb</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>cloud-controller-manager (/metrics)</li><li>kube-apiserver (/metrics)</li><li>kube-controller-manager (/metrics)</li><li>kube-proxy (/metrics)</li><li>kube-scheduler (/metrics)</li><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">rest_client_request_retries_total</div>
+	<div class="metric_help">تعداد تلاش‌های مجدد درخواست، به تفکیک کد وضعیت، فعل و میزبان.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">code</span><span class="metric_label">host</span><span class="metric_label">verb</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>cloud-controller-manager (/metrics)</li><li>kube-apiserver (/metrics)</li><li>kube-controller-manager (/metrics)</li><li>kube-proxy (/metrics)</li><li>kube-scheduler (/metrics)</li><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">rest_client_request_size_bytes</div>
+	<div class="metric_help">اندازهٔ درخواست بر حسب بایت، به تفکیک فعل و میزبان.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">host</span><span class="metric_label">verb</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>cloud-controller-manager (/metrics)</li><li>kube-apiserver (/metrics)</li><li>kube-controller-manager (/metrics)</li><li>kube-proxy (/metrics)</li><li>kube-scheduler (/metrics)</li><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">rest_client_requests_total</div>
+	<div class="metric_help">تعداد درخواست‌های HTTP، به تفکیک کد وضعیت، متد و میزبان.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">code</span><span class="metric_label">host</span><span class="metric_label">method</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>cloud-controller-manager (/metrics)</li><li>kube-apiserver (/metrics)</li><li>kube-controller-manager (/metrics)</li><li>kube-proxy (/metrics)</li><li>kube-scheduler (/metrics)</li><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">rest_client_response_size_bytes</div>
+	<div class="metric_help">اندازهٔ پاسخ بر حسب بایت، به تفکیک فعل و میزبان.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">host</span><span class="metric_label">verb</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>cloud-controller-manager (/metrics)</li><li>kube-apiserver (/metrics)</li><li>kube-controller-manager (/metrics)</li><li>kube-proxy (/metrics)</li><li>kube-scheduler (/metrics)</li><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">rest_client_transport_ca_reload_total</div>
+	<div class="metric_help">تعداد دفعاتی که برای بارگذاری مجدد CA تلاش شده است، به تفکیک نتیجه و علت تلاش برای بارگذاری مجدد</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">reason</span><span class="metric_label">result</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>cloud-controller-manager (/metrics)</li><li>kube-apiserver (/metrics)</li><li>kube-controller-manager (/metrics)</li><li>kube-proxy (/metrics)</li><li>kube-scheduler (/metrics)</li><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">rest_client_transport_cache_entries</div>
+	<div class="metric_help">تعداد ورودی‌های transport در حافظهٔ نهان داخلی.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="gauge"><label class="metric_detail">نوع:</label> <span class="metric_type">Gauge</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>cloud-controller-manager (/metrics)</li><li>kube-apiserver (/metrics)</li><li>kube-controller-manager (/metrics)</li><li>kube-proxy (/metrics)</li><li>kube-scheduler (/metrics)</li><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">rest_client_transport_cache_gc_calls_total</div>
+	<div class="metric_help">تعداد دفعاتی که پاک‌سازی GC تلاش می‌کند یک ورودی حافظهٔ نهان transport را حذف کند، به تفکیک نتیجه: deleted، skipped</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">result</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>cloud-controller-manager (/metrics)</li><li>kube-apiserver (/metrics)</li><li>kube-controller-manager (/metrics)</li><li>kube-proxy (/metrics)</li><li>kube-scheduler (/metrics)</li><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">rest_client_transport_cert_rotation_gc_calls_total</div>
+	<div class="metric_help">تعداد دفعاتی که تابع لغو goroutine چرخش گواهی از طریق پاک‌سازی GC مربوط به transport وابسته فراخوانی می‌شود</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>cloud-controller-manager (/metrics)</li><li>kube-apiserver (/metrics)</li><li>kube-controller-manager (/metrics)</li><li>kube-proxy (/metrics)</li><li>kube-scheduler (/metrics)</li><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">rest_client_transport_create_calls_total</div>
+	<div class="metric_help">تعداد فراخوانی‌ها برای دریافت یک transport جدید، به تفکیک نتیجهٔ عملیات؛ hit: از حافظهٔ نهان به دست آمده، miss: ایجاد و به حافظهٔ نهان اضافه شده، miss-gc: پس از جمع‌آوری زباله دوباره ایجاد و به حافظهٔ نهان بازگردانده شده، uncacheable: ایجاد شده و در حافظهٔ نهان ذخیره نشده</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">result</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>cloud-controller-manager (/metrics)</li><li>kube-apiserver (/metrics)</li><li>kube-controller-manager (/metrics)</li><li>kube-proxy (/metrics)</li><li>kube-scheduler (/metrics)</li><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">retroactive_storageclass_errors_total</div>
+	<div class="metric_help">تعداد کل تخصیص‌های ناموفقِ عطف به ماسبقِ StorageClass به درخواست‌های حجم پایدار</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-controller-manager (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">retroactive_storageclass_total</div>
+	<div class="metric_help">تعداد کل تخصیص‌های عطف به ماسبقِ StorageClass به درخواست‌های حجم پایدار</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-controller-manager (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">root_ca_cert_publisher_sync_duration_seconds</div>
+	<div class="metric_help">تعداد همگام‌سازی‌های فضای نام که در ناشر گواهی root CA انجام شده است.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">code</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-controller-manager (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">root_ca_cert_publisher_sync_total</div>
+	<div class="metric_help">تعداد همگام‌سازی‌های فضای نام که در ناشر گواهی root CA انجام شده است.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">code</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-controller-manager (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">route_controller_route_sync_total</div>
+	<div class="metric_help">متریکی که تعداد هماهنگ‌سازی‌های مسیر با ارائه‌دهندهٔ ابری را می‌شمارد، با برچسب عامل محرک (periodic یا node_change) و نتیجه (error اگر هماهنگ‌سازی شکست خورده باشد، changed اگر دست‌کم یک مسیر ایجاد یا حذف شده باشد، و در غیر این صورت noop).</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">outcome</span><span class="metric_label">trigger</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>cloud-controller-manager (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">scheduler_async_api_call_execution_duration_seconds</div>
+	<div class="metric_help">مدت زمان اجرای فراخوانی API در توزیع‌کنندهٔ ناهمگام، بر حسب ثانیه.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">call_type</span><span class="metric_label">result</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-scheduler (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">scheduler_async_api_call_execution_total</div>
+	<div class="metric_help">تعداد کل فراخوانی‌های API که توزیع‌کنندهٔ ناهمگام اجرا کرده است.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">call_type</span><span class="metric_label">result</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-scheduler (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">scheduler_batch_attempts_total</div>
+	<div class="metric_help">شمار نتایج تلاش برای استفاده از پردازش دسته‌ای (batching).</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">profile</span><span class="metric_label">result</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-scheduler (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">scheduler_batch_cache_flushed_total</div>
+	<div class="metric_help">شمار تخلیه‌های حافظهٔ نهان به تفکیک علت.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">profile</span><span class="metric_label">reason</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-scheduler (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">scheduler_batch_rescore_attempts_total</div>
+	<div class="metric_help">شمار تلاش‌های امتیازدهی مجدد در طول پردازش دسته‌ای فرصت‌طلبانه.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">profile</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-scheduler (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">scheduler_batch_rescore_duration_seconds</div>
+	<div class="metric_help">تأخیر امتیازدهی مجدد یک نود در طول پردازش دسته‌ای فرصت‌طلبانه.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">profile</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-scheduler (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">scheduler_cache_size</div>
+	<div class="metric_help">تعداد نودها، Podها و Podهای فرض‌شده (متصل‌شده) در حافظهٔ نهان زمان‌بند.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="gauge"><label class="metric_detail">نوع:</label> <span class="metric_type">Gauge</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">type</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-scheduler (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">scheduler_dra_bindingconditions_allocations_total</div>
+	<div class="metric_help">تعداد تخصیص‌هایی که از دستگاه‌های دارای BindingConditions استفاده می‌کنند، شمرده‌شده به ازای هر درایور در هر تلاش زمان‌بندی</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">driver</span><span class="metric_label">profile</span><span class="metric_label">status</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-scheduler (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">scheduler_dra_bindingconditions_wait_duration_seconds</div>
+	<div class="metric_help">زمان صرف‌شده بر حسب ثانیه برای انتظار تا برآورده شدن BindingConditions در مرحلهٔ PreBind.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">driver</span><span class="metric_label">profile</span><span class="metric_label">status</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-scheduler (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">scheduler_event_handling_duration_seconds</div>
+	<div class="metric_help">تأخیر رسیدگی به رویداد، بر حسب ثانیه.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">event</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-scheduler (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">scheduler_generated_placements_total</div>
+	<div class="metric_help">تعداد جای‌گذاری‌های نامزد تولیدشده هنگام زمان‌بندی گروه‌های Pod.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">profile</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-scheduler (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">scheduler_get_node_hint_duration_seconds</div>
+	<div class="metric_help">تأخیر دریافت یک راهنمای نود (node hint).</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">hinted</span><span class="metric_label">profile</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-scheduler (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">scheduler_inflight_events</div>
+	<div class="metric_help">تعداد رویدادهایی که در حال حاضر در صف زمان‌بندی ردیابی می‌شوند.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="gauge"><label class="metric_detail">نوع:</label> <span class="metric_type">Gauge</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">event</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-scheduler (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">scheduler_pending_async_api_calls</div>
+	<div class="metric_help">تعداد فراخوانی‌های API که در حال حاضر در صف ناهمگام معلق هستند.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="gauge"><label class="metric_detail">نوع:</label> <span class="metric_type">Gauge</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">call_type</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-scheduler (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">scheduler_placement_evaluation_duration_seconds</div>
+	<div class="metric_help">تأخیر ارزیابی یک جای‌گذاری نامزد واحد هنگام زمان‌بندی گروه‌های Pod بر حسب ثانیه، به تفکیک نتیجه. مقدار 'feasible' یعنی گروه Pod در آن جای‌گذاری جا شده و 'infeasible' یعنی جا نشده است.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">profile</span><span class="metric_label">result</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-scheduler (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">scheduler_placement_evaluations_total</div>
+	<div class="metric_help">تعداد جای‌گذاری‌های نامزد ارزیابی‌شده هنگام زمان‌بندی گروه‌های Pod، به تفکیک نتیجه. مقدار 'feasible' یعنی گروه Pod در آن جای‌گذاری جا شده و 'infeasible' یعنی جا نشده است.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">profile</span><span class="metric_label">result</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-scheduler (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">scheduler_pod_scheduled_after_flush_total</div>
+	<div class="metric_help">تعداد Podهایی که پس از خارج شدن از unschedulableEntities به دلیل پایان مهلت، با موفقیت زمان‌بندی شده‌اند. این متریک به تشخیص پیکربندی نادرست احتمالی queueing hint یا مشکلات رسیدگی به رویدادها کمک می‌کند.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-scheduler (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">scheduler_podgroup_schedule_attempts_total</div>
+	<div class="metric_help">تعداد تلاش‌ها برای زمان‌بندی گروه Pod، به تفکیک نتیجه. مقدار 'unschedulable' یعنی گروه Pod زمان‌بندی‌پذیر نبوده است، در حالی که 'error' به معنای وجود مشکلی داخلی در زمان‌بند است.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">profile</span><span class="metric_label">result</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-scheduler (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">scheduler_podgroup_scheduling_algorithm_duration_seconds</div>
+	<div class="metric_help">تأخیر الگوریتم زمان‌بندی گروه Pod، بر حسب ثانیه</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-scheduler (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">scheduler_podgroup_scheduling_attempt_duration_seconds</div>
+	<div class="metric_help">تأخیر تلاش برای زمان‌بندی گروه Pod، بر حسب ثانیه</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">profile</span><span class="metric_label">result</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-scheduler (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">scheduler_pre_queueing_hint_evaluations_total</div>
+	<div class="metric_help">تعداد ارزیابی‌های PreQueueingHint، با برچسب افزونه و نتیجه (all_pods یا narrowed).</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">plugin</span><span class="metric_label">result</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-scheduler (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">scheduler_preemption_evaluation_duration_seconds</div>
+	<div class="metric_help">مدت زمان شناسایی قربانیان هدفِ پیش‌دستی، بر حسب ثانیه.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">preemptor</span><span class="metric_label">result</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-scheduler (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">scheduler_preemption_execution_duration_seconds</div>
+	<div class="metric_help">مدت زمان اجرای پیش‌دستی روی قربانیان هدف، بر حسب ثانیه. با فعال بودن پیش‌دستی ناهمگام، اجرای پیش‌دستی مانع زمان‌بندی سایر Podها نمی‌شود.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">preemptor</span><span class="metric_label">result</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-scheduler (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">scheduler_preemption_goroutines_duration_seconds</div>
+	<div class="metric_help">مدت زمان اجرای goroutineهای پیش‌دستی، بر حسب ثانیه.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">result</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-scheduler (/metrics)</li></ul></li><li class="metric_deprecated_version"><label class="metric_detail">نسخه‌های منسوخ‌شده:</label><span>1.37.0</span></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">scheduler_preemption_goroutines_execution_total</div>
+	<div class="metric_help">تعداد goroutineهای پیش‌دستی اجراشده.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">result</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-scheduler (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">scheduler_preemption_pdb_violations_total</div>
+	<div class="metric_help">تعداد کل نقض‌های pod disruption budget که پیش‌دستی باعث آن‌ها شده است.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">preemptor</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-scheduler (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">scheduler_preemption_workload_disruptions</div>
+	<div class="metric_help">تعداد واحدهای پیش‌دستی بار کاری که مورد پیش‌دستی قرار می‌گیرند. یک واحد پیش‌دستی می‌تواند همهٔ Podهای یک گروه Pod (در حالت DisruptionMode=all) یا یک Pod واحد (در حالت DisruptionMode=single) باشد.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">preemptor</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-scheduler (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">scheduler_queue_incoming_entities_total</div>
+	<div class="metric_help">تعداد موجودیت‌های زمان‌بندی اضافه‌شده به صف‌های زمان‌بندی، به تفکیک رویداد، نوع صف و نوع موجودیت. نوع موجودیت یا 'pod' است (برای Podهای منفردی که عضو هیچ podgroupی نیستند) یا 'podgroup'.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">event</span><span class="metric_label">queue</span><span class="metric_label">type</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-scheduler (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">scheduler_queued_entities</div>
+	<div class="metric_help">تعداد موجودیت‌های زمان‌بندی در صف ('pod' یا 'podgroup'؛ 'pod' به Podهای منفردی اشاره دارد که عضو هیچ podgroupی نیستند)، به تفکیک نوع صف. مقدار 'active' یعنی تعداد موجودیت‌ها در activeQ؛ 'backoff' یعنی تعداد موجودیت‌ها در backoffQ؛ 'unschedulable' یعنی تعداد موجودیت‌هایی در unschedulableEntities که زمان‌بند برای زمان‌بندی آن‌ها تلاش کرده و شکست خورده است؛ و 'gated' تعداد موجودیت‌های زمان‌بندی‌ناپذیری است که زمان‌بند هرگز برای زمان‌بندی آن‌ها تلاش نکرده است، زیرا gated هستند.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="gauge"><label class="metric_detail">نوع:</label> <span class="metric_type">Gauge</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">queue</span><span class="metric_label">type</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-scheduler (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">scheduler_queueing_hint_execution_duration_seconds</div>
+	<div class="metric_help">مدت زمان اجرای تابع queueing hint یک افزونه.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">event</span><span class="metric_label">hint</span><span class="metric_label">plugin</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-scheduler (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">scheduler_store_schedule_results_duration_seconds</div>
+	<div class="metric_help">تأخیر ذخیرهٔ نتایج زمان‌بندی.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">profile</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-scheduler (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">scheduler_volume_binder_cache_requests_total</div>
+	<div class="metric_help">تعداد کل درخواست‌ها به حافظهٔ نهان اتصال حجم</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">operation</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-scheduler (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">scheduler_volume_scheduling_stage_error_total</div>
+	<div class="metric_help">تعداد خطاهای مرحلهٔ زمان‌بندی حجم</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">operation</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-scheduler (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">scheduler_workload_preemption_attempts_total</div>
+	<div class="metric_help">مجموع تلاش‌های پیش‌دستی که بارهای کاری (از جمله گروه‌های Pod) تاکنون در کلاستر آغاز کرده‌اند.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">result</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-scheduler (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">scheduler_workload_preemption_victims</div>
+	<div class="metric_help">تعداد Podهای قربانی پیش‌دستی که پیش‌دستی بار کاری باعث آن شده است.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-scheduler (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">scrape_error</div>
+	<div class="metric_help">اگر هنگام دریافت متریک‌های کانتینر خطایی رخ داده باشد 1، و در غیر این صورت 0</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="custom"><label class="metric_detail">نوع:</label> <span class="metric_type">Custom</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics/resource)</li></ul></li><li class="metric_deprecated_version"><label class="metric_detail">نسخه‌های منسوخ‌شده:</label><span>1.29.0</span></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">selinux_warning_controller_selinux_volume_conflict</div>
+	<div class="metric_help">تعارض بین دو Pod که از یک حجم یکسان استفاده می‌کنند</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="custom"><label class="metric_detail">نوع:</label> <span class="metric_type">Custom</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">property</span><span class="metric_label">pod1_namespace</span><span class="metric_label">pod1_name</span><span class="metric_label">pod1_value</span><span class="metric_label">pod2_namespace</span><span class="metric_label">pod2_name</span><span class="metric_label">pod2_value</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-controller-manager (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">service_controller_loadbalancer_sync_total</div>
+	<div class="metric_help">متریکی که تعداد دفعاتی را می‌شمارد که هر load balancer در نتیجهٔ تغییرات service/نود در کلاستر پیکربندی شده است</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>cloud-controller-manager (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">service_controller_nodesync_error_total</div>
+	<div class="metric_help">متریکی که تعداد دفعاتی را می‌شمارد که هر load balancer در نتیجهٔ تغییرات نود در کلاستر پیکربندی شده و با خطا مواجه شده است</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>cloud-controller-manager (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">service_controller_nodesync_latency_seconds</div>
+	<div class="metric_help">متریکی که تأخیر nodesync را اندازه می‌گیرد؛ nodesync هنگام به‌روزرسانی نودهای کلاستر، میزبان‌های load balancer را به‌روز می‌کند.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>cloud-controller-manager (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">service_controller_update_loadbalancer_host_latency_seconds</div>
+	<div class="metric_help">متریکی که تأخیر به‌روزرسانی میزبان‌های هر load balancer را اندازه می‌گیرد.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>cloud-controller-manager (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">serviceaccount_invalid_legacy_auto_token_uses_total</div>
+	<div class="metric_help">تعداد تجمعی استفاده از توکن‌های قدیمیِ نامعتبرِ خودکار تولیدشده</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-apiserver (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">serviceaccount_legacy_auto_token_uses_total</div>
+	<div class="metric_help">تعداد تجمعی استفاده از توکن‌های قدیمیِ خودکار تولیدشده</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-apiserver (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">serviceaccount_legacy_manual_token_uses_total</div>
+	<div class="metric_help">تعداد تجمعی استفاده از توکن‌های قدیمیِ دستی ایجادشده</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-apiserver (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">statefulset_controller_stale_sync_skips_total</div>
+	<div class="metric_help">تعداد کل همگام‌سازی‌های StatefulSet که به دلیل کهنه بودن watch cache نادیده گرفته شده‌اند.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">group</span><span class="metric_label">resource</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-controller-manager (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">statefulset_controller_statefulset_max_unavailable</div>
+	<div class="metric_help">بیشینهٔ تعداد Podهای غیرقابل‌دسترس مجاز در طول به‌روزرسانی‌های تدریجی (rolling update) در StatefulSet</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="gauge"><label class="metric_detail">نوع:</label> <span class="metric_type">Gauge</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">pod_management_policy</span><span class="metric_label">statefulset_name</span><span class="metric_label">statefulset_namespace</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-controller-manager (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">statefulset_controller_statefulset_unavailable_replicas</div>
+	<div class="metric_help">تعداد فعلی Podهای غیرقابل‌دسترس در StatefulSet</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="gauge"><label class="metric_detail">نوع:</label> <span class="metric_type">Gauge</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">pod_management_policy</span><span class="metric_label">statefulset_name</span><span class="metric_label">statefulset_namespace</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-controller-manager (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">storage_count_attachable_volumes_in_use</div>
+	<div class="metric_help">تعداد حجم‌های در حال استفاده را اندازه می‌گیرد</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="custom"><label class="metric_detail">نوع:</label> <span class="metric_type">Custom</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">node</span><span class="metric_label">volume_plugin</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-controller-manager (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">taint_eviction_controller_pod_deletion_duration_seconds</div>
+	<div class="metric_help">تأخیر، بر حسب ثانیه، بین زمان فعال شدن اثر یک taint برای Pod و حذف آن از طریق TaintEvictionController.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-controller-manager (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">taint_eviction_controller_pod_deletions_total</div>
+	<div class="metric_help">تعداد کل Podهایی که TaintEvictionController از زمان شروع به کار حذف کرده است.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-controller-manager (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">ttl_after_finished_controller_job_deletion_duration_seconds</div>
+	<div class="metric_help">زمانی که حذف job از لحظهٔ واجد شرایط شدن برای حذف طول کشیده است</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="histogram"><label class="metric_detail">نوع:</label> <span class="metric_type">Histogram</span></li>
+	<li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-controller-manager (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">version_info</div>
+	<div class="metric_help">اطلاعات نسخهٔ سازگاری مؤلفه را ارائه می‌کند. برچسب component نام مؤلفه است که معمولاً kube است، اما برای aggregated-apiserverها اهمیت دارد.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="gauge"><label class="metric_detail">نوع:</label> <span class="metric_type">Gauge</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">binary</span><span class="metric_label">component</span><span class="metric_label">emulation</span><span class="metric_label">min_compat</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>cloud-controller-manager (/metrics)</li><li>kube-apiserver (/metrics)</li><li>kube-controller-manager (/metrics)</li><li>kube-proxy (/metrics)</li><li>kube-scheduler (/metrics)</li><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">volume_manager_selinux_container_errors_total</div>
+	<div class="metric_help">تعداد خطاهایی که kubelet نمی‌تواند زمینهٔ SELinux را برای یک کانتینر محاسبه کند. در این حالت Kubelet نمی‌تواند چنین Podی را شروع کند و دوباره تلاش خواهد کرد؛ بنابراین مقدار این متریک ممکن است نشان‌دهندهٔ تعداد واقعی کانتینرها نباشد.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="gauge"><label class="metric_detail">نوع:</label> <span class="metric_type">Gauge</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">access_mode</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">volume_manager_selinux_container_warnings_total</div>
+	<div class="metric_help">تعداد خطاهای نادیده‌گرفته‌شده‌ای که در آن‌ها kubelet نمی‌تواند زمینهٔ SELinux را برای یک کانتینر محاسبه کند. این موارد زمانی به خطای واقعی تبدیل می‌شوند که قابلیت SELinuxMountReadWriteOncePod به همهٔ حالت‌های دسترسی حجم گسترش یابد.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="gauge"><label class="metric_detail">نوع:</label> <span class="metric_type">Gauge</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">access_mode</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">volume_manager_selinux_pod_context_mismatch_errors_total</div>
+	<div class="metric_help">تعداد خطاهایی که در آن‌ها یک Pod برای کانتینرهایش که از یک حجم یکسان استفاده می‌کنند، زمینه‌های SELinux متفاوتی تعریف می‌کند. در این حالت Kubelet نمی‌تواند چنین Podی را شروع کند و دوباره تلاش خواهد کرد؛ بنابراین مقدار این متریک ممکن است نشان‌دهندهٔ تعداد واقعی Podها نباشد.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="gauge"><label class="metric_detail">نوع:</label> <span class="metric_type">Gauge</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">access_mode</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">volume_manager_selinux_pod_context_mismatch_warnings_total</div>
+	<div class="metric_help">تعداد خطاهایی که در آن‌ها یک Pod برای کانتینرهایش که از یک حجم یکسان استفاده می‌کنند، زمینه‌های SELinux متفاوتی تعریف می‌کند. این موارد هنوز خطا نیستند، اما زمانی به خطای واقعی تبدیل می‌شوند که قابلیت SELinuxMountReadWriteOncePod به همهٔ حالت‌های دسترسی حجم گسترش یابد.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="gauge"><label class="metric_detail">نوع:</label> <span class="metric_type">Gauge</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">access_mode</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">volume_manager_selinux_volume_context_mismatch_errors_total</div>
+	<div class="metric_help">تعداد خطاهایی که در آن‌ها یک Pod از حجمی استفاده می‌کند که پیش‌تر با زمینهٔ SELinux متفاوتی از آنچه Pod نیاز دارد mount شده است. در این حالت Kubelet نمی‌تواند چنین Podی را شروع کند و دوباره تلاش خواهد کرد؛ بنابراین مقدار این متریک ممکن است نشان‌دهندهٔ تعداد واقعی Podها نباشد.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="gauge"><label class="metric_detail">نوع:</label> <span class="metric_type">Gauge</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">access_mode</span><span class="metric_label">volume_plugin</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">volume_manager_selinux_volume_context_mismatch_warnings_total</div>
+	<div class="metric_help">تعداد خطاهایی که در آن‌ها یک Pod از حجمی استفاده می‌کند که پیش‌تر با زمینهٔ SELinux متفاوتی از آنچه Pod نیاز دارد mount شده است. این موارد هنوز خطا نیستند، اما زمانی به خطای واقعی تبدیل می‌شوند که قابلیت SELinuxMountReadWriteOncePod به همهٔ حالت‌های دسترسی حجم گسترش یابد.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="gauge"><label class="metric_detail">نوع:</label> <span class="metric_type">Gauge</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">access_mode</span><span class="metric_label">volume_plugin</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">volume_manager_selinux_volumes_admitted_total</div>
+	<div class="metric_help">تعداد حجم‌هایی که زمینهٔ SELinux آن‌ها مناسب بوده است و با گزینهٔ mount -o context، mount خواهند شد.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="gauge"><label class="metric_detail">نوع:</label> <span class="metric_type">Gauge</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">access_mode</span><span class="metric_label">volume_plugin</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">volume_manager_total_volumes</div>
+	<div class="metric_help">تعداد حجم‌ها در Volume Manager</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="custom"><label class="metric_detail">نوع:</label> <span class="metric_type">Custom</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">plugin_name</span><span class="metric_label">state</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kubelet (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">volume_operation_errors_total</div>
+	<div class="metric_help">مجموع خطاهای عملیات حجم</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">operation_name</span><span class="metric_label">plugin_name</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-controller-manager (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">volume_operation_total_errors</div>
+	<div class="metric_help">مجموع خطاهای عملیات حجم</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">operation_name</span><span class="metric_label">plugin_name</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-controller-manager (/metrics)</li></ul></li><li class="metric_deprecated_version"><label class="metric_detail">نسخه‌های منسوخ‌شده:</label><span>1.36.0</span></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">watch_cache_capacity</div>
+	<div class="metric_help">ظرفیت کل watch cache، به تفکیک نوع منبع.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="gauge"><label class="metric_detail">نوع:</label> <span class="metric_type">Gauge</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">group</span><span class="metric_label">resource</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-apiserver (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">watch_cache_capacity_decrease_total</div>
+	<div class="metric_help">تعداد کل رویدادهای کاهش ظرفیت watch cache، به تفکیک نوع منبع.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">group</span><span class="metric_label">resource</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-apiserver (/metrics)</li></ul></li></ul>
+	</div><div class="metric" data-stability="alpha">
+	<div class="metric_name">watch_cache_capacity_increase_total</div>
+	<div class="metric_help">تعداد کل رویدادهای افزایش ظرفیت watch cache، به تفکیک نوع منبع.</div>
+	<ul>
+	<li><label class="metric_detail">سطح پایداری:</label><span class="metric_stability_level">ALPHA</span></li>
+	<li data-type="counter"><label class="metric_detail">نوع:</label> <span class="metric_type">Counter</span></li>
+	<li class="metric_labels_varying"><label class="metric_detail">برچسب‌ها:</label><span class="metric_label">group</span><span class="metric_label">resource</span></li><li class="metric_component_endpoints"><label class="metric_detail">مؤلفه‌ها:</label><ul><li>kube-apiserver (/metrics)</li></ul></li></ul>
+	</div>
+</div>

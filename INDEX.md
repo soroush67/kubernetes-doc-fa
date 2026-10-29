@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-1058 از 1722 صفحه
+1073 از 1722 صفحه
 
 
 ## `.`
@@ -1101,7 +1101,7 @@
 
 - ✅ [_index.md](md/reference/instrumentation/_index.md)
 - ✅ [cri-pod-container-metrics.md](md/reference/instrumentation/cri-pod-container-metrics.md)
-- ⏳ `metrics.md`
+- ⚠️ [metrics.md](md/reference/instrumentation/metrics.md)
 - ✅ [native-histograms.md](md/reference/instrumentation/native-histograms.md)
 - ✅ [node-metrics.md](md/reference/instrumentation/node-metrics.md)
 - ✅ [slis.md](md/reference/instrumentation/slis.md)
@@ -1339,35 +1339,35 @@
 
 ## `reference/kubectl/generated/kubectl_scale`
 
-- ⏳ `_index.md`
+- ✅ [_index.md](md/reference/kubectl/generated/kubectl_scale/_index.md)
 
 ## `reference/kubectl/generated/kubectl_set`
 
-- ⏳ `_index.md`
-- ⏳ `kubectl_set_env.md`
-- ⏳ `kubectl_set_image.md`
-- ⏳ `kubectl_set_resources.md`
-- ⏳ `kubectl_set_selector.md`
-- ⏳ `kubectl_set_serviceaccount.md`
-- ⏳ `kubectl_set_subject.md`
+- ✅ [_index.md](md/reference/kubectl/generated/kubectl_set/_index.md)
+- ✅ [kubectl_set_env.md](md/reference/kubectl/generated/kubectl_set/kubectl_set_env.md)
+- ✅ [kubectl_set_image.md](md/reference/kubectl/generated/kubectl_set/kubectl_set_image.md)
+- ✅ [kubectl_set_resources.md](md/reference/kubectl/generated/kubectl_set/kubectl_set_resources.md)
+- ✅ [kubectl_set_selector.md](md/reference/kubectl/generated/kubectl_set/kubectl_set_selector.md)
+- ✅ [kubectl_set_serviceaccount.md](md/reference/kubectl/generated/kubectl_set/kubectl_set_serviceaccount.md)
+- ✅ [kubectl_set_subject.md](md/reference/kubectl/generated/kubectl_set/kubectl_set_subject.md)
 
 ## `reference/kubectl/generated/kubectl_taint`
 
-- ⏳ `_index.md`
+- ✅ [_index.md](md/reference/kubectl/generated/kubectl_taint/_index.md)
 
 ## `reference/kubectl/generated/kubectl_top`
 
-- ⏳ `_index.md`
-- ⏳ `kubectl_top_node.md`
-- ⏳ `kubectl_top_pod.md`
+- ✅ [_index.md](md/reference/kubectl/generated/kubectl_top/_index.md)
+- ✅ [kubectl_top_node.md](md/reference/kubectl/generated/kubectl_top/kubectl_top_node.md)
+- ✅ [kubectl_top_pod.md](md/reference/kubectl/generated/kubectl_top/kubectl_top_pod.md)
 
 ## `reference/kubectl/generated/kubectl_uncordon`
 
-- ⏳ `_index.md`
+- ✅ [_index.md](md/reference/kubectl/generated/kubectl_uncordon/_index.md)
 
 ## `reference/kubectl/generated/kubectl_version`
 
-- ⏳ `_index.md`
+- ✅ [_index.md](md/reference/kubectl/generated/kubectl_version/_index.md)
 
 ## `reference/kubectl/generated/kubectl_wait`
 
