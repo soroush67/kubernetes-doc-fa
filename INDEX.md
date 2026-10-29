@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-1043 از 1722 صفحه
+1058 از 1722 صفحه
 
 
 ## `.`
@@ -1300,42 +1300,42 @@
 
 ## `reference/kubectl/generated/kubectl_options`
 
-- ⏳ `_index.md`
+- ✅ [_index.md](md/reference/kubectl/generated/kubectl_options/_index.md)
 
 ## `reference/kubectl/generated/kubectl_patch`
 
-- ⏳ `_index.md`
+- ✅ [_index.md](md/reference/kubectl/generated/kubectl_patch/_index.md)
 
 ## `reference/kubectl/generated/kubectl_plugin`
 
-- ⏳ `_index.md`
-- ⏳ `kubectl_plugin_list.md`
+- ✅ [_index.md](md/reference/kubectl/generated/kubectl_plugin/_index.md)
+- ✅ [kubectl_plugin_list.md](md/reference/kubectl/generated/kubectl_plugin/kubectl_plugin_list.md)
 
 ## `reference/kubectl/generated/kubectl_port-forward`
 
-- ⏳ `_index.md`
+- ✅ [_index.md](md/reference/kubectl/generated/kubectl_port-forward/_index.md)
 
 ## `reference/kubectl/generated/kubectl_proxy`
 
-- ⏳ `_index.md`
+- ✅ [_index.md](md/reference/kubectl/generated/kubectl_proxy/_index.md)
 
 ## `reference/kubectl/generated/kubectl_replace`
 
-- ⏳ `_index.md`
+- ✅ [_index.md](md/reference/kubectl/generated/kubectl_replace/_index.md)
 
 ## `reference/kubectl/generated/kubectl_rollout`
 
-- ⏳ `_index.md`
-- ⏳ `kubectl_rollout_history.md`
-- ⏳ `kubectl_rollout_pause.md`
-- ⏳ `kubectl_rollout_restart.md`
-- ⏳ `kubectl_rollout_resume.md`
-- ⏳ `kubectl_rollout_status.md`
-- ⏳ `kubectl_rollout_undo.md`
+- ✅ [_index.md](md/reference/kubectl/generated/kubectl_rollout/_index.md)
+- ✅ [kubectl_rollout_history.md](md/reference/kubectl/generated/kubectl_rollout/kubectl_rollout_history.md)
+- ✅ [kubectl_rollout_pause.md](md/reference/kubectl/generated/kubectl_rollout/kubectl_rollout_pause.md)
+- ✅ [kubectl_rollout_restart.md](md/reference/kubectl/generated/kubectl_rollout/kubectl_rollout_restart.md)
+- ✅ [kubectl_rollout_resume.md](md/reference/kubectl/generated/kubectl_rollout/kubectl_rollout_resume.md)
+- ✅ [kubectl_rollout_status.md](md/reference/kubectl/generated/kubectl_rollout/kubectl_rollout_status.md)
+- ✅ [kubectl_rollout_undo.md](md/reference/kubectl/generated/kubectl_rollout/kubectl_rollout_undo.md)
 
 ## `reference/kubectl/generated/kubectl_run`
 
-- ⏳ `_index.md`
+- ⚠️ [_index.md](md/reference/kubectl/generated/kubectl_run/_index.md)
 
 ## `reference/kubectl/generated/kubectl_scale`
 

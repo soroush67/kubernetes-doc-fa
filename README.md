@@ -8,9 +8,9 @@
 
 | | |
 |---|---|
-| پیشرفت (بر اساس کلمات) | **34.2٪** |
-| صفحات ترجمه‌شده | 1043 از 1722 |
-| صفحات دارای ایراد ساختاری | 30 |
+| پیشرفت (بر اساس کلمات) | **35.4٪** |
+| صفحات ترجمه‌شده | 1058 از 1722 |
+| صفحات دارای ایراد ساختاری | 31 |
 | نسخه‌ی منبع انگلیسی | `ed70e311737a` |
 
 ## مشاهده
@@ -72,7 +72,7 @@ cd kubernetes-doc-fa
 | `contribute` | 44 | 44 |
 | `doc-contributor-tools` | 1 | 1 |
 | `home` | 2 | 2 |
-| `reference` | 808 | 1198 |
+| `reference` | 823 | 1198 |
 | `setup` | 0 | 22 |
 | `tasks` | 0 | 221 |
 | `tutorials` | 0 | 45 |
@@ -93,26 +93,26 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [reference/kubectl/generated/kubectl_run/_index.md](md/reference/kubectl/generated/kubectl_run/_index.md) — 2026-10-29T13:35:49+03:30
+- [reference/kubectl/generated/kubectl_rollout/kubectl_rollout_undo.md](md/reference/kubectl/generated/kubectl_rollout/kubectl_rollout_undo.md) — 2026-10-29T13:32:46+03:30
+- [reference/kubectl/generated/kubectl_rollout/kubectl_rollout_status.md](md/reference/kubectl/generated/kubectl_rollout/kubectl_rollout_status.md) — 2026-10-29T13:31:01+03:30
+- [reference/kubectl/generated/kubectl_rollout/kubectl_rollout_resume.md](md/reference/kubectl/generated/kubectl_rollout/kubectl_rollout_resume.md) — 2026-10-29T13:30:13+03:30
+- [reference/kubectl/generated/kubectl_rollout/kubectl_rollout_restart.md](md/reference/kubectl/generated/kubectl_rollout/kubectl_rollout_restart.md) — 2026-10-29T13:28:32+03:30
+- [reference/kubectl/generated/kubectl_rollout/kubectl_rollout_pause.md](md/reference/kubectl/generated/kubectl_rollout/kubectl_rollout_pause.md) — 2026-10-29T13:26:52+03:30
+- [reference/kubectl/generated/kubectl_rollout/kubectl_rollout_history.md](md/reference/kubectl/generated/kubectl_rollout/kubectl_rollout_history.md) — 2026-10-29T13:25:10+03:30
+- [reference/kubectl/generated/kubectl_rollout/_index.md](md/reference/kubectl/generated/kubectl_rollout/_index.md) — 2026-10-29T13:23:29+03:30
+- [reference/kubectl/generated/kubectl_replace/_index.md](md/reference/kubectl/generated/kubectl_replace/_index.md) — 2026-10-29T09:21:22+03:30
+- [reference/kubectl/generated/kubectl_proxy/_index.md](md/reference/kubectl/generated/kubectl_proxy/_index.md) — 2026-10-29T09:20:13+03:30
+- [reference/kubectl/generated/kubectl_port-forward/_index.md](md/reference/kubectl/generated/kubectl_port-forward/_index.md) — 2026-10-29T09:18:20+03:30
+- [reference/kubectl/generated/kubectl_plugin/kubectl_plugin_list.md](md/reference/kubectl/generated/kubectl_plugin/kubectl_plugin_list.md) — 2026-10-29T09:16:41+03:30
+- [reference/kubectl/generated/kubectl_plugin/_index.md](md/reference/kubectl/generated/kubectl_plugin/_index.md) — 2026-10-29T09:15:18+03:30
+- [reference/kubectl/generated/kubectl_patch/_index.md](md/reference/kubectl/generated/kubectl_patch/_index.md) — 2026-10-29T09:13:52+03:30
+- [reference/kubectl/generated/kubectl_options/_index.md](md/reference/kubectl/generated/kubectl_options/_index.md) — 2026-10-29T09:11:56+03:30
 - [reference/kubectl/generated/kubectl_logs/_index.md](md/reference/kubectl/generated/kubectl_logs/_index.md) — 2026-10-29T09:10:33+03:30
 - [reference/kubectl/generated/kubectl_label/_index.md](md/reference/kubectl/generated/kubectl_label/_index.md) — 2026-10-29T09:09:04+03:30
 - [reference/kubectl/generated/kubectl_kustomize/_index.md](md/reference/kubectl/generated/kubectl_kustomize/_index.md) — 2026-10-29T09:08:01+03:30
 - [reference/kubectl/generated/kubectl_kuberc/kubectl_kuberc_view.md](md/reference/kubectl/generated/kubectl_kuberc/kubectl_kuberc_view.md) — 2026-10-29T09:05:26+03:30
 - [reference/kubectl/generated/kubectl_kuberc/kubectl_kuberc_set.md](md/reference/kubectl/generated/kubectl_kuberc/kubectl_kuberc_set.md) — 2026-10-29T09:03:10+03:30
-- [reference/kubectl/generated/kubectl_kuberc/_index.md](md/reference/kubectl/generated/kubectl_kuberc/_index.md) — 2026-10-29T09:02:20+03:30
-- [reference/kubectl/generated/kubectl_get/_index.md](md/reference/kubectl/generated/kubectl_get/_index.md) — 2026-10-29T09:00:58+03:30
-- [reference/kubectl/generated/kubectl_expose/_index.md](md/reference/kubectl/generated/kubectl_expose/_index.md) — 2026-10-29T08:58:30+03:30
-- [reference/kubectl/generated/kubectl_explain/_index.md](md/reference/kubectl/generated/kubectl_explain/_index.md) — 2026-10-29T08:55:41+03:30
-- [reference/kubectl/generated/kubectl_exec/_index.md](md/reference/kubectl/generated/kubectl_exec/_index.md) — 2026-10-29T08:54:08+03:30
-- [reference/kubectl/generated/kubectl_events/_index.md](md/reference/kubectl/generated/kubectl_events/_index.md) — 2026-10-29T08:51:37+03:30
-- [reference/kubectl/generated/kubectl_edit/_index.md](md/reference/kubectl/generated/kubectl_edit/_index.md) — 2026-10-29T08:49:52+03:30
-- [reference/kubectl/generated/kubectl_drain/_index.md](md/reference/kubectl/generated/kubectl_drain/_index.md) — 2026-10-29T08:48:50+03:30
-- [reference/kubectl/generated/kubectl_diff/_index.md](md/reference/kubectl/generated/kubectl_diff/_index.md) — 2026-10-29T08:46:48+03:30
-- [reference/kubectl/generated/kubectl_describe/_index.md](md/reference/kubectl/generated/kubectl_describe/_index.md) — 2026-10-29T08:45:51+03:30
-- [reference/kubectl/generated/kubectl_delete/_index.md](md/reference/kubectl/generated/kubectl_delete/_index.md) — 2026-10-29T08:44:50+03:30
-- [reference/kubectl/generated/kubectl_debug/_index.md](md/reference/kubectl/generated/kubectl_debug/_index.md) — 2026-10-29T08:42:41+03:30
-- [reference/kubectl/generated/kubectl_create/kubectl_create_token.md](md/reference/kubectl/generated/kubectl_create/kubectl_create_token.md) — 2026-10-29T08:41:32+03:30
-- [reference/kubectl/generated/kubectl_create/kubectl_create_serviceaccount.md](md/reference/kubectl/generated/kubectl_create/kubectl_create_serviceaccount.md) — 2026-10-29T08:40:36+03:30
-- [reference/kubectl/generated/kubectl_create/kubectl_create_service_nodeport.md](md/reference/kubectl/generated/kubectl_create/kubectl_create_service_nodeport.md) — 2026-10-29T08:38:51+03:30
 
 </div>
 
@@ -150,6 +150,7 @@ cd kubernetes-doc-fa
 - [reference/kubectl/generated/kubectl_config/kubectl_config_set-credentials.md](md/reference/kubectl/generated/kubectl_config/kubectl_config_set-credentials.md): chunk 1: short: 1121 words vs 1593 source words
 - [reference/kubectl/generated/kubectl_expose/_index.md](md/reference/kubectl/generated/kubectl_expose/_index.md): chunk 2: short: 849 words vs 1205 source words
 - [reference/kubectl/generated/kubectl_get/_index.md](md/reference/kubectl/generated/kubectl_get/_index.md): chunk 2: short: 860 words vs 1205 source words
+- [reference/kubectl/generated/kubectl_run/_index.md](md/reference/kubectl/generated/kubectl_run/_index.md): chunk 2: short: 862 words vs 1205 source words
 
 </div>
 

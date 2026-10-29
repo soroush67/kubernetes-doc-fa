@@ -1,0 +1,573 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>kubectl run | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
+<header class="top"><a href="../../../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">reference / kubectl / generated / kubectl_run</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="ltr" class="ltr">kubectl run</h1><p class="page-meta" dir="rtl">اجرای یک ایمیج مشخص در کلاستر</p><!--
+The file is auto-generated from the Go source code of the component using a generic
+[generator](https://github.com/kubernetes-sigs/reference-docs/). To learn how
+to generate the reference documentation, please read
+[Contributing to the reference documentation](/docs/contribute/generate-ref-docs/).
+To update the reference content, please follow the
+[Contributing upstream](/docs/contribute/generate-ref-docs/contribute-upstream/)
+guide. You can file document formatting bugs against the
+[reference-docs](https://github.com/kubernetes-sigs/reference-docs/) project.
+-->
+<h2 id="خلاصه" dir="rtl">خلاصه</h2>
+<p dir="rtl">این فرمان یک ایمیج مشخص را در یک پاد ایجاد و اجرا می‌کند.</p>
+<pre dir="ltr"><code dir="ltr">kubectl run NAME --image=image [--env="key=value"] [--port=port] [--dry-run=server|client] [--overrides=inline-json] [--command] -- [COMMAND] [args...]
+</code></pre>
+<h2 id="مثال-ها" dir="rtl">مثال‌ها</h2>
+<pre dir="ltr"><code dir="ltr">  # Start a nginx pod
+  kubectl run nginx --image=nginx
+  
+  # Start a hazelcast pod and let the container expose port 5701
+  kubectl run hazelcast --image=hazelcast/hazelcast --port=5701
+  
+  # Start a hazelcast pod and set environment variables "DNS_DOMAIN=cluster" and "POD_NAMESPACE=default" in the container
+  kubectl run hazelcast --image=hazelcast/hazelcast --env="DNS_DOMAIN=cluster" --env="POD_NAMESPACE=default"
+  
+  # Start a hazelcast pod and set labels "app=hazelcast" and "env=prod" in the container
+  kubectl run hazelcast --image=hazelcast/hazelcast --labels="app=hazelcast,env=prod"
+  
+  # Dry run; print the corresponding API objects without creating them
+  kubectl run nginx --image=nginx --dry-run=client
+  
+  # Start a nginx pod, but overload the spec with a partial set of values parsed from JSON
+  kubectl run nginx --image=nginx --overrides='{ "apiVersion": "v1", "spec": { ... } }'
+  
+  # Start a busybox pod and keep it in the foreground, don't restart it if it exits
+  kubectl run -i -t busybox --image=busybox --restart=Never
+  
+  # Start the nginx pod using the default command, but use custom arguments (arg1 .. argN) for that command
+  kubectl run nginx --image=nginx -- &lt;arg1&gt; &lt;arg2&gt; ... &lt;argN&gt;
+  
+  # Start the nginx pod using a different command and custom arguments
+  kubectl run nginx --image=nginx --command -- &lt;cmd&gt; &lt;arg1&gt; ... &lt;argN&gt;
+</code></pre>
+<h2 id="گزینه-ها" dir="rtl">گزینه‌ها</h2>
+   <table style="width: 100%; table-layout: fixed;">
+<colgroup>
+<col span="1" style="width: 10px;">
+<col span="1">
+</colgroup>
+<tbody>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--allow-missing-template-keys     Default: true</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">اگر true باشد، هنگامی که یک فیلد یا کلید map در قالب وجود نداشته باشد، از هرگونه خطا در قالب‌ها چشم‌پوشی می‌شود. این گزینه فقط برای قالب‌های خروجی golang و jsonpath کاربرد دارد.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--annotations strings</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">حاشیه‌نویسی‌هایی (annotation) که روی پاد اعمال می‌شوند.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--attach</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">اگر true باشد، منتظر می‌ماند تا اجرای پاد آغاز شود و سپس، مانند زمانی که 'kubectl attach ...' فراخوانی شده باشد، به پاد متصل می‌شود. مقدار پیش‌فرض false است، مگر اینکه '-i/--stdin' تنظیم شده باشد که در این صورت مقدار پیش‌فرض true خواهد بود. با '--restart=Never'، کد خروج فرایند کانتینر بازگردانده می‌شود.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--cascade string[="background"]     Default: "background"</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مقدار باید یکی از "background"، "orphan" یا "foreground" باشد. این گزینه راهبرد حذف آبشاری (cascading) را برای وابسته‌ها (برای مثال، پادهایی که یک ReplicationController ایجاد کرده است) تعیین می‌کند. مقدار پیش‌فرض background است.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--command</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">اگر true باشد و آرگومان‌های اضافی وجود داشته باشند، از آن‌ها به‌عنوان فیلد 'command' در کانتینر استفاده می‌شود، نه فیلد 'args' که حالت پیش‌فرض است.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--detach-keys string     Default: "ctrl-p,ctrl-q"</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">توالی کلیدهای جداشدن از کانتینر را بازنویسی می‌کند.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--dry-run string[="unchanged"]     Default: "none"</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مقدار باید یکی از "none"، "server" یا "client" باشد. در راهبرد client، فقط آبجکتی که قرار است ارسال شود چاپ می‌شود، بی‌آنکه واقعاً ارسال شود. در راهبرد server، درخواست به سمت سرور فرستاده می‌شود، بدون اینکه منبع به‌طور ماندگار ذخیره شود.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--env strings</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">متغیرهای محیطی که در کانتینر تنظیم می‌شوند.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--expose --port</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">اگر true باشد، یک Service از نوع ClusterIP مرتبط با پاد ایجاد می‌شود. این گزینه به --port نیاز دارد.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--field-manager string     Default: "kubectl-run"</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نام مدیری (manager) که برای ردیابی مالکیت فیلدها استفاده می‌شود.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--force</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">اگر true باشد، منابع بی‌درنگ از API حذف می‌شوند و حذف تدریجی (graceful deletion) نادیده گرفته می‌شود. توجه کنید که حذف فوری برخی منابع ممکن است به ناسازگاری یا از دست رفتن داده‌ها منجر شود و به تأیید نیاز دارد.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--grace-period int     Default: -1</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مدت زمانی بر حسب ثانیه که به منبع داده می‌شود تا به‌صورت تدریجی خاتمه یابد. اگر مقدار منفی باشد، نادیده گرفته می‌شود. برای خاموش‌شدن فوری، آن را روی 1 تنظیم کنید. فقط زمانی می‌توان آن را روی 0 تنظیم کرد که --force برابر true باشد (حذف اجباری).</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">-h, --help</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">راهنمای run</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--image string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">ایمیجی که کانتینر باید اجرا کند.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--image-pull-policy string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">سیاست دریافت (pull) ایمیج برای کانتینر. اگر خالی بماند، کلاینت این مقدار را مشخص نمی‌کند و سرور مقدار پیش‌فرض را برای آن تعیین می‌کند.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">-k, --kustomize string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">یک دایرکتوری kustomization را پردازش می‌کند. این فلگ را نمی‌توان همراه با -f یا -R استفاده کرد.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">-l, --labels string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">برچسب‌هایی که با کاما از هم جدا شده‌اند و روی پاد اعمال می‌شوند. این برچسب‌ها مقادیر قبلی را بازنویسی می‌کنند.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--leave-stdin-open</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">اگر پاد در حالت تعاملی یا با stdin آغاز شده باشد، پس از پایان نخستین اتصال (attach)، stdin باز می‌ماند. به‌طور پیش‌فرض، stdin پس از پایان نخستین اتصال بسته می‌شود.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">-o, --output string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">قالب خروجی. یکی از این موارد: (json, yaml, kyaml, name, go-template, go-template-file, template, templatefile, jsonpath, jsonpath-as-json, jsonpath-file).</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--override-type string     Default: "merge"</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">روشی که برای بازنویسی آبجکت تولیدشده به کار می‌رود: json، merge یا strategic.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--overrides string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">یک بازنویسی JSON درون‌خطی برای آبجکت تولیدشده. اگر این مقدار خالی نباشد، از آن برای بازنویسی آبجکت تولیدشده استفاده می‌شود. لازم است آبجکت یک فیلد apiVersion معتبر داشته باشد.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--pod-running-timeout duration     Default: 1m0s</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مدت زمانی (مانند 5s، 2m یا 3h و بزرگ‌تر از صفر) که باید منتظر ماند تا دست‌کم یک پاد در حال اجرا باشد</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--port string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">پورتی که این کانتینر در دسترس قرار می‌دهد.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--privileged</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">اگر true باشد، کانتینر در حالت ممتاز (privileged) اجرا می‌شود.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">-q, --quiet</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">اگر true باشد، پیام‌های اعلان (prompt) نمایش داده نمی‌شوند.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">-R, --recursive</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">دایرکتوری مشخص‌شده در -f, --filename را به‌صورت بازگشتی پردازش می‌کند. این گزینه زمانی مفید است که بخواهید مانیفست‌های مرتبطی را که در یک دایرکتوری سازمان‌دهی شده‌اند مدیریت کنید.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--restart string     Default: "Always"</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">سیاست راه‌اندازی مجدد این پاد. مقادیر مجاز: [Always, OnFailure, Never].</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--rm</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">اگر true باشد، پاد پس از خروج حذف می‌شود. این گزینه فقط هنگام اتصال به کانتینر معتبر است؛ برای مثال با '--attach' یا '-i/--stdin'.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--save-config</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">اگر true باشد، پیکربندی آبجکت فعلی در حاشیه‌نویسی آن ذخیره می‌شود. در غیر این صورت، حاشیه‌نویسی بدون تغییر باقی می‌ماند. این فلگ زمانی مفید است که بخواهید در آینده kubectl apply را روی این آبجکت اجرا کنید.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--show-managed-fields</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">اگر true باشد، هنگام چاپ آبجکت‌ها در قالب JSON یا YAML، فیلد managedFields حفظ می‌شود.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">-i, --stdin</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">ورودی استاندارد (stdin) کانتینر درون پاد را باز نگه می‌دارد، حتی اگر چیزی به آن متصل نباشد.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--template string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">رشته قالب یا مسیر فایل قالب که هنگام استفاده از -o=go-template یا -o=go-template-file به کار می‌رود. قالب‌ها از نوع قالب‌های golang هستند [http://golang.org/pkg/text/template/#pkg-overview].</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--timeout duration</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مدت زمان انتظار پیش از صرف‌نظر کردن از یک عملیات حذف؛ مقدار صفر یعنی مهلت زمانی بر اساس اندازه آبجکت تعیین شود</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">-t, --tty</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">یک TTY برای کانتینر درون پاد تخصیص می‌دهد.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--wait</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">اگر true باشد، پیش از بازگشت منتظر می‌ماند تا منابع حذف شوند. این گزینه منتظر اجرای finalizerها نیز می‌ماند.</p></td>
+</tr>
+</tbody>
+</table>
+<h2 id="گزینه-های-ارث-بری-شده-از-والد" dir="rtl">گزینه‌های ارث‌بری شده از والد</h2>
+   <table style="width: 100%; table-layout: fixed;">
+<colgroup>
+<col span="1" style="width: 10px;">
+<col span="1">
+</colgroup>
+<tbody>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--as string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نام کاربری‌ای که عملیات با جعل هویت (impersonate) آن انجام می‌شود. این کاربر می‌تواند یک کاربر عادی یا یک حساب سرویس (service account) در یک فضای نام (namespace) باشد.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--as-group strings</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">گروهی که عملیات با جعل هویت آن انجام می‌شود. برای مشخص کردن چند گروه می‌توانید این فلگ را چند بار تکرار کنید.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--as-uid string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">شناسهٔ UID که عملیات با جعل هویت آن انجام می‌شود.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--as-user-extra strings</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">اطلاعات تکمیلی کاربر که عملیات با جعل هویت آن انجام می‌شود. برای مشخص کردن چند مقدار برای یک کلید می‌توانید این فلگ را چند بار تکرار کنید.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="rtl">--cache-dir string     پیش‌فرض: "$HOME/.kube/cache"</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">پوشهٔ پیش‌فرض حافظهٔ نهان (cache)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--certificate-authority string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مسیر فایل گواهی مرجع صدور گواهی (certificate authority)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--client-certificate string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مسیر فایل گواهی کلاینت برای TLS</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--client-key string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مسیر فایل کلید کلاینت برای TLS</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--cluster string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نام کلاستری از kubeconfig که باید استفاده شود</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--context string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نام زمینه (context) از kubeconfig که باید استفاده شود</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--disable-compression</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">اگر true باشد، فشرده‌سازی پاسخ برای همهٔ درخواست‌ها به سرور غیرفعال می‌شود</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--insecure-skip-tls-verify</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">اگر true باشد، اعتبار گواهی سرور بررسی نمی‌شود. با این کار اتصال‌های HTTPS شما ناامن می‌شوند</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--kubeconfig string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مسیر فایل kubeconfig برای استفاده در درخواست‌های CLI.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--kuberc string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مسیر فایل kuberc برای استفاده در ترجیحات. می‌توان این قابلیت را با export کردن feature gate به‌صورت KUBECTL_KUBERC=false یا خاموش کردن قابلیت با KUBERC=off غیرفعال کرد.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--match-server-version</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">الزام به یکسان بودن نسخهٔ سرور با نسخهٔ کلاینت</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">-n, --namespace string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">در صورت تعیین، دامنهٔ فضای نام برای این درخواست CLI</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--password string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">گذرواژه برای احراز هویت پایه (basic authentication) در API server</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="rtl">--profile string     پیش‌فرض: "none"</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نام پروفایلی که باید ثبت شود. یکی از مقادیر (none|cpu|heap|goroutine|threadcreate|block|mutex|trace)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="rtl">--profile-output string     پیش‌فرض: "profile.pprof"</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نام فایلی که پروفایل در آن نوشته می‌شود</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--proxy-url string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نشانی پراکسی برای استفاده در درخواست‌ها به API server</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="rtl">--request-timeout string     پیش‌فرض: "0"</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مدت زمانی که پیش از صرف‌نظر کردن از یک درخواست به سرور باید منتظر ماند. مقادیر غیرصفر باید واحد زمانی متناظر داشته باشند (مثلاً 1s، 2m، 3h). مقدار صفر یعنی درخواست‌ها هیچ‌گاه به مهلت زمانی نمی‌رسند.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">-s, --server string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نشانی و درگاه API server کوبرنتیز</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="rtl">--storage-driver-buffer-duration duration     پیش‌فرض: 1m0s</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نوشتن‌ها در درایور ذخیره‌سازی به همین مدت در بافر نگه داشته می‌شوند و سپس در قالب یک تراکنش واحد در پشتیبان‌های غیرحافظه‌ای ثبت می‌شوند</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="rtl">--storage-driver-db string     پیش‌فرض: "cadvisor"</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نام پایگاه داده</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="rtl">--storage-driver-host string     پیش‌فرض: "localhost:8086"</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">میزبان و درگاه پایگاه داده به‌صورت host:port</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="rtl">--storage-driver-password string     پیش‌فرض: "root"</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">گذرواژهٔ پایگاه داده</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--storage-driver-secure</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">استفاده از اتصال امن با پایگاه داده</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="rtl">--storage-driver-table string     پیش‌فرض: "stats"</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نام جدول</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="rtl">--storage-driver-user string     پیش‌فرض: "root"</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نام کاربری پایگاه داده</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--tls-server-name string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نام سروری که برای اعتبارسنجی گواهی سرور استفاده می‌شود. اگر تعیین نشود، نام میزبانی که برای ارتباط با سرور به کار رفته است استفاده می‌شود</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--token string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">توکن حامل (bearer token) برای احراز هویت در API server</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--user string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نام کاربری از kubeconfig که باید استفاده شود</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--username string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نام کاربری برای احراز هویت پایه در API server</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--version version[=true]</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">گزینه‌های --version و --version=raw اطلاعات نسخه را چاپ می‌کنند و از برنامه خارج می‌شوند؛ گزینهٔ --version=vX.Y.Z... نسخهٔ گزارش‌شده را تنظیم می‌کند</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--warnings-as-errors</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">هشدارهای دریافتی از سرور به‌عنوان خطا در نظر گرفته می‌شوند و برنامه با کد خروج غیرصفر خارج می‌شود</p></td>
+</tr>
+</tbody>
+</table>
+<h2 id="همچنین-ببینید" dir="rtl">همچنین ببینید</h2>
+<ul>
+<li dir="rtl"><a href="../kubectl.html">kubectl</a>	 - ابزار kubectl مدیر کلاستر کوبرنتیز را کنترل می‌کند</li>
+</ul>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#خلاصه">خلاصه</a><a class="l2" href="#مثال-ها">مثال‌ها</a><a class="l2" href="#گزینه-ها">گزینه‌ها</a><a class="l2" href="#گزینه-های-ارث-بری-شده-از-والد">گزینه‌های ارث‌بری شده از والد</a><a class="l2" href="#همچنین-ببینید">همچنین ببینید</a></nav>
+</div>
+</body>
+</html>
