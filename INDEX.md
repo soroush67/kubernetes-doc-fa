@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-1028 از 1722 صفحه
+1043 از 1722 صفحه
 
 
 ## `.`
@@ -1246,57 +1246,57 @@
 
 ## `reference/kubectl/generated/kubectl_describe`
 
-- ⏳ `_index.md`
+- ✅ [_index.md](md/reference/kubectl/generated/kubectl_describe/_index.md)
 
 ## `reference/kubectl/generated/kubectl_diff`
 
-- ⏳ `_index.md`
+- ✅ [_index.md](md/reference/kubectl/generated/kubectl_diff/_index.md)
 
 ## `reference/kubectl/generated/kubectl_drain`
 
-- ⏳ `_index.md`
+- ✅ [_index.md](md/reference/kubectl/generated/kubectl_drain/_index.md)
 
 ## `reference/kubectl/generated/kubectl_edit`
 
-- ⏳ `_index.md`
+- ✅ [_index.md](md/reference/kubectl/generated/kubectl_edit/_index.md)
 
 ## `reference/kubectl/generated/kubectl_events`
 
-- ⏳ `_index.md`
+- ✅ [_index.md](md/reference/kubectl/generated/kubectl_events/_index.md)
 
 ## `reference/kubectl/generated/kubectl_exec`
 
-- ⏳ `_index.md`
+- ✅ [_index.md](md/reference/kubectl/generated/kubectl_exec/_index.md)
 
 ## `reference/kubectl/generated/kubectl_explain`
 
-- ⏳ `_index.md`
+- ✅ [_index.md](md/reference/kubectl/generated/kubectl_explain/_index.md)
 
 ## `reference/kubectl/generated/kubectl_expose`
 
-- ⏳ `_index.md`
+- ⚠️ [_index.md](md/reference/kubectl/generated/kubectl_expose/_index.md)
 
 ## `reference/kubectl/generated/kubectl_get`
 
-- ⏳ `_index.md`
+- ⚠️ [_index.md](md/reference/kubectl/generated/kubectl_get/_index.md)
 
 ## `reference/kubectl/generated/kubectl_kuberc`
 
-- ⏳ `_index.md`
-- ⏳ `kubectl_kuberc_set.md`
-- ⏳ `kubectl_kuberc_view.md`
+- ✅ [_index.md](md/reference/kubectl/generated/kubectl_kuberc/_index.md)
+- ✅ [kubectl_kuberc_set.md](md/reference/kubectl/generated/kubectl_kuberc/kubectl_kuberc_set.md)
+- ✅ [kubectl_kuberc_view.md](md/reference/kubectl/generated/kubectl_kuberc/kubectl_kuberc_view.md)
 
 ## `reference/kubectl/generated/kubectl_kustomize`
 
-- ⏳ `_index.md`
+- ✅ [_index.md](md/reference/kubectl/generated/kubectl_kustomize/_index.md)
 
 ## `reference/kubectl/generated/kubectl_label`
 
-- ⏳ `_index.md`
+- ✅ [_index.md](md/reference/kubectl/generated/kubectl_label/_index.md)
 
 ## `reference/kubectl/generated/kubectl_logs`
 
-- ⏳ `_index.md`
+- ✅ [_index.md](md/reference/kubectl/generated/kubectl_logs/_index.md)
 
 ## `reference/kubectl/generated/kubectl_options`
 
