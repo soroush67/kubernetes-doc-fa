@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-1007 از 1722 صفحه
+1028 از 1722 صفحه
 
 
 ## `.`
@@ -1216,33 +1216,33 @@
 - ✅ [kubectl_create_configmap.md](md/reference/kubectl/generated/kubectl_create/kubectl_create_configmap.md)
 - ✅ [kubectl_create_cronjob.md](md/reference/kubectl/generated/kubectl_create/kubectl_create_cronjob.md)
 - ✅ [kubectl_create_deployment.md](md/reference/kubectl/generated/kubectl_create/kubectl_create_deployment.md)
-- ⏳ `kubectl_create_ingress.md`
-- ⏳ `kubectl_create_job.md`
-- ⏳ `kubectl_create_namespace.md`
-- ⏳ `kubectl_create_poddisruptionbudget.md`
-- ⏳ `kubectl_create_priorityclass.md`
-- ⏳ `kubectl_create_quota.md`
-- ⏳ `kubectl_create_role.md`
-- ⏳ `kubectl_create_rolebinding.md`
-- ⏳ `kubectl_create_secret.md`
-- ⏳ `kubectl_create_secret_docker-registry.md`
-- ⏳ `kubectl_create_secret_generic.md`
-- ⏳ `kubectl_create_secret_tls.md`
-- ⏳ `kubectl_create_service.md`
-- ⏳ `kubectl_create_service_clusterip.md`
-- ⏳ `kubectl_create_service_externalname.md`
-- ⏳ `kubectl_create_service_loadbalancer.md`
-- ⏳ `kubectl_create_service_nodeport.md`
-- ⏳ `kubectl_create_serviceaccount.md`
-- ⏳ `kubectl_create_token.md`
+- ✅ [kubectl_create_ingress.md](md/reference/kubectl/generated/kubectl_create/kubectl_create_ingress.md)
+- ✅ [kubectl_create_job.md](md/reference/kubectl/generated/kubectl_create/kubectl_create_job.md)
+- ✅ [kubectl_create_namespace.md](md/reference/kubectl/generated/kubectl_create/kubectl_create_namespace.md)
+- ✅ [kubectl_create_poddisruptionbudget.md](md/reference/kubectl/generated/kubectl_create/kubectl_create_poddisruptionbudget.md)
+- ✅ [kubectl_create_priorityclass.md](md/reference/kubectl/generated/kubectl_create/kubectl_create_priorityclass.md)
+- ✅ [kubectl_create_quota.md](md/reference/kubectl/generated/kubectl_create/kubectl_create_quota.md)
+- ✅ [kubectl_create_role.md](md/reference/kubectl/generated/kubectl_create/kubectl_create_role.md)
+- ✅ [kubectl_create_rolebinding.md](md/reference/kubectl/generated/kubectl_create/kubectl_create_rolebinding.md)
+- ✅ [kubectl_create_secret.md](md/reference/kubectl/generated/kubectl_create/kubectl_create_secret.md)
+- ✅ [kubectl_create_secret_docker-registry.md](md/reference/kubectl/generated/kubectl_create/kubectl_create_secret_docker-registry.md)
+- ✅ [kubectl_create_secret_generic.md](md/reference/kubectl/generated/kubectl_create/kubectl_create_secret_generic.md)
+- ✅ [kubectl_create_secret_tls.md](md/reference/kubectl/generated/kubectl_create/kubectl_create_secret_tls.md)
+- ✅ [kubectl_create_service.md](md/reference/kubectl/generated/kubectl_create/kubectl_create_service.md)
+- ✅ [kubectl_create_service_clusterip.md](md/reference/kubectl/generated/kubectl_create/kubectl_create_service_clusterip.md)
+- ✅ [kubectl_create_service_externalname.md](md/reference/kubectl/generated/kubectl_create/kubectl_create_service_externalname.md)
+- ✅ [kubectl_create_service_loadbalancer.md](md/reference/kubectl/generated/kubectl_create/kubectl_create_service_loadbalancer.md)
+- ✅ [kubectl_create_service_nodeport.md](md/reference/kubectl/generated/kubectl_create/kubectl_create_service_nodeport.md)
+- ✅ [kubectl_create_serviceaccount.md](md/reference/kubectl/generated/kubectl_create/kubectl_create_serviceaccount.md)
+- ✅ [kubectl_create_token.md](md/reference/kubectl/generated/kubectl_create/kubectl_create_token.md)
 
 ## `reference/kubectl/generated/kubectl_debug`
 
-- ⏳ `_index.md`
+- ✅ [_index.md](md/reference/kubectl/generated/kubectl_debug/_index.md)
 
 ## `reference/kubectl/generated/kubectl_delete`
 
-- ⏳ `_index.md`
+- ✅ [_index.md](md/reference/kubectl/generated/kubectl_delete/_index.md)
 
 ## `reference/kubectl/generated/kubectl_describe`
 

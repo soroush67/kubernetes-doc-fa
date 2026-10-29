@@ -1,0 +1,485 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>kubectl delete | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
+<header class="top"><a href="../../../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">reference / kubectl / generated / kubectl_delete</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="ltr" class="ltr">kubectl delete</h1><p class="page-meta" dir="rtl">حذف منابع بر اساس نام فایل‌ها، stdin، منابع و نام‌ها، یا بر اساس منابع و انتخابگر برچسب</p><!--
+The file is auto-generated from the Go source code of the component using a generic
+[generator](https://github.com/kubernetes-sigs/reference-docs/). To learn how
+to generate the reference documentation, please read
+[Contributing to the reference documentation](/docs/contribute/generate-ref-docs/).
+To update the reference content, please follow the
+[Contributing upstream](/docs/contribute/generate-ref-docs/contribute-upstream/)
+guide. You can file document formatting bugs against the
+[reference-docs](https://github.com/kubernetes-sigs/reference-docs/) project.
+-->
+<h2 id="خلاصه" dir="rtl">خلاصه</h2>
+<p dir="rtl">این دستور منابع را بر اساس نام فایل‌ها، ورودی استاندارد (stdin)، منابع و نام‌ها، یا بر اساس منابع و انتخابگر (selector) برچسب حذف می‌کند.</p>
+<p dir="rtl">هر دو قالب JSON و YAML پذیرفته می‌شوند. فقط یک نوع آرگومان را می‌توان مشخص کرد: نام فایل‌ها، منابع و نام‌ها، یا منابع و انتخابگر برچسب.</p>
+<p dir="rtl">برخی منابع، مانند پادها، از حذف مؤدبانه (graceful deletion) پشتیبانی می‌کنند. این منابع یک بازه‌ی زمانی پیش‌فرض پیش از خاتمه‌ی اجباری تعریف می‌کنند (دوره‌ی مهلت یا grace period)، اما می‌توانید این مقدار را با فلگ ‎--grace-period بازنویسی کنید یا با ارسال ‎--now دوره‌ی مهلت را روی ۱ تنظیم کنید. از آنجا که این منابع اغلب نماینده‌ی موجودیت‌هایی در کلاستر هستند، ممکن است حذف آن‌ها بلافاصله تأیید نشود. اگر نودی که میزبان یک پاد است از کار افتاده باشد یا نتواند به سرور API دسترسی پیدا کند، خاتمه ممکن است به‌مراتب بیشتر از دوره‌ی مهلت طول بکشد. برای حذف اجباری یک منبع، باید فلگ ‎--force را مشخص کنید. توجه: تنها بخشی از منابع از حذف مؤدبانه پشتیبانی می‌کنند. در صورت نبود این پشتیبانی، فلگ ‎--grace-period نادیده گرفته می‌شود.</p>
+<p dir="rtl">مهم: حذف اجباری پادها منتظر تأیید خاتمه‌ی پردازه‌های پاد نمی‌ماند. در نتیجه ممکن است این پردازه‌ها تا زمانی که نود حذف را تشخیص دهد و حذف مؤدبانه را کامل کند، همچنان در حال اجرا بمانند. اگر پردازه‌های شما از ذخیره‌سازی مشترک استفاده می‌کنند یا با یک API راه دور ارتباط دارند و برای شناسایی خود به نام پاد وابسته‌اند، حذف اجباری آن پادها ممکن است باعث شود چند پردازه با شناسه‌ی یکسان روی ماشین‌های مختلف اجرا شوند که می‌تواند به خرابی یا ناسازگاری داده‌ها بینجامد. پادها را فقط زمانی به‌صورت اجباری حذف کنید که مطمئن باشید پاد خاتمه یافته است، یا برنامه‌ی شما بتواند اجرای هم‌زمان چند نسخه از یک پاد را تحمل کند. همچنین اگر پادها را به‌صورت اجباری حذف کنید، ممکن است زمان‌بند پیش از آنکه نود آن منابع را آزاد کند، پادهای جدیدی روی آن نودها قرار دهد و همین امر باعث اخراج (evict) فوری آن پادها شود.</p>
+<p dir="rtl">توجه داشته باشید که دستور delete هیچ بررسی‌ای روی نسخه‌ی منبع انجام نمی‌دهد. بنابراین اگر کسی درست هم‌زمان با ارسال درخواست حذف شما، به‌روزرسانی‌ای برای یک منبع ارسال کند، به‌روزرسانی او همراه با بقیه‌ی منبع از بین می‌رود.</p>
+<p dir="rtl">پس از حذف یک CustomResourceDefinition، بی‌اعتبار شدن حافظه‌ی نهان discovery ممکن است تا ۶ ساعت طول بکشد. اگر نمی‌خواهید منتظر بمانید، می‌توانید دستور "kubectl api-resources" را اجرا کنید تا حافظه‌ی نهان discovery تازه‌سازی شود.</p>
+<pre dir="ltr"><code dir="ltr">kubectl delete ([-f FILENAME] | [-k DIRECTORY] | TYPE [(NAME | -l label | --all)])
+</code></pre>
+<h2 id="مثال-ها" dir="rtl">مثال‌ها</h2>
+<pre dir="ltr"><code dir="ltr">  # Delete a pod using the type and name specified in pod.json
+  kubectl delete -f ./pod.json
+  
+  # Delete resources from a directory containing kustomization.yaml - e.g. dir/kustomization.yaml
+  kubectl delete -k dir
+  
+  # Delete resources from all files that end with '.json'
+  kubectl delete -f '*.json'
+  
+  # Delete a pod based on the type and name in the JSON passed into stdin
+  cat pod.json | kubectl delete -f -
+  
+  # Delete pods and services with same names "baz" and "foo"
+  kubectl delete pod,service baz foo
+  
+  # Delete pods and services with label name=myLabel
+  kubectl delete pods,services -l name=myLabel
+  
+  # Delete a pod with minimal delay
+  kubectl delete pod foo --now
+  
+  # Force delete a pod on a dead node
+  kubectl delete pod foo --force
+  
+  # Delete all pods
+  kubectl delete pods --all
+  
+  # Delete all pods only if the user confirms the deletion
+  kubectl delete pods --all --interactive
+</code></pre>
+<h2 id="گزینه-ها" dir="rtl">گزینه‌ها</h2>
+   <table style="width: 100%; table-layout: fixed;">
+<colgroup>
+<col span="1" style="width: 10px;">
+<col span="1">
+</colgroup>
+<tbody>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--all</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">همه‌ی منابع از انواع منبع مشخص‌شده را در فضای نام (namespace) حذف می‌کند.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">-A, --all-namespaces</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">در صورت وجود، آبجکت‌های درخواست‌شده را در همه‌ی فضاهای نام فهرست می‌کند. فضای نامِ context جاری نادیده گرفته می‌شود، حتی اگر با ‎--namespace مشخص شده باشد.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--cascade string[="background"]     Default: "background"</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مقدار آن باید یکی از "background"، "orphan" یا "foreground" باشد. راهبرد حذف آبشاری را برای وابسته‌ها (برای نمونه، پادهایی که یک ReplicationController ایجاد کرده است) انتخاب می‌کند. مقدار پیش‌فرض background است.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--dry-run string[="unchanged"]     Default: "none"</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مقدار آن باید یکی از "none"، "server" یا "client" باشد. در راهبرد client، فقط آبجکتی که قرار است ارسال شود چاپ می‌شود و ارسالی صورت نمی‌گیرد. در راهبرد server، درخواست سمت سرور ارسال می‌شود، بدون آنکه منبع ذخیره شود.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--field-selector string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">انتخابگر (پرس‌وجوی فیلد) برای فیلتر کردن که از '='، '==' و '!=' پشتیبانی می‌کند (برای نمونه ‎--field-selector key1=value1,key2=value2). سرور برای هر نوع فقط از تعداد محدودی پرس‌وجوی فیلد پشتیبانی می‌کند.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">-f, --filename strings</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">فایلی که منبعِ مورد نظر برای حذف را در بر دارد.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--force</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">اگر true باشد، منابع بلافاصله از API حذف می‌شوند و حذف مؤدبانه نادیده گرفته می‌شود. توجه داشته باشید که حذف فوری برخی منابع ممکن است به ناسازگاری یا از دست رفتن داده‌ها بینجامد و به تأیید نیاز دارد.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--grace-period int     Default: -1</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مدت زمانی بر حسب ثانیه که به منبع داده می‌شود تا به‌صورت مؤدبانه خاتمه یابد. مقدار منفی نادیده گرفته می‌شود. برای خاموش شدن فوری، آن را روی ۱ تنظیم کنید. فقط زمانی می‌توان آن را روی ۰ تنظیم کرد که ‎--force برابر true باشد (حذف اجباری).</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">-h, --help</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">راهنمای دستور delete</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--ignore-not-found</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">خطای "resource not found" را به‌عنوان حذف موفق در نظر می‌گیرد. هنگامی که ‎--all مشخص شده باشد، مقدار پیش‌فرض آن "true" است.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">-i, --interactive</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">اگر true باشد، منبع فقط زمانی حذف می‌شود که کاربر آن را تأیید کند.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">-k, --kustomize string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">یک دایرکتوری kustomization را پردازش می‌کند. این فلگ را نمی‌توان همراه با ‎-f یا ‎-R استفاده کرد.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--now</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">اگر true باشد، به منابع برای خاموش شدن فوری سیگنال داده می‌شود (معادل ‎--grace-period=1).</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">-o, --output string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">حالت خروجی. برای خروجی کوتاه‌تر (resource/name) از "-o name" استفاده کنید.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--raw string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نشانی URI خامی که درخواست DELETE به آن روی سرور ارسال می‌شود. از transport مشخص‌شده در فایل kubeconfig استفاده می‌کند.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">-R, --recursive</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">دایرکتوری استفاده‌شده در ‎-f, --filename را به‌صورت بازگشتی پردازش می‌کند. این گزینه زمانی مفید است که بخواهید مانیفست‌های مرتبطی را که در یک دایرکتوری سازمان‌دهی شده‌اند مدیریت کنید.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">-l, --selector string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">انتخابگر (پرس‌وجوی برچسب) برای فیلتر کردن که از '='، '=='، '!='، 'in' و 'notin' پشتیبانی می‌کند (برای نمونه ‎-l key1=value1,key2=value2,key3 in (value3)). آبجکت‌های منطبق باید همه‌ی قیدهای برچسبِ مشخص‌شده را برآورده کنند.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--timeout duration</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مدت زمانی که پیش از صرف‌نظر کردن از حذف منتظر می‌ماند. مقدار صفر به این معناست که مهلت زمانی بر اساس اندازه‌ی آبجکت تعیین شود.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--wait     Default: true</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">اگر true باشد، پیش از بازگشت منتظر می‌ماند تا منابع از بین بروند. این گزینه منتظر finalizerها نیز می‌ماند.</p></td>
+</tr>
+</tbody>
+</table>
+<h2 id="گزینه-های-ارث-بری-شده-از-والد" dir="rtl">گزینه‌های ارث‌بری شده از والد</h2>
+   <table style="width: 100%; table-layout: fixed;">
+<colgroup>
+<col span="1" style="width: 10px;">
+<col span="1">
+</colgroup>
+<tbody>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--as string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نام کاربری که این عملیات به جای آن و با هویت آن انجام می‌شود (جعل هویت یا impersonation). این کاربر می‌تواند یک کاربر عادی یا یک حساب سرویس (service account) در یک فضای نام (namespace) باشد.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--as-group strings</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">گروهی که این عملیات با هویت آن انجام می‌شود. برای مشخص کردن چند گروه، می‌توانید این فلگ را چند بار تکرار کنید.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--as-uid string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">شناسهٔ UID که این عملیات با هویت آن انجام می‌شود.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--as-user-extra strings</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">اطلاعات تکمیلی کاربر که این عملیات با هویت آن‌ها انجام می‌شود. برای مشخص کردن چند مقدار برای یک کلید واحد، می‌توانید این فلگ را چند بار تکرار کنید.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--cache-dir string     Default: "$HOME/.kube/cache"</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مسیر پیش‌فرض دایرکتوری کش</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--certificate-authority string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مسیر فایل گواهی مربوط به مرجع صدور گواهی (certificate authority)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--client-certificate string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مسیر فایل گواهی کلاینت برای TLS</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--client-key string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مسیر فایل کلید کلاینت برای TLS</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--cluster string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نام کلاستری از فایل kubeconfig که باید از آن استفاده شود</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--context string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نام کانتکستی (context) از فایل kubeconfig که باید از آن استفاده شود</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--disable-compression</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">اگر مقدار آن true باشد، فشرده‌سازی پاسخ برای همهٔ درخواست‌هایی که به سرور ارسال می‌شوند غیرفعال می‌شود.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--insecure-skip-tls-verify</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">اگر مقدار آن true باشد، اعتبار گواهی سرور بررسی نمی‌شود. در این صورت، اتصال‌های HTTPS شما ناامن خواهند بود.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--kubeconfig string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مسیر فایل kubeconfig که برای درخواست‌های خط فرمان (CLI) استفاده می‌شود.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--kuberc string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مسیر فایل kuberc که برای تنظیم ترجیحات کاربر استفاده می‌شود. می‌توان این قابلیت را با export کردن feature gate به صورت KUBECTL_KUBERC=false یا با خاموش کردن قابلیت به صورت KUBERC=off غیرفعال کرد.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--match-server-version</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">الزام می‌کند که نسخهٔ سرور با نسخهٔ کلاینت یکسان باشد.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">-n, --namespace string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">در صورت مشخص شدن، دامنهٔ فضای نام را برای این درخواست خط فرمان تعیین می‌کند.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--password string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">گذرواژه برای احراز هویت پایه (basic authentication) در سرور API</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--profile string     Default: "none"</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نام پروفایلی که باید ثبت شود. مقدار آن یکی از این گزینه‌هاست: (none|cpu|heap|goroutine|threadcreate|block|mutex|trace)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--profile-output string     Default: "profile.pprof"</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نام فایلی که پروفایل در آن نوشته می‌شود</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--proxy-url string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نشانی URL پراکسی که برای ارسال درخواست‌ها به سرور API استفاده می‌شود</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--request-timeout string     Default: "0"</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مدت زمانی که پیش از صرف‌نظر کردن از یک درخواست منفرد به سرور، منتظر پاسخ می‌مانیم. مقادیر غیرصفر باید واحد زمانی متناظر داشته باشند (برای نمونه 1s، 2m یا 3h). مقدار صفر به این معناست که برای درخواست‌ها هیچ مهلت زمانی (timeout) در نظر گرفته نمی‌شود.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">-s, --server string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نشانی و درگاه (port) سرور API کوبرنتیز</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--storage-driver-buffer-duration duration     Default: 1m0s</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">عملیات نوشتن در درایور ذخیره‌سازی به اندازهٔ این مدت در بافر نگه داشته می‌شوند و سپس در قالب یک تراکنش واحد در بک‌اندهای غیرحافظه‌ای (non-memory) ثبت می‌شوند.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--storage-driver-db string     Default: "cadvisor"</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نام پایگاه داده</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--storage-driver-host string     Default: "localhost:8086"</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">میزبان و درگاه پایگاه داده به صورت host:port</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--storage-driver-password string     Default: "root"</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">گذرواژهٔ پایگاه داده</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--storage-driver-secure</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">برای اتصال به پایگاه داده از اتصال امن استفاده می‌شود</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--storage-driver-table string     Default: "stats"</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نام جدول</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--storage-driver-user string     Default: "root"</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نام کاربری پایگاه داده</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--tls-server-name string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نام سروری که برای اعتبارسنجی گواهی سرور استفاده می‌شود. اگر این مقدار مشخص نشود، از نام میزبانی (hostname) که برای برقراری ارتباط با سرور به کار رفته است استفاده می‌شود.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--token string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">توکن حامل (bearer token) برای احراز هویت در سرور API</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--user string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نام کاربری از فایل kubeconfig که باید از آن استفاده شود</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--username string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نام کاربری برای احراز هویت پایه در سرور API</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--version version[=true]</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">گزینه‌های ‎--version و ‎--version=raw اطلاعات نسخه را چاپ می‌کنند و از برنامه خارج می‌شوند؛ گزینهٔ ‎--version=vX.Y.Z...‎ نسخهٔ گزارش‌شده را تعیین می‌کند.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--warnings-as-errors</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">هشدارهای دریافت‌شده از سرور را به‌عنوان خطا در نظر می‌گیرد و با کد خروج غیرصفر از برنامه خارج می‌شود.</p></td>
+</tr>
+</tbody>
+</table>
+<h2 id="همچنین-ببینید" dir="rtl">همچنین ببینید</h2>
+<ul>
+<li dir="rtl"><a href="../kubectl.html">kubectl</a>	 - ابزار kubectl مدیر کلاستر کوبرنتیز را کنترل می‌کند</li>
+</ul>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#خلاصه">خلاصه</a><a class="l2" href="#مثال-ها">مثال‌ها</a><a class="l2" href="#گزینه-ها">گزینه‌ها</a><a class="l2" href="#گزینه-های-ارث-بری-شده-از-والد">گزینه‌های ارث‌بری شده از والد</a><a class="l2" href="#همچنین-ببینید">همچنین ببینید</a></nav>
+</div>
+</body>
+</html>

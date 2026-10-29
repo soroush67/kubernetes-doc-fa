@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>kubectl create service | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
+<header class="top"><a href="../../../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">reference / kubectl / generated / kubectl_create</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="ltr" class="ltr">kubectl create service</h1><p class="page-meta" dir="rtl">ایجاد یک Service با استفاده از یک زیرفرمان مشخص</p><!--
+The file is auto-generated from the Go source code of the component using a generic
+[generator](https://github.com/kubernetes-sigs/reference-docs/). To learn how
+to generate the reference documentation, please read
+[Contributing to the reference documentation](/docs/contribute/generate-ref-docs/).
+To update the reference content, please follow the
+[Contributing upstream](/docs/contribute/generate-ref-docs/contribute-upstream/)
+guide. You can file document formatting bugs against the
+[reference-docs](https://github.com/kubernetes-sigs/reference-docs/) project.
+-->
+<h2 id="خلاصه" dir="rtl">خلاصه</h2>
+<p dir="rtl">با این فرمان می‌توانید یک Service را با استفاده از یک زیرفرمان (subcommand) مشخص ایجاد کنید.</p>
+<pre dir="ltr"><code dir="ltr">kubectl create service [flags]
+</code></pre>
+<h2 id="گزینه-ها" dir="rtl">گزینه‌ها</h2>
+   <table style="width: 100%; table-layout: fixed;">
+<colgroup>
+<col span="1" style="width: 10px;">
+<col span="1">
+</colgroup>
+<tbody>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">-h, --help</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">راهنمای فرمان service را نمایش می‌دهد.</p></td>
+</tr>
+</tbody>
+</table>
+<h2 id="گزینه-های-ارث-بری-شده-از-والد" dir="rtl">گزینه‌های ارث‌بری شده از والد</h2>
+   <table style="width: 100%; table-layout: fixed;">
+<colgroup>
+<col span="1" style="width: 10px;">
+<col span="1">
+</colgroup>
+<tbody>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--as string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نام کاربری که عملیات به جای او و با هویت او (impersonation) انجام می‌شود. این کاربر می‌تواند یک کاربر عادی یا یک حساب سرویس (service account) در یک فضای نام (namespace) باشد.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--as-group strings</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">گروهی که عملیات با هویت آن انجام می‌شود. برای مشخص کردن چند گروه، می‌توانید این فلگ را چند بار تکرار کنید.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--as-uid string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">شناسهٔ UID که عملیات با هویت آن انجام می‌شود.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--as-user-extra strings</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">اطلاعات تکمیلی کاربر که عملیات با هویت آن انجام می‌شود. برای مشخص کردن چند مقدار برای یک کلید، می‌توانید این فلگ را چند بار تکرار کنید.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--cache-dir string     Default: "$HOME/.kube/cache"</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مسیر پیش‌فرض پوشهٔ حافظهٔ نهان (cache)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--certificate-authority string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مسیر فایل گواهی مرجع صدور گواهی (certificate authority)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--client-certificate string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مسیر فایل گواهی کلاینت برای TLS</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--client-key string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مسیر فایل کلید کلاینت برای TLS</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--cluster string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نام کلاستری از فایل kubeconfig که باید استفاده شود</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--context string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نام زمینه (context) از فایل kubeconfig که باید استفاده شود</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--disable-compression</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">اگر مقدار آن true باشد، فشرده‌سازی پاسخ برای همهٔ درخواست‌هایی که به سرور فرستاده می‌شوند غیرفعال می‌شود.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--insecure-skip-tls-verify</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">اگر مقدار آن true باشد، اعتبار گواهی سرور بررسی نمی‌شود. در این حالت اتصال‌های HTTPS شما ناامن خواهند بود.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--kubeconfig string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مسیر فایل kubeconfig که برای درخواست‌های خط فرمان (CLI) استفاده می‌شود.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--kuberc string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مسیر فایل kuberc که برای تنظیمات ترجیحی استفاده می‌شود. برای غیرفعال کردن آن می‌توانید feature gate با مقدار KUBECTL_KUBERC=false را export کنید یا قابلیت را با KUBERC=off خاموش کنید.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--match-server-version</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">الزام می‌کند که نسخهٔ سرور با نسخهٔ کلاینت مطابقت داشته باشد.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">-n, --namespace string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">در صورت تعیین، دامنهٔ فضای نام برای این درخواست خط فرمان را مشخص می‌کند.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--password string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">گذرواژه برای احراز هویت پایه (basic authentication) در سرور API</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--profile string     Default: "none"</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نام پروفایلی که باید ثبت شود. یکی از مقادیر (none|cpu|heap|goroutine|threadcreate|block|mutex|trace)</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--profile-output string     Default: "profile.pprof"</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نام فایلی که پروفایل در آن نوشته می‌شود</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--proxy-url string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نشانی URL پراکسی که برای درخواست‌ها به سرور API استفاده می‌شود</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--request-timeout string     Default: "0"</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">مدت زمانی که پیش از رها کردن یک درخواست منفرد به سرور، منتظر پاسخ می‌مانیم. مقادیر غیرصفر باید واحد زمانی متناظر داشته باشند (برای مثال 1s، 2m، 3h). مقدار صفر یعنی برای درخواست‌ها مهلت زمانی در نظر گرفته نمی‌شود.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">-s, --server string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نشانی و پورت سرور API کوبرنتیز</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--storage-driver-buffer-duration duration     Default: 1m0s</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نوشتن‌ها در درایور ذخیره‌سازی به این مدت در بافر نگه داشته می‌شوند و سپس به‌صورت یک تراکنش واحد در پشتیبان‌های غیرحافظه‌ای (non memory backends) ثبت می‌شوند.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--storage-driver-db string     Default: "cadvisor"</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نام پایگاه داده</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--storage-driver-host string     Default: "localhost:8086"</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نشانی پایگاه داده به‌صورت host:port</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--storage-driver-password string     Default: "root"</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">گذرواژهٔ پایگاه داده</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--storage-driver-secure</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">از اتصال امن با پایگاه داده استفاده می‌کند</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--storage-driver-table string     Default: "stats"</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نام جدول</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--storage-driver-user string     Default: "root"</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نام کاربری پایگاه داده</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--tls-server-name string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نام سروری که برای اعتبارسنجی گواهی سرور استفاده می‌شود. اگر این مقدار تعیین نشود، از نام میزبانی (hostname) استفاده می‌شود که برای برقراری ارتباط با سرور به کار رفته است.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--token string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">توکن حامل (bearer token) برای احراز هویت در سرور API</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--user string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نام کاربری از فایل kubeconfig که باید استفاده شود</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--username string</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">نام کاربری برای احراز هویت پایه در سرور API</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--version version[=true]</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">گزینه‌های --version و --version=raw اطلاعات نسخه را چاپ می‌کنند و از برنامه خارج می‌شوند؛ گزینهٔ --version=vX.Y.Z... نسخهٔ گزارش‌شده را تنظیم می‌کند.</p></td>
+</tr>
+<tr>
+<td colspan="2" dir="ltr" class="ltr">--warnings-as-errors</td>
+</tr>
+<tr>
+<td></td><td style="line-height: 130%; word-wrap: break-word;" dir="rtl"><p dir="rtl">هشدارهای دریافت‌شده از سرور را خطا در نظر می‌گیرد و با کد خروج غیرصفر خارج می‌شود.</p></td>
+</tr>
+</tbody>
+</table>
+<h2 id="همچنین-ببینید" dir="rtl">همچنین ببینید</h2>
+<ul>
+<li dir="rtl"><a href="index.html">kubectl create</a>	 - ایجاد یک منبع از یک فایل یا از ورودی استاندارد (stdin)</li>
+<li dir="rtl"><a href="kubectl_create_service_clusterip.html">kubectl create service clusterip</a>	 - ایجاد یک Service از نوع ClusterIP</li>
+<li dir="rtl"><a href="kubectl_create_service_externalname.html">kubectl create service externalname</a>	 - ایجاد یک Service از نوع ExternalName</li>
+<li dir="rtl"><a href="kubectl_create_service_loadbalancer.html">kubectl create service loadbalancer</a>	 - ایجاد یک Service از نوع LoadBalancer</li>
+<li dir="rtl"><a href="kubectl_create_service_nodeport.html">kubectl create service nodeport</a>	 - ایجاد یک Service از نوع NodePort</li>
+</ul>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#خلاصه">خلاصه</a><a class="l2" href="#گزینه-ها">گزینه‌ها</a><a class="l2" href="#گزینه-های-ارث-بری-شده-از-والد">گزینه‌های ارث‌بری شده از والد</a><a class="l2" href="#همچنین-ببینید">همچنین ببینید</a></nav>
+</div>
+</body>
+</html>

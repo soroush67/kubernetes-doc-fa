@@ -8,8 +8,8 @@
 
 | | |
 |---|---|
-| پیشرفت (بر اساس کلمات) | **31.0٪** |
-| صفحات ترجمه‌شده | 1007 از 1722 |
+| پیشرفت (بر اساس کلمات) | **32.9٪** |
+| صفحات ترجمه‌شده | 1028 از 1722 |
 | صفحات دارای ایراد ساختاری | 28 |
 | نسخه‌ی منبع انگلیسی | `ed70e311737a` |
 
@@ -48,7 +48,7 @@ cd kubernetes-doc-fa
 
 <div dir="rtl">
 
-متغیرهای اختیاری: `WORKERS` (پیش‌فرض ۲ ترجمه‌ی هم‌زمان؛ کمتر = مصرف آرام‌تر)، `TRANSLATE_MODEL` (پیش‌فرض `sonnet`)، `PORT`، `HOST`، `CLAUDE_BIN`، `K8S_WEBSITE` (مسیر منبع انگلیسی؛ پیش‌فرض `./website`).
+متغیرهای اختیاری: `WORKERS` (پیش‌فرض ۲ ترجمه‌ی هم‌زمان؛ کمتر = مصرف آرام‌تر)، `TRANSLATE_MODEL` (پیش‌فرض `opus`؛ صفحاتی که با مدل‌های `REDO_MODELS` ترجمه شده‌اند دوباره ترجمه می‌شوند)، `PORT`، `HOST`، `CLAUDE_BIN`، `K8S_WEBSITE` (مسیر منبع انگلیسی؛ پیش‌فرض `./website`).
 
 با `POST /api/update?retry_issues=1` (یا `service.py update --retry-issues`) صفحاتی که با ایراد ساختاری ثبت شده‌اند هم دوباره ترجمه می‌شوند.
 
@@ -72,7 +72,7 @@ cd kubernetes-doc-fa
 | `contribute` | 44 | 44 |
 | `doc-contributor-tools` | 1 | 1 |
 | `home` | 2 | 2 |
-| `reference` | 772 | 1198 |
+| `reference` | 793 | 1198 |
 | `setup` | 0 | 22 |
 | `tasks` | 0 | 221 |
 | `tutorials` | 0 | 45 |
@@ -93,26 +93,26 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
-- [reference/kubectl/generated/kubectl_create/kubectl_create_deployment.md](md/reference/kubectl/generated/kubectl_create/kubectl_create_deployment.md) — 2026-10-28T16:41:08+03:30
-- [reference/kubectl/generated/kubectl_create/kubectl_create_cronjob.md](md/reference/kubectl/generated/kubectl_create/kubectl_create_cronjob.md) — 2026-10-28T16:39:44+03:30
-- [reference/kubectl/generated/kubectl_create/kubectl_create_configmap.md](md/reference/kubectl/generated/kubectl_create/kubectl_create_configmap.md) — 2026-10-28T16:37:51+03:30
-- [reference/kubectl/generated/kubectl_create/kubectl_create_clusterrolebinding.md](md/reference/kubectl/generated/kubectl_create/kubectl_create_clusterrolebinding.md) — 2026-10-28T16:36:50+03:30
-- [reference/kubectl/generated/kubectl_create/kubectl_create_clusterrole.md](md/reference/kubectl/generated/kubectl_create/kubectl_create_clusterrole.md) — 2026-10-28T16:35:54+03:30
-- [reference/kubectl/generated/kubectl_create/_index.md](md/reference/kubectl/generated/kubectl_create/_index.md) — 2026-10-28T16:33:57+03:30
-- [reference/kubectl/generated/kubectl_cp/_index.md](md/reference/kubectl/generated/kubectl_cp/_index.md) — 2026-10-28T16:32:26+03:30
-- [reference/kubectl/generated/kubectl_cordon/_index.md](md/reference/kubectl/generated/kubectl_cordon/_index.md) — 2026-10-28T16:30:44+03:30
-- [reference/kubectl/generated/kubectl_config/kubectl_config_view.md](md/reference/kubectl/generated/kubectl_config/kubectl_config_view.md) — 2026-10-28T16:29:19+03:30
-- [reference/kubectl/generated/kubectl_config/kubectl_config_use-context.md](md/reference/kubectl/generated/kubectl_config/kubectl_config_use-context.md) — 2026-10-28T16:27:39+03:30
-- [reference/kubectl/generated/kubectl_config/kubectl_config_unset.md](md/reference/kubectl/generated/kubectl_config/kubectl_config_unset.md) — 2026-10-28T16:26:23+03:30
-- [reference/kubectl/generated/kubectl_config/kubectl_config_set.md](md/reference/kubectl/generated/kubectl_config/kubectl_config_set.md) — 2026-10-28T16:25:02+03:30
-- [reference/kubectl/generated/kubectl_config/kubectl_config_set-credentials.md](md/reference/kubectl/generated/kubectl_config/kubectl_config_set-credentials.md) — 2026-10-28T16:23:33+03:30
-- [reference/kubectl/generated/kubectl_config/kubectl_config_set-context.md](md/reference/kubectl/generated/kubectl_config/kubectl_config_set-context.md) — 2026-10-28T16:20:50+03:30
-- [reference/kubectl/generated/kubectl_config/kubectl_config_set-cluster.md](md/reference/kubectl/generated/kubectl_config/kubectl_config_set-cluster.md) — 2026-10-28T16:18:49+03:30
-- [reference/kubectl/generated/kubectl_config/kubectl_config_rename-context.md](md/reference/kubectl/generated/kubectl_config/kubectl_config_rename-context.md) — 2026-10-28T16:17:15+03:30
-- [reference/kubectl/generated/kubectl_config/kubectl_config_get-users.md](md/reference/kubectl/generated/kubectl_config/kubectl_config_get-users.md) — 2026-10-28T16:15:55+03:30
-- [reference/kubectl/generated/kubectl_config/kubectl_config_get-contexts.md](md/reference/kubectl/generated/kubectl_config/kubectl_config_get-contexts.md) — 2026-10-28T16:14:35+03:30
-- [reference/kubectl/generated/kubectl_config/kubectl_config_get-clusters.md](md/reference/kubectl/generated/kubectl_config/kubectl_config_get-clusters.md) — 2026-10-28T16:12:30+03:30
-- [reference/kubectl/generated/kubectl_config/kubectl_config_delete-user.md](md/reference/kubectl/generated/kubectl_config/kubectl_config_delete-user.md) — 2026-10-28T16:11:14+03:30
+- [reference/kubectl/generated/kubectl_delete/_index.md](md/reference/kubectl/generated/kubectl_delete/_index.md) — 2026-10-29T08:44:50+03:30
+- [reference/kubectl/generated/kubectl_debug/_index.md](md/reference/kubectl/generated/kubectl_debug/_index.md) — 2026-10-29T08:42:41+03:30
+- [reference/kubectl/generated/kubectl_create/kubectl_create_token.md](md/reference/kubectl/generated/kubectl_create/kubectl_create_token.md) — 2026-10-29T08:41:32+03:30
+- [reference/kubectl/generated/kubectl_create/kubectl_create_serviceaccount.md](md/reference/kubectl/generated/kubectl_create/kubectl_create_serviceaccount.md) — 2026-10-29T08:40:36+03:30
+- [reference/kubectl/generated/kubectl_create/kubectl_create_service_nodeport.md](md/reference/kubectl/generated/kubectl_create/kubectl_create_service_nodeport.md) — 2026-10-29T08:38:51+03:30
+- [reference/kubectl/generated/kubectl_create/kubectl_create_service_loadbalancer.md](md/reference/kubectl/generated/kubectl_create/kubectl_create_service_loadbalancer.md) — 2026-10-29T08:37:02+03:30
+- [reference/kubectl/generated/kubectl_create/kubectl_create_service_externalname.md](md/reference/kubectl/generated/kubectl_create/kubectl_create_service_externalname.md) — 2026-10-29T08:35:13+03:30
+- [reference/kubectl/generated/kubectl_create/kubectl_create_service_clusterip.md](md/reference/kubectl/generated/kubectl_create/kubectl_create_service_clusterip.md) — 2026-10-29T08:33:22+03:30
+- [reference/kubectl/generated/kubectl_create/kubectl_create_service.md](md/reference/kubectl/generated/kubectl_create/kubectl_create_service.md) — 2026-10-29T08:31:31+03:30
+- [reference/kubectl/generated/kubectl_create/kubectl_create_secret_tls.md](md/reference/kubectl/generated/kubectl_create/kubectl_create_secret_tls.md) — 2026-10-29T08:30:12+03:30
+- [reference/kubectl/generated/kubectl_create/kubectl_create_secret_generic.md](md/reference/kubectl/generated/kubectl_create/kubectl_create_secret_generic.md) — 2026-10-29T08:28:14+03:30
+- [reference/kubectl/generated/kubectl_create/kubectl_create_secret_docker-registry.md](md/reference/kubectl/generated/kubectl_create/kubectl_create_secret_docker-registry.md) — 2026-10-29T08:27:05+03:30
+- [reference/kubectl/generated/kubectl_create/kubectl_create_secret.md](md/reference/kubectl/generated/kubectl_create/kubectl_create_secret.md) — 2026-10-29T08:25:27+03:30
+- [reference/kubectl/generated/kubectl_create/kubectl_create_rolebinding.md](md/reference/kubectl/generated/kubectl_create/kubectl_create_rolebinding.md) — 2026-10-29T08:24:06+03:30
+- [reference/kubectl/generated/kubectl_create/kubectl_create_role.md](md/reference/kubectl/generated/kubectl_create/kubectl_create_role.md) — 2026-10-29T08:23:08+03:30
+- [reference/kubectl/generated/kubectl_create/kubectl_create_quota.md](md/reference/kubectl/generated/kubectl_create/kubectl_create_quota.md) — 2026-10-28T16:51:33+03:30
+- [reference/kubectl/generated/kubectl_create/kubectl_create_priorityclass.md](md/reference/kubectl/generated/kubectl_create/kubectl_create_priorityclass.md) — 2026-10-28T16:49:41+03:30
+- [reference/kubectl/generated/kubectl_create/kubectl_create_poddisruptionbudget.md](md/reference/kubectl/generated/kubectl_create/kubectl_create_poddisruptionbudget.md) — 2026-10-28T16:47:43+03:30
+- [reference/kubectl/generated/kubectl_create/kubectl_create_namespace.md](md/reference/kubectl/generated/kubectl_create/kubectl_create_namespace.md) — 2026-10-28T16:46:48+03:30
+- [reference/kubectl/generated/kubectl_create/kubectl_create_job.md](md/reference/kubectl/generated/kubectl_create/kubectl_create_job.md) — 2026-10-28T16:45:01+03:30
 
 </div>
 
