@@ -28,6 +28,7 @@ from translate import MODEL, Limiter, Stopped, translate_page
 
 WORKERS = int(os.environ.get("WORKERS", "2"))
 COMMIT_EVERY = int(os.environ.get("COMMIT_EVERY", "15"))
+COMMIT_MINUTES = int(os.environ.get("COMMIT_MINUTES", "20"))
 # pages translated by these models are redone (Sonnet output read too stiffly)
 REDO_MODELS = set(filter(None, os.environ.get("REDO_MODELS", "sonnet").split(",")))
 
@@ -80,6 +81,9 @@ class Runner:
     # ------------------------------------------------------------ pipeline
     def run(self, pull, retry_issues):
         m = load_manifest()
+        self.last_publish = time.time()
+        # push what is done as soon as the subscription limit is hit (publishing uses no quota)
+        self.limiter.on_pause = lambda: self.try_publish(m, "progress before subscription-limit pause")
         run = {"started": now(), "translated": 0, "issues": 0, "removed": 0}
         try:
             if pull:
@@ -140,15 +144,22 @@ class Runner:
             self.state["done"] = run["translated"]
             self.state["issues"] = run["issues"]
             save_manifest(m)
-            due = run["translated"] % COMMIT_EVERY == 0
+            due = (run["translated"] % COMMIT_EVERY == 0
+                   or time.time() - self.last_publish > COMMIT_MINUTES * 60)
         self.say(f"translated {rel}" + (f" ({len(issues)} issues)" if issues else ""))
-        if due and self.publish_lock.acquire(blocking=False):  # a slow publish never blocks translating
-            try:
-                self.publish(m, f"progress: {run['translated']} pages translated")
-            except Exception as e:
-                self.say(f"publish failed: {e}")
-            finally:
-                self.publish_lock.release()
+        if due:
+            self.try_publish(m, f"progress: {run['translated']} pages translated")
+
+    def try_publish(self, m, message):
+        if not self.publish_lock.acquire(blocking=False):  # a slow publish never blocks translating
+            return
+        try:
+            self.publish(m, message)
+            self.last_publish = time.time()
+        except Exception as e:
+            self.say(f"publish failed: {e}")
+        finally:
+            self.publish_lock.release()
 
     def publish(self, m, message):
         with self.lock:

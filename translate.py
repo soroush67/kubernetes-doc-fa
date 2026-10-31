@@ -35,6 +35,7 @@ class Limiter:
     def __init__(self):
         self.until = 0.0
         self.stop = threading.Event()
+        self.on_pause = None  # called (in a thread) when a new pause starts, e.g. to push work so far
 
     def wait(self):
         while time.time() < self.until:
@@ -45,10 +46,13 @@ class Limiter:
 
     def hit(self, message: str):
         until = reset_time(message)
+        new_pause = self.until < time.time()
         if until > self.until:
             print(f"{time.strftime('%H:%M:%S')} subscription limit hit, waiting until "
                   f"{time.strftime('%H:%M', time.localtime(until))}: {message[:120]}", flush=True)
         self.until = max(self.until, until)
+        if new_pause and self.on_pause:
+            threading.Thread(target=self.on_pause, daemon=True).start()
 
 
 def reset_time(message: str) -> float:
