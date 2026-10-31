@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-1089 از 1722 صفحه
+1094 از 1722 صفحه
 
 
 ## `.`
@@ -1390,22 +1390,22 @@
 - ✅ [mutating-admission-policy-v1.md](md/reference/kubernetes-api/admissionregistration/mutating-admission-policy-v1.md)
 - ✅ [mutating-webhook-configuration-v1.md](md/reference/kubernetes-api/admissionregistration/mutating-webhook-configuration-v1.md)
 - ✅ [validating-admission-policy-binding-v1.md](md/reference/kubernetes-api/admissionregistration/validating-admission-policy-binding-v1.md)
-- ⏳ `validating-admission-policy-v1.md`
+- ✅ [validating-admission-policy-v1.md](md/reference/kubernetes-api/admissionregistration/validating-admission-policy-v1.md)
 - ✅ [validating-webhook-configuration-v1.md](md/reference/kubernetes-api/admissionregistration/validating-webhook-configuration-v1.md)
 
 ## `reference/kubernetes-api/apiextensions`
 
-- ⏳ `_index.md`
+- ✅ [_index.md](md/reference/kubernetes-api/apiextensions/_index.md)
 - ⏳ `custom-resource-definition-v1.md`
 
 ## `reference/kubernetes-api/apiregistration`
 
-- ⏳ `_index.md`
-- ⏳ `api-service-v1.md`
+- ✅ [_index.md](md/reference/kubernetes-api/apiregistration/_index.md)
+- ✅ [api-service-v1.md](md/reference/kubernetes-api/apiregistration/api-service-v1.md)
 
 ## `reference/kubernetes-api/apiserverinternal`
 
-- ⏳ `_index.md`
+- ✅ [_index.md](md/reference/kubernetes-api/apiserverinternal/_index.md)
 - ⏳ `storage-version-v1alpha1.md`
 
 ## `reference/kubernetes-api/apps`

@@ -8,8 +8,8 @@
 
 | | |
 |---|---|
-| پیشرفت (بر اساس کلمات) | **42.3٪** |
-| صفحات ترجمه‌شده | 1089 از 1722 |
+| پیشرفت (بر اساس کلمات) | **43.2٪** |
+| صفحات ترجمه‌شده | 1094 از 1722 |
 | صفحات دارای ایراد ساختاری | 33 |
 | نسخه‌ی منبع انگلیسی | `ed70e311737a` |
 
@@ -72,7 +72,7 @@ cd kubernetes-doc-fa
 | `contribute` | 44 | 44 |
 | `doc-contributor-tools` | 1 | 1 |
 | `home` | 2 | 2 |
-| `reference` | 854 | 1198 |
+| `reference` | 859 | 1198 |
 | `setup` | 0 | 22 |
 | `tasks` | 0 | 221 |
 | `tutorials` | 0 | 45 |
@@ -96,6 +96,11 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [reference/kubernetes-api/apiserverinternal/_index.md](md/reference/kubernetes-api/apiserverinternal/_index.md) — 2026-10-31T10:28:22+03:30
+- [reference/kubernetes-api/apiregistration/api-service-v1.md](md/reference/kubernetes-api/apiregistration/api-service-v1.md) — 2026-10-31T10:28:19+03:30
+- [reference/kubernetes-api/apiregistration/_index.md](md/reference/kubernetes-api/apiregistration/_index.md) — 2026-10-31T10:19:56+03:30
+- [reference/kubernetes-api/admissionregistration/validating-admission-policy-v1.md](md/reference/kubernetes-api/admissionregistration/validating-admission-policy-v1.md) — 2026-10-31T10:19:53+03:30
+- [reference/kubernetes-api/apiextensions/_index.md](md/reference/kubernetes-api/apiextensions/_index.md) — 2026-10-31T10:19:44+03:30
 - [reference/kubernetes-api/admissionregistration/validating-webhook-configuration-v1.md](md/reference/kubernetes-api/admissionregistration/validating-webhook-configuration-v1.md) — 2026-10-31T10:19:35+03:30
 - [reference/kubernetes-api/admissionregistration/validating-admission-policy-binding-v1.md](md/reference/kubernetes-api/admissionregistration/validating-admission-policy-binding-v1.md) — 2026-10-31T10:12:06+03:30
 - [reference/kubernetes-api/admissionregistration/mutating-webhook-configuration-v1.md](md/reference/kubernetes-api/admissionregistration/mutating-webhook-configuration-v1.md) — 2026-10-31T10:10:50+03:30
@@ -111,11 +116,6 @@ cd kubernetes-doc-fa
 - [reference/kubectl/jsonpath.md](md/reference/kubectl/jsonpath.md) — 2026-10-29T13:50:51+03:30
 - [reference/kubectl/kubectl-cmds.md](md/reference/kubectl/kubectl-cmds.md) — 2026-10-29T13:50:43+03:30
 - [reference/kubectl/introduction.md](md/reference/kubectl/introduction.md) — 2026-10-29T13:50:40+03:30
-- [reference/kubectl/generated/kubectl_wait/_index.md](md/reference/kubectl/generated/kubectl_wait/_index.md) — 2026-10-29T13:50:28+03:30
-- [reference/kubectl/generated/kubectl_version/_index.md](md/reference/kubectl/generated/kubectl_version/_index.md) — 2026-10-29T13:50:13+03:30
-- [reference/kubectl/generated/kubectl_uncordon/_index.md](md/reference/kubectl/generated/kubectl_uncordon/_index.md) — 2026-10-29T13:49:25+03:30
-- [reference/kubectl/generated/kubectl_top/kubectl_top_pod.md](md/reference/kubectl/generated/kubectl_top/kubectl_top_pod.md) — 2026-10-29T13:48:52+03:30
-- [reference/kubectl/generated/kubectl_top/kubectl_top_node.md](md/reference/kubectl/generated/kubectl_top/kubectl_top_node.md) — 2026-10-29T13:47:58+03:30
 
 </div>
 
