@@ -52,18 +52,25 @@ class Limiter:
 
 
 def reset_time(message: str) -> float:
-    """'... resets 2:30pm (Asia/Tehran)' -> epoch seconds (+2 min); 30 min if unparsable."""
-    m = re.search(r"resets\s+(\d{1,2})(?::(\d{2}))?\s*(am|pm)(?:\s*\(([^)]+)\))?", message, re.I)
+    """'resets 2:30pm (Asia/Tehran)' or 'resets Oct 31, 7:30am (Asia/Tehran)' -> epoch (+2 min);
+    30 min from now if unparsable."""
+    m = re.search(r"resets\s+(?:([A-Z][a-z]{2})\s+(\d{1,2}),\s*)?(\d{1,2})(?::(\d{2}))?\s*(am|pm)(?:\s*\(([^)]+)\))?",
+                  message, re.I)
     if not m:
         return time.time() + 1800
-    hour = int(m.group(1)) % 12 + (12 if m.group(3).lower() == "pm" else 0)
+    mon, day, h, mi, ampm, zone = m.groups()
+    hour = int(h) % 12 + (12 if ampm.lower() == "pm" else 0)
     try:
-        tz = ZoneInfo(m.group(4)) if m.group(4) else None
+        tz = ZoneInfo(zone) if zone else None
     except Exception:
         tz = None
     now = datetime.now(tz)
-    at = now.replace(hour=hour, minute=int(m.group(2) or 0), second=0, microsecond=0)
-    if at <= now:
+    at = now.replace(hour=hour, minute=int(mi or 0), second=0, microsecond=0)
+    if mon:
+        at = at.replace(month=datetime.strptime(mon, "%b").month, day=int(day))
+        if at < now - timedelta(days=180):
+            at = at.replace(year=at.year + 1)
+    elif at <= now:
         at += timedelta(days=1)
     return at.timestamp() + 120
 
