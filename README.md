@@ -8,9 +8,9 @@
 
 | | |
 |---|---|
-| پیشرفت (بر اساس کلمات) | **39.6٪** |
-| صفحات ترجمه‌شده | 1073 از 1722 |
-| صفحات دارای ایراد ساختاری | 32 |
+| پیشرفت (بر اساس کلمات) | **40.2٪** |
+| صفحات ترجمه‌شده | 1084 از 1722 |
+| صفحات دارای ایراد ساختاری | 33 |
 | نسخه‌ی منبع انگلیسی | `ed70e311737a` |
 
 ## مشاهده
@@ -72,7 +72,7 @@ cd kubernetes-doc-fa
 | `contribute` | 44 | 44 |
 | `doc-contributor-tools` | 1 | 1 |
 | `home` | 2 | 2 |
-| `reference` | 838 | 1198 |
+| `reference` | 849 | 1198 |
 | `setup` | 0 | 22 |
 | `tasks` | 0 | 221 |
 | `tutorials` | 0 | 45 |
@@ -85,6 +85,7 @@ cd kubernetes-doc-fa
 
 | شروع | پایان | ترجمه‌شده | با ایراد | نتیجه |
 |---|---|---|---|---|
+| 2026-10-31T09:43:22+03:30 | 2026-10-31T09:49:30+03:30 | 0 | 0 | stopped |
 | 2026-10-28T11:00:04+03:30 | 2026-10-28T11:56:52+03:30 | 217 | 13 | stopped |
 
 </div>
@@ -93,6 +94,17 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [reference/kubectl/quick-reference.md](md/reference/kubectl/quick-reference.md) — 2026-10-29T13:56:59+03:30
+- [reference/kubernetes-api/admissionregistration/_index.md](md/reference/kubernetes-api/admissionregistration/_index.md) — 2026-10-29T13:56:31+03:30
+- [reference/kubernetes-api/_index.md](md/reference/kubernetes-api/_index.md) — 2026-10-29T13:56:26+03:30
+- [reference/kubelet-api/stats.v1alpha1.md](md/reference/kubelet-api/stats.v1alpha1.md) — 2026-10-29T13:56:21+03:30
+- [reference/kubelet-api/_index.md](md/reference/kubelet-api/_index.md) — 2026-10-29T13:54:00+03:30
+- [reference/kubectl/kuberc.md](md/reference/kubectl/kuberc.md) — 2026-10-29T13:53:56+03:30
+- [reference/kubectl/kubectl.md](md/reference/kubectl/kubectl.md) — 2026-10-29T13:52:29+03:30
+- [reference/kubectl/jsonpath.md](md/reference/kubectl/jsonpath.md) — 2026-10-29T13:50:51+03:30
+- [reference/kubectl/kubectl-cmds.md](md/reference/kubectl/kubectl-cmds.md) — 2026-10-29T13:50:43+03:30
+- [reference/kubectl/introduction.md](md/reference/kubectl/introduction.md) — 2026-10-29T13:50:40+03:30
+- [reference/kubectl/generated/kubectl_wait/_index.md](md/reference/kubectl/generated/kubectl_wait/_index.md) — 2026-10-29T13:50:28+03:30
 - [reference/kubectl/generated/kubectl_version/_index.md](md/reference/kubectl/generated/kubectl_version/_index.md) — 2026-10-29T13:50:13+03:30
 - [reference/kubectl/generated/kubectl_uncordon/_index.md](md/reference/kubectl/generated/kubectl_uncordon/_index.md) — 2026-10-29T13:49:25+03:30
 - [reference/kubectl/generated/kubectl_top/kubectl_top_pod.md](md/reference/kubectl/generated/kubectl_top/kubectl_top_pod.md) — 2026-10-29T13:48:52+03:30
@@ -102,17 +114,6 @@ cd kubernetes-doc-fa
 - [reference/kubectl/generated/kubectl_taint/_index.md](md/reference/kubectl/generated/kubectl_taint/_index.md) — 2026-10-29T13:45:43+03:30
 - [reference/kubectl/generated/kubectl_set/kubectl_set_selector.md](md/reference/kubectl/generated/kubectl_set/kubectl_set_selector.md) — 2026-10-29T13:44:44+03:30
 - [reference/kubectl/generated/kubectl_set/kubectl_set_serviceaccount.md](md/reference/kubectl/generated/kubectl_set/kubectl_set_serviceaccount.md) — 2026-10-29T13:44:25+03:30
-- [reference/kubectl/generated/kubectl_set/kubectl_set_image.md](md/reference/kubectl/generated/kubectl_set/kubectl_set_image.md) — 2026-10-29T13:42:36+03:30
-- [reference/kubectl/generated/kubectl_set/kubectl_set_resources.md](md/reference/kubectl/generated/kubectl_set/kubectl_set_resources.md) — 2026-10-29T13:42:00+03:30
-- [reference/kubectl/generated/kubectl_set/kubectl_set_env.md](md/reference/kubectl/generated/kubectl_set/kubectl_set_env.md) — 2026-10-29T13:40:56+03:30
-- [reference/instrumentation/metrics.md](md/reference/instrumentation/metrics.md) — 2026-10-29T13:40:43+03:30
-- [reference/kubectl/generated/kubectl_set/_index.md](md/reference/kubectl/generated/kubectl_set/_index.md) — 2026-10-29T13:39:19+03:30
-- [reference/kubectl/generated/kubectl_scale/_index.md](md/reference/kubectl/generated/kubectl_scale/_index.md) — 2026-10-29T13:37:57+03:30
-- [reference/kubectl/generated/kubectl_run/_index.md](md/reference/kubectl/generated/kubectl_run/_index.md) — 2026-10-29T13:35:49+03:30
-- [reference/kubectl/generated/kubectl_rollout/kubectl_rollout_undo.md](md/reference/kubectl/generated/kubectl_rollout/kubectl_rollout_undo.md) — 2026-10-29T13:32:46+03:30
-- [reference/kubectl/generated/kubectl_rollout/kubectl_rollout_status.md](md/reference/kubectl/generated/kubectl_rollout/kubectl_rollout_status.md) — 2026-10-29T13:31:01+03:30
-- [reference/kubectl/generated/kubectl_rollout/kubectl_rollout_resume.md](md/reference/kubectl/generated/kubectl_rollout/kubectl_rollout_resume.md) — 2026-10-29T13:30:13+03:30
-- [reference/kubectl/generated/kubectl_rollout/kubectl_rollout_restart.md](md/reference/kubectl/generated/kubectl_rollout/kubectl_rollout_restart.md) — 2026-10-29T13:28:32+03:30
 
 </div>
 
@@ -152,6 +153,7 @@ cd kubernetes-doc-fa
 - [reference/kubectl/generated/kubectl_expose/_index.md](md/reference/kubectl/generated/kubectl_expose/_index.md): chunk 2: short: 849 words vs 1205 source words
 - [reference/kubectl/generated/kubectl_get/_index.md](md/reference/kubectl/generated/kubectl_get/_index.md): chunk 2: short: 860 words vs 1205 source words
 - [reference/kubectl/generated/kubectl_run/_index.md](md/reference/kubectl/generated/kubectl_run/_index.md): chunk 2: short: 862 words vs 1205 source words
+- [reference/kubectl/quick-reference.md](md/reference/kubectl/quick-reference.md): chunk 2: 16 code block(s) changed; chunk 2: 141 untranslated English lines, e.g. 'kubectl config view # Show Merged kubeconfig settings.'
 
 </div>
 

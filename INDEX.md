@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-1073 از 1722 صفحه
+1084 از 1722 صفحه
 
 
 ## `.`
@@ -1120,12 +1120,12 @@
 - ✅ [_index.md](md/reference/kubectl/_index.md)
 - ✅ [conventions.md](md/reference/kubectl/conventions.md)
 - ✅ [docker-cli-to-kubectl.md](md/reference/kubectl/docker-cli-to-kubectl.md)
-- ⏳ `introduction.md`
-- ⏳ `jsonpath.md`
-- ⏳ `kubectl-cmds.md`
-- ⏳ `kubectl.md`
-- ⏳ `kuberc.md`
-- ⏳ `quick-reference.md`
+- ✅ [introduction.md](md/reference/kubectl/introduction.md)
+- ✅ [jsonpath.md](md/reference/kubectl/jsonpath.md)
+- ✅ [kubectl-cmds.md](md/reference/kubectl/kubectl-cmds.md)
+- ✅ [kubectl.md](md/reference/kubectl/kubectl.md)
+- ✅ [kuberc.md](md/reference/kubectl/kuberc.md)
+- ⚠️ [quick-reference.md](md/reference/kubectl/quick-reference.md)
 
 ## `reference/kubectl/generated`
 
@@ -1371,21 +1371,21 @@
 
 ## `reference/kubectl/generated/kubectl_wait`
 
-- ⏳ `_index.md`
+- ✅ [_index.md](md/reference/kubectl/generated/kubectl_wait/_index.md)
 
 ## `reference/kubelet-api`
 
-- ⏳ `_index.md`
-- ⏳ `stats.v1alpha1.md`
+- ✅ [_index.md](md/reference/kubelet-api/_index.md)
+- ✅ [stats.v1alpha1.md](md/reference/kubelet-api/stats.v1alpha1.md)
 
 ## `reference/kubernetes-api`
 
-- ⏳ `_index.md`
+- ✅ [_index.md](md/reference/kubernetes-api/_index.md)
 - ⏳ `group-versions.md`
 
 ## `reference/kubernetes-api/admissionregistration`
 
-- ⏳ `_index.md`
+- ✅ [_index.md](md/reference/kubernetes-api/admissionregistration/_index.md)
 - ⏳ `mutating-admission-policy-binding-v1.md`
 - ⏳ `mutating-admission-policy-v1.md`
 - ⏳ `mutating-webhook-configuration-v1.md`

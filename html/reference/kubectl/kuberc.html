@@ -1,0 +1,408 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ترجیحات کاربر kubectl (kuberc) | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">reference / kubectl</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">ترجیحات کاربر kubectl (kuberc)</h1><div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes 1.34 [beta]</span> (بتا)</div>
+<p dir="rtl">با فایل پیکربندی <code dir="ltr">kuberc</code> در کوبرنتیز می‌توانید ترجیحات خود را برای
+<span class="term" title="kubectl">kubectl</span>
+تعریف کنید؛ مانند گزینه‌های پیش‌فرض و نام‌های مستعار (alias) فرمان‌ها. برخلاف فایل kubeconfig، فایل پیکربندی <code dir="ltr">kuberc</code>
+هیچ‌گونه جزئیاتی دربارهٔ کلاستر، نام‌های کاربری یا گذرواژه‌ها را <strong>در بر ندارد</strong>.</p>
+<p dir="rtl">در رایانه‌های Linux و POSIX، مکان پیش‌فرض این فایل پیکربندی <code dir="ltr">$HOME/.kube/kuberc</code> است.
+مسیر پیش‌فرض در Windows نیز مشابه است: <code dir="ltr">%USERPROFILE%\.kube\kuberc</code>.
+برای معرفی مسیر یک فایل kuberc سفارشی به kubectl، از گزینهٔ خط فرمان <code dir="ltr">--kuberc</code> استفاده کنید
+یا متغیر محیطی <code dir="ltr">KUBERC</code> را تنظیم کنید.</p>
+<p dir="rtl">در فایل <code dir="ltr">kuberc</code> با قالب <code dir="ltr">kubectl.config.k8s.io/v1beta1</code> می‌توانید انواع زیر از ترجیحات کاربر را
+تعریف کنید:</p>
+<ol>
+<li dir="rtl"><a href="#aliases">نام‌های مستعار</a>: با آن‌ها می‌توانید نسخه‌های کوتاه‌تری از فرمان‌های پرکاربرد خود
+بسازید و در صورت نیاز، گزینه‌ها و آرگومان‌هایی را نیز برایشان تعیین کنید.</li>
+<li dir="rtl"><a href="#defaults">پیش‌فرض‌ها</a>: با آن‌ها می‌توانید مقادیر پیش‌فرض گزینه‌ها را برای فرمان‌های
+پرکاربرد خود پیکربندی کنید.</li>
+<li dir="rtl"><a href="#credential-plugin-policy">سیاست افزونهٔ اعتبارنامه</a>: با آن می‌توانید
+سیاستی برای افزونه‌های اعتبارنامهٔ exec پیکربندی کنید.</li>
+</ol>
+<h2 id="aliases" dir="ltr" class="ltr">aliases</h2>
+<p dir="rtl">در پیکربندی <code dir="ltr">kuberc</code>، بخش <em>aliases</em> به شما امکان می‌دهد میان‌برهای سفارشی
+برای فرمان‌های kubectl تعریف کنید و در صورت نیاز، آرگومان‌ها و پرچم‌های خط فرمان را
+از پیش برای آن‌ها تعیین کنید.</p>
+<p dir="rtl">مثال زیر یک نام مستعار <code dir="ltr">kubectl getn</code> برای زیرفرمان <code dir="ltr">kubectl get</code> تعریف می‌کند
+و افزون بر آن، قالب خروجی JSON را نیز مشخص می‌کند: <code dir="ltr">--output=json</code>.</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: kubectl.config.k8s.io/v1beta1
+kind: Preference
+aliases:
+- name: getn
+  command: get
+  options:
+   - name: output
+     default: json
+</code></pre>
+<p dir="rtl">در این مثال، تنظیمات زیر به کار رفته است:</p>
+<ol>
+<li dir="rtl"><code dir="ltr">name</code>: نام مستعار نباید با فرمان‌های داخلی تداخل داشته باشد.</li>
+<li dir="rtl"><code dir="ltr">command</code>: فرمان داخلی زیربنایی‌ای را که نام مستعار شما اجرا می‌کند مشخص می‌کند.
+زیرفرمان‌هایی مانند <code dir="ltr">create role</code> نیز پشتیبانی می‌شوند.</li>
+<li dir="rtl"><code dir="ltr">options</code>: مقادیر پیش‌فرض گزینه‌ها را مشخص می‌کند. اگر هنگام اجرای <code dir="ltr">kubectl</code>
+گزینه‌ای را صریحاً مشخص کنید، مقداری که وارد می‌کنید بر مقدار پیش‌فرض
+تعریف‌شده در <code dir="ltr">kuberc</code> اولویت دارد.</li>
+</ol>
+<p dir="rtl">با این نام مستعار، اجرای <code dir="ltr">kubectl getn pods</code> به‌طور پیش‌فرض خروجی JSON تولید می‌کند. اما
+اگر <code dir="ltr">kubectl getn pods -oyaml</code> را اجرا کنید، خروجی در قالب YAML خواهد بود.</p>
+<p dir="rtl">طرح‌وارهٔ کامل <code dir="ltr">kuberc</code> در <a href="../config-api/kuberc.v1beta1.html">این صفحه</a> در دسترس است.</p>
+<h3 id="prependargs" dir="ltr" class="ltr">prependArgs</h3>
+<p dir="rtl">مثال بعدی، مثال پیشین را گسترش می‌دهد و بخش <code dir="ltr">prependArgs</code> را معرفی می‌کند.
+این بخش امکان می‌دهد آرگومان‌های دلخواه را بلافاصله پس از فرمان kubectl
+و زیرفرمان آن (در صورت وجود) درج کنید.</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: kubectl.config.k8s.io/v1beta1
+kind: Preference
+aliases:
+  - name: getn
+    command: get
+    options:
+      - name: output
+        default: json
+    prependArgs:
+      - namespace
+</code></pre>
+<p dir="rtl">در این مثال، تنظیمات زیر به کار رفته است:</p>
+<ol>
+<li dir="rtl"><code dir="ltr">name</code>: نام مستعار نباید با فرمان‌های داخلی تداخل داشته باشد.</li>
+<li dir="rtl"><code dir="ltr">command</code>: فرمان داخلی زیربنایی‌ای را که نام مستعار شما اجرا می‌کند مشخص می‌کند.
+زیرفرمان‌هایی مانند <code dir="ltr">create role</code> نیز پشتیبانی می‌شوند.</li>
+<li dir="rtl"><code dir="ltr">options</code>: مقادیر پیش‌فرض گزینه‌ها را مشخص می‌کند. اگر هنگام اجرای <code dir="ltr">kubectl</code>
+گزینه‌ای را صریحاً مشخص کنید، مقداری که وارد می‌کنید بر مقدار پیش‌فرض
+تعریف‌شده در <code dir="ltr">kuberc</code> اولویت دارد.</li>
+<li dir="rtl"><code dir="ltr">prependArgs</code>: آرگومان صریحی را مشخص می‌کند که درست پس از فرمان قرار می‌گیرد.
+در اینجا، این تنظیم به <code dir="ltr">kubectl get namespace test-ns --output json</code> تبدیل می‌شود.</li>
+</ol>
+<h3 id="appendargs" dir="ltr" class="ltr">appendArgs</h3>
+<p dir="rtl">مثال بعدی سازوکاری مشابه افزودن آرگومان‌ها به ابتدای فرمان را معرفی می‌کند؛
+اما این بار آرگومان‌ها را به انتهای فرمان kubectl اضافه می‌کنیم.</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: kubectl.config.k8s.io/v1beta1
+kind: Preference
+aliases:
+- name: runx
+  command: run
+  options:
+    - name: image
+      default: busybox
+    - name: namespace
+      default: test-ns
+  appendArgs:
+    - --
+    - custom-arg
+</code></pre>
+<p dir="rtl">در این مثال، تنظیمات زیر به کار رفته است:</p>
+<ol>
+<li dir="rtl"><code dir="ltr">name</code>: نام مستعار نباید با فرمان‌های داخلی تداخل داشته باشد.</li>
+<li dir="rtl"><code dir="ltr">command</code>: فرمان داخلی زیربنایی‌ای را که نام مستعار شما اجرا می‌کند مشخص می‌کند.
+زیرفرمان‌هایی مانند <code dir="ltr">create role</code> نیز پشتیبانی می‌شوند.</li>
+<li dir="rtl"><code dir="ltr">options</code>: مقادیر پیش‌فرض گزینه‌ها را مشخص می‌کند. اگر هنگام اجرای <code dir="ltr">kubectl</code>
+گزینه‌ای را صریحاً مشخص کنید، مقداری که وارد می‌کنید بر مقدار پیش‌فرض
+تعریف‌شده در <code dir="ltr">kuberc</code> اولویت دارد.</li>
+<li dir="rtl"><code dir="ltr">appendArgs</code>: آرگومان‌های صریحی را مشخص می‌کند که در انتهای فرمان قرار می‌گیرند.
+در اینجا، این تنظیم به <code dir="ltr">kubectl run test-pod --namespace test-ns --image busybox -- custom-arg</code> تبدیل می‌شود.</li>
+</ol>
+<h2 id="defaults" dir="ltr" class="ltr">defaults</h2>
+<p dir="rtl">در پیکربندی <code dir="ltr">kuberc</code>، بخش <code dir="ltr">defaults</code> به شما امکان می‌دهد مقادیر پیش‌فرض
+آرگومان‌های خط فرمان را مشخص کنید.</p>
+<p dir="rtl">مثال زیر حذف تعاملی را حالت پیش‌فرض اجرای <code dir="ltr">kubectl delete</code>
+قرار می‌دهد:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: kubectl.config.k8s.io/v1beta1
+kind: Preference
+defaults:
+- command: delete
+  options:
+    - name: interactive
+      default: "true"
+</code></pre>
+<p dir="rtl">در این مثال، تنظیمات زیر به کار رفته است:</p>
+<ol>
+<li dir="rtl"><code dir="ltr">command</code>: فرمان داخلی را مشخص می‌کند؛ زیرفرمان‌هایی مانند <code dir="ltr">create role</code> نیز پشتیبانی می‌شوند.</li>
+<li dir="rtl"><code dir="ltr">options</code>: مقادیر پیش‌فرض گزینه‌ها را مشخص می‌کند. اگر هنگام اجرای <code dir="ltr">kubectl</code>
+گزینه‌ای را صریحاً مشخص کنید، مقداری که وارد می‌کنید بر مقدار پیش‌فرض
+تعریف‌شده در <code dir="ltr">kuberc</code> اولویت دارد.</li>
+</ol>
+<p dir="rtl">با این تنظیم، اجرای <code dir="ltr">kubectl delete pod/test-pod</code> به‌طور پیش‌فرض از شما تأیید می‌خواهد.
+اما <code dir="ltr">kubectl delete pod/test-pod --interactive=false</code> مرحلهٔ تأیید را نادیده می‌گیرد.</p>
+<h2 id="سیاست-افزونهٔ-اعتبارنامه" dir="rtl">سیاست افزونهٔ اعتبارنامه</h2>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes v1.35 [beta]</span> (بتا)</div>
+<p dir="rtl">ویرایشگران یک فایل <code dir="ltr">kubeconfig</code> می‌توانند افزونه‌ای اجرایی را مشخص کنند که برای
+دریافت اعتبارنامه و احراز هویت کلاینت در برابر کلاستر به کار می‌رود. در پیکربندی
+<code dir="ltr">kuberc</code> می‌توانید سیاست اجرای چنین افزونه‌هایی را با دو فیلد سطح بالا
+تعیین کنید. هر دو فیلد اختیاری هستند.</p>
+<h3 id="credentialpluginpolicy" dir="ltr" class="ltr">credentialPluginPolicy</h3>
+<p dir="rtl">با فیلد اختیاری <code dir="ltr">credentialPluginPolicy</code> می‌توانید سیاستی برای افزونه‌های
+اعتبارنامه پیکربندی کنید. این فیلد سه مقدار معتبر دارد:</p>
+<ol>
+<li dir="ltr" class="ltr"><code dir="ltr">"AllowAll"</code></li>
+</ol>
+<p dir="rtl">وقتی سیاست روی <code dir="ltr">"AllowAll"</code> تنظیم شود، هیچ محدودیتی برای اجرای افزونه‌ها
+وجود نخواهد داشت. این رفتار با رفتار نسخه‌های کوبرنتیز پیش از 1.35
+یکسان است.</p>
+<ol start="2">
+<li dir="ltr" class="ltr"><code dir="ltr">"DenyAll"</code></li>
+</ol>
+<p dir="rtl">وقتی سیاست روی <code dir="ltr">"DenyAll"</code> تنظیم شود، اجرای هیچ افزونهٔ exec مجاز نخواهد بود.</p>
+<ol start="3">
+<li dir="ltr" class="ltr"><code dir="ltr">"Allowlist"</code></li>
+</ol>
+<p dir="rtl">وقتی سیاست روی <code dir="ltr">"Allowlist"</code> تنظیم شود، کاربر می‌تواند اجرای افزونه‌های اعتبارنامه را
+به‌صورت گزینشی مجاز کند. در این حالت <strong>باید</strong> فیلد <code dir="ltr">credentialPluginAllowlist</code>
+را نیز (آن هم در سطح بالا) مشخص کنید. این فیلد در ادامه
+توضیح داده شده است.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">برای حفظ سازگاری با نسخه‌های پیشین، مشخص‌نکردن <code dir="ltr">credentialPluginPolicy</code>
+یا خالی گذاشتن آن با تنظیم صریح سیاست روی <code dir="ltr">"AllowAll"</code> یکسان است.</p>
+</div>
+<h3 id="credentialpluginallowlist" dir="ltr" class="ltr">credentialPluginAllowlist</h3>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">تنظیم این فیلد در حالتی که <code dir="ltr">credentialPluginPolicy</code> برابر با <code dir="ltr">Allowlist</code> نیست (از جمله
+وقتی آن فیلد وجود ندارد یا خالی است)، خطای پیکربندی محسوب می‌شود.</p>
+</div>
+<p dir="rtl">فیلد <code dir="ltr">credentialPluginAllowlist</code> فهرستی از مجموعه‌معیارها (مجموعه‌هایی از
+<em>الزامات</em>) را برای مجوز اجرای افزونه‌های اعتبارنامه مشخص می‌کند. هر مجموعه از
+الزامات به‌نوبت بررسی می‌شود و به محض اینکه افزونه دست‌کم تمام الزامات یکی از
+مجموعه‌ها را برآورده کند، اجرای آن مجاز می‌شود. به بیان دیگر، نتیجهٔ کلی اعمال
+فهرست مجاز روی افزونهٔ <code dir="ltr">my-binary-plugin</code>، <em>OR منطقی</em> تصمیم‌های حاصل از تک‌تک
+موارد فهرست است.</p>
+<p dir="rtl">برای نمونه، پیکربندی فهرست مجاز زیر را در نظر بگیرید:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: kubectl.config.k8s.io/v1beta1
+kind: Preference
+credentialPluginPolicy: Allowlist
+credentialPluginAllowlist:
+  - command: foo
+  - command: bar
+  - command: baz
+</code></pre>
+<p dir="rtl">در مثال بالا، فهرست مجاز اجرای افزونه‌هایی را مجاز می‌کند که فرمان آن‌ها "foo"،
+"bar" <em>یا</em> "baz" باشد.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">هر مجموعه از الزامات برای معتبر بودن <strong>باید</strong> دست‌کم یک فیلد غیرخالی و صریحاً
+مشخص‌شده داشته باشد. اگر همهٔ فیلدها خالی یا نامشخص باشند، این وضعیت خطای
+پیکربندی محسوب می‌شود و اجرای افزونه مجاز نخواهد بود. همین حکم در مواردی
+برقرار است که فیلد <code dir="ltr">credentialPluginAllowlist</code> مشخص نشده باشد یا صریحاً
+به‌صورت فهرست خالی تعیین شده باشد. هدف از این کار جلوگیری از وضعیتی است
+که کاربر کلید <code dir="ltr">credentialPluginAllowlist</code> را اشتباه تایپ کند و گمان کند
+فهرست مجازی تعیین کرده است، در حالی که در واقع چنین نکرده است.</p>
+<p dir="rtl">برای نمونه، پیکربندی زیر نامعتبر است:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: kubectl.config.k8s.io/v1beta1
+kind: Preference
+credentialPluginPolicy: Allowlist
+credentialPluginAllowlist:
+  - command: ""
+</code></pre>
+</div>
+<h5 dir="ltr" class="ltr">command</h5>
+<p dir="rtl">فیلد <code dir="ltr">command</code> نام افزونهٔ اعتبارنامه‌ای را مشخص می‌کند که اجرای آن مجاز است. این مقدار را
+می‌توان به‌صورت نام پایهٔ (basename) افزونهٔ موردنظر یا مسیر کامل آن مشخص کرد. اگر به‌صورت
+نام پایه مشخص شود، تصمیم این فیلد در صورتی «مجاز» است که یکی از دو شرط زیر
+برقرار باشد:</p>
+<ol>
+<li dir="rtl">مقدار فیلد <code dir="ltr">command</code> دقیقاً برابر با فیلد <code dir="ltr">command</code> افزونه باشد.</li>
+<li dir="rtl">مسیر کامل هم برای <code dir="ltr">command</code> فهرست مجاز و هم برای <code dir="ltr">command</code> افزونه
+تعیین شود و نتایج برابر باشند.</li>
+</ol>
+<p dir="rtl">اگر به‌صورت مسیر کامل مشخص شود، تصمیم این فیلد در صورتی «مجاز» است که
+یکی از شرط‌های زیر برقرار باشد:</p>
+<ol>
+<li dir="rtl">مقدار فیلد <code dir="ltr">command</code> دقیقاً برابر با فیلد <code dir="ltr">command</code> افزونه باشد (یعنی
+<code dir="ltr">command</code> افزونه نیز مسیر کامل باشد).</li>
+<li dir="rtl">مسیر کامل برای <code dir="ltr">command</code> افزونه تعیین شود و فیلد <code dir="ltr">command</code> فهرست مجاز
+دقیقاً با آن مطابقت داشته باشد.</li>
+</ol>
+<p dir="rtl">در مورد <em>تعیین مسیر کامل</em> که پیش‌تر در این صفحه به آن اشاره شد،
+نه پیوندهای نمادین (symlink) و نه الگوهای glob پوسته تفسیر نمی‌شوند.</p>
+<p dir="rtl">برای نمونه، مدخلی در فهرست مجاز را با <code dir="ltr">command</code> برابر <code dir="ltr">/usr/local/bin/my-binary</code> در نظر بگیرید،
+که در آن <code dir="ltr">/usr/local/bin/my-binary</code> یک پیوند نمادین به <code dir="ltr">/this/is/a/target</code> است. اگر <code dir="ltr">command</code>
+مشخص‌شده در kubeconfig برابر <code dir="ltr">/this/is/a/target</code> باشد، اجرای آن مجاز نخواهد بود. برای
+اینکه این حالت کار کند، باید <code dir="ltr">/this/is/a/target</code> را صریحاً به فهرست مجاز
+اضافه کنید. از سوی دیگر، اگر مقدار <code dir="ltr">command</code> در kubeconfig برابر
+<code dir="ltr">/usr/local/bin/my-binary</code> باشد، فهرست مجاز اجرای آن را مجاز می‌کند.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">تا زمانی که kuberc در مرحلهٔ بتا است، می‌توان در مدخل‌های فهرست مجاز از <code dir="ltr">name</code> به‌عنوان
+نام مستعار <code dir="ltr">command</code> استفاده کرد. از کوبرنتیز 1.36 به بعد، <code dir="ltr">name</code> به نفع <code dir="ltr">command</code>
+منسوخ شده است. تعیین <strong>هم‌زمان</strong> <code dir="ltr">name</code> و <code dir="ltr">command</code> در یک مدخل فهرست مجاز
+خطا محسوب می‌شود، زیرا این تنظیمات از نظر امنیتی حساس هستند.
+فیلد <code dir="ltr">name</code> پس از رسیدن kuberc به مرحلهٔ GA به‌طور کامل حذف خواهد شد.</p>
+</div>
+<h3 id="مثال-credential-plugin-policy-example" dir="rtl">مثال {#credential-plugin-policy-example}</h3>
+<p dir="rtl">مثال زیر یک سیاست <code dir="ltr">"Allowlist"</code> را همراه با فهرست مجاز آن نشان می‌دهد:</p>
+<div class="tabs">
+<div class="tab"><div class="tab-name">POSIX</div>
+<p dir="ltr" class="ltr">apiVersion: kubectl.config.k8s.io/v1beta1
+kind: Preference
+credentialPluginPolicy: Allowlist
+credentialPluginAllowlist:</p>
+<ul>
+<li dir="ltr" class="ltr">command: my-trusted-binary</li>
+<li dir="ltr" class="ltr">command: /usr/local/bin/my-other-trusted-binary</li>
+</ul>
+</div>
+<div class="tab"><div class="tab-name">Windows</div>
+<p dir="ltr" class="ltr">apiVersion: kubectl.config.k8s.io/v1beta1
+kind: Preference
+credentialPluginPolicy: Allowlist
+credentialPluginAllowlist:</p>
+<ul>
+<li dir="ltr" class="ltr">command: my-trusted-binary</li>
+<li dir="ltr" class="ltr">command: "C:\my-other-trusted-binary"</li>
+</ul>
+</div>
+</div>
+<h3 id="مدیریت-سیاست-افزونهٔ-اعتبارنامه-با-kubectl-kuberc-set" dir="rtl">مدیریت سیاست افزونهٔ اعتبارنامه با <code dir="ltr">kubectl kuberc set</code></h3>
+<p dir="rtl">به‌جای ویرایش مستقیم فایل kuberc، می‌توانید با <code dir="ltr">kubectl kuberc set</code>
+سیاست افزونهٔ اعتبارنامه را از خط فرمان پیکربندی کنید.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># Set the policy to deny all credential plugins
+kubectl kuberc set --section credentialplugin --policy DenyAll
+
+# Set the policy to allow all credential plugins
+kubectl kuberc set --section credentialplugin --policy AllowAll
+
+# Allow only specific credential plugins
+kubectl kuberc set --section credentialplugin \
+    --policy Allowlist \
+    --allowlist-entry command=my-trusted-binary \
+    --allowlist-entry command=my-other-trusted-binary
+</code></pre>
+<p dir="rtl">در این مثال، پرچم‌های زیر به کار رفته است:</p>
+<ol>
+<li dir="rtl"><code dir="ltr">--section credentialplugin</code>: بخش پیکربندی افزونهٔ اعتبارنامه را انتخاب می‌کند.</li>
+<li dir="rtl"><code dir="ltr">--policy</code>: الزامی است. سیاست را روی <code dir="ltr">AllowAll</code>، <code dir="ltr">DenyAll</code> یا <code dir="ltr">Allowlist</code> تنظیم می‌کند.</li>
+<li dir="rtl"><code dir="ltr">--allowlist-entry</code>: در صورت استفاده از <code dir="ltr">--policy=Allowlist</code> الزامی است. افزونهٔ مجاز را
+با جفت‌های <code dir="ltr">key=value</code> جداشده با ویرگول مشخص می‌کند. در حال حاضر <code dir="ltr">command</code> تنها
+کلید پشتیبانی‌شده است (برای نمونه، <code dir="ltr">command=&lt;binary-name&gt;</code>)، اما این قالب
+برای افزوده‌های آینده مانند راستی‌آزمایی digest یا کلید عمومی طراحی شده است.
+برای مجاز کردن چند افزونه، این پرچم را تکرار کنید.</li>
+</ol>
+<h2 id="پیش-فرض-های-پیشنهادی" dir="rtl">پیش‌فرض‌های پیشنهادی</h2>
+<p dir="rtl">نگه‌دارندگان kubectl توصیه می‌کنند kuberc را با پیش‌فرض‌های زیر به کار بگیرید:</p>
+<div class="callout caution"><div class="callout-title">احتیاط:</div>
+<p dir="rtl">اگر از یک ارائه‌دهندهٔ مدیریت‌شدهٔ کوبرنتیز استفاده می‌کنید، مستندات ارائه‌دهندهٔ خود را
+دربارهٔ افزونه‌های exec موردنیاز در محیطتان بررسی کنید و به‌جای آن از سیاست
+<a href="#credentialPluginPolicy">«Allowlist»</a> استفاده کنید.</p>
+<p dir="rtl">اگر پس از تنظیم سیاست <a href="#credentialPluginPolicy">«DenyAll»</a> به شکلی که در ادامه
+نشان داده شده است با مشکل مواجه شدید، پیام‌های خطای <code dir="ltr">kubectl</code> را بررسی کنید تا
+مشخص شود اجرای کدام افزونه‌ها متوقف شده است و آن‌ها را با مستندات ارائه‌دهندهٔ
+خود تطبیق دهید. در پایان، سیاست را به «Allowlist» تغییر دهید و افزونه‌های
+لازم را در فیلد
+<a href="#credentialPluginAllowlist">credentialPluginAllowlist</a> اضافه کنید.</p>
+</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: kubectl.config.k8s.io/v1beta1
+kind: Preference
+defaults:
+  # (1) default server-side apply
+  - command: apply
+    options:
+      - name: server-side
+        default: "true"
+
+  # (2) default interactive deletion
+  - command: delete
+    options:
+      - name: interactive
+        default: "true"
+
+# See the above note about managed providers before selecting DenyAll
+credentialPluginPolicy: DenyAll
+</code></pre>
+<p dir="rtl">در این مثال، تنظیمات زیر اعمال می‌شود:</p>
+<ol>
+<li dir="rtl">به‌طور پیش‌فرض از <a href="https://kubernetes.io/docs/reference/using-api/server-side-apply/" target="_blank">اعمال سمت سرور (Server-Side Apply)</a> استفاده می‌شود.</li>
+<li dir="rtl">هر بار که <code dir="ltr">kubectl delete</code> اجرا شود، به‌طور پیش‌فرض حذف تعاملی انجام می‌شود تا از
+حذف ناخواستهٔ منابع از کلاستر جلوگیری شود.</li>
+<li dir="rtl">اجرای هیچ افزونهٔ اعتبارنامهٔ اجرایی مجاز نخواهد بود.</li>
+</ol>
+<h2 id="غیرفعال-کردن-kuberc" dir="rtl">غیرفعال کردن kuberc</h2>
+<p dir="rtl">برای غیرفعال کردن موقت قابلیت <code dir="ltr">kuberc</code>، متغیر محیطی <code dir="ltr">KUBERC</code> را با مقدار <code dir="ltr">off</code>
+تنظیم (و export) کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">export KUBERC=off
+</code></pre>
+<p dir="rtl">یا feature gate مربوط را غیرفعال کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">export KUBECTL_KUBERC=false
+</code></pre>
+<p dir="rtl">این کار برای عیب‌یابی و بررسی اینکه آیا <code dir="ltr">kuberc</code> شما باعث بروز مشکل شده است یا نه، مفید است.</p>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#aliases">aliases</a><a class="l3" href="#prependargs">prependArgs</a><a class="l3" href="#appendargs">appendArgs</a><a class="l2" href="#defaults">defaults</a><a class="l2" href="#سیاست-افزونهٔ-اعتبارنامه">سیاست افزونهٔ اعتبارنامه</a><a class="l3" href="#credentialpluginpolicy">credentialPluginPolicy</a><a class="l3" href="#credentialpluginallowlist">credentialPluginAllowlist</a><a class="l3" href="#مثال-credential-plugin-policy-example">مثال {#credential-plugin-policy-example}</a><a class="l3" href="#مدیریت-سیاست-افزونهٔ-اعتبارنامه-با-kubectl-kuberc-set">مدیریت سیاست افزونهٔ اعتبارنامه با kubectl kuberc set</a><a class="l2" href="#پیش-فرض-های-پیشنهادی">پیش‌فرض‌های پیشنهادی</a><a class="l2" href="#غیرفعال-کردن-kuberc">غیرفعال کردن kuberc</a></nav>
+</div>
+</body>
+</html>
