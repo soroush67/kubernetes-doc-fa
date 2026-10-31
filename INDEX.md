@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-1084 از 1722 صفحه
+1089 از 1722 صفحه
 
 
 ## `.`
@@ -1386,12 +1386,12 @@
 ## `reference/kubernetes-api/admissionregistration`
 
 - ✅ [_index.md](md/reference/kubernetes-api/admissionregistration/_index.md)
-- ⏳ `mutating-admission-policy-binding-v1.md`
-- ⏳ `mutating-admission-policy-v1.md`
-- ⏳ `mutating-webhook-configuration-v1.md`
-- ⏳ `validating-admission-policy-binding-v1.md`
+- ✅ [mutating-admission-policy-binding-v1.md](md/reference/kubernetes-api/admissionregistration/mutating-admission-policy-binding-v1.md)
+- ✅ [mutating-admission-policy-v1.md](md/reference/kubernetes-api/admissionregistration/mutating-admission-policy-v1.md)
+- ✅ [mutating-webhook-configuration-v1.md](md/reference/kubernetes-api/admissionregistration/mutating-webhook-configuration-v1.md)
+- ✅ [validating-admission-policy-binding-v1.md](md/reference/kubernetes-api/admissionregistration/validating-admission-policy-binding-v1.md)
 - ⏳ `validating-admission-policy-v1.md`
-- ⏳ `validating-webhook-configuration-v1.md`
+- ✅ [validating-webhook-configuration-v1.md](md/reference/kubernetes-api/admissionregistration/validating-webhook-configuration-v1.md)
 
 ## `reference/kubernetes-api/apiextensions`
 
