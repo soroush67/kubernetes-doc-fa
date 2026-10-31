@@ -31,6 +31,10 @@ COMMIT_EVERY = int(os.environ.get("COMMIT_EVERY", "15"))
 COMMIT_MINUTES = int(os.environ.get("COMMIT_MINUTES", "20"))
 # pages translated by these models are redone (Sonnet output read too stiffly)
 REDO_MODELS = set(filter(None, os.environ.get("REDO_MODELS", "sonnet").split(",")))
+# ...except auto-generated reference pages (flag/field lists), where fluency matters little
+REDO_SKIP = tuple(filter(None, os.environ.get("REDO_SKIP", ",".join([
+    "reference/kubectl/generated/", "reference/kubernetes-api/", "reference/config-api/",
+    "reference/command-line-tools-reference/"])).split(",")))
 
 
 def sh(*cmd, cwd=ROOT, check=True):
@@ -202,7 +206,7 @@ def plan(m, retry_issues, say):
     for rel, path in src.items():
         h, e = sha(path.read_text(encoding="utf-8")), files.get(rel)
         if (e and e["sha"] == h and (MD / rel).exists() and (e["status"] == "ok" or not retry_issues)
-                and e["model"] not in REDO_MODELS):
+                and (e["model"] not in REDO_MODELS or rel.startswith(REDO_SKIP))):
             continue
         if not e and (MD / rel).exists() and not check(rel):
             files[rel] = {"sha": h, "status": "ok", "issues": [], "model": "opus (agents)", "at": now()}
@@ -249,6 +253,7 @@ def main():
     s = sub.add_parser("serve")
     s.add_argument("--port", type=int, default=int(os.environ.get("PORT", "8460")))
     s.add_argument("--host", default=os.environ.get("HOST", "127.0.0.1"))
+    s.add_argument("--resume", action="store_true", help="start an update run (without pulling) right away")
     u = sub.add_parser("update")
     u.add_argument("--no-pull", action="store_true")
     u.add_argument("--retry-issues", action="store_true")
@@ -265,6 +270,8 @@ def main():
     OUT.mkdir(exist_ok=True)
     srv = ThreadingHTTPServer((host, port), partial(Handler, directory=str(OUT)))
     print(f"serving http://{host}:{port}/  (model {MODEL}, {WORKERS} workers)", flush=True)
+    if a.cmd == "serve" and a.resume:
+        RUNNER.start(pull=False)
     srv.serve_forever()
 
 
