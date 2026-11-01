@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-1100 از 1722 صفحه
+1105 از 1722 صفحه
 
 
 ## `.`
@@ -1413,18 +1413,18 @@
 - ✅ [_index.md](md/reference/kubernetes-api/apps/_index.md)
 - ✅ [controller-revision-v1.md](md/reference/kubernetes-api/apps/controller-revision-v1.md)
 - ✅ [daemon-set-v1.md](md/reference/kubernetes-api/apps/daemon-set-v1.md)
-- ⏳ `deployment-v1.md`
+- ✅ [deployment-v1.md](md/reference/kubernetes-api/apps/deployment-v1.md)
 - ⚠️ [replica-set-v1.md](md/reference/kubernetes-api/apps/replica-set-v1.md)
-- ⏳ `stateful-set-v1.md`
+- ✅ [stateful-set-v1.md](md/reference/kubernetes-api/apps/stateful-set-v1.md)
 
 ## `reference/kubernetes-api/autoscaling`
 
-- ⏳ `_index.md`
-- ⏳ `horizontal-pod-autoscaler-v2.md`
+- ✅ [_index.md](md/reference/kubernetes-api/autoscaling/_index.md)
+- ✅ [horizontal-pod-autoscaler-v2.md](md/reference/kubernetes-api/autoscaling/horizontal-pod-autoscaler-v2.md)
 
 ## `reference/kubernetes-api/batch`
 
-- ⏳ `_index.md`
+- ✅ [_index.md](md/reference/kubernetes-api/batch/_index.md)
 - ⏳ `cron-job-v1.md`
 - ⏳ `job-v1.md`
 
