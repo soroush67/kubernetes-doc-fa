@@ -8,8 +8,8 @@
 
 | | |
 |---|---|
-| پیشرفت (بر اساس کلمات) | **43.2٪** |
-| صفحات ترجمه‌شده | 1094 از 1722 |
+| پیشرفت (بر اساس کلمات) | **45.4٪** |
+| صفحات ترجمه‌شده | 1099 از 1722 |
 | صفحات دارای ایراد ساختاری | 33 |
 | نسخه‌ی منبع انگلیسی | `ed70e311737a` |
 
@@ -72,7 +72,7 @@ cd kubernetes-doc-fa
 | `contribute` | 44 | 44 |
 | `doc-contributor-tools` | 1 | 1 |
 | `home` | 2 | 2 |
-| `reference` | 859 | 1198 |
+| `reference` | 864 | 1198 |
 | `setup` | 0 | 22 |
 | `tasks` | 0 | 221 |
 | `tutorials` | 0 | 45 |
@@ -96,6 +96,11 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [reference/kubernetes-api/apps/daemon-set-v1.md](md/reference/kubernetes-api/apps/daemon-set-v1.md) — 2026-11-01T08:38:50+03:30
+- [reference/kubernetes-api/apps/controller-revision-v1.md](md/reference/kubernetes-api/apps/controller-revision-v1.md) — 2026-11-01T08:30:15+03:30
+- [reference/kubernetes-api/apiextensions/custom-resource-definition-v1.md](md/reference/kubernetes-api/apiextensions/custom-resource-definition-v1.md) — 2026-11-01T08:23:50+03:30
+- [reference/kubernetes-api/apps/_index.md](md/reference/kubernetes-api/apps/_index.md) — 2026-11-01T08:20:48+03:30
+- [reference/kubernetes-api/apiserverinternal/storage-version-v1alpha1.md](md/reference/kubernetes-api/apiserverinternal/storage-version-v1alpha1.md) — 2026-11-01T08:20:43+03:30
 - [reference/kubernetes-api/apiserverinternal/_index.md](md/reference/kubernetes-api/apiserverinternal/_index.md) — 2026-10-31T10:28:22+03:30
 - [reference/kubernetes-api/apiregistration/api-service-v1.md](md/reference/kubernetes-api/apiregistration/api-service-v1.md) — 2026-10-31T10:28:19+03:30
 - [reference/kubernetes-api/apiregistration/_index.md](md/reference/kubernetes-api/apiregistration/_index.md) — 2026-10-31T10:19:56+03:30
@@ -111,11 +116,6 @@ cd kubernetes-doc-fa
 - [reference/kubernetes-api/_index.md](md/reference/kubernetes-api/_index.md) — 2026-10-29T13:56:26+03:30
 - [reference/kubelet-api/stats.v1alpha1.md](md/reference/kubelet-api/stats.v1alpha1.md) — 2026-10-29T13:56:21+03:30
 - [reference/kubelet-api/_index.md](md/reference/kubelet-api/_index.md) — 2026-10-29T13:54:00+03:30
-- [reference/kubectl/kuberc.md](md/reference/kubectl/kuberc.md) — 2026-10-29T13:53:56+03:30
-- [reference/kubectl/kubectl.md](md/reference/kubectl/kubectl.md) — 2026-10-29T13:52:29+03:30
-- [reference/kubectl/jsonpath.md](md/reference/kubectl/jsonpath.md) — 2026-10-29T13:50:51+03:30
-- [reference/kubectl/kubectl-cmds.md](md/reference/kubectl/kubectl-cmds.md) — 2026-10-29T13:50:43+03:30
-- [reference/kubectl/introduction.md](md/reference/kubectl/introduction.md) — 2026-10-29T13:50:40+03:30
 
 </div>
 

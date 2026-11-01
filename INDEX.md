@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-1094 از 1722 صفحه
+1099 از 1722 صفحه
 
 
 ## `.`
@@ -1396,7 +1396,7 @@
 ## `reference/kubernetes-api/apiextensions`
 
 - ✅ [_index.md](md/reference/kubernetes-api/apiextensions/_index.md)
-- ⏳ `custom-resource-definition-v1.md`
+- ✅ [custom-resource-definition-v1.md](md/reference/kubernetes-api/apiextensions/custom-resource-definition-v1.md)
 
 ## `reference/kubernetes-api/apiregistration`
 
@@ -1406,13 +1406,13 @@
 ## `reference/kubernetes-api/apiserverinternal`
 
 - ✅ [_index.md](md/reference/kubernetes-api/apiserverinternal/_index.md)
-- ⏳ `storage-version-v1alpha1.md`
+- ✅ [storage-version-v1alpha1.md](md/reference/kubernetes-api/apiserverinternal/storage-version-v1alpha1.md)
 
 ## `reference/kubernetes-api/apps`
 
-- ⏳ `_index.md`
-- ⏳ `controller-revision-v1.md`
-- ⏳ `daemon-set-v1.md`
+- ✅ [_index.md](md/reference/kubernetes-api/apps/_index.md)
+- ✅ [controller-revision-v1.md](md/reference/kubernetes-api/apps/controller-revision-v1.md)
+- ✅ [daemon-set-v1.md](md/reference/kubernetes-api/apps/daemon-set-v1.md)
 - ⏳ `deployment-v1.md`
 - ⏳ `replica-set-v1.md`
 - ⏳ `stateful-set-v1.md`
