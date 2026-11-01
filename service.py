@@ -171,11 +171,23 @@ class Runner:
         sh(sys.executable, "build_html.py")
         readme.write(snapshot)
         sh("git", "add", "-A", "md", "html", "manifest.json", "README.md", "INDEX.md")
-        if subprocess.run(["git", "diff", "--cached", "--quiet"], cwd=ROOT).returncode == 0:
+        if subprocess.run(["git", "diff", "--cached", "--quiet"], cwd=ROOT).returncode:
+            sh("git", "commit", "-qm", f"{message}\n\nCo-Authored-By: Claude {MODEL.capitalize()} 5.5 <noreply@anthropic.com>")
+            self.say(f"committed: {message}")
+        self.push()
+
+    def push(self):
+        """Push every local commit not yet on GitHub (also ones left by an earlier failed push)."""
+        subprocess.run(["git", "fetch", "-q", "origin"], cwd=ROOT, capture_output=True)
+        if not sh("git", "rev-list", "@{u}..HEAD", check=False):
             return
-        sh("git", "commit", "-qm", f"{message}\n\nCo-Authored-By: Claude {MODEL.capitalize()} 5.5 <noreply@anthropic.com>")
-        push = subprocess.run(["git", "push", "-q"], cwd=ROOT, capture_output=True, text=True)
-        self.say(f"committed: {message}" + ("" if push.returncode == 0 else f" (push failed: {push.stderr.strip()[-200:]})"))
+        for attempt in range(3):
+            p = subprocess.run(["git", "push", "-q"], cwd=ROOT, capture_output=True, text=True)
+            if p.returncode == 0:
+                self.say("pushed to GitHub")
+                return
+            time.sleep(30 * (attempt + 1))
+        self.say(f"push failed (will retry on next publish): {p.stderr.strip()[-200:]}")
 
 
 def pull_source(say) -> str:
