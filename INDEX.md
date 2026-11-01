@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-1099 از 1722 صفحه
+1100 از 1722 صفحه
 
 
 ## `.`
@@ -1414,7 +1414,7 @@
 - ✅ [controller-revision-v1.md](md/reference/kubernetes-api/apps/controller-revision-v1.md)
 - ✅ [daemon-set-v1.md](md/reference/kubernetes-api/apps/daemon-set-v1.md)
 - ⏳ `deployment-v1.md`
-- ⏳ `replica-set-v1.md`
+- ⚠️ [replica-set-v1.md](md/reference/kubernetes-api/apps/replica-set-v1.md)
 - ⏳ `stateful-set-v1.md`
 
 ## `reference/kubernetes-api/autoscaling`

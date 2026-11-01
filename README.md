@@ -8,9 +8,9 @@
 
 | | |
 |---|---|
-| پیشرفت (بر اساس کلمات) | **45.4٪** |
-| صفحات ترجمه‌شده | 1099 از 1722 |
-| صفحات دارای ایراد ساختاری | 33 |
+| پیشرفت (بر اساس کلمات) | **46.1٪** |
+| صفحات ترجمه‌شده | 1100 از 1722 |
+| صفحات دارای ایراد ساختاری | 34 |
 | نسخه‌ی منبع انگلیسی | `ed70e311737a` |
 
 ## مشاهده
@@ -72,7 +72,7 @@ cd kubernetes-doc-fa
 | `contribute` | 44 | 44 |
 | `doc-contributor-tools` | 1 | 1 |
 | `home` | 2 | 2 |
-| `reference` | 864 | 1198 |
+| `reference` | 865 | 1198 |
 | `setup` | 0 | 22 |
 | `tasks` | 0 | 221 |
 | `tutorials` | 0 | 45 |
@@ -97,6 +97,7 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [reference/kubernetes-api/apps/replica-set-v1.md](md/reference/kubernetes-api/apps/replica-set-v1.md) — 2026-11-01T13:18:29+03:30
 - [reference/kubernetes-api/apps/daemon-set-v1.md](md/reference/kubernetes-api/apps/daemon-set-v1.md) — 2026-11-01T08:38:50+03:30
 - [reference/kubernetes-api/apps/controller-revision-v1.md](md/reference/kubernetes-api/apps/controller-revision-v1.md) — 2026-11-01T08:30:15+03:30
 - [reference/kubernetes-api/apiextensions/custom-resource-definition-v1.md](md/reference/kubernetes-api/apiextensions/custom-resource-definition-v1.md) — 2026-11-01T08:23:50+03:30
@@ -116,7 +117,6 @@ cd kubernetes-doc-fa
 - [reference/kubernetes-api/admissionregistration/_index.md](md/reference/kubernetes-api/admissionregistration/_index.md) — 2026-10-29T13:56:31+03:30
 - [reference/kubernetes-api/_index.md](md/reference/kubernetes-api/_index.md) — 2026-10-29T13:56:26+03:30
 - [reference/kubelet-api/stats.v1alpha1.md](md/reference/kubelet-api/stats.v1alpha1.md) — 2026-10-29T13:56:21+03:30
-- [reference/kubelet-api/_index.md](md/reference/kubelet-api/_index.md) — 2026-10-29T13:54:00+03:30
 
 </div>
 
@@ -157,6 +157,7 @@ cd kubernetes-doc-fa
 - [reference/kubectl/generated/kubectl_get/_index.md](md/reference/kubectl/generated/kubectl_get/_index.md): chunk 2: short: 860 words vs 1205 source words
 - [reference/kubectl/generated/kubectl_run/_index.md](md/reference/kubectl/generated/kubectl_run/_index.md): chunk 2: short: 862 words vs 1205 source words
 - [reference/kubectl/quick-reference.md](md/reference/kubectl/quick-reference.md): chunk 2: 16 code block(s) changed; chunk 2: 141 untranslated English lines, e.g. 'kubectl config view # Show Merged kubeconfig settings.'
+- [reference/kubernetes-api/apps/replica-set-v1.md](md/reference/kubernetes-api/apps/replica-set-v1.md): chunk 9: 3 untranslated English lines, e.g. 'GET /apis/apps/v1/namespaces/{namespace}/replicasets/{name}/scale'
 
 </div>
 
