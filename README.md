@@ -8,9 +8,9 @@
 
 | | |
 |---|---|
-| پیشرفت (بر اساس کلمات) | **54.9٪** |
-| صفحات ترجمه‌شده | 1122 از 1722 |
-| صفحات دارای ایراد ساختاری | 38 |
+| پیشرفت (بر اساس کلمات) | **58.0٪** |
+| صفحات ترجمه‌شده | 1127 از 1722 |
+| صفحات دارای ایراد ساختاری | 40 |
 | نسخه‌ی منبع انگلیسی | `ed70e311737a` |
 
 ## مشاهده
@@ -72,7 +72,7 @@ cd kubernetes-doc-fa
 | `contribute` | 44 | 44 |
 | `doc-contributor-tools` | 1 | 1 |
 | `home` | 2 | 2 |
-| `reference` | 887 | 1198 |
+| `reference` | 892 | 1198 |
 | `setup` | 0 | 22 |
 | `tasks` | 0 | 221 |
 | `tutorials` | 0 | 45 |
@@ -98,6 +98,11 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [reference/kubernetes-api/core/resource-quota-v1.md](md/reference/kubernetes-api/core/resource-quota-v1.md) — 2026-11-02T16:28:24+03:30
+- [reference/kubernetes-api/core/replication-controller-v1.md](md/reference/kubernetes-api/core/replication-controller-v1.md) — 2026-11-02T16:21:06+03:30
+- [reference/kubernetes-api/core/persistent-volume-v1.md](md/reference/kubernetes-api/core/persistent-volume-v1.md) — 2026-11-02T16:12:16+03:30
+- [reference/kubernetes-api/core/pod-template-v1.md](md/reference/kubernetes-api/core/pod-template-v1.md) — 2026-11-02T16:11:08+03:30
+- [reference/kubernetes-api/core/persistent-volume-claim-v1.md](md/reference/kubernetes-api/core/persistent-volume-claim-v1.md) — 2026-11-02T16:06:50+03:30
 - [reference/kubernetes-api/core/node-v1.md](md/reference/kubernetes-api/core/node-v1.md) — 2026-11-02T16:05:57+03:30
 - [reference/kubernetes-api/core/limit-range-v1.md](md/reference/kubernetes-api/core/limit-range-v1.md) — 2026-11-02T11:41:51+03:30
 - [reference/kubernetes-api/core/namespace-v1.md](md/reference/kubernetes-api/core/namespace-v1.md) — 2026-11-02T11:40:35+03:30
@@ -113,11 +118,6 @@ cd kubernetes-doc-fa
 - [reference/kubernetes-api/certificates/certificate-signing-request-v1.md](md/reference/kubernetes-api/certificates/certificate-signing-request-v1.md) — 2026-11-02T11:21:19+03:30
 - [reference/kubernetes-api/certificates/cluster-trust-bundle-v1.md](md/reference/kubernetes-api/certificates/cluster-trust-bundle-v1.md) — 2026-11-02T11:20:14+03:30
 - [reference/kubernetes-api/batch/cron-job-v1.md](md/reference/kubernetes-api/batch/cron-job-v1.md) — 2026-11-02T11:17:01+03:30
-- [reference/kubernetes-api/certificates/_index.md](md/reference/kubernetes-api/certificates/_index.md) — 2026-11-02T11:16:28+03:30
-- [reference/kubernetes-api/batch/job-v1.md](md/reference/kubernetes-api/batch/job-v1.md) — 2026-11-02T11:16:22+03:30
-- [reference/kubernetes-api/autoscaling/horizontal-pod-autoscaler-v2.md](md/reference/kubernetes-api/autoscaling/horizontal-pod-autoscaler-v2.md) — 2026-11-01T13:36:19+03:30
-- [reference/kubernetes-api/batch/_index.md](md/reference/kubernetes-api/batch/_index.md) — 2026-11-01T13:35:41+03:30
-- [reference/kubernetes-api/apps/stateful-set-v1.md](md/reference/kubernetes-api/apps/stateful-set-v1.md) — 2026-11-01T13:35:37+03:30
 
 </div>
 
@@ -163,6 +163,8 @@ cd kubernetes-doc-fa
 - [reference/kubernetes-api/certificates/pod-certificate-request-v1.md](md/reference/kubernetes-api/certificates/pod-certificate-request-v1.md): chunk 8: 3 untranslated English lines, e.g. 'PATCH /apis/certificates.k8s.io/v1/namespaces/{namespace}/podcertificaterequests/{name}/status'
 - [reference/kubernetes-api/coordination/lease-v1.md](md/reference/kubernetes-api/coordination/lease-v1.md): chunk 4: heading anchors {#...} differ
 - [reference/kubernetes-api/core/node-v1.md](md/reference/kubernetes-api/core/node-v1.md): chunk 1: short: 1354 words vs 1864 source words; chunk 8: short: 566 words vs 1225 source words
+- [reference/kubernetes-api/core/replication-controller-v1.md](md/reference/kubernetes-api/core/replication-controller-v1.md): chunk 9: 3 untranslated English lines, e.g. 'GET /api/v1/namespaces/{namespace}/replicationcontrollers/{name}/scale'
+- [reference/kubernetes-api/core/resource-quota-v1.md](md/reference/kubernetes-api/core/resource-quota-v1.md): chunk 8: 3 untranslated English lines, e.g. 'PATCH /api/v1/namespaces/{namespace}/resourcequotas/{name}/status'
 
 </div>
 

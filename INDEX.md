@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-1122 از 1722 صفحه
+1127 از 1722 صفحه
 
 
 ## `.`
@@ -1451,12 +1451,12 @@
 - ✅ [limit-range-v1.md](md/reference/kubernetes-api/core/limit-range-v1.md)
 - ✅ [namespace-v1.md](md/reference/kubernetes-api/core/namespace-v1.md)
 - ⚠️ [node-v1.md](md/reference/kubernetes-api/core/node-v1.md)
-- ⏳ `persistent-volume-claim-v1.md`
-- ⏳ `persistent-volume-v1.md`
-- ⏳ `pod-template-v1.md`
+- ✅ [persistent-volume-claim-v1.md](md/reference/kubernetes-api/core/persistent-volume-claim-v1.md)
+- ✅ [persistent-volume-v1.md](md/reference/kubernetes-api/core/persistent-volume-v1.md)
+- ✅ [pod-template-v1.md](md/reference/kubernetes-api/core/pod-template-v1.md)
 - ⏳ `pod-v1.md`
-- ⏳ `replication-controller-v1.md`
-- ⏳ `resource-quota-v1.md`
+- ⚠️ [replication-controller-v1.md](md/reference/kubernetes-api/core/replication-controller-v1.md)
+- ⚠️ [resource-quota-v1.md](md/reference/kubernetes-api/core/resource-quota-v1.md)
 - ⏳ `secret-v1.md`
 - ⏳ `service-account-v1.md`
 - ⏳ `service-v1.md`
