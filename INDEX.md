@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-1121 از 1722 صفحه
+1122 از 1722 صفحه
 
 
 ## `.`
@@ -1450,7 +1450,7 @@
 - ✅ [event-v1.md](md/reference/kubernetes-api/core/event-v1.md)
 - ✅ [limit-range-v1.md](md/reference/kubernetes-api/core/limit-range-v1.md)
 - ✅ [namespace-v1.md](md/reference/kubernetes-api/core/namespace-v1.md)
-- ⏳ `node-v1.md`
+- ⚠️ [node-v1.md](md/reference/kubernetes-api/core/node-v1.md)
 - ⏳ `persistent-volume-claim-v1.md`
 - ⏳ `persistent-volume-v1.md`
 - ⏳ `pod-template-v1.md`
