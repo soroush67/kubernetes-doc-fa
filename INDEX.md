@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-1116 از 1722 صفحه
+1120 از 1722 صفحه
 
 
 ## `.`
@@ -1445,11 +1445,11 @@
 
 - ✅ [_index.md](md/reference/kubernetes-api/core/_index.md)
 - ✅ [component-status-v1.md](md/reference/kubernetes-api/core/component-status-v1.md)
-- ⏳ `config-map-v1.md`
-- ⏳ `endpoints-v1.md`
-- ⏳ `event-v1.md`
+- ✅ [config-map-v1.md](md/reference/kubernetes-api/core/config-map-v1.md)
+- ✅ [endpoints-v1.md](md/reference/kubernetes-api/core/endpoints-v1.md)
+- ✅ [event-v1.md](md/reference/kubernetes-api/core/event-v1.md)
 - ⏳ `limit-range-v1.md`
-- ⏳ `namespace-v1.md`
+- ✅ [namespace-v1.md](md/reference/kubernetes-api/core/namespace-v1.md)
 - ⏳ `node-v1.md`
 - ⏳ `persistent-volume-claim-v1.md`
 - ⏳ `persistent-volume-v1.md`

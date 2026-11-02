@@ -8,8 +8,8 @@
 
 | | |
 |---|---|
-| پیشرفت (بر اساس کلمات) | **52.0٪** |
-| صفحات ترجمه‌شده | 1116 از 1722 |
+| پیشرفت (بر اساس کلمات) | **53.8٪** |
+| صفحات ترجمه‌شده | 1120 از 1722 |
 | صفحات دارای ایراد ساختاری | 37 |
 | نسخه‌ی منبع انگلیسی | `ed70e311737a` |
 
@@ -72,7 +72,7 @@ cd kubernetes-doc-fa
 | `contribute` | 44 | 44 |
 | `doc-contributor-tools` | 1 | 1 |
 | `home` | 2 | 2 |
-| `reference` | 881 | 1198 |
+| `reference` | 885 | 1198 |
 | `setup` | 0 | 22 |
 | `tasks` | 0 | 221 |
 | `tutorials` | 0 | 45 |
@@ -98,6 +98,10 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [reference/kubernetes-api/core/namespace-v1.md](md/reference/kubernetes-api/core/namespace-v1.md) — 2026-11-02T11:40:35+03:30
+- [reference/kubernetes-api/core/event-v1.md](md/reference/kubernetes-api/core/event-v1.md) — 2026-11-02T11:37:38+03:30
+- [reference/kubernetes-api/core/endpoints-v1.md](md/reference/kubernetes-api/core/endpoints-v1.md) — 2026-11-02T11:37:31+03:30
+- [reference/kubernetes-api/core/config-map-v1.md](md/reference/kubernetes-api/core/config-map-v1.md) — 2026-11-02T11:33:02+03:30
 - [reference/kubernetes-api/coordination/lease-v1.md](md/reference/kubernetes-api/coordination/lease-v1.md) — 2026-11-02T11:32:41+03:30
 - [reference/kubernetes-api/core/component-status-v1.md](md/reference/kubernetes-api/core/component-status-v1.md) — 2026-11-02T11:28:44+03:30
 - [reference/kubernetes-api/core/_index.md](md/reference/kubernetes-api/core/_index.md) — 2026-11-02T11:27:58+03:30
@@ -114,10 +118,6 @@ cd kubernetes-doc-fa
 - [reference/kubernetes-api/apps/stateful-set-v1.md](md/reference/kubernetes-api/apps/stateful-set-v1.md) — 2026-11-01T13:35:37+03:30
 - [reference/kubernetes-api/autoscaling/_index.md](md/reference/kubernetes-api/autoscaling/_index.md) — 2026-11-01T13:20:10+03:30
 - [reference/kubernetes-api/apps/deployment-v1.md](md/reference/kubernetes-api/apps/deployment-v1.md) — 2026-11-01T13:20:07+03:30
-- [reference/kubernetes-api/apps/replica-set-v1.md](md/reference/kubernetes-api/apps/replica-set-v1.md) — 2026-11-01T13:18:29+03:30
-- [reference/kubernetes-api/apps/daemon-set-v1.md](md/reference/kubernetes-api/apps/daemon-set-v1.md) — 2026-11-01T08:38:50+03:30
-- [reference/kubernetes-api/apps/controller-revision-v1.md](md/reference/kubernetes-api/apps/controller-revision-v1.md) — 2026-11-01T08:30:15+03:30
-- [reference/kubernetes-api/apiextensions/custom-resource-definition-v1.md](md/reference/kubernetes-api/apiextensions/custom-resource-definition-v1.md) — 2026-11-01T08:23:50+03:30
 
 </div>
 
