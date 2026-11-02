@@ -8,9 +8,9 @@
 
 | | |
 |---|---|
-| پیشرفت (بر اساس کلمات) | **48.1٪** |
-| صفحات ترجمه‌شده | 1105 از 1722 |
-| صفحات دارای ایراد ساختاری | 34 |
+| پیشرفت (بر اساس کلمات) | **52.0٪** |
+| صفحات ترجمه‌شده | 1116 از 1722 |
+| صفحات دارای ایراد ساختاری | 37 |
 | نسخه‌ی منبع انگلیسی | `ed70e311737a` |
 
 ## مشاهده
@@ -72,7 +72,7 @@ cd kubernetes-doc-fa
 | `contribute` | 44 | 44 |
 | `doc-contributor-tools` | 1 | 1 |
 | `home` | 2 | 2 |
-| `reference` | 870 | 1198 |
+| `reference` | 881 | 1198 |
 | `setup` | 0 | 22 |
 | `tasks` | 0 | 221 |
 | `tutorials` | 0 | 45 |
@@ -98,6 +98,17 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [reference/kubernetes-api/coordination/lease-v1.md](md/reference/kubernetes-api/coordination/lease-v1.md) — 2026-11-02T11:32:41+03:30
+- [reference/kubernetes-api/core/component-status-v1.md](md/reference/kubernetes-api/core/component-status-v1.md) — 2026-11-02T11:28:44+03:30
+- [reference/kubernetes-api/core/_index.md](md/reference/kubernetes-api/core/_index.md) — 2026-11-02T11:27:58+03:30
+- [reference/kubernetes-api/certificates/pod-certificate-request-v1.md](md/reference/kubernetes-api/certificates/pod-certificate-request-v1.md) — 2026-11-02T11:27:54+03:30
+- [reference/kubernetes-api/coordination/lease-candidate-v1beta1.md](md/reference/kubernetes-api/coordination/lease-candidate-v1beta1.md) — 2026-11-02T11:27:21+03:30
+- [reference/kubernetes-api/coordination/_index.md](md/reference/kubernetes-api/coordination/_index.md) — 2026-11-02T11:21:26+03:30
+- [reference/kubernetes-api/certificates/certificate-signing-request-v1.md](md/reference/kubernetes-api/certificates/certificate-signing-request-v1.md) — 2026-11-02T11:21:19+03:30
+- [reference/kubernetes-api/certificates/cluster-trust-bundle-v1.md](md/reference/kubernetes-api/certificates/cluster-trust-bundle-v1.md) — 2026-11-02T11:20:14+03:30
+- [reference/kubernetes-api/batch/cron-job-v1.md](md/reference/kubernetes-api/batch/cron-job-v1.md) — 2026-11-02T11:17:01+03:30
+- [reference/kubernetes-api/certificates/_index.md](md/reference/kubernetes-api/certificates/_index.md) — 2026-11-02T11:16:28+03:30
+- [reference/kubernetes-api/batch/job-v1.md](md/reference/kubernetes-api/batch/job-v1.md) — 2026-11-02T11:16:22+03:30
 - [reference/kubernetes-api/autoscaling/horizontal-pod-autoscaler-v2.md](md/reference/kubernetes-api/autoscaling/horizontal-pod-autoscaler-v2.md) — 2026-11-01T13:36:19+03:30
 - [reference/kubernetes-api/batch/_index.md](md/reference/kubernetes-api/batch/_index.md) — 2026-11-01T13:35:41+03:30
 - [reference/kubernetes-api/apps/stateful-set-v1.md](md/reference/kubernetes-api/apps/stateful-set-v1.md) — 2026-11-01T13:35:37+03:30
@@ -107,17 +118,6 @@ cd kubernetes-doc-fa
 - [reference/kubernetes-api/apps/daemon-set-v1.md](md/reference/kubernetes-api/apps/daemon-set-v1.md) — 2026-11-01T08:38:50+03:30
 - [reference/kubernetes-api/apps/controller-revision-v1.md](md/reference/kubernetes-api/apps/controller-revision-v1.md) — 2026-11-01T08:30:15+03:30
 - [reference/kubernetes-api/apiextensions/custom-resource-definition-v1.md](md/reference/kubernetes-api/apiextensions/custom-resource-definition-v1.md) — 2026-11-01T08:23:50+03:30
-- [reference/kubernetes-api/apps/_index.md](md/reference/kubernetes-api/apps/_index.md) — 2026-11-01T08:20:48+03:30
-- [reference/kubernetes-api/apiserverinternal/storage-version-v1alpha1.md](md/reference/kubernetes-api/apiserverinternal/storage-version-v1alpha1.md) — 2026-11-01T08:20:43+03:30
-- [reference/kubernetes-api/apiserverinternal/_index.md](md/reference/kubernetes-api/apiserverinternal/_index.md) — 2026-10-31T10:28:22+03:30
-- [reference/kubernetes-api/apiregistration/api-service-v1.md](md/reference/kubernetes-api/apiregistration/api-service-v1.md) — 2026-10-31T10:28:19+03:30
-- [reference/kubernetes-api/apiregistration/_index.md](md/reference/kubernetes-api/apiregistration/_index.md) — 2026-10-31T10:19:56+03:30
-- [reference/kubernetes-api/admissionregistration/validating-admission-policy-v1.md](md/reference/kubernetes-api/admissionregistration/validating-admission-policy-v1.md) — 2026-10-31T10:19:53+03:30
-- [reference/kubernetes-api/apiextensions/_index.md](md/reference/kubernetes-api/apiextensions/_index.md) — 2026-10-31T10:19:44+03:30
-- [reference/kubernetes-api/admissionregistration/validating-webhook-configuration-v1.md](md/reference/kubernetes-api/admissionregistration/validating-webhook-configuration-v1.md) — 2026-10-31T10:19:35+03:30
-- [reference/kubernetes-api/admissionregistration/validating-admission-policy-binding-v1.md](md/reference/kubernetes-api/admissionregistration/validating-admission-policy-binding-v1.md) — 2026-10-31T10:12:06+03:30
-- [reference/kubernetes-api/admissionregistration/mutating-webhook-configuration-v1.md](md/reference/kubernetes-api/admissionregistration/mutating-webhook-configuration-v1.md) — 2026-10-31T10:10:50+03:30
-- [reference/kubernetes-api/admissionregistration/mutating-admission-policy-v1.md](md/reference/kubernetes-api/admissionregistration/mutating-admission-policy-v1.md) — 2026-10-31T10:04:29+03:30
 
 </div>
 
@@ -159,6 +159,9 @@ cd kubernetes-doc-fa
 - [reference/kubectl/generated/kubectl_run/_index.md](md/reference/kubectl/generated/kubectl_run/_index.md): chunk 2: short: 862 words vs 1205 source words
 - [reference/kubectl/quick-reference.md](md/reference/kubectl/quick-reference.md): chunk 2: 16 code block(s) changed; chunk 2: 141 untranslated English lines, e.g. 'kubectl config view # Show Merged kubeconfig settings.'
 - [reference/kubernetes-api/apps/replica-set-v1.md](md/reference/kubernetes-api/apps/replica-set-v1.md): chunk 9: 3 untranslated English lines, e.g. 'GET /apis/apps/v1/namespaces/{namespace}/replicasets/{name}/scale'
+- [reference/kubernetes-api/batch/cron-job-v1.md](md/reference/kubernetes-api/batch/cron-job-v1.md): chunk 2: heading anchors {#...} differ
+- [reference/kubernetes-api/certificates/pod-certificate-request-v1.md](md/reference/kubernetes-api/certificates/pod-certificate-request-v1.md): chunk 8: 3 untranslated English lines, e.g. 'PATCH /apis/certificates.k8s.io/v1/namespaces/{namespace}/podcertificaterequests/{name}/status'
+- [reference/kubernetes-api/coordination/lease-v1.md](md/reference/kubernetes-api/coordination/lease-v1.md): chunk 4: heading anchors {#...} differ
 
 </div>
 

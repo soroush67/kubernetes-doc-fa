@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-1105 از 1722 صفحه
+1116 از 1722 صفحه
 
 
 ## `.`
@@ -1425,26 +1425,26 @@
 ## `reference/kubernetes-api/batch`
 
 - ✅ [_index.md](md/reference/kubernetes-api/batch/_index.md)
-- ⏳ `cron-job-v1.md`
-- ⏳ `job-v1.md`
+- ⚠️ [cron-job-v1.md](md/reference/kubernetes-api/batch/cron-job-v1.md)
+- ✅ [job-v1.md](md/reference/kubernetes-api/batch/job-v1.md)
 
 ## `reference/kubernetes-api/certificates`
 
-- ⏳ `_index.md`
-- ⏳ `certificate-signing-request-v1.md`
-- ⏳ `cluster-trust-bundle-v1.md`
-- ⏳ `pod-certificate-request-v1.md`
+- ✅ [_index.md](md/reference/kubernetes-api/certificates/_index.md)
+- ✅ [certificate-signing-request-v1.md](md/reference/kubernetes-api/certificates/certificate-signing-request-v1.md)
+- ✅ [cluster-trust-bundle-v1.md](md/reference/kubernetes-api/certificates/cluster-trust-bundle-v1.md)
+- ⚠️ [pod-certificate-request-v1.md](md/reference/kubernetes-api/certificates/pod-certificate-request-v1.md)
 
 ## `reference/kubernetes-api/coordination`
 
-- ⏳ `_index.md`
-- ⏳ `lease-candidate-v1beta1.md`
-- ⏳ `lease-v1.md`
+- ✅ [_index.md](md/reference/kubernetes-api/coordination/_index.md)
+- ✅ [lease-candidate-v1beta1.md](md/reference/kubernetes-api/coordination/lease-candidate-v1beta1.md)
+- ⚠️ [lease-v1.md](md/reference/kubernetes-api/coordination/lease-v1.md)
 
 ## `reference/kubernetes-api/core`
 
-- ⏳ `_index.md`
-- ⏳ `component-status-v1.md`
+- ✅ [_index.md](md/reference/kubernetes-api/core/_index.md)
+- ✅ [component-status-v1.md](md/reference/kubernetes-api/core/component-status-v1.md)
 - ⏳ `config-map-v1.md`
 - ⏳ `endpoints-v1.md`
 - ⏳ `event-v1.md`
