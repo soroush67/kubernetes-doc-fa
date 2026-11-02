@@ -8,9 +8,9 @@
 
 | | |
 |---|---|
-| پیشرفت (بر اساس کلمات) | **58.0٪** |
-| صفحات ترجمه‌شده | 1127 از 1722 |
-| صفحات دارای ایراد ساختاری | 40 |
+| پیشرفت (بر اساس کلمات) | **60.7٪** |
+| صفحات ترجمه‌شده | 1129 از 1722 |
+| صفحات دارای ایراد ساختاری | 41 |
 | نسخه‌ی منبع انگلیسی | `ed70e311737a` |
 
 ## مشاهده
@@ -72,7 +72,7 @@ cd kubernetes-doc-fa
 | `contribute` | 44 | 44 |
 | `doc-contributor-tools` | 1 | 1 |
 | `home` | 2 | 2 |
-| `reference` | 892 | 1198 |
+| `reference` | 894 | 1198 |
 | `setup` | 0 | 22 |
 | `tasks` | 0 | 221 |
 | `tutorials` | 0 | 45 |
@@ -85,6 +85,7 @@ cd kubernetes-doc-fa
 
 | شروع | پایان | ترجمه‌شده | با ایراد | نتیجه |
 |---|---|---|---|---|
+| 2026-11-02T11:08:58+03:30 | 2026-11-02T16:34:51+03:30 | 24 | 7 | stopped |
 | 2026-11-02T10:55:34+03:30 | 2026-11-02T11:08:47+03:30 | 0 | 0 | stopped |
 | 2026-11-01T08:11:00+03:30 | 2026-11-01T08:39:46+03:30 | 5 | 0 | stopped |
 | 2026-10-31T09:52:10+03:30 | 2026-10-31T09:55:49+03:30 | 0 | 0 | stopped |
@@ -98,6 +99,8 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [reference/kubernetes-api/core/pod-v1.md](md/reference/kubernetes-api/core/pod-v1.md) — 2026-11-02T16:33:47+03:30
+- [reference/kubernetes-api/core/secret-v1.md](md/reference/kubernetes-api/core/secret-v1.md) — 2026-11-02T16:32:59+03:30
 - [reference/kubernetes-api/core/resource-quota-v1.md](md/reference/kubernetes-api/core/resource-quota-v1.md) — 2026-11-02T16:28:24+03:30
 - [reference/kubernetes-api/core/replication-controller-v1.md](md/reference/kubernetes-api/core/replication-controller-v1.md) — 2026-11-02T16:21:06+03:30
 - [reference/kubernetes-api/core/persistent-volume-v1.md](md/reference/kubernetes-api/core/persistent-volume-v1.md) — 2026-11-02T16:12:16+03:30
@@ -116,8 +119,6 @@ cd kubernetes-doc-fa
 - [reference/kubernetes-api/coordination/lease-candidate-v1beta1.md](md/reference/kubernetes-api/coordination/lease-candidate-v1beta1.md) — 2026-11-02T11:27:21+03:30
 - [reference/kubernetes-api/coordination/_index.md](md/reference/kubernetes-api/coordination/_index.md) — 2026-11-02T11:21:26+03:30
 - [reference/kubernetes-api/certificates/certificate-signing-request-v1.md](md/reference/kubernetes-api/certificates/certificate-signing-request-v1.md) — 2026-11-02T11:21:19+03:30
-- [reference/kubernetes-api/certificates/cluster-trust-bundle-v1.md](md/reference/kubernetes-api/certificates/cluster-trust-bundle-v1.md) — 2026-11-02T11:20:14+03:30
-- [reference/kubernetes-api/batch/cron-job-v1.md](md/reference/kubernetes-api/batch/cron-job-v1.md) — 2026-11-02T11:17:01+03:30
 
 </div>
 
@@ -163,6 +164,7 @@ cd kubernetes-doc-fa
 - [reference/kubernetes-api/certificates/pod-certificate-request-v1.md](md/reference/kubernetes-api/certificates/pod-certificate-request-v1.md): chunk 8: 3 untranslated English lines, e.g. 'PATCH /apis/certificates.k8s.io/v1/namespaces/{namespace}/podcertificaterequests/{name}/status'
 - [reference/kubernetes-api/coordination/lease-v1.md](md/reference/kubernetes-api/coordination/lease-v1.md): chunk 4: heading anchors {#...} differ
 - [reference/kubernetes-api/core/node-v1.md](md/reference/kubernetes-api/core/node-v1.md): chunk 1: short: 1354 words vs 1864 source words; chunk 8: short: 566 words vs 1225 source words
+- [reference/kubernetes-api/core/pod-v1.md](md/reference/kubernetes-api/core/pod-v1.md): chunk 25: short: 941 words vs 1914 source words; chunk 26: short: 1224 words vs 1810 source words
 - [reference/kubernetes-api/core/replication-controller-v1.md](md/reference/kubernetes-api/core/replication-controller-v1.md): chunk 9: 3 untranslated English lines, e.g. 'GET /api/v1/namespaces/{namespace}/replicationcontrollers/{name}/scale'
 - [reference/kubernetes-api/core/resource-quota-v1.md](md/reference/kubernetes-api/core/resource-quota-v1.md): chunk 8: 3 untranslated English lines, e.g. 'PATCH /api/v1/namespaces/{namespace}/resourcequotas/{name}/status'
 
