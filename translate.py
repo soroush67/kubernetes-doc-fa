@@ -122,13 +122,13 @@ def chunks(text: str) -> list[str]:
     return [c for c in out if c.strip()] or [text]
 
 
-def call(prompt: str, limiter: Limiter) -> str:
+def call(prompt: str, limiter: Limiter, model: str = MODEL) -> str:
     STATE.mkdir(exist_ok=True)
     failures = 0
     while True:
         limiter.wait()
         p = subprocess.run(
-            [claude_bin(), "-p", "--model", MODEL, "--tools", "", "--system-prompt", PROMPT,
+            [claude_bin(), "-p", "--model", model, "--tools", "", "--system-prompt", PROMPT,
              "--setting-sources", "", "--strict-mcp-config", "--no-session-persistence",
              "--output-format", "json"],
             input=prompt, capture_output=True, text=True, cwd=STATE, timeout=1800)
@@ -154,11 +154,11 @@ def clean(out: str) -> str:
     return m.group(1) if m else out
 
 
-def translate_chunk(en: str, where: str, limiter: Limiter) -> tuple[str, list[str]]:
+def translate_chunk(en: str, where: str, limiter: Limiter, model: str = MODEL) -> tuple[str, list[str]]:
     best, best_issues = None, None
     ask = f"Page {where}. Translate this chunk.\n\n<source>\n{en}\n</source>"
     for attempt in range(RETRIES + 1):
-        fa = clean(call(ask, limiter))
+        fa = clean(call(ask, limiter, model))
         issues = check_text(en, fa)
         if best is None or len(issues) < len(best_issues):
             best, best_issues = fa, issues
@@ -169,11 +169,11 @@ def translate_chunk(en: str, where: str, limiter: Limiter) -> tuple[str, list[st
     return best, best_issues
 
 
-def translate_page(rel: str, text: str, limiter: Limiter, on_chunk=None) -> tuple[str, list[str]]:
+def translate_page(rel: str, text: str, limiter: Limiter, on_chunk=None, model: str = MODEL) -> tuple[str, list[str]]:
     parts = chunks(text)
     out, issues = [], []
     for i, en in enumerate(parts, 1):
-        fa, iss = translate_chunk(en, f"{rel} (chunk {i} of {len(parts)})", limiter)
+        fa, iss = translate_chunk(en, f"{rel} (chunk {i} of {len(parts)})", limiter, model)
         out.append(fa.rstrip())
         issues += [f"chunk {i}: {x}" for x in iss]
         if on_chunk:

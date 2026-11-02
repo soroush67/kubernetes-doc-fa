@@ -35,6 +35,9 @@ REDO_MODELS = set(filter(None, os.environ.get("REDO_MODELS", "sonnet").split(","
 REDO_SKIP = tuple(filter(None, os.environ.get("REDO_SKIP", ",".join([
     "reference/kubectl/generated/", "reference/kubernetes-api/", "reference/config-api/",
     "reference/command-line-tools-reference/"])).split(",")))
+# those generated pages are also translated the first time with this cheaper model,
+# so the Opus quota goes to pages people actually read
+REF_MODEL = os.environ.get("REF_MODEL", "sonnet")
 
 
 def sh(*cmd, cwd=ROOT, check=True):
@@ -128,7 +131,8 @@ class Runner:
         text = (EN_DOCS / rel).read_text(encoding="utf-8")
         self.current[rel] = "start"
         try:
-            fa, issues = translate_page(rel, text, self.limiter,
+            model = REF_MODEL if rel.startswith(REDO_SKIP) else MODEL
+            fa, issues = translate_page(rel, text, self.limiter, model=model,
                                         on_chunk=lambda i, n: self.current.__setitem__(rel, f"{i}/{n}"))
         except Stopped:
             return
@@ -142,7 +146,7 @@ class Runner:
         out.write_text(fa, encoding="utf-8")
         with self.lock:
             m["files"][rel] = {"sha": sha(text), "status": "issues" if issues else "ok", "issues": issues[:5],
-                               "model": MODEL, "at": now()}
+                               "model": model, "at": now()}
             run["translated"] += 1
             run["issues"] += bool(issues)
             self.state["done"] = run["translated"]
