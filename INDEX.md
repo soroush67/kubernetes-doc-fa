@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-1159 از 1722 صفحه
+1174 از 1722 صفحه
 
 
 ## `.`
@@ -1491,21 +1491,21 @@
 - ✅ [named-rule-with-operations-v1-admissionregistration.md](md/reference/kubernetes-api/definitions/named-rule-with-operations-v1-admissionregistration.md)
 - ✅ [node-selector-term-v1.md](md/reference/kubernetes-api/definitions/node-selector-term-v1.md)
 - ✅ [node-selector-v1.md](md/reference/kubernetes-api/definitions/node-selector-v1.md)
-- ⏳ `non-resource-attributes-v1-authorization.md`
-- ⏳ `non-resource-rule-v1-authorization.md`
-- ⏳ `object-meta-v1-meta.md`
-- ⏳ `object-reference-v1.md`
-- ⏳ `owner-reference-v1-meta.md`
-- ⏳ `param-kind-v1-admissionregistration.md`
-- ⏳ `param-ref-v1-admissionregistration.md`
-- ⏳ `patch-v1-meta.md`
-- ⏳ `policy-rule-v1-rbac.md`
-- ⏳ `preconditions-v1-meta.md`
-- ⏳ `quantity-resource.md`
-- ⏳ `resource-attributes-v1-authorization.md`
-- ⏳ `resource-rule-v1-authorization.md`
-- ⏳ `role-ref-v1-rbac.md`
-- ⏳ `rule-with-operations-v1-admissionregistration.md`
+- ✅ [non-resource-attributes-v1-authorization.md](md/reference/kubernetes-api/definitions/non-resource-attributes-v1-authorization.md)
+- ✅ [non-resource-rule-v1-authorization.md](md/reference/kubernetes-api/definitions/non-resource-rule-v1-authorization.md)
+- ✅ [object-meta-v1-meta.md](md/reference/kubernetes-api/definitions/object-meta-v1-meta.md)
+- ✅ [object-reference-v1.md](md/reference/kubernetes-api/definitions/object-reference-v1.md)
+- ✅ [owner-reference-v1-meta.md](md/reference/kubernetes-api/definitions/owner-reference-v1-meta.md)
+- ✅ [param-kind-v1-admissionregistration.md](md/reference/kubernetes-api/definitions/param-kind-v1-admissionregistration.md)
+- ✅ [param-ref-v1-admissionregistration.md](md/reference/kubernetes-api/definitions/param-ref-v1-admissionregistration.md)
+- ✅ [patch-v1-meta.md](md/reference/kubernetes-api/definitions/patch-v1-meta.md)
+- ✅ [policy-rule-v1-rbac.md](md/reference/kubernetes-api/definitions/policy-rule-v1-rbac.md)
+- ✅ [preconditions-v1-meta.md](md/reference/kubernetes-api/definitions/preconditions-v1-meta.md)
+- ✅ [quantity-resource.md](md/reference/kubernetes-api/definitions/quantity-resource.md)
+- ✅ [resource-attributes-v1-authorization.md](md/reference/kubernetes-api/definitions/resource-attributes-v1-authorization.md)
+- ✅ [resource-rule-v1-authorization.md](md/reference/kubernetes-api/definitions/resource-rule-v1-authorization.md)
+- ✅ [role-ref-v1-rbac.md](md/reference/kubernetes-api/definitions/role-ref-v1-rbac.md)
+- ✅ [rule-with-operations-v1-admissionregistration.md](md/reference/kubernetes-api/definitions/rule-with-operations-v1-admissionregistration.md)
 - ⏳ `scale-v1-autoscaling.md`
 - ⏳ `self-subject-access-review-v1-authorization.md`
 - ⏳ `self-subject-review-v1-authentication.md`
