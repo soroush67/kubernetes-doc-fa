@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-1204 از 1722 صفحه
+1209 از 1722 صفحه
 
 
 ## `.`
@@ -1544,18 +1544,18 @@
 
 - ✅ [_index.md](md/reference/kubernetes-api/flowcontrol/_index.md)
 - ✅ [flow-schema-v1.md](md/reference/kubernetes-api/flowcontrol/flow-schema-v1.md)
-- ⏳ `priority-level-configuration-v1.md`
+- ✅ [priority-level-configuration-v1.md](md/reference/kubernetes-api/flowcontrol/priority-level-configuration-v1.md)
 
 ## `reference/kubernetes-api/lifecycle`
 
-- ⏳ `_index.md`
-- ⏳ `eviction-request-v1alpha1.md`
+- ✅ [_index.md](md/reference/kubernetes-api/lifecycle/_index.md)
+- ✅ [eviction-request-v1alpha1.md](md/reference/kubernetes-api/lifecycle/eviction-request-v1alpha1.md)
 - ⏳ `eviction-v1alpha1.md`
 
 ## `reference/kubernetes-api/networking`
 
-- ⏳ `_index.md`
-- ⏳ `ingress-class-v1.md`
+- ✅ [_index.md](md/reference/kubernetes-api/networking/_index.md)
+- ✅ [ingress-class-v1.md](md/reference/kubernetes-api/networking/ingress-class-v1.md)
 - ⏳ `ingress-v1.md`
 - ⏳ `ip-address-v1.md`
 - ⏳ `network-policy-v1.md`
