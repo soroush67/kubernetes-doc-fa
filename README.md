@@ -8,9 +8,9 @@
 
 | | |
 |---|---|
-| پیشرفت (بر اساس کلمات) | **66.2٪** |
-| صفحات ترجمه‌شده | 1209 از 1722 |
-| صفحات دارای ایراد ساختاری | 42 |
+| پیشرفت (بر اساس کلمات) | **67.2٪** |
+| صفحات ترجمه‌شده | 1211 از 1722 |
+| صفحات دارای ایراد ساختاری | 43 |
 | نسخه‌ی منبع انگلیسی | `f652c6b8a26f` |
 
 ## مشاهده
@@ -72,7 +72,7 @@ cd kubernetes-doc-fa
 | `contribute` | 44 | 44 |
 | `doc-contributor-tools` | 1 | 1 |
 | `home` | 2 | 2 |
-| `reference` | 974 | 1198 |
+| `reference` | 976 | 1198 |
 | `setup` | 0 | 22 |
 | `tasks` | 0 | 221 |
 | `tutorials` | 0 | 45 |
@@ -100,6 +100,8 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [reference/kubernetes-api/networking/ip-address-v1.md](md/reference/kubernetes-api/networking/ip-address-v1.md) — 2026-11-03T08:09:54+03:30
+- [reference/kubernetes-api/lifecycle/eviction-v1alpha1.md](md/reference/kubernetes-api/lifecycle/eviction-v1alpha1.md) — 2026-11-03T08:06:47+03:30
 - [reference/kubernetes-api/networking/ingress-class-v1.md](md/reference/kubernetes-api/networking/ingress-class-v1.md) — 2026-11-03T08:05:38+03:30
 - [reference/kubernetes-api/networking/_index.md](md/reference/kubernetes-api/networking/_index.md) — 2026-11-03T08:02:28+03:30
 - [reference/kubernetes-api/lifecycle/eviction-request-v1alpha1.md](md/reference/kubernetes-api/lifecycle/eviction-request-v1alpha1.md) — 2026-11-03T08:02:25+03:30
@@ -118,8 +120,6 @@ cd kubernetes-doc-fa
 - [reference/kubernetes-api/definitions/user-info-v1-authentication.md](md/reference/kubernetes-api/definitions/user-info-v1-authentication.md) — 2026-11-03T07:30:48+03:30
 - [reference/kubernetes-api/definitions/variable-v1-admissionregistration.md](md/reference/kubernetes-api/definitions/variable-v1-admissionregistration.md) — 2026-11-03T07:30:45+03:30
 - [reference/kubernetes-api/definitions/typed-local-object-reference-v1beta1-scheduling.md](md/reference/kubernetes-api/definitions/typed-local-object-reference-v1beta1-scheduling.md) — 2026-11-03T07:30:38+03:30
-- [reference/kubernetes-api/definitions/typed-local-object-reference-v1.md](md/reference/kubernetes-api/definitions/typed-local-object-reference-v1.md) — 2026-11-03T07:30:30+03:30
-- [reference/kubernetes-api/definitions/token-review-v1-authentication.md](md/reference/kubernetes-api/definitions/token-review-v1-authentication.md) — 2026-11-03T07:30:24+03:30
 
 </div>
 
@@ -169,6 +169,7 @@ cd kubernetes-doc-fa
 - [reference/kubernetes-api/core/replication-controller-v1.md](md/reference/kubernetes-api/core/replication-controller-v1.md): chunk 9: 3 untranslated English lines, e.g. 'GET /api/v1/namespaces/{namespace}/replicationcontrollers/{name}/scale'
 - [reference/kubernetes-api/core/resource-quota-v1.md](md/reference/kubernetes-api/core/resource-quota-v1.md): chunk 8: 3 untranslated English lines, e.g. 'PATCH /api/v1/namespaces/{namespace}/resourcequotas/{name}/status'
 - [reference/kubernetes-api/core/service-v1.md](md/reference/kubernetes-api/core/service-v1.md): chunk 11: 10 untranslated English lines, e.g. 'POST /api/v1/namespaces/{namespace}/services/{name}/proxy'; chunk 11: short: 1017 words vs 1820 source words
+- [reference/kubernetes-api/lifecycle/eviction-v1alpha1.md](md/reference/kubernetes-api/lifecycle/eviction-v1alpha1.md): chunk 4: heading anchors {#...} differ
 
 </div>
 
