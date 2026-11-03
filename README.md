@@ -8,8 +8,8 @@
 
 | | |
 |---|---|
-| پیشرفت (بر اساس کلمات) | **69.5٪** |
-| صفحات ترجمه‌شده | 1219 از 1722 |
+| پیشرفت (بر اساس کلمات) | **73.6٪** |
+| صفحات ترجمه‌شده | 1228 از 1722 |
 | صفحات دارای ایراد ساختاری | 44 |
 | نسخه‌ی منبع انگلیسی | `f652c6b8a26f` |
 
@@ -72,7 +72,7 @@ cd kubernetes-doc-fa
 | `contribute` | 44 | 44 |
 | `doc-contributor-tools` | 1 | 1 |
 | `home` | 2 | 2 |
-| `reference` | 984 | 1198 |
+| `reference` | 993 | 1198 |
 | `setup` | 0 | 22 |
 | `tasks` | 0 | 221 |
 | `tutorials` | 0 | 45 |
@@ -100,6 +100,15 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [reference/kubernetes-api/resource/resource-claim-v1.md](md/reference/kubernetes-api/resource/resource-claim-v1.md) — 2026-11-03T12:45:58+03:30
+- [reference/kubernetes-api/resource/resource-claim-template-v1.md](md/reference/kubernetes-api/resource/resource-claim-template-v1.md) — 2026-11-03T12:39:56+03:30
+- [reference/kubernetes-api/resource/device-taint-rule-v1.md](md/reference/kubernetes-api/resource/device-taint-rule-v1.md) — 2026-11-03T12:36:13+03:30
+- [reference/kubernetes-api/resource/device-class-v1.md](md/reference/kubernetes-api/resource/device-class-v1.md) — 2026-11-03T12:35:40+03:30
+- [reference/kubernetes-api/rbac/role-v1.md](md/reference/kubernetes-api/rbac/role-v1.md) — 2026-11-03T12:32:14+03:30
+- [reference/kubernetes-api/resource/_index.md](md/reference/kubernetes-api/resource/_index.md) — 2026-11-03T12:31:55+03:30
+- [reference/kubernetes-api/rbac/role-binding-v1.md](md/reference/kubernetes-api/rbac/role-binding-v1.md) — 2026-11-03T12:31:50+03:30
+- [reference/kubernetes-api/rbac/cluster-role-v1.md](md/reference/kubernetes-api/rbac/cluster-role-v1.md) — 2026-11-03T12:26:24+03:30
+- [reference/kubernetes-api/policy/pod-disruption-budget-v1.md](md/reference/kubernetes-api/policy/pod-disruption-budget-v1.md) — 2026-11-03T12:25:10+03:30
 - [reference/kubernetes-api/rbac/cluster-role-binding-v1.md](md/reference/kubernetes-api/rbac/cluster-role-binding-v1.md) — 2026-11-03T12:23:08+03:30
 - [reference/kubernetes-api/rbac/_index.md](md/reference/kubernetes-api/rbac/_index.md) — 2026-11-03T12:19:59+03:30
 - [reference/kubernetes-api/node/runtime-class-v1.md](md/reference/kubernetes-api/node/runtime-class-v1.md) — 2026-11-03T12:19:56+03:30
@@ -111,15 +120,6 @@ cd kubernetes-doc-fa
 - [reference/kubernetes-api/networking/ip-address-v1.md](md/reference/kubernetes-api/networking/ip-address-v1.md) — 2026-11-03T08:09:54+03:30
 - [reference/kubernetes-api/lifecycle/eviction-v1alpha1.md](md/reference/kubernetes-api/lifecycle/eviction-v1alpha1.md) — 2026-11-03T08:06:47+03:30
 - [reference/kubernetes-api/networking/ingress-class-v1.md](md/reference/kubernetes-api/networking/ingress-class-v1.md) — 2026-11-03T08:05:38+03:30
-- [reference/kubernetes-api/networking/_index.md](md/reference/kubernetes-api/networking/_index.md) — 2026-11-03T08:02:28+03:30
-- [reference/kubernetes-api/lifecycle/eviction-request-v1alpha1.md](md/reference/kubernetes-api/lifecycle/eviction-request-v1alpha1.md) — 2026-11-03T08:02:25+03:30
-- [reference/kubernetes-api/flowcontrol/priority-level-configuration-v1.md](md/reference/kubernetes-api/flowcontrol/priority-level-configuration-v1.md) — 2026-11-03T07:46:20+03:30
-- [reference/kubernetes-api/lifecycle/_index.md](md/reference/kubernetes-api/lifecycle/_index.md) — 2026-11-03T07:45:12+03:30
-- [reference/kubernetes-api/group-versions.md](md/reference/kubernetes-api/group-versions.md) — 2026-11-03T07:44:47+03:30
-- [reference/kubernetes-api/flowcontrol/flow-schema-v1.md](md/reference/kubernetes-api/flowcontrol/flow-schema-v1.md) — 2026-11-03T07:44:38+03:30
-- [reference/kubernetes-api/discovery/endpoint-slice-v1.md](md/reference/kubernetes-api/discovery/endpoint-slice-v1.md) — 2026-11-03T07:41:21+03:30
-- [reference/kubernetes-api/flowcontrol/_index.md](md/reference/kubernetes-api/flowcontrol/_index.md) — 2026-11-03T07:35:50+03:30
-- [reference/kubernetes-api/events/event-v1.md](md/reference/kubernetes-api/events/event-v1.md) — 2026-11-03T07:35:47+03:30
 
 </div>
 

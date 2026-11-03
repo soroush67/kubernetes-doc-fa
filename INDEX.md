@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-1219 از 1722 صفحه
+1228 از 1722 صفحه
 
 
 ## `.`
@@ -1569,23 +1569,23 @@
 ## `reference/kubernetes-api/policy`
 
 - ✅ [_index.md](md/reference/kubernetes-api/policy/_index.md)
-- ⏳ `pod-disruption-budget-v1.md`
+- ✅ [pod-disruption-budget-v1.md](md/reference/kubernetes-api/policy/pod-disruption-budget-v1.md)
 
 ## `reference/kubernetes-api/rbac`
 
 - ✅ [_index.md](md/reference/kubernetes-api/rbac/_index.md)
 - ✅ [cluster-role-binding-v1.md](md/reference/kubernetes-api/rbac/cluster-role-binding-v1.md)
-- ⏳ `cluster-role-v1.md`
-- ⏳ `role-binding-v1.md`
-- ⏳ `role-v1.md`
+- ✅ [cluster-role-v1.md](md/reference/kubernetes-api/rbac/cluster-role-v1.md)
+- ✅ [role-binding-v1.md](md/reference/kubernetes-api/rbac/role-binding-v1.md)
+- ✅ [role-v1.md](md/reference/kubernetes-api/rbac/role-v1.md)
 
 ## `reference/kubernetes-api/resource`
 
-- ⏳ `_index.md`
-- ⏳ `device-class-v1.md`
-- ⏳ `device-taint-rule-v1.md`
-- ⏳ `resource-claim-template-v1.md`
-- ⏳ `resource-claim-v1.md`
+- ✅ [_index.md](md/reference/kubernetes-api/resource/_index.md)
+- ✅ [device-class-v1.md](md/reference/kubernetes-api/resource/device-class-v1.md)
+- ✅ [device-taint-rule-v1.md](md/reference/kubernetes-api/resource/device-taint-rule-v1.md)
+- ✅ [resource-claim-template-v1.md](md/reference/kubernetes-api/resource/resource-claim-template-v1.md)
+- ✅ [resource-claim-v1.md](md/reference/kubernetes-api/resource/resource-claim-v1.md)
 - ⏳ `resource-pool-status-request-v1alpha3.md`
 - ⏳ `resource-slice-v1.md`
 
