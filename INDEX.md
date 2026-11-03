@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-1189 از 1722 صفحه
+1204 از 1722 صفحه
 
 
 ## `.`
@@ -1381,7 +1381,7 @@
 ## `reference/kubernetes-api`
 
 - ✅ [_index.md](md/reference/kubernetes-api/_index.md)
-- ⏳ `group-versions.md`
+- ✅ [group-versions.md](md/reference/kubernetes-api/group-versions.md)
 
 ## `reference/kubernetes-api/admissionregistration`
 
@@ -1520,30 +1520,30 @@
 - ✅ [subject-rules-review-status-v1-authorization.md](md/reference/kubernetes-api/definitions/subject-rules-review-status-v1-authorization.md)
 - ✅ [subject-v1-rbac.md](md/reference/kubernetes-api/definitions/subject-v1-rbac.md)
 - ✅ [time-v1-meta.md](md/reference/kubernetes-api/definitions/time-v1-meta.md)
-- ⏳ `token-review-v1-authentication.md`
+- ✅ [token-review-v1-authentication.md](md/reference/kubernetes-api/definitions/token-review-v1-authentication.md)
 - ✅ [toleration-v1.md](md/reference/kubernetes-api/definitions/toleration-v1.md)
-- ⏳ `typed-local-object-reference-v1.md`
-- ⏳ `typed-local-object-reference-v1beta1-scheduling.md`
-- ⏳ `user-info-v1-authentication.md`
-- ⏳ `variable-v1-admissionregistration.md`
-- ⏳ `volume-health-condition-v1.md`
-- ⏳ `watch-event-v1-meta.md`
-- ⏳ `webhook-client-config-v1-admissionregistration.md`
+- ✅ [typed-local-object-reference-v1.md](md/reference/kubernetes-api/definitions/typed-local-object-reference-v1.md)
+- ✅ [typed-local-object-reference-v1beta1-scheduling.md](md/reference/kubernetes-api/definitions/typed-local-object-reference-v1beta1-scheduling.md)
+- ✅ [user-info-v1-authentication.md](md/reference/kubernetes-api/definitions/user-info-v1-authentication.md)
+- ✅ [variable-v1-admissionregistration.md](md/reference/kubernetes-api/definitions/variable-v1-admissionregistration.md)
+- ✅ [volume-health-condition-v1.md](md/reference/kubernetes-api/definitions/volume-health-condition-v1.md)
+- ✅ [watch-event-v1-meta.md](md/reference/kubernetes-api/definitions/watch-event-v1-meta.md)
+- ✅ [webhook-client-config-v1-admissionregistration.md](md/reference/kubernetes-api/definitions/webhook-client-config-v1-admissionregistration.md)
 
 ## `reference/kubernetes-api/discovery`
 
-- ⏳ `_index.md`
-- ⏳ `endpoint-slice-v1.md`
+- ✅ [_index.md](md/reference/kubernetes-api/discovery/_index.md)
+- ✅ [endpoint-slice-v1.md](md/reference/kubernetes-api/discovery/endpoint-slice-v1.md)
 
 ## `reference/kubernetes-api/events`
 
-- ⏳ `_index.md`
-- ⏳ `event-v1.md`
+- ✅ [_index.md](md/reference/kubernetes-api/events/_index.md)
+- ✅ [event-v1.md](md/reference/kubernetes-api/events/event-v1.md)
 
 ## `reference/kubernetes-api/flowcontrol`
 
-- ⏳ `_index.md`
-- ⏳ `flow-schema-v1.md`
+- ✅ [_index.md](md/reference/kubernetes-api/flowcontrol/_index.md)
+- ✅ [flow-schema-v1.md](md/reference/kubernetes-api/flowcontrol/flow-schema-v1.md)
 - ⏳ `priority-level-configuration-v1.md`
 
 ## `reference/kubernetes-api/lifecycle`
