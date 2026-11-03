@@ -1,0 +1,2210 @@
+---
+api_metadata:
+  apiVersion: "v1"
+  import: "k8s.io/api/core/v1"
+  kind: "Service"
+content_type: "api_reference"
+description: "Service یک انتزاع نام‌دار از یک سرویس نرم‌افزاری (برای مثال mysql) است که از یک پورت محلی (برای مثال 3306) که پراکسی روی آن گوش می‌دهد، و انتخابگری تشکیل می‌شود که تعیین می‌کند کدام Podها به درخواست‌هایی که از طریق پراکسی ارسال می‌شوند پاسخ دهند."
+title: "Service"
+weight: 150
+auto_generated: true
+---
+
+<!--
+The file is auto-generated from the Go source code of the component using a generic
+[generator](https://github.com/kubernetes-sigs/reference-docs/). To learn how
+to generate the reference documentation, please read
+[Contributing to the reference documentation](/docs/contribute/generate-ref-docs/).
+To update the reference content, please follow the
+[Contributing upstream](/docs/contribute/generate-ref-docs/contribute-upstream/)
+guide. You can file document formatting bugs against the
+[reference-docs](https://github.com/kubernetes-sigs/reference-docs/) project.
+-->
+
+`apiVersion: v1`
+
+`import "k8s.io/api/core/v1"`
+
+
+## Service {#Service}
+
+Service یک انتزاع نام‌دار از یک سرویس نرم‌افزاری (برای مثال mysql) است که از یک پورت محلی (برای مثال 3306) که پراکسی روی آن گوش می‌دهد، و انتخابگری (selector) تشکیل می‌شود که تعیین می‌کند کدام Podها به درخواست‌هایی که از طریق پراکسی ارسال می‌شوند پاسخ دهند.
+
+<hr>
+
+<table>
+  <thead><tr><th>فیلد</th><th>توضیحات</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>apiVersion</code><br/><em>string</em></td>
+      <td>APIVersion نسخه‌بندی طرحواره (schema) این representation از یک آبجکت را تعریف می‌کند. سرورها باید طرحواره‌های شناخته‌شده را به آخرین مقدار داخلی تبدیل کنند و می‌توانند مقادیر ناشناخته را رد کنند. اطلاعات بیشتر: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources</td>
+    </tr>
+    <tr>
+      <td><code>kind</code><br/><em>string</em></td>
+      <td>Kind یک مقدار رشته‌ای است که منبع REST نمایش‌داده‌شده توسط این آبجکت را مشخص می‌کند. سرورها می‌توانند این مقدار را از endpoint‌ای که کلاینت درخواست‌ها را به آن ارسال می‌کند استنباط کنند. قابل به‌روزرسانی نیست. به‌صورت CamelCase است. اطلاعات بیشتر: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds</td>
+    </tr>
+    <tr>
+      <td><code>metadata</code><br/><em><a href="{{< ref "../definitions/object-meta-v1-meta#ObjectMeta" >}}">ObjectMeta</a></em></td>
+      <td>فراداده استاندارد آبجکت. اطلاعات بیشتر: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata</td>
+    </tr>
+    <tr>
+      <td><code>spec</code><br/><em><a href="{{< ref "#ServiceSpec" >}}">ServiceSpec</a></em></td>
+      <td>Spec رفتار یک Service را تعریف می‌کند. https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status</td>
+    </tr>
+    <tr>
+      <td><code>status</code><br/><em><a href="{{< ref "#ServiceStatus" >}}">ServiceStatus</a></em></td>
+      <td>آخرین وضعیت مشاهده‌شده Service. این مقدار را سیستم پر می‌کند و فقط‌خواندنی است. اطلاعات بیشتر: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status</td>
+    </tr>
+  </tbody>
+</table>
+
+## ServiceSpec {#ServiceSpec}
+
+ServiceSpec مشخصات و ویژگی‌هایی را توصیف می‌کند که کاربر هنگام ایجاد یک Service تعیین می‌کند.
+
+<hr>
+
+<table>
+  <thead><tr><th>فیلد</th><th>توضیحات</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>allocateLoadBalancerNodePorts</code><br/><em>boolean</em></td>
+      <td>فیلد allocateLoadBalancerNodePorts مشخص می‌کند که آیا NodePortها برای Serviceهایی با نوع LoadBalancer به‌طور خودکار تخصیص داده شوند یا خیر. مقدار پیش‌فرض "true" است. اگر load balancer کلاستر به NodePortها وابسته نباشد، می‌توان آن را روی "false" تنظیم کرد. اگر فراخواننده NodePortهای مشخصی را (با تعیین مقدار) درخواست کند، این درخواست‌ها صرف‌نظر از این فیلد رعایت می‌شوند. این فیلد را فقط برای Serviceهایی با نوع LoadBalancer می‌توان تنظیم کرد و در صورت تغییر نوع به هر نوع دیگر، پاک می‌شود.</td>
+    </tr>
+    <tr>
+      <td><code>clusterIP</code><br/><em>string</em></td>
+      <td>فیلد clusterIP نشانی IP سرویس است و معمولاً به‌صورت تصادفی تخصیص داده می‌شود. اگر نشانی به‌صورت دستی تعیین شود، در محدوده مجاز (بر اساس پیکربندی سیستم) قرار داشته باشد و در حال استفاده نباشد، به Service تخصیص داده می‌شود؛ در غیر این صورت ایجاد Service با شکست مواجه می‌شود. این فیلد را نمی‌توان از طریق به‌روزرسانی تغییر داد، مگر اینکه فیلد type نیز به ExternalName تغییر کند (که در این حالت این فیلد باید خالی باشد) یا فیلد type از ExternalName به نوع دیگری تغییر کند (که در این حالت می‌توان این فیلد را، همان‌طور که توضیح داده شد، به‌صورت اختیاری تعیین کرد). مقادیر معتبر عبارت‌اند از "None"، رشته خالی ("") یا یک نشانی IP معتبر. تنظیم این فیلد روی "None" یک «headless service» (بدون IP مجازی) ایجاد می‌کند که برای زمانی مفید است که اتصال مستقیم به endpointها ترجیح داده می‌شود و نیازی به پراکسی نیست. این فیلد فقط برای نوع‌های ClusterIP، NodePort و LoadBalancer اعمال می‌شود. اگر این فیلد هنگام ایجاد Service از نوع ExternalName تعیین شود، ایجاد با شکست مواجه می‌شود. هنگام به‌روزرسانی یک Service به نوع ExternalName، این فیلد پاک می‌شود. اطلاعات بیشتر: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies</td>
+    </tr>
+    <tr>
+      <td><code>clusterIPs</code><br/><em>string array</em></td>
+      <td>فیلد ClusterIPs فهرستی از نشانی‌های IP است که به این Service تخصیص داده شده‌اند و معمولاً به‌صورت تصادفی تخصیص داده می‌شوند. اگر نشانی به‌صورت دستی تعیین شود، در محدوده مجاز (بر اساس پیکربندی سیستم) قرار داشته باشد و در حال استفاده نباشد، به Service تخصیص داده می‌شود؛ در غیر این صورت ایجاد Service با شکست مواجه می‌شود. این فیلد را نمی‌توان از طریق به‌روزرسانی تغییر داد، مگر اینکه فیلد type نیز به ExternalName تغییر کند (که در این حالت این فیلد باید خالی باشد) یا فیلد type از ExternalName به نوع دیگری تغییر کند (که در این حالت می‌توان این فیلد را، همان‌طور که توضیح داده شد، به‌صورت اختیاری تعیین کرد). مقادیر معتبر عبارت‌اند از "None"، رشته خالی ("") یا یک نشانی IP معتبر. تنظیم این فیلد روی "None" یک «headless service» (بدون IP مجازی) ایجاد می‌کند که برای زمانی مفید است که اتصال مستقیم به endpointها ترجیح داده می‌شود و نیازی به پراکسی نیست. این فیلد فقط برای نوع‌های ClusterIP، NodePort و LoadBalancer اعمال می‌شود. اگر این فیلد هنگام ایجاد Service از نوع ExternalName تعیین شود، ایجاد با شکست مواجه می‌شود. هنگام به‌روزرسانی یک Service به نوع ExternalName، این فیلد پاک می‌شود. اگر این فیلد تعیین نشود، از روی فیلد clusterIP مقداردهی اولیه می‌شود. اگر این فیلد تعیین شود، کلاینت‌ها باید اطمینان حاصل کنند که clusterIPs[0] و clusterIP مقدار یکسانی دارند. این فیلد حداکثر می‌تواند دو مقدار داشته باشد (IPهای dual-stack، با هر ترتیبی). این IPها باید با مقادیر فیلد ipFamilies مطابقت داشته باشند. هر دو فیلد clusterIPs و ipFamilies تابع فیلد ipFamilyPolicy هستند. اطلاعات بیشتر: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies</td>
+    </tr>
+    <tr>
+      <td><code>externalIPs</code><br/><em>string array</em></td>
+      <td>فیلد externalIPs فهرستی از نشانی‌های IP است که نودهای کلاستر برای این Service ترافیک مربوط به آن‌ها را نیز می‌پذیرند. این IPها توسط کوبرنتیز مدیریت نمی‌شوند. مسئولیت اطمینان از رسیدن ترافیک به نودی که این IP را دارد بر عهده کاربر است. نمونه رایج آن load balancerهای خارجی هستند که جزو سیستم کوبرنتیز نیستند.</td>
+    </tr>
+    <tr>
+      <td><code>externalName</code><br/><em>string</em></td>
+      <td>فیلد externalName ارجاع خارجی است که سازوکارهای discovery آن را به‌عنوان نام مستعار (alias) این Service برمی‌گردانند (مثلاً یک رکورد CNAME در DNS). هیچ پراکسی‌ای در کار نخواهد بود. مقدار آن باید یک hostname مطابق RFC-1123 (https://tools.ietf.org/html/rfc1123) و با حروف کوچک باشد و لازم است `type` برابر "ExternalName" باشد.</td>
+    </tr>
+    <tr>
+      <td><code>externalTrafficPolicy</code><br/><em>string</em></td>
+      <td>فیلد externalTrafficPolicy توضیح می‌دهد که نودها چگونه ترافیک Service را که از طریق یکی از نشانی‌های «رو به خارج» Service (یعنی NodePortها، ExternalIPها و IPهای LoadBalancer) دریافت می‌کنند توزیع می‌کنند. اگر روی "Local" تنظیم شود، پراکسی Service را به‌گونه‌ای پیکربندی می‌کند که فرض می‌شود load balancerهای خارجی متوجه توزیع ترافیک Service میان نودها هستند؛ بنابراین هر نود ترافیک را فقط به endpointهای محلی همان نود تحویل می‌دهد و IP مبدأ کلاینت را masquerade نمی‌کند. (ترافیکی که به‌اشتباه به نودی بدون endpoint ارسال شود، حذف می‌شود.) مقدار پیش‌فرض یعنی "Cluster" از رفتار استاندارد مسیریابی یکنواخت به همه endpointها استفاده می‌کند (که ممکن است با topology و قابلیت‌های دیگر تغییر کند). توجه کنید که ترافیکی که از داخل کلاستر به یک External IP یا LoadBalancer IP ارسال شود، همیشه معنای "Cluster" را خواهد داشت، اما کلاینت‌هایی که از داخل کلاستر به یک NodePort ارسال می‌کنند، ممکن است هنگام انتخاب نود لازم باشد سیاست ترافیک را در نظر بگیرند.<br/><br/>مقادیر ممکن برای enum:<br/> - `"Cluster"` ترافیک را به همه endpointها مسیردهی می‌کند.<br/> - `"Local"` با مسیردهی ترافیک فقط به endpointهای روی همان نودی که ترافیک در آن دریافت شده است، IP مبدأ ترافیک را حفظ می‌کند (و در صورت نبود endpoint محلی، ترافیک را حذف می‌کند).</td>
+    </tr>
+    <tr>
+      <td><code>healthCheckNodePort</code><br/><em>integer</em></td>
+      <td>فیلد healthCheckNodePort مقدار nodePort بررسی سلامت (healthcheck) را برای Service مشخص می‌کند. این فیلد فقط زمانی اعمال می‌شود که type روی LoadBalancer و externalTrafficPolicy روی Local تنظیم شده باشد. اگر مقداری تعیین شود، در محدوده مجاز باشد و در حال استفاده نباشد، همان مقدار به کار می‌رود. اگر تعیین نشود، مقداری به‌طور خودکار تخصیص داده می‌شود. سیستم‌های خارجی (مثلاً load balancerها) می‌توانند از این پورت استفاده کنند تا تشخیص دهند که یک نود مشخص endpointهای این Service را در خود دارد یا خیر. اگر این فیلد هنگام ایجاد Serviceای که به آن نیاز ندارد تعیین شود، ایجاد با شکست مواجه می‌شود. هنگام به‌روزرسانی یک Service به‌گونه‌ای که دیگر به این فیلد نیاز نداشته باشد (مثلاً تغییر type)، این فیلد پاک می‌شود. پس از تنظیم، این فیلد قابل به‌روزرسانی نیست.</td>
+    </tr>
+    <tr>
+      <td><code>internalTrafficPolicy</code><br/><em>string</em></td>
+      <td>فیلد InternalTrafficPolicy توضیح می‌دهد که نودها چگونه ترافیک Service را که روی ClusterIP دریافت می‌کنند توزیع می‌کنند. اگر روی "Local" تنظیم شود، پراکسی فرض می‌کند که Podها فقط می‌خواهند با endpointهای Service که روی همان نود Pod قرار دارند ارتباط برقرار کنند و در صورت نبود endpoint محلی، ترافیک را حذف می‌کند. مقدار پیش‌فرض یعنی "Cluster" از رفتار استاندارد مسیریابی یکنواخت به همه endpointها استفاده می‌کند (که ممکن است با topology و قابلیت‌های دیگر تغییر کند).<br/><br/>مقادیر ممکن برای enum:<br/> - `"Cluster"` ترافیک را به همه endpointها مسیردهی می‌کند.<br/> - `"Local"` ترافیک را فقط به endpointهای روی همان نودی که Pod کلاینت در آن قرار دارد مسیردهی می‌کند (و در صورت نبود endpoint محلی، ترافیک را حذف می‌کند).</td>
+    </tr>
+    <tr>
+      <td><code>ipFamilies</code><br/><em>string array</em></td>
+      <td>فیلد IPFamilies فهرستی از خانواده‌های IP (مثلاً IPv4 و IPv6) است که به این Service تخصیص داده شده‌اند. این فیلد معمولاً بر اساس پیکربندی کلاستر و فیلد ipFamilyPolicy به‌صورت خودکار تخصیص داده می‌شود. اگر این فیلد به‌صورت دستی تعیین شود، خانواده درخواست‌شده در کلاستر در دسترس باشد و ipFamilyPolicy آن را مجاز بداند، همان مقدار استفاده می‌شود؛ در غیر این صورت ایجاد Service با شکست مواجه می‌شود. این فیلد به‌صورت مشروط قابل تغییر است: افزودن یا حذف یک خانواده IP ثانویه مجاز است، اما تغییر خانواده IP اصلی Service مجاز نیست. مقادیر معتبر "IPv4" و "IPv6" هستند. این فیلد فقط برای Serviceهایی با نوع ClusterIP، NodePort و LoadBalancer اعمال می‌شود و برای Serviceهای «headless» نیز اعمال می‌شود. هنگام به‌روزرسانی یک Service به نوع ExternalName، این فیلد پاک می‌شود. این فیلد حداکثر می‌تواند دو مقدار داشته باشد (خانواده‌های dual-stack، با هر ترتیبی). در صورت تعیین فیلد clusterIPs، این خانواده‌ها باید با مقادیر آن مطابقت داشته باشند. هر دو فیلد clusterIPs و ipFamilies تابع فیلد ipFamilyPolicy هستند.</td>
+    </tr>
+    <tr>
+      <td><code>ipFamilyPolicy</code><br/><em>string</em></td>
+      <td>فیلد IPFamilyPolicy بیانگر وضعیت dual-stack است که این Service درخواست کرده یا الزامی می‌داند. اگر مقداری ارائه نشود، این فیلد روی SingleStack تنظیم می‌شود. Serviceها می‌توانند "SingleStack" (یک خانواده IP)، "PreferDualStack" (دو خانواده IP در کلاسترهای پیکربندی‌شده با dual-stack یا یک خانواده IP در کلاسترهای single-stack) یا "RequireDualStack" (دو خانواده IP در کلاسترهای پیکربندی‌شده با dual-stack، و در غیر این صورت شکست) باشند. فیلدهای ipFamilies و clusterIPs به مقدار این فیلد وابسته‌اند. هنگام به‌روزرسانی یک Service به نوع ExternalName، این فیلد پاک می‌شود.<br/><br/>مقادیر ممکن برای enum:<br/> - `"PreferDualStack"` نشان می‌دهد که این Service در صورتی که کلاستر برای dual-stack پیکربندی شده باشد، dual-stack را ترجیح می‌دهد. اگر کلاستر برای dual-stack پیکربندی نشده باشد، به Service یک IPFamily تخصیص داده می‌شود. اگر IPFamily در service.spec.ipFamilies تنظیم نشده باشد، IPFamily پیش‌فرض پیکربندی‌شده در کلاستر به Service تخصیص داده می‌شود.<br/> - `"RequireDualStack"` نشان می‌دهد که این Service به dual-stack نیاز دارد. استفاده از IPFamilyPolicyRequireDualStack در کلاستر single-stack به خطاهای اعتبارسنجی منجر می‌شود. IPFamilyهای تخصیص‌یافته به این Service (و ترتیب آن‌ها) بر اساس service.spec.ipFamilies تعیین می‌شود. اگر service.spec.ipFamilies ارائه نشده باشد، تخصیص مطابق پیکربندی کلاستر انجام می‌شود. اگر service.spec.ipFamilies فقط یک مقدار داشته باشد، IPFamily دیگر توسط apiserver افزوده می‌شود.<br/> - `"SingleStack"` نشان می‌دهد که این Service باید فقط یک IPFamily داشته باشد. IPFamily تخصیص‌یافته بر اساس IPFamily پیش‌فرض کلاستر یا مقدار مشخص‌شده در فیلد service.spec.ipFamilies تعیین می‌شود.</td>
+    </tr>
+    <tr>
+      <td><code>loadBalancerClass</code><br/><em>string</em></td>
+      <td>فیلد loadBalancerClass کلاس پیاده‌سازی load balancer را مشخص می‌کند که این Service به آن تعلق دارد. اگر تعیین شود، مقدار این فیلد باید یک شناسه به سبک برچسب (label) با پیشوند اختیاری باشد، مانند "internal-vip" یا "example.com/internal-vip". نام‌های بدون پیشوند برای کاربران نهایی رزرو شده‌اند. این فیلد فقط زمانی قابل تنظیم است که نوع Service برابر 'LoadBalancer' باشد. اگر تنظیم نشود، از پیاده‌سازی پیش‌فرض load balancer استفاده می‌شود؛ امروزه این کار معمولاً از طریق یکپارچه‌سازی با ارائه‌دهنده ابری انجام می‌شود، اما باید برای هر پیاده‌سازی پیش‌فرضی صدق کند. اگر تنظیم شود، فرض بر این است که یک پیاده‌سازی load balancer در حال پایش Serviceهایی با کلاس منطبق است. هر پیاده‌سازی پیش‌فرض load balancer (مثلاً ارائه‌دهندگان ابری) باید Serviceهایی را که این فیلد را تنظیم کرده‌اند نادیده بگیرد. این فیلد فقط هنگام ایجاد یا به‌روزرسانی یک Service به نوع 'LoadBalancer' قابل تنظیم است. پس از تنظیم، قابل تغییر نیست. هنگامی که یک Service به نوعی غیر از 'LoadBalancer' به‌روزرسانی شود، این فیلد پاک می‌شود.</td>
+    </tr>
+    <tr>
+      <td><code>loadBalancerIP</code><br/><em>string</em></td>
+      <td>فقط برای Service از نوع LoadBalancer اعمال می‌شود. این قابلیت به این بستگی دارد که ارائه‌دهنده ابری زیربنایی از تعیین loadBalancerIP هنگام ایجاد load balancer پشتیبانی کند یا خیر. اگر ارائه‌دهنده ابری از این قابلیت پشتیبانی نکند، این فیلد نادیده گرفته می‌شود. منسوخ‌شده: این فیلد به‌طور کامل مشخص نشده بود و معنای آن در پیاده‌سازی‌های مختلف متفاوت است. استفاده از آن قابل انتقال (portable) نیست و ممکن است از dual-stack پشتیبانی نکند. به کاربران توصیه می‌شود در صورت وجود، از حاشیه‌نویسی‌های (annotation) مختص پیاده‌سازی استفاده کنند.</td>
+    </tr>
+    <tr>
+      <td><code>loadBalancerSourceRanges</code><br/><em>string array</em></td>
+      <td>اگر تعیین شده باشد و پلتفرم از آن پشتیبانی کند، ترافیک عبوری از load balancer ارائه‌دهنده ابری به IPهای کلاینت مشخص‌شده محدود می‌شود. اگر ارائه‌دهنده ابری از این قابلیت پشتیبانی نکند، این فیلد نادیده گرفته می‌شود. اطلاعات بیشتر: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/</td>
+    </tr>
+    <tr>
+      <td><code>ports</code><br/><em><a href="{{< ref "#ServicePort" >}}">ServicePort array</a></em><br/><em>patch strategy: merge on key <code>port</code></em></td>
+      <td>فهرست پورت‌هایی که این Service در معرض دسترسی قرار می‌دهد. اطلاعات بیشتر: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies</td>
+    </tr>
+    <tr>
+      <td><code>publishNotReadyAddresses</code><br/><em>boolean</em></td>
+      <td>فیلد publishNotReadyAddresses نشان می‌دهد که هر عاملی که با endpointهای این Service سروکار دارد باید نشانه‌های آماده/ناآماده بودن (ready/not-ready) را نادیده بگیرد. کاربرد اصلی تنظیم این فیلد برای Headless Service مربوط به یک StatefulSet است تا رکوردهای SRV DNS مربوط به Podهای آن را برای کشف همتایان (peer discovery) منتشر کند. کنترل‌کننده‌های کوبرنتیز که منابع Endpoints و EndpointSlice را برای Serviceها تولید می‌کنند، این فیلد را چنین تفسیر می‌کنند که همه endpointها حتی اگر خود Podها آماده نباشند، «آماده» محسوب می‌شوند. عامل‌هایی که فقط endpointهای تولیدشده توسط کوبرنتیز را از طریق منابع Endpoints یا EndpointSlice مصرف می‌کنند، می‌توانند با اطمینان این رفتار را فرض کنند.</td>
+    </tr>
+    <tr>
+      <td><code>selector</code><br/><em>object</em></td>
+      <td>ترافیک Service را به Podهایی مسیردهی می‌کند که کلیدها و مقادیر برچسب آن‌ها با این انتخابگر (selector) مطابقت دارد. اگر خالی باشد یا وجود نداشته باشد، فرض بر این است که یک فرایند خارجی endpointهای این Service را مدیریت می‌کند و کوبرنتیز آن‌ها را تغییر نخواهد داد. فقط برای نوع‌های ClusterIP، NodePort و LoadBalancer اعمال می‌شود. اگر type برابر ExternalName باشد، نادیده گرفته می‌شود. اطلاعات بیشتر: https://kubernetes.io/docs/concepts/services-networking/service/</td>
+    </tr>
+    <tr>
+      <td><code>sessionAffinity</code><br/><em>string</em></td>
+      <td>مقادیر "ClientIP" و "None" را پشتیبانی می‌کند. برای حفظ session affinity استفاده می‌شود. session affinity مبتنی بر IP کلاینت را فعال می‌کند. مقدار باید ClientIP یا None باشد. مقدار پیش‌فرض None است. اطلاعات بیشتر: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies<br/><br/>مقادیر ممکن برای enum:<br/> - `"ClientIP"` مبتنی بر IP کلاینت است.<br/> - `"None"` - بدون session affinity.</td>
+    </tr>
+    <tr>
+      <td><code>sessionAffinityConfig</code><br/><em><a href="{{< ref "#SessionAffinityConfig" >}}">SessionAffinityConfig</a></em></td>
+      <td>فیلد sessionAffinityConfig شامل پیکربندی‌های session affinity است.</td>
+    </tr>
+    <tr>
+      <td><code>trafficDistribution</code><br/><em>string</em></td>
+      <td>فیلد TrafficDistribution راهی برای بیان ترجیحات درباره نحوه توزیع ترافیک میان endpointهای Service فراهم می‌کند. پیاده‌سازی‌ها می‌توانند از این فیلد به‌عنوان یک راهنما (hint) استفاده کنند، اما ملزم به تضمین رعایت دقیق آن نیستند. اگر این فیلد تنظیم نشده باشد، پیاده‌سازی از راهبرد مسیریابی پیش‌فرض خود استفاده می‌کند. اگر روی "PreferClose" تنظیم شود، پیاده‌سازی‌ها باید endpointهایی را که در همان zone قرار دارند در اولویت قرار دهند.</td>
+    </tr>
+    <tr>
+      <td><code>type</code><br/><em>string</em></td>
+      <td>فیلد type تعیین می‌کند که Service چگونه در معرض دسترسی قرار می‌گیرد. مقدار پیش‌فرض ClusterIP است. گزینه‌های معتبر عبارت‌اند از ExternalName، ClusterIP، NodePort و LoadBalancer. "ClusterIP" یک نشانی IP داخلی کلاستر را برای توزیع بار میان endpointها تخصیص می‌دهد. endpointها توسط selector تعیین می‌شوند و اگر selector تعیین نشده باشد، با ساخت دستی یک آبجکت Endpoints یا آبجکت‌های EndpointSlice تعیین می‌شوند. اگر clusterIP برابر "None" باشد، هیچ IP مجازی تخصیص داده نمی‌شود و endpointها به‌جای یک IP مجازی، به‌صورت مجموعه‌ای از endpointها منتشر می‌شوند. "NodePort" بر پایه ClusterIP ساخته شده و یک پورت روی هر نود تخصیص می‌دهد که به همان endpointهای clusterIP مسیردهی می‌شود. "LoadBalancer" بر پایه NodePort ساخته شده و (در صورت پشتیبانی در فضای ابری فعلی) یک load balancer خارجی ایجاد می‌کند که به همان endpointهای clusterIP مسیردهی می‌کند. "ExternalName" این Service را به externalName مشخص‌شده نگاشت می‌کند (alias). چند فیلد دیگر برای Serviceهای ExternalName اعمال نمی‌شوند. اطلاعات بیشتر: https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types<br/><br/>مقادیر ممکن برای enum:<br/> - `"ClusterIP"` به این معناست که Service فقط از داخل کلاستر و از طریق IP کلاستر در دسترس خواهد بود.<br/> - `"ExternalName"` به این معناست که Service فقط شامل یک ارجاع به یک نام خارجی است که kubedns یا معادل آن به‌صورت رکورد CNAME برمی‌گرداند، بدون آنکه هیچ Podی در معرض دسترسی قرار گیرد یا پراکسی شود.<br/> - `"LoadBalancer"` به این معناست که Service علاوه بر نوع 'NodePort'، از طریق یک load balancer خارجی (در صورت پشتیبانی ارائه‌دهنده ابری) در معرض دسترسی قرار می‌گیرد.<br/> - `"NodePort"` به این معناست که Service علاوه بر نوع 'ClusterIP'، روی یک پورت از هر نود در معرض دسترسی قرار می‌گیرد.</td>
+    </tr>
+  </tbody>
+</table>
+
+## ServiceStatus {#ServiceStatus}
+
+ServiceStatus وضعیت فعلی یک Service را نشان می‌دهد.
+
+<hr>
+
+<table>
+  <thead><tr><th>فیلد</th><th>توضیحات</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>conditions</code><br/><em><a href="{{< ref "../definitions/condition-v1-meta#Condition" >}}">Condition array</a></em><br/><em>patch strategy: merge on key <code>type</code></em></td>
+      <td>وضعیت فعلی Service</td>
+    </tr>
+    <tr>
+      <td><code>loadBalancer</code><br/><em><a href="{{< ref "#LoadBalancerStatus" >}}">LoadBalancerStatus</a></em></td>
+      <td>فیلد loadBalancer وضعیت فعلی متعادل‌کننده بار (load balancer) را در صورت وجود نگه می‌دارد.</td>
+    </tr>
+  </tbody>
+</table>
+
+
+## ServiceList {#ServiceList}
+
+ServiceList فهرستی از Serviceها را نگه می‌دارد.
+
+<hr>
+
+<table>
+  <thead><tr><th>فیلد</th><th>توضیحات</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>apiVersion</code><br/><em>string</em></td>
+      <td>APIVersion طرحواره نسخه‌دار این نمایش از یک آبجکت را تعریف می‌کند. سرورها باید طرحواره‌های شناخته‌شده را به آخرین مقدار داخلی تبدیل کنند و می‌توانند مقادیر ناشناخته را رد کنند. اطلاعات بیشتر: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources</td>
+    </tr>
+    <tr>
+      <td><code>items</code>&nbsp;<strong>*</strong><br/><em><a href="{{< ref "service-v1#Service" >}}">Service array</a></em></td>
+      <td>فهرست Serviceها</td>
+    </tr>
+    <tr>
+      <td><code>kind</code><br/><em>string</em></td>
+      <td>Kind رشته‌ای است که منبع REST مربوط به این آبجکت را مشخص می‌کند. سرورها ممکن است این مقدار را از endpoint‌ای که کلاینت درخواست‌هایش را به آن ارسال می‌کند استنباط کنند. این مقدار قابل به‌روزرسانی نیست و به صورت CamelCase است. اطلاعات بیشتر: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds</td>
+    </tr>
+    <tr>
+      <td><code>metadata</code><br/><em><a href="{{< ref "../definitions/list-meta-v1-meta#ListMeta" >}}">ListMeta</a></em></td>
+      <td>فراداده استاندارد فهرست. اطلاعات بیشتر: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds</td>
+    </tr>
+  </tbody>
+</table>
+
+
+## ClientIPConfig {#ClientIPConfig}
+
+ClientIPConfig پیکربندی‌های وابستگی نشست (session affinity) مبتنی بر IP کلاینت را نشان می‌دهد.
+
+<hr>
+
+<table>
+  <thead><tr><th>فیلد</th><th>توضیحات</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>timeoutSeconds</code><br/><em>integer</em></td>
+      <td>timeoutSeconds مدت ماندگاری نشست از نوع ClientIP را بر حسب ثانیه مشخص می‌کند. اگر ServiceAffinity == "ClientIP" باشد، مقدار باید بزرگ‌تر از ۰ و کوچک‌تر یا مساوی ۸۶۴۰۰ (معادل ۱ روز) باشد. مقدار پیش‌فرض ۱۰۸۰۰ (معادل ۳ ساعت) است.</td>
+    </tr>
+  </tbody>
+</table>
+
+
+## LoadBalancerIngress {#LoadBalancerIngress}
+
+LoadBalancerIngress وضعیت یک نقطه ورودی (ingress point) متعادل‌کننده بار را نشان می‌دهد: ترافیکی که برای Service در نظر گرفته شده است باید به یک نقطه ورودی ارسال شود.
+
+<hr>
+
+<table>
+  <thead><tr><th>فیلد</th><th>توضیحات</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>hostname</code><br/><em>string</em></td>
+      <td>Hostname برای نقاط ورودی متعادل‌کننده بار که مبتنی بر DNS هستند تنظیم می‌شود (معمولاً متعادل‌کننده‌های بار AWS).</td>
+    </tr>
+    <tr>
+      <td><code>ip</code><br/><em>string</em></td>
+      <td>IP برای نقاط ورودی متعادل‌کننده بار که مبتنی بر IP هستند تنظیم می‌شود (معمولاً متعادل‌کننده‌های بار GCE یا OpenStack).</td>
+    </tr>
+    <tr>
+      <td><code>ipMode</code><br/><em>string</em></td>
+      <td>IPMode مشخص می‌کند IP متعادل‌کننده بار چگونه رفتار کند و فقط زمانی می‌توان آن را تعیین کرد که فیلد ip مشخص شده باشد. مقدار "VIP" نشان می‌دهد که ترافیک با مقصدی برابر با IP و پورت متعادل‌کننده بار به نود تحویل داده می‌شود. مقدار "Proxy" نشان می‌دهد که ترافیک با مقصدی برابر با IP و node port نود، یا IP و پورت pod، به نود یا pod تحویل داده می‌شود. پیاده‌سازی‌های Service می‌توانند از این اطلاعات برای تنظیم مسیریابی ترافیک استفاده کنند.</td>
+    </tr>
+    <tr>
+      <td><code>ports</code><br/><em><a href="{{< ref "#PortStatus" >}}">PortStatus array</a></em></td>
+      <td>Ports فهرستی از رکوردهای پورت‌های Service است. در صورت استفاده، برای هر پورتی که در Service تعریف شده است باید یک ورودی در آن وجود داشته باشد.</td>
+    </tr>
+  </tbody>
+</table>
+
+
+## LoadBalancerStatus {#LoadBalancerStatus}
+
+LoadBalancerStatus وضعیت یک متعادل‌کننده بار را نشان می‌دهد.
+
+<hr>
+
+<table>
+  <thead><tr><th>فیلد</th><th>توضیحات</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>ingress</code><br/><em><a href="{{< ref "#LoadBalancerIngress" >}}">LoadBalancerIngress array</a></em></td>
+      <td>Ingress فهرستی شامل نقاط ورودی متعادل‌کننده بار است. ترافیکی که برای Service در نظر گرفته شده است باید به این نقاط ورودی ارسال شود.</td>
+    </tr>
+  </tbody>
+</table>
+
+
+## PortStatus {#PortStatus}
+
+PortStatus وضعیت خطای یک پورت Service را نشان می‌دهد.
+
+<hr>
+
+<table>
+  <thead><tr><th>فیلد</th><th>توضیحات</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>error</code><br/><em>string</em></td>
+      <td>Error برای ثبت مشکل مربوط به پورت Service است. قالب خطا باید از قواعد زیر پیروی کند: - مقادیر خطای داخلی باید در همین فایل مشخص شوند و از نام‌های CamelCase استفاده کنند - مقادیر خطای مختص ارائه‌دهنده ابری باید نام‌هایی داشته باشند که با قالب foo.example.com/CamelCase مطابقت دارد.</td>
+    </tr>
+    <tr>
+      <td><code>port</code>&nbsp;<strong>*</strong><br/><em>integer</em></td>
+      <td>Port شماره پورت همان پورت Service است که وضعیت آن در اینجا ثبت می‌شود.</td>
+    </tr>
+    <tr>
+      <td><code>protocol</code>&nbsp;<strong>*</strong><br/><em>string</em></td>
+      <td>Protocol پروتکل همان پورت Service است که وضعیت آن در اینجا ثبت می‌شود. مقادیر پشتیبانی‌شده عبارت‌اند از: "TCP"، "UDP"، "SCTP"<br/><br/>Possible enum values:<br/> - `"SCTP"` is the SCTP protocol.<br/> - `"TCP"` is the TCP protocol.<br/> - `"UDP"` is the UDP protocol.</td>
+    </tr>
+  </tbody>
+</table>
+
+
+## ServicePort {#ServicePort}
+
+ServicePort اطلاعات مربوط به پورت یک Service را در خود دارد.
+
+<hr>
+
+<table>
+  <thead><tr><th>فیلد</th><th>توضیحات</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>appProtocol</code><br/><em>string</em></td>
+      <td>پروتکل کاربردی (application protocol) این پورت. این مقدار به عنوان یک راهنما برای پیاده‌سازی‌ها استفاده می‌شود تا برای پروتکل‌هایی که می‌شناسند رفتار غنی‌تری ارائه دهند. این فیلد از نحو استاندارد برچسب‌های کوبرنتیز پیروی می‌کند. مقادیر معتبر یکی از موارد زیر است:  * نام‌های پروتکل بدون پیشوند - این نام‌ها برای نام‌های استاندارد سرویس IANA رزرو شده‌اند (طبق RFC-6335 و https://www.iana.org/assignments/service-names).  * نام‌های پیشونددار تعریف‌شده در کوبرنتیز:   * 'kubernetes.io/h2c' - HTTP/2 با دانش پیشین روی متن ساده (cleartext) مطابق توضیحات https://www.rfc-editor.org/rfc/rfc9113.html#name-starting-http-2-with-prior-   * 'kubernetes.io/ws'  - WebSocket روی متن ساده مطابق توضیحات https://www.rfc-editor.org/rfc/rfc6455   * 'kubernetes.io/wss' - WebSocket روی TLS مطابق توضیحات https://www.rfc-editor.org/rfc/rfc6455  * سایر پروتکل‌ها باید از نام‌های پیشونددار تعریف‌شده توسط پیاده‌سازی استفاده کنند، مانند mycompany.com/my-custom-protocol.</td>
+    </tr>
+    <tr>
+      <td><code>name</code><br/><em>string</em></td>
+      <td>نام این پورت در Service. این مقدار باید یک DNS_LABEL باشد. همه پورت‌های یک ServiceSpec باید نام‌های یکتا داشته باشند. هنگام بررسی endpointهای یک Service، این مقدار باید با فیلد 'name' در EndpointPort مطابقت داشته باشد. اگر روی این Service فقط یک ServicePort تعریف شده باشد، تعیین آن اختیاری است.</td>
+    </tr>
+    <tr>
+      <td><code>nodePort</code><br/><em>integer</em></td>
+      <td>پورتی روی هر نود که وقتی type برابر NodePort یا LoadBalancer باشد، Service از طریق آن در دسترس قرار می‌گیرد.  معمولاً سیستم آن را اختصاص می‌دهد. اگر مقداری تعیین شود، در بازه مجاز باشد و در حال استفاده نباشد، همان مقدار به کار می‌رود؛ در غیر این صورت عملیات با شکست مواجه می‌شود.  اگر مقداری تعیین نشود و این Service به پورت نیاز داشته باشد، یک پورت اختصاص داده می‌شود.  اگر این فیلد هنگام ایجاد Serviceای که به آن نیازی ندارد تعیین شود، ایجاد با شکست مواجه می‌شود. این فیلد هنگام به‌روزرسانی یک Service به‌گونه‌ای که دیگر به آن نیاز نداشته باشد پاک می‌شود (مثلاً با تغییر type از NodePort به ClusterIP). اطلاعات بیشتر: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport</td>
+    </tr>
+    <tr>
+      <td><code>port</code>&nbsp;<strong>*</strong><br/><em>integer</em></td>
+      <td>پورتی که این Service در دسترس قرار می‌دهد.</td>
+    </tr>
+    <tr>
+      <td><code>protocol</code><br/><em>string</em></td>
+      <td>پروتکل IP این پورت. مقادیر "TCP"، "UDP" و "SCTP" پشتیبانی می‌شوند. مقدار پیش‌فرض TCP است.<br/><br/>Possible enum values:<br/> - `"SCTP"` is the SCTP protocol.<br/> - `"TCP"` is the TCP protocol.<br/> - `"UDP"` is the UDP protocol.</td>
+    </tr>
+    <tr>
+      <td><code>targetPort</code><br/><em></em></td>
+      <td>عدد یا نام پورتی که باید روی podهای هدف Service به آن دسترسی پیدا کرد. عدد باید در بازه ۱ تا ۶۵۵۳۵ باشد. نام باید یک IANA_SVC_NAME باشد. اگر این مقدار رشته باشد، به عنوان نام یک پورت در پورت‌های کانتینر Pod هدف جست‌وجو می‌شود. اگر تعیین نشود، مقدار فیلد 'port' استفاده می‌شود (نگاشت همانی). این فیلد برای Serviceهایی با clusterIP=None نادیده گرفته می‌شود و باید حذف شود یا برابر فیلد 'port' تنظیم گردد. اطلاعات بیشتر: https://kubernetes.io/docs/concepts/services-networking/service/#defining-a-service</td>
+    </tr>
+  </tbody>
+</table>
+
+
+## SessionAffinityConfig {#SessionAffinityConfig}
+
+SessionAffinityConfig پیکربندی‌های وابستگی نشست (session affinity) را نشان می‌دهد.
+
+<hr>
+
+<table>
+  <thead><tr><th>فیلد</th><th>توضیحات</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>clientIP</code><br/><em><a href="{{< ref "#ClientIPConfig" >}}">ClientIPConfig</a></em></td>
+      <td>فیلد clientIP پیکربندی‌های وابستگی نشست مبتنی بر IP کلاینت را در خود دارد.</td>
+    </tr>
+  </tbody>
+</table>
+
+
+
+## Operations {#Operations}
+
+<hr>
+
+
+### `post` Create
+
+#### HTTP Request
+
+POST /api/v1/namespaces/{namespace}/services
+
+
+#### Path Parameters
+
+<table>
+  <thead><tr><th>نام</th><th>نوع</th><th>توضیحات</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>namespace</code></td>
+      <td><em>string</em></td>
+      <td>نام آبجکت و محدوده احراز هویت، مانند تیم‌ها و پروژه‌ها</td>
+    </tr>
+  </tbody>
+</table>
+
+
+#### Query Parameters
+
+<table>
+  <thead><tr><th>نام</th><th>نوع</th><th>توضیحات</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>pretty</code></td>
+      <td><em>string</em></td>
+      <td>اگر مقدار 'true' باشد، خروجی به‌صورت خوانا (pretty printed) نمایش داده می‌شود. مقدار پیش‌فرض 'false' است، مگر آنکه user-agent یک مرورگر یا ابزار HTTP خط فرمان (curl و wget) را نشان دهد.</td>
+    </tr>
+    <tr>
+      <td><code>dryRun</code></td>
+      <td><em>string</em></td>
+      <td>وجود این پارامتر نشان می‌دهد که تغییرات نباید ماندگار شوند. یک دستورالعمل dryRun نامعتبر یا ناشناخته به پاسخ خطا منجر می‌شود و درخواست بیش از این پردازش نخواهد شد. مقادیر معتبر: - All: همه مراحل dry run پردازش خواهند شد</td>
+    </tr>
+    <tr>
+      <td><code>fieldManager</code></td>
+      <td><em>string</em></td>
+      <td>fieldManager نامی است که به عامل یا موجودیتی که این تغییرات را اعمال می‌کند مربوط می‌شود. طول مقدار باید حداکثر ۱۲۸ کاراکتر باشد و فقط شامل کاراکترهای قابل چاپ باشد، طبق تعریف https://golang.org/pkg/unicode/#IsPrint.</td>
+    </tr>
+    <tr>
+      <td><code>fieldValidation</code></td>
+      <td><em>string</em></td>
+      <td>fieldValidation به سرور می‌گوید با آبجکت‌هایی در درخواست (POST/PUT/PATCH) که فیلدهای ناشناخته یا تکراری دارند چگونه رفتار کند. مقادیر معتبر: - Ignore: هر فیلد ناشناخته‌ای که بی‌صدا از آبجکت حذف می‌شود نادیده گرفته می‌شود و از میان فیلدهای تکراری فقط آخرین فیلدی که رمزگشا (decoder) با آن مواجه می‌شود در نظر گرفته می‌شود. این رفتار پیش‌فرض پیش از نسخه v1.23 است. - Warn: برای هر فیلد ناشناخته‌ای که از آبجکت حذف می‌شود و برای هر فیلد تکراری که با آن مواجه می‌شود، یک هشدار از طریق هدر استاندارد پاسخ هشدار ارسال می‌شود. اگر خطای دیگری وجود نداشته باشد، درخواست همچنان موفق خواهد بود و از میان فیلدهای تکراری فقط آخرین مورد ماندگار می‌شود. این رفتار پیش‌فرض در نسخه v1.23 و بالاتر است. - Strict: اگر قرار باشد هر فیلد ناشناخته‌ای از آبجکت حذف شود یا فیلد تکراری وجود داشته باشد، درخواست با خطای BadRequest رد می‌شود. خطایی که سرور برمی‌گرداند شامل همه فیلدهای ناشناخته و تکراری شناسایی‌شده خواهد بود.</td>
+    </tr>
+  </tbody>
+</table>
+
+
+#### Body Parameters
+
+<table>
+  <thead><tr><th>نام</th><th>نوع</th><th>توضیحات</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>body</code></td>
+      <td><em><a href="{{< ref "service-v1#Service" >}}">Service</a></em></td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+
+
+#### Response
+
+<table>
+  <thead><tr><th>وضعیت</th><th>توضیحات</th><th>پاسخ</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>200</td>
+      <td>OK</td>
+      <td><em><a href="{{< ref "service-v1#Service" >}}">Service</a></em></td>
+    </tr>
+    <tr>
+      <td>201</td>
+      <td>Created</td>
+      <td><em><a href="{{< ref "service-v1#Service" >}}">Service</a></em></td>
+    </tr>
+    <tr>
+      <td>202</td>
+      <td>Accepted</td>
+      <td><em><a href="{{< ref "service-v1#Service" >}}">Service</a></em></td>
+    </tr>
+  </tbody>
+</table>
+
+
+### `patch` Patch
+
+#### HTTP Request
+
+PATCH /api/v1/namespaces/{namespace}/services/{name}
+
+
+#### Path Parameters
+
+<table>
+  <thead><tr><th>نام</th><th>نوع</th><th>توضیحات</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>name</code></td>
+      <td><em>string</em></td>
+      <td>نام Service</td>
+    </tr>
+    <tr>
+      <td><code>namespace</code></td>
+      <td><em>string</em></td>
+      <td>نام آبجکت و محدوده احراز هویت، مانند تیم‌ها و پروژه‌ها</td>
+    </tr>
+  </tbody>
+</table>
+
+
+#### Query Parameters
+
+<table>
+  <thead><tr><th>نام</th><th>نوع</th><th>توضیحات</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>pretty</code></td>
+      <td><em>string</em></td>
+      <td>اگر مقدار 'true' باشد، خروجی به‌صورت خوانا (pretty printed) نمایش داده می‌شود. مقدار پیش‌فرض 'false' است، مگر آنکه user-agent یک مرورگر یا ابزار HTTP خط فرمان (curl و wget) را نشان دهد.</td>
+    </tr>
+    <tr>
+      <td><code>dryRun</code></td>
+      <td><em>string</em></td>
+      <td>وجود این پارامتر نشان می‌دهد که تغییرات نباید ماندگار شوند. یک دستورالعمل dryRun نامعتبر یا ناشناخته به پاسخ خطا منجر می‌شود و درخواست بیش از این پردازش نخواهد شد. مقادیر معتبر: - All: همه مراحل dry run پردازش خواهند شد</td>
+    </tr>
+    <tr>
+      <td><code>fieldManager</code></td>
+      <td><em>string</em></td>
+      <td>fieldManager نامی است که به عامل یا موجودیتی که این تغییرات را اعمال می‌کند مربوط می‌شود. طول مقدار باید حداکثر ۱۲۸ کاراکتر باشد و فقط شامل کاراکترهای قابل چاپ باشد، طبق تعریف https://golang.org/pkg/unicode/#IsPrint. این فیلد برای درخواست‌های apply (application/apply-patch) الزامی است، اما برای انواع patch غیر از apply (JsonPatch، MergePatch، StrategicMergePatch) اختیاری است.</td>
+    </tr>
+    <tr>
+      <td><code>fieldValidation</code></td>
+      <td><em>string</em></td>
+      <td>fieldValidation به سرور می‌گوید با آبجکت‌هایی در درخواست (POST/PUT/PATCH) که فیلدهای ناشناخته یا تکراری دارند چگونه رفتار کند. مقادیر معتبر: - Ignore: هر فیلد ناشناخته‌ای که بی‌صدا از آبجکت حذف می‌شود نادیده گرفته می‌شود و از میان فیلدهای تکراری فقط آخرین فیلدی که رمزگشا (decoder) با آن مواجه می‌شود در نظر گرفته می‌شود. این رفتار پیش‌فرض پیش از نسخه v1.23 است. - Warn: برای هر فیلد ناشناخته‌ای که از آبجکت حذف می‌شود و برای هر فیلد تکراری که با آن مواجه می‌شود، یک هشدار از طریق هدر استاندارد پاسخ هشدار ارسال می‌شود. اگر خطای دیگری وجود نداشته باشد، درخواست همچنان موفق خواهد بود و از میان فیلدهای تکراری فقط آخرین مورد ماندگار می‌شود. این رفتار پیش‌فرض در نسخه v1.23 و بالاتر است. - Strict: اگر قرار باشد هر فیلد ناشناخته‌ای از آبجکت حذف شود یا فیلد تکراری وجود داشته باشد، درخواست با خطای BadRequest رد می‌شود. خطایی که سرور برمی‌گرداند شامل همه فیلدهای ناشناخته و تکراری شناسایی‌شده خواهد بود.</td>
+    </tr>
+    <tr>
+      <td><code>force</code></td>
+      <td><em>boolean</em></td>
+      <td>Force درخواست‌های Apply را «اجباری» می‌کند. به این معنی که کاربر فیلدهای دارای تعارض را که متعلق به دیگران هستند دوباره در اختیار می‌گیرد. برای درخواست‌های patch غیر از apply، پرچم force باید تنظیم نشده باشد.</td>
+    </tr>
+  </tbody>
+</table>
+
+
+#### Body Parameters
+
+<table>
+  <thead><tr><th>نام</th><th>نوع</th><th>توضیحات</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>body</code></td>
+      <td><em><a href="{{< ref "../definitions/patch-v1-meta#Patch" >}}">Patch</a></em></td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+
+
+#### Response
+
+<table>
+  <thead><tr><th>وضعیت</th><th>توضیحات</th><th>پاسخ</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>200</td>
+      <td>OK</td>
+      <td><em><a href="{{< ref "service-v1#Service" >}}">Service</a></em></td>
+    </tr>
+    <tr>
+      <td>201</td>
+      <td>Created</td>
+      <td><em><a href="{{< ref "service-v1#Service" >}}">Service</a></em></td>
+    </tr>
+  </tbody>
+</table>
+
+### `put` Replace
+
+#### درخواست HTTP
+
+PUT /api/v1/namespaces/{namespace}/services/{name}
+
+
+#### پارامترهای مسیر
+
+<table>
+  <thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>name</code></td>
+      <td><em>string</em></td>
+      <td>نام Service</td>
+    </tr>
+    <tr>
+      <td><code>namespace</code></td>
+      <td><em>string</em></td>
+      <td>نام آبجکت و محدوده احراز هویت، مانند تیم‌ها و پروژه‌ها</td>
+    </tr>
+  </tbody>
+</table>
+
+
+#### پارامترهای کوئری
+
+<table>
+  <thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>pretty</code></td>
+      <td><em>string</em></td>
+      <td>اگر مقدار 'true' باشد، خروجی به‌صورت خوانا (pretty print) نمایش داده می‌شود. مقدار پیش‌فرض 'false' است، مگر آنکه user-agent نشان دهد درخواست از یک مرورگر یا ابزار HTTP خط فرمان (curl و wget) ارسال شده است.</td>
+    </tr>
+    <tr>
+      <td><code>dryRun</code></td>
+      <td><em>string</em></td>
+      <td>در صورت وجود، نشان می‌دهد که تغییرات نباید ذخیره شوند. یک دستور dryRun نامعتبر یا ناشناخته به پاسخ خطا منجر می‌شود و درخواست دیگر پردازش نخواهد شد. مقادیر معتبر عبارتند از: - All: تمام مراحل dry run پردازش می‌شوند</td>
+    </tr>
+    <tr>
+      <td><code>fieldManager</code></td>
+      <td><em>string</em></td>
+      <td>fieldManager نامی است که به عامل یا موجودیتی که این تغییرات را اعمال می‌کند نسبت داده می‌شود. طول مقدار باید حداکثر ۱۲۸ نویسه باشد و فقط شامل نویسه‌های قابل چاپ باشد، مطابق تعریف https://golang.org/pkg/unicode/#IsPrint.</td>
+    </tr>
+    <tr>
+      <td><code>fieldValidation</code></td>
+      <td><em>string</em></td>
+      <td>fieldValidation به سرور مشخص می‌کند که با آبجکت‌هایی در درخواست (POST/PUT/PATCH) که فیلدهای ناشناخته یا تکراری دارند چگونه رفتار کند. مقادیر معتبر عبارتند از: - Ignore: همه فیلدهای ناشناخته را نادیده می‌گیرد و بی‌صدا از آبجکت حذف می‌کند، و از میان فیلدهای تکراری فقط آخرین فیلدی را که رمزگشا (decoder) با آن مواجه می‌شود نگه می‌دارد. این رفتار پیش‌فرض پیش از نسخه v1.23 است. - Warn: برای هر فیلد ناشناخته‌ای که از آبجکت حذف می‌شود و برای هر فیلد تکراری، یک هشدار از طریق هدر استاندارد پاسخ هشدار ارسال می‌کند. اگر خطای دیگری وجود نداشته باشد، درخواست همچنان موفق می‌شود و از میان فیلدهای تکراری فقط آخرین مورد ذخیره می‌شود. این رفتار پیش‌فرض در نسخه v1.23 به بعد است. - Strict: اگر فیلد ناشناخته‌ای قرار باشد از آبجکت حذف شود یا فیلد تکراری وجود داشته باشد، درخواست با خطای BadRequest رد می‌شود. خطای بازگشتی از سرور شامل همه فیلدهای ناشناخته و تکراری مشاهده‌شده خواهد بود.</td>
+    </tr>
+  </tbody>
+</table>
+
+
+#### پارامترهای بدنه
+
+<table>
+  <thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>body</code></td>
+      <td><em><a href="{{< ref "service-v1#Service" >}}">Service</a></em></td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+
+
+#### پاسخ
+
+<table>
+  <thead><tr><th>Status</th><th>Description</th><th>Response</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>200</td>
+      <td>OK</td>
+      <td><em><a href="{{< ref "service-v1#Service" >}}">Service</a></em></td>
+    </tr>
+    <tr>
+      <td>201</td>
+      <td>Created</td>
+      <td><em><a href="{{< ref "service-v1#Service" >}}">Service</a></em></td>
+    </tr>
+  </tbody>
+</table>
+
+
+### `delete` Delete
+
+#### درخواست HTTP
+
+DELETE /api/v1/namespaces/{namespace}/services/{name}
+
+
+#### پارامترهای مسیر
+
+<table>
+  <thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>name</code></td>
+      <td><em>string</em></td>
+      <td>نام Service</td>
+    </tr>
+    <tr>
+      <td><code>namespace</code></td>
+      <td><em>string</em></td>
+      <td>نام آبجکت و محدوده احراز هویت، مانند تیم‌ها و پروژه‌ها</td>
+    </tr>
+  </tbody>
+</table>
+
+
+#### پارامترهای کوئری
+
+<table>
+  <thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>pretty</code></td>
+      <td><em>string</em></td>
+      <td>اگر مقدار 'true' باشد، خروجی به‌صورت خوانا (pretty print) نمایش داده می‌شود. مقدار پیش‌فرض 'false' است، مگر آنکه user-agent نشان دهد درخواست از یک مرورگر یا ابزار HTTP خط فرمان (curl و wget) ارسال شده است.</td>
+    </tr>
+    <tr>
+      <td><code>dryRun</code></td>
+      <td><em>string</em></td>
+      <td>در صورت وجود، نشان می‌دهد که تغییرات نباید ذخیره شوند. یک دستور dryRun نامعتبر یا ناشناخته به پاسخ خطا منجر می‌شود و درخواست دیگر پردازش نخواهد شد. مقادیر معتبر عبارتند از: - All: تمام مراحل dry run پردازش می‌شوند</td>
+    </tr>
+    <tr>
+      <td><code>gracePeriodSeconds</code></td>
+      <td><em>integer</em></td>
+      <td>مدت زمان بر حسب ثانیه پیش از آنکه آبجکت باید حذف شود. مقدار باید عددی صحیح و نامنفی باشد. مقدار صفر یعنی حذف فوری. اگر این مقدار nil باشد، از دوره مهلت پیش‌فرض نوع مشخص‌شده استفاده می‌شود. در صورت تعیین‌نشدن، مقدار مختص هر آبجکت به کار می‌رود. مقدار صفر یعنی حذف فوری.</td>
+    </tr>
+    <tr>
+      <td><code>ignoreStoreReadErrorWithClusterBreakingPotential</code></td>
+      <td><em>boolean</em></td>
+      <td>اگر روی true تنظیم شود، در صورتی که روند عادی حذف با خطای خراب‌بودن آبجکت (corrupt object) شکست بخورد، حذف ناایمن منبع آغاز می‌شود. منبعی خراب در نظر گرفته می‌شود که به‌دلیل الف) غیرقابل تبدیل‌بودن داده‌های آن، مثلاً خطای رمزگشایی، یا ب) ناموفق بودن رمزگشایی آن به یک آبجکت، نتوان آن را با موفقیت از ذخیره‌ساز زیرین بازیابی کرد. توجه: حذف ناایمن محدودیت‌های finalizer را نادیده می‌گیرد، بررسی‌های پیش‌شرط را رد می‌کند و آبجکت را از ذخیره‌ساز حذف می‌کند. هشدار: اگر بار کاری مرتبط با منبعی که به‌صورت ناایمن حذف می‌شود به روند عادی حذف وابسته باشد، این کار ممکن است کلاستر را دچار اختلال کند. فقط در صورتی از آن استفاده کنید که واقعاً می‌دانید چه می‌کنید. مقدار پیش‌فرض false است و کاربر باید آن را صراحتاً فعال کند.</td>
+    </tr>
+    <tr>
+      <td><code>orphanDependents</code></td>
+      <td><em>boolean</em></td>
+      <td>منسوخ‌شده: لطفاً از PropagationPolicy استفاده کنید؛ این فیلد در نسخه 1.7 منسوخ خواهد شد. مشخص می‌کند که آبجکت‌های وابسته باید یتیم (orphan) شوند یا خیر. اگر true/false باشد، finalizer با نام "orphan" به فهرست finalizerهای آبجکت اضافه یا از آن حذف می‌شود. فقط یکی از این فیلد یا PropagationPolicy را می‌توان تنظیم کرد، نه هر دو.</td>
+    </tr>
+    <tr>
+      <td><code>propagationPolicy</code></td>
+      <td><em>string</em></td>
+      <td>مشخص می‌کند که آیا garbage collection انجام شود و چگونه. فقط یکی از این فیلد یا OrphanDependents را می‌توان تنظیم کرد، نه هر دو. سیاست پیش‌فرض بر اساس finalizerهای موجود در metadata.finalizers و سیاست پیش‌فرض مختص منبع تعیین می‌شود. مقادیر قابل قبول عبارتند از: 'Orphan' - آبجکت‌های وابسته را یتیم می‌کند؛ 'Background' - به garbage collector اجازه می‌دهد آبجکت‌های وابسته را در پس‌زمینه حذف کند؛ 'Foreground' - یک سیاست آبشاری است که همه آبجکت‌های وابسته را در پیش‌زمینه حذف می‌کند.</td>
+    </tr>
+  </tbody>
+</table>
+
+
+#### پارامترهای بدنه
+
+<table>
+  <thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>body</code></td>
+      <td><em><a href="{{< ref "../definitions/delete-options-v1-meta#DeleteOptions" >}}">DeleteOptions</a></em></td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+
+
+#### پاسخ
+
+<table>
+  <thead><tr><th>Status</th><th>Description</th><th>Response</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>200</td>
+      <td>OK</td>
+      <td><em><a href="{{< ref "service-v1#Service" >}}">Service</a></em></td>
+    </tr>
+    <tr>
+      <td>202</td>
+      <td>Accepted</td>
+      <td><em><a href="{{< ref "service-v1#Service" >}}">Service</a></em></td>
+    </tr>
+  </tbody>
+</table>
+
+### `delete` حذف مجموعه
+
+#### درخواست HTTP
+
+DELETE /api/v1/namespaces/{namespace}/services
+
+
+#### پارامترهای مسیر
+
+<table>
+  <thead><tr><th>نام</th><th>نوع</th><th>توضیح</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>namespace</code></td>
+      <td><em>string</em></td>
+      <td>نام آبجکت و محدوده احراز هویت، مانند تیم‌ها و پروژه‌ها</td>
+    </tr>
+  </tbody>
+</table>
+
+
+#### پارامترهای پرس‌وجو
+
+<table>
+  <thead><tr><th>نام</th><th>نوع</th><th>توضیح</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>pretty</code></td>
+      <td><em>string</em></td>
+      <td>اگر مقدار آن 'true' باشد، خروجی به‌صورت خوانا (pretty printed) نمایش داده می‌شود. مقدار پیش‌فرض 'false' است، مگر آنکه user-agent نشان دهد که درخواست از یک مرورگر یا ابزار HTTP خط فرمان (curl و wget) ارسال شده است.</td>
+    </tr>
+    <tr>
+      <td><code>continue</code></td>
+      <td><em>string</em></td>
+      <td>هنگام دریافت نتایج بیشتر از سرور باید گزینه continue تنظیم شود. از آنجا که این مقدار را سرور تعیین می‌کند، کلاینت‌ها فقط می‌توانند مقدار continue را از نتیجه یک پرس‌وجوی قبلی با پارامترهای پرس‌وجوی یکسان (به‌جز مقدار continue) استفاده کنند و سرور ممکن است مقدار continue ناشناخته را رد کند. اگر مقدار continue مشخص‌شده دیگر معتبر نباشد، چه به دلیل انقضا (معمولاً پنج تا پانزده دقیقه) و چه به دلیل تغییر پیکربندی در سرور، سرور با خطای 410 ResourceExpired همراه با یک توکن continue پاسخ می‌دهد. اگر کلاینت به فهرستی سازگار نیاز دارد، باید فهرست‌گیری را بدون فیلد continue از ابتدا شروع کند. در غیر این صورت، کلاینت می‌تواند درخواست فهرست دیگری را با توکن دریافتی همراه با خطای 410 ارسال کند؛ در این حالت سرور فهرستی را با شروع از کلید بعدی، اما از جدیدترین snapshot برمی‌گرداند که با نتایج فهرست قبلی ناسازگار است. آبجکت‌هایی که پس از اولین درخواست فهرست ایجاد، تغییر یا حذف شده باشند، تا زمانی که کلیدشان بعد از «کلید بعدی» باشد، در پاسخ گنجانده می‌شوند. این فیلد زمانی که watch برابر true است پشتیبانی نمی‌شود. کلاینت‌ها می‌توانند watch را از آخرین مقدار resourceVersion بازگردانده‌شده توسط سرور آغاز کنند و هیچ تغییری را از دست ندهند.</td>
+    </tr>
+    <tr>
+      <td><code>dryRun</code></td>
+      <td><em>string</em></td>
+      <td>در صورت وجود، نشان می‌دهد که تغییرات نباید ذخیره شوند. یک دستور dryRun نامعتبر یا ناشناخته به پاسخ خطا منجر می‌شود و پردازش بیشتر درخواست انجام نمی‌گیرد. مقادیر معتبر عبارت‌اند از: - All: همه مراحل dry run پردازش خواهند شد</td>
+    </tr>
+    <tr>
+      <td><code>fieldSelector</code></td>
+      <td><em>string</em></td>
+      <td>انتخابگری (selector) برای محدود کردن فهرست آبجکت‌های بازگردانده‌شده بر اساس فیلدهایشان. مقدار پیش‌فرض همه آبجکت‌ها است.</td>
+    </tr>
+    <tr>
+      <td><code>gracePeriodSeconds</code></td>
+      <td><em>integer</em></td>
+      <td>مدت زمان بر حسب ثانیه پیش از آنکه آبجکت باید حذف شود. مقدار باید یک عدد صحیح نامنفی باشد. مقدار صفر به معنای حذف فوری است. اگر این مقدار nil باشد، از مهلت پیش‌فرض (grace period) نوع مشخص‌شده استفاده می‌شود. در صورت مشخص نشدن، مقدار پیش‌فرض به‌ازای هر آبجکت اعمال می‌شود. صفر یعنی حذف فوری.</td>
+    </tr>
+    <tr>
+      <td><code>ignoreStoreReadErrorWithClusterBreakingPotential</code></td>
+      <td><em>boolean</em></td>
+      <td>اگر روی true تنظیم شود، در صورتی که روند عادی حذف با خطای آبجکت خراب (corrupt) شکست بخورد، حذف ناایمن منبع را فعال می‌کند. منبعی خراب در نظر گرفته می‌شود که نتوان آن را با موفقیت از ذخیره‌سازی زیرین بازیابی کرد، زیرا الف) داده‌های آن قابل تبدیل نیست، مانند شکست در رمزگشایی، یا ب) رمزگشایی آن به یک آبجکت ناموفق است. توجه: حذف ناایمن محدودیت‌های finalizer را نادیده می‌گیرد، بررسی‌های پیش‌شرط را رد می‌کند و آبجکت را از ذخیره‌سازی حذف می‌کند. هشدار: اگر بار کاری مرتبط با منبعی که به‌صورت ناایمن حذف می‌شود به روند عادی حذف وابسته باشد، این کار ممکن است کلاستر را دچار اختلال کند. فقط زمانی از آن استفاده کنید که واقعاً بدانید چه می‌کنید. مقدار پیش‌فرض false است و کاربر باید صراحتاً آن را فعال کند.</td>
+    </tr>
+    <tr>
+      <td><code>labelSelector</code></td>
+      <td><em>string</em></td>
+      <td>انتخابگری (selector) برای محدود کردن فهرست آبجکت‌های بازگردانده‌شده بر اساس برچسب‌هایشان. مقدار پیش‌فرض همه آبجکت‌ها است.</td>
+    </tr>
+    <tr>
+      <td><code>limit</code></td>
+      <td><em>integer</em></td>
+      <td>limit حداکثر تعداد پاسخ‌هایی است که برای یک فراخوانی فهرست بازگردانده می‌شود. اگر آیتم‌های بیشتری وجود داشته باشد، سرور فیلد `continue` را در فراداده فهرست روی مقداری تنظیم می‌کند که می‌توان آن را با همان پرس‌وجوی اولیه برای دریافت مجموعه بعدی نتایج به کار برد. در صورتی که همه آبجکت‌های درخواست‌شده فیلتر شوند، تعیین limit ممکن است کمتر از تعداد درخواستی آیتم (حتی صفر آیتم) برگرداند، و کلاینت‌ها باید فقط از وجود فیلد continue برای تشخیص اینکه نتایج بیشتری در دسترس است یا نه استفاده کنند. سرورها می‌توانند آرگومان limit را پشتیبانی نکنند و در این صورت همه نتایج موجود را برمی‌گردانند. اگر limit مشخص شده باشد و فیلد continue خالی باشد، کلاینت‌ها می‌توانند فرض کنند که نتیجه دیگری در دسترس نیست. این فیلد زمانی که watch برابر true است پشتیبانی نمی‌شود. سرور تضمین می‌کند که آبجکت‌های بازگردانده‌شده هنگام استفاده از continue با آبجکت‌های یک فراخوانی فهرست واحد بدون limit یکسان باشند؛ یعنی هیچ آبجکتی که پس از صدور اولین درخواست ایجاد، تغییر یا حذف شده باشد، در درخواست‌های بعدیِ ادامه‌دار گنجانده نمی‌شود. این رفتار گاهی «snapshot سازگار» نامیده می‌شود و تضمین می‌کند کلاینتی که از limit برای دریافت بخش‌های کوچک‌تر یک نتیجه بسیار بزرگ استفاده می‌کند، همه آبجکت‌های ممکن را مشاهده خواهد کرد. اگر آبجکت‌ها در حین فهرست‌گیری بخش‌بخش به‌روزرسانی شوند، نسخه‌ای از آبجکت که هنگام محاسبه اولین نتیجه فهرست وجود داشته است بازگردانده می‌شود.</td>
+    </tr>
+    <tr>
+      <td><code>orphanDependents</code></td>
+      <td><em>boolean</em></td>
+      <td>منسوخ‌شده: لطفاً از PropagationPolicy استفاده کنید؛ این فیلد در نسخه 1.7 منسوخ خواهد شد. مشخص می‌کند که آیا آبجکت‌های وابسته باید یتیم (orphan) شوند یا نه. اگر true/false باشد، finalizer با نام "orphan" به فهرست finalizerهای آبجکت اضافه یا از آن حذف می‌شود. فقط یکی از این فیلد یا PropagationPolicy را می‌توان تنظیم کرد، نه هر دو را.</td>
+    </tr>
+    <tr>
+      <td><code>propagationPolicy</code></td>
+      <td><em>string</em></td>
+      <td>مشخص می‌کند که آیا garbage collection انجام شود و چگونه. فقط یکی از این فیلد یا OrphanDependents را می‌توان تنظیم کرد، نه هر دو را. سیاست پیش‌فرض بر اساس finalizerهای موجود در metadata.finalizers و سیاست پیش‌فرض مختص هر منبع تعیین می‌شود. مقادیر قابل قبول عبارت‌اند از: 'Orphan' - وابسته‌ها را یتیم می‌کند؛ 'Background' - به garbage collector اجازه می‌دهد وابسته‌ها را در پس‌زمینه حذف کند؛ 'Foreground' - یک سیاست آبشاری که همه وابسته‌ها را در پیش‌زمینه حذف می‌کند.</td>
+    </tr>
+    <tr>
+      <td><code>resourceVersion</code></td>
+      <td><em>string</em></td>
+      <td>resourceVersion محدودیتی را برای نسخه‌های منبعی که درخواست می‌تواند از آن‌ها پاسخ داده شود تعیین می‌کند. برای جزئیات به https://kubernetes.io/docs/reference/using-api/api-concepts/#resource-versions مراجعه کنید. مقدار پیش‌فرض تنظیم‌نشده است.</td>
+    </tr>
+    <tr>
+      <td><code>resourceVersionMatch</code></td>
+      <td><em>string</em></td>
+      <td>resourceVersionMatch تعیین می‌کند که resourceVersion چگونه در فراخوانی‌های فهرست اعمال شود. به‌شدت توصیه می‌شود که برای فراخوانی‌های فهرستی که resourceVersion در آن‌ها تنظیم شده است، resourceVersionMatch نیز تنظیم شود. برای جزئیات به https://kubernetes.io/docs/reference/using-api/api-concepts/#resource-versions مراجعه کنید. مقدار پیش‌فرض تنظیم‌نشده است.</td>
+    </tr>
+    <tr>
+      <td><code>sendInitialEvents</code></td>
+      <td><em>boolean</em></td>
+      <td>می‌توان `sendInitialEvents=true` را همراه با `watch=true` تنظیم کرد. در این حالت، جریان watch با رویدادهای مصنوعی (synthetic) آغاز می‌شود تا وضعیت فعلی آبجکت‌های موجود در مجموعه را تولید کند. پس از ارسال همه این رویدادها، یک رویداد مصنوعی "Bookmark" ارسال می‌شود. این bookmark مقدار ResourceVersion (RV) متناظر با مجموعه آبجکت‌ها را گزارش می‌کند و با حاشیه‌نویسی (annotation) `"k8s.io/initial-events-end": "true"` علامت‌گذاری می‌شود. پس از آن، جریان watch طبق معمول ادامه می‌یابد و رویدادهای watch متناظر با تغییرات (پس از RV) در آبجکت‌های تحت نظارت را ارسال می‌کند. هنگامی که گزینه `sendInitialEvents` تنظیم شود، لازم است گزینه `resourceVersionMatch` نیز تنظیم شود. معنای درخواست watch به شرح زیر است:<br/> - `resourceVersionMatch` برابر NotOlderThan   به معنای «داده‌ای دست‌کم به‌روز مانند `resourceVersion` ارائه‌شده» تفسیر می‌شود   و رویداد bookmark زمانی ارسال می‌شود که وضعیت با `resourceVersion` ای همگام شده باشد   که دست‌کم به تازگی مقدار ارائه‌شده در ListOptions است.   اگر `resourceVersion` تنظیم نشده باشد، این حالت به‌صورت «خواندن سازگار» (consistent read) تفسیر می‌شود   و رویداد bookmark زمانی ارسال می‌شود که وضعیت دست‌کم تا لحظه‌ای که   پردازش درخواست آغاز شده است همگام شده باشد.<br/> - اگر `resourceVersionMatch` روی هر مقدار دیگری تنظیم شود یا تنظیم نشده باشد،   خطای Invalid بازگردانده می‌شود.  اگر `resourceVersion=""` یا `resourceVersion="0"` باشد (به دلایل سازگاری با نسخه‌های قبلی) مقدار پیش‌فرض true است و در غیر این صورت false است.</td>
+    </tr>
+    <tr>
+      <td><code>shardSelector</code></td>
+      <td><em>string</em></td>
+      <td>shardSelector فهرست آبجکت‌های بازگردانده‌شده را با استفاده از یک عبارت shard selector مبتنی بر CEL محدود می‌کند. قالب آن از تابع shardRange() همراه با || (عملگر OR منطقی) برای تعیین یک یا چند بازه هش استفاده می‌کند:    shardRange(object.metadata.uid, '0x0', '0x8000000000000000')   shardRange(object.metadata.uid, '0x0', '0x8000000000000000') || shardRange(object.metadata.uid, '0x8000000000000000', '0x10000000000000000')  مسیرهای فیلد از نحو CEL با ریشه object استفاده می‌کنند (مثلاً "object.metadata.uid")، نه قالب fieldSelector ("metadata.uid"). مسیرهای پشتیبانی‌شده فعلی:   - object.metadata.uid   - object.metadata.namespace  hexStart و hexEnd رشته‌های لفظی CEL درون تک‌نقل‌قول با پیشوند '0x' هستند که کران پایین شامل و کران بالای غیرشامل را در فضای هش FNV-1a ۶۴ بیتی تعریف می‌کنند. بازه کامل [0x0, 0x10000000000000000) است که کران بالای غیرشامل آن برابر 2^64 است.  مثال‌ها:   تقسیم به ۲ shard:     shard 0: shardRange(object.metadata.uid, '0x0000000000000000', '0x8000000000000000')     shard 1: shardRange(object.metadata.uid, '0x8000000000000000', '0x10000000000000000')   تقسیم به ۴ shard:     shard 0: shardRange(object.metadata.uid, '0x0000000000000000', '0x4000000000000000')     shard 1: shardRange(object.metadata.uid, '0x4000000000000000', '0x8000000000000000')     shard 2: shardRange(object.metadata.uid, '0x8000000000000000', '0xc000000000000000')     shard 3: shardRange(object.metadata.uid, '0xc000000000000000', '0x10000000000000000')  این فیلد آلفا است و نیاز به فعال‌سازی feature gate با نام ShardedListAndWatch دارد.</td>
+    </tr>
+    <tr>
+      <td><code>timeoutSeconds</code></td>
+      <td><em>integer</em></td>
+      <td>مهلت زمانی برای فراخوانی list/watch. این مقدار مدت فراخوانی را، فارغ از هرگونه فعالیت یا عدم فعالیت، محدود می‌کند.</td>
+    </tr>
+  </tbody>
+</table>
+
+
+#### پارامترهای بدنه
+
+<table>
+  <thead><tr><th>نام</th><th>نوع</th><th>توضیح</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>body</code></td>
+      <td><em><a href="{{< ref "../definitions/delete-options-v1-meta#DeleteOptions" >}}">DeleteOptions</a></em></td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+
+
+#### پاسخ
+
+<table>
+  <thead><tr><th>وضعیت</th><th>توضیح</th><th>پاسخ</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>200</td>
+      <td>OK</td>
+      <td><em><a href="{{< ref "../definitions/status-v1-meta#Status" >}}">Status</a></em></td>
+    </tr>
+  </tbody>
+</table>
+
+
+### `get` خواندن
+
+#### درخواست HTTP
+
+GET /api/v1/namespaces/{namespace}/services/{name}
+
+
+#### پارامترهای مسیر
+
+<table>
+  <thead><tr><th>نام</th><th>نوع</th><th>توضیح</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>name</code></td>
+      <td><em>string</em></td>
+      <td>نام Service</td>
+    </tr>
+    <tr>
+      <td><code>namespace</code></td>
+      <td><em>string</em></td>
+      <td>نام آبجکت و محدوده احراز هویت، مانند تیم‌ها و پروژه‌ها</td>
+    </tr>
+  </tbody>
+</table>
+
+
+#### پارامترهای پرس‌وجو
+
+<table>
+  <thead><tr><th>نام</th><th>نوع</th><th>توضیح</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>pretty</code></td>
+      <td><em>string</em></td>
+      <td>اگر مقدار آن 'true' باشد، خروجی به‌صورت خوانا (pretty printed) نمایش داده می‌شود. مقدار پیش‌فرض 'false' است، مگر آنکه user-agent نشان دهد که درخواست از یک مرورگر یا ابزار HTTP خط فرمان (curl و wget) ارسال شده است.</td>
+    </tr>
+  </tbody>
+</table>
+
+
+
+#### پاسخ
+
+<table>
+  <thead><tr><th>وضعیت</th><th>توضیح</th><th>پاسخ</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>200</td>
+      <td>OK</td>
+      <td><em><a href="{{< ref "service-v1#Service" >}}">Service</a></em></td>
+    </tr>
+  </tbody>
+</table>
+
+### `get` List
+
+#### درخواست HTTP
+
+GET /api/v1/namespaces/{namespace}/services
+
+
+#### پارامترهای مسیر
+
+<table>
+  <thead><tr><th>نام</th><th>نوع</th><th>توضیحات</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>namespace</code></td>
+      <td><em>string</em></td>
+      <td>نام آبجکت و محدوده احراز هویت، مانند تیم‌ها و پروژه‌ها</td>
+    </tr>
+  </tbody>
+</table>
+
+
+#### پارامترهای کوئری
+
+<table>
+  <thead><tr><th>نام</th><th>نوع</th><th>توضیحات</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>pretty</code></td>
+      <td><em>string</em></td>
+      <td>اگر مقدار آن 'true' باشد، خروجی به‌صورت خوانا (pretty printed) نمایش داده می‌شود. مقدار پیش‌فرض 'false' است، مگر آنکه user-agent نشان دهد که درخواست از یک مرورگر یا ابزار HTTP خط فرمان (curl و wget) ارسال شده است.</td>
+    </tr>
+    <tr>
+      <td><code>allowWatchBookmarks</code></td>
+      <td><em>boolean</em></td>
+      <td>allowWatchBookmarks رویدادهای watch با نوع "BOOKMARK" را درخواست می‌کند. سرورهایی که bookmark را پیاده‌سازی نکرده‌اند ممکن است این پرچم را نادیده بگیرند و ارسال bookmarkها به صلاحدید سرور است. کلاینت‌ها نباید فرض کنند که bookmarkها در بازه‌های زمانی مشخصی بازگردانده می‌شوند و نمی‌توانند انتظار داشته باشند که سرور در طول یک نشست حتماً رویداد BOOKMARK ارسال کند. اگر درخواست از نوع watch نباشد، این فیلد نادیده گرفته می‌شود.</td>
+    </tr>
+    <tr>
+      <td><code>continue</code></td>
+      <td><em>string</em></td>
+      <td>هنگام دریافت نتایج بیشتر از سرور باید گزینه continue تنظیم شود. از آنجا که این مقدار را سرور تعیین می‌کند، کلاینت‌ها فقط می‌توانند از مقدار continue مربوط به نتیجه یک کوئری قبلی با پارامترهای کوئری یکسان (به‌جز خود مقدار continue) استفاده کنند و سرور ممکن است مقداری را که نمی‌شناسد رد کند. اگر مقدار continue مشخص‌شده دیگر معتبر نباشد، چه به دلیل انقضا (معمولاً پنج تا پانزده دقیقه) و چه به دلیل تغییر پیکربندی در سرور، سرور با خطای 410 ResourceExpired همراه با یک توکن continue پاسخ می‌دهد. اگر کلاینت به فهرست سازگار نیاز دارد، باید فهرست را بدون فیلد continue از ابتدا آغاز کند. در غیر این صورت، کلاینت می‌تواند درخواست فهرست دیگری را با توکنی که همراه خطای 410 دریافت کرده است ارسال کند؛ سرور با فهرستی پاسخ می‌دهد که از کلید بعدی شروع می‌شود، اما از جدیدترین snapshot گرفته شده است و با نتایج فهرست قبلی ناسازگار است: آبجکت‌هایی که پس از اولین درخواست فهرست ایجاد، تغییر یا حذف شده‌اند، تا زمانی که کلیدشان بعد از «کلید بعدی» باشد، در پاسخ قرار می‌گیرند. این فیلد زمانی که watch برابر true باشد پشتیبانی نمی‌شود. کلاینت‌ها می‌توانند watch را از آخرین مقدار resourceVersion بازگردانده‌شده توسط سرور آغاز کنند، بدون آنکه هیچ تغییری را از دست بدهند.</td>
+    </tr>
+    <tr>
+      <td><code>fieldSelector</code></td>
+      <td><em>string</em></td>
+      <td>یک انتخابگر (selector) برای محدود کردن فهرست آبجکت‌های بازگردانده‌شده بر اساس فیلدهایشان. مقدار پیش‌فرض همه آبجکت‌ها را شامل می‌شود.</td>
+    </tr>
+    <tr>
+      <td><code>labelSelector</code></td>
+      <td><em>string</em></td>
+      <td>یک انتخابگر (selector) برای محدود کردن فهرست آبجکت‌های بازگردانده‌شده بر اساس برچسب‌هایشان. مقدار پیش‌فرض همه آبجکت‌ها را شامل می‌شود.</td>
+    </tr>
+    <tr>
+      <td><code>limit</code></td>
+      <td><em>integer</em></td>
+      <td>limit حداکثر تعداد پاسخ‌هایی است که در یک فراخوانی فهرست بازگردانده می‌شود. اگر آیتم‌های بیشتری وجود داشته باشد، سرور فیلد `continue` را در فراداده فهرست روی مقداری تنظیم می‌کند که می‌توان آن را همراه با همان کوئری اولیه برای دریافت مجموعه بعدی نتایج به کار برد. در صورتی که همه آبجکت‌های درخواست‌شده فیلتر شوند، تنظیم limit ممکن است تعداد آیتم‌های کمتری از مقدار درخواستی (حتی صفر آیتم) بازگرداند؛ بنابراین کلاینت‌ها باید فقط از وجود فیلد continue برای تشخیص اینکه نتایج بیشتری در دسترس است یا نه استفاده کنند. سرورها می‌توانند آرگومان limit را پشتیبانی نکنند و در این صورت همه نتایج موجود را بازمی‌گردانند. اگر limit مشخص شده باشد و فیلد continue خالی باشد، کلاینت‌ها می‌توانند فرض کنند که نتیجه دیگری در دسترس نیست. این فیلد زمانی که watch برابر true باشد پشتیبانی نمی‌شود. سرور تضمین می‌کند که آبجکت‌های بازگردانده‌شده هنگام استفاده از continue با آبجکت‌های یک فراخوانی فهرست واحد بدون limit یکسان باشند؛ یعنی هیچ آبجکتی که پس از صدور درخواست اول ایجاد، تغییر یا حذف شده باشد، در درخواست‌های ادامه‌دار بعدی گنجانده نمی‌شود. این ویژگی گاهی «snapshot سازگار» نامیده می‌شود و تضمین می‌کند کلاینتی که برای دریافت نتایج یک فهرست بسیار بزرگ در قطعات کوچک‌تر از limit استفاده می‌کند، همه آبجکت‌های ممکن را مشاهده کند. اگر آبجکت‌ها در حین فهرست‌گیری قطعه‌بندی‌شده به‌روزرسانی شوند، نسخه‌ای از آبجکت که در زمان محاسبه اولین نتیجه فهرست وجود داشته است بازگردانده می‌شود.</td>
+    </tr>
+    <tr>
+      <td><code>resourceVersion</code></td>
+      <td><em>string</em></td>
+      <td>resourceVersion محدودیتی را تعیین می‌کند که مشخص می‌کند درخواست از کدام نسخه‌های منبع می‌تواند پاسخ داده شود. برای جزئیات بیشتر به https://kubernetes.io/docs/reference/using-api/api-concepts/#resource-versions مراجعه کنید. مقدار پیش‌فرض: تنظیم‌نشده</td>
+    </tr>
+    <tr>
+      <td><code>resourceVersionMatch</code></td>
+      <td><em>string</em></td>
+      <td>resourceVersionMatch تعیین می‌کند resourceVersion چگونه در فراخوانی‌های فهرست اعمال شود. به‌شدت توصیه می‌شود برای فراخوانی‌های فهرستی که resourceVersion در آن‌ها تنظیم شده است، resourceVersionMatch نیز تنظیم شود. برای جزئیات بیشتر به https://kubernetes.io/docs/reference/using-api/api-concepts/#resource-versions مراجعه کنید. مقدار پیش‌فرض: تنظیم‌نشده</td>
+    </tr>
+    <tr>
+      <td><code>sendInitialEvents</code></td>
+      <td><em>boolean</em></td>
+      <td>می‌توان `sendInitialEvents=true` را همراه با `watch=true` تنظیم کرد. در این حالت، جریان watch با رویدادهای ساختگی (synthetic) آغاز می‌شود که وضعیت فعلی آبجکت‌های موجود در مجموعه را تولید می‌کنند. پس از ارسال همه این رویدادها، یک رویداد ساختگی "Bookmark" ارسال می‌شود. این bookmark مقدار ResourceVersion (RV) متناظر با مجموعه آبجکت‌ها را گزارش می‌کند و با حاشیه‌نویسی (annotation) `"k8s.io/initial-events-end": "true"` علامت‌گذاری می‌شود. سپس جریان watch به روال معمول ادامه می‌یابد و رویدادهای watch مربوط به تغییرات آبجکت‌های تحت نظر (پس از RV) را ارسال می‌کند. هنگامی که گزینه `sendInitialEvents` تنظیم شده باشد، گزینه `resourceVersionMatch` نیز باید تنظیم شود. معنای درخواست watch به شرح زیر است:<br/> - مقدار `resourceVersionMatch` برابر NotOlderThan به این معناست که «داده‌ها دست‌کم به‌روز بودن `resourceVersion` ارائه‌شده را داشته باشند». رویداد bookmark زمانی ارسال می‌شود که وضعیت با `resourceVersion`ی همگام شده باشد که دست‌کم به‌اندازه مقدار ارائه‌شده در ListOptions تازه است. اگر `resourceVersion` تنظیم نشده باشد، این حالت به‌صورت «خواندن سازگار» تفسیر می‌شود و رویداد bookmark زمانی ارسال می‌شود که وضعیت دست‌کم تا لحظه شروع پردازش درخواست همگام شده باشد.<br/> - اگر `resourceVersionMatch` روی هر مقدار دیگری تنظیم شده باشد یا تنظیم نشده باشد، خطای Invalid بازگردانده می‌شود. مقدار پیش‌فرض برای `resourceVersion=""` یا `resourceVersion="0"` برابر true است (به دلیل سازگاری با نسخه‌های قبلی) و در سایر حالت‌ها false است.</td>
+    </tr>
+    <tr>
+      <td><code>shardSelector</code></td>
+      <td><em>string</em></td>
+      <td>shardSelector فهرست آبجکت‌های بازگردانده‌شده را با استفاده از یک عبارت انتخابگر شارد مبتنی بر CEL محدود می‌کند. قالب آن از تابع shardRange() به‌همراه || (عملگر OR منطقی) برای مشخص کردن یک یا چند بازه هش استفاده می‌کند:    shardRange(object.metadata.uid, '0x0', '0x8000000000000000')   shardRange(object.metadata.uid, '0x0', '0x8000000000000000') || shardRange(object.metadata.uid, '0x8000000000000000', '0x10000000000000000')  مسیر فیلدها از نحو CEL با ریشه object استفاده می‌کند (مثلاً "object.metadata.uid") و قالب fieldSelector ("metadata.uid") را به کار نمی‌برد. در حال حاضر مسیرهای زیر پشتیبانی می‌شوند:   - object.metadata.uid   - object.metadata.namespace  مقادیر hexStart و hexEnd رشته‌های لفظی CEL داخل single quote با پیشوند '0x' هستند و کران پایین شامل‌شونده و کران بالای شامل‌نشونده را روی فضای هش 64 بیتی FNV-1a تعریف می‌کنند. بازه کامل [0x0, 0x10000000000000000) است که در آن کران بالای شامل‌نشونده برابر 2^64 است.  مثال‌ها:   تقسیم به 2 شارد:     شارد 0: shardRange(object.metadata.uid, '0x0000000000000000', '0x8000000000000000')     شارد 1: shardRange(object.metadata.uid, '0x8000000000000000', '0x10000000000000000')   تقسیم به 4 شارد:     شارد 0: shardRange(object.metadata.uid, '0x0000000000000000', '0x4000000000000000')     شارد 1: shardRange(object.metadata.uid, '0x4000000000000000', '0x8000000000000000')     شارد 2: shardRange(object.metadata.uid, '0x8000000000000000', '0xc000000000000000')     شارد 3: shardRange(object.metadata.uid, '0xc000000000000000', '0x10000000000000000')  این فیلد آلفا است و نیاز به فعال‌سازی feature gate با نام ShardedListAndWatch دارد.</td>
+    </tr>
+    <tr>
+      <td><code>timeoutSeconds</code></td>
+      <td><em>integer</em></td>
+      <td>مهلت زمانی فراخوانی list/watch. این مقدار مدت فراخوانی را بدون توجه به وجود یا نبود هرگونه فعالیت محدود می‌کند.</td>
+    </tr>
+    <tr>
+      <td><code>watch</code></td>
+      <td><em>boolean</em></td>
+      <td>تغییرات منابع توصیف‌شده را زیر نظر می‌گیرد و آن‌ها را به‌صورت جریانی از اعلان‌های افزودن، به‌روزرسانی و حذف بازمی‌گرداند. resourceVersion را مشخص کنید.</td>
+    </tr>
+  </tbody>
+</table>
+
+
+
+#### پاسخ
+
+<table>
+  <thead><tr><th>وضعیت</th><th>توضیحات</th><th>پاسخ</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>200</td>
+      <td>OK</td>
+      <td><em><a href="{{< ref "service-v1#ServiceList" >}}">ServiceList</a></em></td>
+    </tr>
+  </tbody>
+</table>
+
+### `get` فهرست همه فضاهای نام (namespace)
+
+#### درخواست HTTP
+
+GET /api/v1/services
+
+
+
+#### پارامترهای کوئری
+
+<table>
+  <thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>allowWatchBookmarks</code></td>
+      <td><em>boolean</em></td>
+      <td>allowWatchBookmarks رویدادهای watch با نوع "BOOKMARK" را درخواست می‌کند. سرورهایی که bookmark را پیاده‌سازی نکرده‌اند ممکن است این پرچم را نادیده بگیرند و bookmarkها به صلاحدید سرور ارسال می‌شوند. کلاینت‌ها نباید فرض کنند که bookmarkها در فاصله زمانی مشخصی بازگردانده می‌شوند و همچنین نباید فرض کنند که سرور در طول یک نشست حتماً رویداد BOOKMARK ارسال می‌کند. اگر درخواست از نوع watch نباشد، این فیلد نادیده گرفته می‌شود.</td>
+    </tr>
+    <tr>
+      <td><code>continue</code></td>
+      <td><em>string</em></td>
+      <td>گزینه continue باید هنگام دریافت نتایج بیشتر از سرور تنظیم شود. از آنجا که این مقدار را سرور تعیین می‌کند، کلاینت‌ها فقط می‌توانند مقدار continue را از نتیجه یک کوئری قبلی با پارامترهای کوئری یکسان (به‌جز مقدار continue) استفاده کنند و سرور ممکن است مقدار continue ناشناخته را رد کند. اگر مقدار continue مشخص‌شده دیگر معتبر نباشد، چه به دلیل انقضا (معمولاً پنج تا پانزده دقیقه) و چه به دلیل تغییر پیکربندی در سرور، سرور با خطای 410 ResourceExpired همراه با یک توکن continue پاسخ می‌دهد. اگر کلاینت به یک فهرست سازگار نیاز دارد، باید فهرست‌گیری را بدون فیلد continue از ابتدا شروع کند. در غیر این صورت، کلاینت می‌تواند درخواست فهرست دیگری را با توکن دریافتی همراه با خطای 410 ارسال کند؛ سرور با فهرستی پاسخ می‌دهد که از «کلید بعدی» شروع می‌شود، اما از جدیدترین snapshot گرفته شده است و با نتایج قبلی فهرست ناسازگار است: آبجکت‌هایی که پس از اولین درخواست فهرست ایجاد، ویرایش یا حذف شده‌اند، تا زمانی که کلیدشان بعد از «کلید بعدی» باشد، در پاسخ گنجانده می‌شوند. این فیلد زمانی که watch برابر true باشد پشتیبانی نمی‌شود. کلاینت‌ها می‌توانند watch را از آخرین مقدار resourceVersion بازگردانده‌شده توسط سرور شروع کنند و هیچ تغییری را از دست ندهند.</td>
+    </tr>
+    <tr>
+      <td><code>fieldSelector</code></td>
+      <td><em>string</em></td>
+      <td>انتخابگری (selector) برای محدود کردن فهرست آبجکت‌های بازگردانده‌شده بر اساس فیلدهایشان. مقدار پیش‌فرض همه آبجکت‌ها است.</td>
+    </tr>
+    <tr>
+      <td><code>labelSelector</code></td>
+      <td><em>string</em></td>
+      <td>انتخابگری برای محدود کردن فهرست آبجکت‌های بازگردانده‌شده بر اساس برچسب‌هایشان. مقدار پیش‌فرض همه آبجکت‌ها است.</td>
+    </tr>
+    <tr>
+      <td><code>limit</code></td>
+      <td><em>integer</em></td>
+      <td>limit حداکثر تعداد پاسخ‌هایی است که برای یک فراخوانی فهرست بازگردانده می‌شود. اگر آیتم‌های بیشتری وجود داشته باشد، سرور فیلد `continue` را در فراداده فهرست روی مقداری تنظیم می‌کند که می‌توان آن را همراه با همان کوئری اولیه برای دریافت مجموعه بعدی نتایج به کار برد. اگر همه آبجکت‌های درخواستی فیلتر شوند، تعیین limit ممکن است کمتر از تعداد درخواستی آیتم بازگرداند (حتی صفر آیتم)؛ از این رو کلاینت‌ها برای تشخیص وجود نتایج بیشتر فقط باید به حضور فیلد continue تکیه کنند. سرورها می‌توانند آرگومان limit را پشتیبانی نکنند و در این صورت همه نتایج موجود را بازمی‌گردانند. اگر limit مشخص شده باشد و فیلد continue خالی باشد، کلاینت‌ها می‌توانند فرض کنند که نتیجه دیگری وجود ندارد. این فیلد زمانی که watch برابر true باشد پشتیبانی نمی‌شود. سرور تضمین می‌کند آبجکت‌هایی که هنگام استفاده از continue بازگردانده می‌شوند، با صدور یک فراخوانی فهرست واحد بدون limit یکسان باشند؛ یعنی هیچ آبجکتی که پس از صدور اولین درخواست ایجاد، ویرایش یا حذف شده باشد، در درخواست‌های ادامه‌دار بعدی گنجانده نمی‌شود. این ویژگی گاهی snapshot سازگار نامیده می‌شود و تضمین می‌کند کلاینتی که برای دریافت تکه‌های کوچک‌تر از یک نتیجه بسیار بزرگ از limit استفاده می‌کند، همه آبجکت‌های ممکن را مشاهده خواهد کرد. اگر آبجکت‌ها در طول یک فهرست تکه‌تکه به‌روزرسانی شوند، نسخه‌ای از آبجکت که در زمان محاسبه اولین نتیجه فهرست وجود داشته است بازگردانده می‌شود.</td>
+    </tr>
+    <tr>
+      <td><code>pretty</code></td>
+      <td><em>string</em></td>
+      <td>اگر مقدار 'true' باشد، خروجی به‌صورت خوانا (pretty printed) چاپ می‌شود. مقدار پیش‌فرض 'false' است، مگر آنکه user-agent یک مرورگر یا ابزار HTTP خط فرمان (curl و wget) باشد.</td>
+    </tr>
+    <tr>
+      <td><code>resourceVersion</code></td>
+      <td><em>string</em></td>
+      <td>resourceVersion محدودیتی را برای نسخه‌های منبعی که درخواست می‌تواند از آن‌ها پاسخ داده شود تعیین می‌کند. برای جزئیات به https://kubernetes.io/docs/reference/using-api/api-concepts/#resource-versions مراجعه کنید. مقدار پیش‌فرض تنظیم‌نشده است.</td>
+    </tr>
+    <tr>
+      <td><code>resourceVersionMatch</code></td>
+      <td><em>string</em></td>
+      <td>resourceVersionMatch مشخص می‌کند resourceVersion چگونه در فراخوانی‌های فهرست اعمال شود. به‌شدت توصیه می‌شود برای فراخوانی‌های فهرستی که resourceVersion در آن‌ها تنظیم شده است، resourceVersionMatch نیز تنظیم شود. برای جزئیات به https://kubernetes.io/docs/reference/using-api/api-concepts/#resource-versions مراجعه کنید. مقدار پیش‌فرض تنظیم‌نشده است.</td>
+    </tr>
+    <tr>
+      <td><code>sendInitialEvents</code></td>
+      <td><em>boolean</em></td>
+      <td>می‌توان `sendInitialEvents=true` را همراه با `watch=true` تنظیم کرد. در این حالت، جریان watch با رویدادهای مصنوعی (synthetic) آغاز می‌شود که وضعیت فعلی آبجکت‌های مجموعه را تولید می‌کنند. پس از ارسال همه این رویدادها، یک رویداد مصنوعی "Bookmark" ارسال می‌شود. این bookmark مقدار ResourceVersion (RV) متناظر با مجموعه آبجکت‌ها را گزارش می‌کند و با حاشیه‌نویسی (annotation) `"k8s.io/initial-events-end": "true"` علامت‌گذاری می‌شود. پس از آن، جریان watch طبق معمول ادامه می‌یابد و رویدادهای متناظر با تغییرات (پس از RV) آبجکت‌های تحت نظر را ارسال می‌کند. هنگامی که گزینه `sendInitialEvents` تنظیم شده باشد، لازم است گزینه `resourceVersionMatch` نیز تنظیم شود. معنای درخواست watch به شرح زیر است:<br/> - مقدار `resourceVersionMatch` برابر NotOlderThan به معنی «داده‌ای که دست‌کم به‌اندازه `resourceVersion` ارائه‌شده جدید باشد» تفسیر می‌شود و رویداد bookmark زمانی ارسال می‌شود که وضعیت با `resourceVersion`ای همگام شده باشد که دست‌کم به‌اندازه مقدار ارائه‌شده در ListOptions تازه است. اگر `resourceVersion` تنظیم نشده باشد، این حالت «خواندن سازگار» تفسیر می‌شود و رویداد bookmark زمانی ارسال می‌شود که وضعیت دست‌کم تا لحظه شروع پردازش درخواست همگام شده باشد.<br/> - اگر `resourceVersionMatch` روی هر مقدار دیگری تنظیم شود یا تنظیم نشده باشد، خطای Invalid بازگردانده می‌شود. مقدار پیش‌فرض در صورتی که `resourceVersion=""` یا `resourceVersion="0"` باشد true است (به دلایل سازگاری با نسخه‌های قبلی) و در غیر این صورت false است.</td>
+    </tr>
+    <tr>
+      <td><code>shardSelector</code></td>
+      <td><em>string</em></td>
+      <td>shardSelector فهرست آبجکت‌های بازگردانده‌شده را با استفاده از یک عبارت shard selector مبتنی بر CEL محدود می‌کند. قالب آن از تابع shardRange() به‌همراه || (عملگر OR منطقی) برای تعیین یک یا چند بازه هش استفاده می‌کند:    shardRange(object.metadata.uid, '0x0', '0x8000000000000000')   shardRange(object.metadata.uid, '0x0', '0x8000000000000000') || shardRange(object.metadata.uid, '0x8000000000000000', '0x10000000000000000')  مسیر فیلدها از نحو object-rooted به سبک CEL پیروی می‌کند (مثلاً "object.metadata.uid") و قالب fieldSelector ("metadata.uid") نیست. مسیرهای پشتیبانی‌شده فعلی:   - object.metadata.uid   - object.metadata.namespace  مقادیر hexStart و hexEnd رشته‌های لفظی CEL درون تک‌نقل‌قول با پیشوند '0x' هستند و به‌ترتیب کران پایین (شامل) و کران بالا (غیرشامل) را در فضای هش 64 بیتی FNV-1a تعریف می‌کنند. بازه کامل [0x0, 0x10000000000000000) است که کران بالای غیرشامل آن برابر 2^64 است.  مثال‌ها:   تقسیم به 2 shard:     shard 0: shardRange(object.metadata.uid, '0x0000000000000000', '0x8000000000000000')     shard 1: shardRange(object.metadata.uid, '0x8000000000000000', '0x10000000000000000')   تقسیم به 4 shard:     shard 0: shardRange(object.metadata.uid, '0x0000000000000000', '0x4000000000000000')     shard 1: shardRange(object.metadata.uid, '0x4000000000000000', '0x8000000000000000')     shard 2: shardRange(object.metadata.uid, '0x8000000000000000', '0xc000000000000000')     shard 3: shardRange(object.metadata.uid, '0xc000000000000000', '0x10000000000000000')  این فیلد آلفا است و نیاز به فعال‌سازی feature gate با نام ShardedListAndWatch دارد.</td>
+    </tr>
+    <tr>
+      <td><code>timeoutSeconds</code></td>
+      <td><em>integer</em></td>
+      <td>مهلت زمانی فراخوانی list/watch. این مقدار مدت فراخوانی را بدون توجه به وجود یا نبود هرگونه فعالیت محدود می‌کند.</td>
+    </tr>
+    <tr>
+      <td><code>watch</code></td>
+      <td><em>boolean</em></td>
+      <td>تغییرات منابع توصیف‌شده را زیر نظر می‌گیرد و آن‌ها را به‌صورت جریانی از اعلان‌های افزودن، به‌روزرسانی و حذف بازمی‌گرداند. resourceVersion را مشخص کنید.</td>
+    </tr>
+  </tbody>
+</table>
+
+
+
+#### پاسخ
+
+<table>
+  <thead><tr><th>Status</th><th>Description</th><th>Response</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>200</td>
+      <td>OK</td>
+      <td><em><a href="{{< ref "service-v1#ServiceList" >}}">ServiceList</a></em></td>
+    </tr>
+  </tbody>
+</table>
+
+### `get` Watch
+
+#### درخواست HTTP
+
+GET /api/v1/watch/namespaces/{namespace}/services/{name}
+
+
+#### پارامترهای مسیر
+
+<table>
+  <thead><tr><th>نام</th><th>نوع</th><th>توضیحات</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>name</code></td>
+      <td><em>string</em></td>
+      <td>نام Service</td>
+    </tr>
+    <tr>
+      <td><code>namespace</code></td>
+      <td><em>string</em></td>
+      <td>نام آبجکت و محدوده احراز هویت، مانند تیم‌ها و پروژه‌ها</td>
+    </tr>
+  </tbody>
+</table>
+
+
+#### پارامترهای کوئری
+
+<table>
+  <thead><tr><th>نام</th><th>نوع</th><th>توضیحات</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>allowWatchBookmarks</code></td>
+      <td><em>boolean</em></td>
+      <td>allowWatchBookmarks رویدادهای watch با نوع "BOOKMARK" را درخواست می‌کند. سرورهایی که bookmark را پیاده‌سازی نکرده‌اند ممکن است این پرچم را نادیده بگیرند و ارسال bookmarkها به صلاحدید سرور است. کلاینت‌ها نباید فرض کنند که bookmarkها در بازه‌ی زمانی مشخصی بازگردانده می‌شوند و نیز نباید فرض کنند که سرور در طول یک نشست حتماً رویداد BOOKMARK ارسال می‌کند. اگر درخواست از نوع watch نباشد، این فیلد نادیده گرفته می‌شود.</td>
+    </tr>
+    <tr>
+      <td><code>continue</code></td>
+      <td><em>string</em></td>
+      <td>گزینه‌ی continue باید هنگام دریافت نتایج بیشتر از سرور تنظیم شود. از آنجا که این مقدار را سرور تعیین می‌کند، کلاینت‌ها فقط می‌توانند مقدار continue را از نتیجه‌ی یک کوئری قبلی با پارامترهای کوئری یکسان (به‌جز خود مقدار continue) استفاده کنند و سرور می‌تواند مقدار continue ناشناخته را رد کند. اگر مقدار continue مشخص‌شده دیگر معتبر نباشد، چه به دلیل انقضا (معمولاً پنج تا پانزده دقیقه) و چه به دلیل تغییر پیکربندی در سرور، سرور با خطای 410 ResourceExpired همراه با یک توکن continue پاسخ می‌دهد. اگر کلاینت به فهرستی سازگار نیاز دارد، باید فهرست‌گیری را بدون فیلد continue از ابتدا شروع کند. در غیر این صورت، کلاینت می‌تواند درخواست فهرست دیگری با توکنی که همراه خطای 410 دریافت کرده است ارسال کند؛ سرور با فهرستی پاسخ می‌دهد که از کلید بعدی شروع می‌شود، اما از آخرین snapshot گرفته شده است و با نتایج قبلی فهرست ناسازگار است: آبجکت‌هایی که پس از اولین درخواست فهرست ایجاد، ویرایش یا حذف شده‌اند، تا زمانی که کلیدشان پس از «کلید بعدی» باشد، در پاسخ گنجانده می‌شوند. این فیلد زمانی که watch برابر true باشد پشتیبانی نمی‌شود. کلاینت‌ها می‌توانند یک watch را از آخرین مقدار resourceVersion که سرور بازگردانده است آغاز کنند و هیچ تغییری را از دست ندهند.</td>
+    </tr>
+    <tr>
+      <td><code>fieldSelector</code></td>
+      <td><em>string</em></td>
+      <td>انتخابگری (selector) برای محدود کردن فهرست آبجکت‌های بازگردانده‌شده بر اساس فیلدهایشان. مقدار پیش‌فرض همه‌چیز را شامل می‌شود.</td>
+    </tr>
+    <tr>
+      <td><code>labelSelector</code></td>
+      <td><em>string</em></td>
+      <td>انتخابگری برای محدود کردن فهرست آبجکت‌های بازگردانده‌شده بر اساس برچسب‌هایشان. مقدار پیش‌فرض همه‌چیز را شامل می‌شود.</td>
+    </tr>
+    <tr>
+      <td><code>limit</code></td>
+      <td><em>integer</em></td>
+      <td>limit حداکثر تعداد پاسخ‌هایی است که برای یک فراخوانی فهرست بازگردانده می‌شود. اگر آیتم‌های بیشتری وجود داشته باشد، سرور فیلد `continue` را در فراداده‌ی فهرست روی مقداری تنظیم می‌کند که می‌توان آن را همراه با همان کوئری اولیه برای دریافت مجموعه‌ی بعدی نتایج به کار برد. تنظیم limit ممکن است تعداد کمتری از آیتم‌های درخواست‌شده (حتی صفر آیتم) را بازگرداند، در صورتی که همه‌ی آبجکت‌های درخواست‌شده فیلتر شوند؛ بنابراین کلاینت‌ها فقط باید از وجود فیلد continue برای تشخیص اینکه نتایج بیشتری موجود است یا نه استفاده کنند. سرورها می‌توانند آرگومان limit را پشتیبانی نکنند و در این صورت همه‌ی نتایج موجود را بازمی‌گردانند. اگر limit مشخص شده باشد و فیلد continue خالی باشد، کلاینت‌ها می‌توانند فرض کنند که نتیجه‌ی دیگری وجود ندارد. این فیلد زمانی که watch برابر true باشد پشتیبانی نمی‌شود. سرور تضمین می‌کند که آبجکت‌های بازگردانده‌شده هنگام استفاده از continue با آبجکت‌های یک فراخوانی فهرست واحد بدون limit یکسان باشند؛ یعنی هیچ آبجکتی که پس از صدور اولین درخواست ایجاد، ویرایش یا حذف شده باشد، در درخواست‌های ادامه‌ی بعدی گنجانده نمی‌شود. این ویژگی گاهی snapshot سازگار نامیده می‌شود و تضمین می‌کند کلاینتی که برای دریافت بخش‌های کوچک‌تر از یک نتیجه‌ی بسیار بزرگ از limit استفاده می‌کند، همه‌ی آبجکت‌های ممکن را می‌بیند. اگر آبجکت‌ها در طول فهرست‌گیری تکه‌تکه به‌روزرسانی شوند، نسخه‌ای از آبجکت که در زمان محاسبه‌ی اولین نتیجه‌ی فهرست وجود داشته است بازگردانده می‌شود.</td>
+    </tr>
+    <tr>
+      <td><code>pretty</code></td>
+      <td><em>string</em></td>
+      <td>اگر مقدار 'true' باشد، خروجی به‌صورت خوانا (pretty print) چاپ می‌شود. مقدار پیش‌فرض 'false' است، مگر آنکه user-agent نشان دهد که درخواست از یک مرورگر یا ابزار HTTP خط فرمان (curl و wget) ارسال شده است.</td>
+    </tr>
+    <tr>
+      <td><code>resourceVersion</code></td>
+      <td><em>string</em></td>
+      <td>resourceVersion محدودیتی را برای نسخه‌های منبعی که یک درخواست می‌تواند از آن‌ها پاسخ داده شود تعیین می‌کند. برای جزئیات به https://kubernetes.io/docs/reference/using-api/api-concepts/#resource-versions مراجعه کنید. مقدار پیش‌فرض تنظیم‌نشده است.</td>
+    </tr>
+    <tr>
+      <td><code>resourceVersionMatch</code></td>
+      <td><em>string</em></td>
+      <td>resourceVersionMatch تعیین می‌کند که resourceVersion چگونه در فراخوانی‌های فهرست اعمال شود. به‌شدت توصیه می‌شود که resourceVersionMatch برای فراخوانی‌های فهرستی که resourceVersion در آن‌ها تنظیم شده است، مشخص شود. برای جزئیات به https://kubernetes.io/docs/reference/using-api/api-concepts/#resource-versions مراجعه کنید. مقدار پیش‌فرض تنظیم‌نشده است.</td>
+    </tr>
+    <tr>
+      <td><code>sendInitialEvents</code></td>
+      <td><em>boolean</em></td>
+      <td>می‌توان `sendInitialEvents=true` را همراه با `watch=true` تنظیم کرد. در این حالت، جریان watch با رویدادهای مصنوعی (synthetic) آغاز می‌شود که وضعیت فعلی آبجکت‌های موجود در مجموعه را تولید می‌کنند. پس از ارسال همه‌ی این رویدادها، یک رویداد مصنوعی "Bookmark" ارسال می‌شود. این bookmark مقدار ResourceVersion (RV) متناظر با مجموعه‌ی آبجکت‌ها را گزارش می‌کند و با حاشیه‌نویسی (annotation) `"k8s.io/initial-events-end": "true"` علامت‌گذاری می‌شود. پس از آن، جریان watch طبق معمول ادامه می‌یابد و رویدادهای watch متناظر با تغییرات (پس از RV) آبجکت‌های تحت نظر را ارسال می‌کند. هنگامی که گزینه‌ی `sendInitialEvents` تنظیم شده باشد، لازم است گزینه‌ی `resourceVersionMatch` نیز تنظیم شود. معنای درخواست watch به شرح زیر است:<br/> - مقدار `resourceVersionMatch` برابر NotOlderThan به این معنا تفسیر می‌شود که «داده‌ها دست‌کم به‌اندازه‌ی `resourceVersion` ارائه‌شده جدید باشند» و رویداد bookmark زمانی ارسال می‌شود که وضعیت با `resourceVersion`ی همگام شده باشد که دست‌کم به‌اندازه‌ی مقدار ارائه‌شده در ListOptions تازه است. اگر `resourceVersion` تنظیم نشده باشد، این حالت «خواندن سازگار» تفسیر می‌شود و رویداد bookmark زمانی ارسال می‌شود که وضعیت دست‌کم تا لحظه‌ی آغاز پردازش درخواست همگام شده باشد.<br/> - اگر `resourceVersionMatch` روی هر مقدار دیگری تنظیم شده باشد یا تنظیم نشده باشد، خطای Invalid بازگردانده می‌شود. اگر `resourceVersion=""` یا `resourceVersion="0"` باشد (به دلایل سازگاری با نسخه‌های قبلی) مقدار پیش‌فرض true است و در غیر این صورت false است.</td>
+    </tr>
+    <tr>
+      <td><code>shardSelector</code></td>
+      <td><em>string</em></td>
+      <td>shardSelector فهرست آبجکت‌های بازگردانده‌شده را با استفاده از یک عبارت انتخابگر شارد مبتنی بر CEL محدود می‌کند. قالب آن از تابع shardRange() همراه با || (عملگر منطقی OR) برای تعیین یک یا چند بازه‌ی هش استفاده می‌کند:    shardRange(object.metadata.uid, '0x0', '0x8000000000000000')   shardRange(object.metadata.uid, '0x0', '0x8000000000000000') || shardRange(object.metadata.uid, '0x8000000000000000', '0x10000000000000000')  مسیر فیلدها از نحو شیء‌ریشه‌ای به سبک CEL استفاده می‌کند (مثلاً "object.metadata.uid") و قالب fieldSelector ("metadata.uid") را به‌کار نمی‌برد. مسیرهای پشتیبانی‌شده در حال حاضر عبارت‌اند از:   - object.metadata.uid   - object.metadata.namespace  hexStart و hexEnd لیترال‌های رشته‌ای CEL داخل تک‌کوتیشن با پیشوند '0x' هستند که کران پایین شامل‌شونده و کران بالای حذف‌شونده را روی فضای هش 64 بیتی FNV-1a تعریف می‌کنند. بازه‌ی کامل [0x0, 0x10000000000000000) است که در آن کران بالای حذف‌شونده برابر 2^64 است.  مثال‌ها:   تقسیم به 2 شارد:     شارد 0: shardRange(object.metadata.uid, '0x0000000000000000', '0x8000000000000000')     شارد 1: shardRange(object.metadata.uid, '0x8000000000000000', '0x10000000000000000')   تقسیم به 4 شارد:     شارد 0: shardRange(object.metadata.uid, '0x0000000000000000', '0x4000000000000000')     شارد 1: shardRange(object.metadata.uid, '0x4000000000000000', '0x8000000000000000')     شارد 2: shardRange(object.metadata.uid, '0x8000000000000000', '0xc000000000000000')     شارد 3: shardRange(object.metadata.uid, '0xc000000000000000', '0x10000000000000000')  این فیلد آلفا است و فعال‌سازی feature gate با نام ShardedListAndWatch را لازم دارد.</td>
+    </tr>
+    <tr>
+      <td><code>timeoutSeconds</code></td>
+      <td><em>integer</em></td>
+      <td>مهلت زمانی برای فراخوانی list/watch. این مقدار مدت فراخوانی را بدون توجه به فعالیت یا عدم فعالیت محدود می‌کند.</td>
+    </tr>
+    <tr>
+      <td><code>watch</code></td>
+      <td><em>boolean</em></td>
+      <td>تغییرات منابع توصیف‌شده را زیر نظر می‌گیرد و آن‌ها را به‌صورت جریانی از اعلان‌های افزودن، به‌روزرسانی و حذف بازمی‌گرداند. resourceVersion را مشخص کنید.</td>
+    </tr>
+  </tbody>
+</table>
+
+
+
+#### پاسخ
+
+<table>
+  <thead><tr><th>وضعیت</th><th>توضیحات</th><th>پاسخ</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>200</td>
+      <td>OK</td>
+      <td><em><a href="{{< ref "../definitions/watch-event-v1-meta#WatchEvent" >}}">WatchEvent</a></em></td>
+    </tr>
+  </tbody>
+</table>
+
+### `get` Watch List
+
+#### درخواست HTTP
+
+GET /api/v1/watch/namespaces/{namespace}/services
+
+
+#### پارامترهای مسیر
+
+<table>
+  <thead><tr><th>نام</th><th>نوع</th><th>توضیحات</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>namespace</code></td>
+      <td><em>string</em></td>
+      <td>نام آبجکت و محدوده احراز هویت، مانند تیم‌ها و پروژه‌ها</td>
+    </tr>
+  </tbody>
+</table>
+
+
+#### پارامترهای کوئری
+
+<table>
+  <thead><tr><th>نام</th><th>نوع</th><th>توضیحات</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>allowWatchBookmarks</code></td>
+      <td><em>boolean</em></td>
+      <td>allowWatchBookmarks رویدادهای watch از نوع «BOOKMARK» را درخواست می‌کند. سرورهایی که bookmark را پیاده‌سازی نکرده‌اند ممکن است این پرچم را نادیده بگیرند، و ارسال bookmarkها به صلاحدید سرور است. کلاینت‌ها نباید فرض کنند که bookmarkها در فاصله‌های زمانی مشخصی بازگردانده می‌شوند، و نباید انتظار داشته باشند که سرور در طول یک نشست حتماً رویداد BOOKMARK ارسال کند. اگر درخواست از نوع watch نباشد، این فیلد نادیده گرفته می‌شود.</td>
+    </tr>
+    <tr>
+      <td><code>continue</code></td>
+      <td><em>string</em></td>
+      <td>هنگام دریافت نتایج بیشتر از سرور باید گزینه continue تنظیم شود. از آنجا که این مقدار را سرور تعیین می‌کند، کلاینت‌ها فقط می‌توانند از مقدار continue حاصل از نتیجه یک کوئری قبلی با پارامترهای کوئری یکسان (به‌جز خود مقدار continue) استفاده کنند، و سرور ممکن است مقداری از continue را که نمی‌شناسد رد کند. اگر مقدار continue مشخص‌شده دیگر معتبر نباشد، چه به دلیل انقضا (معمولاً پنج تا پانزده دقیقه) و چه به دلیل تغییر پیکربندی در سرور، سرور با خطای 410 ResourceExpired به همراه یک continue token پاسخ می‌دهد. اگر کلاینت به یک فهرست سازگار نیاز دارد، باید فهرست‌کردن را بدون فیلد continue از ابتدا شروع کند. در غیر این صورت، کلاینت می‌تواند درخواست فهرست دیگری را با توکن دریافت‌شده همراه با خطای 410 ارسال کند؛ سرور با فهرستی پاسخ می‌دهد که از کلید بعدی شروع می‌شود، اما از جدیدترین snapshot گرفته شده است و با نتایج فهرست قبلی ناسازگار است. آبجکت‌هایی که پس از درخواست فهرست اول ایجاد، تغییر یا حذف شده‌اند، تا زمانی که کلیدشان پس از «کلید بعدی» باشد، در پاسخ گنجانده می‌شوند. این فیلد در حالتی که watch برابر true باشد پشتیبانی نمی‌شود. کلاینت‌ها می‌توانند یک watch را از آخرین مقدار resourceVersion بازگردانده‌شده توسط سرور آغاز کنند و هیچ تغییری را از دست ندهند.</td>
+    </tr>
+    <tr>
+      <td><code>fieldSelector</code></td>
+      <td><em>string</em></td>
+      <td>یک انتخابگر (selector) برای محدود کردن فهرست آبجکت‌های بازگردانده‌شده بر اساس فیلدهایشان. مقدار پیش‌فرض همه‌چیز است.</td>
+    </tr>
+    <tr>
+      <td><code>labelSelector</code></td>
+      <td><em>string</em></td>
+      <td>یک انتخابگر (selector) برای محدود کردن فهرست آبجکت‌های بازگردانده‌شده بر اساس برچسب‌هایشان. مقدار پیش‌فرض همه‌چیز است.</td>
+    </tr>
+    <tr>
+      <td><code>limit</code></td>
+      <td><em>integer</em></td>
+      <td>limit حداکثر تعداد پاسخ‌هایی است که برای یک فراخوانی فهرست بازگردانده می‌شود. اگر موارد بیشتری وجود داشته باشد، سرور فیلد `continue` را در فرادادهٔ فهرست روی مقداری تنظیم می‌کند که می‌توان آن را همراه با همان کوئری اولیه برای دریافت مجموعه بعدی نتایج به کار برد. در صورتی که همه آبجکت‌های درخواست‌شده فیلتر شوند، تنظیم limit ممکن است کمتر از تعداد درخواست‌شده مورد (حتی صفر مورد) بازگرداند، و کلاینت‌ها باید برای تشخیص وجود نتایج بیشتر فقط به وجود فیلد continue تکیه کنند. سرورها ممکن است آرگومان limit را پشتیبانی نکنند و همه نتایج موجود را بازگردانند. اگر limit مشخص شده باشد و فیلد continue خالی باشد، کلاینت‌ها می‌توانند فرض کنند که نتیجه دیگری وجود ندارد. این فیلد در حالتی که watch برابر true باشد پشتیبانی نمی‌شود. سرور تضمین می‌کند که آبجکت‌های بازگردانده‌شده هنگام استفاده از continue با آبجکت‌های یک فراخوانی فهرست واحد بدون limit یکسان باشند؛ یعنی هیچ آبجکتی که پس از صدور درخواست اول ایجاد، تغییر یا حذف شده باشد، در درخواست‌های ادامه‌دار بعدی گنجانده نمی‌شود. به این ویژگی گاهی snapshot سازگار گفته می‌شود و تضمین می‌کند کلاینتی که برای دریافت تکه‌های کوچک‌تر از یک نتیجه بسیار بزرگ از limit استفاده می‌کند، همه آبجکت‌های ممکن را می‌بیند. اگر آبجکت‌ها در طول یک فهرست تکه‌تکه به‌روزرسانی شوند، نسخه‌ای از آبجکت که در زمان محاسبه نتیجه اول فهرست وجود داشته است بازگردانده می‌شود.</td>
+    </tr>
+    <tr>
+      <td><code>pretty</code></td>
+      <td><em>string</em></td>
+      <td>اگر مقدار 'true' باشد، خروجی به‌صورت خوانا (pretty print) نمایش داده می‌شود. مقدار پیش‌فرض 'false' است، مگر آنکه user-agent نشان دهد از مرورگر یا ابزار HTTP خط فرمان (curl و wget) استفاده می‌شود.</td>
+    </tr>
+    <tr>
+      <td><code>resourceVersion</code></td>
+      <td><em>string</em></td>
+      <td>resourceVersion محدودیتی تعیین می‌کند که یک درخواست از کدام نسخه‌های منبع می‌تواند پاسخ داده شود. برای جزئیات به https://kubernetes.io/docs/reference/using-api/api-concepts/#resource-versions مراجعه کنید. مقدار پیش‌فرض تنظیم‌نشده است.</td>
+    </tr>
+    <tr>
+      <td><code>resourceVersionMatch</code></td>
+      <td><em>string</em></td>
+      <td>resourceVersionMatch تعیین می‌کند که resourceVersion در فراخوانی‌های فهرست چگونه اعمال شود. به‌شدت توصیه می‌شود در فراخوانی‌های فهرستی که resourceVersion در آن‌ها تنظیم شده است، resourceVersionMatch نیز تنظیم شود. برای جزئیات به https://kubernetes.io/docs/reference/using-api/api-concepts/#resource-versions مراجعه کنید. مقدار پیش‌فرض تنظیم‌نشده است.</td>
+    </tr>
+    <tr>
+      <td><code>sendInitialEvents</code></td>
+      <td><em>boolean</em></td>
+      <td>می‌توان `sendInitialEvents=true` را همراه با `watch=true` تنظیم کرد. در این حالت، جریان watch با رویدادهای مصنوعی (synthetic) آغاز می‌شود که وضعیت فعلی آبجکت‌های موجود در مجموعه را بازتاب می‌دهند. پس از ارسال همه این رویدادها، یک رویداد مصنوعی «Bookmark» ارسال می‌شود. این bookmark مقدار ResourceVersion (RV) متناظر با مجموعه آبجکت‌ها را گزارش می‌کند و با حاشیه‌نویسی (annotation) `"k8s.io/initial-events-end": "true"` علامت‌گذاری می‌شود. پس از آن، جریان watch به‌طور معمول ادامه می‌یابد و رویدادهای مربوط به تغییرات (پس از RV) آبجکت‌های تحت نظر را ارسال می‌کند. هنگامی که گزینه `sendInitialEvents` تنظیم شده باشد، لازم است گزینه `resourceVersionMatch` نیز تنظیم شود. معنای درخواست watch به این صورت است:<br/> - مقدار `resourceVersionMatch` برابر NotOlderThan به معنای «داده‌هایی دست‌کم به‌روز مانند `resourceVersion` ارائه‌شده» تفسیر می‌شود و رویداد bookmark زمانی ارسال می‌شود که وضعیت با یک `resourceVersion` دست‌کم به‌تازگی مقدار ارائه‌شده در ListOptions همگام شده باشد. اگر `resourceVersion` تنظیم نشده باشد، این حالت «خواندن سازگار» تفسیر می‌شود و رویداد bookmark زمانی ارسال می‌شود که وضعیت دست‌کم تا لحظه شروع پردازش درخواست همگام شده باشد.<br/> - اگر `resourceVersionMatch` روی هر مقدار دیگری تنظیم شده باشد یا تنظیم نشده باشد، خطای Invalid بازگردانده می‌شود. اگر `resourceVersion=""` یا `resourceVersion="0"` باشد (به دلایل سازگاری با نسخه‌های قبلی) مقدار پیش‌فرض true است و در غیر این صورت false است.</td>
+    </tr>
+    <tr>
+      <td><code>shardSelector</code></td>
+      <td><em>string</em></td>
+      <td>shardSelector فهرست آبجکت‌های بازگردانده‌شده را با استفاده از یک عبارت انتخابگر shard مبتنی بر CEL محدود می‌کند. قالب آن از تابع shardRange() همراه با || (عملگر OR منطقی) برای تعیین یک یا چند بازه hash استفاده می‌کند:    shardRange(object.metadata.uid, '0x0', '0x8000000000000000')   shardRange(object.metadata.uid, '0x0', '0x8000000000000000') || shardRange(object.metadata.uid, '0x8000000000000000', '0x10000000000000000')  مسیر فیلدها از نحو object-rooted به سبک CEL پیروی می‌کند (مثلاً "object.metadata.uid") و قالب fieldSelector (یعنی "metadata.uid") نیست. مسیرهای پشتیبانی‌شده فعلی:   - object.metadata.uid   - object.metadata.namespace  مقادیر hexStart و hexEnd رشته‌های literal در CEL هستند که درون تک‌نقل‌قول قرار می‌گیرند و پیشوند '0x' دارند؛ آن‌ها کران پایین (شامل) و کران بالا (غیرشامل) را در فضای hash ‏64 بیتی FNV-1a تعریف می‌کنند. بازه کامل [0x0, 0x10000000000000000) است که کران بالای غیرشامل آن برابر 2^64 است.  مثال‌ها:   تقسیم به ۲ shard:     shard 0: shardRange(object.metadata.uid, '0x0000000000000000', '0x8000000000000000')     shard 1: shardRange(object.metadata.uid, '0x8000000000000000', '0x10000000000000000')   تقسیم به ۴ shard:     shard 0: shardRange(object.metadata.uid, '0x0000000000000000', '0x4000000000000000')     shard 1: shardRange(object.metadata.uid, '0x4000000000000000', '0x8000000000000000')     shard 2: shardRange(object.metadata.uid, '0x8000000000000000', '0xc000000000000000')     shard 3: shardRange(object.metadata.uid, '0xc000000000000000', '0x10000000000000000')  این فیلد آلفا است و نیاز دارد feature gate با نام ShardedListAndWatch فعال شود.</td>
+    </tr>
+    <tr>
+      <td><code>timeoutSeconds</code></td>
+      <td><em>integer</em></td>
+      <td>مهلت زمانی برای فراخوانی list/watch. این مقدار مدت فراخوانی را بدون توجه به وجود یا نبود هرگونه فعالیت محدود می‌کند.</td>
+    </tr>
+    <tr>
+      <td><code>watch</code></td>
+      <td><em>boolean</em></td>
+      <td>تغییرات منابع توصیف‌شده را زیر نظر می‌گیرد و آن‌ها را به‌صورت جریانی از اعلان‌های افزودن، به‌روزرسانی و حذف بازمی‌گرداند. resourceVersion را مشخص کنید.</td>
+    </tr>
+  </tbody>
+</table>
+
+
+
+#### پاسخ
+
+<table>
+  <thead><tr><th>وضعیت</th><th>توضیحات</th><th>پاسخ</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>200</td>
+      <td>OK</td>
+      <td><em><a href="{{< ref "../definitions/watch-event-v1-meta#WatchEvent" >}}">WatchEvent</a></em></td>
+    </tr>
+  </tbody>
+</table>
+
+### `get` Watch List All Namespaces
+
+#### درخواست HTTP
+
+`GET /api/v1/watch/services`
+
+
+
+#### پارامترهای کوئری
+
+<table>
+  <thead><tr><th>نام</th><th>نوع</th><th>توضیحات</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>allowWatchBookmarks</code></td>
+      <td><em>boolean</em></td>
+      <td>allowWatchBookmarks درخواست می‌کند که رویدادهای watch با نوع "BOOKMARK" ارسال شوند. سرورهایی که bookmarkها را پیاده‌سازی نکرده‌اند می‌توانند این پرچم را نادیده بگیرند و ارسال bookmarkها به صلاحدید سرور است. کلاینت‌ها نباید فرض کنند که bookmarkها در بازه‌های زمانی مشخصی بازگردانده می‌شوند و نباید انتظار داشته باشند که سرور در طول یک نشست حتماً رویداد BOOKMARK ارسال کند. اگر درخواست از نوع watch نباشد، این فیلد نادیده گرفته می‌شود.</td>
+    </tr>
+    <tr>
+      <td><code>continue</code></td>
+      <td><em>string</em></td>
+      <td>گزینه continue باید هنگام دریافت نتایج بیشتر از سرور تنظیم شود. از آنجا که این مقدار را سرور تعیین می‌کند، کلاینت‌ها فقط می‌توانند مقدار continue حاصل از نتیجه یک کوئری قبلی را با پارامترهای کوئری یکسان (به‌جز مقدار continue) استفاده کنند و سرور ممکن است مقدار continue ناشناخته را رد کند. اگر مقدار continue مشخص‌شده دیگر معتبر نباشد، چه به دلیل انقضا (معمولاً پنج تا پانزده دقیقه) و چه به دلیل تغییر پیکربندی سرور، سرور همراه با یک توکن continue خطای 410 ResourceExpired را برمی‌گرداند. اگر کلاینت به یک فهرست سازگار نیاز دارد، باید فهرست‌گیری را بدون فیلد continue از ابتدا شروع کند. در غیر این صورت، کلاینت می‌تواند درخواست فهرست دیگری را با توکنی که همراه خطای 410 دریافت کرده است ارسال کند؛ سرور فهرستی را از کلید بعدی و اما از آخرین snapshot برمی‌گرداند که با نتایج قبلی فهرست ناسازگار است. آبجکت‌هایی که پس از اولین درخواست فهرست ایجاد، تغییر یا حذف شده‌اند، تا زمانی که کلیدشان بعد از «کلید بعدی» باشد، در پاسخ گنجانده می‌شوند. این فیلد زمانی که watch برابر true باشد پشتیبانی نمی‌شود. کلاینت‌ها می‌توانند یک watch را از آخرین مقدار resourceVersion که سرور برگردانده است شروع کنند و هیچ تغییری را از دست ندهند.</td>
+    </tr>
+    <tr>
+      <td><code>fieldSelector</code></td>
+      <td><em>string</em></td>
+      <td>انتخابگری (selector) برای محدود کردن فهرست آبجکت‌های بازگردانده‌شده بر اساس فیلدهایشان. مقدار پیش‌فرض، همه آبجکت‌ها را شامل می‌شود.</td>
+    </tr>
+    <tr>
+      <td><code>labelSelector</code></td>
+      <td><em>string</em></td>
+      <td>انتخابگری برای محدود کردن فهرست آبجکت‌های بازگردانده‌شده بر اساس برچسب‌هایشان. مقدار پیش‌فرض، همه آبجکت‌ها را شامل می‌شود.</td>
+    </tr>
+    <tr>
+      <td><code>limit</code></td>
+      <td><em>integer</em></td>
+      <td>limit حداکثر تعداد پاسخ‌هایی است که یک فراخوانی فهرست برمی‌گرداند. اگر موارد بیشتری وجود داشته باشد، سرور فیلد `continue` را در فراداده فهرست روی مقداری تنظیم می‌کند که می‌توان آن را همراه با همان کوئری اولیه برای دریافت مجموعه بعدی نتایج به کار برد. در صورتی که همه آبجکت‌های درخواست‌شده فیلتر شوند، تنظیم limit ممکن است کمتر از تعداد درخواست‌شده مورد (حتی صفر مورد) برگرداند؛ بنابراین کلاینت‌ها باید برای تشخیص وجود نتایج بیشتر فقط به حضور فیلد continue تکیه کنند. سرورها می‌توانند آرگومان limit را پشتیبانی نکنند و در این صورت همه نتایج موجود را برمی‌گردانند. اگر limit مشخص شده باشد و فیلد continue خالی باشد، کلاینت‌ها می‌توانند فرض کنند که نتیجه دیگری وجود ندارد. این فیلد زمانی که watch برابر true باشد پشتیبانی نمی‌شود. سرور تضمین می‌کند که آبجکت‌های بازگردانده‌شده هنگام استفاده از continue با آبجکت‌های یک فراخوانی فهرست واحد بدون limit یکسان باشند؛ یعنی هیچ آبجکتی که پس از صدور اولین درخواست ایجاد، تغییر یا حذف شده باشد در درخواست‌های بعدیِ ادامه‌دار گنجانده نمی‌شود. این رفتار گاهی «snapshot سازگار» نامیده می‌شود و تضمین می‌کند کلاینتی که برای دریافت بخش‌های کوچک‌تر از یک نتیجه بسیار بزرگ از limit استفاده می‌کند، همه آبجکت‌های ممکن را می‌بیند. اگر آبجکت‌ها در طول یک فهرست تکه‌تکه به‌روزرسانی شوند، نسخه‌ای از آبجکت که در زمان محاسبه اولین نتیجه فهرست وجود داشته است بازگردانده می‌شود.</td>
+    </tr>
+    <tr>
+      <td><code>pretty</code></td>
+      <td><em>string</em></td>
+      <td>اگر مقدار 'true' باشد، خروجی به‌صورت خوانا (pretty printed) چاپ می‌شود. مقدار پیش‌فرض 'false' است، مگر آنکه user-agent یک مرورگر یا ابزار HTTP خط فرمان (curl و wget) را نشان دهد.</td>
+    </tr>
+    <tr>
+      <td><code>resourceVersion</code></td>
+      <td><em>string</em></td>
+      <td>resourceVersion محدودیتی را تعیین می‌کند که درخواست از کدام نسخه‌های منبع می‌تواند پاسخ داده شود. برای جزئیات به https://kubernetes.io/docs/reference/using-api/api-concepts/#resource-versions مراجعه کنید. مقدار پیش‌فرض، تنظیم‌نشده است.</td>
+    </tr>
+    <tr>
+      <td><code>resourceVersionMatch</code></td>
+      <td><em>string</em></td>
+      <td>resourceVersionMatch تعیین می‌کند که resourceVersion چگونه در فراخوانی‌های فهرست اعمال شود. به‌شدت توصیه می‌شود برای فراخوانی‌های فهرستی که resourceVersion در آن‌ها تنظیم شده است، resourceVersionMatch هم تنظیم شود. برای جزئیات به https://kubernetes.io/docs/reference/using-api/api-concepts/#resource-versions مراجعه کنید. مقدار پیش‌فرض، تنظیم‌نشده است.</td>
+    </tr>
+    <tr>
+      <td><code>sendInitialEvents</code></td>
+      <td><em>boolean</em></td>
+      <td>می‌توان `sendInitialEvents=true` را همراه با `watch=true` تنظیم کرد. در این حالت، جریان watch با رویدادهای ساختگی (synthetic) آغاز می‌شود که وضعیت فعلی آبجکت‌های مجموعه را تولید می‌کنند. پس از ارسال همه این رویدادها، یک رویداد ساختگی "Bookmark" ارسال می‌شود. این bookmark مقدار ResourceVersion (RV) متناظر با مجموعه آبجکت‌ها را گزارش می‌کند و با حاشیه‌نویسی (annotation) `"k8s.io/initial-events-end": "true"` علامت‌گذاری می‌شود. پس از آن، جریان watch به روال معمول ادامه می‌یابد و رویدادهای watch مربوط به تغییرات آبجکت‌های تحت نظر (پس از RV) را ارسال می‌کند. وقتی گزینه `sendInitialEvents` تنظیم شده باشد، لازم است گزینه `resourceVersionMatch` نیز تنظیم شود. معنای درخواست watch به این صورت است:<br/> - مقدار `resourceVersionMatch` برابر NotOlderThan به این معنا تفسیر می‌شود: «داده‌ای دست‌کم به‌روز به اندازه `resourceVersion` ارائه‌شده»، و رویداد bookmark زمانی ارسال می‌شود که وضعیت با `resourceVersion`ی همگام شده باشد که دست‌کم به اندازه مقدار ارائه‌شده در ListOptions تازه است. اگر `resourceVersion` تنظیم نشده باشد، این حالت به‌عنوان «خواندن سازگار» تفسیر می‌شود و رویداد bookmark زمانی ارسال می‌شود که وضعیت دست‌کم تا لحظه شروع پردازش درخواست همگام شده باشد.<br/> - اگر `resourceVersionMatch` روی هر مقدار دیگری تنظیم شده باشد یا تنظیم نشده باشد، خطای Invalid برگردانده می‌شود. اگر `resourceVersion=""` یا `resourceVersion="0"` باشد (به دلایل سازگاری با نسخه‌های قبلی)، مقدار پیش‌فرض true است و در غیر این صورت false است.</td>
+    </tr>
+    <tr>
+      <td><code>shardSelector</code></td>
+      <td><em>string</em></td>
+      <td>shardSelector فهرست آبجکت‌های بازگردانده‌شده را با یک عبارت انتخابگر shard مبتنی بر CEL محدود می‌کند. قالب آن از تابع shardRange() به‌همراه || (عملگر منطقی OR) برای تعیین یک یا چند بازه hash استفاده می‌کند:    shardRange(object.metadata.uid, '0x0', '0x8000000000000000')   shardRange(object.metadata.uid, '0x0', '0x8000000000000000') || shardRange(object.metadata.uid, '0x8000000000000000', '0x10000000000000000')  مسیر فیلدها از نحو CEL با ریشه object استفاده می‌کند (مثلاً "object.metadata.uid") و قالب fieldSelector ("metadata.uid") را به کار نمی‌برد. مسیرهای پشتیبانی‌شده در حال حاضر:   - object.metadata.uid   - object.metadata.namespace  مقادیر hexStart و hexEnd رشته‌های literal در CEL هستند که داخل نقل‌قول تکی نوشته می‌شوند و پیشوند '0x' دارند. این دو مقدار کران پایین شامل‌شونده و کران بالای شامل‌نشونده را روی فضای hash ‏۶۴ بیتی FNV-1a تعریف می‌کنند. بازه کامل [0x0, 0x10000000000000000) است که در آن کران بالای شامل‌نشونده برابر 2^64 است.  مثال‌ها:   تقسیم به ۲ shard:     shard 0: shardRange(object.metadata.uid, '0x0000000000000000', '0x8000000000000000')     shard 1: shardRange(object.metadata.uid, '0x8000000000000000', '0x10000000000000000')   تقسیم به ۴ shard:     shard 0: shardRange(object.metadata.uid, '0x0000000000000000', '0x4000000000000000')     shard 1: shardRange(object.metadata.uid, '0x4000000000000000', '0x8000000000000000')     shard 2: shardRange(object.metadata.uid, '0x8000000000000000', '0xc000000000000000')     shard 3: shardRange(object.metadata.uid, '0xc000000000000000', '0x10000000000000000')  این یک فیلد آلفا است و فعال‌سازی feature gate با نام ShardedListAndWatch را لازم دارد.</td>
+    </tr>
+    <tr>
+      <td><code>timeoutSeconds</code></td>
+      <td><em>integer</em></td>
+      <td>مهلت زمانی فراخوانی list/watch. این مقدار مدت فراخوانی را بدون توجه به وجود یا نبود هرگونه فعالیت محدود می‌کند.</td>
+    </tr>
+    <tr>
+      <td><code>watch</code></td>
+      <td><em>boolean</em></td>
+      <td>تغییرات منابع توصیف‌شده را زیر نظر می‌گیرد و آن‌ها را به‌صورت جریانی از اعلان‌های افزودن، به‌روزرسانی و حذف برمی‌گرداند. resourceVersion را مشخص کنید.</td>
+    </tr>
+  </tbody>
+</table>
+
+
+
+#### پاسخ
+
+<table>
+  <thead><tr><th>وضعیت</th><th>توضیحات</th><th>پاسخ</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>200</td>
+      <td>OK</td>
+      <td><em><a href="{{< ref "../definitions/watch-event-v1-meta#WatchEvent" >}}">WatchEvent</a></em></td>
+    </tr>
+  </tbody>
+</table>
+
+
+### `patch` Patch Status
+
+#### درخواست HTTP
+
+`PATCH /api/v1/namespaces/{namespace}/services/{name}/status`
+
+
+#### پارامترهای مسیر
+
+<table>
+  <thead><tr><th>نام</th><th>نوع</th><th>توضیحات</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>name</code></td>
+      <td><em>string</em></td>
+      <td>نام Service</td>
+    </tr>
+    <tr>
+      <td><code>namespace</code></td>
+      <td><em>string</em></td>
+      <td>نام آبجکت و محدوده احراز هویت، مانند تیم‌ها و پروژه‌ها</td>
+    </tr>
+  </tbody>
+</table>
+
+
+#### پارامترهای کوئری
+
+<table>
+  <thead><tr><th>نام</th><th>نوع</th><th>توضیحات</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>pretty</code></td>
+      <td><em>string</em></td>
+      <td>اگر مقدار 'true' باشد، خروجی به‌صورت خوانا (pretty printed) چاپ می‌شود. مقدار پیش‌فرض 'false' است، مگر آنکه user-agent یک مرورگر یا ابزار HTTP خط فرمان (curl و wget) را نشان دهد.</td>
+    </tr>
+    <tr>
+      <td><code>dryRun</code></td>
+      <td><em>string</em></td>
+      <td>وجود این پارامتر نشان می‌دهد که تغییرات نباید ذخیره شوند. دستور dryRun نامعتبر یا ناشناخته به یک پاسخ خطا می‌انجامد و درخواست دیگر پردازش نمی‌شود. مقادیر معتبر عبارت‌اند از: - All: همه مراحل dry run پردازش می‌شوند</td>
+    </tr>
+    <tr>
+      <td><code>fieldManager</code></td>
+      <td><em>string</em></td>
+      <td>fieldManager نامی است که به عامل یا نهادی که این تغییرات را انجام می‌دهد مرتبط است. طول این مقدار باید کمتر از ۱۲۸ نویسه یا برابر با آن باشد و فقط شامل نویسه‌های قابل چاپ باشد، مطابق تعریف https://golang.org/pkg/unicode/#IsPrint. این فیلد برای درخواست‌های apply (‏application/apply-patch) الزامی است، اما برای انواع patch غیر از apply (‏JsonPatch، MergePatch، StrategicMergePatch) اختیاری است.</td>
+    </tr>
+    <tr>
+      <td><code>fieldValidation</code></td>
+      <td><em>string</em></td>
+      <td>fieldValidation به سرور می‌گوید با آبجکت‌های درخواست (POST/PUT/PATCH) که فیلدهای ناشناخته یا تکراری دارند چگونه رفتار کند. مقادیر معتبر عبارت‌اند از: - Ignore: هر فیلد ناشناخته‌ای را که بی‌سروصدا از آبجکت حذف می‌شود نادیده می‌گیرد و از فیلدهای تکراری، جز آخرین فیلدی که رمزگشا (decoder) با آن مواجه می‌شود، همه را نادیده می‌گیرد. این رفتار پیش‌فرض پیش از نسخه v1.23 است. - Warn: برای هر فیلد ناشناخته‌ای که از آبجکت حذف می‌شود و برای هر فیلد تکراری که با آن مواجه می‌شود، از طریق هدر استاندارد پاسخ هشدار (warning) یک هشدار ارسال می‌کند. اگر خطای دیگری وجود نداشته باشد، درخواست همچنان موفق می‌شود و از میان فیلدهای تکراری فقط آخرین مورد ذخیره می‌شود. این رفتار پیش‌فرض در نسخه v1.23 و بالاتر است. - Strict: اگر قرار باشد فیلد ناشناخته‌ای از آبجکت حذف شود یا فیلد تکراری وجود داشته باشد، درخواست را با خطای BadRequest رد می‌کند. خطایی که سرور برمی‌گرداند شامل همه فیلدهای ناشناخته و تکراری مواجه‌شده است.</td>
+    </tr>
+    <tr>
+      <td><code>force</code></td>
+      <td><em>boolean</em></td>
+      <td>Force درخواست‌های Apply را «اجباری» می‌کند. به این معنا که کاربر مالکیت فیلدهای متعارضی را که متعلق به دیگران است دوباره به دست می‌آورد. پرچم Force باید برای درخواست‌های patch غیر از apply تنظیم نشده باشد.</td>
+    </tr>
+  </tbody>
+</table>
+
+
+#### پارامترهای بدنه
+
+<table>
+  <thead><tr><th>نام</th><th>نوع</th><th>توضیحات</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>body</code></td>
+      <td><em><a href="{{< ref "../definitions/patch-v1-meta#Patch" >}}">Patch</a></em></td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+
+
+#### پاسخ
+
+<table>
+  <thead><tr><th>وضعیت</th><th>توضیحات</th><th>پاسخ</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>200</td>
+      <td>OK</td>
+      <td><em><a href="{{< ref "service-v1#Service" >}}">Service</a></em></td>
+    </tr>
+    <tr>
+      <td>201</td>
+      <td>Created</td>
+      <td><em><a href="{{< ref "service-v1#Service" >}}">Service</a></em></td>
+    </tr>
+  </tbody>
+</table>
+
+
+### `get` Read Status
+
+#### درخواست HTTP
+
+`GET /api/v1/namespaces/{namespace}/services/{name}/status`
+
+
+#### پارامترهای مسیر
+
+<table>
+  <thead><tr><th>نام</th><th>نوع</th><th>توضیحات</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>name</code></td>
+      <td><em>string</em></td>
+      <td>نام Service</td>
+    </tr>
+    <tr>
+      <td><code>namespace</code></td>
+      <td><em>string</em></td>
+      <td>نام آبجکت و محدوده احراز هویت، مانند تیم‌ها و پروژه‌ها</td>
+    </tr>
+  </tbody>
+</table>
+
+
+#### پارامترهای کوئری
+
+<table>
+  <thead><tr><th>نام</th><th>نوع</th><th>توضیحات</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>pretty</code></td>
+      <td><em>string</em></td>
+      <td>اگر مقدار 'true' باشد، خروجی به‌صورت خوانا (pretty printed) چاپ می‌شود. مقدار پیش‌فرض 'false' است، مگر آنکه user-agent یک مرورگر یا ابزار HTTP خط فرمان (curl و wget) را نشان دهد.</td>
+    </tr>
+  </tbody>
+</table>
+
+
+
+#### پاسخ
+
+<table>
+  <thead><tr><th>وضعیت</th><th>توضیحات</th><th>پاسخ</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>200</td>
+      <td>OK</td>
+      <td><em><a href="{{< ref "service-v1#Service" >}}">Service</a></em></td>
+    </tr>
+  </tbody>
+</table>
+
+
+### `put` Replace Status
+
+#### درخواست HTTP
+
+`PUT /api/v1/namespaces/{namespace}/services/{name}/status`
+
+
+#### پارامترهای مسیر
+
+<table>
+  <thead><tr><th>نام</th><th>نوع</th><th>توضیحات</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>name</code></td>
+      <td><em>string</em></td>
+      <td>نام Service</td>
+    </tr>
+    <tr>
+      <td><code>namespace</code></td>
+      <td><em>string</em></td>
+      <td>نام آبجکت و محدوده احراز هویت، مانند تیم‌ها و پروژه‌ها</td>
+    </tr>
+  </tbody>
+</table>
+
+
+#### پارامترهای کوئری
+
+<table>
+  <thead><tr><th>نام</th><th>نوع</th><th>توضیحات</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>pretty</code></td>
+      <td><em>string</em></td>
+      <td>اگر مقدار 'true' باشد، خروجی به‌صورت خوانا (pretty printed) چاپ می‌شود. مقدار پیش‌فرض 'false' است، مگر آنکه user-agent یک مرورگر یا ابزار HTTP خط فرمان (curl و wget) را نشان دهد.</td>
+    </tr>
+    <tr>
+      <td><code>dryRun</code></td>
+      <td><em>string</em></td>
+      <td>وجود این پارامتر نشان می‌دهد که تغییرات نباید ذخیره شوند. دستور dryRun نامعتبر یا ناشناخته به یک پاسخ خطا می‌انجامد و درخواست دیگر پردازش نمی‌شود. مقادیر معتبر عبارت‌اند از: - All: همه مراحل dry run پردازش می‌شوند</td>
+    </tr>
+    <tr>
+      <td><code>fieldManager</code></td>
+      <td><em>string</em></td>
+      <td>fieldManager نامی است که به عامل یا نهادی که این تغییرات را انجام می‌دهد مرتبط است. طول این مقدار باید کمتر از ۱۲۸ نویسه یا برابر با آن باشد و فقط شامل نویسه‌های قابل چاپ باشد، مطابق تعریف https://golang.org/pkg/unicode/#IsPrint.</td>
+    </tr>
+    <tr>
+      <td><code>fieldValidation</code></td>
+      <td><em>string</em></td>
+      <td>fieldValidation به سرور می‌گوید با آبجکت‌های درخواست (POST/PUT/PATCH) که فیلدهای ناشناخته یا تکراری دارند چگونه رفتار کند. مقادیر معتبر عبارت‌اند از: - Ignore: هر فیلد ناشناخته‌ای را که بی‌سروصدا از آبجکت حذف می‌شود نادیده می‌گیرد و از فیلدهای تکراری، جز آخرین فیلدی که رمزگشا (decoder) با آن مواجه می‌شود، همه را نادیده می‌گیرد. این رفتار پیش‌فرض پیش از نسخه v1.23 است. - Warn: برای هر فیلد ناشناخته‌ای که از آبجکت حذف می‌شود و برای هر فیلد تکراری که با آن مواجه می‌شود، از طریق هدر استاندارد پاسخ هشدار (warning) یک هشدار ارسال می‌کند. اگر خطای دیگری وجود نداشته باشد، درخواست همچنان موفق می‌شود و از میان فیلدهای تکراری فقط آخرین مورد ذخیره می‌شود. این رفتار پیش‌فرض در نسخه v1.23 و بالاتر است. - Strict: اگر قرار باشد فیلد ناشناخته‌ای از آبجکت حذف شود یا فیلد تکراری وجود داشته باشد، درخواست را با خطای BadRequest رد می‌کند. خطایی که سرور برمی‌گرداند شامل همه فیلدهای ناشناخته و تکراری مواجه‌شده است.</td>
+    </tr>
+  </tbody>
+</table>
+
+
+#### پارامترهای بدنه
+
+<table>
+  <thead><tr><th>نام</th><th>نوع</th><th>توضیحات</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>body</code></td>
+      <td><em><a href="{{< ref "service-v1#Service" >}}">Service</a></em></td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+
+
+#### پاسخ
+
+<table>
+  <thead><tr><th>وضعیت</th><th>توضیحات</th><th>پاسخ</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>200</td>
+      <td>OK</td>
+      <td><em><a href="{{< ref "service-v1#Service" >}}">Service</a></em></td>
+    </tr>
+    <tr>
+      <td>201</td>
+      <td>Created</td>
+      <td><em><a href="{{< ref "service-v1#Service" >}}">Service</a></em></td>
+    </tr>
+  </tbody>
+</table>
+
+### `post` ایجاد Connect Proxy
+
+#### درخواست HTTP
+
+POST /api/v1/namespaces/{namespace}/services/{name}/proxy
+
+
+#### پارامترهای مسیر
+
+<table>
+  <thead><tr><th>نام</th><th>نوع</th><th>توضیحات</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>name</code></td>
+      <td><em>string</em></td>
+      <td>نام ServiceProxyOptions</td>
+    </tr>
+    <tr>
+      <td><code>namespace</code></td>
+      <td><em>string</em></td>
+      <td>نام آبجکت و محدوده احراز هویت، مثلاً برای تیم‌ها و پروژه‌ها</td>
+    </tr>
+  </tbody>
+</table>
+
+
+#### پارامترهای کوئری
+
+<table>
+  <thead><tr><th>نام</th><th>نوع</th><th>توضیحات</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>path</code></td>
+      <td><em>string</em></td>
+      <td>path بخشی از URL است که شامل نقاط پایانی سرویس، پسوندها و پارامترهایی می‌شود که برای درخواست پراکسی فعلی به سرویس استفاده می‌شوند. برای مثال، اگر کل URL درخواست http://localhost/api/v1/namespaces/kube-system/services/elasticsearch-logging/_search?q=user:kimchy باشد، مقدار path برابر _search?q=user:kimchy است.</td>
+    </tr>
+  </tbody>
+</table>
+
+
+
+#### پاسخ
+
+<table>
+  <thead><tr><th>وضعیت</th><th>توضیحات</th><th>پاسخ</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>200</td>
+      <td>OK</td>
+      <td><em>string</em></td>
+    </tr>
+  </tbody>
+</table>
+
+
+### `post` ایجاد Connect Proxy Path
+
+#### درخواست HTTP
+
+POST /api/v1/namespaces/{namespace}/services/{name}/proxy/{path}
+
+
+#### پارامترهای مسیر
+
+<table>
+  <thead><tr><th>نام</th><th>نوع</th><th>توضیحات</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>name</code></td>
+      <td><em>string</em></td>
+      <td>نام ServiceProxyOptions</td>
+    </tr>
+    <tr>
+      <td><code>namespace</code></td>
+      <td><em>string</em></td>
+      <td>نام آبجکت و محدوده احراز هویت، مثلاً برای تیم‌ها و پروژه‌ها</td>
+    </tr>
+    <tr>
+      <td><code>path</code></td>
+      <td><em>string</em></td>
+      <td>مسیر منبع</td>
+    </tr>
+  </tbody>
+</table>
+
+
+#### پارامترهای کوئری
+
+<table>
+  <thead><tr><th>نام</th><th>نوع</th><th>توضیحات</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>path</code></td>
+      <td><em>string</em></td>
+      <td>path بخشی از URL است که شامل نقاط پایانی سرویس، پسوندها و پارامترهایی می‌شود که برای درخواست پراکسی فعلی به سرویس استفاده می‌شوند. برای مثال، اگر کل URL درخواست http://localhost/api/v1/namespaces/kube-system/services/elasticsearch-logging/_search?q=user:kimchy باشد، مقدار path برابر _search?q=user:kimchy است.</td>
+    </tr>
+  </tbody>
+</table>
+
+
+
+#### پاسخ
+
+<table>
+  <thead><tr><th>وضعیت</th><th>توضیحات</th><th>پاسخ</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>200</td>
+      <td>OK</td>
+      <td><em>string</em></td>
+    </tr>
+  </tbody>
+</table>
+
+
+### `delete` حذف Connect Proxy
+
+#### درخواست HTTP
+
+DELETE /api/v1/namespaces/{namespace}/services/{name}/proxy
+
+
+#### پارامترهای مسیر
+
+<table>
+  <thead><tr><th>نام</th><th>نوع</th><th>توضیحات</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>name</code></td>
+      <td><em>string</em></td>
+      <td>نام ServiceProxyOptions</td>
+    </tr>
+    <tr>
+      <td><code>namespace</code></td>
+      <td><em>string</em></td>
+      <td>نام آبجکت و محدوده احراز هویت، مثلاً برای تیم‌ها و پروژه‌ها</td>
+    </tr>
+  </tbody>
+</table>
+
+
+#### پارامترهای کوئری
+
+<table>
+  <thead><tr><th>نام</th><th>نوع</th><th>توضیحات</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>path</code></td>
+      <td><em>string</em></td>
+      <td>path بخشی از URL است که شامل نقاط پایانی سرویس، پسوندها و پارامترهایی می‌شود که برای درخواست پراکسی فعلی به سرویس استفاده می‌شوند. برای مثال، اگر کل URL درخواست http://localhost/api/v1/namespaces/kube-system/services/elasticsearch-logging/_search?q=user:kimchy باشد، مقدار path برابر _search?q=user:kimchy است.</td>
+    </tr>
+  </tbody>
+</table>
+
+
+
+#### پاسخ
+
+<table>
+  <thead><tr><th>وضعیت</th><th>توضیحات</th><th>پاسخ</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>200</td>
+      <td>OK</td>
+      <td><em>string</em></td>
+    </tr>
+  </tbody>
+</table>
+
+
+### `delete` حذف Connect Proxy Path
+
+#### درخواست HTTP
+
+DELETE /api/v1/namespaces/{namespace}/services/{name}/proxy/{path}
+
+
+#### پارامترهای مسیر
+
+<table>
+  <thead><tr><th>نام</th><th>نوع</th><th>توضیحات</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>name</code></td>
+      <td><em>string</em></td>
+      <td>نام ServiceProxyOptions</td>
+    </tr>
+    <tr>
+      <td><code>namespace</code></td>
+      <td><em>string</em></td>
+      <td>نام آبجکت و محدوده احراز هویت، مثلاً برای تیم‌ها و پروژه‌ها</td>
+    </tr>
+    <tr>
+      <td><code>path</code></td>
+      <td><em>string</em></td>
+      <td>مسیر منبع</td>
+    </tr>
+  </tbody>
+</table>
+
+
+#### پارامترهای کوئری
+
+<table>
+  <thead><tr><th>نام</th><th>نوع</th><th>توضیحات</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>path</code></td>
+      <td><em>string</em></td>
+      <td>path بخشی از URL است که شامل نقاط پایانی سرویس، پسوندها و پارامترهایی می‌شود که برای درخواست پراکسی فعلی به سرویس استفاده می‌شوند. برای مثال، اگر کل URL درخواست http://localhost/api/v1/namespaces/kube-system/services/elasticsearch-logging/_search?q=user:kimchy باشد، مقدار path برابر _search?q=user:kimchy است.</td>
+    </tr>
+  </tbody>
+</table>
+
+
+
+#### پاسخ
+
+<table>
+  <thead><tr><th>وضعیت</th><th>توضیحات</th><th>پاسخ</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>200</td>
+      <td>OK</td>
+      <td><em>string</em></td>
+    </tr>
+  </tbody>
+</table>
+
+
+### `get` دریافت Connect Proxy
+
+#### درخواست HTTP
+
+GET /api/v1/namespaces/{namespace}/services/{name}/proxy
+
+
+#### پارامترهای مسیر
+
+<table>
+  <thead><tr><th>نام</th><th>نوع</th><th>توضیحات</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>name</code></td>
+      <td><em>string</em></td>
+      <td>نام ServiceProxyOptions</td>
+    </tr>
+    <tr>
+      <td><code>namespace</code></td>
+      <td><em>string</em></td>
+      <td>نام آبجکت و محدوده احراز هویت، مثلاً برای تیم‌ها و پروژه‌ها</td>
+    </tr>
+  </tbody>
+</table>
+
+
+#### پارامترهای کوئری
+
+<table>
+  <thead><tr><th>نام</th><th>نوع</th><th>توضیحات</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>path</code></td>
+      <td><em>string</em></td>
+      <td>path بخشی از URL است که شامل نقاط پایانی سرویس، پسوندها و پارامترهایی می‌شود که برای درخواست پراکسی فعلی به سرویس استفاده می‌شوند. برای مثال، اگر کل URL درخواست http://localhost/api/v1/namespaces/kube-system/services/elasticsearch-logging/_search?q=user:kimchy باشد، مقدار path برابر _search?q=user:kimchy است.</td>
+    </tr>
+  </tbody>
+</table>
+
+
+
+#### پاسخ
+
+<table>
+  <thead><tr><th>وضعیت</th><th>توضیحات</th><th>پاسخ</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>200</td>
+      <td>OK</td>
+      <td><em>string</em></td>
+    </tr>
+  </tbody>
+</table>
+
+
+### `get` دریافت Connect Proxy Path
+
+#### درخواست HTTP
+
+GET /api/v1/namespaces/{namespace}/services/{name}/proxy/{path}
+
+
+#### پارامترهای مسیر
+
+<table>
+  <thead><tr><th>نام</th><th>نوع</th><th>توضیحات</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>name</code></td>
+      <td><em>string</em></td>
+      <td>نام ServiceProxyOptions</td>
+    </tr>
+    <tr>
+      <td><code>namespace</code></td>
+      <td><em>string</em></td>
+      <td>نام آبجکت و محدوده احراز هویت، مثلاً برای تیم‌ها و پروژه‌ها</td>
+    </tr>
+    <tr>
+      <td><code>path</code></td>
+      <td><em>string</em></td>
+      <td>مسیر منبع</td>
+    </tr>
+  </tbody>
+</table>
+
+
+#### پارامترهای کوئری
+
+<table>
+  <thead><tr><th>نام</th><th>نوع</th><th>توضیحات</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>path</code></td>
+      <td><em>string</em></td>
+      <td>path بخشی از URL است که شامل نقاط پایانی سرویس، پسوندها و پارامترهایی می‌شود که برای درخواست پراکسی فعلی به سرویس استفاده می‌شوند. برای مثال، اگر کل URL درخواست http://localhost/api/v1/namespaces/kube-system/services/elasticsearch-logging/_search?q=user:kimchy باشد، مقدار path برابر _search?q=user:kimchy است.</td>
+    </tr>
+  </tbody>
+</table>
+
+
+
+#### پاسخ
+
+<table>
+  <thead><tr><th>وضعیت</th><th>توضیحات</th><th>پاسخ</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>200</td>
+      <td>OK</td>
+      <td><em>string</em></td>
+    </tr>
+  </tbody>
+</table>
+
+
+### `head` دریافت هدر Connect Proxy
+
+#### درخواست HTTP
+
+HEAD /api/v1/namespaces/{namespace}/services/{name}/proxy
+
+
+#### پارامترهای مسیر
+
+<table>
+  <thead><tr><th>نام</th><th>نوع</th><th>توضیحات</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>name</code></td>
+      <td><em>string</em></td>
+      <td>نام ServiceProxyOptions</td>
+    </tr>
+    <tr>
+      <td><code>namespace</code></td>
+      <td><em>string</em></td>
+      <td>نام آبجکت و محدوده احراز هویت، مثلاً برای تیم‌ها و پروژه‌ها</td>
+    </tr>
+  </tbody>
+</table>
+
+
+#### پارامترهای کوئری
+
+<table>
+  <thead><tr><th>نام</th><th>نوع</th><th>توضیحات</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>path</code></td>
+      <td><em>string</em></td>
+      <td>path بخشی از URL است که شامل نقاط پایانی سرویس، پسوندها و پارامترهایی می‌شود که برای درخواست پراکسی فعلی به سرویس استفاده می‌شوند. برای مثال، اگر کل URL درخواست http://localhost/api/v1/namespaces/kube-system/services/elasticsearch-logging/_search?q=user:kimchy باشد، مقدار path برابر _search?q=user:kimchy است.</td>
+    </tr>
+  </tbody>
+</table>
+
+
+
+#### پاسخ
+
+<table>
+  <thead><tr><th>وضعیت</th><th>توضیحات</th><th>پاسخ</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>200</td>
+      <td>OK</td>
+      <td><em>string</em></td>
+    </tr>
+  </tbody>
+</table>
+
+
+### `head` دریافت هدر Connect Proxy Path
+
+#### درخواست HTTP
+
+HEAD /api/v1/namespaces/{namespace}/services/{name}/proxy/{path}
+
+
+#### پارامترهای مسیر
+
+<table>
+  <thead><tr><th>نام</th><th>نوع</th><th>توضیحات</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>name</code></td>
+      <td><em>string</em></td>
+      <td>نام ServiceProxyOptions</td>
+    </tr>
+    <tr>
+      <td><code>namespace</code></td>
+      <td><em>string</em></td>
+      <td>نام آبجکت و محدوده احراز هویت، مثلاً برای تیم‌ها و پروژه‌ها</td>
+    </tr>
+    <tr>
+      <td><code>path</code></td>
+      <td><em>string</em></td>
+      <td>مسیر منبع</td>
+    </tr>
+  </tbody>
+</table>
+
+
+#### پارامترهای کوئری
+
+<table>
+  <thead><tr><th>نام</th><th>نوع</th><th>توضیحات</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>path</code></td>
+      <td><em>string</em></td>
+      <td>path بخشی از URL است که شامل نقاط پایانی سرویس، پسوندها و پارامترهایی می‌شود که برای درخواست پراکسی فعلی به سرویس استفاده می‌شوند. برای مثال، اگر کل URL درخواست http://localhost/api/v1/namespaces/kube-system/services/elasticsearch-logging/_search?q=user:kimchy باشد، مقدار path برابر _search?q=user:kimchy است.</td>
+    </tr>
+  </tbody>
+</table>
+
+
+
+#### پاسخ
+
+<table>
+  <thead><tr><th>وضعیت</th><th>توضیحات</th><th>پاسخ</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>200</td>
+      <td>OK</td>
+      <td><em>string</em></td>
+    </tr>
+  </tbody>
+</table>
+
+
+### `put` جایگزینی Connect Proxy
+
+#### درخواست HTTP
+
+PUT /api/v1/namespaces/{namespace}/services/{name}/proxy
+
+
+#### پارامترهای مسیر
+
+<table>
+  <thead><tr><th>نام</th><th>نوع</th><th>توضیحات</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>name</code></td>
+      <td><em>string</em></td>
+      <td>نام ServiceProxyOptions</td>
+    </tr>
+    <tr>
+      <td><code>namespace</code></td>
+      <td><em>string</em></td>
+      <td>نام آبجکت و محدوده احراز هویت، مثلاً برای تیم‌ها و پروژه‌ها</td>
+    </tr>
+  </tbody>
+</table>
+
+
+#### پارامترهای کوئری
+
+<table>
+  <thead><tr><th>نام</th><th>نوع</th><th>توضیحات</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>path</code></td>
+      <td><em>string</em></td>
+      <td>path بخشی از URL است که شامل نقاط پایانی سرویس، پسوندها و پارامترهایی می‌شود که برای درخواست پراکسی فعلی به سرویس استفاده می‌شوند. برای مثال، اگر کل URL درخواست http://localhost/api/v1/namespaces/kube-system/services/elasticsearch-logging/_search?q=user:kimchy باشد، مقدار path برابر _search?q=user:kimchy است.</td>
+    </tr>
+  </tbody>
+</table>
+
+
+
+#### پاسخ
+
+<table>
+  <thead><tr><th>وضعیت</th><th>توضیحات</th><th>پاسخ</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>200</td>
+      <td>OK</td>
+      <td><em>string</em></td>
+    </tr>
+  </tbody>
+</table>
+
+
+### `put` جایگزینی Connect Proxy Path
+
+#### درخواست HTTP
+
+PUT /api/v1/namespaces/{namespace}/services/{name}/proxy/{path}
+
+
+#### پارامترهای مسیر
+
+<table>
+  <thead><tr><th>نام</th><th>نوع</th><th>توضیحات</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>name</code></td>
+      <td><em>string</em></td>
+      <td>نام ServiceProxyOptions</td>
+    </tr>
+    <tr>
+      <td><code>namespace</code></td>
+      <td><em>string</em></td>
+      <td>نام آبجکت و محدوده احراز هویت، مثلاً برای تیم‌ها و پروژه‌ها</td>
+    </tr>
+    <tr>
+      <td><code>path</code></td>
+      <td><em>string</em></td>
+      <td>مسیر منبع</td>
+    </tr>
+  </tbody>
+</table>
+
+
+#### پارامترهای کوئری
+
+<table>
+  <thead><tr><th>نام</th><th>نوع</th><th>توضیحات</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>path</code></td>
+      <td><em>string</em></td>
+      <td>path بخشی از URL است که شامل نقاط پایانی سرویس، پسوندها و پارامترهایی می‌شود که برای درخواست پراکسی فعلی به سرویس استفاده می‌شوند. برای مثال، اگر کل URL درخواست http://localhost/api/v1/namespaces/kube-system/services/elasticsearch-logging/_search?q=user:kimchy باشد، مقدار path برابر _search?q=user:kimchy است.</td>
+    </tr>
+  </tbody>
+</table>
+
+
+
+#### پاسخ
+
+<table>
+  <thead><tr><th>وضعیت</th><th>توضیحات</th><th>پاسخ</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>200</td>
+      <td>OK</td>
+      <td><em>string</em></td>
+    </tr>
+  </tbody>
+</table>

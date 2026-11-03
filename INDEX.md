@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-1144 از 1722 صفحه
+1159 از 1722 صفحه
 
 
 ## `.`
@@ -1459,7 +1459,7 @@
 - ⚠️ [resource-quota-v1.md](md/reference/kubernetes-api/core/resource-quota-v1.md)
 - ✅ [secret-v1.md](md/reference/kubernetes-api/core/secret-v1.md)
 - ✅ [service-account-v1.md](md/reference/kubernetes-api/core/service-account-v1.md)
-- ⏳ `service-v1.md`
+- ⚠️ [service-v1.md](md/reference/kubernetes-api/core/service-v1.md)
 
 ## `reference/kubernetes-api/definitions`
 
@@ -1477,20 +1477,20 @@
 - ✅ [field-selector-requirement-v1-meta.md](md/reference/kubernetes-api/definitions/field-selector-requirement-v1-meta.md)
 - ✅ [fields-v1-v1-meta.md](md/reference/kubernetes-api/definitions/fields-v1-v1-meta.md)
 - ✅ [group-resource-v1-meta.md](md/reference/kubernetes-api/definitions/group-resource-v1-meta.md)
-- ⏳ `group-version-for-discovery-v1-meta.md`
-- ⏳ `label-selector-attributes-v1-authorization.md`
-- ⏳ `label-selector-requirement-v1-meta.md`
-- ⏳ `label-selector-v1-meta.md`
-- ⏳ `list-meta-v1-meta.md`
-- ⏳ `local-object-reference-v1.md`
-- ⏳ `local-subject-access-review-v1-authorization.md`
-- ⏳ `managed-fields-entry-v1-meta.md`
-- ⏳ `match-condition-v1-admissionregistration.md`
-- ⏳ `match-resources-v1-admissionregistration.md`
-- ⏳ `micro-time-v1-meta.md`
-- ⏳ `named-rule-with-operations-v1-admissionregistration.md`
-- ⏳ `node-selector-term-v1.md`
-- ⏳ `node-selector-v1.md`
+- ✅ [group-version-for-discovery-v1-meta.md](md/reference/kubernetes-api/definitions/group-version-for-discovery-v1-meta.md)
+- ✅ [label-selector-attributes-v1-authorization.md](md/reference/kubernetes-api/definitions/label-selector-attributes-v1-authorization.md)
+- ✅ [label-selector-requirement-v1-meta.md](md/reference/kubernetes-api/definitions/label-selector-requirement-v1-meta.md)
+- ✅ [label-selector-v1-meta.md](md/reference/kubernetes-api/definitions/label-selector-v1-meta.md)
+- ✅ [list-meta-v1-meta.md](md/reference/kubernetes-api/definitions/list-meta-v1-meta.md)
+- ✅ [local-object-reference-v1.md](md/reference/kubernetes-api/definitions/local-object-reference-v1.md)
+- ✅ [local-subject-access-review-v1-authorization.md](md/reference/kubernetes-api/definitions/local-subject-access-review-v1-authorization.md)
+- ✅ [managed-fields-entry-v1-meta.md](md/reference/kubernetes-api/definitions/managed-fields-entry-v1-meta.md)
+- ✅ [match-condition-v1-admissionregistration.md](md/reference/kubernetes-api/definitions/match-condition-v1-admissionregistration.md)
+- ✅ [match-resources-v1-admissionregistration.md](md/reference/kubernetes-api/definitions/match-resources-v1-admissionregistration.md)
+- ✅ [micro-time-v1-meta.md](md/reference/kubernetes-api/definitions/micro-time-v1-meta.md)
+- ✅ [named-rule-with-operations-v1-admissionregistration.md](md/reference/kubernetes-api/definitions/named-rule-with-operations-v1-admissionregistration.md)
+- ✅ [node-selector-term-v1.md](md/reference/kubernetes-api/definitions/node-selector-term-v1.md)
+- ✅ [node-selector-v1.md](md/reference/kubernetes-api/definitions/node-selector-v1.md)
 - ⏳ `non-resource-attributes-v1-authorization.md`
 - ⏳ `non-resource-rule-v1-authorization.md`
 - ⏳ `object-meta-v1-meta.md`

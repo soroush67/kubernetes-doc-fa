@@ -8,9 +8,9 @@
 
 | | |
 |---|---|
-| پیشرفت (بر اساس کلمات) | **61.4٪** |
-| صفحات ترجمه‌شده | 1144 از 1722 |
-| صفحات دارای ایراد ساختاری | 41 |
+| پیشرفت (بر اساس کلمات) | **62.5٪** |
+| صفحات ترجمه‌شده | 1159 از 1722 |
+| صفحات دارای ایراد ساختاری | 42 |
 | نسخه‌ی منبع انگلیسی | `f652c6b8a26f` |
 
 ## مشاهده
@@ -72,7 +72,7 @@ cd kubernetes-doc-fa
 | `contribute` | 44 | 44 |
 | `doc-contributor-tools` | 1 | 1 |
 | `home` | 2 | 2 |
-| `reference` | 909 | 1198 |
+| `reference` | 924 | 1198 |
 | `setup` | 0 | 22 |
 | `tasks` | 0 | 221 |
 | `tutorials` | 0 | 45 |
@@ -100,26 +100,26 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [reference/kubernetes-api/definitions/node-selector-term-v1.md](md/reference/kubernetes-api/definitions/node-selector-term-v1.md) — 2026-11-03T07:27:21+03:30
+- [reference/kubernetes-api/definitions/node-selector-v1.md](md/reference/kubernetes-api/definitions/node-selector-v1.md) — 2026-11-03T07:27:21+03:30
+- [reference/kubernetes-api/definitions/match-resources-v1-admissionregistration.md](md/reference/kubernetes-api/definitions/match-resources-v1-admissionregistration.md) — 2026-11-03T07:27:13+03:30
+- [reference/kubernetes-api/definitions/named-rule-with-operations-v1-admissionregistration.md](md/reference/kubernetes-api/definitions/named-rule-with-operations-v1-admissionregistration.md) — 2026-11-03T07:27:13+03:30
+- [reference/kubernetes-api/definitions/micro-time-v1-meta.md](md/reference/kubernetes-api/definitions/micro-time-v1-meta.md) — 2026-11-03T07:27:02+03:30
+- [reference/kubernetes-api/definitions/match-condition-v1-admissionregistration.md](md/reference/kubernetes-api/definitions/match-condition-v1-admissionregistration.md) — 2026-11-03T07:26:57+03:30
+- [reference/kubernetes-api/core/service-v1.md](md/reference/kubernetes-api/core/service-v1.md) — 2026-11-03T07:26:55+03:30
+- [reference/kubernetes-api/definitions/managed-fields-entry-v1-meta.md](md/reference/kubernetes-api/definitions/managed-fields-entry-v1-meta.md) — 2026-11-03T07:26:47+03:30
+- [reference/kubernetes-api/definitions/local-subject-access-review-v1-authorization.md](md/reference/kubernetes-api/definitions/local-subject-access-review-v1-authorization.md) — 2026-11-03T07:26:34+03:30
+- [reference/kubernetes-api/definitions/local-object-reference-v1.md](md/reference/kubernetes-api/definitions/local-object-reference-v1.md) — 2026-11-03T07:26:23+03:30
+- [reference/kubernetes-api/definitions/list-meta-v1-meta.md](md/reference/kubernetes-api/definitions/list-meta-v1-meta.md) — 2026-11-03T07:26:16+03:30
+- [reference/kubernetes-api/definitions/label-selector-v1-meta.md](md/reference/kubernetes-api/definitions/label-selector-v1-meta.md) — 2026-11-03T07:26:01+03:30
+- [reference/kubernetes-api/definitions/label-selector-requirement-v1-meta.md](md/reference/kubernetes-api/definitions/label-selector-requirement-v1-meta.md) — 2026-11-03T07:25:54+03:30
+- [reference/kubernetes-api/definitions/label-selector-attributes-v1-authorization.md](md/reference/kubernetes-api/definitions/label-selector-attributes-v1-authorization.md) — 2026-11-03T07:25:47+03:30
+- [reference/kubernetes-api/definitions/group-version-for-discovery-v1-meta.md](md/reference/kubernetes-api/definitions/group-version-for-discovery-v1-meta.md) — 2026-11-03T07:25:34+03:30
 - [reference/kubernetes-api/definitions/group-resource-v1-meta.md](md/reference/kubernetes-api/definitions/group-resource-v1-meta.md) — 2026-11-03T07:25:18+03:30
 - [reference/kubernetes-api/definitions/fields-v1-v1-meta.md](md/reference/kubernetes-api/definitions/fields-v1-v1-meta.md) — 2026-11-03T07:25:12+03:30
 - [reference/kubernetes-api/definitions/field-selector-requirement-v1-meta.md](md/reference/kubernetes-api/definitions/field-selector-requirement-v1-meta.md) — 2026-11-03T07:25:02+03:30
 - [reference/kubernetes-api/definitions/field-selector-attributes-v1-authorization.md](md/reference/kubernetes-api/definitions/field-selector-attributes-v1-authorization.md) — 2026-11-03T07:24:49+03:30
 - [reference/kubernetes-api/definitions/eviction-v1-policy.md](md/reference/kubernetes-api/definitions/eviction-v1-policy.md) — 2026-11-03T07:24:36+03:30
-- [reference/kubernetes-api/definitions/event-source-v1.md](md/reference/kubernetes-api/definitions/event-source-v1.md) — 2026-11-03T07:24:27+03:30
-- [reference/kubernetes-api/definitions/delete-options-v1-meta.md](md/reference/kubernetes-api/definitions/delete-options-v1-meta.md) — 2026-11-03T07:24:21+03:30
-- [reference/kubernetes-api/definitions/condition-v1-meta.md](md/reference/kubernetes-api/definitions/condition-v1-meta.md) — 2026-11-03T07:24:06+03:30
-- [reference/kubernetes-api/definitions/binding-v1.md](md/reference/kubernetes-api/definitions/binding-v1.md) — 2026-11-03T07:23:55+03:30
-- [reference/kubernetes-api/definitions/basic-device-v1beta1-resource.md](md/reference/kubernetes-api/definitions/basic-device-v1beta1-resource.md) — 2026-11-03T07:23:46+03:30
-- [reference/kubernetes-api/definitions/api-versions-v1-meta.md](md/reference/kubernetes-api/definitions/api-versions-v1-meta.md) — 2026-11-03T07:23:27+03:30
-- [reference/kubernetes-api/definitions/api-resource-v1-meta.md](md/reference/kubernetes-api/definitions/api-resource-v1-meta.md) — 2026-11-03T07:23:15+03:30
-- [reference/kubernetes-api/definitions/api-group-v1-meta.md](md/reference/kubernetes-api/definitions/api-group-v1-meta.md) — 2026-11-03T07:22:59+03:30
-- [reference/kubernetes-api/definitions/_index.md](md/reference/kubernetes-api/definitions/_index.md) — 2026-11-03T07:22:43+03:30
-- [reference/kubernetes-api/core/service-account-v1.md](md/reference/kubernetes-api/core/service-account-v1.md) — 2026-11-03T07:22:40+03:30
-- [reference/kubernetes-api/core/pod-v1.md](md/reference/kubernetes-api/core/pod-v1.md) — 2026-11-02T16:33:47+03:30
-- [reference/kubernetes-api/core/secret-v1.md](md/reference/kubernetes-api/core/secret-v1.md) — 2026-11-02T16:32:59+03:30
-- [reference/kubernetes-api/core/resource-quota-v1.md](md/reference/kubernetes-api/core/resource-quota-v1.md) — 2026-11-02T16:28:24+03:30
-- [reference/kubernetes-api/core/replication-controller-v1.md](md/reference/kubernetes-api/core/replication-controller-v1.md) — 2026-11-02T16:21:06+03:30
-- [reference/kubernetes-api/core/persistent-volume-v1.md](md/reference/kubernetes-api/core/persistent-volume-v1.md) — 2026-11-02T16:12:16+03:30
 
 </div>
 
@@ -168,6 +168,7 @@ cd kubernetes-doc-fa
 - [reference/kubernetes-api/core/pod-v1.md](md/reference/kubernetes-api/core/pod-v1.md): chunk 25: short: 941 words vs 1914 source words; chunk 26: short: 1224 words vs 1810 source words
 - [reference/kubernetes-api/core/replication-controller-v1.md](md/reference/kubernetes-api/core/replication-controller-v1.md): chunk 9: 3 untranslated English lines, e.g. 'GET /api/v1/namespaces/{namespace}/replicationcontrollers/{name}/scale'
 - [reference/kubernetes-api/core/resource-quota-v1.md](md/reference/kubernetes-api/core/resource-quota-v1.md): chunk 8: 3 untranslated English lines, e.g. 'PATCH /api/v1/namespaces/{namespace}/resourcequotas/{name}/status'
+- [reference/kubernetes-api/core/service-v1.md](md/reference/kubernetes-api/core/service-v1.md): chunk 11: 10 untranslated English lines, e.g. 'POST /api/v1/namespaces/{namespace}/services/{name}/proxy'; chunk 11: short: 1017 words vs 1820 source words
 
 </div>
 
