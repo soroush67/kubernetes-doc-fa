@@ -8,8 +8,8 @@
 
 | | |
 |---|---|
-| پیشرفت (بر اساس کلمات) | **62.8٪** |
-| صفحات ترجمه‌شده | 1174 از 1722 |
+| پیشرفت (بر اساس کلمات) | **63.0٪** |
+| صفحات ترجمه‌شده | 1189 از 1722 |
 | صفحات دارای ایراد ساختاری | 42 |
 | نسخه‌ی منبع انگلیسی | `f652c6b8a26f` |
 
@@ -72,7 +72,7 @@ cd kubernetes-doc-fa
 | `contribute` | 44 | 44 |
 | `doc-contributor-tools` | 1 | 1 |
 | `home` | 2 | 2 |
-| `reference` | 939 | 1198 |
+| `reference` | 954 | 1198 |
 | `setup` | 0 | 22 |
 | `tasks` | 0 | 221 |
 | `tutorials` | 0 | 45 |
@@ -100,26 +100,26 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [reference/kubernetes-api/definitions/toleration-v1.md](md/reference/kubernetes-api/definitions/toleration-v1.md) — 2026-11-03T07:30:23+03:30
+- [reference/kubernetes-api/definitions/subject-v1-rbac.md](md/reference/kubernetes-api/definitions/subject-v1-rbac.md) — 2026-11-03T07:30:11+03:30
+- [reference/kubernetes-api/definitions/time-v1-meta.md](md/reference/kubernetes-api/definitions/time-v1-meta.md) — 2026-11-03T07:30:09+03:30
+- [reference/kubernetes-api/definitions/subject-access-review-v1-authorization.md](md/reference/kubernetes-api/definitions/subject-access-review-v1-authorization.md) — 2026-11-03T07:30:02+03:30
+- [reference/kubernetes-api/definitions/subject-rules-review-status-v1-authorization.md](md/reference/kubernetes-api/definitions/subject-rules-review-status-v1-authorization.md) — 2026-11-03T07:30:02+03:30
+- [reference/kubernetes-api/definitions/status-v1-meta.md](md/reference/kubernetes-api/definitions/status-v1-meta.md) — 2026-11-03T07:29:52+03:30
+- [reference/kubernetes-api/definitions/status-details-v1-meta.md](md/reference/kubernetes-api/definitions/status-details-v1-meta.md) — 2026-11-03T07:29:45+03:30
+- [reference/kubernetes-api/definitions/status-cause-v1-meta.md](md/reference/kubernetes-api/definitions/status-cause-v1-meta.md) — 2026-11-03T07:29:42+03:30
+- [reference/kubernetes-api/definitions/service-reference-v1-admissionregistration.md](md/reference/kubernetes-api/definitions/service-reference-v1-admissionregistration.md) — 2026-11-03T07:29:35+03:30
+- [reference/kubernetes-api/definitions/shard-info-v1-meta.md](md/reference/kubernetes-api/definitions/shard-info-v1-meta.md) — 2026-11-03T07:29:35+03:30
+- [reference/kubernetes-api/definitions/self-subject-rules-review-v1-authorization.md](md/reference/kubernetes-api/definitions/self-subject-rules-review-v1-authorization.md) — 2026-11-03T07:29:27+03:30
+- [reference/kubernetes-api/definitions/server-address-by-client-cidr-v1-meta.md](md/reference/kubernetes-api/definitions/server-address-by-client-cidr-v1-meta.md) — 2026-11-03T07:29:27+03:30
+- [reference/kubernetes-api/definitions/self-subject-review-v1-authentication.md](md/reference/kubernetes-api/definitions/self-subject-review-v1-authentication.md) — 2026-11-03T07:29:20+03:30
+- [reference/kubernetes-api/definitions/self-subject-access-review-v1-authorization.md](md/reference/kubernetes-api/definitions/self-subject-access-review-v1-authorization.md) — 2026-11-03T07:29:13+03:30
+- [reference/kubernetes-api/definitions/scale-v1-autoscaling.md](md/reference/kubernetes-api/definitions/scale-v1-autoscaling.md) — 2026-11-03T07:29:09+03:30
 - [reference/kubernetes-api/definitions/rule-with-operations-v1-admissionregistration.md](md/reference/kubernetes-api/definitions/rule-with-operations-v1-admissionregistration.md) — 2026-11-03T07:28:51+03:30
 - [reference/kubernetes-api/definitions/role-ref-v1-rbac.md](md/reference/kubernetes-api/definitions/role-ref-v1-rbac.md) — 2026-11-03T07:28:44+03:30
 - [reference/kubernetes-api/definitions/resource-rule-v1-authorization.md](md/reference/kubernetes-api/definitions/resource-rule-v1-authorization.md) — 2026-11-03T07:28:40+03:30
 - [reference/kubernetes-api/definitions/quantity-resource.md](md/reference/kubernetes-api/definitions/quantity-resource.md) — 2026-11-03T07:28:39+03:30
 - [reference/kubernetes-api/definitions/resource-attributes-v1-authorization.md](md/reference/kubernetes-api/definitions/resource-attributes-v1-authorization.md) — 2026-11-03T07:28:32+03:30
-- [reference/kubernetes-api/definitions/policy-rule-v1-rbac.md](md/reference/kubernetes-api/definitions/policy-rule-v1-rbac.md) — 2026-11-03T07:28:20+03:30
-- [reference/kubernetes-api/definitions/preconditions-v1-meta.md](md/reference/kubernetes-api/definitions/preconditions-v1-meta.md) — 2026-11-03T07:28:20+03:30
-- [reference/kubernetes-api/definitions/param-ref-v1-admissionregistration.md](md/reference/kubernetes-api/definitions/param-ref-v1-admissionregistration.md) — 2026-11-03T07:28:14+03:30
-- [reference/kubernetes-api/definitions/patch-v1-meta.md](md/reference/kubernetes-api/definitions/patch-v1-meta.md) — 2026-11-03T07:28:10+03:30
-- [reference/kubernetes-api/definitions/param-kind-v1-admissionregistration.md](md/reference/kubernetes-api/definitions/param-kind-v1-admissionregistration.md) — 2026-11-03T07:28:06+03:30
-- [reference/kubernetes-api/definitions/object-meta-v1-meta.md](md/reference/kubernetes-api/definitions/object-meta-v1-meta.md) — 2026-11-03T07:28:01+03:30
-- [reference/kubernetes-api/definitions/owner-reference-v1-meta.md](md/reference/kubernetes-api/definitions/owner-reference-v1-meta.md) — 2026-11-03T07:28:01+03:30
-- [reference/kubernetes-api/definitions/object-reference-v1.md](md/reference/kubernetes-api/definitions/object-reference-v1.md) — 2026-11-03T07:27:42+03:30
-- [reference/kubernetes-api/definitions/non-resource-rule-v1-authorization.md](md/reference/kubernetes-api/definitions/non-resource-rule-v1-authorization.md) — 2026-11-03T07:27:33+03:30
-- [reference/kubernetes-api/definitions/non-resource-attributes-v1-authorization.md](md/reference/kubernetes-api/definitions/non-resource-attributes-v1-authorization.md) — 2026-11-03T07:27:27+03:30
-- [reference/kubernetes-api/definitions/node-selector-term-v1.md](md/reference/kubernetes-api/definitions/node-selector-term-v1.md) — 2026-11-03T07:27:21+03:30
-- [reference/kubernetes-api/definitions/node-selector-v1.md](md/reference/kubernetes-api/definitions/node-selector-v1.md) — 2026-11-03T07:27:21+03:30
-- [reference/kubernetes-api/definitions/match-resources-v1-admissionregistration.md](md/reference/kubernetes-api/definitions/match-resources-v1-admissionregistration.md) — 2026-11-03T07:27:13+03:30
-- [reference/kubernetes-api/definitions/named-rule-with-operations-v1-admissionregistration.md](md/reference/kubernetes-api/definitions/named-rule-with-operations-v1-admissionregistration.md) — 2026-11-03T07:27:13+03:30
-- [reference/kubernetes-api/definitions/micro-time-v1-meta.md](md/reference/kubernetes-api/definitions/micro-time-v1-meta.md) — 2026-11-03T07:27:02+03:30
 
 </div>
 

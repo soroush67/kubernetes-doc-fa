@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-1174 از 1722 صفحه
+1189 از 1722 صفحه
 
 
 ## `.`
@@ -1506,22 +1506,22 @@
 - ✅ [resource-rule-v1-authorization.md](md/reference/kubernetes-api/definitions/resource-rule-v1-authorization.md)
 - ✅ [role-ref-v1-rbac.md](md/reference/kubernetes-api/definitions/role-ref-v1-rbac.md)
 - ✅ [rule-with-operations-v1-admissionregistration.md](md/reference/kubernetes-api/definitions/rule-with-operations-v1-admissionregistration.md)
-- ⏳ `scale-v1-autoscaling.md`
-- ⏳ `self-subject-access-review-v1-authorization.md`
-- ⏳ `self-subject-review-v1-authentication.md`
-- ⏳ `self-subject-rules-review-v1-authorization.md`
-- ⏳ `server-address-by-client-cidr-v1-meta.md`
-- ⏳ `service-reference-v1-admissionregistration.md`
-- ⏳ `shard-info-v1-meta.md`
-- ⏳ `status-cause-v1-meta.md`
-- ⏳ `status-details-v1-meta.md`
-- ⏳ `status-v1-meta.md`
-- ⏳ `subject-access-review-v1-authorization.md`
-- ⏳ `subject-rules-review-status-v1-authorization.md`
-- ⏳ `subject-v1-rbac.md`
-- ⏳ `time-v1-meta.md`
+- ✅ [scale-v1-autoscaling.md](md/reference/kubernetes-api/definitions/scale-v1-autoscaling.md)
+- ✅ [self-subject-access-review-v1-authorization.md](md/reference/kubernetes-api/definitions/self-subject-access-review-v1-authorization.md)
+- ✅ [self-subject-review-v1-authentication.md](md/reference/kubernetes-api/definitions/self-subject-review-v1-authentication.md)
+- ✅ [self-subject-rules-review-v1-authorization.md](md/reference/kubernetes-api/definitions/self-subject-rules-review-v1-authorization.md)
+- ✅ [server-address-by-client-cidr-v1-meta.md](md/reference/kubernetes-api/definitions/server-address-by-client-cidr-v1-meta.md)
+- ✅ [service-reference-v1-admissionregistration.md](md/reference/kubernetes-api/definitions/service-reference-v1-admissionregistration.md)
+- ✅ [shard-info-v1-meta.md](md/reference/kubernetes-api/definitions/shard-info-v1-meta.md)
+- ✅ [status-cause-v1-meta.md](md/reference/kubernetes-api/definitions/status-cause-v1-meta.md)
+- ✅ [status-details-v1-meta.md](md/reference/kubernetes-api/definitions/status-details-v1-meta.md)
+- ✅ [status-v1-meta.md](md/reference/kubernetes-api/definitions/status-v1-meta.md)
+- ✅ [subject-access-review-v1-authorization.md](md/reference/kubernetes-api/definitions/subject-access-review-v1-authorization.md)
+- ✅ [subject-rules-review-status-v1-authorization.md](md/reference/kubernetes-api/definitions/subject-rules-review-status-v1-authorization.md)
+- ✅ [subject-v1-rbac.md](md/reference/kubernetes-api/definitions/subject-v1-rbac.md)
+- ✅ [time-v1-meta.md](md/reference/kubernetes-api/definitions/time-v1-meta.md)
 - ⏳ `token-review-v1-authentication.md`
-- ⏳ `toleration-v1.md`
+- ✅ [toleration-v1.md](md/reference/kubernetes-api/definitions/toleration-v1.md)
 - ⏳ `typed-local-object-reference-v1.md`
 - ⏳ `typed-local-object-reference-v1beta1-scheduling.md`
 - ⏳ `user-info-v1-authentication.md`
