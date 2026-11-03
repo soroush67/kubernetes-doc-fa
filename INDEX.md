@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-1129 از 1722 صفحه
+1144 از 1722 صفحه
 
 
 ## `.`
@@ -1458,25 +1458,25 @@
 - ⚠️ [replication-controller-v1.md](md/reference/kubernetes-api/core/replication-controller-v1.md)
 - ⚠️ [resource-quota-v1.md](md/reference/kubernetes-api/core/resource-quota-v1.md)
 - ✅ [secret-v1.md](md/reference/kubernetes-api/core/secret-v1.md)
-- ⏳ `service-account-v1.md`
+- ✅ [service-account-v1.md](md/reference/kubernetes-api/core/service-account-v1.md)
 - ⏳ `service-v1.md`
 
 ## `reference/kubernetes-api/definitions`
 
-- ⏳ `_index.md`
-- ⏳ `api-group-v1-meta.md`
-- ⏳ `api-resource-v1-meta.md`
-- ⏳ `api-versions-v1-meta.md`
-- ⏳ `basic-device-v1beta1-resource.md`
-- ⏳ `binding-v1.md`
-- ⏳ `condition-v1-meta.md`
-- ⏳ `delete-options-v1-meta.md`
-- ⏳ `event-source-v1.md`
-- ⏳ `eviction-v1-policy.md`
-- ⏳ `field-selector-attributes-v1-authorization.md`
-- ⏳ `field-selector-requirement-v1-meta.md`
-- ⏳ `fields-v1-v1-meta.md`
-- ⏳ `group-resource-v1-meta.md`
+- ✅ [_index.md](md/reference/kubernetes-api/definitions/_index.md)
+- ✅ [api-group-v1-meta.md](md/reference/kubernetes-api/definitions/api-group-v1-meta.md)
+- ✅ [api-resource-v1-meta.md](md/reference/kubernetes-api/definitions/api-resource-v1-meta.md)
+- ✅ [api-versions-v1-meta.md](md/reference/kubernetes-api/definitions/api-versions-v1-meta.md)
+- ✅ [basic-device-v1beta1-resource.md](md/reference/kubernetes-api/definitions/basic-device-v1beta1-resource.md)
+- ✅ [binding-v1.md](md/reference/kubernetes-api/definitions/binding-v1.md)
+- ✅ [condition-v1-meta.md](md/reference/kubernetes-api/definitions/condition-v1-meta.md)
+- ✅ [delete-options-v1-meta.md](md/reference/kubernetes-api/definitions/delete-options-v1-meta.md)
+- ✅ [event-source-v1.md](md/reference/kubernetes-api/definitions/event-source-v1.md)
+- ✅ [eviction-v1-policy.md](md/reference/kubernetes-api/definitions/eviction-v1-policy.md)
+- ✅ [field-selector-attributes-v1-authorization.md](md/reference/kubernetes-api/definitions/field-selector-attributes-v1-authorization.md)
+- ✅ [field-selector-requirement-v1-meta.md](md/reference/kubernetes-api/definitions/field-selector-requirement-v1-meta.md)
+- ✅ [fields-v1-v1-meta.md](md/reference/kubernetes-api/definitions/fields-v1-v1-meta.md)
+- ✅ [group-resource-v1-meta.md](md/reference/kubernetes-api/definitions/group-resource-v1-meta.md)
 - ⏳ `group-version-for-discovery-v1-meta.md`
 - ⏳ `label-selector-attributes-v1-authorization.md`
 - ⏳ `label-selector-requirement-v1-meta.md`
