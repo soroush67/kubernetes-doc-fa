@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-1228 از 1722 صفحه
+1231 از 1722 صفحه
 
 
 ## `.`
@@ -1586,12 +1586,12 @@
 - ✅ [device-taint-rule-v1.md](md/reference/kubernetes-api/resource/device-taint-rule-v1.md)
 - ✅ [resource-claim-template-v1.md](md/reference/kubernetes-api/resource/resource-claim-template-v1.md)
 - ✅ [resource-claim-v1.md](md/reference/kubernetes-api/resource/resource-claim-v1.md)
-- ⏳ `resource-pool-status-request-v1alpha3.md`
-- ⏳ `resource-slice-v1.md`
+- ✅ [resource-pool-status-request-v1alpha3.md](md/reference/kubernetes-api/resource/resource-pool-status-request-v1alpha3.md)
+- ✅ [resource-slice-v1.md](md/reference/kubernetes-api/resource/resource-slice-v1.md)
 
 ## `reference/kubernetes-api/scheduling`
 
-- ⏳ `_index.md`
+- ✅ [_index.md](md/reference/kubernetes-api/scheduling/_index.md)
 - ⏳ `composite-pod-group-v1alpha3.md`
 - ⏳ `pod-group-v1beta1.md`
 - ⏳ `priority-class-v1.md`
