@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-1211 از 1722 صفحه
+1212 از 1722 صفحه
 
 
 ## `.`
@@ -1556,7 +1556,7 @@
 
 - ✅ [_index.md](md/reference/kubernetes-api/networking/_index.md)
 - ✅ [ingress-class-v1.md](md/reference/kubernetes-api/networking/ingress-class-v1.md)
-- ⏳ `ingress-v1.md`
+- ⚠️ [ingress-v1.md](md/reference/kubernetes-api/networking/ingress-v1.md)
 - ✅ [ip-address-v1.md](md/reference/kubernetes-api/networking/ip-address-v1.md)
 - ⏳ `network-policy-v1.md`
 - ⏳ `service-cidr-v1.md`
