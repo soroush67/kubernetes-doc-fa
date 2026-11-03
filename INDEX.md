@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-1212 از 1722 صفحه
+1219 از 1722 صفحه
 
 
 ## `.`
@@ -1558,23 +1558,23 @@
 - ✅ [ingress-class-v1.md](md/reference/kubernetes-api/networking/ingress-class-v1.md)
 - ⚠️ [ingress-v1.md](md/reference/kubernetes-api/networking/ingress-v1.md)
 - ✅ [ip-address-v1.md](md/reference/kubernetes-api/networking/ip-address-v1.md)
-- ⏳ `network-policy-v1.md`
-- ⏳ `service-cidr-v1.md`
+- ✅ [network-policy-v1.md](md/reference/kubernetes-api/networking/network-policy-v1.md)
+- ✅ [service-cidr-v1.md](md/reference/kubernetes-api/networking/service-cidr-v1.md)
 
 ## `reference/kubernetes-api/node`
 
-- ⏳ `_index.md`
-- ⏳ `runtime-class-v1.md`
+- ✅ [_index.md](md/reference/kubernetes-api/node/_index.md)
+- ✅ [runtime-class-v1.md](md/reference/kubernetes-api/node/runtime-class-v1.md)
 
 ## `reference/kubernetes-api/policy`
 
-- ⏳ `_index.md`
+- ✅ [_index.md](md/reference/kubernetes-api/policy/_index.md)
 - ⏳ `pod-disruption-budget-v1.md`
 
 ## `reference/kubernetes-api/rbac`
 
-- ⏳ `_index.md`
-- ⏳ `cluster-role-binding-v1.md`
+- ✅ [_index.md](md/reference/kubernetes-api/rbac/_index.md)
+- ✅ [cluster-role-binding-v1.md](md/reference/kubernetes-api/rbac/cluster-role-binding-v1.md)
 - ⏳ `cluster-role-v1.md`
 - ⏳ `role-binding-v1.md`
 - ⏳ `role-v1.md`

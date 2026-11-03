@@ -8,8 +8,8 @@
 
 | | |
 |---|---|
-| پیشرفت (بر اساس کلمات) | **67.8٪** |
-| صفحات ترجمه‌شده | 1212 از 1722 |
+| پیشرفت (بر اساس کلمات) | **69.5٪** |
+| صفحات ترجمه‌شده | 1219 از 1722 |
 | صفحات دارای ایراد ساختاری | 44 |
 | نسخه‌ی منبع انگلیسی | `f652c6b8a26f` |
 
@@ -72,7 +72,7 @@ cd kubernetes-doc-fa
 | `contribute` | 44 | 44 |
 | `doc-contributor-tools` | 1 | 1 |
 | `home` | 2 | 2 |
-| `reference` | 977 | 1198 |
+| `reference` | 984 | 1198 |
 | `setup` | 0 | 22 |
 | `tasks` | 0 | 221 |
 | `tutorials` | 0 | 45 |
@@ -100,6 +100,13 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [reference/kubernetes-api/rbac/cluster-role-binding-v1.md](md/reference/kubernetes-api/rbac/cluster-role-binding-v1.md) — 2026-11-03T12:23:08+03:30
+- [reference/kubernetes-api/rbac/_index.md](md/reference/kubernetes-api/rbac/_index.md) — 2026-11-03T12:19:59+03:30
+- [reference/kubernetes-api/node/runtime-class-v1.md](md/reference/kubernetes-api/node/runtime-class-v1.md) — 2026-11-03T12:19:56+03:30
+- [reference/kubernetes-api/policy/_index.md](md/reference/kubernetes-api/policy/_index.md) — 2026-11-03T12:18:41+03:30
+- [reference/kubernetes-api/networking/service-cidr-v1.md](md/reference/kubernetes-api/networking/service-cidr-v1.md) — 2026-11-03T12:18:38+03:30
+- [reference/kubernetes-api/node/_index.md](md/reference/kubernetes-api/node/_index.md) — 2026-11-03T12:16:36+03:30
+- [reference/kubernetes-api/networking/network-policy-v1.md](md/reference/kubernetes-api/networking/network-policy-v1.md) — 2026-11-03T12:16:33+03:30
 - [reference/kubernetes-api/networking/ingress-v1.md](md/reference/kubernetes-api/networking/ingress-v1.md) — 2026-11-03T12:14:55+03:30
 - [reference/kubernetes-api/networking/ip-address-v1.md](md/reference/kubernetes-api/networking/ip-address-v1.md) — 2026-11-03T08:09:54+03:30
 - [reference/kubernetes-api/lifecycle/eviction-v1alpha1.md](md/reference/kubernetes-api/lifecycle/eviction-v1alpha1.md) — 2026-11-03T08:06:47+03:30
@@ -113,13 +120,6 @@ cd kubernetes-doc-fa
 - [reference/kubernetes-api/discovery/endpoint-slice-v1.md](md/reference/kubernetes-api/discovery/endpoint-slice-v1.md) — 2026-11-03T07:41:21+03:30
 - [reference/kubernetes-api/flowcontrol/_index.md](md/reference/kubernetes-api/flowcontrol/_index.md) — 2026-11-03T07:35:50+03:30
 - [reference/kubernetes-api/events/event-v1.md](md/reference/kubernetes-api/events/event-v1.md) — 2026-11-03T07:35:47+03:30
-- [reference/kubernetes-api/events/_index.md](md/reference/kubernetes-api/events/_index.md) — 2026-11-03T07:31:06+03:30
-- [reference/kubernetes-api/definitions/webhook-client-config-v1-admissionregistration.md](md/reference/kubernetes-api/definitions/webhook-client-config-v1-admissionregistration.md) — 2026-11-03T07:31:03+03:30
-- [reference/kubernetes-api/discovery/_index.md](md/reference/kubernetes-api/discovery/_index.md) — 2026-11-03T07:30:59+03:30
-- [reference/kubernetes-api/definitions/watch-event-v1-meta.md](md/reference/kubernetes-api/definitions/watch-event-v1-meta.md) — 2026-11-03T07:30:54+03:30
-- [reference/kubernetes-api/definitions/volume-health-condition-v1.md](md/reference/kubernetes-api/definitions/volume-health-condition-v1.md) — 2026-11-03T07:30:53+03:30
-- [reference/kubernetes-api/definitions/user-info-v1-authentication.md](md/reference/kubernetes-api/definitions/user-info-v1-authentication.md) — 2026-11-03T07:30:48+03:30
-- [reference/kubernetes-api/definitions/variable-v1-admissionregistration.md](md/reference/kubernetes-api/definitions/variable-v1-admissionregistration.md) — 2026-11-03T07:30:45+03:30
 
 </div>
 
