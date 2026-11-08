@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-1347 از 1722 صفحه
+1362 از 1722 صفحه
 
 
 ## `.`
@@ -1761,25 +1761,25 @@
 - ✅ [kubeadm_init_phase_mark-control-plane.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_mark-control-plane.md)
 - ✅ [kubeadm_init_phase_preflight.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_preflight.md)
 - ✅ [kubeadm_init_phase_show-join-command.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_show-join-command.md)
-- ⏳ `kubeadm_init_phase_upload-certs.md`
+- ✅ [kubeadm_init_phase_upload-certs.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_upload-certs.md)
 - ✅ [kubeadm_init_phase_upload-config.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_upload-config.md)
-- ⏳ `kubeadm_init_phase_upload-config_all.md`
-- ⏳ `kubeadm_init_phase_upload-config_kubeadm.md`
-- ⏳ `kubeadm_init_phase_upload-config_kubelet.md`
-- ⏳ `kubeadm_init_phase_wait-control-plane.md`
+- ✅ [kubeadm_init_phase_upload-config_all.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_upload-config_all.md)
+- ✅ [kubeadm_init_phase_upload-config_kubeadm.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_upload-config_kubeadm.md)
+- ✅ [kubeadm_init_phase_upload-config_kubelet.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_upload-config_kubelet.md)
+- ✅ [kubeadm_init_phase_wait-control-plane.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_wait-control-plane.md)
 
 ## `reference/setup-tools/kubeadm/generated/kubeadm_join`
 
-- ⏳ `_index.md`
-- ⏳ `kubeadm_join_phase.md`
-- ⏳ `kubeadm_join_phase_control-plane-join.md`
-- ⏳ `kubeadm_join_phase_control-plane-join_all.md`
-- ⏳ `kubeadm_join_phase_control-plane-join_mark-control-plane.md`
-- ⏳ `kubeadm_join_phase_control-plane-prepare.md`
-- ⏳ `kubeadm_join_phase_control-plane-prepare_all.md`
-- ⏳ `kubeadm_join_phase_control-plane-prepare_certs.md`
-- ⏳ `kubeadm_join_phase_control-plane-prepare_control-plane.md`
-- ⏳ `kubeadm_join_phase_control-plane-prepare_download-certs.md`
+- ✅ [_index.md](md/reference/setup-tools/kubeadm/generated/kubeadm_join/_index.md)
+- ✅ [kubeadm_join_phase.md](md/reference/setup-tools/kubeadm/generated/kubeadm_join/kubeadm_join_phase.md)
+- ✅ [kubeadm_join_phase_control-plane-join.md](md/reference/setup-tools/kubeadm/generated/kubeadm_join/kubeadm_join_phase_control-plane-join.md)
+- ✅ [kubeadm_join_phase_control-plane-join_all.md](md/reference/setup-tools/kubeadm/generated/kubeadm_join/kubeadm_join_phase_control-plane-join_all.md)
+- ✅ [kubeadm_join_phase_control-plane-join_mark-control-plane.md](md/reference/setup-tools/kubeadm/generated/kubeadm_join/kubeadm_join_phase_control-plane-join_mark-control-plane.md)
+- ✅ [kubeadm_join_phase_control-plane-prepare.md](md/reference/setup-tools/kubeadm/generated/kubeadm_join/kubeadm_join_phase_control-plane-prepare.md)
+- ✅ [kubeadm_join_phase_control-plane-prepare_all.md](md/reference/setup-tools/kubeadm/generated/kubeadm_join/kubeadm_join_phase_control-plane-prepare_all.md)
+- ✅ [kubeadm_join_phase_control-plane-prepare_certs.md](md/reference/setup-tools/kubeadm/generated/kubeadm_join/kubeadm_join_phase_control-plane-prepare_certs.md)
+- ✅ [kubeadm_join_phase_control-plane-prepare_control-plane.md](md/reference/setup-tools/kubeadm/generated/kubeadm_join/kubeadm_join_phase_control-plane-prepare_control-plane.md)
+- ✅ [kubeadm_join_phase_control-plane-prepare_download-certs.md](md/reference/setup-tools/kubeadm/generated/kubeadm_join/kubeadm_join_phase_control-plane-prepare_download-certs.md)
 - ⏳ `kubeadm_join_phase_control-plane-prepare_kubeconfig.md`
 - ⏳ `kubeadm_join_phase_etcd-join.md`
 - ⏳ `kubeadm_join_phase_kubelet-start.md`
