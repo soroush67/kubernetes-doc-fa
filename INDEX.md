@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-1302 از 1722 صفحه
+1317 از 1722 صفحه
 
 
 ## `.`
@@ -1714,24 +1714,24 @@
 - ✅ [kubeadm_config_print.md](md/reference/setup-tools/kubeadm/generated/kubeadm_config/kubeadm_config_print.md)
 - ✅ [kubeadm_config_print_init-defaults.md](md/reference/setup-tools/kubeadm/generated/kubeadm_config/kubeadm_config_print_init-defaults.md)
 - ✅ [kubeadm_config_print_join-defaults.md](md/reference/setup-tools/kubeadm/generated/kubeadm_config/kubeadm_config_print_join-defaults.md)
-- ⏳ `kubeadm_config_print_reset-defaults.md`
-- ⏳ `kubeadm_config_print_upgrade-defaults.md`
-- ⏳ `kubeadm_config_validate.md`
+- ✅ [kubeadm_config_print_reset-defaults.md](md/reference/setup-tools/kubeadm/generated/kubeadm_config/kubeadm_config_print_reset-defaults.md)
+- ✅ [kubeadm_config_print_upgrade-defaults.md](md/reference/setup-tools/kubeadm/generated/kubeadm_config/kubeadm_config_print_upgrade-defaults.md)
+- ✅ [kubeadm_config_validate.md](md/reference/setup-tools/kubeadm/generated/kubeadm_config/kubeadm_config_validate.md)
 
 ## `reference/setup-tools/kubeadm/generated/kubeadm_init`
 
-- ⏳ `_index.md`
-- ⏳ `kubeadm_init_phase.md`
-- ⏳ `kubeadm_init_phase_addon.md`
-- ⏳ `kubeadm_init_phase_addon_all.md`
-- ⏳ `kubeadm_init_phase_addon_coredns.md`
-- ⏳ `kubeadm_init_phase_addon_kube-proxy.md`
-- ⏳ `kubeadm_init_phase_bootstrap-token.md`
-- ⏳ `kubeadm_init_phase_certs.md`
-- ⏳ `kubeadm_init_phase_certs_all.md`
-- ⏳ `kubeadm_init_phase_certs_apiserver-etcd-client.md`
-- ⏳ `kubeadm_init_phase_certs_apiserver-kubelet-client.md`
-- ⏳ `kubeadm_init_phase_certs_apiserver.md`
+- ⚠️ [_index.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/_index.md)
+- ✅ [kubeadm_init_phase.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase.md)
+- ✅ [kubeadm_init_phase_addon.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_addon.md)
+- ⚠️ [kubeadm_init_phase_addon_all.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_addon_all.md)
+- ✅ [kubeadm_init_phase_addon_coredns.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_addon_coredns.md)
+- ⚠️ [kubeadm_init_phase_addon_kube-proxy.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_addon_kube-proxy.md)
+- ✅ [kubeadm_init_phase_bootstrap-token.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_bootstrap-token.md)
+- ✅ [kubeadm_init_phase_certs.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_certs.md)
+- ⚠️ [kubeadm_init_phase_certs_all.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_certs_all.md)
+- ✅ [kubeadm_init_phase_certs_apiserver-etcd-client.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_certs_apiserver-etcd-client.md)
+- ✅ [kubeadm_init_phase_certs_apiserver-kubelet-client.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_certs_apiserver-kubelet-client.md)
+- ✅ [kubeadm_init_phase_certs_apiserver.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_certs_apiserver.md)
 - ⏳ `kubeadm_init_phase_certs_ca.md`
 - ⏳ `kubeadm_init_phase_certs_etcd-ca.md`
 - ⏳ `kubeadm_init_phase_certs_etcd-healthcheck-client.md`
