@@ -1,0 +1,608 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>جزئیات پیاده‌سازی | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
+<header class="top"><a href="../../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">reference / setup-tools / kubeadm</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">جزئیات پیاده‌سازی</h1><!-- overview -->
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes v1.10 [stable]</span> (پایدار)</div>
+<p dir="rtl">دستورهای <code dir="ltr">kubeadm init</code> و <code dir="ltr">kubeadm join</code> در کنار هم تجربه کاربری خوبی برای ایجاد یک کلاستر خام کوبرنتیز از ابتدا و مطابق با بهترین شیوه‌ها فراهم می‌کنند. با این حال، شاید روشن نباشد که kubeadm این کار را <em>چگونه</em> انجام می‌دهد.</p>
+<p dir="rtl">این سند جزئیات بیشتری از آنچه در پشت صحنه رخ می‌دهد ارائه می‌کند تا دانش مربوط به بهترین شیوه‌های راه‌اندازی کلاستر کوبرنتیز به اشتراک گذاشته شود.</p>
+<!-- body -->
+<h2 id="اصول-اصلی-طراحی" dir="rtl">اصول اصلی طراحی</h2>
+<p dir="rtl">کلاستری که <code dir="ltr">kubeadm init</code> و <code dir="ltr">kubeadm join</code> راه‌اندازی می‌کنند باید این ویژگی‌ها را داشته باشد:</p>
+<ul>
+<li dir="rtl"><strong>امن</strong>: این کلاستر باید جدیدترین بهترین شیوه‌ها را به کار بگیرد، از جمله:
+<ul>
+<li dir="rtl">اعمال اجباری RBAC</li>
+<li dir="rtl">استفاده از Node Authorizer</li>
+<li dir="rtl">استفاده از ارتباط امن میان مؤلفه‌های control plane</li>
+<li dir="rtl">استفاده از ارتباط امن میان سرور API و kubeletها</li>
+<li dir="rtl">محدودسازی دسترسی به API مربوط به kubelet</li>
+<li dir="rtl">محدودسازی دسترسی مؤلفه‌های سیستمی مانند kube-proxy و CoreDNS به API</li>
+<li dir="rtl">محدودسازی منابعی که یک Bootstrap Token می‌تواند به آن‌ها دسترسی داشته باشد</li>
+</ul>
+</li>
+<li dir="rtl"><strong>کاربرپسند</strong>: کاربر نباید به اجرای چیزی بیش از چند دستور نیاز داشته باشد:
+<ul>
+<li dir="ltr" class="ltr"><code dir="ltr">kubeadm init</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">export KUBECONFIG=/etc/kubernetes/admin.conf</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">kubectl apply -f &lt;network-plugin-of-choice.yaml&gt;</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">kubeadm join --token &lt;token&gt; &lt;endpoint&gt;:&lt;port&gt;</code></li>
+</ul>
+</li>
+<li dir="rtl"><strong>توسعه‌پذیر</strong>:
+<ul>
+<li dir="rtl">این کلاستر <em>نباید</em> هیچ ارائه‌دهنده شبکه خاصی را ترجیح دهد. پیکربندی شبکه کلاستر خارج از محدوده kubeadm است.</li>
+<li dir="rtl">باید بتوان از یک فایل پیکربندی برای سفارشی‌سازی پارامترهای مختلف استفاده کرد.</li>
+</ul>
+</li>
+</ul>
+<h2 id="مقادیر-و-مسیرهای-ثابت-و-شناخته-شده" dir="rtl">مقادیر و مسیرهای ثابت و شناخته‌شده</h2>
+<p dir="rtl">برای کاهش پیچیدگی و ساده‌تر شدن توسعه ابزارهای سطح بالاتری که بر پایه kubeadm ساخته می‌شوند، این ابزار مجموعه محدودی از مقادیر ثابت را برای مسیرها و نام فایل‌های شناخته‌شده به کار می‌برد.</p>
+<p dir="rtl">دایرکتوری کوبرنتیز، یعنی <code dir="ltr">/etc/kubernetes</code>، در این برنامه مقداری ثابت است، زیرا در بیشتر موارد همین مسیر استفاده می‌شود و شهودی‌ترین مکان نیز هست. سایر مسیرها و نام فایل‌های ثابت عبارت‌اند از:</p>
+<ul>
+<li dir="rtl">
+<p dir="rtl">مسیر <code dir="ltr">/etc/kubernetes/manifests</code> که kubelet باید مانیفست‌های Pod ایستا را در آن جست‌وجو کند. نام مانیفست‌های Pod ایستا عبارت‌اند از:</p>
+<ul>
+<li dir="ltr" class="ltr"><code dir="ltr">etcd.yaml</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">kube-apiserver.yaml</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">kube-controller-manager.yaml</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">kube-scheduler.yaml</code></li>
+</ul>
+</li>
+<li dir="rtl">
+<p dir="rtl">مسیر <code dir="ltr">/etc/kubernetes/</code> که فایل‌های kubeconfig حاوی هویت مؤلفه‌های control plane در آن ذخیره می‌شوند. نام فایل‌های kubeconfig عبارت‌اند از:</p>
+<ul>
+<li dir="rtl">فایل <code dir="ltr">kubelet.conf</code> (و در زمان راه‌اندازی اولیه TLS، فایل <code dir="ltr">bootstrap-kubelet.conf</code>)</li>
+<li dir="rtl">فایل <code dir="ltr">controller-manager.conf</code></li>
+<li dir="rtl">فایل <code dir="ltr">scheduler.conf</code></li>
+<li dir="rtl">فایل <code dir="ltr">admin.conf</code> برای مدیر کلاستر و خود kubeadm</li>
+<li dir="rtl">فایل <code dir="ltr">super-admin.conf</code> برای مدیر ارشد کلاستر که می‌تواند RBAC را دور بزند</li>
+</ul>
+</li>
+<li dir="rtl">
+<p dir="rtl">نام فایل‌های گواهی و کلید:</p>
+<ul>
+<li dir="rtl">فایل‌های <code dir="ltr">ca.crt</code> و <code dir="ltr">ca.key</code> برای مرجع صدور گواهی کوبرنتیز</li>
+<li dir="rtl">فایل‌های <code dir="ltr">apiserver.crt</code> و <code dir="ltr">apiserver.key</code> برای گواهی سرور API</li>
+<li dir="rtl">فایل‌های <code dir="ltr">apiserver-kubelet-client.crt</code> و <code dir="ltr">apiserver-kubelet-client.key</code> برای گواهی کلاینتی که سرور API با آن به‌صورت امن به kubeletها متصل می‌شود</li>
+<li dir="rtl">فایل‌های <code dir="ltr">sa.pub</code> و <code dir="ltr">sa.key</code> برای کلیدی که controller manager هنگام امضای ServiceAccount از آن استفاده می‌کند</li>
+<li dir="rtl">فایل‌های <code dir="ltr">front-proxy-ca.crt</code> و <code dir="ltr">front-proxy-ca.key</code> برای مرجع صدور گواهی پراکسی جلویی (front proxy)</li>
+<li dir="rtl">فایل‌های <code dir="ltr">front-proxy-client.crt</code> و <code dir="ltr">front-proxy-client.key</code> برای کلاینت پراکسی جلویی</li>
+</ul>
+</li>
+</ul>
+<h2 id="قالب-فایل-پیکربندی-kubeadm" dir="rtl">قالب فایل پیکربندی kubeadm</h2>
+<p dir="rtl">بیشتر دستورهای kubeadm از پرچم <code dir="ltr">--config</code> پشتیبانی می‌کنند که با آن می‌توان یک فایل پیکربندی را از دیسک به دستور داد. قالب این فایل از طرح رایج <code dir="ltr">apiVersion</code> / <code dir="ltr">kind</code> در API کوبرنتیز پیروی می‌کند، اما قالب پیکربندی مؤلفه به شمار می‌رود. چند مؤلفه دیگر کوبرنتیز، مانند kubelet، نیز از پیکربندی مبتنی بر فایل پشتیبانی می‌کنند.</p>
+<p dir="rtl">زیردستورهای مختلف kubeadm به فایل پیکربندی با <code dir="ltr">kind</code> متفاوتی نیاز دارند. برای نمونه، <code dir="ltr">InitConfiguration</code> برای <code dir="ltr">kubeadm init</code>، <code dir="ltr">JoinConfiguration</code> برای <code dir="ltr">kubeadm join</code>، <code dir="ltr">UpgradeConfiguration</code> برای <code dir="ltr">kubeadm upgrade</code> و <code dir="ltr">ResetConfiguration</code> برای <code dir="ltr">kubeadm reset</code> به کار می‌رود.</p>
+<p dir="rtl">با دستور <code dir="ltr">kubeadm config migrate</code> می‌توان فایل پیکربندی با قالب قدیمی‌تر را به قالب جدیدتر (فعلی) مهاجرت داد. ابزار kubeadm فقط مهاجرت از قالب‌های منسوخ‌شده به قالب فعلی را پشتیبانی می‌کند.</p>
+<p dir="rtl">برای جزئیات بیشتر، صفحه <a href="../../config-api/kubeadm-config.v1beta4.html">مرجع پیکربندی kubeadm</a> را ببینید.</p>
+<h2 id="طراحی-داخلی-گردش-کار-kubeadm-init" dir="rtl">طراحی داخلی گردش کار kubeadm init</h2>
+<p dir="rtl">دستور <code dir="ltr">kubeadm init</code> از دنباله‌ای از کارهای اتمی تشکیل شده است که در <a href="kubeadm-init.html#init-workflow">گردش کار داخلی</a> <code dir="ltr">kubeadm init</code> شرح داده شده‌اند.</p>
+<p dir="rtl">با دستور <a href="kubeadm-init-phase.html"><code dir="ltr">kubeadm init phase</code></a> کاربران می‌توانند هر کار را جداگانه اجرا کنند. این دستور در نهایت یک API یا جعبه‌ابزار قابل استفاده مجدد و ترکیب‌پذیر فراهم می‌کند که سایر ابزارهای راه‌اندازی کوبرنتیز، ابزارهای خودکارسازی فناوری اطلاعات یا کاربران پیشرفته می‌توانند برای ایجاد کلاسترهای سفارشی از آن استفاده کنند.</p>
+<h3 id="بررسی-های-پیش-از-اجرا" dir="rtl">بررسی‌های پیش از اجرا</h3>
+<p dir="rtl">ابزار kubeadm پیش از شروع init مجموعه‌ای از بررسی‌های پیش از اجرا (preflight checks) را انجام می‌دهد تا پیش‌شرط‌ها را تأیید کند و از مشکلات رایج در راه‌اندازی کلاستر جلوگیری شود. کاربر می‌تواند با گزینه <code dir="ltr">--ignore-preflight-errors</code> برخی از این بررسی‌ها یا همه آن‌ها را نادیده بگیرد.</p>
+<ul>
+<li dir="rtl">[هشدار] اگر نسخه کوبرنتیز موردنظر (که با پرچم <code dir="ltr">--kubernetes-version</code> مشخص می‌شود) دست‌کم یک نسخه فرعی بالاتر از نسخه CLI مربوط به kubeadm باشد.</li>
+<li dir="rtl">الزامات سیستمی کوبرنتیز:
+<ul>
+<li dir="rtl">در صورت اجرا روی لینوکس:
+<ul>
+<li dir="rtl">[خطا] اگر نسخه هسته قدیمی‌تر از حداقل نسخه لازم باشد</li>
+<li dir="rtl">[خطا] اگر زیرسیستم‌های لازم cgroups تنظیم نشده باشند</li>
+</ul>
+</li>
+</ul>
+</li>
+<li dir="rtl">[خطا] اگر نقطه پایانی CRI پاسخ ندهد</li>
+<li dir="rtl">[خطا] اگر کاربر root نباشد</li>
+<li dir="rtl">[خطا] اگر نام میزبان ماشین یک زیردامنه DNS معتبر نباشد</li>
+<li dir="rtl">[هشدار] اگر نام میزبان از طریق جست‌وجوی شبکه در دسترس نباشد</li>
+<li dir="rtl">[خطا] اگر نسخه kubelet پایین‌تر از حداقل نسخه kubelet پشتیبانی‌شده در kubeadm (نسخه فرعی فعلی منهای یک) باشد</li>
+<li dir="rtl">[خطا] اگر نسخه kubelet دست‌کم یک نسخه فرعی بالاتر از نسخه لازم control plane باشد (اختلاف نسخه پشتیبانی‌نشده)</li>
+<li dir="rtl">[هشدار] اگر سرویس kubelet وجود نداشته باشد یا غیرفعال باشد</li>
+<li dir="rtl">[هشدار] اگر firewalld فعال باشد</li>
+<li dir="rtl">[خطا] اگر bindPort سرور API یا پورت‌های 10250/10251/10252 در حال استفاده باشند</li>
+<li dir="rtl">[خطا] اگر پوشه <code dir="ltr">/etc/kubernetes/manifest</code> از قبل وجود داشته باشد و خالی نباشد</li>
+<li dir="rtl">[خطا] اگر swap روشن باشد</li>
+<li dir="rtl">[خطا] اگر دستورهای <code dir="ltr">ip</code>، <code dir="ltr">iptables</code>، <code dir="ltr">mount</code> و <code dir="ltr">nsenter</code> در مسیر دستورها وجود نداشته باشند</li>
+<li dir="rtl">[هشدار] اگر دستورهای <code dir="ltr">ethtool</code>، <code dir="ltr">tc</code> و <code dir="ltr">touch</code> در مسیر دستورها وجود نداشته باشند</li>
+<li dir="rtl">[هشدار] اگر پرچم‌های آرگومان اضافی سرور API، controller manager یا زمان‌بند شامل گزینه‌های نامعتبر باشند</li>
+<li dir="rtl">[هشدار] اگر اتصال به https://API.AdvertiseAddress:API.BindPort از پراکسی بگذرد</li>
+<li dir="rtl">[هشدار] اگر اتصال به زیرشبکه سرویس‌ها از پراکسی بگذرد (فقط نخستین نشانی بررسی می‌شود)</li>
+<li dir="rtl">[هشدار] اگر اتصال به زیرشبکه Podها از پراکسی بگذرد (فقط نخستین نشانی بررسی می‌شود)</li>
+<li dir="rtl">اگر etcd خارجی ارائه شده باشد:
+<ul>
+<li dir="rtl">[خطا] اگر نسخه etcd قدیمی‌تر از حداقل نسخه لازم باشد</li>
+<li dir="rtl">[خطا] اگر گواهی‌ها یا کلیدهای etcd مشخص شده اما ارائه نشده باشند</li>
+</ul>
+</li>
+<li dir="rtl">اگر etcd خارجی ارائه <em>نشده</em> باشد (و در نتیجه etcd محلی نصب شود):
+<ul>
+<li dir="rtl">[خطا] اگر پورت 2379 در حال استفاده باشد</li>
+<li dir="rtl">[خطا] اگر پوشه Etcd.DataDir از قبل وجود داشته باشد و خالی نباشد</li>
+</ul>
+</li>
+<li dir="rtl">اگر حالت مجوزدهی ABAC باشد:
+<ul>
+<li dir="rtl">[خطا] اگر فایل abac_policy.json وجود نداشته باشد</li>
+</ul>
+</li>
+<li dir="rtl">اگر حالت مجوزدهی WebHook باشد:
+<ul>
+<li dir="rtl">[خطا] اگر فایل webhook_authz.conf وجود نداشته باشد</li>
+</ul>
+</li>
+</ul>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">بررسی‌های پیش از اجرا را می‌توان به‌صورت جداگانه با دستور <a href="kubeadm-init-phase.html#cmd-phase-preflight"><code dir="ltr">kubeadm init phase preflight</code></a> اجرا کرد.</p>
+</div>
+<h3 id="تولید-گواهی-های-لازم" dir="rtl">تولید گواهی‌های لازم</h3>
+<p dir="rtl">ابزار kubeadm جفت‌های گواهی و کلید خصوصی را برای اهداف مختلف تولید می‌کند:</p>
+<ul>
+<li dir="rtl">
+<p dir="rtl">یک مرجع صدور گواهی خودامضا برای کلاستر کوبرنتیز که در فایل <code dir="ltr">ca.crt</code> و فایل کلید خصوصی <code dir="ltr">ca.key</code> ذخیره می‌شود</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">یک گواهی سرویس‌دهی برای سرور API که با استفاده از <code dir="ltr">ca.crt</code> به‌عنوان CA تولید می‌شود و همراه با کلید خصوصی <code dir="ltr">apiserver.key</code> در فایل <code dir="ltr">apiserver.crt</code> ذخیره می‌شود. این گواهی باید نام‌های جایگزین زیر را داشته باشد:</p>
+<ul>
+<li dir="rtl">نشانی clusterIP داخلی سرویس Kubernetes (نخستین نشانی در CIDR سرویس‌ها؛ برای نمونه <code dir="ltr">10.96.0.1</code> اگر زیرشبکه سرویس <code dir="ltr">10.96.0.0/12</code> باشد)</li>
+<li dir="rtl">نام‌های DNS کوبرنتیز؛ برای نمونه <code dir="ltr">kubernetes.default.svc.cluster.local</code> اگر مقدار پرچم <code dir="ltr">--service-dns-domain</code> برابر با <code dir="ltr">cluster.local</code> باشد، به‌علاوه نام‌های DNS پیش‌فرض <code dir="ltr">kubernetes.default.svc</code>، <code dir="ltr">kubernetes.default</code> و <code dir="ltr">kubernetes</code></li>
+<li dir="rtl">نام نود</li>
+<li dir="rtl">مقدار <code dir="ltr">--apiserver-advertise-address</code></li>
+<li dir="rtl">نام‌های جایگزین اضافی که کاربر مشخص کرده است</li>
+</ul>
+</li>
+<li dir="rtl">
+<p dir="rtl">یک گواهی کلاینت برای اتصال امن سرور API به kubeletها که با استفاده از <code dir="ltr">ca.crt</code> به‌عنوان CA تولید می‌شود و همراه با کلید خصوصی <code dir="ltr">apiserver-kubelet-client.key</code> در فایل <code dir="ltr">apiserver-kubelet-client.crt</code> ذخیره می‌شود.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">یک کلید خصوصی برای امضای توکن‌های ServiceAccount که در فایل <code dir="ltr">sa.key</code> و همراه با کلید عمومی <code dir="ltr">sa.pub</code> ذخیره می‌شود</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">یک مرجع صدور گواهی برای پراکسی جلویی که همراه با کلید <code dir="ltr">front-proxy-ca.key</code> در فایل <code dir="ltr">front-proxy-ca.crt</code> ذخیره می‌شود</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">یک گواهی کلاینت برای کلاینت پراکسی جلویی که با استفاده از <code dir="ltr">front-proxy-ca.crt</code> به‌عنوان CA تولید می‌شود و همراه با کلید خصوصی <code dir="ltr">front-proxy-client.key</code> در فایل <code dir="ltr">front-proxy-client.crt</code> ذخیره می‌شود</p>
+</li>
+</ul>
+<p dir="rtl">گواهی‌ها به‌طور پیش‌فرض در <code dir="ltr">/etc/kubernetes/pki</code> ذخیره می‌شوند، اما می‌توان این دایرکتوری را با پرچم <code dir="ltr">--cert-dir</code> تغییر داد.</p>
+<p dir="rtl">به نکات زیر توجه کنید:</p>
+<ol>
+<li dir="rtl">اگر جفت گواهی و کلید خصوصی موردنظر هر دو وجود داشته باشند و محتوای آن‌ها با مشخصات بالا سازگار تشخیص داده شود، از فایل‌های موجود استفاده می‌شود و مرحله تولید آن گواهی نادیده گرفته می‌شود. بنابراین کاربر می‌تواند، برای نمونه، یک CA موجود را در <code dir="ltr">/etc/kubernetes/pki/ca.{crt,key}</code> کپی کند تا kubeadm از همان فایل‌ها برای امضای بقیه گواهی‌ها استفاده کند. همچنین <a href="https://kubernetes.io/docs/tasks/administer-cluster/kubeadm/kubeadm-certs#custom-certificates" target="_blank">استفاده از گواهی‌های سفارشی</a> را ببینید.</li>
+<li dir="rtl">برای CA می‌توان فایل <code dir="ltr">ca.crt</code> را بدون فایل <code dir="ltr">ca.key</code> ارائه کرد. اگر همه گواهی‌ها و فایل‌های kubeconfig دیگر از قبل موجود باشند، kubeadm این وضعیت را تشخیص می‌دهد و ExternalCA را فعال می‌کند. در این حالت کنترل‌کننده <code dir="ltr">csrsigner</code> در controller-manager نیز راه‌اندازی نخواهد شد.</li>
+<li dir="rtl">اگر kubeadm در <a href="https://kubernetes.io/docs/tasks/administer-cluster/kubeadm/kubeadm-certs#external-ca-mode" target="_blank">حالت CA خارجی</a> اجرا شود، کاربر باید همه گواهی‌ها را ارائه کند، زیرا kubeadm نمی‌تواند آن‌ها را خودش تولید کند.</li>
+<li dir="rtl">اگر kubeadm در حالت <code dir="ltr">--dry-run</code> اجرا شود، فایل‌های گواهی در یک پوشه موقت نوشته می‌شوند.</li>
+<li dir="rtl">تولید گواهی‌ها را می‌توان به‌صورت جداگانه با دستور <a href="kubeadm-init-phase.html#cmd-phase-certs"><code dir="ltr">kubeadm init phase certs all</code></a> اجرا کرد.</li>
+</ol>
+<h3 id="تولید-فایل-های-kubeconfig-برای-مؤلفه-های-control-plane" dir="rtl">تولید فایل‌های kubeconfig برای مؤلفه‌های control plane</h3>
+<p dir="rtl">ابزار kubeadm فایل‌های kubeconfig حاوی هویت مؤلفه‌های control plane را تولید می‌کند:</p>
+<ul>
+<li dir="rtl">
+<p dir="rtl">یک فایل kubeconfig برای استفاده kubelet در زمان راه‌اندازی اولیه TLS، با مسیر <code dir="ltr">/etc/kubernetes/bootstrap-kubelet.conf</code>. این فایل شامل یک bootstrap-token یا گواهی‌های کلاینت جاسازی‌شده برای احراز هویت این نود در کلاستر است.</p>
+<p dir="rtl">این گواهی کلاینت باید:</p>
+<ul>
+<li dir="rtl">طبق الزام ماژول <a href="../../access-authn-authz/node.html">مجوزدهی نود</a> در سازمان <code dir="ltr">system:nodes</code> باشد.</li>
+<li dir="rtl">نام مشترک (CN) آن <code dir="ltr">system:node:&lt;hostname-lowercased&gt;</code> باشد.</li>
+</ul>
+</li>
+<li dir="rtl">
+<p dir="rtl">یک فایل kubeconfig برای controller-manager با مسیر <code dir="ltr">/etc/kubernetes/controller-manager.conf</code>. در این فایل یک گواهی کلاینت با هویت controller-manager جاسازی شده است. مقدار CN این گواهی باید <code dir="ltr">system:kube-controller-manager</code> باشد، همان‌طور که به‌طور پیش‌فرض در <a href="../../access-authn-authz/rbac.html#core-component-roles">نقش‌های RBAC مؤلفه‌های اصلی</a> تعریف شده است.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">یک فایل kubeconfig برای زمان‌بند با مسیر <code dir="ltr">/etc/kubernetes/scheduler.conf</code>. در این فایل یک گواهی کلاینت با هویت زمان‌بند جاسازی شده است. مقدار CN این گواهی باید <code dir="ltr">system:kube-scheduler</code> باشد، همان‌طور که به‌طور پیش‌فرض در <a href="../../access-authn-authz/rbac.html#core-component-roles">نقش‌های RBAC مؤلفه‌های اصلی</a> تعریف شده است.</p>
+</li>
+</ul>
+<p dir="rtl">افزون بر این، یک فایل kubeconfig برای kubeadm به‌عنوان موجودیت مدیریتی تولید و در <code dir="ltr">/etc/kubernetes/admin.conf</code> ذخیره می‌شود. این فایل گواهی‌ای با <code dir="ltr">Subject: O = kubeadm:cluster-admins, CN = kubernetes-admin</code> دارد. گروه <code dir="ltr">kubeadm:cluster-admins</code> را kubeadm مدیریت می‌کند. این گروه در طول <code dir="ltr">kubeadm init</code> و با استفاده از فایل <code dir="ltr">super-admin.conf</code>، که به RBAC نیاز ندارد، به ClusterRole با نام <code dir="ltr">cluster-admin</code> متصل می‌شود. فایل <code dir="ltr">admin.conf</code> باید روی نودهای control plane بماند و نباید با کاربران دیگر به اشتراک گذاشته شود.</p>
+<p dir="rtl">در طول <code dir="ltr">kubeadm init</code> یک فایل kubeconfig دیگر نیز تولید و در <code dir="ltr">/etc/kubernetes/super-admin.conf</code> ذخیره می‌شود. این فایل گواهی‌ای با <code dir="ltr">Subject: O = system:masters, CN = kubernetes-super-admin</code> دارد. گروه <code dir="ltr">system:masters</code> یک گروه ابرکاربر است که RBAC را دور می‌زند و به همین دلیل، فایل <code dir="ltr">super-admin.conf</code> در شرایط اضطراری که کلاستر بر اثر پیکربندی نادرست RBAC قفل شده باشد کاربرد دارد. فایل <code dir="ltr">super-admin.conf</code> باید در مکانی امن نگهداری شود و نباید با کاربران دیگر به اشتراک گذاشته شود.</p>
+<p dir="rtl">برای اطلاعات بیشتر درباره RBAC و ClusterRoleها و گروه‌های داخلی، <a href="../../access-authn-authz/rbac.html#user-facing-roles">اتصال نقش‌های کاربرمحور RBAC</a> را ببینید.</p>
+<p dir="rtl">برای تولید فایل‌های kubeconfig برای کاربران دیگر می‌توانید دستور <a href="kubeadm-kubeconfig.html#cmd-kubeconfig-user"><code dir="ltr">kubeadm kubeconfig user</code></a> را اجرا کنید.</p>
+<div class="callout caution"><div class="callout-title">احتیاط:</div>
+<p dir="rtl">فایل‌های پیکربندی تولیدشده شامل یک کلید احراز هویت جاسازی‌شده هستند و باید با آن‌ها مانند اطلاعات محرمانه رفتار کنید.</p>
+</div>
+<p dir="rtl">همچنین به نکات زیر توجه کنید:</p>
+<ol>
+<li dir="rtl">گواهی <code dir="ltr">ca.crt</code> در همه فایل‌های kubeconfig جاسازی شده است.</li>
+<li dir="rtl">اگر فایل kubeconfig موردنظر وجود داشته باشد و محتوای آن با مشخصات بالا سازگار تشخیص داده شود، از فایل موجود استفاده می‌شود و مرحله تولید آن kubeconfig نادیده گرفته می‌شود.</li>
+<li dir="rtl">اگر kubeadm در <a href="kubeadm-init.html#external-ca-mode">حالت ExternalCA</a> اجرا شود، کاربر باید همه فایل‌های kubeconfig لازم را نیز ارائه کند، زیرا kubeadm نمی‌تواند هیچ‌یک از آن‌ها را خودش تولید کند.</li>
+<li dir="rtl">اگر kubeadm در حالت <code dir="ltr">--dry-run</code> اجرا شود، فایل‌های kubeconfig در یک پوشه موقت نوشته می‌شوند.</li>
+<li dir="rtl">تولید فایل‌های kubeconfig را می‌توان به‌صورت جداگانه با دستور <a href="kubeadm-init-phase.html#cmd-phase-kubeconfig"><code dir="ltr">kubeadm init phase kubeconfig all</code></a> اجرا کرد.</li>
+</ol>
+<h3 id="تولید-مانیفست-های-pod-ایستا-برای-مؤلفه-های-control-plane" dir="rtl">تولید مانیفست‌های Pod ایستا برای مؤلفه‌های control plane</h3>
+<p dir="rtl">ابزار kubeadm فایل‌های مانیفست Pod ایستا را برای مؤلفه‌های control plane در مسیر <code dir="ltr">/etc/kubernetes/manifests</code> می‌نویسد. kubelet این پوشه را زیر نظر دارد تا Podهای موجود در آن را هنگام راه‌اندازی ایجاد کند.</p>
+<p dir="rtl">مانیفست‌های Pod ایستا مجموعه‌ای از ویژگی‌های مشترک دارند:</p>
+<ul>
+<li dir="rtl">
+<p dir="rtl">همهٔ Podهای ایستا در فضای نام (namespace) <code dir="ltr">kube-system</code> مستقر می‌شوند.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">همهٔ Podهای ایستا برچسب‌های <code dir="ltr">tier:control-plane</code> و <code dir="ltr">component:{component-name}</code> را می‌گیرند.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">همهٔ Podهای ایستا از کلاس اولویت <code dir="ltr">system-node-critical</code> استفاده می‌کنند.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">در همهٔ Podهای ایستا مقدار <code dir="ltr">hostNetwork: true</code> تنظیم می‌شود تا control plane بتواند پیش از پیکربندی شبکه راه‌اندازی شود؛ در نتیجه:</p>
+<ul>
+<li dir="rtl">مقدار <code dir="ltr">address</code> که controller-manager و زمان‌بند برای ارجاع به سرور API از آن استفاده می‌کنند، <code dir="ltr">127.0.0.1</code> است.</li>
+<li dir="rtl">اگر سرور etcd به‌صورت محلی راه‌اندازی شده باشد، نشانی <code dir="ltr">etcd-server</code> روی <code dir="ltr">127.0.0.1:2379</code> تنظیم می‌شود.</li>
+</ul>
+</li>
+<li dir="rtl">
+<p dir="rtl">انتخاب رهبر (leader election) هم برای controller-manager و هم برای زمان‌بند فعال است.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">هر یک از controller-manager و زمان‌بند به فایل kubeconfig مخصوص خود با هویتی یکتا ارجاع می‌دهند.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">همهٔ Podهای ایستا فلگ‌ها یا وصله‌های اضافی‌ای را که مشخص می‌کنید دریافت می‌کنند؛ این موضوع در <a href="https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/control-plane-flags/" target="_blank">ارسال آرگومان‌های سفارشی به مؤلفه‌های control plane</a> شرح داده شده است.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">همهٔ Podهای ایستا حجم‌های (volume) اضافی‌ای را که کاربر مشخص کرده است (از نوع Host path) دریافت می‌کنند.</p>
+</li>
+</ul>
+<p dir="rtl">توجه کنید که:</p>
+<ol>
+<li dir="rtl">همهٔ ایمیج‌ها به‌طور پیش‌فرض از registry.k8s.io دریافت می‌شوند. برای سفارشی‌سازی مخزن ایمیج، به <a href="kubeadm-init.html#custom-images">استفاده از ایمیج‌های سفارشی</a> مراجعه کنید.</li>
+<li dir="rtl">اگر kubeadm در حالت <code dir="ltr">--dry-run</code> اجرا شود، فایل‌های Pod ایستا در یک پوشهٔ موقت نوشته می‌شوند.</li>
+<li dir="rtl">تولید مانیفست Pod ایستا برای مؤلفه‌های control plane را می‌توان به‌تنهایی و با دستور <a href="kubeadm-init-phase.html#cmd-phase-control-plane"><code dir="ltr">kubeadm init phase control-plane all</code></a> اجرا کرد.</li>
+</ol>
+<h4 id="سرور-api" dir="rtl">سرور API</h4>
+<p dir="rtl">پارامترهای زیر که کاربران ارائه می‌کنند، بر مانیفست Pod ایستای سرور API اثر می‌گذارند:</p>
+<ul>
+<li dir="rtl">مقادیر <code dir="ltr">apiserver-advertise-address</code> و <code dir="ltr">apiserver-bind-port</code> برای اتصال سرور؛ اگر این مقادیر ارائه نشوند، به‌طور پیش‌فرض نشانی IP رابط شبکهٔ پیش‌فرض ماشین و پورت 6443 استفاده می‌شود.</li>
+<li dir="rtl">مقدار <code dir="ltr">service-cluster-ip-range</code> برای استفاده در Serviceها.</li>
+<li dir="rtl">اگر سرور etcd خارجی مشخص شده باشد، نشانی <code dir="ltr">etcd-servers</code> و تنظیمات TLS مربوط به آن (<code dir="ltr">etcd-cafile</code>، <code dir="ltr">etcd-certfile</code>، <code dir="ltr">etcd-keyfile</code>)؛ اگر سرور etcd خارجی ارائه نشود، از یک etcd محلی (از طریق شبکهٔ میزبان) استفاده می‌شود.</li>
+<li dir="rtl">اگر ارائه‌دهندهٔ ابری مشخص شده باشد، پارامتر <code dir="ltr">--cloud-provider</code> متناظر با آن پیکربندی می‌شود و در صورت وجود فایل پیکربندی، مسیر <code dir="ltr">--cloud-config</code> نیز تنظیم می‌شود (این قابلیت آزمایشی و در مرحلهٔ آلفا است و در نسخه‌ای در آینده حذف خواهد شد).</li>
+</ul>
+<p dir="rtl">سایر فلگ‌های سرور API که بدون هیچ شرطی تنظیم می‌شوند عبارت‌اند از:</p>
+<ul>
+<li dir="rtl">
+<p dir="rtl">فلگ <code dir="ltr">--insecure-port=0</code> برای جلوگیری از اتصال‌های ناامن به سرور API.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">فلگ <code dir="ltr">--enable-bootstrap-token-auth=true</code> برای فعال‌سازی ماژول احراز هویت <code dir="ltr">BootstrapTokenAuthenticator</code>. برای جزئیات بیشتر به <a href="../../access-authn-authz/kubelet-tls-bootstrapping.html">راه‌اندازی اولیهٔ TLS</a> مراجعه کنید.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">فلگ <code dir="ltr">--allow-privileged</code> با مقدار <code dir="ltr">true</code> (که برای نمونه kube proxy به آن نیاز دارد).</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">فلگ <code dir="ltr">--requestheader-client-ca-file</code> با مقدار <code dir="ltr">front-proxy-ca.crt</code>.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">فلگ <code dir="ltr">--enable-admission-plugins</code> با این مقادیر:</p>
+<ul>
+<li dir="rtl">افزونهٔ <a href="../../access-authn-authz/admission-controllers.html#namespacelifecycle"><code dir="ltr">NamespaceLifecycle</code></a>، برای مثال برای جلوگیری از حذف فضاهای نام رزروشدهٔ سیستم.</li>
+<li dir="rtl">افزونه‌های <a href="../../access-authn-authz/admission-controllers.html#limitranger"><code dir="ltr">LimitRanger</code></a> و <a href="../../access-authn-authz/admission-controllers.html#resourcequota"><code dir="ltr">ResourceQuota</code></a> برای اعمال محدودیت‌ها بر فضاهای نام.</li>
+<li dir="rtl">افزونهٔ <a href="../../access-authn-authz/admission-controllers.html#serviceaccount"><code dir="ltr">ServiceAccount</code></a> برای اعمال خودکارسازی حساب‌های سرویس.</li>
+<li dir="rtl">افزونهٔ <a href="../../access-authn-authz/admission-controllers.html#persistentvolumelabel"><code dir="ltr">PersistentVolumeLabel</code></a> که برچسب‌های منطقه یا ناحیه را، مطابق تعریف ارائه‌دهندهٔ ابری، به PersistentVolumeها می‌افزاید (این کنترل‌کنندهٔ پذیرش منسوخ شده است و در نسخه‌ای در آینده حذف خواهد شد. از نسخهٔ v1.9 به بعد، اگر کاربر صراحتاً <code dir="ltr">gce</code> یا <code dir="ltr">aws</code> را به‌عنوان ارائه‌دهندهٔ ابری انتخاب نکند، kubeadm آن را به‌طور پیش‌فرض مستقر نمی‌کند).</li>
+<li dir="rtl">افزونهٔ <a href="../../access-authn-authz/admission-controllers.html#defaultstorageclass"><code dir="ltr">DefaultStorageClass</code></a> برای اعمال کلاس ذخیره‌سازی پیش‌فرض بر آبجکت‌های <code dir="ltr">PersistentVolumeClaim</code>.</li>
+<li dir="rtl">افزونهٔ <a href="../../access-authn-authz/admission-controllers.html#defaulttolerationseconds"><code dir="ltr">DefaultTolerationSeconds</code></a>.</li>
+<li dir="rtl">افزونهٔ <a href="../../access-authn-authz/admission-controllers.html#noderestriction"><code dir="ltr">NodeRestriction</code></a> برای محدود کردن مواردی که kubelet می‌تواند تغییر دهد (برای مثال فقط Podهای همان نود).</li>
+</ul>
+</li>
+<li dir="rtl">
+<p dir="rtl">فلگ <code dir="ltr">--kubelet-preferred-address-types</code> با مقدار <code dir="ltr">InternalIP,ExternalIP,Hostname;</code>؛ با این تنظیم، دستور <code dir="ltr">kubectl logs</code> و سایر ارتباط‌های سرور API با kubelet در محیط‌هایی که نام میزبان نودها قابل تبدیل به نشانی نیست نیز کار می‌کنند.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">فلگ‌های مربوط به استفاده از گواهی‌های تولیدشده در مراحل قبل:</p>
+<ul>
+<li dir="rtl">فلگ <code dir="ltr">--client-ca-file</code> با مقدار <code dir="ltr">ca.crt</code></li>
+<li dir="rtl">فلگ <code dir="ltr">--tls-cert-file</code> با مقدار <code dir="ltr">apiserver.crt</code></li>
+<li dir="rtl">فلگ <code dir="ltr">--tls-private-key-file</code> با مقدار <code dir="ltr">apiserver.key</code></li>
+<li dir="rtl">فلگ <code dir="ltr">--kubelet-client-certificate</code> با مقدار <code dir="ltr">apiserver-kubelet-client.crt</code></li>
+<li dir="rtl">فلگ <code dir="ltr">--kubelet-client-key</code> با مقدار <code dir="ltr">apiserver-kubelet-client.key</code></li>
+<li dir="rtl">فلگ <code dir="ltr">--service-account-key-file</code> با مقدار <code dir="ltr">sa.pub</code></li>
+<li dir="rtl">فلگ <code dir="ltr">--requestheader-client-ca-file</code> با مقدار <code dir="ltr">front-proxy-ca.crt</code></li>
+<li dir="rtl">فلگ <code dir="ltr">--proxy-client-cert-file</code> با مقدار <code dir="ltr">front-proxy-client.crt</code></li>
+<li dir="rtl">فلگ <code dir="ltr">--proxy-client-key-file</code> با مقدار <code dir="ltr">front-proxy-client.key</code></li>
+</ul>
+</li>
+<li dir="rtl">
+<p dir="rtl">سایر فلگ‌ها برای ایمن‌سازی ارتباط‌های پراکسی جلویی (<a href="../../../concepts/extend-kubernetes/api-extension/apiserver-aggregation.html">تجمیع API</a>):</p>
+<ul>
+<li dir="ltr" class="ltr"><code dir="ltr">--requestheader-username-headers=X-Remote-User</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">--requestheader-group-headers=X-Remote-Group</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">--requestheader-extra-headers-prefix=X-Remote-Extra-</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">--requestheader-allowed-names=front-proxy-client</code></li>
+</ul>
+</li>
+</ul>
+<h4 id="مدیر-کنترل-کننده-ها" dir="rtl">مدیر کنترل‌کننده‌ها</h4>
+<p dir="rtl">پارامترهای زیر که کاربران ارائه می‌کنند، بر مانیفست Pod ایستای مدیر کنترل‌کننده‌ها اثر می‌گذارند:</p>
+<ul>
+<li dir="rtl">
+<p dir="rtl">اگر kubeadm با مشخص کردن <code dir="ltr">--pod-network-cidr</code> اجرا شود، قابلیت مدیریت زیرشبکه که برخی افزونه‌های شبکهٔ CNI به آن نیاز دارند، با تنظیم موارد زیر فعال می‌شود:</p>
+<ul>
+<li dir="ltr" class="ltr"><code dir="ltr">--allocate-node-cidrs=true</code></li>
+<li dir="rtl">فلگ‌های <code dir="ltr">--cluster-cidr</code> و <code dir="ltr">--node-cidr-mask-size</code> مطابق با CIDR داده‌شده</li>
+</ul>
+</li>
+</ul>
+<p dir="rtl">سایر فلگ‌هایی که بدون هیچ شرطی تنظیم می‌شوند عبارت‌اند از:</p>
+<ul>
+<li dir="rtl">
+<p dir="rtl">فلگ <code dir="ltr">--controllers</code> که همهٔ کنترل‌کننده‌های پیش‌فرض و نیز کنترل‌کننده‌های <code dir="ltr">BootstrapSigner</code> و <code dir="ltr">TokenCleaner</code> را برای راه‌اندازی اولیهٔ TLS فعال می‌کند. برای جزئیات بیشتر به <a href="../../access-authn-authz/kubelet-tls-bootstrapping.html">راه‌اندازی اولیهٔ TLS</a> مراجعه کنید.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">فلگ <code dir="ltr">--use-service-account-credentials</code> با مقدار <code dir="ltr">true</code>.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">فلگ‌های مربوط به استفاده از گواهی‌های تولیدشده در مراحل قبل:</p>
+<ul>
+<li dir="rtl">فلگ <code dir="ltr">--root-ca-file</code> با مقدار <code dir="ltr">ca.crt</code></li>
+<li dir="rtl">فلگ <code dir="ltr">--cluster-signing-cert-file</code> با مقدار <code dir="ltr">ca.crt</code> اگر حالت CA خارجی غیرفعال باشد، و در غیر این صورت با مقدار <code dir="ltr">""</code></li>
+<li dir="rtl">فلگ <code dir="ltr">--cluster-signing-key-file</code> با مقدار <code dir="ltr">ca.key</code> اگر حالت CA خارجی غیرفعال باشد، و در غیر این صورت با مقدار <code dir="ltr">""</code></li>
+<li dir="rtl">فلگ <code dir="ltr">--service-account-private-key-file</code> با مقدار <code dir="ltr">sa.key</code></li>
+</ul>
+</li>
+</ul>
+<h4 id="زمان-بند" dir="rtl">زمان‌بند</h4>
+<p dir="rtl">پارامترهایی که کاربر ارائه می‌کند، بر مانیفست Pod ایستای زمان‌بند اثری ندارند.</p>
+<h3 id="تولید-مانیفست-pod-ایستا-برای-etcd-محلی" dir="rtl">تولید مانیفست Pod ایستا برای etcd محلی</h3>
+<p dir="rtl">اگر etcd خارجی مشخص کرده باشید، این مرحله نادیده گرفته می‌شود؛ در غیر این صورت، kubeadm یک فایل مانیفست Pod ایستا تولید می‌کند تا نمونه‌ای محلی از etcd را در یک Pod با ویژگی‌های زیر ایجاد کند:</p>
+<ul>
+<li dir="rtl">روی <code dir="ltr">localhost:2379</code> گوش می‌دهد و از <code dir="ltr">HostNetwork=true</code> استفاده می‌کند.</li>
+<li dir="rtl">یک اتصال <code dir="ltr">hostPath</code> از <code dir="ltr">dataDir</code> به سیستم فایل میزبان ایجاد می‌کند.</li>
+<li dir="rtl">همهٔ فلگ‌های اضافی مشخص‌شده توسط کاربر را به کار می‌گیرد.</li>
+</ul>
+<p dir="rtl">توجه کنید که:</p>
+<ol>
+<li dir="rtl">ایمیج کانتینر etcd به‌طور پیش‌فرض از <code dir="ltr">registry.gcr.io</code> دریافت می‌شود. برای سفارشی‌سازی مخزن ایمیج، به <a href="kubeadm-init.html#custom-images">استفاده از ایمیج‌های سفارشی</a> مراجعه کنید.</li>
+<li dir="rtl">اگر kubeadm را در حالت <code dir="ltr">--dry-run</code> اجرا کنید، مانیفست Pod ایستای etcd در یک پوشهٔ موقت نوشته می‌شود.</li>
+<li dir="rtl">می‌توانید تولید مانیفست Pod ایستا برای etcd محلی را مستقیماً با دستور <a href="kubeadm-init-phase.html#cmd-phase-etcd"><code dir="ltr">kubeadm init phase etcd local</code></a> اجرا کنید.</li>
+</ol>
+<h3 id="انتظار-برای-بالا-آمدن-control-plane" dir="rtl">انتظار برای بالا آمدن control plane</h3>
+<p dir="rtl">در نودهای control plane، ابزار kubeadm حداکثر ۴ دقیقه منتظر می‌ماند تا مؤلفه‌های control plane و kubelet در دسترس قرار گیرند. این کار با بررسی سلامت از طریق نقطه‌های پایانی <code dir="ltr">/healthz</code> یا <code dir="ltr">/livez</code> هر مؤلفه انجام می‌شود.</p>
+<p dir="rtl">پس از بالا آمدن control plane، ابزار kubeadm کارهای شرح‌داده‌شده در بندهای بعدی را انجام می‌دهد.</p>
+<h3 id="ذخیرهٔ-clusterconfiguration-ابزار-kubeadm-در-یک-configmap-برای-مراجعات-بعدی" dir="rtl">ذخیرهٔ ClusterConfiguration ابزار kubeadm در یک ConfigMap برای مراجعات بعدی</h3>
+<p dir="rtl">ابزار kubeadm پیکربندی ارسال‌شده به <code dir="ltr">kubeadm init</code> را در یک ConfigMap با نام <code dir="ltr">kubeadm-config</code> در فضای نام <code dir="ltr">kube-system</code> ذخیره می‌کند.</p>
+<p dir="rtl">به این ترتیب، عملیات‌هایی که kubeadm در آینده اجرا می‌کند (مانند <code dir="ltr">kubeadm upgrade</code>) می‌توانند وضعیت واقعی و فعلی کلاستر را تعیین کنند و بر پایهٔ این داده‌ها تصمیم‌های جدید بگیرند.</p>
+<p dir="rtl">توجه کنید که:</p>
+<ol>
+<li dir="rtl">پیش از ذخیرهٔ ClusterConfiguration، اطلاعات حساس مانند توکن از پیکربندی حذف می‌شوند.</li>
+<li dir="rtl">بارگذاری پیکربندی نود control plane را می‌توان به‌تنهایی و با دستور <a href="kubeadm-init-phase.html#cmd-phase-upload-config"><code dir="ltr">kubeadm init phase upload-config</code></a> اجرا کرد.</li>
+</ol>
+<h3 id="علامت-گذاری-نود-به-عنوان-control-plane" dir="rtl">علامت‌گذاری نود به‌عنوان control-plane</h3>
+<p dir="rtl">به‌محض در دسترس قرار گرفتن control plane، ابزار kubeadm اقدامات زیر را انجام می‌دهد:</p>
+<ul>
+<li dir="rtl">با برچسب <code dir="ltr">node-role.kubernetes.io/control-plane=""</code> نود را به‌عنوان control-plane مشخص می‌کند.</li>
+<li dir="rtl">لکهٔ (taint) <code dir="ltr">node-role.kubernetes.io/control-plane:NoSchedule</code> را روی نود اعمال می‌کند.</li>
+</ul>
+<p dir="rtl">توجه کنید که فاز علامت‌گذاری control-plane را می‌توان به‌تنهایی و با دستور <a href="kubeadm-init-phase.html#cmd-phase-mark-control-plane"><code dir="ltr">kubeadm init phase mark-control-plane</code></a> اجرا کرد.</p>
+<h3 id="پیکربندی-راه-اندازی-اولیهٔ-tls-برای-پیوستن-نودها" dir="rtl">پیکربندی راه‌اندازی اولیهٔ TLS برای پیوستن نودها</h3>
+<p dir="rtl">ابزار kubeadm برای پیوستن نودهای جدید به کلاستر موجود از <a href="../../access-authn-authz/bootstrap-tokens.html">احراز هویت با توکن‌های راه‌اندازی اولیه</a> استفاده می‌کند؛ برای جزئیات بیشتر، <a href="https://git.k8s.io/design-proposals-archive/cluster-lifecycle/bootstrap-discovery.md" target="_blank" rel="noopener">پیشنهاد طراحی</a> را نیز ببینید.</p>
+<p dir="rtl">دستور <code dir="ltr">kubeadm init</code> اطمینان حاصل می‌کند که همه‌چیز برای این فرایند به‌درستی پیکربندی شده باشد. این کار شامل مراحل زیر و نیز تنظیم فلگ‌های سرور API و کنترل‌کننده است که در بندهای پیشین شرح داده شدند.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">راه‌اندازی اولیهٔ TLS برای نودها را می‌توان با دستور <a href="kubeadm-init-phase.html#cmd-phase-bootstrap-token"><code dir="ltr">kubeadm init phase bootstrap-token</code></a> پیکربندی کرد؛ این دستور همهٔ مراحل پیکربندی شرح‌داده‌شده در بندهای بعدی را اجرا می‌کند. همچنین می‌توان هر مرحله را به‌تنهایی اجرا کرد.</p>
+</div>
+<h4 id="ایجاد-توکن-راه-اندازی-اولیه" dir="rtl">ایجاد توکن راه‌اندازی اولیه</h4>
+<p dir="rtl">دستور <code dir="ltr">kubeadm init</code> نخستین توکن راه‌اندازی اولیه را ایجاد می‌کند؛ این توکن یا به‌طور خودکار تولید می‌شود یا کاربر آن را با فلگ <code dir="ltr">--token</code> ارائه می‌کند. مطابق مشخصات توکن راه‌اندازی اولیه، توکن باید به‌صورت یک Secret با نام <code dir="ltr">bootstrap-token-&lt;token-id&gt;</code> در فضای نام <code dir="ltr">kube-system</code> ذخیره شود.</p>
+<p dir="rtl">توجه کنید که:</p>
+<ol>
+<li dir="rtl">توکن پیش‌فرضی که <code dir="ltr">kubeadm init</code> ایجاد می‌کند، برای اعتبارسنجی کاربران موقت در فرایند راه‌اندازی اولیهٔ TLS استفاده می‌شود؛ این کاربران عضو گروه <code dir="ltr">system:bootstrappers:kubeadm:default-node-token</code> خواهند بود.</li>
+<li dir="rtl">اعتبار توکن محدود است و به‌طور پیش‌فرض ۲۴ ساعت طول می‌کشد (این بازه را می‌توان با فلگ <code dir="ltr">—token-ttl</code> تغییر داد).</li>
+<li dir="rtl">توکن‌های بیشتر را می‌توان با دستور <a href="kubeadm-token.html"><code dir="ltr">kubeadm token</code></a> ایجاد کرد؛ این دستور قابلیت‌های مفید دیگری نیز برای مدیریت توکن‌ها فراهم می‌کند.</li>
+</ol>
+<h4 id="اجازهٔ-فراخوانی-csr-api-به-نودهای-در-حال-پیوستن" dir="rtl">اجازهٔ فراخوانی CSR API به نودهای در حال پیوستن</h4>
+<p dir="rtl">ابزار kubeadm اطمینان حاصل می‌کند که کاربران گروه <code dir="ltr">system:bootstrappers:kubeadm:default-node-token</code> بتوانند به API امضای گواهی دسترسی داشته باشند.</p>
+<p dir="rtl">این کار با ایجاد یک ClusterRoleBinding با نام <code dir="ltr">kubeadm:kubelet-bootstrap</code> میان گروه بالا و نقش پیش‌فرض RBAC با نام <code dir="ltr">system:node-bootstrapper</code> انجام می‌شود.</p>
+<h4 id="راه-اندازی-تأیید-خودکار-برای-توکن-های-راه-اندازی-اولیهٔ-جدید" dir="rtl">راه‌اندازی تأیید خودکار برای توکن‌های راه‌اندازی اولیهٔ جدید</h4>
+<p dir="rtl">ابزار kubeadm اطمینان حاصل می‌کند که کنترل‌کنندهٔ csrapprover درخواست CSR مربوط به توکن راه‌اندازی اولیه را به‌طور خودکار تأیید کند.</p>
+<p dir="rtl">این کار با ایجاد یک ClusterRoleBinding با نام <code dir="ltr">kubeadm:node-autoapprove-bootstrap</code> میان گروه <code dir="ltr">system:bootstrappers:kubeadm:default-node-token</code> و نقش پیش‌فرض <code dir="ltr">system:certificates.k8s.io:certificatesigningrequests:nodeclient</code> انجام می‌شود.</p>
+<p dir="rtl">نقش <code dir="ltr">system:certificates.k8s.io:certificatesigningrequests:nodeclient</code> نیز باید ایجاد شود و مجوز POST را روی <code dir="ltr">/apis/certificates.k8s.io/certificatesigningrequests/nodeclient</code> اعطا کند.</p>
+<h4 id="راه-اندازی-چرخش-گواهی-نودها-با-تأیید-خودکار" dir="rtl">راه‌اندازی چرخش گواهی نودها با تأیید خودکار</h4>
+<p dir="rtl">ابزار kubeadm اطمینان حاصل می‌کند که چرخش گواهی برای نودها فعال باشد و کنترل‌کنندهٔ csrapprover درخواست CSR مربوط به گواهی جدید نودها را به‌طور خودکار تأیید کند.</p>
+<p dir="rtl">این کار با ایجاد یک ClusterRoleBinding با نام <code dir="ltr">kubeadm:node-autoapprove-certificate-rotation</code> میان گروه <code dir="ltr">system:nodes</code> و نقش پیش‌فرض <code dir="ltr">system:certificates.k8s.io:certificatesigningrequests:selfnodeclient</code> انجام می‌شود.</p>
+<h4 id="اجازهٔ-دسترسی-سرور-api-به-api-کوبلت" dir="rtl">اجازهٔ دسترسی سرور API به API کوبلت</h4>
+<p dir="rtl">ابزار kubeadm اطمینان حاصل می‌کند که سرور API بتواند با گواهی کلاینت خود، <code dir="ltr">apiserver-kubelet-client.crt</code>، به API کوبلت دسترسی داشته باشد.</p>
+<p dir="rtl">این کار با ایجاد یک ClusterRoleBinding با نام <code dir="ltr">kubeadm:apiserver-kubelet-client</code> میان کاربر <code dir="ltr">kube-apiserver-kubelet-client</code> و نقش پیش‌فرض RBAC با نام <code dir="ltr">system:kubelet-api-admin</code> انجام می‌شود.</p>
+<h4 id="ایجاد-configmap-عمومی-cluster-info" dir="rtl">ایجاد ConfigMap عمومی cluster-info</h4>
+<p dir="rtl">این فاز، ConfigMap با نام <code dir="ltr">cluster-info</code> را در فضای نام <code dir="ltr">kube-public</code> ایجاد می‌کند.</p>
+<p dir="rtl">افزون بر این، یک Role و یک RoleBinding ایجاد می‌کند که دسترسی به این ConfigMap را به کاربران احراز هویت‌نشده (یعنی کاربران گروه RBAC با نام <code dir="ltr">system:unauthenticated</code>) می‌دهند.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">دسترسی به ConfigMap با نام <code dir="ltr">cluster-info</code> محدودیت نرخ <em>ندارد</em>. اگر سرور API کلاستر خود را در معرض اینترنت قرار دهید، این موضوع ممکن است مشکل‌ساز باشد یا نباشد؛ بدترین سناریو در این حالت، حملهٔ منع سرویس (DoS) است که در آن مهاجم تمام درخواست‌های همزمانی را که kube-apiserver می‌تواند پردازش کند، صرف دریافت ConfigMap <code dir="ltr">cluster-info</code> می‌کند.</p>
+</div>
+<h3 id="نصب-افزونه-ها" dir="rtl">نصب افزونه‌ها</h3>
+<p dir="rtl">ابزار kubeadm سرور DNS داخلی و مؤلفه‌های افزونهٔ kube-proxy را از طریق سرور API نصب می‌کند.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">این فاز را می‌توان به‌تنهایی و با دستور <a href="kubeadm-init-phase.html#cmd-phase-addon"><code dir="ltr">kubeadm init phase addon all</code></a> اجرا کرد.</p>
+</div>
+<h4 id="پراکسی" dir="rtl">پراکسی</h4>
+<p dir="rtl">یک ServiceAccount برای <code dir="ltr">kube-proxy</code> در فضای نام <code dir="ltr">kube-system</code> ایجاد می‌شود؛ سپس kube-proxy به‌صورت یک DaemonSet مستقر می‌شود:</p>
+<ul>
+<li dir="rtl">اعتبارنامه‌های دسترسی به control plane (<code dir="ltr">ca.crt</code> و <code dir="ltr">token</code>) از ServiceAccount تأمین می‌شوند.</li>
+<li dir="rtl">مکان (URL) سرور API از یک ConfigMap به دست می‌آید.</li>
+<li dir="rtl">حساب ServiceAccount با نام <code dir="ltr">kube-proxy</code> به امتیازهای ClusterRole با نام <code dir="ltr">system:node-proxier</code> متصل می‌شود.</li>
+</ul>
+<h4 id="سرویس-dns" dir="rtl">سرویس DNS</h4>
+<ul>
+<li dir="rtl">
+<p dir="rtl">سرویس CoreDNS برای سازگاری با افزونهٔ قدیمی <code dir="ltr">kube-dns</code>، نام <code dir="ltr">kube-dns</code> را دارد.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">یک ServiceAccount برای CoreDNS در فضای نام <code dir="ltr">kube-system</code> ایجاد می‌شود.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">حساب ServiceAccount با نام <code dir="ltr">coredns</code> به امتیازهای ClusterRole با نام <code dir="ltr">system:coredns</code> متصل می‌شود.</p>
+</li>
+</ul>
+<h2 id="طراحی-داخلی-فازهای-kubeadm-join" dir="rtl">طراحی داخلی فازهای kubeadm join</h2>
+<p dir="rtl">گردش کار داخلی <code dir="ltr">kubeadm join</code> نیز مانند <code dir="ltr">kubeadm init</code> از دنباله‌ای از کارهای اتمی تشکیل شده است.</p>
+<p dir="rtl">این فرایند به دو بخش تقسیم می‌شود: کشف (که در آن نود به سرور API کوبرنتیز اعتماد می‌کند) و راه‌اندازی اولیهٔ TLS (که در آن سرور API کوبرنتیز به نود اعتماد می‌کند).</p>
+<p dir="rtl">به <a href="../../access-authn-authz/bootstrap-tokens.html">احراز هویت با توکن‌های راه‌اندازی اولیه</a> یا <a href="https://git.k8s.io/design-proposals-archive/cluster-lifecycle/bootstrap-discovery.md" target="_blank" rel="noopener">پیشنهاد طراحی</a> مربوط به آن مراجعه کنید.</p>
+<h3 id="بررسی-های-پیش-از-اجرا-1" dir="rtl">بررسی‌های پیش از اجرا</h3>
+<p dir="rtl">ابزار <code dir="ltr">kubeadm</code> پیش از آغاز عملیات پیوستن، مجموعه‌ای از بررسی‌های پیش از اجرا را انجام می‌دهد تا پیش‌شرط‌ها را تأیید کند و از مشکلات رایج هنگام راه‌اندازی کلاستر جلوگیری شود.</p>
+<p dir="rtl">همچنین توجه کنید که:</p>
+<ol>
+<li dir="rtl">بررسی‌های پیش از اجرای <code dir="ltr">kubeadm join</code> در اصل زیرمجموعه‌ای از بررسی‌های پیش از اجرای <code dir="ltr">kubeadm init</code> هستند.</li>
+<li dir="rtl">اگر نود Windows را به کلاستر می‌پیوندانید، کنترل‌های مخصوص Linux نادیده گرفته می‌شوند.</li>
+<li dir="rtl">در هر صورت، کاربر می‌تواند با گزینهٔ <code dir="ltr">--ignore-preflight-errors</code> بررسی‌های مشخصی از پیش از اجرا (یا در صورت لزوم همهٔ آن‌ها) را نادیده بگیرد.</li>
+</ol>
+<h3 id="کشف-cluster-info" dir="rtl">کشف cluster-info</h3>
+<p dir="rtl">برای کشف (discovery) دو روش اصلی وجود دارد. روش نخست، استفاده از یک توکن مشترک همراه با نشانی IP سرور API است. در روش دوم، فایلی ارائه می‌شود که زیرمجموعه‌ای از فایل استاندارد kubeconfig است.</p>
+<h4 id="کشف-با-توکن-مشترک" dir="rtl">کشف با توکن مشترک</h4>
+<p dir="rtl">اگر <code dir="ltr">kubeadm join</code> با <code dir="ltr">--discovery-token</code> اجرا شود، کشف با توکن انجام می‌شود. در این حالت، نود اساساً گواهی‌های CA کلاستر را از ConfigMap با نام <code dir="ltr">cluster-info</code> در فضای نام (namespace) <code dir="ltr">kube-public</code> دریافت می‌کند.</p>
+<p dir="rtl">برای جلوگیری از حملات «مرد میانی» (man in the middle)، چند گام برداشته می‌شود:</p>
+<ul>
+<li dir="rtl">
+<p dir="rtl">نخست، گواهی CA از طریق یک اتصال ناامن دریافت می‌شود. این کار از آن رو ممکن است که <code dir="ltr">kubeadm init</code> به کاربران <code dir="ltr">system:unauthenticated</code> اجازهٔ دسترسی به <code dir="ltr">cluster-info</code> را داده است.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">سپس گواهی CA از گام‌های اعتبارسنجی زیر می‌گذرد:</p>
+<ul>
+<li dir="rtl">اعتبارسنجی پایه: شناسهٔ توکن با یک امضای JWT سنجیده می‌شود.</li>
+<li dir="rtl">اعتبارسنجی کلید عمومی: از مقدار ارائه‌شده در <code dir="ltr">--discovery-token-ca-cert-hash</code> استفاده می‌شود. این مقدار در خروجی <code dir="ltr">kubeadm init</code> در دسترس است و با ابزارهای استاندارد نیز می‌توان آن را محاسبه کرد (این هش، مطابق RFC7469، روی بایت‌های آبجکت Subject Public Key Info (SPKI) محاسبه می‌شود). برای مجاز کردن بیش از یک کلید عمومی، می‌توان <code dir="ltr">--discovery-token-ca-cert-hash flag</code> را چند بار تکرار کرد.</li>
+<li dir="rtl">به‌عنوان اعتبارسنجی تکمیلی، گواهی CA از طریق یک اتصال امن دریافت و با CA دریافت‌شده در ابتدا مقایسه می‌شود.</li>
+</ul>
+</li>
+</ul>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">با ارسال فلگ <code dir="ltr">--discovery-token-unsafe-skip-ca-verification</code> در خط فرمان می‌توانید از اعتبارسنجی CA صرف‌نظر کنید. این کار مدل امنیتی kubeadm را تضعیف می‌کند، زیرا دیگران ممکن است خود را به‌جای سرور API کوبرنتیز جا بزنند.</p>
+</div>
+<h4 id="کشف-با-فایل-یا-https" dir="rtl">کشف با فایل یا HTTPS</h4>
+<p dir="rtl">اگر <code dir="ltr">kubeadm join</code> با <code dir="ltr">--discovery-file</code> اجرا شود، کشف با فایل انجام می‌شود. این فایل می‌تواند محلی باشد یا از یک نشانی HTTPS بارگیری شود. در حالت HTTPS، برای تأیید اتصال از مجموعه گواهی‌های CA نصب‌شده روی میزبان استفاده می‌شود.</p>
+<p dir="rtl">در کشف با فایل، گواهی CA کلاستر درون خود فایل قرار دارد. در واقع، فایل کشف یک فایل kubeconfig است که فقط ویژگی‌های <code dir="ltr">server</code> و <code dir="ltr">certificate-authority-data</code> در آن تنظیم شده‌اند؛ این موضوع در مستند مرجع <a href="kubeadm-join.html#file-or-https-based-discovery"><code dir="ltr">kubeadm join</code></a> شرح داده شده است. پس از برقراری اتصال با کلاستر، kubeadm تلاش می‌کند به ConfigMap با نام <code dir="ltr">cluster-info</code> دسترسی پیدا کند و در صورت موجود بودن، از آن استفاده می‌کند.</p>
+<h2 id="راه-اندازی-اولیهٔ-tls" dir="rtl">راه‌اندازی اولیهٔ TLS</h2>
+<p dir="rtl">پس از مشخص شدن اطلاعات کلاستر، فایل <code dir="ltr">bootstrap-kubelet.conf</code> نوشته می‌شود تا kubelet بتواند راه‌اندازی اولیهٔ TLS (TLS Bootstrapping) را انجام دهد.</p>
+<p dir="rtl">سازوکار راه‌اندازی اولیهٔ TLS از توکن مشترک برای احراز هویت موقت با سرور API کوبرنتیز استفاده می‌کند تا یک درخواست امضای گواهی (CSR) برای جفت‌کلیدی که به‌صورت محلی ساخته شده است ارسال کند.</p>
+<p dir="rtl">سپس این درخواست به‌طور خودکار تأیید می‌شود و عملیات با ذخیرهٔ فایل‌های <code dir="ltr">ca.crt</code> و <code dir="ltr">kubelet.conf</code> پایان می‌یابد. kubelet از این فایل‌ها برای پیوستن به کلاستر استفاده می‌کند و فایل <code dir="ltr">bootstrap-kubelet.conf</code> حذف می‌شود.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<ul>
+<li dir="rtl">احراز هویت موقت با توکن ذخیره‌شده در فرایند <code dir="ltr">kubeadm init</code> (یا با توکن‌های دیگری که با دستور <code dir="ltr">kubeadm token</code> ساخته شده‌اند) اعتبارسنجی می‌شود.</li>
+<li dir="rtl">نتیجهٔ احراز هویت موقت، کاربری عضو گروه <code dir="ltr">system:bootstrappers:kubeadm:default-node-token</code> است که در فرایند <code dir="ltr">kubeadm init</code> به API مربوط به CSR دسترسی گرفته است.</li>
+<li dir="rtl">تأیید خودکار CSR را کنترل‌کنندهٔ csrapprover، مطابق پیکربندی موجود در فرایند <code dir="ltr">kubeadm init</code>، مدیریت می‌کند.</li>
+</ul>
+</div>
+<h2 id="طراحی-داخلی-گردش-کار-kubeadm-upgrade" dir="rtl">طراحی داخلی گردش کار kubeadm upgrade</h2>
+<p dir="rtl">دستور <code dir="ltr">kubeadm upgrade</code> زیردستورهایی برای مدیریت ارتقای کلاستر کوبرنتیز ساخته‌شده با kubeadm دارد. باید <code dir="ltr">kubeadm upgrade apply</code> را روی یک نود control plane اجرا کنید (انتخاب این نود با شماست)؛ این دستور فرایند ارتقا را آغاز می‌کند. سپس <code dir="ltr">kubeadm upgrade node</code> را روی همهٔ نودهای باقی‌مانده، اعم از نودهای کارگر و نودهای control plane، اجرا می‌کنید.</p>
+<p dir="rtl">هر دو دستور <code dir="ltr">kubeadm upgrade apply</code> و <code dir="ltr">kubeadm upgrade node</code> زیردستوری به نام <code dir="ltr">phase</code> دارند که دسترسی به مراحل داخلی فرایند ارتقا را فراهم می‌کند. برای جزئیات بیشتر، <a href="https://kubernetes.io/docs/reference/setup-tools/kubeadm/kubeadm-upgrade-phase/" target="_blank"><code dir="ltr">kubeadm upgrade phase</code></a> را ببینید.</p>
+<p dir="rtl">دستورهای کمکی دیگر برای ارتقا، <code dir="ltr">kubeadm upgrade plan</code> و <code dir="ltr">kubeadm upgrade diff</code> هستند.</p>
+<p dir="rtl">همهٔ زیردستورهای ارتقا از ارسال فایل پیکربندی پشتیبانی می‌کنند.</p>
+<h3 id="دستور-kubeadm-upgrade-plan" dir="rtl">دستور kubeadm upgrade plan</h3>
+<p dir="rtl">می‌توانید پیش از اجرای <code dir="ltr">kubeadm upgrade apply</code>، به‌صورت اختیاری <code dir="ltr">kubeadm upgrade plan</code> را اجرا کنید. زیردستور <code dir="ltr">plan</code> بررسی می‌کند که چه نسخه‌هایی برای ارتقا در دسترس هستند و آیا کلاستر فعلی شما قابل ارتقا است یا نه.</p>
+<h3 id="دستور-kubeadm-upgrade-diff" dir="rtl">دستور kubeadm upgrade diff</h3>
+<p dir="rtl">این دستور نشان می‌دهد چه تفاوت‌هایی روی مانیفست‌های موجود پادهای ایستا (static pod) در نودهای control plane اعمال خواهد شد. برای انجام همین کار با جزئیات بیشتر، می‌توانید <code dir="ltr">kubeadm upgrade apply --dry-run</code> یا <code dir="ltr">kubeadm upgrade node --dry-run</code> را اجرا کنید.</p>
+<h3 id="دستور-kubeadm-upgrade-apply" dir="rtl">دستور kubeadm upgrade apply</h3>
+<p dir="rtl">دستور <code dir="ltr">kubeadm upgrade apply</code> کلاستر را برای ارتقای همهٔ نودها آماده می‌کند و نود control plane‌ای را که روی آن اجرا شده است نیز ارتقا می‌دهد. این دستور گام‌های زیر را انجام می‌دهد:</p>
+<ul>
+<li dir="rtl">بررسی‌های پیش از اجرا را مشابه <code dir="ltr">kubeadm init</code> و <code dir="ltr">kubeadm join</code> انجام می‌دهد و از بارگیری ایمیج‌های کانتینر و مناسب بودن وضعیت کلاستر برای ارتقا اطمینان حاصل می‌کند.</li>
+<li dir="rtl">فایل‌های مانیفست control plane را روی دیسک در مسیر <code dir="ltr">/etc/kubernetes/manifests</code> ارتقا می‌دهد و اگر فایل‌ها تغییر کرده باشند، منتظر می‌ماند تا kubelet مؤلفه‌ها را دوباره راه‌اندازی کند.</li>
+<li dir="rtl">پیکربندی‌های به‌روزشدهٔ kubeadm و kubelet را در ConfigMapهای <code dir="ltr">kubeadm-config</code> و <code dir="ltr">kubelet-config</code> (هر دو در فضای نام <code dir="ltr">kube-system</code>) در کلاستر بارگذاری می‌کند.</li>
+<li dir="rtl">پیکربندی به‌روزشدهٔ kubelet را برای این نود در <code dir="ltr">/var/lib/kubelet/config.yaml</code> می‌نویسد، فایل <code dir="ltr">/var/lib/kubelet/instance-config.yaml</code> نود را می‌خواند و فیلدهایی مانند <code dir="ltr">containerRuntimeEndpoint</code> را از این پیکربندی نمونه در <code dir="ltr">/var/lib/kubelet/config.yaml</code> وصله (patch) می‌کند.</li>
+<li dir="rtl">توکن راه‌انداز (bootstrap token) و ConfigMap با نام <code dir="ltr">cluster-info</code> را برای قواعد RBAC پیکربندی می‌کند. این کار همانند مرحلهٔ <code dir="ltr">kubeadm init</code> است و تضمین می‌کند که کلاستر همچنان از پیوستن نودها با توکن‌های راه‌انداز پشتیبانی کند.</li>
+<li dir="rtl">افزونه‌های kube-proxy و CoreDNS را به‌صورت مشروط ارتقا می‌دهد؛ شرط این کار آن است که همهٔ kube-apiserverهای موجود در کلاستر پیش‌تر به نسخهٔ هدف ارتقا یافته باشند.</li>
+<li dir="rtl">کارهای پس از ارتقا، مانند پاک‌سازی قابلیت‌های منسوخ‌شدهٔ مختص هر انتشار، را انجام می‌دهد.</li>
+</ul>
+<h3 id="دستور-kubeadm-upgrade-node" dir="rtl">دستور kubeadm upgrade node</h3>
+<p dir="rtl">دستور <code dir="ltr">kubeadm upgrade node</code> پس از آغاز ارتقای کلاستر (با اجرای <code dir="ltr">kubeadm upgrade apply</code>)، یک نود control plane یا نود کارگر را ارتقا می‌دهد. این دستور با بررسی وجود فایل <code dir="ltr">/etc/kubernetes/manifests/kube-apiserver.yaml</code> تشخیص می‌دهد که آیا نود از نوع control plane است یا نه. اگر ابزار kubeadm این فایل را پیدا کند، نتیجه می‌گیرد که یک Pod از kube-apiserver روی این نود در حال اجراست.</p>
+<ul>
+<li dir="rtl">بررسی‌های پیش از اجرا را مشابه <code dir="ltr">kubeadm upgrade apply</code> انجام می‌دهد.</li>
+<li dir="rtl">در نودهای control plane، فایل‌های مانیفست control plane را روی دیسک در مسیر <code dir="ltr">/etc/kubernetes/manifests</code> ارتقا می‌دهد و اگر فایل‌ها تغییر کرده باشند، منتظر می‌ماند تا kubelet مؤلفه‌ها را دوباره راه‌اندازی کند.</li>
+<li dir="rtl">پیکربندی به‌روزشدهٔ kubelet را برای این نود در <code dir="ltr">/var/lib/kubelet/config.yaml</code> می‌نویسد، فایل <code dir="ltr">/var/lib/kubelet/instance-config.yaml</code> نود را می‌خواند و فیلدهایی مانند <code dir="ltr">containerRuntimeEndpoint</code> را از این پیکربندی نمونه در <code dir="ltr">/var/lib/kubelet/config.yaml</code> وصله می‌کند.</li>
+<li dir="rtl">(در نودهای control plane) <span class="term" title="addons">افزونه‌های</span> kube-proxy و CoreDNS را به‌صورت مشروط ارتقا می‌دهد؛ شرط این کار آن است که همهٔ سرورهای API موجود در کلاستر پیش‌تر به نسخهٔ هدف ارتقا یافته باشند.</li>
+<li dir="rtl">کارهای پس از ارتقا، مانند پاک‌سازی قابلیت‌های منسوخ‌شدهٔ مختص هر انتشار، را انجام می‌دهد.</li>
+</ul>
+<h2 id="طراحی-داخلی-گردش-کار-kubeadm-reset" dir="rtl">طراحی داخلی گردش کار kubeadm reset</h2>
+<p dir="rtl">می‌توانید زیردستور <code dir="ltr">kubeadm reset</code> را روی نودی به کار ببرید که پیش‌تر دستورهای kubeadm روی آن اجرا شده‌اند. این زیردستور پاک‌سازی نود را به‌صورت <strong>بهترین تلاش ممکن</strong> انجام می‌دهد. اگر برخی از اقدامات ناموفق باشند، باید خودتان مداخله و پاک‌سازی را به‌صورت دستی انجام دهید.</p>
+<p dir="rtl">این دستور از مراحل (phase) پشتیبانی می‌کند. برای جزئیات بیشتر، <a href="kubeadm-reset-phase.html"><code dir="ltr">kubeadm reset phase</code></a> را ببینید.</p>
+<p dir="rtl">این دستور از فایل پیکربندی پشتیبانی می‌کند.</p>
+<p dir="rtl">علاوه بر این:</p>
+<ul>
+<li dir="rtl">قواعد IPVS، iptables و nftables پاک‌سازی <strong>نمی‌شوند</strong>.</li>
+<li dir="rtl">پیکربندی CNI (افزونهٔ شبکه) پاک‌سازی <strong>نمی‌شود</strong>.</li>
+<li dir="rtl">پوشهٔ <code dir="ltr">.kube/</code> در دایرکتوری خانگی کاربر پاک‌سازی <strong>نمی‌شود</strong>.</li>
+</ul>
+<p dir="rtl">این دستور مراحل زیر را دارد:</p>
+<ul>
+<li dir="rtl">بررسی‌های پیش از اجرا را روی نود انجام می‌دهد تا سالم بودن آن را مشخص کند.</li>
+<li dir="rtl">در نودهای control plane، همهٔ داده‌های محلی عضو etcd را حذف می‌کند.</li>
+<li dir="rtl">سرویس kubelet را متوقف می‌کند.</li>
+<li dir="rtl">کانتینرهای در حال اجرا را متوقف می‌کند.</li>
+<li dir="rtl">همهٔ دایرکتوری‌های mount‌شده در <code dir="ltr">/var/lib/kubelet</code> را unmount می‌کند.</li>
+<li dir="rtl">همهٔ فایل‌ها و دایرکتوری‌هایی را که kubeadm در <code dir="ltr">/var/lib/kubelet</code> و <code dir="ltr">/etc/kubernetes</code> مدیریت می‌کند حذف می‌کند.</li>
+</ul>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#اصول-اصلی-طراحی">اصول اصلی طراحی</a><a class="l2" href="#مقادیر-و-مسیرهای-ثابت-و-شناخته-شده">مقادیر و مسیرهای ثابت و شناخته‌شده</a><a class="l2" href="#قالب-فایل-پیکربندی-kubeadm">قالب فایل پیکربندی kubeadm</a><a class="l2" href="#طراحی-داخلی-گردش-کار-kubeadm-init">طراحی داخلی گردش کار kubeadm init</a><a class="l3" href="#بررسی-های-پیش-از-اجرا">بررسی‌های پیش از اجرا</a><a class="l3" href="#تولید-گواهی-های-لازم">تولید گواهی‌های لازم</a><a class="l3" href="#تولید-فایل-های-kubeconfig-برای-مؤلفه-های-control-plane">تولید فایل‌های kubeconfig برای مؤلفه‌های control plane</a><a class="l3" href="#تولید-مانیفست-های-pod-ایستا-برای-مؤلفه-های-control-plane">تولید مانیفست‌های Pod ایستا برای مؤلفه‌های control plane</a><a class="l3" href="#تولید-مانیفست-pod-ایستا-برای-etcd-محلی">تولید مانیفست Pod ایستا برای etcd محلی</a><a class="l3" href="#انتظار-برای-بالا-آمدن-control-plane">انتظار برای بالا آمدن control plane</a><a class="l3" href="#ذخیرهٔ-clusterconfiguration-ابزار-kubeadm-در-یک-configmap-برای-مراجعات-بعدی">ذخیرهٔ ClusterConfiguration ابزار kubeadm در یک ConfigMap برای مراجعات بعدی</a><a class="l3" href="#علامت-گذاری-نود-به-عنوان-control-plane">علامت‌گذاری نود به‌عنوان control-plane</a><a class="l3" href="#پیکربندی-راه-اندازی-اولیهٔ-tls-برای-پیوستن-نودها">پیکربندی راه‌اندازی اولیهٔ TLS برای پیوستن نودها</a><a class="l3" href="#نصب-افزونه-ها">نصب افزونه‌ها</a><a class="l2" href="#طراحی-داخلی-فازهای-kubeadm-join">طراحی داخلی فازهای kubeadm join</a><a class="l3" href="#بررسی-های-پیش-از-اجرا-1">بررسی‌های پیش از اجرا</a><a class="l3" href="#کشف-cluster-info">کشف cluster-info</a><a class="l2" href="#راه-اندازی-اولیهٔ-tls">راه‌اندازی اولیهٔ TLS</a><a class="l2" href="#طراحی-داخلی-گردش-کار-kubeadm-upgrade">طراحی داخلی گردش کار kubeadm upgrade</a><a class="l3" href="#دستور-kubeadm-upgrade-plan">دستور kubeadm upgrade plan</a><a class="l3" href="#دستور-kubeadm-upgrade-diff">دستور kubeadm upgrade diff</a><a class="l3" href="#دستور-kubeadm-upgrade-apply">دستور kubeadm upgrade apply</a><a class="l3" href="#دستور-kubeadm-upgrade-node">دستور kubeadm upgrade node</a><a class="l2" href="#طراحی-داخلی-گردش-کار-kubeadm-reset">طراحی داخلی گردش کار kubeadm reset</a></nav>
+</div>
+</body>
+</html>

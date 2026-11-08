@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-1407 از 1722 صفحه
+1422 از 1722 صفحه
 
 
 ## `.`
@@ -1658,20 +1658,20 @@
 ## `reference/setup-tools/kubeadm`
 
 - ✅ [_index.md](md/reference/setup-tools/kubeadm/_index.md)
-- ⏳ `implementation-details.md`
-- ⏳ `kubeadm-alpha.md`
-- ⏳ `kubeadm-certs.md`
-- ⏳ `kubeadm-config.md`
-- ⏳ `kubeadm-init-phase.md`
-- ⏳ `kubeadm-init.md`
-- ⏳ `kubeadm-join-phase.md`
-- ⏳ `kubeadm-join.md`
-- ⏳ `kubeadm-kubeconfig.md`
-- ⏳ `kubeadm-reset-phase.md`
-- ⏳ `kubeadm-reset.md`
-- ⏳ `kubeadm-token.md`
+- ✅ [implementation-details.md](md/reference/setup-tools/kubeadm/implementation-details.md)
+- ✅ [kubeadm-alpha.md](md/reference/setup-tools/kubeadm/kubeadm-alpha.md)
+- ✅ [kubeadm-certs.md](md/reference/setup-tools/kubeadm/kubeadm-certs.md)
+- ✅ [kubeadm-config.md](md/reference/setup-tools/kubeadm/kubeadm-config.md)
+- ⚠️ [kubeadm-init-phase.md](md/reference/setup-tools/kubeadm/kubeadm-init-phase.md)
+- ✅ [kubeadm-init.md](md/reference/setup-tools/kubeadm/kubeadm-init.md)
+- ✅ [kubeadm-join-phase.md](md/reference/setup-tools/kubeadm/kubeadm-join-phase.md)
+- ✅ [kubeadm-join.md](md/reference/setup-tools/kubeadm/kubeadm-join.md)
+- ✅ [kubeadm-kubeconfig.md](md/reference/setup-tools/kubeadm/kubeadm-kubeconfig.md)
+- ✅ [kubeadm-reset-phase.md](md/reference/setup-tools/kubeadm/kubeadm-reset-phase.md)
+- ✅ [kubeadm-reset.md](md/reference/setup-tools/kubeadm/kubeadm-reset.md)
+- ✅ [kubeadm-token.md](md/reference/setup-tools/kubeadm/kubeadm-token.md)
 - ⏳ `kubeadm-upgrade-phase.md`
-- ⏳ `kubeadm-upgrade.md`
+- ✅ [kubeadm-upgrade.md](md/reference/setup-tools/kubeadm/kubeadm-upgrade.md)
 - ⏳ `kubeadm-version.md`
 
 ## `reference/setup-tools/kubeadm/generated`
@@ -1837,11 +1837,11 @@
 - ✅ [kubeadm_upgrade_node_phase_kubelet-config.md](md/reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_node_phase_kubelet-config.md)
 - ✅ [kubeadm_upgrade_node_phase_post-upgrade.md](md/reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_node_phase_post-upgrade.md)
 - ✅ [kubeadm_upgrade_node_phase_preflight.md](md/reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_node_phase_preflight.md)
-- ⏳ `kubeadm_upgrade_plan.md`
+- ✅ [kubeadm_upgrade_plan.md](md/reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_plan.md)
 
 ## `reference/setup-tools/kubeadm/generated/kubeadm_version`
 
-- ⏳ `_index.md`
+- ✅ [_index.md](md/reference/setup-tools/kubeadm/generated/kubeadm_version/_index.md)
 
 ## `reference/tools`
 

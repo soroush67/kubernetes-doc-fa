@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>kubeadm join | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
+<header class="top"><a href="../../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">reference / setup-tools / kubeadm</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="ltr" class="ltr">kubeadm join</h1><!-- overview -->
+<p dir="rtl">این دستور یک نود جدید کوبرنتیز را مقداردهی اولیه می‌کند و آن را به کلاستر موجود می‌پیوندد.</p>
+<!-- body -->
+<h3 id="گردش-کار-پیوستن-join-workflow" dir="rtl">گردش کار پیوستن {#join-workflow}</h3>
+<p dir="rtl">دستور <code dir="ltr">kubeadm join</code> یک نود کارگر یا یک نود control plane کوبرنتیز را راه‌اندازی اولیه (bootstrap) می‌کند و آن را به کلاستر می‌افزاید. این عملیات برای نودهای کارگر شامل مراحل زیر است:</p>
+<ol>
+<li dir="rtl">
+<p dir="rtl">ابتدا kubeadm اطلاعات لازم کلاستر را از API server دریافت می‌کند. این ابزار به‌طور پیش‌فرض برای تأیید اصالت این داده‌ها از توکن راه‌اندازی اولیه و هش کلید مرجع صدور گواهی (CA) استفاده می‌کند. همچنین می‌توان CA ریشه را مستقیماً از طریق یک فایل یا URL کشف کرد.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">پس از مشخص شدن اطلاعات کلاستر، kubelet می‌تواند فرایند راه‌اندازی اولیه TLS را آغاز کند.</p>
+<p dir="rtl">در این فرایند، از توکن مشترک برای احراز هویت موقت در API server کوبرنتیز استفاده می‌شود تا یک درخواست امضای گواهی (CSR) ارسال شود. control plane به‌طور پیش‌فرض این درخواست را به‌صورت خودکار امضا می‌کند.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">در پایان، kubeadm مؤلفه kubelet محلی را طوری پیکربندی می‌کند که با هویت قطعی اختصاص‌یافته به نود به API server متصل شود.</p>
+</li>
+</ol>
+<p dir="rtl">برای نودهای control plane مراحل دیگری نیز انجام می‌شود:</p>
+<ol>
+<li dir="rtl">
+<p dir="rtl">دریافت گواهی‌های مشترک میان نودهای control plane از کلاستر (در صورتی که کاربر صریحاً آن را درخواست کرده باشد).</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">تولید مانیفست‌های مؤلفه‌های control plane، گواهی‌ها و kubeconfig.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">افزودن عضو محلی جدید etcd.</p>
+</li>
+</ol>
+<h3 id="استفاده-از-مراحل-پیوستن-با-kubeadm-join-phases" dir="rtl">استفاده از مراحل پیوستن با kubeadm {#join-phases}</h3>
+<p dir="rtl">با استفاده از <code dir="ltr">kubeadm join phase</code> می‌توانید فرایند پیوستن یک نود به کلاستر را مرحله‌به‌مرحله انجام دهید.</p>
+<p dir="rtl">برای مشاهده فهرست مرتب مراحل و زیرمراحل، دستور <code dir="ltr">kubeadm join --help</code> را اجرا کنید. این فهرست در بالای صفحه راهنما قرار دارد و کنار هر مرحله توضیحی درباره آن آمده است. توجه کنید که با اجرای <code dir="ltr">kubeadm join</code>، همه مراحل و زیرمراحل دقیقاً به همین ترتیب اجرا می‌شوند.</p>
+<p dir="rtl">برخی مراحل فلگ‌های مخصوص به خود دارند. بنابراین اگر می‌خواهید فهرست گزینه‌های موجود را ببینید، <code dir="ltr">--help</code> را اضافه کنید؛ برای نمونه:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubeadm join phase kubelet-start --help
+</code></pre>
+<p dir="rtl">دستور <code dir="ltr">kubeadm join phase</code> نیز مانند دستور <a href="kubeadm-init.html#init-phases">kubeadm init phase</a> امکان می‌دهد با فلگ <code dir="ltr">--skip-phases</code> فهرستی از مراحل را نادیده بگیرید.</p>
+<p dir="rtl">برای نمونه:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">sudo kubeadm join --skip-phases=preflight --config=config.yaml
+</code></pre>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes v1.22 [beta]</span> (بتا)</div>
+<p dir="rtl">همچنین می‌توانید از فیلد <code dir="ltr">skipPhases</code> در <code dir="ltr">JoinConfiguration</code> استفاده کنید.</p>
+<h3 id="تشخیص-ca-مورد-اعتماد-کلاستر" dir="rtl">تشخیص CA مورد اعتماد کلاستر</h3>
+<p dir="rtl">سازوکار کشف kubeadm چند گزینه دارد که هر یک از نظر امنیتی مزایا و معایب خود را دارند. روش مناسب برای محیط شما به شیوه تأمین نودها و انتظارات امنیتی شما از شبکه و چرخه عمر نودها بستگی دارد.</p>
+<h4 id="کشف-مبتنی-بر-توکن-با-پین-کردن-ca" dir="rtl">کشف مبتنی بر توکن با پین‌کردن CA</h4>
+<p dir="rtl">این حالت، حالت پیش‌فرض kubeadm است. در این حالت، kubeadm پیکربندی کلاستر (از جمله CA ریشه) را دریافت می‌کند و آن را با استفاده از توکن اعتبارسنجی می‌کند. همچنین بررسی می‌کند که کلید عمومی CA ریشه با هش ارائه‌شده مطابقت داشته باشد و گواهی API server تحت CA ریشه معتبر باشد.</p>
+<p dir="rtl">قالب هش کلید CA به‌صورت <code dir="ltr">sha256:&lt;hex_encoded_hash&gt;</code> است. مقدار هش به‌طور پیش‌فرض در پایان اجرای دستور <code dir="ltr">kubeadm init</code> یا در خروجی دستور <code dir="ltr">kubeadm token create --print-join-command</code> چاپ می‌شود. این مقدار قالبی استاندارد دارد (به <a href="https://tools.ietf.org/html/rfc7469#section-2.4" target="_blank" rel="noopener">RFC7469</a> مراجعه کنید) و ابزارهای شخص ثالث یا سامانه‌های تأمین نیز می‌توانند آن را محاسبه کنند. برای نمونه، با رابط خط فرمان OpenSSL:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt | openssl rsa -pubin -outform der 2&gt;/dev/null | openssl dgst -sha256 -hex | sed 's/^.* //'
+</code></pre>
+<p dir="rtl"><strong>نمونه دستورهای <code dir="ltr">kubeadm join</code>:</strong></p>
+<p dir="rtl">برای نودهای کارگر:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubeadm join --discovery-token abcdef.1234567890abcdef --discovery-token-ca-cert-hash sha256:1234..cdef 1.2.3.4:6443
+</code></pre>
+<p dir="rtl">برای نودهای control plane:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubeadm join --discovery-token abcdef.1234567890abcdef --discovery-token-ca-cert-hash sha256:1234..cdef --control-plane 1.2.3.4:6443
+</code></pre>
+<p dir="rtl">اگر دستور <code dir="ltr">kubeadm init</code> با <code dir="ltr">--upload-certs</code> اجرا شده باشد، می‌توانید <code dir="ltr">join</code> را برای یک نود control plane همراه با <code dir="ltr">--certificate-key</code> نیز اجرا کنید تا گواهی‌ها روی این نود کپی شوند.</p>
+<p dir="rtl"><strong>مزایا:</strong></p>
+<ul>
+<li dir="rtl">
+<p dir="rtl">نودهای در حال راه‌اندازی می‌توانند ریشه اعتماد نود control plane را به‌صورت امن کشف کنند، حتی اگر سایر نودهای کارگر یا شبکه به خطر افتاده باشند.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">اجرای دستی آن آسان است، زیرا تمام اطلاعات لازم در یک دستور <code dir="ltr">kubeadm join</code> می‌گنجد.</p>
+</li>
+</ul>
+<p dir="rtl"><strong>معایب:</strong></p>
+<ul>
+<li dir="rtl">هش CA معمولاً تا پیش از تأمین نود control plane مشخص نیست و همین موضوع ممکن است ساخت ابزارهای تأمین خودکار مبتنی بر kubeadm را دشوارتر کند. با تولید CA از پیش می‌توانید این محدودیت را برطرف کنید.</li>
+</ul>
+<h4 id="کشف-مبتنی-بر-توکن-بدون-پین-کردن-ca" dir="rtl">کشف مبتنی بر توکن بدون پین‌کردن CA</h4>
+<p dir="rtl">این حالت برای امضای (HMAC-SHA256) اطلاعات کشف که ریشه اعتماد control plane را برقرار می‌کند، تنها به توکن متقارن متکی است. برای استفاده از این حالت، نودهای در حال پیوستن باید با <code dir="ltr">--discovery-token-unsafe-skip-ca-verification</code> از اعتبارسنجی هش کلید عمومی CA صرف‌نظر کنند. در صورت امکان بهتر است از یکی از حالت‌های دیگر استفاده کنید.</p>
+<p dir="rtl"><strong>نمونه دستور <code dir="ltr">kubeadm join</code>:</strong></p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubeadm join --token abcdef.1234567890abcdef --discovery-token-unsafe-skip-ca-verification 1.2.3.4:6443
+</code></pre>
+<p dir="rtl"><strong>مزایا:</strong></p>
+<ul>
+<li dir="rtl">
+<p dir="rtl">همچنان در برابر بسیاری از حملات سطح شبکه محافظت می‌کند.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">می‌توان توکن را از پیش تولید کرد و آن را با نود control plane و نودهای کارگر به اشتراک گذاشت تا این نودها بدون هماهنگی و به‌صورت موازی راه‌اندازی شوند. به همین دلیل، این حالت در بسیاری از سناریوهای تأمین کاربرد دارد.</p>
+</li>
+</ul>
+<p dir="rtl"><strong>معایب:</strong></p>
+<ul>
+<li dir="rtl">اگر مهاجم بتواند از طریق یک آسیب‌پذیری، توکن راه‌اندازی اولیه را به سرقت ببرد، می‌تواند با استفاده از آن توکن (همراه با دسترسی در سطح شبکه) خود را به‌جای نود control plane به سایر نودهای در حال راه‌اندازی جا بزند. این مصالحه ممکن است برای محیط شما مناسب باشد یا نباشد.</li>
+</ul>
+<h4 id="کشف-مبتنی-بر-فایل-یا-https" dir="rtl">کشف مبتنی بر فایل یا HTTPS</h4>
+<p dir="rtl">این حالت روشی خارج از باند برای برقراری ریشه اعتماد میان نود control plane و نودهای در حال راه‌اندازی فراهم می‌کند. اگر با kubeadm تأمین خودکار می‌سازید، استفاده از این حالت را بررسی کنید. فایل کشف در قالب یک فایل <a href="https://kubernetes.io/docs/tasks/access-application-cluster/configure-access-multiple-clusters/" target="_blank">kubeconfig</a> معمولی کوبرنتیز است.</p>
+<p dir="rtl">اگر فایل کشف حاوی اطلاعات احراز هویت نباشد، از توکن کشف TLS استفاده می‌شود.</p>
+<p dir="rtl"><strong>نمونه دستورهای <code dir="ltr">kubeadm join</code>:</strong></p>
+<ul>
+<li dir="rtl">
+<p dir="rtl">فایل محلی: <code dir="ltr">kubeadm join --discovery-file path/to/file.conf</code></p>
+</li>
+<li dir="rtl">
+<p dir="rtl">نشانی HTTPS راه دور: <code dir="ltr">kubeadm join --discovery-file https://url/file.conf</code></p>
+</li>
+</ul>
+<p dir="rtl"><strong>مزایا:</strong></p>
+<ul>
+<li dir="rtl">نودهای در حال راه‌اندازی می‌توانند ریشه اعتماد نود control plane را به‌صورت امن کشف کنند، حتی اگر شبکه یا سایر نودهای کارگر به خطر افتاده باشند.</li>
+</ul>
+<p dir="rtl"><strong>معایب:</strong></p>
+<ul>
+<li dir="rtl">باید روشی برای انتقال اطلاعات کشف از نود control plane به نودهای در حال راه‌اندازی داشته باشید. اگر فایل کشف حاوی اطلاعات احراز هویت باشد، باید آن را محرمانه نگه دارید و از طریق یک کانال امن منتقل کنید. این کار ممکن است با امکانات ارائه‌دهنده ابری یا ابزار تأمین شما شدنی باشد.</li>
+</ul>
+<h4 id="استفاده-از-اعتبارنامه-های-سفارشی-kubelet-با-kubeadm-join" dir="rtl">استفاده از اعتبارنامه‌های سفارشی kubelet با <code dir="ltr">kubeadm join</code></h4>
+<p dir="rtl">برای آنکه <code dir="ltr">kubeadm join</code> از اعتبارنامه‌های ازپیش‌تعریف‌شده kubelet استفاده کند و راه‌اندازی اولیه TLS کلاینت و تأیید CSR را برای نود جدید نادیده بگیرد، مراحل زیر را انجام دهید:</p>
+<ol>
+<li dir="rtl">روی یک نود control plane فعال در کلاستر که فایل <code dir="ltr">/etc/kubernetes/pki/ca.key</code> را در اختیار دارد، دستور <code dir="ltr">kubeadm kubeconfig user --org system:nodes --client-name system:node:$NODE &gt; kubelet.conf</code> را اجرا کنید. مقدار <code dir="ltr">$NODE</code> باید برابر با نام نود جدید باشد.</li>
+<li dir="rtl">فایل <code dir="ltr">kubelet.conf</code> حاصل را به‌صورت دستی ویرایش کنید تا نام کلاستر و نقطه پایانی سرور را تنظیم کنید، یا دستور <code dir="ltr">kubeadm kubeconfig user --config</code> را اجرا کنید (این دستور <code dir="ltr">InitConfiguration</code> را می‌پذیرد).</li>
+</ol>
+<p dir="rtl">اگر کلاستر شما فایل <code dir="ltr">ca.key</code> را ندارد، باید گواهی‌های جاسازی‌شده در <code dir="ltr">kubelet.conf</code> را به‌صورت خارجی امضا کنید. برای اطلاعات بیشتر، به <a href="https://kubernetes.io/docs/setup/best-practices/certificates/" target="_blank">گواهی‌ها و الزامات PKI</a> و <a href="https://kubernetes.io/docs/tasks/administer-cluster/kubeadm/kubeadm-certs/#external-ca-mode" target="_blank">مدیریت گواهی‌ها با kubeadm</a> مراجعه کنید.</p>
+<ol>
+<li dir="rtl">فایل <code dir="ltr">kubelet.conf</code> حاصل را در مسیر <code dir="ltr">/etc/kubernetes/kubelet.conf</code> روی نود جدید کپی کنید.</li>
+<li dir="rtl">دستور <code dir="ltr">kubeadm join</code> را با فلگ <code dir="ltr">--ignore-preflight-errors=FileAvailable--etc-kubernetes-kubelet.conf</code> روی نود جدید اجرا کنید.</li>
+</ol>
+<h3 id="امن-تر-کردن-نصب-securing-more" dir="rtl">امن‌تر کردن نصب {#securing-more}</h3>
+<p dir="rtl">تنظیمات پیش‌فرض kubeadm ممکن است برای همه مناسب نباشد. این بخش شرح می‌دهد که چگونه می‌توان امنیت نصب kubeadm را به بهای کاهش اندکی از سهولت استفاده افزایش داد.</p>
+<h4 id="غیرفعال-کردن-تأیید-خودکار-گواهی-های-کلاینت-نود" dir="rtl">غیرفعال کردن تأیید خودکار گواهی‌های کلاینت نود</h4>
+<p dir="rtl">به‌طور پیش‌فرض، یک تأییدکننده خودکار CSR فعال است که در صورت استفاده از توکن راه‌اندازی اولیه برای احراز هویت، عملاً هر درخواست گواهی کلاینت kubelet را تأیید می‌کند. اگر نمی‌خواهید کلاستر گواهی‌های کلاینت kubelet را به‌صورت خودکار تأیید کند، می‌توانید با اجرای این دستور این قابلیت را غیرفعال کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl delete clusterrolebinding kubeadm:node-autoapprove-bootstrap
+</code></pre>
+<p dir="rtl">پس از آن، <code dir="ltr">kubeadm join</code> تا زمانی که مدیر، CSR در حال انتظار را به‌صورت دستی تأیید کند، مسدود می‌ماند:</p>
+<ol>
+<li dir="rtl">
+<p dir="rtl">با استفاده از <code dir="ltr">kubectl get csr</code> می‌توانید ببینید که CSR اصلی در وضعیت Pending قرار دارد.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get csr
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">NAME                                                   AGE       REQUESTOR                 CONDITION
+node-csr-c69HXe7aYcqkS1bKmH4faEnHAWxn6i2bHZ2mD04jZyQ   18s       system:bootstrap:878f07   Pending
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">مدیر می‌تواند با <code dir="ltr">kubectl certificate approve</code> درخواست CSR را تأیید کند. این عملیات به کنترل‌کننده امضای گواهی اعلام می‌کند که گواهی‌ای با ویژگی‌های درخواست‌شده در CSR برای درخواست‌کننده صادر کند.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl certificate approve node-csr-c69HXe7aYcqkS1bKmH4faEnHAWxn6i2bHZ2mD04jZyQ
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">certificatesigningrequest "node-csr-c69HXe7aYcqkS1bKmH4faEnHAWxn6i2bHZ2mD04jZyQ" approved
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">با این کار، منبع CSR به وضعیت Active تغییر می‌کند.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get csr
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">NAME                                                   AGE       REQUESTOR                 CONDITION
+node-csr-c69HXe7aYcqkS1bKmH4faEnHAWxn6i2bHZ2mD04jZyQ   1m        system:bootstrap:878f07   Approved,Issued
+</code></pre>
+</li>
+</ol>
+<p dir="rtl">به این ترتیب، <code dir="ltr">kubeadm join</code> تنها در صورتی موفق می‌شود که <code dir="ltr">kubectl certificate approve</code> اجرا شده باشد.</p>
+<h4 id="غیرفعال-کردن-دسترسی-عمومی-به-configmap-با-نام-cluster-info" dir="rtl">غیرفعال کردن دسترسی عمومی به ConfigMap با نام <code dir="ltr">cluster-info</code></h4>
+<p dir="rtl">برای آنکه فرایند پیوستن تنها با تکیه بر توکن به‌عنوان اطلاعات اعتبارسنجی انجام شود، یک ConfigMap حاوی داده‌های لازم برای اعتبارسنجی هویت نود control plane به‌طور پیش‌فرض به‌صورت عمومی در دسترس قرار می‌گیرد. با اینکه این ConfigMap هیچ داده خصوصی‌ای ندارد، برخی کاربران ممکن است همچنان بخواهند دسترسی به آن را غیرفعال کنند. با این کار، امکان استفاده از فلگ <code dir="ltr">--discovery-token</code> در فرایند <code dir="ltr">kubeadm join</code> از بین می‌رود. مراحل انجام این کار به شرح زیر است:</p>
+<ul>
+<li dir="rtl">فایل <code dir="ltr">cluster-info</code> را از API server دریافت کنید:</li>
+</ul>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl -n kube-public get cm cluster-info -o jsonpath='{.data.kubeconfig}' | tee cluster-info.yaml
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: Config
+clusters:
+- cluster:
+    certificate-authority-data: &lt;ca-cert&gt;
+    server: https://&lt;ip&gt;:&lt;port&gt;
+  name: ""
+contexts: []
+current-context: ""
+preferences: {}
+users: []
+</code></pre>
+<ul>
+<li dir="rtl">
+<p dir="rtl">از فایل <code dir="ltr">cluster-info.yaml</code> به‌عنوان آرگومان <code dir="ltr">kubeadm join --discovery-file</code> استفاده کنید.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">دسترسی عمومی به ConfigMap با نام <code dir="ltr">cluster-info</code> را غیرفعال کنید:</p>
+</li>
+</ul>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl -n kube-public delete rolebinding kubeadm:bootstrap-signer-clusterinfo
+</code></pre>
+<p dir="rtl">این دستورها باید پس از <code dir="ltr">kubeadm init</code> و پیش از <code dir="ltr">kubeadm join</code> اجرا شوند.</p>
+<h3 id="استفاده-از-kubeadm-join-با-فایل-پیکربندی-config-file" dir="rtl">استفاده از kubeadm join با فایل پیکربندی {#config-file}</h3>
+<div class="callout caution"><div class="callout-title">احتیاط:</div>
+<p dir="rtl">فایل پیکربندی همچنان در مرحله بتا قرار دارد و ممکن است در نسخه‌های آینده تغییر کند.</p>
+</div>
+<p dir="rtl">می‌توان <code dir="ltr">kubeadm join</code> را به‌جای فلگ‌های خط فرمان با یک فایل پیکربندی تنظیم کرد و برخی قابلیت‌های پیشرفته‌تر ممکن است تنها به‌صورت گزینه‌های فایل پیکربندی در دسترس باشند. این فایل با فلگ <code dir="ltr">--config</code> ارسال می‌شود و باید شامل ساختار <code dir="ltr">JoinConfiguration</code> باشد. ترکیب <code dir="ltr">--config</code> با سایر فلگ‌ها ممکن است در برخی موارد مجاز نباشد.</p>
+<p dir="rtl">پیکربندی پیش‌فرض را می‌توان با دستور <a href="kubeadm-config.html#cmd-config-print">kubeadm config print</a> چاپ کرد.</p>
+<p dir="rtl">اگر پیکربندی شما از آخرین نسخه استفاده نمی‌کند، <strong>توصیه می‌شود</strong> با دستور <a href="kubeadm-config.html#cmd-config-migrate">kubeadm config migrate</a> آن را مهاجرت دهید.</p>
+<p dir="rtl">برای اطلاعات بیشتر درباره فیلدها و نحوه استفاده از پیکربندی، به <a href="../../config-api/kubeadm-config.v1beta4.html">مرجع API</a> مراجعه کنید.</p>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<ul>
+<li dir="rtl">برای راه‌اندازی اولیه یک نود control plane کوبرنتیز، به <a href="kubeadm-init.html">kubeadm init</a> مراجعه کنید.</li>
+<li dir="rtl">برای مدیریت توکن‌های <code dir="ltr">kubeadm join</code>، به <a href="kubeadm-token.html">kubeadm token</a> مراجعه کنید.</li>
+<li dir="rtl">برای بازگرداندن هر تغییری که <code dir="ltr">kubeadm init</code> یا <code dir="ltr">kubeadm join</code> روی این میزبان ایجاد کرده است، به <a href="kubeadm-reset.html">kubeadm reset</a> مراجعه کنید.</li>
+</ul>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l3" href="#گردش-کار-پیوستن-join-workflow">گردش کار پیوستن {#join-workflow}</a><a class="l3" href="#استفاده-از-مراحل-پیوستن-با-kubeadm-join-phases">استفاده از مراحل پیوستن با kubeadm {#join-phases}</a><a class="l3" href="#تشخیص-ca-مورد-اعتماد-کلاستر">تشخیص CA مورد اعتماد کلاستر</a><a class="l3" href="#امن-تر-کردن-نصب-securing-more">امن‌تر کردن نصب {#securing-more}</a><a class="l3" href="#استفاده-از-kubeadm-join-با-فایل-پیکربندی-config-file">استفاده از kubeadm join با فایل پیکربندی {#config-file}</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>
