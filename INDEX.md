@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-1256 از 1722 صفحه
+1258 از 1722 صفحه
 
 
 ## `.`
@@ -1633,8 +1633,8 @@
 - ✅ [kubelet-checkpoint-api.md](md/reference/node/kubelet-checkpoint-api.md)
 - ✅ [kubelet-config-directory-merging.md](md/reference/node/kubelet-config-directory-merging.md)
 - ✅ [kubelet-files.md](md/reference/node/kubelet-files.md)
-- ⏳ `kubelet-pods-api.md`
-- ⏳ `kubelet-sync-loop.md`
+- ✅ [kubelet-pods-api.md](md/reference/node/kubelet-pods-api.md)
+- ✅ [kubelet-sync-loop.md](md/reference/node/kubelet-sync-loop.md)
 - ⏳ `node-labels.md`
 - ⏳ `node-lifecycle-conditions.md`
 - ⏳ `node-status.md`

@@ -9,7 +9,7 @@
 | | |
 |---|---|
 | پیشرفت (بر اساس کلمات) | **80.3٪** |
-| صفحات ترجمه‌شده | 1256 از 1722 |
+| صفحات ترجمه‌شده | 1258 از 1722 |
 | صفحات دارای ایراد ساختاری | 46 |
 | نسخه‌ی منبع انگلیسی | `f652c6b8a26f` |
 
@@ -72,7 +72,7 @@ cd kubernetes-doc-fa
 | `contribute` | 44 | 44 |
 | `doc-contributor-tools` | 1 | 1 |
 | `home` | 2 | 2 |
-| `reference` | 1021 | 1198 |
+| `reference` | 1023 | 1198 |
 | `setup` | 0 | 22 |
 | `tasks` | 0 | 221 |
 | `tutorials` | 0 | 45 |
@@ -101,6 +101,8 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [reference/node/kubelet-sync-loop.md](md/reference/node/kubelet-sync-loop.md) — 2026-11-08T16:52:15+03:30
+- [reference/node/kubelet-pods-api.md](md/reference/node/kubelet-pods-api.md) — 2026-11-08T13:59:40+03:30
 - [reference/node/kubelet-files.md](md/reference/node/kubelet-files.md) — 2026-11-08T13:59:13+03:30
 - [reference/node/kubelet-config-directory-merging.md](md/reference/node/kubelet-config-directory-merging.md) — 2026-11-08T13:58:23+03:30
 - [reference/node/kubelet-checkpoint-api.md](md/reference/node/kubelet-checkpoint-api.md) — 2026-11-08T13:58:03+03:30
@@ -119,8 +121,6 @@ cd kubernetes-doc-fa
 - [reference/kubernetes-api/storage/volume-attachment-v1.md](md/reference/kubernetes-api/storage/volume-attachment-v1.md) — 2026-11-08T12:38:35+03:30
 - [reference/kubernetes-api/storage/storage-class-v1.md](md/reference/kubernetes-api/storage/storage-class-v1.md) — 2026-11-08T12:37:23+03:30
 - [reference/kubernetes-api/storage/csi-storage-capacity-v1.md](md/reference/kubernetes-api/storage/csi-storage-capacity-v1.md) — 2026-11-08T12:34:07+03:30
-- [reference/kubernetes-api/storage/csi-node-v1.md](md/reference/kubernetes-api/storage/csi-node-v1.md) — 2026-11-08T12:33:51+03:30
-- [reference/kubernetes-api/scheduling/workload-v1beta1.md](md/reference/kubernetes-api/scheduling/workload-v1beta1.md) — 2026-11-08T12:14:14+03:30
 
 </div>
 
