@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-1272 از 1722 صفحه
+1287 از 1722 صفحه
 
 
 ## `.`
@@ -1648,7 +1648,7 @@
 ## `reference/scheduling`
 
 - ✅ [_index.md](md/reference/scheduling/_index.md)
-- ⏳ `config.md`
+- ✅ [config.md](md/reference/scheduling/config.md)
 - ✅ [policies.md](md/reference/scheduling/policies.md)
 
 ## `reference/setup-tools`
@@ -1676,23 +1676,23 @@
 
 ## `reference/setup-tools/kubeadm/generated`
 
-- ⏳ `README.md`
-- ⏳ `_index.md`
-- ⏳ `kubeadm.md`
+- ✅ [README.md](md/reference/setup-tools/kubeadm/generated/README.md)
+- ✅ [_index.md](md/reference/setup-tools/kubeadm/generated/_index.md)
+- ✅ [kubeadm.md](md/reference/setup-tools/kubeadm/generated/kubeadm.md)
 
 ## `reference/setup-tools/kubeadm/generated/kubeadm_certs`
 
-- ⏳ `_index.md`
-- ⏳ `kubeadm_certs_certificate-key.md`
-- ⏳ `kubeadm_certs_check-expiration.md`
-- ⏳ `kubeadm_certs_generate-csr.md`
-- ⏳ `kubeadm_certs_renew.md`
-- ⏳ `kubeadm_certs_renew_admin.conf.md`
-- ⏳ `kubeadm_certs_renew_all.md`
-- ⏳ `kubeadm_certs_renew_apiserver-etcd-client.md`
-- ⏳ `kubeadm_certs_renew_apiserver-kubelet-client.md`
-- ⏳ `kubeadm_certs_renew_apiserver.md`
-- ⏳ `kubeadm_certs_renew_controller-manager.conf.md`
+- ✅ [_index.md](md/reference/setup-tools/kubeadm/generated/kubeadm_certs/_index.md)
+- ✅ [kubeadm_certs_certificate-key.md](md/reference/setup-tools/kubeadm/generated/kubeadm_certs/kubeadm_certs_certificate-key.md)
+- ✅ [kubeadm_certs_check-expiration.md](md/reference/setup-tools/kubeadm/generated/kubeadm_certs/kubeadm_certs_check-expiration.md)
+- ✅ [kubeadm_certs_generate-csr.md](md/reference/setup-tools/kubeadm/generated/kubeadm_certs/kubeadm_certs_generate-csr.md)
+- ✅ [kubeadm_certs_renew.md](md/reference/setup-tools/kubeadm/generated/kubeadm_certs/kubeadm_certs_renew.md)
+- ✅ [kubeadm_certs_renew_admin.conf.md](md/reference/setup-tools/kubeadm/generated/kubeadm_certs/kubeadm_certs_renew_admin.conf.md)
+- ✅ [kubeadm_certs_renew_all.md](md/reference/setup-tools/kubeadm/generated/kubeadm_certs/kubeadm_certs_renew_all.md)
+- ✅ [kubeadm_certs_renew_apiserver-etcd-client.md](md/reference/setup-tools/kubeadm/generated/kubeadm_certs/kubeadm_certs_renew_apiserver-etcd-client.md)
+- ✅ [kubeadm_certs_renew_apiserver-kubelet-client.md](md/reference/setup-tools/kubeadm/generated/kubeadm_certs/kubeadm_certs_renew_apiserver-kubelet-client.md)
+- ✅ [kubeadm_certs_renew_apiserver.md](md/reference/setup-tools/kubeadm/generated/kubeadm_certs/kubeadm_certs_renew_apiserver.md)
+- ✅ [kubeadm_certs_renew_controller-manager.conf.md](md/reference/setup-tools/kubeadm/generated/kubeadm_certs/kubeadm_certs_renew_controller-manager.conf.md)
 - ⏳ `kubeadm_certs_renew_etcd-healthcheck-client.md`
 - ⏳ `kubeadm_certs_renew_etcd-peer.md`
 - ⏳ `kubeadm_certs_renew_etcd-server.md`

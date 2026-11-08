@@ -8,8 +8,8 @@
 
 | | |
 |---|---|
-| پیشرفت (بر اساس کلمات) | **81.3٪** |
-| صفحات ترجمه‌شده | 1272 از 1722 |
+| پیشرفت (بر اساس کلمات) | **81.6٪** |
+| صفحات ترجمه‌شده | 1287 از 1722 |
 | صفحات دارای ایراد ساختاری | 46 |
 | نسخه‌ی منبع انگلیسی | `f652c6b8a26f` |
 
@@ -72,7 +72,7 @@ cd kubernetes-doc-fa
 | `contribute` | 44 | 44 |
 | `doc-contributor-tools` | 1 | 1 |
 | `home` | 2 | 2 |
-| `reference` | 1037 | 1198 |
+| `reference` | 1052 | 1198 |
 | `setup` | 0 | 22 |
 | `tasks` | 0 | 221 |
 | `tutorials` | 0 | 45 |
@@ -101,26 +101,26 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [reference/setup-tools/kubeadm/generated/kubeadm_certs/kubeadm_certs_renew_controller-manager.conf.md](md/reference/setup-tools/kubeadm/generated/kubeadm_certs/kubeadm_certs_renew_controller-manager.conf.md) — 2026-11-08T16:57:46+03:30
+- [reference/setup-tools/kubeadm/generated/kubeadm_certs/kubeadm_certs_renew_apiserver.md](md/reference/setup-tools/kubeadm/generated/kubeadm_certs/kubeadm_certs_renew_apiserver.md) — 2026-11-08T16:57:45+03:30
+- [reference/setup-tools/kubeadm/generated/kubeadm_certs/kubeadm_certs_renew_apiserver-etcd-client.md](md/reference/setup-tools/kubeadm/generated/kubeadm_certs/kubeadm_certs_renew_apiserver-etcd-client.md) — 2026-11-08T16:57:30+03:30
+- [reference/setup-tools/kubeadm/generated/kubeadm_certs/kubeadm_certs_renew_apiserver-kubelet-client.md](md/reference/setup-tools/kubeadm/generated/kubeadm_certs/kubeadm_certs_renew_apiserver-kubelet-client.md) — 2026-11-08T16:57:30+03:30
+- [reference/setup-tools/kubeadm/generated/kubeadm_certs/kubeadm_certs_renew_admin.conf.md](md/reference/setup-tools/kubeadm/generated/kubeadm_certs/kubeadm_certs_renew_admin.conf.md) — 2026-11-08T16:57:15+03:30
+- [reference/setup-tools/kubeadm/generated/kubeadm_certs/kubeadm_certs_renew_all.md](md/reference/setup-tools/kubeadm/generated/kubeadm_certs/kubeadm_certs_renew_all.md) — 2026-11-08T16:57:14+03:30
+- [reference/setup-tools/kubeadm/generated/kubeadm_certs/kubeadm_certs_check-expiration.md](md/reference/setup-tools/kubeadm/generated/kubeadm_certs/kubeadm_certs_check-expiration.md) — 2026-11-08T16:57:03+03:30
+- [reference/setup-tools/kubeadm/generated/kubeadm_certs/kubeadm_certs_renew.md](md/reference/setup-tools/kubeadm/generated/kubeadm_certs/kubeadm_certs_renew.md) — 2026-11-08T16:56:58+03:30
+- [reference/setup-tools/kubeadm/generated/kubeadm_certs/kubeadm_certs_generate-csr.md](md/reference/setup-tools/kubeadm/generated/kubeadm_certs/kubeadm_certs_generate-csr.md) — 2026-11-08T16:56:51+03:30
+- [reference/setup-tools/kubeadm/generated/kubeadm.md](md/reference/setup-tools/kubeadm/generated/kubeadm.md) — 2026-11-08T16:56:34+03:30
+- [reference/setup-tools/kubeadm/generated/kubeadm_certs/kubeadm_certs_certificate-key.md](md/reference/setup-tools/kubeadm/generated/kubeadm_certs/kubeadm_certs_certificate-key.md) — 2026-11-08T16:56:32+03:30
+- [reference/setup-tools/kubeadm/generated/kubeadm_certs/_index.md](md/reference/setup-tools/kubeadm/generated/kubeadm_certs/_index.md) — 2026-11-08T16:56:24+03:30
+- [reference/scheduling/config.md](md/reference/scheduling/config.md) — 2026-11-08T16:56:15+03:30
+- [reference/setup-tools/kubeadm/generated/_index.md](md/reference/setup-tools/kubeadm/generated/_index.md) — 2026-11-08T16:56:09+03:30
+- [reference/setup-tools/kubeadm/generated/README.md](md/reference/setup-tools/kubeadm/generated/README.md) — 2026-11-08T16:56:06+03:30
 - [reference/setup-tools/kubeadm/_index.md](md/reference/setup-tools/kubeadm/_index.md) — 2026-11-08T16:55:54+03:30
 - [reference/setup-tools/_index.md](md/reference/setup-tools/_index.md) — 2026-11-08T16:55:38+03:30
 - [reference/scheduling/policies.md](md/reference/scheduling/policies.md) — 2026-11-08T16:55:36+03:30
 - [reference/node/what-happens-on-restart.md](md/reference/node/what-happens-on-restart.md) — 2026-11-08T16:55:29+03:30
 - [reference/scheduling/_index.md](md/reference/scheduling/_index.md) — 2026-11-08T16:54:42+03:30
-- [reference/node/topics-on-dockershim-and-cri-compatible-runtimes.md](md/reference/node/topics-on-dockershim-and-cri-compatible-runtimes.md) — 2026-11-08T16:54:40+03:30
-- [reference/node/seccomp.md](md/reference/node/seccomp.md) — 2026-11-08T16:54:24+03:30
-- [reference/node/systemd-watchdog.md](md/reference/node/systemd-watchdog.md) — 2026-11-08T16:54:20+03:30
-- [reference/node/swap-behavior.md](md/reference/node/swap-behavior.md) — 2026-11-08T16:53:59+03:30
-- [reference/node/node-status.md](md/reference/node/node-status.md) — 2026-11-08T16:53:49+03:30
-- [reference/node/pod-level-resource-managers.md](md/reference/node/pod-level-resource-managers.md) — 2026-11-08T16:53:48+03:30
-- [reference/labels-annotations-taints/_index.md](md/reference/labels-annotations-taints/_index.md) — 2026-11-08T16:53:10+03:30
-- [reference/node/node-lifecycle-conditions.md](md/reference/node/node-lifecycle-conditions.md) — 2026-11-08T16:53:00+03:30
-- [reference/node/node-labels.md](md/reference/node/node-labels.md) — 2026-11-08T16:52:36+03:30
-- [reference/node/kubelet-sync-loop.md](md/reference/node/kubelet-sync-loop.md) — 2026-11-08T16:52:15+03:30
-- [reference/node/kubelet-pods-api.md](md/reference/node/kubelet-pods-api.md) — 2026-11-08T13:59:40+03:30
-- [reference/node/kubelet-files.md](md/reference/node/kubelet-files.md) — 2026-11-08T13:59:13+03:30
-- [reference/node/kubelet-config-directory-merging.md](md/reference/node/kubelet-config-directory-merging.md) — 2026-11-08T13:58:23+03:30
-- [reference/node/kubelet-checkpoint-api.md](md/reference/node/kubelet-checkpoint-api.md) — 2026-11-08T13:58:03+03:30
-- [reference/node/kernel-version-requirements.md](md/reference/node/kernel-version-requirements.md) — 2026-11-08T13:57:34+03:30
 
 </div>
 
