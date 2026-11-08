@@ -8,9 +8,9 @@
 
 | | |
 |---|---|
-| پیشرفت (بر اساس کلمات) | **82.2٪** |
-| صفحات ترجمه‌شده | 1317 از 1722 |
-| صفحات دارای ایراد ساختاری | 51 |
+| پیشرفت (بر اساس کلمات) | **82.5٪** |
+| صفحات ترجمه‌شده | 1332 از 1722 |
+| صفحات دارای ایراد ساختاری | 55 |
 | نسخه‌ی منبع انگلیسی | `f652c6b8a26f` |
 
 ## مشاهده
@@ -72,7 +72,7 @@ cd kubernetes-doc-fa
 | `contribute` | 44 | 44 |
 | `doc-contributor-tools` | 1 | 1 |
 | `home` | 2 | 2 |
-| `reference` | 1082 | 1198 |
+| `reference` | 1097 | 1198 |
 | `setup` | 0 | 22 |
 | `tasks` | 0 | 221 |
 | `tutorials` | 0 | 45 |
@@ -101,26 +101,26 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_kubeconfig.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_kubeconfig.md) — 2026-11-08T17:07:57+03:30
+- [reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_etcd.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_etcd.md) — 2026-11-08T17:07:45+03:30
+- [reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_control-plane_scheduler.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_control-plane_scheduler.md) — 2026-11-08T17:07:44+03:30
+- [reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_control-plane_controller-manager.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_control-plane_controller-manager.md) — 2026-11-08T17:07:38+03:30
+- [reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_control-plane_apiserver.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_control-plane_apiserver.md) — 2026-11-08T17:06:46+03:30
+- [reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_control-plane_all.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_control-plane_all.md) — 2026-11-08T17:06:40+03:30
+- [reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_control-plane.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_control-plane.md) — 2026-11-08T17:05:26+03:30
+- [reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_certs_sa.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_certs_sa.md) — 2026-11-08T17:05:20+03:30
+- [reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_certs_front-proxy-client.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_certs_front-proxy-client.md) — 2026-11-08T17:05:17+03:30
+- [reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_certs_front-proxy-ca.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_certs_front-proxy-ca.md) — 2026-11-08T17:05:07+03:30
+- [reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_certs_etcd-server.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_certs_etcd-server.md) — 2026-11-08T17:05:00+03:30
+- [reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_certs_etcd-peer.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_certs_etcd-peer.md) — 2026-11-08T17:04:52+03:30
+- [reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_certs_etcd-healthcheck-client.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_certs_etcd-healthcheck-client.md) — 2026-11-08T17:04:45+03:30
+- [reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_certs_etcd-ca.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_certs_etcd-ca.md) — 2026-11-08T17:04:38+03:30
+- [reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_certs_ca.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_certs_ca.md) — 2026-11-08T17:04:24+03:30
 - [reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_certs_apiserver.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_certs_apiserver.md) — 2026-11-08T17:04:19+03:30
 - [reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_certs_apiserver-kubelet-client.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_certs_apiserver-kubelet-client.md) — 2026-11-08T17:04:09+03:30
 - [reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_certs_all.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_certs_all.md) — 2026-11-08T17:03:59+03:30
 - [reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_certs_apiserver-etcd-client.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_certs_apiserver-etcd-client.md) — 2026-11-08T17:03:53+03:30
 - [reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_addon_kube-proxy.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_addon_kube-proxy.md) — 2026-11-08T17:03:38+03:30
-- [reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_certs.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_certs.md) — 2026-11-08T17:03:02+03:30
-- [reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_bootstrap-token.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_bootstrap-token.md) — 2026-11-08T17:02:56+03:30
-- [reference/setup-tools/kubeadm/generated/kubeadm_init/_index.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/_index.md) — 2026-11-08T17:02:42+03:30
-- [reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_addon_coredns.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_addon_coredns.md) — 2026-11-08T17:02:39+03:30
-- [reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_addon_all.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_addon_all.md) — 2026-11-08T17:01:55+03:30
-- [reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_addon.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_addon.md) — 2026-11-08T17:00:46+03:30
-- [reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase.md) — 2026-11-08T17:00:36+03:30
-- [reference/setup-tools/kubeadm/generated/kubeadm_config/kubeadm_config_validate.md](md/reference/setup-tools/kubeadm/generated/kubeadm_config/kubeadm_config_validate.md) — 2026-11-08T17:00:29+03:30
-- [reference/setup-tools/kubeadm/generated/kubeadm_config/kubeadm_config_print_upgrade-defaults.md](md/reference/setup-tools/kubeadm/generated/kubeadm_config/kubeadm_config_print_upgrade-defaults.md) — 2026-11-08T17:00:28+03:30
-- [reference/setup-tools/kubeadm/generated/kubeadm_config/kubeadm_config_print_reset-defaults.md](md/reference/setup-tools/kubeadm/generated/kubeadm_config/kubeadm_config_print_reset-defaults.md) — 2026-11-08T17:00:17+03:30
-- [reference/setup-tools/kubeadm/generated/kubeadm_config/kubeadm_config_print_join-defaults.md](md/reference/setup-tools/kubeadm/generated/kubeadm_config/kubeadm_config_print_join-defaults.md) — 2026-11-08T17:00:07+03:30
-- [reference/setup-tools/kubeadm/generated/kubeadm_config/kubeadm_config_print_init-defaults.md](md/reference/setup-tools/kubeadm/generated/kubeadm_config/kubeadm_config_print_init-defaults.md) — 2026-11-08T17:00:03+03:30
-- [reference/setup-tools/kubeadm/generated/kubeadm_config/kubeadm_config_images_list.md](md/reference/setup-tools/kubeadm/generated/kubeadm_config/kubeadm_config_images_list.md) — 2026-11-08T16:59:54+03:30
-- [reference/setup-tools/kubeadm/generated/kubeadm_config/kubeadm_config_print.md](md/reference/setup-tools/kubeadm/generated/kubeadm_config/kubeadm_config_print.md) — 2026-11-08T16:59:49+03:30
-- [reference/setup-tools/kubeadm/generated/kubeadm_config/kubeadm_config_migrate.md](md/reference/setup-tools/kubeadm/generated/kubeadm_config/kubeadm_config_migrate.md) — 2026-11-08T16:59:35+03:30
 
 </div>
 
@@ -179,6 +179,10 @@ cd kubernetes-doc-fa
 - [reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_addon_all.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_addon_all.md): chunk 1: short: 406 words vs 566 source words
 - [reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_addon_kube-proxy.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_addon_kube-proxy.md): chunk 1: short: 365 words vs 494 source words
 - [reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_certs_all.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_certs_all.md): chunk 1: short: 322 words vs 432 source words
+- [reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_control-plane_all.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_control-plane_all.md): chunk 1: short: 473 words vs 658 source words
+- [reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_control-plane_apiserver.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_control-plane_apiserver.md): chunk 1: short: 427 words vs 615 source words
+- [reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_control-plane_controller-manager.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_control-plane_controller-manager.md): chunk 1: short: 332 words vs 470 source words
+- [reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_control-plane_scheduler.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_control-plane_scheduler.md): chunk 1: short: 300 words vs 425 source words
 
 </div>
 

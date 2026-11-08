@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-1317 از 1722 صفحه
+1332 از 1722 صفحه
 
 
 ## `.`
@@ -1732,22 +1732,22 @@
 - ✅ [kubeadm_init_phase_certs_apiserver-etcd-client.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_certs_apiserver-etcd-client.md)
 - ✅ [kubeadm_init_phase_certs_apiserver-kubelet-client.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_certs_apiserver-kubelet-client.md)
 - ✅ [kubeadm_init_phase_certs_apiserver.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_certs_apiserver.md)
-- ⏳ `kubeadm_init_phase_certs_ca.md`
-- ⏳ `kubeadm_init_phase_certs_etcd-ca.md`
-- ⏳ `kubeadm_init_phase_certs_etcd-healthcheck-client.md`
-- ⏳ `kubeadm_init_phase_certs_etcd-peer.md`
-- ⏳ `kubeadm_init_phase_certs_etcd-server.md`
-- ⏳ `kubeadm_init_phase_certs_front-proxy-ca.md`
-- ⏳ `kubeadm_init_phase_certs_front-proxy-client.md`
-- ⏳ `kubeadm_init_phase_certs_sa.md`
-- ⏳ `kubeadm_init_phase_control-plane.md`
-- ⏳ `kubeadm_init_phase_control-plane_all.md`
-- ⏳ `kubeadm_init_phase_control-plane_apiserver.md`
-- ⏳ `kubeadm_init_phase_control-plane_controller-manager.md`
-- ⏳ `kubeadm_init_phase_control-plane_scheduler.md`
-- ⏳ `kubeadm_init_phase_etcd.md`
+- ✅ [kubeadm_init_phase_certs_ca.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_certs_ca.md)
+- ✅ [kubeadm_init_phase_certs_etcd-ca.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_certs_etcd-ca.md)
+- ✅ [kubeadm_init_phase_certs_etcd-healthcheck-client.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_certs_etcd-healthcheck-client.md)
+- ✅ [kubeadm_init_phase_certs_etcd-peer.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_certs_etcd-peer.md)
+- ✅ [kubeadm_init_phase_certs_etcd-server.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_certs_etcd-server.md)
+- ✅ [kubeadm_init_phase_certs_front-proxy-ca.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_certs_front-proxy-ca.md)
+- ✅ [kubeadm_init_phase_certs_front-proxy-client.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_certs_front-proxy-client.md)
+- ✅ [kubeadm_init_phase_certs_sa.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_certs_sa.md)
+- ✅ [kubeadm_init_phase_control-plane.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_control-plane.md)
+- ⚠️ [kubeadm_init_phase_control-plane_all.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_control-plane_all.md)
+- ⚠️ [kubeadm_init_phase_control-plane_apiserver.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_control-plane_apiserver.md)
+- ⚠️ [kubeadm_init_phase_control-plane_controller-manager.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_control-plane_controller-manager.md)
+- ⚠️ [kubeadm_init_phase_control-plane_scheduler.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_control-plane_scheduler.md)
+- ✅ [kubeadm_init_phase_etcd.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_etcd.md)
 - ⏳ `kubeadm_init_phase_etcd_local.md`
-- ⏳ `kubeadm_init_phase_kubeconfig.md`
+- ✅ [kubeadm_init_phase_kubeconfig.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_kubeconfig.md)
 - ⏳ `kubeadm_init_phase_kubeconfig_admin.md`
 - ⏳ `kubeadm_init_phase_kubeconfig_all.md`
 - ⏳ `kubeadm_init_phase_kubeconfig_controller-manager.md`
