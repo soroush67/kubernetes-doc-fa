@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>فایل‌ها و مسیرهای محلی مورد استفاده kubelet | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">reference / node</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">فایل‌ها و مسیرهای محلی مورد استفاده kubelet</h1><p dir="rtl">مؤلفه <span class="term" title="kubelet">kubelet</span> در بیشتر موارد فرایندی بدون حالت (stateless) است که روی یک <span class="term" title="node">نود</span> کوبرنتیز اجرا می‌شود. این سند فایل‌هایی را که kubelet می‌خواند و می‌نویسد، به‌طور کلی معرفی می‌کند.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">این سند صرفاً جنبه اطلاع‌رسانی دارد و هیچ رفتار یا API تضمین‌شده‌ای را توصیف نمی‌کند. منابعی که در اینجا فهرست شده‌اند و kubelet از آن‌ها استفاده می‌کند، جزئیات پیاده‌سازی هستند و ممکن است در هر انتشار تغییر کنند.</p>
+</div>
+<p dir="rtl">معمولاً kubelet برای دانستن اینکه چه چیزی باید روی نود اجرا شود، <span class="term" title="control-plane">control plane</span> را مرجع معتبر می‌داند و وضعیت فعلی کانتینرها را از <span class="term" title="container-runtime">محیط اجرای کانتینر</span> دریافت می‌کند. اگر یک <em>kubeconfig</em> (پیکربندی کلاینت API) در اختیار kubelet قرار دهید، kubelet به control plane شما متصل می‌شود؛ در غیر این صورت، نود در <em>حالت مستقل</em> (standalone mode) کار می‌کند.</p>
+<p dir="rtl">روی نودهای لینوکسی، kubelet برای جمع‌آوری متریک‌ها به خواندن cgroupها و فایل‌های سیستمی گوناگون نیز متکی است.</p>
+<p dir="rtl">روی نودهای ویندوزی، kubelet متریک‌ها را با سازوکار دیگری جمع‌آوری می‌کند که به مسیرها وابسته نیست.</p>
+<p dir="rtl">از آنجا که kubelet از طریق سوکت‌های محلی دامنه یونیکس ارتباط برقرار می‌کند، از چند فایل دیگر نیز استفاده می‌کند. kubelet به برخی از این سوکت‌ها گوش می‌دهد و برخی دیگر را شناسایی می‌کند و سپس در نقش کلاینت به آن‌ها متصل می‌شود.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">در این صفحه، مسیرها به‌صورت مسیرهای لینوکسی آمده‌اند. برای به‌دست‌آوردن مسیر معادل در ویندوز، به‌جای <code dir="ltr">/</code> دیسک ریشه <code dir="ltr">C:\</code> را قرار دهید (مگر آنکه خلاف آن ذکر شده باشد). برای مثال، مسیر <code dir="ltr">/var/lib/kubelet/device-plugins</code> با <code dir="ltr">C:\var\lib\kubelet\device-plugins</code> متناظر است.</p>
+</div>
+<h2 id="پیکربندی" dir="rtl">پیکربندی</h2>
+<h3 id="فایل-های-پیکربندی-kubelet" dir="rtl">فایل‌های پیکربندی kubelet</h3>
+<p dir="rtl">مسیر فایل پیکربندی kubelet را می‌توان با آرگومان خط فرمان <code dir="ltr">--config</code> تعیین کرد. افزون بر این، kubelet برای تکمیل پیکربندی از <a href="https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/#kubelet-conf-d" target="_blank">فایل‌های پیکربندی افزودنی (drop-in)</a> نیز پشتیبانی می‌کند.</p>
+<h3 id="گواهی-ها" dir="rtl">گواهی‌ها</h3>
+<p dir="rtl">گواهی‌ها و کلیدهای خصوصی معمولاً در <code dir="ltr">/var/lib/kubelet/pki</code> قرار دارند، اما می‌توان این مسیر را با آرگومان خط فرمان <code dir="ltr">--cert-dir</code> در kubelet تغییر داد. نام فایل‌های گواهی نیز قابل پیکربندی است.</p>
+<h3 id="مانیفست-ها" dir="rtl">مانیفست‌ها</h3>
+<p dir="rtl">مانیفست‌های Podهای ایستا (static) معمولاً در <code dir="ltr">/etc/kubernetes/manifests</code> قرار دارند. این مکان را می‌توان با گزینه پیکربندی <code dir="ltr">staticPodPath</code> در kubelet تغییر داد.</p>
+<h3 id="تنظیمات-واحد-systemd" dir="rtl">تنظیمات واحد systemd</h3>
+<p dir="rtl">هنگامی که kubelet به‌صورت یک واحد systemd اجرا می‌شود، ممکن است بخشی از پیکربندی آن در فایل تنظیمات واحد systemd تعریف شود. این پیکربندی معمولاً شامل موارد زیر است:</p>
+<ul>
+<li dir="rtl">آرگومان‌های خط فرمان برای <a href="../command-line-tools-reference/kubelet.html">اجرای kubelet</a></li>
+<li dir="rtl">متغیرهای محیطی که kubelet از آن‌ها استفاده می‌کند یا برای <a href="https://pkg.go.dev/runtime#hdr-Environment_Variables" target="_blank" rel="noopener">پیکربندی محیط اجرای golang</a> به کار می‌روند</li>
+</ul>
+<h2 id="وضعیت" dir="rtl">وضعیت</h2>
+<h3 id="فایل-های-نقطه-وارسی-مدیران-منابع-resource-managers-state" dir="rtl">فایل‌های نقطه وارسی مدیران منابع {#resource-managers-state}</h3>
+<p dir="rtl">همه مدیران منابع، نگاشت Podها به منابع تخصیص‌یافته را در فایل‌های وضعیت نگه می‌دارند. این فایل‌ها در پوشه پایه kubelet قرار دارند که <em>پوشه ریشه</em> نیز نامیده می‌شود (البته این پوشه با <code dir="ltr">/</code>، یعنی پوشه ریشه نود، یکسان نیست). پوشه پایه kubelet را می‌توانید با آرگومان خط فرمان <code dir="ltr">--root-dir</code> پیکربندی کنید.</p>
+<p dir="rtl">نام فایل‌ها:</p>
+<ul>
+<li dir="rtl">فایل <code dir="ltr">memory_manager_state</code> برای <a href="https://kubernetes.io/docs/tasks/administer-cluster/memory-manager/" target="_blank">مدیر حافظه</a></li>
+<li dir="rtl">فایل <code dir="ltr">cpu_manager_state</code> برای <a href="https://kubernetes.io/docs/tasks/administer-cluster/cpu-management-policies/" target="_blank">مدیر CPU</a></li>
+<li dir="rtl">فایل <code dir="ltr">dra_manager_state</code> برای <a href="../../concepts/resource-management/dynamic-resource-allocation/index.html">DRA</a></li>
+</ul>
+<h3 id="فایل-نقطه-وارسی-مدیر-دستگاه-device-manager-state" dir="rtl">فایل نقطه وارسی مدیر دستگاه {#device-manager-state}</h3>
+<p dir="rtl">مدیر دستگاه، نقطه‌های وارسی (checkpoint) را در همان پوشه فایل‌های سوکت، یعنی <code dir="ltr">/var/lib/kubelet/device-plugins/</code>، ایجاد می‌کند. این مسیر در کد ثابت شده است و نسبت به پوشه ریشه kubelet سنجیده نمی‌شود. نام فایل نقطه وارسی برای <a href="../../concepts/extend-kubernetes/compute-storage-net/device-plugins.html#device-plugin-integration-with-the-topology-manager">مدیر دستگاه</a>، <code dir="ltr">kubelet_internal_checkpoint</code> است.</p>
+<h3 id="نقطه-های-وارسی-منابع-pod" dir="rtl">نقطه‌های وارسی منابع Pod</h3>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
+<p dir="rtl">اگر <a href="https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/" target="_blank">feature gate</a> با نام <code dir="ltr">InPlacePodVerticalScaling</code> روی یک نود فعال باشد، kubelet سابقه‌ای محلی از منابع <em>تخصیص‌یافته</em> و <em>اعمال‌شده</em> Podها نگه می‌دارد. برای آشنایی بیشتر با نحوه استفاده از این سوابق، به <a href="https://kubernetes.io/docs/tasks/configure-pod-container/resize-container-resources/" target="_blank">تغییر اندازه منابع CPU و حافظه تخصیص‌یافته به کانتینرها</a> مراجعه کنید.</p>
+<p dir="rtl">نام فایل‌ها:</p>
+<ul>
+<li dir="rtl">فایل <code dir="ltr">allocated_pods_state</code> منابع تخصیص‌یافته به هر Pod در حال اجرا روی نود را ثبت می‌کند.</li>
+<li dir="rtl">فایل <code dir="ltr">actuated_pods_state</code> منابعی را ثبت می‌کند که محیط اجرا برای هر Pod در حال اجرا روی نود پذیرفته است.</li>
+</ul>
+<p dir="rtl">این فایل‌ها در پوشه پایه kubelet قرار دارند (که در لینوکس به‌طور پیش‌فرض <code dir="ltr">/var/lib/kubelet</code> است و با <code dir="ltr">--root-dir</code> قابل پیکربندی است).</p>
+<h3 id="محیط-اجرای-کانتینر" dir="rtl">محیط اجرای کانتینر</h3>
+<p dir="rtl">مؤلفه kubelet از طریق سوکتی با محیط اجرای کانتینر ارتباط برقرار می‌کند که با این پارامترهای پیکربندی تعیین می‌شود:</p>
+<ul>
+<li dir="rtl">پارامتر <code dir="ltr">containerRuntimeEndpoint</code> برای عملیات محیط اجرا</li>
+<li dir="rtl">پارامتر <code dir="ltr">imageServiceEndpoint</code> برای عملیات مدیریت ایمیج</li>
+</ul>
+<p dir="rtl">مقادیر واقعی این نقطه‌های پایانی به محیط اجرای کانتینر مورد استفاده بستگی دارد.</p>
+<h3 id="افزونه-های-دستگاه" dir="rtl">افزونه‌های دستگاه</h3>
+<p dir="rtl">مؤلفه kubelet سوکتی را در مسیر <code dir="ltr">/var/lib/kubelet/device-plugins/kubelet.sock</code> در دسترس قرار می‌دهد تا <a href="../../concepts/extend-kubernetes/compute-storage-net/device-plugins.html#device-plugin-implementation">افزونه‌های دستگاه گوناگون بتوانند خود را ثبت کنند</a>.</p>
+<p dir="rtl">هر افزونه دستگاه هنگام ثبت خود، مسیر سوکتش را اعلام می‌کند تا kubelet به آن متصل شود.</p>
+<p dir="rtl">سوکت افزونه دستگاه باید در پوشه <code dir="ltr">/var/lib/kubelet/device-plugins/</code> قرار داشته باشد. این مسیر در کد ثابت شده است و نسبت به پوشه پایه kubelet (پوشه ریشه) سنجیده نمی‌شود. در لینوکس، این مسیر همیشه <code dir="ltr">/var/lib/kubelet/device-plugins</code> است.</p>
+<h3 id="api-منابع-pod" dir="rtl">API منابع Pod</h3>
+<p dir="rtl"><a href="../../concepts/extend-kubernetes/compute-storage-net/device-plugins.html#monitoring-device-plugin-resources">API منابع Pod</a> در مسیر <code dir="ltr">pod-resources</code> درون پوشه پایه kubelet (پوشه ریشه) در دسترس قرار می‌گیرد. روی یک نود لینوکسی معمولی، این مسیر <code dir="ltr">/var/lib/kubelet/pod-resources</code> است.</p>
+<h3 id="افزونه-های-dra،-csi-و-افزونه-های-دستگاه" dir="rtl">افزونه‌های DRA، CSI و افزونه‌های دستگاه</h3>
+<p dir="rtl">مؤلفه kubelet به‌دنبال فایل‌های سوکتی می‌گردد که افزونه‌های دستگاهِ مدیریت‌شده با <a href="../../concepts/resource-management/dynamic-resource-allocation/index.html">DRA</a> یا مدیر دستگاه، یا افزونه‌های ذخیره‌سازی ایجاد کرده‌اند و سپس تلاش می‌کند به این سوکت‌ها متصل شود. پوشه‌ای که kubelet در آن جست‌وجو می‌کند، <code dir="ltr">plugins_registry</code> درون پوشه پایه kubelet است؛ بنابراین روی یک نود لینوکسی معمولی، این مسیر <code dir="ltr">/var/lib/kubelet/plugins_registry</code> خواهد بود.</p>
+<p dir="rtl">توجه کنید که برای افزونه‌های دستگاه، دو سازوکار ثبت جایگزین وجود دارد و برای هر افزونه باید فقط از یکی از آن‌ها استفاده شود.</p>
+<p dir="rtl">انواع افزونه‌هایی که می‌توانند فایل‌های سوکت را در این پوشه قرار دهند، عبارت‌اند از:</p>
+<ul>
+<li dir="rtl">افزونه‌های CSI</li>
+<li dir="rtl">افزونه‌های DRA</li>
+<li dir="rtl">افزونه‌های مدیر دستگاه</li>
+</ul>
+<p dir="rtl">(معمولاً <code dir="ltr">/var/lib/kubelet/plugins_registry</code>).</p>
+<h3 id="خاموش-شدن-تدریجی-نود" dir="rtl">خاموش‌شدن تدریجی نود</h3>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
+<p dir="rtl">قابلیت <a href="../../concepts/cluster-administration/node-shutdown.html#graceful-node-shutdown">خاموش‌شدن تدریجی نود</a> وضعیت خود را به‌صورت محلی در <code dir="ltr">/var/lib/kubelet/graceful_node_shutdown_state</code> ذخیره می‌کند.</p>
+<h3 id="سوابق-دریافت-ایمیج" dir="rtl">سوابق دریافت ایمیج</h3>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
+<p dir="rtl">مؤلفه kubelet سوابق تلاش‌ها و موفقیت‌های دریافت ایمیج را ذخیره می‌کند و با استفاده از آن‌ها بررسی می‌کند که ایمیج قبلاً با همان اعتبارنامه‌ها با موفقیت دریافت شده باشد.</p>
+<p dir="rtl">این سوابق به‌صورت فایل در پوشه <code dir="ltr">image_registry</code> درون پوشه پایه kubelet ذخیره می‌شوند. روی یک نود لینوکسی معمولی، این مسیر <code dir="ltr">/var/lib/kubelet/image_manager</code> است. پوشه <code dir="ltr">image_manager</code> دو زیرپوشه دارد:</p>
+<ul>
+<li dir="rtl">پوشه <code dir="ltr">pulling</code>: سوابق ایمیج‌هایی را نگه می‌دارد که kubelet در تلاش برای دریافت آن‌هاست.</li>
+<li dir="rtl">پوشه <code dir="ltr">pulled</code>: سوابق ایمیج‌هایی را که kubelet با موفقیت دریافت کرده است، همراه با فراداده‌ای درباره اعتبارنامه‌های استفاده‌شده برای دریافت آن‌ها نگه می‌دارد.</li>
+</ul>
+<p dir="rtl">برای جزئیات بیشتر، به <a href="../../concepts/containers/images.html#ensureimagepullcredentialverification">اطمینان از راستی‌آزمایی اعتبارنامه دریافت ایمیج</a> مراجعه کنید.</p>
+<h2 id="پروفایل-ها-و-پیکربندی-امنیتی" dir="rtl">پروفایل‌ها و پیکربندی امنیتی</h2>
+<h3 id="پروفایل-های-seccomp" dir="rtl">پروفایل‌های Seccomp</h3>
+<p dir="rtl">فایل‌های پروفایل Seccomp که Podها به آن‌ها ارجاع می‌دهند، باید در <code dir="ltr">/var/lib/kubelet/seccomp</code> قرار گیرند. برای جزئیات بیشتر، به <a href="https://kubernetes.io/docs/reference/node/seccomp/" target="_blank">مرجع seccomp</a> مراجعه کنید.</p>
+<h3 id="پروفایل-های-apparmor" dir="rtl">پروفایل‌های AppArmor</h3>
+<p dir="rtl">مؤلفه kubelet پروفایل‌های AppArmor را از مسیری مختص کوبرنتیز بارگذاری نمی‌کند و به چنین مسیری نیز ارجاع نمی‌دهد. این پروفایل‌ها به‌جای ارجاع از طریق مسیرشان، به‌واسطه سیستم‌عامل نود بارگذاری می‌شوند.</p>
+<h2 id="قفل-گذاری" dir="rtl">قفل‌گذاری</h2>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes v1.2 [alpha]</span> (آلفا)</div>
+<p dir="rtl">فایل قفل kubelet معمولاً در <code dir="ltr">/var/run/kubelet.lock</code> قرار دارد. kubelet با استفاده از این فایل اطمینان حاصل می‌کند که دو kubelet مختلف هم‌زمان به‌صورت متعارض اجرا نشوند. مسیر فایل قفل را می‌توانید با آرگومان خط فرمان <code dir="ltr">--lock-file</code> در kubelet پیکربندی کنید.</p>
+<p dir="rtl">اگر دو kubelet روی یک نود مقدارهای متفاوتی برای مسیر فایل قفل داشته باشند، هنگام اجرای هم‌زمان نمی‌توانند تعارض را تشخیص دهند.</p>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<ul>
+<li dir="rtl">با <a href="../command-line-tools-reference/kubelet.html">آرگومان‌های خط فرمان</a> kubelet آشنا شوید.</li>
+<li dir="rtl"><a href="../config-api/kubelet-config.v1beta1.html">مرجع پیکربندی Kubelet (v1beta1)</a> را مرور کنید.</li>
+</ul>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#پیکربندی">پیکربندی</a><a class="l3" href="#فایل-های-پیکربندی-kubelet">فایل‌های پیکربندی kubelet</a><a class="l3" href="#گواهی-ها">گواهی‌ها</a><a class="l3" href="#مانیفست-ها">مانیفست‌ها</a><a class="l3" href="#تنظیمات-واحد-systemd">تنظیمات واحد systemd</a><a class="l2" href="#وضعیت">وضعیت</a><a class="l3" href="#فایل-های-نقطه-وارسی-مدیران-منابع-resource-managers-state">فایل‌های نقطه وارسی مدیران منابع {#resource-managers-state}</a><a class="l3" href="#فایل-نقطه-وارسی-مدیر-دستگاه-device-manager-state">فایل نقطه وارسی مدیر دستگاه {#device-manager-state}</a><a class="l3" href="#نقطه-های-وارسی-منابع-pod">نقطه‌های وارسی منابع Pod</a><a class="l3" href="#محیط-اجرای-کانتینر">محیط اجرای کانتینر</a><a class="l3" href="#افزونه-های-دستگاه">افزونه‌های دستگاه</a><a class="l3" href="#api-منابع-pod">API منابع Pod</a><a class="l3" href="#افزونه-های-dra،-csi-و-افزونه-های-دستگاه">افزونه‌های DRA، CSI و افزونه‌های دستگاه</a><a class="l3" href="#خاموش-شدن-تدریجی-نود">خاموش‌شدن تدریجی نود</a><a class="l3" href="#سوابق-دریافت-ایمیج">سوابق دریافت ایمیج</a><a class="l2" href="#پروفایل-ها-و-پیکربندی-امنیتی">پروفایل‌ها و پیکربندی امنیتی</a><a class="l3" href="#پروفایل-های-seccomp">پروفایل‌های Seccomp</a><a class="l3" href="#پروفایل-های-apparmor">پروفایل‌های AppArmor</a><a class="l2" href="#قفل-گذاری">قفل‌گذاری</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>

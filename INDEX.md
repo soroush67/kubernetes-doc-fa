@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-1238 از 1722 صفحه
+1256 از 1722 صفحه
 
 
 ## `.`
@@ -1602,37 +1602,37 @@
 - ✅ [_index.md](md/reference/kubernetes-api/storage/_index.md)
 - ✅ [csi-driver-v1.md](md/reference/kubernetes-api/storage/csi-driver-v1.md)
 - ✅ [csi-node-v1.md](md/reference/kubernetes-api/storage/csi-node-v1.md)
-- ⏳ `csi-storage-capacity-v1.md`
-- ⏳ `storage-class-v1.md`
-- ⏳ `volume-attachment-v1.md`
-- ⏳ `volume-attributes-class-v1.md`
+- ✅ [csi-storage-capacity-v1.md](md/reference/kubernetes-api/storage/csi-storage-capacity-v1.md)
+- ✅ [storage-class-v1.md](md/reference/kubernetes-api/storage/storage-class-v1.md)
+- ⚠️ [volume-attachment-v1.md](md/reference/kubernetes-api/storage/volume-attachment-v1.md)
+- ✅ [volume-attributes-class-v1.md](md/reference/kubernetes-api/storage/volume-attributes-class-v1.md)
 
 ## `reference/kubernetes-api/storagemigration`
 
-- ⏳ `_index.md`
-- ⏳ `storage-version-migration-v1.md`
+- ✅ [_index.md](md/reference/kubernetes-api/storagemigration/_index.md)
+- ✅ [storage-version-migration-v1.md](md/reference/kubernetes-api/storagemigration/storage-version-migration-v1.md)
 
 ## `reference/labels-annotations-taints`
 
 - ⏳ `_index.md`
-- ⏳ `audit-annotations.md`
+- ✅ [audit-annotations.md](md/reference/labels-annotations-taints/audit-annotations.md)
 
 ## `reference/networking`
 
-- ⏳ `_index.md`
-- ⏳ `ports-and-protocols.md`
-- ⏳ `service-protocols.md`
-- ⏳ `virtual-ips.md`
+- ✅ [_index.md](md/reference/networking/_index.md)
+- ✅ [ports-and-protocols.md](md/reference/networking/ports-and-protocols.md)
+- ✅ [service-protocols.md](md/reference/networking/service-protocols.md)
+- ✅ [virtual-ips.md](md/reference/networking/virtual-ips.md)
 
 ## `reference/node`
 
-- ⏳ `_index.md`
-- ⏳ `device-plugin-api-versions.md`
-- ⏳ `dra-standard-device-attributes.md`
-- ⏳ `kernel-version-requirements.md`
-- ⏳ `kubelet-checkpoint-api.md`
-- ⏳ `kubelet-config-directory-merging.md`
-- ⏳ `kubelet-files.md`
+- ✅ [_index.md](md/reference/node/_index.md)
+- ✅ [device-plugin-api-versions.md](md/reference/node/device-plugin-api-versions.md)
+- ✅ [dra-standard-device-attributes.md](md/reference/node/dra-standard-device-attributes.md)
+- ✅ [kernel-version-requirements.md](md/reference/node/kernel-version-requirements.md)
+- ✅ [kubelet-checkpoint-api.md](md/reference/node/kubelet-checkpoint-api.md)
+- ✅ [kubelet-config-directory-merging.md](md/reference/node/kubelet-config-directory-merging.md)
+- ✅ [kubelet-files.md](md/reference/node/kubelet-files.md)
 - ⏳ `kubelet-pods-api.md`
 - ⏳ `kubelet-sync-loop.md`
 - ⏳ `node-labels.md`

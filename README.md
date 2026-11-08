@@ -8,9 +8,9 @@
 
 | | |
 |---|---|
-| پیشرفت (بر اساس کلمات) | **77.6٪** |
-| صفحات ترجمه‌شده | 1238 از 1722 |
-| صفحات دارای ایراد ساختاری | 45 |
+| پیشرفت (بر اساس کلمات) | **80.3٪** |
+| صفحات ترجمه‌شده | 1256 از 1722 |
+| صفحات دارای ایراد ساختاری | 46 |
 | نسخه‌ی منبع انگلیسی | `f652c6b8a26f` |
 
 ## مشاهده
@@ -72,7 +72,7 @@ cd kubernetes-doc-fa
 | `contribute` | 44 | 44 |
 | `doc-contributor-tools` | 1 | 1 |
 | `home` | 2 | 2 |
-| `reference` | 1003 | 1198 |
+| `reference` | 1021 | 1198 |
 | `setup` | 0 | 22 |
 | `tasks` | 0 | 221 |
 | `tutorials` | 0 | 45 |
@@ -101,26 +101,26 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [reference/node/kubelet-files.md](md/reference/node/kubelet-files.md) — 2026-11-08T13:59:13+03:30
+- [reference/node/kubelet-config-directory-merging.md](md/reference/node/kubelet-config-directory-merging.md) — 2026-11-08T13:58:23+03:30
+- [reference/node/kubelet-checkpoint-api.md](md/reference/node/kubelet-checkpoint-api.md) — 2026-11-08T13:58:03+03:30
+- [reference/node/kernel-version-requirements.md](md/reference/node/kernel-version-requirements.md) — 2026-11-08T13:57:34+03:30
+- [reference/node/dra-standard-device-attributes.md](md/reference/node/dra-standard-device-attributes.md) — 2026-11-08T13:56:57+03:30
+- [reference/node/device-plugin-api-versions.md](md/reference/node/device-plugin-api-versions.md) — 2026-11-08T13:56:35+03:30
+- [reference/node/_index.md](md/reference/node/_index.md) — 2026-11-08T13:56:25+03:30
+- [reference/networking/virtual-ips.md](md/reference/networking/virtual-ips.md) — 2026-11-08T13:56:15+03:30
+- [reference/networking/service-protocols.md](md/reference/networking/service-protocols.md) — 2026-11-08T13:52:47+03:30
+- [reference/networking/ports-and-protocols.md](md/reference/networking/ports-and-protocols.md) — 2026-11-08T13:52:11+03:30
+- [reference/networking/_index.md](md/reference/networking/_index.md) — 2026-11-08T13:51:53+03:30
+- [reference/labels-annotations-taints/audit-annotations.md](md/reference/labels-annotations-taints/audit-annotations.md) — 2026-11-08T13:51:50+03:30
+- [reference/kubernetes-api/storagemigration/storage-version-migration-v1.md](md/reference/kubernetes-api/storagemigration/storage-version-migration-v1.md) — 2026-11-08T13:51:12+03:30
+- [reference/kubernetes-api/storage/volume-attributes-class-v1.md](md/reference/kubernetes-api/storage/volume-attributes-class-v1.md) — 2026-11-08T13:50:50+03:30
+- [reference/kubernetes-api/storagemigration/_index.md](md/reference/kubernetes-api/storagemigration/_index.md) — 2026-11-08T12:38:38+03:30
+- [reference/kubernetes-api/storage/volume-attachment-v1.md](md/reference/kubernetes-api/storage/volume-attachment-v1.md) — 2026-11-08T12:38:35+03:30
+- [reference/kubernetes-api/storage/storage-class-v1.md](md/reference/kubernetes-api/storage/storage-class-v1.md) — 2026-11-08T12:37:23+03:30
+- [reference/kubernetes-api/storage/csi-storage-capacity-v1.md](md/reference/kubernetes-api/storage/csi-storage-capacity-v1.md) — 2026-11-08T12:34:07+03:30
 - [reference/kubernetes-api/storage/csi-node-v1.md](md/reference/kubernetes-api/storage/csi-node-v1.md) — 2026-11-08T12:33:51+03:30
 - [reference/kubernetes-api/scheduling/workload-v1beta1.md](md/reference/kubernetes-api/scheduling/workload-v1beta1.md) — 2026-11-08T12:14:14+03:30
-- [reference/kubernetes-api/storage/csi-driver-v1.md](md/reference/kubernetes-api/storage/csi-driver-v1.md) — 2026-11-08T12:14:09+03:30
-- [reference/kubernetes-api/storage/_index.md](md/reference/kubernetes-api/storage/_index.md) — 2026-11-08T12:09:41+03:30
-- [reference/kubernetes-api/scheduling/priority-class-v1.md](md/reference/kubernetes-api/scheduling/priority-class-v1.md) — 2026-11-08T12:09:38+03:30
-- [reference/kubernetes-api/scheduling/pod-group-v1beta1.md](md/reference/kubernetes-api/scheduling/pod-group-v1beta1.md) — 2026-11-08T12:08:48+03:30
-- [reference/kubernetes-api/scheduling/composite-pod-group-v1alpha3.md](md/reference/kubernetes-api/scheduling/composite-pod-group-v1alpha3.md) — 2026-11-08T12:06:33+03:30
-- [reference/kubernetes-api/resource/resource-slice-v1.md](md/reference/kubernetes-api/resource/resource-slice-v1.md) — 2026-11-03T12:50:58+03:30
-- [reference/kubernetes-api/scheduling/_index.md](md/reference/kubernetes-api/scheduling/_index.md) — 2026-11-03T12:46:22+03:30
-- [reference/kubernetes-api/resource/resource-pool-status-request-v1alpha3.md](md/reference/kubernetes-api/resource/resource-pool-status-request-v1alpha3.md) — 2026-11-03T12:46:19+03:30
-- [reference/kubernetes-api/resource/resource-claim-v1.md](md/reference/kubernetes-api/resource/resource-claim-v1.md) — 2026-11-03T12:45:58+03:30
-- [reference/kubernetes-api/resource/resource-claim-template-v1.md](md/reference/kubernetes-api/resource/resource-claim-template-v1.md) — 2026-11-03T12:39:56+03:30
-- [reference/kubernetes-api/resource/device-taint-rule-v1.md](md/reference/kubernetes-api/resource/device-taint-rule-v1.md) — 2026-11-03T12:36:13+03:30
-- [reference/kubernetes-api/resource/device-class-v1.md](md/reference/kubernetes-api/resource/device-class-v1.md) — 2026-11-03T12:35:40+03:30
-- [reference/kubernetes-api/rbac/role-v1.md](md/reference/kubernetes-api/rbac/role-v1.md) — 2026-11-03T12:32:14+03:30
-- [reference/kubernetes-api/resource/_index.md](md/reference/kubernetes-api/resource/_index.md) — 2026-11-03T12:31:55+03:30
-- [reference/kubernetes-api/rbac/role-binding-v1.md](md/reference/kubernetes-api/rbac/role-binding-v1.md) — 2026-11-03T12:31:50+03:30
-- [reference/kubernetes-api/rbac/cluster-role-v1.md](md/reference/kubernetes-api/rbac/cluster-role-v1.md) — 2026-11-03T12:26:24+03:30
-- [reference/kubernetes-api/policy/pod-disruption-budget-v1.md](md/reference/kubernetes-api/policy/pod-disruption-budget-v1.md) — 2026-11-03T12:25:10+03:30
-- [reference/kubernetes-api/rbac/cluster-role-binding-v1.md](md/reference/kubernetes-api/rbac/cluster-role-binding-v1.md) — 2026-11-03T12:23:08+03:30
 
 </div>
 
@@ -173,6 +173,7 @@ cd kubernetes-doc-fa
 - [reference/kubernetes-api/lifecycle/eviction-v1alpha1.md](md/reference/kubernetes-api/lifecycle/eviction-v1alpha1.md): chunk 4: heading anchors {#...} differ
 - [reference/kubernetes-api/networking/ingress-v1.md](md/reference/kubernetes-api/networking/ingress-v1.md): chunk 5: heading anchors {#...} differ
 - [reference/kubernetes-api/scheduling/pod-group-v1beta1.md](md/reference/kubernetes-api/scheduling/pod-group-v1beta1.md): chunk 2: 4 untranslated English lines, e.g. 'POST /apis/scheduling.k8s.io/v1beta1/namespaces/{namespace}/podgroups'
+- [reference/kubernetes-api/storage/volume-attachment-v1.md](md/reference/kubernetes-api/storage/volume-attachment-v1.md): chunk 2: heading anchors {#...} differ
 
 </div>
 
