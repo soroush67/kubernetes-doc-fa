@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-1287 از 1722 صفحه
+1302 از 1722 صفحه
 
 
 ## `.`
@@ -1693,27 +1693,27 @@
 - ✅ [kubeadm_certs_renew_apiserver-kubelet-client.md](md/reference/setup-tools/kubeadm/generated/kubeadm_certs/kubeadm_certs_renew_apiserver-kubelet-client.md)
 - ✅ [kubeadm_certs_renew_apiserver.md](md/reference/setup-tools/kubeadm/generated/kubeadm_certs/kubeadm_certs_renew_apiserver.md)
 - ✅ [kubeadm_certs_renew_controller-manager.conf.md](md/reference/setup-tools/kubeadm/generated/kubeadm_certs/kubeadm_certs_renew_controller-manager.conf.md)
-- ⏳ `kubeadm_certs_renew_etcd-healthcheck-client.md`
-- ⏳ `kubeadm_certs_renew_etcd-peer.md`
-- ⏳ `kubeadm_certs_renew_etcd-server.md`
-- ⏳ `kubeadm_certs_renew_front-proxy-client.md`
-- ⏳ `kubeadm_certs_renew_scheduler.conf.md`
-- ⏳ `kubeadm_certs_renew_super-admin.conf.md`
+- ✅ [kubeadm_certs_renew_etcd-healthcheck-client.md](md/reference/setup-tools/kubeadm/generated/kubeadm_certs/kubeadm_certs_renew_etcd-healthcheck-client.md)
+- ✅ [kubeadm_certs_renew_etcd-peer.md](md/reference/setup-tools/kubeadm/generated/kubeadm_certs/kubeadm_certs_renew_etcd-peer.md)
+- ✅ [kubeadm_certs_renew_etcd-server.md](md/reference/setup-tools/kubeadm/generated/kubeadm_certs/kubeadm_certs_renew_etcd-server.md)
+- ✅ [kubeadm_certs_renew_front-proxy-client.md](md/reference/setup-tools/kubeadm/generated/kubeadm_certs/kubeadm_certs_renew_front-proxy-client.md)
+- ✅ [kubeadm_certs_renew_scheduler.conf.md](md/reference/setup-tools/kubeadm/generated/kubeadm_certs/kubeadm_certs_renew_scheduler.conf.md)
+- ✅ [kubeadm_certs_renew_super-admin.conf.md](md/reference/setup-tools/kubeadm/generated/kubeadm_certs/kubeadm_certs_renew_super-admin.conf.md)
 
 ## `reference/setup-tools/kubeadm/generated/kubeadm_completion`
 
-- ⏳ `_index.md`
+- ✅ [_index.md](md/reference/setup-tools/kubeadm/generated/kubeadm_completion/_index.md)
 
 ## `reference/setup-tools/kubeadm/generated/kubeadm_config`
 
-- ⏳ `_index.md`
-- ⏳ `kubeadm_config_images.md`
-- ⏳ `kubeadm_config_images_list.md`
-- ⏳ `kubeadm_config_images_pull.md`
-- ⏳ `kubeadm_config_migrate.md`
-- ⏳ `kubeadm_config_print.md`
-- ⏳ `kubeadm_config_print_init-defaults.md`
-- ⏳ `kubeadm_config_print_join-defaults.md`
+- ✅ [_index.md](md/reference/setup-tools/kubeadm/generated/kubeadm_config/_index.md)
+- ✅ [kubeadm_config_images.md](md/reference/setup-tools/kubeadm/generated/kubeadm_config/kubeadm_config_images.md)
+- ⚠️ [kubeadm_config_images_list.md](md/reference/setup-tools/kubeadm/generated/kubeadm_config/kubeadm_config_images_list.md)
+- ✅ [kubeadm_config_images_pull.md](md/reference/setup-tools/kubeadm/generated/kubeadm_config/kubeadm_config_images_pull.md)
+- ✅ [kubeadm_config_migrate.md](md/reference/setup-tools/kubeadm/generated/kubeadm_config/kubeadm_config_migrate.md)
+- ✅ [kubeadm_config_print.md](md/reference/setup-tools/kubeadm/generated/kubeadm_config/kubeadm_config_print.md)
+- ✅ [kubeadm_config_print_init-defaults.md](md/reference/setup-tools/kubeadm/generated/kubeadm_config/kubeadm_config_print_init-defaults.md)
+- ✅ [kubeadm_config_print_join-defaults.md](md/reference/setup-tools/kubeadm/generated/kubeadm_config/kubeadm_config_print_join-defaults.md)
 - ⏳ `kubeadm_config_print_reset-defaults.md`
 - ⏳ `kubeadm_config_print_upgrade-defaults.md`
 - ⏳ `kubeadm_config_validate.md`

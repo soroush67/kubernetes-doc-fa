@@ -8,9 +8,9 @@
 
 | | |
 |---|---|
-| پیشرفت (بر اساس کلمات) | **81.6٪** |
-| صفحات ترجمه‌شده | 1287 از 1722 |
-| صفحات دارای ایراد ساختاری | 46 |
+| پیشرفت (بر اساس کلمات) | **81.9٪** |
+| صفحات ترجمه‌شده | 1302 از 1722 |
+| صفحات دارای ایراد ساختاری | 47 |
 | نسخه‌ی منبع انگلیسی | `f652c6b8a26f` |
 
 ## مشاهده
@@ -72,7 +72,7 @@ cd kubernetes-doc-fa
 | `contribute` | 44 | 44 |
 | `doc-contributor-tools` | 1 | 1 |
 | `home` | 2 | 2 |
-| `reference` | 1052 | 1198 |
+| `reference` | 1067 | 1198 |
 | `setup` | 0 | 22 |
 | `tasks` | 0 | 221 |
 | `tutorials` | 0 | 45 |
@@ -101,26 +101,26 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [reference/setup-tools/kubeadm/generated/kubeadm_config/kubeadm_config_print_join-defaults.md](md/reference/setup-tools/kubeadm/generated/kubeadm_config/kubeadm_config_print_join-defaults.md) — 2026-11-08T17:00:07+03:30
+- [reference/setup-tools/kubeadm/generated/kubeadm_config/kubeadm_config_print_init-defaults.md](md/reference/setup-tools/kubeadm/generated/kubeadm_config/kubeadm_config_print_init-defaults.md) — 2026-11-08T17:00:03+03:30
+- [reference/setup-tools/kubeadm/generated/kubeadm_config/kubeadm_config_images_list.md](md/reference/setup-tools/kubeadm/generated/kubeadm_config/kubeadm_config_images_list.md) — 2026-11-08T16:59:54+03:30
+- [reference/setup-tools/kubeadm/generated/kubeadm_config/kubeadm_config_print.md](md/reference/setup-tools/kubeadm/generated/kubeadm_config/kubeadm_config_print.md) — 2026-11-08T16:59:49+03:30
+- [reference/setup-tools/kubeadm/generated/kubeadm_config/kubeadm_config_migrate.md](md/reference/setup-tools/kubeadm/generated/kubeadm_config/kubeadm_config_migrate.md) — 2026-11-08T16:59:35+03:30
+- [reference/setup-tools/kubeadm/generated/kubeadm_config/kubeadm_config_images_pull.md](md/reference/setup-tools/kubeadm/generated/kubeadm_config/kubeadm_config_images_pull.md) — 2026-11-08T16:59:16+03:30
+- [reference/setup-tools/kubeadm/generated/kubeadm_config/kubeadm_config_images.md](md/reference/setup-tools/kubeadm/generated/kubeadm_config/kubeadm_config_images.md) — 2026-11-08T16:58:56+03:30
+- [reference/setup-tools/kubeadm/generated/kubeadm_config/_index.md](md/reference/setup-tools/kubeadm/generated/kubeadm_config/_index.md) — 2026-11-08T16:58:54+03:30
+- [reference/setup-tools/kubeadm/generated/kubeadm_completion/_index.md](md/reference/setup-tools/kubeadm/generated/kubeadm_completion/_index.md) — 2026-11-08T16:58:48+03:30
+- [reference/setup-tools/kubeadm/generated/kubeadm_certs/kubeadm_certs_renew_super-admin.conf.md](md/reference/setup-tools/kubeadm/generated/kubeadm_certs/kubeadm_certs_renew_super-admin.conf.md) — 2026-11-08T16:58:43+03:30
+- [reference/setup-tools/kubeadm/generated/kubeadm_certs/kubeadm_certs_renew_scheduler.conf.md](md/reference/setup-tools/kubeadm/generated/kubeadm_certs/kubeadm_certs_renew_scheduler.conf.md) — 2026-11-08T16:58:34+03:30
+- [reference/setup-tools/kubeadm/generated/kubeadm_certs/kubeadm_certs_renew_front-proxy-client.md](md/reference/setup-tools/kubeadm/generated/kubeadm_certs/kubeadm_certs_renew_front-proxy-client.md) — 2026-11-08T16:58:28+03:30
+- [reference/setup-tools/kubeadm/generated/kubeadm_certs/kubeadm_certs_renew_etcd-server.md](md/reference/setup-tools/kubeadm/generated/kubeadm_certs/kubeadm_certs_renew_etcd-server.md) — 2026-11-08T16:58:18+03:30
+- [reference/setup-tools/kubeadm/generated/kubeadm_certs/kubeadm_certs_renew_etcd-peer.md](md/reference/setup-tools/kubeadm/generated/kubeadm_certs/kubeadm_certs_renew_etcd-peer.md) — 2026-11-08T16:58:12+03:30
+- [reference/setup-tools/kubeadm/generated/kubeadm_certs/kubeadm_certs_renew_etcd-healthcheck-client.md](md/reference/setup-tools/kubeadm/generated/kubeadm_certs/kubeadm_certs_renew_etcd-healthcheck-client.md) — 2026-11-08T16:58:02+03:30
 - [reference/setup-tools/kubeadm/generated/kubeadm_certs/kubeadm_certs_renew_controller-manager.conf.md](md/reference/setup-tools/kubeadm/generated/kubeadm_certs/kubeadm_certs_renew_controller-manager.conf.md) — 2026-11-08T16:57:46+03:30
 - [reference/setup-tools/kubeadm/generated/kubeadm_certs/kubeadm_certs_renew_apiserver.md](md/reference/setup-tools/kubeadm/generated/kubeadm_certs/kubeadm_certs_renew_apiserver.md) — 2026-11-08T16:57:45+03:30
 - [reference/setup-tools/kubeadm/generated/kubeadm_certs/kubeadm_certs_renew_apiserver-etcd-client.md](md/reference/setup-tools/kubeadm/generated/kubeadm_certs/kubeadm_certs_renew_apiserver-etcd-client.md) — 2026-11-08T16:57:30+03:30
 - [reference/setup-tools/kubeadm/generated/kubeadm_certs/kubeadm_certs_renew_apiserver-kubelet-client.md](md/reference/setup-tools/kubeadm/generated/kubeadm_certs/kubeadm_certs_renew_apiserver-kubelet-client.md) — 2026-11-08T16:57:30+03:30
 - [reference/setup-tools/kubeadm/generated/kubeadm_certs/kubeadm_certs_renew_admin.conf.md](md/reference/setup-tools/kubeadm/generated/kubeadm_certs/kubeadm_certs_renew_admin.conf.md) — 2026-11-08T16:57:15+03:30
-- [reference/setup-tools/kubeadm/generated/kubeadm_certs/kubeadm_certs_renew_all.md](md/reference/setup-tools/kubeadm/generated/kubeadm_certs/kubeadm_certs_renew_all.md) — 2026-11-08T16:57:14+03:30
-- [reference/setup-tools/kubeadm/generated/kubeadm_certs/kubeadm_certs_check-expiration.md](md/reference/setup-tools/kubeadm/generated/kubeadm_certs/kubeadm_certs_check-expiration.md) — 2026-11-08T16:57:03+03:30
-- [reference/setup-tools/kubeadm/generated/kubeadm_certs/kubeadm_certs_renew.md](md/reference/setup-tools/kubeadm/generated/kubeadm_certs/kubeadm_certs_renew.md) — 2026-11-08T16:56:58+03:30
-- [reference/setup-tools/kubeadm/generated/kubeadm_certs/kubeadm_certs_generate-csr.md](md/reference/setup-tools/kubeadm/generated/kubeadm_certs/kubeadm_certs_generate-csr.md) — 2026-11-08T16:56:51+03:30
-- [reference/setup-tools/kubeadm/generated/kubeadm.md](md/reference/setup-tools/kubeadm/generated/kubeadm.md) — 2026-11-08T16:56:34+03:30
-- [reference/setup-tools/kubeadm/generated/kubeadm_certs/kubeadm_certs_certificate-key.md](md/reference/setup-tools/kubeadm/generated/kubeadm_certs/kubeadm_certs_certificate-key.md) — 2026-11-08T16:56:32+03:30
-- [reference/setup-tools/kubeadm/generated/kubeadm_certs/_index.md](md/reference/setup-tools/kubeadm/generated/kubeadm_certs/_index.md) — 2026-11-08T16:56:24+03:30
-- [reference/scheduling/config.md](md/reference/scheduling/config.md) — 2026-11-08T16:56:15+03:30
-- [reference/setup-tools/kubeadm/generated/_index.md](md/reference/setup-tools/kubeadm/generated/_index.md) — 2026-11-08T16:56:09+03:30
-- [reference/setup-tools/kubeadm/generated/README.md](md/reference/setup-tools/kubeadm/generated/README.md) — 2026-11-08T16:56:06+03:30
-- [reference/setup-tools/kubeadm/_index.md](md/reference/setup-tools/kubeadm/_index.md) — 2026-11-08T16:55:54+03:30
-- [reference/setup-tools/_index.md](md/reference/setup-tools/_index.md) — 2026-11-08T16:55:38+03:30
-- [reference/scheduling/policies.md](md/reference/scheduling/policies.md) — 2026-11-08T16:55:36+03:30
-- [reference/node/what-happens-on-restart.md](md/reference/node/what-happens-on-restart.md) — 2026-11-08T16:55:29+03:30
-- [reference/scheduling/_index.md](md/reference/scheduling/_index.md) — 2026-11-08T16:54:42+03:30
 
 </div>
 
@@ -174,6 +174,7 @@ cd kubernetes-doc-fa
 - [reference/kubernetes-api/networking/ingress-v1.md](md/reference/kubernetes-api/networking/ingress-v1.md): chunk 5: heading anchors {#...} differ
 - [reference/kubernetes-api/scheduling/pod-group-v1beta1.md](md/reference/kubernetes-api/scheduling/pod-group-v1beta1.md): chunk 2: 4 untranslated English lines, e.g. 'POST /apis/scheduling.k8s.io/v1beta1/namespaces/{namespace}/podgroups'
 - [reference/kubernetes-api/storage/volume-attachment-v1.md](md/reference/kubernetes-api/storage/volume-attachment-v1.md): chunk 2: heading anchors {#...} differ
+- [reference/setup-tools/kubeadm/generated/kubeadm_config/kubeadm_config_images_list.md](md/reference/setup-tools/kubeadm/generated/kubeadm_config/kubeadm_config_images_list.md): chunk 1: short: 340 words vs 459 source words
 
 </div>
 
