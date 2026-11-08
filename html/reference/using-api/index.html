@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>مروری بر API | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">reference / using-api</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">مروری بر API</h1><!-- overview -->
+<p dir="rtl">این بخش اطلاعات مرجع API کوبرنتیز را ارائه می‌کند.</p>
+<p dir="rtl">رابط REST API بنیان اصلی کوبرنتیز است. همهٔ عملیات، ارتباط میان مؤلفه‌ها و فرمان‌های کاربران خارجی، فراخوانی‌های REST API هستند که API Server آن‌ها را پردازش می‌کند. به همین دلیل، هر چیزی در پلتفرم کوبرنتیز یک آبجکت API به شمار می‌رود و مدخل متناظری در <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.37/" target="_blank">API</a> دارد.</p>
+<p dir="rtl"><a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.37/" target="_blank">مرجع API کوبرنتیز</a> فهرست API مربوط به نسخهٔ v1.37 کوبرنتیز را ارائه می‌کند.</p>
+<p dir="rtl">برای آشنایی با مفاهیم کلی، <a href="../../concepts/overview/kubernetes-api.html">API کوبرنتیز</a> را بخوانید. در <a href="../../concepts/security/controlling-access.html">کنترل دسترسی به API کوبرنتیز</a> توضیح داده شده است که کلاینت‌ها چگونه می‌توانند خود را به سرور API کوبرنتیز احراز هویت کنند و درخواست‌هایشان چگونه مجوزدهی می‌شود.</p>
+<h2 id="نسخه-بندی-api" dir="rtl">نسخه‌بندی API</h2>
+<p dir="rtl">طرح‌واره‌های سریال‌سازی JSON و Protobuf برای تغییر طرح‌واره از دستورالعمل‌های یکسانی پیروی می‌کنند. توضیحات زیر هر دو قالب را در بر می‌گیرد.</p>
+<p dir="rtl">نسخه‌بندی API و نسخه‌بندی نرم‌افزار به‌طور غیرمستقیم با یکدیگر مرتبط‌اند. رابطهٔ میان این دو در <a href="https://git.k8s.io/sig-release/release-engineering/reference/versioning.md#kubernetes-release-versioning" target="_blank" rel="noopener">پیشنهاد نسخه‌بندی API و انتشار</a> شرح داده شده است.</p>
+<p dir="rtl">نسخه‌های مختلف API سطوح متفاوتی از پایداری و پشتیبانی را نشان می‌دهند. اطلاعات بیشتر دربارهٔ معیارهای هر سطح را می‌توانید در <a href="https://git.k8s.io/community/contributors/devel/sig-architecture/api_changes.md#alpha-beta-and-stable-versions" target="_blank" rel="noopener">مستندات تغییرات API</a> بیابید.</p>
+<p dir="rtl">خلاصهٔ هر سطح در ادامه آمده است:</p>
+<ul>
+<li dir="rtl">
+<p dir="rtl">آلفا:</p>
+<ul>
+<li dir="rtl">نام این نسخه‌ها شامل <code dir="ltr">alpha</code> است (برای مثال، <code dir="ltr">v1alpha1</code>).</li>
+<li dir="rtl">نسخه‌های آلفای توکار API به‌طور پیش‌فرض غیرفعال هستند و برای استفاده از آن‌ها باید صراحتاً در پیکربندی <code dir="ltr">kube-apiserver</code> فعال شوند.</li>
+<li dir="rtl">نرم‌افزار ممکن است اشکال‌هایی داشته باشد. فعال‌کردن یک قابلیت ممکن است این اشکال‌ها را آشکار کند.</li>
+<li dir="rtl">پشتیبانی از API آلفا ممکن است در هر زمان و بدون اطلاع قبلی متوقف شود.</li>
+<li dir="rtl">این API ممکن است در انتشارهای بعدی نرم‌افزار، بدون اطلاع قبلی و به شکلی ناسازگار تغییر کند.</li>
+<li dir="rtl">به دلیل خطر بیشتر بروز اشکال و نبود پشتیبانی بلندمدت، توصیه می‌شود این نرم‌افزار فقط در کلاسترهای آزمایشی کوتاه‌عمر استفاده شود.</li>
+</ul>
+</li>
+<li dir="rtl">
+<p dir="rtl">بتا:</p>
+<ul>
+<li dir="rtl">
+<p dir="rtl">نام این نسخه‌ها شامل <code dir="ltr">beta</code> است (برای مثال، <code dir="ltr">v2beta3</code>).</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">نسخه‌های بتای توکار API به‌طور پیش‌فرض غیرفعال هستند و برای استفاده از آن‌ها باید صراحتاً در پیکربندی <code dir="ltr">kube-apiserver</code> فعال شوند (<strong>به‌جز</strong> نسخه‌های بتای APIهایی که پیش از کوبرنتیز 1.22 معرفی شده‌اند و به‌طور پیش‌فرض فعال بوده‌اند).</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">حداکثر طول عمر نسخه‌های بتای توکار API از زمان معرفی تا منسوخ‌شدن، ۹ ماه یا ۳ انتشار فرعی (هر کدام طولانی‌تر باشد) است؛ از زمان منسوخ‌شدن تا حذف نیز همین سقف ۹ ماه یا ۳ انتشار فرعی (هر کدام طولانی‌تر باشد) برقرار است.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">این نرم‌افزار به‌خوبی آزمایش شده است و فعال‌کردن قابلیت‌ها ایمن به شمار می‌رود.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">پشتیبانی از قابلیت‌ها متوقف نخواهد شد، اما جزئیات آن‌ها ممکن است تغییر کند.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">طرح‌واره و/یا معناشناسی آبجکت‌ها ممکن است در نسخهٔ بتا یا پایدار بعدی API به شکلی ناسازگار تغییر کند. در چنین مواردی، دستورالعمل‌های مهاجرت ارائه می‌شود. سازگاری با نسخهٔ بتا یا پایدار بعدی API ممکن است به ویرایش یا ایجاد دوبارهٔ آبجکت‌های API نیاز داشته باشد و کار ساده‌ای نباشد. این مهاجرت ممکن است برای برنامه‌هایی که به آن قابلیت وابسته‌اند، به توقف موقت سرویس نیاز داشته باشد.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">استفاده از این نرم‌افزار در محیط‌های عملیاتی توصیه نمی‌شود، زیرا انتشارهای بعدی ممکن است تغییرات ناسازگاری به همراه داشته باشند. برای گذار به نسخه‌های بتا یا پایدار بعدی API، پس از آنکه نسخهٔ بتای API منسوخ شد و دیگر ارائه نمی‌شود، باید از نسخه‌های بتای API استفاده کرد.</p>
+</li>
+</ul>
+</li>
+</ul>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">لطفاً قابلیت‌های بتا را امتحان کنید و بازخورد خود را ارائه دهید. پس از خروج قابلیت‌ها از مرحلهٔ بتا، شاید اعمال تغییرات بیشتر عملی نباشد.</p>
+</div>
+<ul>
+<li dir="rtl">پایدار:
+<ul>
+<li dir="rtl">نام نسخه به شکل <code dir="ltr">vX</code> است که در آن <code dir="ltr">X</code> یک عدد صحیح است.</li>
+<li dir="rtl">نسخه‌های پایدار API در تمام انتشارهای آینده در یک نسخهٔ اصلی کوبرنتیز در دسترس می‌مانند و در حال حاضر برنامه‌ای برای بازنگری نسخهٔ اصلی کوبرنتیز به‌گونه‌ای که APIهای پایدار حذف شوند، وجود ندارد.</li>
+</ul>
+</li>
+</ul>
+<h2 id="گروه-های-api" dir="rtl">گروه‌های API</h2>
+<p dir="rtl"><a href="https://git.k8s.io/design-proposals-archive/api-machinery/api-group.md" target="_blank" rel="noopener">گروه‌های API</a> گسترش API کوبرنتیز را آسان‌تر می‌کنند. گروه API در مسیر REST و در فیلد <code dir="ltr">apiVersion</code> یک آبجکت سریال‌شده مشخص می‌شود.</p>
+<p dir="rtl">کوبرنتیز چندین گروه API دارد:</p>
+<ul>
+<li dir="rtl">گروه <em>core</em> (که <em>legacy</em> نیز نامیده می‌شود) در مسیر REST با آدرس <code dir="ltr">/api/v1</code> قرار دارد. این گروه به‌عنوان بخشی از فیلد <code dir="ltr">apiVersion</code> مشخص نمی‌شود؛ برای مثال، <code dir="ltr">apiVersion: v1</code>.</li>
+<li dir="rtl">گروه‌های نام‌دار در مسیر REST با الگوی <code dir="ltr">/apis/$GROUP_NAME/$VERSION</code> قرار دارند و از <code dir="ltr">apiVersion: $GROUP_NAME/$VERSION</code> استفاده می‌کنند (برای مثال، <code dir="ltr">apiVersion: batch/v1</code>). فهرست کامل گروه‌های API پشتیبانی‌شده را می‌توانید در <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.37/#-strong-api-groups-strong-" target="_blank">مرجع API کوبرنتیز</a> بیابید.</li>
+</ul>
+<h2 id="فعال-یا-غیرفعال-کردن-گروه-های-api-enabling-or-disabling" dir="rtl">فعال یا غیرفعال‌کردن گروه‌های API   {#enabling-or-disabling}</h2>
+<p dir="rtl">برخی منابع و گروه‌های API به‌طور پیش‌فرض فعال هستند. می‌توانید با تنظیم <code dir="ltr">--runtime-config</code> روی سرور API، آن‌ها را فعال یا غیرفعال کنید. فلگ <code dir="ltr">--runtime-config</code> زوج‌های <code dir="ltr">&lt;key&gt;[=&lt;value&gt;]</code> جداشده با ویرگول را می‌پذیرد که پیکربندی زمان اجرای سرور API را توصیف می‌کنند. اگر بخش <code dir="ltr">=&lt;value&gt;</code> حذف شود، مانند آن است که <code dir="ltr">=true</code> مشخص شده باشد. برای مثال:</p>
+<ul>
+<li dir="rtl">برای غیرفعال‌کردن <code dir="ltr">batch/v1</code>، مقدار <code dir="ltr">--runtime-config=batch/v1=false</code> را تنظیم کنید</li>
+<li dir="rtl">برای فعال‌کردن <code dir="ltr">batch/v2alpha1</code>، مقدار <code dir="ltr">--runtime-config=batch/v2alpha1</code> را تنظیم کنید</li>
+<li dir="rtl">برای فعال‌کردن نسخه‌ای مشخص از یک API، مانند <code dir="ltr">storage.k8s.io/v1beta1/csistoragecapacities</code>، مقدار <code dir="ltr">--runtime-config=storage.k8s.io/v1beta1/csistoragecapacities</code> را تنظیم کنید</li>
+</ul>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">هنگام فعال یا غیرفعال‌کردن گروه‌ها یا منابع، باید سرور API و controller manager را دوباره راه‌اندازی کنید تا تغییرات <code dir="ltr">--runtime-config</code> اعمال شوند.</p>
+</div>
+<h2 id="ماندگاری-داده-ها" dir="rtl">ماندگاری داده‌ها</h2>
+<p dir="rtl">کوبرنتیز وضعیت سریال‌شدهٔ خود را در قالب منابع API در <span class="term" title="etcd">etcd</span> می‌نویسد و به این ترتیب ذخیره می‌کند.</p>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<ul>
+<li dir="rtl">دربارهٔ <a href="https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#api-conventions" target="_blank" rel="noopener">قراردادهای API</a> بیشتر بیاموزید</li>
+<li dir="rtl">مستندات طراحی <a href="https://git.k8s.io/design-proposals-archive/api-machinery/aggregated-api-servers.md" target="_blank" rel="noopener">aggregator</a> را بخوانید</li>
+<li dir="rtl">با <a href="https://kubernetes.io/docs/reference/using-api/declarative-validation/" target="_blank">اعتبارسنجی اعلانی API</a> آشنا شوید.</li>
+</ul>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#نسخه-بندی-api">نسخه‌بندی API</a><a class="l2" href="#گروه-های-api">گروه‌های API</a><a class="l2" href="#فعال-یا-غیرفعال-کردن-گروه-های-api-enabling-or-disabling">فعال یا غیرفعال‌کردن گروه‌های API   {#enabling-or-disabling}</a><a class="l2" href="#ماندگاری-داده-ها">ماندگاری داده‌ها</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>
