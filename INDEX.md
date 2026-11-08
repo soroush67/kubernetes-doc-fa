@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-1231 از 1722 صفحه
+1238 از 1722 صفحه
 
 
 ## `.`
@@ -1592,16 +1592,16 @@
 ## `reference/kubernetes-api/scheduling`
 
 - ✅ [_index.md](md/reference/kubernetes-api/scheduling/_index.md)
-- ⏳ `composite-pod-group-v1alpha3.md`
-- ⏳ `pod-group-v1beta1.md`
-- ⏳ `priority-class-v1.md`
-- ⏳ `workload-v1beta1.md`
+- ✅ [composite-pod-group-v1alpha3.md](md/reference/kubernetes-api/scheduling/composite-pod-group-v1alpha3.md)
+- ⚠️ [pod-group-v1beta1.md](md/reference/kubernetes-api/scheduling/pod-group-v1beta1.md)
+- ✅ [priority-class-v1.md](md/reference/kubernetes-api/scheduling/priority-class-v1.md)
+- ✅ [workload-v1beta1.md](md/reference/kubernetes-api/scheduling/workload-v1beta1.md)
 
 ## `reference/kubernetes-api/storage`
 
-- ⏳ `_index.md`
-- ⏳ `csi-driver-v1.md`
-- ⏳ `csi-node-v1.md`
+- ✅ [_index.md](md/reference/kubernetes-api/storage/_index.md)
+- ✅ [csi-driver-v1.md](md/reference/kubernetes-api/storage/csi-driver-v1.md)
+- ✅ [csi-node-v1.md](md/reference/kubernetes-api/storage/csi-node-v1.md)
 - ⏳ `csi-storage-capacity-v1.md`
 - ⏳ `storage-class-v1.md`
 - ⏳ `volume-attachment-v1.md`

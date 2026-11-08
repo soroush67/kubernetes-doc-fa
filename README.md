@@ -8,9 +8,9 @@
 
 | | |
 |---|---|
-| پیشرفت (بر اساس کلمات) | **74.6٪** |
-| صفحات ترجمه‌شده | 1231 از 1722 |
-| صفحات دارای ایراد ساختاری | 44 |
+| پیشرفت (بر اساس کلمات) | **77.6٪** |
+| صفحات ترجمه‌شده | 1238 از 1722 |
+| صفحات دارای ایراد ساختاری | 45 |
 | نسخه‌ی منبع انگلیسی | `f652c6b8a26f` |
 
 ## مشاهده
@@ -72,7 +72,7 @@ cd kubernetes-doc-fa
 | `contribute` | 44 | 44 |
 | `doc-contributor-tools` | 1 | 1 |
 | `home` | 2 | 2 |
-| `reference` | 996 | 1198 |
+| `reference` | 1003 | 1198 |
 | `setup` | 0 | 22 |
 | `tasks` | 0 | 221 |
 | `tutorials` | 0 | 45 |
@@ -101,6 +101,13 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [reference/kubernetes-api/storage/csi-node-v1.md](md/reference/kubernetes-api/storage/csi-node-v1.md) — 2026-11-08T12:33:51+03:30
+- [reference/kubernetes-api/scheduling/workload-v1beta1.md](md/reference/kubernetes-api/scheduling/workload-v1beta1.md) — 2026-11-08T12:14:14+03:30
+- [reference/kubernetes-api/storage/csi-driver-v1.md](md/reference/kubernetes-api/storage/csi-driver-v1.md) — 2026-11-08T12:14:09+03:30
+- [reference/kubernetes-api/storage/_index.md](md/reference/kubernetes-api/storage/_index.md) — 2026-11-08T12:09:41+03:30
+- [reference/kubernetes-api/scheduling/priority-class-v1.md](md/reference/kubernetes-api/scheduling/priority-class-v1.md) — 2026-11-08T12:09:38+03:30
+- [reference/kubernetes-api/scheduling/pod-group-v1beta1.md](md/reference/kubernetes-api/scheduling/pod-group-v1beta1.md) — 2026-11-08T12:08:48+03:30
+- [reference/kubernetes-api/scheduling/composite-pod-group-v1alpha3.md](md/reference/kubernetes-api/scheduling/composite-pod-group-v1alpha3.md) — 2026-11-08T12:06:33+03:30
 - [reference/kubernetes-api/resource/resource-slice-v1.md](md/reference/kubernetes-api/resource/resource-slice-v1.md) — 2026-11-03T12:50:58+03:30
 - [reference/kubernetes-api/scheduling/_index.md](md/reference/kubernetes-api/scheduling/_index.md) — 2026-11-03T12:46:22+03:30
 - [reference/kubernetes-api/resource/resource-pool-status-request-v1alpha3.md](md/reference/kubernetes-api/resource/resource-pool-status-request-v1alpha3.md) — 2026-11-03T12:46:19+03:30
@@ -114,13 +121,6 @@ cd kubernetes-doc-fa
 - [reference/kubernetes-api/rbac/cluster-role-v1.md](md/reference/kubernetes-api/rbac/cluster-role-v1.md) — 2026-11-03T12:26:24+03:30
 - [reference/kubernetes-api/policy/pod-disruption-budget-v1.md](md/reference/kubernetes-api/policy/pod-disruption-budget-v1.md) — 2026-11-03T12:25:10+03:30
 - [reference/kubernetes-api/rbac/cluster-role-binding-v1.md](md/reference/kubernetes-api/rbac/cluster-role-binding-v1.md) — 2026-11-03T12:23:08+03:30
-- [reference/kubernetes-api/rbac/_index.md](md/reference/kubernetes-api/rbac/_index.md) — 2026-11-03T12:19:59+03:30
-- [reference/kubernetes-api/node/runtime-class-v1.md](md/reference/kubernetes-api/node/runtime-class-v1.md) — 2026-11-03T12:19:56+03:30
-- [reference/kubernetes-api/policy/_index.md](md/reference/kubernetes-api/policy/_index.md) — 2026-11-03T12:18:41+03:30
-- [reference/kubernetes-api/networking/service-cidr-v1.md](md/reference/kubernetes-api/networking/service-cidr-v1.md) — 2026-11-03T12:18:38+03:30
-- [reference/kubernetes-api/node/_index.md](md/reference/kubernetes-api/node/_index.md) — 2026-11-03T12:16:36+03:30
-- [reference/kubernetes-api/networking/network-policy-v1.md](md/reference/kubernetes-api/networking/network-policy-v1.md) — 2026-11-03T12:16:33+03:30
-- [reference/kubernetes-api/networking/ingress-v1.md](md/reference/kubernetes-api/networking/ingress-v1.md) — 2026-11-03T12:14:55+03:30
 
 </div>
 
@@ -172,6 +172,7 @@ cd kubernetes-doc-fa
 - [reference/kubernetes-api/core/service-v1.md](md/reference/kubernetes-api/core/service-v1.md): chunk 11: 10 untranslated English lines, e.g. 'POST /api/v1/namespaces/{namespace}/services/{name}/proxy'; chunk 11: short: 1017 words vs 1820 source words
 - [reference/kubernetes-api/lifecycle/eviction-v1alpha1.md](md/reference/kubernetes-api/lifecycle/eviction-v1alpha1.md): chunk 4: heading anchors {#...} differ
 - [reference/kubernetes-api/networking/ingress-v1.md](md/reference/kubernetes-api/networking/ingress-v1.md): chunk 5: heading anchors {#...} differ
+- [reference/kubernetes-api/scheduling/pod-group-v1beta1.md](md/reference/kubernetes-api/scheduling/pod-group-v1beta1.md): chunk 2: 4 untranslated English lines, e.g. 'POST /apis/scheduling.k8s.io/v1beta1/namespaces/{namespace}/podgroups'
 
 </div>
 
