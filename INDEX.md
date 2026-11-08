@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-1377 از 1722 صفحه
+1392 از 1722 صفحه
 
 
 ## `.`
@@ -1803,26 +1803,26 @@
 ## `reference/setup-tools/kubeadm/generated/kubeadm_token`
 
 - ✅ [_index.md](md/reference/setup-tools/kubeadm/generated/kubeadm_token/_index.md)
-- ⏳ `kubeadm_token_create.md`
+- ✅ [kubeadm_token_create.md](md/reference/setup-tools/kubeadm/generated/kubeadm_token/kubeadm_token_create.md)
 - ✅ [kubeadm_token_delete.md](md/reference/setup-tools/kubeadm/generated/kubeadm_token/kubeadm_token_delete.md)
-- ⏳ `kubeadm_token_generate.md`
-- ⏳ `kubeadm_token_list.md`
+- ✅ [kubeadm_token_generate.md](md/reference/setup-tools/kubeadm/generated/kubeadm_token/kubeadm_token_generate.md)
+- ✅ [kubeadm_token_list.md](md/reference/setup-tools/kubeadm/generated/kubeadm_token/kubeadm_token_list.md)
 
 ## `reference/setup-tools/kubeadm/generated/kubeadm_upgrade`
 
-- ⏳ `_index.md`
-- ⏳ `kubeadm_upgrade_apply.md`
-- ⏳ `kubeadm_upgrade_apply_phase.md`
-- ⏳ `kubeadm_upgrade_apply_phase_addon.md`
-- ⏳ `kubeadm_upgrade_apply_phase_addon_all.md`
-- ⏳ `kubeadm_upgrade_apply_phase_addon_coredns.md`
-- ⏳ `kubeadm_upgrade_apply_phase_addon_kube-proxy.md`
-- ⏳ `kubeadm_upgrade_apply_phase_bootstrap-token.md`
-- ⏳ `kubeadm_upgrade_apply_phase_control-plane.md`
-- ⏳ `kubeadm_upgrade_apply_phase_kubelet-config.md`
-- ⏳ `kubeadm_upgrade_apply_phase_post-upgrade.md`
+- ✅ [_index.md](md/reference/setup-tools/kubeadm/generated/kubeadm_upgrade/_index.md)
+- ⚠️ [kubeadm_upgrade_apply.md](md/reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_apply.md)
+- ✅ [kubeadm_upgrade_apply_phase.md](md/reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_apply_phase.md)
+- ✅ [kubeadm_upgrade_apply_phase_addon.md](md/reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_apply_phase_addon.md)
+- ✅ [kubeadm_upgrade_apply_phase_addon_all.md](md/reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_apply_phase_addon_all.md)
+- ⚠️ [kubeadm_upgrade_apply_phase_addon_coredns.md](md/reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_apply_phase_addon_coredns.md)
+- ⚠️ [kubeadm_upgrade_apply_phase_addon_kube-proxy.md](md/reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_apply_phase_addon_kube-proxy.md)
+- ✅ [kubeadm_upgrade_apply_phase_bootstrap-token.md](md/reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_apply_phase_bootstrap-token.md)
+- ⚠️ [kubeadm_upgrade_apply_phase_control-plane.md](md/reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_apply_phase_control-plane.md)
+- ✅ [kubeadm_upgrade_apply_phase_kubelet-config.md](md/reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_apply_phase_kubelet-config.md)
+- ✅ [kubeadm_upgrade_apply_phase_post-upgrade.md](md/reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_apply_phase_post-upgrade.md)
 - ⏳ `kubeadm_upgrade_apply_phase_preflight.md`
-- ⏳ `kubeadm_upgrade_apply_phase_upload-config.md`
+- ✅ [kubeadm_upgrade_apply_phase_upload-config.md](md/reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_apply_phase_upload-config.md)
 - ⏳ `kubeadm_upgrade_apply_phase_upload-config_all.md`
 - ⏳ `kubeadm_upgrade_apply_phase_upload-config_kubeadm.md`
 - ⏳ `kubeadm_upgrade_apply_phase_upload-config_kubelet.md`
