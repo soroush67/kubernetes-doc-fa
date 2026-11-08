@@ -8,8 +8,8 @@
 
 | | |
 |---|---|
-| پیشرفت (بر اساس کلمات) | **83.1٪** |
-| صفحات ترجمه‌شده | 1362 از 1722 |
+| پیشرفت (بر اساس کلمات) | **83.3٪** |
+| صفحات ترجمه‌شده | 1377 از 1722 |
 | صفحات دارای ایراد ساختاری | 61 |
 | نسخه‌ی منبع انگلیسی | `f652c6b8a26f` |
 
@@ -72,7 +72,7 @@ cd kubernetes-doc-fa
 | `contribute` | 44 | 44 |
 | `doc-contributor-tools` | 1 | 1 |
 | `home` | 2 | 2 |
-| `reference` | 1127 | 1198 |
+| `reference` | 1142 | 1198 |
 | `setup` | 0 | 22 |
 | `tasks` | 0 | 221 |
 | `tutorials` | 0 | 45 |
@@ -101,26 +101,26 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [reference/setup-tools/kubeadm/generated/kubeadm_token/kubeadm_token_delete.md](md/reference/setup-tools/kubeadm/generated/kubeadm_token/kubeadm_token_delete.md) — 2026-11-08T17:16:09+03:30
+- [reference/setup-tools/kubeadm/generated/kubeadm_token/_index.md](md/reference/setup-tools/kubeadm/generated/kubeadm_token/_index.md) — 2026-11-08T17:15:57+03:30
+- [reference/setup-tools/kubeadm/generated/kubeadm_reset/kubeadm_reset_phase_remove-etcd-member.md](md/reference/setup-tools/kubeadm/generated/kubeadm_reset/kubeadm_reset_phase_remove-etcd-member.md) — 2026-11-08T17:15:47+03:30
+- [reference/setup-tools/kubeadm/generated/kubeadm_reset/kubeadm_reset_phase_cleanup-node.md](md/reference/setup-tools/kubeadm/generated/kubeadm_reset/kubeadm_reset_phase_cleanup-node.md) — 2026-11-08T17:15:39+03:30
+- [reference/setup-tools/kubeadm/generated/kubeadm_reset/kubeadm_reset_phase_preflight.md](md/reference/setup-tools/kubeadm/generated/kubeadm_reset/kubeadm_reset_phase_preflight.md) — 2026-11-08T17:15:37+03:30
+- [reference/setup-tools/kubeadm/generated/kubeadm_reset/kubeadm_reset_phase.md](md/reference/setup-tools/kubeadm/generated/kubeadm_reset/kubeadm_reset_phase.md) — 2026-11-08T17:15:28+03:30
+- [reference/setup-tools/kubeadm/generated/kubeadm_reset/_index.md](md/reference/setup-tools/kubeadm/generated/kubeadm_reset/_index.md) — 2026-11-08T17:15:24+03:30
+- [reference/setup-tools/kubeadm/generated/kubeadm_kubeconfig/kubeadm_kubeconfig_user.md](md/reference/setup-tools/kubeadm/generated/kubeadm_kubeconfig/kubeadm_kubeconfig_user.md) — 2026-11-08T17:15:21+03:30
+- [reference/setup-tools/kubeadm/generated/kubeadm_join/kubeadm_join_phase_preflight.md](md/reference/setup-tools/kubeadm/generated/kubeadm_join/kubeadm_join_phase_preflight.md) — 2026-11-08T17:15:04+03:30
+- [reference/setup-tools/kubeadm/generated/kubeadm_kubeconfig/_index.md](md/reference/setup-tools/kubeadm/generated/kubeadm_kubeconfig/_index.md) — 2026-11-08T17:14:54+03:30
+- [reference/setup-tools/kubeadm/generated/kubeadm_join/kubeadm_join_phase_wait-control-plane.md](md/reference/setup-tools/kubeadm/generated/kubeadm_join/kubeadm_join_phase_wait-control-plane.md) — 2026-11-08T17:14:48+03:30
+- [reference/setup-tools/kubeadm/generated/kubeadm_join/kubeadm_join_phase_kubelet-wait-bootstrap.md](md/reference/setup-tools/kubeadm/generated/kubeadm_join/kubeadm_join_phase_kubelet-wait-bootstrap.md) — 2026-11-08T17:14:39+03:30
+- [reference/setup-tools/kubeadm/generated/kubeadm_join/kubeadm_join_phase_kubelet-start.md](md/reference/setup-tools/kubeadm/generated/kubeadm_join/kubeadm_join_phase_kubelet-start.md) — 2026-11-08T17:14:38+03:30
+- [reference/setup-tools/kubeadm/generated/kubeadm_join/kubeadm_join_phase_etcd-join.md](md/reference/setup-tools/kubeadm/generated/kubeadm_join/kubeadm_join_phase_etcd-join.md) — 2026-11-08T17:14:27+03:30
+- [reference/setup-tools/kubeadm/generated/kubeadm_join/kubeadm_join_phase_control-plane-prepare_kubeconfig.md](md/reference/setup-tools/kubeadm/generated/kubeadm_join/kubeadm_join_phase_control-plane-prepare_kubeconfig.md) — 2026-11-08T17:14:14+03:30
 - [reference/setup-tools/kubeadm/generated/kubeadm_join/kubeadm_join_phase_control-plane-prepare_download-certs.md](md/reference/setup-tools/kubeadm/generated/kubeadm_join/kubeadm_join_phase_control-plane-prepare_download-certs.md) — 2026-11-08T17:13:58+03:30
 - [reference/setup-tools/kubeadm/generated/kubeadm_join/kubeadm_join_phase_control-plane-prepare_control-plane.md](md/reference/setup-tools/kubeadm/generated/kubeadm_join/kubeadm_join_phase_control-plane-prepare_control-plane.md) — 2026-11-08T17:13:55+03:30
 - [reference/setup-tools/kubeadm/generated/kubeadm_join/kubeadm_join_phase_control-plane-prepare_all.md](md/reference/setup-tools/kubeadm/generated/kubeadm_join/kubeadm_join_phase_control-plane-prepare_all.md) — 2026-11-08T17:13:38+03:30
 - [reference/setup-tools/kubeadm/generated/kubeadm_join/kubeadm_join_phase_control-plane-prepare_certs.md](md/reference/setup-tools/kubeadm/generated/kubeadm_join/kubeadm_join_phase_control-plane-prepare_certs.md) — 2026-11-08T17:13:37+03:30
 - [reference/setup-tools/kubeadm/generated/kubeadm_join/kubeadm_join_phase_control-plane-prepare.md](md/reference/setup-tools/kubeadm/generated/kubeadm_join/kubeadm_join_phase_control-plane-prepare.md) — 2026-11-08T17:13:16+03:30
-- [reference/setup-tools/kubeadm/generated/kubeadm_join/kubeadm_join_phase_control-plane-join_mark-control-plane.md](md/reference/setup-tools/kubeadm/generated/kubeadm_join/kubeadm_join_phase_control-plane-join_mark-control-plane.md) — 2026-11-08T17:13:11+03:30
-- [reference/setup-tools/kubeadm/generated/kubeadm_join/_index.md](md/reference/setup-tools/kubeadm/generated/kubeadm_join/_index.md) — 2026-11-08T17:13:07+03:30
-- [reference/setup-tools/kubeadm/generated/kubeadm_join/kubeadm_join_phase_control-plane-join_all.md](md/reference/setup-tools/kubeadm/generated/kubeadm_join/kubeadm_join_phase_control-plane-join_all.md) — 2026-11-08T17:13:00+03:30
-- [reference/setup-tools/kubeadm/generated/kubeadm_join/kubeadm_join_phase_control-plane-join.md](md/reference/setup-tools/kubeadm/generated/kubeadm_join/kubeadm_join_phase_control-plane-join.md) — 2026-11-08T17:12:42+03:30
-- [reference/setup-tools/kubeadm/generated/kubeadm_join/kubeadm_join_phase.md](md/reference/setup-tools/kubeadm/generated/kubeadm_join/kubeadm_join_phase.md) — 2026-11-08T17:12:33+03:30
-- [reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_wait-control-plane.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_wait-control-plane.md) — 2026-11-08T17:12:26+03:30
-- [reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_upload-config_kubelet.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_upload-config_kubelet.md) — 2026-11-08T17:12:21+03:30
-- [reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_upload-config_kubeadm.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_upload-config_kubeadm.md) — 2026-11-08T17:12:17+03:30
-- [reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_upload-config_all.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_upload-config_all.md) — 2026-11-08T17:12:09+03:30
-- [reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_upload-certs.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_upload-certs.md) — 2026-11-08T17:11:55+03:30
-- [reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_upload-config.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_upload-config.md) — 2026-11-08T17:11:46+03:30
-- [reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_preflight.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_preflight.md) — 2026-11-08T17:11:40+03:30
-- [reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_show-join-command.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_show-join-command.md) — 2026-11-08T17:11:36+03:30
-- [reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_mark-control-plane.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_mark-control-plane.md) — 2026-11-08T17:11:29+03:30
-- [reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_kubelet-start.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_kubelet-start.md) — 2026-11-08T17:11:23+03:30
 
 </div>
 

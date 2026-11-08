@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-1362 از 1722 صفحه
+1377 از 1722 صفحه
 
 
 ## `.`
@@ -1780,31 +1780,31 @@
 - ✅ [kubeadm_join_phase_control-plane-prepare_certs.md](md/reference/setup-tools/kubeadm/generated/kubeadm_join/kubeadm_join_phase_control-plane-prepare_certs.md)
 - ✅ [kubeadm_join_phase_control-plane-prepare_control-plane.md](md/reference/setup-tools/kubeadm/generated/kubeadm_join/kubeadm_join_phase_control-plane-prepare_control-plane.md)
 - ✅ [kubeadm_join_phase_control-plane-prepare_download-certs.md](md/reference/setup-tools/kubeadm/generated/kubeadm_join/kubeadm_join_phase_control-plane-prepare_download-certs.md)
-- ⏳ `kubeadm_join_phase_control-plane-prepare_kubeconfig.md`
-- ⏳ `kubeadm_join_phase_etcd-join.md`
-- ⏳ `kubeadm_join_phase_kubelet-start.md`
-- ⏳ `kubeadm_join_phase_kubelet-wait-bootstrap.md`
-- ⏳ `kubeadm_join_phase_preflight.md`
-- ⏳ `kubeadm_join_phase_wait-control-plane.md`
+- ✅ [kubeadm_join_phase_control-plane-prepare_kubeconfig.md](md/reference/setup-tools/kubeadm/generated/kubeadm_join/kubeadm_join_phase_control-plane-prepare_kubeconfig.md)
+- ✅ [kubeadm_join_phase_etcd-join.md](md/reference/setup-tools/kubeadm/generated/kubeadm_join/kubeadm_join_phase_etcd-join.md)
+- ✅ [kubeadm_join_phase_kubelet-start.md](md/reference/setup-tools/kubeadm/generated/kubeadm_join/kubeadm_join_phase_kubelet-start.md)
+- ✅ [kubeadm_join_phase_kubelet-wait-bootstrap.md](md/reference/setup-tools/kubeadm/generated/kubeadm_join/kubeadm_join_phase_kubelet-wait-bootstrap.md)
+- ✅ [kubeadm_join_phase_preflight.md](md/reference/setup-tools/kubeadm/generated/kubeadm_join/kubeadm_join_phase_preflight.md)
+- ✅ [kubeadm_join_phase_wait-control-plane.md](md/reference/setup-tools/kubeadm/generated/kubeadm_join/kubeadm_join_phase_wait-control-plane.md)
 
 ## `reference/setup-tools/kubeadm/generated/kubeadm_kubeconfig`
 
-- ⏳ `_index.md`
-- ⏳ `kubeadm_kubeconfig_user.md`
+- ✅ [_index.md](md/reference/setup-tools/kubeadm/generated/kubeadm_kubeconfig/_index.md)
+- ✅ [kubeadm_kubeconfig_user.md](md/reference/setup-tools/kubeadm/generated/kubeadm_kubeconfig/kubeadm_kubeconfig_user.md)
 
 ## `reference/setup-tools/kubeadm/generated/kubeadm_reset`
 
-- ⏳ `_index.md`
-- ⏳ `kubeadm_reset_phase.md`
-- ⏳ `kubeadm_reset_phase_cleanup-node.md`
-- ⏳ `kubeadm_reset_phase_preflight.md`
-- ⏳ `kubeadm_reset_phase_remove-etcd-member.md`
+- ✅ [_index.md](md/reference/setup-tools/kubeadm/generated/kubeadm_reset/_index.md)
+- ✅ [kubeadm_reset_phase.md](md/reference/setup-tools/kubeadm/generated/kubeadm_reset/kubeadm_reset_phase.md)
+- ✅ [kubeadm_reset_phase_cleanup-node.md](md/reference/setup-tools/kubeadm/generated/kubeadm_reset/kubeadm_reset_phase_cleanup-node.md)
+- ✅ [kubeadm_reset_phase_preflight.md](md/reference/setup-tools/kubeadm/generated/kubeadm_reset/kubeadm_reset_phase_preflight.md)
+- ✅ [kubeadm_reset_phase_remove-etcd-member.md](md/reference/setup-tools/kubeadm/generated/kubeadm_reset/kubeadm_reset_phase_remove-etcd-member.md)
 
 ## `reference/setup-tools/kubeadm/generated/kubeadm_token`
 
-- ⏳ `_index.md`
+- ✅ [_index.md](md/reference/setup-tools/kubeadm/generated/kubeadm_token/_index.md)
 - ⏳ `kubeadm_token_create.md`
-- ⏳ `kubeadm_token_delete.md`
+- ✅ [kubeadm_token_delete.md](md/reference/setup-tools/kubeadm/generated/kubeadm_token/kubeadm_token_delete.md)
 - ⏳ `kubeadm_token_generate.md`
 - ⏳ `kubeadm_token_list.md`
 
