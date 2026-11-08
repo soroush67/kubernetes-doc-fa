@@ -8,8 +8,8 @@
 
 | | |
 |---|---|
-| پیشرفت (بر اساس کلمات) | **80.3٪** |
-| صفحات ترجمه‌شده | 1258 از 1722 |
+| پیشرفت (بر اساس کلمات) | **81.3٪** |
+| صفحات ترجمه‌شده | 1272 از 1722 |
 | صفحات دارای ایراد ساختاری | 46 |
 | نسخه‌ی منبع انگلیسی | `f652c6b8a26f` |
 
@@ -72,7 +72,7 @@ cd kubernetes-doc-fa
 | `contribute` | 44 | 44 |
 | `doc-contributor-tools` | 1 | 1 |
 | `home` | 2 | 2 |
-| `reference` | 1023 | 1198 |
+| `reference` | 1037 | 1198 |
 | `setup` | 0 | 22 |
 | `tasks` | 0 | 221 |
 | `tutorials` | 0 | 45 |
@@ -101,26 +101,26 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [reference/setup-tools/kubeadm/_index.md](md/reference/setup-tools/kubeadm/_index.md) — 2026-11-08T16:55:54+03:30
+- [reference/setup-tools/_index.md](md/reference/setup-tools/_index.md) — 2026-11-08T16:55:38+03:30
+- [reference/scheduling/policies.md](md/reference/scheduling/policies.md) — 2026-11-08T16:55:36+03:30
+- [reference/node/what-happens-on-restart.md](md/reference/node/what-happens-on-restart.md) — 2026-11-08T16:55:29+03:30
+- [reference/scheduling/_index.md](md/reference/scheduling/_index.md) — 2026-11-08T16:54:42+03:30
+- [reference/node/topics-on-dockershim-and-cri-compatible-runtimes.md](md/reference/node/topics-on-dockershim-and-cri-compatible-runtimes.md) — 2026-11-08T16:54:40+03:30
+- [reference/node/seccomp.md](md/reference/node/seccomp.md) — 2026-11-08T16:54:24+03:30
+- [reference/node/systemd-watchdog.md](md/reference/node/systemd-watchdog.md) — 2026-11-08T16:54:20+03:30
+- [reference/node/swap-behavior.md](md/reference/node/swap-behavior.md) — 2026-11-08T16:53:59+03:30
+- [reference/node/node-status.md](md/reference/node/node-status.md) — 2026-11-08T16:53:49+03:30
+- [reference/node/pod-level-resource-managers.md](md/reference/node/pod-level-resource-managers.md) — 2026-11-08T16:53:48+03:30
+- [reference/labels-annotations-taints/_index.md](md/reference/labels-annotations-taints/_index.md) — 2026-11-08T16:53:10+03:30
+- [reference/node/node-lifecycle-conditions.md](md/reference/node/node-lifecycle-conditions.md) — 2026-11-08T16:53:00+03:30
+- [reference/node/node-labels.md](md/reference/node/node-labels.md) — 2026-11-08T16:52:36+03:30
 - [reference/node/kubelet-sync-loop.md](md/reference/node/kubelet-sync-loop.md) — 2026-11-08T16:52:15+03:30
 - [reference/node/kubelet-pods-api.md](md/reference/node/kubelet-pods-api.md) — 2026-11-08T13:59:40+03:30
 - [reference/node/kubelet-files.md](md/reference/node/kubelet-files.md) — 2026-11-08T13:59:13+03:30
 - [reference/node/kubelet-config-directory-merging.md](md/reference/node/kubelet-config-directory-merging.md) — 2026-11-08T13:58:23+03:30
 - [reference/node/kubelet-checkpoint-api.md](md/reference/node/kubelet-checkpoint-api.md) — 2026-11-08T13:58:03+03:30
 - [reference/node/kernel-version-requirements.md](md/reference/node/kernel-version-requirements.md) — 2026-11-08T13:57:34+03:30
-- [reference/node/dra-standard-device-attributes.md](md/reference/node/dra-standard-device-attributes.md) — 2026-11-08T13:56:57+03:30
-- [reference/node/device-plugin-api-versions.md](md/reference/node/device-plugin-api-versions.md) — 2026-11-08T13:56:35+03:30
-- [reference/node/_index.md](md/reference/node/_index.md) — 2026-11-08T13:56:25+03:30
-- [reference/networking/virtual-ips.md](md/reference/networking/virtual-ips.md) — 2026-11-08T13:56:15+03:30
-- [reference/networking/service-protocols.md](md/reference/networking/service-protocols.md) — 2026-11-08T13:52:47+03:30
-- [reference/networking/ports-and-protocols.md](md/reference/networking/ports-and-protocols.md) — 2026-11-08T13:52:11+03:30
-- [reference/networking/_index.md](md/reference/networking/_index.md) — 2026-11-08T13:51:53+03:30
-- [reference/labels-annotations-taints/audit-annotations.md](md/reference/labels-annotations-taints/audit-annotations.md) — 2026-11-08T13:51:50+03:30
-- [reference/kubernetes-api/storagemigration/storage-version-migration-v1.md](md/reference/kubernetes-api/storagemigration/storage-version-migration-v1.md) — 2026-11-08T13:51:12+03:30
-- [reference/kubernetes-api/storage/volume-attributes-class-v1.md](md/reference/kubernetes-api/storage/volume-attributes-class-v1.md) — 2026-11-08T13:50:50+03:30
-- [reference/kubernetes-api/storagemigration/_index.md](md/reference/kubernetes-api/storagemigration/_index.md) — 2026-11-08T12:38:38+03:30
-- [reference/kubernetes-api/storage/volume-attachment-v1.md](md/reference/kubernetes-api/storage/volume-attachment-v1.md) — 2026-11-08T12:38:35+03:30
-- [reference/kubernetes-api/storage/storage-class-v1.md](md/reference/kubernetes-api/storage/storage-class-v1.md) — 2026-11-08T12:37:23+03:30
-- [reference/kubernetes-api/storage/csi-storage-capacity-v1.md](md/reference/kubernetes-api/storage/csi-storage-capacity-v1.md) — 2026-11-08T12:34:07+03:30
 
 </div>
 

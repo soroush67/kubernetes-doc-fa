@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-1258 از 1722 صفحه
+1272 از 1722 صفحه
 
 
 ## `.`
@@ -1614,7 +1614,7 @@
 
 ## `reference/labels-annotations-taints`
 
-- ⏳ `_index.md`
+- ✅ [_index.md](md/reference/labels-annotations-taints/_index.md)
 - ✅ [audit-annotations.md](md/reference/labels-annotations-taints/audit-annotations.md)
 
 ## `reference/networking`
@@ -1635,29 +1635,29 @@
 - ✅ [kubelet-files.md](md/reference/node/kubelet-files.md)
 - ✅ [kubelet-pods-api.md](md/reference/node/kubelet-pods-api.md)
 - ✅ [kubelet-sync-loop.md](md/reference/node/kubelet-sync-loop.md)
-- ⏳ `node-labels.md`
-- ⏳ `node-lifecycle-conditions.md`
-- ⏳ `node-status.md`
-- ⏳ `pod-level-resource-managers.md`
-- ⏳ `seccomp.md`
-- ⏳ `swap-behavior.md`
-- ⏳ `systemd-watchdog.md`
-- ⏳ `topics-on-dockershim-and-cri-compatible-runtimes.md`
-- ⏳ `what-happens-on-restart.md`
+- ✅ [node-labels.md](md/reference/node/node-labels.md)
+- ✅ [node-lifecycle-conditions.md](md/reference/node/node-lifecycle-conditions.md)
+- ✅ [node-status.md](md/reference/node/node-status.md)
+- ✅ [pod-level-resource-managers.md](md/reference/node/pod-level-resource-managers.md)
+- ✅ [seccomp.md](md/reference/node/seccomp.md)
+- ✅ [swap-behavior.md](md/reference/node/swap-behavior.md)
+- ✅ [systemd-watchdog.md](md/reference/node/systemd-watchdog.md)
+- ✅ [topics-on-dockershim-and-cri-compatible-runtimes.md](md/reference/node/topics-on-dockershim-and-cri-compatible-runtimes.md)
+- ✅ [what-happens-on-restart.md](md/reference/node/what-happens-on-restart.md)
 
 ## `reference/scheduling`
 
-- ⏳ `_index.md`
+- ✅ [_index.md](md/reference/scheduling/_index.md)
 - ⏳ `config.md`
-- ⏳ `policies.md`
+- ✅ [policies.md](md/reference/scheduling/policies.md)
 
 ## `reference/setup-tools`
 
-- ⏳ `_index.md`
+- ✅ [_index.md](md/reference/setup-tools/_index.md)
 
 ## `reference/setup-tools/kubeadm`
 
-- ⏳ `_index.md`
+- ✅ [_index.md](md/reference/setup-tools/kubeadm/_index.md)
 - ⏳ `implementation-details.md`
 - ⏳ `kubeadm-alpha.md`
 - ⏳ `kubeadm-certs.md`
