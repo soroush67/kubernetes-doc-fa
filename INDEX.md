@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-1332 از 1722 صفحه
+1347 از 1722 صفحه
 
 
 ## `.`
@@ -1746,23 +1746,23 @@
 - ⚠️ [kubeadm_init_phase_control-plane_controller-manager.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_control-plane_controller-manager.md)
 - ⚠️ [kubeadm_init_phase_control-plane_scheduler.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_control-plane_scheduler.md)
 - ✅ [kubeadm_init_phase_etcd.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_etcd.md)
-- ⏳ `kubeadm_init_phase_etcd_local.md`
+- ⚠️ [kubeadm_init_phase_etcd_local.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_etcd_local.md)
 - ✅ [kubeadm_init_phase_kubeconfig.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_kubeconfig.md)
-- ⏳ `kubeadm_init_phase_kubeconfig_admin.md`
-- ⏳ `kubeadm_init_phase_kubeconfig_all.md`
-- ⏳ `kubeadm_init_phase_kubeconfig_controller-manager.md`
-- ⏳ `kubeadm_init_phase_kubeconfig_kubelet.md`
-- ⏳ `kubeadm_init_phase_kubeconfig_scheduler.md`
-- ⏳ `kubeadm_init_phase_kubeconfig_super-admin.md`
-- ⏳ `kubeadm_init_phase_kubelet-finalize.md`
-- ⏳ `kubeadm_init_phase_kubelet-finalize_all.md`
-- ⏳ `kubeadm_init_phase_kubelet-finalize_enable-client-cert-rotation.md`
-- ⏳ `kubeadm_init_phase_kubelet-start.md`
-- ⏳ `kubeadm_init_phase_mark-control-plane.md`
-- ⏳ `kubeadm_init_phase_preflight.md`
-- ⏳ `kubeadm_init_phase_show-join-command.md`
+- ⚠️ [kubeadm_init_phase_kubeconfig_admin.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_kubeconfig_admin.md)
+- ⚠️ [kubeadm_init_phase_kubeconfig_all.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_kubeconfig_all.md)
+- ⚠️ [kubeadm_init_phase_kubeconfig_controller-manager.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_kubeconfig_controller-manager.md)
+- ✅ [kubeadm_init_phase_kubeconfig_kubelet.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_kubeconfig_kubelet.md)
+- ⚠️ [kubeadm_init_phase_kubeconfig_scheduler.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_kubeconfig_scheduler.md)
+- ⚠️ [kubeadm_init_phase_kubeconfig_super-admin.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_kubeconfig_super-admin.md)
+- ✅ [kubeadm_init_phase_kubelet-finalize.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_kubelet-finalize.md)
+- ✅ [kubeadm_init_phase_kubelet-finalize_all.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_kubelet-finalize_all.md)
+- ✅ [kubeadm_init_phase_kubelet-finalize_enable-client-cert-rotation.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_kubelet-finalize_enable-client-cert-rotation.md)
+- ✅ [kubeadm_init_phase_kubelet-start.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_kubelet-start.md)
+- ✅ [kubeadm_init_phase_mark-control-plane.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_mark-control-plane.md)
+- ✅ [kubeadm_init_phase_preflight.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_preflight.md)
+- ✅ [kubeadm_init_phase_show-join-command.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_show-join-command.md)
 - ⏳ `kubeadm_init_phase_upload-certs.md`
-- ⏳ `kubeadm_init_phase_upload-config.md`
+- ✅ [kubeadm_init_phase_upload-config.md](md/reference/setup-tools/kubeadm/generated/kubeadm_init/kubeadm_init_phase_upload-config.md)
 - ⏳ `kubeadm_init_phase_upload-config_all.md`
 - ⏳ `kubeadm_init_phase_upload-config_kubeadm.md`
 - ⏳ `kubeadm_init_phase_upload-config_kubelet.md`
