@@ -8,9 +8,9 @@
 
 | | |
 |---|---|
-| پیشرفت (بر اساس کلمات) | **83.6٪** |
-| صفحات ترجمه‌شده | 1392 از 1722 |
-| صفحات دارای ایراد ساختاری | 65 |
+| پیشرفت (بر اساس کلمات) | **83.9٪** |
+| صفحات ترجمه‌شده | 1407 از 1722 |
+| صفحات دارای ایراد ساختاری | 70 |
 | نسخه‌ی منبع انگلیسی | `f652c6b8a26f` |
 
 ## مشاهده
@@ -72,7 +72,7 @@ cd kubernetes-doc-fa
 | `contribute` | 44 | 44 |
 | `doc-contributor-tools` | 1 | 1 |
 | `home` | 2 | 2 |
-| `reference` | 1157 | 1198 |
+| `reference` | 1172 | 1198 |
 | `setup` | 0 | 22 |
 | `tasks` | 0 | 221 |
 | `tutorials` | 0 | 45 |
@@ -101,26 +101,26 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_node_phase_control-plane.md](md/reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_node_phase_control-plane.md) — 2026-11-08T17:23:11+03:30
+- [reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_node_phase_preflight.md](md/reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_node_phase_preflight.md) — 2026-11-08T17:23:11+03:30
+- [reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_node_phase_post-upgrade.md](md/reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_node_phase_post-upgrade.md) — 2026-11-08T17:23:02+03:30
+- [reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_node_phase_kubelet-config.md](md/reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_node_phase_kubelet-config.md) — 2026-11-08T17:22:51+03:30
+- [reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_node_phase_addon_kube-proxy.md](md/reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_node_phase_addon_kube-proxy.md) — 2026-11-08T17:22:16+03:30
+- [reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_node_phase_addon_coredns.md](md/reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_node_phase_addon_coredns.md) — 2026-11-08T17:22:13+03:30
+- [reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_node_phase_addon_all.md](md/reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_node_phase_addon_all.md) — 2026-11-08T17:21:27+03:30
+- [reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_node.md](md/reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_node.md) — 2026-11-08T17:21:24+03:30
+- [reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_node_phase_addon.md](md/reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_node_phase_addon.md) — 2026-11-08T17:20:34+03:30
+- [reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_node_phase.md](md/reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_node_phase.md) — 2026-11-08T17:20:28+03:30
+- [reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_diff.md](md/reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_diff.md) — 2026-11-08T17:20:19+03:30
+- [reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_apply_phase_upload-config_kubelet.md](md/reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_apply_phase_upload-config_kubelet.md) — 2026-11-08T17:20:14+03:30
+- [reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_apply_phase_upload-config_kubeadm.md](md/reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_apply_phase_upload-config_kubeadm.md) — 2026-11-08T17:20:08+03:30
+- [reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_apply_phase_upload-config_all.md](md/reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_apply_phase_upload-config_all.md) — 2026-11-08T17:20:03+03:30
+- [reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_apply_phase_preflight.md](md/reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_apply_phase_preflight.md) — 2026-11-08T17:19:52+03:30
 - [reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_apply_phase_upload-config.md](md/reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_apply_phase_upload-config.md) — 2026-11-08T17:19:47+03:30
 - [reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_apply_phase_control-plane.md](md/reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_apply_phase_control-plane.md) — 2026-11-08T17:19:36+03:30
 - [reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_apply_phase_post-upgrade.md](md/reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_apply_phase_post-upgrade.md) — 2026-11-08T17:19:33+03:30
 - [reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_apply_phase_kubelet-config.md](md/reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_apply_phase_kubelet-config.md) — 2026-11-08T17:19:19+03:30
 - [reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_apply_phase_addon_kube-proxy.md](md/reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_apply_phase_addon_kube-proxy.md) — 2026-11-08T17:18:44+03:30
-- [reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_apply_phase_bootstrap-token.md](md/reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_apply_phase_bootstrap-token.md) — 2026-11-08T17:18:40+03:30
-- [reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_apply_phase_addon_coredns.md](md/reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_apply_phase_addon_coredns.md) — 2026-11-08T17:18:24+03:30
-- [reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_apply.md](md/reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_apply.md) — 2026-11-08T17:17:53+03:30
-- [reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_apply_phase_addon_all.md](md/reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_apply_phase_addon_all.md) — 2026-11-08T17:17:30+03:30
-- [reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_apply_phase_addon.md](md/reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_apply_phase_addon.md) — 2026-11-08T17:16:54+03:30
-- [reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_apply_phase.md](md/reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_apply_phase.md) — 2026-11-08T17:16:47+03:30
-- [reference/setup-tools/kubeadm/generated/kubeadm_token/kubeadm_token_list.md](md/reference/setup-tools/kubeadm/generated/kubeadm_token/kubeadm_token_list.md) — 2026-11-08T17:16:38+03:30
-- [reference/setup-tools/kubeadm/generated/kubeadm_upgrade/_index.md](md/reference/setup-tools/kubeadm/generated/kubeadm_upgrade/_index.md) — 2026-11-08T17:16:28+03:30
-- [reference/setup-tools/kubeadm/generated/kubeadm_token/kubeadm_token_generate.md](md/reference/setup-tools/kubeadm/generated/kubeadm_token/kubeadm_token_generate.md) — 2026-11-08T17:16:21+03:30
-- [reference/setup-tools/kubeadm/generated/kubeadm_token/kubeadm_token_create.md](md/reference/setup-tools/kubeadm/generated/kubeadm_token/kubeadm_token_create.md) — 2026-11-08T17:16:09+03:30
-- [reference/setup-tools/kubeadm/generated/kubeadm_token/kubeadm_token_delete.md](md/reference/setup-tools/kubeadm/generated/kubeadm_token/kubeadm_token_delete.md) — 2026-11-08T17:16:09+03:30
-- [reference/setup-tools/kubeadm/generated/kubeadm_token/_index.md](md/reference/setup-tools/kubeadm/generated/kubeadm_token/_index.md) — 2026-11-08T17:15:57+03:30
-- [reference/setup-tools/kubeadm/generated/kubeadm_reset/kubeadm_reset_phase_remove-etcd-member.md](md/reference/setup-tools/kubeadm/generated/kubeadm_reset/kubeadm_reset_phase_remove-etcd-member.md) — 2026-11-08T17:15:47+03:30
-- [reference/setup-tools/kubeadm/generated/kubeadm_reset/kubeadm_reset_phase_cleanup-node.md](md/reference/setup-tools/kubeadm/generated/kubeadm_reset/kubeadm_reset_phase_cleanup-node.md) — 2026-11-08T17:15:39+03:30
-- [reference/setup-tools/kubeadm/generated/kubeadm_reset/kubeadm_reset_phase_preflight.md](md/reference/setup-tools/kubeadm/generated/kubeadm_reset/kubeadm_reset_phase_preflight.md) — 2026-11-08T17:15:37+03:30
 
 </div>
 
@@ -193,6 +193,11 @@ cd kubernetes-doc-fa
 - [reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_apply_phase_addon_coredns.md](md/reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_apply_phase_addon_coredns.md): chunk 1: short: 271 words vs 369 source words
 - [reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_apply_phase_addon_kube-proxy.md](md/reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_apply_phase_addon_kube-proxy.md): chunk 1: short: 269 words vs 371 source words
 - [reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_apply_phase_control-plane.md](md/reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_apply_phase_control-plane.md): chunk 1: short: 305 words vs 440 source words
+- [reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_node.md](md/reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_node.md): chunk 1: short: 376 words vs 519 source words
+- [reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_node_phase_addon_all.md](md/reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_node_phase_addon_all.md): chunk 1: short: 270 words vs 370 source words
+- [reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_node_phase_addon_coredns.md](md/reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_node_phase_addon_coredns.md): chunk 1: short: 273 words vs 370 source words
+- [reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_node_phase_addon_kube-proxy.md](md/reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_node_phase_addon_kube-proxy.md): chunk 1: short: 270 words vs 372 source words
+- [reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_node_phase_control-plane.md](md/reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_node_phase_control-plane.md): chunk 1: short: 318 words vs 448 source words
 
 </div>
 
