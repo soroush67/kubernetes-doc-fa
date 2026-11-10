@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-1471 از 1722 صفحه
+1486 از 1722 صفحه
 
 
 ## `.`
@@ -1921,22 +1921,22 @@
 
 - ✅ [_index.md](md/tasks/administer-cluster/_index.md)
 - ✅ [access-cluster-api.md](md/tasks/administer-cluster/access-cluster-api.md)
-- ⏳ `certificates.md`
+- ✅ [certificates.md](md/tasks/administer-cluster/certificates.md)
 - ✅ [change-default-storage-class.md](md/tasks/administer-cluster/change-default-storage-class.md)
-- ⏳ `change-pv-access-mode-readwriteoncepod.md`
-- ⏳ `change-pv-reclaim-policy.md`
-- ⏳ `cluster-upgrade.md`
-- ⏳ `configure-feature-gates.md`
-- ⏳ `configure-upgrade-etcd.md`
-- ⏳ `controller-manager-leader-migration.md`
-- ⏳ `coredns.md`
-- ⏳ `cpu-management-policies.md`
-- ⏳ `declare-network-policy.md`
-- ⏳ `decrypt-data.md`
-- ⏳ `developing-cloud-controller-manager.md`
-- ⏳ `dns-custom-nameservers.md`
-- ⏳ `dns-debugging-resolution.md`
-- ⏳ `dns-horizontal-autoscaling.md`
+- ✅ [change-pv-access-mode-readwriteoncepod.md](md/tasks/administer-cluster/change-pv-access-mode-readwriteoncepod.md)
+- ✅ [change-pv-reclaim-policy.md](md/tasks/administer-cluster/change-pv-reclaim-policy.md)
+- ✅ [cluster-upgrade.md](md/tasks/administer-cluster/cluster-upgrade.md)
+- ✅ [configure-feature-gates.md](md/tasks/administer-cluster/configure-feature-gates.md)
+- ✅ [configure-upgrade-etcd.md](md/tasks/administer-cluster/configure-upgrade-etcd.md)
+- ✅ [controller-manager-leader-migration.md](md/tasks/administer-cluster/controller-manager-leader-migration.md)
+- ✅ [coredns.md](md/tasks/administer-cluster/coredns.md)
+- ✅ [cpu-management-policies.md](md/tasks/administer-cluster/cpu-management-policies.md)
+- ✅ [declare-network-policy.md](md/tasks/administer-cluster/declare-network-policy.md)
+- ✅ [decrypt-data.md](md/tasks/administer-cluster/decrypt-data.md)
+- ✅ [developing-cloud-controller-manager.md](md/tasks/administer-cluster/developing-cloud-controller-manager.md)
+- ✅ [dns-custom-nameservers.md](md/tasks/administer-cluster/dns-custom-nameservers.md)
+- ✅ [dns-debugging-resolution.md](md/tasks/administer-cluster/dns-debugging-resolution.md)
+- ✅ [dns-horizontal-autoscaling.md](md/tasks/administer-cluster/dns-horizontal-autoscaling.md)
 - ⏳ `enable-disable-api.md`
 - ⏳ `encrypt-data.md`
 - ⏳ `extended-resource-node.md`

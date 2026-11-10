@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>مهاجرت control plane تکثیرشده به استفاده از Cloud Controller Manager | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">tasks / administer-cluster</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">مهاجرت control plane تکثیرشده به استفاده از Cloud Controller Manager</h1><!-- overview -->
+<p dir="rtl"><em>(تعریف واژه‌نامه: cloud-controller-manager)</em></p>
+<h2 id="پیش-زمینه" dir="rtl">پیش‌زمینه</h2>
+<p dir="rtl">به‌عنوان بخشی از <a href="/blog/2019/04/17/the-future-of-cloud-providers-in-kubernetes/">تلاش برای جداسازی ارائه‌دهندگان ابری</a>،
+همهٔ کنترل‌کننده‌های مختص ابر باید از <code dir="ltr">kube-controller-manager</code> خارج شوند.
+همهٔ کلاسترهای موجود که کنترل‌کننده‌های ابری را در <code dir="ltr">kube-controller-manager</code> اجرا می‌کنند،
+باید مهاجرت کنند و این کنترل‌کننده‌ها را به‌جای آن در <code dir="ltr">cloud-controller-manager</code> مختص
+ارائه‌دهندهٔ ابری اجرا کنند.</p>
+<p dir="rtl">مهاجرت رهبر (Leader Migration) سازوکاری فراهم می‌کند که با آن، کلاسترهای با دسترس‌پذیری بالا (HA)
+می‌توانند هنگام ارتقای control plane تکثیرشده، کنترل‌کننده‌های «مختص ابر» را به‌شکلی امن
+میان <code dir="ltr">kube-controller-manager</code> و <code dir="ltr">cloud-controller-manager</code> جابه‌جا کنند. این کار از طریق یک
+قفل منبع مشترک میان این دو مؤلفه انجام می‌شود. برای control plane تک‌نودی، یا اگر
+در دسترس نبودن مدیران کنترل‌کننده در طول ارتقا قابل‌تحمل باشد، به مهاجرت رهبر نیازی نیست
+و می‌توانید این راهنما را نادیده بگیرید.</p>
+<p dir="rtl">برای فعال‌کردن مهاجرت رهبر، کافی است <code dir="ltr">--enable-leader-migration</code> را روی
+<code dir="ltr">kube-controller-manager</code> یا <code dir="ltr">cloud-controller-manager</code> تنظیم کنید. مهاجرت رهبر فقط
+در طول ارتقا کاربرد دارد و پس از پایان ارتقا می‌توان آن را با خیال راحت غیرفعال کرد
+یا فعال نگه داشت.</p>
+<p dir="rtl">این راهنما شما را گام‌به‌گام با فرایند دستی ارتقای control plane آشنا می‌کند؛ از حالتی که
+<code dir="ltr">kube-controller-manager</code> با ارائه‌دهندهٔ ابری داخلی اجرا می‌شود، به حالتی که هر دو مؤلفهٔ
+<code dir="ltr">kube-controller-manager</code> و <code dir="ltr">cloud-controller-manager</code> اجرا می‌شوند. اگر برای استقرار
+و مدیریت کلاستر از ابزاری استفاده می‌کنید، برای دستورالعمل‌های مشخص مهاجرت به مستندات
+آن ابزار و ارائه‌دهندهٔ ابری مراجعه کنید.</p>
+<h2 id="پیش-از-شروع" dir="rtl">پیش از شروع</h2>
+<p dir="rtl">فرض بر این است که control plane نسخهٔ N از کوبرنتیز را اجرا می‌کند و قرار است به
+نسخهٔ N + 1 ارتقا یابد. با اینکه مهاجرت در همان نسخه نیز امکان‌پذیر است، بهتر است مهاجرت
+به‌عنوان بخشی از یک ارتقا انجام شود تا تغییرات پیکربندی با هر انتشار هم‌راستا شوند.
+نسخه‌های دقیق N و N + 1 به هر ارائه‌دهندهٔ ابری بستگی دارد. برای مثال، اگر یک ارائه‌دهندهٔ ابری
+<code dir="ltr">cloud-controller-manager</code> را برای کار با کوبرنتیز 1.24 بسازد، N می‌تواند 1.23 و N + 1
+می‌تواند 1.24 باشد.</p>
+<p dir="rtl">نودهای control plane باید <code dir="ltr">kube-controller-manager</code> را با انتخاب رهبر (Leader Election)
+فعال اجرا کنند که حالت پیش‌فرض است. در نسخهٔ N، ارائه‌دهندهٔ ابری داخلی (in-tree) باید
+با فلگ <code dir="ltr">--cloud-provider</code> تنظیم شده باشد و <code dir="ltr">cloud-controller-manager</code> هنوز نباید
+مستقر شده باشد.</p>
+<p dir="rtl">ارائه‌دهندهٔ ابری خارجی (out-of-tree) باید <code dir="ltr">cloud-controller-manager</code> را همراه با
+پیاده‌سازی مهاجرت رهبر ساخته باشد. اگر ارائه‌دهندهٔ ابری بسته‌های
+<code dir="ltr">k8s.io/cloud-provider</code> و <code dir="ltr">k8s.io/controller-manager</code> را با نسخهٔ v0.21.0 یا بالاتر وارد
+(import) کند، مهاجرت رهبر در دسترس خواهد بود. با این حال، در نسخه‌های پیش از v0.22.0،
+مهاجرت رهبر در وضعیت آلفا است و لازم است feature gate <code dir="ltr">ControllerManagerLeaderMigration</code>
+در <code dir="ltr">cloud-controller-manager</code> فعال شود.</p>
+<p dir="rtl">این راهنما فرض می‌کند که kubelet هر نود control plane، مؤلفه‌های
+<code dir="ltr">kube-controller-manager</code> و <code dir="ltr">cloud-controller-manager</code> را به‌صورت پادهای ایستا (static pod)
+که با مانیفست‌هایشان تعریف شده‌اند، راه‌اندازی می‌کند. اگر این مؤلفه‌ها در محیط دیگری
+اجرا می‌شوند، گام‌ها را متناسب با آن تنظیم کنید.</p>
+<p dir="rtl">در زمینهٔ مجوزدهی، این راهنما فرض می‌کند که کلاستر از RBAC استفاده می‌کند. اگر حالت
+مجوزدهی دیگری به مؤلفه‌های <code dir="ltr">kube-controller-manager</code> و <code dir="ltr">cloud-controller-manager</code>
+مجوز می‌دهد، دسترسی‌های لازم را به روشی متناسب با همان حالت اعطا کنید.</p>
+<!-- steps -->
+<h3 id="اعطای-دسترسی-به-lease-مهاجرت" dir="rtl">اعطای دسترسی به Lease مهاجرت</h3>
+<p dir="rtl">مجوزهای پیش‌فرض مدیر کنترل‌کننده فقط اجازهٔ دسترسی به Lease اصلی آن را می‌دهند. برای
+اینکه مهاجرت کار کند، دسترسی به یک Lease دیگر نیز لازم است.</p>
+<p dir="rtl">می‌توانید با تغییر نقش <code dir="ltr">system::leader-locking-kube-controller-manager</code>، دسترسی کامل
+به API مربوط به leaseها را به <code dir="ltr">kube-controller-manager</code> بدهید. در این راهنما فرض شده است
+که نام lease مهاجرت <code dir="ltr">cloud-provider-extraction-migration</code> است.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl patch -n kube-system role 'system::leader-locking-kube-controller-manager' -p '{"rules": [ {"apiGroups":[ "coordination.k8s.io"], "resources": ["leases"], "resourceNames": ["cloud-provider-extraction-migration"], "verbs": ["create", "list", "get", "update"] } ]}' --type=merge
+</code></pre>
+<p dir="rtl">همین کار را برای نقش <code dir="ltr">system::leader-locking-cloud-controller-manager</code> نیز انجام دهید.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl patch -n kube-system role 'system::leader-locking-cloud-controller-manager' -p '{"rules": [ {"apiGroups":[ "coordination.k8s.io"], "resources": ["leases"], "resourceNames": ["cloud-provider-extraction-migration"], "verbs": ["create", "list", "get", "update"] } ]}' --type=merge
+</code></pre>
+<h3 id="پیکربندی-اولیهٔ-مهاجرت-رهبر" dir="rtl">پیکربندی اولیهٔ مهاجرت رهبر</h3>
+<p dir="rtl">مهاجرت رهبر می‌تواند به‌صورت اختیاری یک فایل پیکربندی دریافت کند که وضعیت تخصیص
+کنترل‌کننده‌ها به مدیرها را نشان می‌دهد. در این مرحله، با ارائه‌دهندهٔ ابری داخلی،
+<code dir="ltr">kube-controller-manager</code> کنترل‌کننده‌های <code dir="ltr">route</code>، <code dir="ltr">service</code> و <code dir="ltr">cloud-node-lifecycle</code> را
+اجرا می‌کند. پیکربندی نمونهٔ زیر این تخصیص را نشان می‌دهد.</p>
+<p dir="rtl">مهاجرت رهبر را می‌توان بدون پیکربندی نیز فعال کرد. برای جزئیات بیشتر،
+<a href="#default-configuration">پیکربندی پیش‌فرض</a> را ببینید.</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">kind: LeaderMigrationConfiguration
+apiVersion: controllermanager.config.k8s.io/v1
+leaderName: cloud-provider-extraction-migration
+resourceLock: leases
+controllerLeaders:
+  - name: route
+    component: kube-controller-manager
+  - name: service
+    component: kube-controller-manager
+  - name: cloud-node-lifecycle
+    component: kube-controller-manager
+</code></pre>
+<p dir="rtl">به‌عنوان جایگزین، از آنجا که این کنترل‌کننده‌ها می‌توانند زیر هر یک از دو مدیر کنترل‌کننده
+اجرا شوند، تنظیم <code dir="ltr">component</code> روی <code dir="ltr">*</code> برای هر دو طرف باعث می‌شود فایل پیکربندی برای هر دو
+طرف مهاجرت یکسان باشد.</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr"># wildcard version
+kind: LeaderMigrationConfiguration
+apiVersion: controllermanager.config.k8s.io/v1
+leaderName: cloud-provider-extraction-migration
+resourceLock: leases
+controllerLeaders:
+  - name: route
+    component: *
+  - name: service
+    component: *
+  - name: cloud-node-lifecycle
+    component: *
+</code></pre>
+<p dir="rtl">روی هر نود control plane، این محتوا را در <code dir="ltr">/etc/leadermigration.conf</code> ذخیره کنید و
+مانیفست <code dir="ltr">kube-controller-manager</code> را طوری به‌روزرسانی کنید که این فایل در همان مسیر
+درون کانتینر سوار (mount) شود. همچنین همین مانیفست را به‌روزرسانی کنید تا آرگومان‌های
+زیر به آن افزوده شوند:</p>
+<ul>
+<li dir="rtl"><code dir="ltr">--enable-leader-migration</code> برای فعال‌کردن مهاجرت رهبر روی مدیر کنترل‌کننده</li>
+<li dir="rtl"><code dir="ltr">--leader-migration-config=/etc/leadermigration.conf</code> برای تعیین فایل پیکربندی</li>
+</ul>
+<p dir="rtl">مؤلفهٔ <code dir="ltr">kube-controller-manager</code> را روی هر نود دوباره راه‌اندازی کنید. در این مرحله،
+مهاجرت رهبر در <code dir="ltr">kube-controller-manager</code> فعال است و این مؤلفه برای مهاجرت آماده است.</p>
+<h3 id="استقرار-cloud-controller-manager" dir="rtl">استقرار Cloud Controller Manager</h3>
+<p dir="rtl">در نسخهٔ N + 1، وضعیت مطلوب تخصیص کنترل‌کننده‌ها به مدیرها را می‌توان با یک فایل
+پیکربندی جدید، مطابق نمونهٔ زیر، نشان داد. دقت کنید که فیلد <code dir="ltr">component</code> در هر یک از
+<code dir="ltr">controllerLeaders</code> از <code dir="ltr">kube-controller-manager</code> به <code dir="ltr">cloud-controller-manager</code> تغییر
+می‌کند. به‌عنوان جایگزین، می‌توانید از نسخهٔ wildcard که پیش‌تر ذکر شد استفاده کنید که
+همین اثر را دارد.</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">kind: LeaderMigrationConfiguration
+apiVersion: controllermanager.config.k8s.io/v1
+leaderName: cloud-provider-extraction-migration
+resourceLock: leases
+controllerLeaders:
+  - name: route
+    component: cloud-controller-manager
+  - name: service
+    component: cloud-controller-manager
+  - name: cloud-node-lifecycle
+    component: cloud-controller-manager
+</code></pre>
+<p dir="rtl">هنگام ایجاد نودهای control plane با نسخهٔ N + 1، این محتوا باید در
+<code dir="ltr">/etc/leadermigration.conf</code> مستقر شود. مانیفست <code dir="ltr">cloud-controller-manager</code> باید طوری
+به‌روزرسانی شود که فایل پیکربندی را به همان شیوهٔ <code dir="ltr">kube-controller-manager</code> نسخهٔ N
+سوار کند. به همین ترتیب، <code dir="ltr">--enable-leader-migration</code> و
+<code dir="ltr">--leader-migration-config=/etc/leadermigration.conf</code> را به آرگومان‌های
+<code dir="ltr">cloud-controller-manager</code> بیفزایید.</p>
+<p dir="rtl">یک نود control plane جدید با نسخهٔ N + 1 ایجاد کنید که مانیفست به‌روزشدهٔ
+<code dir="ltr">cloud-controller-manager</code> را داشته باشد و فلگ <code dir="ltr">--cloud-provider</code> برای
+<code dir="ltr">kube-controller-manager</code> روی <code dir="ltr">external</code> تنظیم شده باشد. در مؤلفهٔ
+<code dir="ltr">kube-controller-manager</code> نسخهٔ N + 1 <strong>نباید</strong> مهاجرت رهبر فعال باشد؛ زیرا این مؤلفه
+با ارائه‌دهندهٔ ابری خارجی دیگر کنترل‌کننده‌های مهاجرت‌داده‌شده را اجرا نمی‌کند و در نتیجه
+در مهاجرت نقشی ندارد.</p>
+<p dir="rtl">برای جزئیات بیشتر دربارهٔ نحوهٔ استقرار <code dir="ltr">cloud-controller-manager</code>، به
+<a href="https://kubernetes.io/docs/tasks/administer-cluster/running-cloud-controller/" target="_blank">مدیریت Cloud Controller Manager</a>
+مراجعه کنید.</p>
+<h3 id="ارتقای-control-plane" dir="rtl">ارتقای control plane</h3>
+<p dir="rtl">اکنون control plane شامل نودهایی از هر دو نسخهٔ N و N + 1 است. نودهای نسخهٔ N فقط
+<code dir="ltr">kube-controller-manager</code> را اجرا می‌کنند و نودهای نسخهٔ N + 1 هر دو مؤلفهٔ
+<code dir="ltr">kube-controller-manager</code> و <code dir="ltr">cloud-controller-manager</code> را اجرا می‌کنند.
+کنترل‌کننده‌های مهاجرت‌داده‌شده، همان‌طور که در پیکربندی مشخص شده است، بسته به اینکه
+کدام مدیر کنترل‌کننده lease مهاجرت را در اختیار دارد، یا زیر <code dir="ltr">kube-controller-manager</code>
+نسخهٔ N و یا زیر <code dir="ltr">cloud-controller-manager</code> نسخهٔ N + 1 اجرا می‌شوند. هیچ کنترل‌کننده‌ای
+هرگز به‌طور هم‌زمان زیر هر دو مدیر کنترل‌کننده اجرا نخواهد شد.</p>
+<p dir="rtl">به‌صورت چرخشی (rolling)، هر بار یک نود control plane جدید با نسخهٔ N + 1 ایجاد کنید و
+یکی از نودهای نسخهٔ N را از کار بیندازید، تا جایی که control plane فقط شامل نودهای
+نسخهٔ N + 1 باشد. اگر بازگشت (rollback) از نسخهٔ N + 1 به N لازم شد، نودهایی از نسخهٔ N را
+که مهاجرت رهبر برای <code dir="ltr">kube-controller-manager</code> آن‌ها فعال است دوباره به control plane
+بیفزایید و هر بار یکی از نودهای نسخهٔ N + 1 را جایگزین کنید تا فقط نودهای نسخهٔ N
+باقی بمانند.</p>
+<h3 id="اختیاری-غیرفعال-کردن-مهاجرت-رهبر-disable-leader-migration" dir="rtl">(اختیاری) غیرفعال‌کردن مهاجرت رهبر {#disable-leader-migration}</h3>
+<p dir="rtl">اکنون که control plane ارتقا یافته است و هر دو مؤلفهٔ <code dir="ltr">kube-controller-manager</code> و
+<code dir="ltr">cloud-controller-manager</code> با نسخهٔ N + 1 را اجرا می‌کند، کار مهاجرت رهبر به پایان رسیده
+است و می‌توان آن را با خیال راحت غیرفعال کرد تا در یک منبع Lease صرفه‌جویی شود. فعال‌کردن
+دوبارهٔ مهاجرت رهبر برای بازگشت در آینده نیز بی‌خطر است.</p>
+<p dir="rtl">به‌صورت چرخشی، مانیفست <code dir="ltr">cloud-controller-manager</code> را به‌روزرسانی کنید تا هر دو فلگ
+<code dir="ltr">--enable-leader-migration</code> و <code dir="ltr">--leader-migration-config=</code> حذف شوند. همچنین سوارکردن
+<code dir="ltr">/etc/leadermigration.conf</code> را حذف کنید و در پایان خود فایل <code dir="ltr">/etc/leadermigration.conf</code>
+را پاک کنید. برای فعال‌کردن دوبارهٔ مهاجرت رهبر، فایل پیکربندی را از نو بسازید و سوارکردن
+آن و فلگ‌های فعال‌کنندهٔ مهاجرت رهبر را دوباره به <code dir="ltr">cloud-controller-manager</code> بیفزایید.</p>
+<h3 id="پیکربندی-پیش-فرض" dir="rtl">پیکربندی پیش‌فرض</h3>
+<p dir="rtl">از کوبرنتیز 1.22 به بعد، مهاجرت رهبر یک پیکربندی پیش‌فرض ارائه می‌کند که برای تخصیص
+پیش‌فرض کنترل‌کننده‌ها به مدیرها مناسب است.
+برای فعال‌کردن پیکربندی پیش‌فرض، <code dir="ltr">--enable-leader-migration</code> را تنظیم کنید، اما
+<code dir="ltr">--leader-migration-config=</code> را تنظیم نکنید.</p>
+<p dir="rtl">برای <code dir="ltr">kube-controller-manager</code> و <code dir="ltr">cloud-controller-manager</code>، اگر هیچ فلگی وجود نداشته
+باشد که ارائه‌دهندهٔ ابری داخلی را فعال کند یا مالکیت کنترل‌کننده‌ها را تغییر دهد،
+می‌توان از پیکربندی پیش‌فرض استفاده کرد تا نیازی به ساخت دستی فایل پیکربندی نباشد.</p>
+<h3 id="حالت-خاص-مهاجرت-کنترل-کنندهٔ-node-ipam-node-ipam-controller-migration" dir="rtl">حالت خاص: مهاجرت کنترل‌کنندهٔ Node IPAM {#node-ipam-controller-migration}</h3>
+<p dir="rtl">اگر ارائه‌دهندهٔ ابری شما پیاده‌سازی‌ای از کنترل‌کنندهٔ Node IPAM ارائه می‌کند، باید به
+پیاده‌سازی موجود در <code dir="ltr">cloud-controller-manager</code> روی بیاورید. کنترل‌کنندهٔ Node IPAM را در
+<code dir="ltr">kube-controller-manager</code> نسخهٔ N + 1 با افزودن <code dir="ltr">--controllers=*,-nodeipam</code> به فلگ‌های
+آن غیرفعال کنید. سپس <code dir="ltr">nodeipam</code> را به فهرست کنترل‌کننده‌های مهاجرت‌داده‌شده بیفزایید.</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr"># wildcard version, with nodeipam
+kind: LeaderMigrationConfiguration
+apiVersion: controllermanager.config.k8s.io/v1
+leaderName: cloud-provider-extraction-migration
+resourceLock: leases
+controllerLeaders:
+  - name: route
+    component: *
+  - name: service
+    component: *
+  - name: cloud-node-lifecycle
+    component: *
+  - name: nodeipam
+-   component: *
+</code></pre>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<ul>
+<li dir="rtl">پیشنهاد بهبود <a href="https://github.com/kubernetes/enhancements/tree/master/keps/sig-cloud-provider/2436-controller-manager-leader-migration" target="_blank" rel="noopener">Controller Manager Leader Migration</a>
+را مطالعه کنید.</li>
+</ul>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#پیش-زمینه">پیش‌زمینه</a><a class="l2" href="#پیش-از-شروع">پیش از شروع</a><a class="l3" href="#اعطای-دسترسی-به-lease-مهاجرت">اعطای دسترسی به Lease مهاجرت</a><a class="l3" href="#پیکربندی-اولیهٔ-مهاجرت-رهبر">پیکربندی اولیهٔ مهاجرت رهبر</a><a class="l3" href="#استقرار-cloud-controller-manager">استقرار Cloud Controller Manager</a><a class="l3" href="#ارتقای-control-plane">ارتقای control plane</a><a class="l3" href="#اختیاری-غیرفعال-کردن-مهاجرت-رهبر-disable-leader-migration">(اختیاری) غیرفعال‌کردن مهاجرت رهبر {#disable-leader-migration}</a><a class="l3" href="#پیکربندی-پیش-فرض">پیکربندی پیش‌فرض</a><a class="l3" href="#حالت-خاص-مهاجرت-کنترل-کنندهٔ-node-ipam-node-ipam-controller-migration">حالت خاص: مهاجرت کنترل‌کنندهٔ Node IPAM {#node-ipam-controller-migration}</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>

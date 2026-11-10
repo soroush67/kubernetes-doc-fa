@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>مقیاس‌دهی خودکار سرویس DNS در یک کلاستر | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">tasks / administer-cluster</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">مقیاس‌دهی خودکار سرویس DNS در یک کلاستر</h1><!-- overview -->
+<p dir="rtl">این صفحه نشان می‌دهد که چگونه مقیاس‌دهی خودکار (autoscaling) سرویس DNS را در کلاستر کوبرنتیز خود فعال و پیکربندی کنید.</p>
+<h2 id="پیش-از-شروع" dir="rtl">پیش از شروع</h2>
+<ul>
+<li>
+</ul>
+<p dir="rtl">باید یک کلاستر کوبرنتیز داشته باشید و ابزار خط فرمان kubectl باید برای ارتباط با کلاستر شما پیکربندی شده باشد. توصیه می‌شود این آموزش را روی کلاستری اجرا کنید که دست‌کم دو نود داشته باشد که نقش میزبان control plane را ندارند. اگر هنوز کلاستری ندارید، می‌توانید با استفاده از
+<a href="https://minikube.sigs.k8s.io/docs/tutorials/multi_node/" target="_blank" rel="noopener">minikube</a>
+یکی بسازید یا از یکی از این محیط‌های آزمایشی کوبرنتیز استفاده کنید:</p>
+<ul>
+<li dir="ltr" class="ltr">
+<p dir="ltr" class="ltr"><a href="https://labs.iximiuz.com/playgrounds?category=kubernetes&amp;filter=all" target="_blank" rel="noopener">iximiuz Labs</a></p>
+</li>
+<li dir="ltr" class="ltr">
+<p dir="ltr" class="ltr"><a href="https://killercoda.com/playgrounds/scenario/kubernetes" target="_blank" rel="noopener">Killercoda</a></p>
+</li>
+<li dir="ltr" class="ltr">
+<p dir="ltr" class="ltr"><a href="https://kodekloud.com/public-playgrounds" target="_blank" rel="noopener">KodeKloud</a></p>
+</li>
+<li dir="rtl">
+<p dir="rtl">این راهنما فرض می‌کند که نودهای شما از معماری پردازنده AMD64 یا Intel 64 استفاده می‌کنند.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">مطمئن شوید که <a href="../../concepts/services-networking/dns-pod-service.html">DNS کوبرنتیز</a> فعال است.</p>
+</li>
+</ul>
+<!-- steps -->
+<h2 id="بررسی-اینکه-آیا-مقیاس-دهی-خودکار-افقی-dns-از-قبل-فعال-است-determining-whether-dns-horizontal-autoscaling-is-already-enabled" dir="rtl">بررسی اینکه آیا مقیاس‌دهی خودکار افقی DNS از قبل فعال است {#determining-whether-dns-horizontal-autoscaling-is-already-enabled}</h2>
+<p dir="rtl">فهرست <span class="term" title="deployment">Deploymentها</span>ی موجود در <span class="term" title="namespace">فضای نام</span> kube-system کلاستر خود را به دست آورید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get deployment --namespace=kube-system
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">NAME                   READY   UP-TO-DATE   AVAILABLE   AGE
+...
+kube-dns-autoscaler    1/1     1            1           ...
+...
+</code></pre>
+<p dir="rtl">اگر در خروجی، «kube-dns-autoscaler» را می‌بینید، مقیاس‌دهی خودکار افقی DNS از قبل فعال است و می‌توانید مستقیماً به بخش <a href="#tuning-autoscaling-parameters">تنظیم پارامترهای مقیاس‌دهی خودکار</a> بروید.</p>
+<h2 id="یافتن-نام-deployment-مربوط-به-dns-find-scaling-target" dir="rtl">یافتن نام Deployment مربوط به DNS {#find-scaling-target}</h2>
+<p dir="rtl">فهرست Deploymentهای DNS را در فضای نام kube-system کلاستر خود به دست آورید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get deployment -l k8s-app=kube-dns --namespace=kube-system
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">NAME      READY   UP-TO-DATE   AVAILABLE   AGE
+...
+coredns   2/2     2            2           ...
+...
+</code></pre>
+<p dir="rtl">اگر Deployment مربوط به سرویس‌های DNS را نمی‌بینید، می‌توانید آن را با نامش نیز جست‌وجو کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get deployment --namespace=kube-system
+</code></pre>
+<p dir="rtl">و به دنبال Deployment با نام <code dir="ltr">coredns</code> بگردید.</p>
+<p dir="rtl">هدف مقیاس‌دهی شما چنین است:</p>
+<pre dir="ltr"><code dir="ltr">Deployment/&lt;your-deployment-name&gt;
+</code></pre>
+<p dir="rtl">که در آن <code dir="ltr">&lt;your-deployment-name&gt;</code> نام Deployment مربوط به DNS شماست. برای مثال، اگر نام Deployment مربوط به DNS شما coredns باشد، هدف مقیاس‌دهی شما Deployment/coredns است.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">سرویس DNS پیش‌فرض کوبرنتیز، CoreDNS است. این سرویس برچسب <code dir="ltr">k8s-app=kube-dns</code> را تنظیم می‌کند تا بتواند در کلاسترهایی که در اصل از kube-dns استفاده می‌کردند نیز کار کند.</p>
+</div>
+<h2 id="فعال-سازی-مقیاس-دهی-خودکار-افقی-dns-enablng-dns-horizontal-autoscaling" dir="rtl">فعال‌سازی مقیاس‌دهی خودکار افقی DNS {#enablng-dns-horizontal-autoscaling}</h2>
+<p dir="rtl">در این بخش، یک Deployment جدید ایجاد می‌کنید. Podهای این Deployment، کانتینری مبتنی بر ایمیج <code dir="ltr">cluster-proportional-autoscaler-amd64</code> اجرا می‌کنند.</p>
+<p dir="rtl">فایلی با نام <code dir="ltr">dns-horizontal-autoscaler.yaml</code> و با محتوای زیر ایجاد کنید:</p>
+<div class="code-file ltr" dir="ltr">admin/dns/dns-horizontal-autoscaler.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">kind: ServiceAccount
+apiVersion: v1
+metadata:
+  name: kube-dns-autoscaler
+  namespace: kube-system
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: system:kube-dns-autoscaler
+rules:
+  - apiGroups: [""]
+    resources: ["nodes"]
+    verbs: ["list", "watch"]
+  - apiGroups: [""]
+    resources: ["replicationcontrollers/scale"]
+    verbs: ["get", "update"]
+  - apiGroups: ["apps"]
+    resources: ["deployments/scale", "replicasets/scale"]
+    verbs: ["get", "update"]
+# Remove the configmaps rule once below issue is fixed:
+# kubernetes-incubator/cluster-proportional-autoscaler#16
+  - apiGroups: [""]
+    resources: ["configmaps"]
+    verbs: ["get", "create"]
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: system:kube-dns-autoscaler
+subjects:
+  - kind: ServiceAccount
+    name: kube-dns-autoscaler
+    namespace: kube-system
+roleRef:
+  kind: ClusterRole
+  name: system:kube-dns-autoscaler
+  apiGroup: rbac.authorization.k8s.io
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kube-dns-autoscaler
+  namespace: kube-system
+  labels:
+    k8s-app: kube-dns-autoscaler
+    kubernetes.io/cluster-service: "true"
+spec:
+  selector:
+    matchLabels:
+      k8s-app: kube-dns-autoscaler
+  template:
+    metadata:
+      labels:
+        k8s-app: kube-dns-autoscaler
+    spec:
+      priorityClassName: system-cluster-critical
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
+        supplementalGroups: [ 65534 ]
+        fsGroup: 65534
+      nodeSelector:
+        kubernetes.io/os: linux
+      containers:
+      - name: autoscaler
+        image: registry.k8s.io/cpa/cluster-proportional-autoscaler:1.8.4
+        resources:
+            requests:
+                cpu: "20m"
+                memory: "10Mi"
+        command:
+          - /cluster-proportional-autoscaler
+          - --namespace=kube-system
+          - --configmap=kube-dns-autoscaler
+          # Should keep target in sync with cluster/addons/dns/coredns/coredns.yaml.base
+          - --target=&lt;SCALE_TARGET&gt;
+          # When cluster is using large nodes(with more cores), "coresPerReplica" should dominate.
+          # If using small nodes, "nodesPerReplica" should dominate.
+          - --default-params={"linear":{"coresPerReplica":256,"nodesPerReplica":16,"preventSinglePointFailure":true,"includeUnschedulableNodes":true}}
+          - --logtostderr=true
+          - --v=2
+      tolerations:
+      - key: "CriticalAddonsOnly"
+        operator: "Exists"
+      serviceAccountName: kube-dns-autoscaler
+</code></pre>
+<p dir="rtl">در این فایل، به جای <code dir="ltr">&lt;SCALE_TARGET&gt;</code> هدف مقیاس‌دهی خود را قرار دهید.</p>
+<p dir="rtl">به دایرکتوری حاوی فایل پیکربندی بروید و برای ایجاد Deployment، این فرمان را وارد کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f dns-horizontal-autoscaler.yaml
+</code></pre>
+<p dir="rtl">خروجی فرمان در صورت موفقیت چنین است:</p>
+<pre dir="ltr"><code dir="ltr">deployment.apps/kube-dns-autoscaler created
+</code></pre>
+<p dir="rtl">اکنون مقیاس‌دهی خودکار افقی DNS فعال شده است.</p>
+<h2 id="تنظیم-پارامترهای-مقیاس-دهی-خودکار-dns-tuning-autoscaling-parameters" dir="rtl">تنظیم پارامترهای مقیاس‌دهی خودکار DNS {#tuning-autoscaling-parameters}</h2>
+<p dir="rtl">بررسی کنید که <span class="term" title="configmap">ConfigMap</span> با نام kube-dns-autoscaler وجود داشته باشد:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get configmap --namespace=kube-system
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">NAME                  DATA      AGE
+...
+kube-dns-autoscaler   1         ...
+...
+</code></pre>
+<p dir="rtl">داده‌های این ConfigMap را ویرایش کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl edit configmap kube-dns-autoscaler --namespace=kube-system
+</code></pre>
+<p dir="rtl">به دنبال این خط بگردید:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">linear: '{"coresPerReplica":256,"min":1,"nodesPerReplica":16}'
+</code></pre>
+<p dir="rtl">فیلدها را مطابق نیاز خود تغییر دهید. فیلد «min» حداقل تعداد بک‌اندهای DNS را مشخص می‌کند. تعداد واقعی بک‌اندها با این معادله محاسبه می‌شود:</p>
+<pre dir="ltr"><code dir="ltr">replicas = max( ceil( cores × 1/coresPerReplica ) , ceil( nodes × 1/nodesPerReplica ) )
+</code></pre>
+<p dir="rtl">توجه کنید که مقادیر <code dir="ltr">coresPerReplica</code> و <code dir="ltr">nodesPerReplica</code> هر دو از نوع اعشاری (float) هستند.</p>
+<p dir="rtl">ایده این است که وقتی کلاستر از نودهایی با هسته‌های زیاد استفاده می‌کند، <code dir="ltr">coresPerReplica</code> تعیین‌کننده باشد و وقتی کلاستر از نودهایی با هسته‌های کمتر استفاده می‌کند، <code dir="ltr">nodesPerReplica</code> تعیین‌کننده باشد.</p>
+<p dir="rtl">الگوهای مقیاس‌دهی دیگری نیز پشتیبانی می‌شوند. برای جزئیات بیشتر، به <a href="https://github.com/kubernetes-sigs/cluster-proportional-autoscaler" target="_blank" rel="noopener">cluster-proportional-autoscaler</a> مراجعه کنید.</p>
+<h2 id="غیرفعال-سازی-مقیاس-دهی-خودکار-افقی-dns" dir="rtl">غیرفعال‌سازی مقیاس‌دهی خودکار افقی DNS</h2>
+<p dir="rtl">برای تنظیم مقیاس‌دهی خودکار افقی DNS چند گزینه وجود دارد. انتخاب گزینهٔ مناسب به شرایط مختلف بستگی دارد.</p>
+<h3 id="گزینهٔ-۱-کاهش-مقیاس-deployment-مربوط-به-kube-dns-autoscaler-به-۰-رپلیکا" dir="rtl">گزینهٔ ۱: کاهش مقیاس Deployment مربوط به kube-dns-autoscaler به ۰ رپلیکا</h3>
+<p dir="rtl">این گزینه در همهٔ شرایط کار می‌کند. این فرمان را وارد کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl scale deployment --replicas=0 kube-dns-autoscaler --namespace=kube-system
+</code></pre>
+<p dir="rtl">خروجی چنین است:</p>
+<pre dir="ltr"><code dir="ltr">deployment.apps/kube-dns-autoscaler scaled
+</code></pre>
+<p dir="rtl">بررسی کنید که تعداد رپلیکاها صفر باشد:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get rs --namespace=kube-system
+</code></pre>
+<p dir="rtl">خروجی در ستون‌های DESIRED و CURRENT مقدار 0 را نشان می‌دهد:</p>
+<pre dir="ltr"><code dir="ltr">NAME                                  DESIRED   CURRENT   READY   AGE
+...
+kube-dns-autoscaler-6b59789fc8        0         0         0       ...
+...
+</code></pre>
+<h3 id="گزینهٔ-۲-حذف-deployment-مربوط-به-kube-dns-autoscaler" dir="rtl">گزینهٔ ۲: حذف Deployment مربوط به kube-dns-autoscaler</h3>
+<p dir="rtl">این گزینه در صورتی کار می‌کند که kube-dns-autoscaler تحت کنترل خود شما باشد؛ یعنی کسی آن را دوباره ایجاد نکند:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl delete deployment kube-dns-autoscaler --namespace=kube-system
+</code></pre>
+<p dir="rtl">خروجی چنین است:</p>
+<pre dir="ltr"><code dir="ltr">deployment.apps "kube-dns-autoscaler" deleted
+</code></pre>
+<h3 id="گزینهٔ-۳-حذف-فایل-مانیفست-kube-dns-autoscaler-از-نود-master" dir="rtl">گزینهٔ ۳: حذف فایل مانیفست kube-dns-autoscaler از نود master</h3>
+<p dir="rtl">این گزینه در صورتی کار می‌کند که kube-dns-autoscaler تحت کنترل <a href="https://git.k8s.io/kubernetes/cluster/addons/README.md" target="_blank" rel="noopener">Addon Manager</a> (منسوخ‌شده) باشد و شما به نود master دسترسی نوشتن داشته باشید.</p>
+<p dir="rtl">وارد نود master شوید و فایل مانیفست مربوطه را حذف کنید. مسیر رایج این فایل برای kube-dns-autoscaler چنین است:</p>
+<pre dir="ltr"><code dir="ltr">/etc/kubernetes/addons/dns-horizontal-autoscaler/dns-horizontal-autoscaler.yaml
+</code></pre>
+<p dir="rtl">پس از حذف فایل مانیفست، Addon Manager نیز Deployment مربوط به kube-dns-autoscaler را حذف خواهد کرد.</p>
+<!-- discussion -->
+<h2 id="درک-نحوهٔ-کار-مقیاس-دهی-خودکار-افقی-dns" dir="rtl">درک نحوهٔ کار مقیاس‌دهی خودکار افقی DNS</h2>
+<ul>
+<li dir="rtl">
+<p dir="rtl">برنامهٔ cluster-proportional-autoscaler جدا از سرویس DNS مستقر می‌شود.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">یک Pod مقیاس‌دهندهٔ خودکار، کلاینتی را اجرا می‌کند که تعداد نودها و هسته‌های کلاستر را به‌طور دوره‌ای از سرور API کوبرنتیز استعلام می‌کند.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">تعداد رپلیکای مطلوب بر اساس نودها و هسته‌های قابل زمان‌بندی فعلی و پارامترهای مقیاس‌دهی تعیین‌شده محاسبه و بر بک‌اندهای DNS اعمال می‌شود.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">پارامترهای مقیاس‌دهی و نقاط داده از طریق یک ConfigMap در اختیار مقیاس‌دهندهٔ خودکار قرار می‌گیرند و این مقیاس‌دهنده در هر بازهٔ استعلام، جدول پارامترهای خود را تازه‌سازی می‌کند تا با آخرین پارامترهای مقیاس‌دهی مطلوب به‌روز بماند.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">پارامترهای مقیاس‌دهی را می‌توان بدون بازسازی یا راه‌اندازی مجدد Pod مقیاس‌دهندهٔ خودکار تغییر داد.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">مقیاس‌دهندهٔ خودکار یک رابط کنترل‌کننده ارائه می‌دهد که از دو الگوی کنترلی پشتیبانی می‌کند: <em>خطی (linear)</em> و <em>پلکانی (ladder)</em>.</p>
+</li>
+</ul>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<ul>
+<li dir="rtl">دربارهٔ <a href="https://kubernetes.io/docs/tasks/administer-cluster/guaranteed-scheduling-critical-addon-pods/" target="_blank">زمان‌بندی تضمین‌شده برای Podهای افزونهٔ حیاتی</a> مطالعه کنید.</li>
+<li dir="rtl">دربارهٔ <a href="https://github.com/kubernetes-sigs/cluster-proportional-autoscaler" target="_blank" rel="noopener">پیاده‌سازی cluster-proportional-autoscaler</a> بیشتر بیاموزید.</li>
+</ul>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#پیش-از-شروع">پیش از شروع</a><a class="l2" href="#بررسی-اینکه-آیا-مقیاس-دهی-خودکار-افقی-dns-از-قبل-فعال-است-determining-whether-dns-horizontal-autoscaling-is-already-enabled">بررسی اینکه آیا مقیاس‌دهی خودکار افقی DNS از قبل فعال است {#determining-whether-dns-horizontal-autoscaling-is-already-enabled}</a><a class="l2" href="#یافتن-نام-deployment-مربوط-به-dns-find-scaling-target">یافتن نام Deployment مربوط به DNS {#find-scaling-target}</a><a class="l2" href="#فعال-سازی-مقیاس-دهی-خودکار-افقی-dns-enablng-dns-horizontal-autoscaling">فعال‌سازی مقیاس‌دهی خودکار افقی DNS {#enablng-dns-horizontal-autoscaling}</a><a class="l2" href="#تنظیم-پارامترهای-مقیاس-دهی-خودکار-dns-tuning-autoscaling-parameters">تنظیم پارامترهای مقیاس‌دهی خودکار DNS {#tuning-autoscaling-parameters}</a><a class="l2" href="#غیرفعال-سازی-مقیاس-دهی-خودکار-افقی-dns">غیرفعال‌سازی مقیاس‌دهی خودکار افقی DNS</a><a class="l3" href="#گزینهٔ-۱-کاهش-مقیاس-deployment-مربوط-به-kube-dns-autoscaler-به-۰-رپلیکا">گزینهٔ ۱: کاهش مقیاس Deployment مربوط به kube-dns-autoscaler به ۰ رپلیکا</a><a class="l3" href="#گزینهٔ-۲-حذف-deployment-مربوط-به-kube-dns-autoscaler">گزینهٔ ۲: حذف Deployment مربوط به kube-dns-autoscaler</a><a class="l3" href="#گزینهٔ-۳-حذف-فایل-مانیفست-kube-dns-autoscaler-از-نود-master">گزینهٔ ۳: حذف فایل مانیفست kube-dns-autoscaler از نود master</a><a class="l2" href="#درک-نحوهٔ-کار-مقیاس-دهی-خودکار-افقی-dns">درک نحوهٔ کار مقیاس‌دهی خودکار افقی DNS</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>

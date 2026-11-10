@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>رمزگشایی داده‌های محرمانه‌ای که در حالت سکون رمزگذاری شده‌اند | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">tasks / administer-cluster</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">رمزگشایی داده‌های محرمانه‌ای که در حالت سکون رمزگذاری شده‌اند</h1><!-- overview -->
+<p dir="rtl">همهٔ APIهایی در کوبرنتیز که امکان نوشتن داده‌های ماندگار منابع API را فراهم می‌کنند، از رمزگذاری در حالت سکون (at-rest encryption) پشتیبانی می‌کنند. برای مثال، می‌توانید رمزگذاری در حالت سکون را برای
+<span class="term" title="secret">Secretها</span>
+فعال کنید. این رمزگذاری در حالت سکون، علاوه بر هر نوع رمزگذاری در سطح سیستم است که برای کلاستر etcd یا برای فایل‌سیستم(های) میزبان‌هایی که kube-apiserver را روی آن‌ها اجرا می‌کنید اعمال شده باشد.</p>
+<p dir="rtl">این صفحه نشان می‌دهد چگونه رمزگذاری داده‌های API در حالت سکون را کنار بگذارید تا داده‌های API به‌صورت رمزگذاری‌نشده ذخیره شوند. ممکن است بخواهید این کار را برای بهبود کارایی انجام دهید؛ با این حال، معمولاً اگر رمزگذاری برخی داده‌ها ایدهٔ خوبی بوده است، رمزگذاری‌شده نگه‌داشتن آن‌ها نیز ایدهٔ خوبی است.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">این تکلیف به رمزگذاری داده‌های منابعی می‌پردازد که با استفاده از
+<span class="term" title="kubernetes-api">API کوبرنتیز</span>
+ذخیره می‌شوند. برای مثال، می‌توانید آبجکت‌های Secret را همراه با داده‌های کلید-مقداری که در خود دارند رمزگذاری کنید.</p>
+<p dir="rtl">اگر می‌خواهید رمزگذاری داده‌ها را در فایل‌سیستم‌هایی مدیریت کنید که در کانتینرها مانت می‌شوند، باید به‌جای آن یکی از این کارها را انجام دهید:</p>
+<ul>
+<li dir="rtl">از یک یکپارچه‌سازی ذخیره‌سازی استفاده کنید که
+<span class="term" title="volume">حجم‌های (volume)</span> رمزگذاری‌شده فراهم می‌کند</li>
+<li dir="rtl">داده‌ها را درون برنامهٔ خودتان رمزگذاری کنید</li>
+</ul>
+</div>
+<h2 id="پیش-از-شروع" dir="rtl">پیش از شروع</h2>
+<ul>
+<li>
+</ul>
+<p dir="rtl">باید یک کلاستر کوبرنتیز داشته باشید و ابزار خط فرمان kubectl باید برای ارتباط با کلاستر شما پیکربندی شده باشد. توصیه می‌شود این آموزش را روی کلاستری اجرا کنید که دست‌کم دو نود داشته باشد که نقش میزبان control plane را ندارند. اگر هنوز کلاستری ندارید، می‌توانید با استفاده از
+<a href="https://minikube.sigs.k8s.io/docs/tutorials/multi_node/" target="_blank" rel="noopener">minikube</a>
+یکی بسازید یا از یکی از این محیط‌های آزمایشی کوبرنتیز استفاده کنید:</p>
+<ul>
+<li dir="ltr" class="ltr">
+<p dir="ltr" class="ltr"><a href="https://labs.iximiuz.com/playgrounds?category=kubernetes&amp;filter=all" target="_blank" rel="noopener">iximiuz Labs</a></p>
+</li>
+<li dir="ltr" class="ltr">
+<p dir="ltr" class="ltr"><a href="https://killercoda.com/playgrounds/scenario/kubernetes" target="_blank" rel="noopener">Killercoda</a></p>
+</li>
+<li dir="ltr" class="ltr">
+<p dir="ltr" class="ltr"><a href="https://kodekloud.com/public-playgrounds" target="_blank" rel="noopener">KodeKloud</a></p>
+</li>
+<li dir="rtl">
+<p dir="rtl">در این تکلیف فرض بر این است که سرور API کوبرنتیز را به‌صورت یک
+<span class="term" title="static-pod">پاد ایستا (static pod)</span> روی هر نود
+control plane اجرا می‌کنید.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">control plane کلاستر شما <strong>باید</strong> از etcd نسخهٔ v3.x (نسخهٔ اصلی ۳ با هر نسخهٔ فرعی) استفاده کند.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">برای رمزگذاری یک منبع سفارشی (custom resource)، کلاستر شما باید کوبرنتیز v1.26 یا جدیدتر را اجرا کند.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">باید مقداری دادهٔ API داشته باشید که از قبل رمزگذاری شده باشد.</p>
+</li>
+</ul>
+<!-- steps -->
+<h2 id="تشخیص-اینکه-آیا-رمزگذاری-در-حالت-سکون-از-قبل-فعال-است" dir="rtl">تشخیص اینکه آیا رمزگذاری در حالت سکون از قبل فعال است</h2>
+<p dir="rtl">سرور API به‌طور پیش‌فرض از فراهم‌کننده‌ای (provider) به نام <code dir="ltr">identity</code> استفاده می‌کند که نمایش متن سادهٔ منابع را ذخیره می‌کند.
+<strong>فراهم‌کنندهٔ پیش‌فرض <code dir="ltr">identity</code> هیچ حفاظتی از محرمانگی ارائه نمی‌دهد.</strong></p>
+<p dir="rtl">فرایند <code dir="ltr">kube-apiserver</code> آرگومانی به نام <code dir="ltr">--encryption-provider-config</code> می‌پذیرد که مسیر یک فایل پیکربندی را مشخص می‌کند. اگر چنین فایلی را مشخص کنید، محتوای آن تعیین می‌کند که داده‌های API کوبرنتیز در etcd چگونه رمزگذاری شوند.
+اگر این آرگومان مشخص نشده باشد، رمزگذاری در حالت سکون فعال نیست.</p>
+<p dir="rtl">قالب این فایل پیکربندی YAML است و یک نوع (kind) از API پیکربندی به نام
+<a href="../../reference/config-api/apiserver-config.v1.html"><code dir="ltr">EncryptionConfiguration</code></a> را نمایش می‌دهد.
+می‌توانید نمونه‌ای از این پیکربندی را در
+<a href="https://kubernetes.io/docs/tasks/administer-cluster/encrypt-data/#understanding-the-encryption-at-rest-configuration" target="_blank">پیکربندی رمزگذاری در حالت سکون</a> ببینید.</p>
+<p dir="rtl">اگر <code dir="ltr">--encryption-provider-config</code> تنظیم شده باشد، بررسی کنید که کدام منابع (مانند <code dir="ltr">secrets</code>) برای رمزگذاری پیکربندی شده‌اند و از کدام فراهم‌کننده استفاده می‌شود.
+مطمئن شوید که فراهم‌کنندهٔ ترجیحی برای آن نوع منبع، <code dir="ltr">identity</code> <strong>نیست</strong>؛ فقط زمانی <code dir="ltr">identity</code> (<em>بدون رمزگذاری</em>) را به‌عنوان پیش‌فرض تنظیم می‌کنید که بخواهید رمزگذاری در حالت سکون را غیرفعال کنید.
+بررسی کنید که نخستین فراهم‌کنندهٔ فهرست‌شده برای یک منبع، چیزی <strong>غیر</strong> از <code dir="ltr">identity</code> باشد؛ این یعنی هر اطلاعات جدیدی که در منابع آن نوع نوشته شود، طبق پیکربندی رمزگذاری خواهد شد. اگر برای منبعی، <code dir="ltr">identity</code> را به‌عنوان نخستین فراهم‌کنندهٔ فهرست‌شده می‌بینید، یعنی آن منابع بدون رمزگذاری در etcd نوشته می‌شوند.</p>
+<h2 id="رمزگشایی-همهٔ-داده-ها-decrypting-all-data" dir="rtl">رمزگشایی همهٔ داده‌ها {#decrypting-all-data}</h2>
+<p dir="rtl">این مثال نشان می‌دهد چگونه رمزگذاری API مربوط به Secret را در حالت سکون متوقف کنید. اگر انواع دیگری از API را رمزگذاری می‌کنید، مراحل را متناسب با آن‌ها تنظیم کنید.</p>
+<h3 id="یافتن-فایل-پیکربندی-رمزگذاری" dir="rtl">یافتن فایل پیکربندی رمزگذاری</h3>
+<p dir="rtl">ابتدا فایل‌های پیکربندی سرور API را پیدا کنید. روی هر نود control plane، مانیفست Pod ایستای kube-apiserver یک آرگومان خط فرمان به نام <code dir="ltr">--encryption-provider-config</code> را مشخص می‌کند.
+احتمالاً این فایل با استفاده از یک مانت حجم از نوع
+<a href="../../concepts/storage/volumes.html#hostpath"><code dir="ltr">hostPath</code></a> در Pod ایستا مانت شده است. پس از یافتن حجم، می‌توانید فایل را در فایل‌سیستم نود پیدا و بررسی کنید.</p>
+<h3 id="پیکربندی-سرور-api-برای-رمزگشایی-آبجکت-ها" dir="rtl">پیکربندی سرور API برای رمزگشایی آبجکت‌ها</h3>
+<p dir="rtl">برای غیرفعال‌کردن رمزگذاری در حالت سکون، فراهم‌کنندهٔ <code dir="ltr">identity</code> را به‌عنوان نخستین مدخل در فایل پیکربندی رمزگذاری قرار دهید.</p>
+<p dir="rtl">برای مثال، اگر فایل EncryptionConfiguration فعلی شما به این صورت است:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">---
+apiVersion: apiserver.config.k8s.io/v1
+kind: EncryptionConfiguration
+resources:
+  - resources:
+      - secrets
+    providers:
+      - aescbc:
+          keys:
+            # Do not use this (invalid) example key for encryption
+            - name: example
+              secret: 2KfZgdiq2K0g2YrYpyDYs9mF2LPZhQ==
+</code></pre>
+<p dir="rtl">آن را به این صورت تغییر دهید:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">---
+apiVersion: apiserver.config.k8s.io/v1
+kind: EncryptionConfiguration
+resources:
+  - resources:
+      - secrets
+    providers:
+      - identity: {} # add this line
+      - aescbc:
+          keys:
+            - name: example
+              secret: 2KfZgdiq2K0g2YrYpyDYs9mF2LPZhQ==
+</code></pre>
+<p dir="rtl">و Pod مربوط به kube-apiserver را روی این نود دوباره راه‌اندازی کنید.</p>
+<h3 id="پیکربندی-دوبارهٔ-دیگر-میزبان-های-control-plane-api-server-config-update-more-1" dir="rtl">پیکربندی دوبارهٔ دیگر میزبان‌های control plane {#api-server-config-update-more-1}</h3>
+<p dir="rtl">اگر چند سرور API در کلاستر خود دارید، باید تغییرات را به‌ترتیب روی هر سرور API اعمال کنید.</p>
+<p dir="rtl">مطمئن شوید که روی همهٔ میزبان‌های control plane از پیکربندی رمزگذاری یکسانی استفاده می‌کنید.</p>
+<h3 id="اجبار-به-رمزگشایی" dir="rtl">اجبار به رمزگشایی</h3>
+<p dir="rtl">سپس فرمان زیر را اجرا کنید تا همهٔ Secretها به‌اجبار رمزگشایی شوند:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># If you are decrypting a different kind of object, change "secrets" to match.
+kubectl get secrets --all-namespaces -o json | kubectl replace -f -
+</code></pre>
+<p dir="rtl">پس از آنکه <strong>همهٔ</strong> منابع رمزگذاری‌شدهٔ موجود را با داده‌های پشتیبانی جایگزین کردید که از رمزگذاری استفاده نمی‌کنند، می‌توانید تنظیمات رمزگذاری را از <code dir="ltr">kube-apiserver</code> حذف کنید.</p>
+<p dir="rtl">گزینه‌های خط فرمانی که باید حذف شوند عبارت‌اند از:</p>
+<ul>
+<li dir="ltr" class="ltr"><code dir="ltr">--encryption-provider-config</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">--encryption-provider-config-automatic-reload</code></li>
+</ul>
+<p dir="rtl">برای اعمال پیکربندی جدید، Pod مربوط به kube-apiserver را دوباره راه‌اندازی کنید.</p>
+<h3 id="پیکربندی-دوبارهٔ-دیگر-میزبان-های-control-plane-api-server-config-update-more-2" dir="rtl">پیکربندی دوبارهٔ دیگر میزبان‌های control plane {#api-server-config-update-more-2}</h3>
+<p dir="rtl">اگر چند سرور API در کلاستر خود دارید، باید دوباره تغییرات را به‌ترتیب روی هر سرور API اعمال کنید.</p>
+<p dir="rtl">مطمئن شوید که روی همهٔ میزبان‌های control plane از پیکربندی رمزگذاری یکسانی استفاده می‌کنید.</p>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<ul>
+<li dir="rtl">دربارهٔ <a href="../../reference/config-api/apiserver-config.v1.html">API پیکربندی EncryptionConfiguration (v1)</a> بیشتر بیاموزید.</li>
+</ul>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#پیش-از-شروع">پیش از شروع</a><a class="l2" href="#تشخیص-اینکه-آیا-رمزگذاری-در-حالت-سکون-از-قبل-فعال-است">تشخیص اینکه آیا رمزگذاری در حالت سکون از قبل فعال است</a><a class="l2" href="#رمزگشایی-همهٔ-داده-ها-decrypting-all-data">رمزگشایی همهٔ داده‌ها {#decrypting-all-data}</a><a class="l3" href="#یافتن-فایل-پیکربندی-رمزگذاری">یافتن فایل پیکربندی رمزگذاری</a><a class="l3" href="#پیکربندی-سرور-api-برای-رمزگشایی-آبجکت-ها">پیکربندی سرور API برای رمزگشایی آبجکت‌ها</a><a class="l3" href="#پیکربندی-دوبارهٔ-دیگر-میزبان-های-control-plane-api-server-config-update-more-1">پیکربندی دوبارهٔ دیگر میزبان‌های control plane {#api-server-config-update-more-1}</a><a class="l3" href="#اجبار-به-رمزگشایی">اجبار به رمزگشایی</a><a class="l3" href="#پیکربندی-دوبارهٔ-دیگر-میزبان-های-control-plane-api-server-config-update-more-2">پیکربندی دوبارهٔ دیگر میزبان‌های control plane {#api-server-config-update-more-2}</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>

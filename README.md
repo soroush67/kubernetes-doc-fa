@@ -8,8 +8,8 @@
 
 | | |
 |---|---|
-| پیشرفت (بر اساس کلمات) | **87.9٪** |
-| صفحات ترجمه‌شده | 1471 از 1722 |
+| پیشرفت (بر اساس کلمات) | **88.5٪** |
+| صفحات ترجمه‌شده | 1486 از 1722 |
 | صفحات دارای ایراد ساختاری | 73 |
 | نسخه‌ی منبع انگلیسی | `f652c6b8a26f` |
 
@@ -74,7 +74,7 @@ cd kubernetes-doc-fa
 | `home` | 2 | 2 |
 | `reference` | 1198 | 1198 |
 | `setup` | 22 | 22 |
-| `tasks` | 16 | 221 |
+| `tasks` | 31 | 221 |
 | `tutorials` | 0 | 45 |
 
 </div>
@@ -101,26 +101,26 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [tasks/administer-cluster/dns-horizontal-autoscaling.md](md/tasks/administer-cluster/dns-horizontal-autoscaling.md) — 2026-11-10T10:20:04+03:30
+- [tasks/administer-cluster/dns-debugging-resolution.md](md/tasks/administer-cluster/dns-debugging-resolution.md) — 2026-11-10T10:19:57+03:30
+- [tasks/administer-cluster/dns-custom-nameservers.md](md/tasks/administer-cluster/dns-custom-nameservers.md) — 2026-11-10T10:19:33+03:30
+- [tasks/administer-cluster/decrypt-data.md](md/tasks/administer-cluster/decrypt-data.md) — 2026-11-10T10:19:11+03:30
+- [tasks/administer-cluster/developing-cloud-controller-manager.md](md/tasks/administer-cluster/developing-cloud-controller-manager.md) — 2026-11-10T10:18:56+03:30
+- [tasks/administer-cluster/configure-upgrade-etcd.md](md/tasks/administer-cluster/configure-upgrade-etcd.md) — 2026-11-10T10:18:43+03:30
+- [tasks/administer-cluster/declare-network-policy.md](md/tasks/administer-cluster/declare-network-policy.md) — 2026-11-10T10:18:40+03:30
+- [tasks/administer-cluster/cpu-management-policies.md](md/tasks/administer-cluster/cpu-management-policies.md) — 2026-11-10T10:18:21+03:30
+- [tasks/administer-cluster/coredns.md](md/tasks/administer-cluster/coredns.md) — 2026-11-10T10:17:36+03:30
+- [tasks/administer-cluster/controller-manager-leader-migration.md](md/tasks/administer-cluster/controller-manager-leader-migration.md) — 2026-11-10T10:17:21+03:30
+- [tasks/administer-cluster/configure-feature-gates.md](md/tasks/administer-cluster/configure-feature-gates.md) — 2026-11-10T10:16:26+03:30
+- [tasks/administer-cluster/cluster-upgrade.md](md/tasks/administer-cluster/cluster-upgrade.md) — 2026-11-10T10:16:09+03:30
+- [tasks/administer-cluster/change-pv-access-mode-readwriteoncepod.md](md/tasks/administer-cluster/change-pv-access-mode-readwriteoncepod.md) — 2026-11-10T10:15:50+03:30
+- [tasks/administer-cluster/change-pv-reclaim-policy.md](md/tasks/administer-cluster/change-pv-reclaim-policy.md) — 2026-11-10T10:15:46+03:30
+- [tasks/administer-cluster/certificates.md](md/tasks/administer-cluster/certificates.md) — 2026-11-10T10:15:28+03:30
 - [tasks/administer-cluster/change-default-storage-class.md](md/tasks/administer-cluster/change-default-storage-class.md) — 2026-11-10T10:15:11+03:30
 - [tasks/access-application-cluster/web-ui-dashboard.md](md/tasks/access-application-cluster/web-ui-dashboard.md) — 2026-11-10T10:14:54+03:30
 - [tasks/administer-cluster/access-cluster-api.md](md/tasks/administer-cluster/access-cluster-api.md) — 2026-11-10T10:14:52+03:30
 - [tasks/administer-cluster/_index.md](md/tasks/administer-cluster/_index.md) — 2026-11-10T10:14:02+03:30
 - [tasks/access-application-cluster/service-access-application-cluster.md](md/tasks/access-application-cluster/service-access-application-cluster.md) — 2026-11-10T10:13:59+03:30
-- [tasks/access-application-cluster/port-forward-access-application-cluster.md](md/tasks/access-application-cluster/port-forward-access-application-cluster.md) — 2026-11-10T10:13:52+03:30
-- [tasks/access-application-cluster/list-all-running-container-images.md](md/tasks/access-application-cluster/list-all-running-container-images.md) — 2026-11-10T10:13:40+03:30
-- [tasks/access-application-cluster/create-external-load-balancer.md](md/tasks/access-application-cluster/create-external-load-balancer.md) — 2026-11-10T10:13:27+03:30
-- [tasks/access-application-cluster/connecting-frontend-backend.md](md/tasks/access-application-cluster/connecting-frontend-backend.md) — 2026-11-10T10:13:23+03:30
-- [tasks/access-application-cluster/configure-dns-cluster.md](md/tasks/access-application-cluster/configure-dns-cluster.md) — 2026-11-10T10:12:53+03:30
-- [tasks/access-application-cluster/configure-access-multiple-clusters.md](md/tasks/access-application-cluster/configure-access-multiple-clusters.md) — 2026-11-10T10:12:51+03:30
-- [tasks/access-application-cluster/communicate-containers-same-pod-shared-volume.md](md/tasks/access-application-cluster/communicate-containers-same-pod-shared-volume.md) — 2026-11-10T10:12:48+03:30
-- [tasks/access-application-cluster/access-cluster.md](md/tasks/access-application-cluster/access-cluster.md) — 2026-11-10T10:12:03+03:30
-- [setup/production-environment/tools/kubeadm/troubleshooting-kubeadm.md](md/setup/production-environment/tools/kubeadm/troubleshooting-kubeadm.md) — 2026-11-10T10:11:44+03:30
-- [tasks/access-application-cluster/access-cluster-services.md](md/tasks/access-application-cluster/access-cluster-services.md) — 2026-11-10T10:11:18+03:30
-- [tasks/access-application-cluster/_index.md](md/tasks/access-application-cluster/_index.md) — 2026-11-10T10:10:30+03:30
-- [tasks/_index.md](md/tasks/_index.md) — 2026-11-10T10:10:27+03:30
-- [setup/production-environment/turnkey-solutions.md](md/setup/production-environment/turnkey-solutions.md) — 2026-11-10T10:10:22+03:30
-- [setup/production-environment/tools/kubeadm/setup-ha-etcd-with-kubeadm.md](md/setup/production-environment/tools/kubeadm/setup-ha-etcd-with-kubeadm.md) — 2026-11-10T10:10:17+03:30
-- [setup/production-environment/tools/kubeadm/kubelet-integration.md](md/setup/production-environment/tools/kubeadm/kubelet-integration.md) — 2026-11-10T10:09:43+03:30
 
 </div>
 

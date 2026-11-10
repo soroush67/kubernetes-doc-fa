@@ -1,0 +1,456 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>بهره‌برداری از کلاسترهای etcd برای کوبرنتیز | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">tasks / administer-cluster</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">بهره‌برداری از کلاسترهای etcd برای کوبرنتیز</h1><!-- overview -->
+<p dir="rtl"><em>(تعریف واژه‌نامه: etcd)</em></p>
+<h2 id="پیش-از-شروع" dir="rtl">پیش از شروع</h2>
+<p dir="rtl">پیش از آنکه مراحل این صفحه را برای استقرار، مدیریت، پشتیبان‌گیری یا بازیابی etcd دنبال کنید،
+باید با انتظارات معمول از بهره‌برداری یک کلاستر etcd آشنا باشید.
+برای اطلاعات بیشتر به <a href="https://etcd.io/docs/" target="_blank" rel="noopener">مستندات etcd</a> مراجعه کنید.</p>
+<p dir="rtl">نکات کلیدی عبارت‌اند از:</p>
+<ul>
+<li dir="rtl">
+<p dir="rtl">حداقل نسخه‌های توصیه‌شده etcd برای اجرا در محیط عملیاتی (production)، <code dir="ltr">3.4.29+</code> و <code dir="ltr">3.5.11+</code> هستند.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">سامانه etcd یک سامانه توزیع‌شده مبتنی بر رهبر (leader-based) است. اطمینان حاصل کنید که رهبر
+به‌طور دوره‌ای و به‌موقع ضربان (heartbeat) را برای همه پیروان ارسال می‌کند تا کلاستر
+پایدار بماند.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">باید etcd را به‌صورت کلاستری با تعداد فردی عضو اجرا کنید.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">تا جای ممکن اطمینان حاصل کنید که هیچ کمبود منبعی (resource starvation) رخ نمی‌دهد.</p>
+<p dir="rtl">کارایی و پایداری کلاستر به ورودی/خروجی شبکه و دیسک حساس است. هرگونه کمبود منبع
+می‌تواند به پایان مهلت ضربان (heartbeat timeout) بینجامد و کلاستر را ناپایدار کند.
+ناپایدار بودن etcd به این معناست که هیچ رهبری انتخاب نشده است. در چنین شرایطی،
+کلاستر نمی‌تواند هیچ تغییری در وضعیت فعلی خود ایجاد کند؛ یعنی هیچ پاد جدیدی
+زمان‌بندی نمی‌شود.</p>
+</li>
+</ul>
+<h3 id="نیازمندی-های-منابع-برای-etcd" dir="rtl">نیازمندی‌های منابع برای etcd</h3>
+<p dir="rtl">اجرای etcd با منابع محدود فقط برای اهداف آزمایشی مناسب است.
+برای استقرار در محیط عملیاتی، پیکربندی سخت‌افزاری پیشرفته لازم است.
+پیش از استقرار etcd در محیط عملیاتی،
+<a href="https://etcd.io/docs/current/op-guide/hardware/#example-hardware-configurations" target="_blank" rel="noopener">مرجع نیازمندی‌های منابع</a> را ببینید.</p>
+<p dir="rtl">پایدار نگه‌داشتن کلاسترهای etcd برای پایداری کلاسترهای کوبرنتیز حیاتی است.
+بنابراین، کلاسترهای etcd را روی ماشین‌های اختصاصی یا در محیط‌های ایزوله اجرا کنید
+تا <a href="https://etcd.io/docs/current/op-guide/hardware/" target="_blank" rel="noopener">نیازمندی‌های منابع تضمین‌شده</a> فراهم باشد.</p>
+<h3 id="ابزارها" dir="rtl">ابزارها</h3>
+<p dir="rtl">بسته به نتیجه‌ای که دنبال می‌کنید، به ابزار <code dir="ltr">etcdctl</code> یا ابزار <code dir="ltr">etcdutl</code> نیاز خواهید داشت
+(ممکن است به هر دو نیاز داشته باشید).</p>
+<!-- steps -->
+<h2 id="آشنایی-با-etcdctl-و-etcdutl" dir="rtl">آشنایی با etcdctl و etcdutl</h2>
+<p dir="rtl">ابزارهای <code dir="ltr">etcdctl</code> و <code dir="ltr">etcdutl</code> ابزارهای خط فرمانی هستند که برای تعامل با کلاسترهای etcd استفاده می‌شوند، اما هدف‌های متفاوتی دارند:</p>
+<ul>
+<li dir="rtl">
+<p dir="rtl">ابزار <code dir="ltr">etcdctl</code>: این ابزار، کلاینت اصلی خط فرمان برای تعامل با etcd از طریق
+شبکه است و برای کارهای روزمره مانند مدیریت کلیدها و مقادیر،
+مدیریت کلاستر، بررسی سلامت و موارد دیگر به کار می‌رود.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">ابزار <code dir="ltr">etcdutl</code>: این ابزار یک ابزار مدیریتی است که برای کار مستقیم روی فایل‌های داده etcd
+طراحی شده است؛ از جمله مهاجرت داده‌ها بین نسخه‌های etcd، یکپارچه‌سازی (defragment) پایگاه داده،
+بازیابی اسنپ‌شات‌ها و اعتبارسنجی سازگاری داده‌ها. برای عملیات شبکه‌ای باید از <code dir="ltr">etcdctl</code>
+استفاده کرد.</p>
+</li>
+</ul>
+<p dir="rtl">برای اطلاعات بیشتر درباره <code dir="ltr">etcdutl</code> می‌توانید به <a href="https://etcd.io/docs/v3.5/op-guide/recovery/" target="_blank" rel="noopener">مستندات بازیابی etcd</a> مراجعه کنید.</p>
+<h2 id="راه-اندازی-کلاسترهای-etcd" dir="rtl">راه‌اندازی کلاسترهای etcd</h2>
+<p dir="rtl">این بخش راه‌اندازی کلاستر etcd تک‌نودی و چندنودی را پوشش می‌دهد.</p>
+<p dir="rtl">این راهنما فرض می‌کند که <code dir="ltr">etcd</code> از قبل نصب شده است.</p>
+<h3 id="کلاستر-etcd-تک-نودی" dir="rtl">کلاستر etcd تک‌نودی</h3>
+<p dir="rtl">از کلاستر etcd تک‌نودی فقط برای اهداف آزمایشی استفاده کنید.</p>
+<ol>
+<li dir="rtl">
+<p dir="rtl">دستور زیر را اجرا کنید:</p>
+<pre dir="ltr"><code class="language-sh" dir="ltr">etcd --listen-client-urls=http://$PRIVATE_IP:2379 \
+   --advertise-client-urls=http://$PRIVATE_IP:2379
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">سرور API کوبرنتیز را با فلگ
+<code dir="ltr">--etcd-servers=$PRIVATE_IP:2379</code> راه‌اندازی کنید.</p>
+<p dir="rtl">مطمئن شوید که <code dir="ltr">PRIVATE_IP</code> روی IP کلاینت etcd شما تنظیم شده است.</p>
+</li>
+</ol>
+<h3 id="کلاستر-etcd-چندنودی" dir="rtl">کلاستر etcd چندنودی</h3>
+<p dir="rtl">برای دوام و دسترس‌پذیری بالا، در محیط عملیاتی etcd را به‌صورت کلاستر چندنودی
+اجرا کنید و به‌طور دوره‌ای از آن پشتیبان بگیرید. در محیط عملیاتی، کلاستری با پنج عضو
+توصیه می‌شود. برای اطلاعات بیشتر،
+<a href="https://etcd.io/docs/current/faq/#what-is-failure-tolerance" target="_blank" rel="noopener">مستندات پرسش‌های متداول</a> را ببینید.</p>
+<p dir="rtl">از آنجا که از کوبرنتیز استفاده می‌کنید، می‌توانید etcd را به‌صورت یک کانتینر درون
+یک یا چند Pod اجرا کنید. ابزار <code dir="ltr">kubeadm</code> به‌طور پیش‌فرض etcd را به‌صورت
+<span class="term" title="static-pod">پادهای ایستا</span> راه‌اندازی می‌کند؛
+همچنین می‌توانید یک
+<a href="../../setup/production-environment/tools/kubeadm/setup-ha-etcd-with-kubeadm.html">کلاستر جداگانه</a>
+مستقر کنید و به kubeadm بگویید از آن کلاستر etcd به‌عنوان ذخیره‌ساز پشتیبان control plane استفاده کند.</p>
+<p dir="rtl">کلاستر etcd را یا با اطلاعات ایستای اعضا پیکربندی می‌کنید یا با کشف پویا (dynamic discovery).
+برای اطلاعات بیشتر درباره خوشه‌بندی،
+<a href="https://etcd.io/docs/current/op-guide/clustering/" target="_blank" rel="noopener">مستندات خوشه‌بندی etcd</a> را ببینید.</p>
+<p dir="rtl">برای مثال، یک کلاستر etcd پنج‌عضوی را در نظر بگیرید که با URLهای کلاینت زیر اجرا می‌شود:
+<code dir="ltr">http://$IP1:2379</code>، <code dir="ltr">http://$IP2:2379</code>، <code dir="ltr">http://$IP3:2379</code>،
+<code dir="ltr">http://$IP4:2379</code> و <code dir="ltr">http://$IP5:2379</code>. برای راه‌اندازی سرور API کوبرنتیز:</p>
+<ol>
+<li dir="rtl">
+<p dir="rtl">دستور زیر را اجرا کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">etcd --listen-client-urls=http://$IP1:2379,http://$IP2:2379,http://$IP3:2379,http://$IP4:2379,http://$IP5:2379 --advertise-client-urls=http://$IP1:2379,http://$IP2:2379,http://$IP3:2379,http://$IP4:2379,http://$IP5:2379
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">سرورهای API کوبرنتیز را با فلگ
+<code dir="ltr">--etcd-servers=$IP1:2379,$IP2:2379,$IP3:2379,$IP4:2379,$IP5:2379</code> راه‌اندازی کنید.</p>
+<p dir="rtl">مطمئن شوید که متغیرهای <code dir="ltr">IP&lt;n&gt;</code> روی آدرس‌های IP کلاینت شما تنظیم شده‌اند.</p>
+</li>
+</ol>
+<h3 id="کلاستر-etcd-چندنودی-با-متعادل-کننده-بار" dir="rtl">کلاستر etcd چندنودی با متعادل‌کننده بار</h3>
+<p dir="rtl">برای اجرای یک کلاستر etcd با متعادل‌سازی بار:</p>
+<ol>
+<li dir="rtl">یک کلاستر etcd راه‌اندازی کنید.</li>
+<li dir="rtl">یک متعادل‌کننده بار (load balancer) را جلوی کلاستر etcd پیکربندی کنید.
+برای مثال، فرض کنید نشانی متعادل‌کننده بار <code dir="ltr">$LB</code> باشد.</li>
+<li dir="rtl">سرورهای API کوبرنتیز را با فلگ <code dir="ltr">--etcd-servers=$LB:2379</code> راه‌اندازی کنید.</li>
+</ol>
+<h2 id="ایمن-سازی-کلاسترهای-etcd" dir="rtl">ایمن‌سازی کلاسترهای etcd</h2>
+<p dir="rtl">دسترسی به etcd معادل دسترسی root در کلاستر است؛ بنابراین در حالت ایده‌آل فقط
+سرور API باید به آن دسترسی داشته باشد. با توجه به حساسیت داده‌ها، توصیه می‌شود
+فقط به نودهایی مجوز داده شود که به دسترسی به کلاسترهای etcd نیاز دارند.</p>
+<p dir="rtl">برای ایمن‌سازی etcd، یا قوانین فایروال تنظیم کنید یا از قابلیت‌های امنیتی
+etcd استفاده کنید. قابلیت‌های امنیتی etcd به زیرساخت کلید عمومی (PKI) مبتنی بر
+x509 وابسته‌اند. برای شروع، با تولید یک جفت کلید و گواهی، کانال‌های ارتباطی امن
+برقرار کنید. برای نمونه، از جفت‌کلید <code dir="ltr">peer.key</code> و <code dir="ltr">peer.cert</code> برای ایمن‌سازی
+ارتباط بین اعضای etcd و از <code dir="ltr">client.key</code> و <code dir="ltr">client.cert</code> برای ایمن‌سازی ارتباط
+بین etcd و کلاینت‌هایش استفاده کنید. برای تولید جفت‌کلیدها و فایل‌های CA جهت
+احراز هویت کلاینت، <a href="https://github.com/coreos/etcd/tree/master/hack/tls-setup" target="_blank" rel="noopener">اسکریپت‌های نمونه</a>
+ارائه‌شده در پروژه etcd را ببینید.</p>
+<h3 id="ایمن-سازی-ارتباطات" dir="rtl">ایمن‌سازی ارتباطات</h3>
+<p dir="rtl">برای پیکربندی etcd با ارتباط امن بین اعضا (peer)، فلگ‌های
+<code dir="ltr">--peer-key-file=peer.key</code> و <code dir="ltr">--peer-cert-file=peer.cert</code> را مشخص کنید و از HTTPS
+به‌عنوان طرح (schema) URL استفاده کنید.</p>
+<p dir="rtl">به همین ترتیب، برای پیکربندی etcd با ارتباط امن با کلاینت‌ها، فلگ‌های
+<code dir="ltr">--key=k8sclient.key</code> و <code dir="ltr">--cert=k8sclient.cert</code> را مشخص کنید و از HTTPS
+به‌عنوان طرح URL استفاده کنید. در ادامه نمونه‌ای از یک دستور کلاینت آمده است که
+از ارتباط امن استفاده می‌کند:</p>
+<pre dir="ltr"><code dir="ltr">ETCDCTL_API=3 etcdctl --endpoints 10.2.0.9:2379 \
+  --cert=/etc/kubernetes/pki/etcd/server.crt \
+  --key=/etc/kubernetes/pki/etcd/server.key \
+  --cacert=/etc/kubernetes/pki/etcd/ca.crt \
+  member list
+</code></pre>
+<h3 id="محدود-کردن-دسترسی-به-کلاسترهای-etcd" dir="rtl">محدود کردن دسترسی به کلاسترهای etcd</h3>
+<p dir="rtl">پس از پیکربندی ارتباط امن، با استفاده از احراز هویت TLS، دسترسی به کلاستر etcd را
+فقط به سرورهای API کوبرنتیز محدود کنید.</p>
+<p dir="rtl">برای مثال، جفت‌کلید <code dir="ltr">k8sclient.key</code> و <code dir="ltr">k8sclient.cert</code> را در نظر بگیرید که
+CA با نام <code dir="ltr">etcd.ca</code> به آن‌ها اعتماد دارد. هنگامی که etcd همراه با TLS با <code dir="ltr">--client-cert-auth</code>
+پیکربندی شود، گواهی‌های کلاینت‌ها را با استفاده از CAهای سیستم یا CA ارسال‌شده
+از طریق فلگ <code dir="ltr">--trusted-ca-file</code> تأیید می‌کند. با مشخص کردن فلگ‌های
+<code dir="ltr">--client-cert-auth=true</code> و <code dir="ltr">--trusted-ca-file=etcd.ca</code>، دسترسی فقط به
+کلاینت‌هایی که گواهی <code dir="ltr">k8sclient.cert</code> دارند محدود می‌شود.</p>
+<p dir="rtl">پس از آنکه etcd به‌درستی پیکربندی شد، فقط کلاینت‌هایی که گواهی معتبر دارند
+می‌توانند به آن دسترسی داشته باشند. برای دادن دسترسی به سرورهای API کوبرنتیز،
+آن‌ها را با فلگ‌های <code dir="ltr">--etcd-certfile=k8sclient.cert</code>، <code dir="ltr">--etcd-keyfile=k8sclient.key</code> و
+<code dir="ltr">--etcd-cafile=ca.cert</code> پیکربندی کنید.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">احراز هویت etcd برای کوبرنتیز برنامه‌ریزی نشده است.</p>
+</div>
+<h2 id="جایگزینی-عضو-ازکارافتاده-etcd" dir="rtl">جایگزینی عضو ازکارافتاده etcd</h2>
+<p dir="rtl">کلاستر etcd با تحمل خرابی تعداد اندکی از اعضا به دسترس‌پذیری بالا دست می‌یابد.
+با این حال، برای بهبود سلامت کلی کلاستر، اعضای ازکارافتاده را فوراً جایگزین کنید.
+اگر چند عضو از کار بیفتند، آن‌ها را یکی‌یکی جایگزین کنید. جایگزینی عضو ازکارافتاده
+دو مرحله دارد: حذف عضو ازکارافتاده و افزودن یک عضو جدید.</p>
+<p dir="rtl">با اینکه etcd شناسه‌های یکتای اعضا را در داخل خود نگه می‌دارد، توصیه می‌شود برای
+جلوگیری از خطای انسانی، برای هر عضو نامی یکتا به کار ببرید. برای مثال، یک کلاستر
+etcd سه‌عضوی را در نظر بگیرید و فرض کنید URLها <code dir="ltr">member1=http://10.0.0.1</code>،
+<code dir="ltr">member2=http://10.0.0.2</code> و <code dir="ltr">member3=http://10.0.0.3</code> باشند. وقتی <code dir="ltr">member1</code> از کار بیفتد،
+آن را با <code dir="ltr">member4=http://10.0.0.4</code> جایگزین کنید.</p>
+<ol>
+<li dir="rtl">
+<p dir="rtl">شناسه عضو ازکارافتاده <code dir="ltr">member1</code> را به دست آورید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">etcdctl --endpoints=http://10.0.0.2,http://10.0.0.3 member list
+</code></pre>
+<p dir="rtl">پیام زیر نمایش داده می‌شود:</p>
+<pre dir="ltr"><code class="language-console" dir="ltr">8211f1d0f64f3269, started, member1, http://10.0.0.1:2380, http://10.0.0.1:2379
+91bc3c398fb3c146, started, member2, http://10.0.0.2:2380, http://10.0.0.2:2379
+fd422379fda50e48, started, member3, http://10.0.0.3:2380, http://10.0.0.3:2379
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">یکی از کارهای زیر را انجام دهید:</p>
+<ol>
+<li dir="rtl">اگر هر سرور API کوبرنتیز برای ارتباط با همه اعضای etcd پیکربندی شده است،
+عضو ازکارافتاده را از فلگ <code dir="ltr">--etcd-servers</code> حذف کنید و سپس همه سرورهای
+API کوبرنتیز را دوباره راه‌اندازی کنید.</li>
+<li dir="rtl">اگر هر سرور API کوبرنتیز فقط با یک عضو etcd ارتباط دارد، سرور API کوبرنتیزی
+را که با etcd ازکارافتاده ارتباط دارد متوقف کنید.</li>
+</ol>
+</li>
+<li dir="rtl">
+<p dir="rtl">سرور etcd را روی نود خراب متوقف کنید. ممکن است کلاینت‌های دیگری غیر از
+سرور API کوبرنتیز نیز به etcd ترافیک بفرستند؛ بهتر است همه ترافیک را
+متوقف کنید تا از نوشتن در دایرکتوری داده جلوگیری شود.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">عضو ازکارافتاده را حذف کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">etcdctl member remove 8211f1d0f64f3269
+</code></pre>
+<p dir="rtl">پیام زیر نمایش داده می‌شود:</p>
+<pre dir="ltr"><code class="language-console" dir="ltr">Removed member 8211f1d0f64f3269 from cluster
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">عضو جدید را اضافه کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">etcdctl member add member4 --peer-urls=http://10.0.0.4:2380
+</code></pre>
+<p dir="rtl">پیام زیر نمایش داده می‌شود:</p>
+<pre dir="ltr"><code class="language-console" dir="ltr">Member 2be1eb8f84b7f63e added to cluster ef37ad9dc622a7c4
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">عضو تازه‌افزوده را روی ماشینی با IP <code dir="ltr">10.0.0.4</code> راه‌اندازی کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">export ETCD_NAME="member4"
+export ETCD_INITIAL_CLUSTER="member2=http://10.0.0.2:2380,member3=http://10.0.0.3:2380,member4=http://10.0.0.4:2380"
+export ETCD_INITIAL_CLUSTER_STATE=existing
+etcd [flags]
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">یکی از کارهای زیر را انجام دهید:</p>
+<ol>
+<li dir="rtl">اگر هر سرور API کوبرنتیز برای ارتباط با همه اعضای etcd پیکربندی شده است،
+عضو تازه‌افزوده را به فلگ <code dir="ltr">--etcd-servers</code> اضافه کنید و سپس همه سرورهای
+API کوبرنتیز را دوباره راه‌اندازی کنید.</li>
+<li dir="rtl">اگر هر سرور API کوبرنتیز فقط با یک عضو etcd ارتباط دارد، سرور API کوبرنتیزی
+را که در مرحله ۲ متوقف شده بود راه‌اندازی کنید. سپس کلاینت‌های سرور API
+کوبرنتیز را طوری پیکربندی کنید که درخواست‌ها را دوباره به همان سرور API
+کوبرنتیزِ متوقف‌شده هدایت کنند. این کار اغلب با پیکربندی یک متعادل‌کننده بار
+انجام می‌شود.</li>
+</ol>
+</li>
+</ol>
+<p dir="rtl">برای اطلاعات بیشتر درباره پیکربندی مجدد کلاستر،
+<a href="https://etcd.io/docs/current/op-guide/runtime-configuration/#remove-a-member" target="_blank" rel="noopener">مستندات پیکربندی مجدد etcd</a> را ببینید.</p>
+<h2 id="پشتیبان-گیری-از-کلاستر-etcd" dir="rtl">پشتیبان‌گیری از کلاستر etcd</h2>
+<p dir="rtl">همه آبجکت‌های کوبرنتیز در etcd ذخیره می‌شوند. پشتیبان‌گیری دوره‌ای از داده‌های
+کلاستر etcd برای بازیابی کلاسترهای کوبرنتیز در سناریوهای فاجعه، مانند از دست رفتن
+همه نودهای control plane، اهمیت دارد. فایل اسنپ‌شات تمام وضعیت و اطلاعات حیاتی
+کوبرنتیز را در بر دارد. برای حفظ امنیت داده‌های حساس کوبرنتیز، فایل‌های اسنپ‌شات
+را رمزنگاری کنید.</p>
+<p dir="rtl">پشتیبان‌گیری از کلاستر etcd به دو روش ممکن است: اسنپ‌شات داخلی etcd و
+اسنپ‌شات حجم (volume snapshot).</p>
+<h3 id="اسنپ-شات-داخلی" dir="rtl">اسنپ‌شات داخلی</h3>
+<p dir="rtl">در etcd از اسنپ‌شات داخلی پشتیبانی می‌شود. اسنپ‌شات را می‌توان یا از یک عضو فعال
+با دستور <code dir="ltr">etcdctl snapshot save</code> ایجاد کرد، یا با کپی کردن فایل
+<code dir="ltr">member/snap/db</code> از یک
+<a href="https://etcd.io/docs/current/op-guide/configuration/#--data-dir" target="_blank" rel="noopener">دایرکتوری داده</a>
+etcd که در حال حاضر هیچ فرایند etcd از آن استفاده نمی‌کند. ایجاد اسنپ‌شات
+بر کارایی عضو تأثیری نمی‌گذارد.</p>
+<p dir="rtl">در ادامه نمونه‌ای از ایجاد اسنپ‌شات از فضای کلیدی که <code dir="ltr">$ENDPOINT</code> ارائه می‌دهد،
+در فایل <code dir="ltr">snapshot.db</code> آمده است:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">ETCDCTL_API=3 etcdctl --endpoints $ENDPOINT snapshot save snapshot.db
+</code></pre>
+<p dir="rtl">اسنپ‌شات را بررسی کنید:</p>
+<div class="tabs">
+<div class="tab"><div class="tab-name">استفاده از etcdutl</div>
+<p dir="rtl">نمونه زیر استفاده از ابزار <code dir="ltr">etcdutl</code> را برای بررسی یک اسنپ‌شات نشان می‌دهد:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">etcdutl --write-out=table snapshot status snapshot.db 
+</code></pre>
+<p dir="rtl">خروجی باید مشابه نمونه زیر باشد:</p>
+<pre dir="ltr"><code class="language-console" dir="ltr">+----------+----------+------------+------------+
+|   HASH   | REVISION | TOTAL KEYS | TOTAL SIZE |
++----------+----------+------------+------------+
+| fe01cf57 |       10 |          7 | 2.1 MB     |
++----------+----------+------------+------------+
+</code></pre>
+</div>
+<div class="tab"><div class="tab-name">استفاده از etcdctl (منسوخ)</div>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">استفاده از <code dir="ltr">etcdctl snapshot status</code> از نسخه v3.5.x در etcd <strong>منسوخ</strong> شده است و قرار است در نسخه v3.6 از etcd حذف شود.
+توصیه می‌شود به‌جای آن از <a href="https://github.com/etcd-io/etcd/blob/main/etcdutl/README.md" target="_blank" rel="noopener"><code dir="ltr">etcdutl</code></a> استفاده کنید.</p>
+</div>
+<p dir="rtl">نمونه زیر استفاده از ابزار <code dir="ltr">etcdctl</code> را برای بررسی یک اسنپ‌شات نشان می‌دهد:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">export ETCDCTL_API=3
+etcdctl --write-out=table snapshot status snapshot.db
+</code></pre>
+<p dir="rtl">خروجی باید مشابه نمونه زیر باشد:</p>
+<pre dir="ltr"><code class="language-console" dir="ltr">Deprecated: Use `etcdutl snapshot status` instead.
+
++----------+----------+------------+------------+
+|   HASH   | REVISION | TOTAL KEYS | TOTAL SIZE |
++----------+----------+------------+------------+
+| fe01cf57 |       10 |          7 | 2.1 MB     |
++----------+----------+------------+------------+
+</code></pre>
+</div>
+</div>
+<h3 id="اسنپ-شات-حجم" dir="rtl">اسنپ‌شات حجم</h3>
+<p dir="rtl">اگر etcd روی یک حجم ذخیره‌سازی اجرا می‌شود که از پشتیبان‌گیری پشتیبانی می‌کند،
+مانند Amazon Elastic Block Store، با ایجاد اسنپ‌شات از آن حجم ذخیره‌سازی
+از داده‌های etcd پشتیبان بگیرید.</p>
+<h3 id="اسنپ-شات-با-استفاده-از-گزینه-های-etcdctl" dir="rtl">اسنپ‌شات با استفاده از گزینه‌های etcdctl</h3>
+<p dir="rtl">همچنین می‌توان اسنپ‌شات را با گزینه‌های مختلفی که etcdctl ارائه می‌دهد ایجاد کرد. برای مثال، دستور</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">ETCDCTL_API=3 etcdctl -h 
+</code></pre>
+<p dir="rtl">گزینه‌های مختلف موجود در etcdctl را فهرست می‌کند. برای نمونه، می‌توانید با مشخص کردن
+endpoint، گواهی‌ها و کلید، مطابق زیر یک اسنپ‌شات ایجاد کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">ETCDCTL_API=3 etcdctl --endpoints=https://127.0.0.1:2379 \
+  --cacert=&lt;trusted-ca-file&gt; --cert=&lt;cert-file&gt; --key=&lt;key-file&gt; \
+  snapshot save &lt;backup-file-location&gt;
+</code></pre>
+<p dir="rtl">که در آن <code dir="ltr">trusted-ca-file</code>، <code dir="ltr">cert-file</code> و <code dir="ltr">key-file</code> را می‌توان از توضیحات Pod مربوط به etcd به دست آورد.</p>
+<h2 id="افزایش-مقیاس-کلاسترهای-etcd" dir="rtl">افزایش مقیاس کلاسترهای etcd</h2>
+<p dir="rtl">افزایش مقیاس کلاسترهای etcd، دسترس‌پذیری را به بهای کاهش کارایی افزایش می‌دهد.
+مقیاس‌دهی نه کارایی کلاستر را افزایش می‌دهد و نه توانایی آن را. قاعده کلی این است
+که مقیاس کلاسترهای etcd را افزایش یا کاهش ندهید. هیچ گروه مقیاس‌دهی خودکاری
+(auto scaling group) برای کلاسترهای etcd پیکربندی نکنید. اکیداً توصیه می‌شود
+برای کلاسترهای کوبرنتیز عملیاتی، در هر مقیاسی که به‌طور رسمی پشتیبانی می‌شود،
+همیشه یک کلاستر etcd ایستای پنج‌عضوی اجرا کنید.</p>
+<p dir="rtl">یک مقیاس‌دهی معقول این است که هرگاه به قابلیت اطمینان بیشتری نیاز باشد، کلاستر
+سه‌عضوی را به کلاستر پنج‌عضوی ارتقا دهید. برای آشنایی با نحوه افزودن عضو به یک
+کلاستر موجود،
+<a href="https://etcd.io/docs/current/op-guide/runtime-configuration/#remove-a-member" target="_blank" rel="noopener">مستندات پیکربندی مجدد etcd</a>
+را ببینید.</p>
+<h2 id="بازیابی-یک-کلاستر-etcd" dir="rtl">بازیابی یک کلاستر etcd</h2>
+<div class="callout caution"><div class="callout-title">احتیاط:</div>
+<p dir="rtl">اگر هر یک از API serverها در کلاستر شما در حال اجرا باشد، نباید برای بازیابی نمونه‌های etcd اقدام کنید. در عوض، برای بازیابی etcd این مراحل را دنبال کنید:</p>
+<ul>
+<li dir="rtl"><em>همه‌ی</em> نمونه‌های API server را متوقف کنید</li>
+<li dir="rtl">وضعیت را در همه‌ی نمونه‌های etcd بازیابی کنید</li>
+<li dir="rtl">همه‌ی نمونه‌های API server را دوباره راه‌اندازی کنید</li>
+</ul>
+<p dir="rtl">پروژه‌ی کوبرنتیز همچنین توصیه می‌کند که مؤلفه‌های کوبرنتیز (<code dir="ltr">kube-scheduler</code>، <code dir="ltr">kube-controller-manager</code> و <code dir="ltr">kubelet</code>) را دوباره راه‌اندازی کنید تا مطمئن شوید به داده‌های کهنه وابسته نیستند. در عمل، بازیابی کمی زمان می‌برد. در طول بازیابی، مؤلفه‌های حیاتی قفل رهبری (leader lock) را از دست می‌دهند و خودشان را دوباره راه‌اندازی می‌کنند.</p>
+</div>
+<p dir="rtl">ابزار etcd از بازیابی با استفاده از snapshotهایی پشتیبانی می‌کند که از یک فرایند etcd با همان نسخه‌ی <a href="https://semver.org/" target="_blank" rel="noopener">major.minor</a> گرفته شده‌اند. بازیابی از نسخه‌ای با شماره‌ی patch متفاوت etcd نیز پشتیبانی می‌شود. عملیات بازیابی برای بازگرداندن داده‌های یک کلاستر ازکارافتاده به کار می‌رود.</p>
+<p dir="rtl">پیش از شروع عملیات بازیابی، باید یک فایل snapshot در دسترس باشد. این فایل می‌تواند یا حاصل یک عملیات پشتیبان‌گیری قبلی باشد یا از یک <a href="https://etcd.io/docs/current/op-guide/configuration/#--data-dir" target="_blank" rel="noopener">دایرکتوری داده</a>ی باقی‌مانده تهیه شود.</p>
+<div class="tabs">
+<div class="tab"><div class="tab-name">استفاده از etcdutl</div>
+<p dir="rtl">هنگام بازیابی کلاستر با استفاده از <a href="https://github.com/etcd-io/etcd/blob/main/etcdutl/README.md" target="_blank" rel="noopener"><code dir="ltr">etcdutl</code></a>،
+با گزینه‌ی <code dir="ltr">--data-dir</code> مشخص کنید که کلاستر در کدام پوشه بازیابی شود:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">etcdutl --data-dir &lt;data-dir-location&gt; snapshot restore snapshot.db
+</code></pre>
+<p dir="rtl">در این دستور، <code dir="ltr">&lt;data-dir-location&gt;</code> دایرکتوری‌ای است که در طول فرایند بازیابی ایجاد می‌شود.</p>
+</div>
+<div class="tab"><div class="tab-name">استفاده از etcdctl (منسوخ‌شده)</div>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">استفاده از <code dir="ltr">etcdctl</code> برای بازیابی از نسخه‌ی v3.5.x ابزار etcd <strong>منسوخ</strong> شده است و قرار است در etcd v3.6 حذف شود.
+توصیه می‌شود به‌جای آن از <a href="https://github.com/etcd-io/etcd/blob/main/etcdutl/README.md" target="_blank" rel="noopener"><code dir="ltr">etcdutl</code></a> استفاده کنید.</p>
+</div>
+<p dir="rtl">مثال زیر نحوه‌ی استفاده از ابزار <code dir="ltr">etcdctl</code> را برای عملیات بازیابی نشان می‌دهد:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">export ETCDCTL_API=3
+etcdctl --data-dir &lt;data-dir-location&gt; snapshot restore snapshot.db
+</code></pre>
+</div>
+</div>
+<p dir="rtl">اگر <code dir="ltr">&lt;data-dir-location&gt;</code> همان پوشه‌ی قبلی است، پیش از بازیابی کلاستر آن را حذف کنید و فرایند etcd را متوقف کنید.
+در غیر این صورت، پس از بازیابی پیکربندی etcd را تغییر دهید و فرایند etcd را دوباره راه‌اندازی کنید تا از دایرکتوری داده‌ی جدید استفاده کند:
+ابتدا مقدار <code dir="ltr">volumes.hostPath.path</code> مربوط به <code dir="ltr">name: etcd-data</code> را در فایل <code dir="ltr">/etc/kubernetes/manifests/etcd.yaml</code> به <code dir="ltr">&lt;data-dir-location&gt;</code> تغییر دهید،
+سپس دستور <code dir="ltr">kubectl -n kube-system delete pod &lt;name-of-etcd-pod&gt;</code> یا <code dir="ltr">systemctl restart kubelet.service</code> (یا هر دو) را اجرا کنید.
+در کلاستری که kubeadm آن را مدیریت می‌کند، مقدار <code dir="ltr">etcd.local.dataDir</code> را نیز در ConfigMap با نام <code dir="ltr">kubeadm-config</code> برابر <code dir="ltr">&lt;data-dir-location&gt;</code> قرار دهید
+(<a href="https://kubernetes.io/docs/tasks/administer-cluster/kubeadm/kubeadm-reconfigure/#updating-the-clusterconfiguration" target="_blank">پیکربندی مجدد یک کلاستر kubeadm</a>).
+اگر این مقدار همچنان به دایرکتوری قدیمی اشاره کند، اجرای بعدی <code dir="ltr">kubeadm upgrade</code> یک مانیفست etcd برای همان دایرکتوری می‌نویسد.</p>
+<p dir="rtl">برای اطلاعات بیشتر و مثال‌هایی درباره‌ی بازیابی کلاستر از یک فایل snapshot، به
+<a href="https://etcd.io/docs/current/op-guide/recovery/#restoring-a-cluster" target="_blank" rel="noopener">مستندات بازیابی از فاجعه‌ی etcd</a> مراجعه کنید.</p>
+<p dir="rtl">اگر نشانی‌های دسترسی (URL) کلاستر بازیابی‌شده با کلاستر قبلی متفاوت باشد، باید API server کوبرنتیز را متناسب با آن دوباره پیکربندی کرد. در این حالت، API serverهای کوبرنتیز را به‌جای فلگ <code dir="ltr">--etcd-servers=$OLD_ETCD_CLUSTER</code> با فلگ <code dir="ltr">--etcd-servers=$NEW_ETCD_CLUSTER</code> دوباره راه‌اندازی کنید. به‌جای <code dir="ltr">$NEW_ETCD_CLUSTER</code> و <code dir="ltr">$OLD_ETCD_CLUSTER</code> نشانی‌های IP مربوط را قرار دهید. اگر جلوی کلاستر etcd از یک متعادل‌کننده‌ی بار (load balancer) استفاده می‌شود، ممکن است لازم باشد به‌جای آن، متعادل‌کننده‌ی بار را به‌روزرسانی کنید.</p>
+<p dir="rtl">اگر اکثر اعضای etcd برای همیشه از کار افتاده باشند، کلاستر etcd ازکارافتاده در نظر گرفته می‌شود. در این وضعیت، کوبرنتیز نمی‌تواند هیچ تغییری در وضعیت فعلی خود ایجاد کند. هرچند ممکن است پادهای زمان‌بندی‌شده به اجرای خود ادامه دهند، هیچ پاد جدیدی زمان‌بندی نمی‌شود. در چنین مواردی، برای رفع مشکل کلاستر etcd را بازیابی کنید و در صورت نیاز API serverهای کوبرنتیز را دوباره پیکربندی کنید.</p>
+<h2 id="ارتقای-کلاسترهای-etcd" dir="rtl">ارتقای کلاسترهای etcd</h2>
+<div class="callout caution"><div class="callout-title">احتیاط:</div>
+<p dir="rtl">پیش از شروع ارتقا، ابتدا از کلاستر etcd خود نسخه‌ی پشتیبان تهیه کنید.</p>
+</div>
+<p dir="rtl">برای جزئیات ارتقای etcd، به مستندات <a href="https://etcd.io/docs/latest/upgrades/" target="_blank" rel="noopener">ارتقاهای etcd</a> مراجعه کنید.</p>
+<h2 id="خواندن-جریانی-از-etcd" dir="rtl">خواندن جریانی از etcd</h2>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
+<p dir="rtl">وقتی feature gate با نام <code dir="ltr">EtcdRangeStream</code> فعال باشد و از etcd نسخه‌ی v3.7 یا بالاتر استفاده شود، API server مجموعه‌های بزرگ را به‌جای صفحه‌به‌صفحه، به‌صورت جریانی (stream) از etcd می‌خواند و این کار اوج مصرف حافظه را در هر دو سمت کاهش می‌دهد. اگر backend فراخوانی RPC با نام <code dir="ltr">RangeStream</code> را پیاده‌سازی نکرده باشد، API server پاسخ <code dir="ltr">Unimplemented</code> در gRPC را تشخیص می‌دهد و به خواندن صفحه‌بندی‌شده بازمی‌گردد. اگر backend یا proxy سازگار با etcd شما به‌درستی به این حالت بازنمی‌گردد، این gate را با <code dir="ltr">--feature-gates=EtcdRangeStream=false</code> غیرفعال کنید.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">خواندن‌های جریانی در متریک <code dir="ltr">etcd_request_duration_seconds</code> با مقدار <code dir="ltr">operation="listStream"</code> ثبت می‌شوند. هر داشبورد یا هشداری را که با <code dir="ltr">operation="list"</code> تطبیق داده می‌شود، به‌روزرسانی کنید.</p>
+</div>
+<h2 id="نگهداری-کلاسترهای-etcd" dir="rtl">نگهداری کلاسترهای etcd</h2>
+<p dir="rtl">برای جزئیات بیشتر درباره‌ی نگهداری etcd، لطفاً به مستندات <a href="https://etcd.io/docs/latest/op-guide/maintenance/" target="_blank" rel="noopener">نگهداری etcd</a> مراجعه کنید.</p>
+<h3 id="یکپارچه-سازی-defragmentation-کلاستر" dir="rtl">یکپارچه‌سازی (defragmentation) کلاستر</h3>
+<p dir="rtl">یکپارچه‌سازی عملیاتی پرهزینه است، بنابراین باید تا حد امکان به‌ندرت اجرا شود. از سوی دیگر، لازم است مطمئن شوید که هیچ‌یک از اعضای etcd از سهمیه‌ی ذخیره‌سازی فراتر نمی‌رود. پروژه‌ی کوبرنتیز توصیه می‌کند که برای انجام یکپارچه‌سازی از ابزاری مانند <a href="https://github.com/ahrtr/etcd-defrag" target="_blank" rel="noopener">etcd-defrag</a> استفاده کنید.</p>
+<p dir="rtl">همچنین می‌توانید ابزار یکپارچه‌سازی را به‌صورت یک CronJob در کوبرنتیز اجرا کنید تا مطمئن شوید یکپارچه‌سازی به‌طور منظم انجام می‌شود. برای جزئیات، فایل <a href="https://github.com/ahrtr/etcd-defrag/blob/main/doc/etcd-defrag-cronjob.yaml" target="_blank" rel="noopener"><code dir="ltr">etcd-defrag-cronjob.yaml</code></a> را ببینید.</p>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#پیش-از-شروع">پیش از شروع</a><a class="l3" href="#نیازمندی-های-منابع-برای-etcd">نیازمندی‌های منابع برای etcd</a><a class="l3" href="#ابزارها">ابزارها</a><a class="l2" href="#آشنایی-با-etcdctl-و-etcdutl">آشنایی با etcdctl و etcdutl</a><a class="l2" href="#راه-اندازی-کلاسترهای-etcd">راه‌اندازی کلاسترهای etcd</a><a class="l3" href="#کلاستر-etcd-تک-نودی">کلاستر etcd تک‌نودی</a><a class="l3" href="#کلاستر-etcd-چندنودی">کلاستر etcd چندنودی</a><a class="l3" href="#کلاستر-etcd-چندنودی-با-متعادل-کننده-بار">کلاستر etcd چندنودی با متعادل‌کننده بار</a><a class="l2" href="#ایمن-سازی-کلاسترهای-etcd">ایمن‌سازی کلاسترهای etcd</a><a class="l3" href="#ایمن-سازی-ارتباطات">ایمن‌سازی ارتباطات</a><a class="l3" href="#محدود-کردن-دسترسی-به-کلاسترهای-etcd">محدود کردن دسترسی به کلاسترهای etcd</a><a class="l2" href="#جایگزینی-عضو-ازکارافتاده-etcd">جایگزینی عضو ازکارافتاده etcd</a><a class="l2" href="#پشتیبان-گیری-از-کلاستر-etcd">پشتیبان‌گیری از کلاستر etcd</a><a class="l3" href="#اسنپ-شات-داخلی">اسنپ‌شات داخلی</a><a class="l3" href="#اسنپ-شات-حجم">اسنپ‌شات حجم</a><a class="l3" href="#اسنپ-شات-با-استفاده-از-گزینه-های-etcdctl">اسنپ‌شات با استفاده از گزینه‌های etcdctl</a><a class="l2" href="#افزایش-مقیاس-کلاسترهای-etcd">افزایش مقیاس کلاسترهای etcd</a><a class="l2" href="#بازیابی-یک-کلاستر-etcd">بازیابی یک کلاستر etcd</a><a class="l2" href="#ارتقای-کلاسترهای-etcd">ارتقای کلاسترهای etcd</a><a class="l2" href="#خواندن-جریانی-از-etcd">خواندن جریانی از etcd</a><a class="l2" href="#نگهداری-کلاسترهای-etcd">نگهداری کلاسترهای etcd</a><a class="l3" href="#یکپارچه-سازی-defragmentation-کلاستر">یکپارچه‌سازی (defragmentation) کلاستر</a></nav>
+</div>
+</body>
+</html>
