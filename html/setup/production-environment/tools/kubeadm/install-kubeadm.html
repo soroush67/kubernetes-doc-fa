@@ -1,0 +1,444 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>نصب kubeadm | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
+<header class="top"><a href="../../../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">setup / production-environment / tools / kubeadm</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">نصب kubeadm</h1><!-- overview -->
+<p dir="rtl"><img src="/images/kubeadm-stacked-color.png" align="right" width="150px">
+این صفحه نحوهٔ نصب جعبه‌ابزار <code dir="ltr">kubeadm</code> را نشان می‌دهد.
+برای آشنایی با نحوهٔ ایجاد یک کلاستر با kubeadm پس از انجام این فرایند نصب،
+صفحهٔ <a href="create-cluster-kubeadm.html">ایجاد کلاستر با kubeadm</a> را ببینید.</p>
+<h2 id="پیش-از-شروع" dir="rtl">پیش از شروع</h2>
+<ul>
+<li dir="rtl">یک میزبان لینوکسی سازگار. پروژهٔ کوبرنتیز دستورالعمل‌های عمومی‌ای برای توزیع‌های لینوکس مبتنی بر
+Debian و Red Hat و نیز توزیع‌های فاقد مدیر بسته ارائه می‌کند.</li>
+<li dir="rtl">حداقل ۲ گیگابایت RAM برای هر ماشین (مقدار کمتر از این، فضای اندکی برای برنامه‌هایتان باقی می‌گذارد).</li>
+<li dir="rtl">حداقل ۲ CPU برای ماشین‌های control plane.</li>
+<li dir="rtl">اتصال شبکهٔ کامل میان همهٔ ماشین‌های کلاستر (شبکهٔ عمومی یا خصوصی، هر دو مناسب است).</li>
+<li dir="rtl">نام میزبان، نشانی MAC و product_uuid یکتا برای هر نود. برای جزئیات بیشتر <a href="#verify-mac-address">اینجا</a> را ببینید.</li>
+<li dir="rtl">برخی پورت‌ها روی ماشین‌هایتان باز باشند. برای جزئیات بیشتر <a href="#check-required-ports">اینجا</a> را ببینید.</li>
+</ul>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">نصب <code dir="ltr">kubeadm</code> با فایل‌های باینری‌ای انجام می‌شود که از پیوند پویا (dynamic linking) استفاده می‌کنند و فرض بر این است که سیستم مقصد شما <code dir="ltr">glibc</code> را فراهم می‌کند.
+این فرض در بسیاری از توزیع‌های لینوکس (از جمله Debian، Ubuntu، Fedora، CentOS و غیره) معقول است،
+اما در توزیع‌های سفارشی و سبک که به‌طور پیش‌فرض <code dir="ltr">glibc</code> را ندارند، مانند Alpine Linux، همیشه صادق نیست.
+انتظار می‌رود توزیع یا <code dir="ltr">glibc</code> را داشته باشد یا یک
+<a href="https://wiki.alpinelinux.org/wiki/Running_glibc_programs" target="_blank" rel="noopener">لایهٔ سازگاری</a>
+داشته باشد که نمادهای مورد انتظار را فراهم کند.</p>
+</div>
+<!-- steps -->
+<h2 id="بررسی-نسخهٔ-سیستم-عامل" dir="rtl">بررسی نسخهٔ سیستم‌عامل</h2>
+<div class="tabs">
+<div class="tab"><div class="tab-name">Linux</div>
+<ul>
+<li dir="rtl">پروژهٔ kubeadm از کرنل‌های LTS پشتیبانی می‌کند. <a href="https://www.kernel.org/category/releases.html" target="_blank" rel="noopener">فهرست کرنل‌های LTS</a> را ببینید.</li>
+<li dir="rtl">می‌توانید نسخهٔ کرنل را با فرمان <code dir="ltr">uname -r</code> به دست آورید.</li>
+</ul>
+<p dir="rtl">برای اطلاعات بیشتر، <a href="../../../../reference/node/kernel-version-requirements.html">الزامات کرنل لینوکس</a> را ببینید.</p>
+</div>
+<div class="tab"><div class="tab-name">Windows</div>
+<ul>
+<li dir="rtl">پروژهٔ kubeadm از نسخه‌های اخیر کرنل پشتیبانی می‌کند. برای فهرست کرنل‌های اخیر، <a href="https://learn.microsoft.com/en-us/windows/release-health/windows-server-release-info" target="_blank" rel="noopener">اطلاعات انتشار Windows Server</a> را ببینید.</li>
+<li dir="rtl">می‌توانید نسخهٔ کرنل (که نسخهٔ سیستم‌عامل نیز نامیده می‌شود) را با فرمان <code dir="ltr">systeminfo</code> به دست آورید.</li>
+</ul>
+<p dir="rtl">برای اطلاعات بیشتر، <a href="../../../../concepts/windows/intro.html#windows-os-version-support">سازگاری نسخهٔ سیستم‌عامل Windows</a> را ببینید.</p>
+</div>
+</div>
+<p dir="rtl">هر کلاستر کوبرنتیز که با kubeadm ایجاد شود، به نرم‌افزارهایی وابسته است که از قابلیت‌های کرنل استفاده می‌کنند.
+این نرم‌افزارها عبارت‌اند از
+<span class="term" title="container-runtime">محیط اجرای کانتینر</span>،
+<span class="term" title="kubelet">kubelet</span> و یک افزونهٔ <span class="term" title="cni">رابط شبکهٔ کانتینر</span>، اما به این موارد محدود نمی‌شوند.</p>
+<p dir="rtl">برای اینکه از خطاهای غیرمنتظره ناشی از نسخهٔ پشتیبانی‌نشدهٔ کرنل در امان بمانید، kubeadm بررسی پیش از اجرای
+<code dir="ltr">SystemVerification</code> را انجام می‌دهد. اگر نسخهٔ کرنل پشتیبانی نشود، این بررسی ناموفق خواهد بود.</p>
+<p dir="rtl">اگر می‌دانید کرنل شما قابلیت‌های لازم را فراهم می‌کند، می‌توانید این بررسی را نادیده بگیرید،
+حتی اگر kubeadm از نسخهٔ آن پشتیبانی نکند.</p>
+<h2 id="اطمینان-از-یکتا-بودن-نشانی-mac-و-product_uuid-برای-هر-نود-verify-mac-address" dir="rtl">اطمینان از یکتا بودن نشانی MAC و product_uuid برای هر نود {#verify-mac-address}</h2>
+<ul>
+<li dir="rtl">می‌توانید نشانی MAC رابط‌های شبکه را با فرمان <code dir="ltr">ip link</code> یا <code dir="ltr">ifconfig -a</code> به دست آورید.</li>
+<li dir="rtl">مقدار product_uuid را می‌توان با فرمان <code dir="ltr">sudo cat /sys/class/dmi/id/product_uuid</code> بررسی کرد.</li>
+</ul>
+<p dir="rtl">به احتمال بسیار زیاد، دستگاه‌های سخت‌افزاری نشانی‌های یکتایی دارند، هرچند برخی ماشین‌های مجازی ممکن است
+مقادیر یکسانی داشته باشند. کوبرنتیز از این مقادیر برای شناسایی یکتای نودهای کلاستر استفاده می‌کند.
+اگر این مقادیر برای هر نود یکتا نباشند، ممکن است فرایند نصب
+<a href="https://github.com/kubernetes/kubeadm/issues/31" target="_blank" rel="noopener">با شکست مواجه شود</a>.</p>
+<h2 id="بررسی-آداپتورهای-شبکه" dir="rtl">بررسی آداپتورهای شبکه</h2>
+<p dir="rtl">اگر بیش از یک آداپتور شبکه دارید و اجزای کوبرنتیز از طریق مسیر پیش‌فرض در دسترس نیستند،
+توصیه می‌کنیم مسیر (یا مسیرهای) IP اضافه کنید تا نشانی‌های کلاستر کوبرنتیز از آداپتور مناسب عبور کنند.</p>
+<h2 id="بررسی-پورت-های-لازم-check-required-ports" dir="rtl">بررسی پورت‌های لازم {#check-required-ports}</h2>
+<p dir="rtl">این <a href="../../../../reference/networking/ports-and-protocols.html">پورت‌های لازم</a>
+باید باز باشند تا اجزای کوبرنتیز بتوانند با یکدیگر ارتباط برقرار کنند.
+برای بررسی باز بودن یک پورت می‌توانید از ابزارهایی مانند <a href="https://netcat.sourceforge.net" target="_blank" rel="noopener">netcat</a> استفاده کنید. برای مثال:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">nc 127.0.0.1 6443 -zv -w 2
+</code></pre>
+<p dir="rtl">افزونهٔ شبکهٔ پادی که استفاده می‌کنید نیز ممکن است به باز بودن برخی پورت‌ها نیاز داشته باشد.
+از آنجا که این موضوع در هر افزونهٔ شبکهٔ پاد متفاوت است، لطفاً برای اطلاع از پورت‌های مورد نیاز،
+مستندات آن افزونه‌ها را ببینید.</p>
+<h2 id="پیکربندی-swap-swap-configuration" dir="rtl">پیکربندی swap {#swap-configuration}</h2>
+<p dir="rtl">رفتار پیش‌فرض kubelet این است که اگر حافظهٔ swap روی نود شناسایی شود، اجرا نشود.
+این یعنی swap یا باید غیرفعال شود یا kubelet آن را تحمل کند.</p>
+<ul>
+<li dir="rtl">برای تحمل swap، <code dir="ltr">failSwapOn: false</code> را به پیکربندی kubelet یا به‌صورت آرگومان خط فرمان اضافه کنید.
+توجه: حتی اگر <code dir="ltr">failSwapOn: false</code> تنظیم شده باشد، بارهای کاری به‌طور پیش‌فرض به swap دسترسی نخواهند داشت.
+این رفتار را می‌توان با تنظیم <code dir="ltr">swapBehavior</code>، باز هم در فایل پیکربندی kubelet، تغییر داد. برای استفاده از swap،
+مقداری غیر از تنظیم پیش‌فرض <code dir="ltr">NoSwap</code> برای <code dir="ltr">swapBehavior</code> تعیین کنید.
+برای جزئیات بیشتر، <a href="../../../../concepts/cluster-administration/swap-memory-management.html">مدیریت حافظهٔ swap</a> را ببینید.</li>
+<li dir="rtl">برای غیرفعال کردن swap، می‌توان از <code dir="ltr">sudo swapoff -a</code> استفاده کرد تا swap به‌طور موقت غیرفعال شود.
+برای اینکه این تغییر پس از راه‌اندازی مجدد نیز باقی بماند، بسته به نحوهٔ پیکربندی سیستمتان، مطمئن شوید
+swap در فایل‌های پیکربندی مانند <code dir="ltr">/etc/fstab</code> و <code dir="ltr">systemd.swap</code> غیرفعال شده است.</li>
+</ul>
+<h2 id="نصب-محیط-اجرای-کانتینر-installing-runtime" dir="rtl">نصب محیط اجرای کانتینر {#installing-runtime}</h2>
+<p dir="rtl">کوبرنتیز برای اجرای کانتینرها در Podها از یک
+<span class="term" title="container-runtime">محیط اجرای کانتینر</span> استفاده می‌کند.</p>
+<p dir="rtl">کوبرنتیز به‌طور پیش‌فرض از
+<span class="term" title="cri">رابط محیط اجرای کانتینر</span> (CRI)
+برای ارتباط با محیط اجرای کانتینر انتخابی شما استفاده می‌کند.</p>
+<p dir="rtl">اگر محیط اجرایی را مشخص نکنید، kubeadm به‌طور خودکار تلاش می‌کند با پیمایش فهرستی از نقاط پایانی (endpoint) شناخته‌شده،
+محیط اجرای کانتینر نصب‌شده را شناسایی کند.</p>
+<p dir="rtl">اگر چند محیط اجرای کانتینر شناسایی شود یا هیچ‌کدام شناسایی نشود، kubeadm خطا می‌دهد
+و از شما می‌خواهد مشخص کنید از کدام‌یک می‌خواهید استفاده کنید.</p>
+<p dir="rtl">برای اطلاعات بیشتر، <a href="../../container-runtimes.html">محیط‌های اجرای کانتینر</a>
+را ببینید.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">موتور Docker رابط <a href="https://kubernetes.io/docs/concepts/architecture/cri/" target="_blank">CRI</a> را پیاده‌سازی نمی‌کند،
+درحالی‌که این رابط شرط لازم برای کار کردن یک محیط اجرای کانتینر با کوبرنتیز است.
+به همین دلیل، باید سرویس دیگری به نام <a href="https://mirantis.github.io/cri-dockerd/" target="_blank" rel="noopener">cri-dockerd</a>
+نصب شود. cri-dockerd پروژه‌ای است مبتنی بر پشتیبانی داخلی قدیمی از Docker Engine
+که در نسخهٔ 1.24 از kubelet <a href="/dockershim">حذف شد</a>.</p>
+</div>
+<p dir="rtl">جدول‌های زیر نقاط پایانی شناخته‌شده برای سیستم‌عامل‌های پشتیبانی‌شده را نشان می‌دهند:</p>
+<div class="tabs">
+<div class="tab"><div class="tab-name">Linux</div>
+<table>
+<thead>
+<tr>
+<th dir="rtl">محیط اجرا</th>
+<th dir="rtl">مسیر سوکت دامنهٔ Unix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td dir="ltr" class="ltr">containerd</td>
+<td dir="ltr" class="ltr"><code dir="ltr">unix:///var/run/containerd/containerd.sock</code></td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr">CRI-O</td>
+<td dir="ltr" class="ltr"><code dir="ltr">unix:///var/run/crio/crio.sock</code></td>
+</tr>
+<tr>
+<td dir="rtl">Docker Engine (با استفاده از cri-dockerd)</td>
+<td dir="ltr" class="ltr"><code dir="ltr">unix:///var/run/cri-dockerd.sock</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="tab"><div class="tab-name">Windows</div>
+<table>
+<thead>
+<tr>
+<th dir="rtl">محیط اجرا</th>
+<th dir="rtl">مسیر named pipe در Windows</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td dir="ltr" class="ltr">containerd</td>
+<td dir="ltr" class="ltr"><code dir="ltr">npipe:////./pipe/containerd-containerd</code></td>
+</tr>
+<tr>
+<td dir="rtl">Docker Engine (با استفاده از cri-dockerd)</td>
+<td dir="ltr" class="ltr"><code dir="ltr">npipe:////./pipe/cri-dockerd</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<h2 id="نصب-kubeadm،-kubelet-و-kubectl" dir="rtl">نصب kubeadm، kubelet و kubectl</h2>
+<p dir="rtl">این بسته‌ها را روی همهٔ ماشین‌هایتان نصب خواهید کرد:</p>
+<ul>
+<li dir="rtl">
+<p dir="rtl"><code dir="ltr">kubeadm</code>: فرمانی برای راه‌اندازی اولیهٔ (bootstrap) کلاستر.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><code dir="ltr">kubelet</code>: جزئی که روی همهٔ ماشین‌های کلاستر اجرا می‌شود
+و کارهایی مانند راه‌اندازی پادها و کانتینرها را انجام می‌دهد.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><code dir="ltr">kubectl</code>: ابزار خط فرمان برای ارتباط با کلاستر.</p>
+</li>
+</ul>
+<p dir="rtl">kubeadm، <code dir="ltr">kubelet</code> یا <code dir="ltr">kubectl</code> را برای شما نصب یا مدیریت <strong>نمی‌کند</strong>؛ بنابراین باید
+مطمئن شوید نسخهٔ آن‌ها با نسخهٔ control plane کوبرنتیزی که می‌خواهید kubeadm برایتان نصب کند مطابقت دارد.
+در غیر این صورت، خطر ناهمخوانی نسخه‌ها (version skew) وجود دارد که
+می‌تواند به رفتار غیرمنتظره و پرخطا منجر شود. با این حال، ناهمخوانی به اندازهٔ <em>یک</em> نسخهٔ فرعی میان
+kubelet و control plane پشتیبانی می‌شود، اما نسخهٔ kubelet هرگز نباید از نسخهٔ API server
+بالاتر باشد. برای مثال، kubelet با نسخهٔ 1.7.0 باید کاملاً با API server نسخهٔ 1.8.0 سازگار باشد،
+اما عکس آن صادق نیست.</p>
+<p dir="rtl">برای اطلاعات دربارهٔ نصب <code dir="ltr">kubectl</code>، <a href="https://kubernetes.io/docs/tasks/tools/" target="_blank">نصب و راه‌اندازی kubectl</a> را ببینید.</p>
+<div class="callout warning"><div class="callout-title">هشدار:</div>
+<p dir="rtl">این دستورالعمل‌ها همهٔ بسته‌های کوبرنتیز را از هرگونه ارتقای سیستمی مستثنا می‌کنند.
+دلیل این کار آن است که ارتقای kubeadm و کوبرنتیز به
+<a href="https://kubernetes.io/docs/tasks/administer-cluster/kubeadm/kubeadm-upgrade/" target="_blank">توجه ویژه‌ای</a> نیاز دارد.</p>
+<p dir="rtl">برای اطلاعات بیشتر دربارهٔ ناهمخوانی نسخه‌ها، موارد زیر را ببینید:</p>
+<ul>
+<li dir="rtl"><a href="https://kubernetes.io/docs/setup/release/version-skew-policy/" target="_blank">سیاست نسخه‌بندی و ناهمخوانی نسخه‌ها</a> در کوبرنتیز</li>
+<li dir="rtl"><a href="create-cluster-kubeadm.html#version-skew-policy">سیاست ناهمخوانی نسخه‌ها</a> مختص kubeadm</li>
+</ul>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">برای هر نسخهٔ فرعی کوبرنتیز یک مخزن بستهٔ اختصاصی وجود دارد. اگر می‌خواهید
+نسخهٔ فرعی‌ای غیر از v1.37 نصب کنید، لطفاً راهنمای نصب
+نسخهٔ فرعی مورد نظرتان را ببینید.</p>
+</div>
+<div class="tabs">
+<div class="tab"><div class="tab-name">توزیع‌های مبتنی بر Debian</div>
+<p dir="rtl">این دستورالعمل‌ها برای کوبرنتیز v1.37 است.</p>
+<ol>
+<li dir="rtl">
+<p dir="rtl">نمایهٔ بسته‌های <code dir="ltr">apt</code> را به‌روزرسانی کنید و بسته‌های لازم برای استفاده از مخزن <code dir="ltr">apt</code> کوبرنتیز را نصب کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">sudo apt-get update
+# apt-transport-https may be a dummy package; if so, you can skip that package
+sudo apt-get install -y apt-transport-https ca-certificates curl gpg
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">کلید امضای عمومی مخازن بستهٔ کوبرنتیز را دانلود کنید.
+برای همهٔ مخازن از یک کلید امضای یکسان استفاده می‌شود؛ بنابراین می‌توانید نسخهٔ موجود در URL را نادیده بگیرید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># If the directory `/etc/apt/keyrings` does not exist, it should be created before the curl command, read the note below.
+# sudo mkdir -p -m 755 /etc/apt/keyrings
+curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.37/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+</code></pre>
+</li>
+</ol>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">در نسخه‌های قدیمی‌تر از Debian 12 و Ubuntu 22.04، دایرکتوری <code dir="ltr">/etc/apt/keyrings</code> به‌طور پیش‌فرض
+وجود ندارد و باید پیش از اجرای فرمان curl ایجاد شود.</p>
+</div>
+<ol start="3">
+<li dir="rtl">
+<p dir="rtl">مخزن <code dir="ltr">apt</code> مناسب کوبرنتیز را اضافه کنید. لطفاً توجه کنید که این مخزن فقط بسته‌های
+کوبرنتیز 1.37 را دارد؛ برای سایر نسخه‌های فرعی کوبرنتیز، باید
+نسخهٔ فرعی کوبرنتیز را در URL به نسخهٔ فرعی مورد نظرتان تغییر دهید
+(همچنین باید بررسی کنید که مستندات مربوط به همان نسخه‌ای از کوبرنتیز را می‌خوانید
+که قصد نصب آن را دارید).</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># This overwrites any existing configuration in /etc/apt/sources.list.d/kubernetes.list
+echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.37/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">نمایهٔ بسته‌های <code dir="ltr">apt</code> را به‌روزرسانی کنید، kubelet، kubeadm و kubectl را نصب کنید و نسخهٔ آن‌ها را ثابت نگه دارید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">sudo apt-get update
+sudo apt-get install -y kubelet kubeadm kubectl
+sudo apt-mark hold kubelet kubeadm kubectl
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">(اختیاری) پیش از اجرای kubeadm، سرویس kubelet را فعال کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">sudo systemctl enable --now kubelet
+</code></pre>
+</li>
+</ol>
+</div>
+<div class="tab"><div class="tab-name">توزیع‌های مبتنی بر Red Hat</div>
+<ol>
+<li dir="rtl">
+<p dir="rtl">حالت SELinux را روی <code dir="ltr">permissive</code> تنظیم کنید:</p>
+<p dir="rtl">این دستورالعمل‌ها برای کوبرنتیز 1.37 است.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># Set SELinux in permissive mode (effectively disabling it)
+sudo setenforce 0
+sudo sed -i 's/^SELINUX=enforcing$/SELINUX=permissive/' /etc/selinux/config
+</code></pre>
+</li>
+</ol>
+<div class="callout caution"><div class="callout-title">احتیاط:</div>
+<ul>
+<li dir="rtl">قرار دادن SELinux در حالت permissive با اجرای <code dir="ltr">setenforce 0</code> و <code dir="ltr">sed ...</code>
+در عمل آن را غیرفعال می‌کند. این کار لازم است تا کانتینرها بتوانند به فایل‌سیستم میزبان
+دسترسی داشته باشند؛ برای مثال، برخی افزونه‌های شبکهٔ کلاستر به این دسترسی نیاز دارند. تا زمانی که
+پشتیبانی از SELinux در kubelet بهبود نیابد، باید این کار را انجام دهید.</li>
+<li dir="rtl">اگر می‌دانید SELinux را چگونه پیکربندی کنید، می‌توانید آن را فعال نگه دارید، اما ممکن است
+به تنظیماتی نیاز داشته باشد که kubeadm از آن‌ها پشتیبانی نمی‌کند.</li>
+</ul>
+</div>
+<ol start="2">
+<li dir="rtl">
+<p dir="rtl">مخزن <code dir="ltr">yum</code> کوبرنتیز را اضافه کنید. پارامتر <code dir="ltr">exclude</code> در
+تعریف مخزن تضمین می‌کند که بسته‌های مرتبط با کوبرنتیز هنگام اجرای یک
+<code dir="ltr">dnf update</code> معمولی ارتقا نیابند، زیرا ارتقای کوبرنتیز روال ویژه‌ای دارد که
+باید از آن پیروی شود. لطفاً توجه کنید که این مخزن
+فقط بسته‌های کوبرنتیز 1.37 را دارد؛ برای سایر
+نسخه‌های فرعی کوبرنتیز، باید نسخهٔ فرعی کوبرنتیز را
+در URL به نسخهٔ فرعی مورد نظرتان تغییر دهید (همچنین باید بررسی کنید که
+مستندات مربوط به همان نسخه‌ای از کوبرنتیز را می‌خوانید که
+قصد نصب آن را دارید).</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># This overwrites any existing configuration in /etc/yum.repos.d/kubernetes.repo
+cat &lt;&lt;EOF | sudo tee /etc/yum.repos.d/kubernetes.repo
+[kubernetes]
+name=Kubernetes
+baseurl=https://pkgs.k8s.io/core:/stable:/v1.37/rpm/
+enabled=1
+gpgcheck=1
+gpgkey=https://pkgs.k8s.io/core:/stable:/v1.37/rpm/repodata/repomd.xml.key
+exclude=kubelet kubeadm kubectl cri-tools kubernetes-cni
+EOF
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">kubelet، kubeadm و kubectl را نصب کنید:</p>
+<p dir="rtl">برای سیستم‌های دارای DNF4 (Fedora &lt; 41، RHEL/CentOS &lt; 10):</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">sudo dnf install -y kubelet kubeadm kubectl --disableexcludes=kubernetes
+</code></pre>
+<p dir="rtl">برای سیستم‌های Fedora دارای DNF5:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">sudo dnf install -y kubelet kubeadm kubectl --setopt=disable_excludes=kubernetes
+</code></pre>
+<p dir="rtl">برای RHEL/CentOS 10 و نسخه‌های بعدی، برای جلوگیری از نصب <code dir="ltr">iptables</code> به‌عنوان وابستگی:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">sudo dnf install -y kubelet kubeadm kubectl --setopt=disable_excludes=kubernetes --setopt=install_weak_deps=False
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">(اختیاری) پیش از اجرای kubeadm، سرویس kubelet را فعال کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">sudo systemctl enable --now kubelet
+</code></pre>
+</li>
+</ol>
+</div>
+<div class="tab"><div class="tab-name">بدون مدیر بسته</div>
+<p dir="rtl">افزونه‌های CNI را نصب کنید (برای بیشتر شبکه‌های پاد لازم است):</p>
+<pre dir="ltr"><code class="language-bash" dir="ltr">CNI_PLUGINS_VERSION="v1.3.0"
+ARCH="amd64"
+DEST="/opt/cni/bin"
+sudo mkdir -p "$DEST"
+curl -L "https://github.com/containernetworking/plugins/releases/download/${CNI_PLUGINS_VERSION}/cni-plugins-linux-${ARCH}-${CNI_PLUGINS_VERSION}.tgz" | sudo tar -C "$DEST" -xz
+</code></pre>
+<p dir="rtl">دایرکتوری دانلود فایل‌های فرمان را تعریف کنید:</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">متغیر <code dir="ltr">DOWNLOAD_DIR</code> باید روی یک دایرکتوری قابل‌نوشتن تنظیم شود.
+اگر از Flatcar Container Linux استفاده می‌کنید، <code dir="ltr">DOWNLOAD_DIR="/opt/bin"</code> را تنظیم کنید.</p>
+</div>
+<pre dir="ltr"><code class="language-bash" dir="ltr">DOWNLOAD_DIR="/usr/local/bin"
+sudo mkdir -p "$DOWNLOAD_DIR"
+</code></pre>
+<p dir="rtl">در صورت تمایل، crictl را نصب کنید (برای تعامل با رابط محیط اجرای کانتینر (CRI) لازم است و برای kubeadm اختیاری است):</p>
+<pre dir="ltr"><code class="language-bash" dir="ltr">CRICTL_VERSION="v1.31.0"
+ARCH="amd64"
+curl -L "https://github.com/kubernetes-sigs/cri-tools/releases/download/${CRICTL_VERSION}/crictl-${CRICTL_VERSION}-linux-${ARCH}.tar.gz" | sudo tar -C $DOWNLOAD_DIR -xz
+</code></pre>
+<p dir="rtl"><code dir="ltr">kubeadm</code> و <code dir="ltr">kubelet</code> را نصب کنید و یک سرویس systemd برای <code dir="ltr">kubelet</code> اضافه کنید:</p>
+<pre dir="ltr"><code class="language-bash" dir="ltr">RELEASE="$(curl -sSL https://dl.k8s.io/release/stable.txt)"
+ARCH="amd64"
+cd $DOWNLOAD_DIR
+sudo curl -L --remote-name-all https://dl.k8s.io/release/${RELEASE}/bin/linux/${ARCH}/{kubeadm,kubelet}
+sudo chmod +x {kubeadm,kubelet}
+
+RELEASE_VERSION="v0.16.2"
+curl -sSL "https://raw.githubusercontent.com/kubernetes/release/${RELEASE_VERSION}/cmd/krel/templates/latest/kubelet/kubelet.service" | sed "s:/usr/bin:${DOWNLOAD_DIR}:g" | sudo tee /usr/lib/systemd/system/kubelet.service
+sudo mkdir -p /usr/lib/systemd/system/kubelet.service.d
+curl -sSL "https://raw.githubusercontent.com/kubernetes/release/${RELEASE_VERSION}/cmd/krel/templates/latest/kubeadm/10-kubeadm.conf" | sed "s:/usr/bin:${DOWNLOAD_DIR}:g" | sudo tee /usr/lib/systemd/system/kubelet.service.d/10-kubeadm.conf
+</code></pre>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">برای توزیع‌های لینوکسی که به‌طور پیش‌فرض <code dir="ltr">glibc</code> را ندارند، لطفاً به یادداشت بخش
+<a href="#before-you-begin">پیش از شروع</a> مراجعه کنید.</p>
+</div>
+<p dir="rtl">برای نصب <code dir="ltr">kubectl</code>، دستورالعمل‌های <a href="https://kubernetes.io/docs/tasks/tools/#kubectl" target="_blank">صفحهٔ نصب ابزارها</a> را دنبال کنید.</p>
+<p dir="rtl">در صورت تمایل، پیش از اجرای kubeadm، سرویس kubelet را فعال کنید:</p>
+<pre dir="ltr"><code class="language-bash" dir="ltr">sudo systemctl enable --now kubelet
+</code></pre>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">توزیع Flatcar Container Linux دایرکتوری <code dir="ltr">/usr</code> را به‌صورت فایل‌سیستمی فقط‌خواندنی mount می‌کند.
+پیش از راه‌اندازی اولیهٔ کلاستر، باید گام‌های بیشتری برای پیکربندی یک دایرکتوری قابل‌نوشتن بردارید.
+برای آشنایی با نحوهٔ راه‌اندازی یک دایرکتوری قابل‌نوشتن، <a href="https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/troubleshooting-kubeadm/#usr-mounted-read-only" target="_blank">راهنمای عیب‌یابی kubeadm</a>
+را ببینید.</p>
+</div>
+</div>
+</div>
+<p dir="rtl">اکنون kubelet هر چند ثانیه یک بار راه‌اندازی مجدد می‌شود، زیرا در یک چرخهٔ خرابی (crashloop) منتظر می‌ماند
+تا kubeadm به آن بگوید چه کاری انجام دهد.</p>
+<h2 id="عیب-یابی" dir="rtl">عیب‌یابی</h2>
+<p dir="rtl">اگر در کار با kubeadm با مشکل روبه‌رو شدید، لطفاً به
+<a href="https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/troubleshooting-kubeadm/" target="_blank">مستندات عیب‌یابی</a> ما مراجعه کنید.</p>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<ul>
+<li dir="rtl"><a href="create-cluster-kubeadm.html">استفاده از kubeadm برای ایجاد کلاستر</a></li>
+</ul>
+</div><p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#پیش-از-شروع">پیش از شروع</a><a class="l2" href="#بررسی-نسخهٔ-سیستم-عامل">بررسی نسخهٔ سیستم‌عامل</a><a class="l2" href="#اطمینان-از-یکتا-بودن-نشانی-mac-و-product_uuid-برای-هر-نود-verify-mac-address">اطمینان از یکتا بودن نشانی MAC و product_uuid برای هر نود {#verify-mac-address}</a><a class="l2" href="#بررسی-آداپتورهای-شبکه">بررسی آداپتورهای شبکه</a><a class="l2" href="#بررسی-پورت-های-لازم-check-required-ports">بررسی پورت‌های لازم {#check-required-ports}</a><a class="l2" href="#پیکربندی-swap-swap-configuration">پیکربندی swap {#swap-configuration}</a><a class="l2" href="#نصب-محیط-اجرای-کانتینر-installing-runtime">نصب محیط اجرای کانتینر {#installing-runtime}</a><a class="l2" href="#نصب-kubeadm،-kubelet-و-kubectl">نصب kubeadm، kubelet و kubectl</a><a class="l2" href="#عیب-یابی">عیب‌یابی</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>

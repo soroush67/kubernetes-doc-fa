@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>راه‌اندازی یک کلاستر etcd با دسترس‌پذیری بالا با kubeadm | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
+<header class="top"><a href="../../../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">setup / production-environment / tools / kubeadm</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">راه‌اندازی یک کلاستر etcd با دسترس‌پذیری بالا با kubeadm</h1><!-- overview -->
+<p dir="rtl">به‌طور پیش‌فرض، kubeadm روی هر نود control plane یک نمونهٔ محلی از etcd اجرا می‌کند.
+همچنین می‌توان کلاستر etcd را خارجی در نظر گرفت و نمونه‌های etcd را روی میزبان‌های جداگانه
+فراهم کرد. تفاوت‌های این دو رویکرد در صفحهٔ
+<a href="ha-topology.html">گزینه‌های توپولوژی با دسترس‌پذیری بالا</a> شرح داده شده است.</p>
+<p dir="rtl">این وظیفه شما را گام‌به‌گام در فرایند ایجاد یک کلاستر خارجی etcd با دسترس‌پذیری بالا (high availability)
+و سه عضو همراهی می‌کند؛ کلاستری که kubeadm می‌تواند هنگام ایجاد کلاستر از آن استفاده کند.</p>
+<h2 id="پیش-از-شروع" dir="rtl">پیش از شروع</h2>
+<ul>
+<li dir="rtl">سه میزبان که بتوانند از طریق درگاه‌های TCP شمارهٔ 2379 و 2380 با یکدیگر ارتباط برقرار کنند. این
+سند همین درگاه‌های پیش‌فرض را فرض می‌کند؛ با این حال، می‌توان آن‌ها را از طریق فایل پیکربندی
+kubeadm تغییر داد.</li>
+<li dir="rtl">روی هر میزبان باید systemd و یک پوستهٔ سازگار با bash نصب شده باشد.</li>
+<li dir="rtl">روی هر میزبان باید <a href="install-kubeadm.html">یک محیط اجرای کانتینر، kubelet و kubeadm نصب شده باشد</a>.</li>
+<li dir="rtl">هر میزبان باید به رجیستری ایمیج کانتینر کوبرنتیز (<code dir="ltr">registry.k8s.io</code>) دسترسی داشته باشد، یا ایمیج
+etcd موردنیاز را با استفاده از <code dir="ltr">kubeadm config images list/pull</code> فهرست و دریافت کند. این راهنما
+نمونه‌های etcd را به‌صورت <a href="https://kubernetes.io/docs/tasks/configure-pod-container/static-pod/" target="_blank">پادهای ایستا</a> راه‌اندازی می‌کند
+که kubelet آن‌ها را مدیریت می‌کند.</li>
+<li dir="rtl">زیرساختی برای کپی‌کردن فایل‌ها میان میزبان‌ها. برای مثال، <code dir="ltr">ssh</code> و <code dir="ltr">scp</code>
+می‌توانند این نیاز را برآورده کنند.</li>
+</ul>
+<!-- steps -->
+<h2 id="راه-اندازی-کلاستر" dir="rtl">راه‌اندازی کلاستر</h2>
+<p dir="rtl">رویکرد کلی این است که همهٔ گواهی‌ها روی یک نود تولید شوند و تنها فایل‌های <em>ضروری</em>
+میان نودهای دیگر توزیع شوند.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">ابزار kubeadm همهٔ سازوکارهای رمزنگاری لازم برای تولید گواهی‌های شرح‌داده‌شده در ادامه را
+در خود دارد؛ برای این مثال به هیچ ابزار رمزنگاری دیگری نیاز نیست.</p>
+</div>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">مثال‌های زیر از نشانی‌های IPv4 استفاده می‌کنند، اما می‌توانید kubeadm، kubelet و etcd را نیز طوری
+پیکربندی کنید که از نشانی‌های IPv6 استفاده کنند. برخی گزینه‌های کوبرنتیز از پشتهٔ دوگانه (dual-stack)
+پشتیبانی می‌کنند، اما etcd از آن پشتیبانی نمی‌کند. برای جزئیات بیشتر دربارهٔ پشتیبانی کوبرنتیز از
+پشتهٔ دوگانه، به <a href="dual-stack-support.html">پشتیبانی از پشتهٔ دوگانه با kubeadm</a> مراجعه کنید.</p>
+</div>
+<ol>
+<li dir="rtl">kubelet را طوری پیکربندی کنید که مدیر سرویس etcd باشد.</li>
+</ol>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">باید این کار را روی هر میزبانی انجام دهید که etcd قرار است روی آن اجرا شود.</p>
+</div>
+<p dir="rtl">از آنجا که etcd ابتدا ایجاد شده است، باید با ایجاد یک فایل unit جدید که اولویت بالاتری از
+فایل unit مربوط به kubelet ارائه‌شده توسط kubeadm دارد، اولویت سرویس را بازنویسی کنید.</p>
+<pre dir="ltr"><code class="language-sh" dir="ltr">cat &lt;&lt; EOF &gt; /etc/systemd/system/kubelet.service.d/kubelet.conf
+# Replace "systemd" with the cgroup driver of your container runtime. The default value in the kubelet is "cgroupfs".
+# Replace the value of "containerRuntimeEndpoint" for a different container runtime if needed.
+#
+apiVersion: kubelet.config.k8s.io/v1beta1
+kind: KubeletConfiguration
+authentication:
+  anonymous:
+    enabled: false
+  webhook:
+    enabled: false
+authorization:
+  mode: AlwaysAllow
+cgroupDriver: systemd
+address: 127.0.0.1
+containerRuntimeEndpoint: unix:///var/run/containerd/containerd.sock
+staticPodPath: /etc/kubernetes/manifests
+EOF
+
+cat &lt;&lt; EOF &gt; /etc/systemd/system/kubelet.service.d/20-etcd-service-manager.conf
+[Service]
+ExecStart=
+ExecStart=/usr/bin/kubelet --config=/etc/systemd/system/kubelet.service.d/kubelet.conf
+Restart=always
+EOF
+
+systemctl daemon-reload
+systemctl restart kubelet
+</code></pre>
+<p dir="rtl">وضعیت kubelet را بررسی کنید تا مطمئن شوید در حال اجراست.</p>
+<pre dir="ltr"><code class="language-sh" dir="ltr">systemctl status kubelet
+</code></pre>
+<ol>
+<li dir="rtl">
+<p dir="rtl">فایل‌های پیکربندی kubeadm را ایجاد کنید.</p>
+<p dir="rtl">با استفاده از اسکریپت زیر، برای هر میزبانی که یک عضو etcd روی آن اجرا خواهد شد،
+یک فایل پیکربندی kubeadm تولید کنید.</p>
+<pre dir="ltr"><code class="language-sh" dir="ltr"># Update HOST0, HOST1 and HOST2 with the IPs of your hosts
+export HOST0=10.0.0.6
+export HOST1=10.0.0.7
+export HOST2=10.0.0.8
+
+# Update NAME0, NAME1 and NAME2 with the hostnames of your hosts
+export NAME0="infra0"
+export NAME1="infra1"
+export NAME2="infra2"
+
+# Create temp directories to store files that will end up on other hosts
+mkdir -p /tmp/${HOST0}/ /tmp/${HOST1}/ /tmp/${HOST2}/
+
+HOSTS=(${HOST0} ${HOST1} ${HOST2})
+NAMES=(${NAME0} ${NAME1} ${NAME2})
+
+for i in "${!HOSTS[@]}"; do
+HOST=${HOSTS[$i]}
+NAME=${NAMES[$i]}
+cat &lt;&lt; EOF &gt; /tmp/${HOST}/kubeadmcfg.yaml
+---
+apiVersion: "kubeadm.k8s.io/v1beta4"
+kind: InitConfiguration
+nodeRegistration:
+    name: ${NAME}
+localAPIEndpoint:
+    advertiseAddress: ${HOST}
+---
+apiVersion: "kubeadm.k8s.io/v1beta4"
+kind: ClusterConfiguration
+etcd:
+    local:
+        serverCertSANs:
+        - "${HOST}"
+        peerCertSANs:
+        - "${HOST}"
+        extraArgs:
+        - name: initial-cluster
+          value: ${NAMES[0]}=https://${HOSTS[0]}:2380,${NAMES[1]}=https://${HOSTS[1]}:2380,${NAMES[2]}=https://${HOSTS[2]}:2380
+        - name: initial-cluster-state
+          value: new
+        - name: name
+          value: ${NAME}
+        - name: listen-peer-urls
+          value: https://${HOST}:2380
+        - name: listen-client-urls
+          value: https://${HOST}:2379
+        - name: advertise-client-urls
+          value: https://${HOST}:2379
+        - name: initial-advertise-peer-urls
+          value: https://${HOST}:2380
+EOF
+done
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">مرجع صدور گواهی (certificate authority) را تولید کنید.</p>
+<p dir="rtl">اگر از قبل یک CA دارید، تنها کاری که باید انجام دهید کپی‌کردن فایل‌های <code dir="ltr">crt</code> و <code dir="ltr">key</code>
+آن CA به <code dir="ltr">/etc/kubernetes/pki/etcd/ca.crt</code> و <code dir="ltr">/etc/kubernetes/pki/etcd/ca.key</code> است.
+پس از کپی‌شدن این فایل‌ها، به گام بعدی، یعنی «ایجاد گواهی برای هر عضو»، بروید.</p>
+<p dir="rtl">اگر هنوز CA ندارید، این فرمان را روی <code dir="ltr">$HOST0</code> (جایی که فایل‌های پیکربندی kubeadm
+را تولید کردید) اجرا کنید.</p>
+<pre dir="ltr"><code dir="ltr">kubeadm init phase certs etcd-ca
+</code></pre>
+<p dir="rtl">این فرمان دو فایل ایجاد می‌کند:</p>
+<ul>
+<li dir="ltr" class="ltr"><code dir="ltr">/etc/kubernetes/pki/etcd/ca.crt</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">/etc/kubernetes/pki/etcd/ca.key</code></li>
+</ul>
+</li>
+<li dir="rtl">
+<p dir="rtl">برای هر عضو گواهی ایجاد کنید.</p>
+<pre dir="ltr"><code class="language-sh" dir="ltr">kubeadm init phase certs etcd-server --config=/tmp/${HOST2}/kubeadmcfg.yaml
+kubeadm init phase certs etcd-peer --config=/tmp/${HOST2}/kubeadmcfg.yaml
+kubeadm init phase certs etcd-healthcheck-client --config=/tmp/${HOST2}/kubeadmcfg.yaml
+kubeadm init phase certs apiserver-etcd-client --config=/tmp/${HOST2}/kubeadmcfg.yaml
+cp -R /etc/kubernetes/pki /tmp/${HOST2}/
+# cleanup non-reusable certificates
+find /etc/kubernetes/pki -not -name ca.crt -not -name ca.key -type f -delete
+
+kubeadm init phase certs etcd-server --config=/tmp/${HOST1}/kubeadmcfg.yaml
+kubeadm init phase certs etcd-peer --config=/tmp/${HOST1}/kubeadmcfg.yaml
+kubeadm init phase certs etcd-healthcheck-client --config=/tmp/${HOST1}/kubeadmcfg.yaml
+kubeadm init phase certs apiserver-etcd-client --config=/tmp/${HOST1}/kubeadmcfg.yaml
+cp -R /etc/kubernetes/pki /tmp/${HOST1}/
+find /etc/kubernetes/pki -not -name ca.crt -not -name ca.key -type f -delete
+
+kubeadm init phase certs etcd-server --config=/tmp/${HOST0}/kubeadmcfg.yaml
+kubeadm init phase certs etcd-peer --config=/tmp/${HOST0}/kubeadmcfg.yaml
+kubeadm init phase certs etcd-healthcheck-client --config=/tmp/${HOST0}/kubeadmcfg.yaml
+kubeadm init phase certs apiserver-etcd-client --config=/tmp/${HOST0}/kubeadmcfg.yaml
+# No need to move the certs because they are for HOST0
+
+# clean up certs that should not be copied off this host
+find /tmp/${HOST2} -name ca.key -type f -delete
+find /tmp/${HOST1} -name ca.key -type f -delete
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">گواهی‌ها و پیکربندی‌های kubeadm را کپی کنید.</p>
+<p dir="rtl">گواهی‌ها تولید شده‌اند و اکنون باید به میزبان‌های مربوط به خود
+منتقل شوند.</p>
+<pre dir="ltr"><code class="language-sh" dir="ltr">USER=ubuntu
+HOST=${HOST1}
+scp -r /tmp/${HOST}/* ${USER}@${HOST}:
+ssh ${USER}@${HOST}
+USER@HOST $ sudo -Es
+root@HOST $ chown -R root:root pki
+root@HOST $ mv pki /etc/kubernetes/
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">مطمئن شوید همهٔ فایل‌های موردانتظار وجود دارند.</p>
+<p dir="rtl">فهرست کامل فایل‌های لازم روی <code dir="ltr">$HOST0</code> به این شرح است:</p>
+<pre dir="ltr"><code dir="ltr">/tmp/${HOST0}
+└── kubeadmcfg.yaml
+---
+/etc/kubernetes/pki
+├── apiserver-etcd-client.crt
+├── apiserver-etcd-client.key
+└── etcd
+    ├── ca.crt
+    ├── ca.key
+    ├── healthcheck-client.crt
+    ├── healthcheck-client.key
+    ├── peer.crt
+    ├── peer.key
+    ├── server.crt
+    └── server.key
+</code></pre>
+<p dir="rtl">روی <code dir="ltr">$HOST1</code>:</p>
+<pre dir="ltr"><code dir="ltr">$HOME
+└── kubeadmcfg.yaml
+---
+/etc/kubernetes/pki
+├── apiserver-etcd-client.crt
+├── apiserver-etcd-client.key
+└── etcd
+    ├── ca.crt
+    ├── healthcheck-client.crt
+    ├── healthcheck-client.key
+    ├── peer.crt
+    ├── peer.key
+    ├── server.crt
+    └── server.key
+</code></pre>
+<p dir="rtl">روی <code dir="ltr">$HOST2</code>:</p>
+<pre dir="ltr"><code dir="ltr">$HOME
+└── kubeadmcfg.yaml
+---
+/etc/kubernetes/pki
+├── apiserver-etcd-client.crt
+├── apiserver-etcd-client.key
+└── etcd
+    ├── ca.crt
+    ├── healthcheck-client.crt
+    ├── healthcheck-client.key
+    ├── peer.crt
+    ├── peer.key
+    ├── server.crt
+    └── server.key
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">مانیفست‌های پاد ایستا را ایجاد کنید.</p>
+<p dir="rtl">اکنون که گواهی‌ها و پیکربندی‌ها در جای خود قرار دارند، زمان ایجاد مانیفست‌ها
+فرا رسیده است. روی هر میزبان، فرمان <code dir="ltr">kubeadm</code> را اجرا کنید تا یک مانیفست ایستا
+برای etcd تولید شود.</p>
+<pre dir="ltr"><code class="language-sh" dir="ltr">root@HOST0 $ kubeadm init phase etcd local --config=/tmp/${HOST0}/kubeadmcfg.yaml
+root@HOST1 $ kubeadm init phase etcd local --config=$HOME/kubeadmcfg.yaml
+root@HOST2 $ kubeadm init phase etcd local --config=$HOME/kubeadmcfg.yaml
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">اختیاری: سلامت کلاستر را بررسی کنید.</p>
+<p dir="rtl">اگر <code dir="ltr">etcdctl</code> در دسترس نیست، می‌توانید این ابزار را درون یک ایمیج کانتینر اجرا کنید.
+این کار را مستقیماً با محیط اجرای کانتینر خود و با ابزاری مانند <code dir="ltr">crictl run</code> انجام
+می‌دهید، نه از طریق کوبرنتیز.</p>
+<pre dir="ltr"><code class="language-sh" dir="ltr">ETCDCTL_API=3 etcdctl \
+--cert /etc/kubernetes/pki/etcd/peer.crt \
+--key /etc/kubernetes/pki/etcd/peer.key \
+--cacert /etc/kubernetes/pki/etcd/ca.crt \
+--endpoints https://${HOST0}:2379 endpoint health
+...
+https://[HOST0 IP]:2379 is healthy: successfully committed proposal: took = 16.283339ms
+https://[HOST1 IP]:2379 is healthy: successfully committed proposal: took = 19.44402ms
+https://[HOST2 IP]:2379 is healthy: successfully committed proposal: took = 35.926451ms
+</code></pre>
+<ul>
+<li dir="rtl">مقدار <code dir="ltr">${HOST0}</code> را برابر نشانی IP میزبانی قرار دهید که در حال آزمایش آن هستید.</li>
+</ul>
+</li>
+</ol>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<p dir="rtl">پس از آنکه یک کلاستر etcd با ۳ عضو فعال در اختیار داشتید، می‌توانید راه‌اندازی یک
+control plane با دسترس‌پذیری بالا را با استفاده از
+<a href="high-availability.html">روش etcd خارجی با kubeadm</a> ادامه دهید.</p>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#پیش-از-شروع">پیش از شروع</a><a class="l2" href="#راه-اندازی-کلاستر">راه‌اندازی کلاستر</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>

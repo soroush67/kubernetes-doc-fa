@@ -1,0 +1,458 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ایجاد کلاسترهای با دسترس‌پذیری بالا با kubeadm | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
+<header class="top"><a href="../../../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">setup / production-environment / tools / kubeadm</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">ایجاد کلاسترهای با دسترس‌پذیری بالا با kubeadm</h1><!-- overview -->
+<p dir="rtl">این صفحه دو رویکرد متفاوت برای راه‌اندازی یک کلاستر کوبرنتیز با دسترس‌پذیری بالا (highly available) به کمک kubeadm را توضیح می‌دهد:</p>
+<ul>
+<li dir="rtl">با نودهای control plane انباشته (stacked). این رویکرد به زیرساخت کمتری نیاز دارد. در آن، اعضای etcd و نودهای control plane در کنار هم قرار می‌گیرند.</li>
+<li dir="rtl">با یک کلاستر etcd خارجی. این رویکرد به زیرساخت بیشتری نیاز دارد. در آن، نودهای control plane و اعضای etcd از یکدیگر جدا هستند.</li>
+</ul>
+<p dir="rtl">پیش از ادامه، باید با دقت بررسی کنید که کدام رویکرد بهتر با نیازهای برنامه‌ها و محیط شما سازگار است. صفحهٔ <a href="ha-topology.html">گزینه‌های توپولوژی با دسترس‌پذیری بالا</a> مزایا و معایب هر یک را شرح می‌دهد.</p>
+<p dir="rtl">اگر در راه‌اندازی کلاستر HA با مشکلی روبه‌رو شدید، لطفاً آن را در <a href="https://github.com/kubernetes/kubeadm/issues/new" target="_blank" rel="noopener">سامانهٔ پیگیری مشکلات</a> kubeadm گزارش دهید.</p>
+<p dir="rtl">همچنین <a href="https://kubernetes.io/docs/tasks/administer-cluster/kubeadm/kubeadm-upgrade/" target="_blank">مستندات ارتقا</a> را ببینید.</p>
+<div class="callout caution"><div class="callout-title">احتیاط:</div>
+<p dir="rtl">این صفحه به اجرای کلاستر روی یک ارائه‌دهندهٔ ابری نمی‌پردازد. در محیط ابری، هیچ‌یک از دو رویکرد مستندشده در اینجا با آبجکت‌های Service از نوع LoadBalancer یا با PersistentVolumeهای پویا کار نمی‌کند.</p>
+</div>
+<h2 id="پیش-از-شروع" dir="rtl">پیش از شروع</h2>
+<p dir="rtl">پیش‌نیازها به توپولوژی‌ای بستگی دارد که برای control plane کلاستر خود انتخاب کرده‌اید:</p>
+<div class="tabs">
+<div class="tab"><div class="tab-name">etcd انباشته</div>
+<!--
+    note to reviewers: these prerequisites should match the start of the
+    external etc tab
+-->
+<p dir="rtl">به موارد زیر نیاز دارید:</p>
+<ul>
+<li dir="rtl">سه ماشین یا بیشتر که <a href="install-kubeadm.html#before-you-begin">حداقل نیازمندی‌های kubeadm</a> را برای نودهای control plane برآورده کنند. داشتن تعداد فرد نود control plane می‌تواند در صورت از کار افتادن یک ماشین یا یک ناحیه (zone)، به انتخاب رهبر کمک کند.
+<ul>
+<li dir="rtl">از جمله یک <span class="term" title="container-runtime">محیط اجرای کانتینر</span> که از قبل راه‌اندازی شده و کار می‌کند</li>
+</ul>
+</li>
+<li dir="rtl">سه ماشین یا بیشتر که <a href="install-kubeadm.html#before-you-begin">حداقل نیازمندی‌های kubeadm</a> را برای نودهای کارگر (worker) برآورده کنند
+<ul>
+<li dir="rtl">از جمله یک محیط اجرای کانتینر که از قبل راه‌اندازی شده و کار می‌کند</li>
+</ul>
+</li>
+<li dir="rtl">اتصال شبکهٔ کامل میان همهٔ ماشین‌های کلاستر (شبکهٔ عمومی یا خصوصی)</li>
+<li dir="rtl">دسترسی ابرکاربر روی همهٔ ماشین‌ها با استفاده از <code dir="ltr">sudo</code>
+<ul>
+<li dir="rtl">می‌توانید از ابزار دیگری استفاده کنید؛ این راهنما در مثال‌ها از <code dir="ltr">sudo</code> استفاده می‌کند.</li>
+</ul>
+</li>
+<li dir="rtl">دسترسی SSH از یک دستگاه به همهٔ نودهای سیستم</li>
+<li dir="rtl">ابزارهای <code dir="ltr">kubeadm</code> و <code dir="ltr">kubelet</code> که از قبل روی همهٔ ماشین‌ها نصب شده باشند.</li>
+</ul>
+<p dir="rtl"><em>برای آشنایی با زمینهٔ موضوع، <a href="ha-topology.html#stacked-etcd-topology">توپولوژی etcd انباشته</a> را ببینید.</em></p>
+</div>
+<div class="tab"><div class="tab-name">etcd خارجی</div>
+<!--
+    note to reviewers: these prerequisites should match the start of the
+    stacked etc tab
+-->
+<p dir="rtl">به موارد زیر نیاز دارید:</p>
+<ul>
+<li dir="rtl">سه ماشین یا بیشتر که <a href="install-kubeadm.html#before-you-begin">حداقل نیازمندی‌های kubeadm</a> را برای نودهای control plane برآورده کنند. داشتن تعداد فرد نود control plane می‌تواند در صورت از کار افتادن یک ماشین یا یک ناحیه، به انتخاب رهبر کمک کند.
+<ul>
+<li dir="rtl">از جمله یک <span class="term" title="container-runtime">محیط اجرای کانتینر</span> که از قبل راه‌اندازی شده و کار می‌کند</li>
+</ul>
+</li>
+<li dir="rtl">سه ماشین یا بیشتر که <a href="install-kubeadm.html#before-you-begin">حداقل نیازمندی‌های kubeadm</a> را برای نودهای کارگر برآورده کنند
+<ul>
+<li dir="rtl">از جمله یک محیط اجرای کانتینر که از قبل راه‌اندازی شده و کار می‌کند</li>
+</ul>
+</li>
+<li dir="rtl">اتصال شبکهٔ کامل میان همهٔ ماشین‌های کلاستر (شبکهٔ عمومی یا خصوصی)</li>
+<li dir="rtl">دسترسی ابرکاربر روی همهٔ ماشین‌ها با استفاده از <code dir="ltr">sudo</code>
+<ul>
+<li dir="rtl">می‌توانید از ابزار دیگری استفاده کنید؛ این راهنما در مثال‌ها از <code dir="ltr">sudo</code> استفاده می‌کند.</li>
+</ul>
+</li>
+<li dir="rtl">دسترسی SSH از یک دستگاه به همهٔ نودهای سیستم</li>
+<li dir="rtl">ابزارهای <code dir="ltr">kubeadm</code> و <code dir="ltr">kubelet</code> که از قبل روی همهٔ ماشین‌ها نصب شده باشند.</li>
+</ul>
+<!-- end of shared prerequisites -->
+<p dir="rtl">علاوه بر این، به موارد زیر نیز نیاز دارید:</p>
+<ul>
+<li dir="rtl">سه ماشین اضافی یا بیشتر که اعضای کلاستر etcd خواهند شد. داشتن تعداد فرد عضو در کلاستر etcd برای دستیابی به حد نصاب (quorum) بهینه در رأی‌گیری الزامی است.
+<ul>
+<li dir="rtl">روی این ماشین‌ها نیز باید <code dir="ltr">kubeadm</code> و <code dir="ltr">kubelet</code> نصب شده باشند.</li>
+<li dir="rtl">این ماشین‌ها همچنین به یک محیط اجرای کانتینر نیاز دارند که از قبل راه‌اندازی شده و کار کند.</li>
+</ul>
+</li>
+</ul>
+<p dir="rtl"><em>برای آشنایی با زمینهٔ موضوع، <a href="ha-topology.html#external-etcd-topology">توپولوژی etcd خارجی</a> را ببینید.</em></p>
+</div>
+</div>
+<h3 id="ایمیج-های-کانتینر" dir="rtl">ایمیج‌های کانتینر</h3>
+<p dir="rtl">هر میزبان باید بتواند ایمیج‌ها را از رجیستری ایمیج کانتینر کوبرنتیز، یعنی <code dir="ltr">registry.k8s.io</code>، بخواند و دریافت کند. اگر بخواهید کلاستری با دسترس‌پذیری بالا مستقر کنید که میزبان‌های آن امکان دریافت ایمیج را ندارند، این کار شدنی است؛ اما باید به روش دیگری اطمینان حاصل کنید که ایمیج‌های کانتینر درست از قبل روی میزبان‌های مربوط در دسترس هستند.</p>
+<h3 id="رابط-خط-فرمان-kubectl" dir="rtl">رابط خط فرمان {#kubectl}</h3>
+<p dir="rtl">برای مدیریت کوبرنتیز پس از راه‌اندازی کلاستر، باید <a href="https://kubernetes.io/docs/tasks/tools/#kubectl" target="_blank">kubectl را نصب کنید</a> روی رایانهٔ شخصی خود. نصب ابزار <code dir="ltr">kubectl</code> روی هر نود control plane نیز سودمند است، زیرا می‌تواند در عیب‌یابی کمک کند.</p>
+<!-- steps -->
+<h2 id="گام-های-نخست-برای-هر-دو-روش" dir="rtl">گام‌های نخست برای هر دو روش</h2>
+<h3 id="ایجاد-متعادل-کنندهٔ-بار-برای-kube-apiserver" dir="rtl">ایجاد متعادل‌کنندهٔ بار برای kube-apiserver</h3>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">پیکربندی‌های فراوانی برای متعادل‌کننده‌های بار (load balancer) وجود دارد. مثال زیر تنها یکی از گزینه‌هاست و ممکن است نیازمندی‌های کلاستر شما پیکربندی متفاوتی را بطلبد.</p>
+</div>
+<ol>
+<li dir="rtl">
+<p dir="rtl">یک متعادل‌کنندهٔ بار برای kube-apiserver با نامی ایجاد کنید که در DNS قابل تفکیک (resolve) باشد.</p>
+<ul>
+<li dir="rtl">
+<p dir="rtl">در محیط ابری باید نودهای control plane را پشت یک متعادل‌کنندهٔ بار با هدایت TCP قرار دهید. این متعادل‌کننده ترافیک را میان همهٔ نودهای control plane سالم در فهرست مقصدهای خود توزیع می‌کند. بررسی سلامت برای apiserver، یک بررسی TCP روی پورتی است که kube-apiserver به آن گوش می‌دهد (مقدار پیش‌فرض <code dir="ltr">:6443</code>).</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">استفادهٔ مستقیم از نشانی IP در محیط ابری توصیه نمی‌شود.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">متعادل‌کنندهٔ بار باید بتواند روی پورت apiserver با همهٔ نودهای control plane ارتباط برقرار کند. همچنین باید ترافیک ورودی را روی پورت شنود خود بپذیرد.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">مطمئن شوید که نشانی متعادل‌کنندهٔ بار همواره با نشانی <code dir="ltr">ControlPlaneEndpoint</code> در kubeadm مطابقت دارد.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">برای جزئیات بیشتر، راهنمای <a href="https://git.k8s.io/kubeadm/docs/ha-considerations.md#options-for-software-load-balancing" target="_blank" rel="noopener">Options for Software Load Balancing</a> را بخوانید.</p>
+</li>
+</ul>
+</li>
+<li dir="rtl">
+<p dir="rtl">نخستین نود control plane را به متعادل‌کنندهٔ بار اضافه کنید و اتصال را آزمایش کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">nc -zv -w 2 &lt;LOAD_BALANCER_IP&gt; &lt;PORT&gt;
+</code></pre>
+<p dir="rtl">دریافت خطای «connection refused» قابل انتظار است، زیرا سرور API هنوز در حال اجرا نیست. اما رخ دادن timeout به این معناست که متعادل‌کنندهٔ بار نمی‌تواند با نود control plane ارتباط برقرار کند. در صورت رخ دادن timeout، متعادل‌کنندهٔ بار را دوباره طوری پیکربندی کنید که بتواند با نود control plane ارتباط برقرار کند.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">باقی نودهای control plane را به گروه مقصد متعادل‌کنندهٔ بار اضافه کنید.</p>
+</li>
+</ol>
+<h2 id="نودهای-control-plane-و-etcd-انباشته" dir="rtl">نودهای control plane و etcd انباشته</h2>
+<h3 id="گام-ها-برای-نخستین-نود-control-plane" dir="rtl">گام‌ها برای نخستین نود control plane</h3>
+<ol>
+<li dir="rtl">
+<p dir="rtl">control plane را مقداردهی اولیه کنید:</p>
+<pre dir="ltr"><code class="language-sh" dir="ltr">sudo kubeadm init --control-plane-endpoint "LOAD_BALANCER_DNS:LOAD_BALANCER_PORT" --upload-certs
+</code></pre>
+<ul>
+<li dir="rtl">
+<p dir="rtl">با فلگ <code dir="ltr">--kubernetes-version</code> می‌توانید نسخهٔ کوبرنتیز مورد استفاده را تعیین کنید. توصیه می‌شود نسخه‌های kubeadm، kubelet، kubectl و کوبرنتیز با هم مطابقت داشته باشند.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">فلگ <code dir="ltr">--control-plane-endpoint</code> باید روی نشانی یا نام DNS و پورت متعادل‌کنندهٔ بار تنظیم شود.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">از فلگ <code dir="ltr">--upload-certs</code> برای بارگذاری گواهی‌هایی در کلاستر استفاده می‌شود که باید میان همهٔ نمونه‌های control plane به اشتراک گذاشته شوند. اگر ترجیح می‌دهید گواهی‌ها را به‌صورت دستی یا با ابزارهای خودکارسازی میان نودهای control plane کپی کنید، این فلگ را حذف کنید و به بخش <a href="#manual-certs">توزیع دستی گواهی‌ها</a> در ادامه مراجعه کنید.</p>
+</li>
+</ul>
+</li>
+</ol>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">فلگ‌های <code dir="ltr">--config</code> و <code dir="ltr">--certificate-key</code> در <code dir="ltr">kubeadm init</code> را نمی‌توان با هم به کار برد؛ بنابراین اگر می‌خواهید از <a href="../../../../reference/config-api/kubeadm-config.v1beta4.html">پیکربندی kubeadm</a> استفاده کنید، باید فیلد <code dir="ltr">certificateKey</code> را در جاهای مناسب پیکربندی (زیر <code dir="ltr">InitConfiguration</code> و <code dir="ltr">JoinConfiguration: controlPlane</code>) اضافه کنید.</p>
+</div>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">برخی افزونه‌های شبکهٔ CNI به پیکربندی اضافی، مانند تعیین CIDR آی‌پی پادها، نیاز دارند و برخی دیگر نیازی به آن ندارند. <a href="create-cluster-kubeadm.html#pod-network">مستندات شبکهٔ CNI</a> را ببینید. برای افزودن CIDR پادها، فلگ <code dir="ltr">--pod-network-cidr</code> را ارسال کنید، یا اگر از فایل پیکربندی kubeadm استفاده می‌کنید، فیلد <code dir="ltr">podSubnet</code> را زیر آبجکت <code dir="ltr">networking</code> در <code dir="ltr">ClusterConfiguration</code> تنظیم کنید.</p>
+</div>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code class="language-sh" dir="ltr">...
+You can now join any number of control-plane node by running the following command on each as a root:
+    kubeadm join 192.168.0.200:6443 --token 9vr73a.a8uxyaju799qwdjv --discovery-token-ca-cert-hash sha256:7c2e69131a36ae2a042a339b33381c6d0d43887e2de83720eff5359e26aec866 --control-plane --certificate-key f8902e114ef118304e561c3ecd4d0b543adc226b7a07f675f56564185ffe0c07
+
+Please note that the certificate-key gives access to cluster sensitive data, keep it secret!
+As a safeguard, uploaded-certs will be deleted in two hours; If necessary, you can use kubeadm init phase upload-certs to reload certs afterward.
+
+Then you can join any number of worker nodes by running the following on each as root:
+    kubeadm join 192.168.0.200:6443 --token 9vr73a.a8uxyaju799qwdjv --discovery-token-ca-cert-hash sha256:7c2e69131a36ae2a042a339b33381c6d0d43887e2de83720eff5359e26aec866
+</code></pre>
+<ul>
+<li dir="rtl">
+<p dir="rtl">این خروجی را در یک فایل متنی کپی کنید. بعداً برای پیوستن نودهای control plane و نودهای کارگر به کلاستر به آن نیاز خواهید داشت.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">هنگامی که <code dir="ltr">--upload-certs</code> همراه با <code dir="ltr">kubeadm init</code> به کار می‌رود، گواهی‌های control plane اصلی رمزگذاری شده و در Secret به نام <code dir="ltr">kubeadm-certs</code> بارگذاری می‌شوند.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">برای بارگذاری دوبارهٔ گواهی‌ها و تولید یک کلید رمزگشایی جدید، دستور زیر را روی یکی از نودهای control plane که از قبل به کلاستر پیوسته است اجرا کنید:</p>
+<pre dir="ltr"><code class="language-sh" dir="ltr">sudo kubeadm init phase upload-certs --upload-certs
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">همچنین می‌توانید هنگام <code dir="ltr">init</code> یک <code dir="ltr">--certificate-key</code> سفارشی تعیین کنید که بعداً <code dir="ltr">join</code> بتواند از آن استفاده کند. برای تولید چنین کلیدی می‌توانید از دستور زیر استفاده کنید:</p>
+<pre dir="ltr"><code class="language-sh" dir="ltr">kubeadm certs certificate-key
+</code></pre>
+</li>
+</ul>
+<p dir="rtl">کلید گواهی رشته‌ای با کدگذاری hex است که یک کلید AES با اندازهٔ ۳۲ بایت را نشان می‌دهد.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">اعتبار Secret به نام <code dir="ltr">kubeadm-certs</code> و کلید رمزگشایی پس از دو ساعت منقضی می‌شود.</p>
+</div>
+<div class="callout caution"><div class="callout-title">احتیاط:</div>
+<p dir="rtl">همان‌طور که در خروجی دستور آمده است، کلید گواهی به داده‌های حساس کلاستر دسترسی می‌دهد؛ آن را محرمانه نگه دارید!</p>
+</div>
+<ol>
+<li dir="rtl">افزونهٔ CNI دلخواه خود را اعمال کنید:
+برای نصب ارائه‌دهندهٔ CNI، <a href="create-cluster-kubeadm.html#pod-network">این دستورالعمل‌ها را دنبال کنید</a>. مطمئن شوید که پیکربندی با CIDR پادهای تعیین‌شده در فایل پیکربندی kubeadm (در صورت وجود) مطابقت دارد.</li>
+</ol>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">باید افزونهٔ شبکه‌ای متناسب با کاربرد خود انتخاب کنید و پیش از رفتن به گام بعد آن را مستقر کنید. در غیر این صورت، نمی‌توانید کلاستر خود را به‌درستی راه‌اندازی کنید.</p>
+</div>
+<ol>
+<li dir="rtl">
+<p dir="rtl">دستور زیر را وارد کنید و راه‌اندازی پادهای اجزای control plane را مشاهده کنید:</p>
+<pre dir="ltr"><code class="language-sh" dir="ltr">kubectl get pod -n kube-system -w
+</code></pre>
+</li>
+</ol>
+<h3 id="گام-ها-برای-باقی-نودهای-control-plane" dir="rtl">گام‌ها برای باقی نودهای control plane</h3>
+<p dir="rtl">برای هر نود control plane اضافی باید کارهای زیر را انجام دهید:</p>
+<ol>
+<li dir="rtl">
+<p dir="rtl">دستور join را که پیش‌تر خروجی <code dir="ltr">kubeadm init</code> روی نخستین نود در اختیارتان گذاشته بود اجرا کنید. این دستور باید چیزی شبیه به این باشد:</p>
+<pre dir="ltr"><code class="language-sh" dir="ltr">sudo kubeadm join 192.168.0.200:6443 --token 9vr73a.a8uxyaju799qwdjv --discovery-token-ca-cert-hash sha256:7c2e69131a36ae2a042a339b33381c6d0d43887e2de83720eff5359e26aec866 --control-plane --certificate-key f8902e114ef118304e561c3ecd4d0b543adc226b7a07f675f56564185ffe0c07
+</code></pre>
+<ul>
+<li dir="rtl">فلگ <code dir="ltr">--control-plane</code> به <code dir="ltr">kubeadm join</code> می‌گوید که یک control plane جدید ایجاد کند.</li>
+<li dir="rtl">فلگ <code dir="ltr">--certificate-key ...</code> باعث می‌شود گواهی‌های control plane از Secret به نام <code dir="ltr">kubeadm-certs</code> در کلاستر دریافت شوند و با کلید داده‌شده رمزگشایی شوند.</li>
+</ul>
+</li>
+</ol>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">از آنجا که نودهای کلاستر معمولاً به‌ترتیب مقداردهی اولیه می‌شوند، احتمالاً همهٔ پادهای CoreDNS روی نخستین نود control plane اجرا می‌شوند. برای دستیابی به دسترس‌پذیری بالاتر، پس از پیوستن دست‌کم یک نود جدید، پادهای CoreDNS را با دستور <code dir="ltr">kubectl -n kube-system rollout restart deployment coredns</code> دوباره متعادل کنید.</p>
+</div>
+<h2 id="نودهای-etcd-خارجی" dir="rtl">نودهای etcd خارجی</h2>
+<p dir="rtl">راه‌اندازی کلاستر با نودهای etcd خارجی شبیه به روند مورد استفاده برای etcd انباشته است، با این تفاوت که باید ابتدا etcd را راه‌اندازی کنید و اطلاعات etcd را در فایل پیکربندی kubeadm وارد کنید.</p>
+<h3 id="راه-اندازی-کلاستر-etcd" dir="rtl">راه‌اندازی کلاستر etcd</h3>
+<ol>
+<li dir="rtl">
+<p dir="rtl">برای راه‌اندازی کلاستر etcd، این <a href="setup-ha-etcd-with-kubeadm.html">دستورالعمل‌ها</a> را دنبال کنید.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">دسترسی SSH را همان‌گونه که <a href="#manual-certs">اینجا</a> توضیح داده شده است راه‌اندازی کنید.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">فایل‌های زیر را از هر یک از نودهای etcd در کلاستر به نخستین نود control plane کپی کنید:</p>
+<pre dir="ltr"><code class="language-sh" dir="ltr">export CONTROL_PLANE="ubuntu@10.0.0.7"
+scp /etc/kubernetes/pki/etcd/ca.crt "${CONTROL_PLANE}":
+scp /etc/kubernetes/pki/apiserver-etcd-client.crt "${CONTROL_PLANE}":
+scp /etc/kubernetes/pki/apiserver-etcd-client.key "${CONTROL_PLANE}":
+</code></pre>
+<ul>
+<li dir="rtl">مقدار <code dir="ltr">CONTROL_PLANE</code> را با <code dir="ltr">user@host</code> نخستین نود control plane جایگزین کنید.</li>
+</ul>
+</li>
+</ol>
+<h3 id="راه-اندازی-نخستین-نود-control-plane" dir="rtl">راه‌اندازی نخستین نود control plane</h3>
+<ol>
+<li dir="rtl">
+<p dir="rtl">فایلی به نام <code dir="ltr">kubeadm-config.yaml</code> با محتوای زیر ایجاد کنید:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">---
+apiVersion: kubeadm.k8s.io/v1beta4
+kind: ClusterConfiguration
+kubernetesVersion: stable
+controlPlaneEndpoint: "LOAD_BALANCER_DNS:LOAD_BALANCER_PORT" # change this (see below)
+etcd:
+  external:
+    endpoints:
+      - https://ETCD_0_IP:2379 # change ETCD_0_IP appropriately
+      - https://ETCD_1_IP:2379 # change ETCD_1_IP appropriately
+      - https://ETCD_2_IP:2379 # change ETCD_2_IP appropriately
+    caFile: /etc/kubernetes/pki/etcd/ca.crt
+    certFile: /etc/kubernetes/pki/apiserver-etcd-client.crt
+    keyFile: /etc/kubernetes/pki/apiserver-etcd-client.key
+</code></pre>
+</li>
+</ol>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">تفاوت etcd انباشته و etcd خارجی در اینجا این است که راه‌اندازی etcd خارجی به یک فایل پیکربندی نیاز دارد که نقاط پایانی (endpoint) etcd را زیر آبجکت <code dir="ltr">external</code> برای <code dir="ltr">etcd</code> در خود داشته باشد. در توپولوژی etcd انباشته، این کار به‌صورت خودکار مدیریت می‌شود.</p>
+</div>
+<ul>
+<li dir="rtl">
+<p dir="rtl">متغیرهای زیر را در الگوی پیکربندی با مقادیر مناسب برای کلاستر خود جایگزین کنید:</p>
+<ul>
+<li dir="ltr" class="ltr"><code dir="ltr">LOAD_BALANCER_DNS</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">LOAD_BALANCER_PORT</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">ETCD_0_IP</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">ETCD_1_IP</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">ETCD_2_IP</code></li>
+</ul>
+</li>
+</ul>
+<p dir="rtl">گام‌های زیر مشابه راه‌اندازی etcd انباشته هستند:</p>
+<ol>
+<li dir="rtl">
+<p dir="rtl">دستور <code dir="ltr">sudo kubeadm init --config kubeadm-config.yaml --upload-certs</code> را روی این نود اجرا کنید.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">دستورهای join بازگردانده‌شده در خروجی را برای استفادهٔ بعدی در یک فایل متنی بنویسید.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">افزونهٔ CNI دلخواه خود را اعمال کنید.</p>
+</li>
+</ol>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">باید افزونهٔ شبکه‌ای متناسب با کاربرد خود انتخاب کنید و پیش از رفتن به گام بعد آن را مستقر کنید. در غیر این صورت، نمی‌توانید کلاستر خود را به‌درستی راه‌اندازی کنید.</p>
+</div>
+<h3 id="گام-ها-برای-باقی-نودهای-control-plane-1" dir="rtl">گام‌ها برای باقی نودهای control plane</h3>
+<p dir="rtl">گام‌ها همانند راه‌اندازی etcd انباشته است:</p>
+<ul>
+<li dir="rtl">مطمئن شوید که نخستین نود control plane به‌طور کامل مقداردهی اولیه شده است.</li>
+<li dir="rtl">هر نود control plane را با دستور joinی که در فایل متنی ذخیره کرده‌اید به کلاستر بپیوندانید. توصیه می‌شود نودهای control plane را یکی‌یکی به کلاستر بپیوندانید.</li>
+<li dir="rtl">فراموش نکنید که کلید رمزگشایی مربوط به <code dir="ltr">--certificate-key</code> به‌طور پیش‌فرض پس از دو ساعت منقضی می‌شود.</li>
+</ul>
+<h2 id="کارهای-رایج-پس-از-راه-اندازی-اولیهٔ-control-plane" dir="rtl">کارهای رایج پس از راه‌اندازی اولیهٔ control plane</h2>
+<h3 id="نصب-نودهای-کارگر" dir="rtl">نصب نودهای کارگر</h3>
+<p dir="rtl">نودهای کارگر را می‌توان با دستوری که پیش‌تر از خروجی <code dir="ltr">kubeadm init</code> ذخیره کرده‌اید به کلاستر پیوست داد:</p>
+<pre dir="ltr"><code class="language-sh" dir="ltr">sudo kubeadm join 192.168.0.200:6443 --token 9vr73a.a8uxyaju799qwdjv --discovery-token-ca-cert-hash sha256:7c2e69131a36ae2a042a339b33381c6d0d43887e2de83720eff5359e26aec866
+</code></pre>
+<h2 id="توزیع-دستی-گواهی-ها-manual-certs" dir="rtl">توزیع دستی گواهی‌ها {#manual-certs}</h2>
+<p dir="rtl">اگر تصمیم بگیرید <code dir="ltr">kubeadm init</code> را بدون فلگ <code dir="ltr">--upload-certs</code> اجرا کنید، باید گواهی‌ها را به‌صورت دستی از نود اصلی control plane به نودهای control plane که به کلاستر می‌پیوندند کپی کنید.</p>
+<p dir="rtl">برای این کار روش‌های زیادی وجود دارد. مثال زیر از <code dir="ltr">ssh</code> و <code dir="ltr">scp</code> استفاده می‌کند:</p>
+<p dir="rtl">اگر می‌خواهید همه نودها را از یک ماشین واحد کنترل کنید، به SSH نیاز دارید.</p>
+<ol>
+<li dir="rtl">
+<p dir="rtl">‏ssh-agent را روی دستگاه اصلی خود که به همه نودهای دیگر سیستم دسترسی دارد فعال کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">eval $(ssh-agent)
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">هویت SSH خود را به نشست اضافه کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">ssh-add ~/.ssh/path_to_private_key
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">میان نودها با SSH ارتباط برقرار کنید تا مطمئن شوید اتصال به‌درستی کار می‌کند.</p>
+<ul>
+<li dir="rtl">
+<p dir="rtl">هنگام اتصال SSH به هر نود، فلگ <code dir="ltr">-A</code> را اضافه کنید. این فلگ به نودی که از طریق SSH وارد آن شده‌اید امکان می‌دهد به عامل SSH روی رایانه شما دسترسی داشته باشد. اگر به امنیت نشست کاربری خود روی آن نود کاملاً اطمینان ندارید، روش‌های جایگزین را بررسی کنید.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">ssh -A 10.0.0.7
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">هنگام استفاده از sudo روی هر نود، حتماً متغیرهای محیطی را حفظ کنید تا ارسال (forwarding) در SSH کار کند:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">sudo -E -s
+</code></pre>
+</li>
+</ul>
+</li>
+<li dir="rtl">
+<p dir="rtl">پس از پیکربندی SSH روی همه نودها، باید اسکریپت زیر را پس از اجرای <code dir="ltr">kubeadm init</code> روی نخستین نود control plane اجرا کنید. این اسکریپت گواهی‌ها را از نخستین نود control plane به سایر نودهای control plane کپی می‌کند:</p>
+<p dir="rtl">در مثال زیر، به‌جای <code dir="ltr">CONTROL_PLANE_IPS</code> نشانی‌های IP سایر نودهای control plane را قرار دهید.</p>
+<pre dir="ltr"><code class="language-sh" dir="ltr">USER=ubuntu # customizable
+CONTROL_PLANE_IPS="10.0.0.7 10.0.0.8"
+for host in ${CONTROL_PLANE_IPS}; do
+    scp /etc/kubernetes/pki/ca.crt "${USER}"@$host:
+    scp /etc/kubernetes/pki/ca.key "${USER}"@$host:
+    scp /etc/kubernetes/pki/sa.key "${USER}"@$host:
+    scp /etc/kubernetes/pki/sa.pub "${USER}"@$host:
+    scp /etc/kubernetes/pki/front-proxy-ca.crt "${USER}"@$host:
+    scp /etc/kubernetes/pki/front-proxy-ca.key "${USER}"@$host:
+    scp /etc/kubernetes/pki/etcd/ca.crt "${USER}"@$host:etcd-ca.crt
+    # Skip the next line if you are using external etcd
+    scp /etc/kubernetes/pki/etcd/ca.key "${USER}"@$host:etcd-ca.key
+done
+</code></pre>
+</li>
+</ol>
+<div class="callout caution"><div class="callout-title">احتیاط:</div>
+<p dir="rtl">فقط گواهی‌های فهرست بالا را کپی کنید. ابزار kubeadm تولید بقیه گواهی‌ها را با SANهای لازم برای نمونه‌های control plane که به کلاستر می‌پیوندند بر عهده می‌گیرد. اگر به اشتباه همه گواهی‌ها را کپی کنید، ممکن است ایجاد نودهای اضافی به دلیل نبودِ SANهای لازم با شکست روبه‌رو شود.</p>
+</div>
+<ol>
+<li dir="rtl">
+<p dir="rtl">سپس روی هر نود control plane که به کلاستر می‌پیوندد، باید پیش از اجرای <code dir="ltr">kubeadm join</code> اسکریپت زیر را اجرا کنید. این اسکریپت گواهی‌هایی را که پیش‌تر کپی شده‌اند از پوشه خانگی به <code dir="ltr">/etc/kubernetes/pki</code> منتقل می‌کند:</p>
+<pre dir="ltr"><code class="language-sh" dir="ltr">USER=ubuntu # customizable
+mkdir -p /etc/kubernetes/pki/etcd
+mv /home/${USER}/ca.crt /etc/kubernetes/pki/
+mv /home/${USER}/ca.key /etc/kubernetes/pki/
+mv /home/${USER}/sa.pub /etc/kubernetes/pki/
+mv /home/${USER}/sa.key /etc/kubernetes/pki/
+mv /home/${USER}/front-proxy-ca.crt /etc/kubernetes/pki/
+mv /home/${USER}/front-proxy-ca.key /etc/kubernetes/pki/
+mv /home/${USER}/etcd-ca.crt /etc/kubernetes/pki/etcd/ca.crt
+# Skip the next line if you are using external etcd
+mv /home/${USER}/etcd-ca.key /etc/kubernetes/pki/etcd/ca.key
+</code></pre>
+</li>
+</ol>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#پیش-از-شروع">پیش از شروع</a><a class="l3" href="#ایمیج-های-کانتینر">ایمیج‌های کانتینر</a><a class="l3" href="#رابط-خط-فرمان-kubectl">رابط خط فرمان {#kubectl}</a><a class="l2" href="#گام-های-نخست-برای-هر-دو-روش">گام‌های نخست برای هر دو روش</a><a class="l3" href="#ایجاد-متعادل-کنندهٔ-بار-برای-kube-apiserver">ایجاد متعادل‌کنندهٔ بار برای kube-apiserver</a><a class="l2" href="#نودهای-control-plane-و-etcd-انباشته">نودهای control plane و etcd انباشته</a><a class="l3" href="#گام-ها-برای-نخستین-نود-control-plane">گام‌ها برای نخستین نود control plane</a><a class="l3" href="#گام-ها-برای-باقی-نودهای-control-plane">گام‌ها برای باقی نودهای control plane</a><a class="l2" href="#نودهای-etcd-خارجی">نودهای etcd خارجی</a><a class="l3" href="#راه-اندازی-کلاستر-etcd">راه‌اندازی کلاستر etcd</a><a class="l3" href="#راه-اندازی-نخستین-نود-control-plane">راه‌اندازی نخستین نود control plane</a><a class="l3" href="#گام-ها-برای-باقی-نودهای-control-plane-1">گام‌ها برای باقی نودهای control plane</a><a class="l2" href="#کارهای-رایج-پس-از-راه-اندازی-اولیهٔ-control-plane">کارهای رایج پس از راه‌اندازی اولیهٔ control plane</a><a class="l3" href="#نصب-نودهای-کارگر">نصب نودهای کارگر</a><a class="l2" href="#توزیع-دستی-گواهی-ها-manual-certs">توزیع دستی گواهی‌ها {#manual-certs}</a></nav>
+</div>
+</body>
+</html>

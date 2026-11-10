@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>پیکربندی هر kubelet در کلاستر با استفاده از kubeadm | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
+<header class="top"><a href="../../../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">setup / production-environment / tools / kubeadm</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">پیکربندی هر kubelet در کلاستر با استفاده از kubeadm</h1><!-- overview -->
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes v1.11 [stable]</span> (پایدار)</div>
+<p dir="rtl">چرخهٔ عمر ابزار خط فرمان kubeadm از چرخهٔ عمر
+<a href="../../../../reference/command-line-tools-reference/kubelet.html">kubelet</a> جداست. kubelet یک دیمن (daemon) است که
+روی هر نود در کلاستر کوبرنتیز اجرا می‌شود. کاربر ابزار خط فرمان kubeadm را هنگام راه‌اندازی اولیه یا ارتقای کوبرنتیز
+اجرا می‌کند، در حالی که kubelet همواره در پس‌زمینه در حال اجراست.</p>
+<p dir="rtl">از آنجا که kubelet یک دیمن است، باید یک سیستم init یا مدیر سرویس آن را نگهداری کند.
+هنگامی که kubelet با بسته‌های DEB یا RPM نصب می‌شود، systemd برای مدیریت kubelet پیکربندی می‌شود.
+می‌توانید به‌جای آن از مدیر سرویس دیگری استفاده کنید، اما باید آن را به‌صورت دستی پیکربندی کنید.</p>
+<p dir="rtl">برخی از جزئیات پیکربندی kubelet باید در همهٔ kubeletهای کلاستر یکسان باشد، در حالی که
+برخی جنبه‌های دیگر پیکربندی باید برای هر kubelet جداگانه تنظیم شود تا با ویژگی‌های متفاوت
+هر ماشین (مانند سیستم‌عامل، ذخیره‌سازی و شبکه) سازگار باشد. می‌توانید پیکربندی kubeletهای خود را
+به‌صورت دستی مدیریت کنید، اما اکنون kubeadm نوع API با نام <code dir="ltr">KubeletConfiguration</code> را برای
+<a href="#configure-kubelets-using-kubeadm">مدیریت متمرکز پیکربندی‌های kubelet</a> فراهم می‌کند.</p>
+<!-- body -->
+<h2 id="الگوهای-پیکربندی-kubelet" dir="rtl">الگوهای پیکربندی kubelet</h2>
+<p dir="rtl">بخش‌های زیر الگوهایی از پیکربندی kubelet را شرح می‌دهند که با استفاده از kubeadm ساده‌تر می‌شوند
+و دیگر لازم نیست پیکربندی kubelet را برای هر Node به‌صورت دستی مدیریت کنید.</p>
+<h3 id="انتشار-پیکربندی-سطح-کلاستر-به-هر-kubelet" dir="rtl">انتشار پیکربندی سطح کلاستر به هر kubelet</h3>
+<p dir="rtl">می‌توانید مقادیر پیش‌فرضی را در اختیار kubelet بگذارید تا دستورهای <code dir="ltr">kubeadm init</code> و <code dir="ltr">kubeadm join</code>
+از آن‌ها استفاده کنند. از نمونه‌های جالب می‌توان به استفاده از یک محیط اجرای کانتینر دیگر یا تنظیم زیرشبکهٔ پیش‌فرض
+مورداستفادهٔ سرویس‌ها اشاره کرد.</p>
+<p dir="rtl">اگر می‌خواهید سرویس‌هایتان از زیرشبکهٔ <code dir="ltr">10.96.0.0/12</code> به‌عنوان زیرشبکهٔ پیش‌فرض استفاده کنند، می‌توانید
+پارامتر <code dir="ltr">--service-cidr</code> را به kubeadm بدهید:</p>
+<pre dir="ltr"><code class="language-bash" dir="ltr">kubeadm init --service-cidr 10.96.0.0/12
+</code></pre>
+<p dir="rtl">از این پس IPهای مجازی سرویس‌ها از این زیرشبکه تخصیص داده می‌شوند. همچنین باید نشانی DNS مورداستفادهٔ
+kubelet را با فلگ <code dir="ltr">--cluster-dns</code> تنظیم کنید. این تنظیم باید برای همهٔ kubeletها روی همهٔ
+مدیرها و Nodeهای کلاستر یکسان باشد. kubelet یک آبجکت API نسخه‌دار و ساخت‌یافته فراهم می‌کند
+که می‌تواند بیشتر پارامترهای kubelet را پیکربندی کند و این پیکربندی را به همهٔ kubeletهای در حال اجرا
+در کلاستر برساند. نام این آبجکت
+<a href="../../../../reference/config-api/kubelet-config.v1beta1.html"><code dir="ltr">KubeletConfiguration</code></a> است.
+با <code dir="ltr">KubeletConfiguration</code> کاربر می‌تواند فلگ‌هایی مانند نشانی‌های IP مربوط به DNS کلاستر را به‌صورت
+فهرستی از مقادیر برای یک کلید با نگارش camelCase مشخص کند؛ مثال زیر این موضوع را نشان می‌دهد:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: kubelet.config.k8s.io/v1beta1
+kind: KubeletConfiguration
+clusterDNS:
+- 10.96.0.10
+</code></pre>
+<p dir="rtl">برای جزئیات بیشتر دربارهٔ <code dir="ltr">KubeletConfiguration</code> به <a href="#configure-kubelets-using-kubeadm">این بخش</a> نگاهی بیندازید.</p>
+<h3 id="ارائهٔ-جزئیات-پیکربندی-ویژهٔ-هر-نمونه" dir="rtl">ارائهٔ جزئیات پیکربندی ویژهٔ هر نمونه</h3>
+<p dir="rtl">برخی میزبان‌ها به دلیل تفاوت در سخت‌افزار، سیستم‌عامل، شبکه یا سایر پارامترهای ویژهٔ میزبان،
+به پیکربندی‌های خاصی برای kubelet نیاز دارند. فهرست زیر چند نمونه را ارائه می‌دهد.</p>
+<ul>
+<li dir="rtl">
+<p dir="rtl">مسیر فایل تفکیک نام DNS که با فلگ پیکربندی <code dir="ltr">--resolv-conf</code> در kubelet مشخص می‌شود،
+ممکن است در سیستم‌عامل‌های مختلف یا بسته به اینکه از <code dir="ltr">systemd-resolved</code> استفاده می‌کنید یا نه،
+متفاوت باشد. اگر این مسیر نادرست باشد، تفکیک نام DNS روی Nodeای که kubelet آن
+به‌اشتباه پیکربندی شده است با شکست مواجه می‌شود.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">مقدار <code dir="ltr">.metadata.name</code> در آبجکت API مربوط به Node به‌طور پیش‌فرض برابر با نام میزبان ماشین قرار می‌گیرد،
+مگر اینکه از یک ارائه‌دهندهٔ ابری استفاده کنید. اگر لازم است نام Node با نام میزبان ماشین متفاوت باشد،
+می‌توانید با فلگ <code dir="ltr">--hostname-override</code> رفتار پیش‌فرض را تغییر دهید.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">در حال حاضر kubelet نمی‌تواند درایور cgroup مورداستفادهٔ محیط اجرای کانتینر را به‌طور خودکار تشخیص دهد،
+اما برای تضمین سلامت kubelet، مقدار <code dir="ltr">--cgroup-driver</code> باید با درایور cgroup مورداستفادهٔ
+محیط اجرای کانتینر مطابقت داشته باشد.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">برای مشخص کردن محیط اجرای کانتینر باید نقطهٔ پایانی (endpoint) آن را با فلگ
+<code dir="ltr">--container-runtime-endpoint=&lt;path&gt;</code> تنظیم کنید.</p>
+</li>
+</ul>
+<p dir="rtl">روش توصیه‌شده برای اعمال چنین پیکربندی‌های ویژهٔ هر نمونه، استفاده از
+<a href="control-plane-flags.html#patches">وصله‌های <code dir="ltr">KubeletConfiguration</code></a> است.</p>
+<h2 id="پیکربندی-kubeletها-با-استفاده-از-kubeadm" dir="rtl">پیکربندی kubeletها با استفاده از kubeadm</h2>
+<p dir="rtl">اگر یک آبجکت API سفارشی از نوع
+<a href="../../../../reference/config-api/kubelet-config.v1beta1.html"><code dir="ltr">KubeletConfiguration</code></a>
+از طریق یک فایل پیکربندی، مانند <code dir="ltr">kubeadm ... --config some-config-file.yaml</code>، ارسال شود،
+می‌توان kubeletای را که kubeadm راه‌اندازی می‌کند پیکربندی کرد.</p>
+<p dir="rtl">با اجرای <code dir="ltr">kubeadm config print init-defaults --component-configs KubeletConfiguration</code> می‌توانید
+همهٔ مقادیر پیش‌فرض این ساختار را ببینید.</p>
+<p dir="rtl">همچنین می‌توان وصله‌های ویژهٔ هر نمونه را روی <code dir="ltr">KubeletConfiguration</code> پایه اعمال کرد.
+برای جزئیات بیشتر به <a href="control-plane-flags.html#customizing-the-kubelet">سفارشی‌سازی kubelet</a>
+مراجعه کنید.</p>
+<h3 id="روند-کار-هنگام-استفاده-از-kubeadm-init" dir="rtl">روند کار هنگام استفاده از <code dir="ltr">kubeadm init</code></h3>
+<p dir="rtl">هنگامی که <code dir="ltr">kubeadm init</code> را فراخوانی می‌کنید، پیکربندی kubelet در مسیر
+<code dir="ltr">/var/lib/kubelet/config.yaml</code> روی دیسک نوشته می‌شود و همچنین در یک ConfigMap با نام
+<code dir="ltr">kubelet-config</code> در فضای نام (namespace) <code dir="ltr">kube-system</code> کلاستر بارگذاری می‌شود.
+افزون بر این، ابزار kubeadm سوکت CRI روی نود را تشخیص می‌دهد و جزئیات آن را
+(از جمله مسیر سوکت) در یک پیکربندی محلی، یعنی <code dir="ltr">/var/lib/kubelet/instance-config.yaml</code>، می‌نویسد.
+یک فایل پیکربندی kubelet نیز در <code dir="ltr">/etc/kubernetes/kubelet.conf</code> نوشته می‌شود
+که پیکربندی پایهٔ سطح کلاستر را برای همهٔ kubeletهای کلاستر در بر دارد. این فایل پیکربندی
+به گواهی‌های کلاینتی اشاره می‌کند که kubelet با آن‌ها می‌تواند با سرور API ارتباط برقرار کند. به این ترتیب
+نیاز به
+<a href="#propagating-cluster-level-configuration-to-each-kubelet">انتشار پیکربندی سطح کلاستر به هر kubelet</a>
+برطرف می‌شود.</p>
+<p dir="rtl">برای پاسخ به الگوی دوم، یعنی
+<a href="#providing-instance-specific-configuration-details">ارائهٔ جزئیات پیکربندی ویژهٔ هر نمونه</a>،
+kubeadm یک فایل محیطی در <code dir="ltr">/var/lib/kubelet/kubeadm-flags.env</code> می‌نویسد که فهرستی از
+فلگ‌هایی را که باید هنگام شروع kubelet به آن داده شوند در بر دارد. فلگ‌ها در این فایل به این شکل آمده‌اند:</p>
+<pre dir="ltr"><code class="language-bash" dir="ltr">KUBELET_KUBEADM_ARGS="--flag1=value1 --flag2=value2 ..."
+</code></pre>
+<p dir="rtl">این فایل افزون بر فلگ‌هایی که هنگام شروع kubelet استفاده می‌شوند، پارامترهای پویا
+مانند درایور cgroup را نیز در بر دارد.</p>
+<p dir="rtl">پس از نوشتن این دو فایل روی دیسک، اگر از systemd استفاده می‌کنید، kubeadm تلاش می‌کند
+دو دستور زیر را اجرا کند:</p>
+<pre dir="ltr"><code class="language-bash" dir="ltr">systemctl daemon-reload &amp;&amp; systemctl restart kubelet
+</code></pre>
+<p dir="rtl">اگر بارگذاری مجدد و راه‌اندازی دوباره موفقیت‌آمیز باشند، روند عادی <code dir="ltr">kubeadm init</code> ادامه می‌یابد.</p>
+<h3 id="روند-کار-هنگام-استفاده-از-kubeadm-join" dir="rtl">روند کار هنگام استفاده از <code dir="ltr">kubeadm join</code></h3>
+<p dir="rtl">هنگامی که <code dir="ltr">kubeadm join</code> را اجرا می‌کنید، kubeadm از اعتبارنامهٔ Bootstrap Token برای انجام
+یک راه‌اندازی TLS (TLS bootstrap) استفاده می‌کند. این فرایند اعتبارنامهٔ لازم برای دانلود
+ConfigMap با نام <code dir="ltr">kubelet-config</code> را دریافت می‌کند و آن را در <code dir="ltr">/var/lib/kubelet/config.yaml</code> می‌نویسد.
+افزون بر این، ابزار kubeadm سوکت CRI روی نود را تشخیص می‌دهد و جزئیات آن را
+(از جمله مسیر سوکت) در یک پیکربندی محلی، یعنی <code dir="ltr">/var/lib/kubelet/instance-config.yaml</code>، می‌نویسد.
+فایل محیطی پویا دقیقاً به همان روش <code dir="ltr">kubeadm init</code> تولید می‌شود.</p>
+<p dir="rtl">سپس <code dir="ltr">kubeadm</code> دو دستور زیر را برای بارگذاری پیکربندی جدید در kubelet اجرا می‌کند:</p>
+<pre dir="ltr"><code class="language-bash" dir="ltr">systemctl daemon-reload &amp;&amp; systemctl restart kubelet
+</code></pre>
+<p dir="rtl">پس از اینکه kubelet پیکربندی جدید را بارگذاری کرد، kubeadm فایل KubeConfig با نام
+<code dir="ltr">/etc/kubernetes/bootstrap-kubelet.conf</code> را می‌نویسد که یک گواهی CA و یک Bootstrap Token
+در بر دارد. kubelet از این‌ها برای انجام راه‌اندازی TLS و دریافت یک اعتبارنامهٔ یکتا استفاده می‌کند؛
+این اعتبارنامه در <code dir="ltr">/etc/kubernetes/kubelet.conf</code> ذخیره می‌شود.</p>
+<p dir="rtl">هنگامی که فایل <code dir="ltr">/etc/kubernetes/kubelet.conf</code> نوشته شد، kubelet انجام راه‌اندازی TLS را به پایان رسانده است.
+kubeadm پس از تکمیل راه‌اندازی TLS، فایل <code dir="ltr">/etc/kubernetes/bootstrap-kubelet.conf</code> را حذف می‌کند.</p>
+<h2 id="فایل-drop-in-مربوط-به-kubelet-برای-systemd" dir="rtl">فایل drop-in مربوط به kubelet برای systemd</h2>
+<p dir="rtl">بستهٔ <code dir="ltr">kubeadm</code> همراه با پیکربندی‌ای عرضه می‌شود که تعیین می‌کند systemd چگونه kubelet را اجرا کند.
+توجه داشته باشید که دستور خط فرمان kubeadm هرگز به این فایل drop-in دست نمی‌زند.</p>
+<p dir="rtl">این فایل پیکربندی که
+<a href="https://github.com/kubernetes/release/blob/cd53840/cmd/krel/templates/latest/kubeadm/10-kubeadm.conf" target="_blank" rel="noopener">بستهٔ</a> <code dir="ltr">kubeadm</code> نصب می‌کند، در
+<code dir="ltr">/usr/lib/systemd/system/kubelet.service.d/10-kubeadm.conf</code> نوشته می‌شود و systemd از آن استفاده می‌کند.
+این فایل، فایل پایهٔ
+<a href="https://github.com/kubernetes/release/blob/cd53840/cmd/krel/templates/latest/kubelet/kubelet.service" target="_blank" rel="noopener"><code dir="ltr">kubelet.service</code></a>
+را تکمیل می‌کند.</p>
+<p dir="rtl">اگر می‌خواهید این تنظیمات را بیشتر تغییر دهید، می‌توانید دایرکتوری <code dir="ltr">/etc/systemd/system/kubelet.service.d/</code>
+(و نه <code dir="ltr">/usr/lib/systemd/system/kubelet.service.d/</code>) را بسازید و سفارشی‌سازی‌های خود را در فایلی در آنجا قرار دهید.
+برای مثال، می‌توانید یک فایل محلی جدید با نام <code dir="ltr">/etc/systemd/system/kubelet.service.d/local-overrides.conf</code>
+اضافه کنید تا تنظیمات unit را که <code dir="ltr">kubeadm</code> پیکربندی کرده است بازنویسی کنید.</p>
+<p dir="rtl">محتوایی که احتمالاً در <code dir="ltr">/usr/lib/systemd/system/kubelet.service.d/10-kubeadm.conf</code> خواهید یافت، به این شکل است:</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">محتوای زیر تنها یک نمونه است. اگر نمی‌خواهید از مدیر بسته استفاده کنید،
+راهنمای ارائه‌شده در بخش (<a href="install-kubeadm.html#k8s-install-2">بدون مدیر بسته</a>)
+را دنبال کنید.</p>
+</div>
+<pre dir="ltr"><code class="language-none" dir="ltr">[Service]
+Environment="KUBELET_KUBECONFIG_ARGS=--bootstrap-kubeconfig=/etc/kubernetes/bootstrap-kubelet.conf --kubeconfig=/etc/kubernetes/kubelet.conf"
+Environment="KUBELET_CONFIG_ARGS=--config=/var/lib/kubelet/config.yaml"
+# This is a file that "kubeadm init" and "kubeadm join" generate at runtime, populating
+# the KUBELET_KUBEADM_ARGS variable dynamically
+EnvironmentFile=-/var/lib/kubelet/kubeadm-flags.env
+# This is a file that the user can use for overrides of the kubelet args as a last resort. Preferably,
+# the user should use the .NodeRegistration.KubeletExtraArgs object in the configuration files instead.
+# KUBELET_EXTRA_ARGS should be sourced from this file.
+EnvironmentFile=-/etc/default/kubelet
+ExecStart=
+ExecStart=/usr/bin/kubelet $KUBELET_KUBECONFIG_ARGS $KUBELET_CONFIG_ARGS $KUBELET_KUBEADM_ARGS $KUBELET_EXTRA_ARGS
+</code></pre>
+<p dir="rtl">این فایل مکان‌های پیش‌فرض همهٔ فایل‌هایی را که kubeadm برای kubelet مدیریت می‌کند مشخص می‌کند.</p>
+<ul>
+<li dir="rtl">فایل KubeConfig مورداستفاده برای راه‌اندازی TLS، <code dir="ltr">/etc/kubernetes/bootstrap-kubelet.conf</code> است،
+اما تنها در صورتی استفاده می‌شود که <code dir="ltr">/etc/kubernetes/kubelet.conf</code> وجود نداشته باشد.</li>
+<li dir="rtl">فایل KubeConfig حاوی هویت یکتای kubelet، <code dir="ltr">/etc/kubernetes/kubelet.conf</code> است.</li>
+<li dir="rtl">فایل حاوی ComponentConfig مربوط به kubelet، <code dir="ltr">/var/lib/kubelet/config.yaml</code> است.</li>
+<li dir="rtl">فایل محیطی پویا که <code dir="ltr">KUBELET_KUBEADM_ARGS</code> را در بر دارد، از <code dir="ltr">/var/lib/kubelet/kubeadm-flags.env</code> بارگذاری می‌شود.</li>
+<li dir="rtl">فایلی که می‌تواند فلگ‌های بازنویسی‌شده توسط کاربر را از طریق <code dir="ltr">KUBELET_EXTRA_ARGS</code> در بر داشته باشد، از
+<code dir="ltr">/etc/default/kubelet</code> (برای DEBها) یا <code dir="ltr">/etc/sysconfig/kubelet</code> (برای RPMها) بارگذاری می‌شود. متغیر <code dir="ltr">KUBELET_EXTRA_ARGS</code>
+در انتهای زنجیرهٔ فلگ‌ها قرار دارد و در صورت تعارض تنظیمات، بالاترین اولویت را دارد.</li>
+</ul>
+<h2 id="فایل-های-اجرایی-کوبرنتیز-و-محتوای-بسته-ها" dir="rtl">فایل‌های اجرایی کوبرنتیز و محتوای بسته‌ها</h2>
+<p dir="rtl">بسته‌های DEB و RPM که همراه با نسخه‌های کوبرنتیز عرضه می‌شوند عبارت‌اند از:</p>
+<table>
+<thead>
+<tr>
+<th dir="rtl">نام بسته</th>
+<th dir="rtl">توضیحات</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">kubeadm</code></td>
+<td dir="rtl">ابزار خط فرمان <code dir="ltr">/usr/bin/kubeadm</code> و <a href="#the-kubelet-drop-in-file-for-systemd">فایل drop-in مربوط به kubelet</a> را برای kubelet نصب می‌کند.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">kubelet</code></td>
+<td dir="rtl">فایل اجرایی <code dir="ltr">/usr/bin/kubelet</code> را نصب می‌کند.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">kubectl</code></td>
+<td dir="rtl">فایل اجرایی <code dir="ltr">/usr/bin/kubectl</code> را نصب می‌کند.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">cri-tools</code></td>
+<td dir="rtl">فایل اجرایی <code dir="ltr">/usr/bin/crictl</code> را از <a href="https://github.com/kubernetes-sigs/cri-tools" target="_blank" rel="noopener">مخزن git پروژهٔ cri-tools</a> نصب می‌کند.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">kubernetes-cni</code></td>
+<td dir="rtl">فایل‌های اجرایی <code dir="ltr">/opt/cni/bin</code> را از <a href="https://github.com/containernetworking/plugins" target="_blank" rel="noopener">مخزن git پروژهٔ plugins</a> نصب می‌کند.</td>
+</tr>
+</tbody>
+</table>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#الگوهای-پیکربندی-kubelet">الگوهای پیکربندی kubelet</a><a class="l3" href="#انتشار-پیکربندی-سطح-کلاستر-به-هر-kubelet">انتشار پیکربندی سطح کلاستر به هر kubelet</a><a class="l3" href="#ارائهٔ-جزئیات-پیکربندی-ویژهٔ-هر-نمونه">ارائهٔ جزئیات پیکربندی ویژهٔ هر نمونه</a><a class="l2" href="#پیکربندی-kubeletها-با-استفاده-از-kubeadm">پیکربندی kubeletها با استفاده از kubeadm</a><a class="l3" href="#روند-کار-هنگام-استفاده-از-kubeadm-init">روند کار هنگام استفاده از kubeadm init</a><a class="l3" href="#روند-کار-هنگام-استفاده-از-kubeadm-join">روند کار هنگام استفاده از kubeadm join</a><a class="l2" href="#فایل-drop-in-مربوط-به-kubelet-برای-systemd">فایل drop-in مربوط به kubelet برای systemd</a><a class="l2" href="#فایل-های-اجرایی-کوبرنتیز-و-محتوای-بسته-ها">فایل‌های اجرایی کوبرنتیز و محتوای بسته‌ها</a></nav>
+</div>
+</body>
+</html>

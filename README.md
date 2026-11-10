@@ -8,8 +8,8 @@
 
 | | |
 |---|---|
-| پیشرفت (بر اساس کلمات) | **86.3٪** |
-| صفحات ترجمه‌شده | 1441 از 1722 |
+| پیشرفت (بر اساس کلمات) | **87.2٪** |
+| صفحات ترجمه‌شده | 1456 از 1722 |
 | صفحات دارای ایراد ساختاری | 72 |
 | نسخه‌ی منبع انگلیسی | `f652c6b8a26f` |
 
@@ -73,8 +73,8 @@ cd kubernetes-doc-fa
 | `doc-contributor-tools` | 1 | 1 |
 | `home` | 2 | 2 |
 | `reference` | 1198 | 1198 |
-| `setup` | 8 | 22 |
-| `tasks` | 0 | 221 |
+| `setup` | 21 | 22 |
+| `tasks` | 2 | 221 |
 | `tutorials` | 0 | 45 |
 
 </div>
@@ -101,26 +101,26 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [tasks/access-application-cluster/_index.md](md/tasks/access-application-cluster/_index.md) — 2026-11-10T10:10:30+03:30
+- [tasks/_index.md](md/tasks/_index.md) — 2026-11-10T10:10:27+03:30
+- [setup/production-environment/turnkey-solutions.md](md/setup/production-environment/turnkey-solutions.md) — 2026-11-10T10:10:22+03:30
+- [setup/production-environment/tools/kubeadm/setup-ha-etcd-with-kubeadm.md](md/setup/production-environment/tools/kubeadm/setup-ha-etcd-with-kubeadm.md) — 2026-11-10T10:10:17+03:30
+- [setup/production-environment/tools/kubeadm/kubelet-integration.md](md/setup/production-environment/tools/kubeadm/kubelet-integration.md) — 2026-11-10T10:09:43+03:30
+- [setup/production-environment/tools/kubeadm/install-kubeadm.md](md/setup/production-environment/tools/kubeadm/install-kubeadm.md) — 2026-11-10T10:09:33+03:30
+- [setup/production-environment/tools/kubeadm/high-availability.md](md/setup/production-environment/tools/kubeadm/high-availability.md) — 2026-11-10T10:08:51+03:30
+- [setup/production-environment/tools/kubeadm/create-cluster-kubeadm.md](md/setup/production-environment/tools/kubeadm/create-cluster-kubeadm.md) — 2026-11-10T10:08:15+03:30
+- [setup/production-environment/tools/kubeadm/ha-topology.md](md/setup/production-environment/tools/kubeadm/ha-topology.md) — 2026-11-10T10:07:22+03:30
+- [setup/production-environment/tools/kubeadm/dual-stack-support.md](md/setup/production-environment/tools/kubeadm/dual-stack-support.md) — 2026-11-10T10:07:04+03:30
+- [setup/production-environment/tools/kubeadm/control-plane-flags.md](md/setup/production-environment/tools/kubeadm/control-plane-flags.md) — 2026-11-10T10:06:35+03:30
+- [setup/production-environment/_index.md](md/setup/production-environment/_index.md) — 2026-11-10T10:06:00+03:30
+- [setup/production-environment/tools/kubeadm/_index.md](md/setup/production-environment/tools/kubeadm/_index.md) — 2026-11-10T10:05:57+03:30
+- [setup/production-environment/tools/_index.md](md/setup/production-environment/tools/_index.md) — 2026-11-10T10:05:54+03:30
+- [setup/production-environment/container-runtimes.md](md/setup/production-environment/container-runtimes.md) — 2026-11-10T10:05:47+03:30
 - [setup/learning-environment/_index.md](md/setup/learning-environment/_index.md) — 2026-11-10T10:04:33+03:30
 - [setup/best-practices/node-conformance.md](md/setup/best-practices/node-conformance.md) — 2026-11-10T10:04:20+03:30
 - [setup/best-practices/multiple-zones.md](md/setup/best-practices/multiple-zones.md) — 2026-11-10T10:04:15+03:30
 - [setup/best-practices/certificates.md](md/setup/best-practices/certificates.md) — 2026-11-10T10:04:03+03:30
 - [setup/best-practices/enforcing-pod-security-standards.md](md/setup/best-practices/enforcing-pod-security-standards.md) — 2026-11-10T10:03:39+03:30
-- [setup/best-practices/cluster-large.md](md/setup/best-practices/cluster-large.md) — 2026-11-10T10:03:18+03:30
-- [reference/using-api/server-side-apply.md](md/reference/using-api/server-side-apply.md) — 2026-11-10T10:02:45+03:30
-- [setup/best-practices/_index.md](md/setup/best-practices/_index.md) — 2026-11-10T10:01:54+03:30
-- [setup/_index.md](md/setup/_index.md) — 2026-11-10T10:01:51+03:30
-- [reference/using-api/deprecation-guide.md](md/reference/using-api/deprecation-guide.md) — 2026-11-10T10:01:36+03:30
-- [reference/using-api/health-checks.md](md/reference/using-api/health-checks.md) — 2026-11-10T10:00:32+03:30
-- [reference/using-api/api-concepts.md](md/reference/using-api/api-concepts.md) — 2026-11-10T10:00:06+03:30
-- [reference/using-api/declarative-validation.md](md/reference/using-api/declarative-validation.md) — 2026-11-10T09:59:21+03:30
-- [reference/using-api/client-libraries.md](md/reference/using-api/client-libraries.md) — 2026-11-10T09:54:16+03:30
-- [reference/using-api/cel.md](md/reference/using-api/cel.md) — 2026-11-10T09:53:53+03:30
-- [reference/using-api/_index.md](md/reference/using-api/_index.md) — 2026-11-08T17:30:16+03:30
-- [reference/tools/_index.md](md/reference/tools/_index.md) — 2026-11-08T17:29:45+03:30
-- [reference/setup-tools/kubeadm/kubeadm-upgrade-phase.md](md/reference/setup-tools/kubeadm/kubeadm-upgrade-phase.md) — 2026-11-08T17:29:39+03:30
-- [reference/setup-tools/kubeadm/kubeadm-version.md](md/reference/setup-tools/kubeadm/kubeadm-version.md) — 2026-11-08T17:29:23+03:30
-- [reference/setup-tools/kubeadm/kubeadm-upgrade.md](md/reference/setup-tools/kubeadm/kubeadm-upgrade.md) — 2026-11-08T17:29:12+03:30
 
 </div>
 

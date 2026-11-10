@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>محیط‌های اجرای کانتینر | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">setup / production-environment</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">محیط‌های اجرای کانتینر</h1><!-- overview -->
+<p dir="rtl">برای اینکه Podها بتوانند روی هر نود کلاستر اجرا شوند، باید روی آن نود یک
+<span class="term" title="container-runtime">محیط اجرای کانتینر</span>
+نصب کنید. این صفحه مراحل لازم را به‌طور خلاصه شرح می‌دهد و کارهای مرتبط با راه‌اندازی نودها را توضیح می‌دهد.</p>
+<p dir="rtl">کوبرنتیز 1.37 الزام می‌کند که از محیط اجرایی‌ای استفاده کنید که با
+<span class="term" title="cri">رابط محیط اجرای کانتینر</span> (CRI) سازگار باشد.</p>
+<p dir="rtl">برای اطلاعات بیشتر، <a href="#cri-versions">پشتیبانی از نسخه‌های CRI</a> را ببینید.</p>
+<p dir="rtl">این صفحه نمای کلی نحوهٔ استفاده از چند محیط اجرای کانتینر رایج را در کنار کوبرنتیز ارائه می‌دهد.</p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#containerd">containerd</a></li>
+<li dir="ltr" class="ltr"><a href="#cri-o">CRI-O</a></li>
+<li dir="ltr" class="ltr"><a href="#docker">Docker Engine</a></li>
+<li dir="ltr" class="ltr"><a href="#mcr">Mirantis Container Runtime</a></li>
+</ul>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">نسخه‌های کوبرنتیز پیش از v1.24 یکپارچگی مستقیمی با Docker Engine داشتند که از طریق مؤلفه‌ای به نام <em>dockershim</em> انجام می‌شد. این یکپارچگی مستقیم و ویژه دیگر بخشی از کوبرنتیز نیست (حذف آن
+<a href="/blog/2020/12/08/kubernetes-1-20-release-announcement/#dockershim-deprecation">اعلام شد</a>
+و بخشی از انتشار v1.20 بود).
+برای اینکه بدانید این حذف ممکن است چه تأثیری بر شما داشته باشد، می‌توانید
+<a href="https://kubernetes.io/docs/tasks/administer-cluster/migrating-from-dockershim/check-if-dockershim-removal-affects-you/" target="_blank">بررسی کنید که آیا حذف Dockershim بر شما اثر می‌گذارد</a>
+را بخوانید. برای آشنایی با مهاجرت از dockershim، به
+<a href="https://kubernetes.io/docs/tasks/administer-cluster/migrating-from-dockershim/" target="_blank">مهاجرت از dockershim</a> مراجعه کنید.</p>
+<p dir="rtl">اگر نسخه‌ای از کوبرنتیز به‌جز v1.37 را اجرا می‌کنید،
+مستندات همان نسخه را بررسی کنید.</p>
+</div>
+<!-- body -->
+<h2 id="نصب-و-پیکربندی-پیش-نیازها" dir="rtl">نصب و پیکربندی پیش‌نیازها</h2>
+<h3 id="پیکربندی-شبکه" dir="rtl">پیکربندی شبکه</h3>
+<p dir="rtl">هستهٔ لینوکس به‌طور پیش‌فرض اجازهٔ مسیریابی بسته‌های IPv4 بین رابط‌های شبکه را نمی‌دهد. بیشتر پیاده‌سازی‌های شبکهٔ کلاستر کوبرنتیز این تنظیم را (در صورت نیاز) تغییر می‌دهند، اما برخی ممکن است انتظار داشته باشند که مدیر سیستم این کار را انجام دهد. (برخی نیز ممکن است انتظار داشته باشند پارامترهای sysctl دیگری تنظیم شوند، ماژول‌های هسته بارگذاری شوند و مانند آن؛ برای این موارد به مستندات پیاده‌سازی شبکهٔ مورد نظر خود مراجعه کنید.)</p>
+<h3 id="فعال-سازی-ارسال-بسته-های-ipv4-prerequisite-ipv4-forwarding-optional" dir="rtl">فعال‌سازی ارسال بسته‌های IPv4 {#prerequisite-ipv4-forwarding-optional}</h3>
+<p dir="rtl">برای فعال‌سازی دستی ارسال بسته‌های IPv4 (IPv4 packet forwarding):</p>
+<pre dir="ltr"><code class="language-bash" dir="ltr"># sysctl params required by setup, params persist across reboots
+cat &lt;&lt;EOF | sudo tee /etc/sysctl.d/k8s.conf
+net.ipv4.ip_forward = 1
+EOF
+
+# Apply sysctl params without reboot
+sudo sysctl --system
+</code></pre>
+<p dir="rtl">با دستور زیر بررسی کنید که مقدار <code dir="ltr">net.ipv4.ip_forward</code> برابر 1 باشد:</p>
+<pre dir="ltr"><code class="language-bash" dir="ltr">sysctl net.ipv4.ip_forward
+</code></pre>
+<h2 id="درایورهای-cgroup" dir="rtl">درایورهای cgroup</h2>
+<p dir="rtl">در لینوکس، از <span class="term" title="cgroup">گروه‌های کنترل</span>
+برای محدود کردن منابعی استفاده می‌شود که به فرایندها تخصیص داده می‌شوند.</p>
+<p dir="rtl">هم <span class="term" title="kubelet">kubelet</span> و هم محیط اجرای کانتینر زیرین باید با گروه‌های کنترل در ارتباط باشند تا بتوانند
+<a href="../../concepts/configuration/manage-resources-containers.html">مدیریت منابع برای Podها و کانتینرها</a>
+را اعمال کنند و منابعی مانند درخواست‌ها و محدودیت‌های CPU و حافظه را تنظیم کنند. برای ارتباط با گروه‌های کنترل، kubelet و محیط اجرای کانتینر باید از یک <em>درایور cgroup</em> استفاده کنند.
+بسیار مهم است که kubelet و محیط اجرای کانتینر از درایور cgroup یکسانی استفاده کنند و پیکربندی یکسانی داشته باشند.</p>
+<p dir="rtl">دو درایور cgroup در دسترس است:</p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#cgroupfs-cgroup-driver"><code dir="ltr">cgroupfs</code></a></li>
+<li dir="ltr" class="ltr"><a href="#systemd-cgroup-driver"><code dir="ltr">systemd</code></a></li>
+</ul>
+<h3 id="درایور-cgroupfs-cgroupfs-cgroup-driver" dir="rtl">درایور cgroupfs {#cgroupfs-cgroup-driver}</h3>
+<p dir="rtl">درایور <code dir="ltr">cgroupfs</code> همان <a href="../../reference/config-api/kubelet-config.v1beta1.html">درایور cgroup پیش‌فرض در kubelet</a> است.
+وقتی از درایور <code dir="ltr">cgroupfs</code> استفاده می‌شود، kubelet و محیط اجرای کانتینر برای پیکربندی cgroupها مستقیماً با سیستم فایل cgroup در ارتباط هستند.</p>
+<p dir="rtl">استفاده از درایور <code dir="ltr">cgroupfs</code> در حالتی که
+<a href="https://www.freedesktop.org/wiki/Software/systemd/" target="_blank" rel="noopener">systemd</a> سیستم init است، توصیه <strong>نمی‌شود</strong>؛ زیرا systemd انتظار دارد فقط یک مدیر cgroup روی سیستم وجود داشته باشد. افزون بر این، اگر از <a href="../../concepts/architecture/cgroups.html">cgroup v2</a> استفاده می‌کنید، به‌جای <code dir="ltr">cgroupfs</code> از درایور cgroup <code dir="ltr">systemd</code> استفاده کنید.</p>
+<h3 id="درایور-cgroup-systemd-systemd-cgroup-driver" dir="rtl">درایور cgroup systemd {#systemd-cgroup-driver}</h3>
+<p dir="rtl">وقتی <a href="https://www.freedesktop.org/wiki/Software/systemd/" target="_blank" rel="noopener">systemd</a> به‌عنوان سیستم init یک توزیع لینوکس انتخاب شده باشد، فرایند init یک گروه کنترل ریشه (<code dir="ltr">cgroup</code>) ایجاد و مصرف می‌کند و نقش مدیر cgroup را بر عهده می‌گیرد.</p>
+<p dir="rtl">سیستم systemd یکپارچگی تنگاتنگی با cgroupها دارد و برای هر واحد systemd یک cgroup تخصیص می‌دهد. در نتیجه، اگر از <code dir="ltr">systemd</code> به‌عنوان سیستم init همراه با درایور <code dir="ltr">cgroupfs</code> استفاده کنید، سیستم دو مدیر cgroup متفاوت خواهد داشت.</p>
+<p dir="rtl">وجود دو مدیر cgroup به دو دیدگاه متفاوت از منابع موجود و در حال استفادهٔ سیستم منجر می‌شود. در برخی موارد، نودهایی که برای kubelet و محیط اجرای کانتینر از <code dir="ltr">cgroupfs</code> و برای سایر فرایندها از <code dir="ltr">systemd</code> استفاده می‌کنند، تحت فشار منابع ناپایدار می‌شوند.</p>
+<p dir="rtl">راهکار کاهش این ناپایداری این است که وقتی systemd سیستم init انتخاب‌شده است، از <code dir="ltr">systemd</code> به‌عنوان درایور cgroup برای kubelet و محیط اجرای کانتینر استفاده کنید.</p>
+<p dir="rtl">برای تنظیم <code dir="ltr">systemd</code> به‌عنوان درایور cgroup، گزینهٔ <code dir="ltr">cgroupDriver</code> را در
+<a href="https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/" target="_blank"><code dir="ltr">KubeletConfiguration</code></a>
+ویرایش کنید و مقدار آن را <code dir="ltr">systemd</code> قرار دهید. برای مثال:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: kubelet.config.k8s.io/v1beta1
+kind: KubeletConfiguration
+...
+cgroupDriver: systemd
+</code></pre>
+<p dir="rtl">اگر <code dir="ltr">systemd</code> را به‌عنوان درایور cgroup برای kubelet پیکربندی کنید، باید <code dir="ltr">systemd</code> را به‌عنوان درایور cgroup برای محیط اجرای کانتینر نیز پیکربندی کنید. برای دستورالعمل‌ها به مستندات محیط اجرای کانتینر خود مراجعه کنید. برای مثال:</p>
+<ul>
+<li dir="ltr" class="ltr"><a href="#containerd-systemd">containerd</a></li>
+<li dir="ltr" class="ltr"><a href="#cri-o">CRI-O</a></li>
+</ul>
+<p dir="rtl">در کوبرنتیز 1.37، اگر
+<a href="https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/" target="_blank">feature gate</a>
+<code dir="ltr">KubeletCgroupDriverFromCRI</code> فعال باشد و محیط اجرای کانتینر از RPC مربوط به CRI با نام <code dir="ltr">RuntimeConfig</code> پشتیبانی کند، kubelet درایور cgroup مناسب را به‌طور خودکار از محیط اجرا تشخیص می‌دهد و تنظیم <code dir="ltr">cgroupDriver</code> را در پیکربندی kubelet نادیده می‌گیرد.</p>
+<p dir="rtl">با این حال، نسخه‌های قدیمی‌تر محیط‌های اجرای کانتینر (به‌طور مشخص، containerd 1.y و پایین‌تر) از RPC مربوط به CRI با نام <code dir="ltr">RuntimeConfig</code> پشتیبانی نمی‌کنند و ممکن است به این پرس‌وجو پاسخ درستی ندهند؛ در این حالت kubelet به استفاده از مقدار فلگ <code dir="ltr">--cgroup-driver</code> خود بازمی‌گردد.</p>
+<p dir="rtl">در کوبرنتیز 1.38، این رفتار بازگشتی حذف خواهد شد و نسخه‌های قدیمی‌تر containerd با kubeletهای جدیدتر کار نخواهند کرد.</p>
+<div class="callout caution"><div class="callout-title">احتیاط:</div>
+<p dir="rtl">تغییر درایور cgroup نودی که به کلاستر پیوسته است، عملیاتی حساس است.
+اگر kubelet، Podها را با معناشناسی یک درایور cgroup ایجاد کرده باشد، تغییر درایور cgroup محیط اجرای کانتینر به درایوری دیگر ممکن است هنگام بازسازی sandbox مربوط به این Podهای موجود خطا ایجاد کند. راه‌اندازی مجدد kubelet نیز ممکن است این خطاها را برطرف نکند.</p>
+<p dir="rtl">اگر ابزارهای خودکارسازی‌ای در اختیار دارید که این کار را امکان‌پذیر می‌کنند، نود را با نود دیگری که پیکربندی به‌روزشده دارد جایگزین کنید، یا آن را با استفاده از خودکارسازی دوباره نصب کنید.</p>
+</div>
+<h2 id="پشتیبانی-از-نسخه-های-cri-cri-versions" dir="rtl">پشتیبانی از نسخه‌های CRI {#cri-versions}</h2>
+<p dir="rtl">محیط اجرای کانتینر شما باید از نسخهٔ v1 رابط محیط اجرای کانتینر پشتیبانی کند.</p>
+<p dir="rtl">کوبرنتیز <a href="/blog/2022/11/18/upcoming-changes-in-kubernetes-1-26/#cri-api-removal">از نسخهٔ v1.26 به بعد</a>
+<em>فقط</em> با نسخهٔ v1 از API مربوط به CRI کار می‌کند. اگر محیط اجرای کانتینری از API نسخهٔ v1 پشتیبانی نکند، kubelet به‌عنوان نود ثبت نمی‌شود.</p>
+<h2 id="محیط-های-اجرای-کانتینر" dir="rtl">محیط‌های اجرای کانتینر</h2>
+<h3 id="containerd" dir="ltr" class="ltr">containerd</h3>
+<p dir="rtl">این بخش مراحل لازم برای استفاده از containerd به‌عنوان محیط اجرای CRI را شرح می‌دهد.</p>
+<p dir="rtl">برای نصب containerd روی سیستم خود، دستورالعمل‌های
+<a href="https://github.com/containerd/containerd/blob/main/docs/getting-started.md" target="_blank" rel="noopener">شروع کار با containerd</a>
+را دنبال کنید. پس از ایجاد یک فایل پیکربندی معتبر <code dir="ltr">config.toml</code> به این مرحله بازگردید.</p>
+<div class="tabs">
+<div class="tab"><div class="tab-name">Linux</div>
+<p dir="rtl">این فایل را می‌توانید در مسیر <code dir="ltr">/etc/containerd/config.toml</code> پیدا کنید.</p>
+</div>
+<div class="tab"><div class="tab-name">Windows</div>
+<p dir="rtl">این فایل را می‌توانید در مسیر <code dir="ltr">C:\Program Files\containerd\config.toml</code> پیدا کنید.</p>
+</div>
+</div>
+<p dir="rtl">در لینوکس، سوکت CRI پیش‌فرض برای containerd مسیر <code dir="ltr">/run/containerd/containerd.sock</code> است.
+در ویندوز، نقطهٔ پایانی (endpoint) پیش‌فرض CRI مقدار <code dir="ltr">npipe://./pipe/containerd-containerd</code> است.</p>
+<h4 id="پیکربندی-درایور-cgroup-systemd-containerd-systemd" dir="rtl">پیکربندی درایور cgroup <code dir="ltr">systemd</code> {#containerd-systemd}</h4>
+<p dir="rtl">برای استفاده از درایور cgroup <code dir="ltr">systemd</code> در <code dir="ltr">/etc/containerd/config.toml</code> همراه با <code dir="ltr">runc</code>، پیکربندی زیر را متناسب با نسخهٔ containerd خود تنظیم کنید.</p>
+<p dir="rtl">نسخه‌های 1.x از containerd:</p>
+<pre dir="ltr"><code dir="ltr">[plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc]
+  ...
+  [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]
+    SystemdCgroup = true
+</code></pre>
+<p dir="rtl">نسخه‌های 2.x از containerd:</p>
+<pre dir="ltr"><code dir="ltr">[plugins.'io.containerd.cri.v1.runtime'.containerd.runtimes.runc]
+  ...
+  [plugins.'io.containerd.cri.v1.runtime'.containerd.runtimes.runc.options]
+    SystemdCgroup = true
+</code></pre>
+<p dir="rtl">اگر از <a href="../../concepts/architecture/cgroups.html">cgroup v2</a> استفاده می‌کنید، درایور cgroup <code dir="ltr">systemd</code> توصیه می‌شود.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">اگر containerd را از یک بسته (برای مثال RPM یا <code dir="ltr">.deb</code>) نصب کرده باشید، ممکن است متوجه شوید که افزونهٔ یکپارچه‌سازی CRI به‌طور پیش‌فرض غیرفعال است.</p>
+<p dir="rtl">برای استفاده از containerd با کوبرنتیز، پشتیبانی از CRI باید فعال باشد. مطمئن شوید که <code dir="ltr">cri</code> در فهرست <code dir="ltr">disabled_plugins</code> در فایل <code dir="ltr">/etc/containerd/config.toml</code> قرار ندارد؛ اگر این فایل را تغییر داده‌اید، <code dir="ltr">containerd</code> را نیز دوباره راه‌اندازی کنید.</p>
+<p dir="rtl">اگر پس از نصب اولیهٔ کلاستر یا پس از نصب یک CNI با چرخهٔ خرابی مکرر کانتینرها (crash loop) مواجه شدید، ممکن است پیکربندی containerd ارائه‌شده همراه بسته شامل پارامترهای پیکربندی ناسازگار باشد. در این صورت، پیکربندی containerd را همان‌طور که در
+<a href="https://github.com/containerd/containerd/blob/main/docs/getting-started.md#advanced-topics" target="_blank" rel="noopener">getting-started.md</a>
+آمده است با دستور <code dir="ltr">containerd config default &gt; /etc/containerd/config.toml</code> بازنشانی کنید و سپس پارامترهای پیکربندی ذکرشده در بالا را متناسب با آن تنظیم کنید.</p>
+</div>
+<p dir="rtl">اگر این تغییر را اعمال کردید، حتماً containerd را دوباره راه‌اندازی کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">sudo systemctl restart containerd
+</code></pre>
+<p dir="rtl">در کوبرنتیز v1.28، می‌توانید تشخیص خودکار درایور cgroup را به‌عنوان یک قابلیت آلفا فعال کنید. برای جزئیات بیشتر، <a href="#systemd-cgroup-driver">درایور cgroup systemd</a> را ببینید.</p>
+<h4 id="جایگزین-کردن-ایمیج-sandbox-pause-override-pause-image-containerd" dir="rtl">جایگزین کردن ایمیج sandbox (pause) {#override-pause-image-containerd}</h4>
+<p dir="rtl">در <a href="https://github.com/containerd/containerd/blob/main/docs/cri/config.md" target="_blank" rel="noopener">پیکربندی containerd</a> خود می‌توانید با تنظیم پیکربندی زیر، ایمیج sandbox را جایگزین کنید:</p>
+<pre dir="ltr"><code class="language-toml" dir="ltr">[plugins."io.containerd.grpc.v1.cri"]
+  sandbox_image = "registry.k8s.io/pause:3.10"
+</code></pre>
+<p dir="rtl">پس از به‌روزرسانی فایل پیکربندی، ممکن است لازم باشد <code dir="ltr">containerd</code> را نیز دوباره راه‌اندازی کنید: <code dir="ltr">systemctl restart containerd</code>.</p>
+<h3 id="cri-o" dir="ltr" class="ltr">CRI-O</h3>
+<p dir="rtl">این بخش مراحل لازم برای نصب CRI-O به‌عنوان محیط اجرای کانتینر را شرح می‌دهد.</p>
+<p dir="rtl">برای نصب CRI-O، <a href="https://github.com/cri-o/packaging/blob/main/README.md#usage" target="_blank" rel="noopener">دستورالعمل‌های نصب CRI-O</a> را دنبال کنید.</p>
+<h4 id="درایور-cgroup" dir="rtl">درایور cgroup</h4>
+<p dir="rtl">ابزار CRI-O به‌طور پیش‌فرض از درایور cgroup systemd استفاده می‌کند که به احتمال زیاد برای شما به‌خوبی کار خواهد کرد. برای تغییر به درایور cgroup <code dir="ltr">cgroupfs</code>، یا فایل <code dir="ltr">/etc/crio/crio.conf</code> را ویرایش کنید یا یک پیکربندی تکمیلی (drop-in) در <code dir="ltr">/etc/crio/crio.conf.d/02-cgroup-manager.conf</code> قرار دهید؛ برای مثال:</p>
+<pre dir="ltr"><code class="language-toml" dir="ltr">[crio.runtime]
+conmon_cgroup = "pod"
+cgroup_manager = "cgroupfs"
+</code></pre>
+<p dir="rtl">به تغییر <code dir="ltr">conmon_cgroup</code> نیز توجه کنید؛ هنگام استفاده از CRI-O با <code dir="ltr">cgroupfs</code>، مقدار این گزینه باید <code dir="ltr">pod</code> باشد. به‌طور کلی لازم است پیکربندی درایور cgroup در kubelet (که معمولاً از طریق kubeadm انجام می‌شود) و CRI-O با هم هماهنگ نگه داشته شود.</p>
+<p dir="rtl">در کوبرنتیز v1.28، می‌توانید تشخیص خودکار درایور cgroup را به‌عنوان یک قابلیت آلفا فعال کنید. برای جزئیات بیشتر، <a href="#systemd-cgroup-driver">درایور cgroup systemd</a> را ببینید.</p>
+<p dir="rtl">برای CRI-O، سوکت CRI به‌طور پیش‌فرض <code dir="ltr">/var/run/crio/crio.sock</code> است.</p>
+<h4 id="جایگزین-کردن-ایمیج-sandbox-pause-override-pause-image-cri-o" dir="rtl">جایگزین کردن ایمیج sandbox (pause) {#override-pause-image-cri-o}</h4>
+<p dir="rtl">در <a href="https://github.com/cri-o/cri-o/blob/main/docs/crio.conf.5.md" target="_blank" rel="noopener">پیکربندی CRI-O</a> خود می‌توانید مقدار پیکربندی زیر را تنظیم کنید:</p>
+<pre dir="ltr"><code class="language-toml" dir="ltr">[crio.image]
+pause_image="registry.k8s.io/pause:3.10"
+</code></pre>
+<p dir="rtl">این گزینهٔ پیکربندی از بارگذاری مجدد زندهٔ پیکربندی پشتیبانی می‌کند؛ برای اعمال این تغییر، دستور <code dir="ltr">systemctl reload crio</code> را اجرا کنید یا سیگنال <code dir="ltr">SIGHUP</code> را به فرایند <code dir="ltr">crio</code> بفرستید.</p>
+<h3 id="docker-engine-docker" dir="ltr" class="ltr">Docker Engine {#docker}</h3>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">این دستورالعمل‌ها فرض می‌کنند که برای یکپارچه‌سازی Docker Engine با کوبرنتیز از آداپتور
+<a href="https://mirantis.github.io/cri-dockerd/" target="_blank" rel="noopener"><code dir="ltr">cri-dockerd</code></a> استفاده می‌کنید.</p>
+</div>
+<ol>
+<li dir="rtl">
+<p dir="rtl">روی هر یک از نودهای خود، Docker را مطابق با
+<a href="https://docs.docker.com/engine/install/#server" target="_blank" rel="noopener">نصب Docker Engine</a> برای توزیع لینوکس خود نصب کنید.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">ابزار <a href="https://mirantis.github.io/cri-dockerd/usage/install" target="_blank" rel="noopener"><code dir="ltr">cri-dockerd</code></a> را با پیروی از راهنمای بخش نصب در مستندات آن نصب کنید.</p>
+</li>
+</ol>
+<p dir="rtl">برای <code dir="ltr">cri-dockerd</code>، سوکت CRI به‌طور پیش‌فرض <code dir="ltr">/run/cri-dockerd.sock</code> است.</p>
+<h3 id="mirantis-container-runtime-mcr" dir="ltr" class="ltr">Mirantis Container Runtime {#mcr}</h3>
+<p dir="rtl">محصول <a href="https://docs.mirantis.com/mcr/25.0/overview.html" target="_blank" rel="noopener">Mirantis Container Runtime</a> (MCR) یک محیط اجرای کانتینر تجاری است که پیش‌تر با نام Docker Enterprise Edition شناخته می‌شد.</p>
+<p dir="rtl">می‌توانید Mirantis Container Runtime را با استفاده از مؤلفهٔ متن‌باز
+<a href="https://mirantis.github.io/cri-dockerd/" target="_blank" rel="noopener"><code dir="ltr">cri-dockerd</code></a> که همراه MCR ارائه می‌شود، با کوبرنتیز به کار ببرید.</p>
+<p dir="rtl">برای آشنایی بیشتر با نحوهٔ نصب Mirantis Container Runtime، به
+<a href="https://docs.mirantis.com/mcr/25.0/install.html" target="_blank" rel="noopener">راهنمای استقرار MCR</a> مراجعه کنید.</p>
+<p dir="rtl">برای یافتن مسیر سوکت CRI، واحد systemd با نام <code dir="ltr">cri-docker.socket</code> را بررسی کنید.</p>
+<h4 id="جایگزین-کردن-ایمیج-sandbox-pause-override-pause-image-cri-dockerd-mcr" dir="rtl">جایگزین کردن ایمیج sandbox (pause) {#override-pause-image-cri-dockerd-mcr}</h4>
+<p dir="rtl">آداپتور <code dir="ltr">cri-dockerd</code> یک آرگومان خط فرمان می‌پذیرد که با آن مشخص می‌شود کدام ایمیج کانتینر به‌عنوان کانتینر زیرساخت Pod («ایمیج pause») استفاده شود.
+آرگومان خط فرمانی که باید استفاده کنید <code dir="ltr">--pod-infra-container-image</code> است.</p>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<p dir="rtl">کلاستر شما علاوه بر محیط اجرای کانتینر، به یک
+<a href="../../concepts/cluster-administration/networking.html#how-to-implement-the-kubernetes-network-model">افزونهٔ شبکه</a>
+فعال و کارا نیز نیاز دارد.</p>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#نصب-و-پیکربندی-پیش-نیازها">نصب و پیکربندی پیش‌نیازها</a><a class="l3" href="#پیکربندی-شبکه">پیکربندی شبکه</a><a class="l3" href="#فعال-سازی-ارسال-بسته-های-ipv4-prerequisite-ipv4-forwarding-optional">فعال‌سازی ارسال بسته‌های IPv4 {#prerequisite-ipv4-forwarding-optional}</a><a class="l2" href="#درایورهای-cgroup">درایورهای cgroup</a><a class="l3" href="#درایور-cgroupfs-cgroupfs-cgroup-driver">درایور cgroupfs {#cgroupfs-cgroup-driver}</a><a class="l3" href="#درایور-cgroup-systemd-systemd-cgroup-driver">درایور cgroup systemd {#systemd-cgroup-driver}</a><a class="l2" href="#پشتیبانی-از-نسخه-های-cri-cri-versions">پشتیبانی از نسخه‌های CRI {#cri-versions}</a><a class="l2" href="#محیط-های-اجرای-کانتینر">محیط‌های اجرای کانتینر</a><a class="l3" href="#containerd">containerd</a><a class="l3" href="#cri-o">CRI-O</a><a class="l3" href="#docker-engine-docker">Docker Engine {#docker}</a><a class="l3" href="#mirantis-container-runtime-mcr">Mirantis Container Runtime {#mcr}</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>

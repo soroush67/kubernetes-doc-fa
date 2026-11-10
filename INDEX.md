@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-1441 از 1722 صفحه
+1456 از 1722 صفحه
 
 
 ## `.`
@@ -1877,34 +1877,34 @@
 
 ## `setup/production-environment`
 
-- ⏳ `_index.md`
-- ⏳ `container-runtimes.md`
-- ⏳ `turnkey-solutions.md`
+- ✅ [_index.md](md/setup/production-environment/_index.md)
+- ✅ [container-runtimes.md](md/setup/production-environment/container-runtimes.md)
+- ✅ [turnkey-solutions.md](md/setup/production-environment/turnkey-solutions.md)
 
 ## `setup/production-environment/tools`
 
-- ⏳ `_index.md`
+- ✅ [_index.md](md/setup/production-environment/tools/_index.md)
 
 ## `setup/production-environment/tools/kubeadm`
 
-- ⏳ `_index.md`
-- ⏳ `control-plane-flags.md`
-- ⏳ `create-cluster-kubeadm.md`
-- ⏳ `dual-stack-support.md`
-- ⏳ `ha-topology.md`
-- ⏳ `high-availability.md`
-- ⏳ `install-kubeadm.md`
-- ⏳ `kubelet-integration.md`
-- ⏳ `setup-ha-etcd-with-kubeadm.md`
+- ✅ [_index.md](md/setup/production-environment/tools/kubeadm/_index.md)
+- ✅ [control-plane-flags.md](md/setup/production-environment/tools/kubeadm/control-plane-flags.md)
+- ✅ [create-cluster-kubeadm.md](md/setup/production-environment/tools/kubeadm/create-cluster-kubeadm.md)
+- ✅ [dual-stack-support.md](md/setup/production-environment/tools/kubeadm/dual-stack-support.md)
+- ✅ [ha-topology.md](md/setup/production-environment/tools/kubeadm/ha-topology.md)
+- ✅ [high-availability.md](md/setup/production-environment/tools/kubeadm/high-availability.md)
+- ✅ [install-kubeadm.md](md/setup/production-environment/tools/kubeadm/install-kubeadm.md)
+- ✅ [kubelet-integration.md](md/setup/production-environment/tools/kubeadm/kubelet-integration.md)
+- ✅ [setup-ha-etcd-with-kubeadm.md](md/setup/production-environment/tools/kubeadm/setup-ha-etcd-with-kubeadm.md)
 - ⏳ `troubleshooting-kubeadm.md`
 
 ## `tasks`
 
-- ⏳ `_index.md`
+- ✅ [_index.md](md/tasks/_index.md)
 
 ## `tasks/access-application-cluster`
 
-- ⏳ `_index.md`
+- ✅ [_index.md](md/tasks/access-application-cluster/_index.md)
 - ⏳ `access-cluster-services.md`
 - ⏳ `access-cluster.md`
 - ⏳ `communicate-containers-same-pod-shared-volume.md`

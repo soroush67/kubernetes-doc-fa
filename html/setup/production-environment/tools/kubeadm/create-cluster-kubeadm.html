@@ -1,0 +1,506 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ایجاد یک کلاستر با kubeadm | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
+<header class="top"><a href="../../../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">setup / production-environment / tools / kubeadm</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">ایجاد یک کلاستر با kubeadm</h1><!-- overview -->
+<p dir="rtl"><img src="/images/kubeadm-stacked-color.png" align="right" width="150px">
+با استفاده از <code dir="ltr">kubeadm</code> می‌توانید یک کلاستر حداقلیِ کارآمد کوبرنتیز بسازید که با بهترین شیوه‌ها (best practices) سازگار است.
+در واقع، با <code dir="ltr">kubeadm</code> می‌توانید کلاستری راه‌اندازی کنید که
+<a href="/blog/2017/10/software-conformance-certification/">آزمون‌های انطباق کوبرنتیز</a> را با موفقیت پشت سر بگذارد.
+ابزار <code dir="ltr">kubeadm</code> از دیگر کارکردهای چرخه عمر کلاستر، مانند
+<a href="../../../../reference/access-authn-authz/bootstrap-tokens.html">توکن‌های راه‌اندازی اولیه (bootstrap tokens)</a> و ارتقای کلاستر نیز پشتیبانی می‌کند.</p>
+<p dir="rtl">ابزار <code dir="ltr">kubeadm</code> در این موارد گزینه مناسبی است:</p>
+<ul>
+<li dir="rtl">به روشی ساده برای امتحان کردن کوبرنتیز، احتمالاً برای نخستین بار، نیاز دارید.</li>
+<li dir="rtl">کاربر فعلی کوبرنتیز هستید و می‌خواهید راه‌اندازی کلاستر و آزمودن برنامه خود را خودکار کنید.</li>
+<li dir="rtl">به یک جزء سازنده در ابزارهای دیگر اکوسیستم و/یا ابزارهای نصب با دامنه‌ای گسترده‌تر نیاز دارید.</li>
+</ul>
+<p dir="rtl">می‌توانید <code dir="ltr">kubeadm</code> را روی ماشین‌های گوناگونی نصب و استفاده کنید: لپ‌تاپ خود، مجموعه‌ای
+از سرورهای ابری، یک Raspberry Pi و موارد دیگر. چه در ابر مستقر کنید و چه روی
+زیرساخت داخلی (on-premises)، می‌توانید <code dir="ltr">kubeadm</code> را با سامانه‌های تأمین زیرساخت (provisioning)
+مانند Ansible یا Terraform یکپارچه کنید.</p>
+<h2 id="پیش-از-شروع" dir="rtl">پیش از شروع</h2>
+<p dir="rtl">برای دنبال کردن این راهنما به موارد زیر نیاز دارید:</p>
+<ul>
+<li dir="rtl">یک یا چند ماشین با سیستم‌عامل لینوکسیِ سازگار با deb/rpm؛ برای مثال Ubuntu یا CentOS.</li>
+<li dir="rtl">دست‌کم ۲ گیبی‌بایت RAM برای هر ماشین؛ با مقدار کمتر، فضای چندانی برای برنامه‌هایتان باقی نمی‌ماند.</li>
+<li dir="rtl">دست‌کم ۲ CPU روی ماشینی که به‌عنوان نود control plane از آن استفاده می‌کنید.</li>
+<li dir="rtl">اتصال شبکه کامل میان همه ماشین‌های کلاستر. می‌توانید از شبکه عمومی
+یا خصوصی استفاده کنید.</li>
+</ul>
+<p dir="rtl">همچنین باید از نسخه‌ای از <code dir="ltr">kubeadm</code> استفاده کنید که بتواند نسخه‌ای از کوبرنتیز را که
+می‌خواهید در کلاستر جدید خود به کار ببرید، مستقر کند.</p>
+<p dir="rtl"><a href="https://kubernetes.io/docs/setup/release/version-skew-policy/#supported-versions" target="_blank">سیاست نسخه‌ها و پشتیبانی از اختلاف نسخه در کوبرنتیز</a>
+همان‌گونه که برای کل کوبرنتیز اعمال می‌شود، برای <code dir="ltr">kubeadm</code> نیز صادق است.
+برای آگاهی از اینکه کدام نسخه‌های کوبرنتیز و <code dir="ltr">kubeadm</code> پشتیبانی می‌شوند، این سیاست را بررسی کنید.
+این صفحه برای کوبرنتیز v1.37 نوشته شده است.</p>
+<p dir="rtl">وضعیت کلی ویژگی‌های ابزار <code dir="ltr">kubeadm</code> «در دسترس عمومی» (General Availability یا GA) است. برخی از زیرویژگی‌ها
+هنوز در حال توسعه فعال هستند. ممکن است پیاده‌سازی فرایند ایجاد کلاستر با تکامل ابزار
+اندکی تغییر کند، اما پیاده‌سازی کلی باید کاملاً پایدار باشد.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">همه فرمان‌های زیرمجموعه <code dir="ltr">kubeadm alpha</code> بنا به تعریف، در سطح آلفا پشتیبانی می‌شوند.</p>
+</div>
+<!-- steps -->
+<h2 id="اهداف" dir="rtl">اهداف</h2>
+<ul>
+<li dir="rtl">نصب یک کلاستر کوبرنتیز با یک control plane</li>
+<li dir="rtl">نصب یک شبکه Pod روی کلاستر تا Podهای شما بتوانند
+با یکدیگر ارتباط برقرار کنند</li>
+</ul>
+<h2 id="دستورالعمل-ها" dir="rtl">دستورالعمل‌ها</h2>
+<h3 id="آماده-سازی-میزبان-ها" dir="rtl">آماده‌سازی میزبان‌ها</h3>
+<h4 id="نصب-اجزا" dir="rtl">نصب اجزا</h4>
+<p dir="rtl">یک <span class="term" title="container-runtime">محیط اجرای کانتینر</span>
+و kubeadm را روی همه میزبان‌ها نصب کنید. برای دستورالعمل‌های دقیق و دیگر پیش‌نیازها،
+<a href="install-kubeadm.html">نصب kubeadm</a> را ببینید.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">اگر kubeadm را از قبل نصب کرده‌اید، برای آشنایی با نحوه ارتقای آن، دو گام نخست سند
+<a href="https://kubernetes.io/docs/tasks/administer-cluster/kubeadm/upgrading-linux-nodes" target="_blank">ارتقای نودهای لینوکسی</a>
+را ببینید.</p>
+<p dir="rtl">هنگام ارتقا، kubelet هر چند ثانیه یک بار راه‌اندازی مجدد می‌شود، زیرا در یک حلقه خرابی (crashloop)
+منتظر می‌ماند تا kubeadm به آن بگوید چه کاری انجام دهد. این حلقه خرابی قابل انتظار و عادی است.
+پس از مقداردهی اولیه control plane، kubelet به‌طور عادی اجرا می‌شود.</p>
+</div>
+<h4 id="پیکربندی-شبکه" dir="rtl">پیکربندی شبکه</h4>
+<p dir="rtl">ابزار kubeadm نیز مانند دیگر اجزای کوبرنتیز تلاش می‌کند یک IP قابل استفاده را روی
+رابط‌های شبکه‌ای پیدا کند که با درگاه پیش‌فرض (default gateway) میزبان مرتبط هستند.
+سپس هر جزء از این IP برای اعلام نشانی (advertising) و/یا گوش دادن (listening) استفاده می‌کند.</p>
+<p dir="rtl">برای اینکه بفهمید این IP روی یک میزبان لینوکسی چیست، می‌توانید از فرمان زیر استفاده کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">ip route show # Look for a line starting with "default via"
+</code></pre>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">اگر دو یا چند درگاه پیش‌فرض روی میزبان وجود داشته باشد، هر جزء کوبرنتیز تلاش می‌کند
+از نخستین درگاهی استفاده کند که به آن برمی‌خورد و یک نشانی IP مناسب از نوع global unicast دارد.
+هنگام این انتخاب، ترتیب دقیق درگاه‌ها ممکن است در سیستم‌عامل‌ها و نسخه‌های کرنل
+مختلف متفاوت باشد.</p>
+</div>
+<p dir="rtl">اجزای کوبرنتیز رابط شبکه سفارشی را به‌عنوان گزینه نمی‌پذیرند؛
+بنابراین باید نشانی IP سفارشی را به‌صورت یک فلگ به همه نمونه‌های اجزایی
+که به چنین پیکربندی سفارشی‌ای نیاز دارند، ارسال کرد.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">اگر میزبان درگاه پیش‌فرض نداشته باشد و نشانی IP سفارشی نیز به یک جزء کوبرنتیز
+ارسال نشود، ممکن است آن جزء با خطا خارج شود.</p>
+</div>
+<p dir="rtl">برای پیکربندی نشانی اعلام‌شده API server در نودهای control plane که با هر دو فرمان
+<code dir="ltr">init</code> و <code dir="ltr">join</code> ایجاد می‌شوند، می‌توان از فلگ <code dir="ltr">--apiserver-advertise-address</code> استفاده کرد.
+ترجیحاً می‌توان این گزینه را در <a href="../../../../reference/config-api/kubeadm-config.v1beta4.html">API ابزار kubeadm</a>
+به‌صورت <code dir="ltr">InitConfiguration.localAPIEndpoint</code> و <code dir="ltr">JoinConfiguration.controlPlane.localAPIEndpoint</code> تنظیم کرد.</p>
+<p dir="rtl">برای kubeletها در همه نودها، می‌توان گزینه <code dir="ltr">--node-ip</code> را در
+<code dir="ltr">.nodeRegistration.kubeletExtraArgs</code> درون یک فایل پیکربندی kubeadm
+(<code dir="ltr">InitConfiguration</code> یا <code dir="ltr">JoinConfiguration</code>) ارسال کرد.</p>
+<p dir="rtl">برای پشته دوگانه (dual-stack)،
+<a href="dual-stack-support.html">پشتیبانی از پشته دوگانه با kubeadm</a> را ببینید.</p>
+<p dir="rtl">نشانی‌های IP که به اجزای control plane اختصاص می‌دهید، بخشی از فیلدهای
+subject alternative name در گواهی‌های X.509 آن‌ها می‌شوند. تغییر این نشانی‌های IP
+مستلزم امضای گواهی‌های جدید و راه‌اندازی مجدد اجزای تحت تأثیر است تا تغییر
+در فایل‌های گواهی اعمال شود. برای جزئیات بیشتر در این زمینه،
+<a href="https://kubernetes.io/docs/tasks/administer-cluster/kubeadm/kubeadm-certs/#manual-certificate-renewal" target="_blank">تمدید دستی گواهی</a>
+را ببینید.</p>
+<div class="callout warning"><div class="callout-title">هشدار:</div>
+<p dir="rtl">پروژه کوبرنتیز این رویکرد (پیکربندی همه نمونه‌های اجزا با نشانی‌های IP سفارشی) را توصیه نمی‌کند.
+در عوض، نگه‌دارندگان کوبرنتیز توصیه می‌کنند شبکه میزبان را طوری پیکربندی کنید
+که IP درگاه پیش‌فرض همان IP باشد که اجزای کوبرنتیز به‌طور خودکار تشخیص می‌دهند و از آن استفاده می‌کنند.
+در نودهای لینوکسی، می‌توانید برای پیکربندی شبکه از فرمان‌هایی مانند <code dir="ltr">ip route</code> استفاده کنید؛ ممکن است
+سیستم‌عامل شما ابزارهای سطح بالاتری نیز برای مدیریت شبکه فراهم کند. اگر درگاه پیش‌فرض نود شما
+یک نشانی IP عمومی است، باید فیلترکردن بسته‌ها یا دیگر تدابیر امنیتی را برای محافظت از
+نودها و کلاستر خود پیکربندی کنید.</p>
+</div>
+<h3 id="آماده-سازی-ایمیج-های-کانتینر-موردنیاز" dir="rtl">آماده‌سازی ایمیج‌های کانتینر موردنیاز</h3>
+<p dir="rtl">این گام اختیاری است و تنها زمانی کاربرد دارد که بخواهید <code dir="ltr">kubeadm init</code> و <code dir="ltr">kubeadm join</code>
+ایمیج‌های کانتینر پیش‌فرضِ میزبانی‌شده در <code dir="ltr">registry.k8s.io</code> را دانلود نکنند.</p>
+<p dir="rtl">ابزار kubeadm فرمان‌هایی دارد که به شما کمک می‌کنند هنگام ایجاد کلاستری که نودهای آن
+به اینترنت دسترسی ندارند، ایمیج‌های موردنیاز را از پیش دریافت (pre-pull) کنید.
+برای جزئیات بیشتر، <a href="../../../../reference/setup-tools/kubeadm/kubeadm-init.html#without-internet-connection">اجرای kubeadm بدون اتصال به اینترنت</a>
+را ببینید.</p>
+<p dir="rtl">ابزار kubeadm به شما امکان می‌دهد برای ایمیج‌های موردنیاز از یک مخزن ایمیج سفارشی استفاده کنید.
+برای جزئیات بیشتر، <a href="../../../../reference/setup-tools/kubeadm/kubeadm-init.html#custom-images">استفاده از ایمیج‌های سفارشی</a>
+را ببینید.</p>
+<h3 id="مقداردهی-اولیه-نود-control-plane" dir="rtl">مقداردهی اولیه نود control plane</h3>
+<p dir="rtl">نود control plane ماشینی است که اجزای control plane روی آن اجرا می‌شوند؛ از جمله
+<span class="term" title="etcd">etcd</span> (پایگاه داده کلاستر) و
+<span class="term" title="kube-apiserver">API Server</span>
+(که ابزار خط فرمان <span class="term" title="kubectl">kubectl</span>
+با آن ارتباط برقرار می‌کند).</p>
+<ol>
+<li dir="rtl">(توصیه‌شده) اگر قصد دارید این کلاستر <code dir="ltr">kubeadm</code> با یک control plane را
+به <a href="high-availability.html">دسترس‌پذیری بالا</a>
+ارتقا دهید، باید <code dir="ltr">--control-plane-endpoint</code> را مشخص کنید تا نقطه پایانی (endpoint) مشترک همه نودهای control plane تعیین شود.
+این نقطه پایانی می‌تواند یک نام DNS یا نشانی IP یک متعادل‌کننده بار (load-balancer) باشد.</li>
+<li dir="rtl">یک افزونه شبکه Pod انتخاب کنید و بررسی کنید که آیا لازم است آرگومانی
+به <code dir="ltr">kubeadm init</code> ارسال شود یا نه. بسته به اینکه کدام
+ارائه‌دهنده شخص ثالث را انتخاب می‌کنید، ممکن است لازم باشد <code dir="ltr">--pod-network-cidr</code> را
+روی مقداری مختص آن ارائه‌دهنده تنظیم کنید. <a href="#pod-network">نصب افزونه شبکه Pod</a> را ببینید.</li>
+<li dir="rtl">(اختیاری) ابزار <code dir="ltr">kubeadm</code> تلاش می‌کند محیط اجرای کانتینر را با استفاده از فهرستی از نقاط پایانی
+شناخته‌شده تشخیص دهد. برای استفاده از محیط اجرای کانتینر دیگری، یا اگر بیش از یک محیط اجرا
+روی نود تأمین‌شده نصب است، آرگومان <code dir="ltr">--cri-socket</code> را به <code dir="ltr">kubeadm</code> بدهید.
+<a href="install-kubeadm.html#installing-runtime">نصب محیط اجرا</a> را ببینید.</li>
+</ol>
+<p dir="rtl">برای مقداردهی اولیه نود control plane، فرمان زیر را اجرا کنید:</p>
+<pre dir="ltr"><code class="language-bash" dir="ltr">kubeadm init &lt;args&gt;
+</code></pre>
+<h3 id="ملاحظاتی-درباره-apiserver-advertise-address-و-controlplaneendpoint" dir="rtl">ملاحظاتی درباره apiserver-advertise-address و ControlPlaneEndpoint</h3>
+<p dir="rtl">از فلگ <code dir="ltr">--apiserver-advertise-address</code> می‌توان برای تنظیم نشانی اعلام‌شده API server همین
+نود control plane استفاده کرد، در حالی که از <code dir="ltr">--control-plane-endpoint</code> می‌توان برای تنظیم نقطه پایانی مشترک
+همه نودهای control plane بهره برد.</p>
+<p dir="rtl">فلگ <code dir="ltr">--control-plane-endpoint</code> هم نشانی IP و هم نام‌های DNS را که به نشانی IP نگاشت می‌شوند، می‌پذیرد.
+لطفاً برای ارزیابی راه‌حل‌های ممکن درباره چنین نگاشتی با مدیر شبکه خود تماس بگیرید.</p>
+<p dir="rtl">نمونه‌ای از یک نگاشت در ادامه آمده است:</p>
+<pre dir="ltr"><code dir="ltr">192.168.0.102 cluster-endpoint
+</code></pre>
+<p dir="rtl">در این نمونه، <code dir="ltr">192.168.0.102</code> نشانی IP این نود و <code dir="ltr">cluster-endpoint</code> یک نام DNS سفارشی است که به این IP نگاشت می‌شود.
+با این کار می‌توانید <code dir="ltr">--control-plane-endpoint=cluster-endpoint</code> را به <code dir="ltr">kubeadm init</code> بدهید و همین نام DNS را به
+<code dir="ltr">kubeadm join</code> ارسال کنید. بعدها در یک سناریوی دسترس‌پذیری بالا می‌توانید <code dir="ltr">cluster-endpoint</code> را طوری تغییر دهید
+که به نشانی متعادل‌کننده بار شما اشاره کند.</p>
+<p dir="rtl">ابزار kubeadm از تبدیل کلاستری با یک control plane که بدون <code dir="ltr">--control-plane-endpoint</code> ایجاد شده،
+به یک کلاستر با دسترس‌پذیری بالا پشتیبانی نمی‌کند.</p>
+<h3 id="اطلاعات-بیشتر" dir="rtl">اطلاعات بیشتر</h3>
+<p dir="rtl">برای اطلاعات بیشتر درباره آرگومان‌های <code dir="ltr">kubeadm init</code>، <a href="../../../../reference/setup-tools/kubeadm/index.html">راهنمای مرجع kubeadm</a> را ببینید.</p>
+<p dir="rtl">برای پیکربندی <code dir="ltr">kubeadm init</code> با یک فایل پیکربندی،
+<a href="../../../../reference/setup-tools/kubeadm/kubeadm-init.html#config-file">استفاده از kubeadm init با فایل پیکربندی</a> را ببینید.</p>
+<p dir="rtl">برای سفارشی‌سازی اجزای control plane، از جمله اختصاص اختیاری IPv6 به کاوشگر زنده‌بودن (liveness probe)
+برای اجزای control plane و سرور etcd، آرگومان‌های اضافی را مطابق مستندات
+<a href="control-plane-flags.html">آرگومان‌های سفارشی</a> به هر جزء بدهید.</p>
+<p dir="rtl">برای پیکربندی مجدد کلاستری که از قبل ایجاد شده است،
+<a href="https://kubernetes.io/docs/tasks/administer-cluster/kubeadm/kubeadm-reconfigure" target="_blank">پیکربندی مجدد کلاستر kubeadm</a> را ببینید.</p>
+<p dir="rtl">برای اجرای دوباره <code dir="ltr">kubeadm init</code>، ابتدا باید <a href="#tear-down">کلاستر را برچینید</a>.</p>
+<p dir="rtl">اگر نودی با معماری متفاوت را به کلاستر خود ملحق می‌کنید، مطمئن شوید که DaemonSetهای مستقرشده شما
+از ایمیج کانتینر برای این معماری پشتیبانی می‌کنند.</p>
+<p dir="rtl">فرمان <code dir="ltr">kubeadm init</code> ابتدا مجموعه‌ای از بررسی‌های اولیه را اجرا می‌کند تا مطمئن شود ماشین
+برای اجرای کوبرنتیز آماده است. این بررسی‌ها هشدارها را نمایش می‌دهند و در صورت بروز خطا خارج می‌شوند. سپس
+<code dir="ltr">kubeadm init</code> اجزای control plane کلاستر را دانلود و نصب می‌کند. این کار ممکن است چند دقیقه طول بکشد.
+پس از پایان کار، باید خروجی زیر را ببینید:</p>
+<pre dir="ltr"><code class="language-none" dir="ltr">Your Kubernetes control-plane has initialized successfully!
+
+To start using your cluster, you need to run the following as a regular user:
+
+  mkdir -p $HOME/.kube
+  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+  sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+You should now deploy a Pod network to the cluster.
+Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
+  /docs/concepts/cluster-administration/addons/
+
+You can now join any number of machines by running the following on each node
+as root:
+
+  kubeadm join &lt;control-plane-host&gt;:&lt;control-plane-port&gt; --token &lt;token&gt; --discovery-token-ca-cert-hash sha256:&lt;hash&gt;
+</code></pre>
+<p dir="rtl">برای اینکه kubectl برای کاربر غیر root شما کار کند، فرمان‌های زیر را اجرا کنید؛ این فرمان‌ها
+بخشی از خروجی <code dir="ltr">kubeadm init</code> نیز هستند:</p>
+<pre dir="ltr"><code class="language-bash" dir="ltr">mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+</code></pre>
+<p dir="rtl">همچنین اگر کاربر <code dir="ltr">root</code> هستید، می‌توانید فرمان زیر را اجرا کنید:</p>
+<pre dir="ltr"><code class="language-bash" dir="ltr">export KUBECONFIG=/etc/kubernetes/admin.conf
+</code></pre>
+<div class="callout warning"><div class="callout-title">هشدار:</div>
+<p dir="rtl">فایل kubeconfig با نام <code dir="ltr">admin.conf</code> که <code dir="ltr">kubeadm init</code> تولید می‌کند، حاوی گواهی‌ای با
+<code dir="ltr">Subject: O = kubeadm:cluster-admins, CN = kubernetes-admin</code> است. گروه <code dir="ltr">kubeadm:cluster-admins</code>
+به ClusterRole داخلی <code dir="ltr">cluster-admin</code> متصل (bind) شده است.
+فایل <code dir="ltr">admin.conf</code> را با هیچ‌کس به اشتراک نگذارید.</p>
+<p dir="rtl">فرمان <code dir="ltr">kubeadm init</code> فایل kubeconfig دیگری به نام <code dir="ltr">super-admin.conf</code> نیز تولید می‌کند که حاوی گواهی‌ای با
+<code dir="ltr">Subject: O = system:masters, CN = kubernetes-super-admin</code> است.
+گروه <code dir="ltr">system:masters</code> یک گروه ابرکاربر برای مواقع اضطراری (break-glass) است که لایه مجوزدهی (برای مثال RBAC) را دور می‌زند.
+فایل <code dir="ltr">super-admin.conf</code> را با هیچ‌کس به اشتراک نگذارید. توصیه می‌شود این فایل را به مکانی امن منتقل کنید.</p>
+<p dir="rtl">برای آشنایی با نحوه استفاده از <code dir="ltr">kubeadm kubeconfig user</code> جهت تولید فایل‌های kubeconfig برای کاربران دیگر،
+<a href="https://kubernetes.io/docs/tasks/administer-cluster/kubeadm/kubeadm-certs#kubeconfig-additional-users" target="_blank">تولید فایل‌های kubeconfig برای کاربران دیگر</a>
+را ببینید.</p>
+</div>
+<p dir="rtl">فرمان <code dir="ltr">kubeadm join</code> را که <code dir="ltr">kubeadm init</code> در خروجی نمایش می‌دهد، یادداشت کنید.
+برای <a href="#join-nodes">ملحق کردن نودها به کلاستر</a> به این فرمان نیاز دارید.</p>
+<p dir="rtl">این توکن برای احراز هویت متقابل میان نود control plane و نودهای در حال الحاق استفاده می‌شود.
+توکنی که در اینجا آمده، محرمانه است. آن را در جای امنی نگه دارید، زیرا هر کسی که این
+توکن را داشته باشد می‌تواند نودهای احراز هویت‌شده به کلاستر شما اضافه کند. می‌توانید با فرمان
+<code dir="ltr">kubeadm token</code> این توکن‌ها را فهرست، ایجاد و حذف کنید.
+<a href="../../../../reference/setup-tools/kubeadm/kubeadm-token.html">راهنمای مرجع kubeadm</a> را ببینید.</p>
+<h3 id="نصب-افزونه-شبکه-pod-pod-network" dir="rtl">نصب افزونه شبکه Pod {#pod-network}</h3>
+<div class="callout caution"><div class="callout-title">احتیاط:</div>
+<p dir="rtl">این بخش حاوی اطلاعات مهمی درباره پیکربندی شبکه و
+ترتیب استقرار است.
+پیش از ادامه، همه این توصیه‌ها را با دقت بخوانید.</p>
+<p dir="rtl"><strong>باید یک افزونه شبکه Pod مبتنی بر
+<span class="term" title="cni">رابط شبکه کانتینر</span>
+(CNI) مستقر کنید تا Podهای شما بتوانند با یکدیگر ارتباط برقرار کنند.
+سرویس DNS کلاستر (CoreDNS) پیش از نصب شبکه راه‌اندازی نمی‌شود.</strong></p>
+<ul>
+<li dir="rtl">
+<p dir="rtl">دقت کنید که شبکه Pod شما نباید با هیچ‌یک از شبکه‌های میزبان همپوشانی داشته باشد:
+در صورت وجود هرگونه همپوشانی، به احتمال زیاد با مشکل روبه‌رو خواهید شد.
+(اگر میان شبکه Pod ترجیحی افزونه شبکه خود و برخی از شبکه‌های میزبان
+تداخلی یافتید، باید یک بلوک CIDR مناسب را جایگزین آن کنید
+و سپس هنگام اجرای <code dir="ltr">kubeadm init</code> آن را با <code dir="ltr">--pod-network-cidr</code> به کار ببرید
+و در YAML افزونه شبکه خود نیز جایگزین کنید).</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">به‌طور پیش‌فرض، <code dir="ltr">kubeadm</code> کلاستر شما را طوری پیکربندی می‌کند که از
+<a href="../../../../reference/access-authn-authz/rbac.html">RBAC</a> (کنترل دسترسی مبتنی بر نقش) استفاده کند
+و استفاده از آن را الزامی کند.
+مطمئن شوید که افزونه شبکه Pod شما و همه مانیفست‌هایی که برای استقرار آن
+استفاده می‌کنید، از RBAC پشتیبانی می‌کنند.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">اگر می‌خواهید برای کلاستر خود از IPv6 استفاده کنید (چه به‌صورت پشته دوگانه و چه
+به‌صورت شبکه تک‌پشته فقط IPv6)، مطمئن شوید که افزونه شبکه Pod شما
+از IPv6 پشتیبانی می‌کند.
+پشتیبانی از IPv6 در <a href="https://github.com/containernetworking/cni/releases/tag/v0.6.0" target="_blank" rel="noopener">نسخه v0.6.0</a> به CNI افزوده شد.</p>
+</li>
+</ul>
+</div>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">ابزار kubeadm باید نسبت به CNI بی‌طرف باشد و اعتبارسنجی ارائه‌دهندگان CNI خارج از دامنه آزمون‌های e2e فعلی ما است.
+اگر با مشکلی مرتبط با یک افزونه CNI روبه‌رو شدید، باید آن را در سامانه پیگیری مشکلات (issue tracker)
+همان افزونه ثبت کنید، نه در سامانه‌های پیگیری مشکلات kubeadm یا کوبرنتیز.</p>
+</div>
+<p dir="rtl">چندین پروژه خارجی، شبکه‌های Pod کوبرنتیز را با استفاده از CNI فراهم می‌کنند و برخی از آن‌ها
+از <a href="../../../../concepts/services-networking/network-policies.html">سیاست شبکه (Network Policy)</a> نیز پشتیبانی می‌کنند.</p>
+<p dir="rtl">فهرستی از افزونه‌هایی را که
+<a href="../../../../concepts/cluster-administration/networking.html#how-to-implement-the-kubernetes-network-model">مدل شبکه کوبرنتیز</a>
+را پیاده‌سازی می‌کنند، ببینید.</p>
+<p dir="rtl">برای مشاهده فهرستی غیرجامع از افزونه‌های شبکه‌ای که کوبرنتیز پشتیبانی می‌کند، لطفاً به صفحه
+<a href="../../../../concepts/cluster-administration/addons.html#networking-and-network-policy">نصب افزونه‌ها</a> مراجعه کنید.
+می‌توانید افزونه شبکه Pod را با فرمان زیر روی نود control plane
+یا نودی که اعتبارنامه‌های kubeconfig را در اختیار دارد، نصب کنید:</p>
+<pre dir="ltr"><code class="language-bash" dir="ltr">kubectl apply -f &lt;add-on.yaml&gt;
+</code></pre>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">تنها تعداد اندکی از افزونه‌های CNI از ویندوز پشتیبانی می‌کنند. جزئیات بیشتر و دستورالعمل‌های پیکربندی را می‌توانید
+در <a href="https://kubernetes.io/docs/tasks/administer-cluster/kubeadm/adding-windows-nodes/#network-config" target="_blank">افزودن نودهای کارگر ویندوزی</a> بیابید.</p>
+</div>
+<p dir="rtl">در هر کلاستر تنها می‌توانید یک شبکه Pod نصب کنید.</p>
+<p dir="rtl">پس از نصب شبکه Pod، می‌توانید با بررسی اینکه Pod مربوط به CoreDNS در خروجی
+<code dir="ltr">kubectl get pods --all-namespaces</code> در وضعیت <code dir="ltr">Running</code> قرار دارد، از کارکرد درست آن اطمینان پیدا کنید.
+پس از اینکه Pod مربوط به CoreDNS راه‌اندازی شد و در حال اجرا بود، می‌توانید با ملحق کردن نودهای خود ادامه دهید.</p>
+<p dir="rtl">اگر شبکه شما کار نمی‌کند یا CoreDNS در وضعیت <code dir="ltr">Running</code> نیست،
+<a href="https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/troubleshooting-kubeadm/" target="_blank">راهنمای عیب‌یابی</a>
+ابزار <code dir="ltr">kubeadm</code> را ببینید.</p>
+<h3 id="برچسب-های-مدیریت-شدهٔ-نود" dir="rtl">برچسب‌های مدیریت‌شدهٔ نود</h3>
+<p dir="rtl">ابزار kubeadm به‌طور پیش‌فرض کنترل‌کنندهٔ پذیرش (admission controller) <a href="../../../../reference/access-authn-authz/admission-controllers.html#noderestriction">NodeRestriction</a> را فعال می‌کند. این کنترل‌کننده مشخص می‌کند که kubelet هنگام ثبت نود، کدام برچسب‌ها را می‌تواند خودش روی نود اعمال کند. در مستندات این کنترل‌کنندهٔ پذیرش آمده است که کدام برچسب‌ها را می‌توان با گزینهٔ <code dir="ltr">--node-labels</code> در kubelet به کار برد.</p>
+<div class="callout caution"><div class="callout-title">احتیاط:</div>
+<p dir="rtl">به دلیل وجود کنترل‌کنندهٔ پذیرش <code dir="ltr">NodeRestriction</code>، <strong>نمی‌توانید</strong> با فلگ <code dir="ltr">--node-labels</code> در kubelet، برچسب‌های محدودشده (مانند <code dir="ltr">node-role.kubernetes.io/*</code>) را هنگام راه‌اندازی اولیه اعمال کنید.</p>
+<p dir="rtl">اگر بکوشید برچسب‌های محدودشده را با این فلگ kubelet اضافه کنید، ثبت نود در API server با شکست روبه‌رو می‌شود.</p>
+</div>
+<p dir="rtl">برای اعمال دستی این برچسب‌ها، باید پس از پیوستن نود به کلاستر از دستور <code dir="ltr">kubectl label</code> استفاده کنید. مطمئن شوید که از یک kubeconfig دارای دسترسی ممتاز، مانند فایل <code dir="ltr">/etc/kubernetes/admin.conf</code> که kubeadm آن را مدیریت می‌کند، استفاده می‌کنید.</p>
+<h3 id="جداسازی-نود-control-plane" dir="rtl">جداسازی نود control plane</h3>
+<p dir="rtl">کلاستر شما به‌طور پیش‌فرض و به دلایل امنیتی، Podها را روی نودهای control plane زمان‌بندی نمی‌کند. اگر می‌خواهید بتوانید Podها را روی نودهای control plane زمان‌بندی کنید، برای نمونه در یک کلاستر کوبرنتیز تک‌ماشینی، این دستور را اجرا کنید:</p>
+<pre dir="ltr"><code class="language-bash" dir="ltr">kubectl taint nodes --all node-role.kubernetes.io/control-plane-
+</code></pre>
+<p dir="rtl">خروجی چیزی شبیه به این خواهد بود:</p>
+<pre dir="ltr"><code dir="ltr">node "test-01" untainted
+...
+</code></pre>
+<p dir="rtl">این دستور taint با عنوان <code dir="ltr">node-role.kubernetes.io/control-plane:NoSchedule</code> را از همهٔ نودهایی که آن را دارند، از جمله نودهای control plane، حذف می‌کند. در نتیجه زمان‌بند از این پس می‌تواند Podها را روی همهٔ نودها زمان‌بندی کند.</p>
+<p dir="rtl">افزون بر این، می‌توانید دستور زیر را اجرا کنید تا برچسب <a href="../../../../reference/labels-annotations-taints/index.html#node-kubernetes-io-exclude-from-external-load-balancers"><code dir="ltr">node.kubernetes.io/exclude-from-external-load-balancers</code></a> را از نود control plane حذف کنید؛ این برچسب نود را از فهرست سرورهای پشتیبان (backend) کنار می‌گذارد:</p>
+<pre dir="ltr"><code class="language-bash" dir="ltr">kubectl label nodes --all node.kubernetes.io/exclude-from-external-load-balancers-
+</code></pre>
+<h3 id="افزودن-نودهای-control-plane-بیشتر" dir="rtl">افزودن نودهای control plane بیشتر</h3>
+<p dir="rtl">برای آشنایی با مراحل ایجاد یک کلاستر kubeadm با دسترس‌پذیری بالا از طریق افزودن نودهای control plane بیشتر، به <a href="high-availability.html">ایجاد کلاسترهای با دسترس‌پذیری بالا با kubeadm</a> مراجعه کنید.</p>
+<h3 id="افزودن-نودهای-کارگر-join-nodes" dir="rtl">افزودن نودهای کارگر {#join-nodes}</h3>
+<p dir="rtl">بارهای کاری شما روی نودهای کارگر (worker) اجرا می‌شوند.</p>
+<p dir="rtl">صفحه‌های زیر نشان می‌دهند که چگونه می‌توان با دستور <code dir="ltr">kubeadm join</code> نودهای کارگر لینوکس و ویندوز را به کلاستر افزود:</p>
+<ul>
+<li dir="rtl"><a href="https://kubernetes.io/docs/tasks/administer-cluster/kubeadm/adding-linux-nodes/" target="_blank">افزودن نودهای کارگر لینوکس</a></li>
+<li dir="rtl"><a href="https://kubernetes.io/docs/tasks/administer-cluster/kubeadm/adding-windows-nodes/" target="_blank">افزودن نودهای کارگر ویندوز</a></li>
+</ul>
+<h3 id="اختیاری-کنترل-کلاستر-از-ماشین-هایی-غیر-از-نود-control-plane" dir="rtl">(اختیاری) کنترل کلاستر از ماشین‌هایی غیر از نود control plane</h3>
+<p dir="rtl">برای آنکه kubectl روی رایانه‌ای دیگر (مثلاً لپ‌تاپ) بتواند با کلاستر شما ارتباط برقرار کند، باید فایل kubeconfig مدیر را به این شکل از نود control plane به ایستگاه کاری خود کپی کنید:</p>
+<pre dir="ltr"><code class="language-bash" dir="ltr">scp root@&lt;control-plane-host&gt;:/etc/kubernetes/admin.conf .
+kubectl --kubeconfig ./admin.conf get nodes
+</code></pre>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">در مثال بالا فرض شده است که دسترسی SSH برای کاربر root فعال است. اگر چنین نیست، می‌توانید فایل <code dir="ltr">admin.conf</code> را طوری کپی کنید که کاربر دیگری به آن دسترسی داشته باشد و سپس با همان کاربر عمل <code dir="ltr">scp</code> را انجام دهید.</p>
+<p dir="rtl">فایل <code dir="ltr">admin.conf</code> به کاربر، دسترسی‌های <em>ابرکاربر</em> (superuser) روی کلاستر می‌دهد. از این فایل باید با احتیاط و به‌ندرت استفاده کرد. برای کاربران عادی توصیه می‌شود یک اعتبارنامهٔ یکتا بسازید و دسترسی‌های لازم را به آن بدهید. این کار را می‌توانید با دستور <code dir="ltr">kubeadm kubeconfig user --client-name &lt;CN&gt;</code> انجام دهید. این دستور یک فایل KubeConfig را در STDOUT چاپ می‌کند که باید آن را در یک فایل ذخیره کنید و در اختیار کاربر خود بگذارید. پس از آن، با دستور <code dir="ltr">kubectl create (cluster)rolebinding</code> دسترسی‌ها را اعطا کنید.</p>
+</div>
+<h3 id="اختیاری-پراکسی-کردن-api-server-به-localhost" dir="rtl">(اختیاری) پراکسی کردن API Server به localhost</h3>
+<p dir="rtl">اگر می‌خواهید از بیرون کلاستر به API Server متصل شوید، می‌توانید از <code dir="ltr">kubectl proxy</code> استفاده کنید:</p>
+<pre dir="ltr"><code class="language-bash" dir="ltr">scp root@&lt;control-plane-host&gt;:/etc/kubernetes/admin.conf .
+kubectl --kubeconfig ./admin.conf proxy
+</code></pre>
+<p dir="rtl">اکنون می‌توانید به‌صورت محلی از نشانی <code dir="ltr">http://localhost:8001/api/v1</code> به API Server دسترسی داشته باشید.</p>
+<h2 id="پاک-سازی-tear-down" dir="rtl">پاک‌سازی {#tear-down}</h2>
+<p dir="rtl">اگر برای آزمایش، از سرورهای یک‌بارمصرف برای کلاستر خود استفاده کرده‌اید، می‌توانید آن‌ها را خاموش کنید و نیازی به پاک‌سازی بیشتر نیست. برای حذف ارجاع‌های محلی به کلاستر می‌توانید از <code dir="ltr">kubectl config delete-cluster</code> استفاده کنید.</p>
+<p dir="rtl">اما اگر می‌خواهید کلاستر خود را به شکلی تمیزتر از کار بیندازید، ابتدا باید <a href="https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#drain" target="_blank">نود را تخلیه کنید</a> و مطمئن شوید که نود خالی است؛ سپس پیکربندی نود را بردارید.</p>
+<h3 id="حذف-نود" dir="rtl">حذف نود</h3>
+<p dir="rtl">با اعتبارنامه‌های مناسب با نود control plane ارتباط برقرار کنید و این دستور را اجرا کنید:</p>
+<pre dir="ltr"><code class="language-bash" dir="ltr">kubectl drain &lt;node name&gt; --delete-emptydir-data --force --ignore-daemonsets
+</code></pre>
+<p dir="rtl">پیش از حذف نود، وضعیتی را که <code dir="ltr">kubeadm</code> نصب کرده است بازنشانی کنید:</p>
+<pre dir="ltr"><code class="language-bash" dir="ltr">kubeadm reset
+</code></pre>
+<p dir="rtl">فرایند بازنشانی، قواعد iptables یا جدول‌های IPVS را بازنشانی یا پاک‌سازی نمی‌کند. اگر می‌خواهید iptables را بازنشانی کنید، باید این کار را به‌صورت دستی انجام دهید:</p>
+<pre dir="ltr"><code class="language-bash" dir="ltr">iptables -F &amp;&amp; iptables -t nat -F &amp;&amp; iptables -t mangle -F &amp;&amp; iptables -X
+</code></pre>
+<p dir="rtl">اگر می‌خواهید جدول‌های IPVS را بازنشانی کنید، باید دستور زیر را اجرا کنید:</p>
+<pre dir="ltr"><code class="language-bash" dir="ltr">ipvsadm -C
+</code></pre>
+<p dir="rtl">اکنون نود را حذف کنید:</p>
+<pre dir="ltr"><code class="language-bash" dir="ltr">kubectl delete node &lt;node name&gt;
+</code></pre>
+<p dir="rtl">اگر می‌خواهید از نو شروع کنید، دستور <code dir="ltr">kubeadm init</code> یا <code dir="ltr">kubeadm join</code> را با آرگومان‌های مناسب اجرا کنید.</p>
+<h3 id="پاک-سازی-control-plane" dir="rtl">پاک‌سازی control plane</h3>
+<p dir="rtl">می‌توانید با اجرای <code dir="ltr">kubeadm reset</code> روی میزبان control plane، یک پاک‌سازی در حد امکان (best-effort) را آغاز کنید.</p>
+<p dir="rtl">برای اطلاعات بیشتر دربارهٔ این زیرفرمان و گزینه‌های آن، به مستندات مرجع <a href="../../../../reference/setup-tools/kubeadm/kubeadm-reset.html"><code dir="ltr">kubeadm reset</code></a> مراجعه کنید.</p>
+<h2 id="سیاست-اختلاف-نسخه-version-skew-policy" dir="rtl">سیاست اختلاف نسخه {#version-skew-policy}</h2>
+<p dir="rtl">هرچند kubeadm اختلاف نسخه (version skew) با برخی از مؤلفه‌هایی را که مدیریت می‌کند مجاز می‌داند، توصیه می‌شود نسخهٔ kubeadm را با نسخه‌های مؤلفه‌های control plane، kube-proxy و kubelet یکسان نگه دارید.</p>
+<h3 id="اختلاف-نسخهٔ-kubeadm-با-نسخهٔ-کوبرنتیز" dir="rtl">اختلاف نسخهٔ kubeadm با نسخهٔ کوبرنتیز</h3>
+<p dir="rtl">ابزار kubeadm را می‌توان با مؤلفه‌های کوبرنتیزی به کار برد که هم‌نسخهٔ kubeadm یا یک نسخه قدیمی‌تر از آن هستند. نسخهٔ کوبرنتیز را می‌توان با فلگ <code dir="ltr">--kubernetes-version</code> در <code dir="ltr">kubeadm init</code>، یا هنگام استفاده از <code dir="ltr">--config</code> با فیلد <a href="../../../../reference/config-api/kubeadm-config.v1beta4.html"><code dir="ltr">ClusterConfiguration.kubernetesVersion</code></a>، برای kubeadm مشخص کرد. این گزینه نسخه‌های kube-apiserver، kube-controller-manager، kube-scheduler و kube-proxy را تعیین می‌کند.</p>
+<p dir="rtl">مثال:</p>
+<ul>
+<li dir="rtl">نسخهٔ kubeadm برابر 1.37 است</li>
+<li dir="rtl">مقدار <code dir="ltr">kubernetesVersion</code> باید 1.37 یا 1.36 باشد</li>
+</ul>
+<h3 id="اختلاف-نسخهٔ-kubeadm-با-kubelet" dir="rtl">اختلاف نسخهٔ kubeadm با kubelet</h3>
+<p dir="rtl">همانند نسخهٔ کوبرنتیز، kubeadm را می‌توان با نسخه‌ای از kubelet به کار برد که هم‌نسخهٔ kubeadm یا حداکثر سه نسخه قدیمی‌تر از آن باشد.</p>
+<p dir="rtl">مثال:</p>
+<ul>
+<li dir="rtl">نسخهٔ kubeadm برابر 1.37 است</li>
+<li dir="rtl">نسخهٔ kubelet روی میزبان باید 1.37، 1.36،
+1.35 یا 1.34 باشد</li>
+</ul>
+<h3 id="اختلاف-نسخهٔ-kubeadm-با-kubeadm" dir="rtl">اختلاف نسخهٔ kubeadm با kubeadm</h3>
+<p dir="rtl">نحوهٔ عملکرد فرمان‌های kubeadm روی نودهای موجود یا کل کلاسترهایی که kubeadm آن‌ها را مدیریت می‌کند، محدودیت‌های مشخصی دارد.</p>
+<p dir="rtl">اگر نودهای جدیدی به کلاستر بپیوندند، فایل اجرایی kubeadm که برای <code dir="ltr">kubeadm join</code> به کار می‌رود باید با آخرین نسخه‌ای از kubeadm یکسان باشد که برای ایجاد کلاستر با <code dir="ltr">kubeadm init</code> یا برای ارتقای همان نود با <code dir="ltr">kubeadm upgrade</code> استفاده شده است. قواعد مشابهی برای سایر فرمان‌های kubeadm نیز برقرار است، به‌جز <code dir="ltr">kubeadm upgrade</code>.</p>
+<p dir="rtl">مثال برای <code dir="ltr">kubeadm join</code>:</p>
+<ul>
+<li dir="rtl">از kubeadm نسخهٔ 1.37 برای ایجاد کلاستر با <code dir="ltr">kubeadm init</code> استفاده شده است</li>
+<li dir="rtl">نودهایی که به کلاستر می‌پیوندند باید از فایل اجرایی kubeadm با نسخهٔ 1.37 استفاده کنند</li>
+</ul>
+<p dir="rtl">نودهایی که در حال ارتقا هستند باید از نسخه‌ای از kubeadm استفاده کنند که نسخهٔ MINOR آن با نسخهٔ kubeadm به‌کاررفته برای مدیریت نود یکسان باشد یا یک نسخهٔ MINOR جدیدتر از آن باشد.</p>
+<p dir="rtl">مثال برای <code dir="ltr">kubeadm upgrade</code>:</p>
+<ul>
+<li dir="rtl">از kubeadm نسخهٔ 1.36 برای ایجاد یا ارتقای نود استفاده شده است</li>
+<li dir="rtl">نسخهٔ kubeadm که برای ارتقای نود به کار می‌رود باید 1.36
+یا 1.37 باشد</li>
+</ul>
+<p dir="rtl">برای آشنایی بیشتر با اختلاف نسخه میان مؤلفه‌های گوناگون کوبرنتیز، به <a href="/releases/version-skew-policy/">سیاست اختلاف نسخه</a> مراجعه کنید.</p>
+<h2 id="محدودیت-ها-limitations" dir="rtl">محدودیت‌ها {#limitations}</h2>
+<h3 id="تاب-آوری-کلاستر-resilience" dir="rtl">تاب‌آوری کلاستر {#resilience}</h3>
+<p dir="rtl">کلاستری که در اینجا ایجاد شد، تنها یک نود control plane دارد که یک پایگاه دادهٔ etcd نیز روی آن اجرا می‌شود. به این معنا که اگر نود control plane از کار بیفتد، ممکن است کلاستر شما داده‌هایش را از دست بدهد و لازم باشد از ابتدا دوباره ساخته شود.</p>
+<p dir="rtl">راهکارها:</p>
+<ul>
+<li dir="rtl">
+<p dir="rtl">به‌طور منظم <a href="https://etcd.io/docs/v3.5/op-guide/recovery/" target="_blank" rel="noopener">از etcd نسخهٔ پشتیبان بگیرید</a>. پوشهٔ دادهٔ etcd که kubeadm پیکربندی می‌کند، در مسیر <code dir="ltr">/var/lib/etcd</code> روی نود control plane قرار دارد.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">از چند نود control plane استفاده کنید. می‌توانید <a href="ha-topology.html">گزینه‌های توپولوژی با دسترس‌پذیری بالا</a> را مطالعه کنید تا توپولوژی کلاستری را برگزینید که <a href="high-availability.html">دسترس‌پذیری بالا</a> فراهم می‌کند.</p>
+</li>
+</ul>
+<h3 id="سازگاری-با-پلتفرم-ها-multi-platform" dir="rtl">سازگاری با پلتفرم‌ها {#multi-platform}</h3>
+<p dir="rtl">بسته‌های deb/rpm و فایل‌های اجرایی kubeadm، مطابق با <a href="https://git.k8s.io/design-proposals-archive/multi-platform.md" target="_blank" rel="noopener">پیشنهاد چندپلتفرمی</a>، برای معماری‌های amd64، arm (۳۲ بیتی)، arm64، ppc64le و s390x ساخته می‌شوند.</p>
+<p dir="rtl">از نسخهٔ v1.12 به بعد، ایمیج‌های کانتینر چندپلتفرمی برای control plane و افزونه‌ها نیز پشتیبانی می‌شوند.</p>
+<p dir="rtl">تنها برخی از ارائه‌دهندگان شبکه برای همهٔ پلتفرم‌ها راه‌حل ارائه می‌کنند. لطفاً به فهرست ارائه‌دهندگان شبکه در بالا یا مستندات هر ارائه‌دهنده مراجعه کنید تا دریابید که آیا آن ارائه‌دهنده از پلتفرم انتخابی شما پشتیبانی می‌کند یا نه.</p>
+<h2 id="عیب-یابی-troubleshooting" dir="rtl">عیب‌یابی {#troubleshooting}</h2>
+<p dir="rtl">اگر در کار با kubeadm به مشکل برخوردید، لطفاً به <a href="https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/troubleshooting-kubeadm/" target="_blank">مستندات عیب‌یابی</a> ما مراجعه کنید.</p>
+<!-- discussion -->
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<ul>
+<li dir="rtl">با <a href="https://github.com/heptio/sonobuoy" target="_blank" rel="noopener">Sonobuoy</a> بررسی کنید که کلاستر شما به‌درستی کار می‌کند</li>
+<li dir="rtl"><a id="lifecycle"></a>برای جزئیات ارتقای کلاستر با <code dir="ltr">kubeadm</code>، به <a href="https://kubernetes.io/docs/tasks/administer-cluster/kubeadm/kubeadm-upgrade/" target="_blank">ارتقای کلاسترهای kubeadm</a>
+مراجعه کنید.</li>
+<li dir="rtl">با کاربردهای پیشرفتهٔ <code dir="ltr">kubeadm</code> در <a href="../../../../reference/setup-tools/kubeadm/index.html">مستندات مرجع kubeadm</a> آشنا شوید</li>
+<li dir="rtl">دربارهٔ <a href="../../../../concepts/index.html">مفاهیم</a> کوبرنتیز و <a href="../../../../reference/kubectl/index.html"><code dir="ltr">kubectl</code></a> بیشتر بیاموزید.</li>
+<li dir="rtl">برای فهرست کامل‌تری از افزونه‌های شبکهٔ Pod، صفحهٔ <a href="../../../../concepts/cluster-administration/networking.html">شبکه‌بندی کلاستر</a>
+را ببینید.</li>
+<li dir="rtl"><a id="other-addons"></a>برای آشنایی با افزونه‌های دیگر، از جمله ابزارهای ثبت لاگ، پایش، سیاست شبکه، مصورسازی و
+کنترل کلاستر کوبرنتیز، <a href="../../../../concepts/cluster-administration/addons.html">فهرست افزونه‌ها</a> را ببینید.</li>
+<li dir="rtl">نحوهٔ مدیریت لاگ‌های رویدادهای کلاستر و لاگ‌های برنامه‌های در حال اجرا در Podها را در کلاستر خود پیکربندی کنید.
+برای مروری بر آنچه این کار در بر دارد، به <a href="../../../../concepts/cluster-administration/logging.html">معماری ثبت لاگ</a>
+مراجعه کنید.</li>
+</ul>
+<h3 id="بازخورد-feedback" dir="rtl">بازخورد {#feedback}</h3>
+<ul>
+<li dir="rtl">برای گزارش باگ‌ها، به <a href="https://github.com/kubernetes/kubeadm/issues" target="_blank" rel="noopener">ردیاب مسائل kubeadm در GitHub</a> مراجعه کنید</li>
+<li dir="rtl">برای دریافت پشتیبانی، به کانال
+<a href="https://kubernetes.slack.com/messages/kubeadm/" target="_blank" rel="noopener">#kubeadm</a> در Slack مراجعه کنید</li>
+<li dir="rtl">کانال عمومی Slack برای توسعهٔ SIG Cluster Lifecycle:
+<a href="https://kubernetes.slack.com/messages/sig-cluster-lifecycle/" target="_blank" rel="noopener">#sig-cluster-lifecycle</a></li>
+<li dir="rtl"><a href="https://github.com/kubernetes/community/tree/main/sig-cluster-lifecycle#readme" target="_blank" rel="noopener">اطلاعات SIG</a> مربوط به SIG Cluster Lifecycle</li>
+<li dir="rtl">فهرست پستی SIG Cluster Lifecycle:
+<a href="https://groups.google.com/forum/#!forum/kubernetes-sig-cluster-lifecycle" target="_blank" rel="noopener">kubernetes-sig-cluster-lifecycle</a></li>
+</ul>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#پیش-از-شروع">پیش از شروع</a><a class="l2" href="#اهداف">اهداف</a><a class="l2" href="#دستورالعمل-ها">دستورالعمل‌ها</a><a class="l3" href="#آماده-سازی-میزبان-ها">آماده‌سازی میزبان‌ها</a><a class="l3" href="#آماده-سازی-ایمیج-های-کانتینر-موردنیاز">آماده‌سازی ایمیج‌های کانتینر موردنیاز</a><a class="l3" href="#مقداردهی-اولیه-نود-control-plane">مقداردهی اولیه نود control plane</a><a class="l3" href="#ملاحظاتی-درباره-apiserver-advertise-address-و-controlplaneendpoint">ملاحظاتی درباره apiserver-advertise-address و ControlPlaneEndpoint</a><a class="l3" href="#اطلاعات-بیشتر">اطلاعات بیشتر</a><a class="l3" href="#نصب-افزونه-شبکه-pod-pod-network">نصب افزونه شبکه Pod {#pod-network}</a><a class="l3" href="#برچسب-های-مدیریت-شدهٔ-نود">برچسب‌های مدیریت‌شدهٔ نود</a><a class="l3" href="#جداسازی-نود-control-plane">جداسازی نود control plane</a><a class="l3" href="#افزودن-نودهای-control-plane-بیشتر">افزودن نودهای control plane بیشتر</a><a class="l3" href="#افزودن-نودهای-کارگر-join-nodes">افزودن نودهای کارگر {#join-nodes}</a><a class="l3" href="#اختیاری-کنترل-کلاستر-از-ماشین-هایی-غیر-از-نود-control-plane">(اختیاری) کنترل کلاستر از ماشین‌هایی غیر از نود control plane</a><a class="l3" href="#اختیاری-پراکسی-کردن-api-server-به-localhost">(اختیاری) پراکسی کردن API Server به localhost</a><a class="l2" href="#پاک-سازی-tear-down">پاک‌سازی {#tear-down}</a><a class="l3" href="#حذف-نود">حذف نود</a><a class="l3" href="#پاک-سازی-control-plane">پاک‌سازی control plane</a><a class="l2" href="#سیاست-اختلاف-نسخه-version-skew-policy">سیاست اختلاف نسخه {#version-skew-policy}</a><a class="l3" href="#اختلاف-نسخهٔ-kubeadm-با-نسخهٔ-کوبرنتیز">اختلاف نسخهٔ kubeadm با نسخهٔ کوبرنتیز</a><a class="l3" href="#اختلاف-نسخهٔ-kubeadm-با-kubelet">اختلاف نسخهٔ kubeadm با kubelet</a><a class="l3" href="#اختلاف-نسخهٔ-kubeadm-با-kubeadm">اختلاف نسخهٔ kubeadm با kubeadm</a><a class="l2" href="#محدودیت-ها-limitations">محدودیت‌ها {#limitations}</a><a class="l3" href="#تاب-آوری-کلاستر-resilience">تاب‌آوری کلاستر {#resilience}</a><a class="l3" href="#سازگاری-با-پلتفرم-ها-multi-platform">سازگاری با پلتفرم‌ها {#multi-platform}</a><a class="l2" href="#عیب-یابی-troubleshooting">عیب‌یابی {#troubleshooting}</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a><a class="l3" href="#بازخورد-feedback">بازخورد {#feedback}</a></nav>
+</div>
+</body>
+</html>
