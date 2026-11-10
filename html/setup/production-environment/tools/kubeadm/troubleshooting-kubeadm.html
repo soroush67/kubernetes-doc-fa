@@ -1,0 +1,557 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>عیب‌یابی kubeadm | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
+<header class="top"><a href="../../../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">setup / production-environment / tools / kubeadm</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">عیب‌یابی kubeadm</h1><!-- overview -->
+<p dir="rtl">مانند هر برنامه‌ی دیگری، ممکن است هنگام نصب یا اجرای kubeadm با خطا روبه‌رو شوید.
+در این صفحه چند سناریوی رایج خرابی فهرست شده و برای هر کدام مراحلی آمده است که به شما در درک و رفع مشکل کمک می‌کند.</p>
+<p dir="rtl">اگر مشکل شما در فهرست زیر نیست، مراحل زیر را دنبال کنید:</p>
+<ul>
+<li dir="rtl">
+<p dir="rtl">اگر فکر می‌کنید مشکل شما یک باگ در kubeadm است:</p>
+<ul>
+<li dir="rtl">به <a href="https://github.com/kubernetes/kubeadm/issues" target="_blank" rel="noopener">github.com/kubernetes/kubeadm</a> بروید و issueهای موجود را جست‌وجو کنید.</li>
+<li dir="rtl">اگر issue مرتبطی وجود ندارد، <a href="https://github.com/kubernetes/kubeadm/issues/new" target="_blank" rel="noopener">یک issue جدید باز کنید</a> و از قالب issue پیروی کنید.</li>
+</ul>
+</li>
+<li dir="rtl">
+<p dir="rtl">اگر درباره‌ی نحوه‌ی کار kubeadm مطمئن نیستید، می‌توانید در کانال <code dir="ltr">#kubeadm</code> در <a href="https://slack.k8s.io/" target="_blank" rel="noopener">Slack</a> بپرسید
+یا پرسشی در <a href="https://stackoverflow.com/questions/tagged/kubernetes" target="_blank" rel="noopener">StackOverflow</a> مطرح کنید. لطفاً برچسب‌های
+مرتبط مانند <code dir="ltr">#kubernetes</code> و <code dir="ltr">#kubeadm</code> را اضافه کنید تا دیگران بتوانند به شما کمک کنند.</p>
+</li>
+</ul>
+<!-- body -->
+<h2 id="عدم-امکان-پیوستن-نود-v1-18-به-کلاستر-v1-17-به-دلیل-نبود-rbac" dir="rtl">عدم امکان پیوستن نود v1.18 به کلاستر v1.17 به دلیل نبود RBAC</h2>
+<p dir="rtl">در نسخه‌ی v1.18، kubeadm از پیوستن نودی به کلاستر جلوگیری می‌کند که نودی با همان نام از قبل در کلاستر وجود داشته باشد.
+برای این کار لازم بود RBAC به کاربر bootstrap-token اضافه شود تا بتواند آبجکت Node را با عمل GET دریافت کند.</p>
+<p dir="rtl">اما این تغییر مشکلی ایجاد می‌کند: دستور <code dir="ltr">kubeadm join</code> در نسخه‌ی v1.18 نمی‌تواند به کلاستری بپیوندد که با kubeadm نسخه‌ی v1.17 ایجاد شده است.</p>
+<p dir="rtl">برای دور زدن این مشکل دو گزینه دارید:</p>
+<p dir="rtl">دستور <code dir="ltr">kubeadm init phase bootstrap-token</code> را با kubeadm نسخه‌ی v1.18 روی یک نود control-plane اجرا کنید.
+توجه کنید که این کار بقیه‌ی مجوزهای bootstrap-token را نیز فعال می‌کند.</p>
+<p dir="rtl">یا</p>
+<p dir="rtl">قواعد RBAC زیر را به‌صورت دستی با <code dir="ltr">kubectl apply -f ...</code> اعمال کنید:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: kubeadm:get-nodes
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - nodes
+    verbs:
+      - get
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: kubeadm:get-nodes
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: kubeadm:get-nodes
+subjects:
+  - apiGroup: rbac.authorization.k8s.io
+    kind: Group
+    name: system:bootstrappers:kubeadm:default-node-token
+</code></pre>
+<h2 id="پیدا-نشدن-ebtables-یا-فایل-اجرایی-مشابه-هنگام-نصب" dir="rtl">پیدا نشدن <code dir="ltr">ebtables</code> یا فایل اجرایی مشابه هنگام نصب</h2>
+<p dir="rtl">اگر هنگام اجرای <code dir="ltr">kubeadm init</code> هشدارهای زیر را می‌بینید</p>
+<pre dir="ltr"><code class="language-console" dir="ltr">[preflight] WARNING: ebtables not found in system path
+[preflight] WARNING: ethtool not found in system path
+</code></pre>
+<p dir="rtl">احتمالاً <code dir="ltr">ebtables</code>، <code dir="ltr">ethtool</code> یا فایل اجرایی مشابهی روی نود شما نصب نیست.
+می‌توانید آن‌ها را با دستورهای زیر نصب کنید:</p>
+<ul>
+<li dir="rtl">کاربران Ubuntu/Debian دستور <code dir="ltr">apt install ebtables ethtool</code> را اجرا کنند.</li>
+<li dir="rtl">کاربران CentOS/Fedora دستور <code dir="ltr">dnf install ebtables ethtool</code> را اجرا کنند.</li>
+</ul>
+<h2 id="مسدود-ماندن-kubeadm-در-انتظار-control-plane-هنگام-نصب" dir="rtl">مسدود ماندن kubeadm در انتظار control plane هنگام نصب</h2>
+<p dir="rtl">اگر متوجه شدید که <code dir="ltr">kubeadm init</code> پس از چاپ خط زیر متوقف می‌ماند:</p>
+<pre dir="ltr"><code class="language-console" dir="ltr">[apiclient] Created API client, waiting for the control plane to become ready
+</code></pre>
+<p dir="rtl">این وضعیت ممکن است دلایل متعددی داشته باشد. رایج‌ترین آن‌ها عبارت‌اند از:</p>
+<ul>
+<li dir="rtl">مشکلات اتصال شبکه. پیش از ادامه، بررسی کنید که ماشین شما اتصال کامل به شبکه دارد.</li>
+<li dir="rtl">کانتینرهای control plane مدام کرش می‌کنند (crashloop) یا هنگ کرده‌اند. برای بررسی این موضوع می‌توانید دستور <code dir="ltr">docker ps</code>
+را اجرا کنید و هر کانتینر را با اجرای <code dir="ltr">docker logs</code> بررسی کنید. برای سایر محیط‌های اجرای کانتینر، به
+<a href="https://kubernetes.io/docs/tasks/debug/debug-cluster/crictl/" target="_blank">اشکال‌زدایی نودهای کوبرنتیز با crictl</a> مراجعه کنید.</li>
+</ul>
+<h2 id="مسدود-ماندن-kubeadm-هنگام-حذف-کانتینرهای-مدیریت-شده" dir="rtl">مسدود ماندن kubeadm هنگام حذف کانتینرهای مدیریت‌شده</h2>
+<p dir="rtl">اگر محیط اجرای کانتینر متوقف شود و هیچ‌یک از کانتینرهای مدیریت‌شده توسط کوبرنتیز را حذف نکند،
+ممکن است وضعیت زیر رخ دهد:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">sudo kubeadm reset
+</code></pre>
+<pre dir="ltr"><code class="language-console" dir="ltr">[preflight] Running pre-flight checks
+[reset] Stopping the kubelet service
+[reset] Unmounting mounted directories in "/var/lib/kubelet"
+[reset] Removing kubernetes-managed containers
+(block)
+</code></pre>
+<p dir="rtl">یک راه‌حل ممکن این است که محیط اجرای کانتینر را دوباره راه‌اندازی کنید و سپس <code dir="ltr">kubeadm reset</code> را دوباره اجرا کنید.
+همچنین می‌توانید از <code dir="ltr">crictl</code> برای اشکال‌زدایی وضعیت محیط اجرای کانتینر استفاده کنید. به
+<a href="https://kubernetes.io/docs/tasks/debug/debug-cluster/crictl/" target="_blank">اشکال‌زدایی نودهای کوبرنتیز با crictl</a> مراجعه کنید.</p>
+<h2 id="قرار-گرفتن-podها-در-وضعیت-runcontainererror،-crashloopbackoff-یا-error" dir="rtl">قرار گرفتن Podها در وضعیت <code dir="ltr">RunContainerError</code>، <code dir="ltr">CrashLoopBackOff</code> یا <code dir="ltr">Error</code></h2>
+<p dir="rtl">بلافاصله پس از <code dir="ltr">kubeadm init</code> نباید هیچ Podی در این وضعیت‌ها باشد.</p>
+<ul>
+<li dir="rtl">اگر <em>بلافاصله پس از</em> <code dir="ltr">kubeadm init</code> Podهایی در یکی از این وضعیت‌ها وجود دارند، لطفاً یک
+issue در مخزن kubeadm باز کنید. تا زمانی که افزونه‌ی شبکه را مستقر نکرده‌اید، <code dir="ltr">coredns</code> (یا <code dir="ltr">kube-dns</code>)
+باید در وضعیت <code dir="ltr">Pending</code> باشد.</li>
+<li dir="rtl">اگر پس از استقرار افزونه‌ی شبکه، Podهایی را در وضعیت <code dir="ltr">RunContainerError</code>، <code dir="ltr">CrashLoopBackOff</code> یا <code dir="ltr">Error</code>
+می‌بینید و هیچ تغییری در <code dir="ltr">coredns</code> (یا <code dir="ltr">kube-dns</code>) رخ نمی‌دهد،
+به احتمال زیاد افزونه‌ی شبکه‌ی Pod که نصب کرده‌اید به‌نوعی خراب است.
+ممکن است لازم باشد مجوزهای RBAC بیشتری به آن بدهید یا از نسخه‌ی جدیدتری استفاده کنید. لطفاً
+در سامانه‌ی پیگیری issue ارائه‌دهنده‌ی شبکه‌ی Pod یک issue ثبت کنید تا مشکل در آنجا بررسی شود.</li>
+</ul>
+<h2 id="ماندن-coredns-در-وضعیت-pending" dir="rtl">ماندن <code dir="ltr">coredns</code> در وضعیت <code dir="ltr">Pending</code></h2>
+<p dir="rtl">این رفتار <strong>مورد انتظار</strong> و بخشی از طراحی است. ابزار kubeadm به ارائه‌دهنده‌ی شبکه وابسته نیست، بنابراین مدیر کلاستر
+باید <a href="../../../../concepts/cluster-administration/addons.html">افزونه‌ی شبکه‌ی Pod</a> دلخواه خود را نصب کند.
+پیش از آنکه CoreDNS بتواند به‌طور کامل مستقر شود، باید یک شبکه‌ی Pod نصب کنید.
+به همین دلیل، پیش از راه‌اندازی شبکه، وضعیت <code dir="ltr">Pending</code> دیده می‌شود.</p>
+<h2 id="کار-نکردن-سرویس-های-hostport" dir="rtl">کار نکردن سرویس‌های <code dir="ltr">HostPort</code></h2>
+<p dir="rtl">در دسترس بودن قابلیت‌های <code dir="ltr">HostPort</code> و <code dir="ltr">HostIP</code> به ارائه‌دهنده‌ی شبکه‌ی Pod شما بستگی دارد.
+لطفاً با سازنده‌ی افزونه‌ی شبکه‌ی Pod تماس بگیرید تا بفهمید آیا قابلیت‌های
+<code dir="ltr">HostPort</code> و <code dir="ltr">HostIP</code> در دسترس هستند یا نه.</p>
+<p dir="rtl">پشتیبانی ارائه‌دهندگان CNI یعنی Calico، Canal و Flannel از HostPort تأیید شده است.</p>
+<p dir="rtl">برای اطلاعات بیشتر، به
+<a href="https://github.com/containernetworking/plugins/blob/master/plugins/meta/portmap/README.md" target="_blank" rel="noopener">مستندات portmap در CNI</a> مراجعه کنید.</p>
+<p dir="rtl">اگر ارائه‌دهنده‌ی شبکه‌ی شما از افزونه‌ی portmap در CNI پشتیبانی نمی‌کند، ممکن است لازم باشد از
+<a href="../../../../concepts/services-networking/service.html#type-nodeport">قابلیت NodePort در سرویس‌ها</a>
+یا از <code dir="ltr">HostNetwork=true</code> استفاده کنید.</p>
+<h2 id="در-دسترس-نبودن-podها-از-طریق-ip-سرویس-آن-ها" dir="rtl">در دسترس نبودن Podها از طریق IP سرویس آن‌ها</h2>
+<ul>
+<li dir="rtl">
+<p dir="rtl">بسیاری از افزونه‌های شبکه هنوز <a href="https://kubernetes.io/docs/tasks/debug/debug-application/debug-service/#a-pod-fails-to-reach-itself-via-the-service-ip" target="_blank">حالت hairpin</a>
+را فعال نمی‌کنند؛ این حالت به Podها امکان می‌دهد از طریق IP سرویس خود به خودشان دسترسی داشته باشند. این مشکل به
+<a href="https://github.com/containernetworking/cni/issues/476" target="_blank" rel="noopener">CNI</a> مربوط است. لطفاً با ارائه‌دهنده‌ی افزونه‌ی
+شبکه تماس بگیرید تا از آخرین وضعیت پشتیبانی آن از حالت hairpin مطلع شوید.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">اگر از VirtualBox (به‌طور مستقیم یا از طریق Vagrant) استفاده می‌کنید، باید
+مطمئن شوید که <code dir="ltr">hostname -i</code> یک آدرس IP قابل مسیریابی برمی‌گرداند. به‌طور پیش‌فرض، نخستین
+رابط شبکه به یک شبکه‌ی host-only غیرقابل مسیریابی متصل است. یک راه‌حل جایگزین
+ویرایش <code dir="ltr">/etc/hosts</code> است؛ برای نمونه به این
+<a href="https://github.com/errordeveloper/k8s-playground/blob/22dd39dfc06111235620e6c4404a96ae146f26fd/Vagrantfile#L11" target="_blank" rel="noopener">Vagrantfile</a>
+مراجعه کنید.</p>
+</li>
+</ul>
+<h2 id="خطاهای-گواهی-tls" dir="rtl">خطاهای گواهی TLS</h2>
+<p dir="rtl">خطای زیر نشان‌دهنده‌ی احتمال عدم تطابق گواهی است.</p>
+<pre dir="ltr"><code class="language-none" dir="ltr"># kubectl get pods
+Unable to connect to the server: x509: certificate signed by unknown authority (possibly because of "crypto/rsa: verification error" while trying to verify candidate authority certificate "kubernetes")
+</code></pre>
+<ul>
+<li dir="rtl">
+<p dir="rtl">بررسی کنید که فایل <code dir="ltr">$HOME/.kube/config</code> یک گواهی معتبر داشته باشد و در صورت نیاز
+گواهی را دوباره تولید کنید. گواهی‌های موجود در فایل kubeconfig
+با base64 کدگذاری شده‌اند. برای رمزگشایی گواهی می‌توانید از دستور <code dir="ltr">base64 --decode</code>
+و برای مشاهده‌ی اطلاعات گواهی از <code dir="ltr">openssl x509 -text -noout</code> استفاده کنید.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">متغیر محیطی <code dir="ltr">KUBECONFIG</code> را با دستور زیر حذف کنید:</p>
+<pre dir="ltr"><code class="language-sh" dir="ltr">unset KUBECONFIG
+</code></pre>
+<p dir="rtl">یا آن را روی مسیر پیش‌فرض <code dir="ltr">KUBECONFIG</code> تنظیم کنید:</p>
+<pre dir="ltr"><code class="language-sh" dir="ltr">export KUBECONFIG=/etc/kubernetes/admin.conf
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">راه‌حل دیگر، بازنویسی فایل <code dir="ltr">kubeconfig</code> موجود برای کاربر «admin» است:</p>
+<pre dir="ltr"><code class="language-sh" dir="ltr">mv $HOME/.kube $HOME/.kube.bak
+mkdir $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+</code></pre>
+</li>
+</ul>
+<h2 id="شکست-در-چرخش-گواهی-کلاینت-kubelet-kubelet-client-cert" dir="rtl">شکست در چرخش گواهی کلاینت kubelet {#kubelet-client-cert}</h2>
+<p dir="rtl">به‌طور پیش‌فرض، kubeadm یک kubelet را با چرخش خودکار گواهی‌های کلاینت پیکربندی می‌کند و برای این کار از
+پیوند نمادین <code dir="ltr">/var/lib/kubelet/pki/kubelet-client-current.pem</code> تعیین‌شده در <code dir="ltr">/etc/kubernetes/kubelet.conf</code> استفاده می‌کند.
+اگر این فرایند چرخش با شکست مواجه شود، ممکن است خطاهایی مانند <code dir="ltr">x509: certificate has expired or is not yet valid</code>
+را در لاگ‌های kube-apiserver ببینید. برای رفع این مشکل باید مراحل زیر را دنبال کنید:</p>
+<ol>
+<li dir="rtl">
+<p dir="rtl">از فایل‌های <code dir="ltr">/etc/kubernetes/kubelet.conf</code> و <code dir="ltr">/var/lib/kubelet/pki/kubelet-client*</code> روی نود معیوب نسخه‌ی پشتیبان بگیرید و سپس آن‌ها را حذف کنید.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">روی یک نود control plane سالم در کلاستر که فایل <code dir="ltr">/etc/kubernetes/pki/ca.key</code> را دارد، دستور
+<code dir="ltr">kubeadm kubeconfig user --org system:nodes --client-name system:node:$NODE &gt; kubelet.conf</code> را اجرا کنید.
+مقدار <code dir="ltr">$NODE</code> باید برابر با نام نود معیوب موجود در کلاستر باشد.
+فایل <code dir="ltr">kubelet.conf</code> حاصل را به‌صورت دستی ویرایش کنید تا نام کلاستر و نقطه‌ی پایانی سرور را تنظیم کنید،
+یا از <code dir="ltr">kubeconfig user --config</code> استفاده کنید (به <a href="https://kubernetes.io/docs/tasks/administer-cluster/kubeadm/kubeadm-certs/#kubeconfig-additional-users" target="_blank">تولید فایل‌های kubeconfig برای کاربران اضافی</a> مراجعه کنید). اگر کلاستر شما
+فایل <code dir="ltr">ca.key</code> را ندارد، باید گواهی‌های جاسازی‌شده در <code dir="ltr">kubelet.conf</code> را به‌صورت خارجی امضا کنید.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">فایل <code dir="ltr">kubelet.conf</code> حاصل را روی نود معیوب در مسیر <code dir="ltr">/etc/kubernetes/kubelet.conf</code> کپی کنید.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">سرویس kubelet را روی نود معیوب دوباره راه‌اندازی کنید (<code dir="ltr">systemctl restart kubelet</code>) و منتظر بمانید تا
+فایل <code dir="ltr">/var/lib/kubelet/pki/kubelet-client-current.pem</code> دوباره ایجاد شود.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">فایل <code dir="ltr">kubelet.conf</code> را به‌صورت دستی ویرایش کنید تا به گواهی‌های کلاینت چرخش‌یافته‌ی kubelet اشاره کند؛ برای این کار
+<code dir="ltr">client-certificate-data</code> و <code dir="ltr">client-key-data</code> را با موارد زیر جایگزین کنید:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">client-certificate: /var/lib/kubelet/pki/kubelet-client-current.pem
+client-key: /var/lib/kubelet/pki/kubelet-client-current.pem
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">سرویس kubelet را دوباره راه‌اندازی کنید.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">مطمئن شوید که نود به وضعیت <code dir="ltr">Ready</code> می‌رسد.</p>
+</li>
+</ol>
+<h2 id="کارت-شبکه-ی-nic-پیش-فرض-هنگام-استفاده-از-flannel-به-عنوان-شبکه-ی-pod-در-vagrant" dir="rtl">کارت شبکه‌ی (NIC) پیش‌فرض هنگام استفاده از flannel به‌عنوان شبکه‌ی Pod در Vagrant</h2>
+<p dir="rtl">خطای زیر ممکن است نشان دهد که مشکلی در شبکه‌ی Pod وجود دارد:</p>
+<pre dir="ltr"><code class="language-sh" dir="ltr">Error from server (NotFound): the server could not find the requested resource
+</code></pre>
+<ul>
+<li dir="rtl">
+<p dir="rtl">اگر از flannel به‌عنوان شبکه‌ی Pod درون Vagrant استفاده می‌کنید، باید
+نام رابط شبکه‌ی پیش‌فرض را برای flannel مشخص کنید.</p>
+<p dir="rtl">معمولاً Vagrant دو رابط شبکه به همه‌ی ماشین‌های مجازی اختصاص می‌دهد. رابط اول که به همه‌ی میزبان‌ها
+آدرس IP <code dir="ltr">10.0.2.15</code> را می‌دهد، برای ترافیک خارجی است که از NAT عبور می‌کند.</p>
+<p dir="rtl">این موضوع ممکن است برای flannel مشکل ایجاد کند، زیرا flannel به‌طور پیش‌فرض از نخستین رابط شبکه‌ی میزبان استفاده می‌کند.
+در نتیجه، همه‌ی میزبان‌ها تصور می‌کنند آدرس IP عمومی یکسانی دارند. برای جلوگیری از این مشکل،
+فلگ <code dir="ltr">--iface eth1</code> را به flannel بدهید تا رابط دوم انتخاب شود.</p>
+</li>
+</ul>
+<h2 id="استفاده-از-ip-غیرعمومی-برای-کانتینرها" dir="rtl">استفاده از IP غیرعمومی برای کانتینرها</h2>
+<p dir="rtl">در برخی موقعیت‌ها، دستورهای <code dir="ltr">kubectl logs</code> و <code dir="ltr">kubectl run</code> ممکن است در کلاستری که در سایر موارد
+به‌درستی کار می‌کند، خطاهای زیر را برگردانند:</p>
+<pre dir="ltr"><code class="language-console" dir="ltr">Error from server: Get https://10.19.0.41:10250/containerLogs/default/mysql-ddc65b868-glc5m/mysql: dial tcp 10.19.0.41:10250: getsockopt: no route to host
+</code></pre>
+<ul>
+<li dir="rtl">
+<p dir="rtl">علت این مشکل ممکن است این باشد که کوبرنتیز از IPای استفاده می‌کند که نمی‌تواند با سایر IPهای
+ظاهراً هم‌زیرشبکه ارتباط برقرار کند؛ احتمالاً به دلیل سیاست ارائه‌دهنده‌ی ماشین.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">سرویس DigitalOcean یک IP عمومی و نیز یک IP خصوصی به <code dir="ltr">eth0</code> اختصاص می‌دهد؛ IP خصوصی به‌صورت داخلی
+به‌عنوان لنگر (anchor) برای قابلیت IP شناور آن استفاده می‌شود. با این حال، <code dir="ltr">kubelet</code> به‌جای IP عمومی،
+IP خصوصی را به‌عنوان <code dir="ltr">InternalIP</code> نود انتخاب می‌کند.</p>
+<p dir="rtl">برای بررسی این سناریو به‌جای <code dir="ltr">ifconfig</code> از <code dir="ltr">ip addr show</code> استفاده کنید، زیرا <code dir="ltr">ifconfig</code>
+آدرس IP مستعار مشکل‌ساز را نمایش نمی‌دهد. همچنین می‌توانید از یک نقطه‌ی پایانی API مخصوص
+DigitalOcean استفاده کنید تا IP لنگر را از درون droplet استعلام کنید:</p>
+<pre dir="ltr"><code class="language-sh" dir="ltr">curl http://169.254.169.254/metadata/v1/interfaces/public/0/anchor_ipv4/address
+</code></pre>
+<p dir="rtl">راه‌حل این است که با فلگ <code dir="ltr">--node-ip</code> به <code dir="ltr">kubelet</code> بگویید از کدام IP استفاده کند.
+هنگام استفاده از DigitalOcean، این IP می‌تواند IP عمومی (اختصاص‌یافته به <code dir="ltr">eth0</code>) یا
+اگر می‌خواهید از شبکه‌ی خصوصی اختیاری استفاده کنید، IP خصوصی (اختصاص‌یافته به <code dir="ltr">eth1</code>) باشد.
+برای این کار می‌توانید از بخش <code dir="ltr">kubeletExtraArgs</code> در
+<a href="../../../../reference/config-api/kubeadm-config.v1beta4.html#kubeadm-k8s-io-v1beta4-NodeRegistrationOptions">ساختار <code dir="ltr">NodeRegistrationOptions</code></a>
+در kubeadm استفاده کنید.</p>
+<p dir="rtl">سپس <code dir="ltr">kubelet</code> را دوباره راه‌اندازی کنید:</p>
+<pre dir="ltr"><code class="language-sh" dir="ltr">systemctl daemon-reload
+systemctl restart kubelet
+</code></pre>
+</li>
+</ul>
+<h2 id="قرار-داشتن-podهای-coredns-در-وضعیت-crashloopbackoff-یا-error" dir="rtl">قرار داشتن Podهای <code dir="ltr">coredns</code> در وضعیت <code dir="ltr">CrashLoopBackOff</code> یا <code dir="ltr">Error</code></h2>
+<p dir="rtl">اگر نودهایی دارید که SELinux را با نسخه‌ی قدیمی‌تری از Docker اجرا می‌کنند، ممکن است با وضعیتی روبه‌رو شوید
+که در آن Podهای <code dir="ltr">coredns</code> راه‌اندازی نمی‌شوند. برای حل این مشکل، می‌توانید یکی از گزینه‌های زیر را امتحان کنید:</p>
+<ul>
+<li dir="rtl">
+<p dir="rtl">به <a href="../../container-runtimes.html#docker">نسخه‌ی جدیدتری از Docker</a> ارتقا دهید.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><a href="https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/6/html/security-enhanced_linux/sect-security-enhanced_linux-enabling_and_disabling_selinux-disabling_selinux" target="_blank" rel="noopener">SELinux را غیرفعال کنید</a>.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">مقدار <code dir="ltr">allowPrivilegeEscalation</code> را در Deployment مربوط به <code dir="ltr">coredns</code> روی <code dir="ltr">true</code> تنظیم کنید:</p>
+</li>
+</ul>
+<pre dir="ltr"><code class="language-bash" dir="ltr">kubectl -n kube-system get deployment coredns -o yaml | \
+  sed 's/allowPrivilegeEscalation: false/allowPrivilegeEscalation: true/g' | \
+  kubectl apply -f -
+</code></pre>
+<p dir="rtl">یکی دیگر از علت‌های قرار گرفتن CoreDNS در وضعیت <code dir="ltr">CrashLoopBackOff</code> این است که یک Pod مربوط به CoreDNS که در کوبرنتیز مستقر شده، یک حلقه (loop) را تشخیص دهد.
+<a href="https://github.com/coredns/coredns/tree/master/plugin/loop#troubleshooting-loops-in-kubernetes-clusters" target="_blank" rel="noopener">چندین راه‌حل</a>
+وجود دارد تا کوبرنتیز هر بار که CoreDNS حلقه را تشخیص می‌دهد و خارج می‌شود، تلاش نکند Pod مربوط به CoreDNS را دوباره راه‌اندازی کند.</p>
+<div class="callout warning"><div class="callout-title">هشدار:</div>
+<p dir="rtl">غیرفعال کردن SELinux یا تنظیم <code dir="ltr">allowPrivilegeEscalation</code> روی <code dir="ltr">true</code> می‌تواند
+امنیت کلاستر شما را به خطر بیندازد.</p>
+</div>
+<h2 id="راه-اندازی-مجدد-پیوسته-ی-podهای-etcd" dir="rtl">راه‌اندازی مجدد پیوسته‌ی Podهای etcd</h2>
+<p dir="rtl">اگر با خطای زیر روبه‌رو شدید:</p>
+<pre dir="ltr"><code dir="ltr">rpc error: code = 2 desc = oci runtime error: exec failed: container_linux.go:247: starting container process caused "process_linux.go:110: decoding init error from pipe caused \"read parent: connection reset by peer\""
+</code></pre>
+<p dir="rtl">این مشکل زمانی رخ می‌دهد که CentOS 7 را با Docker 1.13.1.84 اجرا کنید.
+این نسخه از Docker ممکن است مانع از اجرای فرمان kubelet درون کانتینر etcd شود.</p>
+<p dir="rtl">برای دور زدن این مشکل، یکی از گزینه‌های زیر را انتخاب کنید:</p>
+<ul>
+<li dir="rtl">
+<p dir="rtl">به نسخه‌ی قدیمی‌تری از Docker، مانند 1.13.1-75، برگردید:</p>
+<pre dir="ltr"><code dir="ltr">dnf downgrade docker-1.13.1-75.git8633870.el7.centos.x86_64 docker-client-1.13.1-75.git8633870.el7.centos.x86_64 docker-common-1.13.1-75.git8633870.el7.centos.x86_64
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">یکی از نسخه‌های توصیه‌شده‌ی جدیدتر، مانند 18.06، را نصب کنید:</p>
+<pre dir="ltr"><code class="language-bash" dir="ltr">sudo dnf config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+dnf install docker-ce-18.06.1.ce-3.el7.x86_64
+</code></pre>
+</li>
+</ul>
+<h2 id="عدم-امکان-ارسال-فهرست-مقادیر-جداشده-با-کاما-به-آرگومان-های-درون-فلگ---component-extra-args" dir="rtl">عدم امکان ارسال فهرست مقادیر جداشده با کاما به آرگومان‌های درون فلگ <code dir="ltr">--component-extra-args</code></h2>
+<p dir="rtl">فلگ‌های <code dir="ltr">kubeadm init</code> مانند <code dir="ltr">--component-extra-args</code> به شما امکان می‌دهند آرگومان‌های سفارشی را به یکی از مؤلفه‌های
+control-plane مانند kube-apiserver بدهید. با این حال، این سازوکار به دلیل نوع زیربنایی‌ای که برای تجزیه‌ی
+مقادیر استفاده می‌شود (<code dir="ltr">mapStringString</code>) محدودیت دارد.</p>
+<p dir="rtl">اگر بخواهید آرگومانی را ارسال کنید که از چند مقدار جداشده با کاما پشتیبانی می‌کند، مانند
+<code dir="ltr">--apiserver-extra-args "enable-admission-plugins=LimitRanger,NamespaceExists"</code>، این فلگ با خطای
+<code dir="ltr">flag: malformed pair, expect string=string</code> شکست می‌خورد. علت این است که فهرست آرگومان‌های
+<code dir="ltr">--apiserver-extra-args</code> انتظار جفت‌های <code dir="ltr">key=value</code> را دارد و در این حالت <code dir="ltr">NamespacesExists</code>
+کلیدی در نظر گرفته می‌شود که مقدار ندارد.</p>
+<p dir="rtl">به‌عنوان راه دیگر، می‌توانید جفت‌های <code dir="ltr">key=value</code> را به این شکل از هم جدا کنید:
+<code dir="ltr">--apiserver-extra-args "enable-admission-plugins=LimitRanger,enable-admission-plugins=NamespaceExists"</code>
+اما در این صورت کلید <code dir="ltr">enable-admission-plugins</code> فقط مقدار <code dir="ltr">NamespaceExists</code> را خواهد داشت.</p>
+<p dir="rtl">یک راه‌حل شناخته‌شده، استفاده از <a href="../../../../reference/config-api/kubeadm-config.v1beta4.html">فایل پیکربندی</a> kubeadm است.</p>
+<h2 id="زمان-بندی-kube-proxy-پیش-از-آنکه-cloud-controller-manager-نود-را-مقداردهی-اولیه-کند" dir="rtl">زمان‌بندی kube-proxy پیش از آنکه cloud-controller-manager نود را مقداردهی اولیه کند</h2>
+<p dir="rtl">در سناریوهای مربوط به ارائه‌دهندگان ابری، ممکن است kube-proxy پیش از آنکه cloud-controller-manager
+آدرس‌های نود را مقداردهی اولیه کند، روی نودهای worker جدید زمان‌بندی شود. در این صورت kube-proxy
+نمی‌تواند آدرس IP نود را به‌درستی دریافت کند و این موضوع بر عملکرد پراکسی در مدیریت
+متعادل‌کننده‌های بار (load balancer) نیز اثر زنجیره‌ای می‌گذارد.</p>
+<p dir="rtl">خطای زیر را می‌توان در Podهای kube-proxy مشاهده کرد:</p>
+<pre dir="ltr"><code dir="ltr">server.go:610] Failed to retrieve node IP: host IP unknown; known addresses: []
+proxier.go:340] invalid nodeIP, initializing kube-proxy with 127.0.0.1 as nodeIP
+</code></pre>
+<p dir="rtl">یک راه‌حل شناخته‌شده این است که DaemonSet مربوط به kube-proxy را patch کنید تا بتوان آن را صرف‌نظر از وضعیت نودهای
+control-plane روی آن‌ها زمان‌بندی کرد و تا زمانی که شرایط محافظتی اولیه‌ی سایر نودها برطرف نشده است،
+روی آن نودها اجرا نشود:</p>
+<pre dir="ltr"><code dir="ltr">kubectl -n kube-system patch ds kube-proxy -p='{
+  "spec": {
+    "template": {
+      "spec": {
+        "tolerations": [
+          {
+            "key": "CriticalAddonsOnly",
+            "operator": "Exists"
+          },
+          {
+            "effect": "NoSchedule",
+            "key": "node-role.kubernetes.io/control-plane"
+          }
+        ]
+      }
+    }
+  }
+}'
+</code></pre>
+<p dir="rtl">برای پیگیری این مشکل می‌توانید به issue مربوط به آن در <a href="https://github.com/kubernetes/kubeadm/issues/1027" target="_blank" rel="noopener">اینجا</a> مراجعه کنید.</p>
+<h2 id="پوشه-ی-usr-روی-نودها-به-صورت-فقط-خواندنی-mount-شده-است-usr-mounted-read-only" dir="rtl">پوشه‌ی <code dir="ltr">/usr</code> روی نودها به‌صورت فقط‌خواندنی mount شده است {#usr-mounted-read-only}</h2>
+<p dir="rtl">در توزیع‌های لینوکسی مانند Fedora CoreOS یا Flatcar Container Linux، پوشه‌ی <code dir="ltr">/usr</code> به‌صورت یک سیستم‌فایل فقط‌خواندنی mount می‌شود.
+اجزای کوبرنتیز مانند kubelet و kube-controller-manager برای <a href="https://github.com/kubernetes/community/blob/ab55d85/contributors/devel/sig-storage/flexvolume.md" target="_blank" rel="noopener">پشتیبانی از flex-volume</a>
+از مسیر پیش‌فرض <code dir="ltr">/usr/libexec/kubernetes/kubelet-plugins/volume/exec/</code> استفاده می‌کنند، اما برای کارکرد این قابلیت، پوشه‌ی flex-volume <em>باید قابل نوشتن باشد</em>.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">قابلیت FlexVolume در نسخه‌ی v1.23 کوبرنتیز منسوخ شد.</p>
+</div>
+<p dir="rtl">برای دور زدن این مشکل، می‌توانید پوشه‌ی flex-volume را با استفاده از
+<a href="../../../../reference/config-api/kubeadm-config.v1beta4.html">فایل پیکربندی</a> kubeadm پیکربندی کنید.</p>
+<p dir="rtl">روی نود اصلی control plane (که با <code dir="ltr">kubeadm init</code> ایجاد شده است)، فایل زیر را با استفاده از
+<code dir="ltr">--config</code> ارسال کنید:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: kubeadm.k8s.io/v1beta4
+kind: InitConfiguration
+nodeRegistration:
+  kubeletExtraArgs:
+  - name: "volume-plugin-dir"
+    value: "/opt/libexec/kubernetes/kubelet-plugins/volume/exec/"
+---
+apiVersion: kubeadm.k8s.io/v1beta4
+kind: ClusterConfiguration
+controllerManager:
+  extraArgs:
+  - name: "flex-volume-plugin-dir"
+    value: "/opt/libexec/kubernetes/kubelet-plugins/volume/exec/"
+</code></pre>
+<p dir="rtl">روی نودهایی که به کلاستر می‌پیوندند:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: kubeadm.k8s.io/v1beta4
+kind: JoinConfiguration
+nodeRegistration:
+  kubeletExtraArgs:
+  - name: "volume-plugin-dir"
+    value: "/opt/libexec/kubernetes/kubelet-plugins/volume/exec/"
+</code></pre>
+<p dir="rtl">به‌عنوان راه‌حل جایگزین، می‌توانید فایل <code dir="ltr">/etc/fstab</code> را تغییر دهید تا mount پوشه‌ی <code dir="ltr">/usr</code> قابل نوشتن شود؛
+اما توجه داشته باشید که با این کار یکی از اصول طراحی توزیع لینوکس را تغییر می‌دهید.</p>
+<h2 id="دستور-kubeadm-upgrade-plan-پیام-خطای-context-deadline-exceeded-را-چاپ-می-کند" dir="rtl">دستور <code dir="ltr">kubeadm upgrade plan</code> پیام خطای <code dir="ltr">context deadline exceeded</code> را چاپ می‌کند</h2>
+<p dir="rtl">این پیام خطا هنگام ارتقای کلاستر کوبرنتیز با <code dir="ltr">kubeadm</code> در حالتی نمایش داده می‌شود که
+از etcd خارجی استفاده می‌کنید. این یک باگ بحرانی نیست و به این دلیل رخ می‌دهد که
+نسخه‌های قدیمی‌تر kubeadm نسخه‌ی کلاستر etcd خارجی را بررسی می‌کنند.
+می‌توانید با اجرای <code dir="ltr">kubeadm upgrade apply ...</code> کار را ادامه دهید.</p>
+<p dir="rtl">این مشکل از نسخه‌ی 1.19 برطرف شده است.</p>
+<h2 id="دستور-kubeadm-reset-پوشه-ی-var-lib-kubelet-را-unmount-می-کند" dir="rtl">دستور <code dir="ltr">kubeadm reset</code> پوشه‌ی <code dir="ltr">/var/lib/kubelet</code> را unmount می‌کند</h2>
+<p dir="rtl">اگر <code dir="ltr">/var/lib/kubelet</code> به‌صورت mount‌شده باشد، اجرای <code dir="ltr">kubeadm reset</code> عملاً آن را unmount می‌کند.</p>
+<p dir="rtl">برای دور زدن این مشکل، پس از انجام عملیات <code dir="ltr">kubeadm reset</code>، پوشه‌ی <code dir="ltr">/var/lib/kubelet</code> را دوباره mount کنید.</p>
+<p dir="rtl">این یک پسرفت (regression) است که در kubeadm 1.15 ایجاد شد. این مشکل در نسخه‌ی 1.20 برطرف شده است.</p>
+<h2 id="امکان-استفاده-ی-امن-از-metrics-server-در-کلاستر-kubeadm-وجود-ندارد" dir="rtl">امکان استفاده‌ی امن از metrics-server در کلاستر kubeadm وجود ندارد</h2>
+<p dir="rtl">در کلاستر kubeadm، می‌توان با ارسال <code dir="ltr">--kubelet-insecure-tls</code> به <a href="https://github.com/kubernetes-sigs/metrics-server" target="_blank" rel="noopener">metrics-server</a>،
+از آن به‌صورت ناامن استفاده کرد. این کار برای کلاسترهای محیط عملیاتی توصیه نمی‌شود.</p>
+<p dir="rtl">اگر می‌خواهید بین metrics-server و kubelet از TLS استفاده کنید، با مشکل روبه‌رو می‌شوید؛
+زیرا kubeadm یک گواهی سرویس‌دهی خودامضا (self-signed) برای kubelet مستقر می‌کند. این موضوع می‌تواند
+خطاهای زیر را در سمت metrics-server ایجاد کند:</p>
+<pre dir="ltr"><code dir="ltr">x509: certificate signed by unknown authority
+x509: certificate is valid for IP-foo not IP-bar
+</code></pre>
+<p dir="rtl">برای آشنایی با نحوه‌ی پیکربندی kubeletها در کلاستر kubeadm به‌گونه‌ای که گواهی‌های سرویس‌دهی به‌درستی امضاشده داشته باشند،
+به <a href="https://kubernetes.io/docs/tasks/administer-cluster/kubeadm/kubeadm-certs/#kubelet-serving-certs" target="_blank">فعال‌سازی گواهی‌های سرویس‌دهی امضاشده‌ی kubelet</a> مراجعه کنید.</p>
+<p dir="rtl">همچنین <a href="https://github.com/kubernetes-sigs/metrics-server/blob/master/FAQ.md#how-to-run-metrics-server-securely" target="_blank" rel="noopener">چگونه metrics-server را به‌صورت امن اجرا کنیم</a> را ببینید.</p>
+<h2 id="ارتقا-به-دلیل-تغییر-نکردن-هش-etcd-شکست-می-خورد" dir="rtl">ارتقا به دلیل تغییر نکردن هش etcd شکست می‌خورد</h2>
+<p dir="rtl">این مورد فقط هنگام ارتقای یک نود control plane با فایل اجرایی kubeadm نسخه‌ی v1.28.3 یا بالاتر صدق می‌کند،
+در حالتی که آن نود در حال حاضر با نسخه‌های v1.28.0، v1.28.1 یا v1.28.2 از kubeadm مدیریت می‌شود.</p>
+<p dir="rtl">پیام خطایی که ممکن است با آن روبه‌رو شوید به این صورت است:</p>
+<pre dir="ltr"><code dir="ltr">[upgrade/etcd] Failed to upgrade etcd: couldn't upgrade control plane. kubeadm has tried to recover everything into the earlier state. Errors faced: static Pod hash for component etcd on Node kinder-upgrade-control-plane-1 did not change after 5m0s: timed out waiting for the condition
+[upgrade/etcd] Waiting for previous etcd to become available
+I0907 10:10:09.109104    3704 etcd.go:588] [etcd] attempting to see if all cluster endpoints ([https://172.17.0.6:2379/ https://172.17.0.4:2379/ https://172.17.0.3:2379/]) are available 1/10
+[upgrade/etcd] Etcd was rolled back and is now available
+static Pod hash for component etcd on Node kinder-upgrade-control-plane-1 did not change after 5m0s: timed out waiting for the condition
+couldn't upgrade control plane. kubeadm has tried to recover everything into the earlier state. Errors faced
+k8s.io/kubernetes/cmd/kubeadm/app/phases/upgrade.rollbackOldManifests
+	cmd/kubeadm/app/phases/upgrade/staticpods.go:525
+k8s.io/kubernetes/cmd/kubeadm/app/phases/upgrade.upgradeComponent
+	cmd/kubeadm/app/phases/upgrade/staticpods.go:254
+k8s.io/kubernetes/cmd/kubeadm/app/phases/upgrade.performEtcdStaticPodUpgrade
+	cmd/kubeadm/app/phases/upgrade/staticpods.go:338
+...
+</code></pre>
+<p dir="rtl">علت این خطا آن است که نسخه‌های آسیب‌دیده یک فایل مانیفست etcd با مقادیر پیش‌فرض ناخواسته
+در PodSpec تولید می‌کنند. در نتیجه، مقایسه‌ی مانیفست‌ها تفاوتی را نشان می‌دهد و
+kubeadm انتظار تغییر در هش Pod را دارد، اما kubelet هرگز این هش را به‌روزرسانی نمی‌کند.</p>
+<p dir="rtl">اگر این مشکل را در کلاستر خود مشاهده کردید، دو راه برای دور زدن آن وجود دارد:</p>
+<ul>
+<li dir="rtl">
+<p dir="rtl">می‌توان ارتقای etcd را بین نسخه‌های آسیب‌دیده و v1.28.3 (یا بالاتر) با استفاده از دستور زیر نادیده گرفت:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubeadm upgrade {apply|node} [version] --etcd-upgrade=false
+</code></pre>
+<p dir="rtl">اگر نسخه‌ی جدیدی از etcd در یکی از نسخه‌های وصله‌ای بعدی v1.28 معرفی شده باشد، این روش توصیه نمی‌شود.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">پیش از ارتقا، مانیفست static pod مربوط به etcd را وصله کنید تا ویژگی‌های پیش‌فرض مشکل‌ساز حذف شوند:</p>
+<pre dir="ltr"><code class="language-patch" dir="ltr">diff --git a/etc/kubernetes/manifests/etcd_defaults.yaml b/etc/kubernetes/manifests/etcd_origin.yaml
+index d807ccbe0aa..46b35f00e15 100644
+--- a/etc/kubernetes/manifests/etcd_defaults.yaml
++++ b/etc/kubernetes/manifests/etcd_origin.yaml
+@@ -43,7 +43,6 @@ spec:
+        scheme: HTTP
+      initialDelaySeconds: 10
+      periodSeconds: 10
+-      successThreshold: 1
+      timeoutSeconds: 15
+    name: etcd
+    resources:
+@@ -59,26 +58,18 @@ spec:
+        scheme: HTTP
+      initialDelaySeconds: 10
+      periodSeconds: 10
+-      successThreshold: 1
+      timeoutSeconds: 15
+-    terminationMessagePath: /dev/termination-log
+-    terminationMessagePolicy: File
+    volumeMounts:
+    - mountPath: /var/lib/etcd
+      name: etcd-data
+    - mountPath: /etc/kubernetes/pki/etcd
+      name: etcd-certs
+-  dnsPolicy: ClusterFirst
+-  enableServiceLinks: true
+  hostNetwork: true
+  priority: 2000001000
+  priorityClassName: system-node-critical
+-  restartPolicy: Always
+-  schedulerName: default-scheduler
+  securityContext:
+    seccompProfile:
+      type: RuntimeDefault
+-  terminationGracePeriodSeconds: 30
+  volumes:
+  - hostPath:
+      path: /etc/kubernetes/pki/etcd
+</code></pre>
+</li>
+</ul>
+<p dir="rtl">اطلاعات بیشتر درباره‌ی این باگ را می‌توانید در
+<a href="https://github.com/kubernetes/kubeadm/issues/2927" target="_blank" rel="noopener">issue پیگیری</a> آن بیابید.</p>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#عدم-امکان-پیوستن-نود-v1-18-به-کلاستر-v1-17-به-دلیل-نبود-rbac">عدم امکان پیوستن نود v1.18 به کلاستر v1.17 به دلیل نبود RBAC</a><a class="l2" href="#پیدا-نشدن-ebtables-یا-فایل-اجرایی-مشابه-هنگام-نصب">پیدا نشدن ebtables یا فایل اجرایی مشابه هنگام نصب</a><a class="l2" href="#مسدود-ماندن-kubeadm-در-انتظار-control-plane-هنگام-نصب">مسدود ماندن kubeadm در انتظار control plane هنگام نصب</a><a class="l2" href="#مسدود-ماندن-kubeadm-هنگام-حذف-کانتینرهای-مدیریت-شده">مسدود ماندن kubeadm هنگام حذف کانتینرهای مدیریت‌شده</a><a class="l2" href="#قرار-گرفتن-podها-در-وضعیت-runcontainererror،-crashloopbackoff-یا-error">قرار گرفتن Podها در وضعیت RunContainerError، CrashLoopBackOff یا Error</a><a class="l2" href="#ماندن-coredns-در-وضعیت-pending">ماندن coredns در وضعیت Pending</a><a class="l2" href="#کار-نکردن-سرویس-های-hostport">کار نکردن سرویس‌های HostPort</a><a class="l2" href="#در-دسترس-نبودن-podها-از-طریق-ip-سرویس-آن-ها">در دسترس نبودن Podها از طریق IP سرویس آن‌ها</a><a class="l2" href="#خطاهای-گواهی-tls">خطاهای گواهی TLS</a><a class="l2" href="#شکست-در-چرخش-گواهی-کلاینت-kubelet-kubelet-client-cert">شکست در چرخش گواهی کلاینت kubelet {#kubelet-client-cert}</a><a class="l2" href="#کارت-شبکه-ی-nic-پیش-فرض-هنگام-استفاده-از-flannel-به-عنوان-شبکه-ی-pod-در-vagrant">کارت شبکه‌ی (NIC) پیش‌فرض هنگام استفاده از flannel به‌عنوان شبکه‌ی Pod در Vagrant</a><a class="l2" href="#استفاده-از-ip-غیرعمومی-برای-کانتینرها">استفاده از IP غیرعمومی برای کانتینرها</a><a class="l2" href="#قرار-داشتن-podهای-coredns-در-وضعیت-crashloopbackoff-یا-error">قرار داشتن Podهای coredns در وضعیت CrashLoopBackOff یا Error</a><a class="l2" href="#راه-اندازی-مجدد-پیوسته-ی-podهای-etcd">راه‌اندازی مجدد پیوسته‌ی Podهای etcd</a><a class="l2" href="#عدم-امکان-ارسال-فهرست-مقادیر-جداشده-با-کاما-به-آرگومان-های-درون-فلگ---component-extra-args">عدم امکان ارسال فهرست مقادیر جداشده با کاما به آرگومان‌های درون فلگ --component-extra-args</a><a class="l2" href="#زمان-بندی-kube-proxy-پیش-از-آنکه-cloud-controller-manager-نود-را-مقداردهی-اولیه-کند">زمان‌بندی kube-proxy پیش از آنکه cloud-controller-manager نود را مقداردهی اولیه کند</a><a class="l2" href="#پوشه-ی-usr-روی-نودها-به-صورت-فقط-خواندنی-mount-شده-است-usr-mounted-read-only">پوشه‌ی /usr روی نودها به‌صورت فقط‌خواندنی mount شده است {#usr-mounted-read-only}</a><a class="l2" href="#دستور-kubeadm-upgrade-plan-پیام-خطای-context-deadline-exceeded-را-چاپ-می-کند">دستور kubeadm upgrade plan پیام خطای context deadline exceeded را چاپ می‌کند</a><a class="l2" href="#دستور-kubeadm-reset-پوشه-ی-var-lib-kubelet-را-unmount-می-کند">دستور kubeadm reset پوشه‌ی /var/lib/kubelet را unmount می‌کند</a><a class="l2" href="#امکان-استفاده-ی-امن-از-metrics-server-در-کلاستر-kubeadm-وجود-ندارد">امکان استفاده‌ی امن از metrics-server در کلاستر kubeadm وجود ندارد</a><a class="l2" href="#ارتقا-به-دلیل-تغییر-نکردن-هش-etcd-شکست-می-خورد">ارتقا به دلیل تغییر نکردن هش etcd شکست می‌خورد</a></nav>
+</div>
+</body>
+</html>

@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>استفاده از Port Forwarding برای دسترسی به برنامه‌ها در یک کلاستر | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">tasks / access-application-cluster</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">استفاده از Port Forwarding برای دسترسی به برنامه‌ها در یک کلاستر</h1><!-- overview -->
+<p dir="rtl">این صفحه نشان می‌دهد که چگونه با استفاده از <code dir="ltr">kubectl port-forward</code> به یک سرور MongoDB
+که در یک کلاستر کوبرنتیز اجرا می‌شود متصل شوید. این نوع اتصال برای اشکال‌زدایی
+پایگاه داده می‌تواند مفید باشد.</p>
+<h2 id="پیش-از-شروع" dir="rtl">پیش از شروع</h2>
+<ul>
+<li>
+</ul>
+<p dir="rtl">باید یک کلاستر کوبرنتیز داشته باشید و ابزار خط فرمان kubectl باید برای ارتباط با کلاستر شما پیکربندی شده باشد. توصیه می‌شود این آموزش را روی کلاستری اجرا کنید که دست‌کم دو نود داشته باشد که نقش میزبان control plane را ندارند. اگر هنوز کلاستری ندارید، می‌توانید با استفاده از
+<a href="https://minikube.sigs.k8s.io/docs/tutorials/multi_node/" target="_blank" rel="noopener">minikube</a>
+یکی بسازید یا از یکی از این محیط‌های آزمایشی کوبرنتیز استفاده کنید:</p>
+<ul>
+<li dir="ltr" class="ltr">
+<p dir="ltr" class="ltr"><a href="https://labs.iximiuz.com/playgrounds?category=kubernetes&amp;filter=all" target="_blank" rel="noopener">iximiuz Labs</a></p>
+</li>
+<li dir="ltr" class="ltr">
+<p dir="ltr" class="ltr"><a href="https://killercoda.com/playgrounds/scenario/kubernetes" target="_blank" rel="noopener">Killercoda</a></p>
+</li>
+<li dir="ltr" class="ltr">
+<p dir="ltr" class="ltr"><a href="https://kodekloud.com/public-playgrounds" target="_blank" rel="noopener">KodeKloud</a></p>
+</li>
+<li dir="rtl">
+<p dir="rtl">ابزار <a href="https://www.mongodb.com/try/download/shell" target="_blank" rel="noopener">MongoDB Shell</a> را نصب کنید.</p>
+</li>
+</ul>
+<!-- steps -->
+<h2 id="ایجاد-deployment-و-service-برای-mongodb" dir="rtl">ایجاد Deployment و Service برای MongoDB</h2>
+<ol>
+<li dir="rtl">
+<p dir="rtl">یک Deployment ایجاد کنید که MongoDB را اجرا کند:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f https://k8s.io/examples/application/mongodb/mongo-deployment.yaml
+</code></pre>
+<p dir="rtl">خروجی یک فرمان موفق تأیید می‌کند که Deployment ایجاد شده است:</p>
+<pre dir="ltr"><code dir="ltr">deployment.apps/mongo created
+</code></pre>
+<p dir="rtl">وضعیت پاد را مشاهده کنید تا از آماده بودن آن مطمئن شوید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pods
+</code></pre>
+<p dir="rtl">خروجی، پاد ایجادشده را نمایش می‌دهد:</p>
+<pre dir="ltr"><code dir="ltr">NAME                     READY   STATUS    RESTARTS   AGE
+mongo-75f59d57f4-4nd6q   1/1     Running   0          2m4s
+</code></pre>
+<p dir="rtl">وضعیت Deployment را مشاهده کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get deployment
+</code></pre>
+<p dir="rtl">خروجی نشان می‌دهد که Deployment ایجاد شده است:</p>
+<pre dir="ltr"><code dir="ltr">NAME    READY   UP-TO-DATE   AVAILABLE   AGE
+mongo   1/1     1            1           2m21s
+</code></pre>
+<p dir="rtl">هر Deployment به‌طور خودکار یک ReplicaSet را مدیریت می‌کند.
+وضعیت ReplicaSet را با فرمان زیر مشاهده کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get replicaset
+</code></pre>
+<p dir="rtl">خروجی نشان می‌دهد که ReplicaSet ایجاد شده است:</p>
+<pre dir="ltr"><code dir="ltr">NAME               DESIRED   CURRENT   READY   AGE
+mongo-75f59d57f4   1         1         1       3m12s
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">یک Service ایجاد کنید تا MongoDB را در شبکه در دسترس قرار دهد:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f https://k8s.io/examples/application/mongodb/mongo-service.yaml
+</code></pre>
+<p dir="rtl">خروجی یک فرمان موفق تأیید می‌کند که Service ایجاد شده است:</p>
+<pre dir="ltr"><code dir="ltr">service/mongo created
+</code></pre>
+<p dir="rtl">Service ایجادشده را بررسی کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get service mongo
+</code></pre>
+<p dir="rtl">خروجی، Service ایجادشده را نمایش می‌دهد:</p>
+<pre dir="ltr"><code dir="ltr">NAME    TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)     AGE
+mongo   ClusterIP   10.96.41.183   &lt;none&gt;        27017/TCP   11s
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">بررسی کنید که سرور MongoDB در Pod در حال اجرا است و روی پورت 27017 گوش می‌دهد:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># Change mongo-75f59d57f4-4nd6q to the name of the Pod
+kubectl get pod mongo-75f59d57f4-4nd6q --template='{{(index (index .spec.containers 0).ports 0).containerPort}}{{"\n"}}'
+</code></pre>
+<p dir="rtl">خروجی، پورت MongoDB را در آن Pod نمایش می‌دهد:</p>
+<pre dir="ltr"><code dir="ltr">27017
+</code></pre>
+<p dir="rtl">پورت 27017 پورت رسمی TCP برای MongoDB است.</p>
+</li>
+</ol>
+<h2 id="هدایت-یک-پورت-محلی-به-پورتی-روی-pod" dir="rtl">هدایت یک پورت محلی به پورتی روی Pod</h2>
+<ol>
+<li dir="rtl">
+<p dir="rtl">فرمان <code dir="ltr">kubectl port-forward</code> امکان می‌دهد با استفاده از نام منبع، مانند نام یک پاد، پاد منطبق را برای هدایت پورت (port forward) انتخاب کنید.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># Change mongo-75f59d57f4-4nd6q to the name of the Pod
+kubectl port-forward mongo-75f59d57f4-4nd6q 28015:27017
+</code></pre>
+<p dir="rtl">که معادل است با</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl port-forward pods/mongo-75f59d57f4-4nd6q 28015:27017
+</code></pre>
+<p dir="rtl">یا</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl port-forward deployment/mongo 28015:27017
+</code></pre>
+<p dir="rtl">یا</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl port-forward replicaset/mongo-75f59d57f4 28015:27017
+</code></pre>
+<p dir="rtl">یا</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl port-forward service/mongo 28015:27017
+</code></pre>
+<p dir="rtl">هر یک از فرمان‌های بالا کار می‌کند. خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">Forwarding from 127.0.0.1:28015 -&gt; 27017
+Forwarding from [::1]:28015 -&gt; 27017
+</code></pre>
+</li>
+</ol>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">فرمان <code dir="ltr">kubectl port-forward</code> به خط فرمان بازنمی‌گردد. برای ادامهٔ تمرین‌ها باید ترمینال دیگری باز کنید.</p>
+</div>
+<ol start="2">
+<li dir="rtl">
+<p dir="rtl">رابط خط فرمان MongoDB را اجرا کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">mongosh --port 28015
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">در اعلان خط فرمان MongoDB، فرمان <code dir="ltr">ping</code> را وارد کنید:</p>
+<pre dir="ltr"><code dir="ltr">db.runCommand( { ping: 1 } )
+</code></pre>
+<p dir="rtl">یک درخواست ping موفق، این خروجی را برمی‌گرداند:</p>
+<pre dir="ltr"><code dir="ltr">{ ok: 1 }
+</code></pre>
+</li>
+</ol>
+<h3 id="انتخاب-اختیاری-پورت-محلی-توسط-kubectl-let-kubectl-choose-local-port" dir="rtl">انتخاب اختیاری پورت محلی توسط <em>kubectl</em> {#let-kubectl-choose-local-port}</h3>
+<p dir="rtl">اگر به پورت محلی خاصی نیاز ندارید، می‌توانید با نحوی کمی ساده‌تر، انتخاب و
+تخصیص پورت محلی را به <code dir="ltr">kubectl</code> بسپارید و به این ترتیب از مدیریت تداخل پورت‌های
+محلی خلاص شوید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl port-forward deployment/mongo :27017
+</code></pre>
+<p dir="rtl">ابزار <code dir="ltr">kubectl</code> یک شمارهٔ پورت محلی آزاد پیدا می‌کند (و از شماره‌پورت‌های پایین
+پرهیز می‌کند، زیرا ممکن است برنامه‌های دیگر از آن‌ها استفاده کنند). خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">Forwarding from 127.0.0.1:63753 -&gt; 27017
+Forwarding from [::1]:63753 -&gt; 27017
+</code></pre>
+<!-- discussion -->
+<h2 id="بحث" dir="rtl">بحث</h2>
+<p dir="rtl">اتصال‌هایی که به پورت محلی 28015 برقرار می‌شوند، به پورت 27017 پادی هدایت
+می‌شوند که سرور MongoDB را اجرا می‌کند. با برقراری این اتصال، می‌توانید از
+ایستگاه کاری محلی خود برای اشکال‌زدایی پایگاه داده‌ای که در Pod اجرا می‌شود استفاده کنید.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">فرمان <code dir="ltr">kubectl port-forward</code> فقط برای پورت‌های TCP پیاده‌سازی شده است.
+پشتیبانی از پروتکل UDP در
+<a href="https://github.com/kubernetes/kubernetes/issues/47862" target="_blank" rel="noopener">issue 47862</a> پیگیری می‌شود.</p>
+</div>
+<h2 id="ملاحظات-مجوزدهی-و-امنیت" dir="rtl">ملاحظات مجوزدهی و امنیت</h2>
+<p dir="rtl">دسترسی به <code dir="ltr">kubectl port-forward</code> با سازوکارهای مجوزدهی کوبرنتیز مانند <span class="term" title="rbac">کنترل دسترسی مبتنی بر نقش (RBAC)</span> کنترل می‌شود. مجوزدهی را سرور API کوبرنتیز اعمال می‌کند، نه کلاینت <code dir="ltr">kubectl</code>.</p>
+<p dir="rtl">برای استفاده از <code dir="ltr">kubectl port-forward</code>، کاربر باید مجوز دسترسی به منبع هدف (برای مثال یک Pod یا Service) و زیرمنبع <code dir="ltr">portforward</code> را داشته باشد. مجوزهای لازم معمولاً شامل <code dir="ltr">get</code> روی <code dir="ltr">pods</code> و <code dir="ltr">create</code> روی <code dir="ltr">pods/portforward</code> است.</p>
+<p dir="rtl">مدیران کلاستر باید این مجوزها را با دقت محدود کنند، زیرا هدایت پورت می‌تواند دسترسی مستقیم شبکه‌ای به بارهای کاری فراهم کند و ممکن است کنترل‌های سطح شبکه را دور بزند.</p>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<p dir="rtl">دربارهٔ <a href="https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands/#port-forward" target="_blank">kubectl port-forward</a> بیشتر بیاموزید.</p>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#پیش-از-شروع">پیش از شروع</a><a class="l2" href="#ایجاد-deployment-و-service-برای-mongodb">ایجاد Deployment و Service برای MongoDB</a><a class="l2" href="#هدایت-یک-پورت-محلی-به-پورتی-روی-pod">هدایت یک پورت محلی به پورتی روی Pod</a><a class="l3" href="#انتخاب-اختیاری-پورت-محلی-توسط-kubectl-let-kubectl-choose-local-port">انتخاب اختیاری پورت محلی توسط kubectl {#let-kubectl-choose-local-port}</a><a class="l2" href="#بحث">بحث</a><a class="l2" href="#ملاحظات-مجوزدهی-و-امنیت">ملاحظات مجوزدهی و امنیت</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>

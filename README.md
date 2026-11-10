@@ -8,9 +8,9 @@
 
 | | |
 |---|---|
-| پیشرفت (بر اساس کلمات) | **87.2٪** |
-| صفحات ترجمه‌شده | 1456 از 1722 |
-| صفحات دارای ایراد ساختاری | 72 |
+| پیشرفت (بر اساس کلمات) | **87.9٪** |
+| صفحات ترجمه‌شده | 1471 از 1722 |
+| صفحات دارای ایراد ساختاری | 73 |
 | نسخه‌ی منبع انگلیسی | `f652c6b8a26f` |
 
 ## مشاهده
@@ -73,8 +73,8 @@ cd kubernetes-doc-fa
 | `doc-contributor-tools` | 1 | 1 |
 | `home` | 2 | 2 |
 | `reference` | 1198 | 1198 |
-| `setup` | 21 | 22 |
-| `tasks` | 2 | 221 |
+| `setup` | 22 | 22 |
+| `tasks` | 16 | 221 |
 | `tutorials` | 0 | 45 |
 
 </div>
@@ -101,26 +101,26 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [tasks/administer-cluster/change-default-storage-class.md](md/tasks/administer-cluster/change-default-storage-class.md) — 2026-11-10T10:15:11+03:30
+- [tasks/access-application-cluster/web-ui-dashboard.md](md/tasks/access-application-cluster/web-ui-dashboard.md) — 2026-11-10T10:14:54+03:30
+- [tasks/administer-cluster/access-cluster-api.md](md/tasks/administer-cluster/access-cluster-api.md) — 2026-11-10T10:14:52+03:30
+- [tasks/administer-cluster/_index.md](md/tasks/administer-cluster/_index.md) — 2026-11-10T10:14:02+03:30
+- [tasks/access-application-cluster/service-access-application-cluster.md](md/tasks/access-application-cluster/service-access-application-cluster.md) — 2026-11-10T10:13:59+03:30
+- [tasks/access-application-cluster/port-forward-access-application-cluster.md](md/tasks/access-application-cluster/port-forward-access-application-cluster.md) — 2026-11-10T10:13:52+03:30
+- [tasks/access-application-cluster/list-all-running-container-images.md](md/tasks/access-application-cluster/list-all-running-container-images.md) — 2026-11-10T10:13:40+03:30
+- [tasks/access-application-cluster/create-external-load-balancer.md](md/tasks/access-application-cluster/create-external-load-balancer.md) — 2026-11-10T10:13:27+03:30
+- [tasks/access-application-cluster/connecting-frontend-backend.md](md/tasks/access-application-cluster/connecting-frontend-backend.md) — 2026-11-10T10:13:23+03:30
+- [tasks/access-application-cluster/configure-dns-cluster.md](md/tasks/access-application-cluster/configure-dns-cluster.md) — 2026-11-10T10:12:53+03:30
+- [tasks/access-application-cluster/configure-access-multiple-clusters.md](md/tasks/access-application-cluster/configure-access-multiple-clusters.md) — 2026-11-10T10:12:51+03:30
+- [tasks/access-application-cluster/communicate-containers-same-pod-shared-volume.md](md/tasks/access-application-cluster/communicate-containers-same-pod-shared-volume.md) — 2026-11-10T10:12:48+03:30
+- [tasks/access-application-cluster/access-cluster.md](md/tasks/access-application-cluster/access-cluster.md) — 2026-11-10T10:12:03+03:30
+- [setup/production-environment/tools/kubeadm/troubleshooting-kubeadm.md](md/setup/production-environment/tools/kubeadm/troubleshooting-kubeadm.md) — 2026-11-10T10:11:44+03:30
+- [tasks/access-application-cluster/access-cluster-services.md](md/tasks/access-application-cluster/access-cluster-services.md) — 2026-11-10T10:11:18+03:30
 - [tasks/access-application-cluster/_index.md](md/tasks/access-application-cluster/_index.md) — 2026-11-10T10:10:30+03:30
 - [tasks/_index.md](md/tasks/_index.md) — 2026-11-10T10:10:27+03:30
 - [setup/production-environment/turnkey-solutions.md](md/setup/production-environment/turnkey-solutions.md) — 2026-11-10T10:10:22+03:30
 - [setup/production-environment/tools/kubeadm/setup-ha-etcd-with-kubeadm.md](md/setup/production-environment/tools/kubeadm/setup-ha-etcd-with-kubeadm.md) — 2026-11-10T10:10:17+03:30
 - [setup/production-environment/tools/kubeadm/kubelet-integration.md](md/setup/production-environment/tools/kubeadm/kubelet-integration.md) — 2026-11-10T10:09:43+03:30
-- [setup/production-environment/tools/kubeadm/install-kubeadm.md](md/setup/production-environment/tools/kubeadm/install-kubeadm.md) — 2026-11-10T10:09:33+03:30
-- [setup/production-environment/tools/kubeadm/high-availability.md](md/setup/production-environment/tools/kubeadm/high-availability.md) — 2026-11-10T10:08:51+03:30
-- [setup/production-environment/tools/kubeadm/create-cluster-kubeadm.md](md/setup/production-environment/tools/kubeadm/create-cluster-kubeadm.md) — 2026-11-10T10:08:15+03:30
-- [setup/production-environment/tools/kubeadm/ha-topology.md](md/setup/production-environment/tools/kubeadm/ha-topology.md) — 2026-11-10T10:07:22+03:30
-- [setup/production-environment/tools/kubeadm/dual-stack-support.md](md/setup/production-environment/tools/kubeadm/dual-stack-support.md) — 2026-11-10T10:07:04+03:30
-- [setup/production-environment/tools/kubeadm/control-plane-flags.md](md/setup/production-environment/tools/kubeadm/control-plane-flags.md) — 2026-11-10T10:06:35+03:30
-- [setup/production-environment/_index.md](md/setup/production-environment/_index.md) — 2026-11-10T10:06:00+03:30
-- [setup/production-environment/tools/kubeadm/_index.md](md/setup/production-environment/tools/kubeadm/_index.md) — 2026-11-10T10:05:57+03:30
-- [setup/production-environment/tools/_index.md](md/setup/production-environment/tools/_index.md) — 2026-11-10T10:05:54+03:30
-- [setup/production-environment/container-runtimes.md](md/setup/production-environment/container-runtimes.md) — 2026-11-10T10:05:47+03:30
-- [setup/learning-environment/_index.md](md/setup/learning-environment/_index.md) — 2026-11-10T10:04:33+03:30
-- [setup/best-practices/node-conformance.md](md/setup/best-practices/node-conformance.md) — 2026-11-10T10:04:20+03:30
-- [setup/best-practices/multiple-zones.md](md/setup/best-practices/multiple-zones.md) — 2026-11-10T10:04:15+03:30
-- [setup/best-practices/certificates.md](md/setup/best-practices/certificates.md) — 2026-11-10T10:04:03+03:30
-- [setup/best-practices/enforcing-pod-security-standards.md](md/setup/best-practices/enforcing-pod-security-standards.md) — 2026-11-10T10:03:39+03:30
 
 </div>
 
@@ -200,6 +200,7 @@ cd kubernetes-doc-fa
 - [reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_node_phase_control-plane.md](md/reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_node_phase_control-plane.md): chunk 1: short: 318 words vs 448 source words
 - [reference/setup-tools/kubeadm/kubeadm-init-phase.md](md/reference/setup-tools/kubeadm/kubeadm-init-phase.md): chunk 1: short: 826 words vs 1211 source words
 - [reference/setup-tools/kubeadm/kubeadm-upgrade-phase.md](md/reference/setup-tools/kubeadm/kubeadm-upgrade-phase.md): chunk 1: short: 204 words vs 316 source words
+- [tasks/access-application-cluster/communicate-containers-same-pod-shared-volume.md](md/tasks/access-application-cluster/communicate-containers-same-pod-shared-volume.md): chunk 1: 6 untranslated English lines, e.g. 'echo Hello from the debian container > /pod-data/index.html'
 
 </div>
 

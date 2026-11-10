@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-1456 از 1722 صفحه
+1471 از 1722 صفحه
 
 
 ## `.`
@@ -1896,7 +1896,7 @@
 - ✅ [install-kubeadm.md](md/setup/production-environment/tools/kubeadm/install-kubeadm.md)
 - ✅ [kubelet-integration.md](md/setup/production-environment/tools/kubeadm/kubelet-integration.md)
 - ✅ [setup-ha-etcd-with-kubeadm.md](md/setup/production-environment/tools/kubeadm/setup-ha-etcd-with-kubeadm.md)
-- ⏳ `troubleshooting-kubeadm.md`
+- ✅ [troubleshooting-kubeadm.md](md/setup/production-environment/tools/kubeadm/troubleshooting-kubeadm.md)
 
 ## `tasks`
 
@@ -1905,24 +1905,24 @@
 ## `tasks/access-application-cluster`
 
 - ✅ [_index.md](md/tasks/access-application-cluster/_index.md)
-- ⏳ `access-cluster-services.md`
-- ⏳ `access-cluster.md`
-- ⏳ `communicate-containers-same-pod-shared-volume.md`
-- ⏳ `configure-access-multiple-clusters.md`
-- ⏳ `configure-dns-cluster.md`
-- ⏳ `connecting-frontend-backend.md`
-- ⏳ `create-external-load-balancer.md`
-- ⏳ `list-all-running-container-images.md`
-- ⏳ `port-forward-access-application-cluster.md`
-- ⏳ `service-access-application-cluster.md`
-- ⏳ `web-ui-dashboard.md`
+- ✅ [access-cluster-services.md](md/tasks/access-application-cluster/access-cluster-services.md)
+- ✅ [access-cluster.md](md/tasks/access-application-cluster/access-cluster.md)
+- ⚠️ [communicate-containers-same-pod-shared-volume.md](md/tasks/access-application-cluster/communicate-containers-same-pod-shared-volume.md)
+- ✅ [configure-access-multiple-clusters.md](md/tasks/access-application-cluster/configure-access-multiple-clusters.md)
+- ✅ [configure-dns-cluster.md](md/tasks/access-application-cluster/configure-dns-cluster.md)
+- ✅ [connecting-frontend-backend.md](md/tasks/access-application-cluster/connecting-frontend-backend.md)
+- ✅ [create-external-load-balancer.md](md/tasks/access-application-cluster/create-external-load-balancer.md)
+- ✅ [list-all-running-container-images.md](md/tasks/access-application-cluster/list-all-running-container-images.md)
+- ✅ [port-forward-access-application-cluster.md](md/tasks/access-application-cluster/port-forward-access-application-cluster.md)
+- ✅ [service-access-application-cluster.md](md/tasks/access-application-cluster/service-access-application-cluster.md)
+- ✅ [web-ui-dashboard.md](md/tasks/access-application-cluster/web-ui-dashboard.md)
 
 ## `tasks/administer-cluster`
 
-- ⏳ `_index.md`
-- ⏳ `access-cluster-api.md`
+- ✅ [_index.md](md/tasks/administer-cluster/_index.md)
+- ✅ [access-cluster-api.md](md/tasks/administer-cluster/access-cluster-api.md)
 - ⏳ `certificates.md`
-- ⏳ `change-default-storage-class.md`
+- ✅ [change-default-storage-class.md](md/tasks/administer-cluster/change-default-storage-class.md)
 - ⏳ `change-pv-access-mode-readwriteoncepod.md`
 - ⏳ `change-pv-reclaim-policy.md`
 - ⏳ `cluster-upgrade.md`

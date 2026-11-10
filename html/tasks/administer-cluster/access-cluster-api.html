@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>دسترسی به کلاسترها با استفاده از API کوبرنتیز | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">tasks / administer-cluster</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">دسترسی به کلاسترها با استفاده از API کوبرنتیز</h1><!-- overview -->
+<p dir="rtl">این صفحه نشان می‌دهد که چگونه می‌توان با استفاده از API کوبرنتیز به کلاسترها دسترسی پیدا کرد.</p>
+<h2 id="پیش-از-شروع" dir="rtl">پیش از شروع</h2>
+<p dir="rtl">باید یک کلاستر کوبرنتیز داشته باشید و ابزار خط فرمان kubectl باید برای ارتباط با کلاستر شما پیکربندی شده باشد. توصیه می‌شود این آموزش را روی کلاستری اجرا کنید که دست‌کم دو نود داشته باشد که نقش میزبان control plane را ندارند. اگر هنوز کلاستری ندارید، می‌توانید با استفاده از
+<a href="https://minikube.sigs.k8s.io/docs/tutorials/multi_node/" target="_blank" rel="noopener">minikube</a>
+یکی بسازید یا از یکی از این محیط‌های آزمایشی کوبرنتیز استفاده کنید:</p>
+<ul>
+<li dir="ltr" class="ltr"><a href="https://labs.iximiuz.com/playgrounds?category=kubernetes&amp;filter=all" target="_blank" rel="noopener">iximiuz Labs</a></li>
+<li dir="ltr" class="ltr"><a href="https://killercoda.com/playgrounds/scenario/kubernetes" target="_blank" rel="noopener">Killercoda</a></li>
+<li dir="ltr" class="ltr"><a href="https://kodekloud.com/public-playgrounds" target="_blank" rel="noopener">KodeKloud</a></li>
+</ul>
+<!-- steps -->
+<h2 id="دسترسی-به-api-کوبرنتیز" dir="rtl">دسترسی به API کوبرنتیز</h2>
+<h3 id="نخستین-دسترسی-با-kubectl" dir="rtl">نخستین دسترسی با kubectl</h3>
+<p dir="rtl">هنگامی که برای نخستین بار به API کوبرنتیز دسترسی پیدا می‌کنید، از ابزار خط فرمان کوبرنتیز، یعنی <code dir="ltr">kubectl</code>، استفاده کنید.</p>
+<p dir="rtl">برای دسترسی به یک کلاستر، باید محل کلاستر را بدانید و اعتبارنامه‌های (credentials) لازم برای دسترسی به آن را در اختیار داشته باشید. معمولاً وقتی یکی از <a href="../../setup/index.html">راهنماهای شروع به کار</a> را دنبال می‌کنید، این موارد به‌طور خودکار تنظیم می‌شوند؛ یا ممکن است شخص دیگری کلاستر را راه‌اندازی کرده و اعتبارنامه‌ها و محل کلاستر را در اختیار شما گذاشته باشد.</p>
+<p dir="rtl">با این فرمان، محل و اعتبارنامه‌هایی را که kubectl از آن‌ها آگاه است بررسی کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl config view
+</code></pre>
+<p dir="rtl">بسیاری از <a href="https://github.com/kubernetes/examples/tree/master/" target="_blank" rel="noopener">نمونه‌ها</a> مقدمه‌ای بر استفاده از kubectl ارائه می‌دهند. مستندات کامل را می‌توانید در <a href="../../reference/kubectl/index.html">راهنمای kubectl</a> بیابید.</p>
+<h3 id="دسترسی-مستقیم-به-rest-api" dir="rtl">دسترسی مستقیم به REST API</h3>
+<p dir="rtl">ابزار kubectl یافتن سرور API و احراز هویت در برابر آن را خودش انجام می‌دهد. اگر می‌خواهید با یک کلاینت http مانند <code dir="ltr">curl</code> یا <code dir="ltr">wget</code>، یا با یک مرورگر، مستقیماً به REST API دسترسی پیدا کنید، چند روش برای یافتن سرور API و احراز هویت در برابر آن وجود دارد:</p>
+<ol>
+<li dir="rtl">kubectl را در حالت پراکسی اجرا کنید (توصیه‌شده). این روش توصیه می‌شود، زیرا از محل ذخیره‌شدهٔ سرور API استفاده می‌کند و هویت سرور API را با یک گواهی خودامضا (self-signed) تأیید می‌کند. با این روش، حملهٔ مرد میانی (MITM) امکان‌پذیر نیست.</li>
+<li dir="rtl">به‌عنوان راه دیگر، می‌توانید محل و اعتبارنامه‌ها را مستقیماً در اختیار کلاینت http قرار دهید. این روش با کدهای کلاینتی که با پراکسی‌ها دچار مشکل می‌شوند کار می‌کند. برای محافظت در برابر حملات مرد میانی، باید یک گواهی ریشه را در مرورگر خود وارد کنید.</li>
+</ol>
+<p dir="rtl">استفاده از کتابخانه‌های کلاینت Go یا Python، دسترسی از طریق kubectl در حالت پراکسی را فراهم می‌کند.</p>
+<h4 id="استفاده-از-kubectl-proxy" dir="rtl">استفاده از kubectl proxy</h4>
+<p dir="rtl">فرمان زیر kubectl را در حالتی اجرا می‌کند که در آن به‌عنوان یک پراکسی معکوس (reverse proxy) عمل می‌کند. این فرمان یافتن سرور API و احراز هویت را انجام می‌دهد.</p>
+<p dir="rtl">آن را به این صورت اجرا کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl proxy --port=8080 &amp;
+</code></pre>
+<p dir="rtl">برای جزئیات بیشتر، <a href="https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands/#proxy" target="_blank">kubectl proxy</a> را ببینید.</p>
+<p dir="rtl">سپس می‌توانید API را با curl، wget یا یک مرورگر بررسی کنید؛ به این صورت:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">curl http://localhost:8080/api/
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code class="language-json" dir="ltr">{
+  "versions": [
+    "v1"
+  ],
+  "serverAddressByClientCIDRs": [
+    {
+      "clientCIDR": "0.0.0.0/0",
+      "serverAddress": "10.0.1.149:443"
+    }
+  ]
+}
+</code></pre>
+<h4 id="بدون-kubectl-proxy" dir="rtl">بدون kubectl proxy</h4>
+<p dir="rtl">می‌توان با ارسال مستقیم یک توکن احراز هویت به سرور API، از به‌کارگیری kubectl proxy صرف‌نظر کرد؛ به این صورت:</p>
+<p dir="rtl">با استفاده از روش <code dir="ltr">grep/cut</code>:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># Check all possible clusters, as your .KUBECONFIG may have multiple contexts:
+kubectl config view -o jsonpath='{"Cluster name\tServer\n"}{range .clusters[*]}{.name}{"\t"}{.cluster.server}{"\n"}{end}'
+
+# Select name of cluster you want to interact with from above output:
+export CLUSTER_NAME="some_server_name"
+
+# Point to the API server referring the cluster name
+APISERVER=$(kubectl config view -o jsonpath="{.clusters[?(@.name==\"$CLUSTER_NAME\")].cluster.server}")
+
+# Create a secret to hold a token for the default service account
+kubectl apply -f - &lt;&lt;EOF
+apiVersion: v1
+kind: Secret
+metadata:
+  name: default-token
+  annotations:
+    kubernetes.io/service-account.name: default
+type: kubernetes.io/service-account-token
+EOF
+
+# Wait for the token controller to populate the secret with a token:
+while ! kubectl describe secret default-token | grep -E '^token' &gt;/dev/null; do
+  echo "waiting for token..." &gt;&amp;2
+  sleep 1
+done
+
+# Get the token value
+TOKEN=$(kubectl get secret default-token -o jsonpath='{.data.token}' | base64 --decode)
+
+# Explore the API with TOKEN
+curl -X GET $APISERVER/api --header "Authorization: Bearer $TOKEN" --insecure
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code class="language-json" dir="ltr">{
+  "kind": "APIVersions",
+  "versions": [
+    "v1"
+  ],
+  "serverAddressByClientCIDRs": [
+    {
+      "clientCIDR": "0.0.0.0/0",
+      "serverAddress": "10.0.1.149:443"
+    }
+  ]
+}
+</code></pre>
+<p dir="rtl">نمونهٔ بالا از فلگ <code dir="ltr">--insecure</code> استفاده می‌کند و به همین دلیل در معرض حملات MITM قرار دارد. وقتی kubectl به کلاستر دسترسی پیدا می‌کند، برای دسترسی به سرور از یک گواهی ریشهٔ ذخیره‌شده و گواهی‌های کلاینت استفاده می‌کند. (این گواهی‌ها در دایرکتوری <code dir="ltr">~/.kube</code> نصب می‌شوند.) از آنجا که گواهی‌های کلاستر معمولاً خودامضا هستند، ممکن است برای اینکه کلاینت http شما از گواهی ریشه استفاده کند، به پیکربندی ویژه‌ای نیاز باشد.</p>
+<p dir="rtl">در برخی کلاسترها، سرور API به احراز هویت نیاز ندارد؛ ممکن است فقط روی localhost سرویس دهد یا با یک فایروال محافظت شود. استاندارد مشخصی برای این موضوع وجود ندارد. صفحهٔ <a href="../../concepts/security/controlling-access.html">کنترل دسترسی به API کوبرنتیز</a> توضیح می‌دهد که چگونه می‌توانید به‌عنوان مدیر کلاستر این موارد را پیکربندی کنید.</p>
+<h3 id="دسترسی-برنامه-نویسی-شده-به-api" dir="rtl">دسترسی برنامه‌نویسی‌شده به API</h3>
+<p dir="rtl">کوبرنتیز به‌طور رسمی از کتابخانه‌های کلاینت برای <a href="#go-client">Go</a>، <a href="#python-client">Python</a>، <a href="#java-client">Java</a>، <a href="#dotnet-client">dotnet</a>، <a href="#javascript-client">JavaScript</a> و <a href="#haskell-client">Haskell</a> پشتیبانی می‌کند. کتابخانه‌های کلاینت دیگری نیز وجود دارند که نویسندگانشان، و نه تیم کوبرنتیز، آن‌ها را ارائه و نگهداری می‌کنند. برای دسترسی به API از زبان‌های دیگر و آشنایی با نحوهٔ احراز هویت آن‌ها، <a href="../../reference/using-api/client-libraries.html">کتابخانه‌های کلاینت</a> را ببینید.</p>
+<h4 id="کلاینت-go" dir="rtl">کلاینت Go</h4>
+<ul>
+<li dir="rtl">برای دریافت کتابخانه، فرمان زیر را اجرا کنید: <code dir="ltr">go get k8s.io/client-go@kubernetes-&lt;kubernetes-version-number&gt;</code>
+برای اطلاع از نسخه‌های پشتیبانی‌شده، <a href="https://github.com/kubernetes/client-go/releases" target="_blank" rel="noopener">https://github.com/kubernetes/client-go/releases</a> را ببینید.</li>
+<li dir="rtl">برنامه‌ای مبتنی بر کلاینت‌های client-go بنویسید.</li>
+</ul>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">کتابخانهٔ <code dir="ltr">client-go</code> آبجکت‌های API مخصوص به خود را تعریف می‌کند؛ بنابراین در صورت نیاز، تعریف‌های API را به‌جای مخزن اصلی، از client-go وارد (import) کنید. برای نمونه، <code dir="ltr">import "k8s.io/client-go/kubernetes"</code> درست است.</p>
+</div>
+<p dir="rtl">کلاینت Go می‌تواند برای یافتن سرور API و احراز هویت در برابر آن، از همان <a href="../../concepts/configuration/organize-cluster-access-kubeconfig.html">فایل kubeconfig</a> استفاده کند که kubectl CLI به کار می‌برد. این <a href="https://git.k8s.io/client-go/examples/out-of-cluster-client-configuration/main.go" target="_blank" rel="noopener">نمونه</a> را ببینید:</p>
+<pre dir="ltr"><code class="language-golang" dir="ltr">package main
+
+import (
+  "context"
+  "fmt"
+  "k8s.io/apimachinery/pkg/apis/meta/v1"
+  "k8s.io/client-go/kubernetes"
+  "k8s.io/client-go/tools/clientcmd"
+)
+
+func main() {
+  // uses the current context in kubeconfig
+  // path-to-kubeconfig -- for example, /root/.kube/config
+  config, _ := clientcmd.BuildConfigFromFlags("", "&lt;path-to-kubeconfig&gt;")
+  // creates the clientset
+  clientset, _ := kubernetes.NewForConfig(config)
+  // access the API to list pods
+  pods, _ := clientset.CoreV1().Pods("").List(context.TODO(), v1.ListOptions{})
+  fmt.Printf("There are %d pods in the cluster\n", len(pods.Items))
+}
+</code></pre>
+<p dir="rtl">اگر برنامه به‌صورت یک Pod در کلاستر مستقر شده است، <a href="../access-application-cluster/access-cluster.html#accessing-the-api-from-a-pod">دسترسی به API از درون یک Pod</a> را ببینید.</p>
+<h4 id="کلاینت-python" dir="rtl">کلاینت Python</h4>
+<p dir="rtl">برای استفاده از <a href="https://github.com/kubernetes-client/python" target="_blank" rel="noopener">کلاینت Python</a>، فرمان زیر را اجرا کنید: <code dir="ltr">pip install kubernetes</code>. برای گزینه‌های بیشتر نصب، <a href="https://github.com/kubernetes-client/python" target="_blank" rel="noopener">صفحهٔ کتابخانهٔ کلاینت Python</a> را ببینید.</p>
+<p dir="rtl">کلاینت Python می‌تواند برای یافتن سرور API و احراز هویت در برابر آن، از همان <a href="../../concepts/configuration/organize-cluster-access-kubeconfig.html">فایل kubeconfig</a> استفاده کند که kubectl CLI به کار می‌برد. این <a href="https://github.com/kubernetes-client/python/blob/master/examples/out_of_cluster_config.py" target="_blank" rel="noopener">نمونه</a> را ببینید:</p>
+<pre dir="ltr"><code class="language-python" dir="ltr">from kubernetes import client, config
+
+config.load_kube_config()
+
+v1=client.CoreV1Api()
+print("Listing pods with their IPs:")
+ret = v1.list_pod_for_all_namespaces(watch=False)
+for i in ret.items:
+    print("%s\t%s\t%s" % (i.status.pod_ip, i.metadata.namespace, i.metadata.name))
+</code></pre>
+<h4 id="کلاینت-java" dir="rtl">کلاینت Java</h4>
+<p dir="rtl">برای نصب <a href="https://github.com/kubernetes-client/java" target="_blank" rel="noopener">کلاینت Java</a>، این فرمان‌ها را اجرا کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># Clone java library
+git clone --recursive https://github.com/kubernetes-client/java
+
+# Installing project artifacts, POM etc:
+cd java
+mvn install
+</code></pre>
+<p dir="rtl">برای اطلاع از نسخه‌های پشتیبانی‌شده، <a href="https://github.com/kubernetes-client/java/releases" target="_blank" rel="noopener">https://github.com/kubernetes-client/java/releases</a> را ببینید.</p>
+<p dir="rtl">کلاینت Java می‌تواند برای یافتن سرور API و احراز هویت در برابر آن، از همان <a href="../../concepts/configuration/organize-cluster-access-kubeconfig.html">فایل kubeconfig</a> استفاده کند که kubectl CLI به کار می‌برد. این <a href="https://github.com/kubernetes-client/java/blob/master/examples/examples-release-latest/src/main/java/io/kubernetes/client/examples/KubeConfigFileClientExample.java" target="_blank" rel="noopener">نمونه</a> را ببینید:</p>
+<pre dir="ltr"><code class="language-java" dir="ltr">package io.kubernetes.client.examples;
+
+import io.kubernetes.client.ApiClient;
+import io.kubernetes.client.ApiException;
+import io.kubernetes.client.Configuration;
+import io.kubernetes.client.apis.CoreV1Api;
+import io.kubernetes.client.models.V1Pod;
+import io.kubernetes.client.models.V1PodList;
+import io.kubernetes.client.util.ClientBuilder;
+import io.kubernetes.client.util.KubeConfig;
+import java.io.FileReader;
+import java.io.IOException;
+
+/**
+ * A simple example of how to use the Java API from an application outside a kubernetes cluster
+ *
+ * &lt;p&gt;Easiest way to run this: mvn exec:java
+ * -Dexec.mainClass="io.kubernetes.client.examples.KubeConfigFileClientExample"
+ *
+ */
+public class KubeConfigFileClientExample {
+  public static void main(String[] args) throws IOException, ApiException {
+
+    // file path to your KubeConfig
+    String kubeConfigPath = "~/.kube/config";
+
+    // loading the out-of-cluster config, a kubeconfig from file-system
+    ApiClient client =
+        ClientBuilder.kubeconfig(KubeConfig.loadKubeConfig(new FileReader(kubeConfigPath))).build();
+
+    // set the global default api-client to the in-cluster one from above
+    Configuration.setDefaultApiClient(client);
+
+    // the CoreV1Api loads default api-client from global configuration.
+    CoreV1Api api = new CoreV1Api();
+
+    // invokes the CoreV1Api client
+    V1PodList list = api.listPodForAllNamespaces(null, null, null, null, null, null, null, null, null);
+    System.out.println("Listing all pods: ");
+    for (V1Pod item : list.getItems()) {
+      System.out.println(item.getMetadata().getName());
+    }
+  }
+}
+</code></pre>
+<h4 id="کلاینت-dotnet" dir="rtl">کلاینت dotnet</h4>
+<p dir="rtl">برای استفاده از <a href="https://github.com/kubernetes-client/csharp" target="_blank" rel="noopener">کلاینت dotnet</a>، فرمان زیر را اجرا کنید: <code dir="ltr">dotnet add package KubernetesClient --version 1.6.1</code>. برای گزینه‌های بیشتر نصب، <a href="https://github.com/kubernetes-client/csharp" target="_blank" rel="noopener">صفحهٔ کتابخانهٔ کلاینت dotnet</a> را ببینید. برای اطلاع از نسخه‌های پشتیبانی‌شده، <a href="https://github.com/kubernetes-client/csharp/releases" target="_blank" rel="noopener">https://github.com/kubernetes-client/csharp/releases</a> را ببینید.</p>
+<p dir="rtl">کلاینت dotnet می‌تواند برای یافتن سرور API و احراز هویت در برابر آن، از همان <a href="../../concepts/configuration/organize-cluster-access-kubeconfig.html">فایل kubeconfig</a> استفاده کند که kubectl CLI به کار می‌برد. این <a href="https://github.com/kubernetes-client/csharp/blob/master/examples/simple/PodList.cs" target="_blank" rel="noopener">نمونه</a> را ببینید:</p>
+<pre dir="ltr"><code class="language-csharp" dir="ltr">using System;
+using k8s;
+
+namespace simple
+{
+    internal class PodList
+    {
+        private static void Main(string[] args)
+        {
+            var config = KubernetesClientConfiguration.BuildDefaultConfig();
+            IKubernetes client = new Kubernetes(config);
+            Console.WriteLine("Starting Request!");
+
+            var list = client.ListNamespacedPod("default");
+            foreach (var item in list.Items)
+            {
+                Console.WriteLine(item.Metadata.Name);
+            }
+            if (list.Items.Count == 0)
+            {
+                Console.WriteLine("Empty!");
+            }
+        }
+    }
+}
+</code></pre>
+<h4 id="کلاینت-javascript" dir="rtl">کلاینت JavaScript</h4>
+<p dir="rtl">برای نصب <a href="https://github.com/kubernetes-client/javascript" target="_blank" rel="noopener">کلاینت JavaScript</a>، فرمان زیر را اجرا کنید: <code dir="ltr">npm install @kubernetes/client-node</code>. برای اطلاع از نسخه‌های پشتیبانی‌شده، <a href="https://github.com/kubernetes-client/javascript/releases" target="_blank" rel="noopener">https://github.com/kubernetes-client/javascript/releases</a> را ببینید.</p>
+<p dir="rtl">کلاینت JavaScript می‌تواند برای یافتن سرور API و احراز هویت در برابر آن، از همان <a href="../../concepts/configuration/organize-cluster-access-kubeconfig.html">فایل kubeconfig</a> استفاده کند که kubectl CLI به کار می‌برد. این <a href="https://github.com/kubernetes-client/javascript/blob/master/examples/example.js" target="_blank" rel="noopener">نمونه</a> را ببینید:</p>
+<pre dir="ltr"><code class="language-javascript" dir="ltr">const k8s = require('@kubernetes/client-node');
+
+const kc = new k8s.KubeConfig();
+kc.loadFromDefault();
+
+const k8sApi = kc.makeApiClient(k8s.CoreV1Api);
+
+k8sApi.listNamespacedPod({ namespace: 'default' }).then((res) =&gt; {
+    console.log(res);
+});
+</code></pre>
+<h4 id="کلاینت-haskell" dir="rtl">کلاینت Haskell</h4>
+<p dir="rtl">برای اطلاع از نسخه‌های پشتیبانی‌شده، <a href="https://github.com/kubernetes-client/haskell/releases" target="_blank" rel="noopener">https://github.com/kubernetes-client/haskell/releases</a> را ببینید.</p>
+<p dir="rtl"><a href="https://github.com/kubernetes-client/haskell" target="_blank" rel="noopener">کلاینت Haskell</a> می‌تواند برای یافتن سرور API و احراز هویت در برابر آن، از همان <a href="../../concepts/configuration/organize-cluster-access-kubeconfig.html">فایل kubeconfig</a> استفاده کند که kubectl CLI به کار می‌برد. این <a href="https://github.com/kubernetes-client/haskell/blob/master/kubernetes-client/example/App.hs" target="_blank" rel="noopener">نمونه</a> را ببینید:</p>
+<pre dir="ltr"><code class="language-haskell" dir="ltr">exampleWithKubeConfig :: IO ()
+exampleWithKubeConfig = do
+    oidcCache &lt;- atomically $ newTVar $ Map.fromList []
+    (mgr, kcfg) &lt;- mkKubeClientConfig oidcCache $ KubeConfigFile "/path/to/kubeconfig"
+    dispatchMime
+            mgr
+            kcfg
+            (CoreV1.listPodForAllNamespaces (Accept MimeJSON))
+        &gt;&gt;= print
+</code></pre>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<ul>
+<li dir="rtl"><a href="https://kubernetes.io/docs/tasks/run-application/access-api-from-pod/" target="_blank">دسترسی به API کوبرنتیز از درون یک Pod</a></li>
+</ul>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#پیش-از-شروع">پیش از شروع</a><a class="l2" href="#دسترسی-به-api-کوبرنتیز">دسترسی به API کوبرنتیز</a><a class="l3" href="#نخستین-دسترسی-با-kubectl">نخستین دسترسی با kubectl</a><a class="l3" href="#دسترسی-مستقیم-به-rest-api">دسترسی مستقیم به REST API</a><a class="l3" href="#دسترسی-برنامه-نویسی-شده-به-api">دسترسی برنامه‌نویسی‌شده به API</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>
