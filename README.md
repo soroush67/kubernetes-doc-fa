@@ -8,8 +8,8 @@
 
 | | |
 |---|---|
-| پیشرفت (بر اساس کلمات) | **84.6٪** |
-| صفحات ترجمه‌شده | 1426 از 1722 |
+| پیشرفت (بر اساس کلمات) | **86.3٪** |
+| صفحات ترجمه‌شده | 1441 از 1722 |
 | صفحات دارای ایراد ساختاری | 72 |
 | نسخه‌ی منبع انگلیسی | `f652c6b8a26f` |
 
@@ -72,8 +72,8 @@ cd kubernetes-doc-fa
 | `contribute` | 44 | 44 |
 | `doc-contributor-tools` | 1 | 1 |
 | `home` | 2 | 2 |
-| `reference` | 1191 | 1198 |
-| `setup` | 0 | 22 |
+| `reference` | 1198 | 1198 |
+| `setup` | 8 | 22 |
 | `tasks` | 0 | 221 |
 | `tutorials` | 0 | 45 |
 
@@ -101,26 +101,26 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [setup/learning-environment/_index.md](md/setup/learning-environment/_index.md) — 2026-11-10T10:04:33+03:30
+- [setup/best-practices/node-conformance.md](md/setup/best-practices/node-conformance.md) — 2026-11-10T10:04:20+03:30
+- [setup/best-practices/multiple-zones.md](md/setup/best-practices/multiple-zones.md) — 2026-11-10T10:04:15+03:30
+- [setup/best-practices/certificates.md](md/setup/best-practices/certificates.md) — 2026-11-10T10:04:03+03:30
+- [setup/best-practices/enforcing-pod-security-standards.md](md/setup/best-practices/enforcing-pod-security-standards.md) — 2026-11-10T10:03:39+03:30
+- [setup/best-practices/cluster-large.md](md/setup/best-practices/cluster-large.md) — 2026-11-10T10:03:18+03:30
+- [reference/using-api/server-side-apply.md](md/reference/using-api/server-side-apply.md) — 2026-11-10T10:02:45+03:30
+- [setup/best-practices/_index.md](md/setup/best-practices/_index.md) — 2026-11-10T10:01:54+03:30
+- [setup/_index.md](md/setup/_index.md) — 2026-11-10T10:01:51+03:30
+- [reference/using-api/deprecation-guide.md](md/reference/using-api/deprecation-guide.md) — 2026-11-10T10:01:36+03:30
+- [reference/using-api/health-checks.md](md/reference/using-api/health-checks.md) — 2026-11-10T10:00:32+03:30
+- [reference/using-api/api-concepts.md](md/reference/using-api/api-concepts.md) — 2026-11-10T10:00:06+03:30
+- [reference/using-api/declarative-validation.md](md/reference/using-api/declarative-validation.md) — 2026-11-10T09:59:21+03:30
+- [reference/using-api/client-libraries.md](md/reference/using-api/client-libraries.md) — 2026-11-10T09:54:16+03:30
+- [reference/using-api/cel.md](md/reference/using-api/cel.md) — 2026-11-10T09:53:53+03:30
 - [reference/using-api/_index.md](md/reference/using-api/_index.md) — 2026-11-08T17:30:16+03:30
 - [reference/tools/_index.md](md/reference/tools/_index.md) — 2026-11-08T17:29:45+03:30
 - [reference/setup-tools/kubeadm/kubeadm-upgrade-phase.md](md/reference/setup-tools/kubeadm/kubeadm-upgrade-phase.md) — 2026-11-08T17:29:39+03:30
 - [reference/setup-tools/kubeadm/kubeadm-version.md](md/reference/setup-tools/kubeadm/kubeadm-version.md) — 2026-11-08T17:29:23+03:30
 - [reference/setup-tools/kubeadm/kubeadm-upgrade.md](md/reference/setup-tools/kubeadm/kubeadm-upgrade.md) — 2026-11-08T17:29:12+03:30
-- [reference/setup-tools/kubeadm/kubeadm-token.md](md/reference/setup-tools/kubeadm/kubeadm-token.md) — 2026-11-08T17:28:57+03:30
-- [reference/setup-tools/kubeadm/kubeadm-reset.md](md/reference/setup-tools/kubeadm/kubeadm-reset.md) — 2026-11-08T17:28:56+03:30
-- [reference/setup-tools/kubeadm/kubeadm-reset-phase.md](md/reference/setup-tools/kubeadm/kubeadm-reset-phase.md) — 2026-11-08T17:28:49+03:30
-- [reference/setup-tools/kubeadm/kubeadm-join.md](md/reference/setup-tools/kubeadm/kubeadm-join.md) — 2026-11-08T17:28:27+03:30
-- [reference/setup-tools/kubeadm/kubeadm-kubeconfig.md](md/reference/setup-tools/kubeadm/kubeadm-kubeconfig.md) — 2026-11-08T17:28:24+03:30
-- [reference/setup-tools/kubeadm/kubeadm-init.md](md/reference/setup-tools/kubeadm/kubeadm-init.md) — 2026-11-08T17:28:17+03:30
-- [reference/setup-tools/kubeadm/kubeadm-join-phase.md](md/reference/setup-tools/kubeadm/kubeadm-join-phase.md) — 2026-11-08T17:27:26+03:30
-- [reference/setup-tools/kubeadm/implementation-details.md](md/reference/setup-tools/kubeadm/implementation-details.md) — 2026-11-08T17:26:47+03:30
-- [reference/setup-tools/kubeadm/kubeadm-init-phase.md](md/reference/setup-tools/kubeadm/kubeadm-init-phase.md) — 2026-11-08T17:26:29+03:30
-- [reference/setup-tools/kubeadm/kubeadm-config.md](md/reference/setup-tools/kubeadm/kubeadm-config.md) — 2026-11-08T17:24:29+03:30
-- [reference/setup-tools/kubeadm/kubeadm-certs.md](md/reference/setup-tools/kubeadm/kubeadm-certs.md) — 2026-11-08T17:24:00+03:30
-- [reference/setup-tools/kubeadm/kubeadm-alpha.md](md/reference/setup-tools/kubeadm/kubeadm-alpha.md) — 2026-11-08T17:23:38+03:30
-- [reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_plan.md](md/reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_plan.md) — 2026-11-08T17:23:32+03:30
-- [reference/setup-tools/kubeadm/generated/kubeadm_version/_index.md](md/reference/setup-tools/kubeadm/generated/kubeadm_version/_index.md) — 2026-11-08T17:23:30+03:30
-- [reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_node_phase_control-plane.md](md/reference/setup-tools/kubeadm/generated/kubeadm_upgrade/kubeadm_upgrade_node_phase_control-plane.md) — 2026-11-08T17:23:11+03:30
 
 </div>
 

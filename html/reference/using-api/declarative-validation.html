@@ -1,0 +1,1437 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>اعتبارسنجی اعلانی API | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">reference / using-api</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">اعتبارسنجی اعلانی API</h1><!-- overview -->
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
+<p dir="rtl">کوبرنتیز 1.37 برای مجموعه‌ای رو به گسترش از APIها از
+<em>اعتبارسنجی اعلانی</em> (declarative validation) استفاده می‌کند. در این روش، نویسندگان API به‌جای نوشتن دستی کد Go (<code dir="ltr">validation.go</code>)، قواعد اعتبارسنجی را به‌صورت تگ‌های توضیحی روی تعریف‌های نوع (<code dir="ltr">types.go</code>) اعلام می‌کنند؛ برای مثال <code dir="ltr">+k8s:minimum=0</code>. سپس یک مولد کد به نام <code dir="ltr">validation-gen</code> این تگ‌ها را به کد اعتبارسنجی تبدیل می‌کند.</p>
+<p dir="rtl">این موضوع عمدتاً به مشارکت‌کنندگان کوبرنتیز و نویسندگان
+<a href="../../concepts/extend-kubernetes/api-extension/apiserver-aggregation.html">سرورهای API افزونه</a>
+مربوط است، اما مدیران کلاستر نیز باید بدانند که این سازوکار در دوره‌ای که اعتبارسنجی‌های دست‌نویس موجود در حال مهاجرت هستند، چگونه رفتار می‌کند.</p>
+<!-- body -->
+<h2 id="چرخه-ی-حیات-اعتبارسنجی-lifecycle" dir="rtl">چرخه‌ی حیات اعتبارسنجی {#lifecycle}</h2>
+<p dir="rtl">برای فیلدهای جدید API، تگ را مستقیماً به کار ببرید؛ مانند <code dir="ltr">+k8s:minimum=1</code>. این تگ‌ها همیشه اعمال می‌شوند.</p>
+<p dir="rtl">مهاجرت دادن یک اعتبارسنجی دست‌نویسِ <em>موجود</em> پرخطرتر است، زیرا کد تولیدشده باید دقیقاً مانند کدی رفتار کند که جایگزین آن می‌شود. در این مهاجرت‌ها، تگ درون یک <em>پیشوند چرخه‌ی حیات</em> (<code dir="ltr">+k8s:alpha</code> یا <code dir="ltr">+k8s:beta</code>) قرار می‌گیرد. این پیشوند تعیین می‌کند که آیا نتیجه‌ی اعتبارسنجی اعلانی، نتیجه‌ی مرجع (authoritative) است یا نه.</p>
+<table>
+<thead>
+<tr>
+<th dir="rtl">شکل تگ</th>
+<th dir="rtl">رفتار</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td dir="rtl"><code dir="ltr">+k8s:minimum=1</code> (بدون پیشوند)</td>
+<td dir="rtl"><strong>اعمال می‌شود.</strong> نتیجه‌ی اعتبارسنجی اعلانی مرجع است.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">+k8s:beta(since:"1.37")=+k8s:minimum=1</code></td>
+<td dir="rtl">وقتی feature gate <code dir="ltr">DeclarativeValidationBeta</code> فعال باشد (حالت پیش‌فرض) <strong>اعمال می‌شود</strong>؛ در غیر این صورت در حالت سایه اجرا می‌شود.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">+k8s:alpha(since:"1.36")=+k8s:minimum=1</code></td>
+<td dir="rtl"><strong>همیشه در حالت سایه اجرا می‌شود.</strong> اعتبارسنجی دست‌نویس همچنان مرجع باقی می‌ماند.</td>
+</tr>
+</tbody>
+</table>
+<p dir="rtl">در <em>حالت سایه</em> (shadow mode)، اعتبارسنجی اعلانی همچنان اجرا می‌شود، اما سرور API خطاهای آن را بازنمی‌گرداند. سرور این خطاها را با خطاهای اعتبارسنجی دست‌نویس مقایسه می‌کند و هر تفاوتی را در لاگ ثبت و شمارش می‌کند. به این ترتیب، می‌توان یک قاعده‌ی مهاجرت‌داده‌شده را پیش از آنکه شروع به رد کردن درخواست‌ها کند، روی یک کلاستر واقعی ارزیابی کرد.</p>
+<h2 id="تنظیمات-feature-gate" dir="rtl">تنظیمات feature gate</h2>
+<ul>
+<li dir="rtl">
+<p dir="rtl">فعال بودن <a href="https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/#DeclarativeValidation" target="_blank"><code dir="ltr">DeclarativeValidation</code></a>
+باعث می‌شود <span class="term" title="kube-apiserver">سرور API</span>
+برای قواعد <code dir="ltr">+k8s:alpha</code> و <code dir="ltr">+k8s:beta</code>، نتایج اعتبارسنجی اعلانی و دست‌نویس را با هم مقایسه کند و ناهمخوانی‌ها را گزارش دهد. اعتبارسنجی اعلانی در هر حال اجرا می‌شود؛ این گیت فقط گزارش‌دهی را کنترل می‌کند.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">کلید ایمنی سراسری برای قواعد <code dir="ltr">+k8s:beta</code>، گیت
+<a href="https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/#DeclarativeValidationBeta" target="_blank"><code dir="ltr">DeclarativeValidationBeta</code></a>
+است. اگر این گیت فعال باشد، این قواعد اعمال می‌شوند و اگر غیرفعال باشد، به حالت سایه بازمی‌گردند.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">گیت <a href="https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/#DeclarativeValidationTakeover" target="_blank"><code dir="ltr">DeclarativeValidationTakeover</code></a>
+با <code dir="ltr">DeclarativeValidationBeta</code> جایگزین شده است و دیگر به آن ترتیب اثر داده نمی‌شود. با این حال، تنظیم آن همچنان پذیرفته می‌شود.</p>
+</li>
+</ul>
+<div class="callout note"><div class="callout-title">Note</div>
+<p dir="rtl">هیچ feature gateای بر تگ‌های بدون پیشوند اثر ندارد. سرور API همیشه این تگ‌ها را اعمال می‌کند، زیرا همتای دست‌نویس آن‌ها پیش‌تر حذف شده است.</p>
+</div>
+<p dir="rtl">برای آشنایی با نحوه‌ی تنظیم این گیت‌ها، به
+<a href="https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/" target="_blank">feature gateها</a>
+مراجعه کنید.</p>
+<h2 id="پایش-اعتبارسنجی-اعلانی-metrics" dir="rtl">پایش اعتبارسنجی اعلانی {#metrics}</h2>
+<p dir="rtl">سرور API متریک‌های زیر را ارائه می‌کند:</p>
+<table>
+<thead>
+<tr>
+<th dir="rtl">متریک</th>
+<th dir="rtl">توضیح</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">declarative_validation_mismatch_total</code></td>
+<td dir="rtl">تعداد دفعاتی که نتایج اعتبارسنجی اعلانی با نتایج اعتبارسنجی دست‌نویس متفاوت بوده است.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">declarative_validation_parity_discrepancies_total</code></td>
+<td dir="rtl">همان ناهمخوانی‌ها، به همراه برچسب <code dir="ltr">validation_identifier</code> که گروه، نسخه، kind، زیرمنبع (subresource) و عملیات را ثبت می‌کند.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">declarative_validation_panic_total</code></td>
+<td dir="rtl">تعداد دفعاتی که اعتبارسنجی اعلانی دچار panic شده است.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">declarative_validation_panics_total</code></td>
+<td dir="rtl">همان panicها، به همراه برچسب <code dir="ltr">validation_identifier</code>.</td>
+</tr>
+</tbody>
+</table>
+<p dir="rtl">ناهمخوانی‌ها در لاگ نیز ثبت می‌شوند. برای یک قاعده‌ی اعمال‌شده (<code dir="ltr">+k8s:beta</code>)، ورودی لاگ پیشنهاد می‌کند که <code dir="ltr">DeclarativeValidationBeta</code> را غیرفعال کنید تا داده‌های ذخیره‌شده در etcd با نسخه‌های قبلی کوبرنتیز سازگار بمانند.</p>
+<h2 id="غیرفعال-کردن-declarativevalidationbeta-opt-out" dir="rtl">غیرفعال کردن DeclarativeValidationBeta {#opt-out}</h2>
+<p dir="rtl">اگر با هر یک از موارد زیر روبه‌رو شدید، تنظیم <code dir="ltr">DeclarativeValidationBeta=false</code> را در نظر بگیرید:</p>
+<ul>
+<li dir="rtl">
+<p dir="rtl"><strong>رفتار غیرمنتظره در اعتبارسنجی:</strong> درخواست‌هایی که باید معتبر باشند رد می‌شوند، یا آبجکت‌هایی که پیش‌تر رد می‌شدند اکنون پذیرفته می‌شوند.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><strong>افت کارایی:</strong> افزایش تأخیر (برای مثال در
+<code dir="ltr">apiserver_request_duration_seconds</code>) که با این قابلیت همبستگی دارد.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><strong>نرخ بالای ناهمخوانی:</strong> افزایش‌های مکرر
+<code dir="ltr">declarative_validation_mismatch_total</code> که بارهای کاری شما را تحت تأثیر قرار می‌دهد.</p>
+</li>
+</ul>
+<p dir="rtl">برای بازگرداندن قواعد <code dir="ltr">+k8s:beta</code> به حالت سایه، فلگ
+<code dir="ltr">--feature-gates=DeclarativeValidationBeta=false</code> را ارسال کنید.</p>
+<h2 id="ملاحظات-کاهش-نسخه-downgrade-و-بازگشت-rollback" dir="rtl">ملاحظات کاهش نسخه (downgrade) و بازگشت (rollback)</h2>
+<p dir="rtl">غیرفعال کردن این گیت یک سازوکار ایمنی است، اما به یک حالت مرزی نامحتمل توجه کنید: اگر یک باگ باعث شده باشد که اعتبارسنجی اعلانی آبجکتی نامعتبر را ذخیره کند، با غیرفعال کردن گیت، اعتبارسنجی دست‌نویسِ صحیح دوباره مرجع می‌شود و ممکن است جلوی به‌روزرسانی‌های بعدی آن آبجکت را بگیرد. رفع این مشکل ممکن است به ویرایش مستقیم آبجکت ذخیره‌شده نیاز داشته باشد.</p>
+<h2 id="تگ-های-اعتبارسنجی-اعلانی-declarative-validation-tag-reference" dir="rtl">تگ‌های اعتبارسنجی اعلانی {#declarative-validation-tag-reference}</h2>
+<h3 id="نحوه-ی-خواندن-این-مرجع-how-to-read" dir="rtl">نحوه‌ی خواندن این مرجع {#how-to-read}</h3>
+<p dir="rtl">هر تگ یک <strong>سطح پایداری</strong> (آلفا، بتا یا پایدار) دارد که میزان بلوغ <em>خود تگ</em> را توصیف می‌کند. این مفهوم از <a href="#lifecycle">پیشوندهای چرخه‌ی حیات</a> <code dir="ltr">+k8s:alpha</code> و <code dir="ltr">+k8s:beta</code> جداست؛ این پیشوندها میزان بلوغ یک <em>کاربرد</em> مشخص از یک تگ را توصیف می‌کنند.</p>
+<p dir="rtl">لینتر مولد کد بر اساس سطح پایداری تعیین می‌کند که هر تگ در کجا مجاز است:</p>
+<ul>
+<li dir="rtl">
+<p dir="rtl">در یک بسته‌ی GA (برای مثال <code dir="ltr">v1</code>)، تگ بدون پیشوند باید پایدار باشد.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">در یک بسته‌ی <code dir="ltr">beta</code>، تگ‌های بتای بدون پیشوند نیز مجازند.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">در یک بسته‌ی <code dir="ltr">alpha</code>، تگ‌های آلفا و بتای بدون پیشوند نیز مجازند.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">درون <code dir="ltr">+k8s:alpha=...</code> تگ‌های آلفا مجازند و درون <code dir="ltr">+k8s:beta=...</code> تگ‌های بتا.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">درون <code dir="ltr">+k8s:ifEnabled(...)</code> یا <code dir="ltr">+k8s:ifDisabled(...)</code>، تگ‌های بتا حتی در یک بسته‌ی GA نیز مجازند، زیرا اعتبارسنجی از قبل به یک گزینه مشروط شده است.</p>
+</li>
+</ul>
+<p dir="rtl">برای هر مورد، <strong>دامنه‌هایی</strong> (scopes) که تگ می‌تواند در آن‌ها به کار رود نیز فهرست شده است: فیلدهای struct، تعریف‌های نوع، مقادیر لیست، کلیدهای map، مقادیر map یا مقادیر ثابت.</p>
+<div class="callout note"><div class="callout-title">Note</div>
+<p dir="rtl">مولد کد تگ‌هایی را نیز ثبت می‌کند که فقط برای آزمودن خود آن وجود دارند
+(<code dir="ltr">+k8s:validateTrue</code>، <code dir="ltr">+k8s:validateFalse</code>، <code dir="ltr">+k8s:validateError</code>،
+<code dir="ltr">+k8s:validateTrueAlpha</code>، <code dir="ltr">+k8s:validateTrueBeta</code>). از این تگ‌ها در تعریف‌های API استفاده نکنید. برای دریافت فهرست مرجعِ هر نسخه، دستور
+<code dir="ltr">validation-gen --docs</code> را از <code dir="ltr">k8s.io/code-generator</code> اجرا کنید.</p>
+</div>
+<h3 id="فهرست-تگ-ها-catalog" dir="rtl">فهرست تگ‌ها {#catalog}</h3>
+<table>
+<thead>
+<tr>
+<th dir="rtl">تگ</th>
+<th dir="rtl">توضیح</th>
+<th dir="rtl">سطح پایداری</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td dir="ltr" class="ltr"><a href="#tag-alpha"><code dir="ltr">+k8s:alpha</code></a></td>
+<td dir="rtl">یک تگ اعتبارسنجی را در حالت سایه قرار می‌دهد (فقط ثبت متریک).</td>
+<td dir="rtl">بتا</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><a href="#tag-beta"><code dir="ltr">+k8s:beta</code></a></td>
+<td dir="rtl">یک تگ اعتبارسنجی را در حالت اعمال قرار می‌دهد (با <code dir="ltr">DeclarativeValidationBeta</code> قابل غیرفعال‌سازی است).</td>
+<td dir="rtl">بتا</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><a href="#tag-customUnique"><code dir="ltr">+k8s:customUnique</code></a></td>
+<td dir="rtl">نشان می‌دهد که اعتبارسنجی دست‌نویس، یکتایی عناصر یک لیست را بررسی می‌کند.</td>
+<td dir="rtl">پایدار</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><a href="#tag-customValidation"><code dir="ltr">+k8s:customValidation</code></a></td>
+<td dir="rtl">یک تابع اعتبارسنجی دست‌نویس را از کد پیمایش تولیدشده فراخوانی می‌کند.</td>
+<td dir="rtl">پایدار</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><a href="#tag-dependentForbidden"><code dir="ltr">+k8s:dependentForbidden</code></a></td>
+<td dir="rtl">نشان می‌دهد که وقتی این فیلد مقدار دارد، یک فیلد هم‌سطحِ نام‌برده نباید مقدار داشته باشد.</td>
+<td dir="rtl">آلفا</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><a href="#tag-dependentRequired"><code dir="ltr">+k8s:dependentRequired</code></a></td>
+<td dir="rtl">نشان می‌دهد که وقتی این فیلد مقدار دارد، یک فیلد هم‌سطحِ نام‌برده نیز باید مقدار داشته باشد.</td>
+<td dir="rtl">آلفا</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><a href="#tag-eachKey"><code dir="ltr">+k8s:eachKey</code></a></td>
+<td dir="rtl">یک اعتبارسنجی برای هر کلید یک map اعلام می‌کند.</td>
+<td dir="rtl">پایدار</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><a href="#tag-eachVal"><code dir="ltr">+k8s:eachVal</code></a></td>
+<td dir="rtl">یک اعتبارسنجی برای هر مقدار یک map یا لیست اعلام می‌کند.</td>
+<td dir="rtl">پایدار</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><a href="#tag-enum"><code dir="ltr">+k8s:enum</code></a></td>
+<td dir="rtl">نشان می‌دهد که یک نوع رشته‌ای، enum است.</td>
+<td dir="rtl">پایدار</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><a href="#tag-enumExclude"><code dir="ltr">+k8s:enumExclude</code></a></td>
+<td dir="rtl">یک ثابت را از مقادیر enum نوع آن مستثنا می‌کند.</td>
+<td dir="rtl">آلفا</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><a href="#tag-forbidden"><code dir="ltr">+k8s:forbidden</code></a></td>
+<td dir="rtl">نشان می‌دهد که یک فیلد نباید مشخص شود.</td>
+<td dir="rtl">بتا</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><a href="#tag-format"><code dir="ltr">+k8s:format</code></a></td>
+<td dir="rtl">نشان می‌دهد که یک فیلد رشته‌ای قالب مشخصی دارد.</td>
+<td dir="rtl">پایدار</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><a href="#tag-ifDisabled"><code dir="ltr">+k8s:ifDisabled</code></a></td>
+<td dir="rtl">اعتبارسنجی‌ای اعلام می‌کند که فقط وقتی یک گزینه غیرفعال است اعمال می‌شود.</td>
+<td dir="rtl">پایدار</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><a href="#tag-ifEnabled"><code dir="ltr">+k8s:ifEnabled</code></a></td>
+<td dir="rtl">اعتبارسنجی‌ای اعلام می‌کند که فقط وقتی یک گزینه فعال است اعمال می‌شود.</td>
+<td dir="rtl">پایدار</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><a href="#tag-ifMode"><code dir="ltr">+k8s:ifMode</code></a></td>
+<td dir="rtl">اعتبارسنجی‌ای اعلام می‌کند که فقط برای مقدار مشخصی از یک متمایزکننده‌ی حالت (mode discriminator) اعمال می‌شود.</td>
+<td dir="rtl">پایدار</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><a href="#tag-immutable"><code dir="ltr">+k8s:immutable</code></a></td>
+<td dir="rtl">نشان می‌دهد که یک فیلد نباید به‌روزرسانی شود.</td>
+<td dir="rtl">پایدار</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><a href="#tag-isSubresource"><code dir="ltr">+k8s:isSubresource</code></a></td>
+<td dir="rtl">مشخص می‌کند که اعتبارسنجی‌های یک بسته فقط به یک زیرمنبع خاص اعمال می‌شوند.</td>
+<td dir="rtl">پایدار</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><a href="#tag-item"><code dir="ltr">+k8s:item</code></a></td>
+<td dir="rtl">یک اعتبارسنجی برای یک آیتم از sliceای اعلام می‌کند که به‌صورت <code dir="ltr">+k8s:listType=map</code> تعریف شده است.</td>
+<td dir="rtl">پایدار</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><a href="#tag-listMapKey"><code dir="ltr">+k8s:listMapKey</code></a></td>
+<td dir="rtl">یک زیرفیلد نام‌دار از نوع مقدار لیست را بخشی از کلید list-map اعلام می‌کند.</td>
+<td dir="rtl">پایدار</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><a href="#tag-listType"><code dir="ltr">+k8s:listType</code></a></td>
+<td dir="rtl">نوع معنایی یک فیلد لیستی را اعلام می‌کند.</td>
+<td dir="rtl">پایدار</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><a href="#tag-maxBytes"><code dir="ltr">+k8s:maxBytes</code></a></td>
+<td dir="rtl">نشان می‌دهد که طول یک فیلد رشته‌ای بر حسب بایت محدودیت دارد.</td>
+<td dir="rtl">پایدار</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><a href="#tag-maxItems"><code dir="ltr">+k8s:maxItems</code></a></td>
+<td dir="rtl">نشان می‌دهد که اندازه‌ی یک لیست محدودیت دارد.</td>
+<td dir="rtl">پایدار</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><a href="#tag-maxLength"><code dir="ltr">+k8s:maxLength</code></a></td>
+<td dir="rtl">نشان می‌دهد که طول یک فیلد رشته‌ای بر حسب کاراکتر محدودیت دارد.</td>
+<td dir="rtl">پایدار</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><a href="#tag-maxProperties"><code dir="ltr">+k8s:maxProperties</code></a></td>
+<td dir="rtl">نشان می‌دهد که تعداد ورودی‌های یک map محدودیت دارد.</td>
+<td dir="rtl">پایدار</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><a href="#tag-maximum"><code dir="ltr">+k8s:maximum</code></a></td>
+<td dir="rtl">نشان می‌دهد که یک فیلد عددی مقدار بیشینه دارد.</td>
+<td dir="rtl">پایدار</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><a href="#tag-minItems"><code dir="ltr">+k8s:minItems</code></a></td>
+<td dir="rtl">نشان می‌دهد که یک لیست اندازه‌ی کمینه دارد.</td>
+<td dir="rtl">پایدار</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><a href="#tag-minLength"><code dir="ltr">+k8s:minLength</code></a></td>
+<td dir="rtl">نشان می‌دهد که یک فیلد رشته‌ای طول کمینه بر حسب کاراکتر دارد.</td>
+<td dir="rtl">پایدار</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><a href="#tag-minProperties"><code dir="ltr">+k8s:minProperties</code></a></td>
+<td dir="rtl">نشان می‌دهد که یک map تعداد کمینه‌ای از ورودی‌ها دارد.</td>
+<td dir="rtl">پایدار</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><a href="#tag-minimum"><code dir="ltr">+k8s:minimum</code></a></td>
+<td dir="rtl">نشان می‌دهد که یک فیلد عددی مقدار کمینه دارد.</td>
+<td dir="rtl">پایدار</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><a href="#tag-modeDiscriminator"><code dir="ltr">+k8s:modeDiscriminator</code></a></td>
+<td dir="rtl">نشان می‌دهد که این فیلد متمایزکننده‌ای برای اعتبارسنجی مبتنی بر وضعیت است.</td>
+<td dir="rtl">پایدار</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><a href="#tag-monotonic"><code dir="ltr">+k8s:monotonic</code></a></td>
+<td dir="rtl">تضمین می‌کند که مقدار یک فیلد در به‌روزرسانی هرگز کاهش نیابد.</td>
+<td dir="rtl">آلفا</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><a href="#tag-neq"><code dir="ltr">+k8s:neq</code></a></td>
+<td dir="rtl">بررسی می‌کند که مقدار فیلد با یک مقدار غیرمجازِ مشخص برابر نباشد.</td>
+<td dir="rtl">آلفا</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><a href="#tag-opaqueType"><code dir="ltr">+k8s:opaqueType</code></a></td>
+<td dir="rtl">نشان می‌دهد که مولد کد هر اعتبارسنجیِ اعلام‌شده روی نوع ارجاع‌شده را نادیده می‌گیرد.</td>
+<td dir="rtl">پایدار</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><a href="#tag-optional"><code dir="ltr">+k8s:optional</code></a></td>
+<td dir="rtl">نشان می‌دهد که مشخص کردن یک فیلد برای کلاینت‌ها اختیاری است.</td>
+<td dir="rtl">پایدار</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><a href="#tag-required"><code dir="ltr">+k8s:required</code></a></td>
+<td dir="rtl">نشان می‌دهد که کلاینت‌ها باید یک فیلد را مشخص کنند.</td>
+<td dir="rtl">پایدار</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><a href="#tag-subfield"><code dir="ltr">+k8s:subfield</code></a></td>
+<td dir="rtl">یک اعتبارسنجی برای یک زیرفیلد از یک struct اعلام می‌کند.</td>
+<td dir="rtl">پایدار</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><a href="#tag-supportsSubresource"><code dir="ltr">+k8s:supportsSubresource</code></a></td>
+<td dir="rtl">یک زیرمنبع پشتیبانی‌شده برای نوع‌های درون یک بسته اعلام می‌کند.</td>
+<td dir="rtl">پایدار</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><a href="#tag-unionDiscriminator"><code dir="ltr">+k8s:unionDiscriminator</code></a></td>
+<td dir="rtl">نشان می‌دهد که این فیلد متمایزکننده‌ی یک union است.</td>
+<td dir="rtl">بتا</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><a href="#tag-unionMember"><code dir="ltr">+k8s:unionMember</code></a></td>
+<td dir="rtl">نشان می‌دهد که این فیلد عضوی از یک گروه union است.</td>
+<td dir="rtl">پایدار</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><a href="#tag-unique"><code dir="ltr">+k8s:unique</code></a></td>
+<td dir="rtl">اعلام می‌کند که عناصر یک فیلد لیستی یکتا هستند.</td>
+<td dir="rtl">پایدار</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><a href="#tag-update"><code dir="ltr">+k8s:update</code></a></td>
+<td dir="rtl">گذارهای مجاز در به‌روزرسانی یک فیلد را محدود می‌کند.</td>
+<td dir="rtl">پایدار</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><a href="#tag-zeroOrOneOfMember"><code dir="ltr">+k8s:zeroOrOneOfMember</code></a></td>
+<td dir="rtl">نشان می‌دهد که این فیلد عضوی از یک گروه «صفر یا یکی از» (zero-or-one-of) است.</td>
+<td dir="rtl">پایدار</td>
+</tr>
+</tbody>
+</table>
+<h2 id="مرجع-تگ-ها" dir="rtl">مرجع تگ‌ها</h2>
+<h3 id="k8s-alpha-tag-alpha" dir="ltr" class="ltr"><code dir="ltr">+k8s:alpha</code> {#tag-alpha}</h3>
+<p dir="rtl"><strong>توضیح:</strong></p>
+<p dir="rtl">یک قاعده‌ی اعتبارسنجی را در <em>حالت سایه</em> قرار می‌دهد که نخستین مرحله از
+<a href="#lifecycle">چرخه‌ی حیات اعتبارسنجی</a> است. از این تگ فقط هنگام مهاجرت اعتبارسنجی دست‌نویس موجود استفاده کنید، نه روی فیلدهای جدید.</p>
+<p dir="rtl">اعتبارسنجی دست‌نویس همچنان مرجع می‌ماند و قاعده‌ی اعلانی در کنار آن اجرا می‌شود؛ ناهمخوانی‌ها و panicها نیز به‌صورت <a href="#metrics">متریک</a> ثبت می‌شوند. به این ترتیب، پیش از ارتقای قاعده به بتا، تأیید می‌شود که این دو رفتاری یکسان دارند.</p>
+<p dir="rtl">سرور API، صرف‌نظر از وضعیت feature gateها، هرگز قواعد <code dir="ltr">+k8s:alpha</code> را اعمال نمی‌کند.</p>
+<p dir="rtl"><strong>سطح پایداری:</strong> بتا</p>
+<p dir="rtl"><strong>دامنه‌ها:</strong> فیلدهای struct، تعریف‌های نوع، مقادیر لیست، کلیدهای map، مقادیر map</p>
+<p dir="rtl"><strong>آرگومان‌ها:</strong></p>
+<ul>
+<li dir="rtl">آرگومان <code dir="ltr">since</code> (رشته، اختیاری): نسخه‌ای از کوبرنتیز که اعتبارسنجی برای نخستین بار در آن در حالت سایه قرار گرفت.</li>
+</ul>
+<p dir="rtl"><strong>محتوا (payload):</strong></p>
+<ul>
+<li dir="rtl">مقدار <code dir="ltr">&lt;validation-tag&gt;</code> (الزامی): تگ اعتبارسنجی اعلانی‌ای که باید در حالت سایه اجرا شود.</li>
+</ul>
+<p dir="rtl"><strong>مثال کاربرد:</strong></p>
+<pre dir="ltr"><code class="language-go" dir="ltr">type MyStruct struct {
+    // +k8s:alpha(since:"1.36")=+k8s:minimum=1
+    MyField int `json:"myField"`
+}
+</code></pre>
+<h3 id="k8s-beta-tag-beta" dir="ltr" class="ltr"><code dir="ltr">+k8s:beta</code> {#tag-beta}</h3>
+<p dir="rtl"><strong>توضیح:</strong></p>
+<p dir="rtl">یک قاعده‌ی اعتبارسنجیِ مهاجرت‌داده‌شده را در <em>حالت اعمال</em> قرار می‌دهد که دومین مرحله از
+<a href="#lifecycle">چرخه‌ی حیات اعتبارسنجی</a> است. از این تگ فقط هنگام مهاجرت اعتبارسنجی دست‌نویس موجود استفاده کنید، نه روی فیلدهای جدید.</p>
+<p dir="rtl">وقتی <code dir="ltr">DeclarativeValidationBeta</code> فعال باشد (حالت پیش‌فرض)، این قاعده مرجع است و سرور API خطاهای دست‌نویسی را که این قاعده پوشش می‌دهد کنار می‌گذارد. با غیرفعال کردن این گیت، قاعده به حالت سایه بازمی‌گردد.</p>
+<p dir="rtl"><strong>سطح پایداری:</strong> بتا</p>
+<p dir="rtl"><strong>دامنه‌ها:</strong> فیلدهای struct، تعریف‌های نوع، مقادیر لیست، کلیدهای map، مقادیر map</p>
+<p dir="rtl"><strong>آرگومان‌ها:</strong></p>
+<ul>
+<li dir="rtl">آرگومان <code dir="ltr">since</code> (رشته، اختیاری): نسخه‌ای از کوبرنتیز که اعتبارسنجی در آن به بتا ارتقا یافت.</li>
+</ul>
+<p dir="rtl"><strong>محتوا:</strong></p>
+<ul>
+<li dir="rtl">مقدار <code dir="ltr">&lt;validation-tag&gt;</code> (الزامی): تگ اعتبارسنجی اعلانی‌ای که باید اعمال شود.</li>
+</ul>
+<p dir="rtl"><strong>مثال کاربرد:</strong></p>
+<pre dir="ltr"><code class="language-go" dir="ltr">type MyStruct struct {
+    // +k8s:beta(since:"1.37")=+k8s:minimum=1
+    MyField int `json:"myField"`
+}
+</code></pre>
+<h3 id="k8s-customunique-tag-customunique" dir="ltr" class="ltr"><code dir="ltr">+k8s:customUnique</code> {#tag-customUnique}</h3>
+<p dir="rtl"><strong>توضیح:</strong></p>
+<p dir="rtl">نشان می‌دهد که یک اعتبارسنجی سفارشی و دست‌نویس، بررسی یکتایی این لیست را انجام می‌دهد. این تگ تولید اعتبارسنجی یکتایی را برای این لیست غیرفعال می‌کند؛ اعتبارسنجی‌ای که در غیر این صورت <code dir="ltr">+k8s:listType=set</code>، <code dir="ltr">+k8s:listType=map</code> و <a href="#tag-unique"><code dir="ltr">+k8s:unique</code></a> به‌طور ضمنی آن را ایجاب می‌کنند.</p>
+<p dir="rtl"><strong>سطح پایداری:</strong> پایدار</p>
+<p dir="rtl"><strong>دامنه‌ها:</strong> فیلدهای struct، تعریف‌های نوع، مقادیر لیست، کلیدهای map، مقادیر map</p>
+<p dir="rtl"><strong>مثال کاربرد:</strong></p>
+<pre dir="ltr"><code class="language-go" dir="ltr">type MyStruct struct {
+    // +k8s:listType=map
+    // +k8s:listMapKey=key
+    // +k8s:customUnique
+    MyList []Item `json:"myList"`
+}
+</code></pre>
+<p dir="rtl">در این مثال، مولد کد ثبت می‌کند که <code dir="ltr">MyList</code> یک list-map است، اما بررسی یکتایی برای آن تولید نمی‌کند؛ مسئولیت این بررسی بر عهده‌ی کد دست‌نویس است.</p>
+<h3 id="k8s-customvalidation-tag-customvalidation" dir="ltr" class="ltr"><code dir="ltr">+k8s:customValidation</code> {#tag-customValidation}</h3>
+<p dir="rtl"><strong>توضیح:</strong></p>
+<p dir="rtl">یک تابع اعتبارسنجی دست‌نویس را از کد پیمایش تولیدشده فراخوانی می‌کند. از این تگ برای منطقی استفاده کنید که با سایر تگ‌ها قابل بیان نیست.</p>
+<p dir="rtl">این تابع باید در بسته‌ی تولیدشده و با امضای زیر تعریف شود:</p>
+<pre dir="ltr"><code class="language-go" dir="ltr">func(ctx context.Context, op operation.Operation, fldPath *field.Path, value, oldValue &lt;ValueType&gt;) field.ErrorList
+</code></pre>
+<p dir="rtl">نوع <code dir="ltr">&lt;ValueType&gt;</code> همان نوع مقدار است که nil‌پذیر شده است: یک اشاره‌گر مانند <code dir="ltr">*string</code>، یا اگر نوع از قبل nil‌پذیر باشد (slice، map، اشاره‌گر)، خود آن نوع. هر بسته‌ی تولیدشده به تعریف مخصوص خود نیاز دارد، زیرا هر نسخه از کد تولیدشده تابعی را فراخوانی می‌کند که در کنار خودش قرار دارد.</p>
+<p dir="rtl">در نام تابع، <code dir="ltr">&lt;Type&gt;</code> و <code dir="ltr">&lt;Field&gt;</code> شناسه‌های Go هستند (<code dir="ltr">Replicas</code>، نه
+<code dir="ltr">replicas</code>):</p>
+<ul>
+<li dir="rtl">
+<p dir="rtl">دامنه‌ی فیلد: تابع <code dir="ltr">ValidateCustom_&lt;Type&gt;_&lt;Field&gt;</code> یک فیلد را اعتبارسنجی می‌کند. در به‌روزرسانی، اگر آن فیلد تغییر نکرده باشد، این تابع اجرا نمی‌شود.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">دامنه‌ی نوع: تابع <code dir="ltr">ValidateCustom_&lt;Type&gt;</code> بررسی‌هایی را میان چند فیلد انجام می‌دهد. این تابع در به‌روزرسانی <em>رد نمی‌شود</em>؛ بنابراین یک بررسی پرهزینه باید در صورت برابر بودن <code dir="ltr">value</code> و <code dir="ltr">oldValue</code> زودتر بازگردد.</p>
+</li>
+</ul>
+<p dir="rtl">برای بررسی‌های مربوط به هر عنصر، نوع عنصر را تگ‌گذاری کنید، یا از دامنه‌ی فیلد استفاده کنید و درون تابع روی عناصر حلقه بزنید.</p>
+<p dir="rtl"><strong>سطح پایداری:</strong> پایدار</p>
+<p dir="rtl"><strong>دامنه‌ها:</strong> فیلدهای struct، تعریف‌های نوع</p>
+<p dir="rtl"><strong>مثال کاربرد:</strong></p>
+<pre dir="ltr"><code class="language-go" dir="ltr">// +k8s:customValidation
+type MyStruct struct {
+    // +k8s:customValidation
+    StringField string `json:"stringField"`
+
+    // Both validations run on this field.
+    // +k8s:maxLength=3
+    // +k8s:customValidation
+    MaxLengthField string `json:"maxLengthField"`
+}
+</code></pre>
+<h3 id="k8s-dependentforbidden-tag-dependentforbidden" dir="ltr" class="ltr"><code dir="ltr">+k8s:dependentForbidden</code> {#tag-dependentForbidden}</h3>
+<p dir="rtl"><strong>توضیح:</strong></p>
+<p dir="rtl">نشان می‌دهد که وقتی این فیلد مقدار دارد، فیلد هم‌سطحِ (sibling) نام‌برده نباید مقدار داشته باشد. یک فیلد زمانی «مقداردار» به شمار می‌آید که اشاره‌گری غیر nil، یک slice یا map غیرخالی، یا یک نوع داخلی با مقدار غیرصفر باشد. وابستگی‌ها یک‌طرفه‌اند. برای ممنوع کردن چند فیلد هم‌سطح، تگ را تکرار کنید.</p>
+<p dir="rtl"><strong>سطح پایداری:</strong> آلفا</p>
+<p dir="rtl"><strong>دامنه‌ها:</strong> فیلدهای struct</p>
+<p dir="rtl"><strong>آرگومان‌ها:</strong></p>
+<ul>
+<li dir="rtl">آرگومان <code dir="ltr">&lt;sibling-field-json-name&gt;</code> (رشته، الزامی): نام JSON فیلد هم‌سطح.</li>
+</ul>
+<p dir="rtl"><strong>مثال کاربرد:</strong></p>
+<pre dir="ltr"><code class="language-go" dir="ltr">type MyStruct struct {
+    // +k8s:optional
+    // +k8s:dependentForbidden("dependentA")
+    // +k8s:dependentForbidden("dependentB")
+    Trigger *string `json:"trigger"`
+
+    // +k8s:optional
+    DependentA *string `json:"dependentA"`
+
+    // +k8s:optional
+    DependentB *string `json:"dependentB"`
+}
+</code></pre>
+<p dir="rtl">در این مثال، اگر <code dir="ltr">trigger</code> مقدار داشته باشد، هیچ‌یک از <code dir="ltr">dependentA</code> و <code dir="ltr">dependentB</code> نباید مقدار داشته باشند.</p>
+<h3 id="k8s-dependentrequired-tag-dependentrequired" dir="ltr" class="ltr"><code dir="ltr">+k8s:dependentRequired</code> {#tag-dependentRequired}</h3>
+<p dir="rtl"><strong>توضیح:</strong></p>
+<p dir="rtl">نشان می‌دهد که وقتی این فیلد مقدار دارد، فیلد هم‌سطحِ نام‌برده نیز باید مقدار داشته باشد. یک فیلد زمانی «مقداردار» به شمار می‌آید که اشاره‌گری غیر nil، یک slice یا map غیرخالی، یا یک نوع داخلی با مقدار غیرصفر باشد. وابستگی‌ها یک‌طرفه‌اند. برای الزامی کردن چند فیلد هم‌سطح، تگ را تکرار کنید.</p>
+<p dir="rtl"><strong>سطح پایداری:</strong> آلفا</p>
+<p dir="rtl"><strong>دامنه‌ها:</strong> فیلدهای struct</p>
+<p dir="rtl"><strong>آرگومان‌ها:</strong></p>
+<ul>
+<li dir="rtl">آرگومان <code dir="ltr">&lt;sibling-field-json-name&gt;</code> (رشته، الزامی): نام JSON فیلد هم‌سطح.</li>
+</ul>
+<p dir="rtl"><strong>مثال کاربرد:</strong></p>
+<pre dir="ltr"><code class="language-go" dir="ltr">type MyStruct struct {
+    // +k8s:optional
+    // +k8s:dependentRequired("dependent")
+    Trigger *string `json:"trigger"`
+
+    // +k8s:optional
+    Dependent *string `json:"dependent"`
+}
+</code></pre>
+<p dir="rtl">در این مثال، اگر <code dir="ltr">trigger</code> مقدار داشته باشد، <code dir="ltr">dependent</code> نیز باید مقدار داشته باشد. مقدار دادن به <code dir="ltr">dependent</code> به‌تنهایی مجاز است.</p>
+<h3 id="k8s-eachkey-tag-eachkey" dir="ltr" class="ltr"><code dir="ltr">+k8s:eachKey</code> {#tag-eachKey}</h3>
+<p dir="rtl"><strong>توضیح:</strong></p>
+<p dir="rtl">یک اعتبارسنجی برای هر کلید یک map اعلام می‌کند.</p>
+<p dir="rtl"><strong>سطح پایداری:</strong> پایدار</p>
+<p dir="rtl"><strong>دامنه‌ها:</strong> فیلدهای struct، تعریف‌های نوع، مقادیر لیست، کلیدهای map، مقادیر map</p>
+<p dir="rtl"><strong>محتوا:</strong></p>
+<ul>
+<li dir="rtl">مقدار <code dir="ltr">&lt;validation-tag&gt;</code> (الزامی): تگی که باید برای هر کلید ارزیابی شود.</li>
+</ul>
+<p dir="rtl"><strong>مثال کاربرد:</strong></p>
+<pre dir="ltr"><code class="language-go" dir="ltr">type MyStruct struct {
+    // +k8s:eachKey=+k8s:minimum=1
+    MyMap map[int]string `json:"myMap"`
+}
+</code></pre>
+<h3 id="k8s-eachval-tag-eachval" dir="ltr" class="ltr"><code dir="ltr">+k8s:eachVal</code> {#tag-eachVal}</h3>
+<p dir="rtl"><strong>توضیح:</strong></p>
+<p dir="rtl">یک اعتبارسنجی برای هر مقدار یک map یا لیست اعلام می‌کند.</p>
+<p dir="rtl"><strong>سطح پایداری:</strong> پایدار</p>
+<p dir="rtl"><strong>دامنه‌ها:</strong> فیلدهای struct، تعریف‌های نوع، مقادیر لیست، کلیدهای map، مقادیر map</p>
+<p dir="rtl"><strong>محتوا:</strong></p>
+<ul>
+<li dir="rtl">مقدار <code dir="ltr">&lt;validation-tag&gt;</code> (الزامی): تگی که باید برای هر مقدار ارزیابی شود.</li>
+</ul>
+<p dir="rtl"><strong>مثال کاربرد:</strong></p>
+<pre dir="ltr"><code class="language-go" dir="ltr">type MyStruct struct {
+    // +k8s:eachVal=+k8s:minimum=1
+    MyMap map[string]int `json:"myMap"`
+
+    // +k8s:eachVal=+k8s:maxLength=10
+    MyList []string `json:"myList"`
+}
+</code></pre>
+<h3 id="k8s-enum-tag-enum" dir="ltr" class="ltr"><code dir="ltr">+k8s:enum</code> {#tag-enum}</h3>
+<p dir="rtl"><strong>توضیح:</strong></p>
+<p dir="rtl">نشان می‌دهد که یک نوع رشته‌ای، enum است. همه‌ی مقادیر ثابت این نوع جزو مقادیر enum هستند، مگر اینکه آن‌ها را با
+<a href="#tag-enumExclude"><code dir="ltr">+k8s:enumExclude</code></a> مستثنا کنید.</p>
+<p dir="rtl"><strong>سطح پایداری:</strong> پایدار</p>
+<p dir="rtl"><strong>دامنه‌ها:</strong> تعریف‌های نوع</p>
+<p dir="rtl"><strong>مثال کاربرد:</strong></p>
+<p dir="rtl">ابتدا یک نوع رشته‌ای جدید و چند ثابت از آن نوع تعریف کنید:</p>
+<pre dir="ltr"><code class="language-go" dir="ltr">// +k8s:enum
+type MyEnum string
+
+const (
+    MyEnumA MyEnum = "A"
+    MyEnumB MyEnum = "B"
+)
+</code></pre>
+<p dir="rtl">سپس از این نوع در یک struct دیگر استفاده کنید:</p>
+<pre dir="ltr"><code class="language-go" dir="ltr">type MyStruct struct {
+    MyField MyEnum `json:"myField"`
+}
+</code></pre>
+<p dir="rtl">منطق اعتبارسنجی تضمین می‌کند که مقدار <code dir="ltr">MyField</code> یکی از مقادیر تعریف‌شده‌ی enum
+(<code dir="ltr">"A"</code> یا <code dir="ltr">"B"</code>) باشد.</p>
+<h3 id="k8s-enumexclude-tag-enumexclude" dir="ltr" class="ltr"><code dir="ltr">+k8s:enumExclude</code> {#tag-enumExclude}</h3>
+<p dir="rtl"><strong>توضیح:</strong></p>
+<p dir="rtl">نشان می‌دهد که یک مقدار ثابت جزو enum نیست، حتی اگر نوع آن ثابت تگ <code dir="ltr">+k8s:enum</code> داشته باشد. می‌توانید با قرار دادن این تگ درون <a href="#tag-ifEnabled"><code dir="ltr">+k8s:ifEnabled</code></a> یا
+<a href="#tag-ifDisabled"><code dir="ltr">+k8s:ifDisabled</code></a>، این استثنا را شرطی کنید. اگر از چند تگ شرطی استفاده کنید، مولد کد مقدار را در صورتی مستثنا می‌کند که <em>هر یک</em> از شرط‌ها برقرار باشد.</p>
+<p dir="rtl"><strong>سطح پایداری:</strong> آلفا</p>
+<p dir="rtl"><strong>دامنه‌ها:</strong> مقادیر ثابت</p>
+<p dir="rtl"><strong>مثال کاربرد:</strong></p>
+<pre dir="ltr"><code class="language-go" dir="ltr">// +k8s:enum
+type MyEnum string
+
+const (
+    MyEnumA MyEnum = "A"
+
+    // Never a valid value.
+    // +k8s:enumExclude
+    MyEnumB MyEnum = "B"
+
+    // Only a valid value while "MyFeature" is disabled.
+    // +k8s:ifEnabled(MyFeature)=+k8s:enumExclude
+    MyEnumC MyEnum = "C"
+)
+</code></pre>
+<h3 id="k8s-forbidden-tag-forbidden" dir="ltr" class="ltr"><code dir="ltr">+k8s:forbidden</code> {#tag-forbidden}</h3>
+<p dir="rtl"><strong>توضیح:</strong></p>
+<p dir="rtl">نشان می‌دهد که یک فیلد نباید مشخص شود.</p>
+<p dir="rtl"><strong>سطح پایداری:</strong> بتا</p>
+<p dir="rtl"><strong>دامنه‌ها:</strong> فیلدهای struct</p>
+<p dir="rtl"><strong>مثال کاربرد:</strong></p>
+<pre dir="ltr"><code class="language-go" dir="ltr">type MyStruct struct {
+    // +k8s:forbidden
+    MyField string `json:"myField"`
+}
+</code></pre>
+<h3 id="k8s-format-tag-format" dir="ltr" class="ltr"><code dir="ltr">+k8s:format</code> {#tag-format}</h3>
+<p dir="rtl"><strong>توضیح:</strong></p>
+<p dir="rtl">نشان می‌دهد که یک فیلد رشته‌ای قالب مشخصی دارد.</p>
+<p dir="rtl"><strong>سطح پایداری:</strong> پایدار</p>
+<p dir="rtl"><strong>دامنه‌ها:</strong> فیلدهای struct، تعریف‌های نوع، مقادیر لیست، کلیدهای map، مقادیر map</p>
+<p dir="rtl"><strong>محتواها (payload):</strong></p>
+<table>
+<thead>
+<tr>
+<th dir="rtl">محتوا</th>
+<th dir="rtl">معنا</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">k8s-extended-resource-name</code></td>
+<td dir="rtl">نام منبع توسعه‌یافته (extended resource) در کوبرنتیز: نامی با پیشوند دامنه که نباید پیشوند <code dir="ltr">kubernetes.io</code> یا <code dir="ltr">requests.</code> داشته باشد. اگر <code dir="ltr">requests.</code> را به ابتدای آن اضافه کنید، حاصل باید یک کلید برچسب معتبر باشد؛ همان‌گونه که در سهمیه (quota) استفاده می‌شود.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">k8s-label-key</code></td>
+<td dir="rtl">یک کلید برچسب کوبرنتیز.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">k8s-label-value</code></td>
+<td dir="rtl">یک مقدار برچسب کوبرنتیز.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">k8s-long-name</code></td>
+<td dir="rtl">مقدار «نام بلند» (long name) کوبرنتیز که «زیردامنهٔ DNS» (DNS subdomain) نیز نامیده می‌شود.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">k8s-long-name-caseless</code></td>
+<td dir="rtl">منسوخ‌شده: «نام بلند» کوبرنتیز بدون حساسیت به بزرگی و کوچکی حروف.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">k8s-path-segment-name</code></td>
+<td dir="rtl">مقدار «نام بخش مسیر» (path segment name) در کوبرنتیز.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">k8s-prefixed-label-key</code></td>
+<td dir="rtl">کلید برچسب کوبرنتیز که داشتن پیشوند در آن الزامی است.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">k8s-resource-fully-qualified-name</code></td>
+<td dir="rtl">یک پیشوند و یک نام غیرخالی که با اسلش از هم جدا شده‌اند (برای مثال <code dir="ltr">prefix/name</code>). پیشوند باید یک زیردامنهٔ DNS باشد و نام باید یک شناسهٔ C با حداکثر ۳۲ نویسه باشد.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">k8s-resource-pool-name</code></td>
+<td dir="rtl">یک یا چند بخش «نام بلند» کوبرنتیز که با <code dir="ltr">/</code> از هم جدا شده‌اند و طول کل آن‌ها از ۲۵۳ نویسه بیشتر نیست.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">k8s-short-name</code></td>
+<td dir="rtl">مقدار «نام کوتاه» (short name) کوبرنتیز که «برچسب DNS» (DNS label) نیز نامیده می‌شود.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">k8s-uuid</code></td>
+<td dir="rtl">یک UUID مطابق با RFC 4122.</td>
+</tr>
+</tbody>
+</table>
+<p dir="rtl"><strong>نمونهٔ استفاده:</strong></p>
+<pre dir="ltr"><code class="language-go" dir="ltr">type MyStruct struct {
+    // +k8s:format=k8s-long-name
+    Subdomain string `json:"subdomain"`
+
+    // +k8s:format=k8s-short-name
+    Label string `json:"label"`
+
+    // +k8s:format=k8s-uuid
+    ID string `json:"id"`
+}
+</code></pre>
+<h3 id="k8s-ifdisabled-tag-ifdisabled" dir="ltr" class="ltr"><code dir="ltr">+k8s:ifDisabled</code> {#tag-ifDisabled}</h3>
+<p dir="rtl"><strong>توضیح:</strong></p>
+<p dir="rtl">اعتبارسنجی‌ای را اعلام می‌کند که فقط وقتی یک گزینه غیرفعال است اعمال می‌شود. گزینه‌ها
+متناظر با گزینه‌های اعتبارسنجی‌ای هستند که سرور API از روی feature gateها به دست می‌آورد.</p>
+<p dir="rtl"><strong>سطح پایداری:</strong> پایدار</p>
+<p dir="rtl"><strong>دامنه‌ها:</strong> فیلدهای struct، تعریف‌های نوع، مقادیر لیست، کلیدهای map، مقادیر map،
+مقادیر ثابت</p>
+<p dir="rtl"><strong>آرگومان‌ها:</strong></p>
+<ul>
+<li dir="rtl">آرگومان <code dir="ltr">&lt;option&gt;</code> (رشته، الزامی): نام گزینه.</li>
+</ul>
+<p dir="rtl"><strong>محتوا:</strong></p>
+<ul>
+<li dir="rtl">مقدار <code dir="ltr">&lt;validation-tag&gt;</code> (الزامی): تگ اعتبارسنجی‌ای که فقط وقتی گزینه
+غیرفعال است ارزیابی می‌شود.</li>
+</ul>
+<p dir="rtl"><strong>نمونهٔ استفاده:</strong></p>
+<pre dir="ltr"><code class="language-go" dir="ltr">type MyStruct struct {
+    // +k8s:ifDisabled(MyFeature)=+k8s:required
+    MyField string `json:"myField"`
+}
+</code></pre>
+<h3 id="k8s-ifenabled-tag-ifenabled" dir="ltr" class="ltr"><code dir="ltr">+k8s:ifEnabled</code> {#tag-ifEnabled}</h3>
+<p dir="rtl"><strong>توضیح:</strong></p>
+<p dir="rtl">اعتبارسنجی‌ای را اعلام می‌کند که فقط وقتی یک گزینه فعال است اعمال می‌شود. گزینه‌ها
+متناظر با گزینه‌های اعتبارسنجی‌ای هستند که سرور API از روی feature gateها به دست می‌آورد.</p>
+<p dir="rtl"><strong>سطح پایداری:</strong> پایدار</p>
+<p dir="rtl"><strong>دامنه‌ها:</strong> فیلدهای struct، تعریف‌های نوع، مقادیر لیست، کلیدهای map، مقادیر map،
+مقادیر ثابت</p>
+<p dir="rtl"><strong>آرگومان‌ها:</strong></p>
+<ul>
+<li dir="rtl">آرگومان <code dir="ltr">&lt;option&gt;</code> (رشته، الزامی): نام گزینه.</li>
+</ul>
+<p dir="rtl"><strong>محتوا:</strong></p>
+<ul>
+<li dir="rtl">مقدار <code dir="ltr">&lt;validation-tag&gt;</code> (الزامی): تگ اعتبارسنجی‌ای که فقط وقتی گزینه
+فعال است ارزیابی می‌شود.</li>
+</ul>
+<p dir="rtl"><strong>نمونهٔ استفاده:</strong></p>
+<pre dir="ltr"><code class="language-go" dir="ltr">type MyStruct struct {
+    // +k8s:ifEnabled(MyFeature)=+k8s:required
+    MyField string `json:"myField"`
+}
+</code></pre>
+<h3 id="k8s-ifmode-tag-ifmode" dir="ltr" class="ltr"><code dir="ltr">+k8s:ifMode</code> {#tag-ifMode}</h3>
+<p dir="rtl"><strong>توضیح:</strong></p>
+<p dir="rtl">اعتبارسنجی‌ای را اعلام می‌کند که فقط وقتی <a href="#tag-modeDiscriminator">متمایزکنندهٔ حالت</a>
+در struct مقدار مشخصی داشته باشد اعمال می‌شود. این تگ اعتبارسنجی مبتنی بر وضعیت را
+بیان می‌کند؛ یعنی حالتی که شکل یک آبجکت به یک فیلد حالت بستگی دارد.</p>
+<p dir="rtl">فیلدی که دست‌کم یک تگ <code dir="ltr">+k8s:ifMode</code> دارد، در هر حالتی که در هیچ‌یک از تگ‌هایش نام
+برده نشده باشد <em>به‌طور ضمنی ممنوع</em> است.</p>
+<p dir="rtl"><strong>سطح پایداری:</strong> پایدار</p>
+<p dir="rtl"><strong>دامنه‌ها:</strong> فیلدهای struct</p>
+<p dir="rtl"><strong>آرگومان‌ها:</strong></p>
+<ul>
+<li dir="rtl">آرگومان <code dir="ltr">&lt;mode&gt;</code> (رشته، موقعیتی): مقدار متمایزکننده (discriminator) که این
+اعتبارسنجی برای آن اعمال می‌شود.</li>
+<li dir="rtl">آرگومان <code dir="ltr">modality</code> (رشته، اختیاری): نام گروه متمایزکننده، در صورتی که struct
+بیش از یک گروه داشته باشد.</li>
+<li dir="rtl">آرگومان <code dir="ltr">mode</code> (رشته، اختیاری): مقدار متمایزکننده، به‌عنوان جایگزینی نام‌دار برای
+آرگومان موقعیتی.</li>
+</ul>
+<p dir="rtl"><strong>محتوا:</strong></p>
+<ul>
+<li dir="rtl">مقدار <code dir="ltr">&lt;validation-tag&gt;</code> (الزامی): تگی که هنگام تطابق حالت ارزیابی می‌شود.</li>
+</ul>
+<p dir="rtl"><strong>نمونهٔ استفاده:</strong></p>
+<pre dir="ltr"><code class="language-go" dir="ltr">type MyStruct struct {
+    // +k8s:modeDiscriminator
+    Mode string `json:"mode"`
+
+    // Required in mode "A", and additionally length-limited.
+    // +k8s:ifMode("A")=+k8s:required
+    // +k8s:ifMode("A")=+k8s:maxLength=5
+    FieldA *string `json:"fieldA,omitempty"`
+
+    // Optional in mode "B", implicitly forbidden in every other mode.
+    // +k8s:ifMode("B")=+k8s:optional
+    FieldB *string `json:"fieldB,omitempty"`
+}
+</code></pre>
+<h3 id="k8s-immutable-tag-immutable" dir="ltr" class="ltr"><code dir="ltr">+k8s:immutable</code> {#tag-immutable}</h3>
+<p dir="rtl"><strong>توضیح:</strong></p>
+<p dir="rtl">نشان می‌دهد که یک فیلد را نمی‌توان به‌روزرسانی کرد. برخلاف <a href="#tag-update"><code dir="ltr">+k8s:update</code></a>
+که گذارهای دقیق‌تری ارائه می‌دهد، تگ <code dir="ltr">+k8s:immutable</code> هرگونه تغییر در مقدار را پس از
+ایجاد ممنوع می‌کند.</p>
+<p dir="rtl"><strong>سطح پایداری:</strong> پایدار</p>
+<p dir="rtl"><strong>دامنه‌ها:</strong> فیلدهای struct، تعریف‌های نوع، مقادیر لیست، مقادیر map</p>
+<p dir="rtl"><strong>نمونهٔ استفاده:</strong></p>
+<pre dir="ltr"><code class="language-go" dir="ltr">type MyStruct struct {
+    // +k8s:immutable
+    StringField string `json:"stringField"`
+
+    // +k8s:immutable
+    SliceField []string `json:"sliceField"`
+}
+
+// +k8s:immutable
+type ImmutableType string
+</code></pre>
+<h3 id="k8s-issubresource-tag-issubresource" dir="ltr" class="ltr"><code dir="ltr">+k8s:isSubresource</code> {#tag-isSubresource}</h3>
+<p dir="rtl"><strong>توضیح:</strong></p>
+<p dir="rtl">تگی در سطح پکیج که قواعد اعتبارسنجی پکیج را به یک زیرمنبع (subresource) محدود می‌کند،
+به‌طوری که این قواعد روی آبجکت ریشه یا هیچ زیرمنبع دیگری اعمال نمی‌شوند. با این کار
+می‌توانید اعتبارسنجی مختص هر زیرمنبع را در پکیجی جداگانه و جدا از نوع‌های API نگه دارید.</p>
+<p dir="rtl"><strong>سطح پایداری:</strong> پایدار</p>
+<p dir="rtl"><strong>دامنه:</strong> پکیج</p>
+<p dir="rtl"><strong>محتوا:</strong></p>
+<ul>
+<li dir="rtl">مقدار <code dir="ltr">&lt;subresource-path&gt;</code>: مسیر زیرمنبعی که اعتبارسنجی‌های این پکیج روی آن
+اعمال می‌شوند (برای مثال <code dir="ltr">"/status"</code> یا <code dir="ltr">"/scale"</code>).</li>
+</ul>
+<div class="callout note"><div class="callout-title">Caution</div>
+<p dir="rtl">این تگ به یک تگ <a href="#tag-supportsSubresource"><code dir="ltr">+k8s:supportsSubresource</code></a> متناظر در
+پکیجی که نوع API را تعریف می‌کند نیاز دارد. بدون آن، مولد (generator) کد اعتبارسنجی را
+تولید می‌کند، اما توزیع‌کننده (dispatcher) مسیر زیرمنبع را تشخیص نمی‌دهد و در نتیجه
+هیچ درخواستی به آن نمی‌رسد.</p>
+</div>
+<p dir="rtl"><strong>نمونهٔ استفاده:</strong></p>
+<p dir="rtl">در فایل <code dir="ltr">staging/src/k8s.io/api/apps/v1/doc.go</code> اعلام کنید که این نوع از
+<code dir="ltr">/scale</code> پشتیبانی می‌کند:</p>
+<pre dir="ltr"><code class="language-go" dir="ltr">// +k8s:supportsSubresource="/scale"
+package v1
+</code></pre>
+<p dir="rtl">در فایل <code dir="ltr">staging/src/k8s.io/api/apps/v1/validations/scale/doc.go</code> قواعدی را تعریف کنید
+که فقط برای <code dir="ltr">/scale</code> اجرا می‌شوند:</p>
+<pre dir="ltr"><code class="language-go" dir="ltr">// +k8s:isSubresource="/scale"
+package scale
+</code></pre>
+<h3 id="k8s-item-tag-item" dir="ltr" class="ltr"><code dir="ltr">+k8s:item</code> {#tag-item}</h3>
+<p dir="rtl"><strong>توضیح:</strong></p>
+<p dir="rtl">اعتبارسنجی‌ای را برای یکی از آیتم‌های یک slice اعلام می‌کند که به‌صورت <code dir="ltr">+k8s:listType=map</code>
+تعریف شده است. آیتم موردنظر را با ارائهٔ آرگومان‌هایی به شکل جفت فیلد-مقدار مشخص می‌کنید
+که در آن‌ها فیلد یک <code dir="ltr">listMapKey</code> است. باید همهٔ فیلدهای <code dir="ltr">listMapKey</code> را مشخص کنید.</p>
+<p dir="rtl"><strong>سطح پایداری:</strong> پایدار</p>
+<p dir="rtl"><strong>دامنه‌ها:</strong> فیلدهای struct، تعریف‌های نوع، مقادیر لیست، کلیدهای map، مقادیر map</p>
+<p dir="rtl"><strong>نحوهٔ استفاده:</strong></p>
+<p dir="ltr" class="ltr"><code dir="ltr">+k8s:item(&lt;listMapKey-JSON-field-name&gt;: &lt;value&gt;,...)=&lt;validation-tag&gt;</code></p>
+<p dir="ltr" class="ltr"><code dir="ltr">+k8s:item(stringKey: "value", intKey: 42, boolKey: true)=&lt;validation-tag&gt;</code></p>
+<p dir="rtl">آرگومان‌ها را با نام‌های JSON فیلدهای کلید list-map نام‌گذاری کنید. مقادیر می‌توانند
+رشته، عدد صحیح یا بولی باشند.</p>
+<p dir="rtl"><strong>محتوا:</strong></p>
+<ul>
+<li dir="rtl">مقدار <code dir="ltr">&lt;validation-tag&gt;</code> (الزامی): تگی که برای آیتم منطبق از لیست ارزیابی می‌شود.</li>
+</ul>
+<p dir="rtl"><strong>نمونهٔ استفاده:</strong></p>
+<pre dir="ltr"><code class="language-go" dir="ltr">type MyStruct struct {
+    // +k8s:listType=map
+    // +k8s:listMapKey=type
+    // +k8s:item(type: "Approved")=+k8s:zeroOrOneOfMember
+    // +k8s:item(type: "Denied")=+k8s:zeroOrOneOfMember
+    MyConditions []MyCondition `json:"conditions"`
+}
+
+type MyCondition struct {
+    Type   string `json:"type"`
+    Status string `json:"status"`
+}
+</code></pre>
+<p dir="rtl">در این مثال، شرط‌هایی (condition) که مقدار <code dir="ltr">type</code> آن‌ها "Approved" و "Denied" است، عضو
+یک گروه مشترک zero-or-one-of (صفر یا یکی) هستند؛ بنابراین حداکثر یکی از آن‌ها می‌تواند
+وجود داشته باشد.</p>
+<h3 id="k8s-listmapkey-tag-listmapkey" dir="ltr" class="ltr"><code dir="ltr">+k8s:listMapKey</code> {#tag-listMapKey}</h3>
+<p dir="rtl"><strong>توضیح:</strong></p>
+<p dir="rtl">یک زیرفیلد نام‌دار از نوع مقدار (value-type) لیست را به‌عنوان بخشی از کلید list-map اعلام
+می‌کند. هنگام استفاده از <code dir="ltr">+k8s:listType=map</code> یا <code dir="ltr">+k8s:unique=map</code> این تگ الزامی است.
+می‌توانید از چند تگ <code dir="ltr">+k8s:listMapKey</code> استفاده کنید تا مشخص شود کلید لیست از چند فیلد
+تشکیل می‌شود.</p>
+<p dir="rtl"><strong>سطح پایداری:</strong> پایدار</p>
+<p dir="rtl"><strong>دامنه‌ها:</strong> فیلدهای struct، تعریف‌های نوع، مقادیر لیست، کلیدهای map، مقادیر map</p>
+<p dir="rtl"><strong>محتوا:</strong></p>
+<ul>
+<li dir="rtl">مقدار <code dir="ltr">&lt;field-json-name&gt;</code> (الزامی): نام JSON فیلدی که به‌عنوان کلید استفاده می‌شود.</li>
+</ul>
+<p dir="rtl"><strong>نمونهٔ استفاده:</strong></p>
+<pre dir="ltr"><code class="language-go" dir="ltr">// +k8s:listType=map
+// +k8s:listMapKey=keyFieldOne
+// +k8s:listMapKey=keyFieldTwo
+type MyList []MyItem
+
+type MyItem struct {
+    KeyFieldOne string `json:"keyFieldOne"`
+    KeyFieldTwo string `json:"keyFieldTwo"`
+    ValueField  string `json:"valueField"`
+}
+</code></pre>
+<p dir="rtl">کلید، ترکیبی از <code dir="ltr">keyFieldOne</code> و <code dir="ltr">keyFieldTwo</code> است.</p>
+<h3 id="k8s-listtype-tag-listtype" dir="ltr" class="ltr"><code dir="ltr">+k8s:listType</code> {#tag-listType}</h3>
+<p dir="rtl"><strong>توضیح:</strong></p>
+<p dir="rtl">نوع معنایی و رفتار مالکیت یک فیلد لیستی را اعلام می‌کند:</p>
+<ul>
+<li dir="rtl">مقدار <code dir="ltr">atomic</code>: مالکیت واحد؛ کل لیست به‌عنوان یک مقدار واحد در نظر گرفته می‌شود.</li>
+<li dir="rtl">مقدار <code dir="ltr">set</code>: مالکیت مشترک همراه با یکتایی؛ هر عنصر باید یکتا باشد.</li>
+<li dir="rtl">مقدار <code dir="ltr">map</code>: مالکیت مشترک همراه با یکتایی مبتنی بر کلید؛ به
+<a href="#tag-listMapKey"><code dir="ltr">+k8s:listMapKey</code></a> نیاز دارد.</li>
+</ul>
+<p dir="rtl"><strong>سطح پایداری:</strong> پایدار</p>
+<p dir="rtl"><strong>دامنه‌ها:</strong> فیلدهای struct، تعریف‌های نوع، مقادیر لیست، کلیدهای map، مقادیر map</p>
+<p dir="rtl"><strong>محتوا:</strong></p>
+<ul>
+<li dir="rtl">یکی از مقادیر <code dir="ltr">atomic | map | set</code> (الزامی)</li>
+</ul>
+<p dir="rtl"><strong>نمونهٔ استفاده:</strong></p>
+<pre dir="ltr"><code class="language-go" dir="ltr">// +k8s:listType=map
+// +k8s:listMapKey=keyField
+type MyList []MyItem
+
+type MyItem struct {
+    KeyField   string `json:"keyField"`
+    ValueField string `json:"valueField"`
+}
+</code></pre>
+<p dir="rtl">هر عنصر <code dir="ltr">MyList</code> باید مقدار <code dir="ltr">keyField</code> یکتایی داشته باشد.</p>
+<h3 id="k8s-maxbytes-tag-maxbytes" dir="ltr" class="ltr"><code dir="ltr">+k8s:maxBytes</code> {#tag-maxBytes}</h3>
+<p dir="rtl"><strong>توضیح:</strong></p>
+<p dir="rtl">نشان می‌دهد که طول یک فیلد رشته‌ای بر حسب بایت محدود است. در این حالت ممکن است فقط
+N/4 نویسهٔ چندبایتی مجاز باشد. برای محدودکردن تعداد نویسه‌ها، از
+<a href="#tag-maxLength"><code dir="ltr">+k8s:maxLength</code></a> استفاده کنید.</p>
+<p dir="rtl"><strong>سطح پایداری:</strong> پایدار</p>
+<p dir="rtl"><strong>دامنه‌ها:</strong> فیلدهای struct، تعریف‌های نوع، مقادیر لیست، کلیدهای map، مقادیر map</p>
+<p dir="rtl"><strong>محتوا:</strong></p>
+<ul>
+<li dir="rtl">مقدار <code dir="ltr">&lt;non-negative integer&gt;</code> (الزامی): طول این فیلد نباید بیشتر از X بایت
+باشد.</li>
+</ul>
+<p dir="rtl"><strong>نمونهٔ استفاده:</strong></p>
+<pre dir="ltr"><code class="language-go" dir="ltr">type MyStruct struct {
+    // +k8s:maxBytes=1024
+    MyString string `json:"myString"`
+}
+</code></pre>
+<h3 id="k8s-maxitems-tag-maxitems" dir="ltr" class="ltr"><code dir="ltr">+k8s:maxItems</code> {#tag-maxItems}</h3>
+<p dir="rtl"><strong>توضیح:</strong></p>
+<p dir="rtl">نشان می‌دهد که اندازهٔ یک لیست محدود است.</p>
+<p dir="rtl"><strong>سطح پایداری:</strong> پایدار</p>
+<p dir="rtl"><strong>دامنه‌ها:</strong> فیلدهای struct، تعریف‌های نوع، مقادیر لیست، مقادیر map</p>
+<p dir="rtl"><strong>محتوا:</strong></p>
+<ul>
+<li dir="rtl">مقدار <code dir="ltr">&lt;non-negative integer&gt;</code> (الزامی): این لیست نباید بیشتر از X آیتم
+داشته باشد.</li>
+</ul>
+<p dir="rtl"><strong>نمونهٔ استفاده:</strong></p>
+<pre dir="ltr"><code class="language-go" dir="ltr">type MyStruct struct {
+    // +k8s:maxItems=5
+    MyList []string `json:"myList"`
+}
+</code></pre>
+<h3 id="k8s-maxlength-tag-maxlength" dir="ltr" class="ltr"><code dir="ltr">+k8s:maxLength</code> {#tag-maxLength}</h3>
+<p dir="rtl"><strong>توضیح:</strong></p>
+<p dir="rtl">نشان می‌دهد که طول یک فیلد رشته‌ای بر حسب نویسه محدود است. اگر مقدار از نویسه‌های
+چندبایتی استفاده کند، ممکن است تا 4*N بایت مجاز باشد. برای محدودکردن تعداد بایت‌ها،
+از <a href="#tag-maxBytes"><code dir="ltr">+k8s:maxBytes</code></a> استفاده کنید.</p>
+<p dir="rtl"><strong>سطح پایداری:</strong> پایدار</p>
+<p dir="rtl"><strong>دامنه‌ها:</strong> فیلدهای struct، تعریف‌های نوع، مقادیر لیست، کلیدهای map، مقادیر map</p>
+<p dir="rtl"><strong>محتوا:</strong></p>
+<ul>
+<li dir="rtl">مقدار <code dir="ltr">&lt;non-negative integer&gt;</code> (الزامی): طول این فیلد نباید بیشتر از X
+نویسه باشد.</li>
+</ul>
+<p dir="rtl"><strong>نمونهٔ استفاده:</strong></p>
+<pre dir="ltr"><code class="language-go" dir="ltr">type MyStruct struct {
+    // +k8s:maxLength=10
+    MyString string `json:"myString"`
+}
+</code></pre>
+<h3 id="k8s-maxproperties-tag-maxproperties" dir="ltr" class="ltr"><code dir="ltr">+k8s:maxProperties</code> {#tag-maxProperties}</h3>
+<p dir="rtl"><strong>توضیح:</strong></p>
+<p dir="rtl">محدودیتی برای ویژگی‌های (properties) یک آبجکت، طبق تعریف JSON Schema، تعیین می‌کند.
+در کوبرنتیز فقط می‌توانید از آن برای محدودکردن تعداد ورودی‌های فیلدی استفاده کنید که
+به‌صورت map در Go تعریف شده است.</p>
+<p dir="rtl"><strong>سطح پایداری:</strong> پایدار</p>
+<p dir="rtl"><strong>دامنه‌ها:</strong> فیلدهای struct، تعریف‌های نوع</p>
+<p dir="rtl"><strong>محتوا:</strong></p>
+<ul>
+<li dir="rtl">مقدار <code dir="ltr">&lt;non-negative integer&gt;</code> (الزامی): این map نباید بیشتر از X ویژگی
+داشته باشد (که در آن X &lt;= 100000).</li>
+</ul>
+<p dir="rtl"><strong>نمونهٔ استفاده:</strong></p>
+<pre dir="ltr"><code class="language-go" dir="ltr">type MyStruct struct {
+    // +k8s:maxProperties=32
+    MyMap map[string]string `json:"myMap"`
+}
+</code></pre>
+<h3 id="k8s-maximum-tag-maximum" dir="ltr" class="ltr"><code dir="ltr">+k8s:maximum</code> {#tag-maximum}</h3>
+<p dir="rtl"><strong>توضیح:</strong></p>
+<p dir="rtl">نشان می‌دهد که یک فیلد عددی مقدار بیشینه دارد.</p>
+<p dir="rtl"><strong>سطح پایداری:</strong> پایدار</p>
+<p dir="rtl"><strong>دامنه‌ها:</strong> فیلدهای struct، تعریف‌های نوع، مقادیر لیست، کلیدهای map، مقادیر map</p>
+<p dir="rtl"><strong>محتوا:</strong></p>
+<ul>
+<li dir="rtl">مقدار <code dir="ltr">&lt;integer&gt;</code> (الزامی): این فیلد باید کوچک‌تر از X یا برابر با آن باشد.</li>
+</ul>
+<p dir="rtl"><strong>نمونهٔ استفاده:</strong></p>
+<pre dir="ltr"><code class="language-go" dir="ltr">type MyStruct struct {
+    // +k8s:maximum=100
+    MyInt int `json:"myInt"`
+}
+</code></pre>
+<h3 id="k8s-minitems-tag-minitems" dir="ltr" class="ltr"><code dir="ltr">+k8s:minItems</code> {#tag-minItems}</h3>
+<p dir="rtl"><strong>توضیح:</strong></p>
+<p dir="rtl">نشان می‌دهد که یک لیست حداقل اندازه‌ای دارد.</p>
+<p dir="rtl"><strong>سطح پایداری:</strong> پایدار</p>
+<p dir="rtl"><strong>دامنه‌ها:</strong> فیلدهای struct، تعریف‌های نوع، مقادیر لیست، مقادیر map</p>
+<p dir="rtl"><strong>محتوا:</strong></p>
+<ul>
+<li dir="rtl">مقدار <code dir="ltr">&lt;non-negative integer&gt;</code> (الزامی): این لیست باید دست‌کم X آیتم داشته باشد.</li>
+</ul>
+<p dir="rtl"><strong>نمونهٔ استفاده:</strong></p>
+<pre dir="ltr"><code class="language-go" dir="ltr">type MyStruct struct {
+    // +k8s:minItems=1
+    MyList []string `json:"myList"`
+}
+</code></pre>
+<h3 id="k8s-minlength-tag-minlength" dir="ltr" class="ltr"><code dir="ltr">+k8s:minLength</code> {#tag-minLength}</h3>
+<p dir="rtl"><strong>توضیح:</strong></p>
+<p dir="rtl">نشان می‌دهد که یک فیلد رشته‌ای حداقل طولی بر حسب نویسه دارد. اگر مقدار از نویسه‌های
+چندبایتی استفاده کند، حداقل اندازه بر حسب بایت بین X تا 4X خواهد بود.</p>
+<p dir="rtl"><strong>سطح پایداری:</strong> پایدار</p>
+<p dir="rtl"><strong>دامنه‌ها:</strong> فیلدهای struct، تعریف‌های نوع، مقادیر لیست، کلیدهای map، مقادیر map</p>
+<p dir="rtl"><strong>محتوا:</strong></p>
+<ul>
+<li dir="rtl">مقدار <code dir="ltr">&lt;integer&gt;</code> (الزامی): طول این فیلد باید دست‌کم X نویسه باشد.</li>
+</ul>
+<p dir="rtl"><strong>نمونهٔ استفاده:</strong></p>
+<pre dir="ltr"><code class="language-go" dir="ltr">type MyStruct struct {
+    // +k8s:minLength=3
+    MyString string `json:"myString"`
+}
+</code></pre>
+<h3 id="k8s-minproperties-tag-minproperties" dir="ltr" class="ltr"><code dir="ltr">+k8s:minProperties</code> {#tag-minProperties}</h3>
+<p dir="rtl"><strong>توضیح:</strong></p>
+<p dir="rtl">حد پایینی برای ویژگی‌های یک آبجکت، طبق تعریف JSON Schema، تعیین می‌کند. در کوبرنتیز
+فقط می‌توانید از آن برای محدودکردن تعداد ورودی‌های فیلدی استفاده کنید که به‌صورت map
+در Go تعریف شده است.</p>
+<p dir="rtl"><strong>سطح پایداری:</strong> پایدار</p>
+<p dir="rtl"><strong>دامنه‌ها:</strong> فیلدهای struct، تعریف‌های نوع</p>
+<p dir="rtl"><strong>محتوا:</strong></p>
+<ul>
+<li dir="rtl">مقدار <code dir="ltr">&lt;non-negative integer&gt;</code> (الزامی): این map باید دست‌کم X ویژگی داشته باشد
+(که در آن X &lt;= 100000).</li>
+</ul>
+<p dir="rtl"><strong>نمونهٔ استفاده:</strong></p>
+<pre dir="ltr"><code class="language-go" dir="ltr">type MyStruct struct {
+    // +k8s:minProperties=1
+    MyMap map[string]string `json:"myMap"`
+}
+</code></pre>
+<h3 id="k8s-minimum-tag-minimum" dir="ltr" class="ltr"><code dir="ltr">+k8s:minimum</code> {#tag-minimum}</h3>
+<p dir="rtl"><strong>توضیح:</strong></p>
+<p dir="rtl">نشان می‌دهد که یک فیلد عددی مقدار کمینه دارد.</p>
+<p dir="rtl"><strong>سطح پایداری:</strong> پایدار</p>
+<p dir="rtl"><strong>دامنه‌ها:</strong> فیلدهای struct، تعریف‌های نوع، مقادیر لیست، کلیدهای map، مقادیر map</p>
+<p dir="rtl"><strong>محتوا:</strong></p>
+<ul>
+<li dir="rtl">مقدار <code dir="ltr">&lt;integer&gt;</code> (الزامی): این فیلد باید بزرگ‌تر از X یا برابر با آن باشد.</li>
+</ul>
+<p dir="rtl"><strong>نمونهٔ استفاده:</strong></p>
+<pre dir="ltr"><code class="language-go" dir="ltr">type MyStruct struct {
+    // +k8s:minimum=0
+    MyInt int `json:"myInt"`
+}
+</code></pre>
+<h3 id="k8s-modediscriminator-tag-modediscriminator" dir="ltr" class="ltr"><code dir="ltr">+k8s:modeDiscriminator</code> {#tag-modeDiscriminator}</h3>
+<p dir="rtl"><strong>توضیح:</strong></p>
+<p dir="rtl">نشان می‌دهد که این فیلد یک متمایزکننده برای اعتبارسنجی مبتنی بر وضعیت است: مقدار آن
+تعیین می‌کند که کدام قواعد <a href="#tag-ifMode"><code dir="ltr">+k8s:ifMode</code></a> روی فیلدهای هم‌سطح در همان
+struct اعمال شوند.</p>
+<p dir="rtl">متمایزکننده باید از نوع <code dir="ltr">string</code> یا <code dir="ltr">bool</code> و غیراشاره‌گر باشد. هر struct می‌تواند بیش از
+یک گروه متمایزکننده داشته باشد؛ گروه‌های اضافی را با آرگومان <code dir="ltr">modality</code> نام‌گذاری کنید.
+نام گروه <code dir="ltr">default</code> رزرو شده است و نام گروه‌ها باید با الگوی <code dir="ltr">^[a-zA-Z][a-zA-Z0-9_]*$</code>
+مطابقت داشته باشد.</p>
+<p dir="rtl"><strong>سطح پایداری:</strong> پایدار</p>
+<p dir="rtl"><strong>دامنه‌ها:</strong> فیلدهای struct</p>
+<p dir="rtl"><strong>آرگومان‌ها:</strong></p>
+<ul>
+<li dir="rtl">آرگومان <code dir="ltr">modality</code> (رشته، اختیاری): نام گروه متمایزکننده، در صورتی که بیش از یک
+گروه وجود داشته باشد.</li>
+</ul>
+<p dir="rtl"><strong>نمونهٔ استفاده:</strong></p>
+<pre dir="ltr"><code class="language-go" dir="ltr">type MyStruct struct {
+    // +k8s:modeDiscriminator
+    Mode string `json:"mode"`
+
+    // +k8s:modeDiscriminator(modality:"Legacy")
+    Legacy bool `json:"legacy"`
+
+    // +k8s:ifMode("A")=+k8s:required
+    FieldA *string `json:"fieldA,omitempty"`
+
+    // +k8s:ifMode(modality:"Legacy", mode:"true")=+k8s:required
+    FieldB *string `json:"fieldB,omitempty"`
+}
+</code></pre>
+<h3 id="k8s-monotonic-tag-monotonic" dir="ltr" class="ltr"><code dir="ltr">+k8s:monotonic</code> {#tag-monotonic}</h3>
+<p dir="rtl"><strong>توضیح:</strong></p>
+<p dir="rtl">تضمین می‌کند که مقدار یک فیلد عددی هنگام به‌روزرسانی هرگز کاهش نیابد.</p>
+<p dir="rtl"><strong>سطح پایداری:</strong> آلفا</p>
+<p dir="rtl"><strong>دامنه‌ها:</strong> فیلدهای struct، تعریف‌های نوع</p>
+<p dir="rtl"><strong>نمونهٔ استفاده:</strong></p>
+<pre dir="ltr"><code class="language-go" dir="ltr">type MyStruct struct {
+    // +k8s:minimum=0
+    // +k8s:monotonic
+    Generation int64 `json:"generation"`
+}
+</code></pre>
+<h3 id="k8s-neq-tag-neq" dir="ltr" class="ltr"><code dir="ltr">+k8s:neq</code> {#tag-neq}</h3>
+<p dir="rtl"><strong>توضیح:</strong></p>
+<p dir="rtl">بررسی می‌کند که مقدار فیلد با یک مقدار غیرمجاز مشخص برابر نباشد. از نوع‌های رشته،
+عدد صحیح و بولی پشتیبانی می‌کند.</p>
+<p dir="rtl"><strong>سطح پایداری:</strong> آلفا</p>
+<p dir="rtl"><strong>دامنه‌ها:</strong> فیلدهای struct، تعریف‌های نوع، مقادیر لیست، کلیدهای map، مقادیر map</p>
+<p dir="rtl"><strong>محتوا:</strong></p>
+<ul>
+<li dir="rtl">مقدار <code dir="ltr">&lt;value&gt;</code> (الزامی): مقدار غیرمجاز. تجزیه‌گر نوع آن (string، int، bool) را
+استنتاج می‌کند.</li>
+</ul>
+<p dir="rtl"><strong>نمونهٔ استفاده:</strong></p>
+<pre dir="ltr"><code class="language-go" dir="ltr">type MyStruct struct {
+    // +k8s:neq="disallowed"
+    MyString string `json:"myString"`
+
+    // +k8s:neq=0
+    MyInt int `json:"myInt"`
+
+    // +k8s:neq=true
+    MyBool bool `json:"myBool"`
+}
+</code></pre>
+<h3 id="k8s-opaquetype-tag-opaquetype" dir="ltr" class="ltr"><code dir="ltr">+k8s:opaqueType</code> {#tag-opaqueType}</h3>
+<p dir="rtl"><strong>توضیح:</strong></p>
+<p dir="rtl">نشان می‌دهد که مولد همهٔ اعتبارسنجی‌های اعلام‌شده روی نوع ارجاع‌شده را نادیده می‌گیرد.
+اگر فلگ‌های فعلی مولد شامل پکیج یک نوع ارجاع‌شده نباشند، باید این تگ را تنظیم کنید؛
+در غیر این صورت تولید کد با شکست مواجه می‌شود (و همین از خطاهای پنهان جلوگیری می‌کند).
+اگر مولد نباید این اعتبارسنجی‌ها را نادیده بگیرد، پکیج آن نوع را با فلگ <code dir="ltr">--readonly-pkg</code>
+به مولد اضافه کنید.</p>
+<p dir="rtl"><strong>سطح پایداری:</strong> پایدار</p>
+<p dir="rtl"><strong>دامنه‌ها:</strong> فیلدهای struct، تعریف‌های نوع، مقادیر لیست، کلیدهای map، مقادیر map</p>
+<p dir="rtl"><strong>نمونهٔ استفاده:</strong></p>
+<pre dir="ltr"><code class="language-go" dir="ltr">import "some/external/package"
+
+type MyStruct struct {
+    // +k8s:opaqueType
+    ExternalField package.ExternalType `json:"externalField"`
+}
+</code></pre>
+<h3 id="k8s-optional-tag-optional" dir="ltr" class="ltr"><code dir="ltr">+k8s:optional</code> {#tag-optional}</h3>
+<p dir="rtl"><strong>توضیح:</strong></p>
+<p dir="rtl">نشان می‌دهد که تعیین یک فیلد برای کلاینت‌ها اختیاری است.</p>
+<p dir="rtl"><strong>سطح پایداری:</strong> پایدار</p>
+<p dir="rtl"><strong>دامنه‌ها:</strong> فیلدهای struct</p>
+<p dir="rtl"><strong>نمونهٔ استفاده:</strong></p>
+<pre dir="ltr"><code class="language-go" dir="ltr">type MyStruct struct {
+    // +k8s:optional
+    MyField string `json:"myField"`
+}
+</code></pre>
+<h3 id="k8s-required-tag-required" dir="ltr" class="ltr"><code dir="ltr">+k8s:required</code> {#tag-required}</h3>
+<p dir="rtl"><strong>توضیح:</strong></p>
+<p dir="rtl">نشان می‌دهد که کلاینت‌ها باید یک فیلد را مشخص کنند.</p>
+<p dir="rtl"><strong>سطح پایداری:</strong> پایدار</p>
+<p dir="rtl"><strong>دامنه‌ها:</strong> فیلدهای struct</p>
+<p dir="rtl"><strong>نمونهٔ استفاده:</strong></p>
+<pre dir="ltr"><code class="language-go" dir="ltr">type MyStruct struct {
+    // +k8s:required
+    MyField string `json:"myField"`
+}
+</code></pre>
+<h3 id="k8s-subfield-tag-subfield" dir="ltr" class="ltr"><code dir="ltr">+k8s:subfield</code> {#tag-subfield}</h3>
+<p dir="rtl"><strong>توضیح:</strong></p>
+<p dir="rtl">اعتبارسنجی‌ای را برای یک زیرفیلد از یک struct اعلام می‌کند. زیرفیلد نام‌برده باید فیلد
+مستقیم خود struct یا فیلد مستقیم یک struct جاسازی‌شده (embedded) در آن باشد.</p>
+<p dir="rtl"><strong>سطح پایداری:</strong> پایدار</p>
+<p dir="rtl"><strong>دامنه‌ها:</strong> فیلدهای struct، تعریف‌های نوع، مقادیر لیست، کلیدهای map، مقادیر map</p>
+<p dir="rtl"><strong>آرگومان‌ها:</strong></p>
+<ul>
+<li dir="rtl">آرگومان <code dir="ltr">&lt;field-json-name&gt;</code> (رشته، الزامی): نام JSON زیرفیلد.</li>
+</ul>
+<p dir="rtl"><strong>محتوا:</strong></p>
+<ul>
+<li dir="rtl">مقدار <code dir="ltr">&lt;validation-tag&gt;</code> (الزامی): تگی که برای زیرفیلد ارزیابی می‌شود.</li>
+</ul>
+<p dir="rtl"><strong>نمونهٔ استفاده:</strong></p>
+<pre dir="ltr"><code class="language-go" dir="ltr">type MyStruct struct {
+    // +k8s:subfield(mySubfield)=+k8s:required
+    Inner MyInnerStruct `json:"inner"`
+}
+
+type MyInnerStruct struct {
+    MySubfield string `json:"mySubfield"`
+}
+</code></pre>
+<h3 id="k8s-supportssubresource-tag-supportssubresource" dir="ltr" class="ltr"><code dir="ltr">+k8s:supportsSubresource</code> {#tag-supportsSubresource}</h3>
+<p dir="rtl"><strong>توضیح:</strong></p>
+<p dir="rtl">تگی در سطح پکیج که یک مسیر زیرمنبع را در تابع توزیع (dispatch) ثبت می‌کند تا درخواست‌های
+ارسالی به آن بتوانند به یک پیاده‌سازی اعتبارسنجی هدایت شوند. برای پشتیبانی از چند زیرمنبع،
+این تگ را تکرار کنید.</p>
+<p dir="rtl">بدون هیچ تگ <code dir="ltr">+k8s:supportsSubresource</code>، فقط منبع ریشه اعتبارسنجی می‌شود و درخواست‌های
+زیرمنبع با خطای "no validation found" شکست می‌خورند. اگر این تگ وجود داشته باشد اما تگ
+<a href="#tag-isSubresource"><code dir="ltr">+k8s:isSubresource</code></a> متناظری نباشد، زیرمنبع از قواعد آبجکت ریشه
+استفاده می‌کند.</p>
+<p dir="rtl"><strong>سطح پایداری:</strong> پایدار</p>
+<p dir="rtl"><strong>دامنه:</strong> پکیج</p>
+<p dir="rtl"><strong>محتوا:</strong></p>
+<ul>
+<li dir="rtl">مقدار <code dir="ltr">&lt;subresource-path&gt;</code>: مسیر زیرمنبعی که باید پشتیبانی شود (برای مثال
+<code dir="ltr">"/status"</code> یا <code dir="ltr">"/scale"</code>).</li>
+</ul>
+<p dir="rtl"><strong>نمونهٔ استفاده:</strong></p>
+<p dir="rtl">برای مدیریت <code dir="ltr">/status</code> و <code dir="ltr">/scale</code> برای نوع‌های پکیج <code dir="ltr">v1</code>، در فایل
+<code dir="ltr">staging/src/k8s.io/api/core/v1/doc.go</code> چنین بنویسید:</p>
+<pre dir="ltr"><code class="language-go" dir="ltr">// +k8s:supportsSubresource="/status"
+// +k8s:supportsSubresource="/scale"
+package v1
+</code></pre>
+<h3 id="k8s-uniondiscriminator-tag-uniondiscriminator" dir="ltr" class="ltr"><code dir="ltr">+k8s:unionDiscriminator</code> {#tag-unionDiscriminator}</h3>
+<p dir="rtl"><strong>توضیح:</strong></p>
+<p dir="rtl">نشان می‌دهد که این فیلد متمایزکنندهٔ یک union است. مقدار متمایزکننده تعیین می‌کند که
+کدام عضو union باید وجود داشته باشد.</p>
+<p dir="rtl"><strong>سطح پایداری:</strong> بتا</p>
+<p dir="rtl"><strong>دامنه‌ها:</strong> فیلدهای struct، مقادیر لیست</p>
+<p dir="rtl"><strong>آرگومان‌ها:</strong></p>
+<ul>
+<li dir="rtl">آرگومان <code dir="ltr">union</code> (رشته، اختیاری): نام union، در صورتی که بیش از یک union وجود
+داشته باشد.</li>
+</ul>
+<p dir="rtl"><strong>نمونهٔ استفاده:</strong></p>
+<pre dir="ltr"><code class="language-go" dir="ltr">type MyStruct struct {
+    TypeMeta int
+
+    // +k8s:unionDiscriminator
+    D D `json:"d"`
+
+    // +k8s:unionMember
+    // +k8s:optional
+    M1 *M1 `json:"m1"`
+
+    // +k8s:unionMember
+    // +k8s:optional
+    M2 *M2 `json:"m2"`
+}
+
+type D string
+
+const (
+    DM1 D = "M1"
+    DM2 D = "M2"
+)
+
+type M1 struct{}
+
+type M2 struct{}
+</code></pre>
+<p dir="rtl">مقدار <code dir="ltr">D</code> تعیین می‌کند که کدام عضو، یعنی <code dir="ltr">M1</code> یا <code dir="ltr">M2</code>، باید وجود داشته باشد.</p>
+<h3 id="k8s-unionmember-tag-unionmember" dir="ltr" class="ltr"><code dir="ltr">+k8s:unionMember</code> {#tag-unionMember}</h3>
+<p dir="rtl"><strong>توضیح:</strong></p>
+<p dir="rtl">نشان می‌دهد که این فیلد عضوی از یک union است. دقیقاً یک عضو از هر union باید تنظیم
+شده باشد.</p>
+<p dir="rtl"><strong>سطح پایداری:</strong> پایدار</p>
+<p dir="rtl"><strong>دامنه‌ها:</strong> فیلدهای struct، مقادیر لیست</p>
+<p dir="rtl"><strong>آرگومان‌ها:</strong></p>
+<ul>
+<li dir="rtl">آرگومان <code dir="ltr">union</code> (رشته، اختیاری): نام union، در صورتی که بیش از یک union وجود
+داشته باشد.</li>
+<li dir="rtl">آرگومان <code dir="ltr">memberName</code> (رشته، اختیاری): مقدار متمایزکننده برای این عضو. مقدار
+پیش‌فرض آن نام فیلد است.</li>
+</ul>
+<p dir="rtl"><strong>نمونهٔ استفاده:</strong></p>
+<pre dir="ltr"><code class="language-go" dir="ltr">type MyStruct struct {
+    // +k8s:unionMember(union: "union1")
+    // +k8s:optional
+    M1 *M1 `json:"u1m1"`
+
+    // +k8s:unionMember(union: "union1")
+    // +k8s:optional
+    M2 *M2 `json:"u1m2"`
+}
+
+type M1 struct{}
+
+type M2 struct{}
+</code></pre>
+<h3 id="k8s-unique-tag-unique" dir="ltr" class="ltr"><code dir="ltr">+k8s:unique</code> {#tag-unique}</h3>
+<p dir="rtl"><strong>توضیح:</strong></p>
+<p dir="rtl">اعلام می‌کند که عناصر یک فیلد لیستی یکتا هستند. می‌توانید این تگ را همراه با
+<code dir="ltr">+k8s:listType=atomic</code> به کار ببرید تا بدون تغییر معنای ادغام (merge semantics) لیست،
+یک قید یکتایی اضافه کنید؛ یا آن را به‌تنهایی برای مشخص‌کردن معنای یکتایی استفاده کنید.</p>
+<p dir="rtl"><strong>سطح پایداری:</strong> پایدار</p>
+<p dir="rtl"><strong>دامنه‌ها:</strong> فیلدهای struct، تعریف‌های نوع، مقادیر لیست، کلیدهای map، مقادیر map</p>
+<p dir="rtl"><strong>محتوا:</strong></p>
+<ul>
+<li dir="rtl">یکی از مقادیر <code dir="ltr">map | set</code> (الزامی). با <code dir="ltr">map</code>، هویت هر عنصر از فیلدهای
+<a href="#tag-listMapKey"><code dir="ltr">+k8s:listMapKey</code></a> به دست می‌آید و با <code dir="ltr">set</code>، از کل مقدار عنصر.</li>
+</ul>
+<p dir="rtl"><strong>نمونهٔ استفاده:</strong></p>
+<pre dir="ltr"><code class="language-go" dir="ltr">type MyStruct struct {
+    // +k8s:listType=atomic
+    // +k8s:unique=set
+    Names []string `json:"names"`
+
+    // +k8s:listType=atomic
+    // +k8s:unique=map
+    // +k8s:listMapKey=key
+    Items []Item `json:"items"`
+}
+</code></pre>
+<h3 id="k8s-update-tag-update" dir="ltr" class="ltr"><code dir="ltr">+k8s:update</code> {#tag-update}</h3>
+<p dir="rtl"><strong>توضیحات:</strong></p>
+<p dir="rtl">این تگ محدودیت‌هایی را بر عملیات به‌روزرسانی مجاز یک فیلد اعمال می‌کند. با به‌کاربردن چند تگ می‌توانید چند محدودیت را هم‌زمان مشخص کنید.</p>
+<table>
+<thead>
+<tr>
+<th dir="rtl">محدودیت</th>
+<th dir="rtl">اثر</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">NoSet</code></td>
+<td dir="rtl">از گذار از حالت تنظیم‌نشده به تنظیم‌شده جلوگیری می‌کند.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">NoUnset</code></td>
+<td dir="rtl">از گذار از حالت تنظیم‌شده به تنظیم‌نشده جلوگیری می‌کند.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">NoModify</code></td>
+<td dir="rtl">از تغییر مقدار جلوگیری می‌کند، اما گذار به حالت تنظیم‌شده و تنظیم‌نشده را مجاز می‌داند.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">NoAddItem</code></td>
+<td dir="rtl">از افزودن آیتم به یک slice یا map جلوگیری می‌کند.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">NoRemoveItem</code></td>
+<td dir="rtl">از حذف آیتم از یک slice یا map جلوگیری می‌کند.</td>
+</tr>
+</tbody>
+</table>
+<p dir="rtl">برای structهای غیراشاره‌گر، <code dir="ltr">NoSet</code> و <code dir="ltr">NoUnset</code> اثری ندارند، زیرا نمی‌توان این فیلدها را به حالت تنظیم‌نشده برگرداند. برای فیلدهای slice و map، «تنظیم‌نشده» به معنای <code dir="ltr">len == 0</code> است. هویت آیتم‌های slice در <code dir="ltr">NoAddItem</code> و <code dir="ltr">NoRemoveItem</code> از <a href="#tag-listType"><code dir="ltr">+k8s:listType</code></a>، <a href="#tag-listMapKey"><code dir="ltr">+k8s:listMapKey</code></a> و <a href="#tag-unique"><code dir="ltr">+k8s:unique</code></a> تعیین می‌شود؛ در mapها، کلید هر آیتم هویت آن را مشخص می‌کند.</p>
+<p dir="rtl">تگ <code dir="ltr">NoModify</code> به‌طور مستقیم روی sliceها یا mapها پشتیبانی نمی‌شود؛ برای تغییرناپذیری در سطح هر آیتم از <code dir="ltr">+k8s:eachVal=+k8s:update=NoModify</code> استفاده کنید. روی لیست‌ها، <code dir="ltr">+k8s:eachVal=+k8s:update=NoModify</code> به <code dir="ltr">listType=map</code> یا <code dir="ltr">unique=map</code> نیاز دارد، زیرا در غیر این صورت تغییرات محتوا قابل تشخیص نیستند.</p>
+<p dir="rtl"><strong>سطح پایداری:</strong> پایدار</p>
+<p dir="rtl"><strong>دامنه‌ها:</strong> فیلدهای struct، مقادیر لیست، مقادیر map</p>
+<p dir="rtl"><strong>محتوا (Payload):</strong></p>
+<ul>
+<li dir="ltr" class="ltr"><code dir="ltr">NoSet | NoUnset | NoModify | NoAddItem | NoRemoveItem</code></li>
+</ul>
+<p dir="rtl"><strong>نمونهٔ استفاده:</strong></p>
+<pre dir="ltr"><code class="language-go" dir="ltr">type MyStruct struct {
+    // Set-once: may be set at any time, but never changed or cleared.
+    // +k8s:update=NoModify
+    // +k8s:update=NoUnset
+    SetOnce *string `json:"setOnce,omitempty"`
+
+    // Must be set at creation or never.
+    // +k8s:update=NoSet
+    AtCreationOnly *string `json:"atCreationOnly,omitempty"`
+
+    // Freeze the shape of the list; individual items may still change.
+    // +k8s:listType=map
+    // +k8s:listMapKey=key
+    // +k8s:update=NoAddItem
+    // +k8s:update=NoRemoveItem
+    FrozenShape []Item `json:"frozenShape"`
+}
+</code></pre>
+<h3 id="k8s-zerooroneofmember-tag-zerooroneofmember" dir="ltr" class="ltr"><code dir="ltr">+k8s:zeroOrOneOfMember</code> {#tag-zeroOrOneOfMember}</h3>
+<p dir="rtl"><strong>توضیحات:</strong></p>
+<p dir="rtl">نشان می‌دهد که این فیلد عضوی از یک اجتماع (union) از نوع «صفر یا یکی» است. در چنین اجتماعی حداکثر یکی از اعضا می‌تواند تنظیم شود. برخلاف اجتماع‌های معمولی، تنظیم‌نشدن هیچ‌یک از اعضا نیز معتبر است.</p>
+<p dir="rtl"><strong>سطح پایداری:</strong> پایدار</p>
+<p dir="rtl"><strong>دامنه‌ها:</strong> فیلدهای struct، مقادیر لیست</p>
+<div class="callout note"><div class="callout-title">احتیاط</div>
+<p dir="rtl">این تگ برای مجموعه‌هایی از آیتم‌های لیست در نظر گرفته شده است که از طریق <a href="#tag-item"><code dir="ltr">+k8s:item</code></a> اعمال می‌شود، نه برای اعمال مستقیم روی فیلدهای struct.</p>
+</div>
+<p dir="rtl"><strong>آرگومان‌ها:</strong></p>
+<ul>
+<li dir="rtl"><code dir="ltr">union</code> (رشته، اختیاری): نام اجتماع، در صورتی که بیش از یک اجتماع وجود داشته باشد.</li>
+<li dir="rtl"><code dir="ltr">memberName</code> (رشته، اختیاری): نام سفارشی این عضو. مقدار پیش‌فرض آن نام فیلد است.</li>
+</ul>
+<p dir="rtl"><strong>نمونهٔ استفاده:</strong></p>
+<pre dir="ltr"><code class="language-go" dir="ltr">type MyStruct struct {
+    // +k8s:listType=map
+    // +k8s:listMapKey=type
+    // +k8s:item(type: "Approved")=+k8s:zeroOrOneOfMember
+    // +k8s:item(type: "Denied")=+k8s:zeroOrOneOfMember
+    Conditions []MyCondition `json:"conditions"`
+}
+
+type MyCondition struct {
+    Type   string `json:"type"`
+    Status string `json:"status"`
+}
+</code></pre>
+<p dir="rtl">در این نمونه، حداکثر یکی از دو شرط «Approved» و «Denied» می‌تواند وجود داشته باشد. نبودن هیچ‌یک از آن دو نیز معتبر است.</p>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<ul>
+<li dir="rtl">دربارهٔ <a href="https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/" target="_blank">Feature Gateها</a> بخوانید.</li>
+<li dir="rtl">سند <a href="https://kep.k8s.io/5073" target="_blank" rel="noopener">KEP-5073: Declarative Validation Of Kubernetes Native Types</a> را بخوانید.</li>
+</ul>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#چرخه-ی-حیات-اعتبارسنجی-lifecycle">چرخه‌ی حیات اعتبارسنجی {#lifecycle}</a><a class="l2" href="#تنظیمات-feature-gate">تنظیمات feature gate</a><a class="l2" href="#پایش-اعتبارسنجی-اعلانی-metrics">پایش اعتبارسنجی اعلانی {#metrics}</a><a class="l2" href="#غیرفعال-کردن-declarativevalidationbeta-opt-out">غیرفعال کردن DeclarativeValidationBeta {#opt-out}</a><a class="l2" href="#ملاحظات-کاهش-نسخه-downgrade-و-بازگشت-rollback">ملاحظات کاهش نسخه (downgrade) و بازگشت (rollback)</a><a class="l2" href="#تگ-های-اعتبارسنجی-اعلانی-declarative-validation-tag-reference">تگ‌های اعتبارسنجی اعلانی {#declarative-validation-tag-reference}</a><a class="l3" href="#نحوه-ی-خواندن-این-مرجع-how-to-read">نحوه‌ی خواندن این مرجع {#how-to-read}</a><a class="l3" href="#فهرست-تگ-ها-catalog">فهرست تگ‌ها {#catalog}</a><a class="l2" href="#مرجع-تگ-ها">مرجع تگ‌ها</a><a class="l3" href="#k8s-alpha-tag-alpha">+k8s:alpha {#tag-alpha}</a><a class="l3" href="#k8s-beta-tag-beta">+k8s:beta {#tag-beta}</a><a class="l3" href="#k8s-customunique-tag-customunique">+k8s:customUnique {#tag-customUnique}</a><a class="l3" href="#k8s-customvalidation-tag-customvalidation">+k8s:customValidation {#tag-customValidation}</a><a class="l3" href="#k8s-dependentforbidden-tag-dependentforbidden">+k8s:dependentForbidden {#tag-dependentForbidden}</a><a class="l3" href="#k8s-dependentrequired-tag-dependentrequired">+k8s:dependentRequired {#tag-dependentRequired}</a><a class="l3" href="#k8s-eachkey-tag-eachkey">+k8s:eachKey {#tag-eachKey}</a><a class="l3" href="#k8s-eachval-tag-eachval">+k8s:eachVal {#tag-eachVal}</a><a class="l3" href="#k8s-enum-tag-enum">+k8s:enum {#tag-enum}</a><a class="l3" href="#k8s-enumexclude-tag-enumexclude">+k8s:enumExclude {#tag-enumExclude}</a><a class="l3" href="#k8s-forbidden-tag-forbidden">+k8s:forbidden {#tag-forbidden}</a><a class="l3" href="#k8s-format-tag-format">+k8s:format {#tag-format}</a><a class="l3" href="#k8s-ifdisabled-tag-ifdisabled">+k8s:ifDisabled {#tag-ifDisabled}</a><a class="l3" href="#k8s-ifenabled-tag-ifenabled">+k8s:ifEnabled {#tag-ifEnabled}</a><a class="l3" href="#k8s-ifmode-tag-ifmode">+k8s:ifMode {#tag-ifMode}</a><a class="l3" href="#k8s-immutable-tag-immutable">+k8s:immutable {#tag-immutable}</a><a class="l3" href="#k8s-issubresource-tag-issubresource">+k8s:isSubresource {#tag-isSubresource}</a><a class="l3" href="#k8s-item-tag-item">+k8s:item {#tag-item}</a><a class="l3" href="#k8s-listmapkey-tag-listmapkey">+k8s:listMapKey {#tag-listMapKey}</a><a class="l3" href="#k8s-listtype-tag-listtype">+k8s:listType {#tag-listType}</a><a class="l3" href="#k8s-maxbytes-tag-maxbytes">+k8s:maxBytes {#tag-maxBytes}</a><a class="l3" href="#k8s-maxitems-tag-maxitems">+k8s:maxItems {#tag-maxItems}</a><a class="l3" href="#k8s-maxlength-tag-maxlength">+k8s:maxLength {#tag-maxLength}</a><a class="l3" href="#k8s-maxproperties-tag-maxproperties">+k8s:maxProperties {#tag-maxProperties}</a><a class="l3" href="#k8s-maximum-tag-maximum">+k8s:maximum {#tag-maximum}</a><a class="l3" href="#k8s-minitems-tag-minitems">+k8s:minItems {#tag-minItems}</a><a class="l3" href="#k8s-minlength-tag-minlength">+k8s:minLength {#tag-minLength}</a><a class="l3" href="#k8s-minproperties-tag-minproperties">+k8s:minProperties {#tag-minProperties}</a><a class="l3" href="#k8s-minimum-tag-minimum">+k8s:minimum {#tag-minimum}</a><a class="l3" href="#k8s-modediscriminator-tag-modediscriminator">+k8s:modeDiscriminator {#tag-modeDiscriminator}</a><a class="l3" href="#k8s-monotonic-tag-monotonic">+k8s:monotonic {#tag-monotonic}</a><a class="l3" href="#k8s-neq-tag-neq">+k8s:neq {#tag-neq}</a><a class="l3" href="#k8s-opaquetype-tag-opaquetype">+k8s:opaqueType {#tag-opaqueType}</a><a class="l3" href="#k8s-optional-tag-optional">+k8s:optional {#tag-optional}</a><a class="l3" href="#k8s-required-tag-required">+k8s:required {#tag-required}</a><a class="l3" href="#k8s-subfield-tag-subfield">+k8s:subfield {#tag-subfield}</a><a class="l3" href="#k8s-supportssubresource-tag-supportssubresource">+k8s:supportsSubresource {#tag-supportsSubresource}</a><a class="l3" href="#k8s-uniondiscriminator-tag-uniondiscriminator">+k8s:unionDiscriminator {#tag-unionDiscriminator}</a><a class="l3" href="#k8s-unionmember-tag-unionmember">+k8s:unionMember {#tag-unionMember}</a><a class="l3" href="#k8s-unique-tag-unique">+k8s:unique {#tag-unique}</a><a class="l3" href="#k8s-update-tag-update">+k8s:update {#tag-update}</a><a class="l3" href="#k8s-zerooroneofmember-tag-zerooroneofmember">+k8s:zeroOrOneOfMember {#tag-zeroOrOneOfMember}</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>

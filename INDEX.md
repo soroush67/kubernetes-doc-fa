@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-1426 از 1722 صفحه
+1441 از 1722 صفحه
 
 
 ## `.`
@@ -1850,30 +1850,30 @@
 ## `reference/using-api`
 
 - ✅ [_index.md](md/reference/using-api/_index.md)
-- ⏳ `api-concepts.md`
-- ⏳ `cel.md`
-- ⏳ `client-libraries.md`
-- ⏳ `declarative-validation.md`
-- ⏳ `deprecation-guide.md`
-- ⏳ `health-checks.md`
-- ⏳ `server-side-apply.md`
+- ✅ [api-concepts.md](md/reference/using-api/api-concepts.md)
+- ✅ [cel.md](md/reference/using-api/cel.md)
+- ✅ [client-libraries.md](md/reference/using-api/client-libraries.md)
+- ✅ [declarative-validation.md](md/reference/using-api/declarative-validation.md)
+- ✅ [deprecation-guide.md](md/reference/using-api/deprecation-guide.md)
+- ✅ [health-checks.md](md/reference/using-api/health-checks.md)
+- ✅ [server-side-apply.md](md/reference/using-api/server-side-apply.md)
 
 ## `setup`
 
-- ⏳ `_index.md`
+- ✅ [_index.md](md/setup/_index.md)
 
 ## `setup/best-practices`
 
-- ⏳ `_index.md`
-- ⏳ `certificates.md`
-- ⏳ `cluster-large.md`
-- ⏳ `enforcing-pod-security-standards.md`
-- ⏳ `multiple-zones.md`
-- ⏳ `node-conformance.md`
+- ✅ [_index.md](md/setup/best-practices/_index.md)
+- ✅ [certificates.md](md/setup/best-practices/certificates.md)
+- ✅ [cluster-large.md](md/setup/best-practices/cluster-large.md)
+- ✅ [enforcing-pod-security-standards.md](md/setup/best-practices/enforcing-pod-security-standards.md)
+- ✅ [multiple-zones.md](md/setup/best-practices/multiple-zones.md)
+- ✅ [node-conformance.md](md/setup/best-practices/node-conformance.md)
 
 ## `setup/learning-environment`
 
-- ⏳ `_index.md`
+- ✅ [_index.md](md/setup/learning-environment/_index.md)
 
 ## `setup/production-environment`
 

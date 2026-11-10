@@ -1,0 +1,1404 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>زبان Common Expression Language در کوبرنتیز | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">reference / using-api</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">زبان Common Expression Language در کوبرنتیز</h1><!-- overview -->
+<p dir="rtl">در API کوبرنتیز از <a href="https://github.com/google/cel-go" target="_blank" rel="noopener">زبان Common Expression Language (CEL)</a>
+برای تعریف قواعد اعتبارسنجی، قواعد سیاست‌ها و سایر محدودیت‌ها یا شرط‌ها استفاده می‌شود.</p>
+<p dir="rtl">عبارت‌های CEL مستقیماً در
+<span class="term" title="kube-apiserver">سرور API</span> ارزیابی می‌شوند. به همین دلیل،
+CEL در بسیاری از کاربردهای توسعه‌پذیری، جایگزین مناسبی برای سازوکارهای خارج از فرایند مانند
+وب‌هوک‌ها (webhooks) است. عبارت‌های CEL شما تا زمانی که مؤلفه سرور API در control plane در دسترس
+باشد، همچنان اجرا می‌شوند.</p>
+<!-- body -->
+<h2 id="مروری-بر-زبان" dir="rtl">مروری بر زبان</h2>
+<p dir="rtl"><a href="https://github.com/google/cel-spec/blob/master/doc/langdef.md" target="_blank" rel="noopener">زبان CEL</a>
+نحو ساده‌ای دارد که به عبارت‌ها در زبان‌های C، C++، Java، JavaScript و Go شباهت دارد.</p>
+<p dir="rtl">زبان CEL برای جاسازی در برنامه‌ها طراحی شده است. هر «برنامه» CEL یک عبارت واحد است که
+به یک مقدار واحد ارزیابی می‌شود. عبارت‌های CEL معمولاً کوتاه و «تک‌خطی» هستند و به‌خوبی
+در فیلدهای رشته‌ای منابع API کوبرنتیز جای می‌گیرند.</p>
+<p dir="rtl">ورودی‌های یک برنامه CEL «متغیرها» هستند. هر فیلد API کوبرنتیز که حاوی CEL است، در مستندات
+API مشخص می‌کند که چه متغیرهایی برای استفاده در آن فیلد در دسترس‌اند. برای مثال، در فیلد
+<code dir="ltr">x-kubernetes-validations[i].rules</code> از CustomResourceDefinitionها، متغیرهای <code dir="ltr">self</code> و <code dir="ltr">oldSelf</code>
+در دسترس هستند و به وضعیت قبلی و فعلی داده‌های منبع سفارشی اشاره می‌کنند که عبارت CEL
+باید آن‌ها را اعتبارسنجی کند. سایر فیلدهای API کوبرنتیز ممکن است متغیرهای متفاوتی تعریف
+کنند. برای اینکه بدانید کدام متغیرها برای یک فیلد در دسترس‌اند، به مستندات API آن فیلد
+مراجعه کنید.</p>
+<p dir="rtl">نمونه‌هایی از عبارت‌های CEL:</p>
+<table>
+<caption>نمونه‌هایی از عبارت‌های CEL و هدف هر کدام</caption>
+<thead>
+<tr>
+  <th dir="rtl">قاعده</th>
+  <th dir="rtl">هدف</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td dir="ltr" class="ltr"><tt>self.minReplicas &lt;= self.replicas &amp;&amp; self.replicas &lt;= self.maxReplicas</tt></td>
+  <td dir="rtl">اعتبارسنجی می‌کند که سه فیلدی که تعداد رپلیکاها را تعیین می‌کنند، ترتیب درستی داشته باشند</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>'Available' in self.stateCounts</tt></td>
+  <td dir="rtl">اعتبارسنجی می‌کند که در یک map، ورودی‌ای با کلید 'Available' وجود داشته باشد</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>(self.list1.size() == 0) != (self.list2.size() == 0)</tt></td>
+  <td dir="rtl">اعتبارسنجی می‌کند که یکی از دو لیست غیرخالی باشد، اما نه هر دو</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>self.envars.filter(e, e.name = 'MY_ENV').all(e, e.value.matches('^[a-zA-Z]*$'))</tt></td>
+  <td dir="rtl">فیلد 'value' را در آن ورودی از listMap که فیلد کلید 'name' آن برابر 'MY_ENV' است، اعتبارسنجی می‌کند</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>has(self.expired) &amp;&amp; self.created + self.ttl &lt; self.expired</tt></td>
+  <td dir="rtl">اعتبارسنجی می‌کند که تاریخ 'expired' پس از تاریخ 'create' به‌علاوه مدت‌زمان 'ttl' باشد</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>self.health.startsWith('ok')</tt></td>
+  <td dir="rtl">اعتبارسنجی می‌کند که فیلد رشته‌ای 'health' پیشوند 'ok' داشته باشد</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>self.widgets.exists(w, w.key == 'x' &amp;&amp; w.foo &lt; 10)</tt></td>
+  <td dir="rtl">اعتبارسنجی می‌کند که ویژگی 'foo' در آیتمی از listMap که کلید آن 'x' است، کمتر از 10 باشد</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>type(self) == string ? self == '99%' : self == 42</tt></td>
+  <td dir="rtl">یک فیلد از نوع int-or-string را در هر دو حالت عدد صحیح و رشته اعتبارسنجی می‌کند</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>self.metadata.name == 'singleton'</tt></td>
+  <td dir="rtl">اعتبارسنجی می‌کند که نام یک آبجکت با مقدار مشخصی مطابقت داشته باشد (و در نتیجه آن آبجکت یکتا یا singleton باشد)</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>self.set1.all(e, !(e in self.set2))</tt></td>
+  <td dir="rtl">اعتبارسنجی می‌کند که دو listSet هیچ عضو مشترکی نداشته باشند</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>self.names.size() == self.details.size() &amp;&amp; self.names.all(n, n in self.details)</tt></td>
+  <td dir="rtl">اعتبارسنجی می‌کند که کلیدهای map با نام 'details' همان آیتم‌های listSet با نام 'names' باشند</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>self.details.all(key, key.matches('^[a-zA-Z]*$'))</tt></td>
+  <td dir="rtl">کلیدهای map با نام 'details' را اعتبارسنجی می‌کند</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>self.details.all(key, self.details[key].matches('^[a-zA-Z]*$'))</tt></td>
+  <td dir="rtl">مقادیر map با نام 'details' را اعتبارسنجی می‌کند</td>
+</tr>
+</tbody>
+</table>
+<h2 id="گزینه-ها،-قابلیت-های-زبانی-و-کتابخانه-های-cel" dir="rtl">گزینه‌ها، قابلیت‌های زبانی و کتابخانه‌های CEL</h2>
+<p dir="rtl">زبان CEL با گزینه‌ها، کتابخانه‌ها و قابلیت‌های زبانی زیر پیکربندی شده است که هر کدام در
+نسخه مشخص‌شده‌ای از کوبرنتیز معرفی شده‌اند:</p>
+<table>
+<thead>
+<tr>
+  <th dir="rtl">گزینه، کتابخانه یا قابلیت زبانی CEL</th>
+  <th dir="rtl">موارد شامل‌شده</th>
+  <th dir="rtl">دسترس‌پذیری</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td dir="rtl"><a href="https://github.com/google/cel-spec/blob/v0.7.0/doc/langdef.md#macros" target="_blank" rel="noopener">ماکروهای استاندارد</a></td>
+  <td dir="ltr" class="ltr"><code dir="ltr">has</code>, <code dir="ltr">all</code>, <code dir="ltr">exists</code>, <code dir="ltr">exists_one</code>, <code dir="ltr">map</code>, <code dir="ltr">filter</code></td>
+  <td dir="rtl">همه نسخه‌های کوبرنتیز</td>
+</tr>
+<tr>
+  <td dir="rtl"><a href="https://github.com/google/cel-spec/blob/master/doc/langdef.md#list-of-standard-definitions" target="_blank" rel="noopener">توابع استاندارد</a></td>
+  <td dir="rtl">به
+    <a href="https://github.com/google/cel-spec/blob/master/doc/langdef.md#list-of-standard-definitions" target="_blank" rel="noopener">
+      فهرست رسمی تعریف‌های استاندارد
+    </a>
+    مراجعه کنید
+  </td>
+  <td dir="rtl">همه نسخه‌های کوبرنتیز</td>
+</tr>
+<tr>
+  <td dir="rtl">
+    <a href="https://pkg.go.dev/github.com/google/cel-go@v0.17.4/cel#HomogeneousAggregateLiterals" target="_blank" rel="noopener">
+      لیترال‌های تجمیعی همگن
+    </a>
+  </td>
+  <td>-</td>
+  <td dir="rtl">همه نسخه‌های کوبرنتیز</td>
+</tr>
+<tr>
+  <td dir="rtl"><a href="https://pkg.go.dev/github.com/google/cel-go@v0.17.4/cel#DefaultUTCTimeZone" target="_blank" rel="noopener">منطقه زمانی پیش‌فرض UTC</a></td>
+  <td>-</td>
+  <td dir="rtl">همه نسخه‌های کوبرنتیز</td>
+</tr>
+<tr>
+  <td dir="rtl">
+    <a href="https://pkg.go.dev/github.com/google/cel-go@v0.17.4/cel#EagerlyValidateDeclarations" target="_blank" rel="noopener">
+      اعتبارسنجی زودهنگام اعلان‌ها
+    </a>
+  </td>
+  <td>-</td>
+  <td dir="rtl">همه نسخه‌های کوبرنتیز</td>
+</tr>
+<tr>
+  <td dir="rtl"><a href="https://pkg.go.dev/github.com/google/cel-go/ext#Strings" target="_blank" rel="noopener">کتابخانه توسعه‌یافته رشته‌ها</a>، نسخه 1</td>
+  <td dir="ltr" class="ltr">
+    <code dir="ltr">charAt</code>, <code dir="ltr">indexOf</code>, <code dir="ltr">lastIndexOf</code>, <code dir="ltr">lowerAscii</code>,
+    <code dir="ltr">upperAscii</code>, <code dir="ltr">replace</code>, <code dir="ltr">split</code>, <code dir="ltr">join</code>, <code dir="ltr">substring</code>,
+    <code dir="ltr">trim</code>
+  </td>
+  <td dir="rtl">نسخه‌های 1.25 تا 1.30 کوبرنتیز</td>
+</tr>
+<tr>
+  <td dir="rtl"><a href="https://pkg.go.dev/github.com/google/cel-go/ext#Strings" target="_blank" rel="noopener">کتابخانه توسعه‌یافته رشته‌ها</a>، نسخه 2</td>
+  <td dir="ltr" class="ltr">
+    <code dir="ltr">charAt</code>, <code dir="ltr">indexOf</code>, <code dir="ltr">lastIndexOf</code>, <code dir="ltr">lowerAscii</code>,
+    <code dir="ltr">upperAscii</code>, <code dir="ltr">replace</code>, <code dir="ltr">split</code>, <code dir="ltr">join</code>, <code dir="ltr">substring</code>,
+    <code dir="ltr">trim</code>
+  </td>
+  <td dir="rtl">نسخه 1.30 کوبرنتیز و بالاتر</td>
+</tr>
+<tr>
+  <td dir="rtl">کتابخانه لیست کوبرنتیز</td>
+  <td dir="rtl">به
+    <a href="#kubernetes-list-library">
+      کتابخانه لیست کوبرنتیز
+    </a>
+    مراجعه کنید
+  </td>
+  <td dir="rtl">همه نسخه‌های کوبرنتیز</td>
+</tr>
+<tr>
+  <td dir="rtl">کتابخانه عبارت‌های منظم (regex) کوبرنتیز</td>
+  <td dir="rtl">به
+    <a href="#kubernetes-regex-library">
+      کتابخانه regex کوبرنتیز
+    </a>
+    مراجعه کنید
+  </td>
+  <td dir="rtl">همه نسخه‌های کوبرنتیز</td>
+</tr>
+<tr>
+  <td dir="rtl">کتابخانه URL کوبرنتیز</td>
+  <td dir="rtl">به
+    <a href="#kubernetes-url-library">
+      کتابخانه URL کوبرنتیز
+    </a>
+    مراجعه کنید
+  </td>
+  <td dir="rtl">همه نسخه‌های کوبرنتیز</td>
+</tr>
+<tr>
+  <td dir="rtl">کتابخانه آدرس IP کوبرنتیز</td>
+  <td dir="rtl">به
+    <a href="#kubernetes-ip-address-library">
+      کتابخانه آدرس IP کوبرنتیز
+    </a>
+    مراجعه کنید
+  </td>
+  <td dir="rtl">نسخه 1.31 کوبرنتیز و بالاتر</td>
+</tr>
+<tr>
+  <td dir="rtl">کتابخانه CIDR کوبرنتیز</td>
+  <td dir="rtl">به
+    <a href="#kubernetes-cidr-library">
+      کتابخانه CIDR کوبرنتیز
+    </a>
+    مراجعه کنید
+  </td>
+  <td dir="rtl">نسخه 1.31 کوبرنتیز و بالاتر</td>
+</tr>
+<tr>
+</tr><tr>
+  <td dir="rtl">کتابخانه مجوزدهنده (authorizer) کوبرنتیز</td>
+  <td dir="rtl">به
+    <a href="#kubernetes-authorizer-library">
+      کتابخانه authorizer کوبرنتیز
+    </a>
+    مراجعه کنید
+  </td>
+  <td dir="rtl">همه نسخه‌های کوبرنتیز</td>
+</tr>
+<tr>
+  <td dir="rtl">کتابخانه کمیت (quantity) کوبرنتیز</td>
+  <td dir="rtl">به
+    <a href="#kubernetes-quantity-library">
+      کتابخانه quantity کوبرنتیز
+    </a>
+    مراجعه کنید
+  </td>
+  <td dir="rtl">نسخه 1.29 کوبرنتیز و بالاتر</td>
+</tr>
+<tr>
+  <td dir="rtl">کتابخانه semver کوبرنتیز</td>
+  <td dir="rtl">به
+    <a href="#kubernetes-semver-library">
+      کتابخانه semver کوبرنتیز
+    </a>
+    مراجعه کنید
+  </td>
+  <td dir="rtl">نسخه 1.34 کوبرنتیز و بالاتر</td>
+</tr>
+<tr>
+  <td dir="rtl">کتابخانه قالب (format) کوبرنتیز</td>
+  <td dir="rtl">به
+    <a href="#kubernetes-format-library">
+      کتابخانه format کوبرنتیز
+    </a>
+    مراجعه کنید
+  </td>
+  <td dir="rtl">نسخه 1.32 کوبرنتیز و بالاتر</td>
+</tr>
+<tr>
+  <td dir="rtl">انواع اختیاری CEL</td>
+  <td dir="rtl">به
+    <a href="https://pkg.go.dev/github.com/google/cel-go@v0.17.4/cel#OptionalTypes" target="_blank" rel="noopener">
+      انواع اختیاری CEL
+    </a>
+    مراجعه کنید
+  </td>
+  <td dir="rtl">نسخه 1.29 کوبرنتیز و بالاتر</td>
+</tr>
+<tr>
+  <td dir="rtl">قابلیت CrossTypeNumericComparisons در CEL</td>
+  <td dir="rtl">به
+    <a href="https://pkg.go.dev/github.com/google/cel-go@v0.17.4/cel#CrossTypeNumericComparisons" target="_blank" rel="noopener">
+      CrossTypeNumericComparisons در CEL
+   </a>
+    مراجعه کنید
+  </td>
+  <td dir="rtl">نسخه 1.29 کوبرنتیز و بالاتر</td>
+</tr><tr>
+  <td dir="rtl">قابلیت TwoVarComprehensions در CEL</td>
+  <td dir="rtl">به
+    <a href="https://pkg.go.dev/github.com/google/cel-go@v0.25.0/ext#readme-twovarcomprehensions" target="_blank" rel="noopener">
+      TwoVarComprehensions در CEL
+   </a>
+    مراجعه کنید
+  </td>
+  <td dir="rtl">نسخه 1.33 کوبرنتیز و بالاتر</td>
+</tr>
+</tbody>
+</table>
+<p dir="rtl">توابع، قابلیت‌ها و تنظیمات زبانی CEL از بازگردانی (rollback) control plane کوبرنتیز پشتیبانی
+می‌کنند. برای مثال، <em>مقادیر اختیاری CEL</em> (CEL Optional Values) در کوبرنتیز 1.29 معرفی شد؛
+بنابراین فقط سرورهای API با این نسخه یا نسخه‌های جدیدتر، درخواست‌های نوشتنِ عبارت‌های CEL
+را که از <em>مقادیر اختیاری CEL</em> استفاده می‌کنند می‌پذیرند. با این حال، اگر کلاستر به کوبرنتیز
+1.28 بازگردانده شود، عبارت‌های CEL که از «مقادیر اختیاری CEL» استفاده می‌کنند و از قبل در
+منابع API ذخیره شده‌اند، همچنان به‌درستی ارزیابی می‌شوند.</p>
+<h2 id="کتابخانه-های-cel-کوبرنتیز" dir="rtl">کتابخانه‌های CEL کوبرنتیز</h2>
+<p dir="rtl">کوبرنتیز علاوه بر کتابخانه‌های جامعه CEL، کتابخانه‌های CEL مخصوص به خود را نیز دارد که در
+همه جاهایی که CEL در کوبرنتیز استفاده می‌شود، در دسترس هستند.</p>
+<h3 id="کتابخانه-لیست-کوبرنتیز" dir="rtl">کتابخانه لیست کوبرنتیز</h3>
+<p dir="rtl">کتابخانه لیست شامل توابع <code dir="ltr">indexOf</code> و <code dir="ltr">lastIndexOf</code> است که مشابه توابع رشته‌ای هم‌نام خود
+عمل می‌کنند. این توابع اولین یا آخرین اندیس موقعیتیِ عنصر داده‌شده را در لیست برمی‌گردانند.</p>
+<p dir="rtl">کتابخانه لیست همچنین توابع <code dir="ltr">min</code>، <code dir="ltr">max</code> و <code dir="ltr">sum</code> را در بر دارد. تابع sum روی همه انواع عددی
+و همچنین نوع duration پشتیبانی می‌شود. توابع min و max روی همه انواع قابل مقایسه پشتیبانی
+می‌شوند.</p>
+<p dir="rtl">تابع <code dir="ltr">isSorted</code> نیز به‌عنوان یک تابع کمکی ارائه شده است و روی همه انواع قابل مقایسه
+پشتیبانی می‌شود.</p>
+<p dir="rtl">نمونه‌ها:</p>
+<table>
+<caption>نمونه‌هایی از عبارت‌های CEL که از توابع کتابخانه لیست استفاده می‌کنند</caption>
+<thead>
+<tr>
+  <td dir="rtl">عبارت CEL</td>
+  <td dir="rtl">هدف</td>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td dir="ltr" class="ltr"><tt>names.isSorted()</tt></td>
+  <td dir="rtl">بررسی می‌کند که لیستی از نام‌ها به ترتیب الفبایی نگه داشته شده باشد</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>items.map(x, x.weight).sum() == 1.0</tt></td>
+  <td dir="rtl">بررسی می‌کند که مجموع «وزن‌های» لیستی از آبجکت‌ها برابر 1.0 باشد</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>lowPriorities.map(x, x.priority).max() &lt; highPriorities.map(x, x.priority).min()</tt></td>
+  <td dir="rtl">بررسی می‌کند که دو مجموعه از اولویت‌ها با هم هم‌پوشانی نداشته باشند</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>names.indexOf('should-be-first') == 1</tt></td>
+  <td dir="rtl">الزام می‌کند که اولین نام در یک لیست مقدار مشخصی باشد</td>
+</tr>
+</tbody>
+</table>
+<p dir="rtl">برای اطلاعات بیشتر، به godoc
+<a href="https://pkg.go.dev/k8s.io/apiextensions-apiserver/pkg/apiserver/schema/cel/library#Lists" target="_blank" rel="noopener">کتابخانه لیست کوبرنتیز</a>
+مراجعه کنید.</p>
+<h3 id="کتابخانه-regex-کوبرنتیز" dir="rtl">کتابخانه regex کوبرنتیز</h3>
+<p dir="rtl">کتابخانه regex علاوه بر تابع <code dir="ltr">matches</code> که کتابخانه استاندارد CEL ارائه می‌کند، توابع <code dir="ltr">find</code>
+و <code dir="ltr">findAll</code> را نیز فراهم می‌کند و به این ترتیب، طیف بسیار گسترده‌تری از عملیات regex را ممکن
+می‌سازد.</p>
+<p dir="rtl">نمونه‌ها:</p>
+<table>
+<caption>نمونه‌هایی از عبارت‌های CEL که از توابع کتابخانه regex استفاده می‌کنند</caption>
+<thead>
+<tr>
+  <td dir="rtl">عبارت CEL</td>
+  <td dir="rtl">هدف</td>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td dir="ltr" class="ltr"><tt>"abc 123".find('[0-9]+')</tt></td>
+  <td dir="rtl">اولین عدد موجود در یک رشته را پیدا می‌کند</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>"1, 2, 3, 4".findAll('[0-9]+').map(x, int(x)).sum() &lt; 100</tt></td>
+  <td dir="rtl">بررسی می‌کند که مجموع اعداد موجود در یک رشته کمتر از 100 باشد</td>
+</tr>
+</tbody>
+</table>
+<p dir="rtl">برای اطلاعات بیشتر، به godoc
+<a href="https://pkg.go.dev/k8s.io/apiextensions-apiserver/pkg/apiserver/schema/cel/library#Regex" target="_blank" rel="noopener">کتابخانه regex کوبرنتیز</a>
+مراجعه کنید.</p>
+<h3 id="کتابخانه-url-کوبرنتیز" dir="rtl">کتابخانه URL کوبرنتیز</h3>
+<p dir="rtl">برای اینکه پردازش URLها آسان‌تر و امن‌تر شود، توابع زیر اضافه شده‌اند:</p>
+<ul>
+<li dir="rtl">تابع <code dir="ltr">isURL(string)</code> بررسی می‌کند که آیا یک رشته طبق بسته
+<a href="https://pkg.go.dev/net/url#URL" target="_blank" rel="noopener">net/url در Go</a> یک URL معتبر است یا نه. این رشته باید یک
+URL مطلق باشد.</li>
+<li dir="rtl">تابع <code dir="ltr">url(string) URL</code> یک رشته را به URL تبدیل می‌کند و اگر رشته یک URL معتبر نباشد،
+خطا برمی‌گرداند.</li>
+</ul>
+<p dir="rtl">پس از تجزیه با تابع <code dir="ltr">url</code>، آبجکت URL حاصل دسترسی‌دهنده‌های <code dir="ltr">getScheme</code>، <code dir="ltr">getHost</code>،
+<code dir="ltr">getHostname</code>، <code dir="ltr">getPort</code>، <code dir="ltr">getEscapedPath</code> و <code dir="ltr">getQuery</code> را در اختیار می‌گذارد.</p>
+<p dir="rtl">نمونه‌ها:</p>
+<table>
+<caption>نمونه‌هایی از عبارت‌های CEL که از توابع کتابخانه URL استفاده می‌کنند</caption>
+<thead>
+<tr>
+  <td dir="rtl">عبارت CEL</td>
+  <td dir="rtl">هدف</td>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+  <td dir="ltr" class="ltr"><tt>url('https://example.com:80/').getHost()</tt></td>
+  <td dir="rtl">بخش میزبان URL، یعنی 'example.com:80'، را برمی‌گرداند</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>url('https://example.com/path with spaces/').getEscapedPath()</tt></td>
+  <td dir="rtl">مقدار '/path%20with%20spaces/' را برمی‌گرداند</td>
+</tr>
+</tbody>
+</table>
+<p dir="rtl">برای اطلاعات بیشتر، به godoc
+<a href="https://pkg.go.dev/k8s.io/apiextensions-apiserver/pkg/apiserver/schema/cel/library#URLs" target="_blank" rel="noopener">کتابخانه URL کوبرنتیز</a>
+مراجعه کنید.</p>
+<h3 id="کتابخانه-آدرس-ip-کوبرنتیز" dir="rtl">کتابخانه آدرس IP کوبرنتیز</h3>
+<p dir="rtl">برای اینکه پردازش آدرس‌های IP آسان‌تر و امن‌تر شود، توابع زیر اضافه شده‌اند:</p>
+<ul>
+<li dir="rtl">تابع <code dir="ltr">isIP(string)</code> بررسی می‌کند که آیا یک رشته آدرس IP معتبری است یا نه.</li>
+<li dir="rtl">تابع <code dir="ltr">ip(string) IP</code> یک رشته را به آبجکت آدرس IP تبدیل می‌کند و اگر رشته آدرس IP معتبری نباشد، خطا برمی‌گرداند.</li>
+</ul>
+<p dir="rtl">در هر دو تابع، آدرس IP باید یک آدرس IPv4 یا IPv6 باشد.
+آدرس‌های IPv6 نگاشت‌شده از IPv4 (مانند <code dir="ltr">::ffff:1.2.3.4</code>) مجاز نیستند.
+آدرس‌های IP دارای zone (مانند <code dir="ltr">fe80::1%eth0</code>) مجاز نیستند.
+صفرهای ابتدایی در اکتت‌های آدرس IPv4 مجاز نیستند.</p>
+<p dir="rtl">پس از تجزیه با تابع <code dir="ltr">ip</code>، آبجکت IP حاصل مجموعه توابع عضو زیر را در اختیار می‌گذارد:</p>
+<table>
+<caption>توابع عضو در دسترس برای آبجکت آدرس IP</caption>
+<thead>
+<tr>
+  <th dir="rtl">تابع عضو</th>
+  <th dir="rtl">مقدار بازگشتی CEL</th>
+  <th dir="rtl">توضیحات</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td dir="ltr" class="ltr"><tt>isCanonical()</tt></td>
+  <td dir="ltr" class="ltr">bool</td>
+  <td dir="rtl">
+    اگر آدرس IP به شکل استاندارد (canonical) خود باشد، true برمی‌گرداند.
+    هر آدرس IP دقیقاً یک شکل استاندارد دارد؛ بنابراین فیلدهایی که آدرس‌های IP را به شکل استاندارد
+    نگه می‌دارند، هنگام بررسی برابری یا یکتایی می‌توانند صرفاً مانند رشته در نظر گرفته شوند.
+  </td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>family()</tt></td>
+  <td dir="ltr" class="ltr">int</td>
+  <td dir="rtl">خانواده آدرس IP را برمی‌گرداند: <tt>4</tt> برای IPv4 و <tt>6</tt> برای IPv6.</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>isUnspecified()</tt></td>
+  <td dir="ltr" class="ltr">bool</td>
+  <td dir="rtl">
+    اگر آدرس IP، آدرس نامشخص (unspecified) باشد، true برمی‌گرداند.
+    این آدرس یا آدرس IPv4 برابر "0.0.0.0" است یا آدرس IPv6 برابر "::".
+  </td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>isLoopback()</tt></td>
+  <td dir="ltr" class="ltr">bool</td>
+  <td dir="rtl">
+    اگر آدرس IP، آدرس loopback باشد، true برمی‌گرداند.
+    این آدرس یا یک آدرس IPv4 با مقدار 127.x.x.x است یا یک آدرس IPv6 با مقدار ::1.
+  </td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>isLinkLocalMulticast()</tt></td>
+  <td dir="ltr" class="ltr">bool</td>
+  <td dir="rtl">
+    اگر آدرس IP یک آدرس multicast از نوع link-local باشد، true برمی‌گرداند.
+    این آدرس یا یک آدرس IPv4 با مقدار 224.0.0.x است یا یک آدرس IPv6 در شبکه ff00::/8.
+  </td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>isLinkLocalUnicast()</tt></td>
+  <td dir="ltr" class="ltr">bool</td>
+  <td dir="rtl">
+    اگر آدرس IP یک آدرس unicast از نوع link-local باشد، true برمی‌گرداند.
+    این آدرس یا یک آدرس IPv4 با مقدار 169.254.x.x است یا یک آدرس IPv6 در شبکه fe80::/10.
+  </td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>isGlobalUnicast()</tt></td>
+  <td dir="ltr" class="ltr">bool</td>
+  <td dir="rtl">
+    اگر آدرس IP یک آدرس unicast سراسری (global) باشد، true برمی‌گرداند.
+    این آدرس یا یک آدرس IPv4 است که صفر یا 255.255.255.255 نباشد، یا یک آدرس IPv6 است که آدرس unicast از نوع link-local، loopback یا multicast نباشد.
+  </td>
+</tr>
+</tbody>
+</table>
+<p dir="rtl">نمونه‌ها:</p>
+<table>
+<caption>نمونه‌هایی از عبارت‌های CEL که از توابع کتابخانه آدرس IP استفاده می‌کنند</caption>
+<thead>
+<tr>
+  <th dir="rtl">عبارت CEL</th>
+  <th dir="rtl">هدف</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td dir="ltr" class="ltr"><tt>isIP('127.0.0.1')</tt></td>
+  <td dir="rtl">برای یک IP معتبر، true برمی‌گرداند.</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>ip('2001:db8::abcd').isCanonical()</tt></td>
+  <td dir="rtl">برای یک آدرس IPv6 به شکل استاندارد، true برمی‌گرداند.</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>ip('2001:DB8::ABCD').isCanonical()</tt></td>
+  <td dir="rtl">مقدار false برمی‌گرداند، زیرا شکل استاندارد با حروف کوچک نوشته می‌شود.</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>ip('127.0.0.1').family() == 4</tt></td>
+  <td dir="rtl">خانواده آدرس یک IP را بررسی می‌کند.</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>ip('::1').isLoopback()</tt></td>
+  <td dir="rtl">بررسی می‌کند که آیا یک IP آدرس loopback است یا نه.</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>ip('192.168.0.1').isGlobalUnicast()</tt></td>
+  <td dir="rtl">بررسی می‌کند که آیا یک IP آدرس unicast سراسری است یا نه.</td>
+</tr>
+</tbody>
+</table>
+<p dir="rtl">برای اطلاعات بیشتر، به godoc <a href="https://pkg.go.dev/k8s.io/apiserver/pkg/cel/library#IP" target="_blank" rel="noopener">کتابخانه آدرس IP کوبرنتیز</a> مراجعه کنید.</p>
+<h3 id="کتابخانهٔ-cidr-کوبرنتیز" dir="rtl">کتابخانهٔ CIDR کوبرنتیز</h3>
+<p dir="rtl">کتابخانهٔ CIDR یک افزونهٔ کتابخانهٔ توابع CEL است که توابعی برای تجزیهٔ نمادگذاری <span class="term" title="CIDR">CIDR</span> فراهم می‌کند.</p>
+<h4 id="cidr" dir="ltr" class="ltr"><code dir="ltr">cidr</code></h4>
+<p dir="rtl">این تابع رشته‌ای را که با نمادگذاری CIDR نوشته شده است به نمایشی از یک نشانی شبکه تبدیل می‌کند. اگر رشته نمادگذاری CIDR معتبری نباشد، خطا رخ می‌دهد.
+مقدار CIDR باید نشانی یک زیرشبکهٔ IPv4 یا IPv6 همراه با ماسک باشد.
+صفرهای ابتدایی در هشتایی‌های (octet) نشانی IPv4 مجاز نیستند.
+نشانی‌های IPv6 نگاشته‌شده به IPv4 (مانند <code dir="ltr">::ffff:1.2.3.4/24</code>) نیز مجاز نیستند.</p>
+<p dir="ltr" class="ltr"><tt>cidr(&lt;string&gt;) &lt;CIDR&gt;</tt></p>
+<p dir="rtl">نمونه‌ها:</p>
+<table>
+<caption>نمونه‌هایی از عبارت‌های CEL که از تابع cidr استفاده می‌کنند</caption>
+<thead>
+<tr>
+  <th dir="rtl">عبارت CEL</th>
+  <th dir="rtl">هدف</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td dir="ltr" class="ltr"><tt>cidr('192.168.0.0/16')</tt></td>
+  <td dir="rtl">یک نشانی IPv4 همراه با ماسک CIDR برمی‌گرداند.</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>cidr('::1/128')</tt></td>
+  <td dir="rtl">یک نشانی IPv6 همراه با ماسک CIDR برمی‌گرداند.</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>cidr('192.168.0.0/33')</tt></td>
+  <td dir="rtl">خطا رخ می‌دهد، زیرا طول پیشوند از اندازهٔ نشانی IPv4 بیشتر است.</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>cidr('::1/129')</tt></td>
+  <td dir="rtl">خطا رخ می‌دهد، زیرا طول پیشوند از اندازهٔ نشانی IPv6 بیشتر است.</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>cidr('192.168.0.1/16')</tt></td>
+  <td dir="rtl">خطا رخ می‌دهد، زیرا پس از پیشوند بیت‌های غیرصفر وجود دارد.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="iscidr" dir="ltr" class="ltr"><code dir="ltr">isCIDR</code></h4>
+<p dir="rtl">اگر رشته نمایش معتبری از یک زیرشبکه همراه با ماسک در نمادگذاری CIDR باشد، این تابع مقدار true برمی‌گرداند.
+مقدار CIDR باید نشانی یک زیرشبکهٔ IPv4 یا IPv6 همراه با ماسک باشد.
+صفرهای ابتدایی در هشتایی‌های نشانی IPv4 مجاز نیستند.
+نشانی‌های IPv6 نگاشته‌شده به IPv4 (مانند <code dir="ltr">::ffff:1.2.3.4/24</code>) نیز مجاز نیستند.</p>
+<p dir="ltr" class="ltr"><tt>isCIDR(&lt;string&gt;) &lt;bool&gt;</tt></p>
+<p dir="rtl">نمونه‌ها:</p>
+<table>
+<caption>نمونه‌هایی از عبارت‌های CEL که از تابع isCIDR استفاده می‌کنند</caption>
+<thead>
+<tr>
+  <th dir="rtl">عبارت CEL</th>
+  <th dir="rtl">هدف</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td dir="ltr" class="ltr"><tt>isCIDR('192.168.0.0/16')</tt></td>
+  <td dir="rtl">برای یک CIDR معتبر IPv4 مقدار true برمی‌گرداند.</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>isCIDR('::1/128')</tt></td>
+  <td dir="rtl">برای یک CIDR معتبر IPv6 مقدار true برمی‌گرداند.</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>isCIDR('192.168.0.0/33')</tt></td>
+  <td dir="rtl">مقدار false برمی‌گرداند، زیرا طول پیشوند از اندازهٔ نشانی IPv4 بیشتر است.</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>isCIDR('::1/129')</tt></td>
+  <td dir="rtl">مقدار false برمی‌گرداند، زیرا طول پیشوند از اندازهٔ نشانی IPv6 بیشتر است.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="containsip-containscidr-ip-masked-prefixlength" dir="ltr" class="ltr"><code dir="ltr">containsIP</code> / <code dir="ltr">containsCIDR</code> / <code dir="ltr">ip</code> / <code dir="ltr">masked</code> / <code dir="ltr">prefixLength</code></h4>
+<ul>
+<li dir="rtl">
+<p dir="rtl">تابع <code dir="ltr">containsIP</code>: اگر CIDR نشانی IP داده‌شده را در بر بگیرد، مقدار true برمی‌گرداند.
+نشانی IP باید یک نشانی IPv4 یا IPv6 باشد.
+این تابع می‌تواند یک رشته یا یک نشانی IP را به‌عنوان آرگومان بپذیرد.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">تابع <code dir="ltr">containsCIDR</code>: اگر CIDR، CIDR داده‌شده را در بر بگیرد، مقدار true برمی‌گرداند.
+مقدار CIDR باید نشانی یک زیرشبکهٔ IPv4 یا IPv6 همراه با ماسک باشد.
+این تابع می‌تواند یک رشته یا یک CIDR را به‌عنوان آرگومان بپذیرد.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">تابع <code dir="ltr">ip</code>: نمایش نشانی IP مربوط به CIDR را برمی‌گرداند.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">تابع <code dir="ltr">masked</code>: نمایش CIDR نشانی شبکه را همراه با پیشوند ماسک‌شده برمی‌گرداند.
+از این تابع می‌توان برای به دست آوردن شکل متعارف شبکهٔ CIDR استفاده کرد.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">تابع <code dir="ltr">prefixLength</code>: طول پیشوند CIDR را بر حسب بیت برمی‌گرداند.
+این مقدار برابر با تعداد بیت‌های ماسک است.</p>
+</li>
+</ul>
+<p dir="rtl">نمونه‌ها:</p>
+<table>
+<caption>نمونه‌هایی از عبارت‌های CEL که از توابع کتابخانهٔ CIDR استفاده می‌کنند</caption>
+<thead>
+<tr>
+  <th dir="rtl">عبارت CEL</th>
+  <th dir="rtl">هدف</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td dir="ltr" class="ltr"><tt>cidr('192.168.0.0/24').containsIP(ip('192.168.0.1'))</tt></td>
+  <td dir="rtl">بررسی می‌کند که آیا یک CIDR نشانی IP داده‌شده (آبجکت IP) را در بر می‌گیرد یا نه.</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>cidr('192.168.0.0/24').containsIP(ip('192.168.1.1'))</tt></td>
+  <td dir="rtl">بررسی می‌کند که آیا یک CIDR نشانی IP داده‌شده (آبجکت IP) را در بر می‌گیرد یا نه.</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>cidr('192.168.0.0/24').containsIP('192.168.0.1')</tt></td>
+  <td dir="rtl">بررسی می‌کند که آیا یک CIDR نشانی IP داده‌شده (رشته) را در بر می‌گیرد یا نه.</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>cidr('192.168.0.0/24').containsIP('192.168.1.1')</tt></td>
+  <td dir="rtl">بررسی می‌کند که آیا یک CIDR نشانی IP داده‌شده (رشته) را در بر می‌گیرد یا نه.</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>cidr('192.168.0.0/16').containsCIDR(cidr('192.168.10.0/24'))</tt></td>
+  <td dir="rtl">بررسی می‌کند که آیا یک CIDR، CIDR داده‌شدهٔ دیگری (آبجکت CIDR) را در بر می‌گیرد یا نه.</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>cidr('192.168.1.0/24').containsCIDR(cidr('192.168.2.0/24'))</tt></td>
+  <td dir="rtl">بررسی می‌کند که آیا یک CIDR، CIDR داده‌شدهٔ دیگری (آبجکت CIDR) را در بر می‌گیرد یا نه.</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>cidr('192.168.0.0/16').containsCIDR('192.168.10.0/24')</tt></td>
+  <td dir="rtl">بررسی می‌کند که آیا یک CIDR، CIDR داده‌شدهٔ دیگری (رشته) را در بر می‌گیرد یا نه.</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>cidr('192.168.1.0/24').containsCIDR('192.168.2.0/24')</tt></td>
+  <td dir="rtl">بررسی می‌کند که آیا یک CIDR، CIDR داده‌شدهٔ دیگری (رشته) را در بر می‌گیرد یا نه.</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>cidr('192.168.0.1/24').ip()</tt></td>
+  <td dir="rtl">بخش نشانی IP یک CIDR را برمی‌گرداند.</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>cidr('192.168.0.1/24').ip().family()</tt></td>
+  <td dir="rtl">خانوادهٔ بخش نشانی IP یک CIDR را برمی‌گرداند.</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>cidr('::1/128').ip()</tt></td>
+  <td dir="rtl">بخش نشانی IP یک CIDR از نوع IPv6 را برمی‌گرداند.</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>cidr('::1/128').ip().family()</tt></td>
+  <td dir="rtl">خانوادهٔ بخش نشانی IP یک CIDR از نوع IPv6 را برمی‌گرداند.</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>cidr('192.168.0.0/24').masked()</tt></td>
+  <td dir="rtl">شکل متعارف یک شبکهٔ CIDR را برمی‌گرداند.</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>cidr('192.168.0.1/24').masked()</tt></td>
+  <td dir="rtl">شکل متعارف یک شبکهٔ CIDR را با ماسک کردن بیت‌های خارج از پیشوند برمی‌گرداند.</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>cidr('192.168.0.0/24') == cidr('192.168.0.0/24').masked()</tt></td>
+  <td dir="rtl">یک CIDR را با شکل متعارف آن مقایسه می‌کند (CIDR از قبل متعارف است).</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>cidr('192.168.0.1/24') == cidr('192.168.0.1/24').masked()</tt></td>
+  <td dir="rtl">یک CIDR را با شکل متعارف آن مقایسه می‌کند (CIDR متعارف نیست).</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>cidr('192.168.0.0/16').prefixLength()</tt></td>
+  <td dir="rtl">طول پیشوند یک CIDR از نوع IPv4 را برمی‌گرداند.</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>cidr('::1/128').prefixLength()</tt></td>
+  <td dir="rtl">طول پیشوند یک CIDR از نوع IPv6 را برمی‌گرداند.</td>
+</tr>
+</tbody>
+</table>
+<p dir="rtl">برای اطلاعات بیشتر، مستندات godoc <a href="https://pkg.go.dev/k8s.io/apiserver/pkg/cel/library#CIDR" target="_blank" rel="noopener">کتابخانهٔ CIDR کوبرنتیز</a> را ببینید.</p>
+<h3 id="کتابخانهٔ-مجوزدهندهٔ-کوبرنتیز" dir="rtl">کتابخانهٔ مجوزدهندهٔ کوبرنتیز</h3>
+<p dir="rtl">در عبارت‌های CEL در API که متغیری از نوع <code dir="ltr">Authorizer</code> در دسترس است،
+می‌توان از مجوزدهنده (authorizer) برای انجام بررسی‌های مجوز برای هویت درخواست‌دهنده (principal)،
+یعنی کاربر احراز هویت‌شدهٔ درخواست، استفاده کرد.</p>
+<p dir="rtl">بررسی‌های مجوز برای منابع API به این صورت انجام می‌شوند:</p>
+<ol>
+<li dir="rtl">گروه و منبعی را که باید بررسی شود مشخص کنید: <code dir="ltr">Authorizer.group(string).resource(string) ResourceCheck</code></li>
+<li dir="rtl">در صورت نیاز، هر ترکیبی از توابع سازندهٔ زیر را فراخوانی کنید تا دامنهٔ بررسی مجوز محدودتر شود.
+توجه کنید که این توابع نوع گیرنده را برمی‌گردانند و می‌توان آن‌ها را به‌صورت زنجیره‌ای فراخوانی کرد:
+<ul>
+<li dir="ltr" class="ltr"><code dir="ltr">ResourceCheck.subresource(string) ResourceCheck</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">ResourceCheck.namespace(string) ResourceCheck</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">ResourceCheck.name(string) ResourceCheck</code></li>
+</ul>
+</li>
+<li dir="rtl">برای انجام بررسی مجوز، <code dir="ltr">ResourceCheck.check(verb string) Decision</code> را فراخوانی کنید.</li>
+<li dir="rtl">برای بررسی نتیجهٔ بررسی مجوز، <code dir="ltr">allowed() bool</code> یا <code dir="ltr">reason() string</code> را فراخوانی کنید.</li>
+</ol>
+<p dir="rtl">بررسی‌های مجوز برای موارد غیرمنبعی به این صورت انجام می‌شوند:</p>
+<ol>
+<li dir="rtl">فقط یک مسیر را مشخص کنید: <code dir="ltr">Authorizer.path(string) PathCheck</code></li>
+<li dir="rtl">برای انجام بررسی مجوز، <code dir="ltr">PathCheck.check(httpVerb string) Decision</code> را فراخوانی کنید.</li>
+<li dir="rtl">برای بررسی نتیجهٔ بررسی مجوز، <code dir="ltr">allowed() bool</code> یا <code dir="ltr">reason() string</code> را فراخوانی کنید.</li>
+</ol>
+<p dir="rtl">برای انجام بررسی مجوز برای یک حساب سرویس (service account):</p>
+<ul>
+<li dir="ltr" class="ltr"><code dir="ltr">Authorizer.serviceAccount(namespace string, name string) Authorizer</code></li>
+</ul>
+<table>
+<caption>نمونه‌هایی از عبارت‌های CEL که از توابع کتابخانهٔ URL استفاده می‌کنند</caption>
+<thead>
+<tr>
+  <th dir="rtl">عبارت CEL</th>
+  <th dir="rtl">هدف</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td dir="ltr" class="ltr"><tt>authorizer.group('').resource('pods').namespace('default').check('create').allowed()</tt></td>
+  <td dir="rtl">اگر هویت درخواست‌دهنده (کاربر یا حساب سرویس) مجاز به ایجاد پادها در فضای نام 'default' باشد، مقدار true برمی‌گرداند.</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>authorizer.path('/healthz').check('get').allowed()</tt></td>
+  <td dir="rtl">بررسی می‌کند که آیا هویت درخواست‌دهنده (کاربر یا حساب سرویس) مجاز است درخواست‌های HTTP GET را به مسیر API ‏/healthz ارسال کند یا نه.</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>authorizer.serviceAccount('default', 'myserviceaccount').resource('deployments').check('delete').allowed()<tt></tt></tt></td>
+  <td dir="rtl">بررسی می‌کند که آیا حساب سرویس مجاز به حذف Deploymentها است یا نه.</td>
+</tr>
+</tbody>
+</table>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
+<p dir="rtl">در عبارت‌های CEL در API که متغیری از نوع <code dir="ltr">Authorizer</code> در دسترس است،
+می‌توان انتخابگرهای فیلد و برچسب را نیز در بررسی‌های مجوز گنجاند.</p>
+<table>
+<caption>نمونه‌هایی از عبارت‌های CEL که از توابع مجوزدهی مبتنی بر انتخابگر استفاده می‌کنند</caption>
+<thead>
+<tr>
+  <th dir="rtl">عبارت CEL</th>
+  <th dir="rtl">هدف</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td dir="ltr" class="ltr"><tt>authorizer.group('').resource('pods').fieldSelector('spec.nodeName=mynode').check('list').allowed()</tt></td>
+  <td dir="rtl">
+    اگر هویت درخواست‌دهنده (کاربر یا حساب سرویس) مجاز باشد پادها را
+    با انتخابگر فیلد <tt>spec.nodeName=mynode</tt> فهرست کند، مقدار true برمی‌گرداند.
+  </td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>authorizer.group('').resource('pods').labelSelector('example.com/mylabel=myvalue').check('list').allowed()</tt></td>
+  <td dir="rtl">
+    اگر هویت درخواست‌دهنده (کاربر یا حساب سرویس) مجاز باشد پادها را
+    با انتخابگر برچسب <tt>example.com/mylabel=myvalue</tt> فهرست کند، مقدار true برمی‌گرداند.
+  </td>
+</tr>
+</tbody>
+</table>
+<p dir="rtl">برای اطلاعات بیشتر، مستندات godoc <a href="https://pkg.go.dev/k8s.io/apiserver/pkg/cel/library#Authz" target="_blank" rel="noopener">کتابخانهٔ Authz کوبرنتیز</a>
+و <a href="https://pkg.go.dev/k8s.io/apiserver/pkg/cel/library#AuthzSelectors" target="_blank" rel="noopener">کتابخانهٔ AuthzSelectors کوبرنتیز</a>
+را ببینید.</p>
+<h3 id="کتابخانهٔ-قالب-کوبرنتیز" dir="rtl">کتابخانهٔ قالب کوبرنتیز</h3>
+<p dir="rtl">کتابخانهٔ <code dir="ltr">format</code> توابعی برای اعتبارسنجی قالب‌های رایج رشته در کوبرنتیز فراهم می‌کند.
+این کتابخانه در <code dir="ltr">messageExpression</code> قواعد اعتبارسنجی کاربرد دارد و با آن می‌توان پیام‌های خطای دقیق‌تری ارائه کرد.</p>
+<p dir="rtl">این کتابخانه برای هر قالب نام‌دار یک تابع <code dir="ltr">format()</code> و همچنین یک تابع عمومی <code dir="ltr">format.named()</code> فراهم می‌کند.</p>
+<ul>
+<li dir="rtl">تابع <code dir="ltr">format.named(string)</code> → <code dir="ltr">?Format</code>: اگر قالبی با نام داده‌شده وجود داشته باشد، آبجکت <code dir="ltr">Format</code> آن را برمی‌گرداند. در غیر این صورت، <code dir="ltr">optional.none</code> را برمی‌گرداند.</li>
+<li dir="rtl">تابع <code dir="ltr">format.&lt;formatName&gt;() -&gt; Format</code>: توابع کمکی برای همهٔ قالب‌های نام‌دار نیز در دسترس هستند. برای مثال، <code dir="ltr">format.dns1123Label()</code> آبجکت <code dir="ltr">Format</code> مربوط به برچسب‌های DNS-1123 را برمی‌گرداند.</li>
+<li dir="rtl">تابع <code dir="ltr">&lt;Format&gt;.validate(string) -&gt; list&lt;string&gt;?</code>: رشتهٔ داده‌شده را با قالب مقایسه و اعتبارسنجی می‌کند. اگر رشته معتبر باشد، <code dir="ltr">optional.none</code> را برمی‌گرداند؛ در غیر این صورت، یک مقدار اختیاری (optional) شامل فهرستی از رشته‌های خطای اعتبارسنجی برمی‌گرداند.</li>
+</ul>
+<p dir="rtl"><strong>قالب‌های موجود:</strong></p>
+<p dir="rtl">نام‌های قالب زیر پشتیبانی می‌شوند:</p>
+<table>
+<caption>قالب‌های موجود در کتابخانهٔ format</caption>
+<thead>
+<tr>
+  <th dir="rtl">نام قالب</th>
+  <th dir="rtl">توضیح</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td dir="ltr" class="ltr"><tt>dns1123Label</tt></td>
+  <td dir="rtl">بررسی می‌کند که آیا رشته یک برچسب DNS-1123 معتبر است.</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>dns1123Subdomain</tt></td>
+  <td dir="rtl">بررسی می‌کند که آیا رشته یک زیردامنهٔ DNS-1123 معتبر است.</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>dns1035Label</tt></td>
+  <td dir="rtl">بررسی می‌کند که آیا رشته یک برچسب DNS-1035 معتبر است.</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>qualifiedName</tt></td>
+  <td dir="rtl">بررسی می‌کند که آیا رشته یک نام واجد شرایط (qualified name) معتبر است.</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>dns1123LabelPrefix</tt></td>
+  <td dir="rtl">بررسی می‌کند که آیا رشته یک پیشوند برچسب DNS-1123 معتبر است.</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>dns1123SubdomainPrefix</tt></td>
+  <td dir="rtl">بررسی می‌کند که آیا رشته یک پیشوند زیردامنهٔ DNS-1123 معتبر است.</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>dns1035LabelPrefix</tt></td>
+  <td dir="rtl">بررسی می‌کند که آیا رشته یک پیشوند برچسب DNS-1035 معتبر است.</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>labelValue</tt></td>
+  <td dir="rtl">بررسی می‌کند که آیا رشته یک مقدار برچسب معتبر است.</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>uri</tt></td>
+  <td dir="rtl">بررسی می‌کند که آیا رشته یک URI معتبر است. این قالب از همان الگوی `isURL` استفاده می‌کند، اما فهرستی از خطاها برمی‌گرداند.</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>uuid</tt></td>
+  <td dir="rtl">بررسی می‌کند که آیا رشته یک UUID معتبر است.</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>byte</tt></td>
+  <td dir="rtl">بررسی می‌کند که آیا رشته یک رشتهٔ معتبر با کدگذاری base64 است.</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>date</tt></td>
+  <td dir="rtl">بررسی می‌کند که آیا رشته یک تاریخ معتبر با قالب `YYYY-MM-DD` است.</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>datetime</tt></td>
+  <td dir="rtl">بررسی می‌کند که آیا رشته یک تاریخ و زمان معتبر با قالب RFC3339 است.</td>
+</tr>
+</tbody>
+</table>
+<p dir="rtl"><strong>نمونه‌ها:</strong></p>
+<table>
+<caption>نمونه‌هایی از عبارت‌های CEL که از توابع کتابخانهٔ format استفاده می‌کنند</caption>
+<thead>
+<tr>
+  <th dir="rtl">عبارت CEL</th>
+  <th dir="rtl">هدف</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td dir="ltr" class="ltr"><tt>!format.dns1123Label().validate(self.metadata.name).hasValue()</tt></td>
+  <td dir="rtl">یک قاعدهٔ اعتبارسنجی که بررسی می‌کند آیا نام یک آبجکت، برچسب DNS-1123 معتبری است یا نه.</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>format.dns1123Label().validate(self.metadata.name).orValue([]).join("\\n")</tt></td>
+  <td dir="rtl">یک `messageExpression` که خطاهای اعتبارسنجی مشخص یک فیلد را برمی‌گرداند. اگر فیلد معتبر باشد، `validate` مقدار `optional.none` را برمی‌گرداند و `orValue` یک فهرست خالی فراهم می‌کند که نتیجهٔ آن یک رشتهٔ خالی است.</td>
+</tr>
+</tbody>
+</table>
+<p dir="rtl">برای اطلاعات بیشتر، مستندات godoc <a href="https://pkg.go.dev/k8s.io/apiserver/pkg/cel/library#Format" target="_blank" rel="noopener">کتابخانهٔ Format کوبرنتیز</a> را ببینید.</p>
+<h3 id="کتابخانهٔ-مقدار-quantity-کوبرنتیز" dir="rtl">کتابخانهٔ مقدار (quantity) کوبرنتیز</h3>
+<p dir="rtl">کوبرنتیز از نسخهٔ 1.28 از کار با رشته‌های مقدار (مانند 1.5G، 512k و 20Mi) پشتیبانی می‌کند.</p>
+<ul>
+<li dir="rtl">تابع <code dir="ltr">isQuantity(string)</code> بررسی می‌کند که آیا یک رشته بر اساس
+<a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/api/resource#Quantity" target="_blank" rel="noopener">resource.Quantity در کوبرنتیز</a> یک Quantity معتبر است یا نه.</li>
+<li dir="rtl">تابع <code dir="ltr">quantity(string) Quantity</code> یک رشته را به Quantity تبدیل می‌کند. اگر رشته
+مقدار معتبری نباشد، خطا رخ می‌دهد.</li>
+</ul>
+<p dir="rtl">پس از تجزیهٔ رشته با تابع <code dir="ltr">quantity</code>، آبجکت Quantity حاصل
+توابع عضو زیر را در اختیار می‌گذارد:</p>
+<table>
+<caption>توابع عضو موجود برای Quantity</caption>
+<thead>
+<tr>
+  <th dir="rtl">تابع عضو</th>
+  <th dir="rtl">مقدار بازگشتی CEL</th>
+  <th dir="rtl">توضیح</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td dir="ltr" class="ltr"><tt>isInteger()</tt></td>
+  <td dir="ltr" class="ltr">bool</td>
+  <td dir="rtl">اگر و تنها اگر بتوان asInteger را بدون خطا فراخوانی کرد، مقدار true برمی‌گرداند</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>asInteger()</tt></td>
+  <td dir="ltr" class="ltr">int</td>
+  <td dir="rtl">
+    در صورت امکان، نمایشی از مقدار فعلی را به‌صورت <tt>int64</tt> برمی‌گرداند.
+    اگر این تبدیل به سرریز یا از دست رفتن دقت منجر شود، خطا رخ می‌دهد.
+  </td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>asApproximateFloat()</tt></td>
+  <td dir="ltr" class="ltr">float</td>
+  <td dir="rtl">
+    نمایشی از مقدار را به‌صورت <tt>float64</tt> برمی‌گرداند که ممکن است با از دست رفتن دقت همراه باشد.
+    اگر مقدار خارج از بازهٔ <tt>float64</tt> باشد،
+    <tt>+Inf/-Inf</tt> برگردانده می‌شود.</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>sign()</tt></td>
+  <td dir="ltr" class="ltr">int</td>
+  <td dir="rtl">
+    اگر مقدار مثبت باشد <tt>1</tt>، اگر منفی باشد <tt>-1</tt>
+    و اگر صفر باشد <tt>0</tt> برمی‌گرداند.
+  </td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>add(&lt;Quantity&gt;)</tt></td>
+  <td dir="ltr" class="ltr">Quantity</td>
+  <td dir="rtl">مجموع دو مقدار را برمی‌گرداند</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>add(&lt;int&gt;)</tt></td>
+  <td dir="ltr" class="ltr">Quantity</td>
+  <td dir="rtl">مجموع یک مقدار و یک عدد صحیح را برمی‌گرداند</td>
+  <td>
+</td></tr><tr>
+  <td dir="ltr" class="ltr"><tt>sub(&lt;Quantity&gt;)</tt></td>
+  <td dir="ltr" class="ltr">Quantity</td>
+  <td dir="rtl">تفاضل دو مقدار را برمی‌گرداند</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>sub(&lt;int&gt;)</tt></td>
+  <td dir="ltr" class="ltr">Quantity</td>
+  <td dir="rtl">تفاضل یک مقدار و یک عدد صحیح را برمی‌گرداند</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>isLessThan(&lt;Quantity&gt;)</tt></td>
+  <td dir="ltr" class="ltr">bool</td>
+  <td dir="rtl">اگر و تنها اگر گیرنده از عملوند کوچک‌تر باشد، مقدار true برمی‌گرداند</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>isGreaterThan(&lt;Quantity&gt;)</tt></td>
+  <td dir="ltr" class="ltr">bool</td>
+  <td dir="rtl">اگر و تنها اگر گیرنده از عملوند بزرگ‌تر باشد، مقدار true برمی‌گرداند</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>compareTo(&lt;Quantity&gt;)</tt></td>
+  <td dir="ltr" class="ltr">int</td>
+  <td dir="rtl">
+    گیرنده را با عملوند مقایسه می‌کند و اگر برابر باشند 0،
+    اگر گیرنده بزرگ‌تر باشد 1 و اگر گیرنده از عملوند کوچک‌تر باشد -1 برمی‌گرداند
+  </td>
+</tr>
+</tbody>
+</table>
+<p dir="rtl">نمونه‌ها:</p>
+<table>
+<caption>نمونه‌هایی از عبارت‌های CEL که از توابع کتابخانهٔ URL استفاده می‌کنند</caption>
+<thead>
+<tr>
+  <th dir="rtl">عبارت CEL</th>
+  <th dir="rtl">هدف</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td dir="ltr" class="ltr"><tt>quantity("500000G").isInteger()</tt></td>
+  <td dir="rtl">بررسی اینکه آیا تبدیل به عدد صحیح خطا ایجاد می‌کند یا نه</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>quantity("50k").asInteger()</tt></td>
+  <td dir="rtl">تبدیل دقیق به عدد صحیح</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>quantity("9999999999999999999999999999999999999G").asApproximateFloat()</tt></td>
+  <td dir="rtl">تبدیل به عدد اعشاری همراه با از دست رفتن دقت</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>quantity("50k").add(quantity("20k"))</tt></td>
+  <td dir="rtl">جمع دو مقدار</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>quantity("50k").sub(20000)</tt></td>
+  <td dir="rtl">کم کردن یک عدد صحیح از یک مقدار</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>quantity("50k").add(20).sub(quantity("100k")).sub(-50000)</tt></td>
+  <td dir="rtl">جمع و تفریق زنجیره‌ای اعداد صحیح و مقدارها</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>quantity("200M").compareTo(quantity("0.2G"))</tt></td>
+  <td dir="rtl">مقایسهٔ دو مقدار</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>quantity("150Mi").isGreaterThan(quantity("100Mi"))</tt></td>
+  <td dir="rtl">بررسی اینکه آیا یک مقدار از گیرنده بزرگ‌تر است یا نه</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>quantity("50M").isLessThan(quantity("100M"))</tt></td>
+  <td dir="rtl">بررسی اینکه آیا یک مقدار از گیرنده کوچک‌تر است یا نه</td>
+</tr>
+</tbody>
+</table>
+<h3 id="کتابخانهٔ-semver-کوبرنتیز" dir="rtl">کتابخانهٔ semver کوبرنتیز</h3>
+<p dir="rtl">کوبرنتیز از نسخهٔ v1.34 امکان تجزیه و مقایسهٔ رشته‌هایی را فراهم می‌کند که از مشخصهٔ Semantic Versioning 2.0.0 پیروی می‌کنند.
+برای آشنایی با الگوهای پذیرفته‌شده، به مستندات <a href="https://semver.org/" target="_blank" rel="noopener">semver.org</a> مراجعه کنید.</p>
+<ul>
+<li dir="rtl">تابع <code dir="ltr">isSemver(string)</code> بررسی می‌کند که آیا یک رشته، نسخهٔ معنایی معتبری است یا نه.</li>
+<li dir="rtl">تابع <code dir="ltr">semver(string)</code> یک رشته را به آبجکت Semver تبدیل می‌کند یا در غیر این صورت به خطا می‌انجامد.</li>
+</ul>
+<p dir="rtl">می‌توان آرگومان بولی اختیاری <code dir="ltr">normalize</code> را به <code dir="ltr">isSemver</code> و <code dir="ltr">semver</code> داد. اگر مقدار آن <code dir="ltr">true</code> باشد، فرایند نرمال‌سازی هر پیشوند «v» را حذف می‌کند، برای نسخه‌هایی که فقط مؤلفهٔ major یا major.minor دارند، شماره‌های minor و patch را برابر 0 قرار می‌دهد و همهٔ صفرهای ابتدایی را حذف می‌کند.</p>
+<p dir="rtl">پس از تجزیهٔ رشته با تابع <code dir="ltr">semver</code>، آبجکت Semver حاصل، کتابخانهٔ توابع عضو زیر را در اختیار می‌گذارد:</p>
+<table>
+<caption>توابع عضو در دسترس برای یک آبجکت Semver</caption>
+<thead>
+<tr>
+  <th dir="rtl">تابع عضو</th>
+  <th dir="rtl">مقدار بازگشتی CEL</th>
+  <th dir="rtl">توضیح</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td dir="ltr" class="ltr"><tt>major()</tt></td>
+  <td dir="ltr" class="ltr">int</td>
+  <td dir="rtl">شمارهٔ نسخهٔ اصلی (major) را برمی‌گرداند.</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>minor()</tt></td>
+  <td dir="ltr" class="ltr">int</td>
+  <td dir="rtl">شمارهٔ نسخهٔ فرعی (minor) را برمی‌گرداند.</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>patch()</tt></td>
+  <td dir="ltr" class="ltr">int</td>
+  <td dir="rtl">شمارهٔ وصله (patch) را برمی‌گرداند.</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>isLessThan(&lt;Semver&gt;)</tt></td>
+  <td dir="ltr" class="ltr">bool</td>
+  <td dir="rtl">اگر و تنها اگر گیرنده از عملوند کوچک‌تر باشد، true برمی‌گرداند.</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>isGreaterThan(&lt;Semver&gt;)</tt></td>
+  <td dir="ltr" class="ltr">bool</td>
+  <td dir="rtl">اگر و تنها اگر گیرنده از عملوند بزرگ‌تر باشد، true برمی‌گرداند.</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>compareTo(&lt;Semver&gt;)</tt></td>
+  <td dir="ltr" class="ltr">int</td>
+  <td dir="rtl">
+    گیرنده را با عملوند مقایسه می‌کند و اگر برابر باشند 0، اگر گیرنده بزرگ‌تر باشد 1
+    و اگر گیرنده از عملوند کوچک‌تر باشد -1 برمی‌گرداند.
+  </td>
+</tr>
+</tbody>
+</table>
+<p dir="rtl">مثال‌ها:</p>
+<table>
+<caption>نمونه‌هایی از عبارت‌های CEL که از توابع کتابخانهٔ semver استفاده می‌کنند</caption>
+<thead>
+<tr>
+  <th dir="rtl">عبارت CEL</th>
+  <th dir="rtl">هدف</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td dir="ltr" class="ltr"><tt>isSemver('1.0.0')</tt></td>
+  <td dir="rtl">برای یک رشتهٔ Semver معتبر، true برمی‌گرداند.</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>isSemver('v1.0', true)</tt></td>
+  <td dir="rtl">برای یک رشتهٔ Semver قابل نرمال‌سازی، true برمی‌گرداند.</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>semver('1.2.3').major()</tt></td>
+  <td dir="rtl">نسخهٔ اصلی یک Semver را برمی‌گرداند.</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>semver('1.2.3').compareTo(semver('2.0.0')) &lt; 0</tt></td>
+  <td dir="rtl">دو رشتهٔ Semver را با هم مقایسه می‌کند.</td>
+</tr>
+</tbody>
+</table>
+<p dir="rtl">برای اطلاعات بیشتر، godoc <a href="https://pkg.go.dev/k8s.io/apiserver/pkg/cel/library#SemverLib" target="_blank" rel="noopener">کتابخانهٔ Semver کوبرنتیز</a> را ببینید.</p>
+<h2 id="بررسی-نوع" dir="rtl">بررسی نوع</h2>
+<p dir="rtl">زبان CEL یک <a href="https://github.com/google/cel-spec/blob/master/doc/langdef.md#gradual-type-checking" target="_blank" rel="noopener">زبان با نوع‌دهی تدریجی</a> است.</p>
+<p dir="rtl">برخی از فیلدهای API کوبرنتیز حاوی عبارت‌های CEL هستند که نوع آن‌ها به‌طور کامل بررسی می‌شود. برای مثال،
+<a href="https://kubernetes.io/docs/tasks/extend-kubernetes/custom-resources/custom-resource-definitions/#validation-rules" target="_blank">قواعد اعتبارسنجی CustomResourceDefinitions</a>
+به‌طور کامل از نظر نوع بررسی می‌شوند.</p>
+<p dir="rtl">برخی دیگر از فیلدهای API کوبرنتیز حاوی عبارت‌های CEL با بررسی نوع جزئی هستند. عبارتی با بررسی نوع جزئی،
+عبارتی است که برخی از متغیرهای آن نوع ایستا و برخی دیگر نوع پویا دارند. برای مثال، در عبارت‌های CEL مربوط به
+<a href="../access-authn-authz/validating-admission-policy.html">ValidatingAdmissionPolicies</a>
+متغیر <code dir="ltr">request</code> نوع‌دار است، اما متغیر <code dir="ltr">object</code> نوع پویا دارد.
+در نتیجه، عبارتی که شامل <code dir="ltr">request.namex</code> باشد در بررسی نوع رد می‌شود، زیرا فیلد <code dir="ltr">namex</code> تعریف نشده است.
+اما <code dir="ltr">object.namex</code> حتی وقتی فیلد <code dir="ltr">namex</code> برای انواع منابعی که <code dir="ltr">object</code> به آن‌ها اشاره می‌کند تعریف نشده باشد،
+از بررسی نوع عبور می‌کند، زیرا <code dir="ltr">object</code> نوع پویا دارد.</p>
+<p dir="rtl">با ماکروی <code dir="ltr">has()</code> در عبارت‌های CEL می‌توان پیش از تلاش برای دسترسی به مقدار یک فیلد از متغیری با نوع پویا،
+وجود آن فیلد را بررسی کرد. برای مثال:</p>
+<pre dir="ltr"><code class="language-cel" dir="ltr">has(object.namex) ? object.namex == 'special' : request.name == 'special'
+</code></pre>
+<p dir="rtl">از <code dir="ltr">has()</code> برای بررسی وجود فیلد استفاده کنید، اما برای بررسی اینکه یک map حاوی کلید معینی است یا نه، از آن
+استفاده نکنید. برای مثال، عبارت
+<code dir="ltr">has(object.metadata.labels['example.com/environment'])</code> را ننویسید. برای بررسی کلیدهای map،
+به جای آن از عملگر <code dir="ltr">in</code> استفاده کنید. برای مثال:</p>
+<pre dir="ltr"><code class="language-cel" dir="ltr">has(object.metadata.labels) &amp;&amp; 'example.com/environment' in object.metadata.labels
+</code></pre>
+<p dir="rtl">این عبارت پیش از بررسی اینکه map حاوی کلید <code dir="ltr">example.com/environment</code> است یا نه،
+وجود <code dir="ltr">metadata.labels</code> را بررسی می‌کند.</p>
+<h2 id="یکپارچگی-با-سیستم-نوع" dir="rtl">یکپارچگی با سیستم نوع</h2>
+<table>
+<caption>جدول رابطهٔ میان انواع OpenAPIv3 و انواع CEL</caption>
+<thead>
+<tr>
+  <th dir="rtl">نوع OpenAPIv3</th>
+  <th dir="rtl">نوع CEL</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td dir="rtl">نوع 'object' دارای Properties</td>
+  <td dir="rtl">
+    نوع object / "message type"
+    (حاصل ارزیابی <tt>type(&lt;object&gt;)</tt> برابر
+     <tt>selfType&lt;uniqueNumber&gt;.path.to.object.from.self</tt> است)
+  </td>
+</tr>
+<tr>
+  <td dir="rtl">نوع 'object' دارای <tt>additionalProperties</tt></td>
+  <td dir="ltr" class="ltr">map</td>
+</tr>
+<tr>
+  <td dir="rtl">نوع 'object' دارای <tt>x-kubernetes-embedded-type</tt></td>
+  <td dir="rtl">
+    نوع object / "message type"؛ فیلدهای 'apiVersion'، 'kind'، 'metadata.name'
+    و 'metadata.generateName' به‌طور ضمنی در طرح‌واره (schema) گنجانده می‌شوند
+  </td>
+</tr>
+<tr>
+  <td dir="rtl">نوع 'object' دارای x-kubernetes-preserve-unknown-fields</td>
+  <td dir="rtl">نوع object / "message type"؛ فیلدهای ناشناخته در عبارت CEL به هیچ وجه در دسترس نیستند</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>x-kubernetes-int-or-string</tt></td>
+  <td dir="rtl">
+    اجتماع <tt>int</tt> یا <tt>string</tt>؛ عبارت
+    <tt>self.intOrString &lt; 100 | self.intOrString == '50%'</tt>
+    برای هر دو مقدار <tt>50</tt> و <tt>"50%"</tt> به true ارزیابی می‌شود
+  </td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr">'array'</td>
+  <td dir="ltr" class="ltr">list</td>
+</tr>
+<tr>
+  <td dir="rtl">نوع 'array' دارای <tt>x-kubernetes-list-type=map</tt></td>
+  <td dir="rtl">نوع list با برابری مبتنی بر map و تضمین یکتایی کلیدها</td>
+</tr>
+<tr>
+  <td dir="rtl">نوع 'array' دارای <tt>x-kubernetes-list-type=set</tt></td>
+  <td dir="rtl">نوع list با برابری مبتنی بر set و تضمین یکتایی عناصر</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr">'boolean'</td>
+  <td dir="ltr" class="ltr">boolean</td>
+</tr>
+<tr>
+  <td dir="rtl">نوع 'number' (همهٔ قالب‌ها)</td>
+  <td dir="ltr" class="ltr">double</td>
+</tr>
+<tr>
+  <td dir="rtl">نوع 'integer' (همهٔ قالب‌ها)</td>
+  <td dir="ltr" class="ltr">int (64)</td>
+</tr>
+<tr>
+  <td dir="rtl"><i>معادلی ندارد</i></td>
+  <td dir="ltr" class="ltr">uint (64)</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr">'null'</td>
+  <td dir="ltr" class="ltr">null_type</td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr">'string'</td>
+  <td dir="ltr" class="ltr">string</td>
+</tr>
+<tr>
+  <td dir="rtl">نوع 'string' با format=byte (کدگذاری‌شده با base64)</td>
+  <td dir="ltr" class="ltr">bytes</td>
+</tr>
+<tr>
+  <td dir="rtl">نوع 'string' با format=date</td>
+  <td dir="ltr" class="ltr">timestamp (<tt>google.protobuf.Timestamp</tt>)</td>
+</tr>
+<tr>
+  <td dir="rtl">نوع 'string' با format=datetime</td>
+  <td dir="ltr" class="ltr">timestamp (<tt>google.protobuf.Timestamp</tt>)</td>
+</tr>
+<tr>
+  <td dir="rtl">نوع 'string' با format=duration</td>
+  <td dir="ltr" class="ltr">duration (<tt>google.protobuf.Duration</tt>)</td>
+</tr>
+</tbody>
+</table>
+<p dir="rtl">همچنین ببینید: <a href="https://github.com/google/cel-spec/blob/v0.6.0/doc/langdef.md#values" target="_blank" rel="noopener">انواع CEL</a>،
+<a href="https://swagger.io/specification/#data-types" target="_blank" rel="noopener">انواع OpenAPI</a>،
+<a href="https://kubernetes.io/docs/tasks/extend-kubernetes/custom-resources/custom-resource-definitions/#specifying-a-structural-schema" target="_blank">طرح‌واره‌های ساختاری کوبرنتیز</a>.</p>
+<p dir="rtl">مقایسهٔ برابری برای آرایه‌هایی که <code dir="ltr">x-kubernetes-list-type</code> آن‌ها <code dir="ltr">set</code> یا <code dir="ltr">map</code> است، ترتیب عناصر را
+نادیده می‌گیرد. برای مثال، اگر آرایه‌ها نمایانگر مقادیر <code dir="ltr">set</code> کوبرنتیز باشند، <code dir="ltr">[1, 2] == [2, 1]</code> برقرار است.</p>
+<p dir="rtl">الحاق آرایه‌هایی که <code dir="ltr">x-kubernetes-list-type</code> دارند، از معناشناسی همان نوع لیست پیروی می‌کند:</p>
+<dl>
+<dt dir="ltr" class="ltr"><code dir="ltr">set</code></dt>
+<dd dir="rtl">عملگر <code dir="ltr">X + Y</code> اجتماعی را انجام می‌دهد که در آن موقعیت همهٔ عناصر <code dir="ltr">X</code> در آرایه حفظ می‌شود
+و عناصر غیرمشترک <code dir="ltr">Y</code> با حفظ ترتیب جزئی‌شان به انتها افزوده می‌شوند.</dd>
+<dt dir="ltr" class="ltr"><code dir="ltr">map</code></dt>
+<dd dir="rtl">عملگر <code dir="ltr">X + Y</code> ادغامی را انجام می‌دهد که در آن موقعیت همهٔ کلیدهای <code dir="ltr">X</code> در آرایه حفظ می‌شود،
+اما هنگامی که مجموعه‌کلیدهای <code dir="ltr">X</code> و <code dir="ltr">Y</code> اشتراک داشته باشند، مقادیر با مقادیر <code dir="ltr">Y</code> بازنویسی می‌شوند.
+عناصری از <code dir="ltr">Y</code> که کلیدهای غیرمشترک دارند، با حفظ ترتیب جزئی‌شان به انتها افزوده می‌شوند.</dd>
+</dl>
+<h2 id="گریزدهی-escaping" dir="rtl">گریزدهی (Escaping)</h2>
+<p dir="rtl">فقط نام ویژگی‌هایی از منابع کوبرنتیز که به شکل
+<code dir="ltr">[a-zA-Z_.-/][a-zA-Z0-9_.-/]*</code> هستند، از CEL در دسترس‌اند. نام ویژگی‌های در دسترس،
+هنگام دسترسی در عبارت، طبق قواعد زیر گریزدهی می‌شوند:</p>
+<table>
+<caption>جدول قواعد گریزدهی شناسه‌های CEL</caption>
+<thead>
+<tr>
+  <th dir="rtl">دنبالهٔ گریز</th>
+  <th dir="rtl">نام ویژگی معادل</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td dir="ltr" class="ltr"><tt>__underscores__</tt></td>
+  <td><tt>__</tt></td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>__dot__</tt></td>
+  <td><tt>.</tt></td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>__dash__</tt></td>
+  <td><tt>-</tt></td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>__slash__</tt></td>
+  <td><tt>/</tt></td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>__{keyword}__</tt></td>
+  <td dir="rtl">
+    <a href="https://github.com/google/cel-spec/blob/v0.6.0/doc/langdef.md#syntax" target="_blank" rel="noopener">
+      کلیدواژهٔ <b>رزروشدهٔ</b> CEL
+    </a>
+  </td>
+</tr>
+</tbody>
+</table>
+<p dir="rtl">وقتی هر یک از کلیدواژه‌های <strong>رزروشدهٔ</strong> CEL را گریزدهی می‌کنید، برای استفاده از گریزدهی با زیرخط،
+نام ویژگی باید دقیقاً با آن کلیدواژه مطابقت داشته باشد
+(برای مثال، <code dir="ltr">int</code> در واژهٔ <code dir="ltr">sprint</code> گریزدهی نمی‌شود و نیازی هم به گریزدهی ندارد).</p>
+<p dir="rtl">نمونه‌های گریزدهی:</p>
+<table>
+<caption>نمونه‌هایی از شناسه‌های گریزدهی‌شدهٔ CEL</caption>
+<thead>
+<tr>
+  <th dir="rtl">نام ویژگی</th>
+  <th dir="rtl">قاعده با نام ویژگی گریزدهی‌شده</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td dir="ltr" class="ltr"><tt>namespace</tt></td>
+  <td dir="ltr" class="ltr"><tt>self.__namespace__ &gt; 0</tt></td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>x-prop</tt></td>
+  <td dir="ltr" class="ltr"><tt>self.x__dash__prop &gt; 0</tt></td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>redact_d</tt></td>
+  <td dir="ltr" class="ltr"><tt>self.redact__underscores__d &gt; 0</tt></td>
+</tr>
+<tr>
+  <td dir="ltr" class="ltr"><tt>string</tt></td>
+  <td dir="ltr" class="ltr"><tt>self.startsWith('kube')</tt></td>
+</tr>
+</tbody>
+</table>
+<h2 id="محدودیت-های-منابع" dir="rtl">محدودیت‌های منابع</h2>
+<p dir="rtl">زبان CEL تورینگ‌کامل نیست و سازوکارهای ایمنی گوناگونی برای محیط عملیاتی فراهم می‌کند تا زمان اجرا را محدود کند.
+قابلیت‌های <em>محدودیت منابع</em> در CEL دربارهٔ پیچیدگی عبارت‌ها به توسعه‌دهندگان بازخورد می‌دهند و به محافظت از
+سرور API در برابر مصرف بیش از حد منابع هنگام ارزیابی کمک می‌کنند. از قابلیت‌های محدودیت منابع CEL برای
+جلوگیری از مصرف بیش از حد منابع سرور API در فرایند ارزیابی CEL استفاده می‌شود.</p>
+<p dir="rtl">یکی از عناصر کلیدی قابلیت‌های محدودیت منابع، <em>واحد هزینه</em> است که CEL آن را برای ردیابی مصرف CPU تعریف می‌کند.
+واحدهای هزینه مستقل از بار سیستم و سخت‌افزار هستند. این واحدها قطعی (deterministic) نیز هستند؛ یعنی برای
+هر عبارت CEL و دادهٔ ورودی معین، ارزیابی آن عبارت در مفسر CEL همواره به هزینهٔ یکسانی می‌انجامد.</p>
+<p dir="rtl">بسیاری از عملیات اصلی CEL هزینهٔ ثابتی دارند. ساده‌ترین عملیات، مانند مقایسه‌ها (برای مثال <code dir="ltr">&lt;</code>)، هزینه‌ای
+برابر 1 دارند. برخی از عملیات هزینهٔ ثابت بالاتری دارند؛ برای مثال، اعلان لیترال لیست هزینهٔ پایهٔ ثابتی
+برابر 40 واحد هزینه دارد.</p>
+<p dir="rtl">هزینهٔ فراخوانی توابعی که در کد بومی پیاده‌سازی شده‌اند، بر اساس پیچیدگی زمانی عملیات تخمین زده می‌شود.
+برای مثال، هزینهٔ عملیاتی که از عبارات منظم استفاده می‌کنند، مانند <code dir="ltr">match</code> و <code dir="ltr">find</code>، با مقدار تقریبی
+<code dir="ltr">length(regexString)*length(inputString)</code> تخمین زده می‌شود. این هزینهٔ تقریبی بازتاب‌دهندهٔ پیچیدگی زمانی
+بدترین حالت در پیاده‌سازی RE2 زبان Go است.</p>
+<h3 id="بودجهٔ-هزینهٔ-زمان-اجرا" dir="rtl">بودجهٔ هزینهٔ زمان اجرا</h3>
+<p dir="rtl">همهٔ عبارت‌های CEL که کوبرنتیز ارزیابی می‌کند، به یک بودجهٔ هزینهٔ زمان اجرا محدود هستند. بودجهٔ هزینهٔ
+زمان اجرا تخمینی از مصرف واقعی CPU است که با افزایش یک شمارندهٔ واحد هزینه در حین تفسیر عبارت CEL
+محاسبه می‌شود. اگر مفسر CEL دستورالعمل‌های بیش از حدی اجرا کند، از بودجهٔ هزینهٔ زمان اجرا فراتر می‌رود،
+اجرای عبارت‌ها متوقف می‌شود و خطایی رخ می‌دهد.</p>
+<p dir="rtl">برخی از منابع کوبرنتیز یک بودجهٔ هزینهٔ زمان اجرای اضافی تعریف می‌کنند که اجرای چند عبارت را محدود می‌کند.
+اگر مجموع هزینهٔ عبارت‌ها از این بودجه فراتر رود، اجرای عبارت‌ها متوقف می‌شود و خطایی رخ می‌دهد.
+برای مثال، اعتبارسنجی یک منبع سفارشی، بودجهٔ هزینهٔ زمان اجرای <em>به‌ازای هر اعتبارسنجی</em> برای همهٔ
+<a href="https://kubernetes.io/docs/tasks/extend-kubernetes/custom-resources/custom-resource-definitions/#validation-rules" target="_blank">قواعد اعتبارسنجی</a>
+دارد که برای اعتبارسنجی آن منبع سفارشی ارزیابی می‌شوند.</p>
+<h3 id="محدودیت-های-هزینهٔ-تخمینی" dir="rtl">محدودیت‌های هزینهٔ تخمینی</h3>
+<p dir="rtl">برای برخی از منابع کوبرنتیز، سرور API ممکن است همچنین بررسی کند که آیا زمان اجرای تخمینی عبارت‌های CEL
+در بدترین حالت، اجرای آن‌ها را بیش از حد پرهزینه می‌کند یا نه. در این صورت، سرور API با رد کردن عملیات
+ایجاد یا به‌روزرسانی‌ای که آن عبارت CEL را در منابع API قرار می‌دهند، از نوشته شدن آن عبارت در منابع API
+جلوگیری می‌کند. این قابلیت تضمین قوی‌تری فراهم می‌کند که عبارت‌های CEL نوشته‌شده در منبع API، در زمان اجرا
+بدون فراتر رفتن از بودجهٔ هزینهٔ زمان اجرا ارزیابی شوند.</p>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#مروری-بر-زبان">مروری بر زبان</a><a class="l2" href="#گزینه-ها،-قابلیت-های-زبانی-و-کتابخانه-های-cel">گزینه‌ها، قابلیت‌های زبانی و کتابخانه‌های CEL</a><a class="l2" href="#کتابخانه-های-cel-کوبرنتیز">کتابخانه‌های CEL کوبرنتیز</a><a class="l3" href="#کتابخانه-لیست-کوبرنتیز">کتابخانه لیست کوبرنتیز</a><a class="l3" href="#کتابخانه-regex-کوبرنتیز">کتابخانه regex کوبرنتیز</a><a class="l3" href="#کتابخانه-url-کوبرنتیز">کتابخانه URL کوبرنتیز</a><a class="l3" href="#کتابخانه-آدرس-ip-کوبرنتیز">کتابخانه آدرس IP کوبرنتیز</a><a class="l3" href="#کتابخانهٔ-cidr-کوبرنتیز">کتابخانهٔ CIDR کوبرنتیز</a><a class="l3" href="#کتابخانهٔ-مجوزدهندهٔ-کوبرنتیز">کتابخانهٔ مجوزدهندهٔ کوبرنتیز</a><a class="l3" href="#کتابخانهٔ-قالب-کوبرنتیز">کتابخانهٔ قالب کوبرنتیز</a><a class="l3" href="#کتابخانهٔ-مقدار-quantity-کوبرنتیز">کتابخانهٔ مقدار (quantity) کوبرنتیز</a><a class="l3" href="#کتابخانهٔ-semver-کوبرنتیز">کتابخانهٔ semver کوبرنتیز</a><a class="l2" href="#بررسی-نوع">بررسی نوع</a><a class="l2" href="#یکپارچگی-با-سیستم-نوع">یکپارچگی با سیستم نوع</a><a class="l2" href="#گریزدهی-escaping">گریزدهی (Escaping)</a><a class="l2" href="#محدودیت-های-منابع">محدودیت‌های منابع</a><a class="l3" href="#بودجهٔ-هزینهٔ-زمان-اجرا">بودجهٔ هزینهٔ زمان اجرا</a><a class="l3" href="#محدودیت-های-هزینهٔ-تخمینی">محدودیت‌های هزینهٔ تخمینی</a></nav>
+</div>
+</body>
+</html>

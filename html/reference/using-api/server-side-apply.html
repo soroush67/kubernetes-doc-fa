@@ -1,0 +1,434 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>اعمال سمت سرور (Server-Side Apply) | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">reference / using-api</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">اعمال سمت سرور (Server-Side Apply)</h1><!-- overview -->
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
+<p dir="rtl">کوبرنتیز از همکاری چند اعمال‌کننده (applier) برای مدیریت فیلدهای یک <a href="../../concepts/overview/working-with-objects/index.html">آبجکت</a> واحد پشتیبانی می‌کند.</p>
+<p dir="rtl">قابلیت Server-Side Apply سازوکاری اختیاری فراهم می‌کند تا control plane کلاستر شما بتواند تغییرات فیلدهای یک آبجکت را ردیابی کند. این قابلیت در سطح هر منبع مشخص، اطلاعات مربوط به کنترل بر فیلدهای آن آبجکت را ثبت و ردیابی می‌کند.</p>
+<p dir="rtl">قابلیت Server-Side Apply به کاربران و <span class="term" title="controller">کنترل‌کننده‌ها</span> کمک می‌کند منابع خود را از طریق پیکربندی اعلانی (declarative) مدیریت کنند. کلاینت‌ها می‌توانند با ارسال <em>قصد کاملاً مشخص‌شده</em> (fully specified intent) خود، <span class="term" title="object">آبجکت‌ها</span> را به‌صورت اعلانی ایجاد و ویرایش کنند.</p>
+<p dir="rtl">قصد کاملاً مشخص‌شده، آبجکتی جزئی است که فقط فیلدها و مقادیری را در بر می‌گیرد که کاربر درباره‌ی آن‌ها نظر مشخصی دارد. این قصد یا آبجکت جدیدی ایجاد می‌کند (و برای فیلدهای مشخص‌نشده از مقادیر پیش‌فرض استفاده می‌کند)، یا API server آن را با آبجکت موجود <a href="#merge-strategy">ترکیب</a> می‌کند.</p>
+<p dir="rtl">بخش <a href="#comparison-with-client-side-apply">مقایسه با اعمال سمت کلاینت</a> توضیح می‌دهد که Server-Side Apply چه تفاوتی با پیاده‌سازی اولیه و سمت کلاینت <code dir="ltr">kubectl apply</code> دارد.</p>
+<!-- body -->
+<h2 id="مدیریت-فیلدها" dir="rtl">مدیریت فیلدها</h2>
+<p dir="rtl">سرور API کوبرنتیز <em>فیلدهای مدیریت‌شده</em> (managed fields) را برای همه‌ی آبجکت‌هایی که تازه ایجاد می‌شوند ردیابی می‌کند.</p>
+<p dir="rtl">هنگام اعمال یک آبجکت، فیلدهایی که مقدار متفاوتی دارند و مالک آن‌ها <a href="#managers">مدیر</a> دیگری است، به <a href="#conflicts">تعارض</a> منجر می‌شوند. هدف از این کار اعلام این نکته است که عملیات ممکن است تغییرات همکار دیگری را خنثی کند. نوشتن در آبجکت‌هایی که فیلدهای مدیریت‌شده دارند را می‌توان اجباری کرد؛ در این صورت مقدار هر فیلد دارای تعارض بازنویسی می‌شود و مالکیت آن منتقل می‌شود.</p>
+<p dir="rtl">هر زمان که مقدار یک فیلد واقعاً تغییر کند، مالکیت آن از مدیر فعلی به مدیری منتقل می‌شود که تغییر را انجام داده است.</p>
+<p dir="rtl">مدیریت یک فیلد توسط کاربر، به مفهوم Server-Side Apply، به این معناست که کاربر به مقدار آن فیلد متکی است و انتظار دارد این مقدار تغییر نکند. کاربری که آخرین بار درباره‌ی مقدار یک فیلد اظهار نظر کرده است، به‌عنوان مدیر فعلی آن فیلد ثبت می‌شود. این کار با تغییر صریح جزئیات مدیر فیلد از طریق <code dir="ltr">POST</code> در HTTP (<strong>create</strong>)، <code dir="ltr">PUT</code> (<strong>update</strong>) یا <code dir="ltr">PATCH</code> غیر apply (<strong>patch</strong>) انجام‌شدنی است. همچنین می‌توانید با گنجاندن مقداری برای آن فیلد در یک عملیات Server-Side Apply، مدیر فیلد را اعلام و ثبت کنید.</p>
+<p dir="rtl">هر درخواست <strong>patch</strong> از نوع Server-Side Apply ایجاب می‌کند که کلاینت هویت خود را به‌عنوان یک <a href="#managers">مدیر فیلد</a> ارائه دهد. هنگام استفاده از Server-Side Apply، تلاش برای تغییر فیلدی که مدیر دیگری آن را کنترل می‌کند به رد شدن درخواست می‌انجامد، مگر اینکه کلاینت بازنویسی را اجباری کند. برای جزئیات بازنویسی‌ها، بخش <a href="#conflicts">تعارض‌ها</a> را ببینید.</p>
+<p dir="rtl">وقتی دو یا چند اعمال‌کننده یک فیلد را روی مقداری یکسان تنظیم کنند، در مالکیت آن فیلد شریک می‌شوند. پس از آن، هر تلاشی از سوی هر یک از این اعمال‌کننده‌ها برای تغییر مقدار فیلد مشترک به تعارض منجر می‌شود. مالکان مشترک یک فیلد می‌توانند با ارسال یک درخواست <strong>patch</strong> از نوع Server-Side Apply که آن فیلد را شامل نمی‌شود، از مالکیت آن صرف‌نظر کنند.</p>
+<p dir="rtl">جزئیات مدیریت فیلدها در فیلدی به نام <code dir="ltr">managedFields</code> ذخیره می‌شود که بخشی از <a href="https://kubernetes.io/docs/reference/kubernetes-api/common-definitions/object-meta/" target="_blank"><code dir="ltr">metadata</code></a> آبجکت است.</p>
+<p dir="rtl">اگر فیلدی را از یک مانیفست حذف کنید و آن مانیفست را اعمال کنید، Server-Side Apply بررسی می‌کند که آیا مدیر فیلد دیگری نیز مالک آن فیلد هست یا نه. اگر هیچ مدیر فیلد دیگری مالک آن نباشد، فیلد یا از آبجکت زنده حذف می‌شود یا، در صورت داشتن مقدار پیش‌فرض، به آن مقدار بازنشانی می‌شود. همین قاعده برای آیتم‌های لیست‌های انجمنی (associative list) یا mapها نیز صدق می‌کند.</p>
+<p dir="rtl">در مقایسه با حاشیه‌نویسی (annotation) قدیمی <a href="../labels-annotations-taints/index.html#kubectl-kubernetes-io-last-applied-configuration"><code dir="ltr">kubectl.kubernetes.io/last-applied-configuration</code></a> که <code dir="ltr">kubectl</code> آن را مدیریت می‌کند، Server-Side Apply رویکرد اعلانی‌تری دارد و به‌جای آخرین وضعیت اعمال‌شده‌ی کاربر، مدیریت فیلدها توسط کاربر (یا کلاینت) را ردیابی می‌کند. یکی از پیامدهای جانبی استفاده از Server-Side Apply این است که اطلاعات مربوط به اینکه کدام مدیر فیلد هر فیلد از آبجکت را مدیریت می‌کند نیز در دسترس قرار می‌گیرد.</p>
+<h3 id="مثال-ssa-example-configmap" dir="rtl">مثال {#ssa-example-configmap}</h3>
+<p dir="rtl">یک مثال ساده از آبجکتی که با Server-Side Apply ایجاد شده است می‌تواند به این شکل باشد:</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">دستور <code dir="ltr">kubectl get</code> به‌طور پیش‌فرض فیلدهای مدیریت‌شده را نمایش نمی‌دهد.
+برای نمایش <code dir="ltr">managedFields</code> در حالتی که قالب خروجی <code dir="ltr">json</code> یا <code dir="ltr">yaml</code> است، <code dir="ltr">--show-managed-fields</code> را اضافه کنید.</p>
+</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: test-cm
+  namespace: default
+  labels:
+    test-label: test
+  managedFields:
+  - manager: kubectl
+    operation: Apply # note capitalization: "Apply" (or "Update")
+    apiVersion: v1
+    time: "2010-10-10T0:00:00Z"
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:labels:
+          f:test-label: {}
+      f:data:
+        f:key: {}
+data:
+  key: some value
+</code></pre>
+<p dir="rtl">آبجکت ConfigMap این مثال یک رکورد مدیریت فیلد در <code dir="ltr">.metadata.managedFields</code> دارد. این رکورد شامل اطلاعات پایه درباره‌ی خود موجودیت مدیریت‌کننده، به‌علاوه‌ی جزئیات فیلدهای مدیریت‌شده و عملیات مربوط (<code dir="ltr">Apply</code> یا <code dir="ltr">Update</code>) است. اگر درخواستی که آخرین بار آن فیلد را تغییر داده یک <strong>patch</strong> از نوع Server-Side Apply بوده باشد، مقدار <code dir="ltr">operation</code> برابر <code dir="ltr">Apply</code> است؛ در غیر این صورت، برابر <code dir="ltr">Update</code> است.</p>
+<p dir="rtl">نتیجه‌ی ممکن دیگری نیز وجود دارد: کلاینت ممکن است بدنه‌ی درخواست نامعتبری ارسال کند. اگر قصد کاملاً مشخص‌شده به آبجکت معتبری منجر نشود، درخواست با شکست مواجه می‌شود.</p>
+<p dir="rtl">با این حال، تغییر <code dir="ltr">.metadata.managedFields</code> از طریق یک <strong>update</strong> یا یک عملیات <strong>patch</strong> که از Server-Side Apply استفاده نمی‌کند امکان‌پذیر است. انجام این کار به‌شدت توصیه نمی‌شود، اما ممکن است برای مثال وقتی <code dir="ltr">.metadata.managedFields</code> به وضعیتی ناسازگار دچار شده باشد (که در عملیات عادی نباید رخ دهد)، گزینه‌ی معقولی برای امتحان کردن باشد.</p>
+<p dir="rtl">قالب <code dir="ltr">managedFields</code> در مرجع API کوبرنتیز <a href="https://kubernetes.io/docs/reference/kubernetes-api/common-definitions/object-meta/#System" target="_blank">شرح داده شده است</a>.</p>
+<div class="callout caution"><div class="callout-title">احتیاط:</div>
+<p dir="rtl">فیلد <code dir="ltr">.metadata.managedFields</code> را API server مدیریت می‌کند.
+باید از به‌روزرسانی دستی آن خودداری کنید.</p>
+</div>
+<h3 id="تعارض-ها" dir="rtl">تعارض‌ها</h3>
+<p dir="rtl"><em>تعارض</em> (conflict) نوع خاصی از خطای وضعیت است که وقتی یک عملیات <code dir="ltr">Apply</code> تلاش می‌کند فیلدی را تغییر دهد که مدیر دیگری نیز مدعی مدیریت آن است، رخ می‌دهد. این کار مانع از آن می‌شود که یک اعمال‌کننده ناخواسته مقداری را که کاربر دیگری تنظیم کرده است بازنویسی کند. در این صورت، اعمال‌کننده برای حل تعارض‌ها سه گزینه دارد:</p>
+<ul>
+<li dir="rtl">
+<p dir="rtl"><strong>بازنویسی مقدار و تبدیل شدن به تنها مدیر:</strong> اگر بازنویسی مقدار عمدی بوده است (یا اگر اعمال‌کننده یک فرایند خودکار مانند یک کنترل‌کننده است)، اعمال‌کننده باید پارامتر کوئری <code dir="ltr">force</code> را روی true تنظیم کند (برای <code dir="ltr">kubectl apply</code> از پارامتر خط فرمان <code dir="ltr">--force-conflicts</code> استفاده می‌کنید) و درخواست را دوباره ارسال کند. این کار عملیات را وادار به موفقیت می‌کند، مقدار فیلد را تغییر می‌دهد و فیلد را از ورودی‌های همه‌ی مدیران دیگر در <code dir="ltr">managedFields</code> حذف می‌کند.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><strong>بازنویسی نکردن مقدار و صرف‌نظر از ادعای مدیریت:</strong> اگر مقدار فیلد دیگر برای اعمال‌کننده اهمیتی ندارد، می‌تواند آن را از مدل محلی خود از منبع حذف کند و درخواست جدیدی بدون آن فیلد ارسال کند. با این کار مقدار بدون تغییر باقی می‌ماند و فیلد از ورودی اعمال‌کننده در <code dir="ltr">managedFields</code> حذف می‌شود.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><strong>بازنویسی نکردن مقدار و تبدیل شدن به مدیر مشترک:</strong> اگر مقدار فیلد همچنان برای اعمال‌کننده مهم است اما نمی‌خواهد آن را بازنویسی کند، می‌تواند مقدار آن فیلد را در مدل محلی خود از منبع طوری تغییر دهد که با مقدار آبجکت روی سرور مطابقت داشته باشد، و سپس درخواست جدیدی ارسال کند که این به‌روزرسانی محلی را در نظر بگیرد. با این کار مقدار بدون تغییر باقی می‌ماند و مدیریت آن فیلد میان اعمال‌کننده و همه‌ی مدیران فیلد دیگری که پیش‌تر مدعی مدیریت آن بوده‌اند به اشتراک گذاشته می‌شود.</p>
+</li>
+</ul>
+<h3 id="مدیران-فیلد-managers" dir="rtl">مدیران فیلد {#managers}</h3>
+<p dir="rtl">مدیران، گردش‌کارهای متمایزی را که آبجکت را تغییر می‌دهند مشخص می‌کنند (که به‌ویژه هنگام بروز تعارض مفید است!) و می‌توان آن‌ها را از طریق پارامتر کوئری <a href="https://kubernetes.io/docs/reference/kubernetes-api/common-parameters/common-parameters/#fieldManager" target="_blank"><code dir="ltr">fieldManager</code></a> به‌عنوان بخشی از یک درخواست تغییردهنده تعیین کرد. هنگامی که روی یک منبع Apply انجام می‌دهید، پارامتر <code dir="ltr">fieldManager</code> الزامی است. برای سایر به‌روزرسانی‌ها، API server هویت مدیر فیلد را از سرآیند HTTP با نام "User-Agent:" (در صورت وجود) استنتاج می‌کند.</p>
+<p dir="rtl">وقتی از ابزار <code dir="ltr">kubectl</code> برای انجام عملیات Server-Side Apply استفاده می‌کنید، <code dir="ltr">kubectl</code> به‌طور پیش‌فرض هویت مدیر را <code dir="ltr">"kubectl"</code> تنظیم می‌کند.</p>
+<h2 id="سریال-سازی" dir="rtl">سریال‌سازی</h2>
+<p dir="rtl">در سطح پروتکل، کوبرنتیز بدنه‌ی پیام‌های Server-Side Apply را به‌صورت <a href="https://yaml.org/" target="_blank" rel="noopener">YAML</a> و با نوع رسانه‌ی <code dir="ltr">application/apply-patch+yaml</code> نمایش می‌دهد.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">چه داده‌ی JSON ارسال کنید و چه داده‌ی YAML، از <code dir="ltr">application/apply-patch+yaml</code> به‌عنوان مقدار سرآیند <code dir="ltr">Content-Type</code> استفاده کنید.</p>
+<p dir="rtl">همه‌ی اسناد JSON، YAML معتبر نیز هستند. با این حال، کوبرنتیز باگی دارد که در آن از تجزیه‌گری برای YAML استفاده می‌کند که مشخصات YAML را به‌طور کامل پیاده‌سازی نمی‌کند. ممکن است برخی از نویسه‌های گریز (escape) در JSON شناسایی نشوند.</p>
+</div>
+<p dir="rtl">سریال‌سازی همانند سریال‌سازی آبجکت‌های کوبرنتیز است، با این تفاوت که کلاینت‌ها ملزم به ارسال آبجکت کامل نیستند.</p>
+<p dir="rtl">در ادامه نمونه‌ای از بدنه‌ی پیام Server-Side Apply (قصد کاملاً مشخص‌شده) آمده است:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">{
+  "apiVersion": "v1",
+  "kind": "ConfigMap"
+}
+</code></pre>
+<p dir="rtl">(این پیام، به شرط آنکه به‌عنوان بدنه‌ی یک درخواست <strong>patch</strong> به یک منبع معتبر <code dir="ltr">v1/configmaps</code> و با <code dir="ltr">Content-Type</code> مناسب ارسال شود، یک به‌روزرسانی بدون تغییر ایجاد می‌کند.)</p>
+<h2 id="عملیات-هایی-که-مدیریت-فیلدها-شامل-آن-ها-می-شود-apply-and-update" dir="rtl">عملیات‌هایی که مدیریت فیلدها شامل آن‌ها می‌شود {#apply-and-update}</h2>
+<p dir="rtl">عملیات‌هایی از API کوبرنتیز که مدیریت فیلدها در آن‌ها لحاظ می‌شود عبارت‌اند از:</p>
+<ol>
+<li dir="rtl">اعمال سمت سرور (<code dir="ltr">PATCH</code> در HTTP با نوع محتوای <code dir="ltr">application/apply-patch+yaml</code>)</li>
+<li dir="rtl">جایگزینی یک آبجکت موجود (<strong>update</strong> در کوبرنتیز؛ <code dir="ltr">PUT</code> در سطح HTTP)</li>
+</ol>
+<p dir="rtl">هر دو عملیات <code dir="ltr">.metadata.managedFields</code> را به‌روزرسانی می‌کنند، اما رفتار کمی متفاوتی دارند.</p>
+<p dir="rtl">عملیات apply که با تعارض در سطح فیلد روبه‌رو شود، همیشه با شکست مواجه می‌شود، مگر اینکه بازنویسی اجباری را مشخص کرده باشید. در مقابل، اگر با <strong>update</strong> تغییری ایجاد کنید که بر یک فیلد مدیریت‌شده اثر بگذارد، تعارض هرگز باعث شکست عملیات نمی‌شود.</p>
+<p dir="rtl">همه‌ی درخواست‌های <strong>patch</strong> از نوع Server-Side Apply باید با ارائه‌ی پارامتر کوئری <code dir="ltr">fieldManager</code> هویت خود را مشخص کنند، در حالی که این پارامتر برای عملیات‌های <strong>update</strong> اختیاری است. در نهایت، هنگام استفاده از عملیات <code dir="ltr">Apply</code> نمی‌توانید <code dir="ltr">managedFields</code> را در بدنه‌ی درخواستی که ارسال می‌کنید تعریف کنید.</p>
+<p dir="rtl">نمونه‌ای از یک آبجکت با چند مدیر می‌تواند به این شکل باشد:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: test-cm
+  namespace: default
+  labels:
+    test-label: test
+  managedFields:
+  - manager: kubectl
+    operation: Apply
+    time: '2019-03-30T15:00:00.000Z'
+    apiVersion: v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:labels:
+          f:test-label: {}
+  - manager: kube-controller-manager
+    operation: Update
+    apiVersion: v1
+    time: '2019-03-30T16:00:00.000Z'
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:data:
+        f:key: {}
+data:
+  key: new value
+</code></pre>
+<p dir="rtl">در این مثال، عملیات دوم به‌صورت یک <strong>update</strong> توسط مدیری به نام <code dir="ltr">kube-controller-manager</code> اجرا شده است. درخواست به‌روزرسانی موفق بود و مقداری را در فیلد data تغییر داد و همین باعث شد مدیریت آن فیلد به <code dir="ltr">kube-controller-manager</code> منتقل شود.</p>
+<p dir="rtl">اگر به‌جای آن، این به‌روزرسانی با Server-Side Apply انجام می‌شد، درخواست به دلیل تعارض در مالکیت با شکست مواجه می‌شد.</p>
+<h2 id="راهبرد-ادغام" dir="rtl">راهبرد ادغام</h2>
+<p dir="rtl">راهبرد ادغامی که با Server-Side Apply پیاده‌سازی شده است، به‌طور کلی چرخه‌ی عمر پایدارتری برای آبجکت فراهم می‌کند. این قابلیت به‌جای چیره شدن بر اساس مقادیر، تلاش می‌کند فیلدها را بر اساس عاملی که آن‌ها را مدیریت می‌کند ادغام کند. به این ترتیب، چند عامل می‌توانند یک آبجکت واحد را بدون ایجاد تداخل غیرمنتظره به‌روزرسانی کنند.</p>
+<p dir="rtl">وقتی کاربر یک آبجکت <em>قصد کاملاً مشخص‌شده</em> را به endpoint مربوط به Server-Side Apply ارسال می‌کند، سرور آن را با آبجکت زنده ادغام می‌کند و اگر مقداری در هر دو جا مشخص شده باشد، مقدار موجود در بدنه‌ی درخواست را ترجیح می‌دهد. اگر مجموعه‌ی آیتم‌های موجود در پیکربندی اعمال‌شده ابرمجموعه‌ای از آیتم‌هایی نباشد که همان کاربر دفعه‌ی قبل اعمال کرده بود، هر آیتم غایبی که هیچ اعمال‌کننده‌ی دیگری آن را مدیریت نمی‌کند حذف می‌شود. برای اطلاعات بیشتر درباره‌ی نحوه‌ی استفاده از طرح‌واره‌ی (schema) آبجکت برای تصمیم‌گیری هنگام ادغام، به <a href="https://sigs.k8s.io/structured-merge-diff" target="_blank" rel="noopener">sigs.k8s.io/structured-merge-diff</a> مراجعه کنید.</p>
+<p dir="rtl">API کوبرنتیز (و کد Go که این API را برای کوبرنتیز پیاده‌سازی می‌کند) امکان تعریف <em>نشانگرهای راهبرد ادغام</em> (merge strategy markers) را فراهم می‌کند. این نشانگرها راهبرد ادغام پشتیبانی‌شده برای فیلدهای درون آبجکت‌های کوبرنتیز را توصیف می‌کنند. برای یک <span class="term" title="CustomResourceDefinition">CustomResourceDefinition</span>، می‌توانید این نشانگرها را هنگام تعریف منبع سفارشی تنظیم کنید.</p>
+<table>
+<thead>
+<tr>
+<th dir="rtl">نشانگر Golang</th>
+<th dir="rtl">افزونه‌ی OpenAPI</th>
+<th dir="rtl">مقادیر ممکن</th>
+<th dir="rtl">توضیحات</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">//+listType</code></td>
+<td dir="ltr" class="ltr"><code dir="ltr">x-kubernetes-list-type</code></td>
+<td dir="ltr" class="ltr"><code dir="ltr">atomic</code>/<code dir="ltr">set</code>/<code dir="ltr">map</code></td>
+<td dir="rtl">قابل اعمال بر لیست‌ها. مقدار <code dir="ltr">set</code> برای لیست‌هایی به کار می‌رود که فقط عناصر اسکالر دارند. این عناصر باید یکتا باشند. مقدار <code dir="ltr">map</code> فقط برای لیست‌هایی از انواع تودرتو به کار می‌رود. مقادیر کلید (<code dir="ltr">listMapKey</code> را ببینید) باید در لیست یکتا باشند. مقدار <code dir="ltr">atomic</code> را می‌توان برای هر لیستی به کار برد. اگر <code dir="ltr">atomic</code> پیکربندی شود، کل لیست هنگام ادغام جایگزین می‌شود. در هر لحظه، فقط یک مدیر مالک لیست است. اگر <code dir="ltr">set</code> یا <code dir="ltr">map</code> باشد، مدیران مختلف می‌توانند ورودی‌ها را جداگانه مدیریت کنند.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">//+listMapKey</code></td>
+<td dir="ltr" class="ltr"><code dir="ltr">x-kubernetes-list-map-keys</code></td>
+<td dir="rtl">لیستی از نام فیلدها، مثلاً <code dir="ltr">["port", "protocol"]</code></td>
+<td dir="rtl">فقط زمانی قابل اعمال است که <code dir="ltr">+listType=map</code> باشد. لیستی از نام فیلدهایی که مقادیرشان ورودی‌های لیست را به‌طور یکتا مشخص می‌کنند. با اینکه ممکن است چند کلید وجود داشته باشد، <code dir="ltr">listMapKey</code> مفرد است، زیرا کلیدها باید در نوع Go به‌صورت جداگانه مشخص شوند. فیلدهای کلید باید اسکالر باشند.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">//+mapType</code></td>
+<td dir="ltr" class="ltr"><code dir="ltr">x-kubernetes-map-type</code></td>
+<td dir="ltr" class="ltr"><code dir="ltr">atomic</code>/<code dir="ltr">granular</code></td>
+<td dir="rtl">قابل اعمال بر mapها. مقدار <code dir="ltr">atomic</code> یعنی map فقط می‌تواند به‌طور کامل و توسط یک مدیر واحد جایگزین شود. مقدار <code dir="ltr">granular</code> یعنی map از به‌روزرسانی فیلدهای جداگانه توسط مدیران مجزا پشتیبانی می‌کند.</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">//+structType</code></td>
+<td dir="ltr" class="ltr"><code dir="ltr">x-kubernetes-map-type</code></td>
+<td dir="ltr" class="ltr"><code dir="ltr">atomic</code>/<code dir="ltr">granular</code></td>
+<td dir="rtl">قابل اعمال بر structها؛ در غیر این صورت، کاربرد و حاشیه‌نویسی OpenAPI آن همانند <code dir="ltr">//+mapType</code> است.</td>
+</tr>
+</tbody>
+</table>
+<p dir="rtl">اگر <code dir="ltr">listType</code> وجود نداشته باشد، API server نشانگر <code dir="ltr">patchStrategy=merge</code> را به‌عنوان <code dir="ltr">listType=map</code> و نشانگر <code dir="ltr">patchMergeKey</code> متناظر را به‌عنوان <code dir="ltr">listMapKey</code> تفسیر می‌کند.</p>
+<p dir="rtl">نوع لیست <code dir="ltr">atomic</code> بازگشتی است.</p>
+<p dir="rtl">(در کد <a href="https://go.dev/" target="_blank" rel="noopener">Go</a> کوبرنتیز، این نشانگرها به‌صورت توضیح (comment) مشخص می‌شوند و نویسندگان کد نیازی ندارند آن‌ها را به‌عنوان برچسب فیلد (field tag) تکرار کنند.)</p>
+<h2 id="منابع-سفارشی-و-server-side-apply" dir="rtl">منابع سفارشی و Server-Side Apply</h2>
+<p dir="rtl">به‌طور پیش‌فرض، Server-Side Apply منابع سفارشی را به‌عنوان داده‌ی بدون ساختار در نظر می‌گیرد. با همه‌ی کلیدها همانند فیلدهای struct رفتار می‌شود و همه‌ی لیست‌ها atomic در نظر گرفته می‌شوند.</p>
+<p dir="rtl">اگر CustomResourceDefinition یک <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.37#jsonschemaprops-v1-apiextensions-k8s-io" target="_blank">طرح‌واره</a> تعریف کند که شامل حاشیه‌نویسی‌هایی باشد که در بخش پیشین <a href="#merge-strategy">راهبرد ادغام</a> تعریف شدند، این حاشیه‌نویسی‌ها هنگام ادغام آبجکت‌های این نوع به کار می‌روند.</p>
+<h3 id="سازگاری-در-برابر-تغییرات-توپولوژی" dir="rtl">سازگاری در برابر تغییرات توپولوژی</h3>
+<p dir="rtl">در موارد نادر، نویسنده‌ی یک CustomResourceDefinition (CRD) یا یک منبع داخلی ممکن است بخواهد توپولوژی مشخص یک فیلد را در منبع خود تغییر دهد، بدون آنکه نسخه‌ی API آن را افزایش دهد. تغییر توپولوژی انواع، چه با ارتقای کلاستر و چه با به‌روزرسانی CRD، هنگام به‌روزرسانی آبجکت‌های موجود پیامدهای متفاوتی دارد. این تغییرات دو دسته‌اند: حالتی که فیلد از <code dir="ltr">map</code>/<code dir="ltr">set</code>/<code dir="ltr">granular</code> به <code dir="ltr">atomic</code> تغییر می‌کند، و حالت عکس آن.</p>
+<p dir="rtl">وقتی <code dir="ltr">listType</code>، <code dir="ltr">mapType</code> یا <code dir="ltr">structType</code> از <code dir="ltr">map</code>/<code dir="ltr">set</code>/<code dir="ltr">granular</code> به <code dir="ltr">atomic</code> تغییر کند، کل لیست، map یا struct آبجکت‌های موجود در نهایت به مالکیت عامل‌هایی درمی‌آید که مالک عنصری از این انواع بوده‌اند. این یعنی هر تغییر بعدی در این آبجکت‌ها به تعارض منجر می‌شود.</p>
+<p dir="rtl">وقتی <code dir="ltr">listType</code>، <code dir="ltr">mapType</code> یا <code dir="ltr">structType</code> از <code dir="ltr">atomic</code> به <code dir="ltr">map</code>/<code dir="ltr">set</code>/<code dir="ltr">granular</code> تغییر کند، API server نمی‌تواند مالکیت جدید این فیلدها را استنتاج کند. به همین دلیل، هنگام به‌روزرسانی این فیلدها در آبجکت‌ها هیچ تعارضی ایجاد نمی‌شود. از این رو، تغییر یک نوع از <code dir="ltr">atomic</code> به <code dir="ltr">map</code>/<code dir="ltr">set</code>/<code dir="ltr">granular</code> توصیه نمی‌شود.</p>
+<p dir="rtl">برای مثال، این منبع سفارشی را در نظر بگیرید:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">---
+apiVersion: example.com/v1
+kind: Foo
+metadata:
+  name: foo-sample
+  managedFields:
+  - manager: "manager-one"
+    operation: Apply
+    apiVersion: example.com/v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:spec:
+        f:data: {}
+spec:
+  data:
+    key1: val1
+    key2: val2
+</code></pre>
+<p dir="rtl">پیش از آنکه <code dir="ltr">spec.data</code> از <code dir="ltr">atomic</code> به <code dir="ltr">granular</code> تغییر کند، <code dir="ltr">manager-one</code> مالک فیلد <code dir="ltr">spec.data</code> و همه‌ی فیلدهای درون آن (<code dir="ltr">key1</code> و <code dir="ltr">key2</code>) است. وقتی CRD طوری تغییر کند که <code dir="ltr">spec.data</code> به <code dir="ltr">granular</code> تبدیل شود، <code dir="ltr">manager-one</code> همچنان مالک فیلد سطح بالای <code dir="ltr">spec.data</code> باقی می‌ماند (یعنی هیچ مدیر دیگری نمی‌تواند map به نام <code dir="ltr">data</code> را بدون تعارض حذف کند)، اما دیگر مالک <code dir="ltr">key1</code> و <code dir="ltr">key2</code> نیست؛ بنابراین مدیر دیگری می‌تواند این فیلدها را بدون تعارض تغییر دهد یا حذف کند.</p>
+<h2 id="استفاده-از-اعمال-سمت-سرور-در-یک-کنترل-کننده" dir="rtl">استفاده از اعمال سمت سرور در یک کنترل‌کننده</h2>
+<p dir="rtl">اگر توسعه‌دهندهٔ یک کنترل‌کننده هستید، می‌توانید از اعمال سمت سرور (Server-Side Apply) برای ساده‌کردن منطق به‌روزرسانی کنترل‌کنندهٔ خود استفاده کنید. تفاوت‌های اصلی این روش با الگوی «خواندن-تغییر-نوشتن» (read-modify-write) و/یا وصله (patch) به شرح زیر است:</p>
+<ul>
+<li dir="rtl">آبجکت اعمال‌شده باید همهٔ فیلدهایی را که برای کنترل‌کننده اهمیت دارند در بر داشته باشد.</li>
+<li dir="rtl">هیچ راهی برای حذف فیلدهایی که کنترل‌کننده پیش‌تر آن‌ها را اعمال نکرده است وجود ندارد (کنترل‌کننده همچنان می‌تواند برای این موارد یک <strong>patch</strong> یا <strong>update</strong> ارسال کند).</li>
+<li dir="rtl">لازم نیست آبجکت از قبل خوانده شود و نیازی به تعیین <code dir="ltr">resourceVersion</code> نیست.</li>
+</ul>
+<p dir="rtl">اکیداً توصیه می‌شود کنترل‌کننده‌ها همیشه روی آبجکت‌هایی که مالک و مدیر آن‌ها هستند تعارض‌ها را به‌اجبار (force) نادیده بگیرند، زیرا ممکن است نتوانند این تعارض‌ها را حل کنند یا بر اساس آن‌ها اقدامی انجام دهند.</p>
+<h2 id="انتقال-مالکیت" dir="rtl">انتقال مالکیت</h2>
+<p dir="rtl">اعمال سمت سرور علاوه بر کنترل‌های هم‌روندی که از طریق <a href="#conflicts">حل تعارض</a> فراهم می‌شود، روش‌هایی برای انتقال هماهنگ مالکیت فیلدها از کاربران به کنترل‌کننده‌ها نیز ارائه می‌دهد.</p>
+<p dir="rtl">این موضوع با یک مثال بهتر توضیح داده می‌شود. در ادامه می‌بینیم که چگونه می‌توان هنگام فعال‌کردن مقیاس‌پذیری افقی خودکار برای یک Deployment، با استفاده از منبع HorizontalPodAutoscaler و کنترل‌کنندهٔ همراه آن، مالکیت فیلد <code dir="ltr">replicas</code> را به‌طور ایمن از یک کاربر به یک کنترل‌کننده منتقل کرد.</p>
+<p dir="rtl">فرض کنید کاربری یک Deployment تعریف کرده و مقدار <code dir="ltr">replicas</code> را روی مقدار دلخواه تنظیم کرده است:</p>
+<div class="code-file ltr" dir="ltr">application/ssa/nginx-deployment.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  labels:
+    app: nginx
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.14.2
+</code></pre>
+<p dir="rtl">و کاربر این Deployment را با اعمال سمت سرور، به شکل زیر ایجاد کرده است:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f https://k8s.io/examples/application/ssa/nginx-deployment.yaml --server-side
+</code></pre>
+<p dir="rtl">سپس در زمانی دیگر، مقیاس‌پذیری خودکار برای این Deployment فعال می‌شود؛ برای مثال:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl autoscale deployment nginx-deployment --cpu=50% --min=1 --max=10
+</code></pre>
+<p dir="rtl">اکنون کاربر می‌خواهد <code dir="ltr">replicas</code> را از پیکربندی خود حذف کند تا به‌طور ناخواسته با HorizontalPodAutoscaler (HPA) و کنترل‌کنندهٔ آن درگیر نشود. اما در این میان یک وضعیت رقابتی (race) وجود دارد: ممکن است مدتی طول بکشد تا HPA نیاز به تنظیم <code dir="ltr">.spec.replicas</code> را تشخیص دهد. اگر کاربر <code dir="ltr">.spec.replicas</code> را پیش از آنکه HPA در این فیلد بنویسد و مالک آن شود حذف کند، سرور API مقدار <code dir="ltr">.spec.replicas</code> را روی ۱ (تعداد پیش‌فرض رپلیکا برای Deployment) تنظیم می‌کند. کاربر چنین چیزی را، حتی به‌طور موقت، نمی‌خواهد؛ زیرا این وضعیت ممکن است کارایی یک بار کاری در حال اجرا را به‌شدت کاهش دهد.</p>
+<p dir="rtl">دو راه‌حل وجود دارد:</p>
+<ul>
+<li dir="rtl">
+<p dir="rtl">(ساده) فیلد <code dir="ltr">replicas</code> را در پیکربندی نگه دارید. هنگامی که HPA سرانجام در این فیلد بنویسد، سیستم برای این فیلد به کاربر تعارض اعلام می‌کند. در این مرحله، حذف آن از پیکربندی ایمن است.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">(پیشرفته‌تر) اما اگر کاربر نخواهد منتظر بماند، برای مثال به این دلیل که می‌خواهد کلاستر برای همکارانش خوانا و قابل‌فهم بماند، می‌تواند گام‌های زیر را انجام دهد تا حذف <code dir="ltr">replicas</code> از پیکربندی‌اش ایمن شود:</p>
+</li>
+</ul>
+<p dir="rtl">ابتدا کاربر یک مانیفست جدید تعریف می‌کند که تنها شامل فیلد <code dir="ltr">replicas</code> است:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr"># Save this file as 'nginx-deployment-replicas-only.yaml'.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+spec:
+  replicas: 3
+</code></pre>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">در این حالت، فایل YAML مربوط به اعمال سمت سرور تنها فیلدهایی را در بر دارد که می‌خواهید تغییر دهید. اگر فقط می‌خواهید فیلد <code dir="ltr">spec.replicas</code> را با اعمال سمت سرور تغییر دهید، لازم نیست یک مانیفست کامل و معتبر برای Deployment ارائه کنید.</p>
+</div>
+<p dir="rtl">کاربر این مانیفست را با یک نام اختصاصی برای مدیر فیلد (field manager) اعمال می‌کند. در این مثال، کاربر نام <code dir="ltr">handover-to-hpa</code> را انتخاب کرده است:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f nginx-deployment-replicas-only.yaml \
+  --server-side --field-manager=handover-to-hpa \
+  --validate=false
+</code></pre>
+<p dir="rtl">اگر این اعمال به تعارض با کنترل‌کنندهٔ HPA منجر شد، کاری انجام ندهید. این تعارض نشان می‌دهد که کنترل‌کننده زودتر از آنچه گاهی رخ می‌دهد، مالکیت فیلد را در اختیار گرفته است.</p>
+<p dir="rtl">در این مرحله، کاربر می‌تواند فیلد <code dir="ltr">replicas</code> را از مانیفست خود حذف کند:</p>
+<div class="code-file ltr" dir="ltr">application/ssa/nginx-deployment-no-replicas.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  labels:
+    app: nginx
+spec:
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.14.2
+</code></pre>
+<p dir="rtl">توجه کنید که هر زمان کنترل‌کنندهٔ HPA مقدار جدیدی برای فیلد <code dir="ltr">replicas</code> تنظیم کند، مدیر فیلد موقت دیگر مالک هیچ فیلدی نخواهد بود و به‌طور خودکار حذف می‌شود. هیچ پاک‌سازی دیگری لازم نیست.</p>
+<h3 id="انتقال-مالکیت-بین-مدیرها" dir="rtl">انتقال مالکیت بین مدیرها</h3>
+<p dir="rtl">مدیرهای فیلد می‌توانند مالکیت یک فیلد را میان یکدیگر منتقل کنند؛ به این صورت که هر دو، آن فیلد را در پیکربندی‌های اعمال‌شدهٔ خود روی مقدار یکسانی تنظیم کنند تا مالکیت فیلد میان آن‌ها مشترک شود. پس از آنکه مالکیت فیلد مشترک شد، یکی از مدیرها می‌تواند فیلد را از پیکربندی اعمال‌شدهٔ خود حذف کند تا از مالکیت آن صرف‌نظر کند و انتقال به مدیر فیلد دیگر کامل شود.</p>
+<h2 id="مقایسه-با-اعمال-سمت-کلاینت" dir="rtl">مقایسه با اعمال سمت کلاینت</h2>
+<p dir="rtl">اعمال سمت سرور هم به‌عنوان جایگزینی برای پیاده‌سازی اولیهٔ سمت کلاینت زیرفرمان <code dir="ltr">kubectl apply</code> طراحی شده است و هم به‌عنوان سازوکاری ساده و کارآمد برای <span class="term" title="controller">کنترل‌کننده‌ها</span> تا تغییرات خود را اعمال کنند.</p>
+<p dir="rtl">در مقایسه با حاشیه‌نویسی (annotation) <code dir="ltr">last-applied</code> که <code dir="ltr">kubectl</code> آن را مدیریت می‌کند، اعمال سمت سرور رویکرد اعلانی‌تری دارد و به‌جای آخرین وضعیت اعمال‌شدهٔ کاربر، مدیریت فیلدهای آبجکت را ردیابی می‌کند. در نتیجه، یکی از پیامدهای جانبی استفاده از اعمال سمت سرور این است که اطلاعات مربوط به اینکه هر فیلد آبجکت را کدام مدیر فیلد مدیریت می‌کند نیز در دسترس قرار می‌گیرد.</p>
+<p dir="rtl">یکی از پیامدهای تشخیص و حل تعارض در اعمال سمت سرور این است که اعمال‌کننده همیشه مقادیر به‌روز فیلدها را در وضعیت محلی خود دارد. اگر چنین نباشد، دفعهٔ بعد که اعمال کند با تعارض روبه‌رو می‌شود. هر یک از سه گزینهٔ حل تعارض باعث می‌شود پیکربندی اعمال‌شده زیرمجموعه‌ای به‌روز از فیلدهای آبجکت روی سرور باشد.</p>
+<p dir="rtl">این رفتار با اعمال سمت کلاینت متفاوت است؛ در آن روش، مقادیر قدیمی که کاربران دیگر آن‌ها را بازنویسی کرده‌اند در پیکربندی محلی اعمال‌کننده باقی می‌مانند. این مقادیر تنها زمانی درست می‌شوند که کاربر همان فیلد خاص را به‌روزرسانی کند (اگر اصلاً چنین کند) و اعمال‌کننده هیچ راهی ندارد تا بداند آیا اعمال بعدی‌اش تغییرات کاربران دیگر را بازنویسی خواهد کرد یا نه.</p>
+<p dir="rtl">تفاوت دیگر این است که اعمال‌کننده‌ای که از اعمال سمت کلاینت استفاده می‌کند نمی‌تواند نسخهٔ API مورد استفادهٔ خود را تغییر دهد، اما اعمال سمت سرور از این مورد پشتیبانی می‌کند.</p>
+<h2 id="مهاجرت-بین-اعمال-سمت-کلاینت-و-اعمال-سمت-سرور" dir="rtl">مهاجرت بین اعمال سمت کلاینت و اعمال سمت سرور</h2>
+<h3 id="ارتقا-از-اعمال-سمت-کلاینت-به-اعمال-سمت-سرور" dir="rtl">ارتقا از اعمال سمت کلاینت به اعمال سمت سرور</h3>
+<p dir="rtl">کاربرانی که از اعمال سمت کلاینت استفاده می‌کنند و منبعی را با <code dir="ltr">kubectl apply</code> مدیریت می‌کنند، می‌توانند با فلگ زیر استفاده از اعمال سمت سرور را آغاز کنند.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply --server-side [--dry-run=server]
+</code></pre>
+<p dir="rtl">به‌طور پیش‌فرض، مدیریت فیلدهای آبجکت بدون بروز تعارض از اعمال سمت کلاینت به اعمال سمت سرور kubectl منتقل می‌شود.</p>
+<div class="callout caution"><div class="callout-title">احتیاط:</div>
+<p dir="rtl">حاشیه‌نویسی <code dir="ltr">last-applied-configuration</code> را به‌روز نگه دارید. فیلدهای مدیریت‌شده توسط اعمال سمت کلاینت از روی این حاشیه‌نویسی استنباط می‌شوند. هر فیلدی که اعمال سمت کلاینت آن را مدیریت نکند، باعث بروز تعارض می‌شود.</p>
+<p dir="rtl">برای مثال، اگر پس از اعمال سمت کلاینت از <code dir="ltr">kubectl scale</code> برای به‌روزرسانی فیلد replicas استفاده کرده باشید، مالک این فیلد اعمال سمت کلاینت نیست و هنگام اجرای <code dir="ltr">kubectl apply --server-side</code> تعارض ایجاد می‌کند.</p>
+</div>
+<p dir="rtl">این رفتار در مورد اعمال سمت سرور با مدیر فیلد <code dir="ltr">kubectl</code> صدق می‌کند. به‌عنوان یک استثنا، می‌توانید با تعیین یک مدیر فیلد دیگر و غیرپیش‌فرض، مانند مثال زیر، از این رفتار صرف‌نظر کنید. مدیر فیلد پیش‌فرض برای اعمال سمت سرور در kubectl، <code dir="ltr">kubectl</code> است.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply --server-side --field-manager=my-manager [--dry-run=server]
+</code></pre>
+<h3 id="بازگشت-از-اعمال-سمت-سرور-به-اعمال-سمت-کلاینت" dir="rtl">بازگشت از اعمال سمت سرور به اعمال سمت کلاینت</h3>
+<p dir="rtl">اگر منبعی را با <code dir="ltr">kubectl apply --server-side</code> مدیریت می‌کنید، می‌توانید مستقیماً با <code dir="ltr">kubectl apply</code> به اعمال سمت کلاینت بازگردید.</p>
+<p dir="rtl">این بازگشت ممکن است، زیرا اگر از <code dir="ltr">kubectl apply</code> استفاده کنید، اعمال سمت سرور در kubectl حاشیه‌نویسی <code dir="ltr">last-applied-configuration</code> را به‌روز نگه می‌دارد.</p>
+<p dir="rtl">این رفتار در مورد اعمال سمت سرور با مدیر فیلد <code dir="ltr">kubectl</code> صدق می‌کند. به‌عنوان یک استثنا، می‌توانید با تعیین یک مدیر فیلد دیگر و غیرپیش‌فرض، مانند مثال زیر، از این رفتار صرف‌نظر کنید. مدیر فیلد پیش‌فرض برای اعمال سمت سرور در kubectl، <code dir="ltr">kubectl</code> است.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply --server-side --field-manager=my-manager [--dry-run=server]
+</code></pre>
+<h2 id="پیاده-سازی-api" dir="rtl">پیاده‌سازی API</h2>
+<p dir="rtl">فعل <code dir="ltr">PATCH</code> (برای آبجکتی که از اعمال سمت سرور پشتیبانی می‌کند) نوع محتوای غیررسمی <code dir="ltr">application/apply-patch+yaml</code> را می‌پذیرد. کاربران اعمال سمت سرور می‌توانند آبجکت‌هایی را که به‌طور ناقص مشخص شده‌اند، به‌صورت YAML در بدنهٔ یک درخواست <code dir="ltr">PATCH</code> به URI یک منبع ارسال کنند. هنگام اعمال یک پیکربندی، همیشه باید همهٔ فیلدهایی را که برای نتیجهٔ مورد نظرتان (مانند وضعیت مطلوب) اهمیت دارند در آن بگنجانید.</p>
+<p dir="rtl">همهٔ پیام‌های JSON، YAML معتبر نیز هستند. بنابراین علاوه بر بدنه‌های درخواست YAML، می‌توانید برای درخواست‌های اعمال سمت سرور از بدنه‌های درخواست JSON نیز استفاده کنید، زیرا آن‌ها هم YAML معتبر به شمار می‌آیند. در هر دو حالت، برای درخواست HTTP از نوع رسانهٔ <code dir="ltr">application/apply-patch+yaml</code> استفاده کنید.</p>
+<h3 id="کنترل-دسترسی-و-مجوزها-rbac-and-permissions" dir="rtl">کنترل دسترسی و مجوزها {#rbac-and-permissions}</h3>
+<p dir="rtl">از آنجا که اعمال سمت سرور نوعی <code dir="ltr">PATCH</code> است، یک موجودیت امنیتی (principal)، مانند یک Role در <span class="term" title="rbac">RBAC</span> کوبرنتیز، برای ویرایش منابع موجود به مجوز <strong>patch</strong> نیاز دارد و برای ایجاد منابع جدید با اعمال سمت سرور نیز به مجوز فعل <strong>create</strong> نیازمند است.</p>
+<h2 id="پاک-کردن-managedfields" dir="rtl">پاک‌کردن <code dir="ltr">managedFields</code></h2>
+<p dir="rtl">می‌توان همهٔ <code dir="ltr">managedFields</code> را از یک آبجکت حذف کرد؛ به این صورت که آن‌ها را با یک <strong>patch</strong> (JSON Merge Patch، Strategic Merge Patch یا JSON Patch) یا از طریق یک <strong>update</strong> (HTTP <code dir="ltr">PUT</code>) بازنویسی کنید؛ به بیان دیگر، با هر عملیات نوشتنی به‌جز <strong>apply</strong>. این کار با بازنویسی فیلد <code dir="ltr">managedFields</code> با یک ورودی خالی انجام می‌شود. دو مثال در ادامه آمده است:</p>
+<pre dir="ltr"><code class="language-console" dir="ltr">PATCH /api/v1/namespaces/default/configmaps/example-cm
+Accept: application/json
+Content-Type: application/merge-patch+json
+
+{
+  "metadata": {
+    "managedFields": [
+      {}
+    ]
+  }
+}
+</code></pre>
+<pre dir="ltr"><code class="language-console" dir="ltr">PATCH /api/v1/namespaces/default/configmaps/example-cm
+Accept: application/json
+Content-Type: application/json-patch+json
+If-Match: 1234567890123456789
+
+[{"op": "replace", "path": "/metadata/managedFields", "value": [{}]}]
+</code></pre>
+<p dir="rtl">این کار <code dir="ltr">managedFields</code> را با فهرستی شامل تنها یک ورودی خالی بازنویسی می‌کند و در نتیجه <code dir="ltr">managedFields</code> به‌طور کامل از آبجکت حذف می‌شود. توجه کنید که تنظیم <code dir="ltr">managedFields</code> روی یک فهرست خالی، این فیلد را بازنشانی نمی‌کند. این رفتار عمدی است تا کلاینت‌هایی که از وجود این فیلد آگاه نیستند هرگز <code dir="ltr">managedFields</code> را حذف نکنند.</p>
+<p dir="rtl">در مواردی که عملیات بازنشانی با تغییر فیلدهایی غیر از <code dir="ltr">managedFields</code> همراه باشد، ابتدا <code dir="ltr">managedFields</code> بازنشانی می‌شود و سپس تغییرات دیگر پردازش می‌شوند. در نتیجه، اعمال‌کننده مالکیت همهٔ فیلدهایی را که در همان درخواست به‌روزرسانی شده‌اند به دست می‌گیرد.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">اعمال سمت سرور مالکیت را در زیرمنبع‌هایی که نوع آبجکت منبع را دریافت نمی‌کنند به‌درستی ردیابی نمی‌کند. اگر از اعمال سمت سرور با چنین زیرمنبعی استفاده می‌کنید، ممکن است فیلدهای تغییریافته ردیابی نشوند.</p>
+</div>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<p dir="rtl">می‌توانید دربارهٔ <code dir="ltr">managedFields</code> در مرجع API کوبرنتیز، در بخش مربوط به فیلد سطح بالای <a href="https://kubernetes.io/docs/reference/kubernetes-api/common-definitions/object-meta/" target="_blank"><code dir="ltr">metadata</code></a> مطالعه کنید.</p>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#مدیریت-فیلدها">مدیریت فیلدها</a><a class="l3" href="#مثال-ssa-example-configmap">مثال {#ssa-example-configmap}</a><a class="l3" href="#تعارض-ها">تعارض‌ها</a><a class="l3" href="#مدیران-فیلد-managers">مدیران فیلد {#managers}</a><a class="l2" href="#سریال-سازی">سریال‌سازی</a><a class="l2" href="#عملیات-هایی-که-مدیریت-فیلدها-شامل-آن-ها-می-شود-apply-and-update">عملیات‌هایی که مدیریت فیلدها شامل آن‌ها می‌شود {#apply-and-update}</a><a class="l2" href="#راهبرد-ادغام">راهبرد ادغام</a><a class="l2" href="#منابع-سفارشی-و-server-side-apply">منابع سفارشی و Server-Side Apply</a><a class="l3" href="#سازگاری-در-برابر-تغییرات-توپولوژی">سازگاری در برابر تغییرات توپولوژی</a><a class="l2" href="#استفاده-از-اعمال-سمت-سرور-در-یک-کنترل-کننده">استفاده از اعمال سمت سرور در یک کنترل‌کننده</a><a class="l2" href="#انتقال-مالکیت">انتقال مالکیت</a><a class="l3" href="#انتقال-مالکیت-بین-مدیرها">انتقال مالکیت بین مدیرها</a><a class="l2" href="#مقایسه-با-اعمال-سمت-کلاینت">مقایسه با اعمال سمت کلاینت</a><a class="l2" href="#مهاجرت-بین-اعمال-سمت-کلاینت-و-اعمال-سمت-سرور">مهاجرت بین اعمال سمت کلاینت و اعمال سمت سرور</a><a class="l3" href="#ارتقا-از-اعمال-سمت-کلاینت-به-اعمال-سمت-سرور">ارتقا از اعمال سمت کلاینت به اعمال سمت سرور</a><a class="l3" href="#بازگشت-از-اعمال-سمت-سرور-به-اعمال-سمت-کلاینت">بازگشت از اعمال سمت سرور به اعمال سمت کلاینت</a><a class="l2" href="#پیاده-سازی-api">پیاده‌سازی API</a><a class="l3" href="#کنترل-دسترسی-و-مجوزها-rbac-and-permissions">کنترل دسترسی و مجوزها {#rbac-and-permissions}</a><a class="l2" href="#پاک-کردن-managedfields">پاک‌کردن managedFields</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>
