@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>پیکربندی مجدد یک کلاستر kubeadm | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
+<header class="top"><a href="../../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">tasks / administer-cluster / kubeadm</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">پیکربندی مجدد یک کلاستر kubeadm</h1><!-- overview -->
+<p dir="rtl">ابزار kubeadm از روش‌های خودکار برای پیکربندی مجدد مؤلفه‌هایی که روی نودهای مدیریت‌شده مستقر شده‌اند پشتیبانی نمی‌کند. یکی از راه‌های خودکارسازی این کار، استفاده از یک <a href="../../../concepts/extend-kubernetes/operator.html">اپراتور</a> سفارشی است.</p>
+<p dir="rtl">برای تغییر پیکربندی مؤلفه‌ها باید آبجکت‌های کلاستر و فایل‌های مرتبط روی دیسک را به‌صورت دستی ویرایش کنید.</p>
+<p dir="rtl">این راهنما ترتیب درست گام‌هایی را نشان می‌دهد که برای پیکربندی مجدد یک کلاستر kubeadm باید انجام شوند.</p>
+<h2 id="پیش-از-شروع" dir="rtl">پیش از شروع</h2>
+<ul>
+<li dir="rtl">به کلاستری نیاز دارید که با kubeadm مستقر شده باشد.</li>
+<li dir="rtl">اعتبارنامه‌های مدیر (<code dir="ltr">/etc/kubernetes/admin.conf</code>) و اتصال شبکه به یک kube-apiserver در حال اجرا در کلاستر را، از میزبانی که kubectl روی آن نصب شده است، در اختیار داشته باشید.</li>
+<li dir="rtl">یک ویرایشگر متن روی همهٔ میزبان‌ها نصب شده باشد.</li>
+</ul>
+<!-- steps -->
+<h2 id="پیکربندی-مجدد-کلاستر" dir="rtl">پیکربندی مجدد کلاستر</h2>
+<p dir="rtl">ابزار kubeadm مجموعه‌ای از گزینه‌های پیکربندی مؤلفه‌ها را در سطح کل کلاستر، در ConfigMapها و آبجکت‌های دیگر می‌نویسد. این آبجکت‌ها باید به‌صورت دستی ویرایش شوند. برای این کار می‌توان از فرمان <code dir="ltr">kubectl edit</code> استفاده کرد.</p>
+<p dir="rtl">فرمان <code dir="ltr">kubectl edit</code> یک ویرایشگر متن باز می‌کند که در آن می‌توانید آبجکت را مستقیماً ویرایش و ذخیره کنید.</p>
+<p dir="rtl">با متغیرهای محیطی <code dir="ltr">KUBECONFIG</code> و <code dir="ltr">KUBE_EDITOR</code> می‌توانید مکان فایل kubeconfig مورد استفادهٔ kubectl و ویرایشگر متن دلخواه خود را مشخص کنید.</p>
+<p dir="rtl">برای مثال:</p>
+<pre dir="ltr"><code dir="ltr">KUBECONFIG=/etc/kubernetes/admin.conf KUBE_EDITOR=nano kubectl edit &lt;parameters&gt;
+</code></pre>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">پس از ذخیرهٔ هر تغییری در این آبجکت‌های کلاستر، ممکن است مؤلفه‌هایی که روی نودها اجرا می‌شوند به‌طور خودکار به‌روزرسانی نشوند. گام‌های زیر نشان می‌دهند که این کار را چگونه به‌صورت دستی انجام دهید.</p>
+</div>
+<div class="callout warning"><div class="callout-title">هشدار:</div>
+<p dir="rtl">پیکربندی مؤلفه‌ها در ConfigMapها به‌صورت داده‌های بدون ساختار (رشتهٔ YAML) ذخیره می‌شود. یعنی هنگام به‌روزرسانی محتوای یک ConfigMap هیچ اعتبارسنجی‌ای انجام نمی‌شود. باید مراقب باشید که از قالب مستندشدهٔ API برای پیکربندی هر مؤلفه پیروی کنید و از اشتباه‌های تایپی و خطا در تورفتگی YAML پرهیز کنید.</p>
+</div>
+<h3 id="اعمال-تغییرات-پیکربندی-کلاستر" dir="rtl">اعمال تغییرات پیکربندی کلاستر</h3>
+<h4 id="به-روزرسانی-clusterconfiguration" dir="rtl">به‌روزرسانی <code dir="ltr">ClusterConfiguration</code></h4>
+<p dir="rtl">هنگام ایجاد و ارتقای کلاستر، kubeadm پیکربندی
+<a href="../../../reference/config-api/kubeadm-config.v1beta4.html"><code dir="ltr">ClusterConfiguration</code></a>
+خود را در ConfigMapی به نام <code dir="ltr">kubeadm-config</code> در فضای نام (namespace) <code dir="ltr">kube-system</code> می‌نویسد.</p>
+<p dir="rtl">برای تغییر یک گزینهٔ خاص در <code dir="ltr">ClusterConfiguration</code>، می‌توانید ConfigMap را با این فرمان ویرایش کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl edit cm -n kube-system kubeadm-config
+</code></pre>
+<p dir="rtl">این پیکربندی زیر کلید <code dir="ltr">data.ClusterConfiguration</code> قرار دارد.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">پیکربندی <code dir="ltr">ClusterConfiguration</code> گزینه‌های گوناگونی دارد که بر پیکربندی تک‌تک مؤلفه‌ها، مانند kube-apiserver، kube-scheduler، kube-controller-manager، CoreDNS، etcd و kube-proxy اثر می‌گذارند. تغییرات این پیکربندی باید به‌صورت دستی روی مؤلفه‌های نود اعمال شوند.</p>
+</div>
+<h4 id="اعمال-تغییرات-clusterconfiguration-روی-نودهای-control-plane" dir="rtl">اعمال تغییرات <code dir="ltr">ClusterConfiguration</code> روی نودهای control plane</h4>
+<p dir="rtl">ابزار kubeadm مؤلفه‌های control plane را به‌صورت مانیفست‌های Pod ایستا (static Pod) در دایرکتوری <code dir="ltr">/etc/kubernetes/manifests</code> مدیریت می‌کند. هر تغییری که در <code dir="ltr">ClusterConfiguration</code> زیر کلیدهای <code dir="ltr">apiServer</code>، <code dir="ltr">controllerManager</code>، <code dir="ltr">scheduler</code> یا <code dir="ltr">etcd</code> انجام شود، باید در فایل‌های مرتبط در دایرکتوری مانیفست‌ها روی نود control plane نیز اعمال شود.</p>
+<p dir="rtl">این تغییرات ممکن است شامل موارد زیر باشند:</p>
+<ul>
+<li dir="rtl">فیلد <code dir="ltr">extraArgs</code>: نیازمند به‌روزرسانی فهرست فلگ‌هایی است که به کانتینر مؤلفه داده می‌شوند.</li>
+<li dir="rtl">فیلد <code dir="ltr">extraVolumes</code>: نیازمند به‌روزرسانی اتصال‌های حجم (volume mount) برای کانتینر مؤلفه است.</li>
+<li dir="rtl">فیلدهای <code dir="ltr">*SANs</code>: نیازمند نوشتن گواهی‌های جدید با نام‌های جایگزین موضوع (Subject Alternative Names) به‌روزشده است.</li>
+</ul>
+<p dir="rtl">پیش از اعمال این تغییرات، مطمئن شوید که از دایرکتوری <code dir="ltr">/etc/kubernetes/</code> نسخهٔ پشتیبان تهیه کرده‌اید.</p>
+<p dir="rtl">برای نوشتن گواهی‌های جدید می‌توانید از این فرمان استفاده کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubeadm init phase certs &lt;component-name&gt; --config &lt;config-file&gt;
+</code></pre>
+<p dir="rtl">برای نوشتن فایل‌های مانیفست جدید در <code dir="ltr">/etc/kubernetes/manifests</code> می‌توانید از این فرمان‌ها استفاده کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># For Kubernetes control plane components
+kubeadm init phase control-plane &lt;component-name&gt; --config &lt;config-file&gt;
+# For local etcd
+kubeadm init phase etcd local --config &lt;config-file&gt;
+</code></pre>
+<p dir="rtl">محتوای <code dir="ltr">&lt;config-file&gt;</code> باید با <code dir="ltr">ClusterConfiguration</code> به‌روزشده مطابقت داشته باشد. مقدار <code dir="ltr">&lt;component-name&gt;</code> نیز باید نام یکی از مؤلفه‌های control plane کوبرنتیز (<code dir="ltr">apiserver</code>، <code dir="ltr">controller-manager</code> یا <code dir="ltr">scheduler</code>) باشد.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">به‌روزرسانی یک فایل در <code dir="ltr">/etc/kubernetes/manifests</code> به kubelet اعلام می‌کند که Pod ایستای مؤلفهٔ مربوط را دوباره راه‌اندازی کند. سعی کنید این تغییرات را هر بار فقط روی یک نود انجام دهید تا کلاستر بدون وقفه در دسترس بماند.</p>
+</div>
+<h3 id="اعمال-تغییرات-پیکربندی-kubelet" dir="rtl">اعمال تغییرات پیکربندی kubelet</h3>
+<h4 id="به-روزرسانی-kubeletconfiguration" dir="rtl">به‌روزرسانی <code dir="ltr">KubeletConfiguration</code></h4>
+<p dir="rtl">هنگام ایجاد و ارتقای کلاستر، kubeadm پیکربندی
+<a href="../../../reference/config-api/kubelet-config.v1beta1.html"><code dir="ltr">KubeletConfiguration</code></a>
+خود را در ConfigMapی به نام <code dir="ltr">kubelet-config</code> در فضای نام <code dir="ltr">kube-system</code> می‌نویسد.</p>
+<p dir="rtl">می‌توانید این ConfigMap را با فرمان زیر ویرایش کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl edit cm -n kube-system kubelet-config
+</code></pre>
+<p dir="rtl">این پیکربندی زیر کلید <code dir="ltr">data.kubelet</code> قرار دارد.</p>
+<h4 id="اعمال-تغییرات-kubelet" dir="rtl">اعمال تغییرات kubelet</h4>
+<p dir="rtl">برای اعمال تغییر روی نودهای kubeadm باید کارهای زیر را انجام دهید:</p>
+<ul>
+<li dir="rtl">وارد یکی از نودهای kubeadm شوید.</li>
+<li dir="rtl">فرمان <code dir="ltr">kubeadm upgrade node phase kubelet-config</code> را اجرا کنید تا آخرین محتوای ConfigMap <code dir="ltr">kubelet-config</code> در فایل محلی <code dir="ltr">/var/lib/kubelet/config.yaml</code> دانلود شود.</li>
+<li dir="rtl">فایل <code dir="ltr">/var/lib/kubelet/kubeadm-flags.env</code> را ویرایش کنید تا پیکربندی‌های تکمیلی را با فلگ‌ها اعمال کنید.</li>
+<li dir="rtl">سرویس kubelet را با فرمان <code dir="ltr">systemctl restart kubelet</code> دوباره راه‌اندازی کنید.</li>
+</ul>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">این تغییرات را هر بار فقط روی یک نود انجام دهید تا بارهای کاری بتوانند به‌درستی دوباره زمان‌بندی شوند.</p>
+</div>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">هنگام اجرای <code dir="ltr">kubeadm upgrade</code>، ابزار kubeadm پیکربندی <code dir="ltr">KubeletConfiguration</code> را از ConfigMap <code dir="ltr">kubelet-config</code> دانلود می‌کند و محتوای <code dir="ltr">/var/lib/kubelet/config.yaml</code> را بازنویسی می‌کند. بنابراین پیکربندی محلی هر نود باید یا با فلگ‌هایی در <code dir="ltr">/var/lib/kubelet/kubeadm-flags.env</code> اعمال شود، یا با به‌روزرسانی دستی محتوای <code dir="ltr">/var/lib/kubelet/config.yaml</code> پس از <code dir="ltr">kubeadm upgrade</code> و سپس راه‌اندازی دوبارهٔ kubelet.</p>
+</div>
+<h3 id="اعمال-تغییرات-پیکربندی-kube-proxy" dir="rtl">اعمال تغییرات پیکربندی kube-proxy</h3>
+<h4 id="به-روزرسانی-kubeproxyconfiguration" dir="rtl">به‌روزرسانی <code dir="ltr">KubeProxyConfiguration</code></h4>
+<p dir="rtl">هنگام ایجاد و ارتقای کلاستر، kubeadm پیکربندی
+<a href="../../../reference/config-api/kube-proxy-config.v1alpha1.html"><code dir="ltr">KubeProxyConfiguration</code></a>
+خود را در ConfigMapی به نام <code dir="ltr">kube-proxy</code> در فضای نام <code dir="ltr">kube-system</code> می‌نویسد.</p>
+<p dir="rtl">این ConfigMap را DaemonSet <code dir="ltr">kube-proxy</code> در فضای نام <code dir="ltr">kube-system</code> استفاده می‌کند.</p>
+<p dir="rtl">برای تغییر یک گزینهٔ خاص در <code dir="ltr">KubeProxyConfiguration</code>، می‌توانید ConfigMap را با این فرمان ویرایش کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl edit cm -n kube-system kube-proxy
+</code></pre>
+<p dir="rtl">این پیکربندی زیر کلید <code dir="ltr">data.config.conf</code> قرار دارد.</p>
+<h4 id="اعمال-تغییرات-kube-proxy" dir="rtl">اعمال تغییرات kube-proxy</h4>
+<p dir="rtl">پس از به‌روزرسانی ConfigMap <code dir="ltr">kube-proxy</code>، می‌توانید همهٔ Podهای kube-proxy را دوباره راه‌اندازی کنید.</p>
+<p dir="rtl">برای این کار، Podها را با فرمان زیر حذف کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl delete po -n kube-system -l k8s-app=kube-proxy
+</code></pre>
+<p dir="rtl">پس از آن، Podهای جدیدی ایجاد می‌شوند که از ConfigMap به‌روزشده استفاده می‌کنند.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">از آنجا که kubeadm مؤلفهٔ kube-proxy را به‌صورت یک DaemonSet مستقر می‌کند، پیکربندی مختص هر نود پشتیبانی نمی‌شود.</p>
+</div>
+<h3 id="اعمال-تغییرات-پیکربندی-coredns" dir="rtl">اعمال تغییرات پیکربندی CoreDNS</h3>
+<h4 id="به-روزرسانی-deployment-و-service-مربوط-به-coredns" dir="rtl">به‌روزرسانی Deployment و Service مربوط به CoreDNS</h4>
+<p dir="rtl">ابزار kubeadm افزونهٔ CoreDNS را به‌صورت یک Deployment به نام <code dir="ltr">coredns</code> و همراه با یک Service به نام <code dir="ltr">kube-dns</code> مستقر می‌کند که هر دو در فضای نام <code dir="ltr">kube-system</code> قرار دارند.</p>
+<p dir="rtl">برای به‌روزرسانی هر یک از تنظیمات CoreDNS، می‌توانید آبجکت‌های Deployment و Service را ویرایش کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl edit deployment -n kube-system coredns
+kubectl edit service -n kube-system kube-dns
+</code></pre>
+<h4 id="اعمال-تغییرات-coredns" dir="rtl">اعمال تغییرات CoreDNS</h4>
+<p dir="rtl">پس از اعمال تغییرات CoreDNS، می‌توانید Deployment مربوط به CoreDNS را دوباره راه‌اندازی کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl rollout restart deployment -n kube-system coredns
+</code></pre>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">ابزار kubeadm اجازهٔ پیکربندی CoreDNS را هنگام ایجاد و ارتقای کلاستر نمی‌دهد. بنابراین اگر <code dir="ltr">kubeadm upgrade apply</code> را اجرا کنید، تغییراتی که در آبجکت‌های CoreDNS داده‌اید از بین می‌روند و باید دوباره اعمال شوند.</p>
+</div>
+<h2 id="ماندگار-کردن-پیکربندی-مجدد" dir="rtl">ماندگار کردن پیکربندی مجدد</h2>
+<p dir="rtl">هنگام اجرای <code dir="ltr">kubeadm upgrade</code> روی یک نود مدیریت‌شده، ممکن است kubeadm پیکربندی‌ای را که پس از ایجاد کلاستر اعمال شده است (پیکربندی مجدد) بازنویسی کند.</p>
+<h3 id="ماندگار-کردن-پیکربندی-مجدد-آبجکت-node" dir="rtl">ماندگار کردن پیکربندی مجدد آبجکت Node</h3>
+<p dir="rtl">ابزار kubeadm برچسب‌ها، taintها، سوکت CRI و اطلاعات دیگری را روی آبجکت Node مربوط به هر نود کوبرنتیز می‌نویسد. برای تغییر هر بخشی از محتوای این آبجکت Node می‌توانید از این فرمان استفاده کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl edit no &lt;node-name&gt;
+</code></pre>
+<p dir="rtl">هنگام اجرای <code dir="ltr">kubeadm upgrade</code> ممکن است محتوای چنین Nodeی بازنویسی شود. اگر می‌خواهید تغییراتتان در آبجکت Node پس از ارتقا حفظ شود، می‌توانید یک <a href="https://kubernetes.io/docs/tasks/manage-kubernetes-objects/update-api-object-kubectl-patch/" target="_blank">وصله (patch) برای kubectl</a> آماده کنید و آن را روی آبجکت Node اعمال کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl patch no &lt;node-name&gt; --patch-file &lt;patch-file&gt;
+</code></pre>
+<h4 id="ماندگار-کردن-پیکربندی-مجدد-مؤلفه-های-control-plane" dir="rtl">ماندگار کردن پیکربندی مجدد مؤلفه‌های control plane</h4>
+<p dir="rtl">منبع اصلی پیکربندی control plane، آبجکت <code dir="ltr">ClusterConfiguration</code> ذخیره‌شده در کلاستر است. برای گسترش پیکربندی مانیفست‌های Pod ایستا می‌توان از <a href="../../../setup/production-environment/tools/kubeadm/control-plane-flags.html#patches">وصله‌ها</a> استفاده کرد.</p>
+<p dir="rtl">این فایل‌های وصله باید به‌صورت فایل روی نودهای control plane باقی بمانند تا فرمان <code dir="ltr">kubeadm upgrade ... --patches &lt;directory&gt;</code> بتواند از آن‌ها استفاده کند.</p>
+<p dir="rtl">اگر پیکربندی مجدد روی <code dir="ltr">ClusterConfiguration</code> و مانیفست‌های Pod ایستا روی دیسک انجام شود، مجموعهٔ وصله‌های مختص هر نود نیز باید متناسب با آن به‌روزرسانی شود.</p>
+<h4 id="ماندگار-کردن-پیکربندی-مجدد-kubelet" dir="rtl">ماندگار کردن پیکربندی مجدد kubelet</h4>
+<p dir="rtl">هر تغییری در <code dir="ltr">KubeletConfiguration</code> ذخیره‌شده در <code dir="ltr">/var/lib/kubelet/config.yaml</code>، هنگام اجرای <code dir="ltr">kubeadm upgrade</code> با دانلود محتوای ConfigMap سراسری <code dir="ltr">kubelet-config</code> بازنویسی می‌شود. برای ماندگار کردن پیکربندی مختص هر نود در kubelet، یا باید فایل <code dir="ltr">/var/lib/kubelet/config.yaml</code> را پس از ارتقا به‌صورت دستی به‌روزرسانی کرد، یا می‌توان فلگ‌ها را در فایل <code dir="ltr">/var/lib/kubelet/kubeadm-flags.env</code> قرار داد. فلگ‌های kubelet گزینه‌های متناظر در <code dir="ltr">KubeletConfiguration</code> را بازنویسی (override) می‌کنند، اما توجه داشته باشید که برخی از این فلگ‌ها منسوخ (deprecated) شده‌اند.</p>
+<p dir="rtl">پس از تغییر <code dir="ltr">/var/lib/kubelet/config.yaml</code> یا <code dir="ltr">/var/lib/kubelet/kubeadm-flags.env</code>، باید kubelet را دوباره راه‌اندازی کنید.</p>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<ul>
+<li dir="rtl"><a href="https://kubernetes.io/docs/tasks/administer-cluster/kubeadm/kubeadm-upgrade" target="_blank">ارتقای کلاسترهای kubeadm</a></li>
+<li dir="rtl"><a href="../../../setup/production-environment/tools/kubeadm/control-plane-flags.html">سفارشی‌سازی مؤلفه‌ها با API ابزار kubeadm</a></li>
+<li dir="rtl"><a href="kubeadm-certs.html">مدیریت گواهی‌ها با kubeadm</a></li>
+<li dir="rtl"><a href="../../../reference/setup-tools/kubeadm/index.html">اطلاعات بیشتر دربارهٔ راه‌اندازی با kubeadm</a></li>
+</ul>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#پیش-از-شروع">پیش از شروع</a><a class="l2" href="#پیکربندی-مجدد-کلاستر">پیکربندی مجدد کلاستر</a><a class="l3" href="#اعمال-تغییرات-پیکربندی-کلاستر">اعمال تغییرات پیکربندی کلاستر</a><a class="l3" href="#اعمال-تغییرات-پیکربندی-kubelet">اعمال تغییرات پیکربندی kubelet</a><a class="l3" href="#اعمال-تغییرات-پیکربندی-kube-proxy">اعمال تغییرات پیکربندی kube-proxy</a><a class="l3" href="#اعمال-تغییرات-پیکربندی-coredns">اعمال تغییرات پیکربندی CoreDNS</a><a class="l2" href="#ماندگار-کردن-پیکربندی-مجدد">ماندگار کردن پیکربندی مجدد</a><a class="l3" href="#ماندگار-کردن-پیکربندی-مجدد-آبجکت-node">ماندگار کردن پیکربندی مجدد آبجکت Node</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>

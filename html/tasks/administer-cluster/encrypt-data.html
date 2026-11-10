@@ -1,0 +1,589 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>رمزگذاری داده‌های محرمانه در حالت ذخیره‌شده | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">tasks / administer-cluster</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">رمزگذاری داده‌های محرمانه در حالت ذخیره‌شده</h1><!-- overview -->
+<p dir="rtl">همهٔ APIهای کوبرنتیز که امکان نوشتن داده‌های ماندگار منابع API را فراهم می‌کنند، از رمزگذاری در حالت ذخیره‌شده (at-rest encryption) پشتیبانی می‌کنند. برای نمونه، می‌توانید رمزگذاری در حالت ذخیره‌شده را برای
+<span class="term" title="secret">Secretها</span> فعال کنید.
+این رمزگذاری علاوه بر هرگونه رمزگذاری در سطح سیستم است که برای کلاستر etcd یا برای فایل‌سیستم‌های میزبان‌هایی که kube-apiserver را روی آن‌ها اجرا می‌کنید، به کار رفته باشد.</p>
+<p dir="rtl">این صفحه نشان می‌دهد که چگونه رمزگذاری داده‌های API را در حالت ذخیره‌شده فعال و پیکربندی کنید.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">این راهنما به رمزگذاری داده‌های منابعی می‌پردازد که از طریق
+<span class="term" title="kubernetes-api">API کوبرنتیز</span> ذخیره می‌شوند. برای نمونه، می‌توانید آبجکت‌های Secret را، همراه با داده‌های کلید-مقداری که در خود دارند، رمزگذاری کنید.</p>
+<p dir="rtl">اگر می‌خواهید داده‌های موجود در فایل‌سیستم‌هایی را رمزگذاری کنید که در کانتینرها mount می‌شوند، باید یکی از این دو کار را انجام دهید:</p>
+<ul>
+<li dir="rtl">از یک راهکار یکپارچه‌سازی ذخیره‌سازی استفاده کنید که
+<span class="term" title="volume">حجم‌های</span> رمزگذاری‌شده فراهم می‌کند</li>
+<li dir="rtl">داده‌ها را درون برنامهٔ خودتان رمزگذاری کنید</li>
+</ul>
+</div>
+<h2 id="پیش-از-شروع" dir="rtl">پیش از شروع</h2>
+<ul>
+<li>
+</ul>
+<p dir="rtl">باید یک کلاستر کوبرنتیز داشته باشید و ابزار خط فرمان kubectl باید برای ارتباط با کلاستر شما پیکربندی شده باشد. توصیه می‌شود این آموزش را روی کلاستری اجرا کنید که دست‌کم دو نود داشته باشد که نقش میزبان control plane را ندارند. اگر هنوز کلاستری ندارید، می‌توانید با استفاده از
+<a href="https://minikube.sigs.k8s.io/docs/tutorials/multi_node/" target="_blank" rel="noopener">minikube</a>
+یکی بسازید یا از یکی از این محیط‌های آزمایشی کوبرنتیز استفاده کنید:</p>
+<ul>
+<li dir="ltr" class="ltr">
+<p dir="ltr" class="ltr"><a href="https://labs.iximiuz.com/playgrounds?category=kubernetes&amp;filter=all" target="_blank" rel="noopener">iximiuz Labs</a></p>
+</li>
+<li dir="ltr" class="ltr">
+<p dir="ltr" class="ltr"><a href="https://killercoda.com/playgrounds/scenario/kubernetes" target="_blank" rel="noopener">Killercoda</a></p>
+</li>
+<li dir="ltr" class="ltr">
+<p dir="ltr" class="ltr"><a href="https://kodekloud.com/public-playgrounds" target="_blank" rel="noopener">KodeKloud</a></p>
+</li>
+<li dir="rtl">
+<p dir="rtl">در این راهنما فرض شده است که سرور API کوبرنتیز را به‌صورت یک
+<span class="term" title="static-pod">پاد ایستا</span> روی هر نود control plane اجرا می‌کنید.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">control plane کلاستر شما <strong>باید</strong> از etcd نسخهٔ v3.x (نسخهٔ اصلی ۳ با هر نسخهٔ فرعی) استفاده کند.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">برای رمزگذاری یک منبع سفارشی، کلاستر شما باید کوبرنتیز نسخهٔ v1.26 یا جدیدتر را اجرا کند.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">برای استفاده از نویسهٔ عام (wildcard) در تطبیق منابع، کلاستر شما باید کوبرنتیز نسخهٔ v1.27 یا جدیدتر را اجرا کند.</p>
+</li>
+</ul>
+<!-- steps -->
+<h2 id="تشخیص-اینکه-آیا-رمزگذاری-در-حالت-ذخیره-شده-از-قبل-فعال-است-determining-whether-encryption-at-rest-is-already-enabled" dir="rtl">تشخیص اینکه آیا رمزگذاری در حالت ذخیره‌شده از قبل فعال است {#determining-whether-encryption-at-rest-is-already-enabled}</h2>
+<p dir="rtl">سرور API به‌طور پیش‌فرض نمایش متن ساده (plain-text) منابع را بدون هیچ رمزگذاری‌ای در etcd ذخیره می‌کند.</p>
+<p dir="rtl">فرایند <code dir="ltr">kube-apiserver</code> آرگومانی به نام <code dir="ltr">--encryption-provider-config</code> می‌پذیرد که مسیر یک فایل پیکربندی را مشخص می‌کند. اگر چنین فایلی را مشخص کنید، محتوای آن تعیین می‌کند که داده‌های API کوبرنتیز چگونه در etcd رمزگذاری شوند.
+اگر kube-apiserver را بدون آرگومان خط فرمان <code dir="ltr">--encryption-provider-config</code> اجرا می‌کنید، رمزگذاری در حالت ذخیره‌شده برای شما فعال نیست. همچنین اگر kube-apiserver را با آرگومان <code dir="ltr">--encryption-provider-config</code> اجرا می‌کنید، ولی فایلی که به آن ارجاع داده شده است فراهم‌کنندهٔ <code dir="ltr">identity</code> را به‌عنوان نخستین فراهم‌کنندهٔ رمزگذاری در فهرست مشخص می‌کند، باز هم رمزگذاری در حالت ذخیره‌شده فعال نیست
+(<strong>فراهم‌کنندهٔ پیش‌فرض <code dir="ltr">identity</code> هیچ‌گونه حفاظتی از محرمانگی داده‌ها فراهم نمی‌کند.</strong>)</p>
+<p dir="rtl">اگر kube-apiserver را با آرگومان خط فرمان <code dir="ltr">--encryption-provider-config</code> اجرا می‌کنید و فایلی که به آن ارجاع داده شده است، فراهم‌کننده‌ای غیر از <code dir="ltr">identity</code> را به‌عنوان نخستین فراهم‌کنندهٔ رمزگذاری در فهرست مشخص می‌کند، رمزگذاری در حالت ذخیره‌شده از قبل برای شما فعال است. با این حال، این بررسی نشان نمی‌دهد که آیا مهاجرت قبلی به ذخیره‌سازی رمزگذاری‌شده با موفقیت انجام شده است یا نه. اگر مطمئن نیستید، بخش
+<a href="#ensure-all-secrets-are-encrypted">اطمینان از رمزگذاری همهٔ داده‌های مرتبط</a> را ببینید.</p>
+<h2 id="آشنایی-با-پیکربندی-رمزگذاری-در-حالت-ذخیره-شده" dir="rtl">آشنایی با پیکربندی رمزگذاری در حالت ذخیره‌شده</h2>
+<!-- note to localizers: the highlight is to make the initial comment obvious -->
+<!-- you can use as many lines as makes sense for your target localization    -->
+<pre dir="ltr"><code class="language-yaml" dir="ltr">---
+#
+# هشدار: این یک پیکربندی نمونه است.
+#        از آن برای کلاستر خودتان استفاده نکنید!
+#
+apiVersion: apiserver.config.k8s.io/v1
+kind: EncryptionConfiguration
+resources:
+  - resources:
+      - secrets
+      - configmaps
+      - pandas.awesome.bears.example # یک API منبع سفارشی
+    providers:
+      # این پیکربندی محرمانگی داده‌ها را تأمین نمی‌کند. نخستین
+      # فراهم‌کنندهٔ پیکربندی‌شده سازوکار «identity» را مشخص می‌کند که
+      # منابع را به‌صورت متن ساده ذخیره می‌کند.
+      #
+      - identity: {} # متن ساده؛ به بیان دیگر، بدون هیچ رمزگذاری
+      - aesgcm:
+          keys:
+            - name: key1
+              secret: c2VjcmV0IGlzIHNlY3VyZQ==
+            - name: key2
+              secret: dGhpcyBpcyBwYXNzd29yZA==
+      - aescbc:
+          keys:
+            - name: key1
+              secret: c2VjcmV0IGlzIHNlY3VyZQ==
+            - name: key2
+              secret: dGhpcyBpcyBwYXNzd29yZA==
+      - secretbox:
+          keys:
+            - name: key1
+              secret: YWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXoxMjM0NTY=
+  - resources:
+      - events
+    providers:
+      - identity: {} # رویدادها رمزگذاری نشوند، هرچند در ادامه *.* مشخص شده است
+  - resources:
+      - '*.apps' # تطبیق با نویسهٔ عام به کوبرنتیز ۱.۲۷ یا جدیدتر نیاز دارد
+    providers:
+      - aescbc:
+          keys:
+          - name: key2
+            secret: c2VjcmV0IGlzIHNlY3VyZSwgb3IgaXMgaXQ/Cg==
+  - resources:
+      - '*.*' # تطبیق با نویسهٔ عام به کوبرنتیز ۱.۲۷ یا جدیدتر نیاز دارد
+    providers:
+      - aescbc:
+          keys:
+          - name: key3
+            secret: c2VjcmV0IGlzIHNlY3VyZSwgSSB0aGluaw==
+</code></pre>
+<p dir="rtl">هر عضو آرایهٔ <code dir="ltr">resources</code> یک پیکربندی جداگانه و کامل است. فیلد
+<code dir="ltr">resources.resources</code> آرایه‌ای از نام منابع کوبرنتیز (به شکل <code dir="ltr">resource</code> یا <code dir="ltr">resource.group</code>) است که باید رمزگذاری شوند؛ مانند Secretها، ConfigMapها یا منابع دیگر.</p>
+<p dir="rtl">اگر منابع سفارشی به <code dir="ltr">EncryptionConfiguration</code> افزوده شوند و نسخهٔ کلاستر ۱.۲۶ یا جدیدتر باشد، همهٔ منابع سفارشی تازه‌ایجادشده‌ای که در <code dir="ltr">EncryptionConfiguration</code> ذکر شده‌اند رمزگذاری خواهند شد.
+منابع سفارشی‌ای که پیش از آن نسخه و آن پیکربندی در etcd وجود داشته‌اند، تا زمانی که دوباره در ذخیره‌ساز نوشته نشوند، رمزگذاری‌نشده باقی می‌مانند. این رفتار با رفتار منابع داخلی یکسان است.
+بخش <a href="#ensure-all-secrets-are-encrypted">اطمینان از رمزگذاری همهٔ Secretها</a> را ببینید.</p>
+<p dir="rtl">آرایهٔ <code dir="ltr">providers</code> فهرستی مرتب از فراهم‌کننده‌های رمزگذاری ممکن برای APIهایی است که فهرست کرده‌اید.
+هر فراهم‌کننده از چند کلید پشتیبانی می‌کند. برای رمزگشایی، کلیدها به ترتیب امتحان می‌شوند و اگر این فراهم‌کننده نخستین فراهم‌کنندهٔ فهرست باشد، از نخستین کلید آن برای رمزگذاری استفاده می‌شود.</p>
+<p dir="rtl">در هر مدخل فقط یک نوع فراهم‌کننده را می‌توان مشخص کرد (می‌توان <code dir="ltr">identity</code> یا <code dir="ltr">aescbc</code> را تعیین کرد، اما نه هر دو را در یک عضو).
+نخستین فراهم‌کنندهٔ فهرست برای رمزگذاری منابعی به کار می‌رود که در ذخیره‌ساز نوشته می‌شوند. هنگام خواندن منابع از ذخیره‌ساز، هر فراهم‌کننده‌ای که با داده‌های ذخیره‌شده مطابقت داشته باشد، به ترتیب برای رمزگشایی داده‌ها تلاش می‌کند. اگر هیچ فراهم‌کننده‌ای به‌دلیل ناهمخوانی در قالب یا کلید محرمانه نتواند داده‌های ذخیره‌شده را بخواند، خطایی برگردانده می‌شود که مانع دسترسی کلاینت‌ها به آن منبع می‌شود.</p>
+<p dir="rtl">پیکربندی <code dir="ltr">EncryptionConfiguration</code> از نویسه‌های عام برای مشخص کردن منابعی که باید رمزگذاری شوند پشتیبانی می‌کند.
+برای رمزگذاری همهٔ منابع یک گروه از '<code dir="ltr">*.&lt;group&gt;</code>' استفاده کنید (برای نمونه '<code dir="ltr">*.apps</code>' در مثال بالا) و برای رمزگذاری همهٔ منابع از '<code dir="ltr">*.*</code>'. با '<code dir="ltr">*.</code>' می‌توان همهٔ منابع گروه هسته (core) را رمزگذاری کرد. الگوی '<code dir="ltr">*.*</code>' همهٔ منابع را رمزگذاری می‌کند، حتی منابع سفارشی‌ای که پس از راه‌اندازی سرور API افزوده می‌شوند.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">استفاده از نویسه‌های عامی که در یک فهرست منابع یا در چند مدخل با یکدیگر هم‌پوشانی دارند مجاز نیست، زیرا بخشی از پیکربندی بی‌اثر خواهد شد. ترتیب پردازش و اولویت فهرست <code dir="ltr">resources</code> بر اساس ترتیبی تعیین می‌شود که در پیکربندی آمده است.</p>
+</div>
+<p dir="rtl">اگر نویسهٔ عامی دارید که منابع را پوشش می‌دهد و می‌خواهید نوع خاصی از منبع را از رمزگذاری در حالت ذخیره‌شده مستثنا کنید، می‌توانید یک عضو جداگانه به آرایهٔ <code dir="ltr">resources</code> با نام منبعی که می‌خواهید مستثنا شود اضافه کنید و پس از آن، یک عضو آرایهٔ <code dir="ltr">providers</code> قرار دهید که در آن فراهم‌کنندهٔ <code dir="ltr">identity</code> را مشخص کرده‌اید. این عضو را طوری به فهرست اضافه کنید که پیش از پیکربندی‌ای قرار گیرد که رمزگذاری را در آن مشخص کرده‌اید (یعنی فراهم‌کننده‌ای غیر از <code dir="ltr">identity</code>).</p>
+<p dir="rtl">برای نمونه، اگر '<code dir="ltr">*.*</code>' فعال است و می‌خواهید رویدادها (Events) و ConfigMapها را از رمزگذاری مستثنا کنید، یک عضو جدید را در جایگاهی <strong>پیش‌تر</strong> به <code dir="ltr">resources</code> اضافه کنید و پس از آن، عضو آرایهٔ providers را با <code dir="ltr">identity</code> به‌عنوان فراهم‌کننده قرار دهید. مدخل خاص‌تر باید پیش از مدخل دارای نویسهٔ عام بیاید.</p>
+<p dir="rtl">عضو جدید چیزی شبیه به این خواهد بود:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">  ...
+  - resources:
+      - configmaps. # specifically from the core API group,
+                    # because of trailing "."
+      - events
+    providers:
+      - identity: {}
+  # and then other entries in resources
+</code></pre>
+<p dir="rtl">اطمینان حاصل کنید که این استثنا <em>پیش از</em> عضو دارای نویسهٔ عام '<code dir="ltr">*.*</code>' در آرایهٔ resources آمده باشد تا بر آن اولویت داشته باشد.</p>
+<p dir="rtl">برای اطلاعات بیشتر دربارهٔ ساختار <code dir="ltr">EncryptionConfiguration</code>، به
+<a href="../../reference/config-api/apiserver-config.v1.html">API پیکربندی رمزگذاری</a> مراجعه کنید.</p>
+<div class="callout caution"><div class="callout-title">احتیاط:</div>
+<p dir="rtl">اگر منبعی با پیکربندی رمزگذاری قابل خواندن نباشد (به‌دلیل تغییر کلیدها) و نتوانید یک پیکربندی سالم را بازیابی کنید، تنها راه چاره این است که آن مدخل را مستقیماً از etcd زیرین حذف کنید.</p>
+<p dir="rtl">هر فراخوانی API کوبرنتیز که بخواهد آن منبع را بخواند، تا زمانی که منبع حذف نشود یا یک کلید رمزگشایی معتبر فراهم نشود، با شکست روبه‌رو خواهد شد.</p>
+</div>
+<h3 id="فراهم-کننده-های-موجود-providers" dir="rtl">فراهم‌کننده‌های موجود {#providers}</h3>
+<p dir="rtl">پیش از آنکه رمزگذاری در حالت ذخیره‌شده را برای داده‌های API کوبرنتیز در کلاستر خود پیکربندی کنید، باید مشخص کنید که از کدام فراهم‌کننده یا فراهم‌کننده‌ها استفاده خواهید کرد.</p>
+<p dir="rtl">جدول زیر هر یک از فراهم‌کننده‌های موجود را شرح می‌دهد.</p>
+<!-- localization note: if it makes sense to adapt this table to work for your localization,
+     please do that. Each sentence in the English original should have a direct equivalent in the adapted
+     layout, although this may not always be possible -->
+<table class="complex-layout">
+<caption style="display: none;">فراهم‌کننده‌های رمزگذاری در حالت ذخیره‌شده در کوبرنتیز</caption>
+<thead>
+  <tr>
+  <th dir="rtl">نام</th>
+  <th dir="rtl">رمزگذاری</th>
+  <th dir="rtl">قدرت</th>
+  <th dir="rtl">سرعت</th>
+  <th dir="rtl">طول کلید</th>
+  </tr>
+</thead>
+<tbody id="encryption-providers-identity">
+  <!-- list identity first, even when the remaining rows are sorted alphabetically -->
+  <tr>
+  <th rowspan="2" scope="row" dir="ltr" class="ltr"><tt>identity</tt></th>
+  <td dir="rtl"><strong>هیچ</strong></td>
+  <td dir="rtl">موضوعیت ندارد</td>
+  <td dir="rtl">موضوعیت ندارد</td>
+  <td dir="rtl">موضوعیت ندارد</td>
+  </tr>
+  <tr>
+  <td colspan="4" dir="rtl">منابع بدون رمزگذاری و به همان شکل نوشته می‌شوند. اگر این فراهم‌کننده به‌عنوان نخستین فراهم‌کننده تنظیم شود، با نوشته شدن مقادیر جدید، منبع رمزگشایی می‌شود. منابع رمزگذاری‌شدهٔ موجود به‌طور خودکار با داده‌های متن ساده بازنویسی <strong>نمی‌شوند</strong>.
+   اگر چیز دیگری مشخص نکنید، فراهم‌کنندهٔ <tt>identity</tt> پیش‌فرض است.</td>
+  </tr>
+</tbody>
+<tbody id="encryption-providers-that-encrypt">
+  <tr>
+  <th rowspan="2" scope="row" dir="ltr" class="ltr"><tt>aescbc</tt></th>
+  <td dir="rtl">AES-CBC با لایه‌گذاری (padding) <a href="https://datatracker.ietf.org/doc/html/rfc2315" target="_blank" rel="noopener">PKCS#7</a></td>
+  <td dir="rtl">ضعیف</td>
+  <td dir="rtl">سریع</td>
+  <td dir="rtl">۱۶، ۲۴ یا ۳۲ بایت</td>
+  </tr>
+  <tr>
+  <td colspan="4" dir="rtl">به‌دلیل آسیب‌پذیری CBC در برابر حملات padding oracle توصیه نمی‌شود. مادهٔ کلید از میزبان control plane قابل دسترسی است.</td>
+  </tr>
+  <tr>
+  <th rowspan="2" scope="row" dir="ltr" class="ltr"><tt>aesgcm</tt></th>
+  <td dir="rtl">AES-GCM با nonce تصادفی</td>
+  <td dir="rtl">باید پس از هر ۲۰۰٬۰۰۰ نوشتن چرخانده شود</td>
+  <td dir="rtl">سریع‌ترین</td>
+  <td dir="rtl">۱۶، ۲۴ یا ۳۲ بایت</td>
+  </tr>
+  <tr>
+  <td colspan="4" dir="rtl">استفاده از آن توصیه نمی‌شود، مگر آنکه یک سازوکار خودکار برای چرخش کلید پیاده‌سازی شده باشد. مادهٔ کلید از میزبان control plane قابل دسترسی است.</td>
+  </tr>
+  <tr>
+  <th rowspan="2" scope="row" dir="rtl"><tt>kms</tt> v1 <em>(منسوخ‌شده از کوبرنتیز v1.28)</em></th>
+  <td dir="rtl">از طرح رمزگذاری پوششی (envelope encryption) با یک DEK برای هر منبع استفاده می‌کند.</td>
+  <td dir="rtl">قوی‌ترین</td>
+  <td dir="rtl">کند (<em>در مقایسه با <tt>kms</tt> نسخهٔ ۲</em>)</td>
+  <td dir="rtl">۳۲ بایت</td>
+  </tr>
+  <tr>
+  <td colspan="4" dir="rtl">
+    داده‌ها با کلیدهای رمزگذاری داده (DEK) و با الگوریتم AES-GCM رمزگذاری می‌شوند؛
+    کلیدهای DEK نیز بر اساس پیکربندی سرویس مدیریت کلید (KMS) با کلیدهای رمزگذاری کلید (KEK) رمزگذاری می‌شوند.
+    چرخش کلید ساده است: برای هر رمزگذاری یک DEK جدید تولید می‌شود و
+    چرخش KEK در اختیار کاربر است.
+    <br>
+    نحوهٔ <a href="kms-provider.html#configuring-the-kms-provider-kms-v1">پیکربندی فراهم‌کنندهٔ KMS V1</a> را بخوانید.
+    </td>
+  </tr>
+  <tr>
+  <th rowspan="2" scope="row" dir="ltr" class="ltr"><tt>kms</tt> v2 </th>
+  <td dir="rtl">از طرح رمزگذاری پوششی با یک DEK برای هر سرور API استفاده می‌کند.</td>
+  <td dir="rtl">قوی‌ترین</td>
+  <td dir="rtl">سریع</td>
+  <td dir="rtl">۳۲ بایت</td>
+  </tr>
+  <tr>
+  <td colspan="4" dir="rtl">
+    داده‌ها با کلیدهای رمزگذاری داده (DEK) و با الگوریتم AES-GCM رمزگذاری می‌شوند؛ کلیدهای DEK
+    نیز بر اساس پیکربندی سرویس مدیریت کلید (KMS) با کلیدهای رمزگذاری کلید (KEK) رمزگذاری می‌شوند.
+    کوبرنتیز برای هر رمزگذاری، یک DEK جدید را از یک بذر (seed) محرمانه تولید می‌کند.
+    هر بار که KEK چرخانده شود، این بذر نیز چرخانده می‌شود.<br>
+    اگر از یک ابزار شخص ثالث برای مدیریت کلید استفاده می‌کنید، گزینهٔ مناسبی است.
+    از کوبرنتیز v1.29 به‌صورت پایدار در دسترس است.
+    <br>
+    نحوهٔ <a href="kms-provider.html#configuring-the-kms-provider-kms-v2">پیکربندی فراهم‌کنندهٔ KMS V2</a> را بخوانید.
+    </td>
+  </tr>
+  <tr>
+  <th rowspan="2" scope="row" dir="ltr" class="ltr"><tt>secretbox</tt></th>
+  <td dir="rtl">XSalsa20 و Poly1305</td>
+  <td dir="rtl">قوی</td>
+  <td dir="rtl">سریع‌تر</td>
+  <td dir="rtl">۳۲ بایت</td>
+  </tr>
+  <tr>
+  <td colspan="4" dir="rtl">از فناوری‌های رمزگذاری نسبتاً جدیدی استفاده می‌کند که ممکن است در محیط‌هایی که به سطح بالایی از بازبینی نیاز دارند، پذیرفتنی تلقی نشوند. مادهٔ کلید از میزبان control plane قابل دسترسی است.</td>
+  </tr>
+</tbody>
+</table>
+<p dir="rtl">اگر چیز دیگری مشخص نکنید، فراهم‌کنندهٔ <code dir="ltr">identity</code> پیش‌فرض است. <strong>فراهم‌کنندهٔ <code dir="ltr">identity</code> داده‌های ذخیره‌شده را رمزگذاری نمی‌کند و <em>هیچ</em> حفاظت اضافه‌ای از محرمانگی فراهم نمی‌کند.</strong></p>
+<h3 id="ذخیره-سازی-کلید" dir="rtl">ذخیره‌سازی کلید</h3>
+<h4 id="ذخیره-سازی-محلی-کلید" dir="rtl">ذخیره‌سازی محلی کلید</h4>
+<p dir="rtl">رمزگذاری داده‌های محرمانه با کلیدی که به‌صورت محلی مدیریت می‌شود، از داده‌ها در برابر نفوذ به etcd محافظت می‌کند، اما در برابر نفوذ به میزبان محافظتی فراهم نمی‌کند. از آنجا که کلیدهای رمزگذاری در فایل YAML مربوط به EncryptionConfiguration روی میزبان ذخیره می‌شوند، یک مهاجم ماهر می‌تواند به آن فایل دسترسی پیدا کند و کلیدهای رمزگذاری را استخراج کند.</p>
+<h4 id="ذخیره-سازی-مدیریت-شدهٔ-کلید-kms-kms-key-storage" dir="rtl">ذخیره‌سازی مدیریت‌شدهٔ کلید (KMS) {#kms-key-storage}</h4>
+<p dir="rtl">فراهم‌کنندهٔ KMS از <em>رمزگذاری پوششی</em> استفاده می‌کند: کوبرنتیز منابع را با یک کلید داده رمزگذاری می‌کند و سپس آن کلید داده را با سرویس رمزگذاری مدیریت‌شده رمزگذاری می‌کند. کوبرنتیز برای هر منبع یک کلید دادهٔ یکتا تولید می‌کند. سرور API نسخهٔ رمزگذاری‌شدهٔ کلید داده را در کنار متن رمزشده (ciphertext) در etcd ذخیره می‌کند؛ هنگام خواندن منبع، سرور API سرویس رمزگذاری مدیریت‌شده را فراخوانی می‌کند و هم متن رمزشده و هم کلید دادهٔ (رمزگذاری‌شده) را در اختیار آن قرار می‌دهد.
+درون سرویس رمزگذاری مدیریت‌شده، فراهم‌کننده با استفاده از یک <em>کلید رمزگذاری کلید</em>، کلید داده را رمزگشایی می‌کند و در نهایت متن ساده را بازیابی می‌کند. ارتباط میان control plane و KMS باید در حین انتقال محافظت شود؛ برای نمونه با TLS.</p>
+<p dir="rtl">استفاده از رمزگذاری پوششی موجب وابستگی به کلید رمزگذاری کلید می‌شود که در کوبرنتیز ذخیره نمی‌شود.
+در حالت KMS، مهاجمی که قصد دارد به مقادیر متن ساده دسترسی غیرمجاز پیدا کند، باید هم به etcd <strong>و</strong> هم به فراهم‌کنندهٔ شخص ثالث KMS نفوذ کند.</p>
+<h3 id="محافظت-از-کلیدهای-رمزگذاری" dir="rtl">محافظت از کلیدهای رمزگذاری</h3>
+<p dir="rtl">باید تدابیر مناسبی برای محافظت از اطلاعات محرمانه‌ای که امکان رمزگشایی را فراهم می‌کنند بیندیشید؛ چه این اطلاعات یک کلید رمزگذاری محلی باشد و چه توکن احراز هویتی که به سرور API اجازهٔ فراخوانی KMS را می‌دهد.</p>
+<p dir="rtl">حتی وقتی مدیریت استفاده و چرخهٔ عمر کلید (یا کلیدهای) اصلی رمزگذاری را به یک فراهم‌کننده می‌سپارید، همچنان مسئولیت دارید اطمینان حاصل کنید که کنترل‌های دسترسی و دیگر تدابیر امنیتی سرویس رمزگذاری مدیریت‌شده با نیازهای امنیتی شما متناسب است.</p>
+<h2 id="رمزگذاری-داده-ها-encrypting-your-data" dir="rtl">رمزگذاری داده‌ها {#encrypting-your-data}</h2>
+<h3 id="تولید-کلید-رمزگذاری-generate-key-no-kms" dir="rtl">تولید کلید رمزگذاری {#generate-key-no-kms}</h3>
+<p dir="rtl">در مراحل زیر فرض شده است که از KMS استفاده نمی‌کنید و در نتیجه باید یک کلید رمزگذاری تولید کنید. اگر از قبل کلید رمزگذاری دارید، مستقیماً به بخش
+<a href="#write-an-encryption-configuration-file">نوشتن فایل پیکربندی رمزگذاری</a> بروید.</p>
+<div class="callout caution"><div class="callout-title">احتیاط:</div>
+<p dir="rtl">ذخیره کردن کلید رمزگذاری خام در EncryptionConfig، در مقایسه با نبود رمزگذاری، وضعیت امنیتی شما را تنها به میزان اندکی بهبود می‌بخشد.</p>
+<p dir="rtl">برای محرمانگی بیشتر، استفاده از فراهم‌کنندهٔ <code dir="ltr">kms</code> را در نظر بگیرید، زیرا این فراهم‌کننده به کلیدهایی متکی است که بیرون از کلاستر کوبرنتیز شما نگهداری می‌شوند. پیاده‌سازی‌های <code dir="ltr">kms</code> می‌توانند با ماژول‌های امنیتی سخت‌افزاری (HSM) یا با سرویس‌های رمزگذاری‌ای که ارائه‌دهندهٔ ابری شما مدیریت می‌کند کار کنند.</p>
+<p dir="rtl">برای آشنایی با راه‌اندازی رمزگذاری در حالت ذخیره‌شده با استفاده از KMS، به
+<a href="kms-provider.html">استفاده از یک فراهم‌کنندهٔ KMS برای رمزگذاری داده‌ها</a> مراجعه کنید.
+افزونهٔ فراهم‌کنندهٔ KMS که از آن استفاده می‌کنید نیز ممکن است مستندات اختصاصی بیشتری داشته باشد.</p>
+</div>
+<p dir="rtl">ابتدا یک کلید رمزگذاری جدید تولید کنید و سپس آن را با base64 کدگذاری کنید:</p>
+<div class="tabs">
+<div class="tab"><div class="tab-name">Linux</div>
+<p dir="rtl">یک کلید تصادفی ۳۲ بایتی تولید و آن را با base64 کدگذاری کنید. می‌توانید از این دستور استفاده کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">head -c 32 /dev/urandom | base64
+</code></pre>
+<p dir="rtl">اگر می‌خواهید از منبع آنتروپی سخت‌افزاری داخلی رایانهٔ خود استفاده کنید، می‌توانید به‌جای <code dir="ltr">/dev/urandom</code> از <code dir="ltr">/dev/hwrng</code> استفاده کنید. همهٔ دستگاه‌های لینوکسی مولد تصادفی سخت‌افزاری ندارند.</p>
+</div>
+<div class="tab"><div class="tab-name">macOS</div>
+<!-- localization note: this is similar to the Linux tab and the wording
+should match wherever the English text does -->
+<p dir="rtl">یک کلید تصادفی ۳۲ بایتی تولید و آن را با base64 کدگذاری کنید. می‌توانید از این دستور استفاده کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">head -c 32 /dev/urandom | base64
+</code></pre>
+</div>
+<div class="tab"><div class="tab-name">Windows</div>
+<p dir="rtl">یک کلید تصادفی ۳۲ بایتی تولید و آن را با base64 کدگذاری کنید. می‌توانید از این دستور استفاده کنید:</p>
+<pre dir="ltr"><code class="language-powershell" dir="ltr"># Do not run this in a session where you have set a random number
+# generator seed.
+[Convert]::ToBase64String((1..32|%{[byte](Get-Random -Max 256)}))
+</code></pre>
+</div>
+</div>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">کلید رمزگذاری را محرمانه نگه دارید؛ هم در زمان تولید آن و در حالت مطلوب، حتی پس از آنکه دیگر به‌طور فعال از آن استفاده نمی‌کنید.</p>
+</div>
+<h3 id="تکثیر-کلید-رمزنگاری" dir="rtl">تکثیر کلید رمزنگاری</h3>
+<p dir="rtl">با استفاده از یک سازوکار امن برای انتقال فایل، یک نسخه از آن کلید رمزنگاری را در اختیار همه‌ی میزبان‌های دیگر control plane قرار دهید.</p>
+<p dir="rtl">دست‌کم از رمزنگاری در حین انتقال، برای نمونه پوسته‌ی امن (SSH)، استفاده کنید. برای امنیت بیشتر، میان میزبان‌ها از رمزنگاری نامتقارن استفاده کنید یا رویکرد خود را تغییر دهید تا به رمزنگاری KMS متکی باشید.</p>
+<h3 id="نوشتن-فایل-پیکربندی-رمزنگاری" dir="rtl">نوشتن فایل پیکربندی رمزنگاری</h3>
+<div class="callout caution"><div class="callout-title">احتیاط:</div>
+<p dir="rtl">فایل پیکربندی رمزنگاری ممکن است کلیدهایی داشته باشد که می‌توانند محتوای etcd را رمزگشایی کنند. اگر این فایل پیکربندی هر نوع داده‌ی کلیدی در خود دارد، باید مجوزهای دسترسی را روی همه‌ی میزبان‌های control plane به‌درستی محدود کنید تا فقط کاربری که kube-apiserver را اجرا می‌کند بتواند این پیکربندی را بخواند.</p>
+</div>
+<p dir="rtl">یک فایل پیکربندی رمزنگاری جدید ایجاد کنید. محتوای آن باید مشابه زیر باشد:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">---
+apiVersion: apiserver.config.k8s.io/v1
+kind: EncryptionConfiguration
+resources:
+  - resources:
+      - secrets
+      - configmaps
+      - pandas.awesome.bears.example
+    providers:
+      - aescbc:
+          keys:
+            - name: key1
+              # See the following text for more details about the secret value
+              secret: &lt;BASE 64 ENCODED SECRET&gt;
+      - identity: {} # this fallback allows reading unencrypted secrets;
+                     # for example, during initial migration
+</code></pre>
+<p dir="rtl">برای ایجاد یک کلید رمزنگاری جدید (که از KMS استفاده نمی‌کند)، بخش <a href="#generate-key-no-kms">تولید کلید رمزنگاری</a> را ببینید.</p>
+<h3 id="استفاده-از-فایل-پیکربندی-رمزنگاری-جدید" dir="rtl">استفاده از فایل پیکربندی رمزنگاری جدید</h3>
+<p dir="rtl">باید فایل پیکربندی رمزنگاری جدید را در پاد ایستای <code dir="ltr">kube-apiserver</code> سوار (mount) کنید. در ادامه نمونه‌ای از نحوه‌ی انجام این کار آمده است:</p>
+<ol>
+<li dir="rtl">
+<p dir="rtl">فایل پیکربندی رمزنگاری جدید را در مسیر <code dir="ltr">/etc/kubernetes/enc/enc.yaml</code> روی نود control plane ذخیره کنید.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">مانیفست پاد ایستای <code dir="ltr">kube-apiserver</code> را در مسیر <code dir="ltr">/etc/kubernetes/manifests/kube-apiserver.yaml</code> ویرایش کنید تا مشابه زیر شود:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">---
+#
+# This is a fragment of a manifest for a static Pod.
+# Check whether this is correct for your cluster and for your API server.
+#
+apiVersion: v1
+kind: Pod
+metadata:
+  annotations:
+    kubeadm.kubernetes.io/kube-apiserver.advertise-address.endpoint: 10.20.30.40:443
+  creationTimestamp: null
+  labels:
+    app.kubernetes.io/component: kube-apiserver
+    tier: control-plane
+  name: kube-apiserver
+  namespace: kube-system
+spec:
+  containers:
+  - command:
+    - kube-apiserver
+    ...
+    - --encryption-provider-config=/etc/kubernetes/enc/enc.yaml  # add this line
+    volumeMounts:
+    ...
+    - name: enc                           # add this line
+      mountPath: /etc/kubernetes/enc      # add this line
+      readOnly: true                      # add this line
+    ...
+  volumes:
+  ...
+  - name: enc                             # add this line
+    hostPath:                             # add this line
+      path: /etc/kubernetes/enc           # add this line
+      type: DirectoryOrCreate             # add this line
+  ...
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">سرور API خود را دوباره راه‌اندازی کنید.</p>
+</li>
+</ol>
+<div class="callout caution"><div class="callout-title">احتیاط:</div>
+<p dir="rtl">فایل پیکربندی شما کلیدهایی دارد که می‌توانند محتوای etcd را رمزگشایی کنند؛ بنابراین باید مجوزهای دسترسی را روی نودهای control plane به‌درستی محدود کنید تا فقط کاربری که <code dir="ltr">kube-apiserver</code> را اجرا می‌کند بتواند آن را بخواند.</p>
+</div>
+<p dir="rtl">اکنون رمزنگاری برای <strong>یک</strong> میزبان control plane برقرار شده است. یک کلاستر معمول کوبرنتیز چندین میزبان control plane دارد، پس کارهای بیشتری باقی مانده است.</p>
+<h3 id="پیکربندی-مجدد-سایر-میزبان-های-control-plane-api-server-config-update-more" dir="rtl">پیکربندی مجدد سایر میزبان‌های control plane {#api-server-config-update-more}</h3>
+<p dir="rtl">اگر در کلاستر خود چندین سرور API دارید، باید تغییرات را به‌نوبت روی هر سرور API اعمال کنید.</p>
+<div class="callout caution"><div class="callout-title">احتیاط:</div>
+<p dir="rtl">در پیکربندی‌هایی از کلاستر که دو یا چند نود control plane دارند، پیکربندی رمزنگاری باید روی همه‌ی نودهای control plane یکسان باشد.</p>
+<p dir="rtl">اگر پیکربندی ارائه‌دهنده‌ی رمزنگاری میان نودهای control plane تفاوت داشته باشد، ممکن است kube-apiserver نتواند داده‌ها را رمزگشایی کند.</p>
+</div>
+<p dir="rtl">هنگامی که قصد به‌روزرسانی پیکربندی رمزنگاری کلاستر خود را دارید، طوری برنامه‌ریزی کنید که سرورهای API در control plane همواره بتوانند داده‌های ذخیره‌شده را رمزگشایی کنند (حتی در میانه‌ی اعمال تدریجی تغییر).</p>
+<p dir="rtl">اطمینان حاصل کنید که روی هر میزبان control plane از پیکربندی رمزنگاری <strong>یکسانی</strong> استفاده می‌کنید.</p>
+<h3 id="بررسی-رمزنگاری-داده-های-تازه-نوشته-شده-verifying-that-data-is-encrypted" dir="rtl">بررسی رمزنگاری داده‌های تازه نوشته‌شده {#verifying-that-data-is-encrypted}</h3>
+<p dir="rtl">داده‌ها هنگام نوشته شدن در etcd رمزنگاری می‌شوند. پس از راه‌اندازی مجدد <code dir="ltr">kube-apiserver</code>، هر Secret تازه ایجادشده یا به‌روزشده (یا سایر انواع منابعی که در <code dir="ltr">EncryptionConfiguration</code> پیکربندی شده‌اند) باید هنگام ذخیره‌سازی رمزنگاری شود.</p>
+<p dir="rtl">برای بررسی این موضوع، می‌توانید با برنامه‌ی خط فرمان <code dir="ltr">etcdctl</code> محتوای داده‌های secret خود را بازیابی کنید.</p>
+<p dir="rtl">این مثال نشان می‌دهد که چگونه این موضوع را برای رمزنگاری API مربوط به Secret بررسی کنید.</p>
+<ol>
+<li dir="rtl">
+<p dir="rtl">یک Secret جدید به نام <code dir="ltr">secret1</code> در فضای نام <code dir="ltr">default</code> ایجاد کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl create secret generic secret1 -n default --from-literal=mykey=mydata
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">با ابزار خط فرمان <code dir="ltr">etcdctl</code>، آن Secret را از etcd بخوانید:</p>
+<pre dir="ltr"><code dir="ltr">ETCDCTL_API=3 etcdctl get /registry/secrets/default/secret1 [...] | hexdump -C
+</code></pre>
+<p dir="rtl">در اینجا <code dir="ltr">[...]</code> باید آرگومان‌های اضافی لازم برای اتصال به سرور etcd باشد.</p>
+<p dir="rtl">برای نمونه:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">ETCDCTL_API=3 etcdctl \
+   --cacert=/etc/kubernetes/pki/etcd/ca.crt   \
+   --cert=/etc/kubernetes/pki/etcd/server.crt \
+   --key=/etc/kubernetes/pki/etcd/server.key  \
+   get /registry/secrets/default/secret1 | hexdump -C
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است (به‌صورت خلاصه):</p>
+<pre dir="ltr"><code class="language-hexdump" dir="ltr">00000000  2f 72 65 67 69 73 74 72  79 2f 73 65 63 72 65 74  |/registry/secret|
+00000010  73 2f 64 65 66 61 75 6c  74 2f 73 65 63 72 65 74  |s/default/secret|
+00000020  31 0a 6b 38 73 3a 65 6e  63 3a 61 65 73 63 62 63  |1.k8s:enc:aescbc|
+00000030  3a 76 31 3a 6b 65 79 31  3a c7 6c e7 d3 09 bc 06  |:v1:key1:.l.....|
+00000040  25 51 91 e4 e0 6c e5 b1  4d 7a 8b 3d b9 c2 7c 6e  |%Q...l..Mz.=..|n|
+00000050  b4 79 df 05 28 ae 0d 8e  5f 35 13 2c c0 18 99 3e  |.y..(..._5.,...&gt;|
+[...]
+00000110  23 3a 0d fc 28 ca 48 2d  6b 2d 46 cc 72 0b 70 4c  |#:..(.H-k-F.r.pL|
+00000120  a5 fc 35 43 12 4e 60 ef  bf 6f fe cf df 0b ad 1f  |..5C.N`..o......|
+00000130  82 c4 88 53 02 da 3e 66  ff 0a                    |...S..&gt;f..|
+0000013a
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">بررسی کنید که Secret ذخیره‌شده با پیشوند <code dir="ltr">k8s:enc:aescbc:v1:</code> شروع شود؛ این پیشوند نشان می‌دهد که ارائه‌دهنده‌ی <code dir="ltr">aescbc</code> داده‌ی حاصل را رمزنگاری کرده است. مطمئن شوید نام کلیدی که در <code dir="ltr">etcd</code> نمایش داده می‌شود با نام کلید تعیین‌شده در <code dir="ltr">EncryptionConfiguration</code> که پیش‌تر به آن اشاره شد مطابقت دارد. در این مثال می‌بینید که کلید رمزنگاری با نام <code dir="ltr">key1</code> هم در <code dir="ltr">etcd</code> و هم در <code dir="ltr">EncryptionConfiguration</code> استفاده شده است.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">بررسی کنید که Secret هنگام بازیابی از طریق API به‌درستی رمزگشایی شود:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get secret secret1 -n default -o yaml
+</code></pre>
+<p dir="rtl">خروجی باید شامل <code dir="ltr">mykey: bXlkYXRh</code> باشد که همان محتوای <code dir="ltr">mydata</code> است که با base64 کدگذاری شده است. برای آشنایی با نحوه‌ی رمزگشایی کامل Secret، بخش <a href="https://kubernetes.io/docs/tasks/configmap-secret/managing-secret-using-kubectl/#decoding-secret" target="_blank">رمزگشایی یک Secret</a> را بخوانید.</p>
+</li>
+</ol>
+<h3 id="اطمینان-از-رمزنگاری-همه-ی-داده-های-مرتبط-ensure-all-secrets-are-encrypted" dir="rtl">اطمینان از رمزنگاری همه‌ی داده‌های مرتبط {#ensure-all-secrets-are-encrypted}</h3>
+<p dir="rtl">اغلب کافی نیست فقط مطمئن شوید که آبجکت‌های جدید رمزنگاری می‌شوند؛ بلکه می‌خواهید این رمزنگاری روی آبجکت‌هایی که از قبل ذخیره شده‌اند نیز اعمال شود.</p>
+<p dir="rtl">در این مثال، کلاستر خود را طوری پیکربندی کرده‌اید که Secretها هنگام نوشته شدن رمزنگاری شوند. اجرای عملیات جایگزینی (replace) برای هر Secret، محتوای آن را در حالت ذخیره (at rest) رمزنگاری می‌کند، در حالی که خود آبجکت‌ها بدون تغییر می‌مانند.</p>
+<p dir="rtl">می‌توانید این تغییر را روی همه‌ی Secretهای کلاستر خود اعمال کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># Run this as an administrator that can read and write all Secrets
+kubectl get secrets --all-namespaces -o json | kubectl replace -f -
+</code></pre>
+<p dir="rtl">فرمان بالا همه‌ی Secretها را می‌خواند و سپس آن‌ها را با همان داده‌ها به‌روزرسانی می‌کند تا رمزنگاری سمت سرور اعمال شود.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">اگر به‌دلیل نوشتن متعارض خطایی رخ داد، فرمان را دوباره اجرا کنید. اجرای چندباره‌ی این فرمان بی‌خطر است.</p>
+<p dir="rtl">در کلاسترهای بزرگ‌تر، ممکن است بخواهید Secretها را بر اساس فضای نام تقسیم کنید یا به‌روزرسانی را با یک اسکریپت انجام دهید.</p>
+</div>
+<h2 id="جلوگیری-از-بازیابی-به-صورت-متن-ساده-cleanup-all-secrets-encrypted" dir="rtl">جلوگیری از بازیابی به‌صورت متن ساده {#cleanup-all-secrets-encrypted}</h2>
+<p dir="rtl">اگر می‌خواهید مطمئن شوید که دسترسی به یک نوع API خاص فقط به‌صورت رمزنگاری‌شده انجام می‌شود، می‌توانید توانایی سرور API در خواندن داده‌های پشتیبان آن API به‌صورت متن ساده را حذف کنید.</p>
+<div class="callout warning"><div class="callout-title">هشدار:</div>
+<p dir="rtl">اعمال این تغییر مانع از آن می‌شود که سرور API منابعی را بازیابی کند که به‌عنوان رمزنگاری‌شده در حالت ذخیره علامت‌گذاری شده‌اند، اما در واقع به‌صورت رمزنگاری‌نشده ذخیره شده‌اند.</p>
+<p dir="rtl">هنگامی که رمزنگاری در حالت ذخیره را برای یک API پیکربندی کرده‌اید (برای نمونه، نوع API به نام <code dir="ltr">Secret</code> که نماینده‌ی منابع <code dir="ltr">secrets</code> در گروه API هسته است)، <strong>باید</strong> اطمینان حاصل کنید که همه‌ی آن منابع در این کلاستر واقعاً در حالت ذخیره رمزنگاری شده‌اند. پیش از ادامه‌ی گام‌های بعدی این موضوع را بررسی کنید.</p>
+</div>
+<p dir="rtl">پس از آنکه همه‌ی Secretهای کلاستر شما رمزنگاری شدند، می‌توانید بخش <code dir="ltr">identity</code> را از پیکربندی رمزنگاری حذف کنید. برای نمونه:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">---
+apiVersion: apiserver.config.k8s.io/v1
+kind: EncryptionConfiguration
+resources:
+  - resources:
+      - secrets
+    providers:
+      - aescbc:
+          keys:
+            - name: key1
+              secret: &lt;BASE 64 ENCODED SECRET&gt;
+      - identity: {} # REMOVE THIS LINE
+</code></pre>
+<p dir="rtl">…و سپس هر سرور API را به‌نوبت دوباره راه‌اندازی کنید. این تغییر مانع از آن می‌شود که سرور API، حتی به‌طور تصادفی، به یک Secret ذخیره‌شده به‌صورت متن ساده دسترسی پیدا کند.</p>
+<h2 id="چرخش-کلید-رمزگشایی-rotating-a-decryption-key" dir="rtl">چرخش کلید رمزگشایی {#rotating-a-decryption-key}</h2>
+<p dir="rtl">تغییر کلید رمزنگاری در کوبرنتیز بدون ایجاد وقفه در سرویس به یک عملیات چندمرحله‌ای نیاز دارد، به‌ویژه در یک استقرار با دسترس‌پذیری بالا که در آن چندین فرایند <code dir="ltr">kube-apiserver</code> در حال اجرا هستند.</p>
+<ol>
+<li dir="rtl">یک کلید جدید تولید کنید و آن را به‌عنوان دومین ورودی کلید برای ارائه‌دهنده‌ی فعلی، روی همه‌ی نودهای control plane اضافه کنید.</li>
+<li dir="rtl"><strong>همه‌ی</strong> فرایندهای <code dir="ltr">kube-apiserver</code> را دوباره راه‌اندازی کنید تا مطمئن شوید هر سرور می‌تواند هر داده‌ای را که با کلید جدید رمزنگاری شده است رمزگشایی کند.</li>
+<li dir="rtl">از کلید رمزنگاری جدید یک نسخه‌ی پشتیبان امن تهیه کنید. اگر همه‌ی نسخه‌های این کلید را از دست بدهید، باید همه‌ی منابعی را که با کلید ازدست‌رفته رمزنگاری شده‌اند حذف کنید و ممکن است بارهای کاری در مدتی که رمزنگاری در حالت ذخیره مختل است، آن‌طور که انتظار می‌رود کار نکنند.</li>
+<li dir="rtl">کلید جدید را به اولین ورودی آرایه‌ی <code dir="ltr">keys</code> تبدیل کنید تا برای رمزنگاری در حالت ذخیره‌ی نوشتن‌های جدید استفاده شود.</li>
+<li dir="rtl">همه‌ی فرایندهای <code dir="ltr">kube-apiserver</code> را دوباره راه‌اندازی کنید تا مطمئن شوید هر میزبان control plane اکنون با کلید جدید رمزنگاری می‌کند.</li>
+<li dir="rtl">به‌عنوان یک کاربر دارای دسترسی ویژه، فرمان <code dir="ltr">kubectl get secrets --all-namespaces -o json | kubectl replace -f -</code> را اجرا کنید تا همه‌ی Secretهای موجود با کلید جدید رمزنگاری شوند.</li>
+<li dir="rtl">پس از آنکه همه‌ی Secretهای موجود را برای استفاده از کلید جدید به‌روزرسانی کردید و از کلید جدید یک نسخه‌ی پشتیبان امن تهیه کردید، کلید رمزگشایی قدیمی را از پیکربندی حذف کنید.</li>
+</ol>
+<h2 id="رمزگشایی-همه-ی-داده-ها-decrypting-all-data" dir="rtl">رمزگشایی همه‌ی داده‌ها {#decrypting-all-data}</h2>
+<p dir="rtl">این مثال نشان می‌دهد که چگونه رمزنگاری API مربوط به Secret را در حالت ذخیره متوقف کنید. اگر انواع دیگری از API را رمزنگاری می‌کنید، گام‌ها را متناسب با آن‌ها تنظیم کنید.</p>
+<p dir="rtl">برای غیرفعال کردن رمزنگاری در حالت ذخیره، ارائه‌دهنده‌ی <code dir="ltr">identity</code> را به‌عنوان اولین ورودی در فایل پیکربندی رمزنگاری خود قرار دهید:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">---
+apiVersion: apiserver.config.k8s.io/v1
+kind: EncryptionConfiguration
+resources:
+  - resources:
+      - secrets
+      # list any other resources here that you previously were
+      # encrypting at rest
+    providers:
+      - identity: {} # add this line
+      - aescbc:
+          keys:
+            - name: key1
+              secret: &lt;BASE 64 ENCODED SECRET&gt; # keep this in place
+                                               # make sure it comes after "identity"
+</code></pre>
+<p dir="rtl">سپس فرمان زیر را اجرا کنید تا رمزگشایی همه‌ی Secretها اجباری شود:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get secrets --all-namespaces -o json | kubectl replace -f -
+</code></pre>
+<p dir="rtl">پس از آنکه همه‌ی منابع رمزنگاری‌شده‌ی موجود را با داده‌های پشتیبانی جایگزین کردید که از رمزنگاری استفاده نمی‌کنند، می‌توانید تنظیمات رمزنگاری را از <code dir="ltr">kube-apiserver</code> حذف کنید.</p>
+<h2 id="پیکربندی-بارگذاری-مجدد-خودکار" dir="rtl">پیکربندی بارگذاری مجدد خودکار</h2>
+<p dir="rtl">می‌توانید بارگذاری مجدد خودکار پیکربندی ارائه‌دهنده‌ی رمزنگاری را پیکربندی کنید. این تنظیم تعیین می‌کند که <span class="term" title="kube-apiserver">سرور API</span> فایلی را که برای <code dir="ltr">--encryption-provider-config</code> مشخص می‌کنید فقط یک بار هنگام راه‌اندازی بارگذاری کند، یا هر بار که آن فایل را تغییر می‌دهید به‌طور خودکار آن را بارگذاری کند. با فعال کردن این گزینه می‌توانید کلیدهای رمزنگاری در حالت ذخیره را بدون راه‌اندازی مجدد سرور API تغییر دهید.</p>
+<p dir="rtl">برای فعال کردن بارگذاری مجدد خودکار، سرور API را طوری پیکربندی کنید که با <code dir="ltr">--encryption-provider-config-automatic-reload=true</code> اجرا شود. در صورت فعال بودن این گزینه، تغییرات فایل هر دقیقه یک بار بررسی می‌شوند تا اصلاحات شناسایی شوند. سنجه‌ی <code dir="ltr">apiserver_encryption_config_controller_automatic_reload_last_timestamp_seconds</code> زمانی را که پیکربندی جدید اعمال می‌شود مشخص می‌کند. به این ترتیب می‌توان کلیدهای رمزنگاری را بدون راه‌اندازی مجدد سرور API چرخش داد.</p>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<ul>
+<li dir="rtl">درباره‌ی <a href="decrypt-data.html">رمزگشایی داده‌هایی که از قبل در حالت ذخیره نگهداری شده‌اند</a> بخوانید.</li>
+<li dir="rtl">درباره‌ی <a href="../../reference/config-api/apiserver-config.v1.html">API پیکربندی EncryptionConfiguration (v1)</a> بیشتر بیاموزید.</li>
+</ul>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#پیش-از-شروع">پیش از شروع</a><a class="l2" href="#تشخیص-اینکه-آیا-رمزگذاری-در-حالت-ذخیره-شده-از-قبل-فعال-است-determining-whether-encryption-at-rest-is-already-enabled">تشخیص اینکه آیا رمزگذاری در حالت ذخیره‌شده از قبل فعال است {#determining-whether-encryption-at-rest-is-already-enabled}</a><a class="l2" href="#آشنایی-با-پیکربندی-رمزگذاری-در-حالت-ذخیره-شده">آشنایی با پیکربندی رمزگذاری در حالت ذخیره‌شده</a><a class="l3" href="#فراهم-کننده-های-موجود-providers">فراهم‌کننده‌های موجود {#providers}</a><a class="l3" href="#ذخیره-سازی-کلید">ذخیره‌سازی کلید</a><a class="l3" href="#محافظت-از-کلیدهای-رمزگذاری">محافظت از کلیدهای رمزگذاری</a><a class="l2" href="#رمزگذاری-داده-ها-encrypting-your-data">رمزگذاری داده‌ها {#encrypting-your-data}</a><a class="l3" href="#تولید-کلید-رمزگذاری-generate-key-no-kms">تولید کلید رمزگذاری {#generate-key-no-kms}</a><a class="l3" href="#تکثیر-کلید-رمزنگاری">تکثیر کلید رمزنگاری</a><a class="l3" href="#نوشتن-فایل-پیکربندی-رمزنگاری">نوشتن فایل پیکربندی رمزنگاری</a><a class="l3" href="#استفاده-از-فایل-پیکربندی-رمزنگاری-جدید">استفاده از فایل پیکربندی رمزنگاری جدید</a><a class="l3" href="#پیکربندی-مجدد-سایر-میزبان-های-control-plane-api-server-config-update-more">پیکربندی مجدد سایر میزبان‌های control plane {#api-server-config-update-more}</a><a class="l3" href="#بررسی-رمزنگاری-داده-های-تازه-نوشته-شده-verifying-that-data-is-encrypted">بررسی رمزنگاری داده‌های تازه نوشته‌شده {#verifying-that-data-is-encrypted}</a><a class="l3" href="#اطمینان-از-رمزنگاری-همه-ی-داده-های-مرتبط-ensure-all-secrets-are-encrypted">اطمینان از رمزنگاری همه‌ی داده‌های مرتبط {#ensure-all-secrets-are-encrypted}</a><a class="l2" href="#جلوگیری-از-بازیابی-به-صورت-متن-ساده-cleanup-all-secrets-encrypted">جلوگیری از بازیابی به‌صورت متن ساده {#cleanup-all-secrets-encrypted}</a><a class="l2" href="#چرخش-کلید-رمزگشایی-rotating-a-decryption-key">چرخش کلید رمزگشایی {#rotating-a-decryption-key}</a><a class="l2" href="#رمزگشایی-همه-ی-داده-ها-decrypting-all-data">رمزگشایی همه‌ی داده‌ها {#decrypting-all-data}</a><a class="l2" href="#پیکربندی-بارگذاری-مجدد-خودکار">پیکربندی بارگذاری مجدد خودکار</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>

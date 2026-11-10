@@ -1,0 +1,440 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>استفاده از ارائه‌دهندهٔ KMS برای رمزنگاری داده‌ها | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">tasks / administer-cluster</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">استفاده از ارائه‌دهندهٔ KMS برای رمزنگاری داده‌ها</h1><!-- overview -->
+<p dir="rtl">این صفحه نشان می‌دهد چگونه یک ارائه‌دهنده (provider) و افزونهٔ (plugin) سرویس مدیریت کلید (Key Management Service یا KMS) را پیکربندی کنید تا رمزنگاری داده‌های محرمانه فعال شود.
+در کوبرنتیز 1.37 دو نسخه از رمزنگاری داده‌های ذخیره‌شده (at-rest) با KMS وجود دارد.
+در صورت امکان از KMS v2 استفاده کنید، زیرا KMS v1 منسوخ شده است (از کوبرنتیز v1.28) و به‌طور پیش‌فرض غیرفعال است (از کوبرنتیز v1.29).
+کارایی KMS v2 به‌مراتب بهتر از KMS v1 است.</p>
+<div class="callout caution"><div class="callout-title">احتیاط:</div>
+<p dir="rtl">این مستندات مربوط به پیاده‌سازی KMS v2 در وضعیت عرضهٔ عمومی (generally available) است (و همچنین پیاده‌سازی منسوخ‌شدهٔ نسخهٔ ۱).
+اگر از هر یک از مؤلفه‌های control plane قدیمی‌تر از کوبرنتیز v1.29 استفاده می‌کنید، لطفاً صفحهٔ معادل را در مستندات همان نسخه‌ای از کوبرنتیز که کلاستر شما اجرا می‌کند بررسی کنید. نسخه‌های پیشین کوبرنتیز رفتار متفاوتی داشتند که ممکن است از نظر امنیت اطلاعات اهمیت داشته باشد.</p>
+</div>
+<h2 id="پیش-از-شروع" dir="rtl">پیش از شروع</h2>
+<p dir="rtl">باید یک کلاستر کوبرنتیز داشته باشید و ابزار خط فرمان kubectl باید برای ارتباط با کلاستر شما پیکربندی شده باشد. توصیه می‌شود این آموزش را روی کلاستری اجرا کنید که دست‌کم دو نود داشته باشد که نقش میزبان control plane را ندارند. اگر هنوز کلاستری ندارید، می‌توانید با استفاده از
+<a href="https://minikube.sigs.k8s.io/docs/tutorials/multi_node/" target="_blank" rel="noopener">minikube</a>
+یکی بسازید یا از یکی از این محیط‌های آزمایشی کوبرنتیز استفاده کنید:</p>
+<ul>
+<li dir="ltr" class="ltr"><a href="https://labs.iximiuz.com/playgrounds?category=kubernetes&amp;filter=all" target="_blank" rel="noopener">iximiuz Labs</a></li>
+<li dir="ltr" class="ltr"><a href="https://killercoda.com/playgrounds/scenario/kubernetes" target="_blank" rel="noopener">Killercoda</a></li>
+<li dir="ltr" class="ltr"><a href="https://kodekloud.com/public-playgrounds" target="_blank" rel="noopener">KodeKloud</a></li>
+</ul>
+<p dir="rtl">نسخهٔ موردنیاز کوبرنتیز به نسخه‌ای از API ِ KMS بستگی دارد که انتخاب کرده‌اید. کوبرنتیز استفاده از KMS v2 را توصیه می‌کند.</p>
+<ul>
+<li dir="rtl">اگر KMS API v1 را برای پشتیبانی از کلاسترهای پیش از نسخهٔ v1.27 انتخاب کرده‌اید، یا افزونهٔ KMS قدیمی‌ای دارید که فقط از KMS v1 پشتیبانی می‌کند، هر نسخهٔ پشتیبانی‌شدهٔ کوبرنتیز کار خواهد کرد. این API از کوبرنتیز v1.28 منسوخ شده است و کوبرنتیز استفاده از آن را توصیه نمی‌کند.</li>
+</ul>
+<h3 id="kms-v1" dir="ltr" class="ltr">KMS v1</h3>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes v1.28 [deprecated]</span> (منسوخ)</div>
+<ul>
+<li dir="rtl">
+<p dir="rtl">به کوبرنتیز نسخهٔ 1.10.0 یا بالاتر نیاز است.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">در نسخهٔ 1.29 و بالاتر، پیاده‌سازی v1 ِ KMS به‌طور پیش‌فرض غیرفعال است.
+برای فعال‌کردن این قابلیت و پیکربندی یک ارائه‌دهندهٔ KMS v1، مقدار <code dir="ltr">--feature-gates=KMSv1=true</code> را تنظیم کنید.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">کلاستر شما باید از etcd نسخهٔ v3 یا بالاتر استفاده کند.</p>
+</li>
+</ul>
+<h3 id="kms-v2" dir="ltr" class="ltr">KMS v2</h3>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes v1.29 [stable]</span> (پایدار)</div>
+<ul>
+<li dir="rtl">کلاستر شما باید از etcd نسخهٔ v3 یا بالاتر استفاده کند.</li>
+</ul>
+<!-- steps -->
+<h2 id="رمزنگاری-kms-و-کلیدهای-رمزنگاری-مختص-هر-آبجکت" dir="rtl">رمزنگاری KMS و کلیدهای رمزنگاری مختص هر آبجکت</h2>
+<p dir="rtl">ارائه‌دهندهٔ رمزنگاری KMS برای رمزنگاری داده‌ها در etcd از طرح رمزنگاری پاکتی (envelope encryption) استفاده می‌کند.
+داده‌ها با یک کلید رمزنگاری داده (data encryption key یا DEK) رمزنگاری می‌شوند.
+خود DEKها نیز با یک کلید رمزنگاری کلید (key encryption key یا KEK) رمزنگاری می‌شوند که در یک KMS راه‌دور ذخیره و مدیریت می‌شود.</p>
+<p dir="rtl">اگر از پیاده‌سازی (منسوخ‌شدهٔ) v1 ِ KMS استفاده کنید، برای هر عملیات رمزنگاری یک DEK جدید تولید می‌شود.</p>
+<p dir="rtl">در KMS v2، یک DEK جدید <strong>برای هر رمزنگاری</strong> تولید می‌شود: سرور API با استفاده از یک <em>تابع استخراج کلید</em> (key derivation function)، از ترکیب یک بذر (seed) محرمانه با مقداری دادهٔ تصادفی، کلیدهای رمزنگاری دادهٔ یک‌بارمصرف تولید می‌کند.
+هر بار که KEK چرخش (rotate) داده شود، این بذر نیز چرخانده می‌شود
+(برای جزئیات بیشتر، بخش <em>درک key_id و چرخش کلید</em> را در ادامه ببینید).</p>
+<p dir="rtl">ارائه‌دهندهٔ KMS از gRPC برای ارتباط با یک افزونهٔ KMS مشخص از طریق یک سوکت دامنهٔ UNIX استفاده می‌کند.
+افزونهٔ KMS که به‌صورت یک سرور gRPC پیاده‌سازی شده و روی همان میزبان (یا میزبان‌هایی) مستقر می‌شود که control plane کوبرنتیز روی آن قرار دارد، مسئول تمام ارتباطات با KMS راه‌دور است.</p>
+<h2 id="پیکربندی-ارائه-دهندهٔ-kms" dir="rtl">پیکربندی ارائه‌دهندهٔ KMS</h2>
+<p dir="rtl">برای پیکربندی یک ارائه‌دهندهٔ KMS روی سرور API، یک ارائه‌دهنده از نوع <code dir="ltr">kms</code> را در آرایهٔ <code dir="ltr">providers</code> در فایل پیکربندی رمزنگاری قرار دهید و ویژگی‌های زیر را تنظیم کنید:</p>
+<h3 id="kms-v1-configuring-the-kms-provider-kms-v1" dir="ltr" class="ltr">KMS v1 {#configuring-the-kms-provider-kms-v1}</h3>
+<ul>
+<li dir="rtl"><code dir="ltr">apiVersion</code>: نسخهٔ API برای ارائه‌دهندهٔ KMS. این مقدار را خالی بگذارید یا آن را <code dir="ltr">v1</code> قرار دهید.</li>
+<li dir="rtl"><code dir="ltr">name</code>: نام نمایشی افزونهٔ KMS. پس از تنظیم، قابل تغییر نیست.</li>
+<li dir="rtl"><code dir="ltr">endpoint</code>: نشانی شنود سرور gRPC (افزونهٔ KMS). این نقطهٔ پایانی (endpoint) یک سوکت دامنهٔ UNIX است.</li>
+<li dir="rtl"><code dir="ltr">cachesize</code>: تعداد کلیدهای رمزنگاری داده (DEK) که به‌صورت رمزنگاری‌نشده در حافظهٔ نهان (cache) نگهداری می‌شوند.
+DEKهایی که در حافظهٔ نهان هستند بدون فراخوانی دوبارهٔ KMS قابل استفاده‌اند؛
+در حالی که برای باز کردن (unwrap) DEKهایی که در حافظهٔ نهان نیستند باید KMS فراخوانی شود.</li>
+<li dir="rtl"><code dir="ltr">timeout</code>: مدت‌زمانی که <code dir="ltr">kube-apiserver</code> پیش از برگرداندن خطا منتظر پاسخ kms-plugin می‌ماند
+(مقدار پیش‌فرض ۳ ثانیه است).</li>
+</ul>
+<h3 id="kms-v2-configuring-the-kms-provider-kms-v2" dir="ltr" class="ltr">KMS v2 {#configuring-the-kms-provider-kms-v2}</h3>
+<ul>
+<li dir="rtl"><code dir="ltr">apiVersion</code>: نسخهٔ API برای ارائه‌دهندهٔ KMS. این مقدار را <code dir="ltr">v2</code> قرار دهید.</li>
+<li dir="rtl"><code dir="ltr">name</code>: نام نمایشی افزونهٔ KMS. پس از تنظیم، قابل تغییر نیست.</li>
+<li dir="rtl"><code dir="ltr">endpoint</code>: نشانی شنود سرور gRPC (افزونهٔ KMS). این نقطهٔ پایانی یک سوکت دامنهٔ UNIX است.</li>
+<li dir="rtl"><code dir="ltr">timeout</code>: مدت‌زمانی که <code dir="ltr">kube-apiserver</code> پیش از برگرداندن خطا منتظر پاسخ kms-plugin می‌ماند
+(مقدار پیش‌فرض ۳ ثانیه است).</li>
+</ul>
+<p dir="rtl">ویژگی <code dir="ltr">cachesize</code> در KMS v2 پشتیبانی نمی‌شود. همهٔ کلیدهای رمزنگاری داده (DEK)، پس از آنکه سرور آن‌ها را با فراخوانی KMS باز کرد، به‌صورت رمزنگاری‌نشده در حافظهٔ نهان نگهداری می‌شوند. پس از قرار گرفتن در حافظهٔ نهان، می‌توان از DEKها بدون فراخوانی KMS و برای مدت نامحدود جهت رمزگشایی استفاده کرد.</p>
+<p dir="rtl"><a href="encrypt-data.html">درک پیکربندی رمزنگاری داده‌های ذخیره‌شده</a> را ببینید.</p>
+<h2 id="پیاده-سازی-یک-افزونهٔ-kms" dir="rtl">پیاده‌سازی یک افزونهٔ KMS</h2>
+<p dir="rtl">برای پیاده‌سازی یک افزونهٔ KMS، می‌توانید یک سرور gRPC جدید برای افزونه توسعه دهید یا افزونهٔ KMS ارائه‌شده از سوی ارائه‌دهندهٔ ابری خود را فعال کنید.
+سپس افزونه را با KMS راه‌دور یکپارچه می‌کنید و آن را روی control plane کوبرنتیز مستقر می‌کنید.</p>
+<h3 id="فعال-کردن-kms-پشتیبانی-شده-از-سوی-ارائه-دهندهٔ-ابری" dir="rtl">فعال‌کردن KMS پشتیبانی‌شده از سوی ارائه‌دهندهٔ ابری</h3>
+<p dir="rtl">برای دستورالعمل‌های فعال‌کردن افزونهٔ KMS مختص ارائه‌دهندهٔ ابری، به مستندات ارائه‌دهندهٔ ابری خود مراجعه کنید.</p>
+<h3 id="توسعهٔ-سرور-grpc-برای-افزونهٔ-kms" dir="rtl">توسعهٔ سرور gRPC برای افزونهٔ KMS</h3>
+<p dir="rtl">می‌توانید سرور gRPC افزونهٔ KMS را با استفاده از یک فایل stub که برای Go در دسترس است توسعه دهید. برای زبان‌های دیگر، با استفاده از یک فایل proto یک فایل stub ایجاد می‌کنید و از آن برای توسعهٔ کد سرور gRPC بهره می‌گیرید.</p>
+<h4 id="kms-v1-developing-a-kms-plugin-grpc-server-kms-v1" dir="ltr" class="ltr">KMS v1 {#developing-a-kms-plugin-gRPC-server-kms-v1}</h4>
+<ul>
+<li dir="rtl">
+<p dir="rtl">با استفاده از Go: برای توسعهٔ کد سرور gRPC، از توابع و ساختارهای دادهٔ موجود در فایل stub
+<a href="https://github.com/kubernetes/kms/blob/release-1.37/apis/v1beta1/api.pb.go" target="_blank" rel="noopener">api.pb.go</a>
+استفاده کنید.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">با استفاده از زبان‌هایی غیر از Go: برای تولید فایل stub مخصوص آن زبان، از کامپایلر protoc همراه با فایل proto
+<a href="https://github.com/kubernetes/kms/blob/release-1.37/apis/v1beta1/api.proto" target="_blank" rel="noopener">api.proto</a>
+استفاده کنید.</p>
+</li>
+</ul>
+<h4 id="kms-v2-developing-a-kms-plugin-grpc-server-kms-v2" dir="ltr" class="ltr">KMS v2 {#developing-a-kms-plugin-gRPC-server-kms-v2}</h4>
+<ul>
+<li dir="rtl">
+<p dir="rtl">با استفاده از Go: یک
+<a href="https://github.com/kubernetes/kms/blob/release-1.37/pkg/service/interface.go" target="_blank" rel="noopener">کتابخانهٔ</a>
+سطح بالا برای ساده‌ترکردن این فرایند فراهم شده است. پیاده‌سازی‌های سطح پایین
+می‌توانند برای توسعهٔ کد سرور gRPC از توابع و ساختارهای دادهٔ موجود در فایل stub
+<a href="https://github.com/kubernetes/kms/blob/release-1.37/apis/v2/api.pb.go" target="_blank" rel="noopener">api.pb.go</a>
+استفاده کنند.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">با استفاده از زبان‌هایی غیر از Go: برای تولید فایل stub مخصوص آن زبان، از کامپایلر protoc همراه با فایل proto
+<a href="https://github.com/kubernetes/kms/blob/release-1.37/apis/v2/api.proto" target="_blank" rel="noopener">api.proto</a>
+استفاده کنید.</p>
+</li>
+</ul>
+<p dir="rtl">سپس با استفاده از توابع و ساختارهای دادهٔ موجود در فایل stub، کد سرور را توسعه دهید.</p>
+<h4 id="نکات" dir="rtl">نکات</h4>
+<h5 dir="ltr" class="ltr">KMS v1 {#developing-a-kms-plugin-gRPC-server-notes-kms-v1}</h5>
+<ul>
+<li dir="rtl">
+<p dir="rtl">نسخهٔ افزونهٔ kms: <code dir="ltr">v1beta1</code></p>
+<p dir="rtl">یک افزونهٔ KMS سازگار باید در پاسخ به فراخوانی رویهٔ Version، مقدار <code dir="ltr">v1beta1</code> را به‌عنوان <code dir="ltr">VersionResponse.version</code> برگرداند.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">نسخهٔ پیام: <code dir="ltr">v1beta1</code></p>
+<p dir="rtl">فیلد version در همهٔ پیام‌های ارسالی از ارائه‌دهندهٔ KMS برابر <code dir="ltr">v1beta1</code> است.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">پروتکل: سوکت دامنهٔ UNIX (<code dir="ltr">unix</code>)</p>
+<p dir="rtl">این افزونه به‌صورت یک سرور gRPC پیاده‌سازی شده است که روی یک سوکت دامنهٔ UNIX گوش می‌دهد. هنگام استقرار افزونه باید یک فایل روی سیستم فایل ایجاد شود تا اتصال سوکت دامنهٔ unix ِ gRPC برقرار شود. سرور API (کلاینت gRPC) با نقطهٔ پایانی سوکت دامنهٔ unix ِ ارائه‌دهندهٔ KMS (سرور gRPC) پیکربندی می‌شود تا بتواند با آن ارتباط برقرار کند. با آغاز کردن نقطهٔ پایانی با <code dir="ltr">/@</code>، یعنی <code dir="ltr">unix:///@foo</code>، می‌توان از یک سوکت انتزاعی (abstract) لینوکس استفاده کرد. هنگام استفاده از این نوع سوکت باید احتیاط کرد، زیرا (برخلاف سوکت‌های سنتی مبتنی بر فایل) مفهوم ACL در آن‌ها وجود ندارد. با این حال، این سوکت‌ها تابع فضای نام شبکهٔ لینوکس هستند و بنابراین، مگر آنکه از شبکهٔ میزبان استفاده شود، فقط برای کانتینرهای درون همان پاد در دسترس خواهند بود.</p>
+</li>
+</ul>
+<h5 dir="ltr" class="ltr">KMS v2 {#developing-a-kms-plugin-gRPC-server-notes-kms-v2}</h5>
+<ul>
+<li dir="rtl">
+<p dir="rtl">نسخهٔ افزونهٔ KMS: <code dir="ltr">v2</code></p>
+<p dir="rtl">یک افزونهٔ KMS سازگار باید در پاسخ به فراخوانی رویهٔ راه‌دور <code dir="ltr">Status</code>، نسخهٔ سازگاری KMS خود را به‌عنوان <code dir="ltr">StatusResponse.version</code> برگرداند. این پاسخ وضعیت باید همچنین مقدار
+"ok" را به‌عنوان <code dir="ltr">StatusResponse.healthz</code> و یک <code dir="ltr">key_id</code> (شناسهٔ KEK در KMS راه‌دور) را به‌عنوان <code dir="ltr">StatusResponse.key_id</code> در بر داشته باشد.
+پروژهٔ کوبرنتیز توصیه می‌کند افزونهٔ خود را با API پایدار <code dir="ltr">v2</code> ِ KMS سازگار کنید. کوبرنتیز 1.37 از API ِ
+<code dir="ltr">v2beta1</code> برای KMS نیز پشتیبانی می‌کند؛ احتمالاً نسخه‌های آیندهٔ کوبرنتیز نیز همچنان از این نسخهٔ بتا پشتیبانی خواهند کرد.</p>
+<p dir="rtl">سرور API، وقتی همه‌چیز سالم است، تقریباً هر دقیقه یک بار و وقتی افزونه سالم نیست، هر ۱۰ ثانیه یک بار رویهٔ <code dir="ltr">Status</code> را فراخوانی (poll) می‌کند. افزونه‌ها باید این فراخوانی را بهینه کنند، زیرا همواره زیر بار خواهد بود.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">رمزنگاری</p>
+<p dir="rtl">فراخوانی رویهٔ <code dir="ltr">EncryptRequest</code> متن آشکار (plaintext) و یک UID را برای مقاصد ثبت لاگ فراهم می‌کند. پاسخ باید شامل متن رمزشده (ciphertext)، <code dir="ltr">key_id</code> ِ KEK استفاده‌شده و در صورت نیاز، هرگونه فراداده‌ای باشد که افزونهٔ KMS برای کمک به فراخوانی‌های آتی <code dir="ltr">DecryptRequest</code> به آن نیاز دارد (از طریق فیلد <code dir="ltr">annotations</code>). افزونه باید تضمین کند که هر متن آشکار متمایز، به پاسخ <code dir="ltr">(ciphertext, key_id, annotations)</code> متمایزی منجر شود.</p>
+<p dir="rtl">اگر افزونه یک نگاشت <code dir="ltr">annotations</code> غیرخالی برگرداند، همهٔ کلیدهای این نگاشت باید نام دامنهٔ کاملاً مشخص (fully qualified domain name) باشند، مانند
+<code dir="ltr">example.com</code>. نمونه‌ای از کاربرد <code dir="ltr">annotation</code> چنین است: <code dir="ltr">{"kms.example.io/remote-kms-auditid":"&lt;audit ID used by the remote KMS&gt;"}</code></p>
+<p dir="rtl">سرور API فراخوانی رویهٔ <code dir="ltr">EncryptRequest</code> را با نرخ بالا انجام نمی‌دهد. با این حال، پیاده‌سازی‌های افزونه باید بکوشند تأخیر هر درخواست را زیر ۱۰۰ میلی‌ثانیه نگه دارند.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">رمزگشایی</p>
+<p dir="rtl">فراخوانی رویهٔ <code dir="ltr">DecryptRequest</code> مقدار <code dir="ltr">(ciphertext, key_id, annotations)</code> حاصل از <code dir="ltr">EncryptRequest</code> و یک UID را برای مقاصد ثبت لاگ فراهم می‌کند. همان‌طور که انتظار می‌رود، این فراخوانی عکس فراخوانی <code dir="ltr">EncryptRequest</code> است. افزونه‌ها باید بررسی کنند که <code dir="ltr">key_id</code> برایشان شناخته‌شده باشد؛ آن‌ها نباید برای رمزگشایی داده‌ای تلاش کنند، مگر آنکه مطمئن باشند آن داده پیش‌تر به دست خودشان رمزنگاری شده است.</p>
+<p dir="rtl">سرور API ممکن است هنگام راه‌اندازی، برای پرکردن حافظهٔ نهان watch خود، هزاران فراخوانی رویهٔ <code dir="ltr">DecryptRequest</code> انجام دهد. بنابراین پیاده‌سازی‌های افزونه باید این فراخوانی‌ها را با بیشترین سرعت ممکن انجام دهند و بکوشند تأخیر هر درخواست را زیر ۱۰ میلی‌ثانیه نگه دارند.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">درک <code dir="ltr">key_id</code> و چرخش کلید</p>
+<p dir="rtl">مقدار <code dir="ltr">key_id</code> نام عمومی و غیرمحرمانهٔ KEK ِ KMS راه‌دوری است که در حال حاضر استفاده می‌شود. این مقدار ممکن است در جریان کار عادی سرور API در لاگ‌ها ثبت شود و بنابراین نباید هیچ دادهٔ خصوصی‌ای در بر داشته باشد. به پیاده‌سازی‌های افزونه توصیه می‌شود برای جلوگیری از نشت هرگونه داده، از هش استفاده کنند. متریک‌های KMS v2 این مقدار را پیش از ارائه از طریق نقطهٔ پایانی <code dir="ltr">/metrics</code> هش می‌کنند.</p>
+<p dir="rtl">سرور API مقدار <code dir="ltr">key_id</code> ِ برگشتی از فراخوانی رویهٔ <code dir="ltr">Status</code> را مرجع معتبر می‌داند. بنابراین تغییر این مقدار به سرور API اعلام می‌کند که KEK راه‌دور تغییر کرده است و داده‌هایی که با KEK قدیمی رمزنگاری شده‌اند، هنگام انجام یک نوشتن بی‌اثر (no-op write)، باید کهنه (stale) علامت‌گذاری شوند (همان‌طور که در ادامه توضیح داده می‌شود). اگر فراخوانی رویهٔ <code dir="ltr">EncryptRequest</code> مقدار <code dir="ltr">key_id</code> ای متفاوت با <code dir="ltr">Status</code> برگرداند، پاسخ دور ریخته می‌شود و افزونه ناسالم در نظر گرفته می‌شود. بنابراین پیاده‌سازی‌ها باید تضمین کنند که <code dir="ltr">key_id</code> برگشتی از <code dir="ltr">Status</code> با مقدار برگشتی از <code dir="ltr">EncryptRequest</code> یکسان باشد. افزون بر این، افزونه‌ها باید اطمینان حاصل کنند که <code dir="ltr">key_id</code> پایدار است و میان مقادیر مختلف نوسان نمی‌کند (برای مثال، در حین چرخش KEK راه‌دور).</p>
+<p dir="rtl">افزونه‌ها نباید از <code dir="ltr">key_id</code>ها دوباره استفاده کنند، حتی در شرایطی که یک KEK راه‌دور که پیش‌تر استفاده شده بود دوباره به کار گرفته شود. برای مثال، اگر افزونه‌ای از <code dir="ltr">key_id=A</code> استفاده می‌کرد، سپس به <code dir="ltr">key_id=B</code> تغییر کرد و دوباره به <code dir="ltr">key_id=A</code> بازگشت، به‌جای گزارش <code dir="ltr">key_id=A</code> باید مقداری مشتق‌شده مانند <code dir="ltr">key_id=A_001</code> را گزارش کند یا از مقداری جدید مانند <code dir="ltr">key_id=C</code> استفاده کند.</p>
+<p dir="rtl">از آنجا که سرور API تقریباً هر دقیقه یک بار <code dir="ltr">Status</code> را فراخوانی می‌کند، چرخش <code dir="ltr">key_id</code> فوری نیست. افزون بر این، سرور API حدود سه دقیقه بر پایهٔ آخرین وضعیت معتبر به کار خود ادامه می‌دهد. بنابراین اگر کاربری بخواهد رویکردی منفعل در مهاجرت ذخیره‌سازی در پیش بگیرد (یعنی با صبر کردن)، باید مهاجرت را طوری زمان‌بندی کند که <code dir="ltr">3 + N + M</code> دقیقه پس از چرخش KEK راه‌دور انجام شود (<code dir="ltr">N</code> مدت‌زمانی است که طول می‌کشد تا افزونه تغییر <code dir="ltr">key_id</code> را مشاهده کند و <code dir="ltr">M</code> حاشیهٔ زمانی دلخواه برای پردازش تغییرات پیکربندی است؛ حداقل مقدار توصیه‌شده برای <code dir="ltr">M</code> پنج دقیقه است). توجه کنید که برای انجام چرخش KEK نیازی به راه‌اندازی مجدد سرور API نیست.</p>
+</li>
+</ul>
+<div class="callout caution"><div class="callout-title">احتیاط:</div>
+<p dir="rtl">از آنجا که تعداد نوشتن‌هایی که با DEK انجام می‌شود در کنترل شما نیست،
+پروژهٔ کوبرنتیز توصیه می‌کند KEK را دست‌کم هر ۹۰ روز یک بار بچرخانید.</p>
+</div>
+<ul>
+<li dir="rtl">
+<p dir="rtl">پروتکل: سوکت دامنهٔ UNIX (<code dir="ltr">unix</code>)</p>
+<p dir="rtl">این افزونه به‌صورت یک سرور gRPC پیاده‌سازی شده است که روی یک سوکت دامنهٔ UNIX گوش می‌دهد.
+هنگام استقرار افزونه باید یک فایل روی سیستم فایل ایجاد شود تا اتصال سوکت دامنهٔ unix ِ gRPC برقرار شود.
+سرور API (کلاینت gRPC) با نقطهٔ پایانی سوکت دامنهٔ unix ِ ارائه‌دهندهٔ KMS (سرور gRPC)
+پیکربندی می‌شود تا بتواند با آن ارتباط برقرار کند.
+با آغاز کردن نقطهٔ پایانی با <code dir="ltr">/@</code>، یعنی <code dir="ltr">unix:///@foo</code>، می‌توان از یک سوکت انتزاعی لینوکس استفاده کرد.
+هنگام استفاده از این نوع سوکت باید احتیاط کرد، زیرا (برخلاف سوکت‌های سنتی مبتنی بر فایل)
+مفهوم ACL در آن‌ها وجود ندارد.
+با این حال، این سوکت‌ها تابع فضای نام شبکهٔ لینوکس هستند و بنابراین، مگر آنکه از شبکهٔ میزبان استفاده شود،
+فقط برای کانتینرهای درون همان پاد در دسترس خواهند بود.</p>
+</li>
+</ul>
+<h3 id="یکپارچه-سازی-افزونهٔ-kms-با-kms-راه-دور" dir="rtl">یکپارچه‌سازی افزونهٔ KMS با KMS راه‌دور</h3>
+<p dir="rtl">افزونهٔ KMS می‌تواند با هر پروتکلی که KMS از آن پشتیبانی می‌کند با KMS راه‌دور ارتباط برقرار کند.
+همهٔ داده‌های پیکربندی، از جمله اعتبارنامه‌های احراز هویتی که افزونهٔ KMS برای ارتباط با KMS راه‌دور به کار می‌برد، به‌طور مستقل در خود افزونهٔ KMS ذخیره و مدیریت می‌شوند.
+افزونهٔ KMS می‌تواند متن رمزشده را پیش از ارسال به KMS برای رمزگشایی، همراه با فراداده‌های اضافی موردنیاز کدگذاری کند
+(KMS v2 با فراهم‌کردن فیلد اختصاصی <code dir="ltr">annotations</code> این فرایند را ساده‌تر کرده است).</p>
+<h3 id="استقرار-افزونهٔ-kms" dir="rtl">استقرار افزونهٔ KMS</h3>
+<p dir="rtl">اطمینان حاصل کنید که افزونهٔ KMS روی همان میزبان (یا میزبان‌هایی) اجرا می‌شود که سرور (یا سرورهای) API کوبرنتیز روی آن قرار دارند.</p>
+<h2 id="رمزنگاری-داده-ها-با-ارائه-دهندهٔ-kms" dir="rtl">رمزنگاری داده‌ها با ارائه‌دهندهٔ KMS</h2>
+<p dir="rtl">برای رمزنگاری داده‌ها:</p>
+<ol>
+<li dir="rtl">
+<p dir="rtl">یک فایل <code dir="ltr">EncryptionConfiguration</code> جدید با ویژگی‌های مناسب برای ارائه‌دهندهٔ <code dir="ltr">kms</code> ایجاد کنید
+تا منابعی مانند Secretها و ConfigMapها رمزنگاری شوند. اگر می‌خواهید یک API افزونه (extension API) را که در یک CustomResourceDefinition تعریف شده است رمزنگاری کنید، کلاستر شما باید کوبرنتیز v1.26 یا جدیدتر را اجرا کند.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">فلگ <code dir="ltr">--encryption-provider-config</code> را روی kube-apiserver طوری تنظیم کنید که به محل فایل پیکربندی اشاره کند.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">آرگومان بولی <code dir="ltr">--encryption-provider-config-automatic-reload</code>
+تعیین می‌کند که آیا فایل تعیین‌شده با <code dir="ltr">--encryption-provider-config</code>، در صورت تغییر محتوای آن روی دیسک،
+<a href="encrypt-data.html#configure-automatic-reloading">به‌طور خودکار دوباره بارگذاری شود</a>
+یا نه.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">سرور API خود را مجدداً راه‌اندازی کنید.</p>
+</li>
+</ol>
+<h3 id="kms-v1-encrypting-your-data-with-the-kms-provider-kms-v1" dir="ltr" class="ltr">KMS v1 {#encrypting-your-data-with-the-kms-provider-kms-v1}</h3>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: apiserver.config.k8s.io/v1
+kind: EncryptionConfiguration
+resources:
+  - resources:
+      - secrets
+      - configmaps
+      - pandas.awesome.bears.example
+    providers:
+      - kms:
+          name: myKmsPluginFoo
+          endpoint: unix:///tmp/socketfile-foo.sock
+          cachesize: 100
+          timeout: 3s
+      - kms:
+          name: myKmsPluginBar
+          endpoint: unix:///tmp/socketfile-bar.sock
+          cachesize: 100
+          timeout: 3s
+</code></pre>
+<h3 id="kms-v2-encrypting-your-data-with-the-kms-provider-kms-v2" dir="ltr" class="ltr">KMS v2 {#encrypting-your-data-with-the-kms-provider-kms-v2}</h3>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: apiserver.config.k8s.io/v1
+kind: EncryptionConfiguration
+resources:
+  - resources:
+      - secrets
+      - configmaps
+      - pandas.awesome.bears.example
+    providers:
+      - kms:
+          apiVersion: v2
+          name: myKmsPluginFoo
+          endpoint: unix:///tmp/socketfile-foo.sock
+          timeout: 3s
+      - kms:
+          apiVersion: v2
+          name: myKmsPluginBar
+          endpoint: unix:///tmp/socketfile-bar.sock
+          timeout: 3s
+</code></pre>
+<p dir="rtl">اگر مقدار <code dir="ltr">--encryption-provider-config-automatic-reload</code> را <code dir="ltr">true</code> قرار دهید، همهٔ بررسی‌های سلامت (health check) در یک endpoint واحد بررسی سلامت ادغام می‌شوند. بررسی‌های سلامت جداگانه فقط زمانی در دسترس هستند که از ارائه‌دهندگان KMS v1 استفاده شود و پیکربندی رمزنگاری به‌طور خودکار دوباره بارگذاری نشود.</p>
+<p dir="rtl">جدول زیر endpointهای بررسی سلامت را برای هر نسخهٔ KMS خلاصه می‌کند:</p>
+<table>
+<thead>
+<tr>
+<th dir="rtl">پیکربندی‌های KMS</th>
+<th dir="rtl">بدون بارگذاری مجدد خودکار</th>
+<th dir="rtl">با بارگذاری مجدد خودکار</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td dir="rtl">فقط KMS v1</td>
+<td dir="rtl">بررسی‌های سلامت جداگانه</td>
+<td dir="rtl">بررسی سلامت واحد</td>
+</tr>
+<tr>
+<td dir="rtl">فقط KMS v2</td>
+<td dir="rtl">بررسی سلامت واحد</td>
+<td dir="rtl">بررسی سلامت واحد</td>
+</tr>
+<tr>
+<td dir="rtl">هر دو KMS v1 و v2</td>
+<td dir="rtl">بررسی‌های سلامت جداگانه</td>
+<td dir="rtl">بررسی سلامت واحد</td>
+</tr>
+<tr>
+<td dir="rtl">بدون KMS</td>
+<td dir="rtl">هیچ‌کدام</td>
+<td dir="rtl">بررسی سلامت واحد</td>
+</tr>
+</tbody>
+</table>
+<p dir="rtl">منظور از «بررسی سلامت واحد» (<code dir="ltr">Single Healthcheck</code>) این است که تنها endpoint بررسی سلامت، <code dir="ltr">/healthz/kms-providers</code> است.</p>
+<p dir="rtl">منظور از «بررسی‌های سلامت جداگانه» (<code dir="ltr">Individual Healthchecks</code>) این است که هر افزونهٔ KMS، بر اساس جایگاهش در پیکربندی رمزنگاری، endpoint بررسی سلامت مخصوص به خود را دارد: <code dir="ltr">/healthz/kms-provider-0</code>، <code dir="ltr">/healthz/kms-provider-1</code> و غیره.</p>
+<p dir="rtl">مسیرهای این endpointهای بررسی سلامت به‌صورت ثابت در کد تعریف شده‌اند و سرور آن‌ها را تولید و کنترل می‌کند. اندیس‌های بررسی‌های سلامت جداگانه با ترتیب پردازش پیکربندی رمزنگاری KMS مطابقت دارند.</p>
+<p dir="rtl">تا زمانی که مراحل بخش <a href="#ensuring-all-secrets-are-encrypted">اطمینان از رمزنگاری همهٔ Secretها</a> انجام نشده است، فهرست <code dir="ltr">providers</code> باید به ارائه‌دهندهٔ <code dir="ltr">identity: {}</code> ختم شود تا داده‌های رمزنگاری‌نشده نیز قابل خواندن باشند. پس از رمزنگاری همهٔ منابع، باید ارائه‌دهندهٔ <code dir="ltr">identity</code> را حذف کنید تا API server دیگر داده‌های رمزنگاری‌نشده را نپذیرد.</p>
+<p dir="rtl">برای جزئیات بیشتر دربارهٔ قالب <code dir="ltr">EncryptionConfiguration</code>، به
+<a href="../../reference/config-api/apiserver-config.v1.html">مرجع API رمزنگاری API server</a> مراجعه کنید.</p>
+<h2 id="بررسی-رمزنگاری-داده-ها" dir="rtl">بررسی رمزنگاری داده‌ها</h2>
+<p dir="rtl">هنگامی که رمزنگاری داده‌های ذخیره‌شده (encryption at rest) به‌درستی پیکربندی شده باشد، منابع هنگام نوشتن رمزنگاری می‌شوند.
+پس از راه‌اندازی مجدد <code dir="ltr">kube-apiserver</code>، هر Secret یا هر نوع منبع دیگری که در <code dir="ltr">EncryptionConfiguration</code> پیکربندی شده است، اگر تازه ایجاد یا به‌روزرسانی شود، باید هنگام ذخیره‌سازی رمزنگاری شود. برای بررسی این موضوع،
+می‌توانید با برنامهٔ خط فرمان <code dir="ltr">etcdctl</code> محتوای داده‌های Secret خود را بازیابی کنید.</p>
+<ol>
+<li dir="rtl">
+<p dir="rtl">یک Secret جدید به نام <code dir="ltr">secret1</code> در فضای نام <code dir="ltr">default</code> ایجاد کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl create secret generic secret1 -n default --from-literal=mykey=mydata
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">با استفاده از خط فرمان <code dir="ltr">etcdctl</code>، آن Secret را از etcd بخوانید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">ETCDCTL_API=3 etcdctl get /kubernetes.io/secrets/default/secret1 [...] | hexdump -C
+</code></pre>
+<p dir="rtl">در این دستور، <code dir="ltr">[...]</code> شامل آرگومان‌های اضافی برای اتصال به سرور etcd است.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">بررسی کنید که Secret ذخیره‌شده در KMS v1 با پیشوند <code dir="ltr">k8s:enc:kms:v1:</code> و در KMS v2 با پیشوند <code dir="ltr">k8s:enc:kms:v2:</code> آغاز شود؛ این پیشوند نشان می‌دهد که ارائه‌دهندهٔ <code dir="ltr">kms</code> داده‌های حاصل را رمزنگاری کرده است.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">بررسی کنید که Secret هنگام بازیابی از طریق API به‌درستی رمزگشایی شود:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl describe secret secret1 -n default
+</code></pre>
+<p dir="rtl">این Secret باید شامل <code dir="ltr">mykey: mydata</code> باشد.</p>
+</li>
+</ol>
+<h2 id="اطمینان-از-رمزنگاری-همهٔ-secretها" dir="rtl">اطمینان از رمزنگاری همهٔ Secretها</h2>
+<p dir="rtl">هنگامی که رمزنگاری داده‌های ذخیره‌شده به‌درستی پیکربندی شده باشد، منابع هنگام نوشتن رمزنگاری می‌شوند.
+بنابراین می‌توان با یک به‌روزرسانی درجا و بدون تغییر (no-op)، از رمزنگاری داده‌ها اطمینان حاصل کرد.</p>
+<p dir="rtl">دستور زیر همهٔ Secretها را می‌خواند و سپس آن‌ها را به‌روزرسانی می‌کند تا رمزنگاری سمت سرور روی آن‌ها اعمال شود.
+اگر به دلیل نوشتن هم‌زمان و متعارض خطایی رخ داد، دستور را دوباره اجرا کنید.
+در کلاسترهای بزرگ‌تر، ممکن است بخواهید Secretها را بر اساس فضای نام تقسیم کنید یا فرایند به‌روزرسانی را با یک اسکریپت انجام دهید.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get secrets --all-namespaces -o json | kubectl replace -f -
+</code></pre>
+<h2 id="تغییر-از-ارائه-دهندهٔ-رمزنگاری-محلی-به-ارائه-دهندهٔ-kms" dir="rtl">تغییر از ارائه‌دهندهٔ رمزنگاری محلی به ارائه‌دهندهٔ KMS</h2>
+<p dir="rtl">برای تغییر از یک ارائه‌دهندهٔ رمزنگاری محلی به ارائه‌دهندهٔ <code dir="ltr">kms</code> و رمزنگاری دوبارهٔ همهٔ Secretها:</p>
+<ol>
+<li dir="rtl">
+<p dir="rtl">مطابق مثال زیر، ارائه‌دهندهٔ <code dir="ltr">kms</code> را به‌عنوان نخستین مورد در فایل پیکربندی اضافه کنید.</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: apiserver.config.k8s.io/v1
+kind: EncryptionConfiguration
+resources:
+  - resources:
+      - secrets
+    providers:
+      - kms:
+          apiVersion: v2
+          name : myKmsPlugin
+          endpoint: unix:///tmp/socketfile.sock
+      - aescbc:
+          keys:
+            - name: key1
+              secret: &lt;BASE 64 ENCODED SECRET&gt;
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">همهٔ فرایندهای <code dir="ltr">kube-apiserver</code> را دوباره راه‌اندازی کنید.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">دستور زیر را اجرا کنید تا همهٔ Secretها به‌اجبار با ارائه‌دهندهٔ <code dir="ltr">kms</code> دوباره رمزنگاری شوند.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get secrets --all-namespaces -o json | kubectl replace -f -
+</code></pre>
+</li>
+</ol>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<!-- preserve legacy hyperlinks -->
+<a id="disabling-encryption-at-rest"></a>
+<p dir="rtl">اگر دیگر نمی‌خواهید داده‌هایی را که در API کوبرنتیز ذخیره می‌شوند رمزنگاری کنید،
+<a href="decrypt-data.html">رمزگشایی داده‌هایی که پیش‌تر به‌صورت ذخیره‌شده رمزنگاری شده‌اند</a> را مطالعه کنید.</p>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#پیش-از-شروع">پیش از شروع</a><a class="l3" href="#kms-v1">KMS v1</a><a class="l3" href="#kms-v2">KMS v2</a><a class="l2" href="#رمزنگاری-kms-و-کلیدهای-رمزنگاری-مختص-هر-آبجکت">رمزنگاری KMS و کلیدهای رمزنگاری مختص هر آبجکت</a><a class="l2" href="#پیکربندی-ارائه-دهندهٔ-kms">پیکربندی ارائه‌دهندهٔ KMS</a><a class="l3" href="#kms-v1-configuring-the-kms-provider-kms-v1">KMS v1 {#configuring-the-kms-provider-kms-v1}</a><a class="l3" href="#kms-v2-configuring-the-kms-provider-kms-v2">KMS v2 {#configuring-the-kms-provider-kms-v2}</a><a class="l2" href="#پیاده-سازی-یک-افزونهٔ-kms">پیاده‌سازی یک افزونهٔ KMS</a><a class="l3" href="#فعال-کردن-kms-پشتیبانی-شده-از-سوی-ارائه-دهندهٔ-ابری">فعال‌کردن KMS پشتیبانی‌شده از سوی ارائه‌دهندهٔ ابری</a><a class="l3" href="#توسعهٔ-سرور-grpc-برای-افزونهٔ-kms">توسعهٔ سرور gRPC برای افزونهٔ KMS</a><a class="l3" href="#یکپارچه-سازی-افزونهٔ-kms-با-kms-راه-دور">یکپارچه‌سازی افزونهٔ KMS با KMS راه‌دور</a><a class="l3" href="#استقرار-افزونهٔ-kms">استقرار افزونهٔ KMS</a><a class="l2" href="#رمزنگاری-داده-ها-با-ارائه-دهندهٔ-kms">رمزنگاری داده‌ها با ارائه‌دهندهٔ KMS</a><a class="l3" href="#kms-v1-encrypting-your-data-with-the-kms-provider-kms-v1">KMS v1 {#encrypting-your-data-with-the-kms-provider-kms-v1}</a><a class="l3" href="#kms-v2-encrypting-your-data-with-the-kms-provider-kms-v2">KMS v2 {#encrypting-your-data-with-the-kms-provider-kms-v2}</a><a class="l2" href="#بررسی-رمزنگاری-داده-ها">بررسی رمزنگاری داده‌ها</a><a class="l2" href="#اطمینان-از-رمزنگاری-همهٔ-secretها">اطمینان از رمزنگاری همهٔ Secretها</a><a class="l2" href="#تغییر-از-ارائه-دهندهٔ-رمزنگاری-محلی-به-ارائه-دهندهٔ-kms">تغییر از ارائه‌دهندهٔ رمزنگاری محلی به ارائه‌دهندهٔ KMS</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>

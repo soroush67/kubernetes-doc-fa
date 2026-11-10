@@ -8,8 +8,8 @@
 
 | | |
 |---|---|
-| پیشرفت (بر اساس کلمات) | **88.5٪** |
-| صفحات ترجمه‌شده | 1486 از 1722 |
+| پیشرفت (بر اساس کلمات) | **89.3٪** |
+| صفحات ترجمه‌شده | 1499 از 1722 |
 | صفحات دارای ایراد ساختاری | 73 |
 | نسخه‌ی منبع انگلیسی | `f652c6b8a26f` |
 
@@ -74,7 +74,7 @@ cd kubernetes-doc-fa
 | `home` | 2 | 2 |
 | `reference` | 1198 | 1198 |
 | `setup` | 22 | 22 |
-| `tasks` | 31 | 221 |
+| `tasks` | 44 | 221 |
 | `tutorials` | 0 | 45 |
 
 </div>
@@ -101,6 +101,19 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [tasks/administer-cluster/kubeadm/kubeadm-certs.md](md/tasks/administer-cluster/kubeadm/kubeadm-certs.md) — 2026-11-10T10:26:36+03:30
+- [tasks/administer-cluster/kubeadm/kubeadm-reconfigure.md](md/tasks/administer-cluster/kubeadm/kubeadm-reconfigure.md) — 2026-11-10T10:25:48+03:30
+- [tasks/administer-cluster/kubeadm/change-package-repository.md](md/tasks/administer-cluster/kubeadm/change-package-repository.md) — 2026-11-10T10:24:25+03:30
+- [tasks/administer-cluster/kubeadm/adding-windows-nodes.md](md/tasks/administer-cluster/kubeadm/adding-windows-nodes.md) — 2026-11-10T10:24:15+03:30
+- [tasks/administer-cluster/encrypt-data.md](md/tasks/administer-cluster/encrypt-data.md) — 2026-11-10T10:23:53+03:30
+- [tasks/administer-cluster/kubeadm/adding-linux-nodes.md](md/tasks/administer-cluster/kubeadm/adding-linux-nodes.md) — 2026-11-10T10:23:50+03:30
+- [tasks/administer-cluster/kubeadm/_index.md](md/tasks/administer-cluster/kubeadm/_index.md) — 2026-11-10T10:23:34+03:30
+- [tasks/administer-cluster/kms-provider.md](md/tasks/administer-cluster/kms-provider.md) — 2026-11-10T10:23:29+03:30
+- [tasks/administer-cluster/ip-masq-agent.md](md/tasks/administer-cluster/ip-masq-agent.md) — 2026-11-10T10:21:47+03:30
+- [tasks/administer-cluster/hardening-dra.md](md/tasks/administer-cluster/hardening-dra.md) — 2026-11-10T10:21:10+03:30
+- [tasks/administer-cluster/guaranteed-scheduling-critical-addon-pods.md](md/tasks/administer-cluster/guaranteed-scheduling-critical-addon-pods.md) — 2026-11-10T10:20:52+03:30
+- [tasks/administer-cluster/extended-resource-node.md](md/tasks/administer-cluster/extended-resource-node.md) — 2026-11-10T10:20:42+03:30
+- [tasks/administer-cluster/enable-disable-api.md](md/tasks/administer-cluster/enable-disable-api.md) — 2026-11-10T10:20:05+03:30
 - [tasks/administer-cluster/dns-horizontal-autoscaling.md](md/tasks/administer-cluster/dns-horizontal-autoscaling.md) — 2026-11-10T10:20:04+03:30
 - [tasks/administer-cluster/dns-debugging-resolution.md](md/tasks/administer-cluster/dns-debugging-resolution.md) — 2026-11-10T10:19:57+03:30
 - [tasks/administer-cluster/dns-custom-nameservers.md](md/tasks/administer-cluster/dns-custom-nameservers.md) — 2026-11-10T10:19:33+03:30
@@ -108,19 +121,6 @@ cd kubernetes-doc-fa
 - [tasks/administer-cluster/developing-cloud-controller-manager.md](md/tasks/administer-cluster/developing-cloud-controller-manager.md) — 2026-11-10T10:18:56+03:30
 - [tasks/administer-cluster/configure-upgrade-etcd.md](md/tasks/administer-cluster/configure-upgrade-etcd.md) — 2026-11-10T10:18:43+03:30
 - [tasks/administer-cluster/declare-network-policy.md](md/tasks/administer-cluster/declare-network-policy.md) — 2026-11-10T10:18:40+03:30
-- [tasks/administer-cluster/cpu-management-policies.md](md/tasks/administer-cluster/cpu-management-policies.md) — 2026-11-10T10:18:21+03:30
-- [tasks/administer-cluster/coredns.md](md/tasks/administer-cluster/coredns.md) — 2026-11-10T10:17:36+03:30
-- [tasks/administer-cluster/controller-manager-leader-migration.md](md/tasks/administer-cluster/controller-manager-leader-migration.md) — 2026-11-10T10:17:21+03:30
-- [tasks/administer-cluster/configure-feature-gates.md](md/tasks/administer-cluster/configure-feature-gates.md) — 2026-11-10T10:16:26+03:30
-- [tasks/administer-cluster/cluster-upgrade.md](md/tasks/administer-cluster/cluster-upgrade.md) — 2026-11-10T10:16:09+03:30
-- [tasks/administer-cluster/change-pv-access-mode-readwriteoncepod.md](md/tasks/administer-cluster/change-pv-access-mode-readwriteoncepod.md) — 2026-11-10T10:15:50+03:30
-- [tasks/administer-cluster/change-pv-reclaim-policy.md](md/tasks/administer-cluster/change-pv-reclaim-policy.md) — 2026-11-10T10:15:46+03:30
-- [tasks/administer-cluster/certificates.md](md/tasks/administer-cluster/certificates.md) — 2026-11-10T10:15:28+03:30
-- [tasks/administer-cluster/change-default-storage-class.md](md/tasks/administer-cluster/change-default-storage-class.md) — 2026-11-10T10:15:11+03:30
-- [tasks/access-application-cluster/web-ui-dashboard.md](md/tasks/access-application-cluster/web-ui-dashboard.md) — 2026-11-10T10:14:54+03:30
-- [tasks/administer-cluster/access-cluster-api.md](md/tasks/administer-cluster/access-cluster-api.md) — 2026-11-10T10:14:52+03:30
-- [tasks/administer-cluster/_index.md](md/tasks/administer-cluster/_index.md) — 2026-11-10T10:14:02+03:30
-- [tasks/access-application-cluster/service-access-application-cluster.md](md/tasks/access-application-cluster/service-access-application-cluster.md) — 2026-11-10T10:13:59+03:30
 
 </div>
 

@@ -1,0 +1,578 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>مدیریت گواهی‌ها با kubeadm | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
+<header class="top"><a href="../../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">tasks / administer-cluster / kubeadm</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">مدیریت گواهی‌ها با kubeadm</h1><!-- overview -->
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes v1.15 [stable]</span> (پایدار)</div>
+<p dir="rtl">گواهی‌های کلاینتی که <a href="../../../reference/setup-tools/kubeadm/index.html">kubeadm</a> تولید می‌کند پس از یک سال منقضی می‌شوند.
+این صفحه توضیح می‌دهد که چگونه تمدید گواهی‌ها را با kubeadm مدیریت کنید. همچنین سایر کارهای مرتبط با
+مدیریت گواهی‌ها در kubeadm را پوشش می‌دهد.</p>
+<p dir="rtl">پروژه کوبرنتیز توصیه می‌کند که به‌روزرسانی به آخرین نسخه‌های وصله (patch) را بی‌درنگ انجام دهید و
+مطمئن شوید که یکی از نسخه‌های فرعی (minor) پشتیبانی‌شده کوبرنتیز را اجرا می‌کنید.
+پیروی از این توصیه به حفظ امنیت شما کمک می‌کند.</p>
+<h2 id="پیش-از-شروع" dir="rtl">پیش از شروع</h2>
+<p dir="rtl">باید با <a href="../../../setup/best-practices/certificates.html">گواهی‌های PKI و الزامات آن‌ها در کوبرنتیز</a> آشنا باشید.</p>
+<p dir="rtl">باید بدانید که چگونه یک فایل <a href="../../../reference/config-api/kubeadm-config.v1beta4.html">پیکربندی</a> را به دستورهای kubeadm بدهید.</p>
+<p dir="rtl">این راهنما استفاده از دستور <code dir="ltr">openssl</code> را پوشش می‌دهد (که در صورت انتخاب روش امضای دستی گواهی‌ها
+از آن استفاده می‌شود)، اما می‌توانید از ابزارهای دلخواه خود استفاده کنید.</p>
+<p dir="rtl">در برخی از مراحل این راهنما برای دسترسی مدیریتی از <code dir="ltr">sudo</code> استفاده شده است. می‌توانید از هر ابزار معادلی استفاده کنید.</p>
+<!-- steps -->
+<h2 id="استفاده-از-گواهی-های-سفارشی-custom-certificates" dir="rtl">استفاده از گواهی‌های سفارشی {#custom-certificates}</h2>
+<p dir="rtl">به‌طور پیش‌فرض، kubeadm همه گواهی‌های لازم برای اجرای یک کلاستر را تولید می‌کند.
+می‌توانید با فراهم کردن گواهی‌های خودتان این رفتار را تغییر دهید.</p>
+<p dir="rtl">برای این کار، باید گواهی‌ها را در دایرکتوری‌ای قرار دهید که با فلگ <code dir="ltr">--cert-dir</code>
+یا فیلد <code dir="ltr">certificatesDir</code> در <code dir="ltr">ClusterConfiguration</code> مربوط به kubeadm مشخص شده است.
+این دایرکتوری به‌طور پیش‌فرض <code dir="ltr">/etc/kubernetes/pki</code> است.</p>
+<p dir="rtl">اگر یک جفت گواهی و کلید خصوصی پیش از اجرای <code dir="ltr">kubeadm init</code> وجود داشته باشد،
+kubeadm آن‌ها را بازنویسی نمی‌کند. برای مثال، این یعنی می‌توانید یک CA موجود را
+در <code dir="ltr">/etc/kubernetes/pki/ca.crt</code> و <code dir="ltr">/etc/kubernetes/pki/ca.key</code> کپی کنید
+تا kubeadm از همین CA برای امضای سایر گواهی‌ها استفاده کند.</p>
+<h2 id="انتخاب-الگوریتم-رمزنگاری-choosing-encryption-algorithm" dir="rtl">انتخاب الگوریتم رمزنگاری {#choosing-encryption-algorithm}</h2>
+<p dir="rtl">در kubeadm می‌توانید الگوریتم رمزنگاری مورد استفاده برای ایجاد کلیدهای عمومی و خصوصی را انتخاب کنید.
+این کار با استفاده از فیلد <code dir="ltr">encryptionAlgorithm</code> در پیکربندی kubeadm انجام می‌شود:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: kubeadm.k8s.io/v1beta4
+kind: ClusterConfiguration
+encryptionAlgorithm: &lt;ALGORITHM&gt;
+</code></pre>
+<p dir="rtl">مقدار <code dir="ltr">&lt;ALGORITHM&gt;</code> می‌تواند یکی از <code dir="ltr">RSA-2048</code> (پیش‌فرض)، <code dir="ltr">RSA-3072</code>، <code dir="ltr">RSA-4096</code> یا <code dir="ltr">ECDSA-P256</code> باشد.</p>
+<h2 id="انتخاب-دوره-اعتبار-گواهی-ها-choosing-cert-validity-period" dir="rtl">انتخاب دوره اعتبار گواهی‌ها {#choosing-cert-validity-period}</h2>
+<p dir="rtl">در kubeadm می‌توانید دوره اعتبار گواهی‌های CA و گواهی‌های برگ (leaf) را انتخاب کنید.
+این کار با استفاده از فیلدهای <code dir="ltr">certificateValidityPeriod</code> و <code dir="ltr">caCertificateValidityPeriod</code>
+در پیکربندی kubeadm انجام می‌شود:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: kubeadm.k8s.io/v1beta4
+kind: ClusterConfiguration
+certificateValidityPeriod: 8760h # Default: 365 days × 24 hours = 1 year
+caCertificateValidityPeriod: 87600h # Default: 365 days × 24 hours * 10 = 10 years
+</code></pre>
+<p dir="rtl">مقادیر این فیلدها از قالب پذیرفته‌شده برای
+<a href="https://pkg.go.dev/time#ParseDuration" target="_blank" rel="noopener">مقادیر <code dir="ltr">time.Duration</code> در Go</a> پیروی می‌کنند و بزرگ‌ترین
+واحد پشتیبانی‌شده <code dir="ltr">h</code> (ساعت) است.</p>
+<h2 id="حالت-ca-خارجی-external-ca-mode" dir="rtl">حالت CA خارجی {#external-ca-mode}</h2>
+<p dir="rtl">همچنین می‌توان فقط فایل <code dir="ltr">ca.crt</code> را فراهم کرد و فایل <code dir="ltr">ca.key</code> را فراهم نکرد
+(این امکان فقط برای فایل CA ریشه وجود دارد و برای سایر جفت‌گواهی‌ها در دسترس نیست).
+اگر همه گواهی‌ها و فایل‌های kubeconfig دیگر در جای خود باشند، kubeadm این وضعیت را تشخیص می‌دهد
+و حالت «CA خارجی» را فعال می‌کند. در این حالت، kubeadm بدون وجود کلید CA روی دیسک
+کار خود را ادامه می‌دهد.</p>
+<p dir="rtl">در عوض، controller-manager را به‌صورت مستقل با <code dir="ltr">--controllers=csrsigner</code> اجرا کنید و
+آن را به گواهی و کلید CA ارجاع دهید.</p>
+<p dir="rtl">برای آماده‌سازی اعتبارنامه‌های مؤلفه‌ها در حالت CA خارجی، روش‌های گوناگونی وجود دارد.</p>
+<h3 id="آماده-سازی-دستی-اعتبارنامه-های-مؤلفه-ها" dir="rtl">آماده‌سازی دستی اعتبارنامه‌های مؤلفه‌ها</h3>
+<p dir="rtl">صفحه <a href="../../../setup/best-practices/certificates.html">گواهی‌های PKI و الزامات آن‌ها</a> اطلاعاتی
+درباره نحوه آماده‌سازی دستی همه اعتبارنامه‌های مؤلفه‌هایی که kubeadm به آن‌ها نیاز دارد ارائه می‌کند.</p>
+<p dir="rtl">این راهنما استفاده از دستور <code dir="ltr">openssl</code> را پوشش می‌دهد (که در صورت انتخاب روش امضای دستی گواهی‌ها
+از آن استفاده می‌شود)، اما می‌توانید از ابزارهای دلخواه خود استفاده کنید.</p>
+<h3 id="آماده-سازی-اعتبارنامه-ها-با-امضای-csrهای-تولیدشده-توسط-kubeadm" dir="rtl">آماده‌سازی اعتبارنامه‌ها با امضای CSRهای تولیدشده توسط kubeadm</h3>
+<p dir="rtl">ابزار kubeadm می‌تواند <a href="#signing-csr">فایل‌های CSR تولید کند</a> که می‌توانید آن‌ها را به‌صورت دستی با ابزارهایی مانند
+<code dir="ltr">openssl</code> و CA خارجی خود امضا کنید. این فایل‌های CSR همه مشخصات اعتبارنامه‌هایی را دربر دارند
+که مؤلفه‌های مستقرشده با kubeadm به آن‌ها نیاز دارند.</p>
+<h3 id="آماده-سازی-خودکار-اعتبارنامه-های-مؤلفه-ها-با-استفاده-از-فازهای-kubeadm" dir="rtl">آماده‌سازی خودکار اعتبارنامه‌های مؤلفه‌ها با استفاده از فازهای kubeadm</h3>
+<p dir="rtl">به‌عنوان جایگزین، می‌توان از دستورهای فاز (phase) در kubeadm برای خودکارسازی این فرایند استفاده کرد.</p>
+<ul>
+<li dir="rtl">به میزبانی بروید که می‌خواهید آن را به‌عنوان نود control plane در kubeadm با CA خارجی آماده کنید.</li>
+<li dir="rtl">فایل‌های CA خارجی خود، یعنی <code dir="ltr">ca.crt</code> و <code dir="ltr">ca.key</code>، را در مسیر <code dir="ltr">/etc/kubernetes/pki</code> روی آن نود کپی کنید.</li>
+<li dir="rtl">یک <a href="../../../reference/setup-tools/kubeadm/kubeadm-init.html#config-file">فایل پیکربندی kubeadm</a> موقت
+با نام <code dir="ltr">config.yaml</code> آماده کنید که بتوان آن را با <code dir="ltr">kubeadm init</code> استفاده کرد. مطمئن شوید که این فایل
+همه اطلاعات مرتبط در سطح کلاستر یا مختص میزبان را که ممکن است در گواهی‌ها گنجانده شوند دربر دارد؛ مانند
+<code dir="ltr">ClusterConfiguration.controlPlaneEndpoint</code>، <code dir="ltr">ClusterConfiguration.certSANs</code> و <code dir="ltr">InitConfiguration.APIEndpoint</code>.</li>
+<li dir="rtl">روی همان میزبان، دستورهای <code dir="ltr">kubeadm init phase kubeconfig all --config config.yaml</code> و
+<code dir="ltr">kubeadm init phase certs all --config config.yaml</code> را اجرا کنید. با این کار همه فایل‌های kubeconfig
+و گواهی‌های لازم در مسیر <code dir="ltr">/etc/kubernetes/</code> و زیردایرکتوری <code dir="ltr">pki</code> آن تولید می‌شوند.</li>
+<li dir="rtl">فایل‌های تولیدشده را بررسی کنید. فایل <code dir="ltr">/etc/kubernetes/pki/ca.key</code> را حذف کنید و فایل
+<code dir="ltr">/etc/kubernetes/super-admin.conf</code> را حذف کنید یا به مکانی امن منتقل کنید.</li>
+<li dir="rtl">روی نودهایی که <code dir="ltr">kubeadm join</code> روی آن‌ها اجرا خواهد شد، فایل <code dir="ltr">/etc/kubernetes/kubelet.conf</code> را نیز حذف کنید.
+این فایل فقط روی نخستین نودی لازم است که <code dir="ltr">kubeadm init</code> روی آن اجرا می‌شود.</li>
+<li dir="rtl">توجه کنید که برخی فایل‌ها، مانند <code dir="ltr">pki/sa.*</code>، <code dir="ltr">pki/front-proxy-ca.*</code> و <code dir="ltr">pki/etc/ca.*</code>، میان
+نودهای control plane مشترک هستند. می‌توانید آن‌ها را یک بار تولید کنید و
+<a href="../../../setup/production-environment/tools/kubeadm/high-availability.html#manual-certs">به‌صورت دستی توزیع کنید</a>
+روی نودهایی که <code dir="ltr">kubeadm join</code> روی آن‌ها اجرا خواهد شد، یا برای خودکارسازی این توزیع از قابلیت
+<a href="../../../setup/production-environment/tools/kubeadm/high-availability.html#stacked-control-plane-and-etcd-nodes"><code dir="ltr">--upload-certs</code></a>
+در <code dir="ltr">kubeadm init</code> و <code dir="ltr">--certificate-key</code> در <code dir="ltr">kubeadm join</code> استفاده کنید.</li>
+</ul>
+<p dir="rtl">پس از آماده‌شدن اعتبارنامه‌ها روی همه نودها، <code dir="ltr">kubeadm init</code> و <code dir="ltr">kubeadm join</code> را روی این نودها اجرا کنید تا
+به کلاستر بپیوندند. kubeadm از فایل‌های kubeconfig و گواهی‌های موجود در مسیر <code dir="ltr">/etc/kubernetes/</code>
+و زیردایرکتوری <code dir="ltr">pki</code> آن استفاده خواهد کرد.</p>
+<h2 id="انقضا-و-مدیریت-گواهی-ها-check-certificate-expiration" dir="rtl">انقضا و مدیریت گواهی‌ها {#check-certificate-expiration}</h2>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">ابزار <code dir="ltr">kubeadm</code> نمی‌تواند گواهی‌هایی را که یک CA خارجی امضا کرده است مدیریت کند.</p>
+</div>
+<p dir="rtl">برای بررسی زمان انقضای گواهی‌ها می‌توانید از زیردستور <code dir="ltr">check-expiration</code> استفاده کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubeadm certs check-expiration
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code class="language-console" dir="ltr">CERTIFICATE                EXPIRES                  RESIDUAL TIME   CERTIFICATE AUTHORITY   EXTERNALLY MANAGED
+admin.conf                 Dec 30, 2020 23:36 UTC   364d                                    no
+apiserver                  Dec 30, 2020 23:36 UTC   364d            ca                      no
+apiserver-etcd-client      Dec 30, 2020 23:36 UTC   364d            etcd-ca                 no
+apiserver-kubelet-client   Dec 30, 2020 23:36 UTC   364d            ca                      no
+controller-manager.conf    Dec 30, 2020 23:36 UTC   364d                                    no
+etcd-healthcheck-client    Dec 30, 2020 23:36 UTC   364d            etcd-ca                 no
+etcd-peer                  Dec 30, 2020 23:36 UTC   364d            etcd-ca                 no
+etcd-server                Dec 30, 2020 23:36 UTC   364d            etcd-ca                 no
+front-proxy-client         Dec 30, 2020 23:36 UTC   364d            front-proxy-ca          no
+scheduler.conf             Dec 30, 2020 23:36 UTC   364d                                    no
+
+CERTIFICATE AUTHORITY   EXPIRES                  RESIDUAL TIME   EXTERNALLY MANAGED
+ca                      Dec 28, 2029 23:36 UTC   9y              no
+etcd-ca                 Dec 28, 2029 23:36 UTC   9y              no
+front-proxy-ca          Dec 28, 2029 23:36 UTC   9y              no
+</code></pre>
+<p dir="rtl">این دستور زمان انقضا و زمان باقی‌مانده را برای گواهی‌های کلاینت در پوشه
+<code dir="ltr">/etc/kubernetes/pki</code> و نیز برای گواهی کلاینتِ جاسازی‌شده در فایل‌های kubeconfig مورد استفاده
+kubeadm (<code dir="ltr">admin.conf</code>، <code dir="ltr">controller-manager.conf</code> و <code dir="ltr">scheduler.conf</code>) نمایش می‌دهد.</p>
+<p dir="rtl">افزون بر این، kubeadm به کاربر اطلاع می‌دهد که آیا گواهی به‌صورت خارجی مدیریت می‌شود یا نه؛ در این صورت،
+کاربر باید خودش تمدید گواهی را به‌صورت دستی یا با ابزارهای دیگر مدیریت کند.</p>
+<p dir="rtl">فایل پیکربندی <code dir="ltr">kubelet.conf</code> در فهرست بالا گنجانده نشده است، زیرا kubeadm
+kubelet را برای <a href="https://kubernetes.io/docs/tasks/tls/certificate-rotation/" target="_blank">تمدید خودکار گواهی‌ها</a>
+با گواهی‌های قابل چرخش در مسیر <code dir="ltr">/var/lib/kubelet/pki</code> پیکربندی می‌کند.
+برای ترمیم گواهی کلاینت منقضی‌شده kubelet، به
+<a href="../../../setup/production-environment/tools/kubeadm/troubleshooting-kubeadm.html#kubelet-client-cert">شکست در چرخش گواهی کلاینت kubelet</a> مراجعه کنید.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">روی نودهایی که با <code dir="ltr">kubeadm init</code> از نسخه‌های پیش از kubeadm 1.17 ایجاد شده‌اند،
+<a href="https://github.com/kubernetes/kubeadm/issues/1753" target="_blank" rel="noopener">اشکالی</a> وجود دارد که باعث می‌شود محتوای
+<code dir="ltr">kubelet.conf</code> را به‌صورت دستی تغییر دهید. پس از پایان <code dir="ltr">kubeadm init</code>، باید <code dir="ltr">kubelet.conf</code> را به‌روزرسانی کنید تا
+به گواهی‌های کلاینت چرخش‌یافته kubelet اشاره کند؛ برای این کار، <code dir="ltr">client-certificate-data</code> و
+<code dir="ltr">client-key-data</code> را با موارد زیر جایگزین کنید:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">client-certificate: /var/lib/kubelet/pki/kubelet-client-current.pem
+client-key: /var/lib/kubelet/pki/kubelet-client-current.pem
+</code></pre>
+</div>
+<h2 id="تمدید-خودکار-گواهی-ها" dir="rtl">تمدید خودکار گواهی‌ها</h2>
+<p dir="rtl">ابزار kubeadm همه گواهی‌ها را هنگام <a href="https://kubernetes.io/docs/tasks/administer-cluster/kubeadm/kubeadm-upgrade/" target="_blank">ارتقای</a>
+control plane تمدید می‌کند.</p>
+<p dir="rtl">این قابلیت برای ساده‌ترین موارد استفاده طراحی شده است؛
+اگر نیازمندی خاصی برای تمدید گواهی‌ها ندارید و ارتقای نسخه کوبرنتیز را به‌طور منظم
+(با فاصله کمتر از یک سال میان هر ارتقا) انجام می‌دهید، kubeadm کلاستر شما را به‌روز و
+به اندازه کافی امن نگه می‌دارد.</p>
+<p dir="rtl">اگر نیازمندی‌های پیچیده‌تری برای تمدید گواهی‌ها دارید، می‌توانید با دادن <code dir="ltr">--certificate-renewal=false</code>
+به <code dir="ltr">kubeadm upgrade apply</code> یا <code dir="ltr">kubeadm upgrade node</code> از رفتار پیش‌فرض صرف‌نظر کنید.</p>
+<h2 id="تمدید-دستی-گواهی-ها" dir="rtl">تمدید دستی گواهی‌ها</h2>
+<p dir="rtl">هر زمان که بخواهید، می‌توانید گواهی‌های خود را به‌صورت دستی با دستور <code dir="ltr">kubeadm certs renew</code> و
+گزینه‌های خط فرمان مناسب تمدید کنید. اگر کلاستری با control plane تکثیرشده اجرا می‌کنید، این دستور
+باید روی همه نودهای control plane اجرا شود.</p>
+<p dir="rtl">این دستور تمدید را با استفاده از گواهی و کلید CA (یا front-proxy-CA) ذخیره‌شده در <code dir="ltr">/etc/kubernetes/pki</code> انجام می‌دهد.</p>
+<p dir="rtl">دستور <code dir="ltr">kubeadm certs renew</code> گواهی‌های موجود را منبع معتبر برای ویژگی‌ها
+(Common Name، Organization، subject alternative name) در نظر می‌گیرد و به ConfigMap
+<code dir="ltr">kubeadm-config</code> تکیه نمی‌کند.
+با این حال، پروژه کوبرنتیز توصیه می‌کند که گواهی ارائه‌شده و مقادیر مرتبط با آن در این ConfigMap
+همگام نگه داشته شوند تا از هرگونه خطر سردرگمی جلوگیری شود.</p>
+<p dir="rtl">پس از اجرای این دستور باید Podهای control plane را مجدداً راه‌اندازی کنید. این کار لازم است، زیرا
+بارگذاری مجدد پویای گواهی‌ها در حال حاضر برای همه مؤلفه‌ها و گواهی‌ها پشتیبانی نمی‌شود.
+<a href="https://kubernetes.io/docs/tasks/configure-pod-container/static-pod/" target="_blank">Podهای ایستا</a> را kubelet محلی مدیریت می‌کند،
+نه API Server؛ بنابراین نمی‌توان از kubectl برای حذف و راه‌اندازی مجدد آن‌ها استفاده کرد.
+برای راه‌اندازی مجدد یک Pod ایستا، می‌توانید فایل مانیفست آن را به‌طور موقت از <code dir="ltr">/etc/kubernetes/manifests/</code> بردارید
+و ۲۰ ثانیه صبر کنید (مقدار <code dir="ltr">fileCheckFrequency</code> را در <a href="../../../reference/config-api/kubelet-config.v1beta1.html">ساختار KubeletConfiguration</a> ببینید).
+اگر Pod دیگر در دایرکتوری مانیفست‌ها نباشد، kubelet آن را خاتمه می‌دهد.
+سپس می‌توانید فایل را به جای خود برگردانید؛ پس از گذشت یک دوره <code dir="ltr">fileCheckFrequency</code> دیگر، kubelet
+Pod را دوباره ایجاد می‌کند و تمدید گواهی برای آن مؤلفه کامل می‌شود.</p>
+<p dir="rtl">دستور <code dir="ltr">kubeadm certs renew</code> می‌تواند هر گواهی مشخصی را تمدید کند یا با زیردستور <code dir="ltr">all</code> همه آن‌ها را تمدید کند:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># If you are running cluster with a replicated control plane, this command
+# needs to be executed on all the control-plane nodes.
+kubeadm certs renew all
+</code></pre>
+<h3 id="کپی-کردن-گواهی-مدیر-اختیاری-admin-certificate-copy" dir="rtl">کپی کردن گواهی مدیر (اختیاری) {#admin-certificate-copy}</h3>
+<p dir="rtl">در کلاسترهایی که با kubeadm ساخته شده‌اند، معمولاً گواهی <code dir="ltr">admin.conf</code> در
+<code dir="ltr">$HOME/.kube/config</code> کپی می‌شود؛ همان‌طور که در <a href="../../../setup/production-environment/tools/kubeadm/create-cluster-kubeadm.html">ایجاد کلاستر با kubeadm</a> آمده است.
+در چنین سیستمی، برای به‌روزرسانی محتوای <code dir="ltr">$HOME/.kube/config</code>
+پس از تمدید <code dir="ltr">admin.conf</code>، می‌توانید دستورهای زیر را اجرا کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+</code></pre>
+<h2 id="تمدید-گواهی-ها-با-api-گواهی-های-کوبرنتیز" dir="rtl">تمدید گواهی‌ها با API گواهی‌های کوبرنتیز</h2>
+<p dir="rtl">این بخش جزئیات بیشتری درباره نحوه تمدید دستی گواهی‌ها با استفاده از API گواهی‌های کوبرنتیز ارائه می‌کند.</p>
+<div class="callout caution"><div class="callout-title">احتیاط:</div>
+<p dir="rtl">این موضوعات پیشرفته برای کاربرانی است که باید زیرساخت گواهی سازمان خود را با کلاستری
+که با kubeadm ساخته شده است یکپارچه کنند. اگر پیکربندی پیش‌فرض kubeadm نیازهای شما را برآورده می‌کند،
+بهتر است مدیریت گواهی‌ها را به kubeadm بسپارید.</p>
+</div>
+<h3 id="راه-اندازی-امضاکننده" dir="rtl">راه‌اندازی امضاکننده</h3>
+<p dir="rtl">مرجع صدور گواهی (Certificate Authority) کوبرنتیز به‌صورت پیش‌فرض و بدون پیکربندی کار نمی‌کند.
+می‌توانید یک امضاکننده خارجی مانند <a href="https://cert-manager.io/docs/configuration/ca/" target="_blank" rel="noopener">cert-manager</a> پیکربندی کنید
+یا از امضاکننده داخلی استفاده کنید.</p>
+<p dir="rtl">امضاکننده داخلی بخشی از <a href="../../../reference/command-line-tools-reference/kube-controller-manager.html"><code dir="ltr">kube-controller-manager</code></a> است.</p>
+<p dir="rtl">برای فعال کردن امضاکننده داخلی، باید فلگ‌های <code dir="ltr">--cluster-signing-cert-file</code> و
+<code dir="ltr">--cluster-signing-key-file</code> را تنظیم کنید.</p>
+<p dir="rtl">اگر کلاستر جدیدی ایجاد می‌کنید، می‌توانید از یک
+<a href="../../../reference/config-api/kubeadm-config.v1beta4.html">فایل پیکربندی</a> kubeadm استفاده کنید:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: kubeadm.k8s.io/v1beta4
+kind: ClusterConfiguration
+controllerManager:
+  extraArgs:
+  - name: "cluster-signing-cert-file"
+    value: "/etc/kubernetes/pki/ca.crt"
+  - name: "cluster-signing-key-file"
+    value: "/etc/kubernetes/pki/ca.key"
+</code></pre>
+<h3 id="ایجاد-درخواست-های-امضای-گواهی-csr" dir="rtl">ایجاد درخواست‌های امضای گواهی (CSR)</h3>
+<p dir="rtl">برای ایجاد CSR با API کوبرنتیز، به <a href="../../../reference/access-authn-authz/certificate-signing-requests.html#create-certificatessigningrequest">ایجاد CertificateSigningRequest</a>
+مراجعه کنید.</p>
+<h2 id="تمدید-گواهی-ها-با-ca-خارجی" dir="rtl">تمدید گواهی‌ها با CA خارجی</h2>
+<p dir="rtl">این بخش جزئیات بیشتری درباره نحوه تمدید دستی گواهی‌ها با استفاده از یک CA خارجی ارائه می‌کند.</p>
+<p dir="rtl">برای یکپارچگی بهتر با CAهای خارجی، kubeadm می‌تواند درخواست‌های امضای گواهی (CSR) نیز تولید کند.
+هر CSR درخواستی است که از یک CA برای دریافت گواهی امضاشده برای یک کلاینت ارسال می‌شود.
+در اصطلاح kubeadm، هر گواهی‌ای که به‌طور معمول با یک CA روی دیسک امضا می‌شود، می‌تواند در عوض
+به‌صورت یک CSR تولید شود. با این حال، خود CA را نمی‌توان به‌صورت CSR تولید کرد.</p>
+<h3 id="تمدید-با-استفاده-از-درخواست-های-امضای-گواهی-csr" dir="rtl">تمدید با استفاده از درخواست‌های امضای گواهی (CSR)</h3>
+<p dir="rtl">تمدید گواهی‌ها با تولید CSRهای جدید و امضای آن‌ها با CA خارجی امکان‌پذیر است.
+برای جزئیات بیشتر درباره کار با CSRهای تولیدشده توسط kubeadm، به بخش
+<a href="#signing-csr">امضای درخواست‌های امضای گواهی (CSR) تولیدشده توسط kubeadm</a> مراجعه کنید.</p>
+<h2 id="چرخش-مرجع-صدور-گواهی-ca-certificate-authority-rotation" dir="rtl">چرخش مرجع صدور گواهی (CA) {#certificate-authority-rotation}</h2>
+<p dir="rtl">ابزار kubeadm به‌صورت پیش‌فرض از چرخش یا جایگزینی گواهی‌های CA پشتیبانی نمی‌کند.</p>
+<p dir="rtl">برای اطلاعات بیشتر درباره چرخش یا جایگزینی دستی CA، به <a href="https://kubernetes.io/docs/tasks/tls/manual-rotation-of-ca-certificates/" target="_blank">چرخش دستی گواهی‌های CA</a> مراجعه کنید.</p>
+<h2 id="فعال-سازی-گواهی-های-امضاشدهٔ-سرویس-دهی-kubelet-kubelet-serving-certs" dir="rtl">فعال‌سازی گواهی‌های امضاشدهٔ سرویس‌دهی kubelet {#kubelet-serving-certs}</h2>
+<p dir="rtl">به‌طور پیش‌فرض، گواهی سرویس‌دهی kubelet که kubeadm مستقر می‌کند خودامضا (self-signed) است.
+در نتیجه، اتصال سرویس‌های خارجی مانند
+<a href="https://github.com/kubernetes-sigs/metrics-server" target="_blank" rel="noopener">metrics-server</a> به kubelet را نمی‌توان با TLS ایمن کرد.</p>
+<p dir="rtl">برای اینکه kubeletها در یک کلاستر جدید kubeadm گواهی‌های سرویس‌دهیِ به‌درستی امضاشده دریافت کنند،
+باید پیکربندی حداقلی زیر را به <code dir="ltr">kubeadm init</code> بدهید:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: kubeadm.k8s.io/v1beta4
+kind: ClusterConfiguration
+---
+apiVersion: kubelet.config.k8s.io/v1beta1
+kind: KubeletConfiguration
+serverTLSBootstrap: true
+</code></pre>
+<p dir="rtl">اگر کلاستر را از قبل ایجاد کرده‌اید، باید آن را به این صورت تطبیق دهید:</p>
+<ul>
+<li dir="rtl">ConfigMap با نام <code dir="ltr">kubelet-config</code> را در فضای نام (namespace) <code dir="ltr">kube-system</code> پیدا و ویرایش کنید.
+در این ConfigMap، مقدار کلید <code dir="ltr">kubelet</code> یک سند
+<a href="../../../reference/config-api/kubelet-config.v1beta1.html">KubeletConfiguration</a>
+است. این سند KubeletConfiguration را ویرایش کنید تا <code dir="ltr">serverTLSBootstrap: true</code> تنظیم شود.</li>
+<li dir="rtl">روی هر نود، فیلد <code dir="ltr">serverTLSBootstrap: true</code> را به <code dir="ltr">/var/lib/kubelet/config.yaml</code> اضافه کنید
+و kubelet را با <code dir="ltr">systemctl restart kubelet</code> دوباره راه‌اندازی کنید.</li>
+</ul>
+<p dir="rtl">فیلد <code dir="ltr">serverTLSBootstrap: true</code> راه‌اندازی اولیهٔ (bootstrap) گواهی‌های سرویس‌دهی kubelet را از طریق درخواست
+آن‌ها از API با نام <code dir="ltr">certificates.k8s.io</code> فعال می‌کند. یکی از محدودیت‌های شناخته‌شده این است که
+امضاکنندهٔ پیش‌فرض در kube-controller-manager، یعنی
+<a href="../../../reference/access-authn-authz/certificate-signing-requests.html#kubernetes-signers"><code dir="ltr">kubernetes.io/kubelet-serving</code></a>،
+نمی‌تواند درخواست‌های امضای گواهی (CSR) مربوط به این گواهی‌ها را به‌طور خودکار تأیید کند.
+بنابراین تأیید آن‌ها به اقدام کاربر یا یک کنترل‌کنندهٔ شخص ثالث نیاز دارد.</p>
+<p dir="rtl">این CSRها را می‌توانید با دستور زیر مشاهده کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get csr
+</code></pre>
+<pre dir="ltr"><code class="language-console" dir="ltr">NAME        AGE     SIGNERNAME                        REQUESTOR                      CONDITION
+csr-9wvgt   112s    kubernetes.io/kubelet-serving     system:node:worker-1           Pending
+csr-lz97v   1m58s   kubernetes.io/kubelet-serving     system:node:control-plane-1    Pending
+</code></pre>
+<p dir="rtl">برای تأیید آن‌ها می‌توانید این کار را انجام دهید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl certificate approve &lt;CSR-name&gt;
+</code></pre>
+<p dir="rtl">به‌طور پیش‌فرض، این گواهی‌های سرویس‌دهی پس از یک سال منقضی می‌شوند. ابزار kubeadm فیلد
+<code dir="ltr">rotateCertificates</code> در <code dir="ltr">KubeletConfiguration</code> را روی <code dir="ltr">true</code> تنظیم می‌کند؛ یعنی نزدیک به زمان انقضا،
+مجموعهٔ جدیدی از CSRها برای گواهی‌های سرویس‌دهی ایجاد می‌شود که برای تکمیل چرخش گواهی باید تأیید شوند.
+برای اطلاعات بیشتر، <a href="../../../reference/access-authn-authz/kubelet-tls-bootstrapping.html#certificate-rotation">چرخش گواهی</a>
+را ببینید.</p>
+<p dir="rtl">اگر به دنبال راهکاری برای تأیید خودکار این CSRها هستید، توصیه می‌شود با ارائه‌دهندهٔ ابری خود تماس بگیرید
+و بپرسید آیا امضاکننده‌ای برای CSR دارند که هویت نود را با یک سازوکار خارج از باند (out of band) راستی‌آزمایی کند.</p>
+<p dir="rtl">می‌توان از کنترل‌کننده‌های سفارشی شخص ثالث استفاده کرد:</p>
+<ul>
+<li dir="ltr" class="ltr"><a href="https://github.com/postfinance/kubelet-csr-approver" target="_blank" rel="noopener">kubelet-csr-approver</a></li>
+</ul>
+<p dir="rtl">چنین کنترل‌کننده‌ای تنها زمانی سازوکاری امن است که علاوه بر CommonName موجود در CSR،
+نشانی‌های IP و نام‌های دامنهٔ درخواست‌شده را نیز راستی‌آزمایی کند. این کار مانع می‌شود که
+عاملی مخرب با دسترسی به گواهی کلاینت یک kubelet، برای هر IP یا نام دامنه‌ای CSR درخواست گواهی سرویس‌دهی ایجاد کند.</p>
+<h2 id="تولید-فایل-های-kubeconfig-برای-کاربران-دیگر-kubeconfig-additional-users" dir="rtl">تولید فایل‌های kubeconfig برای کاربران دیگر {#kubeconfig-additional-users}</h2>
+<p dir="rtl">هنگام ایجاد کلاستر، <code dir="ltr">kubeadm init</code> گواهی موجود در <code dir="ltr">super-admin.conf</code> را طوری امضا می‌کند
+که <code dir="ltr">Subject: O = system:masters, CN = kubernetes-super-admin</code> داشته باشد.
+گروه <a href="../../../reference/access-authn-authz/rbac.html#user-facing-roles"><code dir="ltr">system:masters</code></a>
+یک گروه ابرکاربری برای دسترسی اضطراری (break-glass) است که لایهٔ مجوزدهی (برای نمونه
+<a href="../../../reference/access-authn-authz/rbac.html">RBAC</a>) را دور می‌زند. ابزار kubeadm فایل <code dir="ltr">admin.conf</code> را نیز
+روی نودهای control plane ایجاد می‌کند و این فایل گواهی‌ای با
+<code dir="ltr">Subject: O = kubeadm:cluster-admins, CN = kubernetes-admin</code> دارد. گروه <code dir="ltr">kubeadm:cluster-admins</code>
+از نظر منطقی به kubeadm تعلق دارد. اگر کلاستر شما از RBAC استفاده کند
+(که پیش‌فرض kubeadm است)، گروه <code dir="ltr">kubeadm:cluster-admins</code> به ClusterRole با نام
+<a href="../../../reference/access-authn-authz/rbac.html#user-facing-roles"><code dir="ltr">cluster-admin</code></a> متصل (bind) می‌شود.</p>
+<div class="callout warning"><div class="callout-title">هشدار:</div>
+<p dir="rtl">از اشتراک‌گذاری فایل‌های <code dir="ltr">super-admin.conf</code> یا <code dir="ltr">admin.conf</code> خودداری کنید. به‌جای آن، حتی برای کسانی
+که در نقش مدیر کار می‌کنند، دسترسی با کمترین امتیاز (least privilege) ایجاد کنید و برای هر کاری
+به‌جز دسترسی اضطراری از همین جایگزینِ کم‌امتیاز استفاده کنید.</p>
+</div>
+<p dir="rtl">برای تولید فایل‌های kubeconfig برای کاربران دیگر می‌توانید از دستور
+<a href="../../../reference/setup-tools/kubeadm/kubeadm-kubeconfig.html"><code dir="ltr">kubeadm kubeconfig user</code></a> استفاده کنید.
+این دستور ترکیبی از فلگ‌های خط فرمان و گزینه‌های
+<a href="../../../reference/config-api/kubeadm-config.v1beta4.html">پیکربندی kubeadm</a> را می‌پذیرد.
+فایل kubeconfig تولیدشده در stdout نوشته می‌شود و می‌توان آن را با
+<code dir="ltr">kubeadm kubeconfig user ... &gt; somefile.conf</code> به یک فایل هدایت کرد.</p>
+<p dir="rtl">نمونه‌ای از فایل پیکربندی که می‌توان با <code dir="ltr">--config</code> از آن استفاده کرد:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr"># example.yaml
+apiVersion: kubeadm.k8s.io/v1beta4
+kind: ClusterConfiguration
+# Will be used as the target "cluster" in the kubeconfig
+clusterName: "kubernetes"
+# Will be used as the "server" (IP or DNS name) of this cluster in the kubeconfig
+controlPlaneEndpoint: "some-dns-address:6443"
+# The cluster CA key and certificate will be loaded from this local directory
+certificatesDir: "/etc/kubernetes/pki"
+</code></pre>
+<p dir="rtl">مطمئن شوید که این تنظیمات با تنظیمات کلاستر مقصد مورد نظر مطابقت دارند.
+برای مشاهدهٔ تنظیمات یک کلاستر موجود از دستور زیر استفاده کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get cm kubeadm-config -n kube-system -o=jsonpath="{.data.ClusterConfiguration}"
+</code></pre>
+<p dir="rtl">مثال زیر یک فایل kubeconfig با اعتبارنامه‌هایی که ۲۴ ساعت معتبرند برای کاربر جدید <code dir="ltr">johndoe</code>
+که عضو گروه <code dir="ltr">appdevs</code> است تولید می‌کند:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubeadm kubeconfig user --config example.yaml --org appdevs --client-name johndoe --validity-period 24h
+</code></pre>
+<p dir="rtl">مثال زیر یک فایل kubeconfig با اعتبارنامه‌های مدیر که یک هفته معتبرند تولید می‌کند:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubeadm kubeconfig user --config example.yaml --client-name admin --validity-period 168h
+</code></pre>
+<h2 id="امضای-درخواست-های-امضای-گواهی-csr-تولیدشده-توسط-kubeadm-signing-csr" dir="rtl">امضای درخواست‌های امضای گواهی (CSR) تولیدشده توسط kubeadm {#signing-csr}</h2>
+<p dir="rtl">با <code dir="ltr">kubeadm certs generate-csr</code> می‌توانید درخواست‌های امضای گواهی ایجاد کنید.
+اجرای این دستور برای گواهی‌های معمولی، جفت فایل‌های <code dir="ltr">.csr</code> / <code dir="ltr">.key</code> تولید می‌کند. برای گواهی‌هایی
+که در فایل‌های kubeconfig جاسازی می‌شوند، این دستور جفت <code dir="ltr">.csr</code> / <code dir="ltr">.conf</code> تولید می‌کند که در آن
+کلید از قبل در فایل <code dir="ltr">.conf</code> جاسازی شده است.</p>
+<p dir="rtl">هر فایل CSR همهٔ اطلاعات لازم برای امضای یک گواهی توسط مرجع صدور گواهی (CA) را در بر دارد.
+ابزار kubeadm برای همهٔ گواهی‌ها و CSRهای خود از یک
+<a href="../../../setup/best-practices/certificates.html#all-certificates">مشخصهٔ کاملاً تعریف‌شده</a>
+پیروی می‌کند.</p>
+<p dir="rtl">پوشهٔ پیش‌فرض گواهی‌ها <code dir="ltr">/etc/kubernetes/pki</code> و پوشهٔ پیش‌فرض فایل‌های kubeconfig
+<code dir="ltr">/etc/kubernetes</code> است. این مقادیر پیش‌فرض را می‌توان به‌ترتیب با فلگ‌های <code dir="ltr">--cert-dir</code> و
+<code dir="ltr">--kubeconfig-dir</code> تغییر داد.</p>
+<p dir="rtl">برای ارسال گزینه‌های سفارشی به <code dir="ltr">kubeadm certs generate-csr</code> از فلگ <code dir="ltr">--config</code> استفاده کنید
+که، مشابه دستوراتی مانند <code dir="ltr">kubeadm init</code>، یک فایل
+<a href="../../../reference/config-api/kubeadm-config.v1beta4.html">پیکربندی kubeadm</a> می‌پذیرد. هر مشخصه‌ای،
+مانند SANهای اضافی و نشانی‌های IP سفارشی، باید در همان فایل پیکربندی ذخیره شود و با ارسال آن
+از طریق <code dir="ltr">--config</code> برای همهٔ دستورات مرتبط kubeadm به کار رود.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">این راهنما از پوشهٔ پیش‌فرض کوبرنتیز، یعنی <code dir="ltr">/etc/kubernetes</code>، استفاده می‌کند که به دسترسی ابرکاربر نیاز دارد.
+اگر هنگام پیروی از این راهنما از پوشه‌هایی استفاده می‌کنید که اجازهٔ نوشتن در آن‌ها را دارید
+(که معمولاً یعنی <code dir="ltr">kubeadm</code> را با <code dir="ltr">--cert-dir</code> و <code dir="ltr">--kubeconfig-dir</code> اجرا می‌کنید)،
+می‌توانید دستور <code dir="ltr">sudo</code> را حذف کنید.</p>
+<p dir="rtl">در این صورت باید فایل‌هایی را که تولید کرده‌اید به داخل پوشهٔ <code dir="ltr">/etc/kubernetes</code> کپی کنید
+تا <code dir="ltr">kubeadm init</code> یا <code dir="ltr">kubeadm join</code> آن‌ها را پیدا کنند.</p>
+</div>
+<h3 id="آماده-سازی-فایل-های-ca-و-حساب-سرویس" dir="rtl">آماده‌سازی فایل‌های CA و حساب سرویس</h3>
+<p dir="rtl">روی نود اصلی control plane، یعنی جایی که <code dir="ltr">kubeadm init</code> اجرا خواهد شد، دستورات زیر را اجرا کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">sudo kubeadm init phase certs ca
+sudo kubeadm init phase certs etcd-ca
+sudo kubeadm init phase certs front-proxy-ca
+sudo kubeadm init phase certs sa
+</code></pre>
+<p dir="rtl">این دستورات پوشه‌های <code dir="ltr">/etc/kubernetes/pki</code> و <code dir="ltr">/etc/kubernetes/pki/etcd</code> را با همهٔ فایل‌های CA
+خودامضا (گواهی‌ها و کلیدها) و فایل‌های حساب سرویس (کلیدهای عمومی و خصوصی) که kubeadm برای
+یک نود control plane نیاز دارد پر می‌کنند.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">اگر از یک CA خارجی استفاده می‌کنید، باید همین فایل‌ها را به‌صورت خارج از باند تولید کنید و
+آن‌ها را به‌طور دستی در <code dir="ltr">/etc/kubernetes</code> روی نود اصلی control plane کپی کنید.</p>
+<p dir="rtl">پس از امضای همهٔ CSRها، می‌توانید کلید CA ریشه (<code dir="ltr">ca.key</code>) را حذف کنید؛ همان‌طور که در بخش
+<a href="#external-ca-mode">حالت CA خارجی</a> آمده است.</p>
+</div>
+<p dir="rtl">برای نودهای ثانویهٔ control plane (<code dir="ltr">kubeadm join --control-plane</code>) نیازی به اجرای دستورات بالا نیست.
+بسته به اینکه کلاستر <a href="../../../setup/production-environment/tools/kubeadm/high-availability.html">با دسترس‌پذیری بالا</a>
+را چگونه راه‌اندازی کرده‌اید، یا باید همین فایل‌ها را به‌طور دستی از نود اصلی control plane کپی کنید،
+یا از قابلیت خودکار <code dir="ltr">--upload-certs</code> در <code dir="ltr">kubeadm init</code> استفاده کنید.</p>
+<h3 id="تولید-csrها" dir="rtl">تولید CSRها</h3>
+<p dir="rtl">دستور <code dir="ltr">kubeadm certs generate-csr</code> برای همهٔ گواهی‌های شناخته‌شده‌ای که kubeadm مدیریت می‌کند CSR
+تولید می‌کند. پس از پایان اجرای دستور، باید فایل‌های <code dir="ltr">.csr</code>، <code dir="ltr">.conf</code> یا <code dir="ltr">.key</code> را که به آن‌ها
+نیاز ندارید به‌طور دستی حذف کنید.</p>
+<h4 id="ملاحظات-مربوط-به-kubelet-conf-considerations-kubelet-conf" dir="rtl">ملاحظات مربوط به kubelet.conf {#considerations-kubelet-conf}</h4>
+<p dir="rtl">این بخش هم برای نودهای control plane و هم برای نودهای کارگر کاربرد دارد.</p>
+<p dir="rtl">اگر فایل <code dir="ltr">ca.key</code> را از نودهای control plane حذف کرده باشید
+(<a href="#external-ca-mode">حالت CA خارجی</a>)، kube-controller-manager فعال در این کلاستر نمی‌تواند
+گواهی‌های کلاینت kubelet را امضا کند. اگر در محیط شما روش خارجی‌ای برای امضای این گواهی‌ها
+وجود ندارد (مانند یک <a href="#set-up-a-signer">امضاکنندهٔ خارجی</a>)، می‌توانید <code dir="ltr">kubelet.conf.csr</code> را
+همان‌طور که در این راهنما توضیح داده شده به‌طور دستی امضا کنید.</p>
+<p dir="rtl">توجه کنید که این یعنی
+<a href="https://kubernetes.io/docs/tasks/tls/certificate-rotation/#enabling-client-certificate-rotation" target="_blank">چرخش خودکار گواهی کلاینت kubelet</a>
+نیز غیرفعال خواهد شد. در این صورت، نزدیک به زمان انقضای گواهی باید یک <code dir="ltr">kubelet.conf.csr</code> جدید
+تولید کنید، گواهی را امضا کنید، آن را در <code dir="ltr">kubelet.conf</code> جاسازی کنید و kubelet را دوباره راه‌اندازی کنید.</p>
+<p dir="rtl">اگر این موضوع در محیط شما صدق نمی‌کند، می‌توانید پردازش <code dir="ltr">kubelet.conf.csr</code> را روی نودهای ثانویهٔ
+control plane و نودهای کارگر (همهٔ نودهایی که <code dir="ltr">kubeadm join ...</code> را اجرا می‌کنند) نادیده بگیرید؛
+زیرا kube-controller-manager فعال مسئول امضای گواهی‌های جدید کلاینت kubelet خواهد بود.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">فایل <code dir="ltr">kubelet.conf.csr</code> را باید روی نود اصلی control plane (میزبانی که در ابتدا <code dir="ltr">kubeadm init</code> را
+روی آن اجرا کردید) پردازش کنید؛ زیرا <code dir="ltr">kubeadm</code> آن را نودی می‌داند که کلاستر را راه‌اندازی اولیه
+می‌کند و به یک <code dir="ltr">kubelet.conf</code> از پیش پرشده نیاز است.</p>
+</div>
+<h4 id="نودهای-control-plane" dir="rtl">نودهای control plane</h4>
+<p dir="rtl">دستور زیر را روی نودهای اصلی (<code dir="ltr">kubeadm init</code>) و ثانویهٔ (<code dir="ltr">kubeadm join --control-plane</code>)
+control plane اجرا کنید تا همهٔ فایل‌های CSR تولید شوند:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">sudo kubeadm certs generate-csr
+</code></pre>
+<p dir="rtl">اگر قرار است از etcd خارجی استفاده شود، راهنمای
+<a href="../../../setup/production-environment/tools/kubeadm/high-availability.html#external-etcd-nodes">etcd خارجی با kubeadm</a>
+را دنبال کنید تا بدانید کدام فایل‌های CSR روی نودهای kubeadm و etcd لازم هستند. سایر فایل‌های
+<code dir="ltr">.csr</code> و <code dir="ltr">.key</code> در مسیر <code dir="ltr">/etc/kubernetes/pki/etcd</code> را می‌توان حذف کرد.</p>
+<p dir="rtl">بر اساس توضیحات بخش
+<a href="#considerations-kubelet-conf">ملاحظات مربوط به kubelet.conf</a>، فایل‌های <code dir="ltr">kubelet.conf</code> و
+<code dir="ltr">kubelet.conf.csr</code> را نگه دارید یا حذف کنید.</p>
+<h4 id="نودهای-کارگر" dir="rtl">نودهای کارگر</h4>
+<p dir="rtl">بر اساس توضیحات بخش
+<a href="#considerations-kubelet-conf">ملاحظات مربوط به kubelet.conf</a>، در صورت تمایل دستور زیر را اجرا کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">sudo kubeadm certs generate-csr
+</code></pre>
+<p dir="rtl">و فقط فایل‌های <code dir="ltr">kubelet.conf</code> و <code dir="ltr">kubelet.conf.csr</code> را نگه دارید. همچنین می‌توانید مراحل مربوط
+به نودهای کارگر را به‌طور کامل نادیده بگیرید.</p>
+<h3 id="امضای-csrها-برای-همهٔ-گواهی-ها" dir="rtl">امضای CSRها برای همهٔ گواهی‌ها</h3>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">اگر از CA خارجی استفاده می‌کنید و از قبل فایل‌های شمارهٔ سریال CA (<code dir="ltr">.srl</code>) برای <code dir="ltr">openssl</code> دارید،
+می‌توانید این فایل‌ها را به نودی از kubeadm که CSRها روی آن پردازش می‌شوند کپی کنید.
+فایل‌های <code dir="ltr">.srl</code> که باید کپی شوند عبارت‌اند از <code dir="ltr">/etc/kubernetes/pki/ca.srl</code>،
+<code dir="ltr">/etc/kubernetes/pki/front-proxy-ca.srl</code> و <code dir="ltr">/etc/kubernetes/pki/etcd/ca.srl</code>.
+سپس می‌توان این فایل‌ها را به نود جدیدی که فایل‌های CSR روی آن پردازش می‌شوند منتقل کرد.</p>
+<p dir="rtl">اگر روی یک نود، فایل <code dir="ltr">.srl</code> مربوط به یک CA وجود نداشته باشد، اسکریپت زیر یک فایل SRL جدید
+با یک شمارهٔ سریال آغازین تصادفی تولید می‌کند.</p>
+<p dir="rtl">برای اطلاعات بیشتر دربارهٔ فایل‌های <code dir="ltr">.srl</code>، مستندات
+<a href="https://www.openssl.org/docs/man3.0/man1/openssl-x509.html" target="_blank" rel="noopener"><code dir="ltr">openssl</code></a>
+مربوط به فلگ <code dir="ltr">--CAserial</code> را ببینید.</p>
+</div>
+<p dir="rtl">این مرحله را برای همهٔ نودهایی که فایل CSR دارند تکرار کنید.</p>
+<p dir="rtl">اسکریپت زیر را در پوشهٔ <code dir="ltr">/etc/kubernetes</code> بنویسید، به این پوشه بروید و اسکریپت را اجرا کنید.
+این اسکریپت برای همهٔ فایل‌های CSR موجود در درخت <code dir="ltr">/etc/kubernetes</code> گواهی تولید می‌کند.</p>
+<pre dir="ltr"><code class="language-bash" dir="ltr">#!/bin/bash
+
+# Set certificate expiration time in days
+DAYS=365
+
+# Process all CSR files except those for front-proxy and etcd
+find ./ -name "*.csr" | grep -v "pki/etcd" | grep -v "front-proxy" | while read -r FILE;
+do
+    echo "* Processing ${FILE} ..."
+    FILE=${FILE%.*} # Trim the extension
+    if [ -f "./pki/ca.srl" ]; then
+        SERIAL_FLAG="-CAserial ./pki/ca.srl"
+    else
+        SERIAL_FLAG="-CAcreateserial"
+    fi
+    openssl x509 -req -days "${DAYS}" -CA ./pki/ca.crt -CAkey ./pki/ca.key ${SERIAL_FLAG} \
+        -in "${FILE}.csr" -out "${FILE}.crt"
+    sleep 2
+done
+
+# Process all etcd CSRs
+find ./pki/etcd -name "*.csr" | while read -r FILE;
+do
+    echo "* Processing ${FILE} ..."
+    FILE=${FILE%.*} # Trim the extension
+    if [ -f "./pki/etcd/ca.srl" ]; then
+        SERIAL_FLAG=-CAserial ./pki/etcd/ca.srl
+    else
+        SERIAL_FLAG=-CAcreateserial
+    fi
+    openssl x509 -req -days "${DAYS}" -CA ./pki/etcd/ca.crt -CAkey ./pki/etcd/ca.key ${SERIAL_FLAG} \
+        -in "${FILE}.csr" -out "${FILE}.crt"
+done
+
+# Process front-proxy CSRs
+echo "* Processing ./pki/front-proxy-client.csr ..."
+openssl x509 -req -days "${DAYS}" -CA ./pki/front-proxy-ca.crt -CAkey ./pki/front-proxy-ca.key -CAcreateserial \
+    -in ./pki/front-proxy-client.csr -out ./pki/front-proxy-client.crt
+</code></pre>
+<h3 id="جاسازی-گواهی-ها-در-فایل-های-kubeconfig" dir="rtl">جاسازی گواهی‌ها در فایل‌های kubeconfig</h3>
+<p dir="rtl">این مرحله را برای همهٔ نودهایی که فایل CSR دارند تکرار کنید.</p>
+<p dir="rtl">اسکریپت زیر را در پوشهٔ <code dir="ltr">/etc/kubernetes</code> بنویسید، به این پوشه بروید و اسکریپت را اجرا کنید.
+این اسکریپت فایل‌های <code dir="ltr">.crt</code> را که در مرحلهٔ قبل از روی CSRها برای فایل‌های kubeconfig امضا شده‌اند
+برمی‌دارد و آن‌ها را در فایل‌های kubeconfig جاسازی می‌کند.</p>
+<pre dir="ltr"><code class="language-bash" dir="ltr">#!/bin/bash
+
+CLUSTER=kubernetes
+find ./ -name "*.conf" | while read -r FILE;
+do
+    echo "* Processing ${FILE} ..."
+    KUBECONFIG="${FILE}" kubectl config set-cluster "${CLUSTER}" --certificate-authority ./pki/ca.crt --embed-certs
+    USER=$(KUBECONFIG="${FILE}" kubectl config view -o jsonpath='{.users[0].name}')
+    KUBECONFIG="${FILE}" kubectl config set-credentials "${USER}" --client-certificate "${FILE}.crt" --embed-certs
+done
+</code></pre>
+<h3 id="پاک-سازی-post-csr-cleanup" dir="rtl">پاک‌سازی {#post-csr-cleanup}</h3>
+<p dir="rtl">این مرحله را روی همهٔ نودهایی که فایل CSR دارند انجام دهید.</p>
+<p dir="rtl">اسکریپت زیر را در پوشهٔ <code dir="ltr">/etc/kubernetes</code> بنویسید، به این پوشه بروید و اسکریپت را اجرا کنید.</p>
+<pre dir="ltr"><code class="language-bash" dir="ltr">#!/bin/bash
+
+# Cleanup CSR files
+rm -f ./*.csr ./pki/*.csr ./pki/etcd/*.csr # Clean all CSR files
+
+# Cleanup CRT files that were already embedded in kubeconfig files
+rm -f ./*.crt
+</code></pre>
+<p dir="rtl">در صورت تمایل، فایل‌های <code dir="ltr">.srl</code> را به نود بعدی که باید پردازش شود منتقل کنید.</p>
+<p dir="rtl">در صورت تمایل، اگر از CA خارجی استفاده می‌کنید، فایل <code dir="ltr">/etc/kubernetes/pki/ca.key</code> را حذف کنید؛
+همان‌طور که در بخش <a href="#external-ca-mode">حالت CA خارجی</a> توضیح داده شده است.</p>
+<h3 id="راه-اندازی-اولیهٔ-نود-با-kubeadm" dir="rtl">راه‌اندازی اولیهٔ نود با kubeadm</h3>
+<p dir="rtl">پس از امضای فایل‌های CSR و قرارگرفتن گواهی‌های لازم روی میزبان‌هایی که می‌خواهید به‌عنوان نود
+از آن‌ها استفاده کنید، می‌توانید با دستورات <code dir="ltr">kubeadm init</code> و <code dir="ltr">kubeadm join</code> از این نودها یک کلاستر
+کوبرنتیز بسازید. ابزار kubeadm در طول <code dir="ltr">init</code> و <code dir="ltr">join</code> از گواهی‌ها، کلیدهای رمزنگاری و فایل‌های
+kubeconfig موجودی استفاده می‌کند که در درخت <code dir="ltr">/etc/kubernetes</code> در سامانهٔ فایل محلی میزبان پیدا می‌کند.</p>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#پیش-از-شروع">پیش از شروع</a><a class="l2" href="#استفاده-از-گواهی-های-سفارشی-custom-certificates">استفاده از گواهی‌های سفارشی {#custom-certificates}</a><a class="l2" href="#انتخاب-الگوریتم-رمزنگاری-choosing-encryption-algorithm">انتخاب الگوریتم رمزنگاری {#choosing-encryption-algorithm}</a><a class="l2" href="#انتخاب-دوره-اعتبار-گواهی-ها-choosing-cert-validity-period">انتخاب دوره اعتبار گواهی‌ها {#choosing-cert-validity-period}</a><a class="l2" href="#حالت-ca-خارجی-external-ca-mode">حالت CA خارجی {#external-ca-mode}</a><a class="l3" href="#آماده-سازی-دستی-اعتبارنامه-های-مؤلفه-ها">آماده‌سازی دستی اعتبارنامه‌های مؤلفه‌ها</a><a class="l3" href="#آماده-سازی-اعتبارنامه-ها-با-امضای-csrهای-تولیدشده-توسط-kubeadm">آماده‌سازی اعتبارنامه‌ها با امضای CSRهای تولیدشده توسط kubeadm</a><a class="l3" href="#آماده-سازی-خودکار-اعتبارنامه-های-مؤلفه-ها-با-استفاده-از-فازهای-kubeadm">آماده‌سازی خودکار اعتبارنامه‌های مؤلفه‌ها با استفاده از فازهای kubeadm</a><a class="l2" href="#انقضا-و-مدیریت-گواهی-ها-check-certificate-expiration">انقضا و مدیریت گواهی‌ها {#check-certificate-expiration}</a><a class="l2" href="#تمدید-خودکار-گواهی-ها">تمدید خودکار گواهی‌ها</a><a class="l2" href="#تمدید-دستی-گواهی-ها">تمدید دستی گواهی‌ها</a><a class="l3" href="#کپی-کردن-گواهی-مدیر-اختیاری-admin-certificate-copy">کپی کردن گواهی مدیر (اختیاری) {#admin-certificate-copy}</a><a class="l2" href="#تمدید-گواهی-ها-با-api-گواهی-های-کوبرنتیز">تمدید گواهی‌ها با API گواهی‌های کوبرنتیز</a><a class="l3" href="#راه-اندازی-امضاکننده">راه‌اندازی امضاکننده</a><a class="l3" href="#ایجاد-درخواست-های-امضای-گواهی-csr">ایجاد درخواست‌های امضای گواهی (CSR)</a><a class="l2" href="#تمدید-گواهی-ها-با-ca-خارجی">تمدید گواهی‌ها با CA خارجی</a><a class="l3" href="#تمدید-با-استفاده-از-درخواست-های-امضای-گواهی-csr">تمدید با استفاده از درخواست‌های امضای گواهی (CSR)</a><a class="l2" href="#چرخش-مرجع-صدور-گواهی-ca-certificate-authority-rotation">چرخش مرجع صدور گواهی (CA) {#certificate-authority-rotation}</a><a class="l2" href="#فعال-سازی-گواهی-های-امضاشدهٔ-سرویس-دهی-kubelet-kubelet-serving-certs">فعال‌سازی گواهی‌های امضاشدهٔ سرویس‌دهی kubelet {#kubelet-serving-certs}</a><a class="l2" href="#تولید-فایل-های-kubeconfig-برای-کاربران-دیگر-kubeconfig-additional-users">تولید فایل‌های kubeconfig برای کاربران دیگر {#kubeconfig-additional-users}</a><a class="l2" href="#امضای-درخواست-های-امضای-گواهی-csr-تولیدشده-توسط-kubeadm-signing-csr">امضای درخواست‌های امضای گواهی (CSR) تولیدشده توسط kubeadm {#signing-csr}</a><a class="l3" href="#آماده-سازی-فایل-های-ca-و-حساب-سرویس">آماده‌سازی فایل‌های CA و حساب سرویس</a><a class="l3" href="#تولید-csrها">تولید CSRها</a><a class="l3" href="#امضای-csrها-برای-همهٔ-گواهی-ها">امضای CSRها برای همهٔ گواهی‌ها</a><a class="l3" href="#جاسازی-گواهی-ها-در-فایل-های-kubeconfig">جاسازی گواهی‌ها در فایل‌های kubeconfig</a><a class="l3" href="#پاک-سازی-post-csr-cleanup">پاک‌سازی {#post-csr-cleanup}</a><a class="l3" href="#راه-اندازی-اولیهٔ-نود-با-kubeadm">راه‌اندازی اولیهٔ نود با kubeadm</a></nav>
+</div>
+</body>
+</html>

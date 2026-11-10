@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-1486 از 1722 صفحه
+1499 از 1722 صفحه
 
 
 ## `.`
@@ -1937,13 +1937,13 @@
 - ✅ [dns-custom-nameservers.md](md/tasks/administer-cluster/dns-custom-nameservers.md)
 - ✅ [dns-debugging-resolution.md](md/tasks/administer-cluster/dns-debugging-resolution.md)
 - ✅ [dns-horizontal-autoscaling.md](md/tasks/administer-cluster/dns-horizontal-autoscaling.md)
-- ⏳ `enable-disable-api.md`
-- ⏳ `encrypt-data.md`
-- ⏳ `extended-resource-node.md`
-- ⏳ `guaranteed-scheduling-critical-addon-pods.md`
-- ⏳ `hardening-dra.md`
-- ⏳ `ip-masq-agent.md`
-- ⏳ `kms-provider.md`
+- ✅ [enable-disable-api.md](md/tasks/administer-cluster/enable-disable-api.md)
+- ✅ [encrypt-data.md](md/tasks/administer-cluster/encrypt-data.md)
+- ✅ [extended-resource-node.md](md/tasks/administer-cluster/extended-resource-node.md)
+- ✅ [guaranteed-scheduling-critical-addon-pods.md](md/tasks/administer-cluster/guaranteed-scheduling-critical-addon-pods.md)
+- ✅ [hardening-dra.md](md/tasks/administer-cluster/hardening-dra.md)
+- ✅ [ip-masq-agent.md](md/tasks/administer-cluster/ip-masq-agent.md)
+- ✅ [kms-provider.md](md/tasks/administer-cluster/kms-provider.md)
 - ⏳ `kubelet-config-file.md`
 - ⏳ `kubelet-credential-provider.md`
 - ⏳ `kubelet-in-userns.md`
@@ -1965,12 +1965,12 @@
 
 ## `tasks/administer-cluster/kubeadm`
 
-- ⏳ `_index.md`
-- ⏳ `adding-linux-nodes.md`
-- ⏳ `adding-windows-nodes.md`
-- ⏳ `change-package-repository.md`
-- ⏳ `kubeadm-certs.md`
-- ⏳ `kubeadm-reconfigure.md`
+- ✅ [_index.md](md/tasks/administer-cluster/kubeadm/_index.md)
+- ✅ [adding-linux-nodes.md](md/tasks/administer-cluster/kubeadm/adding-linux-nodes.md)
+- ✅ [adding-windows-nodes.md](md/tasks/administer-cluster/kubeadm/adding-windows-nodes.md)
+- ✅ [change-package-repository.md](md/tasks/administer-cluster/kubeadm/change-package-repository.md)
+- ✅ [kubeadm-certs.md](md/tasks/administer-cluster/kubeadm/kubeadm-certs.md)
+- ✅ [kubeadm-reconfigure.md](md/tasks/administer-cluster/kubeadm/kubeadm-reconfigure.md)
 - ⏳ `kubeadm-upgrade.md`
 - ⏳ `upgrading-linux-nodes.md`
 - ⏳ `upgrading-windows-nodes.md`
