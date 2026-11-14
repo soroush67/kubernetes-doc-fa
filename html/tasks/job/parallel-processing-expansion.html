@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>پردازش موازی با استفاده از بسط‌دادن قالب | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">tasks / job</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">پردازش موازی با استفاده از بسط‌دادن قالب</h1><!-- overview -->
+<p dir="rtl">این تکلیف نشان می‌دهد که چگونه می‌توان چندین <span class="term" title="job">Job</span> را بر پایهٔ یک قالب مشترک اجرا کرد. با این روش می‌توانید دسته‌هایی از کار را به‌صورت موازی پردازش کنید.</p>
+<p dir="rtl">در این مثال فقط سه مورد وجود دارد: <em>apple</em> (سیب)، <em>banana</em> (موز) و <em>cherry</em> (گیلاس). Jobهای نمونه هر مورد را با چاپ یک رشته و سپس توقفی کوتاه پردازش می‌کنند.</p>
+<p dir="rtl">برای آشنایی با نحوهٔ به‌کارگیری این الگو در موارد استفادهٔ واقعی‌تر، بخش <a href="#using-jobs-in-real-workloads">استفاده از Jobها در بارهای کاری واقعی</a> را ببینید.</p>
+<h2 id="پیش-از-شروع" dir="rtl">پیش از شروع</h2>
+<p dir="rtl">باید با کاربرد پایه و غیرموازی <a href="../../concepts/workloads/controllers/job.html">Job</a> آشنا باشید.</p>
+<p dir="rtl">باید یک کلاستر کوبرنتیز داشته باشید و ابزار خط فرمان kubectl باید برای ارتباط با کلاستر شما پیکربندی شده باشد. توصیه می‌شود این آموزش را روی کلاستری اجرا کنید که دست‌کم دو نود داشته باشد که نقش میزبان control plane را ندارند. اگر هنوز کلاستری ندارید، می‌توانید با استفاده از
+<a href="https://minikube.sigs.k8s.io/docs/tutorials/multi_node/" target="_blank" rel="noopener">minikube</a>
+یکی بسازید یا از یکی از این محیط‌های آزمایشی کوبرنتیز استفاده کنید:</p>
+<ul>
+<li dir="ltr" class="ltr"><a href="https://labs.iximiuz.com/playgrounds?category=kubernetes&amp;filter=all" target="_blank" rel="noopener">iximiuz Labs</a></li>
+<li dir="ltr" class="ltr"><a href="https://killercoda.com/playgrounds/scenario/kubernetes" target="_blank" rel="noopener">Killercoda</a></li>
+<li dir="ltr" class="ltr"><a href="https://kodekloud.com/public-playgrounds" target="_blank" rel="noopener">KodeKloud</a></li>
+</ul>
+<p dir="rtl">برای قالب‌سازی پایه به ابزار خط فرمان <code dir="ltr">sed</code> نیاز دارید.</p>
+<p dir="rtl">برای دنبال‌کردن مثال قالب‌سازی پیشرفته، به یک نسخهٔ نصب‌شده و سالم از <a href="https://www.python.org/" target="_blank" rel="noopener">Python</a> و کتابخانهٔ قالب Jinja2 برای Python نیاز دارید.</p>
+<p dir="rtl">پس از راه‌اندازی Python، می‌توانید Jinja2 را با اجرای دستور زیر نصب کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">pip install --user jinja2
+</code></pre>
+<!-- steps -->
+<h2 id="ایجاد-jobها-بر-پایهٔ-یک-قالب" dir="rtl">ایجاد Jobها بر پایهٔ یک قالب</h2>
+<p dir="rtl">ابتدا قالب Job زیر را در فایلی با نام <code dir="ltr">job-tmpl.yaml</code> دانلود کنید. محتوای فایلی که دانلود می‌کنید چنین است:</p>
+<div class="code-file ltr" dir="ltr">application/job/job-tmpl.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: batch/v1
+kind: Job
+metadata:
+  name: process-item-$ITEM
+  labels:
+    jobgroup: jobexample
+spec:
+  template:
+    metadata:
+      name: jobexample
+      labels:
+        jobgroup: jobexample
+    spec:
+      containers:
+      - name: c
+        image: busybox:1.28
+        command: ["sh", "-c", "echo Processing item $ITEM &amp;&amp; sleep 5"]
+      restartPolicy: Never
+</code></pre>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># Use curl to download job-tmpl.yaml
+curl -L -s -O https://k8s.io/examples/application/job/job-tmpl.yaml
+</code></pre>
+<p dir="rtl">فایلی که دانلود کرده‌اید هنوز یک <span class="term" title="manifest">مانیفست</span> معتبر کوبرنتیز نیست. این قالب در واقع نمایشی YAML از یک آبجکت Job است که چند جانگه‌دار (placeholder) دارد و پیش از استفاده باید آن‌ها را پر کرد. نحو <code dir="ltr">$ITEM</code> برای کوبرنتیز معنایی ندارد.</p>
+<h3 id="ایجاد-مانیفست-ها-از-روی-قالب" dir="rtl">ایجاد مانیفست‌ها از روی قالب</h3>
+<p dir="rtl">قطعه‌کد شل زیر با استفاده از <code dir="ltr">sed</code> رشتهٔ <code dir="ltr">$ITEM</code> را با متغیر حلقه جایگزین می‌کند و نتیجه را در یک دایرکتوری موقت با نام <code dir="ltr">jobs</code> می‌نویسد. اکنون آن را اجرا کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># Expand the template into multiple files, one for each item to be processed.
+mkdir ./jobs
+for i in apple banana cherry
+do
+  cat job-tmpl.yaml | sed "s/\$ITEM/$i/" &gt; ./jobs/job-$i.yaml
+done
+</code></pre>
+<p dir="rtl">بررسی کنید که کار به‌درستی انجام شده باشد:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">ls jobs/
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">job-apple.yaml
+job-banana.yaml
+job-cherry.yaml
+</code></pre>
+<p dir="rtl">می‌توانید از هر نوع زبان قالب‌سازی (مثلاً Jinja2 یا ERB) استفاده کنید، یا برنامه‌ای بنویسید که مانیفست‌های Job را تولید کند.</p>
+<h3 id="ایجاد-jobها-از-روی-مانیفست-ها" dir="rtl">ایجاد Jobها از روی مانیفست‌ها</h3>
+<p dir="rtl">سپس همهٔ Jobها را با یک دستور kubectl ایجاد کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl create -f ./jobs
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">job.batch/process-item-apple created
+job.batch/process-item-banana created
+job.batch/process-item-cherry created
+</code></pre>
+<p dir="rtl">اکنون وضعیت Jobها را بررسی کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get jobs -l jobgroup=jobexample
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">NAME                  COMPLETIONS   DURATION   AGE
+process-item-apple    1/1           14s        22s
+process-item-banana   1/1           12s        21s
+process-item-cherry   1/1           12s        20s
+</code></pre>
+<p dir="rtl">گزینهٔ <code dir="ltr">-l</code> در kubectl فقط Jobهایی را انتخاب می‌کند که عضو این گروه از Jobها هستند (ممکن است Jobهای نامرتبط دیگری نیز در سیستم وجود داشته باشند).</p>
+<p dir="rtl">با استفاده از همان <span class="term" title="selector">انتخابگر برچسب</span> می‌توانید Podها را نیز بررسی کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pods -l jobgroup=jobexample
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">NAME                        READY     STATUS      RESTARTS   AGE
+process-item-apple-kixwv    0/1       Completed   0          4m
+process-item-banana-wrsf7   0/1       Completed   0          4m
+process-item-cherry-dnfu9   0/1       Completed   0          4m
+</code></pre>
+<p dir="rtl">با این دستور واحد می‌توانیم خروجی همهٔ Jobها را یک‌جا بررسی کنیم:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl logs -f -l jobgroup=jobexample
+</code></pre>
+<p dir="rtl">خروجی باید چنین باشد:</p>
+<pre dir="ltr"><code dir="ltr">Processing item apple
+Processing item banana
+Processing item cherry
+</code></pre>
+<h3 id="پاک-سازی-cleanup-1" dir="rtl">پاک‌سازی {#cleanup-1}</h3>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># Remove the Jobs you created
+# Your cluster automatically cleans up their Pods
+kubectl delete job -l jobgroup=jobexample
+</code></pre>
+<h2 id="استفاده-از-پارامترهای-پیشرفتهٔ-قالب" dir="rtl">استفاده از پارامترهای پیشرفتهٔ قالب</h2>
+<p dir="rtl">در <a href="#create-jobs-based-on-a-template">مثال نخست</a>، هر نمونه از قالب یک پارامتر داشت و همان پارامتر در نام Job نیز به کار می‌رفت. اما <a href="../../concepts/overview/working-with-objects/names.html#names">نام‌ها</a> محدودند و فقط می‌توانند نویسه‌های مشخصی داشته باشند.</p>
+<p dir="rtl">این مثال کمی پیچیده‌تر از <a href="https://palletsprojects.com/p/jinja/" target="_blank" rel="noopener">زبان قالب Jinja</a> استفاده می‌کند تا مانیفست‌ها و سپس آبجکت‌هایی را از روی آن مانیفست‌ها تولید کند؛ در این مثال هر Job چندین پارامتر دارد.</p>
+<p dir="rtl">در این بخش از تکلیف، از یک اسکریپت یک‌خطی Python برای تبدیل قالب به مجموعه‌ای از مانیفست‌ها استفاده می‌کنید.</p>
+<p dir="rtl">ابتدا قالب آبجکت Job زیر را کپی کرده و در فایلی با نام <code dir="ltr">job.yaml.jinja2</code> قرار دهید:</p>
+<pre dir="ltr"><code class="language-liquid" dir="ltr">{% set params = [{ "name": "apple", "url": "http://dbpedia.org/resource/Apple", },
+                  { "name": "banana", "url": "http://dbpedia.org/resource/Banana", },
+                  { "name": "cherry", "url": "http://dbpedia.org/resource/Cherry" }]
+%}
+{% for p in params %}
+{% set name = p["name"] %}
+{% set url = p["url"] %}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: jobexample-{{ name }}
+  labels:
+    jobgroup: jobexample
+spec:
+  template:
+    metadata:
+      name: jobexample
+      labels:
+        jobgroup: jobexample
+    spec:
+      containers:
+      - name: c
+        image: busybox:1.28
+        command: ["sh", "-c", "echo Processing URL {{ url }} &amp;&amp; sleep 5"]
+      restartPolicy: Never
+{% endfor %}
+</code></pre>
+<p dir="rtl">قالب بالا با استفاده از فهرستی از دیکشنری‌های Python (خطوط ۱ تا ۴)، دو پارامتر برای هر آبجکت Job تعریف می‌کند. یک حلقهٔ <code dir="ltr">for</code> به‌ازای هر مجموعه از پارامترها یک مانیفست Job تولید می‌کند (خطوط باقی‌مانده).</p>
+<p dir="rtl">این مثال بر یکی از ویژگی‌های YAML تکیه دارد: یک فایل YAML می‌تواند چندین سند (در اینجا، مانیفست‌های کوبرنتیز) داشته باشد که با <code dir="ltr">---</code> در یک خط جداگانه از هم جدا می‌شوند. می‌توانید خروجی را مستقیماً از طریق پایپ به <code dir="ltr">kubectl</code> بفرستید تا Jobها ایجاد شوند.</p>
+<p dir="rtl">سپس با استفاده از این برنامهٔ یک‌خطی Python قالب را بسط دهید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">alias render_template='python -c "from jinja2 import Template; import sys; print(Template(sys.stdin.read()).render());"'
+</code></pre>
+<p dir="rtl">با استفاده از <code dir="ltr">render_template</code>، پارامترها و قالب را به یک فایل YAML واحد تبدیل کنید که مانیفست‌های کوبرنتیز را در بر دارد:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># This requires the alias you defined earlier
+cat job.yaml.jinja2 | render_template &gt; jobs.yaml
+</code></pre>
+<p dir="rtl">می‌توانید فایل <code dir="ltr">jobs.yaml</code> را مشاهده کنید تا مطمئن شوید اسکریپت <code dir="ltr">render_template</code> به‌درستی کار کرده است.</p>
+<p dir="rtl">هنگامی که مطمئن شدید <code dir="ltr">render_template</code> همان‌طور که می‌خواهید کار می‌کند، می‌توانید خروجی آن را از طریق پایپ به <code dir="ltr">kubectl</code> بفرستید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">cat job.yaml.jinja2 | render_template | kubectl apply -f -
+</code></pre>
+<p dir="rtl">کوبرنتیز Jobهایی را که ایجاد کرده‌اید می‌پذیرد و اجرا می‌کند.</p>
+<h3 id="پاک-سازی-cleanup-2" dir="rtl">پاک‌سازی {#cleanup-2}</h3>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># Remove the Jobs you created
+# Your cluster automatically cleans up their Pods
+kubectl delete job -l jobgroup=jobexample
+</code></pre>
+<!-- discussion -->
+<h2 id="استفاده-از-jobها-در-بارهای-کاری-واقعی" dir="rtl">استفاده از Jobها در بارهای کاری واقعی</h2>
+<p dir="rtl">در یک مورد استفادهٔ واقعی، هر Job محاسبهٔ قابل‌توجهی انجام می‌دهد؛ برای نمونه، رندر یک فریم از یک فیلم یا پردازش بازه‌ای از سطرهای یک پایگاه داده. اگر در حال رندر یک فیلم باشید، مقدار <code dir="ltr">$ITEM</code> را برابر شمارهٔ فریم قرار می‌دهید. اگر در حال پردازش سطرهای یک جدول پایگاه داده باشید، <code dir="ltr">$ITEM</code> را طوری تنظیم می‌کنید که بازهٔ سطرهای مورد پردازش را نشان دهد.</p>
+<p dir="rtl">در این تکلیف، دستوری را اجرا کردید که خروجی Podها را با واکشی لاگ‌هایشان جمع‌آوری می‌کرد. در یک مورد استفادهٔ واقعی، هر Pod متعلق به یک Job پیش از پایان کار، خروجی خود را در یک ذخیره‌سازی ماندگار می‌نویسد. می‌توانید برای هر Job از یک PersistentVolume یا از یک سرویس ذخیره‌سازی خارجی استفاده کنید. برای نمونه، اگر در حال رندر فریم‌های یک فیلم هستید، داده‌های فریم رندرشده را با HTTP و روش <code dir="ltr">PUT</code> به یک URL بفرستید و برای هر فریم از URL متفاوتی استفاده کنید.</p>
+<h2 id="برچسب-های-jobها-و-podها" dir="rtl">برچسب‌های Jobها و Podها</h2>
+<p dir="rtl">پس از ایجاد یک Job، کوبرنتیز به‌طور خودکار <span class="term" title="label">برچسب‌های</span> دیگری اضافه می‌کند که Podهای یک Job را از Podهای Job دیگر متمایز می‌کنند.</p>
+<p dir="rtl">در این مثال، هر Job و قالب Pod آن یک برچسب دارند: <code dir="ltr">jobgroup=jobexample</code>.</p>
+<p dir="rtl">خود کوبرنتیز به برچسب‌هایی با نام <code dir="ltr">jobgroup</code> توجهی نمی‌کند. تعیین یک برچسب برای همهٔ Jobهایی که از روی یک قالب ایجاد می‌کنید، کار با همهٔ آن Jobها را به‌صورت هم‌زمان آسان می‌کند. در <a href="#create-jobs-based-on-a-template">مثال نخست</a> از یک قالب برای ایجاد چند Job استفاده کردید. این قالب تضمین می‌کند که هر Pod نیز همان برچسب را بگیرد، بنابراین می‌توانید همهٔ Podهای این Jobهای قالب‌محور را با یک دستور واحد بررسی کنید.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">کلید برچسب <code dir="ltr">jobgroup</code> ویژه یا رزروشده نیست. می‌توانید طرح برچسب‌گذاری دلخواه خود را انتخاب کنید. در صورت تمایل می‌توانید از <a href="../../concepts/overview/working-with-objects/common-labels.html#labels">برچسب‌های پیشنهادی</a> استفاده کنید.</p>
+</div>
+<h2 id="روش-های-جایگزین" dir="rtl">روش‌های جایگزین</h2>
+<p dir="rtl">اگر قصد دارید تعداد زیادی آبجکت Job ایجاد کنید، ممکن است با این موارد روبه‌رو شوید:</p>
+<ul>
+<li dir="rtl">حتی با استفاده از برچسب‌ها، مدیریت این‌همه Job دشوار است.</li>
+<li dir="rtl">اگر Jobهای زیادی را به‌صورت دسته‌ای ایجاد کنید، ممکن است بار سنگینی بر control plane کوبرنتیز وارد کنید. همچنین ممکن است سرور API کوبرنتیز نرخ درخواست‌های شما را محدود کند و درخواست‌هایتان را به‌طور موقت با وضعیت 429 رد کند.</li>
+<li dir="rtl">محدودیت <span class="term" title="resource-quota">سهمیهٔ منابع</span> روی Jobها شما را محدود می‌کند: هنگامی که حجم زیادی از کار را در یک دسته ایجاد می‌کنید، سرور API برخی از درخواست‌های شما را برای همیشه رد می‌کند.</li>
+</ul>
+<p dir="rtl"><a href="../../concepts/workloads/controllers/job.html#job-patterns">الگوهای Job</a> دیگری نیز وجود دارند که با آن‌ها می‌توانید حجم زیادی از کار را بدون ایجاد تعداد بسیار زیادی آبجکت Job پردازش کنید.</p>
+<p dir="rtl">همچنین می‌توانید نوشتن <a href="../../concepts/architecture/controller.html">کنترل‌کنندهٔ</a> اختصاصی خود را برای مدیریت خودکار آبجکت‌های Job در نظر بگیرید.</p>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#پیش-از-شروع">پیش از شروع</a><a class="l2" href="#ایجاد-jobها-بر-پایهٔ-یک-قالب">ایجاد Jobها بر پایهٔ یک قالب</a><a class="l3" href="#ایجاد-مانیفست-ها-از-روی-قالب">ایجاد مانیفست‌ها از روی قالب</a><a class="l3" href="#ایجاد-jobها-از-روی-مانیفست-ها">ایجاد Jobها از روی مانیفست‌ها</a><a class="l3" href="#پاک-سازی-cleanup-1">پاک‌سازی {#cleanup-1}</a><a class="l2" href="#استفاده-از-پارامترهای-پیشرفتهٔ-قالب">استفاده از پارامترهای پیشرفتهٔ قالب</a><a class="l3" href="#پاک-سازی-cleanup-2">پاک‌سازی {#cleanup-2}</a><a class="l2" href="#استفاده-از-jobها-در-بارهای-کاری-واقعی">استفاده از Jobها در بارهای کاری واقعی</a><a class="l2" href="#برچسب-های-jobها-و-podها">برچسب‌های Jobها و Podها</a><a class="l2" href="#روش-های-جایگزین">روش‌های جایگزین</a></nav>
+</div>
+</body>
+</html>

@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-1620 از 1722 صفحه
+1635 از 1722 صفحه
 
 
 ## `.`
@@ -2122,33 +2122,33 @@
 ## `tasks/job`
 
 - ✅ [_index.md](md/tasks/job/_index.md)
-- ⏳ `automated-tasks-with-cron-jobs.md`
-- ⏳ `coarse-parallel-processing-work-queue.md`
-- ⏳ `fine-parallel-processing-work-queue.md`
-- ⏳ `indexed-parallel-processing-static.md`
-- ⏳ `job-with-pod-to-pod-communication.md`
-- ⏳ `parallel-processing-expansion.md`
-- ⏳ `pod-failure-policy.md`
+- ✅ [automated-tasks-with-cron-jobs.md](md/tasks/job/automated-tasks-with-cron-jobs.md)
+- ✅ [coarse-parallel-processing-work-queue.md](md/tasks/job/coarse-parallel-processing-work-queue.md)
+- ✅ [fine-parallel-processing-work-queue.md](md/tasks/job/fine-parallel-processing-work-queue.md)
+- ✅ [indexed-parallel-processing-static.md](md/tasks/job/indexed-parallel-processing-static.md)
+- ✅ [job-with-pod-to-pod-communication.md](md/tasks/job/job-with-pod-to-pod-communication.md)
+- ✅ [parallel-processing-expansion.md](md/tasks/job/parallel-processing-expansion.md)
+- ✅ [pod-failure-policy.md](md/tasks/job/pod-failure-policy.md)
 
 ## `tasks/manage-daemon`
 
-- ⏳ `_index.md`
-- ⏳ `create-daemon-set.md`
-- ⏳ `pods-some-nodes.md`
-- ⏳ `rollback-daemon-set.md`
-- ⏳ `update-daemon-set.md`
+- ✅ [_index.md](md/tasks/manage-daemon/_index.md)
+- ✅ [create-daemon-set.md](md/tasks/manage-daemon/create-daemon-set.md)
+- ✅ [pods-some-nodes.md](md/tasks/manage-daemon/pods-some-nodes.md)
+- ✅ [rollback-daemon-set.md](md/tasks/manage-daemon/rollback-daemon-set.md)
+- ✅ [update-daemon-set.md](md/tasks/manage-daemon/update-daemon-set.md)
 
 ## `tasks/manage-gpus`
 
-- ⏳ `scheduling-gpus.md`
+- ✅ [scheduling-gpus.md](md/tasks/manage-gpus/scheduling-gpus.md)
 
 ## `tasks/manage-hugepages`
 
-- ⏳ `scheduling-hugepages.md`
+- ✅ [scheduling-hugepages.md](md/tasks/manage-hugepages/scheduling-hugepages.md)
 
 ## `tasks/manage-kubernetes-objects`
 
-- ⏳ `_index.md`
+- ✅ [_index.md](md/tasks/manage-kubernetes-objects/_index.md)
 - ⏳ `declarative-config.md`
 - ⏳ `imperative-command.md`
 - ⏳ `imperative-config.md`

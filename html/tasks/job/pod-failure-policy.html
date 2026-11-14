@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>مدیریت خرابی‌های قابل تلاش مجدد و غیرقابل تلاش مجدد پادها با سیاست خرابی Pod | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">tasks / job</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">مدیریت خرابی‌های قابل تلاش مجدد و غیرقابل تلاش مجدد پادها با سیاست خرابی Pod</h1><div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
+<!-- overview -->
+<p dir="rtl">این سند نشان می‌دهد چگونه می‌توانید از
+<a href="../../concepts/workloads/controllers/job.html#pod-failure-policy">سیاست خرابی Pod</a>
+در کنار
+<a href="../../concepts/workloads/controllers/job.html#pod-backoff-failure-policy">سیاست خرابی عقب‌نشینی Pod</a>
+پیش‌فرض استفاده کنید تا کنترل بهتری بر نحوهٔ رسیدگی به خرابی‌های سطح کانتینر یا سطح Pod
+در یک <span class="term" title="job">Job</span> داشته باشید.</p>
+<p dir="rtl">تعریف سیاست خرابی Pod می‌تواند به شما کمک کند تا:</p>
+<ul>
+<li dir="rtl">با پرهیز از تلاش‌های مجدد غیرضروری Pod، از منابع محاسباتی بهتر استفاده کنید.</li>
+<li dir="rtl">از شکست Job به دلیل اختلال‌های Pod (مانند <span class="term" title="preemption">پیش‌دستی (preemption)</span>،
+<span class="term" title="api-eviction">بیرون‌رانی آغازشده از طریق API</span>
+یا بیرون‌رانی مبتنی بر <span class="term" title="taint">taint</span>) جلوگیری کنید.</li>
+</ul>
+<h2 id="پیش-از-شروع" dir="rtl">پیش از شروع</h2>
+<p dir="rtl">باید از پیش با کاربرد پایهٔ <a href="../../concepts/workloads/controllers/job.html">Job</a> آشنا باشید.</p>
+<p dir="rtl">باید یک کلاستر کوبرنتیز داشته باشید و ابزار خط فرمان kubectl باید برای ارتباط با کلاستر شما پیکربندی شده باشد. توصیه می‌شود این آموزش را روی کلاستری اجرا کنید که دست‌کم دو نود داشته باشد که نقش میزبان control plane را ندارند. اگر هنوز کلاستری ندارید، می‌توانید با استفاده از
+<a href="https://minikube.sigs.k8s.io/docs/tutorials/multi_node/" target="_blank" rel="noopener">minikube</a>
+یکی بسازید یا از یکی از این محیط‌های آزمایشی کوبرنتیز استفاده کنید:</p>
+<ul>
+<li dir="ltr" class="ltr"><a href="https://labs.iximiuz.com/playgrounds?category=kubernetes&amp;filter=all" target="_blank" rel="noopener">iximiuz Labs</a></li>
+<li dir="ltr" class="ltr"><a href="https://killercoda.com/playgrounds/scenario/kubernetes" target="_blank" rel="noopener">Killercoda</a></li>
+<li dir="ltr" class="ltr"><a href="https://kodekloud.com/public-playgrounds" target="_blank" rel="noopener">KodeKloud</a></li>
+</ul>
+<h2 id="سناریوهای-کاربرد" dir="rtl">سناریوهای کاربرد</h2>
+<p dir="rtl">سناریوهای کاربرد زیر را برای Jobهایی که سیاست خرابی Pod تعریف می‌کنند در نظر بگیرید:</p>
+<ul>
+<li dir="rtl"><a href="#pod-failure-policy-failjob">پرهیز از تلاش‌های مجدد غیرضروری Pod</a></li>
+<li dir="rtl"><a href="#pod-failure-policy-ignore">نادیده گرفتن اختلال‌های Pod</a></li>
+<li dir="rtl"><a href="#pod-failure-policy-config-issue">پرهیز از تلاش‌های مجدد غیرضروری Pod بر اساس وضعیت‌های سفارشی Pod</a></li>
+<li dir="rtl"><a href="#backoff-limit-per-index-failindex">پرهیز از تلاش‌های مجدد غیرضروری Pod به ازای هر اندیس</a></li>
+</ul>
+<h3 id="استفاده-از-سیاست-خرابی-pod-برای-پرهیز-از-تلاش-های-مجدد-غیرضروری-pod-pod-failure-policy-failjob" dir="rtl">استفاده از سیاست خرابی Pod برای پرهیز از تلاش‌های مجدد غیرضروری Pod {#pod-failure-policy-failjob}</h3>
+<p dir="rtl">با مثال زیر می‌توانید یاد بگیرید که چگونه از سیاست خرابی Pod استفاده کنید تا
+وقتی خرابی یک Pod نشان‌دهندهٔ یک باگ نرم‌افزاری غیرقابل تلاش مجدد است، از راه‌اندازی‌های
+مجدد غیرضروری Pod جلوگیری شود.</p>
+<ol>
+<li dir="rtl">مانیفست زیر را بررسی کنید:</li>
+</ol>
+<div class="code-file ltr" dir="ltr">/controllers/job-pod-failure-policy-failjob.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr"># /controllers/job-pod-failure-policy-failjob.yaml (not found in content/en/examples)
+</code></pre>
+<ol>
+<li dir="rtl">
+<p dir="rtl">مانیفست را اعمال کنید:</p>
+<pre dir="ltr"><code class="language-sh" dir="ltr">kubectl create -f https://k8s.io/examples/controllers/job-pod-failure-policy-failjob.yaml
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">پس از حدود ۳۰ ثانیه، کل Job باید خاتمه یافته باشد. وضعیت Job را با اجرای دستور زیر بررسی کنید:</p>
+<pre dir="ltr"><code class="language-sh" dir="ltr">kubectl get jobs -l job-name=job-pod-failure-policy-failjob -o yaml
+</code></pre>
+<p dir="rtl">در وضعیت Job، شرایط (condition) زیر نمایش داده می‌شوند:</p>
+<ul>
+<li dir="rtl">شرط <code dir="ltr">FailureTarget</code>: فیلد <code dir="ltr">reason</code> آن روی <code dir="ltr">PodFailurePolicy</code> تنظیم شده است و
+فیلد <code dir="ltr">message</code> آن اطلاعات بیشتری دربارهٔ خاتمه دارد، مانند
+<code dir="ltr">Container main for pod default/job-pod-failure-policy-failjob-8ckj8 failed with exit code 42 matching FailJob rule at index 0</code>.
+کنترل‌کنندهٔ Job این شرط را به محض اینکه Job شکست‌خورده تلقی شود اضافه می‌کند.
+برای جزئیات، <a href="../../concepts/workloads/controllers/job.html#termination-of-job-pods">خاتمهٔ Podهای Job</a> را ببینید.</li>
+<li dir="rtl">شرط <code dir="ltr">Failed</code>: همان <code dir="ltr">reason</code> و <code dir="ltr">message</code> شرط <code dir="ltr">FailureTarget</code> را دارد.
+کنترل‌کنندهٔ Job این شرط را پس از خاتمهٔ همهٔ Podهای Job اضافه می‌کند.</li>
+</ul>
+<p dir="rtl">برای مقایسه، اگر سیاست خرابی Pod غیرفعال بود، Job تا رسیدن به <code dir="ltr">backoffLimit</code>
+(۶ خرابی) دوباره تلاش می‌کرد. از آنجا که تلاش‌های مجدد از عقب‌نشینی نمایی
+(exponential backoff) استفاده می‌کنند و با <code dir="ltr">parallelism: 2</code> خرابی‌ها به‌صورت جفتی رخ
+می‌دهند، فاصلهٔ بین تلاش‌ها با هر تلاش مجدد افزایش می‌یابد. در نتیجه، در این مثال
+دست‌کم ۹ دقیقه طول می‌کشید تا Job شکست بخورد.</p>
+</li>
+</ol>
+<h4 id="پاک-سازی" dir="rtl">پاک‌سازی</h4>
+<p dir="rtl">Job ایجادشده را حذف کنید:</p>
+<pre dir="ltr"><code class="language-sh" dir="ltr">kubectl delete jobs/job-pod-failure-policy-failjob
+</code></pre>
+<p dir="rtl">کلاستر به‌طور خودکار Podها را پاک‌سازی می‌کند.</p>
+<h3 id="استفاده-از-سیاست-خرابی-pod-برای-نادیده-گرفتن-اختلال-های-pod-pod-failure-policy-ignore" dir="rtl">استفاده از سیاست خرابی Pod برای نادیده گرفتن اختلال‌های Pod {#pod-failure-policy-ignore}</h3>
+<p dir="rtl">با مثال زیر می‌توانید یاد بگیرید که چگونه از سیاست خرابی Pod استفاده کنید تا
+اختلال‌های Pod باعث افزایش شمارندهٔ تلاش مجدد Pod به سمت حد
+<code dir="ltr">.spec.backoffLimit</code> نشوند.</p>
+<div class="callout caution"><div class="callout-title">احتیاط:</div>
+<p dir="rtl">زمان‌بندی در این مثال اهمیت دارد، پس بهتر است پیش از اجرا مراحل را بخوانید.
+برای ایجاد اختلال در Pod، مهم است که نود را در حالی تخلیه (drain) کنید که Pod روی آن
+در حال اجراست (ظرف ۹۰ ثانیه پس از زمان‌بندی Pod).</p>
+</div>
+<ol>
+<li dir="rtl">مانیفست زیر را بررسی کنید:</li>
+</ol>
+<div class="code-file ltr" dir="ltr">/controllers/job-pod-failure-policy-ignore.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr"># /controllers/job-pod-failure-policy-ignore.yaml (not found in content/en/examples)
+</code></pre>
+<ol>
+<li dir="rtl">
+<p dir="rtl">مانیفست را اعمال کنید:</p>
+<pre dir="ltr"><code class="language-sh" dir="ltr">kubectl create -f https://k8s.io/examples/controllers/job-pod-failure-policy-ignore.yaml
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">این دستور را اجرا کنید تا <code dir="ltr">nodeName</code> نودی که Pod روی آن زمان‌بندی شده است را بیابید:</p>
+<pre dir="ltr"><code class="language-sh" dir="ltr">nodeName=$(kubectl get pods -l job-name=job-pod-failure-policy-ignore -o jsonpath='{.items[0].spec.nodeName}')
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">نود را تخلیه کنید تا Pod پیش از تکمیل شدن (ظرف ۹۰ ثانیه) بیرون رانده شود:</p>
+<pre dir="ltr"><code class="language-sh" dir="ltr">kubectl drain nodes/$nodeName --ignore-daemonsets --grace-period=0
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">فیلد <code dir="ltr">.status.failed</code> را بررسی کنید تا مطمئن شوید شمارندهٔ Job افزایش نیافته است:</p>
+<pre dir="ltr"><code class="language-sh" dir="ltr">kubectl get jobs -l job-name=job-pod-failure-policy-ignore -o yaml
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">حالت cordon نود را بردارید:</p>
+<pre dir="ltr"><code class="language-sh" dir="ltr">kubectl uncordon nodes/$nodeName
+</code></pre>
+</li>
+</ol>
+<p dir="rtl">اجرای Job از سر گرفته می‌شود و با موفقیت به پایان می‌رسد.</p>
+<p dir="rtl">برای مقایسه، اگر سیاست خرابی Pod غیرفعال بود، اختلال Pod به خاتمهٔ کل Job منجر
+می‌شد (زیرا <code dir="ltr">.spec.backoffLimit</code> روی ۰ تنظیم شده است).</p>
+<h4 id="پاک-سازی-1" dir="rtl">پاک‌سازی</h4>
+<p dir="rtl">Job ایجادشده را حذف کنید:</p>
+<pre dir="ltr"><code class="language-sh" dir="ltr">kubectl delete jobs/job-pod-failure-policy-ignore
+</code></pre>
+<p dir="rtl">کلاستر به‌طور خودکار Podها را پاک‌سازی می‌کند.</p>
+<h3 id="استفاده-از-سیاست-خرابی-pod-برای-پرهیز-از-تلاش-های-مجدد-غیرضروری-pod-بر-اساس-وضعیت-های-سفارشی-pod-pod-failure-policy-config-issue" dir="rtl">استفاده از سیاست خرابی Pod برای پرهیز از تلاش‌های مجدد غیرضروری Pod بر اساس وضعیت‌های سفارشی Pod {#pod-failure-policy-config-issue}</h3>
+<p dir="rtl">با مثال زیر می‌توانید یاد بگیرید که چگونه از سیاست خرابی Pod استفاده کنید تا
+بر اساس وضعیت‌های سفارشی Pod (Pod Conditions) از راه‌اندازی‌های مجدد غیرضروری Pod جلوگیری شود.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">مثال زیر از نسخهٔ 1.27 به بعد کار می‌کند، زیرا به انتقال Podهای حذف‌شده در فاز <code dir="ltr">Pending</code>
+به یک فاز پایانی وابسته است
+(ببینید: <a href="../../concepts/workloads/pods/pod-lifecycle.html#pod-phase">فاز Pod</a>).</p>
+</div>
+<ol>
+<li dir="rtl">مانیفست زیر را بررسی کنید:</li>
+</ol>
+<div class="code-file ltr" dir="ltr">/controllers/job-pod-failure-policy-config-issue.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr"># /controllers/job-pod-failure-policy-config-issue.yaml (not found in content/en/examples)
+</code></pre>
+<ol>
+<li dir="rtl">
+<p dir="rtl">مانیفست را اعمال کنید:</p>
+<pre dir="ltr"><code class="language-sh" dir="ltr">kubectl create -f https://k8s.io/examples/controllers/job-pod-failure-policy-config-issue.yaml
+</code></pre>
+<p dir="rtl">توجه کنید که ایمیج به‌اشتباه پیکربندی شده است، زیرا وجود ندارد.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">وضعیت Podهای Job را با اجرای دستور زیر بررسی کنید:</p>
+<pre dir="ltr"><code class="language-sh" dir="ltr">kubectl get pods -l job-name=job-pod-failure-policy-config-issue -o yaml
+</code></pre>
+<p dir="rtl">خروجی‌ای مشابه این خواهید دید:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">containerStatuses:
+- image: non-existing-repo/non-existing-image:example
+   ...
+   state:
+   waiting:
+      message: Back-off pulling image "non-existing-repo/non-existing-image:example"
+      reason: ImagePullBackOff
+      ...
+phase: Pending
+</code></pre>
+<p dir="rtl">توجه کنید که Pod در فاز <code dir="ltr">Pending</code> باقی می‌ماند، زیرا نمی‌تواند ایمیج نادرست
+پیکربندی‌شده را دریافت (pull) کند. این مشکل در اصل می‌تواند گذرا باشد و ایمیج ممکن
+است دریافت شود. اما در این مورد ایمیج وجود ندارد، بنابراین این واقعیت را با یک
+وضعیت سفارشی مشخص می‌کنیم.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">وضعیت سفارشی را اضافه کنید. ابتدا وصله (patch) را با اجرای دستور زیر آماده کنید:</p>
+<pre dir="ltr"><code class="language-sh" dir="ltr">cat &lt;&lt;EOF &gt; patch.yaml
+status:
+  conditions:
+  - type: ConfigIssue
+    status: "True"
+    reason: "NonExistingImage"
+    lastTransitionTime: "$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
+EOF
+</code></pre>
+<p dir="rtl">سپس با اجرای دستور زیر، یکی از Podهای ایجادشده توسط Job را انتخاب کنید:</p>
+<pre dir="ltr"><code dir="ltr">podName=$(kubectl get pods -l job-name=job-pod-failure-policy-config-issue -o jsonpath='{.items[0].metadata.name}')
+</code></pre>
+<p dir="rtl">پس از آن، با اجرای دستور زیر وصله را روی یکی از Podها اعمال کنید:</p>
+<pre dir="ltr"><code class="language-sh" dir="ltr">kubectl patch pod $podName --subresource=status --patch-file=patch.yaml
+</code></pre>
+<p dir="rtl">اگر وصله با موفقیت اعمال شود، پیامی مانند این دریافت خواهید کرد:</p>
+<pre dir="ltr"><code class="language-sh" dir="ltr">pod/job-pod-failure-policy-config-issue-k6pvp patched
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">با اجرای دستور زیر Pod را حذف کنید تا به فاز <code dir="ltr">Failed</code> منتقل شود:</p>
+<pre dir="ltr"><code class="language-sh" dir="ltr">kubectl delete pods/$podName
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">وضعیت Job را با اجرای دستور زیر بررسی کنید:</p>
+<pre dir="ltr"><code class="language-sh" dir="ltr">kubectl get jobs -l job-name=job-pod-failure-policy-config-issue -o yaml
+</code></pre>
+<p dir="rtl">در وضعیت Job، شرط <code dir="ltr">Failed</code> را می‌بینید که فیلد <code dir="ltr">reason</code> آن برابر با
+<code dir="ltr">PodFailurePolicy</code> است. افزون بر این، فیلد <code dir="ltr">message</code> اطلاعات دقیق‌تری دربارهٔ
+خاتمهٔ Job دارد، مانند:
+<code dir="ltr">Pod default/job-pod-failure-policy-config-issue-k6pvp has condition ConfigIssue matching FailJob rule at index 0</code>.</p>
+</li>
+</ol>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">در محیط عملیاتی (production)، مراحل ۳ و ۴ باید با یک کنترل‌کنندهٔ ارائه‌شده از سوی
+کاربر خودکار شوند.</p>
+</div>
+<h4 id="پاک-سازی-2" dir="rtl">پاک‌سازی</h4>
+<p dir="rtl">Job ایجادشده را حذف کنید:</p>
+<pre dir="ltr"><code class="language-sh" dir="ltr">kubectl delete jobs/job-pod-failure-policy-config-issue
+</code></pre>
+<p dir="rtl">کلاستر به‌طور خودکار Podها را پاک‌سازی می‌کند.</p>
+<h3 id="استفاده-از-سیاست-خرابی-pod-برای-پرهیز-از-تلاش-های-مجدد-غیرضروری-pod-به-ازای-هر-اندیس-backoff-limit-per-index-failindex" dir="rtl">استفاده از سیاست خرابی Pod برای پرهیز از تلاش‌های مجدد غیرضروری Pod به ازای هر اندیس {#backoff-limit-per-index-failindex}</h3>
+<p dir="rtl">برای جلوگیری از راه‌اندازی‌های مجدد غیرضروری Pod به ازای هر اندیس، می‌توانید از
+قابلیت‌های <em>سیاست خرابی Pod</em> و <em>حد عقب‌نشینی به ازای هر اندیس</em> استفاده کنید. این بخش
+از صفحه نشان می‌دهد که چگونه این قابلیت‌ها را با هم به کار ببرید.</p>
+<ol>
+<li dir="rtl">مانیفست زیر را بررسی کنید:</li>
+</ol>
+<div class="code-file ltr" dir="ltr">/controllers/job-backoff-limit-per-index-failindex.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr"># /controllers/job-backoff-limit-per-index-failindex.yaml (not found in content/en/examples)
+</code></pre>
+<ol>
+<li dir="rtl">
+<p dir="rtl">مانیفست را اعمال کنید:</p>
+<pre dir="ltr"><code class="language-sh" dir="ltr">kubectl create -f https://k8s.io/examples/controllers/job-backoff-limit-per-index-failindex.yaml
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">پس از حدود ۱۵ ثانیه، وضعیت Podهای Job را بررسی کنید. برای این کار دستور زیر را اجرا کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pods -l job-name=job-backoff-limit-per-index-failindex -o yaml
+</code></pre>
+<p dir="rtl">خروجی‌ای مشابه این خواهید دید:</p>
+<pre dir="ltr"><code class="language-none" dir="ltr">NAME                                            READY   STATUS      RESTARTS   AGE
+job-backoff-limit-per-index-failindex-0-4g4cm   0/1     Error       0          4s
+job-backoff-limit-per-index-failindex-0-fkdzq   0/1     Error       0          15s
+job-backoff-limit-per-index-failindex-1-2bgdj   0/1     Error       0          15s
+job-backoff-limit-per-index-failindex-2-vs6lt   0/1     Completed   0          11s
+job-backoff-limit-per-index-failindex-3-s7s47   0/1     Completed   0          6s
+</code></pre>
+<p dir="rtl">توجه کنید که خروجی موارد زیر را نشان می‌دهد:</p>
+<ul>
+<li dir="rtl">دو Pod اندیس 0 دارند، زیرا حد عقب‌نشینی اجازهٔ یک تلاش مجدد برای این اندیس را
+داده است.</li>
+<li dir="rtl">فقط یک Pod اندیس 1 دارد، زیرا کد خروج Pod شکست‌خورده با سیاست خرابی Pod دارای
+کنش <code dir="ltr">FailIndex</code> مطابقت داشته است.</li>
+</ul>
+</li>
+<li dir="rtl">
+<p dir="rtl">وضعیت Job را با اجرای دستور زیر بررسی کنید:</p>
+<pre dir="ltr"><code class="language-sh" dir="ltr">kubectl get jobs -l job-name=job-backoff-limit-per-index-failindex -o yaml
+</code></pre>
+<p dir="rtl">در وضعیت Job می‌بینید که فیلد <code dir="ltr">failedIndexes</code> مقدار "0,1" را نشان می‌دهد، زیرا
+هر دو اندیس شکست خورده‌اند. از آنجا که اندیس 1 دوباره امتحان نشده است، تعداد
+Podهای شکست‌خورده که با فیلد وضعیت "failed" نشان داده می‌شود، برابر با 3 است.</p>
+</li>
+</ol>
+<h4 id="پاک-سازی-3" dir="rtl">پاک‌سازی</h4>
+<p dir="rtl">Job ایجادشده را حذف کنید:</p>
+<pre dir="ltr"><code class="language-sh" dir="ltr">kubectl delete jobs/job-backoff-limit-per-index-failindex
+</code></pre>
+<p dir="rtl">کلاستر به‌طور خودکار Podها را پاک‌سازی می‌کند.</p>
+<h2 id="جایگزین-ها" dir="rtl">جایگزین‌ها</h2>
+<p dir="rtl">می‌توانید با مشخص کردن فیلد <code dir="ltr">.spec.backoffLimit</code> در Job، تنها به
+<a href="../../concepts/workloads/controllers/job.html#pod-backoff-failure-policy">سیاست خرابی عقب‌نشینی Pod</a>
+تکیه کنید. با این حال، در بسیاری از موقعیت‌ها یافتن تعادل میان مقداری برای
+<code dir="ltr">.spec.backoffLimit</code> که به‌قدر کافی کم باشد تا از تلاش‌های مجدد غیرضروری Pod جلوگیری
+کند و در عین حال به‌قدر کافی زیاد باشد تا Job بر اثر اختلال‌های Pod خاتمه نیابد،
+دشوار است.</p>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#پیش-از-شروع">پیش از شروع</a><a class="l2" href="#سناریوهای-کاربرد">سناریوهای کاربرد</a><a class="l3" href="#استفاده-از-سیاست-خرابی-pod-برای-پرهیز-از-تلاش-های-مجدد-غیرضروری-pod-pod-failure-policy-failjob">استفاده از سیاست خرابی Pod برای پرهیز از تلاش‌های مجدد غیرضروری Pod {#pod-failure-policy-failjob}</a><a class="l3" href="#استفاده-از-سیاست-خرابی-pod-برای-نادیده-گرفتن-اختلال-های-pod-pod-failure-policy-ignore">استفاده از سیاست خرابی Pod برای نادیده گرفتن اختلال‌های Pod {#pod-failure-policy-ignore}</a><a class="l3" href="#استفاده-از-سیاست-خرابی-pod-برای-پرهیز-از-تلاش-های-مجدد-غیرضروری-pod-بر-اساس-وضعیت-های-سفارشی-pod-pod-failure-policy-config-issue">استفاده از سیاست خرابی Pod برای پرهیز از تلاش‌های مجدد غیرضروری Pod بر اساس وضعیت‌های سفارشی Pod {#pod-failure-policy-config-issue}</a><a class="l3" href="#استفاده-از-سیاست-خرابی-pod-برای-پرهیز-از-تلاش-های-مجدد-غیرضروری-pod-به-ازای-هر-اندیس-backoff-limit-per-index-failindex">استفاده از سیاست خرابی Pod برای پرهیز از تلاش‌های مجدد غیرضروری Pod به ازای هر اندیس {#backoff-limit-per-index-failindex}</a><a class="l2" href="#جایگزین-ها">جایگزین‌ها</a></nav>
+</div>
+</body>
+</html>

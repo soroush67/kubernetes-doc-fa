@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>پردازش موازی ریزدانه با استفاده از صف کار | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">tasks / job</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">پردازش موازی ریزدانه با استفاده از صف کار</h1><!-- overview -->
+<p dir="rtl">در این مثال، یک Job کوبرنتیز اجرا می‌کنید که چندین وظیفهٔ موازی را در قالب فرایندهای کارگر (worker) اجرا می‌کند و هر کدام از این فرایندها در یک Pod جداگانه اجرا می‌شود.</p>
+<p dir="rtl">در این مثال، هر Pod پس از ایجاد شدن، یک واحد کار را از صف وظایف برمی‌دارد، آن را پردازش می‌کند و این کار را تا رسیدن به انتهای صف تکرار می‌کند.</p>
+<p dir="rtl">مراحل این مثال به‌طور خلاصه به شرح زیر است:</p>
+<ol>
+<li dir="rtl"><strong>یک سرویس ذخیره‌سازی برای نگهداری صف کار راه‌اندازی کنید.</strong> در این مثال، برای ذخیرهٔ آیتم‌های کار از Redis استفاده می‌کنید. در <a href="coarse-parallel-processing-work-queue.html">مثال قبلی</a> از RabbitMQ استفاده کردید. در این مثال از Redis و یک کتابخانهٔ کلاینت سفارشی برای صف کار استفاده می‌کنید، زیرا AMQP روش مناسبی در اختیار کلاینت‌ها قرار نمی‌دهد تا خالی شدن یک صف کار با طول محدود را تشخیص دهند. در عمل، یک مخزن ذخیره‌سازی مانند Redis را یک بار راه‌اندازی می‌کنید و از آن برای صف‌های کار Jobهای متعدد و کاربردهای دیگر دوباره استفاده می‌کنید.</li>
+<li dir="rtl"><strong>یک صف ایجاد کنید و آن را با پیام‌ها پر کنید.</strong> هر پیام نمایانگر یک وظیفه برای انجام است. در این مثال، هر پیام یک عدد صحیح است که یک محاسبهٔ طولانی روی آن انجام می‌دهیم.</li>
+<li dir="rtl"><strong>یک Job راه‌اندازی کنید که وظایف موجود در صف را پردازش کند.</strong> این Job چندین Pod را راه‌اندازی می‌کند. هر Pod یک وظیفه را از صف پیام برمی‌دارد، آن را پردازش می‌کند و این کار را تا رسیدن به انتهای صف تکرار می‌کند.</li>
+</ol>
+<h2 id="پیش-از-شروع" dir="rtl">پیش از شروع</h2>
+<p dir="rtl">باید یک کلاستر کوبرنتیز داشته باشید و ابزار خط فرمان kubectl باید برای ارتباط با کلاستر شما پیکربندی شده باشد. توصیه می‌شود این آموزش را روی کلاستری اجرا کنید که دست‌کم دو نود داشته باشد که نقش میزبان control plane را ندارند. اگر هنوز کلاستری ندارید، می‌توانید با استفاده از
+<a href="https://minikube.sigs.k8s.io/docs/tutorials/multi_node/" target="_blank" rel="noopener">minikube</a>
+یکی بسازید یا از یکی از این محیط‌های آزمایشی کوبرنتیز استفاده کنید:</p>
+<ul>
+<li dir="ltr" class="ltr"><a href="https://labs.iximiuz.com/playgrounds?category=kubernetes&amp;filter=all" target="_blank" rel="noopener">iximiuz Labs</a></li>
+<li dir="ltr" class="ltr"><a href="https://killercoda.com/playgrounds/scenario/kubernetes" target="_blank" rel="noopener">Killercoda</a></li>
+<li dir="ltr" class="ltr"><a href="https://kodekloud.com/public-playgrounds" target="_blank" rel="noopener">KodeKloud</a></li>
+</ul>
+<p dir="rtl">به یک رجیستری ایمیج کانتینر نیاز دارید که بتوانید ایمیج‌ها را برای اجرا در کلاستر خود در آن بارگذاری کنید. این مثال از <a href="https://hub.docker.com/" target="_blank" rel="noopener">Docker Hub</a> استفاده می‌کند، اما می‌توانید آن را برای یک رجیستری ایمیج کانتینر دیگر نیز تطبیق دهید.</p>
+<p dir="rtl">همچنین فرض این مثال بر آن است که Docker را به‌صورت محلی نصب کرده‌اید. از Docker برای ساخت ایمیج‌های کانتینر استفاده می‌کنید.</p>
+<!-- steps -->
+<p dir="rtl">با استفادهٔ پایه و غیرموازی از <a href="../../concepts/workloads/controllers/job.html">Job</a> آشنا باشید.</p>
+<!-- steps -->
+<h2 id="راه-اندازی-redis" dir="rtl">راه‌اندازی Redis</h2>
+<p dir="rtl">در این مثال، برای سادگی، تنها یک نمونه از Redis را راه‌اندازی می‌کنید. برای مشاهدهٔ نمونه‌ای از استقرار Redis به‌صورت مقیاس‌پذیر و با افزونگی، به <a href="https://github.com/kubernetes/examples/tree/master/web/guestbook/" target="_blank" rel="noopener">مثال Redis</a> مراجعه کنید.</p>
+<p dir="rtl">همچنین می‌توانید فایل‌های زیر را مستقیماً دانلود کنید:</p>
+<ul>
+<li dir="ltr" class="ltr"><a href="/examples/application/job/redis/redis-pod.yaml"><code dir="ltr">redis-pod.yaml</code></a></li>
+<li dir="ltr" class="ltr"><a href="/examples/application/job/redis/redis-service.yaml"><code dir="ltr">redis-service.yaml</code></a></li>
+<li dir="ltr" class="ltr"><a href="/examples/application/job/redis/Dockerfile"><code dir="ltr">Dockerfile</code></a></li>
+<li dir="ltr" class="ltr"><a href="/examples/application/job/redis/job.yaml"><code dir="ltr">job.yaml</code></a></li>
+<li dir="ltr" class="ltr"><a href="/examples/application/job/redis/rediswq.py"><code dir="ltr">rediswq.py</code></a></li>
+<li dir="ltr" class="ltr"><a href="/examples/application/job/redis/worker.py"><code dir="ltr">worker.py</code></a></li>
+</ul>
+<p dir="rtl">برای راه‌اندازی یک نمونهٔ واحد از Redis، باید Pod و Service مربوط به redis را ایجاد کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f https://k8s.io/examples/application/job/redis/redis-pod.yaml
+kubectl apply -f https://k8s.io/examples/application/job/redis/redis-service.yaml
+</code></pre>
+<h2 id="پر-کردن-صف-با-وظایف" dir="rtl">پر کردن صف با وظایف</h2>
+<p dir="rtl">اکنون صف را با چند «وظیفه» پر می‌کنیم. در این مثال، وظایف رشته‌هایی هستند که باید چاپ شوند.</p>
+<p dir="rtl">یک Pod تعاملی موقت برای اجرای Redis CLI راه‌اندازی کنید.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl run -i --tty temp --image redis --command "/bin/sh"
+</code></pre>
+<pre dir="ltr"><code dir="ltr">Waiting for pod default/redis2-c7h78 to be running, status is Pending, pod ready: false
+Hit enter for command prompt
+</code></pre>
+<p dir="rtl">اکنون کلید Enter را بزنید، Redis CLI را اجرا کنید و فهرستی شامل چند آیتم کار ایجاد کنید.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">redis-cli -h redis
+</code></pre>
+<pre dir="ltr"><code class="language-console" dir="ltr">redis:6379&gt; rpush job2 "apple"
+(integer) 1
+redis:6379&gt; rpush job2 "banana"
+(integer) 2
+redis:6379&gt; rpush job2 "cherry"
+(integer) 3
+redis:6379&gt; rpush job2 "date"
+(integer) 4
+redis:6379&gt; rpush job2 "fig"
+(integer) 5
+redis:6379&gt; rpush job2 "grape"
+(integer) 6
+redis:6379&gt; rpush job2 "lemon"
+(integer) 7
+redis:6379&gt; rpush job2 "melon"
+(integer) 8
+redis:6379&gt; rpush job2 "orange"
+(integer) 9
+redis:6379&gt; lrange job2 0 -1
+1) "apple"
+2) "banana"
+3) "cherry"
+4) "date"
+5) "fig"
+6) "grape"
+7) "lemon"
+8) "melon"
+9) "orange"
+</code></pre>
+<p dir="rtl">بنابراین، فهرستی که کلید آن <code dir="ltr">job2</code> است، صف کار خواهد بود.</p>
+<p dir="rtl">نکته: اگر Kube DNS را به‌درستی پیکربندی نکرده‌اید، ممکن است لازم باشد نخستین مرحلهٔ بلوک بالا را به <code dir="ltr">redis-cli -h $REDIS_SERVICE_HOST</code> تغییر دهید.</p>
+<h2 id="ایجاد-یک-ایمیج-کانتینر-create-an-image" dir="rtl">ایجاد یک ایمیج کانتینر {#create-an-image}</h2>
+<p dir="rtl">اکنون آماده‌اید ایمیجی بسازید که کارهای موجود در آن صف را پردازش کند.</p>
+<p dir="rtl">برای خواندن پیام‌ها از صف پیام، از یک برنامهٔ کارگر پایتون همراه با یک کلاینت Redis استفاده خواهید کرد.</p>
+<p dir="rtl">یک کتابخانهٔ کلاینت ساده برای صف کار Redis با نام <code dir="ltr">rediswq.py</code> (<a href="/examples/application/job/redis/rediswq.py">دانلود</a>) در اختیار شما قرار گرفته است.</p>
+<p dir="rtl">برنامهٔ «کارگر» در هر Pod از این Job، برای دریافت کار از کتابخانهٔ کلاینت صف کار استفاده می‌کند. کد آن در ادامه آمده است:</p>
+<div class="code-file ltr" dir="ltr">application/job/redis/worker.py</div>
+<pre dir="ltr"><code class="language-py" dir="ltr">#!/usr/bin/env python
+
+import time
+import rediswq
+
+host="redis"
+# Uncomment next two lines if you do not have CoreDNS working.
+# import os
+# host = os.getenv("REDIS_SERVICE_HOST")
+
+q = rediswq.RedisWQ(name="job2", host=host)
+print("Worker with sessionID: " +  q.sessionID())
+print("Initial queue state: empty=" + str(q.empty()))
+while not q.empty():
+  item = q.lease(lease_secs=10, block=True, timeout=2) 
+  if item is not None:
+    itemstr = item.decode("utf-8")
+    print("Working on " + itemstr)
+    time.sleep(10) # Put your actual work here instead of sleep.
+    q.complete(item)
+  else:
+    print("Waiting for work")
+print("Queue empty, exiting")
+</code></pre>
+<p dir="rtl">همچنین می‌توانید فایل‌های <a href="/examples/application/job/redis/worker.py"><code dir="ltr">worker.py</code></a>، <a href="/examples/application/job/redis/rediswq.py"><code dir="ltr">rediswq.py</code></a> و <a href="/examples/application/job/redis/Dockerfile"><code dir="ltr">Dockerfile</code></a> را دانلود کنید و سپس ایمیج کانتینر را بسازید. در ادامه نمونه‌ای از ساخت ایمیج با Docker آمده است:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">docker build -t job-wq-2 .
+</code></pre>
+<h3 id="ارسال-push-ایمیج" dir="rtl">ارسال (push) ایمیج</h3>
+<p dir="rtl">برای <a href="https://hub.docker.com/" target="_blank" rel="noopener">Docker Hub</a>، ایمیج برنامهٔ خود را با نام کاربری‌تان برچسب‌گذاری (tag) کنید و با دستورهای زیر آن را به Hub ارسال کنید. به‌جای <code dir="ltr">&lt;username&gt;</code> نام کاربری Hub خود را قرار دهید.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">docker tag job-wq-2 &lt;username&gt;/job-wq-2
+docker push &lt;username&gt;/job-wq-2
+</code></pre>
+<p dir="rtl">باید ایمیج را به یک مخزن عمومی ارسال کنید یا <a href="../../concepts/containers/images.html">کلاستر خود را طوری پیکربندی کنید که به مخزن خصوصی شما دسترسی داشته باشد</a>.</p>
+<h2 id="تعریف-یک-job" dir="rtl">تعریف یک Job</h2>
+<p dir="rtl">مانیفست Jobی که ایجاد خواهید کرد در ادامه آمده است:</p>
+<div class="code-file ltr" dir="ltr">application/job/redis/job.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: batch/v1
+kind: Job
+metadata:
+  name: job-wq-2
+spec:
+  parallelism: 2
+  template:
+    metadata:
+      name: job-wq-2
+    spec:
+      containers:
+      - name: c
+        image: gcr.io/myproject/job-wq-2
+      restartPolicy: OnFailure
+</code></pre>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">حتماً مانیفست را ویرایش کنید و <code dir="ltr">gcr.io/myproject</code> را به مسیر خودتان تغییر دهید.</p>
+</div>
+<p dir="rtl">در این مثال، هر Pod چندین آیتم از صف را پردازش می‌کند و هنگامی که آیتم دیگری باقی نماند، خارج می‌شود. از آنجا که خود کارگرها خالی شدن صف کار را تشخیص می‌دهند و کنترل‌کنندهٔ Job از صف کار اطلاعی ندارد، این کنترل‌کننده برای اطلاع از پایان کار به اعلام کارگرها متکی است. کارگرها با خروج موفقیت‌آمیز، خالی بودن صف را اعلام می‌کنند. بنابراین به محض اینکه <strong>هر یک</strong> از کارگرها با موفقیت خارج شود، کنترل‌کننده متوجه می‌شود که کار به پایان رسیده است و Podها به‌زودی خارج خواهند شد. از این رو، باید تعداد تکمیل (completion count) را برای Job تنظیم‌نشده باقی بگذارید. کنترل‌کنندهٔ Job منتظر می‌ماند تا Podهای دیگر نیز کار خود را به پایان برسانند.</p>
+<h2 id="اجرای-job" dir="rtl">اجرای Job</h2>
+<p dir="rtl">اکنون Job را اجرا کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># this assumes you downloaded and then edited the manifest already
+kubectl apply -f ./job.yaml
+</code></pre>
+<p dir="rtl">اکنون کمی صبر کنید و سپس وضعیت Job را بررسی کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl describe jobs/job-wq-2
+</code></pre>
+<pre dir="ltr"><code dir="ltr">Name:             job-wq-2
+Namespace:        default
+Selector:         controller-uid=b1c7e4e3-92e1-11e7-b85e-fa163ee3c11f
+Labels:           controller-uid=b1c7e4e3-92e1-11e7-b85e-fa163ee3c11f
+                  job-name=job-wq-2
+Annotations:      &lt;none&gt;
+Parallelism:      2
+Completions:      &lt;unset&gt;
+Start Time:       Mon, 11 Jan 2022 17:07:59 +0000
+Pods Statuses:    1 Running / 0 Succeeded / 0 Failed
+Pod Template:
+  Labels:       controller-uid=b1c7e4e3-92e1-11e7-b85e-fa163ee3c11f
+                job-name=job-wq-2
+  Containers:
+   c:
+    Image:              container-registry.example/exampleproject/job-wq-2
+    Port:
+    Environment:        &lt;none&gt;
+    Mounts:             &lt;none&gt;
+  Volumes:              &lt;none&gt;
+Events:
+  FirstSeen    LastSeen    Count    From            SubobjectPath    Type        Reason            Message
+  ---------    --------    -----    ----            -------------    --------    ------            -------
+  33s          33s         1        {job-controller }                Normal      SuccessfulCreate  Created pod: job-wq-2-lglf8
+</code></pre>
+<p dir="rtl">می‌توانید با تعیین یک مهلت زمانی، منتظر بمانید تا Job با موفقیت به پایان برسد:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># The check for condition name is case insensitive
+kubectl wait --for=condition=complete --timeout=300s job/job-wq-2
+</code></pre>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl logs pods/job-wq-2-7r7b2
+</code></pre>
+<pre dir="ltr"><code dir="ltr">Worker with sessionID: bbd72d0a-9e5c-4dd6-abf6-416cc267991f
+Initial queue state: empty=False
+Working on banana
+Working on date
+Working on lemon
+</code></pre>
+<p dir="rtl">همان‌طور که می‌بینید، یکی از Podهای این Job چندین واحد کار را پردازش کرده است.</p>
+<!-- discussion -->
+<h2 id="راهکارهای-جایگزین" dir="rtl">راهکارهای جایگزین</h2>
+<p dir="rtl">اگر اجرای یک سرویس صف یا تغییر کانتینرها برای استفاده از صف کار برایتان دشوار است، می‌توانید یکی از دیگر <a href="../../concepts/workloads/controllers/job.html#job-patterns">الگوهای Job</a> را در نظر بگیرید.</p>
+<p dir="rtl">اگر جریان پیوسته‌ای از کارهای پردازشی پس‌زمینه برای اجرا دارید، بهتر است کارگرهای پس‌زمینهٔ خود را به‌جای Job با یک ReplicaSet اجرا کنید و استفاده از یک کتابخانهٔ پردازش پس‌زمینه مانند <a href="https://github.com/resque/resque" target="_blank" rel="noopener">https://github.com/resque/resque</a> را نیز در نظر بگیرید.</p>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#پیش-از-شروع">پیش از شروع</a><a class="l2" href="#راه-اندازی-redis">راه‌اندازی Redis</a><a class="l2" href="#پر-کردن-صف-با-وظایف">پر کردن صف با وظایف</a><a class="l2" href="#ایجاد-یک-ایمیج-کانتینر-create-an-image">ایجاد یک ایمیج کانتینر {#create-an-image}</a><a class="l3" href="#ارسال-push-ایمیج">ارسال (push) ایمیج</a><a class="l2" href="#تعریف-یک-job">تعریف یک Job</a><a class="l2" href="#اجرای-job">اجرای Job</a><a class="l2" href="#راهکارهای-جایگزین">راهکارهای جایگزین</a></nav>
+</div>
+</body>
+</html>
