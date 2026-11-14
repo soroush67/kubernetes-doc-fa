@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>پیکربندی پروب‌های Liveness، Readiness و Startup | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">tasks / configure-pod-container</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">پیکربندی پروب‌های Liveness، Readiness و Startup</h1><!-- overview -->
+<p dir="rtl">این صفحه نشان می‌دهد که چگونه می‌توانید پروب‌های زنده‌بودن (liveness)، آمادگی (readiness) و راه‌اندازی (startup) را برای کانتینرها پیکربندی کنید.</p>
+<p dir="rtl">برای اطلاعات بیشتر دربارهٔ پروب‌ها، به <a href="../../concepts/workloads/pods/probes.html">پروب‌های Liveness، Readiness و Startup</a> مراجعه کنید.</p>
+<h2 id="پیش-از-شروع" dir="rtl">پیش از شروع</h2>
+<p dir="rtl">باید یک کلاستر کوبرنتیز داشته باشید و ابزار خط فرمان kubectl باید برای ارتباط با کلاستر شما پیکربندی شده باشد. توصیه می‌شود این آموزش را روی کلاستری اجرا کنید که دست‌کم دو نود داشته باشد که نقش میزبان control plane را ندارند. اگر هنوز کلاستری ندارید، می‌توانید با استفاده از
+<a href="https://minikube.sigs.k8s.io/docs/tutorials/multi_node/" target="_blank" rel="noopener">minikube</a>
+یکی بسازید یا از یکی از این محیط‌های آزمایشی کوبرنتیز استفاده کنید:</p>
+<ul>
+<li dir="ltr" class="ltr"><a href="https://labs.iximiuz.com/playgrounds?category=kubernetes&amp;filter=all" target="_blank" rel="noopener">iximiuz Labs</a></li>
+<li dir="ltr" class="ltr"><a href="https://killercoda.com/playgrounds/scenario/kubernetes" target="_blank" rel="noopener">Killercoda</a></li>
+<li dir="ltr" class="ltr"><a href="https://kodekloud.com/public-playgrounds" target="_blank" rel="noopener">KodeKloud</a></li>
+</ul>
+<!-- steps -->
+<h2 id="تعریف-یک-فرمان-زنده-بودن" dir="rtl">تعریف یک فرمان زنده‌بودن</h2>
+<p dir="rtl">بسیاری از برنامه‌ها پس از مدتی طولانی اجرا، سرانجام به وضعیتی خراب می‌رسند و جز با راه‌اندازی مجدد نمی‌توانند بازیابی شوند. کوبرنتیز پروب‌های زنده‌بودن را برای تشخیص و رفع چنین وضعیت‌هایی فراهم می‌کند.</p>
+<p dir="rtl">در این تمرین، یک Pod ایجاد می‌کنید که کانتینری مبتنی بر ایمیج <code dir="ltr">registry.k8s.io/busybox:1.27.2</code> را اجرا می‌کند. فایل پیکربندی این Pod در ادامه آمده است:</p>
+<div class="code-file ltr" dir="ltr">pods/probe/exec-liveness.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    test: liveness
+  name: liveness-exec
+spec:
+  containers:
+  - name: liveness
+    image: registry.k8s.io/busybox:1.27.2
+    args:
+    - /bin/sh
+    - -c
+    - touch /tmp/healthy; sleep 30; rm -f /tmp/healthy; sleep 600
+    livenessProbe:
+      exec:
+        command:
+        - cat
+        - /tmp/healthy
+      initialDelaySeconds: 5
+      periodSeconds: 5
+</code></pre>
+<p dir="rtl">در فایل پیکربندی می‌بینید که این Pod تنها یک <code dir="ltr">Container</code> دارد. فیلد <code dir="ltr">periodSeconds</code> مشخص می‌کند که kubelet باید هر ۵ ثانیه یک بار پروب زنده‌بودن را اجرا کند. فیلد <code dir="ltr">initialDelaySeconds</code> به kubelet می‌گوید که پیش از اجرای نخستین پروب، ۵ ثانیه صبر کند. برای اجرای پروب، kubelet فرمان <code dir="ltr">cat /tmp/healthy</code> را در کانتینر هدف اجرا می‌کند. اگر این فرمان با موفقیت اجرا شود، مقدار 0 را برمی‌گرداند و kubelet کانتینر را زنده و سالم در نظر می‌گیرد. اگر فرمان مقداری غیرصفر برگرداند، kubelet کانتینر را از بین می‌برد و دوباره راه‌اندازی می‌کند.</p>
+<p dir="rtl">هنگامی که کانتینر شروع به کار می‌کند، این فرمان را اجرا می‌کند:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">/bin/sh -c "touch /tmp/healthy; sleep 30; rm -f /tmp/healthy; sleep 600"
+</code></pre>
+<p dir="rtl">در ۳۰ ثانیهٔ نخست عمر کانتینر، فایلی با مسیر <code dir="ltr">/tmp/healthy</code> وجود دارد. بنابراین در این ۳۰ ثانیه، فرمان <code dir="ltr">cat /tmp/healthy</code> کد موفقیت برمی‌گرداند. پس از ۳۰ ثانیه، فرمان <code dir="ltr">cat /tmp/healthy</code> کد شکست برمی‌گرداند.</p>
+<p dir="rtl">Pod را ایجاد کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f https://k8s.io/examples/pods/probe/exec-liveness.yaml
+</code></pre>
+<p dir="rtl">پیش از گذشت ۳۰ ثانیه، رویدادهای Pod را مشاهده کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl describe pod liveness-exec
+</code></pre>
+<p dir="rtl">خروجی نشان می‌دهد که هنوز هیچ پروب زنده‌بودنی شکست نخورده است:</p>
+<pre dir="ltr"><code class="language-none" dir="ltr">Type    Reason     Age   From               Message
+----    ------     ----  ----               -------
+Normal  Scheduled  11s   default-scheduler  Successfully assigned default/liveness-exec to node01
+Normal  Pulling    9s    kubelet, node01    Pulling image "registry.k8s.io/busybox:1.27.2"
+Normal  Pulled     7s    kubelet, node01    Successfully pulled image "registry.k8s.io/busybox:1.27.2"
+Normal  Created    7s    kubelet, node01    Created container liveness
+Normal  Started    7s    kubelet, node01    Started container liveness
+</code></pre>
+<p dir="rtl">پس از ۳۵ ثانیه، دوباره رویدادهای Pod را مشاهده کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl describe pod liveness-exec
+</code></pre>
+<p dir="rtl">در انتهای خروجی، پیام‌هایی دیده می‌شود که نشان می‌دهند پروب‌های زنده‌بودن شکست خورده‌اند و کانتینرهای ناموفق از بین رفته و دوباره ایجاد شده‌اند.</p>
+<pre dir="ltr"><code class="language-none" dir="ltr">Type     Reason     Age                From               Message
+----     ------     ----               ----               -------
+Normal   Scheduled  57s                default-scheduler  Successfully assigned default/liveness-exec to node01
+Normal   Pulling    55s                kubelet, node01    Pulling image "registry.k8s.io/busybox:1.27.2"
+Normal   Pulled     53s                kubelet, node01    Successfully pulled image "registry.k8s.io/busybox:1.27.2"
+Normal   Created    53s                kubelet, node01    Created container liveness
+Normal   Started    53s                kubelet, node01    Started container liveness
+Warning  Unhealthy  10s (x3 over 20s)  kubelet, node01    Liveness probe failed: cat: can't open '/tmp/healthy': No such file or directory
+Normal   Killing    10s                kubelet, node01    Container liveness failed liveness probe, will be restarted
+</code></pre>
+<p dir="rtl">۳۰ ثانیهٔ دیگر صبر کنید و بررسی کنید که کانتینر دوباره راه‌اندازی شده است:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pod liveness-exec
+</code></pre>
+<p dir="rtl">خروجی نشان می‌دهد که مقدار <code dir="ltr">RESTARTS</code> افزایش یافته است. توجه کنید که شمارندهٔ <code dir="ltr">RESTARTS</code> به محض بازگشت کانتینر ناموفق به وضعیت در حال اجرا افزایش می‌یابد:</p>
+<pre dir="ltr"><code class="language-none" dir="ltr">NAME            READY     STATUS    RESTARTS   AGE
+liveness-exec   1/1       Running   1          1m
+</code></pre>
+<h2 id="تعریف-یک-درخواست-http-برای-بررسی-زنده-بودن" dir="rtl">تعریف یک درخواست HTTP برای بررسی زنده‌بودن</h2>
+<p dir="rtl">نوع دیگری از پروب زنده‌بودن از درخواست HTTP GET استفاده می‌کند. در ادامه، فایل پیکربندی Podای آمده است که کانتینری مبتنی بر ایمیج <code dir="ltr">registry.k8s.io/e2e-test-images/agnhost</code> را اجرا می‌کند.</p>
+<div class="code-file ltr" dir="ltr">pods/probe/http-liveness.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    test: liveness
+  name: liveness-http
+spec:
+  containers:
+  - name: liveness
+    image: registry.k8s.io/e2e-test-images/agnhost:2.40
+    args:
+    - liveness
+    livenessProbe:
+      httpGet:
+        path: /healthz
+        port: 8080
+        httpHeaders:
+        - name: Custom-Header
+          value: Awesome
+      initialDelaySeconds: 3
+      periodSeconds: 3
+</code></pre>
+<p dir="rtl">در فایل پیکربندی می‌بینید که این Pod تنها یک کانتینر دارد. فیلد <code dir="ltr">periodSeconds</code> مشخص می‌کند که kubelet باید هر ۳ ثانیه یک بار پروب زنده‌بودن را اجرا کند. فیلد <code dir="ltr">initialDelaySeconds</code> به kubelet می‌گوید که پیش از اجرای نخستین پروب، ۳ ثانیه صبر کند. برای اجرای پروب، kubelet یک درخواست HTTP GET به سروری می‌فرستد که در کانتینر اجرا می‌شود و به پورت 8080 گوش می‌دهد. اگر کنترل‌گر (handler) مسیر <code dir="ltr">/healthz</code> در سرور کد موفقیت برگرداند، kubelet کانتینر را زنده و سالم در نظر می‌گیرد. اگر کنترل‌گر کد شکست برگرداند، kubelet کانتینر را از بین می‌برد و دوباره راه‌اندازی می‌کند.</p>
+<p dir="rtl">هر کدِ بزرگ‌تر یا مساوی 200 و کوچک‌تر از 400 نشان‌دهندهٔ موفقیت است. هر کد دیگری نشان‌دهندهٔ شکست است.</p>
+<p dir="rtl">کد منبع این سرور را می‌توانید در
+<a href="https://github.com/kubernetes/kubernetes/blob/master/test/images/agnhost/liveness/server.go" target="_blank" rel="noopener">server.go</a> ببینید.</p>
+<p dir="rtl">در ۱۰ ثانیهٔ نخستی که کانتینر زنده است، کنترل‌گر <code dir="ltr">/healthz</code> وضعیت 200 را برمی‌گرداند. پس از آن، این کنترل‌گر وضعیت 500 را برمی‌گرداند.</p>
+<pre dir="ltr"><code class="language-go" dir="ltr">http.HandleFunc("/healthz", func(w http.ResponseWriter, r *http.Request) {
+    duration := time.Now().Sub(started)
+    if duration.Seconds() &gt; 10 {
+        w.WriteHeader(500)
+        w.Write([]byte(fmt.Sprintf("error: %v", duration.Seconds())))
+    } else {
+        w.WriteHeader(200)
+        w.Write([]byte("ok"))
+    }
+})
+</code></pre>
+<p dir="rtl">kubelet سه ثانیه پس از شروع کانتینر، بررسی‌های سلامت را آغاز می‌کند. بنابراین چند بررسی سلامت نخست موفق خواهند بود. اما پس از ۱۰ ثانیه، بررسی‌های سلامت شکست می‌خورند و kubelet کانتینر را از بین می‌برد و دوباره راه‌اندازی می‌کند.</p>
+<p dir="rtl">برای آزمودن بررسی زنده‌بودن HTTP، یک Pod ایجاد کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f https://k8s.io/examples/pods/probe/http-liveness.yaml
+</code></pre>
+<p dir="rtl">پس از ۱۰ ثانیه، رویدادهای Pod را مشاهده کنید تا مطمئن شوید پروب‌های زنده‌بودن شکست خورده‌اند و کانتینر دوباره راه‌اندازی شده است:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl describe pod liveness-http
+</code></pre>
+<p dir="rtl">در نسخه‌های پس از v1.13، تنظیمات متغیرهای محیطی پراکسی HTTP محلی تأثیری بر پروب زنده‌بودن HTTP ندارند.</p>
+<h3 id="استفاده-از-http-2-بدون-رمزنگاری-h2c-در-پروب-های-http-use-h2c-with-http-probes" dir="rtl">استفاده از HTTP/2 بدون رمزنگاری (h2c) در پروب‌های HTTP {#use-h2c-with-http-probes}</h3>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
+<p dir="rtl">به‌طور پیش‌فرض، <code dir="ltr">kubelet</code> هنگام اجرای پروب HTTP، درخواست‌های HTTP/1.1 می‌فرستد. اگر برنامهٔ شما نقاط پایانی سلامت را فقط از طریق HTTP/2 بدون رمزنگاری (h2c) ارائه می‌کند، می‌توانید فیلد <code dir="ltr">protocol</code> را به فیلد <code dir="ltr">httpGet</code> در مشخصات پروب اضافه کنید و مقدار <code dir="ltr">HTTP2</code> را برای آن تعیین کنید. برای این کار باید
+<a href="https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/" target="_blank">feature gate</a> با نام <code dir="ltr">H2CContainerProbe</code> هم در <code dir="ltr">kube-apiserver</code> و هم در <code dir="ltr">kubelet</code> فعال باشد.</p>
+<div class="code-file ltr" dir="ltr">pods/probe/h2c-liveness.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: Pod
+metadata:
+  name: h2c-app
+spec:
+  containers:
+  - name: app
+    image: registry.k8s.io/e2e-test-images/agnhost:2.64.0
+    command: ["/agnhost", "h2c-server", "--port=8080"]
+    ports:
+    - containerPort: 8080
+    livenessProbe:
+      httpGet:
+        path: /healthz
+        port: 8080
+        protocol: HTTP2
+      initialDelaySeconds: 5
+      periodSeconds: 10
+</code></pre>
+<p dir="rtl">هنگامی که مقدار <code dir="ltr">protocol</code> برابر <code dir="ltr">HTTP2</code> باشد، <code dir="ltr">kubelet</code> با استفاده از HTTP/2 بدون رمزنگاری (h2c)، یعنی HTTP/2 روی TCP ساده و بدون TLS، متصل می‌شود. پیکربندی‌های زیر پشتیبانی نمی‌شوند:</p>
+<ul>
+<li dir="rtl">ترکیب <code dir="ltr">protocol: HTTP2</code> و <code dir="ltr">scheme: HTTPS</code></li>
+<li dir="rtl">ترکیب <code dir="ltr">protocol: HTTP2</code> با مقداری در فیلد <code dir="ltr">host</code></li>
+</ul>
+<p dir="rtl">اگر این feature gate غیرفعال باشد، API server فیلد <code dir="ltr">protocol</code> را از Podهای جدید یا به‌روزرسانی‌شده حذف می‌کند.</p>
+<h2 id="تعریف-یک-پروب-زنده-بودن-tcp" dir="rtl">تعریف یک پروب زنده‌بودن TCP</h2>
+<p dir="rtl">سومین نوع پروب زنده‌بودن از یک سوکت TCP استفاده می‌کند. با این پیکربندی، kubelet تلاش می‌کند روی پورت مشخص‌شده، سوکتی به کانتینر شما باز کند. اگر بتواند اتصال برقرار کند، کانتینر سالم در نظر گرفته می‌شود و اگر نتواند، شکست در نظر گرفته می‌شود.</p>
+<div class="code-file ltr" dir="ltr">pods/probe/tcp-liveness-readiness.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: Pod
+metadata:
+  name: goproxy
+  labels:
+    app: goproxy
+spec:
+  containers:
+  - name: goproxy
+    image: registry.k8s.io/goproxy:0.1
+    ports:
+    - containerPort: 8080
+    readinessProbe:
+      tcpSocket:
+        port: 8080
+      initialDelaySeconds: 15
+      periodSeconds: 10
+    livenessProbe:
+      tcpSocket:
+        port: 8080
+      initialDelaySeconds: 15
+      periodSeconds: 10
+</code></pre>
+<p dir="rtl">همان‌طور که می‌بینید، پیکربندی بررسی TCP بسیار شبیه به بررسی HTTP است. این مثال از هر دو پروب آمادگی و زنده‌بودن استفاده می‌کند. kubelet نخستین پروب زنده‌بودن را ۱۵ ثانیه پس از شروع کانتینر اجرا می‌کند. این پروب تلاش می‌کند روی پورت 8080 به کانتینر <code dir="ltr">goproxy</code> متصل شود. اگر پروب زنده‌بودن شکست بخورد، کانتینر دوباره راه‌اندازی می‌شود. kubelet این بررسی را هر ۱۰ ثانیه یک بار ادامه می‌دهد.</p>
+<p dir="rtl">افزون بر پروب زنده‌بودن، این پیکربندی یک پروب آمادگی نیز دارد. kubelet نخستین پروب آمادگی را ۱۵ ثانیه پس از شروع کانتینر اجرا می‌کند. این پروب نیز مانند پروب زنده‌بودن تلاش می‌کند روی پورت 8080 به کانتینر <code dir="ltr">goproxy</code> متصل شود. اگر پروب موفق شود، Pod به‌عنوان آماده علامت‌گذاری می‌شود و از سرویس‌ها ترافیک دریافت می‌کند. اگر پروب آمادگی شکست بخورد، Pod به‌عنوان ناآماده علامت‌گذاری می‌شود و از هیچ سرویسی ترافیک دریافت نمی‌کند.</p>
+<p dir="rtl">برای آزمودن بررسی زنده‌بودن TCP، یک Pod ایجاد کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f https://k8s.io/examples/pods/probe/tcp-liveness-readiness.yaml
+</code></pre>
+<p dir="rtl">پس از ۱۵ ثانیه، رویدادهای Pod را مشاهده کنید تا پروب‌های زنده‌بودن را بررسی کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl describe pod goproxy
+</code></pre>
+<h2 id="تعریف-یک-پروب-زنده-بودن-grpc" dir="rtl">تعریف یک پروب زنده‌بودن gRPC</h2>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes v1.27 [stable]</span> (پایدار)</div>
+<p dir="rtl">اگر برنامهٔ شما
+<a href="https://github.com/grpc/grpc/blob/master/doc/health-checking.md" target="_blank" rel="noopener">gRPC Health Checking Protocol</a>
+را پیاده‌سازی می‌کند، این مثال نشان می‌دهد که چگونه کوبرنتیز را پیکربندی کنید تا از آن برای بررسی زنده‌بودن برنامه استفاده کند. به همین شکل می‌توانید پروب‌های آمادگی و راه‌اندازی را نیز پیکربندی کنید.</p>
+<p dir="rtl">در ادامه یک مانیفست نمونه آمده است:</p>
+<div class="code-file ltr" dir="ltr">pods/probe/grpc-liveness.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: Pod
+metadata:
+  name: etcd-with-grpc
+spec:
+  containers:
+  - name: etcd
+    image: registry.k8s.io/etcd:3.5.1-0
+    command: [ "/usr/local/bin/etcd", "--data-dir",  "/var/lib/etcd", "--listen-client-urls", "http://0.0.0.0:2379", "--advertise-client-urls", "http://127.0.0.1:2379", "--log-level", "debug"]
+    ports:
+    - containerPort: 2379
+    livenessProbe:
+      grpc:
+        port: 2379
+      initialDelaySeconds: 10
+</code></pre>
+<p dir="rtl">برای آزمودن بررسی زنده‌بودن gRPC، با فرمان زیر یک Pod ایجاد کنید. در این مثال، Pod مربوط به etcd طوری پیکربندی شده است که از پروب زنده‌بودن gRPC استفاده کند.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f https://k8s.io/examples/pods/probe/grpc-liveness.yaml
+</code></pre>
+<p dir="rtl">پس از ۱۵ ثانیه، رویدادهای Pod را مشاهده کنید تا مطمئن شوید بررسی زنده‌بودن شکست نخورده است:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl describe pod etcd-with-grpc
+</code></pre>
+<p dir="rtl">هنگام استفاده از پروب gRPC، باید به چند نکتهٔ فنی توجه کنید:</p>
+<ul>
+<li dir="rtl">پروب‌ها روی نشانی IP یا نام میزبان Pod اجرا می‌شوند. حتماً نقطهٔ پایانی gRPC خود را طوری پیکربندی کنید که به نشانی IP مربوط به Pod گوش دهد.</li>
+<li dir="rtl">پروب‌ها به‌طور پیش‌فرض بدون رمزنگاری متصل می‌شوند. برای آشنایی با نحوهٔ فعال‌سازی TLS، به <a href="#grpc-probe-tls">استفاده از TLS در پروب‌های gRPC</a> مراجعه کنید.</li>
+<li dir="rtl">پروب‌های داخلی هیچ کد خطایی ندارند. همهٔ خطاها شکست پروب در نظر گرفته می‌شوند.</li>
+<li dir="rtl">اگر مقدار feature gate با نام <code dir="ltr">ExecProbeTimeout</code> برابر <code dir="ltr">false</code> باشد، ابزار grpc-health-probe تنظیم <code dir="ltr">timeoutSeconds</code> (با مقدار پیش‌فرض 1s) را رعایت <strong>نمی‌کند</strong>، در حالی که پروب داخلی در صورت پایان مهلت شکست می‌خورد.</li>
+</ul>
+<h3 id="استفاده-از-tls-در-پروب-های-grpc-grpc-probe-tls" dir="rtl">استفاده از TLS در پروب‌های gRPC {#grpc-probe-tls}</h3>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
+<p dir="rtl">به‌طور پیش‌فرض، <code dir="ltr">kubelet</code> بدون رمزنگاری به نقاط پایانی سلامت gRPC متصل می‌شود. اگر برنامهٔ شما gRPC را فقط از طریق TLS ارائه می‌کند، می‌توانید فیلد <code dir="ltr">mode</code> را به فیلد <code dir="ltr">grpc</code> در مشخصات پروب اضافه کنید و مقدار <code dir="ltr">TLS</code> را برای آن تعیین کنید. برای این کار باید
+<a href="https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/" target="_blank">feature gate</a> با نام <code dir="ltr">GRPCContainerProbeTLS</code> هم در <code dir="ltr">kube-apiserver</code> و هم در <code dir="ltr">kubelet</code> فعال باشد.</p>
+<div class="code-file ltr" dir="ltr">pods/probe/grpc-tls-liveness.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: Pod
+metadata:
+  name: grpc-tls-app
+spec:
+  containers:
+  - name: app
+    image: registry.k8s.io/e2e-test-images/agnhost:2.40
+    command: ["/agnhost", "grpc-health-checking", "--port=8443"]
+    ports:
+    - containerPort: 8443
+    livenessProbe:
+      grpc:
+        port: 8443
+        mode: TLS
+      initialDelaySeconds: 5
+      periodSeconds: 10
+</code></pre>
+<p dir="rtl">هنگامی که مقدار <code dir="ltr">mode</code> برابر <code dir="ltr">TLS</code> باشد، <code dir="ltr">kubelet</code> با گزینهٔ <code dir="ltr">InsecureSkipVerify</code> از طریق TLS متصل می‌شود و گواهی سرور را راستی‌آزمایی نمی‌کند. این رفتار با رفتار پروب‌های HTTPS یکسان است. راستی‌آزمایی گواهی پشتیبانی نمی‌شود.</p>
+<p dir="rtl">اگر این feature gate غیرفعال باشد، <code dir="ltr">kube-apiserver</code> فیلد <code dir="ltr">mode</code> را از Podهای جدید یا به‌روزرسانی‌شده حذف می‌کند.</p>
+<h2 id="استفاده-از-پورت-نام-دار" dir="rtl">استفاده از پورت نام‌دار</h2>
+<p dir="rtl">برای پروب‌های HTTP و TCP می‌توانید از یک <a href="https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#ports" target="_blank"><code dir="ltr">port</code></a> نام‌دار استفاده کنید. پروب‌های gRPC از پورت‌های نام‌دار پشتیبانی نمی‌کنند.</p>
+<p dir="rtl">برای مثال:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">ports:
+- name: liveness-port
+  containerPort: 8080
+
+livenessProbe:
+  httpGet:
+    path: /healthz
+    port: liveness-port
+</code></pre>
+<h2 id="محافظت-از-کانتینرهای-کندآغاز-با-پروب-های-راه-اندازی-define-startup-probes" dir="rtl">محافظت از کانتینرهای کندآغاز با پروب‌های راه‌اندازی {#define-startup-probes}</h2>
+<p dir="rtl">گاهی باید با برنامه‌هایی سروکار داشته باشید که در نخستین مقداردهی اولیه به زمان راه‌اندازی بیشتری نیاز دارند. در چنین مواردی، تنظیم پارامترهای پروب زنده‌بودن بدون از دست دادن واکنش سریع به بن‌بست‌ها، که انگیزهٔ اصلی استفاده از این پروب است، می‌تواند دشوار باشد. راه‌حل این است که یک پروب راه‌اندازی با همان فرمان یا بررسی HTTP یا TCP تنظیم کنید و مقدار <code dir="ltr">failureThreshold * periodSeconds</code> را به اندازه‌ای بزرگ انتخاب کنید که بدترین حالت زمان راه‌اندازی را پوشش دهد.</p>
+<p dir="rtl">بنابراین، مثال قبلی به این شکل درمی‌آید:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">ports:
+- name: liveness-port
+  containerPort: 8080
+
+livenessProbe:
+  httpGet:
+    path: /healthz
+    port: liveness-port
+  failureThreshold: 1
+  periodSeconds: 10
+
+startupProbe:
+  httpGet:
+    path: /healthz
+    port: liveness-port
+  failureThreshold: 30
+  periodSeconds: 10
+</code></pre>
+<p dir="rtl">به لطف پروب راه‌اندازی، برنامه حداکثر ۵ دقیقه (30 * 10 = 300s) فرصت دارد تا راه‌اندازی خود را کامل کند. به محض اینکه پروب راه‌اندازی یک بار موفق شود، پروب زنده‌بودن کار را به دست می‌گیرد تا به بن‌بست‌های کانتینر واکنش سریع نشان دهد. اگر پروب راه‌اندازی هرگز موفق نشود، کانتینر پس از ۳۰۰ ثانیه از بین می‌رود و تابع <code dir="ltr">restartPolicy</code> مربوط به Pod خواهد بود.</p>
+<h2 id="تعریف-پروب-های-آمادگی" dir="rtl">تعریف پروب‌های آمادگی</h2>
+<p dir="rtl">گاهی برنامه‌ها به‌طور موقت قادر به پاسخ‌گویی به ترافیک نیستند. برای مثال، ممکن است برنامه‌ای هنگام راه‌اندازی نیاز داشته باشد داده‌های حجیم یا فایل‌های پیکربندی را بارگذاری کند، یا پس از راه‌اندازی به سرویس‌های خارجی وابسته باشد. در چنین مواردی نمی‌خواهید برنامه را از بین ببرید، اما نمی‌خواهید درخواستی هم به آن بفرستید. کوبرنتیز پروب‌های آمادگی را برای تشخیص و کاهش اثر این وضعیت‌ها فراهم می‌کند. Podی که کانتینرهایش گزارش می‌دهند آماده نیستند، از طریق Serviceهای کوبرنتیز ترافیکی دریافت نمی‌کند.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">پروب‌های آمادگی در تمام چرخهٔ حیات کانتینر روی آن اجرا می‌شوند.</p>
+</div>
+<div class="callout caution"><div class="callout-title">احتیاط:</div>
+<p dir="rtl">موفقیت پروب‌های آمادگی و زنده‌بودن به یکدیگر وابسته نیست. اگر می‌خواهید پیش از اجرای پروب آمادگی صبر کنید، باید از <code dir="ltr">initialDelaySeconds</code> یا <code dir="ltr">startupProbe</code> استفاده کنید.</p>
+</div>
+<p dir="rtl">پروب‌های آمادگی به شیوه‌ای مشابه پروب‌های زنده‌بودن پیکربندی می‌شوند. تنها تفاوت این است که به جای فیلد <code dir="ltr">livenessProbe</code> از فیلد <code dir="ltr">readinessProbe</code> استفاده می‌کنید.</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">readinessProbe:
+  exec:
+    command:
+    - /bin/cat
+    - /tmp/healthy
+  initialDelaySeconds: 5
+  periodSeconds: 5
+</code></pre>
+<p dir="rtl">پیکربندی پروب‌های آمادگی HTTP و TCP نیز دقیقاً همانند پروب‌های زنده‌بودن است.</p>
+<p dir="rtl">پروب‌های آمادگی و زنده‌بودن را می‌توان به‌طور هم‌زمان برای یک کانتینر به کار برد. استفاده از هر دو تضمین می‌کند که ترافیک به کانتینری که برای دریافت آن آماده نیست نرسد و کانتینرها هنگام شکست دوباره راه‌اندازی شوند.</p>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<ul>
+<li dir="rtl">دربارهٔ <a href="../../concepts/workloads/pods/probes.html">پروب‌های Liveness، Readiness و Startup</a> بیشتر بیاموزید.</li>
+<li dir="rtl">برای مشاهدهٔ مشخصات کامل فیلدهای مربوط به پروب، به مرجع API مراجعه کنید:
+<a href="https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/" target="_blank">Pod</a>،
+<a href="https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#Container" target="_blank">Container</a>،
+<a href="https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#Probe" target="_blank">Probe</a></li>
+</ul>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#پیش-از-شروع">پیش از شروع</a><a class="l2" href="#تعریف-یک-فرمان-زنده-بودن">تعریف یک فرمان زنده‌بودن</a><a class="l2" href="#تعریف-یک-درخواست-http-برای-بررسی-زنده-بودن">تعریف یک درخواست HTTP برای بررسی زنده‌بودن</a><a class="l3" href="#استفاده-از-http-2-بدون-رمزنگاری-h2c-در-پروب-های-http-use-h2c-with-http-probes">استفاده از HTTP/2 بدون رمزنگاری (h2c) در پروب‌های HTTP {#use-h2c-with-http-probes}</a><a class="l2" href="#تعریف-یک-پروب-زنده-بودن-tcp">تعریف یک پروب زنده‌بودن TCP</a><a class="l2" href="#تعریف-یک-پروب-زنده-بودن-grpc">تعریف یک پروب زنده‌بودن gRPC</a><a class="l3" href="#استفاده-از-tls-در-پروب-های-grpc-grpc-probe-tls">استفاده از TLS در پروب‌های gRPC {#grpc-probe-tls}</a><a class="l2" href="#استفاده-از-پورت-نام-دار">استفاده از پورت نام‌دار</a><a class="l2" href="#محافظت-از-کانتینرهای-کندآغاز-با-پروب-های-راه-اندازی-define-startup-probes">محافظت از کانتینرهای کندآغاز با پروب‌های راه‌اندازی {#define-startup-probes}</a><a class="l2" href="#تعریف-پروب-های-آمادگی">تعریف پروب‌های آمادگی</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>

@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>راه‌اندازی DRA در یک کلاستر | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
+<header class="top"><a href="../../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">tasks / configure-pod-container / assign-resources</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">راه‌اندازی DRA در یک کلاستر</h1><div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
+<!-- overview -->
+<p dir="rtl">این صفحه نشان می‌دهد چگونه می‌توانید <em>تخصیص پویای منابع (Dynamic Resource Allocation یا DRA)</em> را در یک کلاستر کوبرنتیز پیکربندی کنید. برای این کار باید گروه‌های API را فعال و کلاس‌های دستگاه را پیکربندی کنید. این دستورالعمل‌ها برای مدیران کلاستر نوشته شده‌اند.</p>
+<!-- body -->
+<h2 id="درباره-dra-about-dra" dir="rtl">درباره DRA {#about-dra}</h2>
+<p dir="rtl"><em>(تعریف واژه‌نامه: dra)</em></p>
+<p dir="rtl">پیش از ادامه، با نحوه کار DRA و اصطلاحات آن، مانند
+<span class="term" title="deviceclass">DeviceClassها</span>،
+<span class="term" title="resourceclaim">ResourceClaimها</span> و
+<span class="term" title="resourceclaimtemplate">ResourceClaimTemplateها</span>
+آشنا شوید. برای جزئیات بیشتر،
+<a href="../../../concepts/resource-management/dynamic-resource-allocation/index.html">تخصیص پویای منابع (DRA)</a> را ببینید.</p>
+<!-- prerequisites -->
+<h2 id="پیش-از-شروع" dir="rtl">پیش از شروع</h2>
+<p dir="rtl">باید یک کلاستر کوبرنتیز داشته باشید و ابزار خط فرمان kubectl باید برای ارتباط با کلاستر شما پیکربندی شده باشد. توصیه می‌شود این آموزش را روی کلاستری اجرا کنید که دست‌کم دو نود داشته باشد که نقش میزبان control plane را ندارند. اگر هنوز کلاستری ندارید، می‌توانید با استفاده از
+<a href="https://minikube.sigs.k8s.io/docs/tutorials/multi_node/" target="_blank" rel="noopener">minikube</a>
+یکی بسازید یا از یکی از این محیط‌های آزمایشی کوبرنتیز استفاده کنید:</p>
+<ul>
+<li dir="ltr" class="ltr">
+<p dir="ltr" class="ltr"><a href="https://labs.iximiuz.com/playgrounds?category=kubernetes&amp;filter=all" target="_blank" rel="noopener">iximiuz Labs</a></p>
+</li>
+<li dir="ltr" class="ltr">
+<p dir="ltr" class="ltr"><a href="https://killercoda.com/playgrounds/scenario/kubernetes" target="_blank" rel="noopener">Killercoda</a></p>
+</li>
+<li dir="ltr" class="ltr">
+<p dir="ltr" class="ltr"><a href="https://kodekloud.com/public-playgrounds" target="_blank" rel="noopener">KodeKloud</a></p>
+</li>
+<li dir="rtl">
+<p dir="rtl">دستگاه‌ها را به‌طور مستقیم یا غیرمستقیم به کلاستر خود متصل کنید. برای جلوگیری از مشکلات احتمالی درایورها، تا پیش از راه‌اندازی قابلیت DRA در کلاستر، درایورها را نصب نکنید.</p>
+</li>
+</ul>
+<!-- steps -->
+<h2 id="اختیاری-فعال-سازی-گروه-های-api-اضافی-dra-enable-dra" dir="rtl">اختیاری: فعال‌سازی گروه‌های API اضافی DRA {#enable-dra}</h2>
+<p dir="rtl">قابلیت DRA در مجموع یک قابلیت پایدار در کوبرنتیز است، اما برخی از جنبه‌های آن ممکن است هنوز در مرحله آلفا یا بتا باشند.
+اگر می‌خواهید از جنبه‌ای از DRA استفاده کنید که هنوز پایدار نشده است و آن قابلیت به یک نوع API اختصاصی وابسته است، باید گروه‌های API آلفا یا بتای مربوط به آن را فعال کنید.</p>
+<p dir="rtl">برخی از درایورها یا بارهای کاری قدیمی‌تر DRA ممکن است هنوز به API نسخه v1beta1 از کوبرنتیز 1.30 یا نسخه v1beta2 از کوبرنتیز 1.32 نیاز داشته باشند.
+تنها در صورتی که به پشتیبانی از این نسخه‌ها نیاز دارید،
+<span class="term" title="api-group">گروه‌های API</span> زیر را فعال کنید:</p>
+<pre dir="ltr"><code dir="ltr">* `resource.k8s.io/v1beta1`
+* `resource.k8s.io/v1beta2`
+</code></pre>
+<p dir="rtl">قابلیت‌های آلفا که نوع‌های API جداگانه دارند، به این گروه نیاز دارند:</p>
+<ul>
+<li dir="ltr" class="ltr"><code dir="ltr">resource.k8s.io/v1alpha3</code></li>
+</ul>
+<p dir="rtl">برای اطلاعات بیشتر،
+<a href="../../../reference/using-api/index.html#enabling-or-disabling">فعال یا غیرفعال کردن گروه‌های API</a> را ببینید.</p>
+<h2 id="بررسی-فعال-بودن-dra-verify" dir="rtl">بررسی فعال بودن DRA {#verify}</h2>
+<p dir="rtl">برای اطمینان از اینکه کلاستر به‌درستی پیکربندی شده است، فهرست DeviceClassها را دریافت کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get deviceclasses
+</code></pre>
+<p dir="rtl">اگر پیکربندی مؤلفه‌ها درست باشد، خروجی مشابه زیر خواهد بود:</p>
+<pre dir="ltr"><code dir="ltr">No resources found
+</code></pre>
+<p dir="rtl">اگر DRA به‌درستی پیکربندی نشده باشد، خروجی دستور قبلی مشابه زیر خواهد بود:</p>
+<pre dir="ltr"><code dir="ltr">error: the server doesn't have a resource type "deviceclasses"
+</code></pre>
+<p dir="rtl">برای مثال، این وضعیت زمانی رخ می‌دهد که گروه API با نام resource.k8s.io غیرفعال شده باشد.
+بررسی مشابهی برای نوع‌های سطح بالای آلفا یا بتا نیز قابل انجام است.</p>
+<p dir="rtl">مراحل عیب‌یابی زیر را امتحان کنید:</p>
+<ol>
+<li dir="rtl">
+<p dir="rtl">مؤلفه <code dir="ltr">kube-apiserver</code> را دوباره پیکربندی و راه‌اندازی مجدد کنید.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">اگر کل فیلد <code dir="ltr">.spec.resourceClaims</code> از Podها حذف می‌شود، یا Podها بدون در نظر گرفتن ResourceClaimها زمان‌بندی می‌شوند، بررسی کنید که
+<a href="https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/" target="_blank">feature gate</a> با نام <code dir="ltr">DynamicResourceAllocation</code> برای kube-apiserver، kube-controller-manager، kube-scheduler یا kubelet خاموش نشده باشد.</p>
+</li>
+</ol>
+<h2 id="نصب-درایورهای-دستگاه-install-drivers" dir="rtl">نصب درایورهای دستگاه {#install-drivers}</h2>
+<p dir="rtl">پس از فعال‌سازی DRA در کلاستر، می‌توانید درایورهای دستگاه‌های متصل را نصب کنید. برای دستورالعمل نصب، به مستندات مالک دستگاه یا پروژه‌ای که درایورهای دستگاه را نگهداری می‌کند مراجعه کنید. درایورهایی که نصب می‌کنید باید با DRA سازگار باشند.</p>
+<p dir="rtl">برای اطمینان از اینکه درایورهای نصب‌شده طبق انتظار کار می‌کنند، فهرست ResourceSliceهای کلاستر را دریافت کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get resourceslices
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">NAME                                                  NODE                DRIVER               POOL                             AGE
+00000-driver.example.com-cluster-1-node-1-abcde      cluster-1-node-1    driver.example.com   cluster-1-device-pool-1-r1gc     7s
+00000-driver.example.com-cluster-1-node-2-fghij      cluster-1-node-2    driver.example.com   cluster-1-device-pool-2-446z     8s
+</code></pre>
+<p dir="rtl">مراحل عیب‌یابی زیر را امتحان کنید:</p>
+<ol>
+<li dir="rtl">سلامت درایور DRA را بررسی کنید و در خروجی لاگ آن به دنبال پیام‌های خطای مربوط به انتشار ResourceSliceها بگردید. ممکن است فروشنده درایور دستورالعمل‌های بیشتری درباره نصب و عیب‌یابی ارائه کرده باشد.</li>
+</ol>
+<h2 id="ایجاد-deviceclassها-create-deviceclasses" dir="rtl">ایجاد DeviceClassها {#create-deviceclasses}</h2>
+<p dir="rtl">با ایجاد
+<span class="term" title="deviceclass">DeviceClassها</span>
+می‌توانید دسته‌هایی از دستگاه‌ها را تعریف کنید که اپراتورهای برنامه بتوانند آن‌ها را در بارهای کاری درخواست کنند. برخی از ارائه‌دهندگان درایور دستگاه نیز ممکن است از شما بخواهند که در حین نصب درایور، DeviceClassهایی ایجاد کنید.</p>
+<p dir="rtl">آبجکت‌های ResourceSlice که درایور شما منتشر می‌کند، اطلاعاتی درباره دستگاه‌های تحت مدیریت آن درایور، مانند ظرفیت، فراداده و ویژگی‌ها، در خود دارند. می‌توانید با استفاده از <span class="term" title="cel">cel</span> ویژگی‌ها را در DeviceClassها فیلتر کنید. با این کار، یافتن دستگاه‌ها برای اپراتورهای بار کاری آسان‌تر می‌شود.</p>
+<ol>
+<li dir="rtl">
+<p dir="rtl">برای یافتن ویژگی‌هایی از دستگاه که می‌توانید با عبارت‌های CEL در DeviceClassها انتخاب کنید، مشخصات یک ResourceSlice را دریافت کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get resourceslice &lt;resourceslice-name&gt; -o yaml
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: resource.k8s.io/v1
+kind: ResourceSlice
+# lines omitted for clarity
+spec:
+  devices:
+  - attributes:
+      type:
+        string: gpu
+    capacity:
+      memory:
+        value: 64Gi
+    name: gpu-0
+  - attributes:
+      type:
+        string: gpu
+    capacity:
+      memory:
+        value: 64Gi
+    name: gpu-1
+  driver: driver.example.com
+  nodeName: cluster-1-node-1
+# lines omitted for clarity
+</code></pre>
+<p dir="rtl">همچنین می‌توانید ویژگی‌ها و مقادیر موجود را در مستندات ارائه‌دهنده درایور بررسی کنید.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">مانیفست نمونه DeviceClass زیر را بررسی کنید. این مانیفست هر دستگاهی را که درایور دستگاه <code dir="ltr">driver.example.com</code> مدیریت می‌کند انتخاب می‌کند:</p>
+</li>
+</ol>
+<div class="code-file ltr" dir="ltr">dra/deviceclass.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: resource.k8s.io/v1
+kind: DeviceClass
+metadata:
+  name: example-device-class
+spec:
+  selectors:
+  - cel:
+      expression: |-
+        device.driver == "driver.example.com"
+</code></pre>
+<ol>
+<li dir="rtl">
+<p dir="rtl">این DeviceClass را در کلاستر خود ایجاد کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f https://k8s.io/examples/dra/deviceclass.yaml
+</code></pre>
+</li>
+</ol>
+<h2 id="پاک-سازی-clean-up" dir="rtl">پاک‌سازی {#clean-up}</h2>
+<p dir="rtl">برای حذف DeviceClass که در این تمرین ایجاد کردید، دستور زیر را اجرا کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl delete -f https://k8s.io/examples/dra/deviceclass.yaml
+</code></pre>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<ul>
+<li dir="rtl"><a href="../../../concepts/resource-management/dynamic-resource-allocation/index.html">اطلاعات بیشتر درباره DRA</a></li>
+<li dir="rtl"><a href="allocate-devices-dra.html">تخصیص دستگاه‌ها به بارهای کاری با DRA</a></li>
+</ul>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#درباره-dra-about-dra">درباره DRA {#about-dra}</a><a class="l2" href="#پیش-از-شروع">پیش از شروع</a><a class="l2" href="#اختیاری-فعال-سازی-گروه-های-api-اضافی-dra-enable-dra">اختیاری: فعال‌سازی گروه‌های API اضافی DRA {#enable-dra}</a><a class="l2" href="#بررسی-فعال-بودن-dra-verify">بررسی فعال بودن DRA {#verify}</a><a class="l2" href="#نصب-درایورهای-دستگاه-install-drivers">نصب درایورهای دستگاه {#install-drivers}</a><a class="l2" href="#ایجاد-deviceclassها-create-deviceclasses">ایجاد DeviceClassها {#create-deviceclasses}</a><a class="l2" href="#پاک-سازی-clean-up">پاک‌سازی {#clean-up}</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>

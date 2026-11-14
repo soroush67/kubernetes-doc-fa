@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>تخصیص منابع حافظه به کانتینرها و Podها | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">tasks / configure-pod-container</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">تخصیص منابع حافظه به کانتینرها و Podها</h1><!-- overview -->
+<p dir="rtl">این صفحه نشان می‌دهد که چگونه یک <em>درخواست</em> (request) حافظه و یک <em>حد</em> (limit) حافظه را به یک کانتینر اختصاص دهید. کانتینر به‌طور تضمین‌شده به اندازهٔ حافظه‌ای که درخواست کرده است حافظه در اختیار دارد، اما اجازه ندارد بیش از حد خود حافظه مصرف کند.</p>
+<h2 id="پیش-از-شروع" dir="rtl">پیش از شروع</h2>
+<p dir="rtl">باید یک کلاستر کوبرنتیز داشته باشید و ابزار خط فرمان kubectl باید برای ارتباط با کلاستر شما پیکربندی شده باشد. توصیه می‌شود این آموزش را روی کلاستری اجرا کنید که دست‌کم دو نود داشته باشد که نقش میزبان control plane را ندارند. اگر هنوز کلاستری ندارید، می‌توانید با استفاده از
+<a href="https://minikube.sigs.k8s.io/docs/tutorials/multi_node/" target="_blank" rel="noopener">minikube</a>
+یکی بسازید یا از یکی از این محیط‌های آزمایشی کوبرنتیز استفاده کنید:</p>
+<ul>
+<li dir="ltr" class="ltr"><a href="https://labs.iximiuz.com/playgrounds?category=kubernetes&amp;filter=all" target="_blank" rel="noopener">iximiuz Labs</a></li>
+<li dir="ltr" class="ltr"><a href="https://killercoda.com/playgrounds/scenario/kubernetes" target="_blank" rel="noopener">Killercoda</a></li>
+<li dir="ltr" class="ltr"><a href="https://kodekloud.com/public-playgrounds" target="_blank" rel="noopener">KodeKloud</a></li>
+</ul>
+<p dir="rtl">هر نود در کلاستر شما باید دست‌کم 300 MiB حافظه داشته باشد.</p>
+<p dir="rtl">برای انجام برخی از گام‌های این صفحه باید سرویس <a href="https://github.com/kubernetes-sigs/metrics-server" target="_blank" rel="noopener">metrics-server</a> را در کلاستر خود اجرا کنید. اگر metrics-server در کلاستر شما در حال اجراست، می‌توانید از این گام‌ها صرف‌نظر کنید.</p>
+<p dir="rtl">اگر از Minikube استفاده می‌کنید، برای فعال‌سازی metrics-server دستور زیر را اجرا کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">minikube addons enable metrics-server
+</code></pre>
+<p dir="rtl">برای بررسی اینکه آیا metrics-server یا ارائه‌دهندهٔ دیگری از API معیارهای منابع (<code dir="ltr">metrics.k8s.io</code>) در حال اجراست، دستور زیر را اجرا کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get apiservices
+</code></pre>
+<p dir="rtl">اگر API معیارهای منابع در دسترس باشد، خروجی شامل ارجاعی به <code dir="ltr">metrics.k8s.io</code> خواهد بود.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">NAME
+v1beta1.metrics.k8s.io
+</code></pre>
+<!-- steps -->
+<h2 id="ایجاد-یک-فضای-نام" dir="rtl">ایجاد یک فضای نام</h2>
+<p dir="rtl">یک فضای نام (namespace) ایجاد کنید تا منابعی که در این تمرین ایجاد می‌کنید از بقیهٔ کلاستر شما جدا باشند.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl create namespace mem-example
+</code></pre>
+<h2 id="تعیین-درخواست-حافظه-و-حد-حافظه" dir="rtl">تعیین درخواست حافظه و حد حافظه</h2>
+<p dir="rtl">برای تعیین درخواست حافظه برای یک کانتینر، فیلد <code dir="ltr">resources.requests.memory</code> را در مانیفست منبع کانتینر قرار دهید. برای تعیین حد حافظه نیز فیلد <code dir="ltr">resources.limits.memory</code> را اضافه کنید.</p>
+<p dir="rtl">در این تمرین، یک Pod با یک کانتینر ایجاد می‌کنید. درخواست حافظهٔ این کانتینر 100 MiB و حد حافظهٔ آن 200 MiB است. فایل پیکربندی این Pod در ادامه آمده است:</p>
+<div class="code-file ltr" dir="ltr">pods/resource/memory-request-limit.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: Pod
+metadata:
+  name: memory-demo
+  namespace: mem-example
+spec:
+  containers:
+  - name: memory-demo-ctr
+    image: polinux/stress
+    resources:
+      requests:
+        memory: "100Mi"
+      limits:
+        memory: "200Mi"
+    command: ["stress"]
+    args: ["--vm", "1", "--vm-bytes", "150M", "--vm-hang", "1"]
+</code></pre>
+<p dir="rtl">بخش <code dir="ltr">args</code> در فایل پیکربندی، آرگومان‌هایی را فراهم می‌کند که هنگام شروع کانتینر به آن داده می‌شوند. آرگومان‌های <code dir="ltr">"--vm-bytes", "150M"</code> به کانتینر می‌گویند که تلاش کند 150 MiB حافظه تخصیص دهد.</p>
+<p dir="rtl">این Pod را ایجاد کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f https://k8s.io/examples/pods/resource/memory-request-limit.yaml --namespace=mem-example
+</code></pre>
+<p dir="rtl">بررسی کنید که کانتینر این Pod در حال اجرا باشد:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pod memory-demo --namespace=mem-example
+</code></pre>
+<p dir="rtl">اطلاعات مفصل Pod را مشاهده کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pod memory-demo --output=yaml --namespace=mem-example
+</code></pre>
+<p dir="rtl">خروجی نشان می‌دهد که درخواست حافظهٔ تنها کانتینر این Pod برابر 100 MiB و حد حافظهٔ آن 200 MiB است.</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">...
+resources:
+  requests:
+    memory: 100Mi
+  limits:
+    memory: 200Mi
+...
+</code></pre>
+<p dir="rtl">برای دریافت معیارهای Pod، دستور <code dir="ltr">kubectl top</code> را اجرا کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl top pod memory-demo --namespace=mem-example
+</code></pre>
+<p dir="rtl">خروجی نشان می‌دهد که این Pod حدود ۱۶۲٬۹۰۰٬۰۰۰ بایت حافظه مصرف می‌کند که تقریباً برابر 150 MiB است. این مقدار از درخواست 100 MiB این Pod بیشتر است، اما همچنان در محدودهٔ حد 200 MiB آن قرار دارد.</p>
+<pre dir="ltr"><code dir="ltr">NAME                        CPU(cores)   MEMORY(bytes)
+memory-demo                 &lt;something&gt;  162856960
+</code></pre>
+<p dir="rtl">اکنون Pod خود را حذف کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl delete pod memory-demo --namespace=mem-example
+</code></pre>
+<h2 id="فراتر-رفتن-از-حد-حافظهٔ-کانتینر" dir="rtl">فراتر رفتن از حد حافظهٔ کانتینر</h2>
+<p dir="rtl">اگر نود حافظهٔ آزاد داشته باشد، کانتینر می‌تواند از درخواست حافظهٔ خود فراتر برود، اما اجازه ندارد بیش از حد حافظهٔ خود مصرف کند. اگر کانتینری بیش از حد خود حافظه تخصیص دهد، در فهرست نامزدهای خاتمه قرار می‌گیرد. اگر کانتینر همچنان بیش از حد خود حافظه مصرف کند، خاتمه داده می‌شود. اگر امکان راه‌اندازی مجدد کانتینرِ خاتمه‌یافته وجود داشته باشد، kubelet آن را مانند هر نوع دیگری از خطای زمان اجرا دوباره راه‌اندازی می‌کند.</p>
+<p dir="rtl">در این تمرین، یک Pod ایجاد می‌کنید که تلاش می‌کند بیش از حد خود حافظه تخصیص دهد. فایل پیکربندی زیر مربوط به Podای است که یک کانتینر با درخواست حافظهٔ 50 MiB و حد حافظهٔ 100 MiB دارد:</p>
+<div class="code-file ltr" dir="ltr">pods/resource/memory-request-limit-2.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: Pod
+metadata:
+  name: memory-demo-2
+  namespace: mem-example
+spec:
+  containers:
+  - name: memory-demo-2-ctr
+    image: polinux/stress
+    resources:
+      requests:
+        memory: "50Mi"
+      limits:
+        memory: "100Mi"
+    command: ["stress"]
+    args: ["--vm", "1", "--vm-bytes", "250M", "--vm-hang", "1"]
+</code></pre>
+<p dir="rtl">در بخش <code dir="ltr">args</code> فایل پیکربندی می‌بینید که کانتینر تلاش خواهد کرد 250 MiB حافظه تخصیص دهد؛ این مقدار بسیار بیشتر از حد 100 MiB است.</p>
+<p dir="rtl">این Pod را ایجاد کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f https://k8s.io/examples/pods/resource/memory-request-limit-2.yaml --namespace=mem-example
+</code></pre>
+<p dir="rtl">اطلاعات مفصل Pod را مشاهده کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pod memory-demo-2 --namespace=mem-example
+</code></pre>
+<p dir="rtl">در این مرحله، کانتینر ممکن است در حال اجرا باشد یا از بین رفته باشد. دستور قبلی را آن‌قدر تکرار کنید تا کانتینر از بین برود:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">NAME            READY     STATUS      RESTARTS   AGE
+memory-demo-2   0/1       OOMKilled   1          24s
+</code></pre>
+<p dir="rtl">وضعیت کانتینر را با جزئیات بیشتری مشاهده کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pod memory-demo-2 --output=yaml --namespace=mem-example
+</code></pre>
+<p dir="rtl">خروجی نشان می‌دهد که کانتینر به دلیل کمبود حافظه (OOM) از بین رفته است:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">lastState:
+   terminated:
+     containerID: 65183c1877aaec2e8427bc95609cc52677a454b56fcb24340dbd22917c23b10f
+     exitCode: 137
+     finishedAt: 2017-06-20T20:52:19Z
+     reason: OOMKilled
+     startedAt: null
+</code></pre>
+<p dir="rtl">کانتینر این تمرین قابل راه‌اندازی مجدد است، بنابراین kubelet آن را دوباره راه‌اندازی می‌کند. این دستور را چند بار تکرار کنید تا ببینید کانتینر پیوسته از بین می‌رود و دوباره راه‌اندازی می‌شود:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pod memory-demo-2 --namespace=mem-example
+</code></pre>
+<p dir="rtl">خروجی نشان می‌دهد که کانتینر از بین می‌رود، دوباره راه‌اندازی می‌شود، باز از بین می‌رود، دوباره راه‌اندازی می‌شود و این چرخه ادامه پیدا می‌کند:</p>
+<pre dir="ltr"><code dir="ltr">kubectl get pod memory-demo-2 --namespace=mem-example
+NAME            READY     STATUS      RESTARTS   AGE
+memory-demo-2   0/1       OOMKilled   1          37s
+</code></pre>
+<pre dir="ltr"><code dir="ltr">
+kubectl get pod memory-demo-2 --namespace=mem-example
+NAME            READY     STATUS    RESTARTS   AGE
+memory-demo-2   1/1       Running   2          40s
+</code></pre>
+<p dir="rtl">اطلاعات مفصل تاریخچهٔ Pod را مشاهده کنید:</p>
+<pre dir="ltr"><code dir="ltr">kubectl describe pod memory-demo-2 --namespace=mem-example
+</code></pre>
+<p dir="rtl">خروجی نشان می‌دهد که کانتینر بارها شروع به کار می‌کند و با شکست مواجه می‌شود:</p>
+<pre dir="ltr"><code dir="ltr">... Normal  Created   Created container with id 66a3a20aa7980e61be4922780bf9d24d1a1d8b7395c09861225b0eba1b1f8511
+... Warning BackOff   Back-off restarting failed container
+</code></pre>
+<p dir="rtl">اطلاعات مفصل نودهای کلاستر خود را مشاهده کنید:</p>
+<pre dir="ltr"><code dir="ltr">kubectl describe nodes
+</code></pre>
+<p dir="rtl">خروجی شامل سابقه‌ای از ازبین‌رفتن کانتینر به دلیل کمبود حافظه است:</p>
+<pre dir="ltr"><code dir="ltr">Warning OOMKilling Memory cgroup out of memory: Kill process 4481 (stress) score 1994 or sacrifice child
+</code></pre>
+<p dir="rtl">اکنون Pod خود را حذف کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl delete pod memory-demo-2 --namespace=mem-example
+</code></pre>
+<h2 id="تعیین-درخواست-حافظه-ای-بزرگ-تر-از-ظرفیت-نودها" dir="rtl">تعیین درخواست حافظه‌ای بزرگ‌تر از ظرفیت نودها</h2>
+<p dir="rtl">درخواست‌ها و حدهای حافظه به کانتینرها مربوط می‌شوند، اما مفید است که برای Pod نیز درخواست و حد حافظه در نظر بگیریم. درخواست حافظهٔ یک Pod برابر با مجموع درخواست‌های حافظهٔ همهٔ کانتینرهای آن است. به همین ترتیب، حد حافظهٔ Pod برابر با مجموع حدهای همهٔ کانتینرهای آن است.</p>
+<p dir="rtl">زمان‌بندی Podها بر اساس درخواست‌ها انجام می‌شود. یک Pod تنها زمانی برای اجرا روی یک نود زمان‌بندی می‌شود که آن نود حافظهٔ آزاد کافی برای پاسخ‌گویی به درخواست حافظهٔ Pod داشته باشد.</p>
+<p dir="rtl">در این تمرین، Podای ایجاد می‌کنید که درخواست حافظهٔ آن به قدری بزرگ است که از ظرفیت همهٔ نودهای کلاستر شما فراتر می‌رود. فایل پیکربندی زیر مربوط به Podای است که یک کانتینر با درخواست 1000 GiB حافظه دارد؛ این مقدار به احتمال زیاد از ظرفیت هر نودی در کلاستر شما بیشتر است.</p>
+<div class="code-file ltr" dir="ltr">pods/resource/memory-request-limit-3.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: Pod
+metadata:
+  name: memory-demo-3
+  namespace: mem-example
+spec:
+  containers:
+  - name: memory-demo-3-ctr
+    image: polinux/stress
+    resources:
+      requests:
+        memory: "1000Gi"
+      limits:
+        memory: "1000Gi"
+    command: ["stress"]
+    args: ["--vm", "1", "--vm-bytes", "150M", "--vm-hang", "1"]
+</code></pre>
+<p dir="rtl">این Pod را ایجاد کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f https://k8s.io/examples/pods/resource/memory-request-limit-3.yaml --namespace=mem-example
+</code></pre>
+<p dir="rtl">وضعیت Pod را مشاهده کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pod memory-demo-3 --namespace=mem-example
+</code></pre>
+<p dir="rtl">خروجی نشان می‌دهد که وضعیت Pod برابر PENDING است؛ یعنی Pod برای اجرا روی هیچ نودی زمان‌بندی نشده است و برای مدت نامحدود در وضعیت PENDING باقی می‌ماند:</p>
+<pre dir="ltr"><code dir="ltr">kubectl get pod memory-demo-3 --namespace=mem-example
+NAME            READY     STATUS    RESTARTS   AGE
+memory-demo-3   0/1       Pending   0          25s
+</code></pre>
+<p dir="rtl">اطلاعات مفصل Pod را به همراه رویدادهای آن مشاهده کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl describe pod memory-demo-3 --namespace=mem-example
+</code></pre>
+<p dir="rtl">خروجی نشان می‌دهد که به دلیل کمبود حافظه روی نودها، کانتینر قابل زمان‌بندی نیست:</p>
+<pre dir="ltr"><code dir="ltr">Events:
+  ...  Reason            Message
+       ------            -------
+  ...  FailedScheduling  No nodes are available that match all of the following predicates:: Insufficient memory (3).
+</code></pre>
+<h2 id="واحدهای-حافظه" dir="rtl">واحدهای حافظه</h2>
+<p dir="rtl">منبع حافظه بر حسب بایت اندازه‌گیری می‌شود. می‌توانید حافظه را به صورت یک عدد صحیح ساده یا یک عدد ممیز ثابت (fixed-point) با یکی از این پسوندها بیان کنید: E, P, T, G, M, K, Ei, Pi, Ti, Gi, Mi, Ki. برای مثال، مقادیر زیر تقریباً یک مقدار را نشان می‌دهند:</p>
+<pre dir="ltr"><code dir="ltr">128974848, 129e6, 129M, 123Mi
+</code></pre>
+<p dir="rtl">اکنون Pod خود را حذف کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl delete pod memory-demo-3 --namespace=mem-example
+</code></pre>
+<h2 id="اگر-حد-حافظه-را-تعیین-نکنید" dir="rtl">اگر حد حافظه را تعیین نکنید</h2>
+<p dir="rtl">اگر برای یک کانتینر حد حافظه تعیین نکنید، یکی از وضعیت‌های زیر پیش می‌آید:</p>
+<ul>
+<li dir="rtl">
+<p dir="rtl">کانتینر هیچ سقفی برای میزان حافظهٔ مصرفی خود ندارد. کانتینر ممکن است تمام حافظهٔ موجود روی نودی را که روی آن اجرا می‌شود مصرف کند و این به نوبهٔ خود ممکن است OOM Killer را فعال کند. افزون بر این، در صورت وقوع OOM Kill، کانتینری که حد منبع ندارد با احتمال بیشتری از بین می‌رود.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">کانتینر در فضای نامی اجرا می‌شود که حد حافظهٔ پیش‌فرض دارد و این حد پیش‌فرض به‌طور خودکار به کانتینر اختصاص داده می‌شود. مدیران کلاستر می‌توانند با استفاده از یک <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.37/#limitrange-v1-core" target="_blank">LimitRange</a> مقدار پیش‌فرضی برای حد حافظه تعیین کنند.</p>
+</li>
+</ul>
+<h2 id="انگیزهٔ-استفاده-از-درخواست-ها-و-حدهای-حافظه" dir="rtl">انگیزهٔ استفاده از درخواست‌ها و حدهای حافظه</h2>
+<p dir="rtl">با پیکربندی درخواست‌ها و حدهای حافظه برای کانتینرهایی که در کلاستر شما اجرا می‌شوند، می‌توانید از منابع حافظهٔ موجود روی نودهای کلاستر به‌طور کارآمد استفاده کنید. با پایین نگه داشتن درخواست حافظهٔ یک Pod، شانس زمان‌بندی‌شدن آن را افزایش می‌دهید. با تعیین حد حافظه‌ای بزرگ‌تر از درخواست حافظه، به دو هدف دست می‌یابید:</p>
+<ul>
+<li dir="rtl">این Pod می‌تواند دوره‌هایی از فعالیت ناگهانی و شدید (burst) داشته باشد که در آن‌ها از حافظهٔ آزادِ موجود استفاده می‌کند.</li>
+<li dir="rtl">میزان حافظه‌ای که یک Pod در طول این فعالیت شدید می‌تواند مصرف کند، به مقداری معقول محدود می‌شود.</li>
+</ul>
+<h2 id="پاک-سازی" dir="rtl">پاک‌سازی</h2>
+<p dir="rtl">فضای نام خود را حذف کنید. با این کار همهٔ Podهایی که برای این تمرین ایجاد کرده‌اید حذف می‌شوند:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl delete namespace mem-example
+</code></pre>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<h3 id="برای-توسعه-دهندگان-برنامه" dir="rtl">برای توسعه‌دهندگان برنامه</h3>
+<ul>
+<li dir="rtl">
+<p dir="rtl"><a href="assign-cpu-resource.html">تخصیص منابع CPU به کانتینرها و Podها</a></p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><a href="assign-pod-level-resources.html">تخصیص منابع CPU و حافظه در سطح Pod</a></p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><a href="https://kubernetes.io/docs/tasks/configure-pod-container/quality-service-pod/" target="_blank">پیکربندی کیفیت سرویس (Quality of Service) برای Podها</a></p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><a href="https://kubernetes.io/docs/tasks/configure-pod-container/resize-container-resources/" target="_blank">تغییر اندازهٔ منابع CPU و حافظهٔ اختصاص‌یافته به کانتینرها</a></p>
+</li>
+</ul>
+<h3 id="برای-مدیران-کلاستر" dir="rtl">برای مدیران کلاستر</h3>
+<ul>
+<li dir="rtl">
+<p dir="rtl"><a href="../administer-cluster/manage-resources/memory-default-namespace.html">پیکربندی درخواست‌ها و حدهای پیش‌فرض حافظه برای یک فضای نام</a></p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><a href="../administer-cluster/manage-resources/cpu-default-namespace.html">پیکربندی درخواست‌ها و حدهای پیش‌فرض CPU برای یک فضای نام</a></p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><a href="../administer-cluster/manage-resources/memory-constraint-namespace.html">پیکربندی محدودیت‌های حداقل و حداکثر حافظه برای یک فضای نام</a></p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><a href="../administer-cluster/manage-resources/cpu-constraint-namespace.html">پیکربندی محدودیت‌های حداقل و حداکثر CPU برای یک فضای نام</a></p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><a href="../administer-cluster/manage-resources/quota-memory-cpu-namespace.html">پیکربندی سهمیه‌های حافظه و CPU برای یک فضای نام</a></p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><a href="../administer-cluster/manage-resources/quota-pod-namespace.html">پیکربندی سهمیهٔ Pod برای یک فضای نام</a></p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><a href="../administer-cluster/quota-api-object.html">پیکربندی سهمیه‌ها برای آبجکت‌های API</a></p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><a href="https://kubernetes.io/docs/tasks/configure-pod-container/resize-container-resources/" target="_blank">تغییر اندازهٔ منابع CPU و حافظهٔ اختصاص‌یافته به کانتینرها</a></p>
+</li>
+</ul>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#پیش-از-شروع">پیش از شروع</a><a class="l2" href="#ایجاد-یک-فضای-نام">ایجاد یک فضای نام</a><a class="l2" href="#تعیین-درخواست-حافظه-و-حد-حافظه">تعیین درخواست حافظه و حد حافظه</a><a class="l2" href="#فراتر-رفتن-از-حد-حافظهٔ-کانتینر">فراتر رفتن از حد حافظهٔ کانتینر</a><a class="l2" href="#تعیین-درخواست-حافظه-ای-بزرگ-تر-از-ظرفیت-نودها">تعیین درخواست حافظه‌ای بزرگ‌تر از ظرفیت نودها</a><a class="l2" href="#واحدهای-حافظه">واحدهای حافظه</a><a class="l2" href="#اگر-حد-حافظه-را-تعیین-نکنید">اگر حد حافظه را تعیین نکنید</a><a class="l2" href="#انگیزهٔ-استفاده-از-درخواست-ها-و-حدهای-حافظه">انگیزهٔ استفاده از درخواست‌ها و حدهای حافظه</a><a class="l2" href="#پاک-سازی">پاک‌سازی</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a><a class="l3" href="#برای-توسعه-دهندگان-برنامه">برای توسعه‌دهندگان برنامه</a><a class="l3" href="#برای-مدیران-کلاستر">برای مدیران کلاستر</a></nav>
+</div>
+</body>
+</html>

@@ -8,8 +8,8 @@
 
 | | |
 |---|---|
-| پیشرفت (بر اساس کلمات) | **91.3٪** |
-| صفحات ترجمه‌شده | 1545 از 1722 |
+| پیشرفت (بر اساس کلمات) | **91.8٪** |
+| صفحات ترجمه‌شده | 1560 از 1722 |
 | صفحات دارای ایراد ساختاری | 73 |
 | نسخه‌ی منبع انگلیسی | `f652c6b8a26f` |
 
@@ -74,7 +74,7 @@ cd kubernetes-doc-fa
 | `home` | 2 | 2 |
 | `reference` | 1198 | 1198 |
 | `setup` | 22 | 22 |
-| `tasks` | 90 | 221 |
+| `tasks` | 105 | 221 |
 | `tutorials` | 0 | 45 |
 
 </div>
@@ -101,26 +101,26 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [tasks/configure-pod-container/configure-runasusername.md](md/tasks/configure-pod-container/configure-runasusername.md) — 2026-11-14T10:40:21+03:30
+- [tasks/configure-pod-container/configure-projected-volume-storage.md](md/tasks/configure-pod-container/configure-projected-volume-storage.md) — 2026-11-14T10:39:56+03:30
+- [tasks/configure-pod-container/configure-pod-initialization.md](md/tasks/configure-pod-container/configure-pod-initialization.md) — 2026-11-14T10:39:44+03:30
+- [tasks/configure-pod-container/configure-liveness-readiness-startup-probes.md](md/tasks/configure-pod-container/configure-liveness-readiness-startup-probes.md) — 2026-11-14T10:39:31+03:30
+- [tasks/configure-pod-container/configure-gmsa.md](md/tasks/configure-pod-container/configure-gmsa.md) — 2026-11-14T10:39:14+03:30
+- [tasks/configure-pod-container/configure-emptydir-volume-mode.md](md/tasks/configure-pod-container/configure-emptydir-volume-mode.md) — 2026-11-14T10:38:23+03:30
+- [tasks/configure-pod-container/assign-resources/set-up-dra-cluster.md](md/tasks/configure-pod-container/assign-resources/set-up-dra-cluster.md) — 2026-11-14T10:38:11+03:30
+- [tasks/configure-pod-container/configure-bind-mount-options.md](md/tasks/configure-pod-container/configure-bind-mount-options.md) — 2026-11-14T10:38:10+03:30
+- [tasks/configure-pod-container/attach-handler-lifecycle-event.md](md/tasks/configure-pod-container/attach-handler-lifecycle-event.md) — 2026-11-14T10:37:57+03:30
+- [tasks/configure-pod-container/assign-resources/access-dra-device-metadata.md](md/tasks/configure-pod-container/assign-resources/access-dra-device-metadata.md) — 2026-11-14T10:37:40+03:30
+- [tasks/configure-pod-container/assign-resources/allocate-devices-dra.md](md/tasks/configure-pod-container/assign-resources/allocate-devices-dra.md) — 2026-11-14T10:37:38+03:30
+- [tasks/configure-pod-container/assign-pods-nodes.md](md/tasks/configure-pod-container/assign-pods-nodes.md) — 2026-11-14T10:37:04+03:30
+- [tasks/configure-pod-container/assign-resources/_index.md](md/tasks/configure-pod-container/assign-resources/_index.md) — 2026-11-14T10:37:02+03:30
+- [tasks/configure-pod-container/assign-pods-nodes-using-node-affinity.md](md/tasks/configure-pod-container/assign-pods-nodes-using-node-affinity.md) — 2026-11-14T10:36:58+03:30
+- [tasks/configure-pod-container/assign-memory-resource.md](md/tasks/configure-pod-container/assign-memory-resource.md) — 2026-11-14T10:36:41+03:30
 - [tasks/configure-pod-container/assign-pod-level-resources.md](md/tasks/configure-pod-container/assign-pod-level-resources.md) — 2026-11-14T10:36:37+03:30
 - [tasks/configure-pod-container/assign-cpu-resource.md](md/tasks/configure-pod-container/assign-cpu-resource.md) — 2026-11-14T10:35:53+03:30
 - [tasks/configmap-secret/managing-secret-using-kustomize.md](md/tasks/configmap-secret/managing-secret-using-kustomize.md) — 2026-11-14T10:35:14+03:30
 - [tasks/configure-pod-container/_index.md](md/tasks/configure-pod-container/_index.md) — 2026-11-14T10:35:08+03:30
 - [tasks/configmap-secret/managing-secret-using-kubectl.md](md/tasks/configmap-secret/managing-secret-using-kubectl.md) — 2026-11-14T10:35:03+03:30
-- [tasks/configmap-secret/managing-secret-using-config-file.md](md/tasks/configmap-secret/managing-secret-using-config-file.md) — 2026-11-14T10:34:53+03:30
-- [tasks/administer-cluster/topology-manager.md](md/tasks/administer-cluster/topology-manager.md) — 2026-11-14T10:34:38+03:30
-- [tasks/configmap-secret/_index.md](md/tasks/configmap-secret/_index.md) — 2026-11-14T10:34:22+03:30
-- [tasks/administer-cluster/verify-signed-artifacts.md](md/tasks/administer-cluster/verify-signed-artifacts.md) — 2026-11-14T10:34:17+03:30
-- [tasks/administer-cluster/use-cascading-deletion.md](md/tasks/administer-cluster/use-cascading-deletion.md) — 2026-11-14T10:33:55+03:30
-- [tasks/administer-cluster/sysctl-cluster.md](md/tasks/administer-cluster/sysctl-cluster.md) — 2026-11-14T10:33:23+03:30
-- [tasks/administer-cluster/securing-a-cluster.md](md/tasks/administer-cluster/securing-a-cluster.md) — 2026-11-14T10:33:01+03:30
-- [tasks/administer-cluster/switch-to-evented-pleg.md](md/tasks/administer-cluster/switch-to-evented-pleg.md) — 2026-11-14T10:32:21+03:30
-- [tasks/administer-cluster/safely-drain-node.md](md/tasks/administer-cluster/safely-drain-node.md) — 2026-11-14T10:31:57+03:30
-- [tasks/administer-cluster/reserve-compute-resources.md](md/tasks/administer-cluster/reserve-compute-resources.md) — 2026-11-14T10:31:39+03:30
-- [tasks/administer-cluster/running-cloud-controller.md](md/tasks/administer-cluster/running-cloud-controller.md) — 2026-11-14T10:31:14+03:30
-- [tasks/administer-cluster/nodelocaldns.md](md/tasks/administer-cluster/nodelocaldns.md) — 2026-11-14T10:30:40+03:30
-- [tasks/administer-cluster/quota-api-object.md](md/tasks/administer-cluster/quota-api-object.md) — 2026-11-14T10:30:39+03:30
-- [tasks/administer-cluster/node-overprovisioning.md](md/tasks/administer-cluster/node-overprovisioning.md) — 2026-11-14T10:30:19+03:30
-- [tasks/administer-cluster/network-policy-provider/kube-router-network-policy.md](md/tasks/administer-cluster/network-policy-provider/kube-router-network-policy.md) — 2026-11-14T10:29:57+03:30
 
 </div>
 

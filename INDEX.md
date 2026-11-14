@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-1545 از 1722 صفحه
+1560 از 1722 صفحه
 
 
 ## `.`
@@ -2013,19 +2013,19 @@
 
 - ✅ [_index.md](md/tasks/configure-pod-container/_index.md)
 - ✅ [assign-cpu-resource.md](md/tasks/configure-pod-container/assign-cpu-resource.md)
-- ⏳ `assign-memory-resource.md`
+- ✅ [assign-memory-resource.md](md/tasks/configure-pod-container/assign-memory-resource.md)
 - ✅ [assign-pod-level-resources.md](md/tasks/configure-pod-container/assign-pod-level-resources.md)
-- ⏳ `assign-pods-nodes-using-node-affinity.md`
-- ⏳ `assign-pods-nodes.md`
-- ⏳ `attach-handler-lifecycle-event.md`
-- ⏳ `configure-bind-mount-options.md`
-- ⏳ `configure-emptydir-volume-mode.md`
-- ⏳ `configure-gmsa.md`
-- ⏳ `configure-liveness-readiness-startup-probes.md`
+- ✅ [assign-pods-nodes-using-node-affinity.md](md/tasks/configure-pod-container/assign-pods-nodes-using-node-affinity.md)
+- ✅ [assign-pods-nodes.md](md/tasks/configure-pod-container/assign-pods-nodes.md)
+- ✅ [attach-handler-lifecycle-event.md](md/tasks/configure-pod-container/attach-handler-lifecycle-event.md)
+- ✅ [configure-bind-mount-options.md](md/tasks/configure-pod-container/configure-bind-mount-options.md)
+- ✅ [configure-emptydir-volume-mode.md](md/tasks/configure-pod-container/configure-emptydir-volume-mode.md)
+- ✅ [configure-gmsa.md](md/tasks/configure-pod-container/configure-gmsa.md)
+- ✅ [configure-liveness-readiness-startup-probes.md](md/tasks/configure-pod-container/configure-liveness-readiness-startup-probes.md)
 - ⏳ `configure-pod-configmap.md`
-- ⏳ `configure-pod-initialization.md`
-- ⏳ `configure-projected-volume-storage.md`
-- ⏳ `configure-runasusername.md`
+- ✅ [configure-pod-initialization.md](md/tasks/configure-pod-container/configure-pod-initialization.md)
+- ✅ [configure-projected-volume-storage.md](md/tasks/configure-pod-container/configure-projected-volume-storage.md)
+- ✅ [configure-runasusername.md](md/tasks/configure-pod-container/configure-runasusername.md)
 - ⏳ `configure-service-account.md`
 - ⏳ `configure-volume-storage.md`
 - ⏳ `create-hostprocess-pod.md`
@@ -2046,10 +2046,10 @@
 
 ## `tasks/configure-pod-container/assign-resources`
 
-- ⏳ `_index.md`
-- ⏳ `access-dra-device-metadata.md`
-- ⏳ `allocate-devices-dra.md`
-- ⏳ `set-up-dra-cluster.md`
+- ✅ [_index.md](md/tasks/configure-pod-container/assign-resources/_index.md)
+- ✅ [access-dra-device-metadata.md](md/tasks/configure-pod-container/assign-resources/access-dra-device-metadata.md)
+- ✅ [allocate-devices-dra.md](md/tasks/configure-pod-container/assign-resources/allocate-devices-dra.md)
+- ✅ [set-up-dra-cluster.md](md/tasks/configure-pod-container/assign-resources/set-up-dra-cluster.md)
 
 ## `tasks/debug`
 
