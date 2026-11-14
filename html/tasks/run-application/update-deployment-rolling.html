@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>به‌روزرسانی یک Deployment بدون قطعی | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">tasks / run-application</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">به‌روزرسانی یک Deployment بدون قطعی</h1><!-- overview -->
+<p dir="rtl">این صفحه نشان می‌دهد که چگونه می‌توانید یک Deployment در حال اجرا را با استفاده از
+به‌روزرسانی تدریجی (rolling update) به نسخهٔ جدیدی ارتقا دهید. در به‌روزرسانی تدریجی،
+Podهای قدیمی به‌تدریج با Podهای جدید جایگزین می‌شوند و به این ترتیب برنامهٔ شما در
+سراسر این فرایند در دسترس می‌ماند.</p>
+<h2 id="اهداف" dir="rtl">اهداف</h2>
+<ul>
+<li dir="rtl">راه‌اندازی یک به‌روزرسانی تدریجی روی یک Deployment.</li>
+<li dir="rtl">پایش پیشرفت عرضه (rollout).</li>
+<li dir="rtl">توقف موقت و ازسرگیری عرضه.</li>
+<li dir="rtl">پیکربندی پارامترهای راهبرد به‌روزرسانی تدریجی.</li>
+<li dir="rtl">(در صورت نیاز) بازگشت به یک بازبینی (revision) قبلی.</li>
+</ul>
+<h2 id="پیش-از-شروع" dir="rtl">پیش از شروع</h2>
+<p dir="rtl">باید یک کلاستر کوبرنتیز داشته باشید و ابزار خط فرمان kubectl باید برای ارتباط با کلاستر شما پیکربندی شده باشد. توصیه می‌شود این آموزش را روی کلاستری اجرا کنید که دست‌کم دو نود داشته باشد که نقش میزبان control plane را ندارند. اگر هنوز کلاستری ندارید، می‌توانید با استفاده از
+<a href="https://minikube.sigs.k8s.io/docs/tutorials/multi_node/" target="_blank" rel="noopener">minikube</a>
+یکی بسازید یا از یکی از این محیط‌های آزمایشی کوبرنتیز استفاده کنید:</p>
+<ul>
+<li dir="ltr" class="ltr"><a href="https://labs.iximiuz.com/playgrounds?category=kubernetes&amp;filter=all" target="_blank" rel="noopener">iximiuz Labs</a></li>
+<li dir="ltr" class="ltr"><a href="https://killercoda.com/playgrounds/scenario/kubernetes" target="_blank" rel="noopener">Killercoda</a></li>
+<li dir="ltr" class="ltr"><a href="https://kodekloud.com/public-playgrounds" target="_blank" rel="noopener">KodeKloud</a></li>
+</ul>
+<p dir="rtl">به یک Deployment موجود نیاز دارید. اگر Deployment ندارید، Deployment مربوط به nginx
+را طبق صفحهٔ
+<a href="run-stateless-application-deployment.html">اجرای یک برنامهٔ بی‌حالت با استفاده از Deployment</a>
+ایجاد کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f https://k8s.io/examples/application/deployment.yaml
+</code></pre>
+<p dir="rtl">بررسی کنید که این Deployment دو Pod را اجرا می‌کند:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get deployment nginx-deployment
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">NAME               READY   UP-TO-DATE   AVAILABLE   AGE
+nginx-deployment   2/2     2            2           10s
+</code></pre>
+<!-- steps -->
+<h2 id="انجام-به-روزرسانی-تدریجی" dir="rtl">انجام به‌روزرسانی تدریجی</h2>
+<p dir="rtl">هر تغییری در فیلد <code dir="ltr">.spec.template</code> یک Deployment، یک به‌روزرسانی تدریجی را آغاز
+می‌کند. کوبرنتیز Podهای جدیدی با پیکربندی به‌روزشده ایجاد می‌کند و Podهای قدیمی را
+به‌تدریج خاتمه می‌دهد.</p>
+<h3 id="به-روزرسانی-با-kubectl-apply" dir="rtl">به‌روزرسانی با <code dir="ltr">kubectl apply</code></h3>
+<p dir="rtl">می‌توانید با ویرایش مانیفست Deployment و اعمال تغییر، یک به‌روزرسانی تدریجی را آغاز کنید. این روش زمانی مناسب است که مانیفست‌ها را در سامانهٔ کنترل نسخه نگه می‌دارید.</p>
+<p dir="rtl">ابتدا Deployment فعلی را در یک فایل محلی ذخیره کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get deployment nginx-deployment -o yaml &gt; /tmp/nginx-deployment.yaml
+</code></pre>
+<p dir="rtl">فایل <code dir="ltr">/tmp/nginx-deployment.yaml</code> را ویرایش کنید و مقدار <code dir="ltr">.spec.template.spec.containers[0].image</code>
+را از <code dir="ltr">nginx:1.14.2</code> به <code dir="ltr">nginx:1.16.1</code> تغییر دهید.</p>
+<p dir="rtl">پیش از اعمال، تغییرات محلی خود را با وضعیت کلاستر مقایسه کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl diff -f /tmp/nginx-deployment.yaml
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">diff -u -N /tmp/LIVE/apps.v1.Deployment.default.nginx-deployment /tmp/MERGED/apps.v1.Deployment.default.nginx-deployment
+--- /tmp/LIVE/apps.v1.Deployment...
++++ /tmp/MERGED/apps.v1.Deployment...
+@@ -29,7 +29,7 @@
+       containers:
+-      - image: nginx:1.14.2
++      - image: nginx:1.16.1
+         name: nginx
+</code></pre>
+<p dir="rtl">مانیفست به‌روزشده را اعمال کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f /tmp/nginx-deployment.yaml
+</code></pre>
+<h3 id="به-روزرسانی-فقط-ایمیج-کانتینر" dir="rtl">به‌روزرسانی فقط ایمیج کانتینر</h3>
+<p dir="rtl">برای به‌روزرسانی ایمیج کانتینر بدون ویرایش فایل مانیفست، از
+<code dir="ltr">kubectl set image</code> استفاده کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl set image deployment/nginx-deployment nginx=nginx:1.16.1
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">deployment.apps/nginx-deployment image updated
+</code></pre>
+<p dir="rtl">بررسی کنید که ایمیج به‌روز شده باشد:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get deployment nginx-deployment -o jsonpath='{.spec.template.spec.containers[0].image}'
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">nginx:1.16.1
+</code></pre>
+<h2 id="پایش-پیشرفت-عرضه" dir="rtl">پایش پیشرفت عرضه</h2>
+<p dir="rtl">برای مشاهدهٔ پیشرفت یک به‌روزرسانی تدریجی، از <code dir="ltr">kubectl rollout status</code> استفاده کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl rollout status deployment/nginx-deployment
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">Waiting for deployment "nginx-deployment" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "nginx-deployment" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "nginx-deployment" rollout to finish: 1 old replicas are pending termination...
+deployment "nginx-deployment" successfully rolled out
+</code></pre>
+<p dir="rtl">پس از پایان عرضه، وضعیت Deployment را بررسی کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get deployment nginx-deployment
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">NAME               READY   UP-TO-DATE   AVAILABLE   AGE
+nginx-deployment   2/2     2            2           2m
+</code></pre>
+<h2 id="توقف-موقت-و-ازسرگیری-عرضه" dir="rtl">توقف موقت و ازسرگیری عرضه</h2>
+<p dir="rtl">می‌توانید یک عرضه را موقتاً متوقف کنید تا یک به‌روزرسانی نیمه‌کاره را بررسی کنید یا
+چند تغییر را در قالب یک عرضهٔ واحد اعمال کنید.</p>
+<h3 id="توقف-موقت-عرضه" dir="rtl">توقف موقت عرضه</h3>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl rollout pause deployment/nginx-deployment
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">deployment.apps/nginx-deployment paused
+</code></pre>
+<h3 id="اعمال-تغییرات-بیشتر-در-حالت-توقف" dir="rtl">اعمال تغییرات بیشتر در حالت توقف</h3>
+<p dir="rtl">در مدتی که عرضه متوقف است، می‌توانید تغییرات دیگری نیز اعمال کنید. این تغییرات تا
+زمانی که عرضه را از سر نگیرید، عرضهٔ جدیدی را آغاز نمی‌کنند:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl set image deployment/nginx-deployment nginx=nginx:1.17.0
+</code></pre>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">می‌توانید چندین تغییر را روی یک Deployment متوقف‌شده اعمال کنید. کوبرنتیز هنگام
+ازسرگیری عرضه، همهٔ این تغییرات را با هم اعمال می‌کند.</p>
+</div>
+<h3 id="ازسرگیری-عرضه" dir="rtl">ازسرگیری عرضه</h3>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl rollout resume deployment/nginx-deployment
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">deployment.apps/nginx-deployment resumed
+</code></pre>
+<p dir="rtl">بررسی کنید که عرضه به پایان برسد:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl rollout status deployment/nginx-deployment
+</code></pre>
+<h2 id="پیکربندی-راهبرد-به-روزرسانی-تدریجی" dir="rtl">پیکربندی راهبرد به‌روزرسانی تدریجی</h2>
+<p dir="rtl">منابع Deployment از دو
+<a href="../../concepts/workloads/controllers/deployment.html#strategy">نوع راهبرد به‌روزرسانی</a>
+پشتیبانی می‌کنند:</p>
+<ul>
+<li dir="rtl">راهبرد <strong>RollingUpdate</strong> (پیش‌فرض): Podهای قدیمی را به‌تدریج با Podهای جدید جایگزین می‌کند.</li>
+<li dir="rtl">راهبرد <strong>Recreate</strong>: پیش از ایجاد Podهای جدید، همهٔ Podهای موجود را خاتمه می‌دهد.
+این کار باعث قطعی می‌شود.</li>
+</ul>
+<p dir="rtl">در راهبرد RollingUpdate، پارامترهای زیر نحوهٔ انجام به‌روزرسانی را در کوبرنتیز کنترل می‌کنند:</p>
+<table>
+<thead>
+<tr>
+<th dir="rtl">پارامتر</th>
+<th dir="rtl">مورد کنترل</th>
+<th dir="rtl">پیش‌فرض</th>
+<th dir="rtl">مثال</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">maxUnavailable</code></td>
+<td dir="rtl">حداکثر تعداد Podهایی که در طول به‌روزرسانی می‌توانند در دسترس نباشند</td>
+<td>25%</td>
+<td dir="rtl"><code dir="ltr">1</code> یا <code dir="ltr">25%</code></td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">maxSurge</code></td>
+<td dir="rtl">حداکثر تعداد Podهای اضافی که در طول به‌روزرسانی می‌توانند ایجاد شوند</td>
+<td>25%</td>
+<td dir="rtl"><code dir="ltr">1</code> یا <code dir="ltr">25%</code></td>
+</tr>
+</tbody>
+</table>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">فیلدهای <code dir="ltr">maxUnavailable</code> و <code dir="ltr">maxSurge</code> یک عدد مطلق یا یک درصد را می‌پذیرند.
+کوبرنتیز درصدها را بر اساس تعداد رونوشت‌های مطلوب محاسبه می‌کند و نتیجه را برای
+<code dir="ltr">maxUnavailable</code> به پایین و برای <code dir="ltr">maxSurge</code> به بالا گرد می‌کند.</p>
+</div>
+<p dir="rtl">برای پیکربندی این پارامترها، از <code dir="ltr">kubectl patch</code> استفاده کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl patch deployment nginx-deployment -p \
+  '{"spec":{"strategy":{"rollingUpdate":{"maxUnavailable":"25%","maxSurge":"25%"}}}}'
+</code></pre>
+<p dir="rtl">همچنین می‌توانید این فیلدها را در مانیفست Deployment و زیر
+<code dir="ltr">.spec.strategy.rollingUpdate</code> تنظیم کنید. برای مثال‌های تفصیلی، بخش‌های
+<a href="../../concepts/workloads/controllers/deployment.html#max-unavailable">max unavailable</a>
+و <a href="../../concepts/workloads/controllers/deployment.html#max-surge">max surge</a>
+را در مستندات مفهومی Deployment ببینید.</p>
+<h3 id="تشخیص-عرضهٔ-متوقف-مانده" dir="rtl">تشخیص عرضهٔ متوقف‌مانده</h3>
+<p dir="rtl">اگر یک عرضه در مدت زمانی که با <code dir="ltr">.spec.progressDeadlineSeconds</code> (پیش‌فرض: ۶۰۰ ثانیه) تعیین شده است پیشرفتی نداشته باشد، کوبرنتیز وضعیت <code dir="ltr">Progressing</code> آن Deployment را <code dir="ltr">False</code> اعلام می‌کند. برای بررسی این وضعیت، Deployment را توصیف کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl describe deployment nginx-deployment
+</code></pre>
+<p dir="rtl">در بخش <code dir="ltr">Conditions</code> خروجی، به دنبال وضعیت <code dir="ltr">Progressing</code> بگردید. متوقف‌ماندن عرضه معمولاً نشان می‌دهد که Podهای جدید نمی‌توانند راه‌اندازی شوند. بخش <code dir="ltr">Events</code> خروجی می‌تواند به تشخیص مشکل کمک کند.</p>
+<h2 id="بازگشت-به-یک-بازبینی-قبلی-rollback" dir="rtl">بازگشت به یک بازبینی قبلی {#rollback}</h2>
+<p dir="rtl">اگر نسخهٔ جدید مشکلاتی ایجاد کند، می‌توانید به یک بازبینی قبلی بازگردید.</p>
+<h3 id="مشاهدهٔ-تاریخچهٔ-عرضه" dir="rtl">مشاهدهٔ تاریخچهٔ عرضه</h3>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl rollout history deployment/nginx-deployment
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">deployment.apps/nginx-deployment
+REVISION  CHANGE-CAUSE
+1         &lt;none&gt;
+2         &lt;none&gt;
+</code></pre>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">ستون <code dir="ltr">CHANGE-CAUSE</code> مقدار حاشیه‌نویسی (annotation) <code dir="ltr">kubernetes.io/change-cause</code>
+را در زمان ایجاد هر بازبینی نشان می‌دهد. این حاشیه‌نویسی به‌طور خودکار تنظیم <strong>نمی‌شود</strong>،
+اما اگر از یک راهکار خودکار برای مدیریت Deploymentها استفاده می‌کنید، ممکن است ابزار
+مورد استفادهٔ شما متنی را در این حاشیه‌نویسی بنویسد.</p>
+</div>
+<h3 id="بازگشت-به-بازبینی-قبلی" dir="rtl">بازگشت به بازبینی قبلی</h3>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl rollout undo deployment/nginx-deployment
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">deployment.apps/nginx-deployment rolled back
+</code></pre>
+<h3 id="بازگشت-به-یک-بازبینی-مشخص" dir="rtl">بازگشت به یک بازبینی مشخص</h3>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl rollout undo deployment/nginx-deployment --to-revision=1
+</code></pre>
+<p dir="rtl">بررسی کنید که بازگشت به پایان برسد:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl rollout status deployment/nginx-deployment
+</code></pre>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">تاریخچهٔ بازبینی‌های هر Deployment در ReplicaSetهایی که آن Deployment کنترل می‌کند ذخیره می‌شود.
+کوبرنتیز به‌طور پیش‌فرض ۱۰ ReplicaSet قدیمی را نگه می‌دارد. می‌توانید این محدودیت را
+با تنظیم <code dir="ltr">.spec.revisionHistoryLimit</code> در مانیفست Deployment تغییر دهید. تنظیم این مقدار روی <code dir="ltr">0</code> امکان بازگشت را به‌کلی غیرفعال می‌کند.</p>
+</div>
+<h2 id="پاکسازی" dir="rtl">پاکسازی</h2>
+<p dir="rtl">Deployment را حذف کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl delete deployment nginx-deployment
+</code></pre>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<ul>
+<li dir="rtl">دربارهٔ <a href="../../concepts/workloads/controllers/deployment.html">Deploymentها</a> بیشتر بیاموزید.</li>
+<li dir="rtl">با نحوهٔ <a href="scale-deployment.html">مقیاس‌دهی دستی یک Deployment</a> آشنا شوید.</li>
+<li dir="rtl">راهنمای گام‌به‌گام <a href="horizontal-pod-autoscale-walkthrough.html">مقیاس‌دهی خودکار افقی Pod</a> را دنبال کنید.</li>
+<li dir="rtl">ببینید چگونه می‌توان <a href="../manage-daemon/update-daemon-set.html">یک به‌روزرسانی تدریجی را روی یک DaemonSet انجام داد</a>.</li>
+</ul>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#اهداف">اهداف</a><a class="l2" href="#پیش-از-شروع">پیش از شروع</a><a class="l2" href="#انجام-به-روزرسانی-تدریجی">انجام به‌روزرسانی تدریجی</a><a class="l3" href="#به-روزرسانی-با-kubectl-apply">به‌روزرسانی با kubectl apply</a><a class="l3" href="#به-روزرسانی-فقط-ایمیج-کانتینر">به‌روزرسانی فقط ایمیج کانتینر</a><a class="l2" href="#پایش-پیشرفت-عرضه">پایش پیشرفت عرضه</a><a class="l2" href="#توقف-موقت-و-ازسرگیری-عرضه">توقف موقت و ازسرگیری عرضه</a><a class="l3" href="#توقف-موقت-عرضه">توقف موقت عرضه</a><a class="l3" href="#اعمال-تغییرات-بیشتر-در-حالت-توقف">اعمال تغییرات بیشتر در حالت توقف</a><a class="l3" href="#ازسرگیری-عرضه">ازسرگیری عرضه</a><a class="l2" href="#پیکربندی-راهبرد-به-روزرسانی-تدریجی">پیکربندی راهبرد به‌روزرسانی تدریجی</a><a class="l3" href="#تشخیص-عرضهٔ-متوقف-مانده">تشخیص عرضهٔ متوقف‌مانده</a><a class="l2" href="#بازگشت-به-یک-بازبینی-قبلی-rollback">بازگشت به یک بازبینی قبلی {#rollback}</a><a class="l3" href="#مشاهدهٔ-تاریخچهٔ-عرضه">مشاهدهٔ تاریخچهٔ عرضه</a><a class="l3" href="#بازگشت-به-بازبینی-قبلی">بازگشت به بازبینی قبلی</a><a class="l3" href="#بازگشت-به-یک-بازبینی-مشخص">بازگشت به یک بازبینی مشخص</a><a class="l2" href="#پاکسازی">پاکسازی</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>

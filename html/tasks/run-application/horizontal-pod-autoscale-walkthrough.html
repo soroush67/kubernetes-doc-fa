@@ -1,0 +1,541 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>راهنمای گام‌به‌گام HorizontalPodAutoscaler | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">tasks / run-application</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">راهنمای گام‌به‌گام HorizontalPodAutoscaler</h1><!-- overview -->
+<p dir="rtl">یک <a href="../../concepts/workloads/autoscaling/horizontal-pod-autoscale.html">HorizontalPodAutoscaler</a>
+(یا به‌اختصار HPA) یک منبع بار کاری (مانند یک <span class="term" title="deployment">Deployment</span> یا
+<span class="term" title="statefulset">StatefulSet</span>) را به‌طور خودکار به‌روزرسانی می‌کند. هدف از این کار
+این است که مقیاس بار کاری به‌صورت خودکار با میزان تقاضا هماهنگ شود.</p>
+<p dir="rtl">مقیاس‌دهی افقی یعنی در پاسخ به افزایش بار،
+<span class="term" title="pod">Podهای</span> بیشتری مستقر شوند.
+این روش با مقیاس‌دهی <em>عمودی</em> تفاوت دارد. در کوبرنتیز، مقیاس‌دهی عمودی به معنای
+اختصاص منابع بیشتر (برای مثال حافظه یا CPU) به Podهایی است که از قبل برای آن بار کاری
+در حال اجرا هستند.</p>
+<p dir="rtl">اگر بار کاهش یابد و تعداد Podها از حداقل پیکربندی‌شده بیشتر باشد،
+HorizontalPodAutoscaler به منبع بار کاری (Deployment، StatefulSet
+یا هر منبع مشابه دیگری) دستور می‌دهد که مقیاس را کاهش دهد.</p>
+<p dir="rtl">این سند شما را گام‌به‌گام با مثالی همراهی می‌کند که در آن HorizontalPodAutoscaler
+برای مدیریت خودکار مقیاس یک برنامهٔ وب نمونه فعال می‌شود. این بار کاری نمونه
+یک سرور Apache httpd است که مقداری کد PHP را اجرا می‌کند.</p>
+<h2 id="پیش-از-شروع" dir="rtl">پیش از شروع</h2>
+<p dir="rtl">باید یک کلاستر کوبرنتیز داشته باشید و ابزار خط فرمان kubectl باید برای ارتباط با کلاستر شما پیکربندی شده باشد. توصیه می‌شود این آموزش را روی کلاستری اجرا کنید که دست‌کم دو نود داشته باشد که نقش میزبان control plane را ندارند. اگر هنوز کلاستری ندارید، می‌توانید با استفاده از
+<a href="https://minikube.sigs.k8s.io/docs/tutorials/multi_node/" target="_blank" rel="noopener">minikube</a>
+یکی بسازید یا از یکی از این محیط‌های آزمایشی کوبرنتیز استفاده کنید:</p>
+<ul>
+<li dir="ltr" class="ltr">
+<p dir="ltr" class="ltr"><a href="https://labs.iximiuz.com/playgrounds?category=kubernetes&amp;filter=all" target="_blank" rel="noopener">iximiuz Labs</a></p>
+</li>
+<li dir="ltr" class="ltr">
+<p dir="ltr" class="ltr"><a href="https://killercoda.com/playgrounds/scenario/kubernetes" target="_blank" rel="noopener">Killercoda</a></p>
+</li>
+<li dir="rtl">
+<p dir="ltr" class="ltr"><a href="https://kodekloud.com/public-playgrounds" target="_blank" rel="noopener">KodeKloud</a></p>
+<p dir="rtl">اگر نسخهٔ قدیمی‌تری
+از کوبرنتیز را اجرا می‌کنید، به نسخهٔ مستندات مربوط به همان انتشار مراجعه کنید (بنگرید به
+<a href="../../home/supported-doc-versions.html">نسخه‌های موجود مستندات</a>).</p>
+</li>
+</ul>
+<p dir="rtl">برای دنبال کردن این راهنما، به کلاستری نیز نیاز دارید که
+<a href="https://github.com/kubernetes-sigs/metrics-server#readme" target="_blank" rel="noopener">Metrics Server</a> در آن مستقر و پیکربندی شده باشد.
+سرویس Metrics Server کوبرنتیز معیارهای منابع را از
+<span class="term" title="kubelet">kubeletهای</span> کلاستر شما جمع‌آوری می‌کند و این معیارها را
+از طریق <a href="../../concepts/overview/kubernetes-api.html">API کوبرنتیز</a> در دسترس قرار می‌دهد. این سرویس برای این کار
+از یک <a href="../../concepts/extend-kubernetes/api-extension/apiserver-aggregation.html">APIService</a> استفاده می‌کند
+تا انواع جدیدی از منبع را اضافه کند که مقادیر خوانده‌شدهٔ معیارها را نمایش می‌دهند.</p>
+<p dir="rtl">برای آشنایی با نحوهٔ استقرار Metrics Server،
+<a href="https://github.com/kubernetes-sigs/metrics-server#deployment" target="_blank" rel="noopener">مستندات metrics-server</a> را ببینید.</p>
+<p dir="rtl">اگر از <span class="term" title="minikube">minikube</span> استفاده می‌کنید، برای فعال کردن metrics-server دستور زیر را اجرا کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">minikube addons enable metrics-server
+</code></pre>
+<!-- steps -->
+<h2 id="اجرا-و-در-دسترس-قرار-دادن-سرور-php-apache" dir="rtl">اجرا و در دسترس قرار دادن سرور php-apache</h2>
+<p dir="rtl">برای نمایش عملکرد HorizontalPodAutoscaler، ابتدا یک Deployment راه‌اندازی می‌کنید که کانتینری با ایمیج
+<code dir="ltr">hpa-example</code> اجرا می‌کند و سپس با استفاده از مانیفست زیر، آن را به‌صورت یک <span class="term" title="service">service</span>
+در دسترس قرار می‌دهید:</p>
+<div class="code-file ltr" dir="ltr">application/php-apache.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: php-apache
+spec:
+  selector:
+    matchLabels:
+      run: php-apache
+  template:
+    metadata:
+      labels:
+        run: php-apache
+    spec:
+      containers:
+      - name: php-apache
+        image: registry.k8s.io/hpa-example
+        ports:
+        - containerPort: 80
+        resources:
+          limits:
+            cpu: 500m
+          requests:
+            cpu: 200m
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: php-apache
+  labels:
+    run: php-apache
+spec:
+  ports:
+  - port: 80
+  selector:
+    run: php-apache
+</code></pre>
+<p dir="rtl">برای این کار، دستور زیر را اجرا کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f https://k8s.io/examples/application/php-apache.yaml
+</code></pre>
+<pre dir="ltr"><code dir="ltr">deployment.apps/php-apache created
+service/php-apache created
+</code></pre>
+<h2 id="ایجاد-horizontalpodautoscaler-create-horizontal-pod-autoscaler" dir="rtl">ایجاد HorizontalPodAutoscaler {#create-horizontal-pod-autoscaler}</h2>
+<p dir="rtl">اکنون که سرور در حال اجراست، مقیاس‌دهندهٔ خودکار (autoscaler) را با استفاده از <code dir="ltr">kubectl</code> ایجاد کنید.
+زیرفرمان <a href="https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#autoscale" target="_blank"><code dir="ltr">kubectl autoscale</code></a>،
+که بخشی از <code dir="ltr">kubectl</code> است، در این کار به شما کمک می‌کند.</p>
+<p dir="rtl">به‌زودی دستوری را اجرا می‌کنید که یک HorizontalPodAutoscaler ایجاد می‌کند. این HorizontalPodAutoscaler
+تعداد رپلیکاهای Podهای تحت کنترل Deployment به نام php-apache را، که در گام نخست این دستورالعمل
+ایجاد کردید، بین ۱ تا ۱۰ نگه می‌دارد.</p>
+<p dir="rtl">به‌طور تقریبی، <span class="term" title="controller">کنترل‌کنندهٔ</span> HPA تعداد رپلیکاها را
+(با به‌روزرسانی Deployment) افزایش یا کاهش می‌دهد تا میانگین مصرف CPU در همهٔ Podها در حد ۵۰٪ باقی بماند.
+سپس Deployment، آبجکت ReplicaSet را به‌روزرسانی می‌کند (این بخشی از سازوکار همهٔ Deploymentها در کوبرنتیز است)
+و پس از آن، ReplicaSet بر اساس تغییر در <code dir="ltr">.spec</code> خود، Podهایی را اضافه یا حذف می‌کند.</p>
+<p dir="rtl">از آنجا که هر Pod از طریق <code dir="ltr">kubectl run</code> مقدار ۲۰۰ میلی‌هسته (milli-core) درخواست می‌کند، این به معنای
+میانگین مصرف CPU برابر با ۱۰۰ میلی‌هسته است.
+برای اطلاعات بیشتر دربارهٔ این الگوریتم، <a href="../../concepts/workloads/autoscaling/horizontal-pod-autoscale.html#algorithm-details">جزئیات الگوریتم</a>
+را ببینید.</p>
+<p dir="rtl">برای ایجاد HorizontalPodAutoscaler دستور زیر را اجرا کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl autoscale deployment php-apache --cpu=50% --min=1 --max=10
+</code></pre>
+<pre dir="ltr"><code dir="ltr">horizontalpodautoscaler.autoscaling/php-apache autoscaled
+</code></pre>
+<p dir="rtl">با اجرای دستور زیر می‌توانید وضعیت فعلی HorizontalPodAutoscaler تازه‌ایجادشده را بررسی کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># You can use "hpa" or "horizontalpodautoscaler"; either name works OK.
+kubectl get hpa
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">NAME         REFERENCE                     TARGET    MINPODS   MAXPODS   REPLICAS   AGE
+php-apache   Deployment/php-apache/scale   0% / 50%  1         10        1          18s
+</code></pre>
+<p dir="rtl">(اگر HorizontalPodAutoscalerهای دیگری با نام‌های متفاوت می‌بینید، به این معناست که از قبل وجود داشته‌اند
+و معمولاً مشکلی ایجاد نمی‌کنند.)</p>
+<p dir="rtl">توجه کنید که مصرف فعلی CPU برابر با ۰٪ است، زیرا هیچ کلاینتی به سرور درخواست ارسال نمی‌کند
+(ستون <code dir="ltr">TARGET</code> میانگین مصرف را در همهٔ Podهای تحت کنترل Deployment مربوطه نشان می‌دهد).</p>
+<h2 id="افزایش-بار-increase-load" dir="rtl">افزایش بار {#increase-load}</h2>
+<p dir="rtl">در ادامه، ببینید مقیاس‌دهندهٔ خودکار چگونه به افزایش بار واکنش نشان می‌دهد.
+برای این کار، Pod دیگری راه‌اندازی می‌کنید که نقش کلاینت را ایفا کند. کانتینر درون این Pod کلاینت
+در یک حلقهٔ بی‌پایان اجرا می‌شود و پیوسته به سرویس php-apache درخواست می‌فرستد.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># Run this in a separate terminal
+# so that the load generation continues and you can carry on with the rest of the steps
+kubectl run -i --tty load-generator --rm --image=busybox:1.28 --restart=Never -- /bin/sh -c "while sleep 0.01; do wget -q -O- http://php-apache; done"
+</code></pre>
+<p dir="rtl">اکنون دستور زیر را اجرا کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># type Ctrl+C to end the watch when you're ready
+kubectl get hpa php-apache --watch
+</code></pre>
+<p dir="rtl">پس از حدود یک دقیقه، باید افزایش بار CPU را ببینید؛ برای مثال:</p>
+<pre dir="ltr"><code dir="ltr">NAME         REFERENCE                     TARGET      MINPODS   MAXPODS   REPLICAS   AGE
+php-apache   Deployment/php-apache/scale   305% / 50%  1         10        1          3m
+</code></pre>
+<p dir="rtl">و سپس رپلیکاهای بیشتری را؛ برای مثال:</p>
+<pre dir="ltr"><code dir="ltr">NAME         REFERENCE                     TARGET      MINPODS   MAXPODS   REPLICAS   AGE
+php-apache   Deployment/php-apache/scale   305% / 50%  1         10        7          3m
+</code></pre>
+<p dir="rtl">در اینجا مصرف CPU به ۳۰۵٪ مقدار درخواست‌شده رسیده است.
+در نتیجه، اندازهٔ Deployment به ۷ رپلیکا تغییر یافته است:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get deployment php-apache
+</code></pre>
+<p dir="rtl">باید ببینید که تعداد رپلیکاها با عدد گزارش‌شده در HorizontalPodAutoscaler مطابقت دارد:</p>
+<pre dir="ltr"><code dir="ltr">NAME         READY   UP-TO-DATE   AVAILABLE   AGE
+php-apache   7/7      7           7           19m
+</code></pre>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">ممکن است چند دقیقه طول بکشد تا تعداد رپلیکاها پایدار شود. از آنجا که میزان بار
+به هیچ شکلی کنترل نمی‌شود، ممکن است تعداد نهایی رپلیکاها با این مثال متفاوت باشد.</p>
+</div>
+<h2 id="توقف-تولید-بار-stop-load" dir="rtl">توقف تولید بار {#stop-load}</h2>
+<p dir="rtl">برای پایان دادن به مثال، ارسال بار را متوقف کنید.</p>
+<p dir="rtl">در ترمینالی که Pod اجراکنندهٔ ایمیج <code dir="ltr">busybox</code> را در آن ایجاد کردید، با فشردن
+<code dir="ltr">&lt;Ctrl&gt; + C</code> تولید بار را متوقف کنید.</p>
+<p dir="rtl">سپس (پس از حدود یک دقیقه) وضعیت نهایی را بررسی کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># type Ctrl+C to end the watch when you're ready
+kubectl get hpa php-apache --watch
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">NAME         REFERENCE                     TARGET       MINPODS   MAXPODS   REPLICAS   AGE
+php-apache   Deployment/php-apache/scale   0% / 50%     1         10        1          11m
+</code></pre>
+<p dir="rtl">و Deployment نیز نشان می‌دهد که مقیاس آن کاهش یافته است:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get deployment php-apache
+</code></pre>
+<pre dir="ltr"><code dir="ltr">NAME         READY   UP-TO-DATE   AVAILABLE   AGE
+php-apache   1/1     1            1           27m
+</code></pre>
+<p dir="rtl">پس از آنکه مصرف CPU به ۰ رسید، HPA به‌طور خودکار تعداد رپلیکاها را به ۱ کاهش داد.</p>
+<p dir="rtl">مقیاس‌دهی خودکار رپلیکاها ممکن است چند دقیقه طول بکشد.</p>
+<!-- discussion -->
+<h2 id="مقیاس-دهی-خودکار-بر-اساس-چند-معیار-و-معیارهای-سفارشی" dir="rtl">مقیاس‌دهی خودکار بر اساس چند معیار و معیارهای سفارشی</h2>
+<p dir="rtl">با استفاده از نسخهٔ API <code dir="ltr">autoscaling/v2</code> می‌توانید معیارهای دیگری را نیز برای مقیاس‌دهی خودکار
+Deployment <code dir="ltr">php-apache</code> به کار بگیرید.</p>
+<p dir="rtl">ابتدا YAML مربوط به HorizontalPodAutoscaler خود را در قالب <code dir="ltr">autoscaling/v2</code> دریافت کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get hpa php-apache -o yaml &gt; /tmp/hpa-v2.yaml
+</code></pre>
+<p dir="rtl">فایل <code dir="ltr">/tmp/hpa-v2.yaml</code> را در یک ویرایشگر باز کنید؛ باید YAMLی شبیه به این ببینید:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: php-apache
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: php-apache
+  minReplicas: 1
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 50
+status:
+  observedGeneration: 1
+  lastScaleTime: &lt;some-time&gt;
+  currentReplicas: 1
+  desiredReplicas: 1
+  currentMetrics:
+  - type: Resource
+    resource:
+      name: cpu
+      current:
+        averageUtilization: 0
+        averageValue: 0
+</code></pre>
+<p dir="rtl">توجه کنید که فیلد <code dir="ltr">targetCPUUtilizationPercentage</code> با آرایه‌ای به نام <code dir="ltr">metrics</code> جایگزین شده است.
+معیار مصرف CPU یک <em>معیار منبع</em> (resource metric) است، زیرا به‌صورت درصدی از منبعی بیان می‌شود
+که روی کانتینرهای Pod مشخص شده است. توجه کنید که علاوه بر CPU می‌توانید معیارهای منبع دیگری نیز تعیین کنید.
+به‌طور پیش‌فرض، تنها معیار منبع پشتیبانی‌شدهٔ دیگر <code dir="ltr">memory</code> است. نام این منابع از کلاستری به کلاستر دیگر
+تغییر نمی‌کند و تا زمانی که API <code dir="ltr">metrics.k8s.io</code> در دسترس باشد، این منابع همیشه در دسترس خواهند بود.</p>
+<p dir="rtl">همچنین می‌توانید معیارهای منبع را به‌جای درصدی از مقدار درخواست‌شده، به‌صورت مقادیر مستقیم مشخص کنید.
+برای این کار، به‌جای <code dir="ltr">Utilization</code> از <code dir="ltr">target.type</code> با مقدار <code dir="ltr">AverageValue</code> استفاده کنید و
+به‌جای فیلد <code dir="ltr">target.averageUtilization</code>، فیلد متناظر <code dir="ltr">target.averageValue</code> را تنظیم کنید.</p>
+<pre dir="ltr"><code dir="ltr">  metrics:
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: AverageValue
+        averageValue: 500Mi
+</code></pre>
+<p dir="rtl">دو نوع دیگر از معیارها نیز وجود دارد که هر دو <em>معیار سفارشی</em> (custom metrics) به شمار می‌روند:
+معیارهای Pod و معیارهای آبجکت. ممکن است نام این معیارها مختص هر کلاستر باشد و این معیارها
+به راه‌اندازی پیشرفته‌تری برای پایش کلاستر نیاز دارند.</p>
+<p dir="rtl">نخستین نوع از این معیارهای جایگزین، <em>معیارهای Pod</em> است. این معیارها Podها را توصیف می‌کنند،
+در میان Podها میانگین‌گیری می‌شوند و با یک مقدار هدف مقایسه می‌شوند تا تعداد رپلیکاها تعیین شود.
+عملکرد آن‌ها بسیار شبیه معیارهای منبع است، با این تفاوت که <em>فقط</em> از نوع <code dir="ltr">target</code> با مقدار <code dir="ltr">AverageValue</code> پشتیبانی می‌کنند.</p>
+<p dir="rtl">معیارهای Pod با استفاده از یک بلوک معیار مانند نمونهٔ زیر مشخص می‌شوند:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">type: Pods
+pods:
+  metric:
+    name: packets-per-second
+  target:
+    type: AverageValue
+    averageValue: 1k
+</code></pre>
+<p dir="rtl">دومین نوع معیار جایگزین، <em>معیارهای آبجکت</em> است. این معیارها به‌جای توصیف Podها، آبجکت دیگری را
+در همان فضای نام (namespace) توصیف می‌کنند. این معیارها لزوماً از خود آن آبجکت دریافت نمی‌شوند؛
+فقط آن را توصیف می‌کنند. معیارهای آبجکت از هر دو نوع <code dir="ltr">target</code> یعنی <code dir="ltr">Value</code> و <code dir="ltr">AverageValue</code>
+پشتیبانی می‌کنند. با <code dir="ltr">Value</code>، مقدار هدف مستقیماً با معیار بازگردانده‌شده از API مقایسه می‌شود.
+با <code dir="ltr">AverageValue</code>، مقدار بازگردانده‌شده از API معیارهای سفارشی پیش از مقایسه با هدف، بر تعداد Podها
+تقسیم می‌شود. مثال زیر نمایش YAML معیار <code dir="ltr">requests-per-second</code> است.</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">type: Object
+object:
+  metric:
+    name: requests-per-second
+  describedObject:
+    apiVersion: networking.k8s.io/v1
+    kind: Ingress
+    name: main-route
+  target:
+    type: Value
+    value: 2k
+</code></pre>
+<p dir="rtl">اگر چند بلوک معیار از این نوع تعیین کنید، HorizontalPodAutoscaler هر معیار را به‌نوبت در نظر می‌گیرد؛
+یعنی برای هر معیار، تعداد رپلیکای پیشنهادی را محاسبه می‌کند و سپس معیاری را انتخاب می‌کند
+که بیشترین تعداد رپلیکا را به دست می‌دهد.</p>
+<p dir="rtl">برای مثال، اگر سامانهٔ پایش شما معیارهایی دربارهٔ ترافیک شبکه جمع‌آوری کند،
+می‌توانید تعریف بالا را با استفاده از <code dir="ltr">kubectl edit</code> به شکل زیر به‌روزرسانی کنید:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: php-apache
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: php-apache
+  minReplicas: 1
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 50
+  - type: Pods
+    pods:
+      metric:
+        name: packets-per-second
+      target:
+        type: AverageValue
+        averageValue: 1k
+  - type: Object
+    object:
+      metric:
+        name: requests-per-second
+      describedObject:
+        apiVersion: networking.k8s.io/v1
+        kind: Ingress
+        name: main-route
+      target:
+        type: Value
+        value: 10k
+status:
+  observedGeneration: 1
+  lastScaleTime: &lt;some-time&gt;
+  currentReplicas: 1
+  desiredReplicas: 1
+  currentMetrics:
+  - type: Resource
+    resource:
+      name: cpu
+    current:
+      averageUtilization: 0
+      averageValue: 0
+  - type: Object
+    object:
+      metric:
+        name: requests-per-second
+      describedObject:
+        apiVersion: networking.k8s.io/v1
+        kind: Ingress
+        name: main-route
+      current:
+        value: 10k
+</code></pre>
+<p dir="rtl">در این صورت، HorizontalPodAutoscaler شما تلاش می‌کند اطمینان حاصل کند که هر Pod تقریباً ۵۰٪
+از CPU درخواستی خود را مصرف می‌کند و ۱۰۰۰ بسته در ثانیه را پاسخ می‌دهد، و همهٔ Podهای پشت
+Ingress به نام main-route در مجموع ۱۰۰۰۰ درخواست در ثانیه را پاسخ می‌دهند.</p>
+<h3 id="مقیاس-دهی-خودکار-بر-اساس-معیارهای-دقیق-تر" dir="rtl">مقیاس‌دهی خودکار بر اساس معیارهای دقیق‌تر</h3>
+<p dir="rtl">بسیاری از خطوط لولهٔ معیارها (metrics pipelines) به شما امکان می‌دهند معیارها را یا با نام
+یا با مجموعه‌ای از توصیفگرهای اضافی به نام <em>برچسب‌ها</em> توصیف کنید. برای همهٔ انواع معیارهای غیرمنبعی
+(Pod، آبجکت و خارجی، که در ادامه توضیح داده می‌شود) می‌توانید یک انتخابگر (selector) برچسب اضافی
+تعیین کنید که به خط لولهٔ معیار شما ارسال می‌شود. برای نمونه، اگر معیاری به نام <code dir="ltr">http_requests</code>
+را با برچسب <code dir="ltr">verb</code> جمع‌آوری می‌کنید، می‌توانید بلوک معیار زیر را تعیین کنید تا مقیاس‌دهی
+فقط بر اساس درخواست‌های GET انجام شود:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">type: Object
+object:
+  metric:
+    name: http_requests
+    selector: {matchLabels: {verb: GET}}
+</code></pre>
+<p dir="rtl">این انتخابگر از همان نحوی پیروی می‌کند که انتخابگرهای کامل برچسب در کوبرنتیز به کار می‌برند.
+اگر نام و انتخابگر با چند سری داده مطابقت داشته باشند، خط لولهٔ پایش تعیین می‌کند که این سری‌ها
+چگونه در قالب یک مقدار واحد ادغام شوند. انتخابگر به‌صورت افزوده اعمال می‌شود و نمی‌تواند معیارهایی را
+انتخاب کند که آبجکت‌هایی <strong>غیر</strong> از آبجکت هدف را توصیف می‌کنند (در نوع <code dir="ltr">Pods</code>، آبجکت هدف همان
+Podهای هدف و در نوع <code dir="ltr">Object</code>، همان آبجکت توصیف‌شده است).</p>
+<h3 id="مقیاس-دهی-خودکار-بر-اساس-معیارهای-نامرتبط-با-آبجکت-های-کوبرنتیز" dir="rtl">مقیاس‌دهی خودکار بر اساس معیارهای نامرتبط با آبجکت‌های کوبرنتیز</h3>
+<p dir="rtl">ممکن است لازم باشد برنامه‌هایی که روی کوبرنتیز اجرا می‌شوند، بر اساس معیارهایی مقیاس‌دهی خودکار شوند
+که ارتباط آشکاری با هیچ آبجکتی در کلاستر کوبرنتیز ندارند؛ مانند معیارهایی که یک سرویس میزبانی‌شده را
+توصیف می‌کنند و هیچ ارتباط مستقیمی با فضاهای نام کوبرنتیز ندارند. در کوبرنتیز 1.10 و نسخه‌های بعدی،
+می‌توانید این نیاز را با <em>معیارهای خارجی</em> (external metrics) برطرف کنید.</p>
+<p dir="rtl">استفاده از معیارهای خارجی به شناخت سامانهٔ پایش شما نیاز دارد؛ راه‌اندازی آن مشابه راه‌اندازی لازم
+برای استفاده از معیارهای سفارشی است. معیارهای خارجی به شما امکان می‌دهند کلاستر خود را بر اساس
+هر معیاری که در سامانهٔ پایش شما موجود است، به‌طور خودکار مقیاس‌دهی کنید. یک بلوک <code dir="ltr">metric</code> با
+<code dir="ltr">name</code> و <code dir="ltr">selector</code>، مانند نمونهٔ بالا، تعیین کنید و به‌جای نوع <code dir="ltr">Object</code> از نوع معیار <code dir="ltr">External</code> استفاده کنید.
+اگر چند سری زمانی با <code dir="ltr">metricSelector</code> مطابقت داشته باشند، HorizontalPodAutoscaler مجموع مقادیر آن‌ها را
+به کار می‌برد. معیارهای خارجی از هر دو نوع هدف <code dir="ltr">Value</code> و <code dir="ltr">AverageValue</code> پشتیبانی می‌کنند و این انواع
+دقیقاً همانند زمانی عمل می‌کنند که از نوع <code dir="ltr">Object</code> استفاده می‌کنید.</p>
+<p dir="rtl">برای مثال، اگر برنامهٔ شما وظایفی را از یک سرویس صف میزبانی‌شده پردازش می‌کند، می‌توانید بخش زیر را
+به مانیفست HorizontalPodAutoscaler خود اضافه کنید تا مشخص کنید به ازای هر ۳۰ وظیفهٔ در انتظار،
+به یک کارگر (worker) نیاز دارید.</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">- type: External
+  external:
+    metric:
+      name: queue_messages_ready
+      selector:
+        matchLabels:
+          queue: "worker_tasks"
+    target:
+      type: AverageValue
+      averageValue: 30
+</code></pre>
+<p dir="rtl">در صورت امکان، بهتر است به‌جای معیارهای خارجی از انواع هدف معیارهای سفارشی استفاده کنید، زیرا
+ایمن‌سازی API معیارهای سفارشی برای مدیران کلاستر آسان‌تر است. از آنجا که API معیارهای خارجی
+به‌طور بالقوه امکان دسترسی به هر معیاری را فراهم می‌کند، مدیران کلاستر باید هنگام در دسترس قرار دادن
+آن احتیاط کنند.</p>
+<h2 id="پیوست-شرایط-وضعیت-horizontal-pod-autoscaler" dir="rtl">پیوست: شرایط وضعیت Horizontal Pod Autoscaler</h2>
+<p dir="rtl">هنگام استفاده از قالب <code dir="ltr">autoscaling/v2</code> برای HorizontalPodAutoscaler، می‌توانید <em>شرایط وضعیت</em>
+(status conditions) را ببینید که کوبرنتیز روی HorizontalPodAutoscaler تنظیم می‌کند. این شرایط وضعیت
+نشان می‌دهند که آیا HorizontalPodAutoscaler می‌تواند مقیاس را تغییر دهد یا نه، و آیا در حال حاضر
+به هر شکلی محدود شده است یا نه.</p>
+<p dir="rtl">این شرایط در فیلد <code dir="ltr">status.conditions</code> نمایش داده می‌شوند. برای دیدن شرایطی که بر یک HorizontalPodAutoscaler
+اثر می‌گذارند، می‌توانیم از <code dir="ltr">kubectl describe hpa</code> استفاده کنیم:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl describe hpa cm-test
+</code></pre>
+<pre dir="ltr"><code dir="ltr">Name:                           cm-test
+Namespace:                      prom
+Labels:                         &lt;none&gt;
+Annotations:                    &lt;none&gt;
+CreationTimestamp:              Fri, 16 Jun 2017 18:09:22 +0000
+Reference:                      ReplicationController/cm-test
+Metrics:                        ( current / target )
+  "http_requests" on pods:      66m / 500m
+Min replicas:                   1
+Max replicas:                   4
+ReplicationController pods:     1 current / 1 desired
+Conditions:
+  Type                  Status  Reason                  Message
+  ----                  ------  ------                  -------
+  AbleToScale           True    ReadyForNewScale        the last scale time was sufficiently old as to warrant a new scale
+  ScalingActive         True    ValidMetricFound        the HPA was able to successfully calculate a replica count from pods metric http_requests
+  ScalingLimited        False   DesiredWithinRange      the desired replica count is within the acceptable range
+Events:
+</code></pre>
+<p dir="rtl">برای این HorizontalPodAutoscaler، چند شرط را در وضعیت سالم می‌بینید. شرط نخست، <code dir="ltr">AbleToScale</code>،
+نشان می‌دهد که آیا HPA می‌تواند مقیاس‌ها را دریافت و به‌روزرسانی کند یا نه، و همچنین آیا شرایط
+مربوط به عقب‌نشینی (backoff) مانع مقیاس‌دهی می‌شوند یا نه. شرط دوم، <code dir="ltr">ScalingActive</code>، نشان می‌دهد
+که آیا HPA فعال است (یعنی تعداد رپلیکاهای هدف صفر نیست) و می‌تواند مقیاس‌های مطلوب را محاسبه کند یا نه.
+هنگامی که مقدار این شرط <code dir="ltr">False</code> باشد، معمولاً نشان‌دهندهٔ مشکل در دریافت معیارهاست. در نهایت،
+آخرین شرط، <code dir="ltr">ScalingLimited</code>، نشان می‌دهد که مقیاس مطلوب به حداکثر یا حداقل تعیین‌شده در
+HorizontalPodAutoscaler محدود شده است. این نشانه‌ای است که شاید بخواهید محدودیت‌های حداقل
+یا حداکثر تعداد رپلیکا را در HorizontalPodAutoscaler خود افزایش یا کاهش دهید.</p>
+<h2 id="کمیت-ها" dir="rtl">کمیت‌ها</h2>
+<p dir="rtl">همهٔ معیارها در HorizontalPodAutoscaler و APIهای معیارها با نمادگذاری ویژه‌ای از اعداد صحیح
+مشخص می‌شوند که در کوبرنتیز با نام <span class="term" title="quantity">کمیت</span> شناخته می‌شود.
+برای مثال، کمیت <code dir="ltr">10500m</code> در نمادگذاری اعشاری به‌صورت <code dir="ltr">10.5</code> نوشته می‌شود. این APIها در صورت امکان
+اعداد صحیح را بدون پسوند بازمی‌گردانند و در غیر این صورت، معمولاً کمیت‌ها را بر حسب میلی‌واحد بازمی‌گردانند.
+به همین دلیل ممکن است ببینید مقدار معیار شما میان <code dir="ltr">1</code> و <code dir="ltr">1500m</code>، یا در نمادگذاری اعشاری میان <code dir="ltr">1</code> و <code dir="ltr">1.5</code>،
+نوسان می‌کند.</p>
+<h2 id="سناریوهای-ممکن-دیگر" dir="rtl">سناریوهای ممکن دیگر</h2>
+<h3 id="ایجاد-مقیاس-دهنده-ی-خودکار-به-صورت-اعلانی" dir="rtl">ایجاد مقیاس‌دهنده‌ی خودکار به‌صورت اعلانی</h3>
+<p dir="rtl">به‌جای اینکه با دستور <code dir="ltr">kubectl autoscale</code> یک HorizontalPodAutoscaler را به‌صورت دستوری (imperative) ایجاد کنیم، می‌توانیم با مانیفست زیر آن را به‌صورت اعلانی (declarative) بسازیم:</p>
+<div class="code-file ltr" dir="ltr">application/hpa/php-apache.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: php-apache
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: php-apache
+  minReplicas: 1
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 50
+</code></pre>
+<p dir="rtl">سپس با اجرای دستور زیر، مقیاس‌دهنده‌ی خودکار را ایجاد کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl create -f https://k8s.io/examples/application/hpa/php-apache.yaml
+</code></pre>
+<pre dir="ltr"><code dir="ltr">horizontalpodautoscaler.autoscaling/php-apache created
+</code></pre>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#پیش-از-شروع">پیش از شروع</a><a class="l2" href="#اجرا-و-در-دسترس-قرار-دادن-سرور-php-apache">اجرا و در دسترس قرار دادن سرور php-apache</a><a class="l2" href="#ایجاد-horizontalpodautoscaler-create-horizontal-pod-autoscaler">ایجاد HorizontalPodAutoscaler {#create-horizontal-pod-autoscaler}</a><a class="l2" href="#افزایش-بار-increase-load">افزایش بار {#increase-load}</a><a class="l2" href="#توقف-تولید-بار-stop-load">توقف تولید بار {#stop-load}</a><a class="l2" href="#مقیاس-دهی-خودکار-بر-اساس-چند-معیار-و-معیارهای-سفارشی">مقیاس‌دهی خودکار بر اساس چند معیار و معیارهای سفارشی</a><a class="l3" href="#مقیاس-دهی-خودکار-بر-اساس-معیارهای-دقیق-تر">مقیاس‌دهی خودکار بر اساس معیارهای دقیق‌تر</a><a class="l3" href="#مقیاس-دهی-خودکار-بر-اساس-معیارهای-نامرتبط-با-آبجکت-های-کوبرنتیز">مقیاس‌دهی خودکار بر اساس معیارهای نامرتبط با آبجکت‌های کوبرنتیز</a><a class="l2" href="#پیوست-شرایط-وضعیت-horizontal-pod-autoscaler">پیوست: شرایط وضعیت Horizontal Pod Autoscaler</a><a class="l2" href="#کمیت-ها">کمیت‌ها</a><a class="l2" href="#سناریوهای-ممکن-دیگر">سناریوهای ممکن دیگر</a><a class="l3" href="#ایجاد-مقیاس-دهنده-ی-خودکار-به-صورت-اعلانی">ایجاد مقیاس‌دهنده‌ی خودکار به‌صورت اعلانی</a></nav>
+</div>
+</body>
+</html>

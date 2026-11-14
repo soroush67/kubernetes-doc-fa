@@ -8,8 +8,8 @@
 
 | | |
 |---|---|
-| پیشرفت (بر اساس کلمات) | **96.5٪** |
-| صفحات ترجمه‌شده | 1650 از 1722 |
+| پیشرفت (بر اساس کلمات) | **97.2٪** |
+| صفحات ترجمه‌شده | 1665 از 1722 |
 | صفحات دارای ایراد ساختاری | 75 |
 | نسخه‌ی منبع انگلیسی | `f652c6b8a26f` |
 
@@ -74,7 +74,7 @@ cd kubernetes-doc-fa
 | `home` | 2 | 2 |
 | `reference` | 1198 | 1198 |
 | `setup` | 22 | 22 |
-| `tasks` | 195 | 221 |
+| `tasks` | 210 | 221 |
 | `tutorials` | 0 | 45 |
 
 </div>
@@ -101,26 +101,26 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [tasks/tools/included/kubectl-convert-overview.md](md/tasks/tools/included/kubectl-convert-overview.md) — 2026-11-14T15:51:51+03:30
+- [tasks/tools/included/_index.md](md/tasks/tools/included/_index.md) — 2026-11-14T15:51:46+03:30
+- [tasks/tls/manual-rotation-of-ca-certificates.md](md/tasks/tls/manual-rotation-of-ca-certificates.md) — 2026-11-14T15:51:43+03:30
+- [tasks/tls/managing-tls-in-a-cluster.md](md/tasks/tls/managing-tls-in-a-cluster.md) — 2026-11-14T15:51:40+03:30
+- [tasks/tls/certificate-rotation.md](md/tasks/tls/certificate-rotation.md) — 2026-11-14T15:51:01+03:30
+- [tasks/run-application/update-deployment-rolling.md](md/tasks/run-application/update-deployment-rolling.md) — 2026-11-14T15:50:49+03:30
+- [tasks/tls/certificate-issue-client-csr.md](md/tasks/tls/certificate-issue-client-csr.md) — 2026-11-14T15:50:47+03:30
+- [tasks/tls/_index.md](md/tasks/tls/_index.md) — 2026-11-14T15:50:10+03:30
+- [tasks/run-application/scale-deployment.md](md/tasks/run-application/scale-deployment.md) — 2026-11-14T15:50:07+03:30
+- [tasks/run-application/scale-stateful-set.md](md/tasks/run-application/scale-stateful-set.md) — 2026-11-14T15:50:02+03:30
+- [tasks/run-application/run-stateless-application-deployment.md](md/tasks/run-application/run-stateless-application-deployment.md) — 2026-11-14T15:49:45+03:30
+- [tasks/run-application/run-single-instance-stateful-application.md](md/tasks/run-application/run-single-instance-stateful-application.md) — 2026-11-14T15:49:35+03:30
+- [tasks/run-application/run-replicated-stateful-application.md](md/tasks/run-application/run-replicated-stateful-application.md) — 2026-11-14T15:49:25+03:30
+- [tasks/run-application/horizontal-pod-autoscale-walkthrough.md](md/tasks/run-application/horizontal-pod-autoscale-walkthrough.md) — 2026-11-14T15:49:07+03:30
+- [tasks/run-application/configure-pdb.md](md/tasks/run-application/configure-pdb.md) — 2026-11-14T15:47:54+03:30
 - [tasks/run-application/force-delete-stateful-set-pod.md](md/tasks/run-application/force-delete-stateful-set-pod.md) — 2026-11-14T15:46:27+03:30
 - [tasks/run-application/delete-stateful-set.md](md/tasks/run-application/delete-stateful-set.md) — 2026-11-14T15:46:00+03:30
 - [tasks/run-application/access-api-from-pod.md](md/tasks/run-application/access-api-from-pod.md) — 2026-11-14T15:45:44+03:30
 - [tasks/network/validate-dual-stack.md](md/tasks/network/validate-dual-stack.md) — 2026-11-14T15:45:42+03:30
 - [tasks/run-application/_index.md](md/tasks/run-application/_index.md) — 2026-11-14T15:45:23+03:30
-- [tasks/manage-kubernetes-objects/update-api-object-kubectl-patch.md](md/tasks/manage-kubernetes-objects/update-api-object-kubectl-patch.md) — 2026-11-14T15:45:19+03:30
-- [tasks/network/reconfigure-default-service-ip-ranges.md](md/tasks/network/reconfigure-default-service-ip-ranges.md) — 2026-11-14T15:45:08+03:30
-- [tasks/network/extend-service-ip-ranges.md](md/tasks/network/extend-service-ip-ranges.md) — 2026-11-14T15:44:37+03:30
-- [tasks/network/customize-hosts-file-for-pods.md](md/tasks/network/customize-hosts-file-for-pods.md) — 2026-11-14T15:44:04+03:30
-- [tasks/network/_index.md](md/tasks/network/_index.md) — 2026-11-14T15:43:46+03:30
-- [tasks/manage-kubernetes-objects/kustomization.md](md/tasks/manage-kubernetes-objects/kustomization.md) — 2026-11-14T15:43:43+03:30
-- [tasks/manage-kubernetes-objects/storage-version-migration.md](md/tasks/manage-kubernetes-objects/storage-version-migration.md) — 2026-11-14T15:43:25+03:30
-- [tasks/manage-kubernetes-objects/declarative-config.md](md/tasks/manage-kubernetes-objects/declarative-config.md) — 2026-11-14T15:42:41+03:30
-- [tasks/manage-kubernetes-objects/imperative-config.md](md/tasks/manage-kubernetes-objects/imperative-config.md) — 2026-11-14T15:41:23+03:30
-- [tasks/manage-kubernetes-objects/imperative-command.md](md/tasks/manage-kubernetes-objects/imperative-command.md) — 2026-11-14T15:40:58+03:30
-- [tasks/manage-gpus/scheduling-gpus.md](md/tasks/manage-gpus/scheduling-gpus.md) — 2026-11-14T15:40:15+03:30
-- [tasks/manage-kubernetes-objects/_index.md](md/tasks/manage-kubernetes-objects/_index.md) — 2026-11-14T15:40:08+03:30
-- [tasks/manage-hugepages/scheduling-hugepages.md](md/tasks/manage-hugepages/scheduling-hugepages.md) — 2026-11-14T15:40:05+03:30
-- [tasks/manage-daemon/update-daemon-set.md](md/tasks/manage-daemon/update-daemon-set.md) — 2026-11-14T15:39:43+03:30
-- [tasks/manage-daemon/rollback-daemon-set.md](md/tasks/manage-daemon/rollback-daemon-set.md) — 2026-11-14T15:39:25+03:30
 
 </div>
 

@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>اجرای یک برنامهٔ بدون حالت با استفاده از Deployment | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">tasks / run-application</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">اجرای یک برنامهٔ بدون حالت با استفاده از Deployment</h1><!-- overview -->
+<p dir="rtl">این صفحه نشان می‌دهد که چگونه می‌توان یک برنامه را با استفاده از آبجکت Deployment در کوبرنتیز اجرا کرد.</p>
+<h2 id="اهداف" dir="rtl">اهداف</h2>
+<ul>
+<li dir="rtl">یک استقرار nginx ایجاد کنید.</li>
+<li dir="rtl">با استفاده از kubectl اطلاعات مربوط به استقرار را فهرست کنید.</li>
+<li dir="rtl">استقرار را به‌روزرسانی کنید.</li>
+</ul>
+<h2 id="پیش-از-شروع" dir="rtl">پیش از شروع</h2>
+<p dir="rtl">باید یک کلاستر کوبرنتیز داشته باشید و ابزار خط فرمان kubectl باید برای ارتباط با کلاستر شما پیکربندی شده باشد. توصیه می‌شود این آموزش را روی کلاستری اجرا کنید که دست‌کم دو نود داشته باشد که نقش میزبان control plane را ندارند. اگر هنوز کلاستری ندارید، می‌توانید با استفاده از
+<a href="https://minikube.sigs.k8s.io/docs/tutorials/multi_node/" target="_blank" rel="noopener">minikube</a>
+یکی بسازید یا از یکی از این محیط‌های آزمایشی کوبرنتیز استفاده کنید:</p>
+<ul>
+<li dir="ltr" class="ltr"><a href="https://labs.iximiuz.com/playgrounds?category=kubernetes&amp;filter=all" target="_blank" rel="noopener">iximiuz Labs</a></li>
+<li dir="ltr" class="ltr"><a href="https://killercoda.com/playgrounds/scenario/kubernetes" target="_blank" rel="noopener">Killercoda</a></li>
+<li dir="ltr" class="ltr"><a href="https://kodekloud.com/public-playgrounds" target="_blank" rel="noopener">KodeKloud</a></li>
+</ul>
+<!-- lessoncontent -->
+<h2 id="ایجاد-و-بررسی-یک-استقرار-nginx" dir="rtl">ایجاد و بررسی یک استقرار nginx</h2>
+<p dir="rtl">برای اجرای یک برنامه می‌توانید یک آبجکت Deployment در کوبرنتیز ایجاد کنید و
+مشخصات این Deployment را در یک فایل YAML بنویسید. برای نمونه، فایل YAML زیر
+یک Deployment را توصیف می‌کند که ایمیج Docker با نام nginx:1.14.2 را اجرا می‌کند:</p>
+<div class="code-file ltr" dir="ltr">application/deployment.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+spec:
+  selector:
+    matchLabels:
+      app: nginx
+  replicas: 2 # tells deployment to run 2 pods matching the template
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.14.2
+        ports:
+        - containerPort: 80
+</code></pre>
+<ol>
+<li dir="rtl">
+<p dir="rtl">بر اساس فایل YAML یک Deployment ایجاد کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f https://k8s.io/examples/application/deployment.yaml
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">اطلاعات مربوط به Deployment را نمایش دهید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl describe deployment nginx-deployment
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">Name:     nginx-deployment
+Namespace:    default
+CreationTimestamp:  Tue, 30 Aug 2016 18:11:37 -0700
+Labels:     app=nginx
+Annotations:    deployment.kubernetes.io/revision=1
+Selector:   app=nginx
+Replicas:   2 desired | 2 updated | 2 total | 2 available | 0 unavailable
+StrategyType:   RollingUpdate
+MinReadySeconds:  0
+RollingUpdateStrategy:  1 max unavailable, 1 max surge
+Pod Template:
+  Labels:       app=nginx
+  Containers:
+    nginx:
+    Image:              nginx:1.14.2
+    Port:               80/TCP
+    Environment:        &lt;none&gt;
+    Mounts:             &lt;none&gt;
+  Volumes:              &lt;none&gt;
+Conditions:
+  Type          Status  Reason
+  ----          ------  ------
+  Available     True    MinimumReplicasAvailable
+  Progressing   True    NewReplicaSetAvailable
+OldReplicaSets:   &lt;none&gt;
+NewReplicaSet:    nginx-deployment-1771418926 (2/2 replicas created)
+No events.
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">Podهایی را که این استقرار ایجاد کرده است فهرست کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pods -l app=nginx
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">NAME                                READY     STATUS    RESTARTS   AGE
+nginx-deployment-1771418926-7o5ns   1/1       Running   0          16h
+nginx-deployment-1771418926-r18az   1/1       Running   0          16h
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">اطلاعات مربوط به یک Pod را نمایش دهید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl describe pod &lt;pod-name&gt;
+</code></pre>
+<p dir="rtl">در این دستور، <code dir="ltr">&lt;pod-name&gt;</code> نام یکی از Podهای شماست.</p>
+</li>
+</ol>
+<h2 id="به-روزرسانی-استقرار" dir="rtl">به‌روزرسانی استقرار</h2>
+<p dir="rtl">برای به‌روزرسانی استقرار می‌توانید یک فایل YAML جدید را اعمال کنید. فایل YAML
+زیر مشخص می‌کند که استقرار باید طوری به‌روزرسانی شود که از nginx 1.16.1 استفاده کند.</p>
+<div class="code-file ltr" dir="ltr">application/deployment-update.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+spec:
+  selector:
+    matchLabels:
+      app: nginx
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.16.1 # Update the version of nginx from 1.14.2 to 1.16.1
+        ports:
+        - containerPort: 80
+</code></pre>
+<ol>
+<li dir="rtl">
+<p dir="rtl">فایل YAML جدید را اعمال کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f https://k8s.io/examples/application/deployment-update.yaml
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">مشاهده کنید که استقرار، Podهایی با نام‌های جدید ایجاد می‌کند و Podهای قدیمی را حذف می‌کند:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pods -l app=nginx
+</code></pre>
+</li>
+</ol>
+<h2 id="مقیاس-دهی-برنامه-با-افزایش-تعداد-رپلیکاها" dir="rtl">مقیاس‌دهی برنامه با افزایش تعداد رپلیکاها</h2>
+<p dir="rtl">با اعمال یک فایل YAML جدید می‌توانید تعداد Podهای Deployment خود را افزایش دهید.
+این فایل YAML مقدار <code dir="ltr">replicas</code> را برابر با ۴ قرار می‌دهد؛ یعنی Deployment باید
+چهار Pod داشته باشد:</p>
+<div class="code-file ltr" dir="ltr">application/deployment-scale.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+spec:
+  selector:
+    matchLabels:
+      app: nginx
+  replicas: 4 # Update the replicas from 2 to 4
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.16.1
+        ports:
+        - containerPort: 80
+</code></pre>
+<ol>
+<li dir="rtl">
+<p dir="rtl">فایل YAML جدید را اعمال کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f https://k8s.io/examples/application/deployment-scale.yaml
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">بررسی کنید که Deployment چهار Pod دارد:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pods -l app=nginx
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">NAME                               READY     STATUS    RESTARTS   AGE
+nginx-deployment-148880595-4zdqq   1/1       Running   0          25s
+nginx-deployment-148880595-6zgi1   1/1       Running   0          25s
+nginx-deployment-148880595-fxcez   1/1       Running   0          2m
+nginx-deployment-148880595-rwovn   1/1       Running   0          2m
+</code></pre>
+</li>
+</ol>
+<p dir="rtl">برای آشنایی با روش‌های دقیق مقیاس‌دهی، از جمله کاهش مقیاس و مقیاس‌دهی تا صفر، به
+<a href="scale-deployment.html">مقیاس‌دهی دستی یک Deployment</a> مراجعه کنید.</p>
+<h2 id="حذف-یک-استقرار" dir="rtl">حذف یک استقرار</h2>
+<p dir="rtl">استقرار را با استفاده از نام آن حذف کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl delete deployment nginx-deployment
+</code></pre>
+<h2 id="replicationcontrollerها؛-روش-قدیمی" dir="rtl">ReplicationControllerها؛ روش قدیمی</h2>
+<p dir="rtl">روش ترجیحی برای ایجاد یک برنامهٔ تکثیرشده، استفاده از Deployment است که خود از
+ReplicaSet استفاده می‌کند. پیش از آنکه Deployment و ReplicaSet به کوبرنتیز
+افزوده شوند، برنامه‌های تکثیرشده با استفاده از
+<a href="../../concepts/workloads/controllers/replicationcontroller.html">ReplicationController</a> پیکربندی می‌شدند.</p>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<ul>
+<li dir="rtl">دربارهٔ <a href="../../concepts/workloads/controllers/deployment.html">آبجکت‌های Deployment</a> بیشتر بیاموزید.</li>
+<li dir="rtl">با نحوهٔ <a href="update-deployment-rolling.html">به‌روزرسانی یک Deployment بدون وقفه در سرویس‌دهی</a> آشنا شوید.</li>
+</ul>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#اهداف">اهداف</a><a class="l2" href="#پیش-از-شروع">پیش از شروع</a><a class="l2" href="#ایجاد-و-بررسی-یک-استقرار-nginx">ایجاد و بررسی یک استقرار nginx</a><a class="l2" href="#به-روزرسانی-استقرار">به‌روزرسانی استقرار</a><a class="l2" href="#مقیاس-دهی-برنامه-با-افزایش-تعداد-رپلیکاها">مقیاس‌دهی برنامه با افزایش تعداد رپلیکاها</a><a class="l2" href="#حذف-یک-استقرار">حذف یک استقرار</a><a class="l2" href="#replicationcontrollerها؛-روش-قدیمی">ReplicationControllerها؛ روش قدیمی</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>

@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>اجرای یک برنامهٔ حالت‌مند تک‌نمونه‌ای | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">tasks / run-application</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">اجرای یک برنامهٔ حالت‌مند تک‌نمونه‌ای</h1><!-- overview -->
+<p dir="rtl">این صفحه نشان می‌دهد که چگونه می‌توانید با استفاده از یک PersistentVolume و یک Deployment، یک برنامهٔ حالت‌مند (stateful) تک‌نمونه‌ای را در کوبرنتیز اجرا کنید. برنامهٔ مورد نظر MySQL است.</p>
+<h2 id="اهداف" dir="rtl">اهداف</h2>
+<ul>
+<li dir="rtl">یک PersistentVolume بسازید که به یک دیسک در محیط شما ارجاع دهد.</li>
+<li dir="rtl">یک Deployment برای MySQL بسازید.</li>
+<li dir="rtl">MySQL را با یک نام DNS مشخص در دسترس سایر Podهای کلاستر قرار دهید.</li>
+</ul>
+<h2 id="پیش-از-شروع" dir="rtl">پیش از شروع</h2>
+<ul>
+<li>
+</ul>
+<p dir="rtl">باید یک کلاستر کوبرنتیز داشته باشید و ابزار خط فرمان kubectl باید برای ارتباط با کلاستر شما پیکربندی شده باشد. توصیه می‌شود این آموزش را روی کلاستری اجرا کنید که دست‌کم دو نود داشته باشد که نقش میزبان control plane را ندارند. اگر هنوز کلاستری ندارید، می‌توانید با استفاده از
+<a href="https://minikube.sigs.k8s.io/docs/tutorials/multi_node/" target="_blank" rel="noopener">minikube</a>
+یکی بسازید یا از یکی از این محیط‌های آزمایشی کوبرنتیز استفاده کنید:</p>
+<ul>
+<li dir="ltr" class="ltr"><a href="https://labs.iximiuz.com/playgrounds?category=kubernetes&amp;filter=all" target="_blank" rel="noopener">iximiuz Labs</a></li>
+<li dir="ltr" class="ltr"><a href="https://killercoda.com/playgrounds/scenario/kubernetes" target="_blank" rel="noopener">Killercoda</a></li>
+<li dir="ltr" class="ltr"><a href="https://kodekloud.com/public-playgrounds" target="_blank" rel="noopener">KodeKloud</a></li>
+</ul>
+<ul>
+<li>
+</ul>
+<p dir="rtl">برای تأمین <a href="../../concepts/storage/persistent-volumes.html#persistentvolumeclaims">PersistentVolumeClaim‌هایی</a> که در اینجا استفاده می‌شوند، باید یا یک <a href="../../concepts/storage/dynamic-provisioning.html">تأمین‌کننده پویای PersistentVolume</a> با یک
+<a href="../../concepts/storage/storage-classes.html">StorageClass</a> پیش‌فرض داشته باشید،
+یا خودتان <a href="../../concepts/storage/persistent-volumes.html#provisioning">PersistentVolume‌ها را به‌صورت ایستا تأمین کنید</a>.</p>
+<!-- lessoncontent -->
+<h2 id="استقرار-mysql" dir="rtl">استقرار MySQL</h2>
+<p dir="rtl">برای اجرای یک برنامهٔ حالت‌مند می‌توانید یک Deployment در کوبرنتیز بسازید و آن را با استفاده از یک PersistentVolumeClaim به یک PersistentVolume موجود متصل کنید. برای نمونه، فایل YAML زیر یک Deployment را توصیف می‌کند که MySQL را اجرا می‌کند و به PersistentVolumeClaim ارجاع می‌دهد. این فایل یک محل اتصال حجم (volume mount) برای ‎/var/lib/mysql تعریف می‌کند و سپس یک PersistentVolumeClaim می‌سازد که به دنبال یک حجم (volume) ‎20G است. این درخواست را هر حجم موجودی که الزامات آن را برآورده کند، یا یک تأمین‌کنندهٔ پویا (dynamic provisioner)، پاسخ می‌دهد.</p>
+<p dir="rtl">نکته: گذرواژه در فایل پیکربندی YAML تعریف شده است و این کار امن نیست. برای یک راه‌حل امن، به <a href="../../concepts/configuration/secret.html">Secretها در کوبرنتیز</a> مراجعه کنید.</p>
+<div class="code-file ltr" dir="ltr">application/mysql/mysql-deployment.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+spec:
+  ports:
+  - port: 3306
+  selector:
+    app: mysql
+  clusterIP: None
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql
+spec:
+  selector:
+    matchLabels:
+      app: mysql
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+      - image: mysql:9
+        name: mysql
+        env:
+          # Use secret in real usage
+        - name: MYSQL_ROOT_PASSWORD
+          value: password
+        ports:
+        - containerPort: 3306
+          name: mysql
+        volumeMounts:
+        - name: mysql-persistent-storage
+          mountPath: /var/lib/mysql
+      volumes:
+      - name: mysql-persistent-storage
+        persistentVolumeClaim:
+          claimName: mysql-pv-claim
+</code></pre>
+<div class="code-file ltr" dir="ltr">application/mysql/mysql-pv.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mysql-pv-volume
+  labels:
+    type: local
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 20Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/data"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-pv-claim
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 20Gi
+</code></pre>
+<ol>
+<li dir="rtl">
+<p dir="rtl">PV و PVC تعریف‌شده در فایل YAML را مستقر کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f https://k8s.io/examples/application/mysql/mysql-pv.yaml
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">محتوای فایل YAML را مستقر کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f https://k8s.io/examples/application/mysql/mysql-deployment.yaml
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">اطلاعات Deployment را نمایش دهید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl describe deployment mysql
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">Name:                 mysql
+Namespace:            default
+CreationTimestamp:    Tue, 01 Nov 2016 11:18:45 -0700
+Labels:               app=mysql
+Annotations:          deployment.kubernetes.io/revision=1
+Selector:             app=mysql
+Replicas:             1 desired | 1 updated | 1 total | 0 available | 1 unavailable
+StrategyType:         Recreate
+MinReadySeconds:      0
+Pod Template:
+  Labels:       app=mysql
+  Containers:
+    mysql:
+    Image:      mysql:9
+    Port:       3306/TCP
+    Environment:
+      MYSQL_ROOT_PASSWORD:      password
+    Mounts:
+      /var/lib/mysql from mysql-persistent-storage (rw)
+  Volumes:
+    mysql-persistent-storage:
+    Type:       PersistentVolumeClaim (a reference to a PersistentVolumeClaim in the same namespace)
+    ClaimName:  mysql-pv-claim
+    ReadOnly:   false
+Conditions:
+  Type          Status  Reason
+  ----          ------  ------
+  Available     False   MinimumReplicasUnavailable
+  Progressing   True    ReplicaSetUpdated
+OldReplicaSets:       &lt;none&gt;
+NewReplicaSet:        mysql-63082529 (1/1 replicas created)
+Events:
+  FirstSeen    LastSeen    Count    From                SubobjectPath    Type        Reason            Message
+  ---------    --------    -----    ----                -------------    --------    ------            -------
+  33s          33s         1        {deployment-controller }             Normal      ScalingReplicaSet Scaled up replica set mysql-63082529 to 1
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">فهرست Podهایی را که Deployment ساخته است نمایش دهید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pods -l app=mysql
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">NAME                   READY     STATUS    RESTARTS   AGE
+mysql-63082529-2z3ki   1/1       Running   0          3m
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">PersistentVolumeClaim را بررسی کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl describe pvc mysql-pv-claim
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">Name:         mysql-pv-claim
+Namespace:    default
+StorageClass:
+Status:       Bound
+Volume:       mysql-pv-volume
+Labels:       &lt;none&gt;
+Annotations:    pv.kubernetes.io/bind-completed=yes
+                pv.kubernetes.io/bound-by-controller=yes
+Capacity:     20Gi
+Access Modes: RWO
+Events:       &lt;none&gt;
+</code></pre>
+</li>
+</ol>
+<h2 id="دسترسی-به-نمونهٔ-mysql" dir="rtl">دسترسی به نمونهٔ MySQL</h2>
+<p dir="rtl">فایل YAML پیشین یک Service می‌سازد که به سایر Podهای کلاستر امکان دسترسی به پایگاه داده را می‌دهد. گزینهٔ <code dir="ltr">clusterIP: None</code> در Service باعث می‌شود نام DNS سرویس مستقیماً به نشانی IP مربوط به Pod ترجمه شود. این روش زمانی بهینه است که تنها یک Pod پشت Service دارید و قصد ندارید تعداد Podها را افزایش دهید.</p>
+<p dir="rtl">برای اتصال به سرور، یک کلاینت MySQL اجرا کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl run -it --rm --image=mysql:9 --restart=Never mysql-client -- mysql -h mysql -ppassword
+</code></pre>
+<p dir="rtl">این فرمان یک Pod جدید در کلاستر می‌سازد که یک کلاینت MySQL را اجرا می‌کند و آن را از طریق Service به سرور متصل می‌کند. اگر اتصال برقرار شود، مطمئن می‌شوید که پایگاه دادهٔ حالت‌مند MySQL شما راه‌اندازی شده و در حال اجراست.</p>
+<pre dir="ltr"><code dir="ltr">Waiting for pod default/mysql-client-274442439-zyp6i to be running, status is Pending, pod ready: false
+If you don't see a command prompt, try pressing enter.
+
+mysql&gt;
+</code></pre>
+<h2 id="به-روزرسانی" dir="rtl">به‌روزرسانی</h2>
+<p dir="rtl">ایمیج یا هر بخش دیگری از Deployment را می‌توان طبق روال معمول با فرمان <code dir="ltr">kubectl apply</code> به‌روزرسانی کرد. در ادامه چند نکتهٔ احتیاطی آمده است که مختص برنامه‌های حالت‌مند است:</p>
+<ul>
+<li dir="rtl">برنامه را مقیاس‌دهی نکنید. این پیکربندی فقط برای برنامه‌های تک‌نمونه‌ای است. PersistentVolume زیربنایی تنها می‌تواند به یک Pod متصل شود. برای برنامه‌های حالت‌مند خوشه‌ای، به <a href="../../concepts/workloads/controllers/statefulset.html">مستندات StatefulSet</a> مراجعه کنید.</li>
+<li dir="rtl">در فایل YAML پیکربندی Deployment از <code dir="ltr">strategy:</code> <code dir="ltr">type: Recreate</code> استفاده کنید. این تنظیم به کوبرنتیز دستور می‌دهد که از به‌روزرسانی‌های تدریجی (rolling updates) استفاده <em>نکند</em>. به‌روزرسانی تدریجی در این حالت کار نمی‌کند، زیرا نمی‌توانید بیش از یک Pod را هم‌زمان در حال اجرا داشته باشید. راهبرد <code dir="ltr">Recreate</code> پیش از ساختن Pod جدید با پیکربندی به‌روزشده، Pod نخست را متوقف می‌کند.</li>
+</ul>
+<h2 id="حذف-یک-deployment" dir="rtl">حذف یک Deployment</h2>
+<p dir="rtl">آبجکت‌های مستقرشده را با نامشان حذف کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl delete deployment,svc mysql
+kubectl delete pvc mysql-pv-claim
+kubectl delete pv mysql-pv-volume
+</code></pre>
+<p dir="rtl">اگر PersistentVolume را به‌صورت دستی تأمین کرده‌اید، باید آن را نیز به‌صورت دستی حذف کنید و منبع زیربنایی را هم آزاد کنید. اگر از یک تأمین‌کنندهٔ پویا استفاده کرده‌اید، این تأمین‌کننده با مشاهدهٔ حذف PersistentVolumeClaim، PersistentVolume را به‌طور خودکار حذف می‌کند. برخی تأمین‌کننده‌های پویا (مانند تأمین‌کننده‌های EBS و PD) هنگام حذف PersistentVolume، منبع زیربنایی را نیز آزاد می‌کنند.</p>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<ul>
+<li dir="rtl">
+<p dir="rtl">دربارهٔ <a href="../../concepts/workloads/controllers/deployment.html">آبجکت‌های Deployment</a> بیشتر بیاموزید.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">دربارهٔ <a href="run-stateless-application-deployment.html">استقرار برنامه‌ها</a> بیشتر بیاموزید.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><a href="https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands/#run" target="_blank">مستندات kubectl run</a></p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><a href="../../concepts/storage/volumes.html">حجم‌ها</a> و <a href="../../concepts/storage/persistent-volumes.html">حجم‌های پایدار</a></p>
+</li>
+</ul>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#اهداف">اهداف</a><a class="l2" href="#پیش-از-شروع">پیش از شروع</a><a class="l2" href="#استقرار-mysql">استقرار MySQL</a><a class="l2" href="#دسترسی-به-نمونهٔ-mysql">دسترسی به نمونهٔ MySQL</a><a class="l2" href="#به-روزرسانی">به‌روزرسانی</a><a class="l2" href="#حذف-یک-deployment">حذف یک Deployment</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>

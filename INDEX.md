@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-1650 از 1722 صفحه
+1665 از 1722 صفحه
 
 
 ## `.`
@@ -2168,24 +2168,24 @@
 
 - ✅ [_index.md](md/tasks/run-application/_index.md)
 - ✅ [access-api-from-pod.md](md/tasks/run-application/access-api-from-pod.md)
-- ⏳ `configure-pdb.md`
+- ✅ [configure-pdb.md](md/tasks/run-application/configure-pdb.md)
 - ✅ [delete-stateful-set.md](md/tasks/run-application/delete-stateful-set.md)
 - ✅ [force-delete-stateful-set-pod.md](md/tasks/run-application/force-delete-stateful-set-pod.md)
-- ⏳ `horizontal-pod-autoscale-walkthrough.md`
-- ⏳ `run-replicated-stateful-application.md`
-- ⏳ `run-single-instance-stateful-application.md`
-- ⏳ `run-stateless-application-deployment.md`
-- ⏳ `scale-deployment.md`
-- ⏳ `scale-stateful-set.md`
-- ⏳ `update-deployment-rolling.md`
+- ✅ [horizontal-pod-autoscale-walkthrough.md](md/tasks/run-application/horizontal-pod-autoscale-walkthrough.md)
+- ✅ [run-replicated-stateful-application.md](md/tasks/run-application/run-replicated-stateful-application.md)
+- ✅ [run-single-instance-stateful-application.md](md/tasks/run-application/run-single-instance-stateful-application.md)
+- ✅ [run-stateless-application-deployment.md](md/tasks/run-application/run-stateless-application-deployment.md)
+- ✅ [scale-deployment.md](md/tasks/run-application/scale-deployment.md)
+- ✅ [scale-stateful-set.md](md/tasks/run-application/scale-stateful-set.md)
+- ✅ [update-deployment-rolling.md](md/tasks/run-application/update-deployment-rolling.md)
 
 ## `tasks/tls`
 
-- ⏳ `_index.md`
-- ⏳ `certificate-issue-client-csr.md`
-- ⏳ `certificate-rotation.md`
-- ⏳ `managing-tls-in-a-cluster.md`
-- ⏳ `manual-rotation-of-ca-certificates.md`
+- ✅ [_index.md](md/tasks/tls/_index.md)
+- ✅ [certificate-issue-client-csr.md](md/tasks/tls/certificate-issue-client-csr.md)
+- ✅ [certificate-rotation.md](md/tasks/tls/certificate-rotation.md)
+- ✅ [managing-tls-in-a-cluster.md](md/tasks/tls/managing-tls-in-a-cluster.md)
+- ✅ [manual-rotation-of-ca-certificates.md](md/tasks/tls/manual-rotation-of-ca-certificates.md)
 
 ## `tasks/tools`
 
@@ -2196,8 +2196,8 @@
 
 ## `tasks/tools/included`
 
-- ⏳ `_index.md`
-- ⏳ `kubectl-convert-overview.md`
+- ✅ [_index.md](md/tasks/tools/included/_index.md)
+- ✅ [kubectl-convert-overview.md](md/tasks/tools/included/kubectl-convert-overview.md)
 - ⏳ `kubectl-whats-next.md`
 - ⏳ `optional-kubectl-configs-bash-linux.md`
 - ⏳ `optional-kubectl-configs-bash-mac.md`

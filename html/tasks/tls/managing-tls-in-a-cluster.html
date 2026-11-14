@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>مدیریت گواهی‌های TLS در کلاستر | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">tasks / tls</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">مدیریت گواهی‌های TLS در کلاستر</h1><!-- overview -->
+<p dir="rtl">کوبرنتیز یک API به نام <code dir="ltr">certificates.k8s.io</code> فراهم می‌کند که با آن می‌توانید گواهی‌های TLS امضاشده توسط یک مرجع صدور گواهی (Certificate Authority یا CA) تحت کنترل خودتان را تهیه کنید. بارهای کاری شما می‌توانند از این CAها و گواهی‌ها برای برقراری اعتماد استفاده کنند.</p>
+<p dir="rtl">API ‏<code dir="ltr">certificates.k8s.io</code> از پروتکلی مشابه <a href="https://github.com/ietf-wg-acme/acme/" target="_blank" rel="noopener">پیش‌نویس ACME</a> استفاده می‌کند.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">گواهی‌هایی که با API ‏<code dir="ltr">certificates.k8s.io</code> ایجاد می‌شوند، با یک <a href="#configuring-your-cluster-to-provide-signing">CA اختصاصی</a> امضا می‌شوند. می‌توان کلاستر را طوری پیکربندی کرد که برای این منظور از CA ریشه‌ی کلاستر استفاده کند، اما هرگز نباید به این موضوع تکیه کنید. فرض نکنید که این گواهی‌ها در برابر CA ریشه‌ی کلاستر اعتبارسنجی می‌شوند.</p>
+</div>
+<h2 id="پیش-از-شروع" dir="rtl">پیش از شروع</h2>
+<p dir="rtl">باید یک کلاستر کوبرنتیز داشته باشید و ابزار خط فرمان kubectl باید برای ارتباط با کلاستر شما پیکربندی شده باشد. توصیه می‌شود این آموزش را روی کلاستری اجرا کنید که دست‌کم دو نود داشته باشد که نقش میزبان control plane را ندارند. اگر هنوز کلاستری ندارید، می‌توانید با استفاده از
+<a href="https://minikube.sigs.k8s.io/docs/tutorials/multi_node/" target="_blank" rel="noopener">minikube</a>
+یکی بسازید یا از یکی از این محیط‌های آزمایشی کوبرنتیز استفاده کنید:</p>
+<ul>
+<li dir="ltr" class="ltr"><a href="https://labs.iximiuz.com/playgrounds?category=kubernetes&amp;filter=all" target="_blank" rel="noopener">iximiuz Labs</a></li>
+<li dir="ltr" class="ltr"><a href="https://killercoda.com/playgrounds/scenario/kubernetes" target="_blank" rel="noopener">Killercoda</a></li>
+<li dir="ltr" class="ltr"><a href="https://kodekloud.com/public-playgrounds" target="_blank" rel="noopener">KodeKloud</a></li>
+</ul>
+<p dir="rtl">به ابزار <code dir="ltr">cfssl</code> نیاز دارید. می‌توانید <code dir="ltr">cfssl</code> را از
+<a href="https://github.com/cloudflare/cfssl/releases" target="_blank" rel="noopener">https://github.com/cloudflare/cfssl/releases</a> دانلود کنید.</p>
+<p dir="rtl">برخی از مراحل این صفحه از ابزار <code dir="ltr">jq</code> استفاده می‌کنند. اگر <code dir="ltr">jq</code> را ندارید، می‌توانید آن را از طریق منابع نرم‌افزاری سیستم‌عامل خود نصب کنید یا از
+<a href="https://jqlang.github.io/jq/" target="_blank" rel="noopener">https://jqlang.github.io/jq/</a> دریافت کنید.</p>
+<!-- steps -->
+<h2 id="اعتماد-به-tls-در-کلاستر" dir="rtl">اعتماد به TLS در کلاستر</h2>
+<p dir="rtl">اعتماد به <a href="#configuring-your-cluster-to-provide-signing">CA سفارشی</a> از سوی برنامه‌ای که به‌صورت پاد اجرا می‌شود، معمولاً به پیکربندی اضافه‌ای در برنامه نیاز دارد. باید بسته‌ی گواهی CA را به فهرست گواهی‌های CA مورد اعتماد کلاینت یا سرور TLS اضافه کنید. برای مثال، در پیکربندی TLS زبان Golang این کار را با تجزیه‌ی زنجیره‌ی گواهی و افزودن گواهی‌های تجزیه‌شده به فیلد <code dir="ltr">RootCAs</code> در ساختار
+<a href="https://pkg.go.dev/crypto/tls#Config" target="_blank" rel="noopener"><code dir="ltr">tls.Config</code></a> انجام می‌دهید.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">با اینکه ممکن است گواهی CA سفارشی در سیستم فایل (در ConfigMap ‏<code dir="ltr">kube-root-ca.crt</code>) وجود داشته باشد، نباید از این مرجع صدور گواهی برای هیچ هدفی جز تأیید endpointهای داخلی کوبرنتیز استفاده کنید. نمونه‌ای از endpoint داخلی کوبرنتیز، Service با نام <code dir="ltr">kubernetes</code> در فضای نام default است.</p>
+<p dir="rtl">اگر می‌خواهید برای بارهای کاری خود از یک مرجع صدور گواهی سفارشی استفاده کنید، باید آن CA را جداگانه تولید کنید و گواهی CA آن را از طریق یک
+<a href="../configure-pod-container/configure-pod-configmap.html">ConfigMap</a> توزیع کنید که پادهای شما اجازه‌ی خواندن آن را داشته باشند.</p>
+</div>
+<h2 id="درخواست-گواهی" dir="rtl">درخواست گواهی</h2>
+<p dir="rtl">بخش زیر نشان می‌دهد چگونه برای یک سرویس کوبرنتیز که از طریق DNS به آن دسترسی پیدا می‌شود، گواهی TLS ایجاد کنید.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">این آموزش از CFSSL، یعنی جعبه‌ابزار PKI و TLS شرکت Cloudflare، استفاده می‌کند. برای اطلاعات بیشتر، مقاله‌ی وبلاگ Cloudflare با عنوان
+<a href="https://blog.cloudflare.com/introducing-cfssl/" target="_blank" rel="noopener">Introducing CFSSL - CloudFlare's PKI toolkit</a> را ببینید.</p>
+</div>
+<h2 id="ایجاد-درخواست-امضای-گواهی" dir="rtl">ایجاد درخواست امضای گواهی</h2>
+<p dir="rtl">با اجرای دستور زیر، یک کلید خصوصی و یک درخواست امضای گواهی (certificate signing request یا CSR) تولید کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">cat &lt;&lt;EOF | cfssl genkey - | cfssljson -bare server
+{
+  "hosts": [
+    "my-svc.my-namespace.svc.cluster.local",
+    "my-pod.my-namespace.pod.cluster.local",
+    "192.0.2.24",
+    "10.0.34.2"
+  ],
+  "CN": "my-pod.my-namespace.pod.cluster.local",
+  "key": {
+    "algo": "ecdsa",
+    "size": 256
+  }
+}
+EOF
+</code></pre>
+<p dir="rtl">در اینجا <code dir="ltr">192.0.2.24</code> همان IP کلاستری سرویس، <code dir="ltr">my-svc.my-namespace.svc.cluster.local</code> نام DNS سرویس، <code dir="ltr">10.0.34.2</code> آدرس IP پاد و <code dir="ltr">my-pod.my-namespace.pod.cluster.local</code> نام DNS پاد است. باید خروجی‌ای مشابه زیر ببینید:</p>
+<pre dir="ltr"><code dir="ltr">2022/02/01 11:45:32 [INFO] generate received request
+2022/02/01 11:45:32 [INFO] received CSR
+2022/02/01 11:45:32 [INFO] generating key: ecdsa-256
+2022/02/01 11:45:32 [INFO] encoded CSR
+</code></pre>
+<p dir="rtl">این دستور دو فایل تولید می‌کند: فایل <code dir="ltr">server.csr</code> که حاوی درخواست گواهی
+<a href="https://tools.ietf.org/html/rfc2986" target="_blank" rel="noopener">PKCS#10</a> با کدگذاری PEM است، و فایل <code dir="ltr">server-key.pem</code> که حاوی کلید با کدگذاری PEM برای گواهی‌ای است که هنوز باید ایجاد شود.</p>
+<h2 id="ایجاد-آبجکت-certificatesigningrequest-برای-ارسال-به-api-کوبرنتیز" dir="rtl">ایجاد آبجکت CertificateSigningRequest برای ارسال به API کوبرنتیز</h2>
+<p dir="rtl">یک مانیفست CSR (به‌صورت YAML) تولید کنید و آن را به سرور API بفرستید. این کار را می‌توانید با اجرای دستور زیر انجام دهید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">cat &lt;&lt;EOF | kubectl apply -f -
+apiVersion: certificates.k8s.io/v1
+kind: CertificateSigningRequest
+metadata:
+  name: my-svc.my-namespace
+spec:
+  request: $(cat server.csr | base64 | tr -d '\n')
+  signerName: example.com/serving
+  usages:
+  - digital signature
+  - key encipherment
+  - server auth
+EOF
+</code></pre>
+<p dir="rtl">توجه کنید که فایل <code dir="ltr">server.csr</code> ایجادشده در مرحله‌ی ۱ با base64 کدگذاری شده و در فیلد <code dir="ltr">.spec.request</code> قرار گرفته است. همچنین گواهی‌ای با کاربردهای کلید "digital signature"، "key encipherment" و "server auth" درخواست می‌کنید که قرار است امضاکننده‌ی نمونه‌ی <code dir="ltr">example.com/serving</code> آن را امضا کند. باید یک <code dir="ltr">signerName</code> مشخص درخواست شود. برای اطلاعات بیشتر، مستندات <a href="../../reference/access-authn-authz/certificate-signing-requests.html#signers">نام‌های امضاکننده‌ی پشتیبانی‌شده</a> را ببینید.</p>
+<p dir="rtl">اکنون CSR باید در API با وضعیت Pending قابل مشاهده باشد. می‌توانید با اجرای دستور زیر آن را ببینید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl describe csr my-svc.my-namespace
+</code></pre>
+<pre dir="ltr"><code class="language-none" dir="ltr">Name:                   my-svc.my-namespace
+Labels:                 &lt;none&gt;
+Annotations:            &lt;none&gt;
+CreationTimestamp:      Tue, 01 Feb 2022 11:49:15 -0500
+Requesting User:        yourname@example.com
+Signer:                 example.com/serving
+Status:                 Pending
+Subject:
+        Common Name:    my-pod.my-namespace.pod.cluster.local
+        Serial Number:
+Subject Alternative Names:
+        DNS Names:      my-pod.my-namespace.pod.cluster.local
+                        my-svc.my-namespace.svc.cluster.local
+        IP Addresses:   192.0.2.24
+                        10.0.34.2
+Events: &lt;none&gt;
+</code></pre>
+<h2 id="گرفتن-تأیید-برای-certificatesigningrequest-get-the-certificate-signing-request-approved" dir="rtl">گرفتن تأیید برای CertificateSigningRequest {#get-the-certificate-signing-request-approved}</h2>
+<p dir="rtl">تأیید <a href="../../reference/access-authn-authz/certificate-signing-requests.html">درخواست امضای گواهی</a> یا با یک فرایند تأیید خودکار انجام می‌شود یا به‌صورت موردی توسط مدیر کلاستر. اگر مجاز به تأیید درخواست گواهی هستید، می‌توانید این کار را به‌صورت دستی با <code dir="ltr">kubectl</code> انجام دهید؛ برای مثال:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl certificate approve my-svc.my-namespace
+</code></pre>
+<pre dir="ltr"><code class="language-none" dir="ltr">certificatesigningrequest.certificates.k8s.io/my-svc.my-namespace approved
+</code></pre>
+<p dir="rtl">اکنون باید خروجی زیر را ببینید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get csr
+</code></pre>
+<pre dir="ltr"><code class="language-none" dir="ltr">NAME                  AGE   SIGNERNAME            REQUESTOR              REQUESTEDDURATION   CONDITION
+my-svc.my-namespace   10m   example.com/serving   yourname@example.com   &lt;none&gt;              Approved
+</code></pre>
+<p dir="rtl">این یعنی درخواست گواهی تأیید شده است و منتظر است تا امضاکننده‌ی درخواست‌شده آن را امضا کند.</p>
+<h2 id="امضای-certificatesigningrequest-sign-the-certificate-signing-request" dir="rtl">امضای CertificateSigningRequest {#sign-the-certificate-signing-request}</h2>
+<p dir="rtl">در ادامه، نقش یک امضاکننده‌ی گواهی را بازی می‌کنید، گواهی را صادر می‌کنید و آن را در API بارگذاری می‌کنید.</p>
+<p dir="rtl">یک امضاکننده معمولاً API ‏CertificateSigningRequest را برای یافتن آبجکت‌هایی با <code dir="ltr">signerName</code> خودش زیر نظر می‌گیرد، بررسی می‌کند که آن‌ها تأیید شده باشند، برای آن درخواست‌ها گواهی امضا می‌کند و وضعیت آبجکت API را با گواهی صادرشده به‌روزرسانی می‌کند.</p>
+<h3 id="ایجاد-مرجع-صدور-گواهی" dir="rtl">ایجاد مرجع صدور گواهی</h3>
+<p dir="rtl">برای ارائه‌ی امضای دیجیتال روی گواهی جدید، به یک مرجع صدور گواهی نیاز دارید.</p>
+<p dir="rtl">ابتدا با اجرای دستور زیر یک گواهی امضا ایجاد کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">cat &lt;&lt;EOF | cfssl gencert -initca - | cfssljson -bare ca
+{
+  "CN": "My Example Signer",
+  "key": {
+    "algo": "rsa",
+    "size": 2048
+  }
+}
+EOF
+</code></pre>
+<p dir="rtl">باید خروجی‌ای مشابه زیر ببینید:</p>
+<pre dir="ltr"><code class="language-none" dir="ltr">2022/02/01 11:50:39 [INFO] generating a new CA key and certificate from CSR
+2022/02/01 11:50:39 [INFO] generate received request
+2022/02/01 11:50:39 [INFO] received CSR
+2022/02/01 11:50:39 [INFO] generating key: rsa-2048
+2022/02/01 11:50:39 [INFO] encoded CSR
+2022/02/01 11:50:39 [INFO] signed certificate with serial number 263983151013686720899716354349605500797834580472
+</code></pre>
+<p dir="rtl">این دستور یک فایل کلید مرجع صدور گواهی (<code dir="ltr">ca-key.pem</code>) و یک گواهی (<code dir="ltr">ca.pem</code>) تولید می‌کند.</p>
+<h3 id="صدور-گواهی" dir="rtl">صدور گواهی</h3>
+<div class="code-file ltr" dir="ltr">tls/server-signing-config.json</div>
+<pre dir="ltr"><code class="language-json" dir="ltr">{
+    "signing": {
+        "default": {
+            "usages": [
+                "digital signature",
+                "key encipherment",
+                "server auth"
+            ],
+            "expiry": "876000h",
+            "ca_constraint": {
+                "is_ca": false
+            }
+        }
+    }
+}
+</code></pre>
+<p dir="rtl">با استفاده از پیکربندی امضای <code dir="ltr">server-signing-config.json</code> و همچنین فایل کلید و گواهی مرجع صدور گواهی، درخواست گواهی را امضا کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get csr my-svc.my-namespace -o jsonpath='{.spec.request}' | \
+  base64 --decode | \
+  cfssl sign -ca ca.pem -ca-key ca-key.pem -config server-signing-config.json - | \
+  cfssljson -bare ca-signed-server
+</code></pre>
+<p dir="rtl">باید خروجی‌ای مشابه زیر ببینید:</p>
+<pre dir="ltr"><code dir="ltr">2022/02/01 11:52:26 [INFO] signed certificate with serial number 576048928624926584381415936700914530534472870337
+</code></pre>
+<p dir="rtl">این دستور یک فایل گواهی سرویس‌دهی امضاشده با نام <code dir="ltr">ca-signed-server.pem</code> تولید می‌کند.</p>
+<h3 id="بارگذاری-گواهی-امضاشده" dir="rtl">بارگذاری گواهی امضاشده</h3>
+<p dir="rtl">در پایان، گواهی امضاشده را در وضعیت آبجکت API قرار دهید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get csr my-svc.my-namespace -o json | \
+  jq '.status.certificate = "'$(base64 ca-signed-server.pem | tr -d '\n')'"' | \
+  kubectl replace --raw /apis/certificates.k8s.io/v1/certificatesigningrequests/my-svc.my-namespace/status -f -
+</code></pre>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">این دستور از ابزار خط فرمان <a href="https://jqlang.github.io/jq/" target="_blank" rel="noopener"><code dir="ltr">jq</code></a> برای قرار دادن محتوای کدگذاری‌شده با base64 در فیلد <code dir="ltr">.status.certificate</code> استفاده می‌کند.
+اگر <code dir="ltr">jq</code> را ندارید، می‌توانید خروجی JSON را در یک فایل ذخیره کنید، این فیلد را به‌صورت دستی پر کنید و فایل حاصل را بارگذاری کنید.</p>
+</div>
+<p dir="rtl">پس از تأیید CSR و بارگذاری گواهی امضاشده، دستور زیر را اجرا کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get csr
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code class="language-none" dir="ltr">NAME                  AGE   SIGNERNAME            REQUESTOR              REQUESTEDDURATION   CONDITION
+my-svc.my-namespace   20m   example.com/serving   yourname@example.com   &lt;none&gt;              Approved,Issued
+</code></pre>
+<h2 id="دانلود-گواهی-و-استفاده-از-آن" dir="rtl">دانلود گواهی و استفاده از آن</h2>
+<p dir="rtl">اکنون، به‌عنوان کاربر درخواست‌دهنده، می‌توانید با اجرای دستور زیر گواهی صادرشده را دانلود کنید و در فایل <code dir="ltr">server.crt</code> ذخیره کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get csr my-svc.my-namespace -o jsonpath='{.status.certificate}' \
+    | base64 --decode &gt; server.crt
+</code></pre>
+<p dir="rtl">اکنون می‌توانید <code dir="ltr">server.crt</code> و <code dir="ltr">server-key.pem</code> را در یک
+<span class="term" title="secret">Secret</span>
+قرار دهید تا بعداً آن را در یک Pod مانت کنید (برای مثال، برای استفاده در یک وب‌سرور که HTTPS ارائه می‌دهد).</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl create secret tls server --cert server.crt --key server-key.pem
+</code></pre>
+<pre dir="ltr"><code class="language-none" dir="ltr">secret/server created
+</code></pre>
+<p dir="rtl">در پایان، می‌توانید <code dir="ltr">ca.pem</code> را در یک <span class="term" title="configmap">ConfigMap</span>
+ذخیره کنید و از آن به‌عنوان ریشه‌ی اعتماد برای تأیید گواهی سرویس‌دهی استفاده کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl create configmap example-serving-ca --from-file ca.crt=ca.pem
+</code></pre>
+<pre dir="ltr"><code class="language-none" dir="ltr">configmap/example-serving-ca created
+</code></pre>
+<h2 id="تأیید-certificatesigningrequestها-approving-certificate-signing-requests" dir="rtl">تأیید CertificateSigningRequestها {#approving-certificate-signing-requests}</h2>
+<p dir="rtl">مدیر کوبرنتیز (با مجوزهای مناسب) می‌تواند با دستورهای <code dir="ltr">kubectl certificate approve</code> و <code dir="ltr">kubectl certificate deny</code>، CertificateSigningRequestها را به‌صورت دستی تأیید (یا رد) کند. با این حال، اگر قصد دارید از این API به‌طور گسترده استفاده کنید، بهتر است نوشتن یک کنترل‌کننده‌ی خودکار گواهی را در نظر بگیرید.</p>
+<div class="callout caution"><div class="callout-title">احتیاط:</div>
+<p dir="rtl">توانایی تأیید CSRها تعیین می‌کند چه کسی در محیط شما به چه کسی اعتماد کند. این توانایی نباید به‌صورت گسترده یا بی‌ملاحظه اعطا شود.</p>
+<p dir="rtl">پیش از اعطای مجوز <code dir="ltr">approve</code>، باید مطمئن شوید که هم الزامات تأییدی را که بر عهده‌ی تأییدکننده است <strong>و</strong> هم پیامدهای صدور یک گواهی مشخص را با اطمینان درک می‌کنید.</p>
+</div>
+<p dir="rtl">چه تأییدکننده یک ماشین باشد و چه انسانی که مانند مثال بالا از kubectl استفاده می‌کند، نقش <em>تأییدکننده</em> این است که بررسی کند CSR دو شرط را برآورده می‌کند:</p>
+<ol>
+<li dir="rtl">موجودیت درخواست‌کننده‌ی (subject) CSR کلید خصوصی‌ای را که برای امضای CSR استفاده شده است در اختیار دارد. این شرط با تهدید جعل هویت یک موجودیت مجاز توسط شخص ثالث مقابله می‌کند. در مثال بالا، این مرحله یعنی بررسی اینکه پاد کلید خصوصی‌ای را که برای تولید CSR استفاده شده در اختیار دارد.</li>
+<li dir="rtl">موجودیت درخواست‌کننده‌ی CSR مجاز است در زمینه‌ی درخواست‌شده عمل کند. این شرط با تهدید پیوستن یک موجودیت ناخواسته به کلاستر مقابله می‌کند. در مثال بالا، این مرحله یعنی بررسی اینکه پاد اجازه‌ی مشارکت در سرویس درخواست‌شده را دارد.</li>
+</ol>
+<p dir="rtl">تأییدکننده باید CSR را فقط و فقط در صورتی تأیید کند که این دو شرط برآورده شده باشند و در غیر این صورت باید آن را رد کند.</p>
+<p dir="rtl">برای اطلاعات بیشتر درباره‌ی تأیید گواهی و کنترل دسترسی، صفحه‌ی مرجع
+<a href="../../reference/access-authn-authz/certificate-signing-requests.html">درخواست‌های امضای گواهی</a>
+را بخوانید.</p>
+<h2 id="پیکربندی-کلاستر-برای-ارائه-ی-امضا" dir="rtl">پیکربندی کلاستر برای ارائه‌ی امضا</h2>
+<p dir="rtl">این صفحه فرض می‌کند که یک امضاکننده برای سرویس‌دهی به API گواهی‌ها راه‌اندازی شده است. کنترل‌کننده‌ی مدیریت (controller manager) کوبرنتیز یک پیاده‌سازی پیش‌فرض از امضاکننده ارائه می‌دهد. برای فعال‌سازی آن، پارامترهای <code dir="ltr">--cluster-signing-cert-file</code> و <code dir="ltr">--cluster-signing-key-file</code> را همراه با مسیرهای جفت‌کلید مرجع صدور گواهی خود به controller manager بدهید.</p>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#پیش-از-شروع">پیش از شروع</a><a class="l2" href="#اعتماد-به-tls-در-کلاستر">اعتماد به TLS در کلاستر</a><a class="l2" href="#درخواست-گواهی">درخواست گواهی</a><a class="l2" href="#ایجاد-درخواست-امضای-گواهی">ایجاد درخواست امضای گواهی</a><a class="l2" href="#ایجاد-آبجکت-certificatesigningrequest-برای-ارسال-به-api-کوبرنتیز">ایجاد آبجکت CertificateSigningRequest برای ارسال به API کوبرنتیز</a><a class="l2" href="#گرفتن-تأیید-برای-certificatesigningrequest-get-the-certificate-signing-request-approved">گرفتن تأیید برای CertificateSigningRequest {#get-the-certificate-signing-request-approved}</a><a class="l2" href="#امضای-certificatesigningrequest-sign-the-certificate-signing-request">امضای CertificateSigningRequest {#sign-the-certificate-signing-request}</a><a class="l3" href="#ایجاد-مرجع-صدور-گواهی">ایجاد مرجع صدور گواهی</a><a class="l3" href="#صدور-گواهی">صدور گواهی</a><a class="l3" href="#بارگذاری-گواهی-امضاشده">بارگذاری گواهی امضاشده</a><a class="l2" href="#دانلود-گواهی-و-استفاده-از-آن">دانلود گواهی و استفاده از آن</a><a class="l2" href="#تأیید-certificatesigningrequestها-approving-certificate-signing-requests">تأیید CertificateSigningRequestها {#approving-certificate-signing-requests}</a><a class="l2" href="#پیکربندی-کلاستر-برای-ارائه-ی-امضا">پیکربندی کلاستر برای ارائه‌ی امضا</a></nav>
+</div>
+</body>
+</html>
