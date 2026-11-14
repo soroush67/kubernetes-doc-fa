@@ -8,9 +8,9 @@
 
 | | |
 |---|---|
-| پیشرفت (بر اساس کلمات) | **91.8٪** |
-| صفحات ترجمه‌شده | 1560 از 1722 |
-| صفحات دارای ایراد ساختاری | 73 |
+| پیشرفت (بر اساس کلمات) | **92.7٪** |
+| صفحات ترجمه‌شده | 1575 از 1722 |
+| صفحات دارای ایراد ساختاری | 74 |
 | نسخه‌ی منبع انگلیسی | `f652c6b8a26f` |
 
 ## مشاهده
@@ -74,7 +74,7 @@ cd kubernetes-doc-fa
 | `home` | 2 | 2 |
 | `reference` | 1198 | 1198 |
 | `setup` | 22 | 22 |
-| `tasks` | 105 | 221 |
+| `tasks` | 120 | 221 |
 | `tutorials` | 0 | 45 |
 
 </div>
@@ -101,26 +101,26 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [tasks/configure-pod-container/static-pod.md](md/tasks/configure-pod-container/static-pod.md) — 2026-11-14T10:49:43+03:30
+- [tasks/configure-pod-container/share-process-namespace.md](md/tasks/configure-pod-container/share-process-namespace.md) — 2026-11-14T10:49:02+03:30
+- [tasks/configure-pod-container/resize-container-resources.md](md/tasks/configure-pod-container/resize-container-resources.md) — 2026-11-14T10:48:42+03:30
+- [tasks/configure-pod-container/resize-pod-resources.md](md/tasks/configure-pod-container/resize-pod-resources.md) — 2026-11-14T10:46:47+03:30
+- [tasks/configure-pod-container/migrate-from-psp.md](md/tasks/configure-pod-container/migrate-from-psp.md) — 2026-11-14T10:46:06+03:30
+- [tasks/configure-pod-container/quality-service-pod.md](md/tasks/configure-pod-container/quality-service-pod.md) — 2026-11-14T10:45:58+03:30
+- [tasks/configure-pod-container/pull-image-private-registry.md](md/tasks/configure-pod-container/pull-image-private-registry.md) — 2026-11-14T10:45:23+03:30
+- [tasks/configure-pod-container/image-volumes.md](md/tasks/configure-pod-container/image-volumes.md) — 2026-11-14T10:44:41+03:30
+- [tasks/configure-pod-container/extended-resource.md](md/tasks/configure-pod-container/extended-resource.md) — 2026-11-14T10:44:35+03:30
+- [tasks/configure-pod-container/configure-service-account.md](md/tasks/configure-pod-container/configure-service-account.md) — 2026-11-14T10:44:29+03:30
+- [tasks/configure-pod-container/enforce-standards-namespace-labels.md](md/tasks/configure-pod-container/enforce-standards-namespace-labels.md) — 2026-11-14T10:44:12+03:30
+- [tasks/configure-pod-container/enforce-standards-admission-controller.md](md/tasks/configure-pod-container/enforce-standards-admission-controller.md) — 2026-11-14T10:43:53+03:30
+- [tasks/configure-pod-container/create-hostprocess-pod.md](md/tasks/configure-pod-container/create-hostprocess-pod.md) — 2026-11-14T10:43:39+03:30
+- [tasks/configure-pod-container/configure-volume-storage.md](md/tasks/configure-pod-container/configure-volume-storage.md) — 2026-11-14T10:42:43+03:30
+- [tasks/configure-pod-container/configure-pod-configmap.md](md/tasks/configure-pod-container/configure-pod-configmap.md) — 2026-11-14T10:42:23+03:30
 - [tasks/configure-pod-container/configure-runasusername.md](md/tasks/configure-pod-container/configure-runasusername.md) — 2026-11-14T10:40:21+03:30
 - [tasks/configure-pod-container/configure-projected-volume-storage.md](md/tasks/configure-pod-container/configure-projected-volume-storage.md) — 2026-11-14T10:39:56+03:30
 - [tasks/configure-pod-container/configure-pod-initialization.md](md/tasks/configure-pod-container/configure-pod-initialization.md) — 2026-11-14T10:39:44+03:30
 - [tasks/configure-pod-container/configure-liveness-readiness-startup-probes.md](md/tasks/configure-pod-container/configure-liveness-readiness-startup-probes.md) — 2026-11-14T10:39:31+03:30
 - [tasks/configure-pod-container/configure-gmsa.md](md/tasks/configure-pod-container/configure-gmsa.md) — 2026-11-14T10:39:14+03:30
-- [tasks/configure-pod-container/configure-emptydir-volume-mode.md](md/tasks/configure-pod-container/configure-emptydir-volume-mode.md) — 2026-11-14T10:38:23+03:30
-- [tasks/configure-pod-container/assign-resources/set-up-dra-cluster.md](md/tasks/configure-pod-container/assign-resources/set-up-dra-cluster.md) — 2026-11-14T10:38:11+03:30
-- [tasks/configure-pod-container/configure-bind-mount-options.md](md/tasks/configure-pod-container/configure-bind-mount-options.md) — 2026-11-14T10:38:10+03:30
-- [tasks/configure-pod-container/attach-handler-lifecycle-event.md](md/tasks/configure-pod-container/attach-handler-lifecycle-event.md) — 2026-11-14T10:37:57+03:30
-- [tasks/configure-pod-container/assign-resources/access-dra-device-metadata.md](md/tasks/configure-pod-container/assign-resources/access-dra-device-metadata.md) — 2026-11-14T10:37:40+03:30
-- [tasks/configure-pod-container/assign-resources/allocate-devices-dra.md](md/tasks/configure-pod-container/assign-resources/allocate-devices-dra.md) — 2026-11-14T10:37:38+03:30
-- [tasks/configure-pod-container/assign-pods-nodes.md](md/tasks/configure-pod-container/assign-pods-nodes.md) — 2026-11-14T10:37:04+03:30
-- [tasks/configure-pod-container/assign-resources/_index.md](md/tasks/configure-pod-container/assign-resources/_index.md) — 2026-11-14T10:37:02+03:30
-- [tasks/configure-pod-container/assign-pods-nodes-using-node-affinity.md](md/tasks/configure-pod-container/assign-pods-nodes-using-node-affinity.md) — 2026-11-14T10:36:58+03:30
-- [tasks/configure-pod-container/assign-memory-resource.md](md/tasks/configure-pod-container/assign-memory-resource.md) — 2026-11-14T10:36:41+03:30
-- [tasks/configure-pod-container/assign-pod-level-resources.md](md/tasks/configure-pod-container/assign-pod-level-resources.md) — 2026-11-14T10:36:37+03:30
-- [tasks/configure-pod-container/assign-cpu-resource.md](md/tasks/configure-pod-container/assign-cpu-resource.md) — 2026-11-14T10:35:53+03:30
-- [tasks/configmap-secret/managing-secret-using-kustomize.md](md/tasks/configmap-secret/managing-secret-using-kustomize.md) — 2026-11-14T10:35:14+03:30
-- [tasks/configure-pod-container/_index.md](md/tasks/configure-pod-container/_index.md) — 2026-11-14T10:35:08+03:30
-- [tasks/configmap-secret/managing-secret-using-kubectl.md](md/tasks/configmap-secret/managing-secret-using-kubectl.md) — 2026-11-14T10:35:03+03:30
 
 </div>
 
@@ -201,6 +201,7 @@ cd kubernetes-doc-fa
 - [reference/setup-tools/kubeadm/kubeadm-init-phase.md](md/reference/setup-tools/kubeadm/kubeadm-init-phase.md): chunk 1: short: 826 words vs 1211 source words
 - [reference/setup-tools/kubeadm/kubeadm-upgrade-phase.md](md/reference/setup-tools/kubeadm/kubeadm-upgrade-phase.md): chunk 1: short: 204 words vs 316 source words
 - [tasks/access-application-cluster/communicate-containers-same-pod-shared-volume.md](md/tasks/access-application-cluster/communicate-containers-same-pod-shared-volume.md): chunk 1: 6 untranslated English lines, e.g. 'echo Hello from the debian container > /pod-data/index.html'
+- [tasks/configure-pod-container/configure-service-account.md](md/tasks/configure-pod-container/configure-service-account.md): chunk 1: 1 code block(s) changed
 
 </div>
 

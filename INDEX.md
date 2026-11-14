@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-1560 از 1722 صفحه
+1575 از 1722 صفحه
 
 
 ## `.`
@@ -2022,25 +2022,25 @@
 - ✅ [configure-emptydir-volume-mode.md](md/tasks/configure-pod-container/configure-emptydir-volume-mode.md)
 - ✅ [configure-gmsa.md](md/tasks/configure-pod-container/configure-gmsa.md)
 - ✅ [configure-liveness-readiness-startup-probes.md](md/tasks/configure-pod-container/configure-liveness-readiness-startup-probes.md)
-- ⏳ `configure-pod-configmap.md`
+- ✅ [configure-pod-configmap.md](md/tasks/configure-pod-container/configure-pod-configmap.md)
 - ✅ [configure-pod-initialization.md](md/tasks/configure-pod-container/configure-pod-initialization.md)
 - ✅ [configure-projected-volume-storage.md](md/tasks/configure-pod-container/configure-projected-volume-storage.md)
 - ✅ [configure-runasusername.md](md/tasks/configure-pod-container/configure-runasusername.md)
-- ⏳ `configure-service-account.md`
-- ⏳ `configure-volume-storage.md`
-- ⏳ `create-hostprocess-pod.md`
-- ⏳ `enforce-standards-admission-controller.md`
-- ⏳ `enforce-standards-namespace-labels.md`
-- ⏳ `extended-resource.md`
-- ⏳ `image-volumes.md`
-- ⏳ `migrate-from-psp.md`
-- ⏳ `pull-image-private-registry.md`
-- ⏳ `quality-service-pod.md`
-- ⏳ `resize-container-resources.md`
-- ⏳ `resize-pod-resources.md`
+- ⚠️ [configure-service-account.md](md/tasks/configure-pod-container/configure-service-account.md)
+- ✅ [configure-volume-storage.md](md/tasks/configure-pod-container/configure-volume-storage.md)
+- ✅ [create-hostprocess-pod.md](md/tasks/configure-pod-container/create-hostprocess-pod.md)
+- ✅ [enforce-standards-admission-controller.md](md/tasks/configure-pod-container/enforce-standards-admission-controller.md)
+- ✅ [enforce-standards-namespace-labels.md](md/tasks/configure-pod-container/enforce-standards-namespace-labels.md)
+- ✅ [extended-resource.md](md/tasks/configure-pod-container/extended-resource.md)
+- ✅ [image-volumes.md](md/tasks/configure-pod-container/image-volumes.md)
+- ✅ [migrate-from-psp.md](md/tasks/configure-pod-container/migrate-from-psp.md)
+- ✅ [pull-image-private-registry.md](md/tasks/configure-pod-container/pull-image-private-registry.md)
+- ✅ [quality-service-pod.md](md/tasks/configure-pod-container/quality-service-pod.md)
+- ✅ [resize-container-resources.md](md/tasks/configure-pod-container/resize-container-resources.md)
+- ✅ [resize-pod-resources.md](md/tasks/configure-pod-container/resize-pod-resources.md)
 - ⏳ `security-context.md`
-- ⏳ `share-process-namespace.md`
-- ⏳ `static-pod.md`
+- ✅ [share-process-namespace.md](md/tasks/configure-pod-container/share-process-namespace.md)
+- ✅ [static-pod.md](md/tasks/configure-pod-container/static-pod.md)
 - ⏳ `translate-compose-kubernetes.md`
 - ⏳ `user-namespaces.md`
 

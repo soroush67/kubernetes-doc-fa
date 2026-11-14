@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ایجاد یک Pod از نوع HostProcess در ویندوز | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">tasks / configure-pod-container</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">ایجاد یک Pod از نوع HostProcess در ویندوز</h1><!-- overview -->
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes v1.26 [stable]</span> (پایدار)</div>
+<p dir="rtl">با کانتینرهای HostProcess ویندوز می‌توانید بارهای کاری (workload) کانتینری‌شده را روی میزبان ویندوزی اجرا کنید. این کانتینرها مانند فرایندهای عادی عمل می‌کنند، اما در صورت داشتن مجوزهای کاربری مناسب، به فضای نام (namespace) شبکهٔ میزبان، ذخیره‌سازی و دستگاه‌های آن دسترسی دارند. از کانتینرهای HostProcess می‌توان برای استقرار افزونه‌های شبکه، پیکربندی‌های ذخیره‌سازی، افزونه‌های دستگاه، kube-proxy و سایر مؤلفه‌ها روی نودهای ویندوزی استفاده کرد، بدون آنکه به پراکسی‌های اختصاصی یا نصب مستقیم سرویس‌های میزبان نیاز باشد.</p>
+<p dir="rtl">کارهای مدیریتی مانند نصب وصله‌های امنیتی، جمع‌آوری لاگ رویدادها و موارد دیگر را می‌توان بدون نیاز به ورود اپراتورهای کلاستر به تک‌تک نودهای ویندوزی انجام داد. کانتینرهای HostProcess می‌توانند با هر کاربری که روی میزبان موجود است یا در دامنهٔ ماشین میزبان قرار دارد اجرا شوند؛ به این ترتیب مدیران می‌توانند دسترسی به منابع را از طریق مجوزهای کاربری محدود کنند. اگرچه جداسازی سیستم فایل و فرایند پشتیبانی نمی‌شود، هنگام شروع کانتینر یک حجم (volume) جدید روی میزبان ایجاد می‌شود تا فضای کاری تمیز و یکپارچه‌ای در اختیار کانتینر قرار گیرد. کانتینرهای HostProcess را همچنین می‌توان بر پایهٔ ایمیج‌های پایهٔ موجود ویندوز ساخت. این کانتینرها همان <a href="https://docs.microsoft.com/virtualization/windowscontainers/deploy-containers/version-compatibility" target="_blank" rel="noopener">الزامات سازگاری</a> کانتینرهای Windows Server را به ارث نمی‌برند؛ یعنی لازم نیست نسخهٔ ایمیج‌های پایه با نسخهٔ میزبان یکسان باشد. با این حال، توصیه می‌شود از همان نسخهٔ ایمیج پایه‌ای استفاده کنید که بارهای کاری کانتینر Windows Server شما از آن استفاده می‌کنند تا ایمیج‌های بلااستفاده فضای نود را اشغال نکنند. کانتینرهای HostProcess از <a href="#volume-mounts">اتصال حجم‌ها</a> درون حجم کانتینر نیز پشتیبانی می‌کنند.</p>
+<h3 id="چه-زمانی-باید-از-کانتینر-hostprocess-ویندوز-استفاده-کنم؟" dir="rtl">چه زمانی باید از کانتینر HostProcess ویندوز استفاده کنم؟</h3>
+<ul>
+<li dir="rtl">زمانی که باید کارهایی انجام دهید که به فضای نام شبکهٔ میزبان نیاز دارند. کانتینرهای HostProcess به رابط‌های شبکه و نشانی‌های IP میزبان دسترسی دارند.</li>
+<li dir="rtl">زمانی که به منابعی روی میزبان، مانند سیستم فایل، لاگ رویدادها و غیره، نیاز دارید.</li>
+<li dir="rtl">برای نصب درایورهای دستگاه خاص یا سرویس‌های ویندوز.</li>
+<li dir="rtl">برای یکپارچه‌سازی کارهای مدیریتی و سیاست‌های امنیتی. این کار سطح مجوزهای مورد نیاز نودهای ویندوزی را کاهش می‌دهد.</li>
+</ul>
+<h2 id="پیش-از-شروع" dir="rtl">پیش از شروع</h2>
+<!-- change this when graduating to stable -->
+<p dir="rtl">این راهنما مختص کوبرنتیز نسخهٔ v1.37 است. اگر از کوبرنتیز v1.37 استفاده نمی‌کنید، مستندات نسخهٔ کوبرنتیز خود را بررسی کنید.</p>
+<p dir="rtl">در کوبرنتیز 1.37، قابلیت کانتینر HostProcess به‌طور پیش‌فرض فعال است. kubelet با ارسال پرچم hostprocess از طریق CRI، مستقیماً با containerd ارتباط برقرار می‌کند. برای اجرای کانتینرهای HostProcess می‌توانید از آخرین نسخهٔ containerd (نسخهٔ 1.6 به بعد) استفاده کنید.
+<a href="../../setup/production-environment/container-runtimes.html#containerd">نحوهٔ نصب containerd.</a></p>
+<h2 id="محدودیت-ها" dir="rtl">محدودیت‌ها</h2>
+<p dir="rtl">محدودیت‌های زیر مربوط به کوبرنتیز v1.37 هستند:</p>
+<ul>
+<li dir="rtl">کانتینرهای HostProcess به
+<span class="term" title="container-runtime">محیط اجرای کانتینر</span>
+containerd نسخهٔ 1.6 یا بالاتر نیاز دارند و نسخهٔ 1.7 توصیه می‌شود.</li>
+<li dir="rtl">Podهای HostProcess فقط می‌توانند شامل کانتینرهای HostProcess باشند. این محدودیتی فعلی در سیستم‌عامل ویندوز است؛ کانتینرهای ویندوزی غیرممتاز نمی‌توانند یک vNIC را با فضای نام IP میزبان به اشتراک بگذارند.</li>
+<li dir="rtl">کانتینرهای HostProcess به‌صورت یک فرایند روی میزبان اجرا می‌شوند و جز محدودیت‌های منابعی که بر حساب کاربری HostProcess اعمال می‌شود، هیچ‌گونه جداسازی ندارند. جداسازی سیستم فایل و جداسازی Hyper-V هیچ‌کدام برای کانتینرهای HostProcess پشتیبانی نمی‌شوند.</li>
+<li dir="rtl">اتصال حجم‌ها پشتیبانی می‌شود و حجم‌ها زیر حجم کانتینر متصل می‌شوند. به
+<a href="#volume-mounts">اتصال حجم‌ها</a> مراجعه کنید.</li>
+<li dir="rtl">به‌طور پیش‌فرض، مجموعهٔ محدودی از حساب‌های کاربری میزبان برای کانتینرهای HostProcess در دسترس است.
+به <a href="#choosing-a-user-account">انتخاب حساب کاربری</a> مراجعه کنید.</li>
+<li dir="rtl">محدودیت‌های منابع (دیسک، حافظه، تعداد CPU) به همان شیوهٔ فرایندهای روی میزبان پشتیبانی می‌شوند.</li>
+<li dir="rtl">اتصال Named pipe و سوکت‌های دامنهٔ یونیکس هیچ‌کدام پشتیبانی <strong>نمی‌شوند</strong> و به‌جای آن باید از طریق مسیرشان روی میزبان به آن‌ها دسترسی پیدا کرد (مثلاً \\.\pipe\*)</li>
+</ul>
+<h2 id="الزامات-پیکربندی-pod-از-نوع-hostprocess" dir="rtl">الزامات پیکربندی Pod از نوع HostProcess</h2>
+<p dir="rtl">برای فعال‌سازی Pod از نوع HostProcess در ویندوز باید پیکربندی‌های درستی را در پیکربندی امنیتی Pod تنظیم کنید. از میان سیاست‌های تعریف‌شده در <a href="../../concepts/security/pod-security-standards.html">استانداردهای امنیتی Pod</a>، سیاست‌های baseline و restricted اجازهٔ اجرای Podهای HostProcess را نمی‌دهند. بنابراین توصیه می‌شود Podهای HostProcess مطابق با پروفایل privileged اجرا شوند.</p>
+<p dir="rtl">هنگام اجرا تحت سیاست privileged، پیکربندی‌های زیر باید تنظیم شوند تا ایجاد Pod از نوع HostProcess امکان‌پذیر شود:</p>
+<table>
+  <caption style="display: none">مشخصات سیاست privileged</caption>
+  <thead>
+    <tr>
+      <th dir="rtl">کنترل</th>
+      <th dir="rtl">سیاست</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="white-space: nowrap" dir="ltr" class="ltr"><a href="../../concepts/security/pod-security-standards.html"><tt>securityContext.windowsOptions.hostProcess</tt></a></td>
+      <td dir="rtl">
+        <p dir="rtl">Podهای ویندوزی امکان اجرای <a href="create-hostprocess-pod.html">
+        کانتینرهای HostProcess</a> را فراهم می‌کنند که دسترسی ممتاز به نود ویندوزی را ممکن می‌سازند. </p>
+        <p dir="rtl"><strong>مقادیر مجاز</strong></p>
+        <ul>
+          <li dir="ltr" class="ltr"><code dir="ltr">true</code></li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td style="white-space: nowrap" dir="ltr" class="ltr"><a href="../../concepts/security/pod-security-standards.html"><tt>hostNetwork</tt></a></td>
+      <td dir="rtl">
+        <p dir="rtl">Podهایی که شامل کانتینرهای HostProcess هستند باید از فضای نام شبکهٔ میزبان استفاده کنند.</p>
+        <p dir="rtl"><strong>مقادیر مجاز</strong></p>
+        <ul>
+          <li dir="ltr" class="ltr"><code dir="ltr">true</code></li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td style="white-space: nowrap" dir="ltr" class="ltr"><a href="configure-runasusername.html"><tt>securityContext.windowsOptions.runAsUserName</tt></a></td>
+      <td dir="rtl">
+        <p dir="rtl">مشخص کردن کاربری که کانتینر HostProcess باید با آن اجرا شود، در مشخصات Pod الزامی است.</p>
+        <p dir="rtl"><strong>مقادیر مجاز</strong></p>
+        <ul>
+          <li dir="ltr" class="ltr"><code dir="ltr">NT AUTHORITY\SYSTEM</code></li>
+          <li dir="ltr" class="ltr"><code dir="ltr">NT AUTHORITY\Local service</code></li>
+          <li dir="ltr" class="ltr"><code dir="ltr">NT AUTHORITY\NetworkService</code></li>
+          <li dir="rtl">نام گروه‌های کاربری محلی (توضیحات پایین را ببینید)</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td style="white-space: nowrap" dir="ltr" class="ltr"><a href="../../concepts/security/pod-security-standards.html"><tt>runAsNonRoot</tt></a></td>
+      <td dir="rtl">
+        <p dir="rtl">از آنجا که کانتینرهای HostProcess دسترسی ممتاز به میزبان دارند، فیلد <tt>runAsNonRoot</tt> را نمی‌توان روی true تنظیم کرد.</p>
+        <p dir="rtl"><strong>مقادیر مجاز</strong></p>
+        <ul>
+          <li dir="rtl">تعریف‌نشده/Nil</li>
+          <li dir="ltr" class="ltr"><code dir="ltr">false</code></li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<h3 id="نمونهٔ-مانیفست-بخشی-از-آن-manifest-example" dir="rtl">نمونهٔ مانیفست (بخشی از آن) {#manifest-example}</h3>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">spec:
+  securityContext:
+    windowsOptions:
+      hostProcess: true
+      runAsUserName: "NT AUTHORITY\\Local service"
+  hostNetwork: true
+  containers:
+  - name: test
+    image: image1:latest
+    command:
+      - ping
+      - -t
+      - 127.0.0.1
+  nodeSelector:
+    "kubernetes.io/os": windows
+</code></pre>
+<h2 id="اتصال-حجم-ها" dir="rtl">اتصال حجم‌ها</h2>
+<p dir="rtl">کانتینرهای HostProcess امکان اتصال حجم‌ها درون فضای حجم کانتینر را پشتیبانی می‌کنند. رفتار اتصال حجم‌ها بسته به نسخهٔ محیط اجرای containerd که روی نود استفاده می‌شود، متفاوت است.</p>
+<h3 id="نسخهٔ-1-6-از-containerd" dir="rtl">نسخهٔ 1.6 از containerd</h3>
+<p dir="rtl">برنامه‌هایی که درون کانتینر اجرا می‌شوند می‌توانند مستقیماً از طریق مسیرهای نسبی یا مطلق به حجم‌های متصل‌شده دسترسی داشته باشند. هنگام ایجاد کانتینر، متغیر محیطی <code dir="ltr">$CONTAINER_SANDBOX_MOUNT_POINT</code> تنظیم می‌شود و مسیر مطلق حجم کانتینر روی میزبان را در اختیار قرار می‌دهد. مسیرهای نسبی بر اساس پیکربندی <code dir="ltr">.spec.containers.volumeMounts.mountPath</code> تعیین می‌شوند.</p>
+<p dir="rtl">برای مثال، برای دسترسی به توکن‌های حساب سرویس، ساختارهای مسیر زیر درون کانتینر پشتیبانی می‌شوند:</p>
+<ul>
+<li dir="ltr" class="ltr"><code dir="ltr">.\var\run\secrets\kubernetes.io\serviceaccount\</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">$CONTAINER_SANDBOX_MOUNT_POINT\var\run\secrets\kubernetes.io\serviceaccount\</code></li>
+</ul>
+<h3 id="نسخهٔ-1-7-از-containerd-و-بالاتر" dir="rtl">نسخهٔ 1.7 از containerd (و بالاتر)</h3>
+<p dir="rtl">برنامه‌هایی که درون کانتینر اجرا می‌شوند می‌توانند مستقیماً از طریق <code dir="ltr">mountPath</code> مشخص‌شده در volumeMount به حجم‌های متصل‌شده دسترسی داشته باشند (درست مانند کانتینرهای لینوکسی و کانتینرهای ویندوزی غیر HostProcess).</p>
+<p dir="rtl">برای حفظ سازگاری با نسخه‌های قبلی، همچنین می‌توان با استفاده از همان مسیرهای نسبی پیکربندی‌شده در containerd نسخهٔ 1.6 به حجم‌ها دسترسی داشت.</p>
+<p dir="rtl">برای مثال، برای دسترسی به توکن‌های حساب سرویس درون کانتینر می‌توانید از یکی از مسیرهای زیر استفاده کنید:</p>
+<ul>
+<li dir="ltr" class="ltr"><code dir="ltr">c:\var\run\secrets\kubernetes.io\serviceaccount</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">/var/run/secrets/kubernetes.io/serviceaccount/</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">$CONTAINER_SANDBOX_MOUNT_POINT\var\run\secrets\kubernetes.io\serviceaccount\</code></li>
+</ul>
+<h2 id="محدودیت-های-منابع" dir="rtl">محدودیت‌های منابع</h2>
+<p dir="rtl">محدودیت‌های منابع (دیسک، حافظه، تعداد CPU) روی job اعمال می‌شوند و در سطح کل job معتبرند. برای مثال، با تنظیم محدودیت 10MB، حافظهٔ تخصیص‌یافته به هر آبجکت job از نوع HostProcess حداکثر 10MB خواهد بود. این رفتار مشابه سایر انواع کانتینرهای ویندوزی است. این محدودیت‌ها به همان شیوه‌ای مشخص می‌شوند که در حال حاضر برای هر ارکستراتور یا محیط اجرایی مورد استفاده مشخص می‌شوند. تنها تفاوت در نحوهٔ محاسبهٔ مصرف منبع دیسک برای ردیابی منابع است که ناشی از تفاوت در شیوهٔ راه‌اندازی اولیهٔ کانتینرهای HostProcess است.</p>
+<h2 id="انتخاب-حساب-کاربری" dir="rtl">انتخاب حساب کاربری</h2>
+<h3 id="حساب-های-سیستمی" dir="rtl">حساب‌های سیستمی</h3>
+<p dir="rtl">به‌طور پیش‌فرض، کانتینرهای HostProcess می‌توانند با یکی از سه حساب سرویس پشتیبانی‌شدهٔ ویندوز اجرا شوند:</p>
+<ul>
+<li dir="ltr" class="ltr"><strong><a href="https://docs.microsoft.com/windows/win32/services/localsystem-account" target="_blank" rel="noopener">LocalSystem</a></strong></li>
+<li dir="ltr" class="ltr"><strong><a href="https://docs.microsoft.com/windows/win32/services/localservice-account" target="_blank" rel="noopener">LocalService</a></strong></li>
+<li dir="ltr" class="ltr"><strong><a href="https://docs.microsoft.com/windows/win32/services/networkservice-account" target="_blank" rel="noopener">NetworkService</a></strong></li>
+</ul>
+<p dir="rtl">باید برای هر کانتینر HostProcess یک حساب سرویس مناسب ویندوز انتخاب کنید و هدفتان محدود کردن سطح مجوزها باشد تا از آسیب تصادفی (یا حتی مخرب) به میزبان جلوگیری شود. حساب سرویس LocalSystem در میان این سه، بالاترین سطح مجوز را دارد و فقط در صورت ضرورت مطلق باید از آن استفاده شود. در صورت امکان، از حساب سرویس LocalService استفاده کنید، زیرا کمترین سطح مجوز را در میان این سه گزینه دارد.</p>
+<h3 id="حساب-های-محلی-local-accounts" dir="rtl">حساب‌های محلی {#local-accounts}</h3>
+<p dir="rtl">در صورت پیکربندی، کانتینرهای HostProcess می‌توانند با حساب‌های کاربری محلی نیز اجرا شوند؛ با این کار اپراتورهای نود می‌توانند دسترسی دقیق و جزئی به بارهای کاری بدهند.</p>
+<p dir="rtl">برای اجرای کانتینرهای HostProcess با یک کاربر محلی، ابتدا باید یک گروه کاربری محلی روی نود ایجاد شود و نام آن گروه در فیلد <code dir="ltr">runAsUserName</code> در استقرار مشخص شود. پیش از راه‌اندازی کانتینر HostProcess، یک حساب کاربری محلی <strong>موقت</strong> جدید ایجاد و به گروه کاربری مشخص‌شده افزوده می‌شود و کانتینر با این حساب اجرا می‌شود. این روش مزایای متعددی دارد، از جمله اینکه دیگر نیازی به مدیریت گذرواژه‌های حساب‌های کاربری محلی نیست. می‌توان از یک کانتینر HostProcess اولیه که با یک حساب سرویس اجرا می‌شود، برای آماده‌سازی گروه‌های کاربری برای کانتینرهای HostProcess بعدی استفاده کرد.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">اجرای کانتینرهای HostProcess با حساب‌های کاربری محلی به containerd نسخهٔ 1.7 یا بالاتر نیاز دارد.</p>
+</div>
+<p dir="rtl">مثال:</p>
+<ol>
+<li dir="rtl">
+<p dir="rtl">یک گروه کاربری محلی روی نود ایجاد کنید (این کار را می‌توان در یک کانتینر HostProcess دیگر انجام داد).</p>
+<pre dir="ltr"><code class="language-cmd" dir="ltr">net localgroup hpc-localgroup /add
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">به گروه کاربری محلی، دسترسی به منابع مورد نظر روی نود را اعطا کنید.
+این کار را می‌توان با ابزارهایی مانند <a href="https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/icacls" target="_blank" rel="noopener">icacls</a> انجام داد.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">مقدار <code dir="ltr">runAsUserName</code> را برای Pod یا کانتینرهای جداگانه، برابر نام گروه کاربری محلی قرار دهید.</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">securityContext:
+  windowsOptions:
+    hostProcess: true
+    runAsUserName: hpc-localgroup
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">Pod را زمان‌بندی کنید!</p>
+</li>
+</ol>
+<h2 id="ایمیج-پایه-برای-کانتینرهای-hostprocess" dir="rtl">ایمیج پایه برای کانتینرهای HostProcess</h2>
+<p dir="rtl">کانتینرهای HostProcess را می‌توان از هر یک از <a href="https://learn.microsoft.com/virtualization/windowscontainers/manage-containers/container-base-images" target="_blank" rel="noopener">ایمیج‌های پایهٔ کانتینر ویندوز</a> موجود ساخت.</p>
+<p dir="rtl">علاوه بر این، یک ایمیج پایهٔ جدید مخصوص کانتینرهای HostProcess ایجاد شده است!
+برای اطلاعات بیشتر، <a href="https://github.com/microsoft/windows-host-process-containers-base-image#overview" target="_blank" rel="noopener">پروژهٔ گیت‌هاب windows-host-process-containers-base-image</a> را ببینید.</p>
+<h2 id="عیب-یابی-کانتینرهای-hostprocess" dir="rtl">عیب‌یابی کانتینرهای HostProcess</h2>
+<ul>
+<li dir="rtl">
+<p dir="rtl">کانتینرهای HostProcess با خطای <code dir="ltr">failed to create user process token: failed to logon user: Access is denied.: unknown</code> شروع به کار نمی‌کنند.</p>
+<p dir="rtl">مطمئن شوید که containerd با حساب سرویس <code dir="ltr">LocalSystem</code> یا <code dir="ltr">LocalService</code> اجرا می‌شود. حساب‌های کاربری (حتی حساب‌های Administrator) مجوز ایجاد توکن ورود برای هیچ‌یک از <a href="#choosing-a-user-account">حساب‌های کاربری</a> پشتیبانی‌شده را ندارند.</p>
+</li>
+</ul>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l3" href="#چه-زمانی-باید-از-کانتینر-hostprocess-ویندوز-استفاده-کنم؟">چه زمانی باید از کانتینر HostProcess ویندوز استفاده کنم؟</a><a class="l2" href="#پیش-از-شروع">پیش از شروع</a><a class="l2" href="#محدودیت-ها">محدودیت‌ها</a><a class="l2" href="#الزامات-پیکربندی-pod-از-نوع-hostprocess">الزامات پیکربندی Pod از نوع HostProcess</a><a class="l3" href="#نمونهٔ-مانیفست-بخشی-از-آن-manifest-example">نمونهٔ مانیفست (بخشی از آن) {#manifest-example}</a><a class="l2" href="#اتصال-حجم-ها">اتصال حجم‌ها</a><a class="l3" href="#نسخهٔ-1-6-از-containerd">نسخهٔ 1.6 از containerd</a><a class="l3" href="#نسخهٔ-1-7-از-containerd-و-بالاتر">نسخهٔ 1.7 از containerd (و بالاتر)</a><a class="l2" href="#محدودیت-های-منابع">محدودیت‌های منابع</a><a class="l2" href="#انتخاب-حساب-کاربری">انتخاب حساب کاربری</a><a class="l3" href="#حساب-های-سیستمی">حساب‌های سیستمی</a><a class="l3" href="#حساب-های-محلی-local-accounts">حساب‌های محلی {#local-accounts}</a><a class="l2" href="#ایمیج-پایه-برای-کانتینرهای-hostprocess">ایمیج پایه برای کانتینرهای HostProcess</a><a class="l2" href="#عیب-یابی-کانتینرهای-hostprocess">عیب‌یابی کانتینرهای HostProcess</a></nav>
+</div>
+</body>
+</html>

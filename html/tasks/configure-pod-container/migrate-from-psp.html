@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>مهاجرت از PodSecurityPolicy به کنترل‌کنندهٔ پذیرش داخلی PodSecurity | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">tasks / configure-pod-container</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">مهاجرت از PodSecurityPolicy به کنترل‌کنندهٔ پذیرش داخلی PodSecurity</h1><!-- overview -->
+<p dir="rtl">این صفحه فرایند مهاجرت از PodSecurityPolicyها به کنترل‌کنندهٔ پذیرش (admission controller) داخلی
+PodSecurity را شرح می‌دهد. این کار را می‌توان با ترکیبی از اجرای آزمایشی (dry-run) و حالت‌های <code dir="ltr">audit</code> و
+<code dir="ltr">warn</code> به‌طور مؤثر انجام داد، هرچند اگر از PSPهای تغییردهنده (mutating) استفاده شود، کار دشوارتر می‌شود.</p>
+<h2 id="پیش-از-شروع" dir="rtl">پیش از شروع</h2>
+<p dir="rtl">اگر در حال حاضر نسخه‌ای از کوبرنتیز به‌جز 1.37 را اجرا می‌کنید، بهتر است
+این صفحه را در مستندات مربوط به نسخه‌ای از کوبرنتیز که واقعاً اجرا می‌کنید مشاهده کنید.</p>
+<p dir="rtl">این صفحه فرض می‌کند که شما از پیش با مفاهیم پایهٔ <a href="../../concepts/security/pod-security-admission.html">پذیرش امنیت Pod</a>
+آشنا هستید.</p>
+<!-- body -->
+<h2 id="رویکرد-کلی" dir="rtl">رویکرد کلی</h2>
+<p dir="rtl">برای مهاجرت از PodSecurityPolicy به پذیرش امنیت Pod (Pod Security Admission) راهبردهای متعددی وجود دارد.
+مراحل زیر یکی از مسیرهای ممکن برای مهاجرت است که هدف آن به حداقل رساندن هم خطر قطعی در محیط
+عملیاتی و هم خطر ایجاد شکاف امنیتی است.</p>
+<!-- Keep section header numbering in sync with this list. -->
+<ol start="0">
+<li dir="rtl">تصمیم بگیرید که آیا پذیرش امنیت Pod برای کاربرد شما مناسب است یا نه.</li>
+<li dir="rtl">مجوزهای فضای نام را بازبینی کنید</li>
+<li dir="rtl">PodSecurityPolicyها را ساده و استاندارد کنید</li>
+<li dir="rtl">فضاهای نام را به‌روزرسانی کنید
+<ol>
+<li dir="rtl">سطح امنیت Pod مناسب را شناسایی کنید</li>
+<li dir="rtl">سطح امنیت Pod را راستی‌آزمایی کنید</li>
+<li dir="rtl">سطح امنیت Pod را اعمال کنید</li>
+<li dir="rtl">PodSecurityPolicy را دور بزنید</li>
+</ol>
+</li>
+<li dir="rtl">فرایندهای ایجاد فضای نام را بازبینی کنید</li>
+<li dir="rtl">PodSecurityPolicy را غیرفعال کنید</li>
+</ol>
+<h2 id="۰-تصمیم-بگیرید-که-آیا-پذیرش-امنیت-pod-برای-شما-مناسب-است-is-psa-right-for-you" dir="rtl">۰. تصمیم بگیرید که آیا پذیرش امنیت Pod برای شما مناسب است {#is-psa-right-for-you}</h2>
+<p dir="rtl">پذیرش امنیت Pod به‌گونه‌ای طراحی شده است که رایج‌ترین نیازهای امنیتی را بدون پیکربندی اضافه برآورده کند و
+مجموعه‌ای استاندارد از سطوح امنیتی را در کلاسترهای مختلف فراهم آورد. با این حال، انعطاف‌پذیری آن از
+PodSecurityPolicy کمتر است. به‌طور مشخص، قابلیت‌های زیر در PodSecurityPolicy پشتیبانی می‌شوند، اما در
+پذیرش امنیت Pod پشتیبانی نمی‌شوند:</p>
+<ul>
+<li dir="rtl"><strong>تنظیم محدودیت‌های امنیتی پیش‌فرض</strong> - پذیرش امنیت Pod یک کنترل‌کنندهٔ پذیرش غیرتغییردهنده است؛
+یعنی پادها را پیش از اعتبارسنجی تغییر نمی‌دهد. اگر به این جنبه از PSP متکی بوده‌اید، باید یا بارهای
+کاری خود را طوری تغییر دهید که با محدودیت‌های امنیت Pod سازگار باشند، یا برای اعمال این تغییرات از یک
+<a href="../../reference/access-authn-authz/extensible-admission-controllers.html">وب‌هوک پذیرش تغییردهنده</a>
+استفاده کنید. برای جزئیات بیشتر، بخش <a href="#simplify-psps">ساده‌سازی و استانداردسازی PodSecurityPolicyها</a> را در ادامه ببینید.</li>
+<li dir="rtl"><strong>کنترل دقیق بر تعریف سیاست</strong> - پذیرش امنیت Pod فقط از
+<a href="../../concepts/security/pod-security-standards.html">۳ سطح استاندارد</a> پشتیبانی می‌کند.
+اگر به کنترل بیشتری بر محدودیت‌های خاص نیاز دارید، باید برای اعمال آن سیاست‌ها از یک
+<a href="../../reference/access-authn-authz/extensible-admission-controllers.html">وب‌هوک پذیرش اعتبارسنج</a>
+استفاده کنید.</li>
+<li dir="rtl"><strong>جزئی‌سازی سیاست در سطحی پایین‌تر از فضای نام</strong> - PodSecurityPolicy به شما امکان می‌دهد حتی در یک
+فضای نام واحد، سیاست‌های متفاوتی را به حساب‌های سرویس (Service Account) یا کاربران مختلف متصل کنید.
+این رویکرد مشکلات بسیاری دارد و توصیه نمی‌شود، اما اگر به هر حال به این قابلیت نیاز دارید، باید به‌جای آن
+از یک وب‌هوک شخص ثالث استفاده کنید. استثنای این مورد زمانی است که فقط لازم باشد کاربران یا
+<a href="../../concepts/containers/runtime-class.html">RuntimeClassهای</a> مشخصی را به‌طور کامل معاف کنید؛ در این
+حالت، پذیرش امنیت Pod
+<a href="../../concepts/security/pod-security-admission.html#exemptions">پیکربندی ایستایی برای معافیت‌ها</a>
+در اختیار می‌گذارد.</li>
+</ul>
+<p dir="rtl">حتی اگر پذیرش امنیت Pod همهٔ نیازهای شما را برآورده نکند، به‌گونه‌ای طراحی شده است که <em>مکمل</em> دیگر
+سازوکارهای اعمال سیاست باشد و می‌تواند در کنار دیگر وب‌هوک‌های پذیرش، به‌عنوان یک پشتیبان مفید عمل کند.</p>
+<h2 id="۱-بازبینی-مجوزهای-فضای-نام-review-namespace-permissions" dir="rtl">۱. بازبینی مجوزهای فضای نام {#review-namespace-permissions}</h2>
+<p dir="rtl">پذیرش امنیت Pod با <a href="../../concepts/security/pod-security-admission.html#pod-security-admission-labels-for-namespaces">برچسب‌های روی
+فضاهای نام</a>
+کنترل می‌شود. این یعنی هر کسی که بتواند یک فضای نام را به‌روزرسانی کند (یا آن را patch یا ایجاد کند)،
+می‌تواند سطح امنیت Pod آن فضای نام را نیز تغییر دهد و از این راه یک سیاست سخت‌گیرانه‌تر را دور بزند. پیش از
+ادامه، مطمئن شوید که فقط کاربران مورد اعتماد و دارای امتیاز ویژه این مجوزهای فضای نام را دارند. اعطای این
+مجوزهای قدرتمند به کاربرانی که نباید مجوزهای ارتقایافته داشته باشند توصیه نمی‌شود، اما اگر ناچار به این کار
+هستید، باید از یک
+<a href="../../reference/access-authn-authz/extensible-admission-controllers.html">وب‌هوک پذیرش</a>
+برای اعمال محدودیت‌های بیشتر بر تنظیم برچسب‌های امنیت Pod روی آبجکت‌های Namespace استفاده کنید.</p>
+<h2 id="۲-ساده-سازی-و-استانداردسازی-podsecuritypolicyها-simplify-psps" dir="rtl">۲. ساده‌سازی و استانداردسازی PodSecurityPolicyها {#simplify-psps}</h2>
+<p dir="rtl">در این بخش، PodSecurityPolicyهای تغییردهنده را کاهش می‌دهید و گزینه‌هایی را که خارج از دامنهٔ
+استانداردهای امنیت Pod هستند حذف می‌کنید. تغییرات توصیه‌شده در اینجا را باید روی یک نسخهٔ آفلاین از
+PodSecurityPolicy اصلیِ در حال تغییر اعمال کنید. نام PSP کپی‌شده باید با نام اصلی متفاوت باشد و از نظر
+الفبایی پیش از آن قرار بگیرد (برای مثال، یک <code dir="ltr">0</code> به ابتدای آن اضافه کنید). هنوز سیاست‌های جدید را در
+کوبرنتیز ایجاد نکنید؛ این کار در بخش <a href="#psp-update-rollout">انتشار سیاست‌های
+به‌روزشده</a> در ادامه پوشش داده می‌شود.</p>
+<h3 id="۲-الف-حذف-فیلدهای-صرفاً-تغییردهنده-eliminate-mutating-fields" dir="rtl">۲.الف. حذف فیلدهای صرفاً تغییردهنده {#eliminate-mutating-fields}</h3>
+<p dir="rtl">اگر یک PodSecurityPolicy پادها را تغییر دهد، ممکن است هنگامی که سرانجام PodSecurityPolicy را خاموش
+می‌کنید، با پادهایی روبه‌رو شوید که الزامات سطح امنیت Pod را برآورده نمی‌کنند. برای جلوگیری از این وضعیت،
+باید پیش از جابه‌جایی، همهٔ تغییرات PSP را حذف کنید. متأسفانه PSP فیلدهای تغییردهنده و اعتبارسنج را به‌طور
+روشن از هم جدا نمی‌کند، بنابراین این مهاجرت ساده و سرراست نیست.</p>
+<p dir="rtl">می‌توانید کار را با حذف فیلدهایی آغاز کنید که صرفاً تغییردهنده هستند و هیچ تأثیری بر سیاست اعتبارسنجی
+ندارند. این فیلدها (که در مرجع
+<a href="../../reference/access-authn-authz/psp-to-pod-security-standards.html">نگاشت PodSecurityPolicyها به استانداردهای امنیت Pod</a>
+نیز فهرست شده‌اند) عبارت‌اند از:</p>
+<ul>
+<li dir="ltr" class="ltr"><code dir="ltr">.spec.defaultAllowPrivilegeEscalation</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">.spec.runtimeClass.defaultRuntimeClassName</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">.metadata.annotations['seccomp.security.alpha.kubernetes.io/defaultProfileName']</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">.metadata.annotations['apparmor.security.beta.kubernetes.io/defaultProfileName']</code></li>
+<li dir="rtl"><code dir="ltr">.spec.defaultAddCapabilities</code> - این فیلد اگرچه از نظر فنی هم تغییردهنده و هم اعتبارسنج است، باید در
+<code dir="ltr">.spec.allowedCapabilities</code> ادغام شود؛ فیلدی که همان اعتبارسنجی را بدون تغییر انجام می‌دهد.</li>
+</ul>
+<div class="callout caution"><div class="callout-title">احتیاط:</div>
+<p dir="rtl">حذف این فیلدها ممکن است باعث شود بارهای کاری فاقد پیکربندی لازم شوند و مشکلاتی پدید آید. برای راهنمایی
+دربارهٔ انتشار ایمن این تغییرات، بخش <a href="#psp-update-rollout">انتشار سیاست‌های به‌روزشده</a> را در ادامه ببینید.</p>
+</div>
+<h3 id="۲-ب-حذف-گزینه-هایی-که-استانداردهای-امنیت-pod-آن-ها-را-پوشش-نمی-دهند-eliminate-non-standard-options" dir="rtl">۲.ب. حذف گزینه‌هایی که استانداردهای امنیت Pod آن‌ها را پوشش نمی‌دهند {#eliminate-non-standard-options}</h3>
+<p dir="rtl">چندین فیلد در PodSecurityPolicy وجود دارد که استانداردهای امنیت Pod آن‌ها را پوشش نمی‌دهند. اگر ناچار
+به اعمال این گزینه‌ها هستید، باید پذیرش امنیت Pod را با یک
+<a href="../../reference/access-authn-authz/extensible-admission-controllers.html">وب‌هوک پذیرش</a>
+تکمیل کنید که خارج از دامنهٔ این راهنماست.</p>
+<p dir="rtl">ابتدا می‌توانید فیلدهای صرفاً اعتبارسنجی را که استانداردهای امنیت Pod پوشش نمی‌دهند حذف کنید.
+این فیلدها (که در مرجع
+<a href="../../reference/access-authn-authz/psp-to-pod-security-standards.html">نگاشت PodSecurityPolicyها به استانداردهای امنیت Pod</a>
+با عبارت «no opinion» فهرست شده‌اند) عبارت‌اند از:</p>
+<ul>
+<li dir="ltr" class="ltr"><code dir="ltr">.spec.allowedHostPaths</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">.spec.allowedFlexVolumes</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">.spec.allowedCSIDrivers</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">.spec.forbiddenSysctls</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">.spec.runtimeClass</code></li>
+</ul>
+<p dir="rtl">همچنین می‌توانید فیلدهای زیر را که به کنترل‌های گروه POSIX / UNIX مربوط‌اند حذف کنید.</p>
+<div class="callout caution"><div class="callout-title">احتیاط:</div>
+<p dir="rtl">اگر هر یک از این فیلدها از راهبرد <code dir="ltr">MustRunAs</code> استفاده کند، ممکن است تغییردهنده باشد! حذف آن‌ها ممکن است
+باعث شود بارهای کاری گروه‌های لازم را تنظیم نکنند و مشکلاتی پدید آید. برای راهنمایی دربارهٔ انتشار ایمن
+این تغییرات، بخش <a href="#psp-update-rollout">انتشار سیاست‌های به‌روزشده</a> را در ادامه ببینید.</p>
+</div>
+<ul>
+<li dir="ltr" class="ltr"><code dir="ltr">.spec.runAsGroup</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">.spec.supplementalGroups</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">.spec.fsGroup</code></li>
+</ul>
+<p dir="rtl">فیلدهای تغییردهندهٔ باقی‌مانده برای پشتیبانی درست از استانداردهای امنیت Pod لازم‌اند و بعداً باید هر یک
+به‌صورت موردی بررسی شوند:</p>
+<ul>
+<li dir="rtl"><code dir="ltr">.spec.requiredDropCapabilities</code> - برای حذف <code dir="ltr">ALL</code> در پروفایل Restricted لازم است.</li>
+<li dir="rtl"><code dir="ltr">.spec.seLinux</code> - (فقط با قاعدهٔ <code dir="ltr">MustRunAs</code> تغییردهنده است) برای اعمال الزامات SELinux در
+پروفایل‌های Baseline و Restricted لازم است.</li>
+<li dir="rtl"><code dir="ltr">.spec.runAsUser</code> - (با قاعدهٔ <code dir="ltr">RunAsAny</code> تغییردهنده نیست) برای اعمال <code dir="ltr">RunAsNonRoot</code> در
+پروفایل Restricted لازم است.</li>
+<li dir="rtl"><code dir="ltr">.spec.allowPrivilegeEscalation</code> - (فقط در صورتی که روی <code dir="ltr">false</code> تنظیم شود تغییردهنده است) برای
+پروفایل Restricted لازم است.</li>
+</ul>
+<h3 id="۲-ج-انتشار-pspهای-به-روزشده-psp-update-rollout" dir="rtl">۲.ج. انتشار PSPهای به‌روزشده {#psp-update-rollout}</h3>
+<p dir="rtl">در گام بعد، می‌توانید سیاست‌های به‌روزشده را در کلاستر خود منتشر کنید. باید با احتیاط پیش بروید، زیرا
+حذف گزینه‌های تغییردهنده ممکن است باعث شود بارهای کاری فاقد پیکربندی لازم شوند.</p>
+<p dir="rtl">برای هر PodSecurityPolicy به‌روزشده:</p>
+<ol>
+<li dir="rtl">پادهایی را که تحت PSP اصلی اجرا می‌شوند شناسایی کنید. این کار با استفاده از حاشیه‌نویسی (annotation)
+<code dir="ltr">kubernetes.io/psp</code> امکان‌پذیر است. برای مثال، با kubectl:<pre dir="ltr"><code class="language-sh" dir="ltr">PSP_NAME="original" # Set the name of the PSP you're checking for
+kubectl get pods --all-namespaces -o jsonpath="{range .items[?(@.metadata.annotations.kubernetes\.io\/psp=='$PSP_NAME')]}{.metadata.namespace} {.metadata.name}{'\n'}{end}"
+</code></pre>
+</li>
+<li dir="rtl">این پادهای در حال اجرا را با مشخصات (spec) اصلی پاد مقایسه کنید تا معلوم شود که آیا PodSecurityPolicy
+پاد را تغییر داده است یا نه. برای پادهایی که یک <a href="../../concepts/workloads/controllers/index.html">منبع بار کاری</a>
+ایجاد کرده است، می‌توانید پاد را با PodTemplate موجود در منبع کنترل‌کننده مقایسه کنید. اگر تغییری
+شناسایی شد، باید Pod یا PodTemplate اصلی را با پیکربندی مطلوب به‌روزرسانی کنید.
+فیلدهایی که باید بازبینی شوند عبارت‌اند از:
+<ul>
+<li dir="rtl"><code dir="ltr">.metadata.annotations['container.apparmor.security.beta.kubernetes.io/*']</code> (به‌جای * نام هر کانتینر را قرار دهید)</li>
+<li dir="ltr" class="ltr"><code dir="ltr">.spec.runtimeClassName</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">.spec.securityContext.fsGroup</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">.spec.securityContext.seccompProfile</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">.spec.securityContext.seLinuxOptions</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">.spec.securityContext.supplementalGroups</code></li>
+<li dir="rtl">در کانتینرها، زیر <code dir="ltr">.spec.containers[*]</code> و <code dir="ltr">.spec.initContainers[*]</code>:
+<ul>
+<li dir="ltr" class="ltr"><code dir="ltr">.securityContext.allowPrivilegeEscalation</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">.securityContext.capabilities.add</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">.securityContext.capabilities.drop</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">.securityContext.readOnlyRootFilesystem</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">.securityContext.runAsGroup</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">.securityContext.runAsNonRoot</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">.securityContext.runAsUser</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">.securityContext.seccompProfile</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">.securityContext.seLinuxOptions</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li dir="rtl">PodSecurityPolicyهای جدید را ایجاد کنید. اگر Role یا ClusterRoleای مجوز <code dir="ltr">use</code> را روی همهٔ PSPها
+اعطا کند، ممکن است به‌جای همتاهای تغییردهنده، PSPهای جدید استفاده شوند.</li>
+<li dir="rtl">پیکربندی مجوزدهی خود را به‌روزرسانی کنید تا دسترسی به PSPهای جدید اعطا شود. در RBAC، این یعنی هر
+Role یا ClusterRoleای را که مجوز <code dir="ltr">use</code> را روی PSP اصلی اعطا می‌کند، طوری به‌روزرسانی کنید که این مجوز
+را برای PSP به‌روزشده نیز اعطا کند.</li>
+<li dir="rtl">راستی‌آزمایی: پس از گذشت مدتی برای تثبیت، فرمان مرحلهٔ ۱ را دوباره اجرا کنید تا ببینید آیا هنوز پادی از
+PSPهای اصلی استفاده می‌کند یا نه. توجه کنید که پس از انتشار سیاست‌های جدید، پادها باید دوباره ایجاد
+شوند تا بتوان آن‌ها را به‌طور کامل راستی‌آزمایی کرد.</li>
+<li dir="rtl">(اختیاری) پس از آنکه اطمینان یافتید PSPهای اصلی دیگر استفاده نمی‌شوند، می‌توانید آن‌ها را حذف کنید.</li>
+</ol>
+<h2 id="۳-به-روزرسانی-فضاهای-نام-update-namespaces" dir="rtl">۳. به‌روزرسانی فضاهای نام {#update-namespaces}</h2>
+<p dir="rtl">مراحل زیر باید روی تک‌تک فضاهای نام کلاستر انجام شوند. فرمان‌هایی که در این مراحل به آن‌ها اشاره
+می‌شود، از متغیر <code dir="ltr">$NAMESPACE</code> برای ارجاع به فضای نامِ در حال به‌روزرسانی استفاده می‌کنند.</p>
+<h3 id="۳-الف-شناسایی-سطح-امنیت-pod-مناسب-identify-appropriate-level" dir="rtl">۳.الف. شناسایی سطح امنیت Pod مناسب {#identify-appropriate-level}</h3>
+<p dir="rtl">کار را با مرور <a href="../../concepts/security/pod-security-standards.html">استانداردهای امنیت Pod</a> و
+آشنایی با ۳ سطح مختلف آن آغاز کنید.</p>
+<p dir="rtl">برای انتخاب سطح امنیت Pod برای فضای نام خود چند راه وجود دارد:</p>
+<ol>
+<li dir="rtl"><strong>بر اساس الزامات امنیتی فضای نام</strong> - اگر با سطح دسترسی مورد انتظار برای فضای نام آشنا هستید،
+می‌توانید سطح مناسب را بر اساس همان الزامات انتخاب کنید؛ مشابه کاری که ممکن است در یک کلاستر
+جدید انجام دهید.</li>
+<li dir="rtl"><strong>بر اساس PodSecurityPolicyهای موجود</strong> - با استفاده از مرجع
+<a href="../../reference/access-authn-authz/psp-to-pod-security-standards.html">نگاشت PodSecurityPolicyها به استانداردهای امنیت Pod</a>
+می‌توانید هر PSP را به یکی از سطوح استاندارد امنیت Pod نگاشت کنید. اگر PSPهای شما بر پایهٔ
+استانداردهای امنیت Pod نیستند، ممکن است لازم باشد میان انتخاب سطحی که دست‌کم به‌اندازهٔ PSP
+سهل‌گیر است و سطحی که دست‌کم به‌اندازهٔ آن سخت‌گیر است تصمیم بگیرید. با فرمان زیر می‌توانید ببینید
+پادهای یک فضای نام مشخص از کدام PSPها استفاده می‌کنند:<pre dir="ltr"><code class="language-sh" dir="ltr">kubectl get pods -n $NAMESPACE -o jsonpath="{.items[*].metadata.annotations.kubernetes\.io\/psp}" | tr " " "\n" | sort -u
+</code></pre>
+</li>
+<li dir="rtl"><strong>بر اساس پادهای موجود</strong> - با استفاده از راهبردهای بخش <a href="#verify-pss-level">راستی‌آزمایی سطح امنیت Pod</a>
+می‌توانید هر دو سطح Baseline و Restricted را آزمایش کنید تا ببینید آیا برای بارهای کاری موجود به‌اندازهٔ
+کافی سهل‌گیر هستند یا نه، و سپس معتبرترین سطحی را که کمترین امتیاز را دارد انتخاب کنید.</li>
+</ol>
+<div class="callout caution"><div class="callout-title">احتیاط:</div>
+<p dir="rtl">گزینه‌های ۲ و ۳ بالا بر پایهٔ پادهای <em>موجود</em> هستند و ممکن است بارهای کاری‌ای را که در حال حاضر اجرا
+نمی‌شوند، مانند CronJobها، بارهای کاری مقیاس‌پذیر تا صفر یا دیگر بارهای کاری‌ای که هنوز منتشر نشده‌اند،
+از قلم بیندازند.</p>
+</div>
+<h3 id="۳-ب-راستی-آزمایی-سطح-امنیت-pod-verify-pss-level" dir="rtl">۳.ب. راستی‌آزمایی سطح امنیت Pod {#verify-pss-level}</h3>
+<p dir="rtl">پس از آنکه سطح امنیت Pod را برای فضای نام انتخاب کردید (یا اگر در حال آزمودن چند سطح هستید)، بهتر است
+ابتدا آن را آزمایش کنید (اگر از سطح Privileged استفاده می‌کنید، می‌توانید از این مرحله بگذرید). امنیت Pod
+چندین ابزار برای کمک به آزمایش و انتشار ایمن پروفایل‌ها در اختیار می‌گذارد.</p>
+<p dir="rtl">نخست، می‌توانید سیاست را به‌صورت آزمایشی اجرا کنید. این کار پادهای در حال اجرا در فضای نام را در برابر
+سیاست اعمال‌شده ارزیابی می‌کند، بی‌آنکه سیاست جدید واقعاً اعمال شود:</p>
+<pre dir="ltr"><code class="language-sh" dir="ltr"># $LEVEL is the level to dry-run, either "baseline" or "restricted".
+kubectl label --dry-run=server --overwrite ns $NAMESPACE pod-security.kubernetes.io/enforce=$LEVEL
+</code></pre>
+<p dir="rtl">این فرمان برای هر پاد <em>موجود</em> که در سطح پیشنهادی معتبر نباشد، یک هشدار برمی‌گرداند.</p>
+<p dir="rtl">گزینهٔ دوم، یعنی حالت ممیزی (audit)، برای شناسایی بارهای کاری‌ای که در حال حاضر اجرا نمی‌شوند مناسب‌تر
+است. در حالت ممیزی (برخلاف حالت اعمال)، پادهایی که سطح سیاست را نقض می‌کنند ممنوع نمی‌شوند، بلکه در
+لاگ‌های ممیزی ثبت می‌شوند تا بتوان پس از گذشت مدتی برای تثبیت، آن‌ها را بازبینی کرد. حالت هشدار نیز به
+همین شکل کار می‌کند، اما هشدار را بی‌درنگ به کاربر برمی‌گرداند. با فرمان زیر می‌توانید سطح ممیزی را
+روی یک فضای نام تنظیم کنید:</p>
+<pre dir="ltr"><code class="language-sh" dir="ltr">kubectl label --overwrite ns $NAMESPACE pod-security.kubernetes.io/audit=$LEVEL
+</code></pre>
+<p dir="rtl">اگر هر یک از این رویکردها به نقض‌های غیرمنتظره‌ای منجر شود، باید یا بارهای کاری ناقض را طوری
+به‌روزرسانی کنید که الزامات سیاست را برآورده کنند، یا سطح امنیت Pod فضای نام را سهل‌گیرانه‌تر کنید.</p>
+<h3 id="۳-ج-اعمال-سطح-امنیت-pod-enforce-pod-security-level" dir="rtl">۳.ج. اعمال سطح امنیت Pod {#enforce-pod-security-level}</h3>
+<p dir="rtl">هنگامی که مطمئن شدید سطح انتخاب‌شده را می‌توان به‌طور ایمن روی فضای نام اعمال کرد، می‌توانید فضای نام
+را طوری به‌روزرسانی کنید که سطح مطلوب را اعمال کند:</p>
+<pre dir="ltr"><code class="language-sh" dir="ltr">kubectl label --overwrite ns $NAMESPACE pod-security.kubernetes.io/enforce=$LEVEL
+</code></pre>
+<h3 id="۳-د-دور-زدن-podsecuritypolicy-bypass-psp" dir="rtl">۳.د. دور زدن PodSecurityPolicy {#bypass-psp}</h3>
+<p dir="rtl">در پایان، می‌توانید با متصل کردن
+PSP کاملاً دارای امتیاز ویژه به همهٔ
+حساب‌های سرویس در فضای نام، PodSecurityPolicy را در سطح فضای نام عملاً دور بزنید.</p>
+<pre dir="ltr"><code class="language-sh" dir="ltr"># The following cluster-scoped commands are only needed once.
+kubectl apply -f privileged-psp.yaml
+kubectl create clusterrole privileged-psp --verb use --resource podsecuritypolicies.policy --resource-name privileged
+
+# Per-namespace disable
+kubectl create -n $NAMESPACE rolebinding disable-psp --clusterrole privileged-psp --group system:serviceaccounts:$NAMESPACE
+</code></pre>
+<p dir="rtl">از آنجا که PSP دارای امتیاز ویژه غیرتغییردهنده است و کنترل‌کنندهٔ پذیرش PSP همواره PSPهای
+غیرتغییردهنده را ترجیح می‌دهد، این کار تضمین می‌کند که پادهای این فضای نام دیگر توسط PodSecurityPolicy
+تغییر داده یا محدود نمی‌شوند.</p>
+<p dir="rtl">مزیت غیرفعال کردن PodSecurityPolicy به این شکل و به‌صورت جداگانه برای هر فضای نام این است که اگر مشکلی
+پیش بیاید، می‌توانید با حذف RoleBinding به‌آسانی تغییر را بازگردانید. فقط مطمئن شوید که
+PodSecurityPolicyهای از پیش موجود همچنان سر جای خود باقی هستند!</p>
+<pre dir="ltr"><code class="language-sh" dir="ltr"># Undo PodSecurityPolicy disablement.
+kubectl delete -n $NAMESPACE rolebinding disable-psp
+</code></pre>
+<h2 id="۴-بازبینی-فرایندهای-ایجاد-فضای-نام-review-namespace-creation-process" dir="rtl">۴. بازبینی فرایندهای ایجاد فضای نام {#review-namespace-creation-process}</h2>
+<p dir="rtl">اکنون که فضاهای نام موجود برای اعمال پذیرش امنیت Pod به‌روزرسانی شده‌اند، باید مطمئن شوید که فرایندها
+و/یا سیاست‌های شما برای ایجاد فضاهای نام جدید نیز به‌روزرسانی شده‌اند تا یک پروفایل امنیت Pod مناسب روی
+فضاهای نام جدید اعمال شود.</p>
+<p dir="rtl">همچنین می‌توانید کنترل‌کنندهٔ پذیرش امنیت Pod را به‌صورت ایستا پیکربندی کنید تا برای فضاهای نام بدون
+برچسب، سطح پیش‌فرضی برای حالت‌های enforce، audit و/یا warn تعیین کند. برای اطلاعات بیشتر،
+<a href="enforce-standards-admission-controller.html#configure-the-admission-controller">پیکربندی کنترل‌کنندهٔ پذیرش</a>
+را ببینید.</p>
+<h2 id="۵-غیرفعال-کردن-podsecuritypolicy-disable-psp" dir="rtl">۵. غیرفعال‌کردن PodSecurityPolicy {#disable-psp}</h2>
+<p dir="rtl">اکنون سرانجام آماده‌اید که PodSecurityPolicy را غیرفعال کنید. برای این کار باید پیکربندی پذیرش
+(admission) سرور API را تغییر دهید:
+<a href="../../reference/access-authn-authz/admission-controllers.html#how-do-i-turn-off-an-admission-controller">چگونه یک کنترل‌کنندهٔ پذیرش را غیرفعال کنم؟</a>.</p>
+<p dir="rtl">برای اطمینان از اینکه کنترل‌کنندهٔ پذیرش PodSecurityPolicy دیگر فعال نیست، می‌توانید با جعل هویت
+کاربری که به هیچ PodSecurityPolicy دسترسی ندارد، به‌صورت دستی آزمایشی اجرا کنید (به
+<a href="../../concepts/security/pod-security-policy.html#example">نمونهٔ PodSecurityPolicy</a> مراجعه کنید)
+یا این موضوع را در لاگ‌های سرور API بررسی کنید. سرور API هنگام راه‌اندازی، خطوطی در لاگ می‌نویسد
+که افزونه‌های بارگذاری‌شدهٔ کنترل‌کنندهٔ پذیرش را فهرست می‌کنند:</p>
+<pre dir="ltr"><code dir="ltr">I0218 00:59:44.903329      13 plugins.go:158] Loaded 16 mutating admission controller(s) successfully in the following order: NamespaceLifecycle,LimitRanger,ServiceAccount,NodeRestriction,TaintNodesByCondition,Priority,DefaultTolerationSeconds,ExtendedResourceToleration,PersistentVolumeLabel,DefaultStorageClass,StorageObjectInUseProtection,RuntimeClass,DefaultIngressClass,MutatingAdmissionWebhook.
+I0218 00:59:44.903350      13 plugins.go:161] Loaded 14 validating admission controller(s) successfully in the following order: LimitRanger,ServiceAccount,PodSecurity,Priority,PersistentVolumeClaimResize,RuntimeClass,CertificateApproval,CertificateSigning,CertificateSubjectRestriction,DenyServiceExternalIPs,ValidatingAdmissionWebhook,ResourceQuota.
+</code></pre>
+<p dir="rtl">باید <code dir="ltr">PodSecurity</code> را (در میان کنترل‌کننده‌های پذیرش اعتبارسنج) ببینید و هیچ‌یک از دو فهرست
+نباید شامل <code dir="ltr">PodSecurityPolicy</code> باشد.</p>
+<p dir="rtl">هنگامی که مطمئن شدید کنترل‌کنندهٔ پذیرش PSP غیرفعال شده است (و پس از گذشت زمان آزمایشی کافی برای
+اطمینان از اینکه به بازگشت به وضعیت قبلی نیازی نخواهید داشت)، می‌توانید PodSecurityPolicyها و
+همهٔ Roleها، ClusterRoleها، RoleBindingها و ClusterRoleBindingهای مرتبط با آن‌ها را حذف کنید
+(فقط مطمئن شوید که این آبجکت‌ها مجوزهای نامرتبط دیگری اعطا نمی‌کنند).</p>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#پیش-از-شروع">پیش از شروع</a><a class="l2" href="#رویکرد-کلی">رویکرد کلی</a><a class="l2" href="#۰-تصمیم-بگیرید-که-آیا-پذیرش-امنیت-pod-برای-شما-مناسب-است-is-psa-right-for-you">۰. تصمیم بگیرید که آیا پذیرش امنیت Pod برای شما مناسب است {#is-psa-right-for-you}</a><a class="l2" href="#۱-بازبینی-مجوزهای-فضای-نام-review-namespace-permissions">۱. بازبینی مجوزهای فضای نام {#review-namespace-permissions}</a><a class="l2" href="#۲-ساده-سازی-و-استانداردسازی-podsecuritypolicyها-simplify-psps">۲. ساده‌سازی و استانداردسازی PodSecurityPolicyها {#simplify-psps}</a><a class="l3" href="#۲-الف-حذف-فیلدهای-صرفاً-تغییردهنده-eliminate-mutating-fields">۲.الف. حذف فیلدهای صرفاً تغییردهنده {#eliminate-mutating-fields}</a><a class="l3" href="#۲-ب-حذف-گزینه-هایی-که-استانداردهای-امنیت-pod-آن-ها-را-پوشش-نمی-دهند-eliminate-non-standard-options">۲.ب. حذف گزینه‌هایی که استانداردهای امنیت Pod آن‌ها را پوشش نمی‌دهند {#eliminate-non-standard-options}</a><a class="l3" href="#۲-ج-انتشار-pspهای-به-روزشده-psp-update-rollout">۲.ج. انتشار PSPهای به‌روزشده {#psp-update-rollout}</a><a class="l2" href="#۳-به-روزرسانی-فضاهای-نام-update-namespaces">۳. به‌روزرسانی فضاهای نام {#update-namespaces}</a><a class="l3" href="#۳-الف-شناسایی-سطح-امنیت-pod-مناسب-identify-appropriate-level">۳.الف. شناسایی سطح امنیت Pod مناسب {#identify-appropriate-level}</a><a class="l3" href="#۳-ب-راستی-آزمایی-سطح-امنیت-pod-verify-pss-level">۳.ب. راستی‌آزمایی سطح امنیت Pod {#verify-pss-level}</a><a class="l3" href="#۳-ج-اعمال-سطح-امنیت-pod-enforce-pod-security-level">۳.ج. اعمال سطح امنیت Pod {#enforce-pod-security-level}</a><a class="l3" href="#۳-د-دور-زدن-podsecuritypolicy-bypass-psp">۳.د. دور زدن PodSecurityPolicy {#bypass-psp}</a><a class="l2" href="#۴-بازبینی-فرایندهای-ایجاد-فضای-نام-review-namespace-creation-process">۴. بازبینی فرایندهای ایجاد فضای نام {#review-namespace-creation-process}</a><a class="l2" href="#۵-غیرفعال-کردن-podsecuritypolicy-disable-psp">۵. غیرفعال‌کردن PodSecurityPolicy {#disable-psp}</a></nav>
+</div>
+</body>
+</html>

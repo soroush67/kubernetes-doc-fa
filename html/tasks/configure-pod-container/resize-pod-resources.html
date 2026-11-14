@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>تغییر اندازهٔ منابع CPU و حافظهٔ اختصاص‌یافته به Podها | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">tasks / configure-pod-container</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">تغییر اندازهٔ منابع CPU و حافظهٔ اختصاص‌یافته به Podها</h1><!-- overview -->
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
+<p dir="rtl">این صفحه توضیح می‌دهد که چگونه می‌توان منابع CPU و حافظهٔ تنظیم‌شده در سطح Pod را بدون ایجاد دوبارهٔ Pod تغییر داد.</p>
+<p dir="rtl">قابلیت تغییر اندازهٔ درجای Pod (In-place Pod Resize) امکان تغییر تخصیص منابع یک Pod در حال اجرا را فراهم می‌کند و از اختلال در کار برنامه جلوگیری می‌کند. فرایند تغییر اندازهٔ منابع هر کانتینر به‌تنهایی در صفحهٔ <a href="resize-container-resources.html">تغییر اندازهٔ منابع CPU و حافظهٔ اختصاص‌یافته به کانتینرها</a> شرح داده شده است.</p>
+<p dir="rtl">تمرکز این صفحه بر تغییر اندازهٔ درجای منابع در سطح Pod است. منابع سطح Pod در <code dir="ltr">spec.resources</code> تعریف می‌شوند و حد بالای مجموع منابعی را تعیین می‌کنند که همهٔ کانتینرهای Pod مصرف می‌کنند. با قابلیت تغییر اندازهٔ درجای منابع سطح Pod می‌توانید این تخصیص‌های کلی CPU و حافظه را برای یک Pod در حال اجرا مستقیماً تغییر دهید.</p>
+<h2 id="پیش-از-شروع" dir="rtl">پیش از شروع</h2>
+<p dir="rtl">باید یک کلاستر کوبرنتیز داشته باشید و ابزار خط فرمان kubectl باید برای ارتباط با کلاستر شما پیکربندی شده باشد. توصیه می‌شود این آموزش را روی کلاستری اجرا کنید که دست‌کم دو نود داشته باشد که نقش میزبان control plane را ندارند. اگر هنوز کلاستری ندارید، می‌توانید با استفاده از
+<a href="https://minikube.sigs.k8s.io/docs/tutorials/multi_node/" target="_blank" rel="noopener">minikube</a>
+یکی بسازید یا از یکی از این محیط‌های آزمایشی کوبرنتیز استفاده کنید:</p>
+<ul>
+<li dir="ltr" class="ltr"><a href="https://labs.iximiuz.com/playgrounds?category=kubernetes&amp;filter=all" target="_blank" rel="noopener">iximiuz Labs</a></li>
+<li dir="ltr" class="ltr"><a href="https://killercoda.com/playgrounds/scenario/kubernetes" target="_blank" rel="noopener">Killercoda</a></li>
+<li dir="ltr" class="ltr"><a href="https://kodekloud.com/public-playgrounds" target="_blank" rel="noopener">KodeKloud</a></li>
+</ul>
+<p dir="rtl"><a href="https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/" target="_blank">feature gateهای</a> زیر باید برای control plane و برای همهٔ نودهای کلاستر فعال باشند:</p>
+<ul>
+<li dir="ltr" class="ltr"><a href="https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/#InPlacePodLevelResourcesVerticalScaling" target="_blank"><code dir="ltr">InPlacePodLevelResourcesVerticalScaling</code></a></li>
+<li dir="ltr" class="ltr"><a href="https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/#PodLevelResources" target="_blank"><code dir="ltr">PodLevelResources</code></a></li>
+<li dir="ltr" class="ltr"><a href="https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/#InPlacePodVerticalScaling" target="_blank"><code dir="ltr">InPlacePodVerticalScaling</code></a></li>
+<li dir="ltr" class="ltr"><a href="https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/#NodeDeclaredFeatures" target="_blank"><code dir="ltr">NodeDeclaredFeatures</code></a></li>
+</ul>
+<p dir="rtl">برای استفاده از فلگ <code dir="ltr">--subresource=resize</code>، نسخهٔ کلاینت kubectl باید دست‌کم v1.32 باشد.</p>
+<h2 id="وضعیت-تغییر-اندازهٔ-pod-و-منطق-تلاش-دوباره" dir="rtl">وضعیت تغییر اندازهٔ Pod و منطق تلاش دوباره</h2>
+<p dir="rtl">سازوکاری که <code dir="ltr">kubelet</code> برای پیگیری تغییرات منابع و تلاش دوباره برای اعمال آن‌ها به کار می‌برد، میان درخواست‌های تغییر اندازه در سطح کانتینر و در سطح Pod مشترک است.</p>
+<p dir="rtl">وضعیت‌ها، دلیل‌ها و اولویت‌های تلاش دوباره همان مواردی هستند که برای تغییر اندازهٔ کانتینر تعریف شده‌اند:</p>
+<ul>
+<li dir="rtl">
+<p dir="rtl">شرایط وضعیت (Status Conditions): ‏<code dir="ltr">kubelet</code> با استفاده از PodResizePending (همراه با دلیل‌هایی مانند Infeasible یا Deferred) و PodResizeInProgress وضعیت درخواست را اعلام می‌کند.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">اولویت تلاش دوباره: تلاش دوباره برای تغییر اندازه‌های به تعویق افتاده (Deferred) ابتدا بر اساس PriorityClass، سپس بر اساس کلاس QoS (‏Guaranteed بر Burstable مقدم است) و در پایان بر اساس مدت‌زمانی که به تعویق افتاده‌اند انجام می‌شود.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">پیگیری: با فیلدهای <code dir="ltr">observedGeneration</code> می‌توانید مشخص کنید که وضعیت آخرین درخواست تغییر اندازهٔ پردازش‌شده به کدام مشخصهٔ Pod ‏(metadata.generation) مربوط است.</p>
+</li>
+</ul>
+<p dir="rtl">برای شرح کامل این شرایط و منطق تلاش دوباره، به بخش <a href="resize-container-resources.html#pod-resize-status">وضعیت تغییر اندازهٔ Pod</a> در مستندات تغییر اندازهٔ کانتینر مراجعه کنید.</p>
+<h2 id="سیاست-تغییر-اندازهٔ-کانتینر-و-تغییر-اندازه-در-سطح-pod" dir="rtl">سیاست تغییر اندازهٔ کانتینر و تغییر اندازه در سطح Pod</h2>
+<p dir="rtl">تغییر اندازهٔ منابع در سطح Pod از سیاست راه‌اندازی مجدد جداگانه‌ای پشتیبانی نمی‌کند و به آن نیازی هم ندارد.</p>
+<ul>
+<li dir="rtl">
+<p dir="rtl">نبود سیاست در سطح Pod: تغییرات منابع کلی Pod ‏(spec.resources) همیشه به‌صورت درجا و بدون راه‌اندازی مجدد اعمال می‌شوند؛ زیرا منابع سطح Pod نقش یک محدودیت کلی بر cgroup مربوط به Pod را دارند و محیط اجرای برنامه در داخل کانتینرها را مستقیماً مدیریت نمی‌کنند.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><a href="resize-container-resources.html#container-resize-policies">سیاست کانتینر</a> همچنان تعیین‌کننده است: فیلد resizePolicy همچنان باید در سطح کانتینر (spec.containers[*].resizePolicy) پیکربندی شود. این سیاست تعیین می‌کند که آیا هر کانتینر هنگام تغییر درخواست‌ها (requests) یا حدهای (limits) منابعش دوباره راه‌اندازی شود یا نه؛ فرقی نمی‌کند این تغییر از یک تغییر اندازهٔ مستقیم در سطح کانتینر ناشی شده باشد یا از به‌روزرسانی محدودهٔ کلی منابع در سطح Pod.</p>
+</li>
+</ul>
+<h2 id="محدودیت-ها" dir="rtl">محدودیت‌ها</h2>
+<p dir="rtl">در کوبرنتیز 1.37، تغییر اندازهٔ درجای منابع سطح Pod مشمول همهٔ محدودیت‌هایی است که برای تغییر اندازهٔ منابع در سطح کانتینر شرح داده شده‌اند. این محدودیت‌ها را می‌توانید در این صفحه ببینید: <a href="resize-container-resources.html#limitations">تغییر اندازهٔ منابع CPU و حافظهٔ اختصاص‌یافته به کانتینرها: محدودیت‌ها</a>.</p>
+<p dir="rtl">افزون بر این، محدودیت زیر مخصوص تغییر اندازهٔ منابع در سطح Pod است:</p>
+<ul>
+<li dir="rtl">
+<p dir="rtl">اعتبارسنجی درخواست‌های کانتینر: تغییر اندازه تنها در صورتی مجاز است که درخواست‌های منابع سطح Pod پس از تغییر (spec.resources.requests) بزرگ‌تر یا مساوی مجموع درخواست‌های متناظر همهٔ کانتینرهای داخل Pod باشند. به این ترتیب، حداقل منابع تضمین‌شده برای Pod حفظ می‌شود.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">اعتبارسنجی حدهای کانتینر: تغییر اندازه در صورتی مجاز است که حد هر کانتینر کوچک‌تر یا مساوی حدهای منابع سطح Pod ‏(spec.resources.limits) باشد. حد سطح Pod مرزی است که هیچ کانتینری به‌تنهایی نمی‌تواند از آن فراتر رود، اما مجموع حدهای کانتینرها می‌تواند از حد سطح Pod بیشتر باشد؛ به این ترتیب کانتینرهای داخل Pod می‌توانند منابع را به‌صورت اشتراکی استفاده کنند.</p>
+</li>
+</ul>
+<h2 id="مثال-تغییر-اندازهٔ-منابع-سطح-pod" dir="rtl">مثال: تغییر اندازهٔ منابع سطح Pod</h2>
+<p dir="rtl">ابتدا یک Pod بسازید که برای تغییر اندازهٔ درجای CPU و تغییر اندازهٔ حافظه همراه با راه‌اندازی مجدد طراحی شده است.</p>
+<div class="code-file ltr" dir="ltr">pods/resource/pod-level-resize.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-level-resize-demo
+spec:
+  containers:
+  - name: pause
+    image: registry.k8s.io/pause:3.9
+    resizePolicy:
+    - resourceName: cpu
+      restartPolicy: NotRequired # Default, but explicit here
+    - resourceName: memory
+      restartPolicy: RestartContainer
+    resources:
+      requests:
+        cpu: 100m
+        memory: 100Mi
+  - name: nginx-server
+    image: registry.k8s.io/nginx:latest
+    resizePolicy:
+    - resourceName: cpu
+      restartPolicy: RestartContainer
+    - resourceName: memory
+      restartPolicy: RestartContainer
+  resources: # Pod-level resources
+    requests:
+      cpu: 200m
+      memory: 200Mi
+    limits:
+      cpu: 200m
+      memory: 200Mi
+</code></pre>
+<p dir="rtl">Pod را ایجاد کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl create -f pod-level-resize.yaml
+</code></pre>
+<p dir="rtl">از آنجا که درخواست‌های سطح Pod با حدها برابرند، این Pod در کلاس QoS از نوع Guaranteed آغاز به کار می‌کند. وضعیت اولیهٔ آن را بررسی کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># Wait a moment for the pod to be running
+kubectl get pod pod-level-resize-demo --output=yaml
+</code></pre>
+<p dir="rtl">به <code dir="ltr">spec.resources</code> (‏200m CPU و 200Mi حافظه) توجه کنید. همچنین مقدار <code dir="ltr">status.containerStatuses[0].restartCount</code> (که باید 0 باشد) و <code dir="ltr">status.containerStatuses[1].restartCount</code> (که باید 0 باشد) را بررسی کنید.</p>
+<p dir="rtl">اکنون درخواست و حد CPU در سطح Pod را به <code dir="ltr">300m</code> افزایش دهید. برای این کار از <code dir="ltr">kubectl patch</code> همراه با آرگومان خط فرمان <code dir="ltr">--subresource resize</code> استفاده کنید.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl patch pod pod-level-resize-demo --subresource resize --patch \
+  '{"spec":{"resources":{"requests":{"cpu":"300m"}, "limits":{"cpu":"300m"}}}}'
+
+# Alternative methods:
+# kubectl edit pod pod-level-resize-demo --subresource resize
+# kubectl apply -f &lt;updated-manifest&gt; --subresource resize --server-side
+</code></pre>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">آرگومان خط فرمان <code dir="ltr">--subresource resize</code> به کلاینت <code dir="ltr">kubectl</code> با نسخهٔ v1.32.0 یا بالاتر نیاز دارد. نسخه‌های قدیمی‌تر خطای <code dir="ltr">invalid subresource</code> را گزارش می‌کنند.</p>
+</div>
+<p dir="rtl">پس از اعمال patch، وضعیت Pod را دوباره بررسی کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pod pod-level-resize-demo --output=yaml
+</code></pre>
+<p dir="rtl">باید موارد زیر را ببینید:</p>
+<ul>
+<li dir="rtl">اکنون <code dir="ltr">spec.resources.requests</code> و <code dir="ltr">spec.resources.limits</code> مقدار <code dir="ltr">cpu: 300m</code> را نشان می‌دهند.</li>
+<li dir="rtl">مقدار <code dir="ltr">status.containerStatuses[0].restartCount</code> همچنان <code dir="ltr">0</code> باقی می‌ماند، زیرا <code dir="ltr">resizePolicy</code> مربوط به CPU برابر <code dir="ltr">NotRequired</code> بود.</li>
+<li dir="rtl">مقدار <code dir="ltr">status.containerStatuses[1].restartCount</code> به <code dir="ltr">1</code> افزایش یافته است؛ این نشان می‌دهد که کانتینر برای اعمال تغییر CPU دوباره راه‌اندازی شده است. با اینکه تغییر اندازه در سطح Pod اعمال شد، کانتینر 1 به دلیل رابطهٔ پیچیدهٔ میان حدهای سطح Pod و سیاست‌های سطح کانتینر دوباره راه‌اندازی شد. از آنجا که کانتینر 1 حد CPU صریحی تعیین نکرده بود، پیکربندی زیربنایی منابع آن (برای مثال cgroupها) به‌طور ضمنی حد کلی CPU در Pod را به‌عنوان مرز مؤثر حداکثر مصرف خود پذیرفته بود. وقتی حد CPU سطح Pod از 200m به 300m تغییر داده شد، حد ضمنی اعمال‌شده بر کانتینر 1 نیز در نتیجه تغییر کرد. چون resizePolicy کانتینر 1 برای CPU به‌طور صریح روی RestartContainer تنظیم شده بود، <code dir="ltr">kubelet</code> ناگزیر بود کانتینر را دوباره راه‌اندازی کند تا این تغییر به‌درستی در سازوکار زیربنایی اعمال منابع اعمال شود. این موضوع تأیید می‌کند که تغییر حدهای سطح Pod می‌تواند سیاست‌های راه‌اندازی مجدد کانتینر را فعال کند، حتی وقتی حدهای کانتینر مستقیماً تعریف نشده باشند.</li>
+</ul>
+<h2 id="پاک-سازی" dir="rtl">پاک‌سازی</h2>
+<p dir="rtl">Pod را حذف کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl delete pod pod-level-resize-demo
+</code></pre>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<h3 id="برای-توسعه-دهندگان-برنامه" dir="rtl">برای توسعه‌دهندگان برنامه</h3>
+<ul>
+<li dir="rtl">
+<p dir="rtl"><a href="assign-memory-resource.html">اختصاص منابع حافظه به کانتینرها و Podها</a></p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><a href="assign-cpu-resource.html">اختصاص منابع CPU به کانتینرها و Podها</a></p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><a href="assign-pod-level-resources.html">اختصاص منابع CPU و حافظه در سطح Pod</a></p>
+</li>
+</ul>
+<h3 id="برای-مدیران-کلاستر" dir="rtl">برای مدیران کلاستر</h3>
+<ul>
+<li dir="rtl">
+<p dir="rtl"><a href="../administer-cluster/manage-resources/memory-default-namespace.html">پیکربندی درخواست‌ها و حدهای پیش‌فرض حافظه برای یک فضای نام</a></p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><a href="../administer-cluster/manage-resources/cpu-default-namespace.html">پیکربندی درخواست‌ها و حدهای پیش‌فرض CPU برای یک فضای نام</a></p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><a href="../administer-cluster/manage-resources/memory-constraint-namespace.html">پیکربندی محدودیت‌های حداقل و حداکثر حافظه برای یک فضای نام</a></p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><a href="../administer-cluster/manage-resources/cpu-constraint-namespace.html">پیکربندی محدودیت‌های حداقل و حداکثر CPU برای یک فضای نام</a></p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><a href="../administer-cluster/manage-resources/quota-memory-cpu-namespace.html">پیکربندی سهمیه‌های حافظه و CPU برای یک فضای نام</a></p>
+</li>
+</ul>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#پیش-از-شروع">پیش از شروع</a><a class="l2" href="#وضعیت-تغییر-اندازهٔ-pod-و-منطق-تلاش-دوباره">وضعیت تغییر اندازهٔ Pod و منطق تلاش دوباره</a><a class="l2" href="#سیاست-تغییر-اندازهٔ-کانتینر-و-تغییر-اندازه-در-سطح-pod">سیاست تغییر اندازهٔ کانتینر و تغییر اندازه در سطح Pod</a><a class="l2" href="#محدودیت-ها">محدودیت‌ها</a><a class="l2" href="#مثال-تغییر-اندازهٔ-منابع-سطح-pod">مثال: تغییر اندازهٔ منابع سطح Pod</a><a class="l2" href="#پاک-سازی">پاک‌سازی</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a><a class="l3" href="#برای-توسعه-دهندگان-برنامه">برای توسعه‌دهندگان برنامه</a><a class="l3" href="#برای-مدیران-کلاستر">برای مدیران کلاستر</a></nav>
+</div>
+</body>
+</html>
