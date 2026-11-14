@@ -1,0 +1,477 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>به‌روزرسانی درجای آبجکت‌های API با استفاده از kubectl patch | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">tasks / manage-kubernetes-objects</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">به‌روزرسانی درجای آبجکت‌های API با استفاده از kubectl patch</h1><p class="page-meta" dir="rtl">با kubectl patch آبجکت‌های API کوبرنتیز را درجا به‌روزرسانی کنید. یک وصلهٔ ادغام راهبردی یا یک وصلهٔ ادغام JSON اعمال کنید.</p><!-- overview -->
+<p dir="rtl">این صفحه نشان می‌دهد که چگونه با <code dir="ltr">kubectl patch</code> یک آبجکت API را درجا به‌روزرسانی کنید. تمرین‌های این صفحه نحوهٔ اعمال یک وصلهٔ ادغام راهبردی (strategic merge patch) و یک وصلهٔ ادغام JSON (JSON merge patch) را نشان می‌دهند.</p>
+<h2 id="پیش-از-شروع" dir="rtl">پیش از شروع</h2>
+<p dir="rtl">باید یک کلاستر کوبرنتیز داشته باشید و ابزار خط فرمان kubectl باید برای ارتباط با کلاستر شما پیکربندی شده باشد. توصیه می‌شود این آموزش را روی کلاستری اجرا کنید که دست‌کم دو نود داشته باشد که نقش میزبان control plane را ندارند. اگر هنوز کلاستری ندارید، می‌توانید با استفاده از
+<a href="https://minikube.sigs.k8s.io/docs/tutorials/multi_node/" target="_blank" rel="noopener">minikube</a>
+یکی بسازید یا از یکی از این محیط‌های آزمایشی کوبرنتیز استفاده کنید:</p>
+<ul>
+<li dir="ltr" class="ltr"><a href="https://labs.iximiuz.com/playgrounds?category=kubernetes&amp;filter=all" target="_blank" rel="noopener">iximiuz Labs</a></li>
+<li dir="ltr" class="ltr"><a href="https://killercoda.com/playgrounds/scenario/kubernetes" target="_blank" rel="noopener">Killercoda</a></li>
+<li dir="ltr" class="ltr"><a href="https://kodekloud.com/public-playgrounds" target="_blank" rel="noopener">KodeKloud</a></li>
+</ul>
+<!-- steps -->
+<h2 id="استفاده-از-وصلهٔ-ادغام-راهبردی-برای-به-روزرسانی-یک-deployment" dir="rtl">استفاده از وصلهٔ ادغام راهبردی برای به‌روزرسانی یک Deployment</h2>
+<p dir="rtl">در ادامه فایل پیکربندی یک Deployment با دو رونوشت (replica) آمده است. هر رونوشت یک Pod است که یک کانتینر دارد:</p>
+<div class="code-file ltr" dir="ltr">application/deployment-patch.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: patch-demo
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: patch-demo-ctr
+        image: nginx
+      tolerations:
+      - effect: NoSchedule
+        key: dedicated
+        value: test-team
+</code></pre>
+<p dir="rtl">این Deployment را ایجاد کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f https://k8s.io/examples/application/deployment-patch.yaml
+</code></pre>
+<p dir="rtl">فهرست Podهای مرتبط با Deployment خود را ببینید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pods
+</code></pre>
+<p dir="rtl">خروجی نشان می‌دهد که Deployment دو Pod دارد. مقدار <code dir="ltr">1/1</code> نشان می‌دهد که هر Pod یک کانتینر دارد:</p>
+<pre dir="ltr"><code dir="ltr">NAME                        READY     STATUS    RESTARTS   AGE
+patch-demo-28633765-670qr   1/1       Running   0          23s
+patch-demo-28633765-j5qs3   1/1       Running   0          23s
+</code></pre>
+<p dir="rtl">نام Podهای در حال اجرا را یادداشت کنید. بعداً خواهید دید که این Podها خاتمه می‌یابند و Podهای جدیدی جای آن‌ها را می‌گیرند.</p>
+<p dir="rtl">در این مرحله، هر Pod یک کانتینر دارد که ایمیج nginx را اجرا می‌کند. اکنون فرض کنید می‌خواهید هر Pod دو کانتینر داشته باشد: یکی برای اجرای nginx و دیگری برای اجرای redis.</p>
+<p dir="rtl">فایلی با نام <code dir="ltr">patch-file.yaml</code> و محتوای زیر ایجاد کنید:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">spec:
+  template:
+    spec:
+      containers:
+      - name: patch-demo-ctr-2
+        image: redis
+</code></pre>
+<p dir="rtl">وصله را روی Deployment خود اعمال کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl patch deployment patch-demo --patch-file patch-file.yaml
+</code></pre>
+<p dir="rtl">وضعیت Deployment وصله‌شده را مشاهده کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get deployment patch-demo --output yaml
+</code></pre>
+<p dir="rtl">خروجی نشان می‌دهد که PodSpec در این Deployment دو کانتینر دارد:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">containers:
+- image: redis
+  imagePullPolicy: Always
+  name: patch-demo-ctr-2
+  ...
+- image: nginx
+  imagePullPolicy: Always
+  name: patch-demo-ctr
+  ...
+</code></pre>
+<p dir="rtl">فهرست Podهای مرتبط با Deployment وصله‌شده را ببینید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pods
+</code></pre>
+<p dir="rtl">خروجی نشان می‌دهد که نام Podهای در حال اجرا با نام Podهایی که پیش‌تر اجرا می‌شدند متفاوت است. این Deployment، Podهای قدیمی را خاتمه داده و دو Pod جدید مطابق با مشخصات (spec) به‌روزشدهٔ Deployment ایجاد کرده است. مقدار <code dir="ltr">2/2</code> نشان می‌دهد که هر Pod دو کانتینر دارد:</p>
+<pre dir="ltr"><code dir="ltr">NAME                          READY     STATUS    RESTARTS   AGE
+patch-demo-1081991389-2wrn5   2/2       Running   0          1m
+patch-demo-1081991389-jmg7b   2/2       Running   0          1m
+</code></pre>
+<p dir="rtl">یکی از Podهای patch-demo را دقیق‌تر بررسی کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pod &lt;your-pod-name&gt; --output yaml
+</code></pre>
+<p dir="rtl">خروجی نشان می‌دهد که این Pod دو کانتینر دارد: یکی nginx و دیگری redis را اجرا می‌کند:</p>
+<pre dir="ltr"><code dir="ltr">containers:
+- image: redis
+  ...
+- image: nginx
+  ...
+</code></pre>
+<h3 id="نکاتی-دربارهٔ-وصلهٔ-ادغام-راهبردی" dir="rtl">نکاتی دربارهٔ وصلهٔ ادغام راهبردی</h3>
+<p dir="rtl">وصله‌ای که در تمرین قبل اعمال کردید <em>وصلهٔ ادغام راهبردی</em> نام دارد. توجه کنید که این وصله فهرست <code dir="ltr">containers</code> را جایگزین نکرد، بلکه یک کانتینر جدید به آن افزود. به بیان دیگر، فهرست موجود در وصله با فهرست فعلی ادغام شد. اما هنگام اعمال وصلهٔ ادغام راهبردی روی یک فهرست، همیشه چنین اتفاقی نمی‌افتد. در برخی موارد، فهرست جایگزین می‌شود، نه ادغام.</p>
+<p dir="rtl">در وصلهٔ ادغام راهبردی، هر فهرست بسته به راهبرد وصلهٔ (patch strategy) خود یا جایگزین می‌شود یا ادغام. راهبرد وصله با مقدار کلید <code dir="ltr">patchStrategy</code> در تگ فیلد (field tag) در کد منبع کوبرنتیز تعیین می‌شود. برای مثال، فیلد <code dir="ltr">Containers</code> در ساختار (struct) <code dir="ltr">PodSpec</code> دارای <code dir="ltr">patchStrategy</code> با مقدار <code dir="ltr">merge</code> است:</p>
+<pre dir="ltr"><code class="language-go" dir="ltr">type PodSpec struct {
+  ...
+  Containers []Container `json:"containers" patchStrategy:"merge" patchMergeKey:"name" ...`
+  ...
+}
+</code></pre>
+<p dir="rtl">راهبرد وصله را در
+<a href="https://raw.githubusercontent.com/kubernetes/kubernetes/master/api/openapi-spec/swagger.json" target="_blank" rel="noopener">مشخصات OpenApi</a> نیز می‌توانید ببینید:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">"io.k8s.api.core.v1.PodSpec": {
+    ...,
+    "containers": {
+        "description": "List of containers belonging to the pod.  ...."
+    },
+    "x-kubernetes-patch-merge-key": "name",
+    "x-kubernetes-patch-strategy": "merge"
+}
+</code></pre>
+<!-- for editors: intentionally use yaml instead of json here, to prevent syntax highlight error. -->
+<p dir="rtl">همچنین می‌توانید راهبرد وصله را در
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.37/#podspec-v1-core" target="_blank">مستندات API کوبرنتیز</a> ببینید.</p>
+<p dir="rtl">فایلی با نام <code dir="ltr">patch-file-tolerations.yaml</code> و محتوای زیر ایجاد کنید:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">spec:
+  template:
+    spec:
+      tolerations:
+      - effect: NoSchedule
+        key: disktype
+        value: ssd
+</code></pre>
+<p dir="rtl">وصله را روی Deployment خود اعمال کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl patch deployment patch-demo --patch-file patch-file-tolerations.yaml
+</code></pre>
+<p dir="rtl">وضعیت Deployment وصله‌شده را مشاهده کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get deployment patch-demo --output yaml
+</code></pre>
+<p dir="rtl">خروجی نشان می‌دهد که PodSpec در این Deployment فقط یک تحمل (toleration) دارد:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">tolerations:
+- effect: NoSchedule
+  key: disktype
+  value: ssd
+</code></pre>
+<p dir="rtl">توجه کنید که فهرست <code dir="ltr">tolerations</code> در PodSpec جایگزین شد، نه ادغام. دلیل این است که فیلد Tolerations در PodSpec، در تگ فیلد خود کلید <code dir="ltr">patchStrategy</code> ندارد. بنابراین وصلهٔ ادغام راهبردی از راهبرد وصلهٔ پیش‌فرض، یعنی <code dir="ltr">replace</code>، استفاده می‌کند.</p>
+<pre dir="ltr"><code class="language-go" dir="ltr">type PodSpec struct {
+  ...
+  Tolerations []Toleration `json:"tolerations,omitempty" protobuf:"bytes,22,opt,name=tolerations"`
+  ...
+}
+</code></pre>
+<h2 id="استفاده-از-وصلهٔ-ادغام-json-برای-به-روزرسانی-یک-deployment" dir="rtl">استفاده از وصلهٔ ادغام JSON برای به‌روزرسانی یک Deployment</h2>
+<p dir="rtl">وصلهٔ ادغام راهبردی با
+<a href="https://tools.ietf.org/html/rfc7386" target="_blank" rel="noopener">وصلهٔ ادغام JSON</a> تفاوت دارد.
+در وصلهٔ ادغام JSON، اگر بخواهید فهرستی را به‌روزرسانی کنید، باید کل فهرست جدید را مشخص کنید. فهرست جدید نیز به‌طور کامل جایگزین فهرست موجود می‌شود.</p>
+<p dir="rtl">فرمان <code dir="ltr">kubectl patch</code> پارامتری به نام <code dir="ltr">type</code> دارد که می‌توانید آن را روی یکی از مقادیر زیر تنظیم کنید:</p>
+<table>
+  <tr><th dir="rtl">مقدار پارامتر</th><th dir="rtl">نوع ادغام</th></tr>
+  <tr><td dir="ltr" class="ltr">json</td><td dir="ltr" class="ltr"><a href="https://tools.ietf.org/html/rfc6902" target="_blank" rel="noopener">JSON Patch, RFC 6902</a></td></tr>
+  <tr><td dir="ltr" class="ltr">merge</td><td dir="ltr" class="ltr"><a href="https://tools.ietf.org/html/rfc7386" target="_blank" rel="noopener">JSON Merge Patch, RFC 7386</a></td></tr>
+  <tr><td dir="ltr" class="ltr">strategic</td><td dir="rtl">وصلهٔ ادغام راهبردی</td></tr>
+</table>
+<p dir="rtl">برای مقایسهٔ وصلهٔ JSON و وصلهٔ ادغام JSON، به
+<a href="https://erosb.github.io/post/json-patch-vs-merge-patch/" target="_blank" rel="noopener">JSON Patch and JSON Merge Patch</a> مراجعه کنید.</p>
+<p dir="rtl">مقدار پیش‌فرض پارامتر <code dir="ltr">type</code> برابر با <code dir="ltr">strategic</code> است. بنابراین در تمرین قبل، یک وصلهٔ ادغام راهبردی اعمال کردید.</p>
+<p dir="rtl">اکنون یک وصلهٔ ادغام JSON روی همان Deployment اعمال کنید. فایلی با نام <code dir="ltr">patch-file-2.yaml</code> و محتوای زیر ایجاد کنید:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">spec:
+  template:
+    spec:
+      containers:
+      - name: patch-demo-ctr-3
+        image: gcr.io/google-samples/hello-app:2.0
+</code></pre>
+<p dir="rtl">در فرمان وصله، مقدار <code dir="ltr">type</code> را برابر با <code dir="ltr">merge</code> قرار دهید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl patch deployment patch-demo --type merge --patch-file patch-file-2.yaml
+</code></pre>
+<p dir="rtl">وضعیت Deployment وصله‌شده را مشاهده کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get deployment patch-demo --output yaml
+</code></pre>
+<p dir="rtl">فهرست <code dir="ltr">containers</code> که در وصله مشخص کردید فقط یک کانتینر دارد. خروجی نشان می‌دهد که این فهرست تک‌کانتینری جایگزین فهرست <code dir="ltr">containers</code> موجود شده است.</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">spec:
+  containers:
+  - image: gcr.io/google-samples/hello-app:2.0
+    ...
+    name: patch-demo-ctr-3
+</code></pre>
+<p dir="rtl">فهرست Podهای در حال اجرا را ببینید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pods
+</code></pre>
+<p dir="rtl">در خروجی می‌بینید که Podهای قبلی خاتمه یافته‌اند و Podهای جدیدی ایجاد شده‌اند. مقدار <code dir="ltr">1/1</code> نشان می‌دهد که هر Pod جدید فقط یک کانتینر را اجرا می‌کند.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">NAME                          READY     STATUS    RESTARTS   AGE
+patch-demo-1307768864-69308   1/1       Running   0          1m
+patch-demo-1307768864-c86dc   1/1       Running   0          1m
+</code></pre>
+<h2 id="استفاده-از-وصلهٔ-ادغام-راهبردی-با-راهبرد-retainkeys-برای-به-روزرسانی-یک-deployment" dir="rtl">استفاده از وصلهٔ ادغام راهبردی با راهبرد retainKeys برای به‌روزرسانی یک Deployment</h2>
+<p dir="rtl">در ادامه فایل پیکربندی یک Deployment آمده است که از راهبرد <code dir="ltr">RollingUpdate</code> استفاده می‌کند:</p>
+<div class="code-file ltr" dir="ltr">application/deployment-retainkeys.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: retainkeys-demo
+spec:
+  selector:
+    matchLabels:
+      app: nginx
+  strategy:
+    rollingUpdate:
+      maxSurge: 30%
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: retainkeys-demo-ctr
+        image: nginx
+</code></pre>
+<p dir="rtl">این Deployment را ایجاد کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f https://k8s.io/examples/application/deployment-retainkeys.yaml
+</code></pre>
+<p dir="rtl">در این مرحله، Deployment ایجاد شده است و از راهبرد <code dir="ltr">RollingUpdate</code> استفاده می‌کند.</p>
+<p dir="rtl">فایلی با نام <code dir="ltr">patch-file-no-retainkeys.yaml</code> و محتوای زیر ایجاد کنید:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">spec:
+  strategy:
+    type: Recreate
+</code></pre>
+<p dir="rtl">وصله را روی Deployment خود اعمال کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl patch deployment retainkeys-demo --type strategic --patch-file patch-file-no-retainkeys.yaml
+</code></pre>
+<p dir="rtl">در خروجی می‌بینید که وقتی برای <code dir="ltr">spec.strategy.rollingUpdate</code> مقداری تعریف شده باشد، نمی‌توان <code dir="ltr">type</code> را روی <code dir="ltr">Recreate</code> تنظیم کرد:</p>
+<pre dir="ltr"><code dir="ltr">The Deployment "retainkeys-demo" is invalid: spec.strategy.rollingUpdate: Forbidden: may not be specified when strategy `type` is 'Recreate'
+</code></pre>
+<p dir="rtl">برای حذف مقدار <code dir="ltr">spec.strategy.rollingUpdate</code> هنگام به‌روزرسانی مقدار <code dir="ltr">type</code>، باید از راهبرد <code dir="ltr">retainKeys</code> در ادغام راهبردی استفاده کنید.</p>
+<p dir="rtl">فایل دیگری با نام <code dir="ltr">patch-file-retainkeys.yaml</code> و محتوای زیر ایجاد کنید:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">spec:
+  strategy:
+    $retainKeys:
+    - type
+    type: Recreate
+</code></pre>
+<p dir="rtl">با این وصله مشخص می‌کنیم که می‌خواهیم فقط کلید <code dir="ltr">type</code> از آبجکت <code dir="ltr">strategy</code> حفظ شود. در نتیجه، <code dir="ltr">rollingUpdate</code> در طول عملیات وصله حذف می‌شود.</p>
+<p dir="rtl">این وصلهٔ جدید را دوباره روی Deployment خود اعمال کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl patch deployment retainkeys-demo --type strategic --patch-file patch-file-retainkeys.yaml
+</code></pre>
+<p dir="rtl">محتوای Deployment را بررسی کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get deployment retainkeys-demo --output yaml
+</code></pre>
+<p dir="rtl">خروجی نشان می‌دهد که آبجکت strategy در Deployment دیگر کلید <code dir="ltr">rollingUpdate</code> را ندارد:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">spec:
+  strategy:
+    type: Recreate
+  template:
+</code></pre>
+<h3 id="نکاتی-دربارهٔ-وصلهٔ-ادغام-راهبردی-با-راهبرد-retainkeys" dir="rtl">نکاتی دربارهٔ وصلهٔ ادغام راهبردی با راهبرد retainKeys</h3>
+<p dir="rtl">وصله‌ای که در تمرین قبل اعمال کردید <em>وصلهٔ ادغام راهبردی با راهبرد retainKeys</em> نام دارد. این روش رهنمود (directive) جدیدی به نام <code dir="ltr">$retainKeys</code> معرفی می‌کند که از راهبردهای زیر پیروی می‌کند:</p>
+<ul>
+<li dir="rtl">شامل فهرستی از رشته‌ها است.</li>
+<li dir="rtl">همهٔ فیلدهایی که باید حفظ شوند، باید در فهرست <code dir="ltr">$retainKeys</code> حضور داشته باشند.</li>
+<li dir="rtl">فیلدهای حاضر در این فهرست با آبجکت زنده (live object) ادغام می‌شوند.</li>
+<li dir="rtl">همهٔ فیلدهای غایب هنگام اعمال وصله پاک می‌شوند.</li>
+<li dir="rtl">مجموعهٔ فیلدهای فهرست <code dir="ltr">$retainKeys</code> باید با فیلدهای موجود در وصله برابر یا ابرمجموعهٔ آن‌ها باشد.</li>
+</ul>
+<p dir="rtl">راهبرد <code dir="ltr">retainKeys</code> برای همهٔ آبجکت‌ها کار نمی‌کند. این راهبرد فقط زمانی کار می‌کند که مقدار کلید <code dir="ltr">patchStrategy</code> در تگ فیلد در کد منبع کوبرنتیز شامل <code dir="ltr">retainKeys</code> باشد. برای مثال، فیلد <code dir="ltr">Strategy</code> در ساختار <code dir="ltr">DeploymentSpec</code> دارای <code dir="ltr">patchStrategy</code> با مقدار <code dir="ltr">retainKeys</code> است:</p>
+<pre dir="ltr"><code class="language-go" dir="ltr">type DeploymentSpec struct {
+  ...
+  // +patchStrategy=retainKeys
+  Strategy DeploymentStrategy `json:"strategy,omitempty" patchStrategy:"retainKeys" ...`
+  ...
+}
+</code></pre>
+<p dir="rtl">راهبرد <code dir="ltr">retainKeys</code> را در <a href="https://raw.githubusercontent.com/kubernetes/kubernetes/master/api/openapi-spec/swagger.json" target="_blank" rel="noopener">مشخصات OpenApi</a> نیز می‌توانید ببینید:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">"io.k8s.api.apps.v1.DeploymentSpec": {
+    ...,
+    "strategy": {
+        "$ref": "#/definitions/io.k8s.api.apps.v1.DeploymentStrategy",
+        "description": "The deployment strategy to use to replace existing pods with new ones.",
+        "x-kubernetes-patch-strategy": "retainKeys"
+    },
+    ....
+}
+</code></pre>
+<!-- for editors: intentionally use yaml instead of json here, to prevent syntax highlight error. -->
+<p dir="rtl">همچنین می‌توانید راهبرد <code dir="ltr">retainKeys</code> را در
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.37/#deploymentspec-v1-apps" target="_blank">مستندات API کوبرنتیز</a> ببینید.</p>
+<h3 id="شکل-های-دیگر-فرمان-kubectl-patch" dir="rtl">شکل‌های دیگر فرمان kubectl patch</h3>
+<p dir="rtl">فرمان <code dir="ltr">kubectl patch</code> ورودی YAML یا JSON می‌پذیرد. این فرمان می‌تواند وصله را به‌صورت فایل یا مستقیماً در خط فرمان دریافت کند.</p>
+<p dir="rtl">فایلی با نام <code dir="ltr">patch-file.json</code> و محتوای زیر ایجاد کنید:</p>
+<pre dir="ltr"><code class="language-json" dir="ltr">{
+   "spec": {
+      "template": {
+         "spec": {
+            "containers": [
+               {
+                  "name": "patch-demo-ctr-2",
+                  "image": "redis"
+               }
+            ]
+         }
+      }
+   }
+}
+</code></pre>
+<p dir="rtl">فرمان‌های زیر معادل یکدیگرند:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl patch deployment patch-demo --patch-file patch-file.yaml
+kubectl patch deployment patch-demo --patch 'spec:\n template:\n  spec:\n   containers:\n   - name: patch-demo-ctr-2\n     image: redis'
+
+kubectl patch deployment patch-demo --patch-file patch-file.json
+kubectl patch deployment patch-demo --patch '{"spec": {"template": {"spec": {"containers": [{"name": "patch-demo-ctr-2","image": "redis"}]}}}}'
+</code></pre>
+<h3 id="به-روزرسانی-تعداد-رونوشت-های-یک-آبجکت-با-kubectl-patch-و---subresource-scale-kubectl-patch" dir="rtl">به‌روزرسانی تعداد رونوشت‌های یک آبجکت با <code dir="ltr">kubectl patch</code> و <code dir="ltr">--subresource</code> {#scale-kubectl-patch}</h3>
+<p dir="rtl">فلگ <code dir="ltr">--subresource=[subresource-name]</code> همراه با فرمان‌های kubectl مانند get، patch، edit، apply و replace به کار می‌رود تا زیرمنبع‌های (subresource) <code dir="ltr">status</code>، <code dir="ltr">scale</code> و <code dir="ltr">resize</code> منابعی را که مشخص می‌کنید دریافت و به‌روزرسانی کند. برای هر یک از منابع API کوبرنتیز (منابع داخلی و CRها) که زیرمنبع <code dir="ltr">status</code>، <code dir="ltr">scale</code> یا <code dir="ltr">resize</code> دارند، می‌توانید یک زیرمنبع مشخص کنید.</p>
+<p dir="rtl">برای مثال، Deployment یک زیرمنبع <code dir="ltr">status</code> و یک زیرمنبع <code dir="ltr">scale</code> دارد؛ بنابراین می‌توانید با <code dir="ltr">kubectl</code> فقط زیرمنبع <code dir="ltr">status</code> یک Deployment را دریافت یا تغییر دهید.</p>
+<p dir="rtl">در ادامه مانیفست یک Deployment با دو رونوشت آمده است:</p>
+<div class="code-file ltr" dir="ltr">application/deployment.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+spec:
+  selector:
+    matchLabels:
+      app: nginx
+  replicas: 2 # tells deployment to run 2 pods matching the template
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.14.2
+        ports:
+        - containerPort: 80
+</code></pre>
+<p dir="rtl">این Deployment را ایجاد کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f https://k8s.io/examples/application/deployment.yaml
+</code></pre>
+<p dir="rtl">فهرست Podهای مرتبط با Deployment خود را ببینید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pods -l app=nginx
+</code></pre>
+<p dir="rtl">در خروجی می‌بینید که Deployment دو Pod دارد. برای مثال:</p>
+<pre dir="ltr"><code dir="ltr">NAME                                READY   STATUS    RESTARTS   AGE
+nginx-deployment-7fb96c846b-22567   1/1     Running   0          47s
+nginx-deployment-7fb96c846b-mlgns   1/1     Running   0          47s
+</code></pre>
+<p dir="rtl">اکنون آن Deployment را با فلگ <code dir="ltr">--subresource=[subresource-name]</code> وصله کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl patch deployment nginx-deployment --subresource='scale' --type='merge' -p '{"spec":{"replicas":3}}'
+</code></pre>
+<p dir="rtl">خروجی به این صورت است:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">scale.autoscaling/nginx-deployment patched
+</code></pre>
+<p dir="rtl">فهرست Podهای مرتبط با Deployment وصله‌شده را ببینید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pods -l app=nginx
+</code></pre>
+<p dir="rtl">در خروجی می‌بینید که یک Pod جدید ایجاد شده است و اکنون ۳ Pod در حال اجرا دارید.</p>
+<pre dir="ltr"><code dir="ltr">NAME                                READY   STATUS    RESTARTS   AGE
+nginx-deployment-7fb96c846b-22567   1/1     Running   0          107s
+nginx-deployment-7fb96c846b-lxfr2   1/1     Running   0          14s
+nginx-deployment-7fb96c846b-mlgns   1/1     Running   0          107s
+</code></pre>
+<p dir="rtl">وضعیت Deployment وصله‌شده را مشاهده کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get deployment nginx-deployment -o yaml
+</code></pre>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">...
+spec:
+  replicas: 3
+  ...
+status:
+  ...
+  availableReplicas: 3
+  readyReplicas: 3
+  replicas: 3
+</code></pre>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">اگر <code dir="ltr">kubectl patch</code> را اجرا کنید و فلگ <code dir="ltr">--subresource</code> را برای منبعی مشخص کنید که از آن زیرمنبع خاص پشتیبانی نمی‌کند، سرور API خطای 404 Not Found برمی‌گرداند.</p>
+</div>
+<h2 id="خلاصه" dir="rtl">خلاصه</h2>
+<p dir="rtl">در این تمرین، با <code dir="ltr">kubectl patch</code> پیکربندی زندهٔ یک آبجکت Deployment را تغییر دادید. فایل پیکربندی‌ای را که در ابتدا برای ایجاد آبجکت Deployment استفاده کرده بودید تغییر ندادید. از دیگر فرمان‌های به‌روزرسانی آبجکت‌های API می‌توان به
+<a href="https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands/#annotate" target="_blank">kubectl annotate</a>،
+<a href="https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands/#edit" target="_blank">kubectl edit</a>،
+<a href="https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands/#replace" target="_blank">kubectl replace</a>،
+<a href="https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands/#scale" target="_blank">kubectl scale</a>
+و
+<a href="https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands/#apply" target="_blank">kubectl apply</a>
+اشاره کرد.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">وصلهٔ ادغام راهبردی برای منابع سفارشی (custom resources) پشتیبانی نمی‌شود.</p>
+</div>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<ul>
+<li dir="rtl"><a href="../../concepts/overview/working-with-objects/object-management.html">مدیریت آبجکت‌های کوبرنتیز</a></li>
+<li dir="rtl"><a href="imperative-command.html">مدیریت آبجکت‌های کوبرنتیز با فرمان‌های دستوری</a></li>
+<li dir="rtl"><a href="imperative-config.html">مدیریت دستوری آبجکت‌های کوبرنتیز با فایل‌های پیکربندی</a></li>
+<li dir="rtl"><a href="declarative-config.html">مدیریت اعلانی آبجکت‌های کوبرنتیز با فایل‌های پیکربندی</a></li>
+</ul>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#پیش-از-شروع">پیش از شروع</a><a class="l2" href="#استفاده-از-وصلهٔ-ادغام-راهبردی-برای-به-روزرسانی-یک-deployment">استفاده از وصلهٔ ادغام راهبردی برای به‌روزرسانی یک Deployment</a><a class="l3" href="#نکاتی-دربارهٔ-وصلهٔ-ادغام-راهبردی">نکاتی دربارهٔ وصلهٔ ادغام راهبردی</a><a class="l2" href="#استفاده-از-وصلهٔ-ادغام-json-برای-به-روزرسانی-یک-deployment">استفاده از وصلهٔ ادغام JSON برای به‌روزرسانی یک Deployment</a><a class="l2" href="#استفاده-از-وصلهٔ-ادغام-راهبردی-با-راهبرد-retainkeys-برای-به-روزرسانی-یک-deployment">استفاده از وصلهٔ ادغام راهبردی با راهبرد retainKeys برای به‌روزرسانی یک Deployment</a><a class="l3" href="#نکاتی-دربارهٔ-وصلهٔ-ادغام-راهبردی-با-راهبرد-retainkeys">نکاتی دربارهٔ وصلهٔ ادغام راهبردی با راهبرد retainKeys</a><a class="l3" href="#شکل-های-دیگر-فرمان-kubectl-patch">شکل‌های دیگر فرمان kubectl patch</a><a class="l3" href="#به-روزرسانی-تعداد-رونوشت-های-یک-آبجکت-با-kubectl-patch-و---subresource-scale-kubectl-patch">به‌روزرسانی تعداد رونوشت‌های یک آبجکت با kubectl patch و --subresource {#scale-kubectl-patch}</a><a class="l2" href="#خلاصه">خلاصه</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>

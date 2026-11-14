@@ -8,8 +8,8 @@
 
 | | |
 |---|---|
-| پیشرفت (بر اساس کلمات) | **95.7٪** |
-| صفحات ترجمه‌شده | 1635 از 1722 |
+| پیشرفت (بر اساس کلمات) | **96.5٪** |
+| صفحات ترجمه‌شده | 1650 از 1722 |
 | صفحات دارای ایراد ساختاری | 75 |
 | نسخه‌ی منبع انگلیسی | `f652c6b8a26f` |
 
@@ -74,7 +74,7 @@ cd kubernetes-doc-fa
 | `home` | 2 | 2 |
 | `reference` | 1198 | 1198 |
 | `setup` | 22 | 22 |
-| `tasks` | 180 | 221 |
+| `tasks` | 195 | 221 |
 | `tutorials` | 0 | 45 |
 
 </div>
@@ -101,26 +101,26 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [tasks/run-application/force-delete-stateful-set-pod.md](md/tasks/run-application/force-delete-stateful-set-pod.md) — 2026-11-14T15:46:27+03:30
+- [tasks/run-application/delete-stateful-set.md](md/tasks/run-application/delete-stateful-set.md) — 2026-11-14T15:46:00+03:30
+- [tasks/run-application/access-api-from-pod.md](md/tasks/run-application/access-api-from-pod.md) — 2026-11-14T15:45:44+03:30
+- [tasks/network/validate-dual-stack.md](md/tasks/network/validate-dual-stack.md) — 2026-11-14T15:45:42+03:30
+- [tasks/run-application/_index.md](md/tasks/run-application/_index.md) — 2026-11-14T15:45:23+03:30
+- [tasks/manage-kubernetes-objects/update-api-object-kubectl-patch.md](md/tasks/manage-kubernetes-objects/update-api-object-kubectl-patch.md) — 2026-11-14T15:45:19+03:30
+- [tasks/network/reconfigure-default-service-ip-ranges.md](md/tasks/network/reconfigure-default-service-ip-ranges.md) — 2026-11-14T15:45:08+03:30
+- [tasks/network/extend-service-ip-ranges.md](md/tasks/network/extend-service-ip-ranges.md) — 2026-11-14T15:44:37+03:30
+- [tasks/network/customize-hosts-file-for-pods.md](md/tasks/network/customize-hosts-file-for-pods.md) — 2026-11-14T15:44:04+03:30
+- [tasks/network/_index.md](md/tasks/network/_index.md) — 2026-11-14T15:43:46+03:30
+- [tasks/manage-kubernetes-objects/kustomization.md](md/tasks/manage-kubernetes-objects/kustomization.md) — 2026-11-14T15:43:43+03:30
+- [tasks/manage-kubernetes-objects/storage-version-migration.md](md/tasks/manage-kubernetes-objects/storage-version-migration.md) — 2026-11-14T15:43:25+03:30
+- [tasks/manage-kubernetes-objects/declarative-config.md](md/tasks/manage-kubernetes-objects/declarative-config.md) — 2026-11-14T15:42:41+03:30
+- [tasks/manage-kubernetes-objects/imperative-config.md](md/tasks/manage-kubernetes-objects/imperative-config.md) — 2026-11-14T15:41:23+03:30
+- [tasks/manage-kubernetes-objects/imperative-command.md](md/tasks/manage-kubernetes-objects/imperative-command.md) — 2026-11-14T15:40:58+03:30
 - [tasks/manage-gpus/scheduling-gpus.md](md/tasks/manage-gpus/scheduling-gpus.md) — 2026-11-14T15:40:15+03:30
 - [tasks/manage-kubernetes-objects/_index.md](md/tasks/manage-kubernetes-objects/_index.md) — 2026-11-14T15:40:08+03:30
 - [tasks/manage-hugepages/scheduling-hugepages.md](md/tasks/manage-hugepages/scheduling-hugepages.md) — 2026-11-14T15:40:05+03:30
 - [tasks/manage-daemon/update-daemon-set.md](md/tasks/manage-daemon/update-daemon-set.md) — 2026-11-14T15:39:43+03:30
 - [tasks/manage-daemon/rollback-daemon-set.md](md/tasks/manage-daemon/rollback-daemon-set.md) — 2026-11-14T15:39:25+03:30
-- [tasks/manage-daemon/pods-some-nodes.md](md/tasks/manage-daemon/pods-some-nodes.md) — 2026-11-14T15:39:12+03:30
-- [tasks/manage-daemon/create-daemon-set.md](md/tasks/manage-daemon/create-daemon-set.md) — 2026-11-14T15:39:06+03:30
-- [tasks/job/pod-failure-policy.md](md/tasks/job/pod-failure-policy.md) — 2026-11-14T15:39:01+03:30
-- [tasks/manage-daemon/_index.md](md/tasks/manage-daemon/_index.md) — 2026-11-14T15:38:53+03:30
-- [tasks/job/parallel-processing-expansion.md](md/tasks/job/parallel-processing-expansion.md) — 2026-11-14T15:38:50+03:30
-- [tasks/job/job-with-pod-to-pod-communication.md](md/tasks/job/job-with-pod-to-pod-communication.md) — 2026-11-14T15:38:13+03:30
-- [tasks/job/indexed-parallel-processing-static.md](md/tasks/job/indexed-parallel-processing-static.md) — 2026-11-14T15:38:08+03:30
-- [tasks/job/coarse-parallel-processing-work-queue.md](md/tasks/job/coarse-parallel-processing-work-queue.md) — 2026-11-14T15:37:51+03:30
-- [tasks/job/fine-parallel-processing-work-queue.md](md/tasks/job/fine-parallel-processing-work-queue.md) — 2026-11-14T15:37:37+03:30
-- [tasks/job/automated-tasks-with-cron-jobs.md](md/tasks/job/automated-tasks-with-cron-jobs.md) — 2026-11-14T15:37:00+03:30
-- [tasks/inject-data-application/environment-variable-expose-pod-information.md](md/tasks/inject-data-application/environment-variable-expose-pod-information.md) — 2026-11-14T15:36:47+03:30
-- [tasks/job/_index.md](md/tasks/job/_index.md) — 2026-11-14T15:36:46+03:30
-- [tasks/inject-data-application/distribute-credentials-secure.md](md/tasks/inject-data-application/distribute-credentials-secure.md) — 2026-11-14T15:36:42+03:30
-- [tasks/inject-data-application/downward-api-volume-expose-pod-information.md](md/tasks/inject-data-application/downward-api-volume-expose-pod-information.md) — 2026-11-14T15:36:23+03:30
-- [tasks/inject-data-application/define-interdependent-environment-variables.md](md/tasks/inject-data-application/define-interdependent-environment-variables.md) — 2026-11-14T15:35:52+03:30
 
 </div>
 

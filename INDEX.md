@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-1635 از 1722 صفحه
+1650 از 1722 صفحه
 
 
 ## `.`
@@ -2149,28 +2149,28 @@
 ## `tasks/manage-kubernetes-objects`
 
 - ✅ [_index.md](md/tasks/manage-kubernetes-objects/_index.md)
-- ⏳ `declarative-config.md`
-- ⏳ `imperative-command.md`
-- ⏳ `imperative-config.md`
-- ⏳ `kustomization.md`
-- ⏳ `storage-version-migration.md`
-- ⏳ `update-api-object-kubectl-patch.md`
+- ✅ [declarative-config.md](md/tasks/manage-kubernetes-objects/declarative-config.md)
+- ✅ [imperative-command.md](md/tasks/manage-kubernetes-objects/imperative-command.md)
+- ✅ [imperative-config.md](md/tasks/manage-kubernetes-objects/imperative-config.md)
+- ✅ [kustomization.md](md/tasks/manage-kubernetes-objects/kustomization.md)
+- ✅ [storage-version-migration.md](md/tasks/manage-kubernetes-objects/storage-version-migration.md)
+- ✅ [update-api-object-kubectl-patch.md](md/tasks/manage-kubernetes-objects/update-api-object-kubectl-patch.md)
 
 ## `tasks/network`
 
-- ⏳ `_index.md`
-- ⏳ `customize-hosts-file-for-pods.md`
-- ⏳ `extend-service-ip-ranges.md`
-- ⏳ `reconfigure-default-service-ip-ranges.md`
-- ⏳ `validate-dual-stack.md`
+- ✅ [_index.md](md/tasks/network/_index.md)
+- ✅ [customize-hosts-file-for-pods.md](md/tasks/network/customize-hosts-file-for-pods.md)
+- ✅ [extend-service-ip-ranges.md](md/tasks/network/extend-service-ip-ranges.md)
+- ✅ [reconfigure-default-service-ip-ranges.md](md/tasks/network/reconfigure-default-service-ip-ranges.md)
+- ✅ [validate-dual-stack.md](md/tasks/network/validate-dual-stack.md)
 
 ## `tasks/run-application`
 
-- ⏳ `_index.md`
-- ⏳ `access-api-from-pod.md`
+- ✅ [_index.md](md/tasks/run-application/_index.md)
+- ✅ [access-api-from-pod.md](md/tasks/run-application/access-api-from-pod.md)
 - ⏳ `configure-pdb.md`
-- ⏳ `delete-stateful-set.md`
-- ⏳ `force-delete-stateful-set-pod.md`
+- ✅ [delete-stateful-set.md](md/tasks/run-application/delete-stateful-set.md)
+- ✅ [force-delete-stateful-set-pod.md](md/tasks/run-application/force-delete-stateful-set-pod.md)
 - ⏳ `horizontal-pod-autoscale-walkthrough.md`
 - ⏳ `run-replicated-stateful-application.md`
 - ⏳ `run-single-instance-stateful-application.md`
