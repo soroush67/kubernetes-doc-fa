@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-1530 از 1722 صفحه
+1545 از 1722 صفحه
 
 
 ## `.`
@@ -1953,15 +1953,15 @@
 - ✅ [node-overprovisioning.md](md/tasks/administer-cluster/node-overprovisioning.md)
 - ✅ [nodelocaldns.md](md/tasks/administer-cluster/nodelocaldns.md)
 - ✅ [quota-api-object.md](md/tasks/administer-cluster/quota-api-object.md)
-- ⏳ `reserve-compute-resources.md`
+- ✅ [reserve-compute-resources.md](md/tasks/administer-cluster/reserve-compute-resources.md)
 - ✅ [running-cloud-controller.md](md/tasks/administer-cluster/running-cloud-controller.md)
-- ⏳ `safely-drain-node.md`
-- ⏳ `securing-a-cluster.md`
-- ⏳ `switch-to-evented-pleg.md`
-- ⏳ `sysctl-cluster.md`
-- ⏳ `topology-manager.md`
-- ⏳ `use-cascading-deletion.md`
-- ⏳ `verify-signed-artifacts.md`
+- ✅ [safely-drain-node.md](md/tasks/administer-cluster/safely-drain-node.md)
+- ✅ [securing-a-cluster.md](md/tasks/administer-cluster/securing-a-cluster.md)
+- ✅ [switch-to-evented-pleg.md](md/tasks/administer-cluster/switch-to-evented-pleg.md)
+- ✅ [sysctl-cluster.md](md/tasks/administer-cluster/sysctl-cluster.md)
+- ✅ [topology-manager.md](md/tasks/administer-cluster/topology-manager.md)
+- ✅ [use-cascading-deletion.md](md/tasks/administer-cluster/use-cascading-deletion.md)
+- ✅ [verify-signed-artifacts.md](md/tasks/administer-cluster/verify-signed-artifacts.md)
 
 ## `tasks/administer-cluster/kubeadm`
 
@@ -2004,17 +2004,17 @@
 
 ## `tasks/configmap-secret`
 
-- ⏳ `_index.md`
-- ⏳ `managing-secret-using-config-file.md`
-- ⏳ `managing-secret-using-kubectl.md`
-- ⏳ `managing-secret-using-kustomize.md`
+- ✅ [_index.md](md/tasks/configmap-secret/_index.md)
+- ✅ [managing-secret-using-config-file.md](md/tasks/configmap-secret/managing-secret-using-config-file.md)
+- ✅ [managing-secret-using-kubectl.md](md/tasks/configmap-secret/managing-secret-using-kubectl.md)
+- ✅ [managing-secret-using-kustomize.md](md/tasks/configmap-secret/managing-secret-using-kustomize.md)
 
 ## `tasks/configure-pod-container`
 
-- ⏳ `_index.md`
-- ⏳ `assign-cpu-resource.md`
+- ✅ [_index.md](md/tasks/configure-pod-container/_index.md)
+- ✅ [assign-cpu-resource.md](md/tasks/configure-pod-container/assign-cpu-resource.md)
 - ⏳ `assign-memory-resource.md`
-- ⏳ `assign-pod-level-resources.md`
+- ✅ [assign-pod-level-resources.md](md/tasks/configure-pod-container/assign-pod-level-resources.md)
 - ⏳ `assign-pods-nodes-using-node-affinity.md`
 - ⏳ `assign-pods-nodes.md`
 - ⏳ `attach-handler-lifecycle-event.md`

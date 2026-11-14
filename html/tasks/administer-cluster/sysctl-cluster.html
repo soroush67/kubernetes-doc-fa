@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>استفاده از sysctlها در یک کلاستر کوبرنتیز | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">tasks / administer-cluster</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">استفاده از sysctlها در یک کلاستر کوبرنتیز</h1><!-- overview -->
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes v1.21 [stable]</span> (پایدار)</div>
+<p dir="rtl">این سند توضیح می‌دهد که چگونه می‌توان پارامترهای کرنل را در یک کلاستر کوبرنتیز با استفاده از رابط <span class="term" title="sysctl">sysctl</span> پیکربندی و استفاده کرد.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">از نسخهٔ ۱.۲۳ کوبرنتیز، kubelet از هر دو نویسهٔ <code dir="ltr">/</code> و <code dir="ltr">.</code> به‌عنوان جداکننده در نام‌های sysctl پشتیبانی می‌کند.
+از نسخهٔ ۱.۲۵ کوبرنتیز، هنگام تنظیم sysctlها برای یک Pod می‌توان از نام‌هایی با اسلش نیز استفاده کرد.
+برای مثال، یک نام sysctl واحد را می‌توان با جداکنندهٔ نقطه به‌صورت <code dir="ltr">kernel.shm_rmid_forced</code> یا با جداکنندهٔ اسلش به‌صورت <code dir="ltr">kernel/shm_rmid_forced</code> نوشت.
+برای جزئیات بیشتر دربارهٔ روش تبدیل پارامترهای sysctl، به صفحهٔ <a href="https://man7.org/linux/man-pages/man5/sysctl.d.5.html" target="_blank" rel="noopener">sysctl.d(5)</a> از پروژهٔ Linux man-pages مراجعه کنید.</p>
+</div>
+<h2 id="پیش-از-شروع" dir="rtl">پیش از شروع</h2>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">ابزار <code dir="ltr">sysctl</code> یک ابزار خط فرمان مختص لینوکس است که برای پیکربندی پارامترهای گوناگون کرنل به کار می‌رود و در سیستم‌عامل‌های غیرلینوکسی در دسترس نیست.</p>
+</div>
+<p dir="rtl">باید یک کلاستر کوبرنتیز داشته باشید و ابزار خط فرمان kubectl باید برای ارتباط با کلاستر شما پیکربندی شده باشد. توصیه می‌شود این آموزش را روی کلاستری اجرا کنید که دست‌کم دو نود داشته باشد که نقش میزبان control plane را ندارند. اگر هنوز کلاستری ندارید، می‌توانید با استفاده از
+<a href="https://minikube.sigs.k8s.io/docs/tutorials/multi_node/" target="_blank" rel="noopener">minikube</a>
+یکی بسازید یا از یکی از این محیط‌های آزمایشی کوبرنتیز استفاده کنید:</p>
+<ul>
+<li dir="ltr" class="ltr"><a href="https://labs.iximiuz.com/playgrounds?category=kubernetes&amp;filter=all" target="_blank" rel="noopener">iximiuz Labs</a></li>
+<li dir="ltr" class="ltr"><a href="https://killercoda.com/playgrounds/scenario/kubernetes" target="_blank" rel="noopener">Killercoda</a></li>
+<li dir="ltr" class="ltr"><a href="https://kodekloud.com/public-playgrounds" target="_blank" rel="noopener">KodeKloud</a></li>
+</ul>
+<p dir="rtl">برای برخی از مراحل، باید بتوانید گزینه‌های خط فرمان kubeletهای در حال اجرا در کلاستر خود را نیز دوباره پیکربندی کنید.</p>
+<!-- steps -->
+<h2 id="فهرست-کردن-همهٔ-پارامترهای-sysctl" dir="rtl">فهرست کردن همهٔ پارامترهای sysctl</h2>
+<p dir="rtl">در لینوکس، رابط sysctl به مدیر سیستم امکان می‌دهد پارامترهای کرنل را در زمان اجرا تغییر دهد. این پارامترها از طریق سامانهٔ فایل مجازی پردازه‌ها در مسیر <code dir="ltr">/proc/sys/</code> در دسترس هستند. این پارامترها زیرسامانه‌های گوناگونی را پوشش می‌دهند، از جمله:</p>
+<ul>
+<li dir="rtl">کرنل (پیشوند رایج: <code dir="ltr">kernel.</code>)</li>
+<li dir="rtl">شبکه (پیشوند رایج: <code dir="ltr">net.</code>)</li>
+<li dir="rtl">حافظهٔ مجازی (پیشوند رایج: <code dir="ltr">vm.</code>)</li>
+<li dir="rtl">‏MDADM (پیشوند رایج: <code dir="ltr">dev.</code>)</li>
+<li dir="rtl">زیرسامانه‌های دیگر در <a href="https://www.kernel.org/doc/Documentation/sysctl/README" target="_blank" rel="noopener">مستندات کرنل</a> شرح داده شده‌اند.</li>
+</ul>
+<p dir="rtl">برای دریافت فهرست همهٔ پارامترها می‌توانید این فرمان را اجرا کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">sudo sysctl -a
+</code></pre>
+<h2 id="sysctlهای-امن-و-ناامن" dir="rtl">sysctlهای امن و ناامن</h2>
+<p dir="rtl">کوبرنتیز sysctlها را به دو دستهٔ <em>امن</em> و <em>ناامن</em> تقسیم می‌کند. یک sysctl <em>امن</em> علاوه بر داشتن فضای نام (namespace) مناسب، باید میان پادهای روی یک نود به‌درستی <em>ایزوله</em> باشد. یعنی تنظیم یک sysctl <em>امن</em> برای یک پاد:</p>
+<ul>
+<li dir="rtl">نباید هیچ تأثیری بر پادهای دیگر روی آن نود داشته باشد</li>
+<li dir="rtl">نباید امکان آسیب رساندن به سلامت نود را فراهم کند</li>
+<li dir="rtl">نباید امکان به دست آوردن منابع CPU یا حافظه فراتر از محدودیت‌های منابع پاد را فراهم کند.</li>
+</ul>
+<p dir="rtl">بیشتر sysctlهای <em>دارای فضای نام</em> لزوماً <em>امن</em> به شمار نمی‌آیند. sysctlهای زیر در مجموعهٔ <em>امن</em> پشتیبانی می‌شوند:</p>
+<ul>
+<li dir="rtl"><code dir="ltr">kernel.shm_rmid_forced</code>؛</li>
+<li dir="rtl"><code dir="ltr">net.ipv4.ip_local_port_range</code>؛</li>
+<li dir="rtl"><code dir="ltr">net.ipv4.tcp_syncookies</code>؛</li>
+<li dir="rtl"><code dir="ltr">net.ipv4.ping_group_range</code> (از کوبرنتیز ۱.۱۸)؛</li>
+<li dir="rtl"><code dir="ltr">net.ipv4.ip_unprivileged_port_start</code> (از کوبرنتیز ۱.۲۲)؛</li>
+<li dir="rtl"><code dir="ltr">net.ipv4.ip_local_reserved_ports</code> (از کوبرنتیز ۱.۲۷، نیازمند کرنل ۳.۱۶ یا بالاتر)؛</li>
+<li dir="rtl"><code dir="ltr">net.ipv4.tcp_keepalive_time</code> (از کوبرنتیز ۱.۲۹، نیازمند کرنل ۴.۵ یا بالاتر)؛</li>
+<li dir="rtl"><code dir="ltr">net.ipv4.tcp_fin_timeout</code> (از کوبرنتیز ۱.۲۹، نیازمند کرنل ۴.۶ یا بالاتر)؛</li>
+<li dir="rtl"><code dir="ltr">net.ipv4.tcp_keepalive_intvl</code> (از کوبرنتیز ۱.۲۹، نیازمند کرنل ۴.۵ یا بالاتر)؛</li>
+<li dir="rtl"><code dir="ltr">net.ipv4.tcp_keepalive_probes</code> (از کوبرنتیز ۱.۲۹، نیازمند کرنل ۴.۵ یا بالاتر).</li>
+<li dir="rtl"><code dir="ltr">net.ipv4.tcp_rmem</code> (از کوبرنتیز ۱.۳۲، نیازمند کرنل ۴.۱۵ یا بالاتر).</li>
+<li dir="rtl"><code dir="ltr">net.ipv4.tcp_wmem</code> (از کوبرنتیز ۱.۳۲، نیازمند کرنل ۴.۱۵ یا بالاتر).</li>
+<li dir="rtl"><code dir="ltr">net.ipv4.tcp_slow_start_after_idle</code> (از کوبرنتیز ۱.۳۷، نیازمند کرنل ۴.۱۵ یا بالاتر).</li>
+<li dir="rtl"><code dir="ltr">net.ipv4.tcp_notsent_lowat</code> (از کوبرنتیز ۱.۳۷، نیازمند کرنل ۴.۶ یا بالاتر).</li>
+</ul>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">مجموعهٔ sysctlهای امن چند استثنا دارد:</p>
+<ul>
+<li dir="rtl">استفاده از sysctlهای <code dir="ltr">net.*</code> در حالتی که شبکهٔ میزبان (host networking) فعال باشد مجاز نیست.</li>
+<li dir="rtl">‏sysctl مربوط به <code dir="ltr">net.ipv4.tcp_syncookies</code> در کرنل لینوکس نسخهٔ ۴.۵ یا پایین‌تر فضای نام ندارد.</li>
+</ul>
+</div>
+<p dir="rtl">این فهرست در نسخه‌های آیندهٔ کوبرنتیز، هم‌زمان با پشتیبانی kubelet از سازوکارهای ایزوله‌سازی بهتر، گسترش خواهد یافت.</p>
+<h3 id="فعال-سازی-sysctlهای-ناامن" dir="rtl">فعال‌سازی sysctlهای ناامن</h3>
+<p dir="rtl">همهٔ sysctlهای <em>امن</em> به‌طور پیش‌فرض فعال هستند.</p>
+<p dir="rtl">همهٔ sysctlهای <em>ناامن</em> به‌طور پیش‌فرض غیرفعال هستند و مدیر کلاستر باید آن‌ها را به‌صورت دستی و جداگانه برای هر نود مجاز کند. پادهایی که sysctlهای ناامنِ غیرفعال دارند زمان‌بندی می‌شوند، اما راه‌اندازی آن‌ها با شکست مواجه می‌شود.</p>
+<p dir="rtl">با در نظر گرفتن هشدار بالا، مدیر کلاستر می‌تواند برخی sysctlهای <em>ناامن</em> را برای موقعیت‌های بسیار خاص، مانند تنظیم دقیق برنامه‌های پرکارایی یا بلادرنگ، مجاز کند. sysctlهای <em>ناامن</em> به‌صورت نود به نود و با یک فلگ kubelet فعال می‌شوند؛ برای مثال:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubelet --allowed-unsafe-sysctls \
+  'kernel.msg*,net.core.somaxconn' ...
+</code></pre>
+<p dir="rtl">در <span class="term" title="minikube">minikube</span>، این کار را می‌توان با فلگ <code dir="ltr">extra-config</code> انجام داد:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">minikube start --extra-config="kubelet.allowed-unsafe-sysctls=kernel.msg*,net.core.somaxconn"...
+</code></pre>
+<p dir="rtl">تنها sysctlهای <em>دارای فضای نام</em> را می‌توان به این روش فعال کرد.</p>
+<h2 id="تنظیم-sysctlها-برای-یک-pod" dir="rtl">تنظیم sysctlها برای یک Pod</h2>
+<p dir="rtl">در کرنل‌های امروزی لینوکس، شماری از sysctlها <em>دارای فضای نام</em> هستند. یعنی می‌توان آن‌ها را برای هر پاد روی یک نود به‌طور مستقل تنظیم کرد. در کوبرنتیز تنها sysctlهای دارای فضای نام را می‌توان از طریق securityContext پاد پیکربندی کرد.</p>
+<p dir="rtl">sysctlهای زیر دارای فضای نام شناخته می‌شوند. این فهرست ممکن است در نسخه‌های آیندهٔ کرنل لینوکس تغییر کند.</p>
+<ul>
+<li dir="rtl"><code dir="ltr">kernel.shm*</code>،</li>
+<li dir="rtl"><code dir="ltr">kernel.msg*</code>،</li>
+<li dir="rtl"><code dir="ltr">kernel.sem</code>،</li>
+<li dir="rtl"><code dir="ltr">fs.mqueue.*</code>،</li>
+<li dir="rtl">آن دسته از <code dir="ltr">net.*</code>هایی که می‌توان آن‌ها را در فضای نام شبکهٔ کانتینر تنظیم کرد. با این حال، استثناهایی وجود دارد (برای مثال، <code dir="ltr">net.netfilter.nf_conntrack_max</code> و <code dir="ltr">net.netfilter.nf_conntrack_expect_max</code> را می‌توان در فضای نام شبکهٔ کانتینر تنظیم کرد، اما پیش از لینوکس ۵.۱۲.۲ فضای نام ندارند).</li>
+</ul>
+<p dir="rtl">به sysctlهایی که فضای نام ندارند sysctlهای <em>سطح نود</em> گفته می‌شود. اگر نیاز به تنظیم آن‌ها دارید، باید آن‌ها را به‌صورت دستی روی سیستم‌عامل هر نود پیکربندی کنید یا از یک DaemonSet با کانتینرهای دارای امتیاز ویژه (privileged) استفاده کنید.</p>
+<p dir="rtl">برای پیکربندی sysctlهای دارای فضای نام از securityContext پاد استفاده کنید. securityContext بر همهٔ کانتینرهای یک پاد اعمال می‌شود.</p>
+<p dir="rtl">در این مثال، با استفاده از securityContext پاد، یک sysctl امن یعنی <code dir="ltr">kernel.shm_rmid_forced</code> و دو sysctl ناامن یعنی <code dir="ltr">net.core.somaxconn</code> و <code dir="ltr">kernel.msgmax</code> تنظیم می‌شوند. در مشخصات (specification) هیچ تمایزی میان sysctlهای <em>امن</em> و <em>ناامن</em> وجود ندارد.</p>
+<div class="callout warning"><div class="callout-title">هشدار:</div>
+<p dir="rtl">برای جلوگیری از ناپایدار شدن سیستم‌عامل، پارامترهای sysctl را تنها پس از درک کامل اثرات آن‌ها تغییر دهید.</p>
+</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: Pod
+metadata:
+  name: sysctl-example
+spec:
+  securityContext:
+    sysctls:
+    - name: kernel.shm_rmid_forced
+      value: "0"
+    - name: net.core.somaxconn
+      value: "1024"
+    - name: kernel.msgmax
+      value: "65536"
+  ...
+</code></pre>
+<!-- discussion -->
+<div class="callout warning"><div class="callout-title">هشدار:</div>
+<p dir="rtl">به دلیل ماهیت <em>ناامن</em> این sysctlها، مسئولیت استفاده از sysctlهای <em>ناامن</em> بر عهدهٔ خود شماست و این کار می‌تواند به مشکلات جدی مانند رفتار نادرست کانتینرها، کمبود منابع یا از کار افتادن کامل یک نود منجر شود.</p>
+</div>
+<p dir="rtl">توصیه می‌شود نودهایی را که تنظیمات sysctl ویژه دارند در کلاستر <em>لکه‌دار</em> (tainted) در نظر بگیرید و تنها پادهایی را روی آن‌ها زمان‌بندی کنید که به آن تنظیمات sysctl نیاز دارند. برای پیاده‌سازی این کار، استفاده از <a href="https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands/#taint" target="_blank">قابلیت <em>taints and toleration</em></a> کوبرنتیز پیشنهاد می‌شود.</p>
+<p dir="rtl">پادی که sysctlهای <em>ناامن</em> دارد، روی هر نودی که آن دو sysctl <em>ناامن</em> را صریحاً فعال نکرده باشد، با شکست در راه‌اندازی مواجه می‌شود. همانند sysctlهای <em>سطح نود</em>، توصیه می‌شود برای زمان‌بندی این پادها روی نودهای مناسب، از <a href="https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands/#taint" target="_blank">قابلیت <em>taints and toleration</em></a> یا <a href="../../concepts/scheduling-eviction/taint-and-toleration.html">taintها روی نودها</a> استفاده کنید.</p>
+<h2 id="تنظیم-sysctlها-برای-همهٔ-پادها" dir="rtl">تنظیم sysctlها برای همهٔ پادها</h2>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
+<p dir="rtl">می‌توانید مجموعه‌ای پیش‌فرض از پارامترهای کرنل (sysctlها) را پیکربندی کنید تا <code dir="ltr">kubelet</code> آن‌ها را بر همهٔ پادهای در حال اجرا روی یک نود لینوکسی، از جمله <span class="term" title="static-pod">پادهای ایستا</span>، اعمال کند.
+این قابلیت زمانی سودمند است که مدیران نود بخواهند تنظیم یکسانی از پارامترهای کرنل را بر همهٔ بارهای کاری روی یک نود یا در یک گروه نود اعمال کنند (برای مثال، تنظیم اندازهٔ بافرهای TCP برای شبکه‌های پرکارایی)، بی‌آنکه لازم باشد در مشخصات تک‌تک پادها فیلد <code dir="ltr">securityContext.sysctls</code> تنظیم شود.</p>
+<p dir="rtl">برای استفاده از این قابلیت، <a href="https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/" target="_blank">feature gate</a> با نام <code dir="ltr">DefaultPodSysctls</code> را برای <code dir="ltr">kubelet</code> فعال کنید و جفت‌های کلید-مقدار را در فیلد <code dir="ltr">defaultPodSysctls</code> در <a href="../../reference/config-api/kubelet-config.v1beta1.html">KubeletConfiguration</a> خود مشخص کنید.</p>
+<p dir="rtl">فیلد <code dir="ltr">defaultPodSysctls</code> از همهٔ sysctlهای دارای فضای نام (<code dir="ltr">kernel.shm*</code>، <code dir="ltr">kernel.msg*</code>، <code dir="ltr">kernel.sem</code>، <code dir="ltr">kernel.domainname</code>، <code dir="ltr">fs.mqueue.*</code>، <code dir="ltr">net.*</code> و <code dir="ltr">user.*</code>) پشتیبانی می‌کند و هم sysctlهای <em>امن</em> و هم <em>ناامن</em> را در بر می‌گیرد. از آنجا که این مقادیر پیش‌فرض را مدیر نود مستقیماً روی <code dir="ltr">kubelet</code> پیکربندی می‌کند، لازم نیست sysctlهای ناامن را در <code dir="ltr">allowedUnsafeSysctls</code> به فهرست مجاز اضافه کنید.</p>
+<p dir="rtl">مثال زیر <code dir="ltr">kubelet</code> را طوری پیکربندی می‌کند که sysctlهای پیش‌فرض را در چند زیرسامانهٔ دارای فضای نام (شبکه، IPC و فضاهای نام کاربر) بر همهٔ پادهای روی نود اعمال کند:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: kubelet.config.k8s.io/v1beta1
+kind: KubeletConfiguration
+featureGates:
+  DefaultPodSysctls: true
+defaultPodSysctls:
+  # Network namespace sysctls (skipped if Pod uses hostNetwork: true)
+  net.ipv4.ip_forward: "1"
+  net.ipv4.tcp_rmem: "4096 87380 16777216"
+  net.ipv4.tcp_wmem: "4096 65536 16777216"
+  net.core.somaxconn: "1024"
+  # IPC namespace sysctls (skipped if Pod uses hostIPC: true)
+  kernel.shmall: "1048576"
+  kernel.msgmax: "65536"
+  kernel.sem: "250 32000 32 128"
+  fs.mqueue.msg_max: "1024"
+  # User namespace sysctls (skipped if Pod shares the host user namespace)
+  user.max_user_namespaces: "1000"
+</code></pre>
+<h3 id="اولویت-و-بازنویسی-مقادیر" dir="rtl">اولویت و بازنویسی مقادیر</h3>
+<p dir="rtl">مقادیری که صریحاً در <code dir="ltr">spec.securityContext.sysctls</code> یک پاد تنظیم شده‌اند، همواره مقادیر پیش‌فرض متناظر در <code dir="ltr">defaultPodSysctls</code> مربوط به <code dir="ltr">kubelet</code> را بازنویسی می‌کنند. بازنویسی‌ها به‌صورت جداگانه و برای هر کلید اعمال می‌شوند: اگر پادی مقداری را برای یک sysctl مشخص کند که در <code dir="ltr">defaultPodSysctls</code> نیز تعریف شده است، تنظیم سطح پاد برای همان sysctl اولویت دارد و سایر مقادیر پیش‌فرض همچنان اعمال می‌شوند. توجه کنید که هیچ گروهی از تنظیمات sysctl به‌هم‌پیوسته وجود ندارد؛ اگر بار کاری شما sysctlی را بازنویسی کند که بخشی از یک گروه مرتبط است (برای مثال، اندازهٔ بافرهای شبکه)، مشخصات پاد باید در صورت نیاز همهٔ تنظیمات مرتبط را در نظر بگیرد.</p>
+<h3 id="فضاهای-نام-میزبان-و-فیلتر-کردن" dir="rtl">فضاهای نام میزبان و فیلتر کردن</h3>
+<p dir="rtl">‏<code dir="ltr">kubelet</code> تنها در صورتی sysctlهای پیش‌فرض را هنگام ایجاد sandbox پاد اعمال می‌کند که پاد در یک فضای نام جداگانه برای زیرسامانهٔ مربوط اجرا شود. اگر پادی یک فضای نام میزبان را به اشتراک بگذارد، sysctlهای پیش‌فرض آن فضای نام برای آن پاد نادیده گرفته می‌شوند:</p>
+<ul>
+<li dir="rtl">اگر پاد از شبکهٔ میزبان استفاده کند (<code dir="ltr">hostNetwork: true</code>)، sysctlهای <code dir="ltr">net.*</code> نادیده گرفته می‌شوند.</li>
+<li dir="rtl">اگر پاد از IPC میزبان استفاده کند (<code dir="ltr">hostIPC: true</code>)، sysctlهای IPC (<code dir="ltr">kernel.sem</code>، <code dir="ltr">kernel.msg*</code>، <code dir="ltr">kernel.shm*</code>، <code dir="ltr">fs.mqueue.*</code>) نادیده گرفته می‌شوند.</li>
+<li dir="rtl">اگر پاد فضای نام کاربر میزبان را به اشتراک بگذارد (<code dir="ltr">hostUsers: true</code> یا تنظیم‌نشده)، sysctlهای <code dir="ltr">user.*</code> نادیده گرفته می‌شوند.</li>
+<li dir="rtl">اگر پاد از شبکهٔ میزبان استفاده کند (<code dir="ltr">hostNetwork: true</code>)، sysctlهای UTS (<code dir="ltr">kernel.domainname</code>) نادیده گرفته می‌شوند.</li>
+</ul>
+<h3 id="اعتبارسنجی-و-محدودیت-ها" dir="rtl">اعتبارسنجی و محدودیت‌ها</h3>
+<p dir="rtl">‏<code dir="ltr">kubelet</code> فیلد <code dir="ltr">defaultPodSysctls</code> را هنگام راه‌اندازی اعتبارسنجی می‌کند. وجود sysctlهای بدون فضای نام، نام‌های نامعتبر sysctl یا کلیدهای تکراری مانع راه‌اندازی <code dir="ltr">kubelet</code> می‌شود.</p>
+<p dir="rtl">افزون بر این، برخی sysctlهای <code dir="ltr">net.*</code> بسته به نسخهٔ کرنل شما ممکن است فضای نام نداشته باشند. مشخص کردن یک sysctl بدون فضای نام از نوع <code dir="ltr">net.*</code> در <code dir="ltr">defaultPodSysctls</code> باعث می‌شود ایجاد sandbox پاد با خطای <code dir="ltr">FailedCreatePodSandBox</code> شکست بخورد. در این حالت، پاد بی‌پایان برای ایجاد sandbox تلاش دوباره می‌کند. مطمئن شوید همهٔ sysctlهای مشخص‌شده در کرنل نود شما دارای فضای نام هستند.</p>
+<p dir="rtl">تغییرات <code dir="ltr">defaultPodSysctls</code> تنها بر پادهای تازه ایجادشده اعمال می‌شوند. ‏<code dir="ltr">kubelet</code> پادهای موجود را به‌صورت پویا دوباره پیکربندی نمی‌کند (به <a href="../../reference/node/what-happens-on-restart.html#impact-of-a-kubelet-restart">پس از راه‌اندازی دوبارهٔ نود چه اتفاقی می‌افتد</a> مراجعه کنید).
+پادهای موجود با همان sysctlهایی به اجرا ادامه می‌دهند که هنگام ایجاد sandbox آن‌ها اعمال شده بود.
+اگر می‌خواهید پادهای موجود sysctlهای پیش‌فرض به‌روزشده را بپذیرند، باید آن پادها را دوباره ایجاد کنید (برای مثال، با cordon و drain کردن نود).</p>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#پیش-از-شروع">پیش از شروع</a><a class="l2" href="#فهرست-کردن-همهٔ-پارامترهای-sysctl">فهرست کردن همهٔ پارامترهای sysctl</a><a class="l2" href="#sysctlهای-امن-و-ناامن">sysctlهای امن و ناامن</a><a class="l3" href="#فعال-سازی-sysctlهای-ناامن">فعال‌سازی sysctlهای ناامن</a><a class="l2" href="#تنظیم-sysctlها-برای-یک-pod">تنظیم sysctlها برای یک Pod</a><a class="l2" href="#تنظیم-sysctlها-برای-همهٔ-پادها">تنظیم sysctlها برای همهٔ پادها</a><a class="l3" href="#اولویت-و-بازنویسی-مقادیر">اولویت و بازنویسی مقادیر</a><a class="l3" href="#فضاهای-نام-میزبان-و-فیلتر-کردن">فضاهای نام میزبان و فیلتر کردن</a><a class="l3" href="#اعتبارسنجی-و-محدودیت-ها">اعتبارسنجی و محدودیت‌ها</a></nav>
+</div>
+</body>
+</html>

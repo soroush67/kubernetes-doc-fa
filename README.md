@@ -8,8 +8,8 @@
 
 | | |
 |---|---|
-| پیشرفت (بر اساس کلمات) | **90.6٪** |
-| صفحات ترجمه‌شده | 1530 از 1722 |
+| پیشرفت (بر اساس کلمات) | **91.3٪** |
+| صفحات ترجمه‌شده | 1545 از 1722 |
 | صفحات دارای ایراد ساختاری | 73 |
 | نسخه‌ی منبع انگلیسی | `f652c6b8a26f` |
 
@@ -74,7 +74,7 @@ cd kubernetes-doc-fa
 | `home` | 2 | 2 |
 | `reference` | 1198 | 1198 |
 | `setup` | 22 | 22 |
-| `tasks` | 75 | 221 |
+| `tasks` | 90 | 221 |
 | `tutorials` | 0 | 45 |
 
 </div>
@@ -101,26 +101,26 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [tasks/configure-pod-container/assign-pod-level-resources.md](md/tasks/configure-pod-container/assign-pod-level-resources.md) — 2026-11-14T10:36:37+03:30
+- [tasks/configure-pod-container/assign-cpu-resource.md](md/tasks/configure-pod-container/assign-cpu-resource.md) — 2026-11-14T10:35:53+03:30
+- [tasks/configmap-secret/managing-secret-using-kustomize.md](md/tasks/configmap-secret/managing-secret-using-kustomize.md) — 2026-11-14T10:35:14+03:30
+- [tasks/configure-pod-container/_index.md](md/tasks/configure-pod-container/_index.md) — 2026-11-14T10:35:08+03:30
+- [tasks/configmap-secret/managing-secret-using-kubectl.md](md/tasks/configmap-secret/managing-secret-using-kubectl.md) — 2026-11-14T10:35:03+03:30
+- [tasks/configmap-secret/managing-secret-using-config-file.md](md/tasks/configmap-secret/managing-secret-using-config-file.md) — 2026-11-14T10:34:53+03:30
+- [tasks/administer-cluster/topology-manager.md](md/tasks/administer-cluster/topology-manager.md) — 2026-11-14T10:34:38+03:30
+- [tasks/configmap-secret/_index.md](md/tasks/configmap-secret/_index.md) — 2026-11-14T10:34:22+03:30
+- [tasks/administer-cluster/verify-signed-artifacts.md](md/tasks/administer-cluster/verify-signed-artifacts.md) — 2026-11-14T10:34:17+03:30
+- [tasks/administer-cluster/use-cascading-deletion.md](md/tasks/administer-cluster/use-cascading-deletion.md) — 2026-11-14T10:33:55+03:30
+- [tasks/administer-cluster/sysctl-cluster.md](md/tasks/administer-cluster/sysctl-cluster.md) — 2026-11-14T10:33:23+03:30
+- [tasks/administer-cluster/securing-a-cluster.md](md/tasks/administer-cluster/securing-a-cluster.md) — 2026-11-14T10:33:01+03:30
+- [tasks/administer-cluster/switch-to-evented-pleg.md](md/tasks/administer-cluster/switch-to-evented-pleg.md) — 2026-11-14T10:32:21+03:30
+- [tasks/administer-cluster/safely-drain-node.md](md/tasks/administer-cluster/safely-drain-node.md) — 2026-11-14T10:31:57+03:30
+- [tasks/administer-cluster/reserve-compute-resources.md](md/tasks/administer-cluster/reserve-compute-resources.md) — 2026-11-14T10:31:39+03:30
 - [tasks/administer-cluster/running-cloud-controller.md](md/tasks/administer-cluster/running-cloud-controller.md) — 2026-11-14T10:31:14+03:30
 - [tasks/administer-cluster/nodelocaldns.md](md/tasks/administer-cluster/nodelocaldns.md) — 2026-11-14T10:30:40+03:30
 - [tasks/administer-cluster/quota-api-object.md](md/tasks/administer-cluster/quota-api-object.md) — 2026-11-14T10:30:39+03:30
 - [tasks/administer-cluster/node-overprovisioning.md](md/tasks/administer-cluster/node-overprovisioning.md) — 2026-11-14T10:30:19+03:30
 - [tasks/administer-cluster/network-policy-provider/kube-router-network-policy.md](md/tasks/administer-cluster/network-policy-provider/kube-router-network-policy.md) — 2026-11-14T10:29:57+03:30
-- [tasks/administer-cluster/namespaces.md](md/tasks/administer-cluster/namespaces.md) — 2026-11-14T10:29:51+03:30
-- [tasks/administer-cluster/network-policy-provider/cilium-network-policy.md](md/tasks/administer-cluster/network-policy-provider/cilium-network-policy.md) — 2026-11-14T10:29:50+03:30
-- [tasks/administer-cluster/network-policy-provider/calico-network-policy.md](md/tasks/administer-cluster/network-policy-provider/calico-network-policy.md) — 2026-11-14T10:29:32+03:30
-- [tasks/administer-cluster/network-policy-provider/antrea-network-policy.md](md/tasks/administer-cluster/network-policy-provider/antrea-network-policy.md) — 2026-11-14T10:29:24+03:30
-- [tasks/administer-cluster/network-policy-provider/_index.md](md/tasks/administer-cluster/network-policy-provider/_index.md) — 2026-11-14T10:29:17+03:30
-- [tasks/administer-cluster/migrating-from-dockershim/migrating-telemetry-and-security-agents.md](md/tasks/administer-cluster/migrating-from-dockershim/migrating-telemetry-and-security-agents.md) — 2026-11-14T10:29:15+03:30
-- [tasks/administer-cluster/migrating-from-dockershim/troubleshooting-cni-plugin-related-errors.md](md/tasks/administer-cluster/migrating-from-dockershim/troubleshooting-cni-plugin-related-errors.md) — 2026-11-14T10:28:59+03:30
-- [tasks/administer-cluster/memory-manager.md](md/tasks/administer-cluster/memory-manager.md) — 2026-11-14T10:28:31+03:30
-- [tasks/administer-cluster/migrating-from-dockershim/find-out-runtime-you-use.md](md/tasks/administer-cluster/migrating-from-dockershim/find-out-runtime-you-use.md) — 2026-11-14T10:28:04+03:30
-- [tasks/administer-cluster/migrating-from-dockershim/check-if-dockershim-removal-affects-you.md](md/tasks/administer-cluster/migrating-from-dockershim/check-if-dockershim-removal-affects-you.md) — 2026-11-14T10:27:44+03:30
-- [tasks/administer-cluster/migrating-from-dockershim/change-runtime-containerd.md](md/tasks/administer-cluster/migrating-from-dockershim/change-runtime-containerd.md) — 2026-11-14T10:26:57+03:30
-- [tasks/administer-cluster/migrating-from-dockershim/_index.md](md/tasks/administer-cluster/migrating-from-dockershim/_index.md) — 2026-11-14T10:26:35+03:30
-- [tasks/administer-cluster/manage-resources/quota-memory-cpu-namespace.md](md/tasks/administer-cluster/manage-resources/quota-memory-cpu-namespace.md) — 2026-11-14T10:26:22+03:30
-- [tasks/administer-cluster/manage-resources/quota-pod-namespace.md](md/tasks/administer-cluster/manage-resources/quota-pod-namespace.md) — 2026-11-14T10:26:22+03:30
-- [tasks/administer-cluster/manage-resources/memory-default-namespace.md](md/tasks/administer-cluster/manage-resources/memory-default-namespace.md) — 2026-11-14T10:26:04+03:30
 
 </div>
 

@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>تخصیص منابع CPU و حافظه در سطح Pod | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">tasks / configure-pod-container</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">تخصیص منابع CPU و حافظه در سطح Pod</h1><!-- overview -->
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
+<p dir="rtl">این صفحه نشان می‌دهد که چگونه می‌توانید علاوه بر مشخص‌کردن منابع در سطح کانتینر، منابع CPU و حافظه را برای یک Pod در سطح خودِ Pod نیز تعیین کنید. هر نود کوبرنتیز منابع را بر اساس درخواست‌های منابع (resource requests) یک پاد به آن تخصیص می‌دهد. این درخواست‌ها را می‌توان در سطح پاد یا به‌طور جداگانه برای هر یک از کانتینرهای درون پاد تعریف کرد. اگر هر دو تعریف شده باشند، درخواست‌های سطح پاد اولویت دارند.</p>
+<p dir="rtl">به همین ترتیب، مصرف منابع یک پاد با محدودیت‌ها (limits) کنترل می‌شود. محدودیت‌ها را نیز می‌توان در سطح پاد یا به‌طور جداگانه برای کانتینرهای درون پاد تنظیم کرد و در این حالت هم، اگر هر دو وجود داشته باشند، محدودیت‌های سطح پاد اولویت دارند. این رویکرد مدیریت منابع را انعطاف‌پذیر می‌کند و به شما امکان می‌دهد تخصیص منابع را هم در سطح پاد و هم در سطح کانتینر کنترل کنید.</p>
+<p dir="rtl">برای مشخص‌کردن منابع در سطح پاد، باید <a href="https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/" target="_blank">feature gate</a> با نام <code dir="ltr">PodLevelResources</code> را فعال کنید.</p>
+<p dir="rtl">درباره‌ی منابع سطح پاد:</p>
+<ul>
+<li dir="rtl">اولویت: اگر منابع هم در سطح پاد و هم در سطح کانتینر مشخص شده باشند، منابع سطح پاد اولویت دارند.</li>
+<li dir="rtl">کیفیت سرویس (QoS): منابع سطح پاد در تعیین کلاس QoS پاد اولویت دارند.</li>
+<li dir="rtl">امتیاز OOM: در محاسبه‌ی تنظیم امتیاز OOM، هم منابع سطح پاد و هم منابع سطح کانتینر در نظر گرفته می‌شوند.</li>
+<li dir="rtl">سازگاری: منابع سطح پاد به‌گونه‌ای طراحی شده‌اند که با قابلیت‌های موجود سازگار باشند.</li>
+</ul>
+<h2 id="پیش-از-شروع" dir="rtl">پیش از شروع</h2>
+<p dir="rtl">باید یک کلاستر کوبرنتیز داشته باشید و ابزار خط فرمان kubectl باید برای ارتباط با کلاستر شما پیکربندی شده باشد. توصیه می‌شود این آموزش را روی کلاستری اجرا کنید که دست‌کم دو نود داشته باشد که نقش میزبان control plane را ندارند. اگر هنوز کلاستری ندارید، می‌توانید با استفاده از
+<a href="https://minikube.sigs.k8s.io/docs/tutorials/multi_node/" target="_blank" rel="noopener">minikube</a>
+یکی بسازید یا از یکی از این محیط‌های آزمایشی کوبرنتیز استفاده کنید:</p>
+<ul>
+<li dir="ltr" class="ltr"><a href="https://labs.iximiuz.com/playgrounds?category=kubernetes&amp;filter=all" target="_blank" rel="noopener">iximiuz Labs</a></li>
+<li dir="ltr" class="ltr"><a href="https://killercoda.com/playgrounds/scenario/kubernetes" target="_blank" rel="noopener">Killercoda</a></li>
+<li dir="ltr" class="ltr"><a href="https://kodekloud.com/public-playgrounds" target="_blank" rel="noopener">KodeKloud</a></li>
+</ul>
+<p dir="rtl"><a href="https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/" target="_blank">feature gate</a> با نام <code dir="ltr">PodLevelResources</code> باید برای control plane و برای همه‌ی نودهای کلاستر شما فعال باشد.</p>
+<h2 id="محدودیت-ها" dir="rtl">محدودیت‌ها</h2>
+<p dir="rtl">در کوبرنتیز 1.37، منابع سطح پاد محدودیت‌های زیر را دارند:</p>
+<ul>
+<li dir="rtl"><strong>انواع منابع:</strong> فقط منابع CPU، حافظه و hugepages را می‌توان در سطح پاد مشخص کرد.</li>
+<li dir="rtl"><strong>سیستم‌عامل:</strong> منابع سطح پاد برای پادهای ویندوزی پشتیبانی نمی‌شوند.</li>
+<li dir="rtl"><strong>مدیران منابع:</strong> اگر <a href="https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/" target="_blank">feature gate</a> با نام <code dir="ltr">PodLevelResourceManagers</code> فعال باشد، Topology Manager و Memory Manager و CPU Manager از منابع سطح پاد پشتیبانی می‌کنند. برای جزئیات بیشتر، <a href="../../concepts/resource-management/resource-managers.html#pod-level-resource-managers">مدیران منابع سطح پاد</a> را ببینید. اگر این feature gate فعال نباشد، این مدیران پادها و کانتینرها را بر اساس منابع سطح پاد هم‌تراز نمی‌کنند.</li>
+<li dir="rtl"><strong>تغییر اندازه‌ی درجا:</strong> <a href="https://kubernetes.io/docs/tasks/configure-pod-container/resize-container-resources/" target="_blank">تغییر اندازه‌ی درجا</a>ی منابع سطح پاد به feature gate با نام <code dir="ltr">InPlacePodLevelResourcesVerticalScaling</code> نیاز دارد که در کوبرنتیز 1.37 در وضعیت آلفا است. برای جزئیات بیشتر، <a href="https://kubernetes.io/docs/tasks/configure-pod-container/resize-pod-resources/" target="_blank">تغییر اندازه‌ی منابع CPU و حافظه‌ی Pod</a> را ببینید.</li>
+</ul>
+<!-- steps -->
+<h2 id="ایجاد-یک-فضای-نام" dir="rtl">ایجاد یک فضای نام</h2>
+<p dir="rtl">یک فضای نام (namespace) ایجاد کنید تا منابعی که در این تمرین می‌سازید از بقیه‌ی کلاستر شما جدا بمانند.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl create namespace pod-resources-example
+</code></pre>
+<h2 id="ایجاد-پادی-با-درخواست-و-محدودیت-حافظه-در-سطح-پاد" dir="rtl">ایجاد پادی با درخواست و محدودیت حافظه در سطح پاد</h2>
+<p dir="rtl">برای مشخص‌کردن درخواست حافظه برای یک Pod در سطح پاد، فیلد <code dir="ltr">resources.requests.memory</code> را در مانیفست مشخصات Pod قرار دهید. برای مشخص‌کردن محدودیت حافظه نیز <code dir="ltr">resources.limits.memory</code> را اضافه کنید.</p>
+<p dir="rtl">در این تمرین، پادی با یک کانتینر ایجاد می‌کنید. این پاد درخواست حافظه‌ی ۱۰۰ MiB و محدودیت حافظه‌ی ۲۰۰ MiB دارد. فایل پیکربندی Pod در ادامه آمده است:</p>
+<div class="code-file ltr" dir="ltr">pods/resource/pod-level-memory-request-limit.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: Pod
+metadata:
+  name: memory-demo
+  namespace: pod-resources-example
+spec:
+  resources:
+    requests:
+      memory: "100Mi"
+    limits:
+      memory: "200Mi"
+  containers:
+  - name: memory-demo-ctr
+    image: nginx
+    command: ["stress"]
+    args: ["--vm", "1", "--vm-bytes", "150M", "--vm-hang", "1"]
+</code></pre>
+<p dir="rtl">بخش <code dir="ltr">args</code> در مانیفست، آرگومان‌هایی را که کانتینر هنگام شروع به کار دریافت می‌کند فراهم می‌کند. آرگومان‌های <code dir="ltr">"--vm-bytes", "150M"</code> به کانتینر می‌گویند که تلاش کند ۱۵۰ MiB حافظه تخصیص دهد.</p>
+<p dir="rtl">پاد را ایجاد کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f https://k8s.io/examples/pods/resource/pod-level-memory-request-limit.yaml --namespace=pod-resources-example
+</code></pre>
+<p dir="rtl">بررسی کنید که پاد در حال اجرا باشد:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pod memory-demo --namespace=pod-resources-example
+</code></pre>
+<p dir="rtl">اطلاعات دقیق پاد را مشاهده کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pod memory-demo --output=yaml --namespace=pod-resources-example
+</code></pre>
+<p dir="rtl">خروجی نشان می‌دهد که پاد درخواست حافظه‌ی ۱۰۰ MiB و محدودیت حافظه‌ی ۲۰۰ MiB دارد.</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">...
+spec:
+  containers:
+  ...
+  resources:
+    requests:
+      memory: 100Mi
+    limits:
+      memory: 200Mi
+...
+</code></pre>
+<p dir="rtl">برای دریافت معیارهای (metrics) پاد، دستور <code dir="ltr">kubectl top</code> را اجرا کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl top pod memory-demo --namespace=pod-resources-example
+</code></pre>
+<p dir="rtl">خروجی نشان می‌دهد که پاد حدود ۱۶۲٬۹۰۰٬۰۰۰ بایت حافظه، یعنی تقریباً ۱۵۰ MiB، مصرف می‌کند. این مقدار از درخواست ۱۰۰ MiB پاد بیشتر است، اما از محدودیت ۲۰۰ MiB آن فراتر نمی‌رود.</p>
+<pre dir="ltr"><code dir="ltr">NAME                        CPU(cores)   MEMORY(bytes)
+memory-demo                 &lt;something&gt;  162856960
+</code></pre>
+<h2 id="ایجاد-پادی-با-درخواست-و-محدودیت-cpu-در-سطح-پاد" dir="rtl">ایجاد پادی با درخواست و محدودیت CPU در سطح پاد</h2>
+<p dir="rtl">برای مشخص‌کردن درخواست CPU برای یک Pod، فیلد <code dir="ltr">resources.requests.cpu</code> را در مانیفست مشخصات Pod قرار دهید. برای مشخص‌کردن محدودیت CPU نیز <code dir="ltr">resources.limits.cpu</code> را اضافه کنید.</p>
+<p dir="rtl">در این تمرین، پادی با یک کانتینر ایجاد می‌کنید. این پاد درخواست ۰٫۵ CPU و محدودیت ۱ CPU دارد. فایل پیکربندی Pod در ادامه آمده است:</p>
+<div class="code-file ltr" dir="ltr">pods/resource/pod-level-cpu-request-limit.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: Pod
+metadata:
+  name: cpu-demo
+  namespace: pod-resources-example
+spec:
+  resources:
+    limits:
+      cpu: "1"
+    requests:
+      cpu: "0.5"
+  containers:
+  - name: cpu-demo-ctr
+    image: vish/stress
+    args:
+    - -cpus
+    - "2"
+</code></pre>
+<p dir="rtl">بخش <code dir="ltr">args</code> در فایل پیکربندی، آرگومان‌هایی را که کانتینر هنگام شروع به کار دریافت می‌کند فراهم می‌کند. آرگومان <code dir="ltr">-cpus "2"</code> به کانتینر می‌گوید که تلاش کند از ۲ CPU استفاده کند.</p>
+<p dir="rtl">پاد را ایجاد کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f https://k8s.io/examples/pods/resource/pod-level-cpu-request-limit.yaml --namespace=pod-resources-example
+</code></pre>
+<p dir="rtl">بررسی کنید که پاد در حال اجرا باشد:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pod cpu-demo --namespace=pod-resources-example
+</code></pre>
+<p dir="rtl">اطلاعات دقیق پاد را مشاهده کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pod cpu-demo --output=yaml --namespace=pod-resources-example
+</code></pre>
+<p dir="rtl">خروجی نشان می‌دهد که پاد درخواست CPU برابر با ۵۰۰ میلی‌CPU و محدودیت CPU برابر با ۱ CPU دارد.</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">spec:
+  containers:
+  ...
+  resources:
+    limits:
+      cpu: "1"
+    requests:
+      cpu: 500m
+</code></pre>
+<p dir="rtl">برای دریافت معیارهای پاد، از <code dir="ltr">kubectl top</code> استفاده کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl top pod cpu-demo --namespace=pod-resources-example
+</code></pre>
+<p dir="rtl">این خروجی نمونه نشان می‌دهد که پاد ۹۷۴ میلی‌CPU مصرف می‌کند که اندکی کمتر از محدودیت ۱ CPU تعیین‌شده در پیکربندی پاد است.</p>
+<pre dir="ltr"><code dir="ltr">NAME                        CPU(cores)   MEMORY(bytes)
+cpu-demo                    974m         &lt;something&gt;
+</code></pre>
+<p dir="rtl">به یاد داشته باشید که با تنظیم <code dir="ltr">-cpu "2"</code>، کانتینر را طوری پیکربندی کردید که تلاش کند از ۲ CPU استفاده کند، اما کانتینر تنها اجازه دارد حدود ۱ CPU مصرف کند. مصرف CPU کانتینر محدود (throttle) می‌شود، زیرا کانتینر تلاش می‌کند بیش از محدودیت CPU پاد از منابع CPU استفاده کند.</p>
+<h2 id="ایجاد-پادی-با-درخواست-و-محدودیت-منابع-هم-در-سطح-پاد-و-هم-در-سطح-کانتینر" dir="rtl">ایجاد پادی با درخواست و محدودیت منابع هم در سطح پاد و هم در سطح کانتینر</h2>
+<p dir="rtl">برای تخصیص منابع CPU و حافظه به یک Pod، می‌توانید آن‌ها را هم در سطح پاد و هم در سطح کانتینر مشخص کنید. برای تعریف منابع کل پاد، فیلد <code dir="ltr">resources</code> را در مشخصات Pod قرار دهید. همچنین برای تعیین نیازمندی‌های منابع مخصوص هر کانتینر، فیلد <code dir="ltr">resources</code> را درون مشخصات آن کانتینر در مانیفست Pod اضافه کنید.</p>
+<p dir="rtl">در این تمرین، پادی با دو کانتینر ایجاد می‌کنید تا تعامل میان مشخصات منابع سطح پاد و سطح کانتینر را بررسی کنید. خودِ پاد درخواست‌ها و محدودیت‌های CPU تعریف‌شده دارد، در حالی که فقط یکی از کانتینرها درخواست‌ها و محدودیت‌های منابع صریح خودش را دارد. کانتینر دیگر محدودیت‌های منابع را از تنظیمات سطح پاد به ارث می‌برد. فایل پیکربندی Pod در ادامه آمده است:</p>
+<div class="code-file ltr" dir="ltr">pods/resource/pod-level-resources.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-resources-demo
+  namespace: pod-resources-example
+spec:
+  resources:
+    limits:
+      cpu: "1"
+      memory: "200Mi"
+    requests:
+      cpu: "1"
+      memory: "100Mi"
+  containers:
+  - name: pod-resources-demo-ctr-1
+    image: nginx
+    resources:
+      limits:
+        cpu: "0.5"
+        memory: "100Mi"
+      requests:
+        cpu: "0.5"
+        memory: "50Mi"
+  - name: pod-resources-demo-ctr-2
+    image: fedora
+    command:
+    - sleep
+    - inf
+</code></pre>
+<p dir="rtl">پاد را ایجاد کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f https://k8s.io/examples/pods/resource/pod-level-resources.yaml --namespace=pod-resources-example
+</code></pre>
+<p dir="rtl">بررسی کنید که کانتینر پاد در حال اجرا باشد:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pod pod-resources-demo --namespace=pod-resources-example
+</code></pre>
+<p dir="rtl">اطلاعات دقیق پاد را مشاهده کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pod pod-resources-demo --output=yaml --namespace=pod-resources-example
+</code></pre>
+<p dir="rtl">خروجی نشان می‌دهد که یکی از کانتینرهای پاد درخواست حافظه‌ی ۵۰ MiB و درخواست CPU برابر با ۰٫۵ هسته، و محدودیت حافظه‌ی ۱۰۰ MiB و محدودیت CPU برابر با ۰٫۵ هسته دارد. خودِ پاد درخواست حافظه‌ی ۱۰۰ MiB و درخواست CPU برابر با ۱ هسته، و محدودیت حافظه‌ی ۲۰۰ MiB و محدودیت CPU برابر با ۱ هسته دارد.</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">...
+  containers:
+  -
+    name: pod-resources-demo-ctr-1
+    resources:
+      limits:
+        cpu: 500m
+        memory: 100Mi
+      requests:
+        cpu: 500m
+        memory: 50Mi
+...
+  -
+    name: pod-resources-demo-ctr-2
+    resources: {}
+...
+  resources:
+    limits:
+      cpu: "1"
+      memory: 200Mi
+    requests:
+      cpu: "1"
+      memory: 100Mi
+...
+</code></pre>
+<p dir="rtl">از آنجا که درخواست‌ها و محدودیت‌های سطح پاد مشخص شده‌اند، منابع تضمین‌شده برای هر دو کانتینر پاد در مجموع برابر با ۱ هسته‌ی CPU و ۱۰۰Mi حافظه خواهد بود. علاوه بر این، دو کانتینر روی هم نمی‌توانند بیش از محدودیت‌های سطح پاد از منابع استفاده کنند؛ بنابراین مجموع مصرف آن‌ها از ۲۰۰ MiB حافظه و ۱ هسته‌ی CPU فراتر نخواهد رفت.</p>
+<h2 id="پاک-سازی" dir="rtl">پاک‌سازی</h2>
+<p dir="rtl">فضای نام خود را حذف کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl delete namespace pod-resources-example
+</code></pre>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<h3 id="برای-توسعه-دهندگان-برنامه" dir="rtl">برای توسعه‌دهندگان برنامه</h3>
+<ul>
+<li dir="rtl">
+<p dir="rtl"><a href="https://kubernetes.io/docs/tasks/configure-pod-container/assign-memory-resource/" target="_blank">تخصیص منابع حافظه به کانتینرها و پادها</a></p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><a href="assign-cpu-resource.html">تخصیص منابع CPU به کانتینرها و پادها</a></p>
+</li>
+</ul>
+<h3 id="برای-مدیران-کلاستر" dir="rtl">برای مدیران کلاستر</h3>
+<ul>
+<li dir="rtl">
+<p dir="rtl"><a href="../administer-cluster/manage-resources/memory-default-namespace.html">پیکربندی درخواست‌ها و محدودیت‌های پیش‌فرض حافظه برای یک فضای نام</a></p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><a href="../administer-cluster/manage-resources/cpu-default-namespace.html">پیکربندی درخواست‌ها و محدودیت‌های پیش‌فرض CPU برای یک فضای نام</a></p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><a href="../administer-cluster/manage-resources/memory-constraint-namespace.html">پیکربندی محدودیت‌های کمینه و بیشینه‌ی حافظه برای یک فضای نام</a></p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><a href="../administer-cluster/manage-resources/cpu-constraint-namespace.html">پیکربندی محدودیت‌های کمینه و بیشینه‌ی CPU برای یک فضای نام</a></p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><a href="../administer-cluster/manage-resources/quota-memory-cpu-namespace.html">پیکربندی سهمیه‌های حافظه و CPU برای یک فضای نام</a></p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><a href="../../concepts/resource-management/resource-managers.html#pod-level-resource-managers">مدیران منابع سطح پاد</a></p>
+</li>
+</ul>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#پیش-از-شروع">پیش از شروع</a><a class="l2" href="#محدودیت-ها">محدودیت‌ها</a><a class="l2" href="#ایجاد-یک-فضای-نام">ایجاد یک فضای نام</a><a class="l2" href="#ایجاد-پادی-با-درخواست-و-محدودیت-حافظه-در-سطح-پاد">ایجاد پادی با درخواست و محدودیت حافظه در سطح پاد</a><a class="l2" href="#ایجاد-پادی-با-درخواست-و-محدودیت-cpu-در-سطح-پاد">ایجاد پادی با درخواست و محدودیت CPU در سطح پاد</a><a class="l2" href="#ایجاد-پادی-با-درخواست-و-محدودیت-منابع-هم-در-سطح-پاد-و-هم-در-سطح-کانتینر">ایجاد پادی با درخواست و محدودیت منابع هم در سطح پاد و هم در سطح کانتینر</a><a class="l2" href="#پاک-سازی">پاک‌سازی</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a><a class="l3" href="#برای-توسعه-دهندگان-برنامه">برای توسعه‌دهندگان برنامه</a><a class="l3" href="#برای-مدیران-کلاستر">برای مدیران کلاستر</a></nav>
+</div>
+</body>
+</html>
