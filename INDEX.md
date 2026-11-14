@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-1575 از 1722 صفحه
+1590 از 1722 صفحه
 
 
 ## `.`
@@ -2038,11 +2038,11 @@
 - ✅ [quality-service-pod.md](md/tasks/configure-pod-container/quality-service-pod.md)
 - ✅ [resize-container-resources.md](md/tasks/configure-pod-container/resize-container-resources.md)
 - ✅ [resize-pod-resources.md](md/tasks/configure-pod-container/resize-pod-resources.md)
-- ⏳ `security-context.md`
+- ✅ [security-context.md](md/tasks/configure-pod-container/security-context.md)
 - ✅ [share-process-namespace.md](md/tasks/configure-pod-container/share-process-namespace.md)
 - ✅ [static-pod.md](md/tasks/configure-pod-container/static-pod.md)
-- ⏳ `translate-compose-kubernetes.md`
-- ⏳ `user-namespaces.md`
+- ✅ [translate-compose-kubernetes.md](md/tasks/configure-pod-container/translate-compose-kubernetes.md)
+- ✅ [user-namespaces.md](md/tasks/configure-pod-container/user-namespaces.md)
 
 ## `tasks/configure-pod-container/assign-resources`
 
@@ -2053,24 +2053,24 @@
 
 ## `tasks/debug`
 
-- ⏳ `_index.md`
+- ✅ [_index.md](md/tasks/debug/_index.md)
 
 ## `tasks/debug/debug-application`
 
-- ⏳ `_index.md`
-- ⏳ `debug-init-containers.md`
-- ⏳ `debug-pods.md`
-- ⏳ `debug-running-pod.md`
-- ⏳ `debug-service.md`
-- ⏳ `debug-statefulset.md`
-- ⏳ `determine-reason-pod-failure.md`
-- ⏳ `get-shell-running-container.md`
+- ✅ [_index.md](md/tasks/debug/debug-application/_index.md)
+- ✅ [debug-init-containers.md](md/tasks/debug/debug-application/debug-init-containers.md)
+- ✅ [debug-pods.md](md/tasks/debug/debug-application/debug-pods.md)
+- ✅ [debug-running-pod.md](md/tasks/debug/debug-application/debug-running-pod.md)
+- ✅ [debug-service.md](md/tasks/debug/debug-application/debug-service.md)
+- ✅ [debug-statefulset.md](md/tasks/debug/debug-application/debug-statefulset.md)
+- ✅ [determine-reason-pod-failure.md](md/tasks/debug/debug-application/determine-reason-pod-failure.md)
+- ✅ [get-shell-running-container.md](md/tasks/debug/debug-application/get-shell-running-container.md)
 
 ## `tasks/debug/debug-cluster`
 
-- ⏳ `_index.md`
-- ⏳ `audit.md`
-- ⏳ `crictl.md`
+- ✅ [_index.md](md/tasks/debug/debug-cluster/_index.md)
+- ✅ [audit.md](md/tasks/debug/debug-cluster/audit.md)
+- ✅ [crictl.md](md/tasks/debug/debug-cluster/crictl.md)
 - ⏳ `kubectl-node-debug.md`
 - ⏳ `local-debugging.md`
 - ⏳ `monitor-node-health.md`

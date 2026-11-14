@@ -1,0 +1,721 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>پیکربندی زمینهٔ امنیتی برای یک Pod یا کانتینر | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">tasks / configure-pod-container</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">پیکربندی زمینهٔ امنیتی برای یک Pod یا کانتینر</h1><!-- overview -->
+<p dir="rtl">زمینهٔ امنیتی (security context) تنظیمات مربوط به سطح دسترسی و کنترل دسترسی یک Pod یا کانتینر را تعریف می‌کند. تنظیمات زمینهٔ امنیتی شامل موارد زیر است، اما به آن‌ها محدود نمی‌شود:</p>
+<ul>
+<li dir="rtl">
+<p dir="rtl">کنترل دسترسی اختیاری (Discretionary Access Control): مجوز دسترسی به یک آبجکت، مانند یک فایل، بر اساس
+<a href="https://wiki.archlinux.org/index.php/users_and_groups" target="_blank" rel="noopener">شناسهٔ کاربر (UID) و شناسهٔ گروه (GID)</a> تعیین می‌شود.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><a href="https://en.wikipedia.org/wiki/Security-Enhanced_Linux" target="_blank" rel="noopener">لینوکس با امنیت تقویت‌شده (SELinux)</a>:
+به آبجکت‌ها برچسب‌های امنیتی اختصاص داده می‌شود.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">اجرا به‌صورت ممتاز (privileged) یا غیرممتاز.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><a href="https://linux-audit.com/linux-capabilities-hardening-linux-binaries-by-removing-setuid/" target="_blank" rel="noopener">قابلیت‌های لینوکس (Linux Capabilities)</a>:
+به یک فرایند برخی از امتیازها داده می‌شود، اما نه همهٔ امتیازهای کاربر root.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><a href="https://kubernetes.io/docs/tutorials/security/apparmor/" target="_blank">AppArmor</a>:
+با استفاده از پروفایل‌های برنامه، قابلیت‌های هر برنامه به‌طور جداگانه محدود می‌شود.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><a href="https://kubernetes.io/docs/tutorials/security/seccomp/" target="_blank">Seccomp</a>: فراخوانی‌های سیستمی یک فرایند فیلتر می‌شود.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">فیلد <code dir="ltr">allowPrivilegeEscalation</code>: تعیین می‌کند که آیا یک فرایند می‌تواند امتیازهایی بیش از فرایند والد خود به دست آورد یا نه؛ برای مثال با اجرای یک <a href="https://en.wikipedia.org/wiki/Setuid" target="_blank" rel="noopener">فایل اجرایی setuid</a>.
+این مقدار بولی مستقیماً تعیین می‌کند که پرچم
+<a href="https://www.kernel.org/doc/Documentation/prctl/no_new_privs.txt" target="_blank" rel="noopener"><code dir="ltr">no_new_privs</code></a>
+روی فرایند کانتینر تنظیم شود یا نه. البته توجه کنید که این مقدار وارونه است: اگر <code dir="ltr">allowPrivilegeEscalation</code> برابر true باشد، <code dir="ltr">no_new_privs</code> برابر false تنظیم خواهد شد.</p>
+<p dir="rtl">اگر <code dir="ltr">allowPrivilegeEscalation</code> در فیلد <code dir="ltr">securityContext</code> مشخصات یک کانتینر تعریف نشده باشد، مقدار پیش‌فرض آن true خواهد بود.</p>
+<p dir="rtl">مقدار <code dir="ltr">allowPrivilegeEscalation: false</code> با کانتینری که یکی از شرایط زیر را دارد ناسازگار است و بنابراین نمی‌توان آن را همراه با چنین کانتینری تنظیم کرد:</p>
+<ul>
+<li dir="rtl">به‌صورت ممتاز اجرا می‌شود، یا</li>
+<li dir="rtl">قابلیت <code dir="ltr">CAP_SYS_ADMIN</code> را دارد</li>
+</ul>
+</li>
+<li dir="rtl">
+<p dir="rtl">فیلد <code dir="ltr">readOnlyRootFilesystem</code>: فایل‌سیستم ریشهٔ کانتینر را به‌صورت فقط‌خواندنی mount می‌کند.</p>
+</li>
+</ul>
+<p dir="rtl">موارد بالا مجموعهٔ کاملی از تنظیمات زمینهٔ امنیتی نیستند؛ برای دیدن فهرست جامع، به
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.37/#securitycontext-v1-core" target="_blank">SecurityContext</a>
+مراجعه کنید.</p>
+<h2 id="پیش-از-شروع" dir="rtl">پیش از شروع</h2>
+<p dir="rtl">باید یک کلاستر کوبرنتیز داشته باشید و ابزار خط فرمان kubectl باید برای ارتباط با کلاستر شما پیکربندی شده باشد. توصیه می‌شود این آموزش را روی کلاستری اجرا کنید که دست‌کم دو نود داشته باشد که نقش میزبان control plane را ندارند. اگر هنوز کلاستری ندارید، می‌توانید با استفاده از
+<a href="https://minikube.sigs.k8s.io/docs/tutorials/multi_node/" target="_blank" rel="noopener">minikube</a>
+یکی بسازید یا از یکی از این محیط‌های آزمایشی کوبرنتیز استفاده کنید:</p>
+<ul>
+<li dir="ltr" class="ltr"><a href="https://labs.iximiuz.com/playgrounds?category=kubernetes&amp;filter=all" target="_blank" rel="noopener">iximiuz Labs</a></li>
+<li dir="ltr" class="ltr"><a href="https://killercoda.com/playgrounds/scenario/kubernetes" target="_blank" rel="noopener">Killercoda</a></li>
+<li dir="ltr" class="ltr"><a href="https://kodekloud.com/public-playgrounds" target="_blank" rel="noopener">KodeKloud</a></li>
+</ul>
+<!-- steps -->
+<h2 id="تنظیم-زمینهٔ-امنیتی-برای-یک-pod" dir="rtl">تنظیم زمینهٔ امنیتی برای یک Pod</h2>
+<p dir="rtl">برای مشخص کردن تنظیمات امنیتی یک Pod، فیلد <code dir="ltr">securityContext</code> را در مشخصات Pod قرار دهید. فیلد <code dir="ltr">securityContext</code> یک آبجکت
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.37/#podsecuritycontext-v1-core" target="_blank">PodSecurityContext</a> است.
+تنظیمات امنیتی‌ای که برای یک Pod مشخص می‌کنید، بر همهٔ کانتینرهای آن Pod اعمال می‌شوند.
+در ادامه فایل پیکربندی یک Pod را می‌بینید که یک <code dir="ltr">securityContext</code> و یک حجم (volume) از نوع <code dir="ltr">emptyDir</code> دارد:</p>
+<div class="code-file ltr" dir="ltr">pods/security/security-context.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: Pod
+metadata:
+  name: security-context-demo
+spec:
+  securityContext:
+    runAsUser: 1000
+    runAsGroup: 3000
+    fsGroup: 2000
+    supplementalGroups: [4000]
+  volumes:
+  - name: sec-ctx-vol
+    emptyDir: {}
+  containers:
+  - name: sec-ctx-demo
+    image: busybox:1.28
+    command: [ "sh", "-c", "sleep 1h" ]
+    volumeMounts:
+    - name: sec-ctx-vol
+      mountPath: /data/demo
+    securityContext:
+      allowPrivilegeEscalation: false
+</code></pre>
+<p dir="rtl">در این فایل پیکربندی، فیلد <code dir="ltr">runAsUser</code> مشخص می‌کند که در همهٔ کانتینرهای Pod، تمام فرایندها با شناسهٔ کاربر 1000 اجرا شوند. فیلد <code dir="ltr">runAsGroup</code> شناسهٔ گروه اصلی 3000 را برای همهٔ فرایندهای درون کانتینرهای Pod تعیین می‌کند. اگر این فیلد حذف شود، شناسهٔ گروه اصلی کانتینرها root(0) خواهد بود. وقتی <code dir="ltr">runAsGroup</code> مشخص شده باشد، مالک همهٔ فایل‌های ایجادشده نیز کاربر 1000 و گروه 3000 خواهد بود.
+از آنجا که فیلد <code dir="ltr">fsGroup</code> مشخص شده است، همهٔ فرایندهای کانتینر عضو گروه تکمیلی با شناسهٔ 2000 نیز هستند.
+مالک حجم <code dir="ltr">/data/demo</code> و همهٔ فایل‌هایی که در آن حجم ایجاد می‌شوند، گروهی با شناسهٔ 2000 خواهد بود.
+علاوه بر این، وقتی فیلد <code dir="ltr">supplementalGroups</code> مشخص شده باشد، همهٔ فرایندهای کانتینر عضو گروه‌های مشخص‌شده نیز هستند. اگر این فیلد حذف شود، به معنای خالی بودن آن است.</p>
+<p dir="rtl">Pod را ایجاد کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f https://k8s.io/examples/pods/security/security-context.yaml
+</code></pre>
+<p dir="rtl">بررسی کنید که کانتینر Pod در حال اجرا باشد:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pod security-context-demo
+</code></pre>
+<p dir="rtl">یک شل در کانتینر در حال اجرا باز کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl exec -it security-context-demo -- sh
+</code></pre>
+<p dir="rtl">در شل، فرایندهای در حال اجرا را فهرست کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">ps
+</code></pre>
+<p dir="rtl">خروجی نشان می‌دهد که فرایندها با کاربر 1000 اجرا می‌شوند که همان مقدار <code dir="ltr">runAsUser</code> است:</p>
+<pre dir="ltr"><code class="language-none" dir="ltr">PID   USER     TIME  COMMAND
+    1 1000      0:00 sleep 1h
+    6 1000      0:00 sh
+...
+</code></pre>
+<p dir="rtl">در شل، به مسیر <code dir="ltr">/data</code> بروید و تنها دایرکتوری موجود را فهرست کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">cd /data
+ls -l
+</code></pre>
+<p dir="rtl">خروجی نشان می‌دهد که دایرکتوری <code dir="ltr">/data/demo</code> شناسهٔ گروه 2000 دارد که همان مقدار <code dir="ltr">fsGroup</code> است.</p>
+<pre dir="ltr"><code class="language-none" dir="ltr">drwxrwsrwx 2 root 2000 4096 Jun  6 20:08 demo
+</code></pre>
+<p dir="rtl">در شل، به مسیر <code dir="ltr">/data/demo</code> بروید و یک فایل ایجاد کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">cd demo
+echo hello &gt; testfile
+</code></pre>
+<p dir="rtl">فایل موجود در دایرکتوری <code dir="ltr">/data/demo</code> را فهرست کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">ls -l
+</code></pre>
+<p dir="rtl">خروجی نشان می‌دهد که فایل <code dir="ltr">testfile</code> شناسهٔ گروه 2000 دارد که همان مقدار <code dir="ltr">fsGroup</code> است.</p>
+<pre dir="ltr"><code class="language-none" dir="ltr">-rw-r--r-- 1 1000 2000 6 Jun  6 20:08 testfile
+</code></pre>
+<p dir="rtl">دستور زیر را اجرا کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">id
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code class="language-none" dir="ltr">uid=1000 gid=3000 groups=2000,3000,4000
+</code></pre>
+<p dir="rtl">در خروجی می‌بینید که مقدار <code dir="ltr">gid</code> برابر 3000 است که با فیلد <code dir="ltr">runAsGroup</code> یکسان است.
+اگر <code dir="ltr">runAsGroup</code> حذف شده بود، مقدار <code dir="ltr">gid</code> همچنان 0 (root) باقی می‌ماند و فرایند می‌توانست با فایل‌هایی که مالکشان گروه root(0) است و نیز گروه‌هایی که مجوزهای لازم را برای گروه root (0) دارند، تعامل داشته باشد. همچنین می‌بینید که <code dir="ltr">groups</code> علاوه بر <code dir="ltr">gid</code>، شناسه‌های گروهی را که با <code dir="ltr">fsGroup</code> و <code dir="ltr">supplementalGroups</code> مشخص شده‌اند نیز در بر دارد.</p>
+<p dir="rtl">از شل خارج شوید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">exit
+</code></pre>
+<h3 id="عضویت-های-ضمنی-در-گروه-که-در-etc-group-ایمیج-کانتینر-تعریف-شده-اند" dir="rtl">عضویت‌های ضمنی در گروه که در <code dir="ltr">/etc/group</code> ایمیج کانتینر تعریف شده‌اند</h3>
+<p dir="rtl">کوبرنتیز به‌طور پیش‌فرض اطلاعات گروه Pod را با اطلاعات تعریف‌شده در <code dir="ltr">/etc/group</code> ایمیج کانتینر ادغام می‌کند.</p>
+<div class="code-file ltr" dir="ltr">pods/security/security-context-5.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: Pod
+metadata:
+  name: security-context-demo
+spec:
+  securityContext:
+    runAsUser: 1000
+    runAsGroup: 3000
+    supplementalGroups: [4000]
+  containers:
+  - name: sec-ctx-demo
+    image: registry.k8s.io/e2e-test-images/agnhost:2.45
+    command: [ "sh", "-c", "sleep 1h" ]
+    securityContext:
+      allowPrivilegeEscalation: false
+</code></pre>
+<p dir="rtl">زمینهٔ امنیتی این Pod شامل <code dir="ltr">runAsUser</code>، <code dir="ltr">runAsGroup</code> و <code dir="ltr">supplementalGroups</code> است.
+با این حال، می‌بینید که گروه‌های تکمیلی واقعی متصل به فرایند کانتینر، شناسه‌های گروهی را نیز شامل می‌شوند که از <code dir="ltr">/etc/group</code> ایمیج کانتینر می‌آیند.</p>
+<p dir="rtl">Pod را ایجاد کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f https://k8s.io/examples/pods/security/security-context-5.yaml
+</code></pre>
+<p dir="rtl">بررسی کنید که کانتینر Pod در حال اجرا باشد:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pod security-context-demo
+</code></pre>
+<p dir="rtl">یک شل در کانتینر در حال اجرا باز کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl exec -it security-context-demo -- sh
+</code></pre>
+<p dir="rtl">هویت فرایند را بررسی کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">id
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code class="language-none" dir="ltr">uid=1000 gid=3000 groups=3000,4000,50000
+</code></pre>
+<p dir="rtl">می‌بینید که <code dir="ltr">groups</code> شامل شناسهٔ گروه <code dir="ltr">50000</code> است. دلیل این است که کاربر (<code dir="ltr">uid=1000</code>) که در ایمیج تعریف شده، به گروه (<code dir="ltr">gid=50000</code>) تعلق دارد که در <code dir="ltr">/etc/group</code> درون ایمیج کانتینر تعریف شده است.</p>
+<p dir="rtl">فایل <code dir="ltr">/etc/group</code> را در ایمیج کانتینر بررسی کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">cat /etc/group
+</code></pre>
+<p dir="rtl">می‌بینید که کاربر با uid برابر <code dir="ltr">1000</code> به گروه <code dir="ltr">50000</code> تعلق دارد.</p>
+<pre dir="ltr"><code class="language-none" dir="ltr">...
+user-defined-in-image:x:1000:
+group-defined-in-image:x:50000:user-defined-in-image
+</code></pre>
+<p dir="rtl">از شل خارج شوید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">exit
+</code></pre>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">گروه‌های تکمیلی که <em>به‌طور ضمنی ادغام می‌شوند</em> ممکن است مشکلات امنیتی ایجاد کنند، به‌ویژه هنگام دسترسی به حجم‌ها (برای جزئیات، <a href="https://issue.k8s.io/112879" target="_blank" rel="noopener">kubernetes/kubernetes#112879</a> را ببینید).
+اگر می‌خواهید از این وضعیت جلوگیری کنید، بخش زیر را ببینید.</p>
+</div>
+<h2 id="پیکربندی-کنترل-دقیق-supplementalgroups-برای-یک-pod-supplementalgroupspolicy" dir="rtl">پیکربندی کنترل دقیق SupplementalGroups برای یک Pod {#supplementalgroupspolicy}</h2>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
+<p dir="rtl">برای فعال کردن این قابلیت، باید <a href="https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/" target="_blank">feature gate</a> با نام <code dir="ltr">SupplementalGroupsPolicy</code> را برای kubelet و kube-apiserver فعال کنید و فیلد <code dir="ltr">.spec.securityContext.supplementalGroupsPolicy</code> را برای Pod تنظیم کنید.</p>
+<p dir="rtl">فیلد <code dir="ltr">supplementalGroupsPolicy</code> سیاست محاسبهٔ گروه‌های تکمیلی برای فرایندهای کانتینر در یک Pod را تعریف می‌کند. این فیلد دو مقدار معتبر دارد:</p>
+<ul>
+<li dir="rtl">
+<p dir="rtl">مقدار <code dir="ltr">Merge</code>: عضویت گروهی تعریف‌شده در <code dir="ltr">/etc/group</code> برای کاربر اصلی کانتینر ادغام می‌شود.
+اگر مقداری مشخص نشود، این سیاست پیش‌فرض است.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">مقدار <code dir="ltr">Strict</code>: فقط شناسه‌های گروه موجود در فیلدهای <code dir="ltr">fsGroup</code>، <code dir="ltr">supplementalGroups</code> یا <code dir="ltr">runAsGroup</code> به‌عنوان گروه‌های تکمیلی به فرایندهای کانتینر متصل می‌شوند.
+یعنی هیچ عضویت گروهی از <code dir="ltr">/etc/group</code> برای کاربر اصلی کانتینر ادغام نمی‌شود.</p>
+</li>
+</ul>
+<p dir="rtl">وقتی این قابلیت فعال باشد، هویت فرایندِ متصل به نخستین فرایند کانتینر نیز در فیلد <code dir="ltr">.status.containerStatuses[].user.linux</code> نمایش داده می‌شود. این اطلاعات برای تشخیص اینکه آیا شناسه‌های گروه ضمنی متصل شده‌اند یا نه، مفید است.</p>
+<div class="code-file ltr" dir="ltr">pods/security/security-context-6.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: Pod
+metadata:
+  name: security-context-demo
+spec:
+  securityContext:
+    runAsUser: 1000
+    runAsGroup: 3000
+    supplementalGroups: [4000]
+    supplementalGroupsPolicy: Strict
+  containers:
+  - name: sec-ctx-demo
+    image: registry.k8s.io/e2e-test-images/agnhost:2.45
+    command: [ "sh", "-c", "sleep 1h" ]
+    securityContext:
+      allowPrivilegeEscalation: false
+</code></pre>
+<p dir="rtl">این مانیفست Pod مقدار <code dir="ltr">supplementalGroupsPolicy=Strict</code> را تعریف می‌کند. می‌بینید که هیچ‌یک از عضویت‌های گروهی تعریف‌شده در <code dir="ltr">/etc/group</code> با گروه‌های تکمیلی فرایندهای کانتینر ادغام نمی‌شوند.</p>
+<p dir="rtl">Pod را ایجاد کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f https://k8s.io/examples/pods/security/security-context-6.yaml
+</code></pre>
+<p dir="rtl">بررسی کنید که کانتینر Pod در حال اجرا باشد:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pod security-context-demo
+</code></pre>
+<p dir="rtl">هویت فرایند را بررسی کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl exec -it security-context-demo -- id
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code class="language-none" dir="ltr">uid=1000 gid=3000 groups=3000,4000
+</code></pre>
+<p dir="rtl">وضعیت Pod را ببینید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pod security-context-demo -o yaml
+</code></pre>
+<p dir="rtl">می‌بینید که فیلد <code dir="ltr">status.containerStatuses[].user.linux</code> هویت فرایندِ متصل به نخستین فرایند کانتینر را نمایش می‌دهد.</p>
+<pre dir="ltr"><code class="language-none" dir="ltr">...
+status:
+  containerStatuses:
+  - name: sec-ctx-demo
+    user:
+      linux:
+        gid: 3000
+        supplementalGroups:
+        - 3000
+        - 4000
+        uid: 1000
+...
+</code></pre>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">توجه کنید که مقادیر فیلد <code dir="ltr">status.containerStatuses[].user.linux</code> همان هویت فرایندی است که <em>در ابتدا</em> به نخستین فرایند کانتینر متصل شده است. اگر کانتینر امتیاز کافی برای انجام فراخوانی‌های سیستمی مرتبط با هویت فرایند داشته باشد
+(مانند <a href="https://man7.org/linux/man-pages/man2/setuid.2.html" target="_blank" rel="noopener"><code dir="ltr">setuid(2)</code></a>،
+<a href="https://man7.org/linux/man-pages/man2/setgid.2.html" target="_blank" rel="noopener"><code dir="ltr">setgid(2)</code></a> یا
+<a href="https://man7.org/linux/man-pages/man2/setgroups.2.html" target="_blank" rel="noopener"><code dir="ltr">setgroups(2)</code></a> و غیره)،
+فرایند کانتینر می‌تواند هویت خود را تغییر دهد. بنابراین هویت <em>واقعی</em> فرایند پویا خواهد بود.</p>
+</div>
+<h3 id="پیاده-سازی-ها-implementations-supplementalgroupspolicy" dir="rtl">پیاده‌سازی‌ها {#implementations-supplementalgroupspolicy}</h3>
+<p dir="rtl">محیط‌های اجرای کانتینر زیر از کنترل دقیق SupplementalGroups پشتیبانی می‌کنند.</p>
+<p dir="rtl">در سطح CRI:</p>
+<ul>
+<li dir="rtl"><a href="https://containerd.io/" target="_blank" rel="noopener">containerd</a>، از نسخهٔ v2.0</li>
+<li dir="rtl"><a href="https://cri-o.io/" target="_blank" rel="noopener">CRI-O</a>، از نسخهٔ v1.31</li>
+</ul>
+<p dir="rtl">می‌توانید در وضعیت Node ببینید که آیا این قابلیت پشتیبانی می‌شود یا نه.</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: Node
+...
+status:
+  features:
+    supplementalGroupsPolicy: true
+</code></pre>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">در این انتشار آلفا (از v1.31 تا v1.32)، وقتی یک Pod با <code dir="ltr">SupplementalGroupsPolicy=Strict</code> روی نودی زمان‌بندی شود که از این قابلیت پشتیبانی نمی‌کند (یعنی <code dir="ltr">.status.features.supplementalGroupsPolicy=false</code>)، سیاست گروه‌های تکمیلی آن Pod <em>بی‌صدا</em> به سیاست <code dir="ltr">Merge</code> برمی‌گردد.</p>
+<p dir="rtl">اما از انتشار بتا (v1.33) به بعد، برای اعمال سخت‌گیرانه‌تر این سیاست، <strong>kubelet ایجاد چنین Podهایی را رد می‌کند، زیرا نود نمی‌تواند سیاست مشخص‌شده را تضمین کند</strong>. وقتی Pod شما رد شود، رویدادهای هشداری با <code dir="ltr">reason=SupplementalGroupsPolicyNotSupported</code> مانند نمونهٔ زیر خواهید دید:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: Event
+...
+type: Warning
+reason: SupplementalGroupsPolicyNotSupported
+message: "SupplementalGroupsPolicy=Strict is not supported in this node"
+involvedObject:
+  apiVersion: v1
+  kind: Pod
+  ...
+</code></pre>
+</div>
+<h2 id="پیکربندی-سیاست-تغییر-مجوز-و-مالکیت-حجم-برای-podها" dir="rtl">پیکربندی سیاست تغییر مجوز و مالکیت حجم برای Podها</h2>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes v1.23 [stable]</span> (پایدار)</div>
+<p dir="rtl">کوبرنتیز به‌طور پیش‌فرض، هنگام mount شدن هر حجم، مالکیت و مجوزهای محتوای آن را به‌صورت بازگشتی تغییر می‌دهد تا با <code dir="ltr">fsGroup</code> مشخص‌شده در <code dir="ltr">securityContext</code> آن Pod مطابقت داشته باشد.
+برای حجم‌های بزرگ، بررسی و تغییر مالکیت و مجوزها ممکن است زمان زیادی ببرد و راه‌اندازی Pod را کند کند. می‌توانید با فیلد <code dir="ltr">fsGroupChangePolicy</code> درون <code dir="ltr">securityContext</code>، نحوهٔ بررسی و مدیریت مالکیت و مجوزهای یک حجم را توسط کوبرنتیز کنترل کنید.</p>
+<p dir="rtl"><strong>fsGroupChangePolicy</strong> - فیلد <code dir="ltr">fsGroupChangePolicy</code> رفتار تغییر مالکیت و مجوز حجم را پیش از در دسترس قرار گرفتن آن درون یک Pod تعریف می‌کند.
+این فیلد فقط برای انواعی از حجم اعمال می‌شود که از کنترل مالکیت و مجوزها با <code dir="ltr">fsGroup</code> پشتیبانی می‌کنند.
+این فیلد دو مقدار ممکن دارد:</p>
+<ul>
+<li dir="rtl"><em>OnRootMismatch</em>: مجوزها و مالکیت فقط در صورتی تغییر می‌کنند که مجوز و مالکیت دایرکتوری ریشه با مجوزهای مورد انتظار حجم مطابقت نداشته باشد.
+این کار می‌تواند زمان لازم برای تغییر مالکیت و مجوز یک حجم را کوتاه‌تر کند.</li>
+<li dir="rtl"><em>Always</em>: هنگام mount شدن حجم، مجوز و مالکیت آن همیشه تغییر می‌کند.</li>
+</ul>
+<p dir="rtl">برای مثال:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">securityContext:
+  runAsUser: 1000
+  runAsGroup: 3000
+  fsGroup: 2000
+  fsGroupChangePolicy: "OnRootMismatch"
+</code></pre>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">این فیلد هیچ تأثیری بر انواع حجم‌های موقت (ephemeral) مانند
+<a href="../../concepts/storage/volumes.html#secret"><code dir="ltr">secret</code></a>،
+<a href="../../concepts/storage/volumes.html#configmap"><code dir="ltr">configMap</code></a>
+و <a href="../../concepts/storage/volumes.html#emptydir"><code dir="ltr">emptyDir</code></a> ندارد.</p>
+</div>
+<h2 id="واگذاری-تغییر-مجوز-و-مالکیت-حجم-به-درایور-csi" dir="rtl">واگذاری تغییر مجوز و مالکیت حجم به درایور CSI</h2>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes v1.26 [stable]</span> (پایدار)</div>
+<p dir="rtl">اگر یک درایور <a href="https://github.com/container-storage-interface/spec/blob/master/spec.md" target="_blank" rel="noopener">رابط ذخیره‌سازی کانتینر (CSI)</a> مستقر کنید که از <code dir="ltr">NodeServiceCapability</code> با نام <code dir="ltr">VOLUME_MOUNT_GROUP</code> پشتیبانی می‌کند، فرایند تنظیم مالکیت و مجوزهای فایل بر اساس <code dir="ltr">fsGroup</code> مشخص‌شده در <code dir="ltr">securityContext</code> به‌جای کوبرنتیز توسط درایور CSI انجام می‌شود. در این حالت، چون کوبرنتیز هیچ تغییری در مالکیت و مجوزها انجام نمی‌دهد، <code dir="ltr">fsGroupChangePolicy</code> اثری ندارد و طبق مشخصات CSI، انتظار می‌رود درایور حجم را با <code dir="ltr">fsGroup</code> ارائه‌شده mount کند؛ در نتیجه حجمی به دست می‌آید که <code dir="ltr">fsGroup</code> می‌تواند آن را بخواند و در آن بنویسد.</p>
+<h2 id="تنظیم-زمینهٔ-امنیتی-برای-یک-کانتینر" dir="rtl">تنظیم زمینهٔ امنیتی برای یک کانتینر</h2>
+<p dir="rtl">برای مشخص کردن تنظیمات امنیتی یک کانتینر، فیلد <code dir="ltr">securityContext</code> را در مانیفست کانتینر قرار دهید. فیلد <code dir="ltr">securityContext</code> یک آبجکت
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.37/#securitycontext-v1-core" target="_blank">SecurityContext</a> است.
+تنظیمات امنیتی‌ای که برای یک کانتینر مشخص می‌کنید، فقط بر همان کانتینر اعمال می‌شوند و در صورت هم‌پوشانی، تنظیمات سطح Pod را بازنویسی می‌کنند. تنظیمات کانتینر بر حجم‌های Pod تأثیری ندارند.</p>
+<p dir="rtl">در ادامه فایل پیکربندی یک Pod را می‌بینید که یک کانتینر دارد. هم Pod و هم کانتینر فیلد <code dir="ltr">securityContext</code> دارند:</p>
+<div class="code-file ltr" dir="ltr">pods/security/security-context-2.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: Pod
+metadata:
+  name: security-context-demo-2
+spec:
+  securityContext:
+    runAsUser: 1000
+  containers:
+  - name: sec-ctx-demo-2
+    image: gcr.io/google-samples/hello-app:2.0
+    securityContext:
+      runAsUser: 2000
+      allowPrivilegeEscalation: false
+</code></pre>
+<p dir="rtl">Pod را ایجاد کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f https://k8s.io/examples/pods/security/security-context-2.yaml
+</code></pre>
+<p dir="rtl">بررسی کنید که کانتینر Pod در حال اجرا باشد:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pod security-context-demo-2
+</code></pre>
+<p dir="rtl">یک شل در کانتینر در حال اجرا باز کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl exec -it security-context-demo-2 -- sh
+</code></pre>
+<p dir="rtl">در شل، فرایندهای در حال اجرا را فهرست کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">ps aux
+</code></pre>
+<p dir="rtl">خروجی نشان می‌دهد که فرایندها با کاربر 2000 اجرا می‌شوند. این همان مقدار <code dir="ltr">runAsUser</code> است که برای کانتینر مشخص شده و مقدار 1000 را که برای Pod مشخص شده است بازنویسی می‌کند.</p>
+<pre dir="ltr"><code dir="ltr">USER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+2000         1  0.0  0.0   4336   764 ?        Ss   20:36   0:00 /bin/sh -c node server.js
+2000         8  0.1  0.5 772124 22604 ?        Sl   20:36   0:00 node server.js
+...
+</code></pre>
+<p dir="rtl">از شل خارج شوید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">exit
+</code></pre>
+<h2 id="تنظیم-قابلیت-ها-برای-یک-کانتینر" dir="rtl">تنظیم قابلیت‌ها برای یک کانتینر</h2>
+<p dir="rtl">با <a href="https://man7.org/linux/man-pages/man7/capabilities.7.html" target="_blank" rel="noopener">قابلیت‌های لینوکس</a>
+می‌توانید امتیازهای مشخصی را به یک فرایند بدهید، بی‌آنکه همهٔ امتیازهای کاربر root را به آن بدهید. برای افزودن یا حذف قابلیت‌های لینوکس برای یک کانتینر، فیلد <code dir="ltr">capabilities</code> را در بخش <code dir="ltr">securityContext</code> مانیفست کانتینر قرار دهید.</p>
+<p dir="rtl">ابتدا ببینید وقتی فیلد <code dir="ltr">capabilities</code> را قرار نمی‌دهید چه اتفاقی می‌افتد.
+در ادامه فایل پیکربندی‌ای را می‌بینید که هیچ قابلیتی را به کانتینر اضافه یا از آن حذف نمی‌کند:</p>
+<div class="code-file ltr" dir="ltr">pods/security/security-context-3.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: Pod
+metadata:
+  name: security-context-demo-3
+spec:
+  containers:
+  - name: sec-ctx-3
+    image: gcr.io/google-samples/hello-app:2.0
+</code></pre>
+<p dir="rtl">Pod را ایجاد کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f https://k8s.io/examples/pods/security/security-context-3.yaml
+</code></pre>
+<p dir="rtl">بررسی کنید که کانتینر Pod در حال اجرا باشد:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pod security-context-demo-3
+</code></pre>
+<p dir="rtl">یک شل در کانتینر در حال اجرا باز کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl exec -it security-context-demo-3 -- sh
+</code></pre>
+<p dir="rtl">در شل، فرایندهای در حال اجرا را فهرست کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">ps aux
+</code></pre>
+<p dir="rtl">خروجی، شناسه‌های فرایند (PID) کانتینر را نشان می‌دهد:</p>
+<pre dir="ltr"><code dir="ltr">USER  PID %CPU %MEM    VSZ   RSS TTY   STAT START   TIME COMMAND
+root    1  0.0  0.0   4336   796 ?     Ss   18:17   0:00 /bin/sh -c node server.js
+root    5  0.1  0.5 772124 22700 ?     Sl   18:17   0:00 node server.js
+</code></pre>
+<p dir="rtl">در شل، وضعیت فرایند 1 را مشاهده کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">cd /proc/1
+cat status
+</code></pre>
+<p dir="rtl">خروجی، نقشهٔ بیتی قابلیت‌های فرایند را نشان می‌دهد:</p>
+<pre dir="ltr"><code dir="ltr">...
+CapPrm:	00000000a80425fb
+CapEff:	00000000a80425fb
+...
+</code></pre>
+<p dir="rtl">نقشهٔ بیتی قابلیت‌ها را یادداشت کنید و سپس از شل خارج شوید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">exit
+</code></pre>
+<p dir="rtl">سپس کانتینری را اجرا کنید که با کانتینر قبلی یکسان است، با این تفاوت که قابلیت‌های بیشتری برای آن تنظیم شده است.</p>
+<p dir="rtl">در ادامه فایل پیکربندی یک Pod را می‌بینید که یک کانتینر اجرا می‌کند. این پیکربندی قابلیت‌های <code dir="ltr">CAP_NET_ADMIN</code> و <code dir="ltr">CAP_SYS_TIME</code> را اضافه می‌کند:</p>
+<div class="code-file ltr" dir="ltr">pods/security/security-context-4.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: Pod
+metadata:
+  name: security-context-demo-4
+spec:
+  containers:
+  - name: sec-ctx-4
+    image: gcr.io/google-samples/hello-app:2.0
+    securityContext:
+      capabilities:
+        add: ["NET_ADMIN", "SYS_TIME"]
+</code></pre>
+<p dir="rtl">Pod را ایجاد کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f https://k8s.io/examples/pods/security/security-context-4.yaml
+</code></pre>
+<p dir="rtl">یک شل در کانتینر در حال اجرا باز کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl exec -it security-context-demo-4 -- sh
+</code></pre>
+<p dir="rtl">در شل، قابلیت‌های فرایند 1 را مشاهده کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">cd /proc/1
+cat status
+</code></pre>
+<p dir="rtl">خروجی، نقشهٔ بیتی قابلیت‌های فرایند را نشان می‌دهد:</p>
+<pre dir="ltr"><code dir="ltr">...
+CapPrm:	00000000aa0435fb
+CapEff:	00000000aa0435fb
+...
+</code></pre>
+<p dir="rtl">قابلیت‌های دو کانتینر را با هم مقایسه کنید:</p>
+<pre dir="ltr"><code dir="ltr">00000000a80425fb
+00000000aa0435fb
+</code></pre>
+<p dir="rtl">در نقشهٔ بیتی قابلیت‌های کانتینر اول، بیت‌های 12 و 25 خاموش هستند. در کانتینر دوم، بیت‌های 12 و 25 روشن هستند. بیت 12 مربوط به <code dir="ltr">CAP_NET_ADMIN</code> و بیت 25 مربوط به <code dir="ltr">CAP_SYS_TIME</code> است.
+برای دیدن تعریف ثابت‌های قابلیت، به <a href="https://github.com/torvalds/linux/blob/master/include/uapi/linux/capability.h" target="_blank" rel="noopener">capability.h</a> مراجعه کنید.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">ثابت‌های قابلیت لینوکس به شکل <code dir="ltr">CAP_XXX</code> هستند.
+اما وقتی قابلیت‌ها را در مانیفست کانتینر خود فهرست می‌کنید، باید بخش <code dir="ltr">CAP_</code> ثابت را حذف کنید.
+برای مثال، برای افزودن <code dir="ltr">CAP_SYS_TIME</code>، مقدار <code dir="ltr">SYS_TIME</code> را در فهرست قابلیت‌های خود قرار دهید.</p>
+</div>
+<h2 id="تنظیم-پروفایل-seccomp-برای-یک-کانتینر" dir="rtl">تنظیم پروفایل Seccomp برای یک کانتینر</h2>
+<p dir="rtl">برای تنظیم پروفایل Seccomp یک کانتینر، فیلد <code dir="ltr">seccompProfile</code> را در بخش <code dir="ltr">securityContext</code> مانیفست Pod یا کانتینر خود قرار دهید. فیلد <code dir="ltr">seccompProfile</code> یک آبجکت
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.37/#seccompprofile-v1-core" target="_blank">SeccompProfile</a> است که از <code dir="ltr">type</code> و <code dir="ltr">localhostProfile</code> تشکیل شده است.
+گزینه‌های معتبر برای <code dir="ltr">type</code> عبارت‌اند از <code dir="ltr">RuntimeDefault</code>، <code dir="ltr">Unconfined</code> و <code dir="ltr">Localhost</code>. فیلد <code dir="ltr">localhostProfile</code> فقط باید زمانی تنظیم شود که <code dir="ltr">type: Localhost</code> باشد. این فیلد مسیر پروفایل ازپیش‌پیکربندی‌شده روی نود را نسبت به محل پروفایل‌های Seccomp در kubelet مشخص می‌کند. این محل با فلگ <code dir="ltr">--root-dir</code> پیکربندی می‌شود.</p>
+<p dir="rtl">در مثال زیر، پروفایل Seccomp روی پروفایل پیش‌فرض محیط اجرای کانتینر نود تنظیم می‌شود:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">...
+securityContext:
+  seccompProfile:
+    type: RuntimeDefault
+</code></pre>
+<p dir="rtl">در مثال زیر، پروفایل Seccomp روی فایلی ازپیش‌پیکربندی‌شده در مسیر
+<code dir="ltr">&lt;kubelet-root-dir&gt;/seccomp/my-profiles/profile-allow.json</code> تنظیم می‌شود:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">...
+securityContext:
+  seccompProfile:
+    type: Localhost
+    localhostProfile: my-profiles/profile-allow.json
+</code></pre>
+<h2 id="تنظیم-پروفایل-apparmor-برای-یک-کانتینر" dir="rtl">تنظیم پروفایل AppArmor برای یک کانتینر</h2>
+<p dir="rtl">برای تنظیم پروفایل AppArmor یک کانتینر، فیلد <code dir="ltr">appArmorProfile</code> را در بخش <code dir="ltr">securityContext</code> کانتینر خود قرار دهید. فیلد <code dir="ltr">appArmorProfile</code> یک آبجکت
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.37/#apparmorprofile-v1-core" target="_blank">AppArmorProfile</a> است که از <code dir="ltr">type</code> و <code dir="ltr">localhostProfile</code> تشکیل شده است.
+گزینه‌های معتبر برای <code dir="ltr">type</code> عبارت‌اند از <code dir="ltr">RuntimeDefault</code> (پیش‌فرض)، <code dir="ltr">Unconfined</code> و <code dir="ltr">Localhost</code>. فیلد <code dir="ltr">localhostProfile</code> فقط باید زمانی تنظیم شود که مقدار <code dir="ltr">type</code> برابر <code dir="ltr">Localhost</code> باشد. این فیلد نام پروفایل ازپیش‌پیکربندی‌شده روی نود را مشخص می‌کند. پروفایل باید روی همه نودهایی که برای Pod مناسب هستند بارگذاری شود، زیرا نمی‌دانید Pod روی کدام نود زمان‌بندی خواهد شد.
+روش‌های راه‌اندازی پروفایل‌های سفارشی در
+<a href="https://kubernetes.io/docs/tutorials/security/apparmor/#setting-up-nodes-with-profiles" target="_blank">راه‌اندازی نودها با پروفایل‌ها</a> شرح داده شده‌اند.</p>
+<p dir="rtl">نکته: اگر <code dir="ltr">containers[*].securityContext.appArmorProfile.type</code> به‌صراحت روی <code dir="ltr">RuntimeDefault</code> تنظیم شده باشد و AppArmor روی نود فعال نباشد، Pod پذیرفته نمی‌شود. اما اگر <code dir="ltr">containers[*].securityContext.appArmorProfile.type</code> مشخص نشده باشد، مقدار پیش‌فرض (که آن هم <code dir="ltr">RuntimeDefault</code> است) فقط زمانی اعمال می‌شود که AppArmor روی نود فعال باشد. اگر AppArmor روی نود غیرفعال باشد، Pod پذیرفته می‌شود، اما کانتینر با پروفایل <code dir="ltr">RuntimeDefault</code> محدود نمی‌شود.</p>
+<p dir="rtl">در مثال زیر، پروفایل AppArmor روی پروفایل پیش‌فرض محیط اجرای کانتینر نود تنظیم می‌شود:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">...
+containers:
+- name: container-1
+  securityContext:
+    appArmorProfile:
+      type: RuntimeDefault
+</code></pre>
+<p dir="rtl">در مثال زیر، پروفایل AppArmor روی پروفایلی ازپیش‌پیکربندی‌شده با نام <code dir="ltr">k8s-apparmor-example-deny-write</code> تنظیم می‌شود:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">...
+containers:
+- name: container-1
+  securityContext:
+    appArmorProfile:
+      type: Localhost
+      localhostProfile: k8s-apparmor-example-deny-write
+</code></pre>
+<p dir="rtl">برای جزئیات بیشتر، <a href="https://kubernetes.io/docs/tutorials/security/apparmor/" target="_blank">محدود کردن دسترسی یک کانتینر به منابع با AppArmor</a> را ببینید.</p>
+<h2 id="اختصاص-برچسب-های-selinux-به-یک-کانتینر" dir="rtl">اختصاص برچسب‌های SELinux به یک کانتینر</h2>
+<p dir="rtl">برای اختصاص برچسب‌های SELinux به یک کانتینر، فیلد <code dir="ltr">seLinuxOptions</code> را در بخش <code dir="ltr">securityContext</code> مانیفست Pod یا کانتینر خود قرار دهید. فیلد <code dir="ltr">seLinuxOptions</code> یک آبجکت
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.37/#selinuxoptions-v1-core" target="_blank">SELinuxOptions</a>
+است. در مثال زیر یک سطح SELinux اعمال می‌شود:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">...
+securityContext:
+  seLinuxOptions:
+    level: "s0:c123,c456"
+</code></pre>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">برای اختصاص برچسب‌های SELinux، ماژول امنیتی SELinux باید روی سیستم‌عامل میزبان بارگذاری شده باشد.
+روی نودهای کارگر ویندوزی و نودهای کارگر لینوکسی بدون پشتیبانی از SELinux، این فیلد و هیچ‌یک از feature gateهای SELinux که در ادامه شرح داده می‌شوند، تأثیری ندارند.</p>
+</div>
+<h3 id="برچسب-گذاری-مجدد-کارآمد-حجم-ها-در-selinux" dir="rtl">برچسب‌گذاری مجدد کارآمد حجم‌ها در SELinux</h3>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
+<p dir="rtl">کوبرنتیز به‌طور پیش‌فرض برچسب SELinux را با استفاده از گزینه mount با مقدار <code dir="ltr">-o context=&lt;label&gt;</code> بی‌درنگ روی حجم‌های (volume) واجد شرایط اعمال می‌کند.</p>
+<p dir="rtl">برای بهره‌مندی از این افزایش سرعت، همه شرایط زیر باید برقرار باشند:</p>
+<ul>
+<li dir="rtl">لازم است Pod از یک PersistentVolumeClaim استفاده کند.</li>
+<li dir="rtl">مقدار <code dir="ltr">spec.securityContext.seLinuxChangePolicy</code> در Pod باید nil (پیش‌فرض) یا <code dir="ltr">MountOption</code> باشد.</li>
+<li dir="rtl">لازم است فیلد <code dir="ltr">seLinuxOptions</code> برای Pod (یا برای همه کانتینرهای آن که از PersistentVolumeClaim استفاده می‌کنند) تنظیم شده باشد.</li>
+<li dir="rtl">لازم است PersistentVolume متناظر یکی از موارد زیر باشد:
+<ul>
+<li dir="rtl">حجمی که از نوع حجم قدیمی و درون‌درختی (in-tree) <code dir="ltr">iscsi</code>، <code dir="ltr">rbd</code> یا <code dir="ltr">fc</code> استفاده می‌کند.</li>
+<li dir="rtl">یا حجمی که از یک درایور <span class="term" title="csi">CSI</span> استفاده می‌کند.
+درایور CSI باید با تنظیم <code dir="ltr">spec.seLinuxMount: true</code> در نمونه CSIDriver خود اعلام کند که از mount با <code dir="ltr">-o context</code> پشتیبانی می‌کند.</li>
+</ul>
+</li>
+</ul>
+<p dir="rtl">اگر هر یک از این شرایط برقرار نباشد، برچسب‌گذاری مجدد SELinux به روش دیگری انجام می‌شود: محیط اجرای کانتینر برچسب SELinux همه inodeهای حجم (فایل‌ها و دایرکتوری‌ها) را به‌صورت بازگشتی تغییر می‌دهد. به‌طور مشخص، این روش برای حجم‌های موقت (ephemeral) کوبرنتیز مانند <code dir="ltr">secret</code>، <code dir="ltr">configMap</code> و <code dir="ltr">projected</code> و نیز برای همه حجم‌هایی به کار می‌رود که نمونه CSIDriver آن‌ها به‌صراحت پشتیبانی از mount با <code dir="ltr">-o context</code> را اعلام نکرده است.</p>
+<p dir="rtl">هنگام استفاده از این افزایش سرعت، همه Podهایی که هم‌زمان از یک حجم واجد شرایط یکسان روی یک نود استفاده می‌کنند، <strong>باید برچسب SELinux یکسانی داشته باشند</strong>. هر Pod با برچسب SELinux متفاوت نمی‌تواند شروع به کار کند و تا زمانی که همه Podهای دارای برچسب‌های SELinux دیگر که از آن حجم استفاده می‌کنند حذف نشوند، در وضعیت <code dir="ltr">ContainerCreating</code> باقی می‌ماند.</p>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
+<p dir="rtl">آن دسته از Podهایی که می‌خواهند از برچسب‌گذاری مجدد با گزینه‌های mount صرف‌نظر کنند، می‌توانند <code dir="ltr">spec.securityContext.seLinuxChangePolicy</code> را روی <code dir="ltr">Recursive</code> تنظیم کنند. این کار زمانی لازم است که چند Pod یک حجم واحد را روی یک نود به اشتراک بگذارند، اما با برچسب‌های SELinux متفاوتی اجرا شوند که دسترسی هم‌زمان به حجم را ممکن می‌کنند. برای مثال، یک Pod ممتاز (privileged) که با برچسب <code dir="ltr">spc_t</code> اجرا می‌شود و یک Pod غیرممتاز که با برچسب پیش‌فرض <code dir="ltr">container_file_t</code> اجرا می‌شود.
+اگر <code dir="ltr">spec.securityContext.seLinuxChangePolicy</code> تنظیم نشده باشد (یا مقدار پیش‌فرض <code dir="ltr">MountOption</code> را داشته باشد)، فقط یکی از این Podها می‌تواند روی نود اجرا شود و دیگری با خطای
+<code dir="ltr">conflicting SELinux labels of volume &lt;name of the volume&gt;: &lt;label of the running pod&gt; and &lt;label of the pod that can't start&gt;</code> در وضعیت ContainerCreating باقی می‌ماند.</p>
+<h4 id="کنترل-کننده-selinuxwarningcontroller" dir="rtl">کنترل‌کننده SELinuxWarningController</h4>
+<p dir="rtl">برای آسان‌تر کردن شناسایی Podهایی که تحت تأثیر تغییر در برچسب‌گذاری مجدد حجم‌های SELinux قرار می‌گیرند، کنترل‌کننده جدیدی به نام <code dir="ltr">SELinuxWarningController</code> به kube-controller-manager اضافه شده است.
+این کنترل‌کننده به‌طور پیش‌فرض غیرفعال است. برای فعال کردن آن می‌توانید مقدار <code dir="ltr">--controllers=*,selinux-warning-controller</code> را در
+<a href="../../reference/command-line-tools-reference/kube-controller-manager.html">فلگ خط فرمان</a> تنظیم کنید،
+یا فیلد <code dir="ltr">genericControllerManagerConfiguration.controllers</code> را در
+<a href="../../reference/config-api/kube-controller-manager-config.v1alpha1.html#controllermanager-config-k8s-io-v1alpha1-GenericControllerManagerConfiguration">فیلدهای KubeControllerManagerConfiguration</a> تنظیم کنید.
+این کنترل‌کننده تنها زمانی کار می‌کند که feature gate با نام <code dir="ltr">SELinuxChangePolicy</code> فعال باشد.</p>
+<p dir="rtl">پس از فعال‌سازی، این کنترل‌کننده Podهای در حال اجرا را زیر نظر می‌گیرد و هر گاه تشخیص دهد که دو Pod از یک حجم یکسان با برچسب‌های SELinux متفاوت استفاده می‌کنند، کارهای زیر را انجام می‌دهد:</p>
+<ol>
+<li dir="rtl">برای هر دو Pod یک رویداد (event) منتشر می‌کند. در این حالت، دستور <code dir="ltr">kubectl describe pod &lt;pod-name&gt;</code> پیام زیر را نشان می‌دهد:
+<code dir="ltr">SELinuxLabel "&lt;label on the pod&gt;" conflicts with pod &lt;the other pod name&gt; that uses the same volume as this pod with SELinuxLabel "&lt;the other pod label&gt;". If both pods land on the same node, only one of them may access the volume</code>.</li>
+<li dir="rtl">مقدار متریک <code dir="ltr">selinux_warning_controller_selinux_volume_conflict</code> را افزایش می‌دهد. این متریک نام و فضای نام (namespace) هر دو Pod را به‌صورت برچسب در خود دارد تا Podهای تحت تأثیر به‌آسانی شناسایی شوند.</li>
+</ol>
+<p dir="rtl">مدیر کلاستر می‌تواند با استفاده از این اطلاعات، Podهای تحت تأثیر این تغییر را شناسایی کند و پیشاپیش آن‌ها را از این بهینه‌سازی خارج کند (یعنی <code dir="ltr">spec.securityContext.seLinuxChangePolicy: Recursive</code> را برایشان تنظیم کند).</p>
+<div class="callout warning"><div class="callout-title">هشدار:</div>
+<p dir="rtl">اکیداً توصیه می‌کنیم در کلاسترهایی که از SELinux استفاده می‌کنند، پیش از ارتقا به کوبرنتیز نسخه v1.37 یا بالاتر، این کنترل‌کننده را فعال کنید و مطمئن شوید که متریک <code dir="ltr">selinux_warning_controller_selinux_volume_conflict</code> هیچ تعارضی گزارش نمی‌کند. در این نسخه‌ها <code dir="ltr">SELinuxMount</code> به وضعیت GA رسیده و به‌طور پیش‌فرض فعال است.</p>
+</div>
+<h4 id="فهرست-feature-gateها" dir="rtl">فهرست feature gateها</h4>
+<p dir="rtl">رفتار برچسب‌گذاری مجدد حجم‌ها در SELinux با feature gateهای زیر کنترل می‌شود:</p>
+<ul>
+<li dir="rtl">گزینه <code dir="ltr">SELinuxMountReadWriteOncePod</code>: بهینه‌سازی را برای حجم‌هایی با <code dir="ltr">accessModes: ["ReadWriteOncePod"]</code> فعال می‌کند.
+فعال کردن این feature gate بسیار ایمن است، زیرا ممکن نیست دو Pod یک حجم واحد با این حالت دسترسی را به اشتراک بگذارند. این گزینه از نسخه 1.36 در وضعیت GA قرار دارد.</li>
+<li dir="rtl">گزینه <code dir="ltr">SELinuxChangePolicy</code>: فیلد <code dir="ltr">spec.securityContext.seLinuxChangePolicy</code> را در Pod و کنترل‌کننده مرتبط با آن، یعنی SELinuxWarningController، را در kube-controller-manager فعال می‌کند. هنگامی که چند Pod با برچسب‌های SELinux متفاوت یک حجم را به اشتراک می‌گذارند، با این گزینه می‌توان Podها را از بهینه‌سازی mount خارج کرد. این گزینه از نسخه 1.36 در وضعیت GA قرار دارد.</li>
+<li dir="rtl">گزینه <code dir="ltr">SELinuxMount</code>: بهینه‌سازی را برای همه حجم‌های واجد شرایط فعال می‌کند. این گزینه از نسخه 1.37 در وضعیت GA قرار دارد.
+هنگام ارتقا از نسخه‌های قدیمی‌تر کوبرنتیز که در آن‌ها <code dir="ltr">SELinuxMount</code> به‌طور پیش‌فرض غیرفعال بود، توصیه می‌کنیم ابتدا feature gate با نام <code dir="ltr">SELinuxChangePolicy</code> و کنترل‌کننده SELinuxWarningController را فعال کنید تا تأثیر این تغییر را بررسی کنید.</li>
+</ul>
+<h2 id="مدیریت-دسترسی-به-فایل-سیستم-proc-proc-access" dir="rtl">مدیریت دسترسی به فایل‌سیستم <code dir="ltr">/proc</code> {#proc-access}</h2>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
+<p dir="rtl">در محیط‌های اجرایی که از مشخصات محیط اجرای OCI پیروی می‌کنند، کانتینرها به‌طور پیش‌فرض در حالتی اجرا می‌شوند که در آن چندین مسیر هم پوشانده (masked) و هم فقط‌خواندنی هستند.
+در نتیجه، این مسیرها درون فضای نام mount کانتینر وجود دارند و می‌توانند همانند حالتی عمل کنند که کانتینر یک میزبان ایزوله باشد، اما فرایند کانتینر نمی‌تواند در آن‌ها بنویسد. فهرست مسیرهای پوشانده‌شده و فقط‌خواندنی به شرح زیر است:</p>
+<ul>
+<li dir="rtl">
+<p dir="rtl">مسیرهای پوشانده‌شده:</p>
+<ul>
+<li dir="ltr" class="ltr"><code dir="ltr">/proc/asound</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">/proc/acpi</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">/proc/kcore</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">/proc/keys</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">/proc/latency_stats</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">/proc/timer_list</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">/proc/timer_stats</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">/proc/sched_debug</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">/proc/scsi</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">/sys/firmware</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">/sys/devices/virtual/powercap</code></li>
+</ul>
+</li>
+<li dir="rtl">
+<p dir="rtl">مسیرهای فقط‌خواندنی:</p>
+<ul>
+<li dir="ltr" class="ltr"><code dir="ltr">/proc/bus</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">/proc/fs</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">/proc/irq</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">/proc/sys</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">/proc/sysrq-trigger</code></li>
+</ul>
+</li>
+</ul>
+<p dir="rtl">ممکن است بخواهید برای برخی Podها این پوشاندن پیش‌فرض مسیرها را دور بزنید.
+رایج‌ترین موقعیت برای این کار زمانی است که می‌خواهید کانتینرهایی را درون یک کانتینر کوبرنتیز (درون یک Pod) اجرا کنید.</p>
+<p dir="rtl">فیلد <code dir="ltr">procMount</code> در <code dir="ltr">securityContext</code> به کاربر امکان می‌دهد درخواست کند که <code dir="ltr">/proc</code> کانتینر <code dir="ltr">Unmasked</code> باشد، یا فرایند کانتینر آن را به‌صورت خواندنی-نوشتنی mount کند. این قابلیت درباره <code dir="ltr">/sys/firmware</code> نیز، که درون <code dir="ltr">/proc</code> قرار ندارد، صدق می‌کند.</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">...
+securityContext:
+  procMount: Unmasked
+</code></pre>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">تنظیم <code dir="ltr">procMount</code> روی Unmasked مستلزم آن است که مقدار <code dir="ltr">spec.hostUsers</code> در مشخصات Pod برابر <code dir="ltr">false</code> باشد. به بیان دیگر، کانتینری که می‌خواهد <code dir="ltr">/proc</code> یا <code dir="ltr">/sys</code> پوشانده‌نشده داشته باشد، باید در یک
+<a href="../../concepts/workloads/pods/user-namespaces.html">فضای نام کاربر</a> نیز قرار داشته باشد.
+کوبرنتیز از نسخه v1.12 تا v1.29 این الزام را اعمال نمی‌کرد.</p>
+</div>
+<h2 id="بحث" dir="rtl">بحث</h2>
+<p dir="rtl">زمینه امنیتی (security context) یک Pod روی کانتینرهای آن Pod و در صورت لزوم روی حجم‌های آن نیز اعمال می‌شود. به‌طور مشخص، <code dir="ltr">fsGroup</code> و <code dir="ltr">seLinuxOptions</code> به شکل زیر روی حجم‌ها اعمال می‌شوند:</p>
+<ul>
+<li dir="rtl">
+<p dir="rtl">فیلد <code dir="ltr">fsGroup</code>: حجم‌هایی که از مدیریت مالکیت پشتیبانی می‌کنند، طوری تغییر داده می‌شوند که مالکیت آن‌ها به GID مشخص‌شده در <code dir="ltr">fsGroup</code> تعلق گیرد و این GID بتواند در آن‌ها بنویسد. برای جزئیات بیشتر،
+<a href="https://git.k8s.io/design-proposals-archive/storage/volume-ownership-management.md" target="_blank" rel="noopener">سند طراحی مدیریت مالکیت</a>
+را ببینید.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">فیلد <code dir="ltr">seLinuxOptions</code>: حجم‌هایی که از برچسب‌گذاری SELinux پشتیبانی می‌کنند، دوباره برچسب‌گذاری می‌شوند تا برای برچسب مشخص‌شده در <code dir="ltr">seLinuxOptions</code> قابل دسترسی باشند. معمولاً کافی است فقط بخش <code dir="ltr">level</code> را تنظیم کنید. این بخش برچسب
+<a href="https://selinuxproject.org/page/NB_MLS" target="_blank" rel="noopener">امنیت چنددسته‌ای (MCS)</a>
+را تعیین می‌کند که به همه کانتینرهای Pod و همچنین به حجم‌ها داده می‌شود.</p>
+</li>
+</ul>
+<div class="callout warning"><div class="callout-title">هشدار:</div>
+<p dir="rtl">پس از آنکه یک برچسب MCS برای یک Pod مشخص کردید، همه Podهای دارای همان برچسب می‌توانند به آن حجم دسترسی داشته باشند.
+اگر به محافظت میان Podها نیاز دارید، باید به هر Pod یک برچسب MCS یکتا اختصاص دهید.</p>
+</div>
+<h2 id="پاک-سازی" dir="rtl">پاک‌سازی</h2>
+<p dir="rtl">اکنون Podها را حذف کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl delete pod security-context-demo
+kubectl delete pod security-context-demo-2
+kubectl delete pod security-context-demo-3
+kubectl delete pod security-context-demo-4
+</code></pre>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<ul>
+<li dir="ltr" class="ltr"><a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.37/#podsecuritycontext-v1-core" target="_blank">PodSecurityContext</a></li>
+<li dir="ltr" class="ltr"><a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.37/#securitycontext-v1-core" target="_blank">SecurityContext</a></li>
+<li dir="rtl"><a href="https://github.com/containerd/containerd/blob/main/docs/cri/config.md" target="_blank" rel="noopener">راهنمای پیکربندی افزونه CRI</a></li>
+<li dir="rtl"><a href="https://git.k8s.io/design-proposals-archive/auth/security_context.md" target="_blank" rel="noopener">سند طراحی زمینه‌های امنیتی</a></li>
+<li dir="rtl"><a href="https://git.k8s.io/design-proposals-archive/storage/volume-ownership-management.md" target="_blank" rel="noopener">سند طراحی مدیریت مالکیت</a></li>
+<li dir="rtl"><a href="../../concepts/security/pod-security-admission.html">پذیرش PodSecurity</a></li>
+<li dir="rtl"><a href="https://git.k8s.io/design-proposals-archive/auth/no-new-privs.md" target="_blank" rel="noopener">سند طراحی
+AllowPrivilegeEscalation</a></li>
+<li dir="rtl">برای اطلاعات بیشتر درباره سازوکارهای امنیتی در لینوکس،
+<a href="https://www.linux.com/learn/overview-linux-kernel-security-features" target="_blank" rel="noopener">مروری بر قابلیت‌های امنیتی هسته لینوکس</a>
+را ببینید (توجه: بخشی از اطلاعات آن قدیمی است).</li>
+<li dir="rtl">درباره <a href="../../concepts/workloads/pods/user-namespaces.html">فضاهای نام کاربر</a>
+برای Podهای لینوکسی مطالعه کنید.</li>
+<li dir="rtl"><a href="https://github.com/opencontainers/runtime-spec/blob/f66aad47309/config-linux.md#masked-paths" target="_blank" rel="noopener">مسیرهای پوشانده‌شده در مشخصات محیط اجرای
+OCI</a></li>
+</ul>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#پیش-از-شروع">پیش از شروع</a><a class="l2" href="#تنظیم-زمینهٔ-امنیتی-برای-یک-pod">تنظیم زمینهٔ امنیتی برای یک Pod</a><a class="l3" href="#عضویت-های-ضمنی-در-گروه-که-در-etc-group-ایمیج-کانتینر-تعریف-شده-اند">عضویت‌های ضمنی در گروه که در /etc/group ایمیج کانتینر تعریف شده‌اند</a><a class="l2" href="#پیکربندی-کنترل-دقیق-supplementalgroups-برای-یک-pod-supplementalgroupspolicy">پیکربندی کنترل دقیق SupplementalGroups برای یک Pod {#supplementalgroupspolicy}</a><a class="l3" href="#پیاده-سازی-ها-implementations-supplementalgroupspolicy">پیاده‌سازی‌ها {#implementations-supplementalgroupspolicy}</a><a class="l2" href="#پیکربندی-سیاست-تغییر-مجوز-و-مالکیت-حجم-برای-podها">پیکربندی سیاست تغییر مجوز و مالکیت حجم برای Podها</a><a class="l2" href="#واگذاری-تغییر-مجوز-و-مالکیت-حجم-به-درایور-csi">واگذاری تغییر مجوز و مالکیت حجم به درایور CSI</a><a class="l2" href="#تنظیم-زمینهٔ-امنیتی-برای-یک-کانتینر">تنظیم زمینهٔ امنیتی برای یک کانتینر</a><a class="l2" href="#تنظیم-قابلیت-ها-برای-یک-کانتینر">تنظیم قابلیت‌ها برای یک کانتینر</a><a class="l2" href="#تنظیم-پروفایل-seccomp-برای-یک-کانتینر">تنظیم پروفایل Seccomp برای یک کانتینر</a><a class="l2" href="#تنظیم-پروفایل-apparmor-برای-یک-کانتینر">تنظیم پروفایل AppArmor برای یک کانتینر</a><a class="l2" href="#اختصاص-برچسب-های-selinux-به-یک-کانتینر">اختصاص برچسب‌های SELinux به یک کانتینر</a><a class="l3" href="#برچسب-گذاری-مجدد-کارآمد-حجم-ها-در-selinux">برچسب‌گذاری مجدد کارآمد حجم‌ها در SELinux</a><a class="l2" href="#مدیریت-دسترسی-به-فایل-سیستم-proc-proc-access">مدیریت دسترسی به فایل‌سیستم /proc {#proc-access}</a><a class="l2" href="#بحث">بحث</a><a class="l2" href="#پاک-سازی">پاک‌سازی</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>

@@ -8,8 +8,8 @@
 
 | | |
 |---|---|
-| پیشرفت (بر اساس کلمات) | **92.7٪** |
-| صفحات ترجمه‌شده | 1575 از 1722 |
+| پیشرفت (بر اساس کلمات) | **93.7٪** |
+| صفحات ترجمه‌شده | 1590 از 1722 |
 | صفحات دارای ایراد ساختاری | 74 |
 | نسخه‌ی منبع انگلیسی | `f652c6b8a26f` |
 
@@ -74,7 +74,7 @@ cd kubernetes-doc-fa
 | `home` | 2 | 2 |
 | `reference` | 1198 | 1198 |
 | `setup` | 22 | 22 |
-| `tasks` | 120 | 221 |
+| `tasks` | 135 | 221 |
 | `tutorials` | 0 | 45 |
 
 </div>
@@ -101,26 +101,26 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [tasks/debug/debug-cluster/crictl.md](md/tasks/debug/debug-cluster/crictl.md) — 2026-11-14T10:56:10+03:30
+- [tasks/debug/debug-cluster/audit.md](md/tasks/debug/debug-cluster/audit.md) — 2026-11-14T10:55:51+03:30
+- [tasks/debug/debug-cluster/_index.md](md/tasks/debug/debug-cluster/_index.md) — 2026-11-14T10:55:39+03:30
+- [tasks/debug/debug-application/determine-reason-pod-failure.md](md/tasks/debug/debug-application/determine-reason-pod-failure.md) — 2026-11-14T10:54:48+03:30
+- [tasks/debug/debug-application/get-shell-running-container.md](md/tasks/debug/debug-application/get-shell-running-container.md) — 2026-11-14T10:54:42+03:30
+- [tasks/debug/debug-application/debug-service.md](md/tasks/debug/debug-application/debug-service.md) — 2026-11-14T10:54:25+03:30
+- [tasks/debug/debug-application/debug-statefulset.md](md/tasks/debug/debug-application/debug-statefulset.md) — 2026-11-14T10:54:25+03:30
+- [tasks/debug/debug-application/debug-running-pod.md](md/tasks/debug/debug-application/debug-running-pod.md) — 2026-11-14T10:54:17+03:30
+- [tasks/debug/debug-application/debug-pods.md](md/tasks/debug/debug-application/debug-pods.md) — 2026-11-14T10:52:40+03:30
+- [tasks/configure-pod-container/translate-compose-kubernetes.md](md/tasks/configure-pod-container/translate-compose-kubernetes.md) — 2026-11-14T10:52:04+03:30
+- [tasks/debug/debug-application/debug-init-containers.md](md/tasks/debug/debug-application/debug-init-containers.md) — 2026-11-14T10:51:13+03:30
+- [tasks/debug/debug-application/_index.md](md/tasks/debug/debug-application/_index.md) — 2026-11-14T10:50:55+03:30
+- [tasks/debug/_index.md](md/tasks/debug/_index.md) — 2026-11-14T10:50:49+03:30
+- [tasks/configure-pod-container/user-namespaces.md](md/tasks/configure-pod-container/user-namespaces.md) — 2026-11-14T10:50:12+03:30
+- [tasks/configure-pod-container/security-context.md](md/tasks/configure-pod-container/security-context.md) — 2026-11-14T10:49:52+03:30
 - [tasks/configure-pod-container/static-pod.md](md/tasks/configure-pod-container/static-pod.md) — 2026-11-14T10:49:43+03:30
 - [tasks/configure-pod-container/share-process-namespace.md](md/tasks/configure-pod-container/share-process-namespace.md) — 2026-11-14T10:49:02+03:30
 - [tasks/configure-pod-container/resize-container-resources.md](md/tasks/configure-pod-container/resize-container-resources.md) — 2026-11-14T10:48:42+03:30
 - [tasks/configure-pod-container/resize-pod-resources.md](md/tasks/configure-pod-container/resize-pod-resources.md) — 2026-11-14T10:46:47+03:30
 - [tasks/configure-pod-container/migrate-from-psp.md](md/tasks/configure-pod-container/migrate-from-psp.md) — 2026-11-14T10:46:06+03:30
-- [tasks/configure-pod-container/quality-service-pod.md](md/tasks/configure-pod-container/quality-service-pod.md) — 2026-11-14T10:45:58+03:30
-- [tasks/configure-pod-container/pull-image-private-registry.md](md/tasks/configure-pod-container/pull-image-private-registry.md) — 2026-11-14T10:45:23+03:30
-- [tasks/configure-pod-container/image-volumes.md](md/tasks/configure-pod-container/image-volumes.md) — 2026-11-14T10:44:41+03:30
-- [tasks/configure-pod-container/extended-resource.md](md/tasks/configure-pod-container/extended-resource.md) — 2026-11-14T10:44:35+03:30
-- [tasks/configure-pod-container/configure-service-account.md](md/tasks/configure-pod-container/configure-service-account.md) — 2026-11-14T10:44:29+03:30
-- [tasks/configure-pod-container/enforce-standards-namespace-labels.md](md/tasks/configure-pod-container/enforce-standards-namespace-labels.md) — 2026-11-14T10:44:12+03:30
-- [tasks/configure-pod-container/enforce-standards-admission-controller.md](md/tasks/configure-pod-container/enforce-standards-admission-controller.md) — 2026-11-14T10:43:53+03:30
-- [tasks/configure-pod-container/create-hostprocess-pod.md](md/tasks/configure-pod-container/create-hostprocess-pod.md) — 2026-11-14T10:43:39+03:30
-- [tasks/configure-pod-container/configure-volume-storage.md](md/tasks/configure-pod-container/configure-volume-storage.md) — 2026-11-14T10:42:43+03:30
-- [tasks/configure-pod-container/configure-pod-configmap.md](md/tasks/configure-pod-container/configure-pod-configmap.md) — 2026-11-14T10:42:23+03:30
-- [tasks/configure-pod-container/configure-runasusername.md](md/tasks/configure-pod-container/configure-runasusername.md) — 2026-11-14T10:40:21+03:30
-- [tasks/configure-pod-container/configure-projected-volume-storage.md](md/tasks/configure-pod-container/configure-projected-volume-storage.md) — 2026-11-14T10:39:56+03:30
-- [tasks/configure-pod-container/configure-pod-initialization.md](md/tasks/configure-pod-container/configure-pod-initialization.md) — 2026-11-14T10:39:44+03:30
-- [tasks/configure-pod-container/configure-liveness-readiness-startup-probes.md](md/tasks/configure-pod-container/configure-liveness-readiness-startup-probes.md) — 2026-11-14T10:39:31+03:30
-- [tasks/configure-pod-container/configure-gmsa.md](md/tasks/configure-pod-container/configure-gmsa.md) — 2026-11-14T10:39:14+03:30
 
 </div>
 

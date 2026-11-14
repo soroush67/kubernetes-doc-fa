@@ -1,0 +1,577 @@
+---
+reviewers:
+- thockin
+- bowei
+content_type: task
+title: اشکال‌زدایی Serviceها
+weight: 20
+---
+
+<!-- overview -->
+یکی از مشکلاتی که در نصب‌های تازهٔ کوبرنتیز نسبتاً زیاد پیش می‌آید، این است که یک Service به‌درستی کار نمی‌کند. شما Podهای خود را از طریق یک Deployment (یا کنترل‌کنندهٔ بار کاری دیگری) اجرا کرده و یک Service ساخته‌اید، اما هنگام تلاش برای دسترسی به آن پاسخی دریافت نمی‌کنید. امیدواریم این سند به شما کمک کند تا علت مشکل را پیدا کنید.
+
+<!-- body -->
+
+## اجرای فرمان‌ها در یک Pod
+
+در بسیاری از گام‌های این راهنما لازم است ببینید یک Pod در حال اجرا در کلاستر چه چیزی می‌بیند. ساده‌ترین راه برای این کار، اجرای یک Pod تعاملی busybox است:
+
+```none
+kubectl run -it --rm --restart=Never busybox --image=registry.k8s.io/busybox:1.27.2 sh
+```
+
+{{< note >}}
+اگر خط فرمان (command prompt) را نمی‌بینید، کلید Enter را فشار دهید.
+{{< /note >}}
+
+اگر از قبل یک Pod در حال اجرا دارید که ترجیح می‌دهید از آن استفاده کنید، می‌توانید با فرمان زیر یک فرمان را در آن اجرا کنید:
+
+```shell
+kubectl exec <POD-NAME> -c <CONTAINER-NAME> -- <COMMAND>
+```
+
+## راه‌اندازی
+
+برای این راهنمای گام‌به‌گام، چند Pod اجرا می‌کنیم. از آنجا که احتمالاً در حال اشکال‌زدایی Service خودتان هستید، می‌توانید جزئیات مربوط به خودتان را جایگزین کنید، یا همراه با این راهنما پیش بروید تا یک نقطهٔ مرجع دوم برای مقایسه داشته باشید.
+
+```shell
+kubectl create deployment hostnames --image=registry.k8s.io/serve_hostname
+```
+```none
+deployment.apps/hostnames created
+```
+
+فرمان‌های `kubectl` نوع و نام منبع ایجادشده یا تغییریافته را چاپ می‌کنند و می‌توان از آن در فرمان‌های بعدی استفاده کرد.
+
+اکنون تعداد رپلیکاهای این Deployment را به ۳ افزایش می‌دهیم.
+```shell
+kubectl scale deployment hostnames --replicas=3
+```
+```none
+deployment.apps/hostnames scaled
+```
+
+توجه کنید که این کار معادل آن است که Deployment را با YAML زیر ایجاد کرده باشید:
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: hostnames
+  name: hostnames
+spec:
+  selector:
+    matchLabels:
+      app: hostnames
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: hostnames
+    spec:
+      containers:
+      - name: hostnames
+        image: registry.k8s.io/serve_hostname
+```
+
+فرمان `kubectl create deployment` برچسب "app" را به‌طور خودکار برابر با نام Deployment تنظیم می‌کند.
+
+می‌توانید اجرای Podهای خود را بررسی کنید:
+
+```shell
+kubectl get pods -l app=hostnames
+```
+```none
+NAME                        READY     STATUS    RESTARTS   AGE
+hostnames-632524106-bbpiw   1/1       Running   0          2m
+hostnames-632524106-ly40y   1/1       Running   0          2m
+hostnames-632524106-tlaok   1/1       Running   0          2m
+```
+
+همچنین می‌توانید بررسی کنید که Podهای شما به درخواست‌ها پاسخ می‌دهند. برای این کار، فهرست نشانی‌های IP پادها را به دست آورید و آن‌ها را مستقیماً آزمایش کنید.
+
+```shell
+kubectl get pods -l app=hostnames \
+    -o go-template='{{range .items}}{{.status.podIP}}{{"\n"}}{{end}}'
+```
+```none
+10.244.0.5
+10.244.0.6
+10.244.0.7
+```
+
+کانتینر نمونه‌ای که در این راهنما استفاده می‌شود، نام میزبان (hostname) خود را از طریق HTTP روی پورت 9376 ارائه می‌کند؛ اما اگر در حال اشکال‌زدایی برنامهٔ خودتان هستید، باید از شماره پورتی استفاده کنید که Podهای شما روی آن گوش می‌دهند.
+
+از درون یک Pod:
+
+```shell
+for ep in 10.244.0.5:9376 10.244.0.6:9376 10.244.0.7:9376; do
+    wget -qO- $ep
+done
+```
+
+خروجی باید چیزی شبیه این باشد:
+
+```
+hostnames-632524106-bbpiw
+hostnames-632524106-ly40y
+hostnames-632524106-tlaok
+```
+
+اگر در این مرحله پاسخ‌های مورد انتظار را دریافت نمی‌کنید، ممکن است Podهای شما سالم نباشند یا روی پورتی که فکر می‌کنید گوش ندهند. فرمان `kubectl logs` می‌تواند برای دیدن آنچه در حال رخ دادن است مفید باشد؛ یا شاید لازم باشد با `kubectl exec` مستقیماً وارد Podهای خود شوید و از همان‌جا اشکال‌زدایی کنید.
+
+با فرض اینکه تا اینجا همه‌چیز طبق برنامه پیش رفته است، می‌توانید بررسی علت کار نکردن Service را آغاز کنید.
+
+## آیا Service وجود دارد؟
+
+خوانندهٔ دقیق متوجه شده است که هنوز در واقع هیچ Service‌ای نساخته‌اید؛ این کار عمدی است. این گامی است که گاهی فراموش می‌شود و نخستین چیزی است که باید بررسی کنید.
+
+اگر بخواهید به Service‌ای که وجود ندارد دسترسی پیدا کنید، چه اتفاقی می‌افتد؟ اگر Pod دیگری داشته باشید که این Service را با نام آن استفاده می‌کند، خروجی‌ای شبیه این دریافت خواهید کرد:
+
+```shell
+wget -O- hostnames
+```
+```none
+Resolving hostnames (hostnames)... failed: Name or service not known.
+wget: unable to resolve host address 'hostnames'
+```
+
+نخستین چیزی که باید بررسی کنید این است که آیا آن Service واقعاً وجود دارد یا نه:
+
+```shell
+kubectl get svc hostnames
+```
+```none
+No resources found.
+Error from server (NotFound): services "hostnames" not found
+```
+
+اکنون Service را می‌سازیم. مانند قبل، این کار برای همین راهنماست و می‌توانید در اینجا از جزئیات Service خودتان استفاده کنید.
+
+```shell
+kubectl expose deployment hostnames --port=80 --target-port=9376
+```
+```none
+service/hostnames exposed
+```
+
+و آن را دوباره بخوانید:
+
+```shell
+kubectl get svc hostnames
+```
+```none
+NAME        TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+hostnames   ClusterIP   10.0.1.175   <none>        80/TCP    5s
+```
+
+اکنون می‌دانید که Service وجود دارد.
+
+مانند قبل، این کار معادل آن است که Service را با YAML زیر ایجاد کرده باشید:
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: hostnames
+  name: hostnames
+spec:
+  selector:
+    app: hostnames
+  ports:
+  - name: default
+    protocol: TCP
+    port: 80
+    targetPort: 9376
+```
+
+برای اینکه گسترهٔ کامل پیکربندی را نشان دهیم، Service‌ای که در اینجا ساختید از شماره پورتی متفاوت با Podها استفاده می‌کند. در بسیاری از Serviceهای دنیای واقعی، این مقادیر ممکن است یکسان باشند.
+
+## آیا قانون‌های Ingress در Network Policy بر Podهای هدف اثر می‌گذارند؟
+
+اگر قانون‌های Ingress در Network Policy را مستقر کرده‌اید که ممکن است بر ترافیک ورودی به Podهای `hostnames-*` اثر بگذارند، باید آن‌ها را بازبینی کنید.
+
+برای جزئیات بیشتر به [سیاست‌های شبکه](/docs/concepts/services-networking/network-policies/) مراجعه کنید.
+
+## آیا Service با نام DNS کار می‌کند؟
+
+یکی از رایج‌ترین روش‌هایی که کلاینت‌ها از طریق آن از یک Service استفاده می‌کنند، نام DNS است.
+
+از یک Pod در همان فضای نام (namespace):
+
+```shell
+nslookup hostnames
+```
+```none
+Address 1: 10.0.0.10 kube-dns.kube-system.svc.cluster.local
+
+Name:      hostnames
+Address 1: 10.0.1.175 hostnames.default.svc.cluster.local
+```
+
+اگر این کار ناموفق بود، شاید Pod و Service شما در فضاهای نام متفاوتی باشند. در این صورت نامی را امتحان کنید که فضای نام را نیز در بر دارد (باز هم از درون یک Pod):
+
+```shell
+nslookup hostnames.default
+```
+```none
+Address 1: 10.0.0.10 kube-dns.kube-system.svc.cluster.local
+
+Name:      hostnames.default
+Address 1: 10.0.1.175 hostnames.default.svc.cluster.local
+```
+
+اگر این کار جواب داد، باید برنامهٔ خود را طوری تنظیم کنید که از نامی بین‌فضای‌نامی استفاده کند، یا برنامه و Service خود را در یک فضای نام اجرا کنید. اگر باز هم ناموفق بود، نام کامل (fully-qualified) را امتحان کنید:
+
+```shell
+nslookup hostnames.default.svc.cluster.local
+```
+```none
+Address 1: 10.0.0.10 kube-dns.kube-system.svc.cluster.local
+
+Name:      hostnames.default.svc.cluster.local
+Address 1: 10.0.1.175 hostnames.default.svc.cluster.local
+```
+
+به پسوند اینجا توجه کنید: "default.svc.cluster.local". بخش "default" فضای نامی است که در آن کار می‌کنید. بخش "svc" نشان می‌دهد که این یک Service است. بخش "cluster.local" دامنهٔ کلاستر شماست که ممکن است در کلاستر خودتان متفاوت باشد.
+
+می‌توانید این کار را از یک نود در کلاستر نیز امتحان کنید:
+
+{{< note >}}
+نشانی 10.0.0.10 همان IP مربوط به Service DNS کلاستر است و ممکن است در کلاستر شما متفاوت باشد.
+{{< /note >}}
+
+```shell
+nslookup hostnames.default.svc.cluster.local 10.0.0.10
+```
+```none
+Server:         10.0.0.10
+Address:        10.0.0.10#53
+
+Name:   hostnames.default.svc.cluster.local
+Address: 10.0.1.175
+```
+
+اگر جست‌وجوی نام کامل موفق است اما جست‌وجوی نام نسبی موفق نیست، باید درستی فایل `/etc/resolv.conf` را در Pod خود بررسی کنید. از درون یک Pod:
+
+```shell
+cat /etc/resolv.conf
+```
+
+باید چیزی شبیه این ببینید:
+
+```
+nameserver 10.0.0.10
+search default.svc.cluster.local svc.cluster.local cluster.local example.com
+options ndots:5
+```
+
+خط `nameserver` باید به Service DNS کلاستر شما اشاره کند. این مقدار با فلگ `--cluster-dns` به `kubelet` داده می‌شود.
+
+خط `search` باید پسوند مناسبی را در بر داشته باشد تا نام Service پیدا شود. در این مثال، جست‌وجو به ترتیب برای Serviceهای فضای نام محلی ("default.svc.cluster.local")، Serviceهای همهٔ فضاهای نام ("svc.cluster.local") و در نهایت برای نام‌های درون کلاستر ("cluster.local") انجام می‌شود. بسته به نصب خودتان، ممکن است پس از آن رکوردهای دیگری نیز داشته باشید (حداکثر ۶ رکورد در مجموع). پسوند کلاستر با فلگ `--cluster-domain` به `kubelet` داده می‌شود. در سراسر این سند فرض شده است که پسوند کلاستر "cluster.local" است. ممکن است کلاسترهای شما به شکل دیگری پیکربندی شده باشند که در این صورت باید آن را در همهٔ فرمان‌های قبلی تغییر دهید.
+
+خط `options` باید مقدار `ndots` را به اندازهٔ کافی بالا تنظیم کند تا کتابخانهٔ کلاینت DNS شما اصلاً مسیرهای جست‌وجو را در نظر بگیرد. کوبرنتیز به‌طور پیش‌فرض این مقدار را 5 قرار می‌دهد که برای پوشش همهٔ نام‌های DNS تولیدشده توسط آن کافی است.
+
+### آیا هیچ Service‌ای با نام DNS کار می‌کند؟ {#does-any-service-exist-in-dns}
+
+اگر مراحل بالا همچنان ناموفق است، جست‌وجوهای DNS برای Service شما کار نمی‌کنند. می‌توانید یک گام به عقب برگردید و ببینید چه چیز دیگری کار نمی‌کند. Service اصلی (master) کوبرنتیز همیشه باید کار کند. از درون یک Pod:
+
+```shell
+nslookup kubernetes.default
+```
+```none
+Server:    10.0.0.10
+Address 1: 10.0.0.10 kube-dns.kube-system.svc.cluster.local
+
+Name:      kubernetes.default
+Address 1: 10.0.0.1 kubernetes.default.svc.cluster.local
+```
+
+اگر این کار ناموفق بود، بخش [kube-proxy](#is-the-kube-proxy-working) همین سند را ببینید، یا حتی به ابتدای این سند برگردید و از نو شروع کنید؛ اما این بار به‌جای اشکال‌زدایی Service خودتان، Service DNS را اشکال‌زدایی کنید.
+
+## آیا Service با IP کار می‌کند؟
+
+با فرض اینکه درستی کار DNS را تأیید کرده‌اید، گام بعدی آزمودن این است که آیا Service شما با نشانی IP خود کار می‌کند یا نه. از یک Pod در کلاستر خود، به IP مربوط به Service (که از خروجی `kubectl get` بالا به دست آمد) دسترسی پیدا کنید.
+
+```shell
+for i in $(seq 1 3); do 
+    wget -qO- 10.0.1.175:80
+done
+```
+
+خروجی باید چیزی شبیه این باشد:
+
+```
+hostnames-632524106-bbpiw
+hostnames-632524106-ly40y
+hostnames-632524106-tlaok
+```
+
+اگر Service شما کار کند، باید پاسخ‌های درستی دریافت کنید. در غیر این صورت، ممکن است چند چیز مختلف دچار اشکال باشند. ادامه را بخوانید.
+
+## آیا Service به‌درستی تعریف شده است؟
+
+شاید ساده‌لوحانه به نظر برسد، اما واقعاً باید دو یا سه بار بررسی کنید که Service شما درست است و با پورت Pod شما مطابقت دارد. Service خود را دوباره بخوانید و آن را بررسی کنید:
+
+```shell
+kubectl get service hostnames -o json
+```
+```json
+{
+    "kind": "Service",
+    "apiVersion": "v1",
+    "metadata": {
+        "name": "hostnames",
+        "namespace": "default",
+        "uid": "428c8b6c-24bc-11e5-936d-42010af0a9bc",
+        "resourceVersion": "347189",
+        "creationTimestamp": "2015-07-07T15:24:29Z",
+        "labels": {
+            "app": "hostnames"
+        }
+    },
+    "spec": {
+        "ports": [
+            {
+                "name": "default",
+                "protocol": "TCP",
+                "port": 80,
+                "targetPort": 9376,
+                "nodePort": 0
+            }
+        ],
+        "selector": {
+            "app": "hostnames"
+        },
+        "clusterIP": "10.0.1.175",
+        "type": "ClusterIP",
+        "sessionAffinity": "None"
+    },
+    "status": {
+        "loadBalancer": {}
+    }
+}
+```
+
+* آیا پورت Service که می‌خواهید به آن دسترسی پیدا کنید، در `spec.ports[]` فهرست شده است؟
+* آیا مقدار `targetPort` برای Podهای شما درست است (برخی Podها از پورتی متفاوت با Service استفاده می‌کنند)؟
+* اگر قصد داشتید از پورت عددی استفاده کنید، آیا مقدار آن عدد (9376) است یا رشتهٔ "9376"؟
+* اگر قصد داشتید از پورت نام‌دار استفاده کنید، آیا Podهای شما پورتی با همان نام را در دسترس قرار می‌دهند؟
+* آیا مقدار `protocol` پورت برای Podهای شما درست است؟
+
+## آیا Service هیچ EndpointSlice‌ای دارد؟
+
+اگر به اینجا رسیده‌اید، تأیید کرده‌اید که Service شما به‌درستی تعریف شده است و DNS نام آن را تحلیل (resolve) می‌کند. اکنون بررسی می‌کنیم که آیا Podهایی که اجرا کرده‌اید واقعاً توسط Service انتخاب می‌شوند یا نه.
+
+پیش‌تر دیدید که Podها در حال اجرا بودند. می‌توانید دوباره این را بررسی کنید:
+
+```shell
+kubectl get pods -l app=hostnames
+```
+```none
+NAME                        READY     STATUS    RESTARTS   AGE
+hostnames-632524106-bbpiw   1/1       Running   0          1h
+hostnames-632524106-ly40y   1/1       Running   0          1h
+hostnames-632524106-tlaok   1/1       Running   0          1h
+```
+
+آرگومان `-l app=hostnames` همان انتخابگر (selector) برچسبی است که روی Service پیکربندی شده است.
+
+ستون "AGE" نشان می‌دهد که حدود یک ساعت از عمر این Podها می‌گذرد؛ یعنی به‌خوبی در حال اجرا هستند و از کار نمی‌افتند.
+
+ستون "RESTARTS" نشان می‌دهد که این Podها مرتباً از کار نمی‌افتند یا راه‌اندازی مجدد نمی‌شوند. راه‌اندازی‌های مجدد مکرر می‌توانند به مشکلات اتصال متناوب منجر شوند. اگر تعداد راه‌اندازی‌های مجدد زیاد است، دربارهٔ [اشکال‌زدایی Podها](/docs/tasks/debug/debug-application/debug-pods) بیشتر بخوانید.
+
+درون سیستم کوبرنتیز یک حلقهٔ کنترلی وجود دارد که انتخابگر هر Service را ارزیابی می‌کند و نتایج را در یک یا چند آبجکت EndpointSlice ذخیره می‌کند.
+
+```shell
+kubectl get endpointslices -l kubernetes.io/service-name=hostnames
+
+NAME              ADDRESSTYPE   PORTS   ENDPOINTS
+hostnames-ytpni   IPv4          9376    10.244.0.5,10.244.0.6,10.244.0.7
+```
+
+این خروجی تأیید می‌کند که کنترل‌کنندهٔ EndpointSlice، Podهای درست را برای Service شما پیدا کرده است. اگر مقدار ستون `ENDPOINTS` برابر `<none>` است، باید بررسی کنید که فیلد `spec.selector` در Service شما واقعاً مقادیر `metadata.labels` روی Podهایتان را انتخاب می‌کند. یک اشتباه رایج، غلط تایپی یا خطای مشابه است؛ مثلاً Service مقدار `app=hostnames` را انتخاب می‌کند، اما Deployment مقدار `run=hostnames` را مشخص کرده است. این وضعیت در نسخه‌های پیش از 1.18 پیش می‌آمد که در آن‌ها فرمان `kubectl run` را نیز می‌شد برای ساختن یک Deployment به کار برد.
+
+## آیا Podها کار می‌کنند؟
+
+در این مرحله می‌دانید که Service شما وجود دارد و Podهایتان را انتخاب کرده است. در ابتدای این راهنما، خود Podها را بررسی کردید. اکنون دوباره بررسی می‌کنیم که Podها واقعاً کار می‌کنند؛ می‌توانید سازوکار Service را دور بزنید و مستقیماً به سراغ Podهایی بروید که در فهرست Endpointهای بالا آمده‌اند.
+
+{{< note >}}
+این فرمان‌ها به‌جای پورت Service (80)، از پورت Pod (9376) استفاده می‌کنند.
+{{< /note >}}
+
+از درون یک Pod:
+
+```shell
+for ep in 10.244.0.5:9376 10.244.0.6:9376 10.244.0.7:9376; do
+    wget -qO- $ep
+done
+```
+
+خروجی باید چیزی شبیه این باشد:
+
+```
+hostnames-632524106-bbpiw
+hostnames-632524106-ly40y
+hostnames-632524106-tlaok
+```
+
+انتظار دارید هر Pod در فهرست endpointها نام میزبان خود را برگرداند. اگر این اتفاق نیفتاد (یا هر رفتاری که برای Podهای خودتان درست است رخ نداد)، باید بررسی کنید که در آنجا چه می‌گذرد.
+
+## آیا kube-proxy کار می‌کند؟
+
+اگر به اینجا رسیده‌اید، Service شما در حال اجراست، EndpointSlice دارد و Podهایتان واقعاً به درخواست‌ها پاسخ می‌دهند. در این مرحله، کل سازوکار پروکسی Service مشکوک است. بیایید آن را بخش به بخش بررسی کنیم.
+
+پیاده‌سازی پیش‌فرض Serviceها، که در بیشتر کلاسترها نیز استفاده می‌شود، kube-proxy است. این برنامه روی هر نود اجرا می‌شود و یکی از مجموعهٔ کوچکی از سازوکارها را برای فراهم کردن انتزاع Service پیکربندی می‌کند. اگر کلاستر شما از kube-proxy استفاده نمی‌کند، بخش‌های بعدی برای شما کاربردی ندارند و باید پیاده‌سازی Serviceای را که استفاده می‌کنید بررسی کنید.
+
+### آیا kube-proxy در حال اجراست؟
+
+بررسی کنید که `kube-proxy` روی نودهای شما در حال اجرا باشد. اگر این دستور را مستقیماً روی یک نود اجرا کنید، باید خروجی‌ای مشابه زیر ببینید:
+
+```shell
+ps auxw | grep kube-proxy
+```
+```none
+root  4194  0.4  0.1 101864 17696 ?    Sl Jul04  25:43 /usr/local/bin/kube-proxy --master=https://kubernetes-master --kubeconfig=/var/lib/kube-proxy/kubeconfig --v=2
+```
+
+سپس مطمئن شوید که در کار آشکاری مانند برقراری ارتباط با master دچار خطا نشده است. برای این کار باید لاگ‌ها را بررسی کنید. نحوهٔ دسترسی به لاگ‌ها به سیستم‌عامل نود بستگی دارد. در برخی سیستم‌عامل‌ها لاگ در فایلی مانند /var/log/kube-proxy.log ذخیره می‌شود و در برخی دیگر برای دسترسی به لاگ‌ها از `journalctl` استفاده می‌شود. باید خروجی‌ای مشابه زیر ببینید:
+
+```none
+I1027 22:14:53.995134    5063 server.go:200] Running in resource-only container "/kube-proxy"
+I1027 22:14:53.998163    5063 server.go:247] Using iptables Proxier.
+I1027 22:14:54.038140    5063 proxier.go:352] Setting endpoints for "kube-system/kube-dns:dns-tcp" to [10.244.1.3:53]
+I1027 22:14:54.038164    5063 proxier.go:352] Setting endpoints for "kube-system/kube-dns:dns" to [10.244.1.3:53]
+I1027 22:14:54.038209    5063 proxier.go:352] Setting endpoints for "default/kubernetes:https" to [10.240.0.2:443]
+I1027 22:14:54.038238    5063 proxier.go:429] Not syncing iptables until Services and Endpoints have been received from master
+I1027 22:14:54.040048    5063 proxier.go:294] Adding new service "default/kubernetes:https" at 10.0.0.1:443/TCP
+I1027 22:14:54.040154    5063 proxier.go:294] Adding new service "kube-system/kube-dns:dns" at 10.0.0.10:53/UDP
+I1027 22:14:54.040223    5063 proxier.go:294] Adding new service "kube-system/kube-dns:dns-tcp" at 10.0.0.10:53/TCP
+```
+
+اگر پیام‌های خطایی دربارهٔ ناتوانی در برقراری ارتباط با master می‌بینید، پیکربندی نود و مراحل نصب آن را دوباره بررسی کنید.
+
+برنامهٔ kube-proxy می‌تواند در یکی از چند حالت مختلف اجرا شود. در لاگ بالا، خط `Using iptables Proxier` نشان می‌دهد که kube-proxy در حالت «iptables» اجرا می‌شود. رایج‌ترین حالت دیگر «ipvs» است.
+
+#### حالت iptables
+
+در حالت «iptables»، باید روی نود خروجی‌ای مشابه زیر ببینید:
+
+```shell
+iptables-save | grep hostnames
+```
+```none
+-A KUBE-SEP-57KPRZ3JQVENLNBR -s 10.244.3.6/32 -m comment --comment "default/hostnames:" -j MARK --set-xmark 0x00004000/0x00004000
+-A KUBE-SEP-57KPRZ3JQVENLNBR -p tcp -m comment --comment "default/hostnames:" -m tcp -j DNAT --to-destination 10.244.3.6:9376
+-A KUBE-SEP-WNBA2IHDGP2BOBGZ -s 10.244.1.7/32 -m comment --comment "default/hostnames:" -j MARK --set-xmark 0x00004000/0x00004000
+-A KUBE-SEP-WNBA2IHDGP2BOBGZ -p tcp -m comment --comment "default/hostnames:" -m tcp -j DNAT --to-destination 10.244.1.7:9376
+-A KUBE-SEP-X3P2623AGDH6CDF3 -s 10.244.2.3/32 -m comment --comment "default/hostnames:" -j MARK --set-xmark 0x00004000/0x00004000
+-A KUBE-SEP-X3P2623AGDH6CDF3 -p tcp -m comment --comment "default/hostnames:" -m tcp -j DNAT --to-destination 10.244.2.3:9376
+-A KUBE-SERVICES -d 10.0.1.175/32 -p tcp -m comment --comment "default/hostnames: cluster IP" -m tcp --dport 80 -j KUBE-SVC-NWV5X2332I4OT4T3
+-A KUBE-SVC-NWV5X2332I4OT4T3 -m comment --comment "default/hostnames:" -m statistic --mode random --probability 0.33332999982 -j KUBE-SEP-WNBA2IHDGP2BOBGZ
+-A KUBE-SVC-NWV5X2332I4OT4T3 -m comment --comment "default/hostnames:" -m statistic --mode random --probability 0.50000000000 -j KUBE-SEP-X3P2623AGDH6CDF3
+-A KUBE-SVC-NWV5X2332I4OT4T3 -m comment --comment "default/hostnames:" -j KUBE-SEP-57KPRZ3JQVENLNBR
+```
+
+برای هر پورت از هر Service، باید یک قاعده در `KUBE-SERVICES` و یک زنجیرهٔ `KUBE-SVC-<hash>` وجود داشته باشد. برای هر endpoint از Pod نیز باید چند قاعده در همان `KUBE-SVC-<hash>` و یک زنجیرهٔ `KUBE-SEP-<hash>` با چند قاعده در آن وجود داشته باشد. قواعد دقیق بسته به پیکربندی دقیق شما (از جمله node-portها و load-balancerها) متفاوت خواهد بود.
+
+#### حالت IPVS
+
+در حالت «ipvs»، باید روی نود خروجی‌ای مشابه زیر ببینید:
+
+```shell
+ipvsadm -ln
+```
+```none
+Prot LocalAddress:Port Scheduler Flags
+  -> RemoteAddress:Port           Forward Weight ActiveConn InActConn
+...
+TCP  10.0.1.175:80 rr
+  -> 10.244.0.5:9376               Masq    1      0          0
+  -> 10.244.0.6:9376               Masq    1      0          0
+  -> 10.244.0.7:9376               Masq    1      0          0
+...
+```
+
+برنامهٔ kube-proxy برای هر پورت از هر Service و همچنین برای هر NodePort، IP خارجی و IP متعادل‌کنندهٔ بار، یک سرور مجازی (virtual server) ایجاد می‌کند. همچنین برای هر endpoint از Pod، سرورهای واقعی (real server) متناظر را ایجاد می‌کند. در این مثال، سرویس hostnames (`10.0.1.175:80`) سه endpoint دارد (`10.244.0.5:9376`، `10.244.0.6:9376` و `10.244.0.7:9376`).
+
+### آیا kube-proxy عمل پراکسی را انجام می‌دهد؟
+
+با فرض اینکه یکی از حالت‌های بالا را مشاهده می‌کنید، دوباره تلاش کنید از یکی از نودهای خود و با استفاده از IP به Service دسترسی پیدا کنید:
+
+```shell
+curl 10.0.1.175:80
+```
+```none
+hostnames-632524106-bbpiw
+```
+
+اگر باز هم ناموفق بود، در لاگ‌های `kube-proxy` به دنبال خطوط مشخصی مانند زیر بگردید:
+
+```none
+Setting endpoints for default/hostnames:default to [10.244.0.5:9376 10.244.0.6:9376 10.244.0.7:9376]
+```
+
+اگر چنین خطوطی را نمی‌بینید، `kube-proxy` را با مقدار ۴ برای فلگ `-v` دوباره راه‌اندازی کنید و سپس دوباره لاگ‌ها را بررسی کنید.
+
+### حالت خاص: یک Pod نمی‌تواند از طریق IP سرویس به خودش دسترسی پیدا کند {#a-pod-fails-to-reach-itself-via-the-service-ip}
+
+شاید این وضعیت بعید به نظر برسد، اما واقعاً رخ می‌دهد و قرار است این دسترسی کار کند.
+
+این مشکل زمانی رخ می‌دهد که شبکه برای ترافیک «hairpin» به‌درستی پیکربندی نشده باشد؛ معمولاً در شرایطی که `kube-proxy` در حالت `iptables` اجرا می‌شود و Podها با شبکهٔ bridge به هم متصل هستند. `Kubelet` یک [فلگ](/docs/reference/command-line-tools-reference/kubelet/) به نام `hairpin-mode` ارائه می‌دهد که به endpointهای یک Service امکان می‌دهد هنگام تلاش برای دسترسی به VIP سرویس خودشان، ترافیک از طریق توزیع بار به خودشان بازگردد. فلگ `hairpin-mode` باید روی `hairpin-veth` یا `promiscuous-bridge` تنظیم شده باشد.
+
+مراحل رایج برای عیب‌یابی این مشکل به شرح زیر است:
+
+* مطمئن شوید که `hairpin-mode` روی `hairpin-veth` یا `promiscuous-bridge` تنظیم شده است. باید خروجی‌ای مشابه زیر ببینید. در مثال زیر، `hairpin-mode` روی `promiscuous-bridge` تنظیم شده است.
+
+```shell
+ps auxw | grep kubelet
+```
+```none
+root      3392  1.1  0.8 186804 65208 ?        Sl   00:51  11:11 /usr/local/bin/kubelet --enable-debugging-handlers=true --config=/etc/kubernetes/manifests --allow-privileged=True --v=4 --cluster-dns=10.0.0.10 --cluster-domain=cluster.local --configure-cbr0=true --cgroup-root=/ --system-cgroups=/system --hairpin-mode=promiscuous-bridge --runtime-cgroups=/docker-daemon --kubelet-cgroups=/kubelet --babysit-daemons=true --max-pods=110 --serialize-image-pulls=false --outofdisk-transition-frequency=0
+```
+
+* مقدار مؤثر `hairpin-mode` را بررسی کنید. برای این کار باید لاگ kubelet را بررسی کنید. نحوهٔ دسترسی به لاگ‌ها به سیستم‌عامل نود بستگی دارد. در برخی سیستم‌عامل‌ها لاگ در فایلی مانند /var/log/kubelet.log ذخیره می‌شود و در برخی دیگر برای دسترسی به لاگ‌ها از `journalctl` استفاده می‌شود. توجه داشته باشید که به دلایل سازگاری، حالت hairpin مؤثر ممکن است با فلگ `--hairpin-mode` یکسان نباشد. بررسی کنید که آیا در kubelet.log خطی حاوی کلیدواژهٔ `hairpin` وجود دارد یا نه. باید خطوطی در لاگ وجود داشته باشد که حالت hairpin مؤثر را نشان دهد، مانند نمونهٔ زیر.
+
+```none
+I0629 00:51:43.648698    3252 kubelet.go:380] Hairpin mode set to "promiscuous-bridge"
+```
+
+* اگر حالت hairpin مؤثر `hairpin-veth` است، مطمئن شوید که `Kubelet` مجوز انجام عملیات در مسیر `/sys` روی نود را دارد. اگر همه‌چیز به‌درستی کار کند، باید خروجی‌ای مشابه زیر ببینید:
+
+```shell
+for intf in /sys/devices/virtual/net/cbr0/brif/*; do cat $intf/hairpin_mode; done
+```
+```none
+1
+1
+1
+1
+```
+
+* اگر حالت hairpin مؤثر `promiscuous-bridge` است، مطمئن شوید که `Kubelet` مجوز دست‌کاری bridge لینوکس روی نود را دارد. اگر bridge با نام `cbr0` استفاده شده و به‌درستی پیکربندی شده باشد، باید خروجی زیر را ببینید:
+
+```shell
+ifconfig cbr0 |grep PROMISC
+```
+```none
+UP BROADCAST RUNNING PROMISC MULTICAST  MTU:1460  Metric:1
+```
+
+* اگر هیچ‌یک از راهکارهای بالا نتیجه نداد، کمک بگیرید.
+
+## کمک گرفتن
+
+اگر تا اینجا پیش آمده‌اید، اتفاق بسیار عجیبی در حال رخ دادن است. Service شما در حال اجراست، EndpointSlice دارد و Podهای شما واقعاً به درخواست‌ها پاسخ می‌دهند. DNS کار می‌کند و به نظر نمی‌رسد `kube-proxy` رفتار نادرستی داشته باشد. با این حال Service شما کار نمی‌کند. لطفاً ما را از وضعیت آگاه کنید تا در بررسی مشکل به شما کمک کنیم!
+
+از طریق
+[Slack](https://slack.k8s.io/)،
+[انجمن](https://discuss.kubernetes.io) یا
+[GitHub](https://github.com/kubernetes/kubernetes)
+با ما تماس بگیرید.
+
+## {{% heading "whatsnext" %}}
+
+برای اطلاعات بیشتر، [سند مروری بر عیب‌یابی](/docs/tasks/debug/) را ببینید.

@@ -1,0 +1,487 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>تبدیل یک فایل Docker Compose به منابع کوبرنتیز | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">tasks / configure-pod-container</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">تبدیل یک فایل Docker Compose به منابع کوبرنتیز</h1><!-- overview -->
+<p dir="rtl">ابزار Kompose چیست؟ این ابزار هر چیزی را که با Compose (یعنی Docker Compose) نوشته شده باشد، برای هماهنگ‌کننده‌های کانتینر (کوبرنتیز یا OpenShift) تبدیل می‌کند.</p>
+<p dir="rtl">اطلاعات بیشتر را می‌توانید در وب‌سایت Kompose به نشانی <a href="https://kompose.io/" target="_blank" rel="noopener">https://kompose.io/</a> بیابید.</p>
+<h2 id="پیش-از-شروع" dir="rtl">پیش از شروع</h2>
+<p dir="rtl">باید یک کلاستر کوبرنتیز داشته باشید و ابزار خط فرمان kubectl باید برای ارتباط با کلاستر شما پیکربندی شده باشد. توصیه می‌شود این آموزش را روی کلاستری اجرا کنید که دست‌کم دو نود داشته باشد که نقش میزبان control plane را ندارند. اگر هنوز کلاستری ندارید، می‌توانید با استفاده از
+<a href="https://minikube.sigs.k8s.io/docs/tutorials/multi_node/" target="_blank" rel="noopener">minikube</a>
+یکی بسازید یا از یکی از این محیط‌های آزمایشی کوبرنتیز استفاده کنید:</p>
+<ul>
+<li dir="ltr" class="ltr"><a href="https://labs.iximiuz.com/playgrounds?category=kubernetes&amp;filter=all" target="_blank" rel="noopener">iximiuz Labs</a></li>
+<li dir="ltr" class="ltr"><a href="https://killercoda.com/playgrounds/scenario/kubernetes" target="_blank" rel="noopener">Killercoda</a></li>
+<li dir="ltr" class="ltr"><a href="https://kodekloud.com/public-playgrounds" target="_blank" rel="noopener">KodeKloud</a></li>
+</ul>
+<!-- steps -->
+<h2 id="نصب-kompose" dir="rtl">نصب Kompose</h2>
+<p dir="rtl">برای نصب Kompose چند روش وجود دارد. روش پیشنهادی ما دانلود فایل باینری از آخرین انتشار در GitHub است.</p>
+<div class="tabs">
+<div class="tab"><div class="tab-name">دانلود از GitHub</div>
+<p dir="rtl">نسخه‌های Kompose در چرخه‌های سه‌هفته‌ای از طریق GitHub منتشر می‌شوند. همه انتشارهای فعلی را می‌توانید در <a href="https://github.com/kubernetes/kompose/releases" target="_blank" rel="noopener">صفحه انتشارهای GitHub</a> ببینید.</p>
+<pre dir="ltr"><code class="language-sh" dir="ltr"># Linux
+curl -L https://github.com/kubernetes/kompose/releases/download/v1.34.0/kompose-linux-amd64 -o kompose
+
+# macOS
+curl -L https://github.com/kubernetes/kompose/releases/download/v1.34.0/kompose-darwin-amd64 -o kompose
+
+# Windows
+curl -L https://github.com/kubernetes/kompose/releases/download/v1.34.0/kompose-windows-amd64.exe -o kompose.exe
+
+chmod +x kompose
+sudo mv ./kompose /usr/local/bin/kompose
+</code></pre>
+<p dir="rtl">به‌عنوان راه دیگر، می‌توانید <a href="https://github.com/kubernetes/kompose/releases" target="_blank" rel="noopener">فایل فشرده tarball</a> را دانلود کنید.</p>
+</div>
+<div class="tab"><div class="tab-name">ساخت از کد منبع</div>
+<p dir="rtl">نصب با <code dir="ltr">go get</code> کد را از شاخه master، همراه با آخرین تغییرات در حال توسعه، دریافت می‌کند.</p>
+<pre dir="ltr"><code class="language-sh" dir="ltr">go get -u github.com/kubernetes/kompose
+</code></pre>
+</div>
+<div class="tab"><div class="tab-name">Homebrew (macOS)</div>
+<p dir="rtl">در macOS می‌توانید آخرین نسخه را با <a href="https://brew.sh" target="_blank" rel="noopener">Homebrew</a> نصب کنید:</p>
+<pre dir="ltr"><code class="language-bash" dir="ltr">brew install kompose
+</code></pre>
+</div>
+</div>
+<h2 id="استفاده-از-kompose" dir="rtl">استفاده از Kompose</h2>
+<p dir="rtl">در چند گام، شما را از Docker Compose به کوبرنتیز می‌رسانیم. تنها چیزی که
+نیاز دارید یک فایل <code dir="ltr">docker-compose.yml</code> موجود است.</p>
+<ol>
+<li dir="rtl">
+<p dir="rtl">به پوشه‌ای بروید که فایل <code dir="ltr">docker-compose.yml</code> شما در آن قرار دارد. اگر چنین فایلی ندارید، می‌توانید با فایل زیر آزمایش کنید.</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">
+services:
+
+  redis-leader:
+    container_name: redis-leader
+    image: redis
+    ports:
+      - "6379"
+
+  redis-replica:
+    container_name: redis-replica
+    image: redis
+    ports:
+      - "6379"
+    command: redis-server --replicaof redis-leader 6379 --dir /tmp
+
+  web:
+    container_name: web
+    image: quay.io/kompose/web
+    ports:
+      - "8080:8080"
+    environment:
+      - GET_HOSTS_FROM=dns
+    labels:
+      kompose.service.type: LoadBalancer
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">برای تبدیل فایل <code dir="ltr">docker-compose.yml</code> به فایل‌هایی که با <code dir="ltr">kubectl</code> قابل استفاده
+باشند، دستور <code dir="ltr">kompose convert</code> و سپس <code dir="ltr">kubectl apply -f &lt;output file&gt;</code> را اجرا کنید.</p>
+<pre dir="ltr"><code class="language-bash" dir="ltr">kompose convert
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code class="language-none" dir="ltr">INFO Kubernetes file "redis-leader-service.yaml" created
+INFO Kubernetes file "redis-replica-service.yaml" created
+INFO Kubernetes file "web-tcp-service.yaml" created
+INFO Kubernetes file "redis-leader-deployment.yaml" created
+INFO Kubernetes file "redis-replica-deployment.yaml" created
+INFO Kubernetes file "web-deployment.yaml" created
+</code></pre>
+<pre dir="ltr"><code class="language-bash" dir="ltr"> kubectl apply -f web-tcp-service.yaml,redis-leader-service.yaml,redis-replica-service.yaml,web-deployment.yaml,redis-leader-deployment.yaml,redis-replica-deployment.yaml
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code class="language-none" dir="ltr">deployment.apps/redis-leader created
+deployment.apps/redis-replica created
+deployment.apps/web created
+service/redis-leader created
+service/redis-replica created
+service/web-tcp created
+</code></pre>
+<p dir="rtl">اکنون Deploymentهای شما در کوبرنتیز در حال اجرا هستند.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">به برنامه خود دسترسی پیدا کنید.</p>
+<p dir="rtl">اگر در فرایند توسعه از <code dir="ltr">minikube</code> استفاده می‌کنید:</p>
+<pre dir="ltr"><code class="language-bash" dir="ltr">minikube service web-tcp
+</code></pre>
+<p dir="rtl">در غیر این صورت، بیایید ببینیم سرویس شما از چه IPای استفاده می‌کند!</p>
+<pre dir="ltr"><code class="language-sh" dir="ltr">kubectl describe svc web-tcp
+</code></pre>
+<pre dir="ltr"><code class="language-none" dir="ltr"> Name:                     web-tcp
+ Namespace:                default
+ Labels:                   io.kompose.service=web-tcp
+ Annotations:              kompose.cmd: kompose convert
+                           kompose.service.type: LoadBalancer
+                           kompose.version: 1.33.0 (3ce457399)
+ Selector:                 io.kompose.service=web
+ Type:                     LoadBalancer
+ IP Family Policy:         SingleStack
+ IP Families:              IPv4
+ IP:                       10.102.30.3
+ IPs:                      10.102.30.3
+ Port:                     8080  8080/TCP
+ TargetPort:               8080/TCP
+ NodePort:                 8080  31624/TCP
+ Endpoints:                10.244.0.5:8080
+ Session Affinity:         None
+ External Traffic Policy:  Cluster
+ Events:                   &lt;none&gt;
+</code></pre>
+<p dir="rtl">اگر از یک ارائه‌دهنده ابری استفاده می‌کنید، IP شما در کنار <code dir="ltr">LoadBalancer Ingress</code> نمایش داده می‌شود.</p>
+<pre dir="ltr"><code class="language-sh" dir="ltr">curl http://192.0.2.89
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">پاک‌سازی.</p>
+<p dir="rtl">پس از پایان آزمایش استقرار برنامه نمونه، کافی است دستور زیر را در پوسته خود اجرا کنید تا
+منابع استفاده‌شده حذف شوند.</p>
+<pre dir="ltr"><code class="language-sh" dir="ltr">kubectl delete -f web-tcp-service.yaml,redis-leader-service.yaml,redis-replica-service.yaml,web-deployment.yaml,redis-leader-deployment.yaml,redis-replica-deployment.yaml
+</code></pre>
+</li>
+</ol>
+<!-- discussion -->
+<h2 id="راهنمای-کاربر" dir="rtl">راهنمای کاربر</h2>
+<ul>
+<li dir="rtl">رابط خط فرمان (CLI)
+<ul>
+<li dir="ltr" class="ltr"><a href="#kompose-convert"><code dir="ltr">kompose convert</code></a></li>
+</ul>
+</li>
+<li dir="rtl">مستندات
+<ul>
+<li dir="rtl"><a href="#alternative-conversions">تبدیل‌های جایگزین</a></li>
+<li dir="rtl"><a href="#labels">برچسب‌ها</a></li>
+<li dir="rtl"><a href="#restart">راه‌اندازی مجدد</a></li>
+<li dir="rtl"><a href="#docker-compose-versions">نسخه‌های Docker Compose</a></li>
+</ul>
+</li>
+</ul>
+<p dir="rtl">ابزار Kompose از دو ارائه‌دهنده پشتیبانی می‌کند: OpenShift و کوبرنتیز.
+می‌توانید ارائه‌دهنده موردنظر را با گزینه سراسری <code dir="ltr">--provider</code> انتخاب کنید. اگر ارائه‌دهنده‌ای مشخص نشود، کوبرنتیز به‌طور پیش‌فرض انتخاب می‌شود.</p>
+<h2 id="دستور-kompose-convert" dir="rtl">دستور <code dir="ltr">kompose convert</code></h2>
+<p dir="rtl">ابزار Kompose از تبدیل فایل‌های Docker Compose نسخه‌های V1، V2 و V3 به آبجکت‌های کوبرنتیز و OpenShift پشتیبانی می‌کند.</p>
+<h3 id="مثال-kompose-convert-برای-کوبرنتیز" dir="rtl">مثال <code dir="ltr">kompose convert</code> برای کوبرنتیز</h3>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kompose --file docker-voting.yml convert
+</code></pre>
+<pre dir="ltr"><code class="language-none" dir="ltr">WARN Unsupported key networks - ignoring
+WARN Unsupported key build - ignoring
+INFO Kubernetes file "worker-svc.yaml" created
+INFO Kubernetes file "db-svc.yaml" created
+INFO Kubernetes file "redis-svc.yaml" created
+INFO Kubernetes file "result-svc.yaml" created
+INFO Kubernetes file "vote-svc.yaml" created
+INFO Kubernetes file "redis-deployment.yaml" created
+INFO Kubernetes file "result-deployment.yaml" created
+INFO Kubernetes file "vote-deployment.yaml" created
+INFO Kubernetes file "worker-deployment.yaml" created
+INFO Kubernetes file "db-deployment.yaml" created
+</code></pre>
+<pre dir="ltr"><code class="language-shell" dir="ltr">ls
+</code></pre>
+<pre dir="ltr"><code class="language-none" dir="ltr">db-deployment.yaml  docker-compose.yml         docker-gitlab.yml  redis-deployment.yaml  result-deployment.yaml  vote-deployment.yaml  worker-deployment.yaml
+db-svc.yaml         docker-voting.yml          redis-svc.yaml     result-svc.yaml        vote-svc.yaml           worker-svc.yaml
+</code></pre>
+<p dir="rtl">همچنین می‌توانید چند فایل docker-compose را هم‌زمان ارائه دهید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kompose -f docker-compose.yml -f docker-guestbook.yml convert
+</code></pre>
+<pre dir="ltr"><code class="language-none" dir="ltr">INFO Kubernetes file "frontend-service.yaml" created         
+INFO Kubernetes file "mlbparks-service.yaml" created         
+INFO Kubernetes file "mongodb-service.yaml" created          
+INFO Kubernetes file "redis-master-service.yaml" created     
+INFO Kubernetes file "redis-slave-service.yaml" created      
+INFO Kubernetes file "frontend-deployment.yaml" created      
+INFO Kubernetes file "mlbparks-deployment.yaml" created      
+INFO Kubernetes file "mongodb-deployment.yaml" created       
+INFO Kubernetes file "mongodb-claim0-persistentvolumeclaim.yaml" created
+INFO Kubernetes file "redis-master-deployment.yaml" created  
+INFO Kubernetes file "redis-slave-deployment.yaml" created   
+</code></pre>
+<pre dir="ltr"><code class="language-shell" dir="ltr">ls
+</code></pre>
+<pre dir="ltr"><code class="language-none" dir="ltr">mlbparks-deployment.yaml  mongodb-service.yaml                       redis-slave-service.jsonmlbparks-service.yaml  
+frontend-deployment.yaml  mongodb-claim0-persistentvolumeclaim.yaml  redis-master-service.yaml
+frontend-service.yaml     mongodb-deployment.yaml                    redis-slave-deployment.yaml
+redis-master-deployment.yaml
+</code></pre>
+<p dir="rtl">وقتی چند فایل docker-compose ارائه شود، پیکربندی آن‌ها با هم ادغام می‌شود. هر پیکربندی مشترک با مقدار فایل بعدی بازنویسی می‌شود.</p>
+<h3 id="مثال-kompose-convert-برای-openshift" dir="rtl">مثال <code dir="ltr">kompose convert</code> برای OpenShift</h3>
+<pre dir="ltr"><code class="language-sh" dir="ltr">kompose --provider openshift --file docker-voting.yml convert
+</code></pre>
+<pre dir="ltr"><code class="language-none" dir="ltr">WARN [worker] Service cannot be created because of missing port.
+INFO OpenShift file "vote-service.yaml" created             
+INFO OpenShift file "db-service.yaml" created               
+INFO OpenShift file "redis-service.yaml" created            
+INFO OpenShift file "result-service.yaml" created           
+INFO OpenShift file "vote-deploymentconfig.yaml" created    
+INFO OpenShift file "vote-imagestream.yaml" created         
+INFO OpenShift file "worker-deploymentconfig.yaml" created  
+INFO OpenShift file "worker-imagestream.yaml" created       
+INFO OpenShift file "db-deploymentconfig.yaml" created      
+INFO OpenShift file "db-imagestream.yaml" created           
+INFO OpenShift file "redis-deploymentconfig.yaml" created   
+INFO OpenShift file "redis-imagestream.yaml" created        
+INFO OpenShift file "result-deploymentconfig.yaml" created  
+INFO OpenShift file "result-imagestream.yaml" created  
+</code></pre>
+<p dir="rtl">این ابزار همچنین از ایجاد buildconfig برای دستور build در یک سرویس پشتیبانی می‌کند. به‌طور پیش‌فرض، مخزن راه دور شاخه فعلی git به‌عنوان مخزن منبع و شاخه فعلی به‌عنوان شاخه منبع برای ساخت استفاده می‌شود. می‌توانید به‌ترتیب با گزینه‌های <code dir="ltr">--build-repo</code> و <code dir="ltr">--build-branch</code> مخزن و شاخه منبع دیگری را مشخص کنید.</p>
+<pre dir="ltr"><code class="language-sh" dir="ltr">kompose --provider openshift --file buildconfig/docker-compose.yml convert
+</code></pre>
+<pre dir="ltr"><code class="language-none" dir="ltr">WARN [foo] Service cannot be created because of missing port.
+INFO OpenShift Buildconfig using git@github.com:rtnpro/kompose.git::master as source.
+INFO OpenShift file "foo-deploymentconfig.yaml" created     
+INFO OpenShift file "foo-imagestream.yaml" created          
+INFO OpenShift file "foo-buildconfig.yaml" created
+</code></pre>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">اگر مصنوعات OpenShift را به‌صورت دستی با <code dir="ltr">oc create -f</code> ارسال می‌کنید، برای دور زدن این مشکل OpenShift باید مطمئن شوید که مصنوع imagestream را پیش از مصنوع buildconfig ارسال می‌کنید: https://github.com/openshift/origin/issues/4518 .</p>
+</div>
+<h2 id="تبدیل-های-جایگزین" dir="rtl">تبدیل‌های جایگزین</h2>
+<p dir="rtl">تبدیل پیش‌فرض <code dir="ltr">kompose</code>، آبجکت‌های <a href="../../concepts/workloads/controllers/deployment.html">Deployment</a> و <a href="../../concepts/services-networking/service.html">Service</a> کوبرنتیز را در قالب yaml تولید می‌کند. به‌عنوان گزینه جایگزین، می‌توانید با <code dir="ltr">-j</code> خروجی json تولید کنید. همچنین می‌توانید به‌جای آن‌ها آبجکت‌های <a href="../../concepts/workloads/controllers/replicationcontroller.html">Replication Controller</a>، <a href="../../concepts/workloads/controllers/daemonset.html">DaemonSet</a> یا چارت‌های <a href="https://github.com/helm/helm" target="_blank" rel="noopener">Helm</a> تولید کنید.</p>
+<pre dir="ltr"><code class="language-sh" dir="ltr">kompose convert -j
+INFO Kubernetes file "redis-svc.json" created
+INFO Kubernetes file "web-svc.json" created
+INFO Kubernetes file "redis-deployment.json" created
+INFO Kubernetes file "web-deployment.json" created
+</code></pre>
+<p dir="rtl">فایل‌های <code dir="ltr">*-deployment.json</code> شامل آبجکت‌های Deployment هستند.</p>
+<pre dir="ltr"><code class="language-sh" dir="ltr">kompose convert --replication-controller
+INFO Kubernetes file "redis-svc.yaml" created
+INFO Kubernetes file "web-svc.yaml" created
+INFO Kubernetes file "redis-replicationcontroller.yaml" created
+INFO Kubernetes file "web-replicationcontroller.yaml" created
+</code></pre>
+<p dir="rtl">فایل‌های <code dir="ltr">*-replicationcontroller.yaml</code> شامل آبجکت‌های Replication Controller هستند. اگر می‌خواهید تعداد نسخه‌های تکثیری (replicas) را مشخص کنید (مقدار پیش‌فرض ۱ است)، از فلگ <code dir="ltr">--replicas</code> استفاده کنید: <code dir="ltr">kompose convert --replication-controller --replicas 3</code>.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kompose convert --daemon-set
+INFO Kubernetes file "redis-svc.yaml" created
+INFO Kubernetes file "web-svc.yaml" created
+INFO Kubernetes file "redis-daemonset.yaml" created
+INFO Kubernetes file "web-daemonset.yaml" created
+</code></pre>
+<p dir="rtl">فایل‌های <code dir="ltr">*-daemonset.yaml</code> شامل آبجکت‌های DaemonSet هستند.</p>
+<p dir="rtl">اگر می‌خواهید چارتی برای استفاده با <a href="https://github.com/kubernetes/helm" target="_blank" rel="noopener">Helm</a> تولید کنید، دستور زیر را اجرا کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kompose convert -c
+</code></pre>
+<pre dir="ltr"><code class="language-none" dir="ltr">INFO Kubernetes file "web-svc.yaml" created
+INFO Kubernetes file "redis-svc.yaml" created
+INFO Kubernetes file "web-deployment.yaml" created
+INFO Kubernetes file "redis-deployment.yaml" created
+chart created in "./docker-compose/"
+</code></pre>
+<pre dir="ltr"><code class="language-shell" dir="ltr">tree docker-compose/
+</code></pre>
+<pre dir="ltr"><code class="language-none" dir="ltr">docker-compose
+├── Chart.yaml
+├── README.md
+└── templates
+    ├── redis-deployment.yaml
+    ├── redis-svc.yaml
+    ├── web-deployment.yaml
+    └── web-svc.yaml
+</code></pre>
+<p dir="rtl">هدف از این ساختار چارت، فراهم کردن اسکلتی برای ساختن چارت‌های Helm شماست.</p>
+<h2 id="برچسب-ها" dir="rtl">برچسب‌ها</h2>
+<p dir="rtl">ابزار <code dir="ltr">kompose</code> از برچسب‌های مخصوص Kompose در فایل <code dir="ltr">docker-compose.yml</code> پشتیبانی می‌کند تا بتوانید رفتار یک سرویس را هنگام تبدیل به‌صراحت تعریف کنید.</p>
+<ul>
+<li dir="rtl">
+<p dir="rtl">برچسب <code dir="ltr">kompose.service.type</code> نوع سرویسی را که باید ایجاد شود تعیین می‌کند.</p>
+<p dir="rtl">برای مثال:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">version: "2"
+services:
+  nginx:
+    image: nginx
+    dockerfile: foobar
+    build: ./foobar
+    cap_add:
+      - ALL
+    container_name: foobar
+    labels:
+      kompose.service.type: nodeport
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">برچسب <code dir="ltr">kompose.service.expose</code> تعیین می‌کند که آیا سرویس باید از بیرون کلاستر در دسترس باشد یا نه. اگر مقدار آن "true" باشد، ارائه‌دهنده نقطه پایانی (endpoint) را به‌طور خودکار تنظیم می‌کند و هر مقدار دیگری به‌عنوان نام میزبان (hostname) در نظر گرفته می‌شود. اگر چند پورت در یک سرویس تعریف شده باشد، نخستین پورت برای در دسترس قرار گرفتن انتخاب می‌شود.</p>
+<ul>
+<li dir="rtl">برای ارائه‌دهنده کوبرنتیز، یک منبع ingress ایجاد می‌شود و فرض بر این است که یک کنترل‌کننده ingress از قبل پیکربندی شده است.</li>
+<li dir="rtl">برای ارائه‌دهنده OpenShift، یک route ایجاد می‌شود.</li>
+</ul>
+<p dir="rtl">برای مثال:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">version: "2"
+services:
+  web:
+    image: tuna/docker-counter23
+    ports:
+    - "5000:5000"
+    links:
+    - redis
+    labels:
+      kompose.service.expose: "counter.example.com"
+  redis:
+    image: redis:3.0
+    ports:
+    - "6379"
+</code></pre>
+</li>
+</ul>
+<p dir="rtl">گزینه‌هایی که در حال حاضر پشتیبانی می‌شوند عبارت‌اند از:</p>
+<table>
+<thead>
+<tr>
+<th dir="rtl">کلید</th>
+<th dir="rtl">مقدار</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td dir="ltr" class="ltr">kompose.service.type</td>
+<td dir="ltr" class="ltr">nodeport / clusterip / loadbalancer</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr">kompose.service.expose</td>
+<td dir="ltr" class="ltr">true / hostname</td>
+</tr>
+</tbody>
+</table>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">برچسب <code dir="ltr">kompose.service.type</code> فقط باید همراه با <code dir="ltr">ports</code> تعریف شود؛ در غیر این صورت <code dir="ltr">kompose</code> با خطا مواجه می‌شود.</p>
+</div>
+<h2 id="راه-اندازی-مجدد" dir="rtl">راه‌اندازی مجدد</h2>
+<p dir="rtl">اگر می‌خواهید Podهای معمولی و بدون کنترل‌کننده ایجاد کنید، می‌توانید این کار را با ساختار <code dir="ltr">restart</code> در docker-compose تعریف کنید. در جدول زیر می‌بینید که با هر مقدار <code dir="ltr">restart</code> چه اتفاقی می‌افتد.</p>
+<table>
+<thead>
+<tr>
+<th dir="ltr" class="ltr"><code dir="ltr">docker-compose</code> <code dir="ltr">restart</code></th>
+<th dir="rtl">آبجکت ایجادشده</th>
+<th dir="rtl"><code dir="ltr">restartPolicy</code> در Pod</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code dir="ltr">""</code></td>
+<td dir="rtl">آبجکت کنترل‌کننده</td>
+<td dir="ltr" class="ltr"><code dir="ltr">Always</code></td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">always</code></td>
+<td dir="rtl">آبجکت کنترل‌کننده</td>
+<td dir="ltr" class="ltr"><code dir="ltr">Always</code></td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">on-failure</code></td>
+<td dir="ltr" class="ltr">Pod</td>
+<td dir="ltr" class="ltr"><code dir="ltr">OnFailure</code></td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">no</code></td>
+<td dir="ltr" class="ltr">Pod</td>
+<td dir="ltr" class="ltr"><code dir="ltr">Never</code></td>
+</tr>
+</tbody>
+</table>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">آبجکت کنترل‌کننده می‌تواند <code dir="ltr">deployment</code> یا <code dir="ltr">replicationcontroller</code> باشد.</p>
+</div>
+<p dir="rtl">برای مثال، سرویس <code dir="ltr">pival</code> در نمونه زیر به یک Pod تبدیل می‌شود. این کانتینر مقدار <code dir="ltr">pi</code> را محاسبه می‌کند.</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">version: '2'
+
+services:
+  pival:
+    image: perl
+    command: ["perl",  "-Mbignum=bpi", "-wle", "print bpi(2000)"]
+    restart: "on-failure"
+</code></pre>
+<h3 id="هشدار-درباره-پیکربندی-های-deployment" dir="rtl">هشدار درباره پیکربندی‌های Deployment</h3>
+<p dir="rtl">اگر در فایل Docker Compose برای یک سرویس حجم (volume) مشخص شده باشد، راهبرد Deployment (در کوبرنتیز) یا DeploymentConfig (در OpenShift) به‌جای "RollingUpdate" (پیش‌فرض) به "Recreate" تغییر می‌کند. این کار برای جلوگیری از دسترسی هم‌زمان چند نمونه از یک سرویس به یک حجم انجام می‌شود.</p>
+<p dir="rtl">اگر نام سرویس در فایل Docker Compose شامل <code dir="ltr">_</code> باشد (برای مثال <code dir="ltr">web_service</code>)، این نویسه با <code dir="ltr">-</code> جایگزین می‌شود و نام سرویس متناسب با آن تغییر می‌کند (برای مثال <code dir="ltr">web-service</code>). دلیل این کار Kompose آن است که کوبرنتیز اجازه استفاده از <code dir="ltr">_</code> را در نام آبجکت‌ها نمی‌دهد.</p>
+<p dir="rtl">توجه داشته باشید که تغییر نام سرویس ممکن است برخی از فایل‌های <code dir="ltr">docker-compose</code> را از کار بیندازد.</p>
+<h2 id="نسخه-های-docker-compose" dir="rtl">نسخه‌های Docker Compose</h2>
+<p dir="rtl">ابزار Kompose از نسخه‌های ۱، ۲ و ۳ Docker Compose پشتیبانی می‌کند. پشتیبانی ما از نسخه‌های 2.1 و 3.2 به دلیل ماهیت آزمایشی آن‌ها محدود است.</p>
+<p dir="rtl">فهرست کامل سازگاری میان هر سه نسخه، همراه با فهرست همه کلیدهای ناسازگار Docker Compose، در <a href="https://github.com/kubernetes/kompose/blob/master/docs/conversion.md" target="_blank" rel="noopener">سند تبدیل</a> ما آمده است.</p>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#پیش-از-شروع">پیش از شروع</a><a class="l2" href="#نصب-kompose">نصب Kompose</a><a class="l2" href="#استفاده-از-kompose">استفاده از Kompose</a><a class="l2" href="#راهنمای-کاربر">راهنمای کاربر</a><a class="l2" href="#دستور-kompose-convert">دستور kompose convert</a><a class="l3" href="#مثال-kompose-convert-برای-کوبرنتیز">مثال kompose convert برای کوبرنتیز</a><a class="l3" href="#مثال-kompose-convert-برای-openshift">مثال kompose convert برای OpenShift</a><a class="l2" href="#تبدیل-های-جایگزین">تبدیل‌های جایگزین</a><a class="l2" href="#برچسب-ها">برچسب‌ها</a><a class="l2" href="#راه-اندازی-مجدد">راه‌اندازی مجدد</a><a class="l3" href="#هشدار-درباره-پیکربندی-های-deployment">هشدار درباره پیکربندی‌های Deployment</a><a class="l2" href="#نسخه-های-docker-compose">نسخه‌های Docker Compose</a></nav>
+</div>
+</body>
+</html>

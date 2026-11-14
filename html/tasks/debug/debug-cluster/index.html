@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>عیب‌یابی کلاسترها | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
+<header class="top"><a href="../../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">tasks / debug / debug-cluster</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">عیب‌یابی کلاسترها</h1><p class="page-meta" dir="rtl">اشکال‌زدایی مشکلات رایج کلاستر.</p><!-- overview -->
+<p dir="rtl">این سند به عیب‌یابی کلاستر می‌پردازد و فرض بر این است که پیش‌تر بررسی کرده‌اید و مطمئن شده‌اید که برنامهٔ شما
+علت اصلی مشکلی نیست که با آن روبه‌رو هستید. برای نکاتی دربارهٔ اشکال‌زدایی برنامه‌ها،
+<a href="../debug-application/index.html">راهنمای عیب‌یابی برنامه</a> را ببینید.
+برای اطلاعات بیشتر می‌توانید به <a href="../index.html">سند مرور کلی عیب‌یابی</a> نیز مراجعه کنید.</p>
+<p dir="rtl">برای عیب‌یابی <span class="term" title="kubectl">kubectl</span>، به
+<a href="https://kubernetes.io/docs/tasks/debug/debug-cluster/troubleshoot-kubectl/" target="_blank">عیب‌یابی kubectl</a> مراجعه کنید.</p>
+<!-- body -->
+<h2 id="فهرست-کردن-اجزای-کلاستر" dir="rtl">فهرست‌کردن اجزای کلاستر</h2>
+<p dir="rtl">نخستین چیزی که هنگام اشکال‌زدایی کلاستر باید بررسی کنید این است که آیا همهٔ نودها به‌درستی ثبت شده‌اند یا نه.</p>
+<p dir="rtl">دستور زیر را اجرا کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get nodes
+</code></pre>
+<p dir="rtl">سپس بررسی کنید که همهٔ نودهایی که انتظار دارید، در فهرست حاضر باشند و همگی در وضعیت <code dir="ltr">Ready</code> قرار داشته باشند.</p>
+<p dir="rtl">برای به‌دست‌آوردن اطلاعات مفصل دربارهٔ سلامت کلی کلاستر، می‌توانید دستور زیر را اجرا کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl cluster-info dump
+</code></pre>
+<h3 id="مثال-اشکال-زدایی-نودی-که-از-کار-افتاده-یا-در-دسترس-نیست" dir="rtl">مثال: اشکال‌زدایی نودی که از کار افتاده یا در دسترس نیست</h3>
+<p dir="rtl">گاهی هنگام اشکال‌زدایی، بررسی وضعیت یک نود می‌تواند مفید باشد؛ برای مثال، چون رفتار عجیبی از یک Pod
+در حال اجرا روی آن نود مشاهده کرده‌اید، یا می‌خواهید بفهمید چرا یک Pod روی آن نود زمان‌بندی نمی‌شود.
+همانند Podها، می‌توانید با <code dir="ltr">kubectl describe node</code> و <code dir="ltr">kubectl get node -o yaml</code> اطلاعات مفصلی دربارهٔ نودها به دست آورید. برای نمونه، اگر نودی از کار افتاده باشد
+(از شبکه قطع شده باشد، یا kubelet متوقف شده و دوباره راه‌اندازی نشود و مانند آن)، خروجی زیر را خواهید دید.
+به رویدادهایی توجه کنید که نشان می‌دهند نود در وضعیت NotReady است، و همچنین دقت کنید که Podها دیگر در حال اجرا نیستند
+(پس از پنج دقیقه ماندن در وضعیت NotReady، بیرون رانده (evict) می‌شوند).</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get nodes
+</code></pre>
+<pre dir="ltr"><code class="language-none" dir="ltr">NAME                     STATUS       ROLES     AGE     VERSION
+kube-worker-1            NotReady     &lt;none&gt;    1h      v1.23.3
+kubernetes-node-bols     Ready        &lt;none&gt;    1h      v1.23.3
+kubernetes-node-st6x     Ready        &lt;none&gt;    1h      v1.23.3
+kubernetes-node-unaj     Ready        &lt;none&gt;    1h      v1.23.3
+</code></pre>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl describe node kube-worker-1
+</code></pre>
+<pre dir="ltr"><code class="language-none" dir="ltr">Name:               kube-worker-1
+Roles:              &lt;none&gt;
+Labels:             beta.kubernetes.io/arch=amd64
+                    beta.kubernetes.io/os=linux
+                    kubernetes.io/arch=amd64
+                    kubernetes.io/hostname=kube-worker-1
+                    kubernetes.io/os=linux
+                    node.alpha.kubernetes.io/ttl: 0
+                    volumes.kubernetes.io/controller-managed-attach-detach: true
+CreationTimestamp:  Thu, 17 Feb 2022 16:46:30 -0500
+Taints:             node.kubernetes.io/unreachable:NoExecute
+                    node.kubernetes.io/unreachable:NoSchedule
+Unschedulable:      false
+Lease:
+  HolderIdentity:  kube-worker-1
+  AcquireTime:     &lt;unset&gt;
+  RenewTime:       Thu, 17 Feb 2022 17:13:09 -0500
+Conditions:
+  Type                 Status    LastHeartbeatTime                 LastTransitionTime                Reason              Message
+  ----                 ------    -----------------                 ------------------                ------              -------
+  NetworkUnavailable   False     Thu, 17 Feb 2022 17:09:13 -0500   Thu, 17 Feb 2022 17:09:13 -0500   WeaveIsUp           Weave pod has set this
+  MemoryPressure       Unknown   Thu, 17 Feb 2022 17:12:40 -0500   Thu, 17 Feb 2022 17:13:52 -0500   NodeStatusUnknown   Kubelet stopped posting node status.
+  DiskPressure         Unknown   Thu, 17 Feb 2022 17:12:40 -0500   Thu, 17 Feb 2022 17:13:52 -0500   NodeStatusUnknown   Kubelet stopped posting node status.
+  PIDPressure          Unknown   Thu, 17 Feb 2022 17:12:40 -0500   Thu, 17 Feb 2022 17:13:52 -0500   NodeStatusUnknown   Kubelet stopped posting node status.
+  Ready                Unknown   Thu, 17 Feb 2022 17:12:40 -0500   Thu, 17 Feb 2022 17:13:52 -0500   NodeStatusUnknown   Kubelet stopped posting node status.
+Addresses:
+  InternalIP:  192.168.0.113
+  Hostname:    kube-worker-1
+Capacity:
+  cpu:                2
+  ephemeral-storage:  15372232Ki
+  hugepages-2Mi:      0
+  memory:             2025188Ki
+  pods:               110
+Allocatable:
+  cpu:                2
+  ephemeral-storage:  14167048988
+  hugepages-2Mi:      0
+  memory:             1922788Ki
+  pods:               110
+System Info:
+  Machine ID:                 9384e2927f544209b5d7b67474bbf92b
+  System UUID:                aa829ca9-73d7-064d-9019-df07404ad448
+  Boot ID:                    5a295a03-aaca-4340-af20-1327fa5dab5c
+  Kernel Version:             5.13.0-28-generic
+  OS Image:                   Ubuntu 21.10
+  Operating System:           linux
+  Architecture:               amd64
+  Container Runtime Version:  containerd://1.5.9
+  Kubelet Version:            v1.23.3
+  Kube-Proxy Version:         v1.23.3
+Non-terminated Pods:          (4 in total)
+  Namespace                   Name                                 CPU Requests  CPU Limits  Memory Requests  Memory Limits  Age
+  ---------                   ----                                 ------------  ----------  ---------------  -------------  ---
+  default                     nginx-deployment-67d4bdd6f5-cx2nz    500m (25%)    500m (25%)  128Mi (6%)       128Mi (6%)     23m
+  default                     nginx-deployment-67d4bdd6f5-w6kd7    500m (25%)    500m (25%)  128Mi (6%)       128Mi (6%)     23m
+  kube-system                 kube-proxy-dnxbz                     0 (0%)        0 (0%)      0 (0%)           0 (0%)         28m
+  kube-system                 weave-net-gjxxp                      100m (5%)     0 (0%)      200Mi (10%)      0 (0%)         28m
+Allocated resources:
+  (Total limits may be over 100 percent, i.e., overcommitted.)
+  Resource           Requests     Limits
+  --------           --------     ------
+  cpu                1100m (55%)  1 (50%)
+  memory             456Mi (24%)  256Mi (13%)
+  ephemeral-storage  0 (0%)       0 (0%)
+  hugepages-2Mi      0 (0%)       0 (0%)
+Events:
+...
+</code></pre>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get node kube-worker-1 -o yaml
+</code></pre>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: Node
+metadata:
+  annotations:
+    node.alpha.kubernetes.io/ttl: "0"
+    volumes.kubernetes.io/controller-managed-attach-detach: "true"
+  creationTimestamp: "2022-02-17T21:46:30Z"
+  labels:
+    beta.kubernetes.io/arch: amd64
+    beta.kubernetes.io/os: linux
+    kubernetes.io/arch: amd64
+    kubernetes.io/hostname: kube-worker-1
+    kubernetes.io/os: linux
+  name: kube-worker-1
+  resourceVersion: "4026"
+  uid: 98efe7cb-2978-4a0b-842a-1a7bf12c05f8
+spec: {}
+status:
+  addresses:
+  - address: 192.168.0.113
+    type: InternalIP
+  - address: kube-worker-1
+    type: Hostname
+  allocatable:
+    cpu: "2"
+    ephemeral-storage: "14167048988"
+    hugepages-2Mi: "0"
+    memory: 1922788Ki
+    pods: "110"
+  capacity:
+    cpu: "2"
+    ephemeral-storage: 15372232Ki
+    hugepages-2Mi: "0"
+    memory: 2025188Ki
+    pods: "110"
+  conditions:
+  - lastHeartbeatTime: "2022-02-17T22:20:32Z"
+    lastTransitionTime: "2022-02-17T22:20:32Z"
+    message: Weave pod has set this
+    reason: WeaveIsUp
+    status: "False"
+    type: NetworkUnavailable
+  - lastHeartbeatTime: "2022-02-17T22:20:15Z"
+    lastTransitionTime: "2022-02-17T22:13:25Z"
+    message: kubelet has sufficient memory available
+    reason: KubeletHasSufficientMemory
+    status: "False"
+    type: MemoryPressure
+  - lastHeartbeatTime: "2022-02-17T22:20:15Z"
+    lastTransitionTime: "2022-02-17T22:13:25Z"
+    message: kubelet has no disk pressure
+    reason: KubeletHasNoDiskPressure
+    status: "False"
+    type: DiskPressure
+  - lastHeartbeatTime: "2022-02-17T22:20:15Z"
+    lastTransitionTime: "2022-02-17T22:13:25Z"
+    message: kubelet has sufficient PID available
+    reason: KubeletHasSufficientPID
+    status: "False"
+    type: PIDPressure
+  - lastHeartbeatTime: "2022-02-17T22:20:15Z"
+    lastTransitionTime: "2022-02-17T22:15:15Z"
+    message: kubelet is posting ready status
+    reason: KubeletReady
+    status: "True"
+    type: Ready
+  daemonEndpoints:
+    kubeletEndpoint:
+      Port: 10250
+  nodeInfo:
+    architecture: amd64
+    bootID: 22333234-7a6b-44d4-9ce1-67e31dc7e369
+    containerRuntimeVersion: containerd://1.5.9
+    kernelVersion: 5.13.0-28-generic
+    kubeProxyVersion: v1.23.3
+    kubeletVersion: v1.23.3
+    machineID: 9384e2927f544209b5d7b67474bbf92b
+    operatingSystem: linux
+    osImage: Ubuntu 21.10
+    systemUUID: aa829ca9-73d7-064d-9019-df07404ad448
+</code></pre>
+<h2 id="بررسی-لاگ-ها" dir="rtl">بررسی لاگ‌ها</h2>
+<p dir="rtl">در حال حاضر، برای بررسی عمیق‌تر کلاستر باید وارد ماشین‌های مربوط شوید. محل فایل‌های لاگ مربوط در ادامه آمده است.
+در سیستم‌های مبتنی بر systemd، ممکن است لازم باشد به‌جای بررسی فایل‌های لاگ از <code dir="ltr">journalctl</code> استفاده کنید.</p>
+<h3 id="نودهای-control-plane" dir="rtl">نودهای Control Plane</h3>
+<ul>
+<li dir="rtl"><code dir="ltr">/var/log/kube-apiserver.log</code> - سرور API، مسئول ارائهٔ API</li>
+<li dir="rtl"><code dir="ltr">/var/log/kube-scheduler.log</code> - زمان‌بند، مسئول تصمیم‌گیری دربارهٔ زمان‌بندی</li>
+<li dir="rtl"><code dir="ltr">/var/log/kube-controller-manager.log</code> - مؤلفه‌ای که بیشتر
+<span class="term" title="controller">کنترل‌کننده‌های</span> داخلی کوبرنتیز را اجرا می‌کند؛ استثنای مهم آن زمان‌بندی است
+(زمان‌بندی بر عهدهٔ kube-scheduler است).</li>
+</ul>
+<h3 id="نودهای-کارگر" dir="rtl">نودهای کارگر</h3>
+<ul>
+<li dir="rtl"><code dir="ltr">/var/log/kubelet.log</code> - لاگ‌های kubelet، که مسئول اجرای کانتینرها روی نود است</li>
+<li dir="rtl"><code dir="ltr">/var/log/kube-proxy.log</code> - لاگ‌های <code dir="ltr">kube-proxy</code>، که مسئول هدایت ترافیک به endpointهای Service است</li>
+</ul>
+<h2 id="حالت-های-خرابی-کلاستر" dir="rtl">حالت‌های خرابی کلاستر</h2>
+<p dir="rtl">فهرست زیر، فهرستی ناقص از مشکلاتی است که ممکن است رخ دهند، همراه با روش‌هایی برای تنظیم پیکربندی کلاستر به‌منظور کاهش این مشکلات.</p>
+<h3 id="علت-های-مؤثر" dir="rtl">علت‌های مؤثر</h3>
+<ul>
+<li dir="rtl">خاموش‌شدن یک یا چند ماشین مجازی (VM)</li>
+<li dir="rtl">پارتیشن‌بندی شبکه (network partition) درون کلاستر، یا میان کلاستر و کاربران</li>
+<li dir="rtl">از کار افتادن (crash) نرم‌افزار کوبرنتیز</li>
+<li dir="rtl">از دست رفتن داده یا در دسترس نبودن ذخیره‌سازی پایدار (مانند GCE PD یا حجم AWS EBS)</li>
+<li dir="rtl">خطای اپراتور، برای مثال پیکربندی نادرست نرم‌افزار کوبرنتیز یا نرم‌افزار برنامه</li>
+</ul>
+<h3 id="سناریوهای-خاص" dir="rtl">سناریوهای خاص</h3>
+<ul>
+<li dir="rtl">خاموش‌شدن ماشین مجازی سرور API یا از کار افتادن apiserver
+<ul>
+<li dir="rtl">پیامدها
+<ul>
+<li dir="rtl">امکان متوقف‌کردن، به‌روزرسانی یا راه‌اندازی Podها، Serviceها و replication controllerهای جدید وجود ندارد</li>
+<li dir="rtl">Podها و Serviceهای موجود باید به کار عادی خود ادامه دهند، مگر اینکه به API کوبرنتیز وابسته باشند</li>
+</ul>
+</li>
+</ul>
+</li>
+<li dir="rtl">از دست رفتن ذخیره‌سازی پشتیبان سرور API
+<ul>
+<li dir="rtl">پیامدها
+<ul>
+<li dir="rtl">مؤلفهٔ kube-apiserver نمی‌تواند با موفقیت راه‌اندازی شود و به وضعیت سالم برسد</li>
+<li dir="rtl">kubeletها نمی‌توانند به آن دسترسی پیدا کنند، اما همچنان همان Podها را اجرا می‌کنند و همان پراکسی Service را فراهم می‌کنند</li>
+<li dir="rtl">پیش از راه‌اندازی دوبارهٔ apiserver، بازیابی دستی یا بازسازی وضعیت apiserver ضروری است</li>
+</ul>
+</li>
+</ul>
+</li>
+<li dir="rtl">خاموش‌شدن ماشین مجازی یا از کار افتادن سرویس‌های پشتیبان (کنترل‌کنندهٔ نود، مدیر replication controller، زمان‌بند و مانند آن)
+<ul>
+<li dir="rtl">در حال حاضر این سرویس‌ها در کنار apiserver قرار دارند و در دسترس نبودن آن‌ها پیامدهایی مشابه در دسترس نبودن apiserver دارد</li>
+<li dir="rtl">در آینده، این سرویس‌ها نیز تکثیر خواهند شد و ممکن است در کنار هم قرار نگیرند</li>
+<li dir="rtl">این سرویس‌ها وضعیت پایدار مخصوص به خود ندارند</li>
+</ul>
+</li>
+<li dir="rtl">خاموش‌شدن یک نود منفرد (ماشین مجازی یا فیزیکی)
+<ul>
+<li dir="rtl">پیامدها
+<ul>
+<li dir="rtl">Podهای روی آن نود از اجرا باز می‌ایستند</li>
+</ul>
+</li>
+</ul>
+</li>
+<li dir="rtl">پارتیشن‌بندی شبکه
+<ul>
+<li dir="rtl">پیامدها
+<ul>
+<li dir="rtl">پارتیشن A گمان می‌کند نودهای پارتیشن B از کار افتاده‌اند و پارتیشن B گمان می‌کند apiserver از کار افتاده است.
+(با این فرض که ماشین مجازی master در پارتیشن A قرار بگیرد.)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li dir="rtl">خرابی نرم‌افزار kubelet
+<ul>
+<li dir="rtl">پیامدها
+<ul>
+<li dir="rtl">kubeletِ از کار افتاده نمی‌تواند Podهای جدیدی روی نود راه‌اندازی کند</li>
+<li dir="rtl">ممکن است kubelet، Podها را حذف کند یا نکند</li>
+<li dir="rtl">نود ناسالم علامت‌گذاری می‌شود</li>
+<li dir="rtl">replication controllerها Podهای جدیدی را در جای دیگری راه‌اندازی می‌کنند</li>
+</ul>
+</li>
+</ul>
+</li>
+<li dir="rtl">خطای اپراتور کلاستر
+<ul>
+<li dir="rtl">پیامدها
+<ul>
+<li dir="rtl">از دست رفتن Podها، Serviceها و مانند آن</li>
+<li dir="rtl">از دست رفتن ذخیره‌گاه پشتیبان apiserver</li>
+<li dir="rtl">ناتوانی کاربران در خواندن API</li>
+<li dir="rtl">و مانند آن.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="راهکارهای-کاهش-مشکلات" dir="rtl">راهکارهای کاهش مشکلات</h3>
+<ul>
+<li dir="rtl">
+<p dir="rtl">اقدام: برای ماشین‌های مجازی IaaS از قابلیت راه‌اندازی مجدد خودکار ماشین مجازی ارائه‌دهندهٔ IaaS استفاده کنید</p>
+<ul>
+<li dir="rtl">کاهش می‌دهد: خاموش‌شدن ماشین مجازی apiserver یا از کار افتادن apiserver</li>
+<li dir="rtl">کاهش می‌دهد: خاموش‌شدن ماشین مجازی یا از کار افتادن سرویس‌های پشتیبان</li>
+</ul>
+</li>
+<li dir="rtl">
+<p dir="rtl">اقدام: برای ماشین‌های مجازی دارای apiserver+etcd از ذخیره‌سازی قابل‌اعتماد ارائه‌دهندگان IaaS (مانند GCE PD یا حجم AWS EBS) استفاده کنید</p>
+<ul>
+<li dir="rtl">کاهش می‌دهد: از دست رفتن ذخیره‌سازی پشتیبان apiserver</li>
+</ul>
+</li>
+<li dir="rtl">
+<p dir="rtl">اقدام: از پیکربندی <a href="../../../setup/production-environment/tools/kubeadm/high-availability.html">دسترس‌پذیری بالا</a> استفاده کنید</p>
+<ul>
+<li dir="rtl">کاهش می‌دهد: خاموش‌شدن نود control plane یا از کار افتادن مؤلفه‌های control plane (زمان‌بند، سرور API، controller-manager)
+<ul>
+<li dir="rtl">خرابی هم‌زمان یک یا چند نود یا مؤلفه را تحمل می‌کند</li>
+</ul>
+</li>
+<li dir="rtl">کاهش می‌دهد: از دست رفتن ذخیره‌سازی پشتیبان سرور API (یعنی دایرکتوری داده‌های etcd)
+<ul>
+<li dir="rtl">به شرط وجود پیکربندی etcd با دسترس‌پذیری بالا (HA)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li dir="rtl">
+<p dir="rtl">اقدام: به‌صورت دوره‌ای از PDها/حجم‌های EBS مربوط به apiserver اسنپ‌شات بگیرید</p>
+<ul>
+<li dir="rtl">کاهش می‌دهد: از دست رفتن ذخیره‌سازی پشتیبان apiserver</li>
+<li dir="rtl">کاهش می‌دهد: برخی موارد خطای اپراتور</li>
+<li dir="rtl">کاهش می‌دهد: برخی موارد خرابی نرم‌افزار کوبرنتیز</li>
+</ul>
+</li>
+<li dir="rtl">
+<p dir="rtl">اقدام: از replication controller و Serviceها در جلوی Podها استفاده کنید</p>
+<ul>
+<li dir="rtl">کاهش می‌دهد: خاموش‌شدن نود</li>
+<li dir="rtl">کاهش می‌دهد: خرابی نرم‌افزار kubelet</li>
+</ul>
+</li>
+<li dir="rtl">
+<p dir="rtl">اقدام: برنامه‌ها (کانتینرها) طوری طراحی شوند که راه‌اندازی‌های مجدد غیرمنتظره را تحمل کنند</p>
+<ul>
+<li dir="rtl">کاهش می‌دهد: خاموش‌شدن نود</li>
+<li dir="rtl">کاهش می‌دهد: خرابی نرم‌افزار kubelet</li>
+</ul>
+</li>
+</ul>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<ul>
+<li dir="rtl">با متریک‌های موجود در
+<a href="https://kubernetes.io/docs/tasks/debug/debug-cluster/resource-metrics-pipeline/" target="_blank">خط لولهٔ متریک‌های منابع</a> آشنا شوید</li>
+<li dir="rtl">ابزارهای بیشتری برای
+<a href="https://kubernetes.io/docs/tasks/debug/debug-cluster/resource-usage-monitoring/" target="_blank">پایش مصرف منابع</a> کشف کنید</li>
+<li dir="rtl">با استفاده از Node Problem Detector
+<a href="https://kubernetes.io/docs/tasks/debug/debug-cluster/monitor-node-health/" target="_blank">سلامت نودها را پایش کنید</a></li>
+<li dir="rtl">با استفاده از <code dir="ltr">kubectl debug node</code> <a href="https://kubernetes.io/docs/tasks/debug/debug-cluster/kubectl-node-debug" target="_blank">نودهای کوبرنتیز را اشکال‌زدایی کنید</a></li>
+<li dir="rtl">با استفاده از <code dir="ltr">crictl</code> <a href="crictl.html">نودهای کوبرنتیز را اشکال‌زدایی کنید</a></li>
+<li dir="rtl">اطلاعات بیشتری دربارهٔ <a href="audit.html">ممیزی (auditing) در کوبرنتیز</a> به دست آورید</li>
+<li dir="rtl">با استفاده از <code dir="ltr">telepresence</code> <a href="https://kubernetes.io/docs/tasks/debug/debug-cluster/local-debugging/" target="_blank">سرویس‌ها را به‌صورت محلی توسعه دهید و اشکال‌زدایی کنید</a></li>
+</ul>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#فهرست-کردن-اجزای-کلاستر">فهرست‌کردن اجزای کلاستر</a><a class="l3" href="#مثال-اشکال-زدایی-نودی-که-از-کار-افتاده-یا-در-دسترس-نیست">مثال: اشکال‌زدایی نودی که از کار افتاده یا در دسترس نیست</a><a class="l2" href="#بررسی-لاگ-ها">بررسی لاگ‌ها</a><a class="l3" href="#نودهای-control-plane">نودهای Control Plane</a><a class="l3" href="#نودهای-کارگر">نودهای کارگر</a><a class="l2" href="#حالت-های-خرابی-کلاستر">حالت‌های خرابی کلاستر</a><a class="l3" href="#علت-های-مؤثر">علت‌های مؤثر</a><a class="l3" href="#سناریوهای-خاص">سناریوهای خاص</a><a class="l3" href="#راهکارهای-کاهش-مشکلات">راهکارهای کاهش مشکلات</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>
