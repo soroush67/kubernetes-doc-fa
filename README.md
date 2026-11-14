@@ -8,9 +8,9 @@
 
 | | |
 |---|---|
-| پیشرفت (بر اساس کلمات) | **94.3٪** |
-| صفحات ترجمه‌شده | 1605 از 1722 |
-| صفحات دارای ایراد ساختاری | 74 |
+| پیشرفت (بر اساس کلمات) | **95.2٪** |
+| صفحات ترجمه‌شده | 1620 از 1722 |
+| صفحات دارای ایراد ساختاری | 75 |
 | نسخه‌ی منبع انگلیسی | `f652c6b8a26f` |
 
 ## مشاهده
@@ -74,7 +74,7 @@ cd kubernetes-doc-fa
 | `home` | 2 | 2 |
 | `reference` | 1198 | 1198 |
 | `setup` | 22 | 22 |
-| `tasks` | 150 | 221 |
+| `tasks` | 165 | 221 |
 | `tutorials` | 0 | 45 |
 
 </div>
@@ -101,26 +101,26 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [tasks/inject-data-application/environment-variable-expose-pod-information.md](md/tasks/inject-data-application/environment-variable-expose-pod-information.md) — 2026-11-14T15:36:47+03:30
+- [tasks/job/_index.md](md/tasks/job/_index.md) — 2026-11-14T15:36:46+03:30
+- [tasks/inject-data-application/distribute-credentials-secure.md](md/tasks/inject-data-application/distribute-credentials-secure.md) — 2026-11-14T15:36:42+03:30
+- [tasks/inject-data-application/downward-api-volume-expose-pod-information.md](md/tasks/inject-data-application/downward-api-volume-expose-pod-information.md) — 2026-11-14T15:36:23+03:30
+- [tasks/inject-data-application/define-interdependent-environment-variables.md](md/tasks/inject-data-application/define-interdependent-environment-variables.md) — 2026-11-14T15:35:52+03:30
+- [tasks/inject-data-application/define-environment-variable-via-file.md](md/tasks/inject-data-application/define-environment-variable-via-file.md) — 2026-11-14T15:35:50+03:30
+- [tasks/inject-data-application/define-environment-variable-container.md](md/tasks/inject-data-application/define-environment-variable-container.md) — 2026-11-14T15:35:36+03:30
+- [tasks/extend-kubernetes/socks5-proxy-access-api.md](md/tasks/extend-kubernetes/socks5-proxy-access-api.md) — 2026-11-14T15:35:27+03:30
+- [tasks/inject-data-application/define-command-argument-container.md](md/tasks/inject-data-application/define-command-argument-container.md) — 2026-11-14T15:35:16+03:30
+- [tasks/inject-data-application/_index.md](md/tasks/inject-data-application/_index.md) — 2026-11-14T15:35:00+03:30
+- [tasks/extend-kubernetes/custom-resources/custom-resource-definitions.md](md/tasks/extend-kubernetes/custom-resources/custom-resource-definitions.md) — 2026-11-14T15:34:57+03:30
+- [tasks/extend-kubernetes/setup-konnectivity.md](md/tasks/extend-kubernetes/setup-konnectivity.md) — 2026-11-14T15:33:48+03:30
+- [tasks/extend-kubernetes/setup-extension-api-server.md](md/tasks/extend-kubernetes/setup-extension-api-server.md) — 2026-11-14T15:33:31+03:30
+- [tasks/extend-kubernetes/http-proxy-access-api.md](md/tasks/extend-kubernetes/http-proxy-access-api.md) — 2026-11-14T15:33:08+03:30
+- [tasks/extend-kubernetes/custom-resources/custom-resource-definition-versioning.md](md/tasks/extend-kubernetes/custom-resources/custom-resource-definition-versioning.md) — 2026-11-14T15:32:59+03:30
 - [tasks/extend-kubernetes/configure-aggregation-layer.md](md/tasks/extend-kubernetes/configure-aggregation-layer.md) — 2026-11-14T11:03:00+03:30
 - [tasks/extend-kubernetes/custom-resources/_index.md](md/tasks/extend-kubernetes/custom-resources/_index.md) — 2026-11-14T11:00:28+03:30
 - [tasks/extend-kubernetes/configure-multiple-schedulers.md](md/tasks/extend-kubernetes/configure-multiple-schedulers.md) — 2026-11-14T11:00:25+03:30
 - [tasks/extend-kubectl/kubectl-plugins.md](md/tasks/extend-kubectl/kubectl-plugins.md) — 2026-11-14T10:59:46+03:30
 - [tasks/extend-kubernetes/_index.md](md/tasks/extend-kubernetes/_index.md) — 2026-11-14T10:58:50+03:30
-- [tasks/debug/debug-cluster/windows.md](md/tasks/debug/debug-cluster/windows.md) — 2026-11-14T10:58:45+03:30
-- [tasks/debug/monitoring/_index.md](md/tasks/debug/monitoring/_index.md) — 2026-11-14T10:58:41+03:30
-- [tasks/debug/logging/_index.md](md/tasks/debug/logging/_index.md) — 2026-11-14T10:58:34+03:30
-- [tasks/debug/debug-cluster/troubleshoot-kubectl.md](md/tasks/debug/debug-cluster/troubleshoot-kubectl.md) — 2026-11-14T10:58:26+03:30
-- [tasks/debug/debug-cluster/resource-usage-monitoring.md](md/tasks/debug/debug-cluster/resource-usage-monitoring.md) — 2026-11-14T10:58:02+03:30
-- [tasks/debug/debug-cluster/topology.md](md/tasks/debug/debug-cluster/topology.md) — 2026-11-14T10:57:56+03:30
-- [tasks/debug/debug-cluster/resource-metrics-pipeline.md](md/tasks/debug/debug-cluster/resource-metrics-pipeline.md) — 2026-11-14T10:57:25+03:30
-- [tasks/debug/debug-cluster/monitor-node-health.md](md/tasks/debug/debug-cluster/monitor-node-health.md) — 2026-11-14T10:56:58+03:30
-- [tasks/debug/debug-cluster/local-debugging.md](md/tasks/debug/debug-cluster/local-debugging.md) — 2026-11-14T10:56:35+03:30
-- [tasks/debug/debug-cluster/kubectl-node-debug.md](md/tasks/debug/debug-cluster/kubectl-node-debug.md) — 2026-11-14T10:56:14+03:30
-- [tasks/debug/debug-cluster/crictl.md](md/tasks/debug/debug-cluster/crictl.md) — 2026-11-14T10:56:10+03:30
-- [tasks/debug/debug-cluster/audit.md](md/tasks/debug/debug-cluster/audit.md) — 2026-11-14T10:55:51+03:30
-- [tasks/debug/debug-cluster/_index.md](md/tasks/debug/debug-cluster/_index.md) — 2026-11-14T10:55:39+03:30
-- [tasks/debug/debug-application/determine-reason-pod-failure.md](md/tasks/debug/debug-application/determine-reason-pod-failure.md) — 2026-11-14T10:54:48+03:30
-- [tasks/debug/debug-application/get-shell-running-container.md](md/tasks/debug/debug-application/get-shell-running-container.md) — 2026-11-14T10:54:42+03:30
 
 </div>
 
@@ -202,6 +202,7 @@ cd kubernetes-doc-fa
 - [reference/setup-tools/kubeadm/kubeadm-upgrade-phase.md](md/reference/setup-tools/kubeadm/kubeadm-upgrade-phase.md): chunk 1: short: 204 words vs 316 source words
 - [tasks/access-application-cluster/communicate-containers-same-pod-shared-volume.md](md/tasks/access-application-cluster/communicate-containers-same-pod-shared-volume.md): chunk 1: 6 untranslated English lines, e.g. 'echo Hello from the debian container > /pod-data/index.html'
 - [tasks/configure-pod-container/configure-service-account.md](md/tasks/configure-pod-container/configure-service-account.md): chunk 1: 1 code block(s) changed
+- [tasks/extend-kubernetes/socks5-proxy-access-api.md](md/tasks/extend-kubernetes/socks5-proxy-access-api.md): chunk 1: 7 untranslated English lines, e.g. 'client([client])-. local <br> traffic .->  local_ssh[Local SSH <br> SOCKS5 proxy];'
 
 </div>
 

@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-1605 از 1722 صفحه
+1620 از 1722 صفحه
 
 
 ## `.`
@@ -2097,31 +2097,31 @@
 - ✅ [_index.md](md/tasks/extend-kubernetes/_index.md)
 - ✅ [configure-aggregation-layer.md](md/tasks/extend-kubernetes/configure-aggregation-layer.md)
 - ✅ [configure-multiple-schedulers.md](md/tasks/extend-kubernetes/configure-multiple-schedulers.md)
-- ⏳ `http-proxy-access-api.md`
-- ⏳ `setup-extension-api-server.md`
-- ⏳ `setup-konnectivity.md`
-- ⏳ `socks5-proxy-access-api.md`
+- ✅ [http-proxy-access-api.md](md/tasks/extend-kubernetes/http-proxy-access-api.md)
+- ✅ [setup-extension-api-server.md](md/tasks/extend-kubernetes/setup-extension-api-server.md)
+- ✅ [setup-konnectivity.md](md/tasks/extend-kubernetes/setup-konnectivity.md)
+- ⚠️ [socks5-proxy-access-api.md](md/tasks/extend-kubernetes/socks5-proxy-access-api.md)
 
 ## `tasks/extend-kubernetes/custom-resources`
 
 - ✅ [_index.md](md/tasks/extend-kubernetes/custom-resources/_index.md)
-- ⏳ `custom-resource-definition-versioning.md`
-- ⏳ `custom-resource-definitions.md`
+- ✅ [custom-resource-definition-versioning.md](md/tasks/extend-kubernetes/custom-resources/custom-resource-definition-versioning.md)
+- ✅ [custom-resource-definitions.md](md/tasks/extend-kubernetes/custom-resources/custom-resource-definitions.md)
 
 ## `tasks/inject-data-application`
 
-- ⏳ `_index.md`
-- ⏳ `define-command-argument-container.md`
-- ⏳ `define-environment-variable-container.md`
-- ⏳ `define-environment-variable-via-file.md`
-- ⏳ `define-interdependent-environment-variables.md`
-- ⏳ `distribute-credentials-secure.md`
-- ⏳ `downward-api-volume-expose-pod-information.md`
-- ⏳ `environment-variable-expose-pod-information.md`
+- ✅ [_index.md](md/tasks/inject-data-application/_index.md)
+- ✅ [define-command-argument-container.md](md/tasks/inject-data-application/define-command-argument-container.md)
+- ✅ [define-environment-variable-container.md](md/tasks/inject-data-application/define-environment-variable-container.md)
+- ✅ [define-environment-variable-via-file.md](md/tasks/inject-data-application/define-environment-variable-via-file.md)
+- ✅ [define-interdependent-environment-variables.md](md/tasks/inject-data-application/define-interdependent-environment-variables.md)
+- ✅ [distribute-credentials-secure.md](md/tasks/inject-data-application/distribute-credentials-secure.md)
+- ✅ [downward-api-volume-expose-pod-information.md](md/tasks/inject-data-application/downward-api-volume-expose-pod-information.md)
+- ✅ [environment-variable-expose-pod-information.md](md/tasks/inject-data-application/environment-variable-expose-pod-information.md)
 
 ## `tasks/job`
 
-- ⏳ `_index.md`
+- ✅ [_index.md](md/tasks/job/_index.md)
 - ⏳ `automated-tasks-with-cron-jobs.md`
 - ⏳ `coarse-parallel-processing-work-queue.md`
 - ⏳ `fine-parallel-processing-work-queue.md`

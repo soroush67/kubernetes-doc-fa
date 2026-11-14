@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>راه‌اندازی سرویس Konnectivity | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">tasks / extend-kubernetes</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">راه‌اندازی سرویس Konnectivity</h1><!-- overview -->
+<p dir="rtl">سرویس Konnectivity یک پراکسی در سطح TCP برای ارتباط control plane با کلاستر فراهم می‌کند.</p>
+<h2 id="پیش-از-شروع" dir="rtl">پیش از شروع</h2>
+<p dir="rtl">باید یک کلاستر کوبرنتیز داشته باشید و ابزار خط فرمان kubectl نیز طوری پیکربندی شده باشد که بتواند با کلاستر شما ارتباط برقرار کند. توصیه می‌شود این آموزش را روی کلاستری اجرا کنید که دست‌کم دو نود داشته باشد که نقش میزبان control plane را ندارند. اگر هنوز کلاستری ندارید، می‌توانید با استفاده از <a href="https://minikube.sigs.k8s.io/docs/tutorials/multi_node/" target="_blank" rel="noopener">minikube</a> یک کلاستر بسازید.</p>
+<!-- steps -->
+<h2 id="پیکربندی-سرویس-konnectivity" dir="rtl">پیکربندی سرویس Konnectivity</h2>
+<p dir="rtl">برای انجام مراحل زیر به یک پیکربندی ترافیک خروجی (egress) نیاز دارید؛ برای نمونه:</p>
+<div class="code-file ltr" dir="ltr">admin/konnectivity/egress-selector-configuration.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: apiserver.k8s.io/v1beta1
+kind: EgressSelectorConfiguration
+egressSelections:
+# Since we want to control the egress traffic to the cluster, we use the
+# "cluster" as the name. Other supported values are "etcd", and "controlplane".
+- name: cluster
+  connection:
+    # This controls the protocol between the API Server and the Konnectivity
+    # server. Supported values are "GRPC" and "HTTPConnect". There is no
+    # end user visible difference between the two modes. You need to set the
+    # Konnectivity server to work in the same mode.
+    proxyProtocol: GRPC
+    transport:
+      # This controls what transport the API Server uses to communicate with the
+      # Konnectivity server. UDS is recommended if the Konnectivity server
+      # locates on the same machine as the API Server. You need to configure the
+      # Konnectivity server to listen on the same UDS socket.
+      # The other supported transport is "tcp". You will need to set up TLS 
+      # config to secure the TCP transport.
+      uds:
+        udsName: /etc/kubernetes/konnectivity-server/konnectivity-server.socket
+</code></pre>
+<p dir="rtl">باید API Server را طوری پیکربندی کنید که از سرویس Konnectivity استفاده کند و ترافیک شبکه را به نودهای کلاستر هدایت کند:</p>
+<ol>
+<li dir="rtl">مطمئن شوید که قابلیت <a href="../configure-pod-container/configure-service-account.html#serviceaccount-token-volume-projection">Service Account Token Volume Projection</a> در کلاستر شما فعال است. این قابلیت از نسخهٔ v1.20 کوبرنتیز به‌طور پیش‌فرض فعال است.</li>
+<li dir="rtl">یک فایل پیکربندی ترافیک خروجی، مانند <code dir="ltr">admin/konnectivity/egress-selector-configuration.yaml</code>، ایجاد کنید.</li>
+<li dir="rtl">مقدار فلگ <code dir="ltr">--egress-selector-config-file</code> در API Server را برابر با مسیر فایل پیکربندی ترافیک خروجی API Server قرار دهید.</li>
+<li dir="rtl">اگر از اتصال UDS استفاده می‌کنید، پیکربندی حجم‌ها (volumes) را به kube-apiserver اضافه کنید:<pre dir="ltr"><code class="language-yaml" dir="ltr">spec:
+  containers:
+    volumeMounts:
+    - name: konnectivity-uds
+      mountPath: /etc/kubernetes/konnectivity-server
+      readOnly: false
+  volumes:
+  - name: konnectivity-uds
+    hostPath:
+      path: /etc/kubernetes/konnectivity-server
+      type: DirectoryOrCreate
+</code></pre>
+</li>
+</ol>
+<p dir="rtl">برای konnectivity-server یک گواهی و یک فایل kubeconfig تولید یا تهیه کنید. برای نمونه، می‌توانید با ابزار خط فرمان OpenSSL و با استفاده از گواهی CA کلاستر، یعنی <code dir="ltr">/etc/kubernetes/pki/ca.crt</code>، روی یکی از میزبان‌های control plane یک گواهی X.509 صادر کنید.</p>
+<pre dir="ltr"><code class="language-bash" dir="ltr">openssl req -subj "/CN=system:konnectivity-server" -new -newkey rsa:2048 -noenc -out konnectivity.csr -keyout konnectivity.key
+openssl x509 -req -in konnectivity.csr -CA /etc/kubernetes/pki/ca.crt -CAkey /etc/kubernetes/pki/ca.key -CAcreateserial -out konnectivity.crt -days 375 -sha256
+SERVER=$(kubectl config view -o jsonpath='{.clusters..server}')
+kubectl --kubeconfig /etc/kubernetes/konnectivity-server.conf config set-credentials system:konnectivity-server --client-certificate konnectivity.crt --client-key konnectivity.key --embed-certs=true
+kubectl --kubeconfig /etc/kubernetes/konnectivity-server.conf config set-cluster kubernetes --server "$SERVER" --certificate-authority /etc/kubernetes/pki/ca.crt --embed-certs=true
+kubectl --kubeconfig /etc/kubernetes/konnectivity-server.conf config set-context system:konnectivity-server@kubernetes --cluster kubernetes --user system:konnectivity-server
+kubectl --kubeconfig /etc/kubernetes/konnectivity-server.conf config use-context system:konnectivity-server@kubernetes
+rm -f konnectivity.crt konnectivity.key konnectivity.csr
+</code></pre>
+<p dir="rtl">در گام بعد، باید سرور و عامل‌های (agents) Konnectivity را مستقر کنید. پروژهٔ <a href="https://github.com/kubernetes-sigs/apiserver-network-proxy" target="_blank" rel="noopener">kubernetes-sigs/apiserver-network-proxy</a> یک پیاده‌سازی مرجع برای این کار است.</p>
+<p dir="rtl">سرور Konnectivity را روی نود control plane خود مستقر کنید. مانیفست <code dir="ltr">konnectivity-server.yaml</code> که در اینجا ارائه شده است، فرض می‌کند که مؤلفه‌های کوبرنتیز در کلاستر شما به‌صورت <span class="term" title="static-pod">Pod ایستا</span> مستقر شده‌اند. در غیر این صورت، می‌توانید سرور Konnectivity را به‌صورت یک DaemonSet مستقر کنید.</p>
+<div class="code-file ltr" dir="ltr">admin/konnectivity/konnectivity-server.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: Pod
+metadata:
+  name: konnectivity-server
+  namespace: kube-system
+spec:
+  priorityClassName: system-cluster-critical
+  hostNetwork: true
+  containers:
+  - name: konnectivity-server-container
+    image: registry.k8s.io/kas-network-proxy/proxy-server:v0.0.37
+    command: ["/proxy-server"]
+    args: [
+            "--logtostderr=true",
+            # This needs to be consistent with the value set in egressSelectorConfiguration.
+            "--uds-name=/etc/kubernetes/konnectivity-server/konnectivity-server.socket",
+            "--delete-existing-uds-file",
+            # The following two lines assume the Konnectivity server is
+            # deployed on the same machine as the apiserver, and the certs and
+            # key of the API Server are at the specified location.
+            "--cluster-cert=/etc/kubernetes/pki/apiserver.crt",
+            "--cluster-key=/etc/kubernetes/pki/apiserver.key",
+            # This needs to be consistent with the value set in egressSelectorConfiguration.
+            "--mode=grpc",
+            "--server-port=0",
+            "--agent-port=8132",
+            "--admin-port=8133",
+            "--health-port=8134",
+            "--agent-namespace=kube-system",
+            "--agent-service-account=konnectivity-agent",
+            "--kubeconfig=/etc/kubernetes/konnectivity-server.conf",
+            "--authentication-audience=system:konnectivity-server"
+            ]
+    livenessProbe:
+      httpGet:
+        scheme: HTTP
+        host: 127.0.0.1
+        port: 8134
+        path: /healthz
+      initialDelaySeconds: 30
+      timeoutSeconds: 60
+    ports:
+    - name: agentport
+      containerPort: 8132
+      hostPort: 8132
+    - name: adminport
+      containerPort: 8133
+      hostPort: 8133
+    - name: healthport
+      containerPort: 8134
+      hostPort: 8134
+    volumeMounts:
+    - name: k8s-certs
+      mountPath: /etc/kubernetes/pki
+      readOnly: true
+    - name: kubeconfig
+      mountPath: /etc/kubernetes/konnectivity-server.conf
+      readOnly: true
+    - name: konnectivity-uds
+      mountPath: /etc/kubernetes/konnectivity-server
+      readOnly: false
+  volumes:
+  - name: k8s-certs
+    hostPath:
+      path: /etc/kubernetes/pki
+  - name: kubeconfig
+    hostPath:
+      path: /etc/kubernetes/konnectivity-server.conf
+      type: FileOrCreate
+  - name: konnectivity-uds
+    hostPath:
+      path: /etc/kubernetes/konnectivity-server
+      type: DirectoryOrCreate
+</code></pre>
+<p dir="rtl">سپس عامل‌های Konnectivity را در کلاستر خود مستقر کنید:</p>
+<div class="code-file ltr" dir="ltr">admin/konnectivity/konnectivity-agent.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: apps/v1
+# Alternatively, you can deploy the agents as Deployments. It is not necessary
+# to have an agent on each node.
+kind: DaemonSet
+metadata:
+  labels:
+    addonmanager.kubernetes.io/mode: Reconcile
+    k8s-app: konnectivity-agent
+  namespace: kube-system
+  name: konnectivity-agent
+spec:
+  selector:
+    matchLabels:
+      k8s-app: konnectivity-agent
+  template:
+    metadata:
+      labels:
+        k8s-app: konnectivity-agent
+    spec:
+      priorityClassName: system-cluster-critical
+      tolerations:
+        - key: "CriticalAddonsOnly"
+          operator: "Exists"
+      containers:
+        - image: us.gcr.io/k8s-artifacts-prod/kas-network-proxy/proxy-agent:v0.0.37
+          name: konnectivity-agent
+          command: ["/proxy-agent"]
+          args: [
+                  "--logtostderr=true",
+                  "--ca-cert=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt",
+                  # Since the konnectivity server runs with hostNetwork=true,
+                  # this is the IP address of the master machine.
+                  "--proxy-server-host=35.225.206.7",
+                  "--proxy-server-port=8132",
+                  "--admin-server-port=8133",
+                  "--health-server-port=8134",
+                  "--service-account-token-path=/var/run/secrets/tokens/konnectivity-agent-token"
+                  ]
+          volumeMounts:
+            - mountPath: /var/run/secrets/tokens
+              name: konnectivity-agent-token
+          livenessProbe:
+            httpGet:
+              port: 8134
+              path: /healthz
+            initialDelaySeconds: 15
+            timeoutSeconds: 15
+      serviceAccountName: konnectivity-agent
+      volumes:
+        - name: konnectivity-agent-token
+          projected:
+            sources:
+              - serviceAccountToken:
+                  path: konnectivity-agent-token
+                  audience: system:konnectivity-server
+</code></pre>
+<p dir="rtl">در پایان، اگر RBAC در کلاستر شما فعال است، قواعد RBAC مربوط را ایجاد کنید:</p>
+<div class="code-file ltr" dir="ltr">admin/konnectivity/konnectivity-rbac.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: system:konnectivity-server
+  labels:
+    kubernetes.io/cluster-service: "true"
+    addonmanager.kubernetes.io/mode: Reconcile
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: system:auth-delegator
+subjects:
+  - apiGroup: rbac.authorization.k8s.io
+    kind: User
+    name: system:konnectivity-server
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: konnectivity-agent
+  namespace: kube-system
+  labels:
+    kubernetes.io/cluster-service: "true"
+    addonmanager.kubernetes.io/mode: Reconcile
+</code></pre>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#پیش-از-شروع">پیش از شروع</a><a class="l2" href="#پیکربندی-سرویس-konnectivity">پیکربندی سرویس Konnectivity</a></nav>
+</div>
+</body>
+</html>

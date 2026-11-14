@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>تعریف مقادیر متغیرهای محیطی با استفاده از یک Init Container | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">tasks / inject-data-application</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">تعریف مقادیر متغیرهای محیطی با استفاده از یک Init Container</h1><!-- overview -->
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
+<p dir="rtl">این صفحه نشان می‌دهد که چگونه می‌توان متغیرهای محیطی کانتینرهای یک Pod را از طریق فایل پیکربندی کرد.</p>
+<h2 id="پیش-از-شروع" dir="rtl">پیش از شروع</h2>
+<p dir="rtl">باید یک کلاستر کوبرنتیز داشته باشید و ابزار خط فرمان kubectl باید برای ارتباط با کلاستر شما پیکربندی شده باشد. توصیه می‌شود این آموزش را روی کلاستری اجرا کنید که دست‌کم دو نود داشته باشد که نقش میزبان control plane را ندارند. اگر هنوز کلاستری ندارید، می‌توانید با استفاده از
+<a href="https://minikube.sigs.k8s.io/docs/tutorials/multi_node/" target="_blank" rel="noopener">minikube</a>
+یکی بسازید یا از یکی از این محیط‌های آزمایشی کوبرنتیز استفاده کنید:</p>
+<ul>
+<li dir="ltr" class="ltr"><a href="https://labs.iximiuz.com/playgrounds?category=kubernetes&amp;filter=all" target="_blank" rel="noopener">iximiuz Labs</a></li>
+<li dir="ltr" class="ltr"><a href="https://killercoda.com/playgrounds/scenario/kubernetes" target="_blank" rel="noopener">Killercoda</a></li>
+<li dir="ltr" class="ltr"><a href="https://kodekloud.com/public-playgrounds" target="_blank" rel="noopener">KodeKloud</a></li>
+</ul>
+<!-- steps -->
+<h2 id="این-طراحی-چگونه-کار-می-کند" dir="rtl">این طراحی چگونه کار می‌کند</h2>
+<p dir="rtl">در این تمرین، یک Pod ایجاد می‌کنید که متغیرهای محیطی را از فایل‌ها می‌خواند و این مقادیر را در کانتینر در حال اجرا قرار می‌دهد.</p>
+<div class="code-file ltr" dir="ltr">pods/inject/envars-file-container.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: Pod
+metadata:
+  name: envfile-test-pod
+spec:
+  initContainers:
+    - name: setup-envfile
+      image:  nginx
+      command: ['sh', '-c', "echo \"DB_ADDRESS=\'address\'\nREST_ENDPOINT=\'endpoint\'\" &gt; /data/config.env"]
+      volumeMounts:
+        - name: config
+          mountPath: /data
+  containers:
+    - name: use-envfile
+      image: nginx
+      command: [ "/bin/sh", "-c", "env" ]
+      env:
+        - name: DB_ADDRESS
+          valueFrom:
+            fileKeyRef:
+              path: config.env
+              volumeName: config
+              key: DB_ADDRESS
+              optional: false
+  restartPolicy: Never
+  volumes:
+    - name: config
+      emptyDir: {}
+</code></pre>
+<p dir="rtl">همان‌طور که در این مانیفست می‌بینید، <code dir="ltr">initContainer</code> یک حجم (volume) از نوع <code dir="ltr">emptyDir</code> را مونت می‌کند و متغیرهای محیطی را در فایلی درون آن می‌نویسد. کانتینرهای عادی نیز بدون نیاز به مونت کردن این حجم، از طریق فیلد <code dir="ltr">fileKeyRef</code> هم به فایل و هم به کلید متغیر محیطی ارجاع می‌دهند. هنگامی که فیلد <code dir="ltr">optional</code> برابر با false باشد، کلید مشخص‌شده در <code dir="ltr">key</code> درون <code dir="ltr">fileKeyRef</code> باید در فایل متغیرهای محیطی وجود داشته باشد.</p>
+<p dir="rtl">این حجم فقط در کانتینری مونت می‌شود که در فایل می‌نویسد (<code dir="ltr">initContainer</code>)، و کانتینر مصرف‌کننده‌ای که از متغیر محیطی استفاده می‌کند، این حجم را مونت نخواهد داشت.</p>
+<p dir="rtl">قالب فایل env از <a href="define-environment-variable-via-file.html#env-file-syntax">استاندارد فایل env در کوبرنتیز</a> پیروی می‌کند.</p>
+<p dir="rtl">در طول مقداردهی اولیه کانتینر، kubelet متغیرهای محیطی را از فایل‌های مشخص‌شده در حجم <code dir="ltr">emptyDir</code> بازیابی می‌کند و آن‌ها را در اختیار کانتینر قرار می‌دهد.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">همه انواع کانتینر (initContainerها، کانتینرهای عادی، کانتینرهای sidecar و کانتینرهای موقت (ephemeral)) از بارگذاری متغیرهای محیطی از فایل پشتیبانی می‌کنند.</p>
+<p dir="rtl">اگرچه این متغیرهای محیطی می‌توانند اطلاعات حساس را ذخیره کنند، حجم‌های <code dir="ltr">emptyDir</code> سازوکارهای حفاظتی مشابه آبجکت‌های اختصاصی Secret را فراهم نمی‌کنند. بنابراین، در اختیار قرار دادن متغیرهای محیطی محرمانه برای کانتینرها از طریق این قابلیت، بهترین روش امنیتی محسوب نمی‌شود.</p>
+</div>
+<p dir="rtl">Pod را ایجاد کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f https://k8s.io/examples/pods/inject/envars-file-container.yaml
+</code></pre>
+<p dir="rtl">بررسی کنید که کانتینر درون Pod در حال اجرا باشد:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># If the new Pod isn't yet healthy, rerun this command a few times.
+kubectl get pods
+</code></pre>
+<p dir="rtl">لاگ‌های کانتینر را برای یافتن متغیرهای محیطی بررسی کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl logs envfile-test-pod -c use-envfile | grep DB_ADDRESS
+</code></pre>
+<p dir="rtl">خروجی، مقادیر متغیرهای محیطی انتخاب‌شده را نشان می‌دهد:</p>
+<pre dir="ltr"><code dir="ltr">DB_ADDRESS=address
+</code></pre>
+<h2 id="نحو-فایل-env-env-file-syntax" dir="rtl">نحو فایل env {#env-file-syntax}</h2>
+<p dir="rtl">قالب فایل env که کوبرنتیز از آن استفاده می‌کند، زیرمجموعه‌ای به‌خوبی تعریف‌شده از معنای متغیرهای محیطی در bash سازگار با POSIX است. هر فایل env که کوبرنتیز از آن پشتیبانی می‌کند، همان متغیرهای محیطی‌ای را تولید می‌کند که در صورت تفسیر با bash سازگار با POSIX تولید می‌شوند. با این حال، bash سازگار با POSIX از برخی قالب‌های دیگر نیز پشتیبانی می‌کند که کوبرنتیز آن‌ها را نمی‌پذیرد.</p>
+<p dir="rtl">مثال:</p>
+<pre dir="ltr"><code dir="ltr">MY_VAR='my-literal-value'
+</code></pre>
+<h3 id="قواعد" dir="rtl">قواعد</h3>
+<ul>
+<li dir="rtl">تعریف متغیر: از شکل <code dir="ltr">VAR='value'</code> استفاده کنید. فاصله‌های اطراف <code dir="ltr">=</code> نادیده گرفته می‌شوند؛ فاصله‌های ابتدای هر خط نادیده گرفته می‌شوند؛ خطوط خالی نیز نادیده گرفته می‌شوند.</li>
+<li dir="rtl">مقادیر داخل نقل‌قول: مقادیر باید درون نقل‌قول تکی (<code dir="ltr">'</code>) قرار گیرند.
+<ul>
+<li dir="rtl">محتوای درون نقل‌قول تکی عیناً حفظ می‌شود. هیچ پردازشی روی دنباله‌های گریز (escape sequence) انجام نمی‌شود، فاصله‌های سفید ادغام نمی‌شوند و هیچ نویسه‌ای تفسیر نمی‌شود.</li>
+<li dir="rtl">خطوط جدید درون نقل‌قول تکی حفظ می‌شوند (از مقادیر چندخطی پشتیبانی می‌شود).</li>
+</ul>
+</li>
+<li dir="rtl">توضیحات: خطوطی که با <code dir="ltr">#</code> شروع می‌شوند، توضیح در نظر گرفته شده و نادیده گرفته می‌شوند. نویسه <code dir="ltr">#</code> درون مقداری که در نقل‌قول تکی قرار دارد، توضیح محسوب نمی‌شود.</li>
+</ul>
+<p dir="rtl">مثال‌ها:</p>
+<pre dir="ltr"><code dir="ltr"># comment
+DB_ADDRESS='address'
+
+MULTI='line1
+line2'
+</code></pre>
+<h3 id="قالب-های-پشتیبانی-نشده" dir="rtl">قالب‌های پشتیبانی‌نشده</h3>
+<ul>
+<li dir="rtl">مقادیر بدون نقل‌قول <strong>ممنوع</strong> هستند:
+<ul>
+<li dir="rtl"><code dir="ltr">VAR=value</code> — پشتیبانی نمی‌شود.</li>
+</ul>
+</li>
+<li dir="rtl">مقادیر درون نقل‌قول دوتایی <strong>ممنوع</strong> هستند:
+<ul>
+<li dir="rtl"><code dir="ltr">VAR="value"</code> — پشتیبانی نمی‌شود.</li>
+</ul>
+</li>
+<li dir="rtl">چند رشته نقل‌قول‌شده مجاور هم پشتیبانی <strong>نمی‌شوند</strong>:
+<ul>
+<li dir="rtl"><code dir="ltr">VAR='val1''val2'</code> — پشتیبانی نمی‌شود.</li>
+</ul>
+</li>
+<li dir="rtl">هیچ نوعی از درون‌یابی (interpolation)، بسط (expansion) یا الحاق (concatenation) پشتیبانی <strong>نمی‌شود</strong>:
+<ul>
+<li dir="rtl"><code dir="ltr">VAR='a'$OTHER</code> یا <code dir="ltr">VAR=${OTHER}</code> — پشتیبانی نمی‌شود.</li>
+</ul>
+</li>
+</ul>
+<p dir="rtl">الزام سخت‌گیرانه به استفاده از نقل‌قول تکی تضمین می‌کند که kubelet هنگام بارگذاری متغیرهای محیطی از فایل‌ها، مقدار را عیناً و به همان شکل نوشته‌شده دریافت کند.</p>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<ul>
+<li dir="rtl">درباره <a href="environment-variable-expose-pod-information.html">متغیرهای محیطی</a> بیشتر بیاموزید.</li>
+<li dir="rtl"><a href="define-environment-variable-container.html">تعریف متغیرهای محیطی برای یک کانتینر</a> را بخوانید.</li>
+<li dir="rtl"><a href="environment-variable-expose-pod-information.html">در اختیار قرار دادن اطلاعات Pod برای کانتینرها از طریق متغیرهای محیطی</a> را بخوانید.</li>
+</ul>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#پیش-از-شروع">پیش از شروع</a><a class="l2" href="#این-طراحی-چگونه-کار-می-کند">این طراحی چگونه کار می‌کند</a><a class="l2" href="#نحو-فایل-env-env-file-syntax">نحو فایل env {#env-file-syntax}</a><a class="l3" href="#قواعد">قواعد</a><a class="l3" href="#قالب-های-پشتیبانی-نشده">قالب‌های پشتیبانی‌نشده</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>

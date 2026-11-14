@@ -1,0 +1,992 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>نسخه‌ها در CustomResourceDefinitionها | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
+<header class="top"><a href="../../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">tasks / extend-kubernetes / custom-resources</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">نسخه‌ها در CustomResourceDefinitionها</h1><!-- overview -->
+<p dir="rtl">این صفحه توضیح می‌دهد که چگونه اطلاعات نسخه‌بندی را به
+<a href="https://kubernetes.io/docs/reference/kubernetes-api/extend-resources/custom-resource-definition-v1/" target="_blank">CustomResourceDefinitionها</a> اضافه کنید. با این کار می‌توانید سطح پایداری CustomResourceDefinitionهای خود را مشخص کنید یا API خود را به نسخه‌ای جدید ارتقا دهید و میان نمایش‌های مختلف API تبدیل انجام دهید. همچنین در این صفحه توضیح داده می‌شود که چگونه یک آبجکت را از یک نسخه به نسخهٔ دیگر ارتقا دهید.</p>
+<h2 id="پیش-از-شروع" dir="rtl">پیش از شروع</h2>
+<p dir="rtl">باید یک کلاستر کوبرنتیز داشته باشید و ابزار خط فرمان kubectl باید برای ارتباط با کلاستر شما پیکربندی شده باشد. توصیه می‌شود این آموزش را روی کلاستری اجرا کنید که دست‌کم دو نود داشته باشد که نقش میزبان control plane را ندارند. اگر هنوز کلاستری ندارید، می‌توانید با استفاده از
+<a href="https://minikube.sigs.k8s.io/docs/tutorials/multi_node/" target="_blank" rel="noopener">minikube</a>
+یکی بسازید یا از یکی از این محیط‌های آزمایشی کوبرنتیز استفاده کنید:</p>
+<ul>
+<li dir="ltr" class="ltr"><a href="https://labs.iximiuz.com/playgrounds?category=kubernetes&amp;filter=all" target="_blank" rel="noopener">iximiuz Labs</a></li>
+<li dir="ltr" class="ltr"><a href="https://killercoda.com/playgrounds/scenario/kubernetes" target="_blank" rel="noopener">Killercoda</a></li>
+<li dir="ltr" class="ltr"><a href="https://kodekloud.com/public-playgrounds" target="_blank" rel="noopener">KodeKloud</a></li>
+</ul>
+<p dir="rtl">باید درک اولیه‌ای از <a href="../../../concepts/extend-kubernetes/api-extension/custom-resources.html">منابع سفارشی</a> داشته باشید.</p>
+<!-- steps -->
+<h2 id="مرور-کلی" dir="rtl">مرور کلی</h2>
+<p dir="rtl">رابط API مربوط به CustomResourceDefinition یک گردش کار برای معرفی نسخه‌های جدید یک CustomResourceDefinition و ارتقا به آن‌ها فراهم می‌کند.</p>
+<p dir="rtl">هنگام ایجاد یک CustomResourceDefinition، نخستین نسخه با سطح پایداری مناسب و یک شمارهٔ نسخه در فهرست <code dir="ltr">spec.versions</code> آن تنظیم می‌شود. برای مثال، <code dir="ltr">v1beta1</code> نشان می‌دهد که نخستین نسخه هنوز پایدار نیست. همهٔ آبجکت‌های منبع سفارشی در ابتدا با همین نسخه ذخیره می‌شوند.</p>
+<p dir="rtl">پس از ایجاد CustomResourceDefinition، کلاینت‌ها می‌توانند استفاده از API نسخهٔ <code dir="ltr">v1beta1</code> را آغاز کنند.</p>
+<p dir="rtl">ممکن است بعدها لازم شود نسخهٔ جدیدی مانند <code dir="ltr">v1</code> اضافه شود.</p>
+<p dir="rtl">افزودن نسخهٔ جدید:</p>
+<ol>
+<li dir="rtl">یک راهبرد تبدیل (conversion strategy) انتخاب کنید. از آنجا که آبجکت‌های منبع سفارشی باید بتوانند در هر دو نسخه ارائه شوند، گاهی در نسخه‌ای متفاوت با نسخهٔ ذخیره‌شده ارائه خواهند شد. برای اینکه این امر ممکن شود، آبجکت‌های منبع سفارشی گاهی باید میان نسخه‌ای که با آن ذخیره شده‌اند و نسخه‌ای که با آن ارائه می‌شوند تبدیل شوند. اگر تبدیل شامل تغییرات طرح‌واره (schema) باشد و به منطق سفارشی نیاز داشته باشد، باید از یک وب‌هوک تبدیل (conversion webhook) استفاده کرد. اگر طرح‌واره تغییری نکرده باشد، می‌توان از راهبرد تبدیل پیش‌فرض <code dir="ltr">None</code> استفاده کرد؛ در این حالت هنگام ارائهٔ نسخه‌های مختلف، تنها فیلد <code dir="ltr">apiVersion</code> تغییر می‌کند.</li>
+<li dir="rtl">اگر از وب‌هوک‌های تبدیل استفاده می‌کنید، وب‌هوک تبدیل را ایجاد و مستقر کنید. برای جزئیات بیشتر، بخش <a href="#webhook-conversion">تبدیل با وب‌هوک</a> را ببینید.</li>
+<li dir="rtl">آبجکت CustomResourceDefinition را به‌روزرسانی کنید تا نسخهٔ جدید با <code dir="ltr">served:true</code> در فهرست <code dir="ltr">spec.versions</code> قرار گیرد. همچنین فیلد <code dir="ltr">spec.conversion</code> را روی راهبرد تبدیل انتخاب‌شده تنظیم کنید. اگر از وب‌هوک تبدیل استفاده می‌کنید، فیلد <code dir="ltr">spec.conversion.webhookClientConfig</code> را طوری پیکربندی کنید که وب‌هوک فراخوانی شود.</li>
+</ol>
+<p dir="rtl">پس از افزودن نسخهٔ جدید، کلاینت‌ها می‌توانند به‌تدریج به نسخهٔ جدید مهاجرت کنند. کاملاً بی‌خطر است که برخی کلاینت‌ها از نسخهٔ قدیمی و برخی دیگر از نسخهٔ جدید استفاده کنند.</p>
+<p dir="rtl">مهاجرت آبجکت‌های ذخیره‌شده به نسخهٔ جدید:</p>
+<ol>
+<li dir="rtl">بخش <a href="#upgrade-existing-objects-to-a-new-stored-version">ارتقای آبجکت‌های موجود به نسخهٔ ذخیره‌سازی جدید</a> را ببینید.</li>
+</ol>
+<p dir="rtl">کلاینت‌ها پیش از ارتقای آبجکت‌ها به نسخهٔ ذخیره‌سازی جدید، در حین آن و پس از آن، می‌توانند بدون خطر از هر دو نسخهٔ قدیمی و جدید استفاده کنند.</p>
+<p dir="rtl">حذف نسخهٔ قدیمی:</p>
+<ol>
+<li dir="rtl">مطمئن شوید همهٔ کلاینت‌ها به‌طور کامل به نسخهٔ جدید مهاجرت کرده‌اند. برای شناسایی کلاینت‌هایی که هنوز از طریق نسخهٔ قدیمی دسترسی دارند، می‌توانید لاگ‌های kube-apiserver را بررسی کنید.</li>
+<li dir="rtl">مقدار <code dir="ltr">served</code> را برای نسخهٔ قدیمی در فهرست <code dir="ltr">spec.versions</code> روی <code dir="ltr">false</code> تنظیم کنید. اگر کلاینتی به‌طور غیرمنتظره هنوز از نسخهٔ قدیمی استفاده کند، ممکن است هنگام تلاش برای دسترسی به آبجکت‌های منبع سفارشی در نسخهٔ قدیمی، خطا گزارش دهد. در این صورت، دوباره <code dir="ltr">served:true</code> را برای نسخهٔ قدیمی تنظیم کنید، کلاینت‌های باقی‌مانده را به نسخهٔ جدید مهاجرت دهید و این گام را تکرار کنید.</li>
+<li dir="rtl">مطمئن شوید گام <a href="#upgrade-existing-objects-to-a-new-stored-version">ارتقای آبجکت‌های موجود به نسخهٔ ذخیره‌سازی جدید</a> کامل شده است.
+<ol>
+<li dir="rtl">بررسی کنید که در فهرست <code dir="ltr">spec.versions</code> آبجکت CustomResourceDefinition، مقدار <code dir="ltr">storage</code> برای نسخهٔ جدید روی <code dir="ltr">true</code> تنظیم شده باشد.</li>
+<li dir="rtl">بررسی کنید که نسخهٔ قدیمی دیگر در <code dir="ltr">status.storedVersions</code> آبجکت CustomResourceDefinition فهرست نشده باشد.</li>
+</ol>
+</li>
+<li dir="rtl">نسخهٔ قدیمی را از فهرست <code dir="ltr">spec.versions</code> آبجکت CustomResourceDefinition حذف کنید.</li>
+<li dir="rtl">پشتیبانی از تبدیل نسخهٔ قدیمی را از وب‌هوک‌های تبدیل حذف کنید.</li>
+</ol>
+<h2 id="تعیین-چند-نسخه" dir="rtl">تعیین چند نسخه</h2>
+<p dir="rtl">فیلد <code dir="ltr">versions</code> در API مربوط به CustomResourceDefinition را می‌توان برای پشتیبانی از چند نسخه از منابع سفارشی‌ای که توسعه داده‌اید به کار برد. نسخه‌ها می‌توانند طرح‌واره‌های متفاوتی داشته باشند و وب‌هوک‌های تبدیل می‌توانند منابع سفارشی را میان نسخه‌ها تبدیل کنند.
+تبدیل‌های وب‌هوک باید هر جا که کاربرد دارد از <a href="https://github.com/kubernetes/community/blob/main/contributors/devel/sig-architecture/api-conventions.md" target="_blank" rel="noopener">قراردادهای API کوبرنتیز</a> پیروی کنند.
+به‌ویژه، برای مجموعه‌ای از نکات ظریف و پیشنهادهای مفید، <a href="https://github.com/kubernetes/community/blob/main/contributors/devel/sig-architecture/api_changes.md" target="_blank" rel="noopener">مستندات تغییر API</a> را ببینید.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">در <code dir="ltr">apiextensions.k8s.io/v1beta1</code>، به‌جای <code dir="ltr">versions</code> فیلدی به نام <code dir="ltr">version</code> وجود داشت. فیلد <code dir="ltr">version</code> منسوخ (deprecated) و اختیاری است، اما اگر خالی نباشد، باید با نخستین مورد در فیلد <code dir="ltr">versions</code> مطابقت داشته باشد.</p>
+</div>
+<p dir="rtl">این مثال یک CustomResourceDefinition با دو نسخه را نشان می‌دهد. در مثال نخست، فرض بر این است که همهٔ نسخه‌ها طرح‌وارهٔ یکسانی دارند و هیچ تبدیلی میان آن‌ها انجام نمی‌شود. توضیحات درون YAML زمینهٔ بیشتری فراهم می‌کنند.</p>
+<div class="tabs">
+<div class="tab"><div class="tab-name">apiextensions.k8s.io/v1</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  # name must match the spec fields below, and be in the form: &lt;plural&gt;.&lt;group&gt;
+  name: crontabs.example.com
+spec:
+  # group name to use for REST API: /apis/&lt;group&gt;/&lt;version&gt;
+  group: example.com
+  # list of versions supported by this CustomResourceDefinition
+  versions:
+  - name: v1beta1
+    # Each version can be enabled/disabled by Served flag.
+    served: true
+    # One and only one version must be marked as the storage version.
+    storage: true
+    # A schema is required
+    schema:
+      openAPIV3Schema:
+        type: object
+        properties:
+          host:
+            type: string
+          port:
+            type: string
+  - name: v1
+    served: true
+    storage: false
+    schema:
+      openAPIV3Schema:
+        type: object
+        properties:
+          host:
+            type: string
+          port:
+            type: string
+  # The conversion section is introduced in Kubernetes 1.13+ with a default value of
+  # None conversion (strategy sub-field set to None).
+  conversion:
+    # None conversion assumes the same schema for all versions and only sets the apiVersion
+    # field of custom resources to the proper value
+    strategy: None
+  # either Namespaced or Cluster
+  scope: Namespaced
+  names:
+    # plural name to be used in the URL: /apis/&lt;group&gt;/&lt;version&gt;/&lt;plural&gt;
+    plural: crontabs
+    # singular name to be used as an alias on the CLI and for display
+    singular: crontab
+    # kind is normally the CamelCased singular type. Your resource manifests use this.
+    kind: CronTab
+    # shortNames allow shorter string to match your resource on the CLI
+    shortNames:
+    - ct
+</code></pre>
+</div>
+<div class="tab"><div class="tab-name">apiextensions.k8s.io/v1beta1</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr"># Deprecated in v1.16 in favor of apiextensions.k8s.io/v1
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  # name must match the spec fields below, and be in the form: &lt;plural&gt;.&lt;group&gt;
+  name: crontabs.example.com
+spec:
+  # group name to use for REST API: /apis/&lt;group&gt;/&lt;version&gt;
+  group: example.com
+  # list of versions supported by this CustomResourceDefinition
+  versions:
+  - name: v1beta1
+    # Each version can be enabled/disabled by Served flag.
+    served: true
+    # One and only one version must be marked as the storage version.
+    storage: true
+  - name: v1
+    served: true
+    storage: false
+  validation:
+    openAPIV3Schema:
+      type: object
+      properties:
+        host:
+          type: string
+        port:
+          type: string
+  # The conversion section is introduced in Kubernetes 1.13+ with a default value of
+  # None conversion (strategy sub-field set to None).
+  conversion:
+    # None conversion assumes the same schema for all versions and only sets the apiVersion
+    # field of custom resources to the proper value
+    strategy: None
+  # either Namespaced or Cluster
+  scope: Namespaced
+  names:
+    # plural name to be used in the URL: /apis/&lt;group&gt;/&lt;version&gt;/&lt;plural&gt;
+    plural: crontabs
+    # singular name to be used as an alias on the CLI and for display
+    singular: crontab
+    # kind is normally the PascalCased singular type. Your resource manifests use this.
+    kind: CronTab
+    # shortNames allow shorter string to match your resource on the CLI
+    shortNames:
+    - ct
+</code></pre>
+</div>
+</div>
+<p dir="rtl">می‌توانید CustomResourceDefinition را در یک فایل YAML ذخیره کنید و سپس با <code dir="ltr">kubectl apply</code> آن را ایجاد کنید.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f my-versioned-crontab.yaml
+</code></pre>
+<p dir="rtl">پس از ایجاد، سرور API ارائهٔ هر نسخهٔ فعال را در یک endpoint از نوع HTTP REST آغاز می‌کند. در مثال بالا، نسخه‌های API در <code dir="ltr">/apis/example.com/v1beta1</code> و <code dir="ltr">/apis/example.com/v1</code> در دسترس هستند.</p>
+<h3 id="اولویت-نسخه" dir="rtl">اولویت نسخه</h3>
+<p dir="rtl">صرف‌نظر از ترتیب تعریف نسخه‌ها در یک CustomResourceDefinition، ابزار kubectl نسخهٔ دارای بالاترین اولویت را به‌عنوان نسخهٔ پیش‌فرض برای دسترسی به آبجکت‌ها به کار می‌برد. اولویت با تجزیهٔ فیلد <em>name</em> تعیین می‌شود تا شمارهٔ نسخه، سطح پایداری (GA، Beta یا Alpha) و ترتیب درون آن سطح پایداری مشخص شود.</p>
+<p dir="rtl">الگوریتمی که برای مرتب‌سازی نسخه‌ها به کار می‌رود طوری طراحی شده است که نسخه‌ها را به همان شیوه‌ای مرتب کند که پروژهٔ کوبرنتیز نسخه‌های کوبرنتیز را مرتب می‌کند. نسخه‌ها با حرف <code dir="ltr">v</code> شروع می‌شوند و پس از آن یک عدد، یک پسوند اختیاری <code dir="ltr">beta</code> یا <code dir="ltr">alpha</code> و اطلاعات عددی اختیاری دیگری برای نسخه‌بندی می‌آید. به‌طور کلی، رشتهٔ نسخه ممکن است شبیه <code dir="ltr">v2</code> یا <code dir="ltr">v2beta1</code> باشد. نسخه‌ها با الگوریتم زیر مرتب می‌شوند:</p>
+<ul>
+<li dir="rtl">ورودی‌هایی که از الگوهای نسخهٔ کوبرنتیز پیروی می‌کنند، پیش از ورودی‌هایی قرار می‌گیرند که از این الگوها پیروی نمی‌کنند.</li>
+<li dir="rtl">در ورودی‌هایی که از الگوهای نسخهٔ کوبرنتیز پیروی می‌کنند، بخش‌های عددی رشتهٔ نسخه از بزرگ به کوچک مرتب می‌شوند.</li>
+<li dir="rtl">اگر رشته‌های <code dir="ltr">beta</code> یا <code dir="ltr">alpha</code> پس از نخستین بخش عددی بیایند، به همین ترتیب و پس از رشتهٔ معادلی که پسوند <code dir="ltr">beta</code> یا <code dir="ltr">alpha</code> ندارد (و فرض می‌شود نسخهٔ GA است) مرتب می‌شوند.</li>
+<li dir="rtl">اگر عدد دیگری پس از <code dir="ltr">beta</code> یا <code dir="ltr">alpha</code> بیاید، آن اعداد نیز از بزرگ به کوچک مرتب می‌شوند.</li>
+<li dir="rtl">رشته‌هایی که با قالب بالا سازگار نیستند به ترتیب الفبایی مرتب می‌شوند و با بخش‌های عددی آن‌ها رفتار ویژه‌ای نمی‌شود. توجه کنید که در مثال زیر، <code dir="ltr">foo1</code> بالاتر از <code dir="ltr">foo10</code> قرار گرفته است. این رفتار با مرتب‌سازی بخش عددی ورودی‌هایی که از الگوهای نسخهٔ کوبرنتیز پیروی می‌کنند متفاوت است.</li>
+</ul>
+<p dir="rtl">با نگاه به فهرست مرتب‌شدهٔ زیر، این قواعد روشن‌تر می‌شوند:</p>
+<pre dir="ltr"><code class="language-none" dir="ltr">- v10
+- v2
+- v1
+- v11beta2
+- v10beta3
+- v3beta1
+- v12alpha1
+- v11alpha2
+- foo1
+- foo10
+</code></pre>
+<p dir="rtl">در مثال بخش <a href="#specify-multiple-versions">تعیین چند نسخه</a>، ترتیب مرتب‌سازی نسخه‌ها ابتدا <code dir="ltr">v1</code> و سپس <code dir="ltr">v1beta1</code> است. در نتیجه، فرمان kubectl از <code dir="ltr">v1</code> به‌عنوان نسخهٔ پیش‌فرض استفاده می‌کند، مگر اینکه آبجکت ارائه‌شده نسخه را مشخص کرده باشد.</p>
+<h3 id="منسوخ-شدن-نسخه" dir="rtl">منسوخ‌شدن نسخه</h3>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes v1.19 [stable]</span> (پایدار)</div>
+<p dir="rtl">از نسخهٔ v1.19 به بعد، یک CustomResourceDefinition می‌تواند مشخص کند که نسخهٔ خاصی از منبعی که تعریف می‌کند منسوخ شده است.
+هنگامی که درخواست‌های API به نسخهٔ منسوخ آن منبع ارسال شوند، یک پیام هشدار به‌صورت header در پاسخ API بازگردانده می‌شود.
+در صورت تمایل، می‌توان پیام هشدار هر نسخهٔ منسوخ منبع را سفارشی کرد.</p>
+<p dir="rtl">پیام هشدار سفارشی باید گروه API، نسخه و kind منسوخ را مشخص کند و در صورت امکان، گروه API، نسخه و kind جایگزین را نیز نشان دهد.</p>
+<div class="tabs">
+<div class="tab"><div class="tab-name">apiextensions.k8s.io/v1</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: crontabs.example.com
+spec:
+  group: example.com
+  names:
+    plural: crontabs
+    singular: crontab
+    kind: CronTab
+  scope: Namespaced
+  versions:
+  - name: v1alpha1
+    served: true
+    storage: false
+    # This indicates the v1alpha1 version of the custom resource is deprecated.
+    # API requests to this version receive a warning header in the server response.
+    deprecated: true
+    # This overrides the default warning returned to API clients making v1alpha1 API requests.
+    deprecationWarning: "example.com/v1alpha1 CronTab is deprecated; see http://example.com/v1alpha1-v1 for instructions to migrate to example.com/v1 CronTab"
+    
+    schema: ...
+  - name: v1beta1
+    served: true
+    # This indicates the v1beta1 version of the custom resource is deprecated.
+    # API requests to this version receive a warning header in the server response.
+    # A default warning message is returned for this version.
+    deprecated: true
+    schema: ...
+  - name: v1
+    served: true
+    storage: true
+    schema: ...
+</code></pre>
+</div>
+<div class="tab"><div class="tab-name">apiextensions.k8s.io/v1beta1</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr"># Deprecated in v1.16 in favor of apiextensions.k8s.io/v1
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  name: crontabs.example.com
+spec:
+  group: example.com
+  names:
+    plural: crontabs
+    singular: crontab
+    kind: CronTab
+  scope: Namespaced
+  validation: ...
+  versions:
+  - name: v1alpha1
+    served: true
+    storage: false
+    # This indicates the v1alpha1 version of the custom resource is deprecated.
+    # API requests to this version receive a warning header in the server response.
+    deprecated: true
+    # This overrides the default warning returned to API clients making v1alpha1 API requests.
+    deprecationWarning: "example.com/v1alpha1 CronTab is deprecated; see http://example.com/v1alpha1-v1 for instructions to migrate to example.com/v1 CronTab"
+  - name: v1beta1
+    served: true
+    # This indicates the v1beta1 version of the custom resource is deprecated.
+    # API requests to this version receive a warning header in the server response.
+    # A default warning message is returned for this version.
+    deprecated: true
+  - name: v1
+    served: true
+    storage: true
+</code></pre>
+</div>
+</div>
+<h3 id="حذف-نسخه" dir="rtl">حذف نسخه</h3>
+<p dir="rtl">یک نسخهٔ قدیمی‌تر API را نمی‌توان از مانیفست CustomResourceDefinition حذف کرد، مگر اینکه داده‌های ذخیره‌شدهٔ موجود در همهٔ کلاسترهایی که نسخهٔ قدیمی‌تر منبع سفارشی را ارائه می‌کردند به نسخهٔ جدیدتر API مهاجرت داده شده باشند و نسخهٔ قدیمی از <code dir="ltr">status.storedVersions</code> آبجکت CustomResourceDefinition حذف شده باشد.</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: crontabs.example.com
+spec:
+  group: example.com
+  names:
+    plural: crontabs
+    singular: crontab
+    kind: CronTab
+  scope: Namespaced
+  versions:
+  - name: v1beta1
+    # This indicates the v1beta1 version of the custom resource is no longer served.
+    # API requests to this version receive a not found error in the server response.
+    served: false
+    schema: ...
+  - name: v1
+    served: true
+    # The new served version should be set as the storage version
+    storage: true
+    schema: ...
+</code></pre>
+<h2 id="تبدیل-با-وب-هوک" dir="rtl">تبدیل با وب‌هوک</h2>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes v1.16 [stable]</span> (پایدار)</div>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">تبدیل با وب‌هوک از نسخهٔ 1.15 به‌صورت بتا و از کوبرنتیز 1.13 به‌صورت آلفا در دسترس است. قابلیت <code dir="ltr">CustomResourceWebhookConversion</code> باید فعال باشد؛ در بسیاری از کلاسترها این قابلیت برای ویژگی‌های بتا به‌طور خودکار فعال است. برای اطلاعات بیشتر، مستندات <a href="https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/" target="_blank">feature gate</a> را ببینید.</p>
+</div>
+<p dir="rtl">در مثال بالا، تبدیل میان نسخه‌ها از نوع None است که هنگام تبدیل فقط فیلد <code dir="ltr">apiVersion</code> را تنظیم می‌کند و بقیهٔ آبجکت را تغییر نمی‌دهد. سرور API از تبدیل‌های وب‌هوک نیز پشتیبانی می‌کند که در صورت نیاز به تبدیل، یک سرویس خارجی را فراخوانی می‌کنند. برای مثال، در موارد زیر:</p>
+<ul>
+<li dir="rtl">منبع سفارشی در نسخه‌ای متفاوت با نسخهٔ ذخیره‌شده درخواست شود.</li>
+<li dir="rtl">یک Watch در یک نسخه ایجاد شده باشد، اما آبجکت تغییریافته در نسخه‌ای دیگر ذخیره شده باشد.</li>
+<li dir="rtl">درخواست PUT منبع سفارشی در نسخه‌ای متفاوت با نسخهٔ ذخیره‌سازی باشد.</li>
+</ul>
+<p dir="rtl">برای پوشش همهٔ این موارد و بهینه‌سازی تبدیل در سرور API، درخواست‌های تبدیل ممکن است شامل چند آبجکت باشند تا تعداد فراخوانی‌های خارجی به حداقل برسد. وب‌هوک باید این تبدیل‌ها را به‌طور مستقل انجام دهد.</p>
+<h3 id="نوشتن-سرور-وب-هوک-تبدیل" dir="rtl">نوشتن سرور وب‌هوک تبدیل</h3>
+<p dir="rtl">لطفاً به پیاده‌سازی <a href="https://github.com/kubernetes/kubernetes/tree/v1.25.3/test/images/agnhost/crd-conversion-webhook/main.go" target="_blank" rel="noopener">سرور وب‌هوک تبدیل منبع
+سفارشی</a>
+مراجعه کنید که در یک آزمون e2e کوبرنتیز اعتبارسنجی می‌شود. این وب‌هوک درخواست‌های <code dir="ltr">ConversionReview</code> ارسال‌شده از سوی سرورهای API را پردازش می‌کند و نتایج تبدیل را در قالب <code dir="ltr">ConversionResponse</code> بازمی‌گرداند. توجه کنید که درخواست شامل فهرستی از منابع سفارشی است که باید بدون تغییر ترتیب آبجکت‌ها، به‌طور مستقل تبدیل شوند.
+سرور نمونه به گونه‌ای سازمان‌دهی شده است که بتوان آن را برای تبدیل‌های دیگر نیز دوباره به کار برد.
+بیشتر کدهای مشترک در
+<a href="https://github.com/kubernetes/kubernetes/tree/v1.25.3/test/images/agnhost/crd-conversion-webhook/converter/framework.go" target="_blank" rel="noopener">فایل framework</a>
+قرار دارند و تنها
+<a href="https://github.com/kubernetes/kubernetes/tree/v1.25.3/test/images/agnhost/crd-conversion-webhook/converter/example_converter.go#L29-L80" target="_blank" rel="noopener">یک تابع</a>
+باقی می‌ماند که باید برای تبدیل‌های مختلف پیاده‌سازی شود.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">سرور وب‌هوک تبدیل نمونه، فیلد <code dir="ltr">ClientAuth</code> را
+<a href="https://github.com/kubernetes/kubernetes/tree/v1.25.3/test/images/agnhost/crd-conversion-webhook/config.go#L47-L48" target="_blank" rel="noopener">خالی</a>
+می‌گذارد که مقدار پیش‌فرض آن <code dir="ltr">NoClientCert</code> است. این یعنی سرور وب‌هوک هویت کلاینت‌ها را، که قاعدتاً سرورهای API هستند، احراز نمی‌کند. اگر به TLS دوطرفه یا روش‌های دیگری برای احراز هویت کلاینت‌ها نیاز دارید، بخش <a href="../../../reference/access-authn-authz/extensible-admission-controllers.html#authenticate-apiservers">احراز هویت سرورهای API</a> را ببینید.</p>
+</div>
+<h4 id="تغییرات-مجاز" dir="rtl">تغییرات مجاز</h4>
+<p dir="rtl">وب‌هوک تبدیل نباید چیزی درون <code dir="ltr">metadata</code> آبجکت تبدیل‌شده را به‌جز <code dir="ltr">labels</code> و <code dir="ltr">annotations</code> تغییر دهد.
+تلاش برای تغییر <code dir="ltr">name</code>، <code dir="ltr">UID</code> و <code dir="ltr">namespace</code> رد می‌شود و درخواستی که موجب تبدیل شده است شکست می‌خورد. همهٔ تغییرات دیگر نادیده گرفته می‌شوند.</p>
+<h3 id="استقرار-سرویس-وب-هوک-تبدیل" dir="rtl">استقرار سرویس وب‌هوک تبدیل</h3>
+<p dir="rtl">مستندات استقرار وب‌هوک تبدیل (conversion webhook) همانند مستندات
+<a href="../../../reference/access-authn-authz/extensible-admission-controllers.html#deploy-the-admission-webhook-service">سرویس نمونهٔ وب‌هوک پذیرش</a> است.
+در بخش‌های بعدی فرض بر این است که سرور وب‌هوک تبدیل در سرویسی به نام <code dir="ltr">example-conversion-webhook-server</code> در فضای نام (namespace) <code dir="ltr">default</code> مستقر شده است و ترافیک را روی مسیر <code dir="ltr">/crdconvert</code> پاسخ می‌دهد.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">وقتی سرور وب‌هوک به‌صورت یک سرویس در کلاستر کوبرنتیز مستقر می‌شود، باید از طریق یک سرویس روی پورت 443 در دسترس قرار گیرد. خود سرور می‌تواند از هر پورت دلخواهی استفاده کند، اما آبجکت Service باید آن را به پورت 443 نگاشت کند.
+اگر برای سرویس از پورت دیگری استفاده شود، ممکن است ارتباط میان سرور API و سرویس وب‌هوک با شکست مواجه شود.</p>
+</div>
+<h3 id="پیکربندی-customresourcedefinition-برای-استفاده-از-وب-هوک-های-تبدیل" dir="rtl">پیکربندی CustomResourceDefinition برای استفاده از وب‌هوک‌های تبدیل</h3>
+<p dir="rtl">می‌توان مثال تبدیل <code dir="ltr">None</code> را با تغییر بخش <code dir="ltr">conversion</code> در <code dir="ltr">spec</code> طوری گسترش داد که از وب‌هوک تبدیل استفاده کند:</p>
+<div class="tabs">
+<div class="tab"><div class="tab-name">apiextensions.k8s.io/v1</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  # name must match the spec fields below, and be in the form: &lt;plural&gt;.&lt;group&gt;
+  name: crontabs.example.com
+spec:
+  # group name to use for REST API: /apis/&lt;group&gt;/&lt;version&gt;
+  group: example.com
+  # list of versions supported by this CustomResourceDefinition
+  versions:
+  - name: v1beta1
+    # Each version can be enabled/disabled by Served flag.
+    served: true
+    # One and only one version must be marked as the storage version.
+    storage: true
+    # Each version can define its own schema when there is no top-level
+    # schema is defined.
+    schema:
+      openAPIV3Schema:
+        type: object
+        properties:
+          hostPort:
+            type: string
+  - name: v1
+    served: true
+    storage: false
+    schema:
+      openAPIV3Schema:
+        type: object
+        properties:
+          host:
+            type: string
+          port:
+            type: string
+  conversion:
+    # the Webhook strategy instructs the API server to call an external webhook for any conversion between custom resources.
+    strategy: Webhook
+    # webhook is required when strategy is `Webhook` and it configures the webhook endpoint to be called by API server.
+    webhook:
+      # conversionReviewVersions indicates what ConversionReview versions are understood/preferred by the webhook.
+      # The first version in the list understood by the API server is sent to the webhook.
+      # The webhook must respond with a ConversionReview object in the same version it received.
+      conversionReviewVersions: ["v1","v1beta1"]
+      clientConfig:
+        service:
+          namespace: default
+          name: example-conversion-webhook-server
+          path: /crdconvert
+        caBundle: "Ci0tLS0tQk...&lt;base64-encoded PEM bundle&gt;...tLS0K"
+  # either Namespaced or Cluster
+  scope: Namespaced
+  names:
+    # plural name to be used in the URL: /apis/&lt;group&gt;/&lt;version&gt;/&lt;plural&gt;
+    plural: crontabs
+    # singular name to be used as an alias on the CLI and for display
+    singular: crontab
+    # kind is normally the CamelCased singular type. Your resource manifests use this.
+    kind: CronTab
+    # shortNames allow shorter string to match your resource on the CLI
+    shortNames:
+    - ct
+</code></pre>
+</div>
+<div class="tab"><div class="tab-name">apiextensions.k8s.io/v1beta1</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr"># Deprecated in v1.16 in favor of apiextensions.k8s.io/v1
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  # name must match the spec fields below, and be in the form: &lt;plural&gt;.&lt;group&gt;
+  name: crontabs.example.com
+spec:
+  # group name to use for REST API: /apis/&lt;group&gt;/&lt;version&gt;
+  group: example.com
+  # prunes object fields that are not specified in OpenAPI schemas below.
+  preserveUnknownFields: false
+  # list of versions supported by this CustomResourceDefinition
+  versions:
+  - name: v1beta1
+    # Each version can be enabled/disabled by Served flag.
+    served: true
+    # One and only one version must be marked as the storage version.
+    storage: true
+    # Each version can define its own schema when there is no top-level
+    # schema is defined.
+    schema:
+      openAPIV3Schema:
+        type: object
+        properties:
+          hostPort:
+            type: string
+  - name: v1
+    served: true
+    storage: false
+    schema:
+      openAPIV3Schema:
+        type: object
+        properties:
+          host:
+            type: string
+          port:
+            type: string
+  conversion:
+    # the Webhook strategy instructs the API server to call an external webhook for any conversion between custom resources.
+    strategy: Webhook
+    # webhookClientConfig is required when strategy is `Webhook` and it configures the webhook endpoint to be called by API server.
+    webhookClientConfig:
+      service:
+        namespace: default
+        name: example-conversion-webhook-server
+        path: /crdconvert
+      caBundle: "Ci0tLS0tQk...&lt;base64-encoded PEM bundle&gt;...tLS0K"
+  # either Namespaced or Cluster
+  scope: Namespaced
+  names:
+    # plural name to be used in the URL: /apis/&lt;group&gt;/&lt;version&gt;/&lt;plural&gt;
+    plural: crontabs
+    # singular name to be used as an alias on the CLI and for display
+    singular: crontab
+    # kind is normally the CamelCased singular type. Your resource manifests use this.
+    kind: CronTab
+    # shortNames allow shorter string to match your resource on the CLI
+    shortNames:
+    - ct
+</code></pre>
+</div>
+</div>
+<p dir="rtl">می‌توانید این CustomResourceDefinition را در یک فایل YAML ذخیره کنید و سپس با
+<code dir="ltr">kubectl apply</code> آن را اعمال کنید.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f my-versioned-crontab-with-conversion.yaml
+</code></pre>
+<p dir="rtl">پیش از اعمال تغییرات جدید، مطمئن شوید که سرویس تبدیل راه‌اندازی شده و در حال اجراست.</p>
+<h3 id="برقراری-ارتباط-با-وب-هوک" dir="rtl">برقراری ارتباط با وب‌هوک</h3>
+<p dir="rtl">هنگامی که سرور API تشخیص داد که یک درخواست باید به وب‌هوک تبدیل فرستاده شود،
+باید بداند چگونه با وب‌هوک ارتباط برقرار کند. این موضوع در بخش <code dir="ltr">webhookClientConfig</code>
+از پیکربندی وب‌هوک مشخص می‌شود.</p>
+<p dir="rtl">وب‌هوک‌های تبدیل را می‌توان از طریق یک URL یا یک ارجاع به سرویس فراخوانی کرد.
+همچنین می‌توان به‌صورت اختیاری یک بستهٔ CA سفارشی برای اعتبارسنجی اتصال TLS در نظر گرفت.</p>
+<h3 id="url" dir="ltr" class="ltr">URL</h3>
+<p dir="rtl">فیلد <code dir="ltr">url</code> مکان وب‌هوک را در قالب استاندارد URL
+(<code dir="ltr">scheme://host:port/path</code>) مشخص می‌کند.</p>
+<p dir="rtl">مقدار <code dir="ltr">host</code> نباید به سرویسی اشاره کند که درون کلاستر اجرا می‌شود؛ در این حالت
+به‌جای آن با تعیین فیلد <code dir="ltr">service</code> از ارجاع به سرویس استفاده کنید.
+در برخی از سرورهای API ممکن است نام میزبان از طریق DNS خارجی تفکیک شود
+(یعنی <code dir="ltr">kube-apiserver</code> نمی‌تواند DNS درون کلاستر را تفکیک کند، زیرا این کار
+نقض لایه‌بندی است). مقدار <code dir="ltr">host</code> می‌تواند یک نشانی IP نیز باشد.</p>
+<p dir="rtl">توجه کنید که استفاده از <code dir="ltr">localhost</code> یا <code dir="ltr">127.0.0.1</code> به‌عنوان <code dir="ltr">host</code> پرخطر است،
+مگر آنکه با دقت زیاد این وب‌هوک را روی همهٔ میزبان‌هایی اجرا کنید که سرور APIای
+روی آن‌ها اجرا می‌شود که ممکن است لازم باشد این وب‌هوک را فراخوانی کند. چنین نصب‌هایی
+احتمالاً قابل‌حمل نیستند و نمی‌توان آن‌ها را به‌سادگی در یک کلاستر جدید اجرا کرد.</p>
+<p dir="rtl">طرح (scheme) باید "https" باشد؛ یعنی URL باید با "https://" آغاز شود.</p>
+<p dir="rtl">استفاده از نام کاربری یا احراز هویت پایه (برای مثال "user:password@") مجاز نیست.
+بخش‌های قطعه (‎"#..."‎) و پارامترهای پرس‌وجو (‎"?..."‎) نیز مجاز نیستند.</p>
+<p dir="rtl">در ادامه نمونه‌ای از یک وب‌هوک تبدیل آمده است که برای فراخوانی یک URL پیکربندی شده است
+(و انتظار دارد گواهی TLS با استفاده از ریشه‌های اعتماد سیستم اعتبارسنجی شود؛ به همین دلیل caBundle را مشخص نمی‌کند):</p>
+<div class="tabs">
+<div class="tab"><div class="tab-name">apiextensions.k8s.io/v1</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+...
+spec:
+  ...
+  conversion:
+    strategy: Webhook
+    webhook:
+      clientConfig:
+        url: "https://my-webhook.example.com:9443/my-webhook-path"
+...
+</code></pre>
+</div>
+<div class="tab"><div class="tab-name">apiextensions.k8s.io/v1beta1</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr"># Deprecated in v1.16 in favor of apiextensions.k8s.io/v1
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+...
+spec:
+  ...
+  conversion:
+    strategy: Webhook
+    webhookClientConfig:
+      url: "https://my-webhook.example.com:9443/my-webhook-path"
+...
+</code></pre>
+</div>
+</div>
+<h3 id="ارجاع-به-سرویس" dir="rtl">ارجاع به سرویس</h3>
+<p dir="rtl">بخش <code dir="ltr">service</code> درون <code dir="ltr">webhookClientConfig</code> ارجاعی به سرویسِ وب‌هوک تبدیل است.
+اگر وب‌هوک درون کلاستر اجرا می‌شود، باید به‌جای <code dir="ltr">url</code> از <code dir="ltr">service</code> استفاده کنید.
+تعیین فضای نام و نام سرویس الزامی است. پورت اختیاری است و مقدار پیش‌فرض آن 443 است.
+مسیر نیز اختیاری است و مقدار پیش‌فرض آن "/" است.</p>
+<p dir="rtl">در ادامه نمونه‌ای از وب‌هوکی آمده است که برای فراخوانی یک سرویس روی پورت "1234"
+در زیرمسیر "/my-path" پیکربندی شده است و اتصال TLS را با استفاده از یک بستهٔ CA سفارشی
+در برابر ServerName‏ <code dir="ltr">my-service-name.my-service-namespace.svc</code> اعتبارسنجی می‌کند.</p>
+<div class="tabs">
+<div class="tab"><div class="tab-name">apiextensions.k8s.io/v1</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+...
+spec:
+  ...
+  conversion:
+    strategy: Webhook
+    webhook:
+      clientConfig:
+        service:
+          namespace: my-service-namespace
+          name: my-service-name
+          path: /my-path
+          port: 1234
+        caBundle: "Ci0tLS0tQk...&lt;base64-encoded PEM bundle&gt;...tLS0K"
+...
+</code></pre>
+</div>
+<div class="tab"><div class="tab-name">apiextensions.k8s.io/v1beta1</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr"># Deprecated in v1.16 in favor of apiextensions.k8s.io/v1
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+...
+spec:
+  ...
+  conversion:
+    strategy: Webhook
+    webhookClientConfig:
+      service:
+        namespace: my-service-namespace
+        name: my-service-name
+        path: /my-path
+        port: 1234
+      caBundle: "Ci0tLS0tQk...&lt;base64-encoded PEM bundle&gt;...tLS0K"
+...
+</code></pre>
+</div>
+</div>
+<h2 id="درخواست-و-پاسخ-وب-هوک" dir="rtl">درخواست و پاسخ وب‌هوک</h2>
+<h3 id="درخواست" dir="rtl">درخواست</h3>
+<p dir="rtl">به وب‌هوک‌ها یک درخواست POST با <code dir="ltr">Content-Type: application/json</code> فرستاده می‌شود
+که بدنهٔ آن یک آبجکت API از نوع <code dir="ltr">ConversionReview</code> در گروه API‏ <code dir="ltr">apiextensions.k8s.io</code>
+است که به JSON سریال‌سازی شده است.</p>
+<p dir="rtl">وب‌هوک‌ها می‌توانند با فیلد <code dir="ltr">conversionReviewVersions</code> در CustomResourceDefinition خود
+مشخص کنند که کدام نسخه‌های آبجکت‌های <code dir="ltr">ConversionReview</code> را می‌پذیرند:</p>
+<div class="tabs">
+<div class="tab"><div class="tab-name">apiextensions.k8s.io/v1</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+...
+spec:
+  ...
+  conversion:
+    strategy: Webhook
+    webhook:
+      conversionReviewVersions: ["v1", "v1beta1"]
+      ...
+</code></pre>
+<p dir="rtl">فیلد <code dir="ltr">conversionReviewVersions</code> هنگام ایجاد تعریف‌های منبع سفارشی
+<code dir="ltr">apiextensions.k8s.io/v1</code> الزامی است.
+وب‌هوک‌ها باید دست‌کم از یک نسخهٔ <code dir="ltr">ConversionReview</code> پشتیبانی کنند
+که سرور API فعلی و سرور API نسخهٔ قبلی آن را می‌شناسند.</p>
+</div>
+<div class="tab"><div class="tab-name">apiextensions.k8s.io/v1beta1</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr"># Deprecated in v1.16 in favor of apiextensions.k8s.io/v1
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+...
+spec:
+  ...
+  conversion:
+    strategy: Webhook
+    conversionReviewVersions: ["v1", "v1beta1"]
+    ...
+</code></pre>
+<p dir="rtl">اگر هیچ مقداری برای <code dir="ltr">conversionReviewVersions</code> مشخص نشود، مقدار پیش‌فرض هنگام ایجاد
+تعریف‌های منبع سفارشی <code dir="ltr">apiextensions.k8s.io/v1beta1</code> برابر <code dir="ltr">v1beta1</code> است.</p>
+</div>
+</div>
+<p dir="rtl">سرورهای API نخستین نسخهٔ <code dir="ltr">ConversionReview</code> در فهرست <code dir="ltr">conversionReviewVersions</code> را که پشتیبانی می‌کنند، ارسال می‌کنند.
+اگر سرور API از هیچ‌یک از نسخه‌های این فهرست پشتیبانی نکند، اجازهٔ ایجاد تعریف منبع سفارشی داده نمی‌شود.
+اگر سرور API با پیکربندی وب‌هوک تبدیلی روبه‌رو شود که پیش‌تر ایجاد شده و از هیچ‌یک از نسخه‌های <code dir="ltr">ConversionReview</code>
+که سرور API می‌تواند ارسال کند پشتیبانی نمی‌کند، تلاش‌ها برای فراخوانی وب‌هوک با شکست مواجه می‌شوند.</p>
+<p dir="rtl">این مثال داده‌های موجود در یک آبجکت <code dir="ltr">ConversionReview</code> را برای درخواستی نشان می‌دهد
+که آبجکت‌های <code dir="ltr">CronTab</code> را به <code dir="ltr">example.com/v1</code> تبدیل می‌کند:</p>
+<div class="tabs">
+<div class="tab"><div class="tab-name">apiextensions.k8s.io/v1</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">{
+  "apiVersion": "apiextensions.k8s.io/v1",
+  "kind": "ConversionReview",
+  "request": {
+    # Random uid uniquely identifying this conversion call
+    "uid": "705ab4f5-6393-11e8-b7cc-42010a800002",
+    
+    # The API group and version the objects should be converted to
+    "desiredAPIVersion": "example.com/v1",
+    
+    # The list of objects to convert.
+    # May contain one or more objects, in one or more versions.
+    "objects": [
+      {
+        "kind": "CronTab",
+        "apiVersion": "example.com/v1beta1",
+        "metadata": {
+          "creationTimestamp": "2019-09-04T14:03:02Z",
+          "name": "local-crontab",
+          "namespace": "default",
+          "resourceVersion": "143",
+          "uid": "3415a7fc-162b-4300-b5da-fd6083580d66"
+        },
+        "hostPort": "localhost:1234"
+      },
+      {
+        "kind": "CronTab",
+        "apiVersion": "example.com/v1beta1",
+        "metadata": {
+          "creationTimestamp": "2019-09-03T13:02:01Z",
+          "name": "remote-crontab",
+          "resourceVersion": "12893",
+          "uid": "359a83ec-b575-460d-b553-d859cedde8a0"
+        },
+        "hostPort": "example.com:2345"
+      }
+    ]
+  }
+}
+</code></pre>
+</div>
+<div class="tab"><div class="tab-name">apiextensions.k8s.io/v1beta1</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">{
+  # Deprecated in v1.16 in favor of apiextensions.k8s.io/v1
+  "apiVersion": "apiextensions.k8s.io/v1beta1",
+  "kind": "ConversionReview",
+  "request": {
+    # Random uid uniquely identifying this conversion call
+    "uid": "705ab4f5-6393-11e8-b7cc-42010a800002",
+    
+    # The API group and version the objects should be converted to
+    "desiredAPIVersion": "example.com/v1",
+    
+    # The list of objects to convert.
+    # May contain one or more objects, in one or more versions.
+    "objects": [
+      {
+        "kind": "CronTab",
+        "apiVersion": "example.com/v1beta1",
+        "metadata": {
+          "creationTimestamp": "2019-09-04T14:03:02Z",
+          "name": "local-crontab",
+          "namespace": "default",
+          "resourceVersion": "143",
+          "uid": "3415a7fc-162b-4300-b5da-fd6083580d66"
+        },
+        "hostPort": "localhost:1234"
+      },
+      {
+        "kind": "CronTab",
+        "apiVersion": "example.com/v1beta1",
+        "metadata": {
+          "creationTimestamp": "2019-09-03T13:02:01Z",
+          "name": "remote-crontab",
+          "resourceVersion": "12893",
+          "uid": "359a83ec-b575-460d-b553-d859cedde8a0"
+        },
+        "hostPort": "example.com:2345"
+      }
+    ]
+  }
+}
+</code></pre>
+</div>
+</div>
+<h3 id="پاسخ" dir="rtl">پاسخ</h3>
+<p dir="rtl">وب‌هوک‌ها با کد وضعیت HTTP‏ 200، سرآیند <code dir="ltr">Content-Type: application/json</code>
+و بدنه‌ای پاسخ می‌دهند که شامل یک آبجکت <code dir="ltr">ConversionReview</code> (در همان نسخه‌ای که برایشان ارسال شده)
+با بخش <code dir="ltr">response</code> پرشده است و به JSON سریال‌سازی شده است.</p>
+<p dir="rtl">اگر تبدیل موفقیت‌آمیز باشد، وب‌هوک باید بخش <code dir="ltr">response</code> را با فیلدهای زیر برگرداند:</p>
+<ul>
+<li dir="rtl">فیلد <code dir="ltr">uid</code> که از <code dir="ltr">request.uid</code> ارسال‌شده به وب‌هوک کپی می‌شود</li>
+<li dir="rtl">فیلد <code dir="ltr">result</code> با مقدار <code dir="ltr">{"status":"Success"}</code></li>
+<li dir="rtl">فیلد <code dir="ltr">convertedObjects</code> که شامل همهٔ آبجکت‌های <code dir="ltr">request.objects</code> است که به <code dir="ltr">request.desiredAPIVersion</code> تبدیل شده‌اند</li>
+</ul>
+<p dir="rtl">نمونه‌ای از یک پاسخ موفق حداقلی از وب‌هوک:</p>
+<div class="tabs">
+<div class="tab"><div class="tab-name">apiextensions.k8s.io/v1</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">{
+  "apiVersion": "apiextensions.k8s.io/v1",
+  "kind": "ConversionReview",
+  "response": {
+    # must match &lt;request.uid&gt;
+    "uid": "705ab4f5-6393-11e8-b7cc-42010a800002",
+    "result": {
+      "status": "Success"
+    },
+    # Objects must match the order of request.objects, and have apiVersion set to &lt;request.desiredAPIVersion&gt;.
+    # kind, metadata.uid, metadata.name, and metadata.namespace fields must not be changed by the webhook.
+    # metadata.labels and metadata.annotations fields may be changed by the webhook.
+    # All other changes to metadata fields by the webhook are ignored.
+    "convertedObjects": [
+      {
+        "kind": "CronTab",
+        "apiVersion": "example.com/v1",
+        "metadata": {
+          "creationTimestamp": "2019-09-04T14:03:02Z",
+          "name": "local-crontab",
+          "namespace": "default",
+          "resourceVersion": "143",
+          "uid": "3415a7fc-162b-4300-b5da-fd6083580d66"
+        },
+        "host": "localhost",
+        "port": "1234"
+      },
+      {
+        "kind": "CronTab",
+        "apiVersion": "example.com/v1",
+        "metadata": {
+          "creationTimestamp": "2019-09-03T13:02:01Z",
+          "name": "remote-crontab",
+          "resourceVersion": "12893",
+          "uid": "359a83ec-b575-460d-b553-d859cedde8a0"
+        },
+        "host": "example.com",
+        "port": "2345"
+      }
+    ]
+  }
+}
+</code></pre>
+</div>
+<div class="tab"><div class="tab-name">apiextensions.k8s.io/v1beta1</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">{
+  # Deprecated in v1.16 in favor of apiextensions.k8s.io/v1
+  "apiVersion": "apiextensions.k8s.io/v1beta1",
+  "kind": "ConversionReview",
+  "response": {
+    # must match &lt;request.uid&gt;
+    "uid": "705ab4f5-6393-11e8-b7cc-42010a800002",
+    "result": {
+      "status": "Failed"
+    },
+    # Objects must match the order of request.objects, and have apiVersion set to &lt;request.desiredAPIVersion&gt;.
+    # kind, metadata.uid, metadata.name, and metadata.namespace fields must not be changed by the webhook.
+    # metadata.labels and metadata.annotations fields may be changed by the webhook.
+    # All other changes to metadata fields by the webhook are ignored.
+    "convertedObjects": [
+      {
+        "kind": "CronTab",
+        "apiVersion": "example.com/v1",
+        "metadata": {
+          "creationTimestamp": "2019-09-04T14:03:02Z",
+          "name": "local-crontab",
+          "namespace": "default",
+          "resourceVersion": "143",
+          "uid": "3415a7fc-162b-4300-b5da-fd6083580d66"
+        },
+        "host": "localhost",
+        "port": "1234"
+      },
+      {
+        "kind": "CronTab",
+        "apiVersion": "example.com/v1",
+        "metadata": {
+          "creationTimestamp": "2019-09-03T13:02:01Z",
+          "name": "remote-crontab",
+          "resourceVersion": "12893",
+          "uid": "359a83ec-b575-460d-b553-d859cedde8a0"
+        },
+        "host": "example.com",
+        "port": "2345"
+      }
+    ]
+  }
+}
+</code></pre>
+</div>
+</div>
+<p dir="rtl">اگر تبدیل با شکست مواجه شود، وب‌هوک باید بخش <code dir="ltr">response</code> را با فیلدهای زیر برگرداند:</p>
+<ul>
+<li dir="rtl">فیلد <code dir="ltr">uid</code> که از <code dir="ltr">request.uid</code> ارسال‌شده به وب‌هوک کپی می‌شود</li>
+<li dir="rtl">فیلد <code dir="ltr">result</code> با مقدار <code dir="ltr">{"status":"Failed"}</code></li>
+</ul>
+<div class="callout warning"><div class="callout-title">هشدار:</div>
+<p dir="rtl">شکست در تبدیل می‌تواند دسترسی خواندن و نوشتن به منابع سفارشی، از جمله امکان به‌روزرسانی
+یا حذف این منابع، را مختل کند. تا جای ممکن باید از شکست در تبدیل جلوگیری کرد و نباید
+از آن برای اعمال محدودیت‌های اعتبارسنجی استفاده کرد (به‌جای آن از طرح‌واره‌های اعتبارسنجی
+یا وب‌هوک پذیرش استفاده کنید).</p>
+</div>
+<p dir="rtl">نمونه‌ای از پاسخ وب‌هوک که نشان می‌دهد درخواست تبدیل با شکست مواجه شده است، همراه با یک پیام اختیاری:</p>
+<div class="tabs">
+<div class="tab"><div class="tab-name">apiextensions.k8s.io/v1</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">{
+  "apiVersion": "apiextensions.k8s.io/v1",
+  "kind": "ConversionReview",
+  "response": {
+    "uid": "&lt;value from request.uid&gt;",
+    "result": {
+      "status": "Failed",
+      "message": "hostPort could not be parsed into a separate host and port"
+    }
+  }
+}
+</code></pre>
+</div>
+<div class="tab"><div class="tab-name">apiextensions.k8s.io/v1beta1</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">{
+  # Deprecated in v1.16 in favor of apiextensions.k8s.io/v1
+  "apiVersion": "apiextensions.k8s.io/v1beta1",
+  "kind": "ConversionReview",
+  "response": {
+    "uid": "&lt;value from request.uid&gt;",
+    "result": {
+      "status": "Failed",
+      "message": "hostPort could not be parsed into a separate host and port"
+    }
+  }
+}
+</code></pre>
+</div>
+</div>
+<h2 id="نوشتن،-خواندن-و-به-روزرسانی-آبجکت-های-customresourcedefinition-نسخه-بندی-شده" dir="rtl">نوشتن، خواندن و به‌روزرسانی آبجکت‌های CustomResourceDefinition نسخه‌بندی‌شده</h2>
+<p dir="rtl">هنگام نوشتن یک آبجکت، آن آبجکت در نسخه‌ای ذخیره می‌شود که در لحظهٔ نوشتن به‌عنوان نسخهٔ ذخیره‌سازی (storage version) تعیین شده است. اگر نسخهٔ ذخیره‌سازی تغییر کند، آبجکت‌های موجود هرگز به‌طور خودکار تبدیل نمی‌شوند. با این حال، آبجکت‌هایی که تازه ایجاد یا به‌روزرسانی می‌شوند، در نسخهٔ ذخیره‌سازی جدید نوشته می‌شوند. ممکن است آبجکتی در نسخه‌ای نوشته شده باشد که دیگر ارائه نمی‌شود.</p>
+<p dir="rtl">هنگام خواندن یک آبجکت، نسخه را به‌عنوان بخشی از مسیر مشخص می‌کنید. می‌توانید آبجکت را در هر نسخه‌ای که در حال حاضر ارائه می‌شود درخواست کنید. اگر نسخه‌ای متفاوت با نسخهٔ ذخیره‌شدهٔ آبجکت مشخص کنید، کوبرنتیز آبجکت را در همان نسخهٔ درخواستی به شما برمی‌گرداند، اما آبجکت ذخیره‌شده روی دیسک تغییری نمی‌کند.</p>
+<p dir="rtl">اینکه هنگام پاسخ به درخواست خواندن چه اتفاقی برای آبجکت بازگردانده‌شده می‌افتد، به مقداری بستگی دارد که در <code dir="ltr">spec.conversion</code> مربوط به CRD مشخص شده است:</p>
+<ul>
+<li dir="rtl">اگر مقدار پیش‌فرض <code dir="ltr">None</code> برای <code dir="ltr">strategy</code> مشخص شده باشد، تنها تغییرات اعمال‌شده روی آبجکت، تغییر رشتهٔ <code dir="ltr">apiVersion</code> و احتمالاً <a href="custom-resource-definitions.html#field-pruning">هرس فیلدهای ناشناخته</a> (بسته به پیکربندی) است. توجه کنید که اگر شِماهای نسخهٔ ذخیره‌سازی و نسخهٔ درخواستی با هم متفاوت باشند، بعید است این روش نتیجهٔ خوبی داشته باشد. به‌ویژه، اگر داده‌های یکسان در نسخه‌های مختلف در فیلدهای متفاوتی نمایش داده می‌شوند، نباید از این راهبرد استفاده کنید.</li>
+<li dir="rtl">اگر <a href="#webhook-conversion">تبدیل از طریق وب‌هوک</a> مشخص شده باشد، این سازوکار فرایند تبدیل را کنترل می‌کند.</li>
+</ul>
+<p dir="rtl">اگر آبجکت موجودی را به‌روزرسانی کنید، آن آبجکت در نسخه‌ای که در حال حاضر نسخهٔ ذخیره‌سازی است بازنویسی می‌شود. این تنها راهی است که آبجکت‌ها از یک نسخه به نسخهٔ دیگر تغییر می‌کنند.</p>
+<p dir="rtl">برای روشن‌تر شدن موضوع، دنبالهٔ فرضی رویدادهای زیر را در نظر بگیرید:</p>
+<ol>
+<li dir="rtl">نسخهٔ ذخیره‌سازی <code dir="ltr">v1beta1</code> است. آبجکتی ایجاد می‌کنید. این آبجکت در نسخهٔ <code dir="ltr">v1beta1</code> ذخیره می‌شود.</li>
+<li dir="rtl">نسخهٔ <code dir="ltr">v1</code> را به CustomResourceDefinition خود اضافه می‌کنید و آن را به‌عنوان نسخهٔ ذخیره‌سازی تعیین می‌کنید. در اینجا شِماهای <code dir="ltr">v1</code> و <code dir="ltr">v1beta1</code> یکسان هستند؛ این وضعیت معمولاً هنگام ارتقای یک API به سطح پایدار در اکوسیستم کوبرنتیز رخ می‌دهد.</li>
+<li dir="rtl">آبجکت خود را در نسخهٔ <code dir="ltr">v1beta1</code> می‌خوانید و سپس دوباره آن را در نسخهٔ <code dir="ltr">v1</code> می‌خوانید. هر دو آبجکت بازگردانده‌شده به‌جز فیلد apiVersion کاملاً یکسان هستند.</li>
+<li dir="rtl">آبجکت جدیدی ایجاد می‌کنید. این آبجکت در نسخهٔ <code dir="ltr">v1</code> ذخیره می‌شود. اکنون دو آبجکت دارید که یکی در نسخهٔ <code dir="ltr">v1beta1</code> و دیگری در نسخهٔ <code dir="ltr">v1</code> است.</li>
+<li dir="rtl">آبجکت اول را به‌روزرسانی می‌کنید. اکنون این آبجکت در نسخهٔ <code dir="ltr">v1</code> ذخیره می‌شود، زیرا این نسخه نسخهٔ ذخیره‌سازی فعلی است.</li>
+</ol>
+<h3 id="نسخه-های-ذخیره-سازی-قبلی" dir="rtl">نسخه‌های ذخیره‌سازی قبلی</h3>
+<p dir="rtl">سرور API هر نسخه‌ای را که تاکنون به‌عنوان نسخهٔ ذخیره‌سازی علامت‌گذاری شده باشد، در فیلد وضعیت <code dir="ltr">storedVersions</code> ثبت می‌کند. آبجکت‌ها ممکن است در هر نسخه‌ای که زمانی به‌عنوان نسخهٔ ذخیره‌سازی تعیین شده است ذخیره شده باشند. هیچ آبجکتی نمی‌تواند در نسخه‌ای که هرگز نسخهٔ ذخیره‌سازی نبوده است، در ذخیره‌سازی وجود داشته باشد.</p>
+<h2 id="ارتقای-آبجکت-های-موجود-به-یک-نسخهٔ-ذخیره-شدهٔ-جدید" dir="rtl">ارتقای آبجکت‌های موجود به یک نسخهٔ ذخیره‌شدهٔ جدید</h2>
+<p dir="rtl">هنگام منسوخ کردن نسخه‌ها و حذف پشتیبانی از آن‌ها، یک روال ارتقای ذخیره‌سازی انتخاب کنید.</p>
+<p dir="rtl"><em>گزینهٔ ۱:</em> استفاده از مهاجرت نسخهٔ ذخیره‌سازی (Storage Version Migration)</p>
+<ol>
+<li dir="rtl">
+<p dir="rtl"><a href="https://kubernetes.io/docs/tasks/manage-kubernetes-objects/storage-version-migration/" target="_blank">مهاجرت نسخهٔ ذخیره‌سازی</a> را برای منبع سفارشی اجرا کنید.</p>
+<p dir="rtl">برای مثال، می‌توانید یک منبع <code dir="ltr">StorageVersionMigration</code> را در همان مانیفستی قرار دهید که <code dir="ltr">CustomResourceDefinition</code> به‌روزرسانی‌شدهٔ شما در آن است:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: crontabs.example.com
+spec:
+  group: example.com
+  ...
+---
+apiVersion: storagemigration.k8s.io/v1
+kind: StorageVersionMigration
+metadata:
+  name: crontabs-migration
+spec:
+  resource:
+    group: example.com
+    resource: crontabs
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">پس از موفقیت‌آمیز بودن مهاجرت، نسخهٔ قدیمی از فیلد <code dir="ltr">status.storedVersions</code> در CustomResourceDefinition حذف می‌شود.</p>
+</li>
+</ol>
+<p dir="rtl"><em>گزینهٔ ۲:</em> ارتقای دستی آبجکت‌های موجود به یک نسخهٔ ذخیره‌شدهٔ جدید</p>
+<p dir="rtl">در ادامه، نمونه‌ای از روال ارتقا از <code dir="ltr">v1beta1</code> به <code dir="ltr">v1</code> آمده است.</p>
+<ol>
+<li dir="rtl">در فایل CustomResourceDefinition، نسخهٔ <code dir="ltr">v1</code> را به‌عنوان نسخهٔ ذخیره‌سازی تنظیم کنید و آن را با kubectl اعمال کنید. اکنون مقدار <code dir="ltr">storedVersions</code> برابر <code dir="ltr">v1beta1, v1</code> است.</li>
+<li dir="rtl">یک روال ارتقا بنویسید که همهٔ آبجکت‌های موجود را فهرست کند و آن‌ها را با همان محتوا دوباره بنویسد. این کار بک‌اند را وادار می‌کند آبجکت‌ها را در نسخهٔ ذخیره‌سازی فعلی، یعنی <code dir="ltr">v1</code>، بنویسد.</li>
+<li dir="rtl">نسخهٔ <code dir="ltr">v1beta1</code> را از فیلد <code dir="ltr">status.storedVersions</code> در CustomResourceDefinition حذف کنید.</li>
+</ol>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">در اینجا نمونه‌ای از نحوهٔ وصله کردن (patch) زیرمنبع <code dir="ltr">status</code> برای یک آبجکت CRD با استفاده از <code dir="ltr">kubectl</code> آمده است:</p>
+<pre dir="ltr"><code class="language-bash" dir="ltr">kubectl patch customresourcedefinitions &lt;CRD_Name&gt; --subresource='status' --type='merge' -p '{"status":{"storedVersions":["v1"]}}'
+</code></pre>
+</div>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#پیش-از-شروع">پیش از شروع</a><a class="l2" href="#مرور-کلی">مرور کلی</a><a class="l2" href="#تعیین-چند-نسخه">تعیین چند نسخه</a><a class="l3" href="#اولویت-نسخه">اولویت نسخه</a><a class="l3" href="#منسوخ-شدن-نسخه">منسوخ‌شدن نسخه</a><a class="l3" href="#حذف-نسخه">حذف نسخه</a><a class="l2" href="#تبدیل-با-وب-هوک">تبدیل با وب‌هوک</a><a class="l3" href="#نوشتن-سرور-وب-هوک-تبدیل">نوشتن سرور وب‌هوک تبدیل</a><a class="l3" href="#استقرار-سرویس-وب-هوک-تبدیل">استقرار سرویس وب‌هوک تبدیل</a><a class="l3" href="#پیکربندی-customresourcedefinition-برای-استفاده-از-وب-هوک-های-تبدیل">پیکربندی CustomResourceDefinition برای استفاده از وب‌هوک‌های تبدیل</a><a class="l3" href="#برقراری-ارتباط-با-وب-هوک">برقراری ارتباط با وب‌هوک</a><a class="l3" href="#url">URL</a><a class="l3" href="#ارجاع-به-سرویس">ارجاع به سرویس</a><a class="l2" href="#درخواست-و-پاسخ-وب-هوک">درخواست و پاسخ وب‌هوک</a><a class="l3" href="#درخواست">درخواست</a><a class="l3" href="#پاسخ">پاسخ</a><a class="l2" href="#نوشتن،-خواندن-و-به-روزرسانی-آبجکت-های-customresourcedefinition-نسخه-بندی-شده">نوشتن، خواندن و به‌روزرسانی آبجکت‌های CustomResourceDefinition نسخه‌بندی‌شده</a><a class="l3" href="#نسخه-های-ذخیره-سازی-قبلی">نسخه‌های ذخیره‌سازی قبلی</a><a class="l2" href="#ارتقای-آبجکت-های-موجود-به-یک-نسخهٔ-ذخیره-شدهٔ-جدید">ارتقای آبجکت‌های موجود به یک نسخهٔ ذخیره‌شدهٔ جدید</a></nav>
+</div>
+</body>
+</html>

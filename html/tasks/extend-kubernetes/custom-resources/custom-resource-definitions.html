@@ -1,0 +1,1932 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>گسترش API کوبرنتیز با CustomResourceDefinitionها | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
+<header class="top"><a href="../../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">tasks / extend-kubernetes / custom-resources</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">گسترش API کوبرنتیز با CustomResourceDefinitionها</h1><!-- overview -->
+<p dir="rtl">این صفحه نشان می‌دهد که چگونه با ایجاد یک
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.37/#customresourcedefinition-v1-apiextensions-k8s-io" target="_blank">CustomResourceDefinition</a>،
+یک <a href="../../../concepts/extend-kubernetes/api-extension/custom-resources.html">منبع سفارشی</a> (custom resource)
+را در API کوبرنتیز نصب کنید.</p>
+<h2 id="پیش-از-شروع" dir="rtl">پیش از شروع</h2>
+<p dir="rtl">باید یک کلاستر کوبرنتیز داشته باشید و ابزار خط فرمان kubectl باید برای ارتباط با کلاستر شما پیکربندی شده باشد. توصیه می‌شود این آموزش را روی کلاستری اجرا کنید که دست‌کم دو نود داشته باشد که نقش میزبان control plane را ندارند. اگر هنوز کلاستری ندارید، می‌توانید با استفاده از
+<a href="https://minikube.sigs.k8s.io/docs/tutorials/multi_node/" target="_blank" rel="noopener">minikube</a>
+یکی بسازید یا از یکی از این محیط‌های آزمایشی کوبرنتیز استفاده کنید:</p>
+<ul>
+<li dir="ltr" class="ltr"><a href="https://labs.iximiuz.com/playgrounds?category=kubernetes&amp;filter=all" target="_blank" rel="noopener">iximiuz Labs</a></li>
+<li dir="ltr" class="ltr"><a href="https://killercoda.com/playgrounds/scenario/kubernetes" target="_blank" rel="noopener">Killercoda</a></li>
+<li dir="ltr" class="ltr"><a href="https://kodekloud.com/public-playgrounds" target="_blank" rel="noopener">KodeKloud</a></li>
+</ul>
+<p dir="rtl">اگر از نسخهٔ قدیمی‌تری از کوبرنتیز استفاده می‌کنید که هنوز پشتیبانی می‌شود، به مستندات همان نسخه
+بروید تا توصیه‌های متناسب با کلاستر خود را ببینید.</p>
+<!-- steps -->
+<h2 id="ایجاد-یک-customresourcedefinition" dir="rtl">ایجاد یک CustomResourceDefinition</h2>
+<p dir="rtl">هنگامی که یک CustomResourceDefinition (CRD) جدید ایجاد می‌کنید، سرور API کوبرنتیز برای هر نسخه‌ای
+که مشخص کرده‌اید یک مسیر منبع RESTful جدید می‌سازد. منبع سفارشی‌ای که از یک آبجکت CRD ساخته می‌شود،
+بسته به مقدار فیلد <code dir="ltr">spec.scope</code> در CRD، می‌تواند در محدودهٔ فضای نام (namespace) یا در محدودهٔ کل
+کلاستر باشد. همانند آبجکت‌های داخلی موجود، حذف یک فضای نام همهٔ آبجکت‌های سفارشی آن فضای نام را نیز
+حذف می‌کند. خودِ CustomResourceDefinitionها به هیچ فضای نامی تعلق ندارند و در همهٔ فضاهای نام در
+دسترس هستند.</p>
+<p dir="rtl">برای مثال، اگر CustomResourceDefinition زیر را در فایل <code dir="ltr">resourcedefinition.yaml</code> ذخیره کنید:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  # name must match the spec fields below, and be in the form: &lt;plural&gt;.&lt;group&gt;
+  name: crontabs.stable.example.com
+spec:
+  # group name to use for REST API: /apis/&lt;group&gt;/&lt;version&gt;
+  group: stable.example.com
+  # list of versions supported by this CustomResourceDefinition
+  versions:
+    - name: v1
+      # Each version can be enabled/disabled by Served flag.
+      served: true
+      # One and only one version must be marked as the storage version.
+      storage: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                cronSpec:
+                  type: string
+                image:
+                  type: string
+                replicas:
+                  type: integer
+  # either Namespaced or Cluster
+  scope: Namespaced
+  names:
+    # plural name to be used in the URL: /apis/&lt;group&gt;/&lt;version&gt;/&lt;plural&gt;
+    plural: crontabs
+    # singular name to be used as an alias on the CLI and for display
+    singular: crontab
+    # kind is normally the CamelCased singular type. Your resource manifests use this.
+    kind: CronTab
+    # shortNames allow shorter string to match your resource on the CLI
+    shortNames:
+    - ct
+</code></pre>
+<p dir="rtl">و آن را ایجاد کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f resourcedefinition.yaml
+</code></pre>
+<p dir="rtl">آنگاه یک نقطهٔ پایانی (endpoint) جدید API از نوع RESTful و در محدودهٔ فضای نام در مسیر زیر ایجاد می‌شود:</p>
+<pre dir="ltr"><code dir="ltr">/apis/stable.example.com/v1/namespaces/*/crontabs/...
+</code></pre>
+<p dir="rtl">سپس می‌توانید از این URL نقطهٔ پایانی برای ایجاد و مدیریت آبجکت‌های سفارشی استفاده کنید.
+مقدار <code dir="ltr">kind</code> این آبجکت‌ها برابر با <code dir="ltr">CronTab</code> خواهد بود که از spec آبجکت CustomResourceDefinition
+ایجادشده در بالا گرفته می‌شود.</p>
+<p dir="rtl">ممکن است ایجاد نقطهٔ پایانی چند ثانیه طول بکشد. می‌توانید شرط <code dir="ltr">Established</code> در CustomResourceDefinition
+خود را زیر نظر بگیرید تا true شود، یا اطلاعات کشف (discovery) سرور API را دنبال کنید تا منبع شما در آن
+ظاهر شود.</p>
+<h2 id="ایجاد-آبجکت-های-سفارشی" dir="rtl">ایجاد آبجکت‌های سفارشی</h2>
+<p dir="rtl">پس از ایجاد آبجکت CustomResourceDefinition، می‌توانید آبجکت‌های سفارشی بسازید. آبجکت‌های سفارشی
+می‌توانند فیلدهای سفارشی داشته باشند و این فیلدها می‌توانند هر JSON دلخواهی را در خود نگه دارند.
+در مثال زیر، فیلدهای سفارشی <code dir="ltr">cronSpec</code> و <code dir="ltr">image</code> در یک آبجکت سفارشی از نوع <code dir="ltr">CronTab</code> مقداردهی
+شده‌اند. نوع <code dir="ltr">CronTab</code> از spec آبجکت CustomResourceDefinition ایجادشده در بالا می‌آید.</p>
+<p dir="rtl">اگر YAML زیر را در فایل <code dir="ltr">my-crontab.yaml</code> ذخیره کنید:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: "stable.example.com/v1"
+kind: CronTab
+metadata:
+  name: my-new-cron-object
+spec:
+  cronSpec: "* * * * */5"
+  image: my-awesome-cron-image
+</code></pre>
+<p dir="rtl">و آن را ایجاد کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f my-crontab.yaml
+</code></pre>
+<p dir="rtl">آنگاه می‌توانید آبجکت‌های CronTab خود را با kubectl مدیریت کنید. برای مثال:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get crontab
+</code></pre>
+<p dir="rtl">باید فهرستی مانند زیر چاپ شود:</p>
+<pre dir="ltr"><code class="language-none" dir="ltr">NAME                 AGE
+my-new-cron-object   6s
+</code></pre>
+<p dir="rtl">هنگام استفاده از kubectl، نام منابع به بزرگی و کوچکی حروف حساس نیست و می‌توانید از شکل مفرد یا جمعِ
+تعریف‌شده در CRD و نیز از هر یک از نام‌های کوتاه استفاده کنید.</p>
+<p dir="rtl">همچنین می‌توانید داده‌های خام YAML را ببینید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get ct -o yaml
+</code></pre>
+<p dir="rtl">باید ببینید که خروجی شامل فیلدهای سفارشی <code dir="ltr">cronSpec</code> و <code dir="ltr">image</code> از YAMLی است که برای ایجاد آبجکت
+به کار بردید:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+items:
+- apiVersion: stable.example.com/v1
+  kind: CronTab
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"stable.example.com/v1","kind":"CronTab","metadata":{"annotations":{},"name":"my-new-cron-object","namespace":"default"},"spec":{"cronSpec":"* * * * */5","image":"my-awesome-cron-image"}}
+    creationTimestamp: "2021-06-20T07:35:27Z"
+    generation: 1
+    name: my-new-cron-object
+    namespace: default
+    resourceVersion: "1326"
+    uid: 9aab1d66-628e-41bb-a422-57b8b3b1f5a9
+  spec:
+    cronSpec: '* * * * */5'
+    image: my-awesome-cron-image
+kind: List
+metadata:
+  resourceVersion: ""
+  selfLink: ""
+</code></pre>
+<h2 id="حذف-یک-customresourcedefinition" dir="rtl">حذف یک CustomResourceDefinition</h2>
+<p dir="rtl">هنگامی که یک CustomResourceDefinition را حذف می‌کنید، سرور نقطهٔ پایانی API از نوع RESTful را
+حذف می‌کند و همهٔ آبجکت‌های سفارشی ذخیره‌شده در آن را نیز پاک می‌کند.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl delete -f resourcedefinition.yaml
+kubectl get crontabs
+</code></pre>
+<pre dir="ltr"><code class="language-none" dir="ltr">Error from server (NotFound): Unable to list {"stable.example.com" "v1" "crontabs"}: the server could not
+find the requested resource (get crontabs.stable.example.com)
+</code></pre>
+<p dir="rtl">اگر بعداً همان CustomResourceDefinition را دوباره ایجاد کنید، در ابتدا خالی خواهد بود.</p>
+<h2 id="تعیین-یک-طرح-وارهٔ-ساختاری" dir="rtl">تعیین یک طرح‌وارهٔ ساختاری</h2>
+<p dir="rtl">منابع سفارشی (CustomResources) داده‌های ساخت‌یافته را در فیلدهای سفارشی ذخیره می‌کنند (در کنار
+فیلدهای داخلی <code dir="ltr">apiVersion</code>، <code dir="ltr">kind</code> و <code dir="ltr">metadata</code> که سرور API به‌طور ضمنی اعتبارسنجی می‌کند). با
+<a href="#validation">اعتبارسنجی OpenAPI v3.0</a> می‌توان یک طرح‌واره (schema) تعیین کرد که هنگام ایجاد و
+به‌روزرسانی اعتبارسنجی می‌شود. برای جزئیات و محدودیت‌های چنین طرح‌واره‌ای، توضیحات زیر را ببینید.</p>
+<p dir="rtl">در <code dir="ltr">apiextensions.k8s.io/v1</code>، تعریف یک طرح‌وارهٔ ساختاری برای CustomResourceDefinitionها الزامی
+است. در نسخهٔ بتای CustomResourceDefinition، طرح‌وارهٔ ساختاری اختیاری بود.</p>
+<p dir="rtl">طرح‌وارهٔ ساختاری یک <a href="#validation">طرح‌وارهٔ اعتبارسنجی OpenAPI v3.0</a> است که:</p>
+<ol>
+<li dir="rtl">برای ریشه، برای هر فیلد مشخص‌شده از یک گرهٔ آبجکت (از طریق <code dir="ltr">properties</code> یا <code dir="ltr">additionalProperties</code>
+در OpenAPI) و برای هر آیتم در یک گرهٔ آرایه (از طریق <code dir="ltr">items</code> در OpenAPI) یک نوع غیرخالی (از طریق
+<code dir="ltr">type</code> در OpenAPI) تعیین می‌کند، به‌جز موارد زیر:
+<ul>
+<li dir="rtl">گره‌ای با <code dir="ltr">x-kubernetes-int-or-string: true</code></li>
+<li dir="rtl">گره‌ای با <code dir="ltr">x-kubernetes-preserve-unknown-fields: true</code></li>
+</ul>
+</li>
+<li dir="rtl">برای هر فیلد در یک آبجکت و هر آیتم در یک آرایه که درون یکی از <code dir="ltr">allOf</code>، <code dir="ltr">anyOf</code>، <code dir="ltr">oneOf</code> یا <code dir="ltr">not</code>
+مشخص شده باشد، آن فیلد یا آیتم را بیرون از این عملگرهای منطقی نیز مشخص می‌کند (مثال ۱ و ۲ را مقایسه
+کنید).</li>
+<li dir="rtl">مقادیر <code dir="ltr">description</code>، <code dir="ltr">type</code>، <code dir="ltr">default</code>، <code dir="ltr">additionalProperties</code> و <code dir="ltr">nullable</code> را درون <code dir="ltr">allOf</code>،
+<code dir="ltr">anyOf</code>، <code dir="ltr">oneOf</code> یا <code dir="ltr">not</code> تنظیم نمی‌کند، به‌جز دو الگوی مربوط به <code dir="ltr">x-kubernetes-int-or-string: true</code>
+(در ادامه را ببینید).</li>
+<li dir="rtl">اگر <code dir="ltr">metadata</code> مشخص شده باشد، فقط محدودیت‌هایی روی <code dir="ltr">metadata.name</code> و <code dir="ltr">metadata.generateName</code> مجاز
+است.</li>
+</ol>
+<p dir="rtl">مثال غیرساختاری ۱:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">allOf:
+- properties:
+    foo:
+      # ...
+</code></pre>
+<p dir="rtl">با قاعدهٔ ۲ در تعارض است. شکل درست آن چنین است:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">properties:
+  foo:
+    # ...
+allOf:
+- properties:
+    foo:
+      # ...
+</code></pre>
+<p dir="rtl">مثال غیرساختاری ۲:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">allOf:
+- items:
+    properties:
+      foo:
+        # ...
+</code></pre>
+<p dir="rtl">با قاعدهٔ ۲ در تعارض است. شکل درست آن چنین است:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">items:
+  properties:
+    foo:
+      # ...
+allOf:
+- items:
+    properties:
+      foo:
+        # ...
+</code></pre>
+<p dir="rtl">مثال غیرساختاری ۳:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">properties:
+  foo:
+    pattern: "abc"
+  metadata:
+    type: object
+    properties:
+      name:
+        type: string
+        pattern: "^a"
+      finalizers:
+        type: array
+        items:
+          type: string
+          pattern: "my-finalizer"
+anyOf:
+- properties:
+    bar:
+      type: integer
+      minimum: 42
+  required: ["bar"]
+  description: "foo bar object"
+</code></pre>
+<p dir="rtl">به دلیل تخلف‌های زیر یک طرح‌وارهٔ ساختاری نیست:</p>
+<ul>
+<li dir="rtl">نوعِ ریشه مشخص نشده است (قاعدهٔ ۱).</li>
+<li dir="rtl">نوعِ <code dir="ltr">foo</code> مشخص نشده است (قاعدهٔ ۱).</li>
+<li dir="rtl">فیلد <code dir="ltr">bar</code> درون <code dir="ltr">anyOf</code> بیرون از آن مشخص نشده است (قاعدهٔ ۲).</li>
+<li dir="rtl">مقدار <code dir="ltr">type</code> برای <code dir="ltr">bar</code> درون <code dir="ltr">anyOf</code> قرار دارد (قاعدهٔ ۳).</li>
+<li dir="rtl">توضیح (description) درون <code dir="ltr">anyOf</code> تنظیم شده است (قاعدهٔ ۳).</li>
+<li dir="rtl">فیلد <code dir="ltr">metadata.finalizers</code> نباید محدود شود (قاعدهٔ ۴).</li>
+</ul>
+<p dir="rtl">در مقابل، طرح‌وارهٔ متناظر زیر ساختاری است:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">type: object
+description: "foo bar object"
+properties:
+  foo:
+    type: string
+    pattern: "abc"
+  bar:
+    type: integer
+  metadata:
+    type: object
+    properties:
+      name:
+        type: string
+        pattern: "^a"
+anyOf:
+- properties:
+    bar:
+      minimum: 42
+  required: ["bar"]
+</code></pre>
+<p dir="rtl">تخلف از قواعد طرح‌وارهٔ ساختاری در شرط <code dir="ltr">NonStructural</code> در CustomResourceDefinition گزارش می‌شود.</p>
+<h3 id="هرس-فیلدها" dir="rtl">هرس فیلدها</h3>
+<p dir="rtl">CustomResourceDefinitionها داده‌های اعتبارسنجی‌شدهٔ منابع را در ذخیره‌گاه ماندگار کلاستر، یعنی
+<span class="term" title="etcd">etcd</span>، ذخیره می‌کنند. همانند منابع بومی کوبرنتیز مانند
+<span class="term" title="configmap">ConfigMap</span>، اگر فیلدی را مشخص کنید که سرور API آن
+را نمی‌شناسد، آن فیلد ناشناخته پیش از ذخیره‌شدن <em>هرس</em> (حذف) می‌شود.</p>
+<p dir="rtl">ممکن است CRDهایی که از <code dir="ltr">apiextensions.k8s.io/v1beta1</code> به <code dir="ltr">apiextensions.k8s.io/v1</code> تبدیل شده‌اند
+طرح‌وارهٔ ساختاری نداشته باشند و مقدار <code dir="ltr">spec.preserveUnknownFields</code> در آن‌ها <code dir="ltr">true</code> باشد.</p>
+<p dir="rtl">برای آبجکت‌های قدیمی CustomResourceDefinition که به‌صورت <code dir="ltr">apiextensions.k8s.io/v1beta1</code> و با
+مقدار <code dir="ltr">true</code> برای <code dir="ltr">spec.preserveUnknownFields</code> ایجاد شده‌اند، موارد زیر نیز صدق می‌کند:</p>
+<ul>
+<li dir="rtl">هرس فعال نیست.</li>
+<li dir="rtl">می‌توانید داده‌های دلخواه ذخیره کنید.</li>
+</ul>
+<p dir="rtl">برای سازگاری با <code dir="ltr">apiextensions.k8s.io/v1</code>، تعریف‌های منابع سفارشی خود را به‌گونه‌ای به‌روزرسانی کنید
+که:</p>
+<ol>
+<li dir="rtl">از یک طرح‌وارهٔ ساختاری OpenAPI استفاده کنند.</li>
+<li dir="rtl">مقدار <code dir="ltr">spec.preserveUnknownFields</code> را <code dir="ltr">false</code> قرار دهند.</li>
+</ol>
+<p dir="rtl">اگر YAML زیر را در فایل <code dir="ltr">my-crontab.yaml</code> ذخیره کنید:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: "stable.example.com/v1"
+kind: CronTab
+metadata:
+  name: my-new-cron-object
+spec:
+  cronSpec: "* * * * */5"
+  image: my-awesome-cron-image
+  someRandomField: 42
+</code></pre>
+<p dir="rtl">و آن را ایجاد کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl create --validate=false -f my-crontab.yaml -o yaml
+</code></pre>
+<p dir="rtl">خروجی شما مشابه زیر خواهد بود:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: stable.example.com/v1
+kind: CronTab
+metadata:
+  creationTimestamp: 2017-05-31T12:56:35Z
+  generation: 1
+  name: my-new-cron-object
+  namespace: default
+  resourceVersion: "285"
+  uid: 9423255b-4600-11e7-af6a-28d2447dc82b
+spec:
+  cronSpec: '* * * * */5'
+  image: my-awesome-cron-image
+</code></pre>
+<p dir="rtl">توجه کنید که فیلد <code dir="ltr">someRandomField</code> هرس شده است.</p>
+<p dir="rtl">در این مثال، برای نمایش رفتار سرور API، اعتبارسنجی سمت کلاینت با افزودن گزینهٔ خط فرمان
+<code dir="ltr">--validate=false</code> غیرفعال شده است. از آنجا که
+<a href="#publish-validation-schema-in-openapi">طرح‌واره‌های اعتبارسنجی OpenAPI برای کلاینت‌ها نیز منتشر می‌شوند</a>،
+<code dir="ltr">kubectl</code> نیز فیلدهای ناشناخته را بررسی می‌کند و چنین آبجکت‌هایی را مدت‌ها پیش از ارسال به سرور API
+رد می‌کند.</p>
+<h4 id="کنترل-هرس" dir="rtl">کنترل هرس</h4>
+<p dir="rtl">به‌طور پیش‌فرض، همهٔ فیلدهای مشخص‌نشدهٔ یک منبع سفارشی در همهٔ نسخه‌ها هرس می‌شوند. با این حال،
+می‌توان با افزودن <code dir="ltr">x-kubernetes-preserve-unknown-fields: true</code> در
+<a href="#specifying-a-structural-schema">طرح‌وارهٔ ساختاری اعتبارسنجی OpenAPI v3</a>، زیردرخت‌های مشخصی از
+فیلدها را از این رفتار مستثنا کرد.</p>
+<p dir="rtl">برای مثال:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">type: object
+properties:
+  json:
+    x-kubernetes-preserve-unknown-fields: true
+</code></pre>
+<p dir="rtl">فیلد <code dir="ltr">json</code> می‌تواند هر مقدار JSON را بدون هرس شدن هیچ بخشی ذخیره کند.</p>
+<p dir="rtl">همچنین می‌توانید JSON مجاز را به‌صورت جزئی مشخص کنید؛ برای مثال:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">type: object
+properties:
+  json:
+    x-kubernetes-preserve-unknown-fields: true
+    type: object
+    description: this is arbitrary JSON
+</code></pre>
+<p dir="rtl">با این کار، فقط مقادیری از نوع <code dir="ltr">object</code> مجاز هستند.</p>
+<p dir="rtl">برای هر ویژگی مشخص‌شده (یا <code dir="ltr">additionalProperties</code>)، هرس دوباره فعال می‌شود:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">type: object
+properties:
+  json:
+    x-kubernetes-preserve-unknown-fields: true
+    type: object
+    properties:
+      spec:
+        type: object
+        properties:
+          foo:
+            type: string
+          bar:
+            type: string
+</code></pre>
+<p dir="rtl">با این تعریف، مقدار زیر:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">json:
+  spec:
+    foo: abc
+    bar: def
+    something: x
+  status:
+    something: x
+</code></pre>
+<p dir="rtl">به این شکل هرس می‌شود:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">json:
+  spec:
+    foo: abc
+    bar: def
+  status:
+    something: x
+</code></pre>
+<p dir="rtl">یعنی فیلد <code dir="ltr">something</code> در آبجکت مشخص‌شدهٔ <code dir="ltr">spec</code> هرس می‌شود، اما هیچ‌چیز بیرون از آن هرس نمی‌شود.</p>
+<h3 id="intorstring" dir="ltr" class="ltr">IntOrString</h3>
+<p dir="rtl">گره‌هایی از طرح‌واره که <code dir="ltr">x-kubernetes-int-or-string: true</code> دارند از قاعدهٔ ۱ مستثنا هستند، به‌طوری
+که طرح‌وارهٔ زیر ساختاری است:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">type: object
+properties:
+  foo:
+    x-kubernetes-int-or-string: true
+</code></pre>
+<p dir="rtl">همچنین این گره‌ها تا حدی از قاعدهٔ ۳ مستثنا هستند، به این معنا که دو الگوی زیر مجاز است (دقیقاً
+همین دو الگو، بدون تغییر در ترتیب یا افزودن فیلدهای دیگر):</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">x-kubernetes-int-or-string: true
+anyOf:
+  - type: integer
+  - type: string
+...
+</code></pre>
+<p dir="rtl">و</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">x-kubernetes-int-or-string: true
+allOf:
+  - anyOf:
+      - type: integer
+      - type: string
+  - # ... zero or more
+...
+</code></pre>
+<p dir="rtl">با هر یک از این تعریف‌ها، هم عدد صحیح و هم رشته معتبر شناخته می‌شوند.</p>
+<p dir="rtl">در <a href="#publish-validation-schema-in-openapi">انتشار طرح‌وارهٔ اعتبارسنجی</a>،
+<code dir="ltr">x-kubernetes-int-or-string: true</code> به یکی از دو الگوی بالا گسترش داده می‌شود.</p>
+<h3 id="rawextension" dir="ltr" class="ltr">RawExtension</h3>
+<p dir="rtl">ساختارهای RawExtension (مانند <a href="https://kubernetes.io/docs/reference//kubernetes-api/workload-resources/controller-revision-v1#RawExtension" target="_blank"><code dir="ltr">runtime.RawExtension</code></a>)
+آبجکت‌های کامل کوبرنتیز، یعنی آبجکت‌هایی دارای فیلدهای <code dir="ltr">apiVersion</code> و <code dir="ltr">kind</code>، را در خود نگه می‌دارند.</p>
+<p dir="rtl">می‌توان این آبجکت‌های تعبیه‌شده را (چه کاملاً بدون محدودیت و چه به‌صورت جزئی) با تنظیم
+<code dir="ltr">x-kubernetes-embedded-resource: true</code> مشخص کرد. برای مثال:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">type: object
+properties:
+  foo:
+    x-kubernetes-embedded-resource: true
+    x-kubernetes-preserve-unknown-fields: true
+</code></pre>
+<p dir="rtl">در اینجا، فیلد <code dir="ltr">foo</code> یک آبجکت کامل را نگه می‌دارد؛ برای نمونه:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">foo:
+  apiVersion: v1
+  kind: Pod
+  spec:
+    # ...
+</code></pre>
+<p dir="rtl">از آنجا که <code dir="ltr">x-kubernetes-preserve-unknown-fields: true</code> نیز در کنار آن مشخص شده است، هیچ‌چیز هرس
+نمی‌شود. البته استفاده از <code dir="ltr">x-kubernetes-preserve-unknown-fields: true</code> اختیاری است.</p>
+<p dir="rtl">با <code dir="ltr">x-kubernetes-embedded-resource: true</code>، فیلدهای <code dir="ltr">apiVersion</code>، <code dir="ltr">kind</code> و <code dir="ltr">metadata</code> به‌طور ضمنی
+مشخص و اعتبارسنجی می‌شوند.</p>
+<h2 id="ارائهٔ-چند-نسخه-از-یک-crd" dir="rtl">ارائهٔ چند نسخه از یک CRD</h2>
+<p dir="rtl">برای اطلاعات بیشتر دربارهٔ ارائهٔ چند نسخه از CustomResourceDefinition و انتقال آبجکت‌ها از یک نسخه به
+نسخهٔ دیگر، به
+<a href="custom-resource-definition-versioning.html">نسخه‌بندی تعریف منابع سفارشی</a>
+مراجعه کنید.</p>
+<!-- discussion -->
+<h2 id="مباحث-پیشرفته" dir="rtl">مباحث پیشرفته</h2>
+<h3 id="نهایی-کننده-ها" dir="rtl">نهایی‌کننده‌ها</h3>
+<p dir="rtl"><em>نهایی‌کننده‌ها</em> (Finalizers) به کنترل‌کننده‌ها امکان می‌دهند قلاب‌های (hooks) ناهمگامِ پیش از حذف
+را پیاده‌سازی کنند. آبجکت‌های سفارشی، همانند آبجکت‌های داخلی، از نهایی‌کننده‌ها پشتیبانی می‌کنند.</p>
+<p dir="rtl">می‌توانید یک نهایی‌کننده را به این شکل به یک آبجکت سفارشی اضافه کنید:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: "stable.example.com/v1"
+kind: CronTab
+metadata:
+  finalizers:
+  - stable.example.com/finalizer
+</code></pre>
+<p dir="rtl">شناسهٔ نهایی‌کننده‌های سفارشی از یک نام دامنه، یک کاراکتر اسلش (/) و نام نهایی‌کننده تشکیل می‌شود.
+هر کنترل‌کننده‌ای می‌تواند یک نهایی‌کننده را به فهرست نهایی‌کننده‌های هر آبجکتی اضافه کند.</p>
+<p dir="rtl">نخستین درخواست حذف روی آبجکتی که نهایی‌کننده دارد، مقداری برای فیلد <code dir="ltr">metadata.deletionTimestamp</code>
+تنظیم می‌کند، اما آبجکت را حذف نمی‌کند. پس از تنظیم این مقدار، فقط می‌توان مدخل‌هایی را از فهرست
+<code dir="ltr">finalizers</code> حذف کرد. تا زمانی که نهایی‌کننده‌ای باقی مانده باشد، حذف اجباری آبجکت نیز ممکن نیست.</p>
+<p dir="rtl">هنگامی که فیلد <code dir="ltr">metadata.deletionTimestamp</code> تنظیم می‌شود، کنترل‌کننده‌هایی که آبجکت را زیر نظر دارند
+نهایی‌کننده‌های مربوط به خود را اجرا می‌کنند و پس از پایان کار، آن‌ها را از فهرست حذف می‌کنند. حذف
+نهایی‌کنندهٔ هر کنترل‌کننده از فهرست، بر عهدهٔ خودِ آن کنترل‌کننده است.</p>
+<p dir="rtl">مقدار <code dir="ltr">metadata.deletionGracePeriodSeconds</code> فاصلهٔ زمانی میان به‌روزرسانی‌های نظرسنجی (polling) را
+کنترل می‌کند.</p>
+<p dir="rtl">هنگامی که فهرست نهایی‌کننده‌ها خالی شود، یعنی همهٔ نهایی‌کننده‌ها اجرا شده باشند، کوبرنتیز منبع را
+حذف می‌کند.</p>
+<h3 id="اعتبارسنجی" dir="rtl">اعتبارسنجی</h3>
+<p dir="rtl">منابع سفارشی با استفاده از
+<a href="https://github.com/OAI/OpenAPI-Specification/blob/3.0.0/versions/3.0.0.md#schema-object" target="_blank" rel="noopener">OpenAPI v3.0 schemas</a>
+اعتبارسنجی می‌شوند. اگر <a href="#validation-rules">قابلیت قواعد اعتبارسنجی</a> فعال باشد، اعتبارسنجی با x-kubernetes-validations نیز انجام می‌شود. همچنین می‌توانید با استفاده از
+<a href="../../../reference/access-authn-authz/admission-controllers.html#validatingadmissionwebhook">وب‌هوک‌های پذیرش (admission webhooks)</a>
+اعتبارسنجی‌های بیشتری اضافه کنید.</p>
+<p dir="rtl">افزون بر این، محدودیت‌های زیر بر schema اعمال می‌شوند:</p>
+<ul>
+<li dir="rtl">
+<p dir="rtl">فیلدهای زیر را نمی‌توان تنظیم کرد:</p>
+<ul>
+<li dir="ltr" class="ltr"><code dir="ltr">definitions</code>,</li>
+<li dir="ltr" class="ltr"><code dir="ltr">dependencies</code>,</li>
+<li dir="ltr" class="ltr"><code dir="ltr">deprecated</code>,</li>
+<li dir="ltr" class="ltr"><code dir="ltr">discriminator</code>,</li>
+<li dir="ltr" class="ltr"><code dir="ltr">id</code>,</li>
+<li dir="ltr" class="ltr"><code dir="ltr">patternProperties</code>,</li>
+<li dir="ltr" class="ltr"><code dir="ltr">readOnly</code>,</li>
+<li dir="ltr" class="ltr"><code dir="ltr">writeOnly</code>,</li>
+<li dir="ltr" class="ltr"><code dir="ltr">xml</code>,</li>
+<li dir="ltr" class="ltr"><code dir="ltr">$ref</code>.</li>
+</ul>
+</li>
+<li dir="rtl">
+<p dir="rtl">فیلد <code dir="ltr">uniqueItems</code> را نمی‌توان روی <code dir="ltr">true</code> تنظیم کرد.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">فیلد <code dir="ltr">additionalProperties</code> را نمی‌توان روی <code dir="ltr">false</code> تنظیم کرد.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">فیلد <code dir="ltr">additionalProperties</code> با <code dir="ltr">properties</code> مانعهٔ‌الجمع است و نمی‌توان هر دو را با هم به کار برد.</p>
+</li>
+</ul>
+<p dir="rtl">اگر قابلیت <a href="#validation-rules">قواعد اعتبارسنجی</a> فعال باشد و schema آبجکت CustomResourceDefinition یک
+<a href="#specifying-a-structural-schema">schema ساختاری (structural schema)</a> باشد، می‌توان از افزونهٔ <code dir="ltr">x-kubernetes-validations</code> برای اعتبارسنجی منابع سفارشی با عبارت‌های
+<a href="https://github.com/google/cel-spec" target="_blank" rel="noopener">Common Expression Language (CEL)</a> استفاده کرد.</p>
+<p dir="rtl">برای آشنایی با سایر محدودیت‌ها و قابلیت‌های CustomResourceDefinition، به بخش
+<a href="#specifying-a-structural-schema">schemaهای ساختاری</a> مراجعه کنید.</p>
+<p dir="rtl">این schema در CustomResourceDefinition تعریف می‌شود. در مثال زیر، CustomResourceDefinition اعتبارسنجی‌های زیر را بر آبجکت سفارشی اعمال می‌کند:</p>
+<ul>
+<li dir="rtl">فیلد <code dir="ltr">spec.cronSpec</code> باید رشته باشد و با الگوی توصیف‌شده در عبارت باقاعده (regular expression) مطابقت داشته باشد.</li>
+<li dir="rtl">فیلد <code dir="ltr">spec.replicas</code> باید عدد صحیح باشد و مقدار آن حداقل ۱ و حداکثر ۱۰ باشد.</li>
+</ul>
+<p dir="rtl">این CustomResourceDefinition را در فایل <code dir="ltr">resourcedefinition.yaml</code> ذخیره کنید:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: crontabs.stable.example.com
+spec:
+  group: stable.example.com
+  versions:
+    - name: v1
+      served: true
+      storage: true
+      schema:
+        # openAPIV3Schema is the schema for validating custom objects.
+        openAPIV3Schema:
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                cronSpec:
+                  type: string
+                  pattern: '^(\d+|\*)(/\d+)?(\s+(\d+|\*)(/\d+)?){4}$'
+                image:
+                  type: string
+                replicas:
+                  type: integer
+                  minimum: 1
+                  maximum: 10
+  scope: Namespaced
+  names:
+    plural: crontabs
+    singular: crontab
+    kind: CronTab
+    shortNames:
+    - ct
+</code></pre>
+<p dir="rtl">و آن را ایجاد کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f resourcedefinition.yaml
+</code></pre>
+<p dir="rtl">اگر فیلدهای یک آبجکت سفارشی از نوع CronTab مقادیر نامعتبر داشته باشند، درخواست ایجاد آن رد می‌شود.
+در مثال زیر، آبجکت سفارشی فیلدهایی با مقادیر نامعتبر دارد:</p>
+<ul>
+<li dir="rtl">فیلد <code dir="ltr">spec.cronSpec</code> با عبارت باقاعده مطابقت ندارد.</li>
+<li dir="rtl">مقدار فیلد <code dir="ltr">spec.replicas</code> بیشتر از ۱۰ است.</li>
+</ul>
+<p dir="rtl">اگر YAML زیر را در فایل <code dir="ltr">my-crontab.yaml</code> ذخیره کنید:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: "stable.example.com/v1"
+kind: CronTab
+metadata:
+  name: my-new-cron-object
+spec:
+  cronSpec: "* * * *"
+  image: my-awesome-cron-image
+  replicas: 15
+</code></pre>
+<p dir="rtl">و بکوشید آن را ایجاد کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f my-crontab.yaml
+</code></pre>
+<p dir="rtl">با خطای زیر روبه‌رو می‌شوید:</p>
+<pre dir="ltr"><code class="language-console" dir="ltr">The CronTab "my-new-cron-object" is invalid: []: Invalid value: map[string]interface {}{"apiVersion":"stable.example.com/v1", "kind":"CronTab", "metadata":map[string]interface {}{"name":"my-new-cron-object", "namespace":"default", "deletionTimestamp":interface {}(nil), "deletionGracePeriodSeconds":(*int64)(nil), "creationTimestamp":"2017-09-05T05:20:07Z", "uid":"e14d79e7-91f9-11e7-a598-f0761cb232d1", "clusterName":""}, "spec":map[string]interface {}{"cronSpec":"* * * *", "image":"my-awesome-cron-image", "replicas":15}}:
+validation failure list:
+spec.cronSpec in body should match '^(\d+|\*)(/\d+)?(\s+(\d+|\*)(/\d+)?){4}$'
+spec.replicas in body should be less than or equal to 10
+</code></pre>
+<p dir="rtl">اگر فیلدها مقادیر معتبر داشته باشند، درخواست ایجاد آبجکت پذیرفته می‌شود.</p>
+<p dir="rtl">YAML زیر را در فایل <code dir="ltr">my-crontab.yaml</code> ذخیره کنید:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: "stable.example.com/v1"
+kind: CronTab
+metadata:
+  name: my-new-cron-object
+spec:
+  cronSpec: "* * * * */5"
+  image: my-awesome-cron-image
+  replicas: 5
+</code></pre>
+<p dir="rtl">و آن را ایجاد کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f my-crontab.yaml
+crontab "my-new-cron-object" created
+</code></pre>
+<h3 id="رچتینگ-اعتبارسنجی" dir="rtl">رچتینگ اعتبارسنجی</h3>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
+<p dir="rtl">اگر از نسخه‌ای از کوبرنتیز قدیمی‌تر از v1.30 استفاده می‌کنید، برای بهره‌گیری از این رفتار باید
+<a href="https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/" target="_blank">feature gate</a> با نام
+<code dir="ltr">CRDValidationRatcheting</code> را به‌صراحت فعال کنید. در این صورت، این رفتار بر همهٔ CustomResourceDefinitionهای کلاستر شما اعمال می‌شود.</p>
+<p dir="rtl">به شرط فعال بودن این feature gate، کوبرنتیز <em>رچتینگ اعتبارسنجی</em> (validation ratcheting) را برای CustomResourceDefinitionها پیاده‌سازی می‌کند. در این حالت، سرور API به‌روزرسانی‌هایی را که منبع را پس از به‌روزرسانی نامعتبر باقی می‌گذارند می‌پذیرد، به این شرط که هیچ‌یک از بخش‌هایی از منبع که در اعتبارسنجی رد شده‌اند در عملیات به‌روزرسانی تغییر نکرده باشند. به بیان دیگر، هر بخش نامعتبری از منبع که همچنان نامعتبر می‌ماند باید از پیش نیز نادرست بوده باشد.
+نمی‌توانید از این سازوکار برای به‌روزرسانی یک منبع معتبر به‌گونه‌ای استفاده کنید که نامعتبر شود.</p>
+<p dir="rtl">این قابلیت به نویسندگان CRDها امکان می‌دهد در شرایطی مشخص، با اطمینان اعتبارسنجی‌های جدیدی به schema نوع OpenAPIV3 اضافه کنند. کاربران نیز می‌توانند بی‌آنکه نسخهٔ آبجکت را افزایش دهند یا روندهای کاری خود را مختل کنند، با خیال آسوده به schema جدید ارتقا یابند.</p>
+<p dir="rtl">اگرچه بیشتر اعتبارسنجی‌هایی که در schema نوع OpenAPIV3 یک CRD تعریف می‌شوند از رچتینگ پشتیبانی می‌کنند، چند استثنا وجود دارد. در پیاده‌سازی کوبرنتیز 1.37، اعتبارسنجی‌های زیر در schema نوع OpenAPIV3 از رچتینگ پشتیبانی نمی‌کنند و در صورت نقض شدن، مانند حالت عادی خطا تولید می‌کنند:</p>
+<ul>
+<li dir="rtl">
+<p dir="rtl">کمیت‌نماها (Quantors)</p>
+<ul>
+<li dir="ltr" class="ltr"><code dir="ltr">allOf</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">oneOf</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">anyOf</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">not</code></li>
+<li dir="rtl">هر اعتبارسنجی در زیرشاخه‌های یکی از این فیلدها</li>
+</ul>
+</li>
+<li dir="rtl">
+<p dir="rtl">افزونهٔ <code dir="ltr">x-kubernetes-validations</code>
+در کوبرنتیز 1.28، <a href="#validation-rules">قواعد اعتبارسنجی</a> CRD در رچتینگ نادیده گرفته می‌شوند. از نسخهٔ Alpha 2 در کوبرنتیز 1.29 به بعد، <code dir="ltr">x-kubernetes-validations</code> تنها در صورتی مشمول رچتینگ می‌شوند که به <code dir="ltr">oldSelf</code> ارجاع ندهند.</p>
+<p dir="rtl">قواعد گذار (Transition Rules) هرگز مشمول رچتینگ نمی‌شوند: تنها خطاهایی که قواعدِ بدون استفاده از <code dir="ltr">oldSelf</code> ایجاد می‌کنند، در صورت تغییر نکردن مقادیرشان، به‌طور خودکار مشمول رچتینگ می‌شوند.</p>
+<p dir="rtl">برای نوشتن منطق رچتینگ سفارشی برای عبارت‌های CEL، به بخش <a href="#field-optional-oldself">optionalOldSelf</a> مراجعه کنید.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">افزونهٔ <code dir="ltr">x-kubernetes-list-type</code>
+خطاهای ناشی از تغییر نوع لیست در یک زیر‌schema مشمول رچتینگ نمی‌شوند. برای نمونه، افزودن <code dir="ltr">set</code> به لیستی که عناصر تکراری دارد همواره به خطا می‌انجامد.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">افزونهٔ <code dir="ltr">x-kubernetes-list-map-keys</code>
+خطاهای ناشی از تغییر کلیدهای map در schema یک لیست مشمول رچتینگ نمی‌شوند.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">فیلد <code dir="ltr">required</code>
+خطاهای ناشی از تغییر فهرست فیلدهای الزامی مشمول رچتینگ نمی‌شوند.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">فیلد <code dir="ltr">properties</code>
+افزودن، حذف یا تغییر نام ویژگی‌ها مشمول رچتینگ نمی‌شود، اما تغییر اعتبارسنجی‌ها در schema و زیر‌schemaهای هر ویژگی، در صورتی که نام آن ویژگی ثابت بماند، ممکن است مشمول رچتینگ شود.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">فیلد <code dir="ltr">additionalProperties</code>
+حذف اعتبارسنجی <code dir="ltr">additionalProperties</code> که پیش‌تر تعیین شده است مشمول رچتینگ نمی‌شود.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">فیلد <code dir="ltr">metadata</code>
+خطاهای ناشی از اعتبارسنجی داخلی کوبرنتیز روی <code dir="ltr">metadata</code> یک آبجکت (مانند نام آبجکت یا نویسه‌های موجود در مقدار یک برچسب) مشمول رچتینگ نمی‌شوند. اگر قواعد اضافی خودتان را برای metadata یک منبع سفارشی تعیین کنید، این اعتبارسنجی اضافی مشمول رچتینگ می‌شود.</p>
+</li>
+</ul>
+<h3 id="قواعد-اعتبارسنجی" dir="rtl">قواعد اعتبارسنجی</h3>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes v1.29 [stable]</span> (پایدار)</div>
+<p dir="rtl">قواعد اعتبارسنجی برای اعتبارسنجی مقادیر منابع سفارشی از <a href="https://github.com/google/cel-spec" target="_blank" rel="noopener">زبان عبارت مشترک (Common Expression Language یا CEL)</a> استفاده می‌کنند. این قواعد با افزونهٔ <code dir="ltr">x-kubernetes-validations</code> در طرح‌واره‌های (schema) CustomResourceDefinition قرار می‌گیرند.</p>
+<p dir="rtl">محدودهٔ هر قاعده همان جایی از طرح‌واره است که افزونهٔ <code dir="ltr">x-kubernetes-validations</code> در آن قرار دارد. متغیر <code dir="ltr">self</code> در عبارت CEL نیز به مقدارِ همین محدوده متصل می‌شود.</p>
+<p dir="rtl">محدودهٔ همهٔ قواعد اعتبارسنجی به آبجکت فعلی محدود است؛ قواعد اعتبارسنجی میان‌آبجکتی یا حالت‌مند (stateful) پشتیبانی نمی‌شوند.</p>
+<p dir="rtl">برای نمونه:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">  # ...
+  openAPIV3Schema:
+    type: object
+    properties:
+      spec:
+        type: object
+        x-kubernetes-validations:
+          - rule: "self.minReplicas &lt;= self.replicas"
+            message: "replicas should be greater than or equal to minReplicas."
+          - rule: "self.replicas &lt;= self.maxReplicas"
+            message: "replicas should be smaller than or equal to maxReplicas."
+        properties:
+          # ...
+          minReplicas:
+            type: integer
+          replicas:
+            type: integer
+          maxReplicas:
+            type: integer
+        required:
+          - minReplicas
+          - replicas
+          - maxReplicas
+</code></pre>
+<p dir="rtl">درخواست ایجاد منبع سفارشی زیر را رد می‌کند:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: "stable.example.com/v1"
+kind: CronTab
+metadata:
+  name: my-new-cron-object
+spec:
+  minReplicas: 0
+  replicas: 20
+  maxReplicas: 10
+</code></pre>
+<p dir="rtl">و این پاسخ را برمی‌گرداند:</p>
+<pre dir="ltr"><code dir="ltr">The CronTab "my-new-cron-object" is invalid:
+* spec: Invalid value: map[string]interface {}{"maxReplicas":10, "minReplicas":0, "replicas":20}: replicas should be smaller than or equal to maxReplicas.
+</code></pre>
+<p dir="rtl">افزونهٔ <code dir="ltr">x-kubernetes-validations</code> می‌تواند چند قاعده داشته باشد. کلید <code dir="ltr">rule</code> زیر <code dir="ltr">x-kubernetes-validations</code> عبارتی را نشان می‌دهد که CEL آن را ارزیابی می‌کند. کلید <code dir="ltr">message</code> پیامی است که هنگام شکست اعتبارسنجی نمایش داده می‌شود. اگر پیامی تنظیم نشده باشد، پاسخ بالا چنین خواهد بود:</p>
+<pre dir="ltr"><code dir="ltr">The CronTab "my-new-cron-object" is invalid:
+* spec: Invalid value: map[string]interface {}{"maxReplicas":10, "minReplicas":0, "replicas":20}: failed rule: self.replicas &lt;= self.maxReplicas
+</code></pre>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">می‌توانید عبارت‌های CEL را به‌سرعت در <a href="https://playcel.undistro.io" target="_blank" rel="noopener">CEL Playground</a> آزمایش کنید.</p>
+</div>
+<p dir="rtl">قواعد اعتبارسنجی هنگام ایجاد یا به‌روزرسانی CRDها کامپایل می‌شوند. اگر کامپایل قواعد اعتبارسنجی با شکست روبه‌رو شود، درخواست ایجاد یا به‌روزرسانی CRD نیز شکست می‌خورد. فرایند کامپایل شامل بررسی نوع‌ها نیز هست.</p>
+<p dir="rtl">خطاهای کامپایل:</p>
+<ul>
+<li dir="rtl">
+<p dir="rtl"><code dir="ltr">no_matching_overload</code>: این تابع هیچ سربارگذاری (overload) متناسب با نوع آرگومان‌ها ندارد.</p>
+<p dir="rtl">برای نمونه، قاعده‌ای مانند <code dir="ltr">self == true</code> روی فیلدی از نوع عدد صحیح این خطا را می‌دهد:</p>
+<pre dir="ltr"><code class="language-none" dir="ltr">Invalid value: apiextensions.ValidationRule{Rule:"self == true", Message:""}: compilation failed: ERROR: \&lt;input&gt;:1:6: found no matching overload for '_==_' applied to '(int, bool)'
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl"><code dir="ltr">no_such_field</code>: فیلد مورد نظر وجود ندارد.</p>
+<p dir="rtl">برای نمونه، قاعده‌ای مانند <code dir="ltr">self.nonExistingField &gt; 0</code> روی فیلدی ناموجود خطای زیر را برمی‌گرداند:</p>
+<pre dir="ltr"><code class="language-none" dir="ltr">Invalid value: apiextensions.ValidationRule{Rule:"self.nonExistingField &gt; 0", Message:""}: compilation failed: ERROR: \&lt;input&gt;:1:5: undefined field 'nonExistingField'
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl"><code dir="ltr">invalid argument</code>: آرگومان نامعتبر برای ماکروها.</p>
+<p dir="rtl">برای نمونه، قاعده‌ای مانند <code dir="ltr">has(self)</code> این خطا را برمی‌گرداند:</p>
+<pre dir="ltr"><code class="language-none" dir="ltr">Invalid value: apiextensions.ValidationRule{Rule:"has(self)", Message:""}: compilation failed: ERROR: &lt;input&gt;:1:4: invalid argument to has() macro
+</code></pre>
+</li>
+</ul>
+<p dir="rtl">نمونه‌هایی از قواعد اعتبارسنجی:</p>
+<table>
+<thead>
+<tr>
+<th dir="rtl">قاعده</th>
+<th dir="rtl">هدف</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">self.minReplicas &lt;= self.replicas &amp;&amp; self.replicas &lt;= self.maxReplicas</code></td>
+<td dir="rtl">بررسی اینکه سه فیلدِ تعریف‌کنندهٔ replicas به‌ترتیب درستی باشند</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">'Available' in self.stateCounts</code></td>
+<td dir="rtl">بررسی اینکه مدخلی با کلید 'Available' در یک نگاشت (map) وجود داشته باشد</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">(size(self.list1) == 0) != (size(self.list2) == 0)</code></td>
+<td dir="rtl">بررسی اینکه یکی از دو فهرست خالی نباشد، اما نه هر دو</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">!('MY_KEY' in self.map1) || self['MY_KEY'].matches('^[a-zA-Z]*$')</code></td>
+<td dir="rtl">اعتبارسنجی مقدارِ یک کلید مشخص در نگاشت، در صورتی که آن کلید در نگاشت وجود داشته باشد</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">self.envars.filter(e, e.name == 'MY_ENV').all(e, e.value.matches('^[a-zA-Z]*$')</code></td>
+<td dir="rtl">اعتبارسنجی فیلد 'value' در مدخلی از listMap که فیلد کلیدی 'name' آن برابر 'MY_ENV' است</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">has(self.expired) &amp;&amp; self.created + self.ttl &lt; self.expired</code></td>
+<td dir="rtl">بررسی اینکه تاریخ 'expired' پس از تاریخ 'create' به‌اضافهٔ مدت 'ttl' باشد</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">self.health.startsWith('ok')</code></td>
+<td dir="rtl">بررسی اینکه فیلد رشته‌ای 'health' با پیشوند 'ok' شروع شود</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">self.widgets.exists(w, w.key == 'x' &amp;&amp; w.foo &lt; 10)</code></td>
+<td dir="rtl">بررسی اینکه ویژگی 'foo' در عضوی از listMap با کلید 'x' کمتر از 10 باشد</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">type(self) == string ? self == '100%' : self == 1000</code></td>
+<td dir="rtl">اعتبارسنجی فیلدی از نوع int-or-string در هر دو حالت عدد صحیح و رشته</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">self.metadata.name.startsWith(self.prefix)</code></td>
+<td dir="rtl">بررسی اینکه نام آبجکت با مقدار فیلدی دیگر به‌عنوان پیشوند شروع شود</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">self.set1.all(e, !(e in self.set2))</code></td>
+<td dir="rtl">بررسی اینکه دو listSet هیچ عضو مشترکی نداشته باشند</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">size(self.names) == size(self.details) &amp;&amp; self.names.all(n, n in self.details)</code></td>
+<td dir="rtl">بررسی اینکه کلیدهای نگاشت 'details' همان اعضای listSet با نام 'names' باشند</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">size(self.clusters.filter(c, c.name == self.primary)) == 1</code></td>
+<td dir="rtl">بررسی اینکه ویژگی 'primary' دقیقاً یک بار در listMap با نام 'clusters' آمده باشد</td>
+</tr>
+</tbody>
+</table>
+<p dir="rtl">همچنین ببینید: <a href="https://github.com/google/cel-spec/blob/v0.6.0/doc/langdef.md#evaluation" target="_blank" rel="noopener">ارزیابی پشتیبانی‌شده در CEL</a></p>
+<ul>
+<li dir="rtl">
+<p dir="rtl">اگر محدودهٔ قاعده ریشهٔ یک منبع باشد، می‌توان در آن هر یک از فیلدهای اعلام‌شده در طرح‌وارهٔ OpenAPIv3 مربوط به CRD و همچنین <code dir="ltr">apiVersion</code>، <code dir="ltr">kind</code>، <code dir="ltr">metadata.name</code> و <code dir="ltr">metadata.generateName</code> را انتخاب کرد. این شامل انتخاب فیلدها از هر دو بخش <code dir="ltr">spec</code> و <code dir="ltr">status</code> در یک عبارت واحد نیز می‌شود:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">  # ...
+  openAPIV3Schema:
+    type: object
+    x-kubernetes-validations:
+      - rule: "self.status.availableReplicas &gt;= self.spec.minReplicas"
+    properties:
+        spec:
+          type: object
+          properties:
+            minReplicas:
+              type: integer
+            # ...
+        status:
+          type: object
+          properties:
+            availableReplicas:
+              type: integer
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">اگر محدودهٔ قاعده آبجکتی دارای ویژگی (property) باشد، ویژگی‌های در دسترس آن آبجکت را می‌توان با <code dir="ltr">self.field</code> انتخاب کرد و وجود فیلد را با <code dir="ltr">has(self.field)</code> بررسی کرد. در عبارت‌های CEL، فیلدهایی که مقدارشان null است فیلدهای غایب به شمار می‌آیند.</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">  # ...
+  openAPIV3Schema:
+    type: object
+    properties:
+      spec:
+        type: object
+        x-kubernetes-validations:
+          - rule: "has(self.foo)"
+        properties:
+          # ...
+          foo:
+            type: integer
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">اگر محدودهٔ قاعده آبجکتی دارای additionalProperties (یعنی یک نگاشت) باشد، مقادیر نگاشت از طریق <code dir="ltr">self[mapKey]</code> در دسترس‌اند، وجود کلید در نگاشت را می‌توان با <code dir="ltr">mapKey in self</code> بررسی کرد و به همهٔ مدخل‌های نگاشت می‌توان با ماکروها و توابع CEL مانند <code dir="ltr">self.all(...)</code> دسترسی داشت.</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">  # ...
+  openAPIV3Schema:
+    type: object
+    properties:
+      spec:
+        type: object
+        x-kubernetes-validations:
+          - rule: "self['xyz'].foo &gt; 0"
+        additionalProperties:
+          # ...
+          type: object
+          properties:
+            foo:
+              type: integer
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">اگر محدودهٔ قاعده یک آرایه باشد، عناصر آرایه از طریق <code dir="ltr">self[i]</code> و همچنین با ماکروها و توابع در دسترس‌اند.</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">  # ...
+  openAPIV3Schema:
+    type: object
+    properties:
+      # ...
+      foo:
+        type: array
+        x-kubernetes-validations:
+          - rule: "size(self) == 1"
+        items:
+          type: string
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">اگر محدودهٔ قاعده یک مقدار نرده‌ای (scalar) باشد، <code dir="ltr">self</code> به همان مقدار نرده‌ای متصل می‌شود.</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">  # ...
+  openAPIV3Schema:
+    type: object
+    properties:
+      spec:
+        type: object
+        properties:
+          # ...
+          foo:
+            type: integer
+            x-kubernetes-validations:
+            - rule: "self &gt; 0"
+</code></pre>
+</li>
+</ul>
+<p dir="rtl">نمونه‌ها:</p>
+<table>
+<thead>
+<tr>
+<th dir="rtl">نوع فیلدی که محدودهٔ قاعده است</th>
+<th dir="rtl">نمونهٔ قاعده</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td dir="rtl">آبجکت ریشه</td>
+<td dir="ltr" class="ltr"><code dir="ltr">self.status.actual &lt;= self.spec.maxDesired</code></td>
+</tr>
+<tr>
+<td dir="rtl">نگاشتی از آبجکت‌ها</td>
+<td dir="ltr" class="ltr"><code dir="ltr">self.components['Widget'].priority &lt; 10</code></td>
+</tr>
+<tr>
+<td dir="rtl">فهرستی از اعداد صحیح</td>
+<td dir="ltr" class="ltr"><code dir="ltr">self.values.all(value, value &gt;= 0 &amp;&amp; value &lt; 100)</code></td>
+</tr>
+<tr>
+<td dir="rtl">رشته</td>
+<td dir="ltr" class="ltr"><code dir="ltr">self.startsWith('kube')</code></td>
+</tr>
+</tbody>
+</table>
+<p dir="rtl">فیلدهای <code dir="ltr">apiVersion</code>، <code dir="ltr">kind</code>، <code dir="ltr">metadata.name</code> و <code dir="ltr">metadata.generateName</code> همیشه از ریشهٔ آبجکت و از هر آبجکتی که با <code dir="ltr">x-kubernetes-embedded-resource</code> حاشیه‌نویسی شده باشد در دسترس‌اند. هیچ ویژگی دیگری از metadata در دسترس نیست.</p>
+<p dir="rtl">داده‌های ناشناخته‌ای که با <code dir="ltr">x-kubernetes-preserve-unknown-fields</code> در منابع سفارشی حفظ می‌شوند، در عبارت‌های CEL در دسترس نیستند. این موارد عبارت‌اند از:</p>
+<ul>
+<li dir="rtl">
+<p dir="rtl">مقادیر فیلدهای ناشناخته‌ای که طرح‌واره‌های آبجکت دارای <code dir="ltr">x-kubernetes-preserve-unknown-fields</code> آن‌ها را حفظ می‌کنند.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">ویژگی‌هایی از آبجکت که طرح‌وارهٔ آن‌ها از «نوع ناشناخته» است. «نوع ناشناخته» به‌صورت بازگشتی چنین تعریف می‌شود:</p>
+<ul>
+<li dir="rtl">طرح‌واره‌ای بدون نوع که x-kubernetes-preserve-unknown-fields در آن برابر true است</li>
+<li dir="rtl">آرایه‌ای که طرح‌وارهٔ اعضای آن (items) از «نوع ناشناخته» است</li>
+<li dir="rtl">آبجکتی که طرح‌وارهٔ additionalProperties آن از «نوع ناشناخته» است</li>
+</ul>
+</li>
+</ul>
+<p dir="rtl">فقط نام ویژگی‌هایی به شکل <code dir="ltr">[a-zA-Z_.-/][a-zA-Z0-9_.-/]*</code> در دسترس‌اند. نام ویژگی‌های در دسترس، هنگام استفاده در عبارت، طبق قواعد زیر گریزداده (escape) می‌شوند:</p>
+<table>
+<thead>
+<tr>
+<th dir="rtl">دنبالهٔ گریز</th>
+<th dir="rtl">نام ویژگی معادل</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">__underscores__</code></td>
+<td><code dir="ltr">__</code></td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">__dot__</code></td>
+<td><code dir="ltr">.</code></td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">__dash__</code></td>
+<td><code dir="ltr">-</code></td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">__slash__</code></td>
+<td><code dir="ltr">/</code></td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">__{keyword}__</code></td>
+<td dir="rtl"><a href="https://github.com/google/cel-spec/blob/v0.6.0/doc/langdef.md#syntax" target="_blank" rel="noopener">کلیدواژهٔ رزروشدهٔ CEL</a></td>
+</tr>
+</tbody>
+</table>
+<p dir="rtl">نکته: کلیدواژهٔ رزروشدهٔ CEL فقط زمانی گریزداده می‌شود که دقیقاً با نام ویژگی منطبق باشد (برای نمونه، int در واژهٔ sprint گریزداده نمی‌شود).</p>
+<p dir="rtl">نمونه‌هایی از گریزدادن:</p>
+<table>
+<thead>
+<tr>
+<th dir="rtl">نام ویژگی</th>
+<th dir="rtl">قاعده با نام ویژگی گریزداده‌شده</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td dir="ltr" class="ltr">namespace</td>
+<td dir="ltr" class="ltr"><code dir="ltr">self.__namespace__ &gt; 0</code></td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr">x-prop</td>
+<td dir="ltr" class="ltr"><code dir="ltr">self.x__dash__prop &gt; 0</code></td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr">redact__d</td>
+<td dir="ltr" class="ltr"><code dir="ltr">self.redact__underscores__d &gt; 0</code></td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr">string</td>
+<td dir="ltr" class="ltr"><code dir="ltr">self.startsWith('kube')</code></td>
+</tr>
+</tbody>
+</table>
+<p dir="rtl">در آرایه‌هایی که <code dir="ltr">x-kubernetes-list-type</code> آن‌ها <code dir="ltr">set</code> یا <code dir="ltr">map</code> است، مقایسهٔ برابری ترتیب عناصر را نادیده می‌گیرد؛ یعنی <code dir="ltr">[1, 2] == [2, 1]</code>. الحاق آرایه‌هایی که x-kubernetes-list-type دارند از معناشناسی همان نوع فهرست پیروی می‌کند:</p>
+<ul>
+<li dir="rtl">
+<p dir="rtl"><code dir="ltr">set</code>: عبارت <code dir="ltr">X + Y</code> اجتماعی انجام می‌دهد که در آن جایگاه همهٔ عناصر <code dir="ltr">X</code> در آرایه حفظ می‌شود و عناصرِ غیرمشترکِ <code dir="ltr">Y</code> با حفظ ترتیب جزئی‌شان به انتها افزوده می‌شوند.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><code dir="ltr">map</code>: عبارت <code dir="ltr">X + Y</code> ادغامی انجام می‌دهد که در آن جایگاه همهٔ کلیدهای <code dir="ltr">X</code> در آرایه حفظ می‌شود، اما هنگامی که مجموعه‌کلیدهای <code dir="ltr">X</code> و <code dir="ltr">Y</code> اشتراک داشته باشند، مقادیر با مقادیر <code dir="ltr">Y</code> بازنویسی می‌شوند. عناصرِ <code dir="ltr">Y</code> که کلیدهای غیرمشترک دارند، با حفظ ترتیب جزئی‌شان به انتها افزوده می‌شوند.</p>
+</li>
+</ul>
+<p dir="rtl">نگاشت نوع‌های OpenAPIv3 به نوع‌های CEL به این صورت است:</p>
+<table>
+<thead>
+<tr>
+<th dir="rtl">نوع OpenAPIv3</th>
+<th dir="rtl">نوع CEL</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td dir="rtl">'object' با Properties</td>
+<td dir="ltr" class="ltr">object / "message type"</td>
+</tr>
+<tr>
+<td dir="rtl">'object' با AdditionalProperties</td>
+<td dir="ltr" class="ltr">map</td>
+</tr>
+<tr>
+<td dir="rtl">'object' با x-kubernetes-embedded-type</td>
+<td dir="rtl">object / "message type"؛ 'apiVersion'، 'kind'، 'metadata.name' و 'metadata.generateName' به‌طور ضمنی در طرح‌واره گنجانده می‌شوند</td>
+</tr>
+<tr>
+<td dir="rtl">'object' با x-kubernetes-preserve-unknown-fields</td>
+<td dir="rtl">object / "message type"؛ فیلدهای ناشناخته در عبارت CEL در دسترس نیستند</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr">x-kubernetes-int-or-string</td>
+<td dir="rtl">آبجکت پویایی که یا int است یا string؛ برای بررسی نوع می‌توان از <code dir="ltr">type(value)</code> استفاده کرد</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr">'array</td>
+<td dir="ltr" class="ltr">list</td>
+</tr>
+<tr>
+<td dir="rtl">'array' با x-kubernetes-list-type=map</td>
+<td dir="rtl">list با برابری مبتنی بر map و تضمین یکتایی کلیدها</td>
+</tr>
+<tr>
+<td dir="rtl">'array' با x-kubernetes-list-type=set</td>
+<td dir="rtl">list با برابری مبتنی بر set و تضمین یکتایی مدخل‌ها</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr">'boolean'</td>
+<td dir="ltr" class="ltr">boolean</td>
+</tr>
+<tr>
+<td dir="rtl">'number' (همهٔ قالب‌ها)</td>
+<td dir="ltr" class="ltr">double</td>
+</tr>
+<tr>
+<td dir="rtl">'integer' (همهٔ قالب‌ها)</td>
+<td dir="ltr" class="ltr">int (64)</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr">'null'</td>
+<td dir="ltr" class="ltr">null_type</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr">'string'</td>
+<td dir="ltr" class="ltr">string</td>
+</tr>
+<tr>
+<td dir="rtl">'string' با format=byte (کدگذاری‌شده با base64)</td>
+<td dir="ltr" class="ltr">bytes</td>
+</tr>
+<tr>
+<td dir="rtl">'string' با format=date</td>
+<td dir="ltr" class="ltr">timestamp (google.protobuf.Timestamp)</td>
+</tr>
+<tr>
+<td dir="rtl">'string' با format=datetime</td>
+<td dir="ltr" class="ltr">timestamp (google.protobuf.Timestamp)</td>
+</tr>
+<tr>
+<td dir="rtl">'string' با format=duration</td>
+<td dir="ltr" class="ltr">duration (google.protobuf.Duration)</td>
+</tr>
+</tbody>
+</table>
+<p dir="rtl">همچنین ببینید: <a href="https://github.com/google/cel-spec/blob/v0.6.0/doc/langdef.md#values" target="_blank" rel="noopener">نوع‌های CEL</a>،
+<a href="https://swagger.io/specification/#data-types" target="_blank" rel="noopener">نوع‌های OpenAPI</a>،
+<a href="custom-resource-definitions.html#specifying-a-structural-schema">طرح‌واره‌های ساختاری کوبرنتیز</a>.</p>
+<h4 id="فیلد-messageexpression" dir="rtl">فیلد messageExpression</h4>
+<p dir="rtl">فیلد <code dir="ltr">messageExpression</code> نیز مانند فیلد <code dir="ltr">message</code> که رشتهٔ گزارش‌شده هنگام شکست یک قاعدهٔ اعتبارسنجی را تعریف می‌کند، به کار می‌رود، با این تفاوت که به شما امکان می‌دهد رشتهٔ پیام را با یک عبارت CEL بسازید. به این ترتیب می‌توانید اطلاعات توصیفی‌تری در پیام شکست اعتبارسنجی بگنجانید. حاصل ارزیابی <code dir="ltr">messageExpression</code> باید یک رشته باشد و این عبارت می‌تواند از همان متغیرهایی استفاده کند که در فیلد <code dir="ltr">rule</code> در دسترس‌اند. برای نمونه:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">x-kubernetes-validations:
+- rule: "self.x &lt;= self.maxLimit"
+  messageExpression: '"x exceeded max limit of " + string(self.maxLimit)'
+</code></pre>
+<p dir="rtl">توجه کنید که الحاق رشته در CEL (عملگر <code dir="ltr">+</code>) به‌طور خودکار مقدار را به رشته تبدیل نمی‌کند. اگر مقدار نرده‌ای غیررشته‌ای دارید، همان‌طور که در نمونهٔ بالا آمده است، با تابع <code dir="ltr">string(&lt;value&gt;)</code> آن را به رشته تبدیل کنید.</p>
+<p dir="rtl">حاصل ارزیابی <code dir="ltr">messageExpression</code> باید یک رشته باشد و این موضوع هنگام نوشتن CRD بررسی می‌شود. توجه کنید که می‌توان <code dir="ltr">message</code> و <code dir="ltr">messageExpression</code> را در یک قاعده هم‌زمان تنظیم کرد؛ در این صورت از <code dir="ltr">messageExpression</code> استفاده می‌شود. با این حال، اگر ارزیابی <code dir="ltr">messageExpression</code> به خطا بینجامد، به‌جای آن از رشتهٔ تعریف‌شده در <code dir="ltr">message</code> استفاده می‌شود و خطای <code dir="ltr">messageExpression</code> در لاگ ثبت می‌شود. اگر عبارت CEL تعریف‌شده در <code dir="ltr">messageExpression</code> رشته‌ای خالی یا رشته‌ای دارای شکست خط تولید کند نیز همین جایگزینی رخ می‌دهد.</p>
+<p dir="rtl">اگر یکی از شرایط بالا برقرار باشد و هیچ <code dir="ltr">message</code> تنظیم نشده باشد، به‌جای آن از پیام پیش‌فرض شکست اعتبارسنجی استفاده می‌شود.</p>
+<p dir="rtl">از آنجا که <code dir="ltr">messageExpression</code> یک عبارت CEL است، محدودیت‌های فهرست‌شده در <a href="#resource-use-by-validation-functions">مصرف منابع توسط توابع اعتبارسنجی</a> در مورد آن نیز صدق می‌کند. اگر ارزیابی در حین اجرای <code dir="ltr">messageExpression</code> به دلیل محدودیت منابع متوقف شود، هیچ قاعدهٔ اعتبارسنجی دیگری اجرا نخواهد شد.</p>
+<p dir="rtl">تنظیم <code dir="ltr">messageExpression</code> اختیاری است.</p>
+<h4 id="فیلد-message-field-message" dir="rtl">فیلد <code dir="ltr">message</code> {#field-message}</h4>
+<p dir="rtl">اگر می‌خواهید پیامی ثابت تنظیم کنید، می‌توانید به‌جای <code dir="ltr">messageExpression</code> از <code dir="ltr">message</code> استفاده کنید. در صورت شکست اعتبارسنجی، مقدار <code dir="ltr">message</code> به‌عنوان یک رشتهٔ خطای مبهم (opaque) به کار می‌رود.</p>
+<p dir="rtl">تنظیم <code dir="ltr">message</code> اختیاری است.</p>
+<h4 id="فیلد-reason-field-reason" dir="rtl">فیلد <code dir="ltr">reason</code> {#field-reason}</h4>
+<p dir="rtl">می‌توانید در یک <code dir="ltr">validation</code> دلیلی ماشین‌خوان برای شکست اعتبارسنجی اضافه کنید تا هر بار که درخواستی این قاعدهٔ اعتبارسنجی را نقض کرد، بازگردانده شود.</p>
+<p dir="rtl">برای نمونه:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">x-kubernetes-validations:
+- rule: "self.x &lt;= self.maxLimit"
+  reason: "FieldValueInvalid"
+</code></pre>
+<p dir="rtl">کد وضعیت HTTP که به فراخواننده بازگردانده می‌شود، با دلیلِ نخستین قاعدهٔ اعتبارسنجیِ شکست‌خورده مطابقت دارد. دلایلی که در حال حاضر پشتیبانی می‌شوند عبارت‌اند از: "FieldValueInvalid"، "FieldValueForbidden"، "FieldValueRequired" و "FieldValueDuplicate". اگر دلیلی تنظیم نشده باشد یا دلیل ناشناخته باشد، به‌طور پیش‌فرض از "FieldValueInvalid" استفاده می‌شود.</p>
+<p dir="rtl">تنظیم <code dir="ltr">reason</code> اختیاری است.</p>
+<h4 id="فیلد-fieldpath-field-field-path" dir="rtl">فیلد <code dir="ltr">fieldPath</code> {#field-field-path}</h4>
+<p dir="rtl">می‌توانید مسیر فیلدی را که هنگام شکست اعتبارسنجی بازگردانده می‌شود، مشخص کنید.</p>
+<p dir="rtl">برای نمونه:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">x-kubernetes-validations:
+- rule: "self.foo.test.x &lt;= self.maxLimit"
+  fieldPath: ".foo.test.x"
+</code></pre>
+<p dir="rtl">در نمونهٔ بالا، اعتبارسنجی بررسی می‌کند که مقدار فیلد <code dir="ltr">x</code> کمتر از مقدار <code dir="ltr">maxLimit</code> باشد. اگر هیچ <code dir="ltr">fieldPath</code> مشخص نشده باشد، هنگام شکست اعتبارسنجی، مسیر فیلد به‌طور پیش‌فرض همان جایی خواهد بود که <code dir="ltr">self</code> به آن محدود شده است. با مشخص کردن <code dir="ltr">fieldPath</code>، خطای بازگردانده‌شده در <code dir="ltr">fieldPath</code> به‌درستی به محل فیلد <code dir="ltr">x</code> اشاره خواهد کرد.</p>
+<p dir="rtl">مقدار <code dir="ltr">fieldPath</code> باید یک مسیر JSON نسبی باشد که محدوده‌اش محل همین افزونهٔ x-kubernetes-validations در طرح‌واره است. افزون بر این، باید به فیلدی موجود در طرح‌واره اشاره کند. برای نمونه، هنگامی که اعتبارسنجی یک ویژگی مشخص <code dir="ltr">foo</code> را زیر نگاشت <code dir="ltr">testMap</code> بررسی می‌کند، می‌توانید <code dir="ltr">fieldPath</code> را برابر <code dir="ltr">".testMap.foo"</code> یا <code dir="ltr">.testMap['foo']'</code> قرار دهید. اگر اعتبارسنجی نیازمند بررسی یکتایی ویژگی‌ها در دو فهرست باشد، می‌توان fieldPath را روی هر یک از این دو فهرست تنظیم کرد؛ برای نمونه، می‌توان آن را برابر <code dir="ltr">.testList1</code> یا <code dir="ltr">.testList2</code> قرار داد. در حال حاضر، این فیلد از عملیات فرزند برای اشاره به یک فیلد موجود پشتیبانی می‌کند. برای اطلاعات بیشتر به <a href="../../../reference/kubectl/jsonpath.html">پشتیبانی از JSONPath در کوبرنتیز</a> مراجعه کنید. فیلد <code dir="ltr">fieldPath</code> از اندیس‌گذاری عددی آرایه‌ها پشتیبانی نمی‌کند.</p>
+<p dir="rtl">تنظیم <code dir="ltr">fieldPath</code> اختیاری است.</p>
+<h4 id="فیلد-optionaloldself-field-optional-oldself" dir="rtl">فیلد <code dir="ltr">optionalOldSelf</code> {#field-optional-oldself}</h4>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
+<p dir="rtl">اگر <a href="#validation-ratcheting">اعتبارسنجی تدریجی (ratcheting) CRD</a> در کلاستر شما فعال نباشد، API مربوط به CustomResourceDefinition این فیلد را شامل نمی‌شود و تلاش برای تنظیم آن ممکن است به خطا بینجامد.</p>
+<p dir="rtl">فیلد <code dir="ltr">optionalOldSelf</code> یک فیلد بولی است که رفتار <a href="#transition-rules">قواعد گذار</a> را که در ادامه شرح داده می‌شوند، تغییر می‌دهد. در حالت عادی، اگر نتوان <code dir="ltr">oldSelf</code> را تعیین کرد، قاعدهٔ گذار ارزیابی نمی‌شود؛ یعنی هنگام ایجاد آبجکت یا وقتی مقدار جدیدی در یک به‌روزرسانی اضافه می‌شود.</p>
+<p dir="rtl">اگر <code dir="ltr">optionalOldSelf</code> برابر true باشد، قواعد گذار همیشه ارزیابی می‌شوند و نوع <code dir="ltr">oldSelf</code> به نوع <a href="https://pkg.go.dev/github.com/google/cel-go/cel#OptionalTypes" target="_blank" rel="noopener"><code dir="ltr">Optional</code></a> در CEL تغییر می‌کند.</p>
+<p dir="rtl">فیلد <code dir="ltr">optionalOldSelf</code> در مواردی سودمند است که نویسندگان طرح‌واره ابزار کنترلی قوی‌تر <a href="#validation-ratcheting">از رفتار پیش‌فرض مبتنی بر برابری</a> بخواهند تا محدودیت‌های جدیدتر و معمولاً سخت‌گیرانه‌تری را بر مقادیر جدید اعمال کنند و در عین حال اجازه دهند مقادیر قدیمی با اعتبارسنجی قدیمی‌تر همچنان معتبر بمانند (grandfathered) یا به‌صورت تدریجی اعتبارسنجی شوند.</p>
+<p dir="rtl">نمونهٔ کاربرد:</p>
+<table>
+<thead>
+<tr>
+<th dir="ltr" class="ltr">CEL</th>
+<th dir="rtl">توضیح</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">self.foo == "foo" || (oldSelf.hasValue() &amp;&amp; oldSelf.value().foo != "foo")</code></td>
+<td dir="rtl">قاعدهٔ تدریجی. هنگامی که مقداری برابر "foo" شد، باید همان foo باقی بماند. اما اگر این مقدار پیش از اعمال محدودیت "foo" وجود داشته است، می‌تواند هر مقداری داشته باشد</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">[oldSelf.orValue(""), self].all(x, ["OldCase1", "OldCase2"].exists(case, x == case)) || ["NewCase1", "NewCase2"].exists(case, self == case) || ["NewCase"].has(self)</code></td>
+<td dir="rtl">«اعتبارسنجی تدریجی برای حالت‌های حذف‌شدهٔ enum، در صورتی که oldSelf از آن‌ها استفاده کرده باشد»</td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">oldSelf.optMap(o, o.size()).orValue(0) &lt; 4 || self.size() &gt;= 4</code></td>
+<td dir="rtl">اعتبارسنجی تدریجی برای حداقل اندازهٔ تازه افزایش‌یافتهٔ نگاشت یا فهرست</td>
+</tr>
+</tbody>
+</table>
+<h4 id="توابع-اعتبارسنجی-available-validation-functions" dir="rtl">توابع اعتبارسنجی {#available-validation-functions}</h4>
+<p dir="rtl">توابع در دسترس عبارت‌اند از:</p>
+<ul>
+<li dir="rtl">توابع استاندارد CEL که در <a href="https://github.com/google/cel-spec/blob/v0.7.0/doc/langdef.md#list-of-standard-definitions" target="_blank" rel="noopener">فهرست تعاریف استاندارد</a> تعریف شده‌اند</li>
+<li dir="rtl"><a href="https://github.com/google/cel-spec/blob/v0.7.0/doc/langdef.md#macros" target="_blank" rel="noopener">ماکروهای</a> استاندارد CEL</li>
+<li dir="rtl"><a href="https://pkg.go.dev/github.com/google/cel-go@v0.11.2/ext#Strings" target="_blank" rel="noopener">کتابخانهٔ توابع رشته‌ای گسترش‌یافتهٔ</a> CEL</li>
+<li dir="rtl"><a href="https://pkg.go.dev/k8s.io/apiextensions-apiserver@v0.24.0/pkg/apiserver/schema/cel/library#pkg-functions" target="_blank" rel="noopener">کتابخانهٔ افزونهٔ CEL</a> در کوبرنتیز</li>
+</ul>
+<h4 id="قواعد-گذار" dir="rtl">قواعد گذار</h4>
+<p dir="rtl">قاعده‌ای که عبارتش به شناسهٔ <code dir="ltr">oldSelf</code> ارجاع می‌دهد، به‌طور ضمنی یک <em>قاعدهٔ گذار</em> (transition rule) به شمار می‌آید. با قواعد گذار، نویسندگان طرح‌واره می‌توانند از برخی گذارها میان دو حالتی که هر کدام به‌تنهایی معتبرند، جلوگیری کنند. برای نمونه:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">type: string
+enum: ["low", "medium", "high"]
+x-kubernetes-validations:
+- rule: "!(self == 'high' &amp;&amp; oldSelf == 'low') &amp;&amp; !(self == 'low' &amp;&amp; oldSelf == 'high')"
+  message: cannot transition directly between 'low' and 'high'
+</code></pre>
+<p dir="rtl">برخلاف سایر قواعد، قواعد گذار فقط بر عملیاتی اعمال می‌شوند که معیارهای زیر را داشته باشند:</p>
+<ul>
+<li dir="rtl">
+<p dir="rtl">عملیات باید یک آبجکت موجود را به‌روزرسانی کند. قواعد انتقال هرگز بر عملیات ایجاد اعمال نمی‌شوند.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">هم مقدار قدیمی و هم مقدار جدید باید وجود داشته باشند. با قرار دادن یک قاعدهٔ انتقال روی گرهٔ والد، همچنان می‌توان بررسی کرد که مقداری اضافه یا حذف شده است یا نه. قواعد انتقال هرگز هنگام ایجاد منبع سفارشی اعمال نمی‌شوند. اگر قاعدهٔ انتقال روی یک فیلد اختیاری قرار گیرد، بر عملیات به‌روزرسانی‌ای که آن فیلد را مقداردهی یا حذف می‌کند اعمال نمی‌شود.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">مسیر گرهٔ طرح‌واره (schema) که قاعدهٔ انتقال آن را اعتبارسنجی می‌کند باید به گره‌ای برسد که میان آبجکت قدیمی و آبجکت جدید قابل مقایسه باشد. برای مثال، آیتم‌های فهرست و زیرشاخه‌های آن‌ها (<code dir="ltr">spec.foo[10].bar</code>) را لزوماً نمی‌توان میان یک آبجکت موجود و به‌روزرسانی بعدی همان آبجکت متناظر کرد.</p>
+</li>
+</ul>
+<p dir="rtl">اگر یک گرهٔ طرح‌واره شامل قاعدهٔ انتقالی باشد که هرگز نمی‌تواند اعمال شود، هنگام نوشتن CRD خطا تولید می‌شود؛ برای نمونه: "oldSelf cannot be used on the uncorrelatable portion of the schema within <em>path</em>".</p>
+<p dir="rtl">قواعد انتقال فقط روی <em>بخش‌های همبسته‌پذیر</em> (correlatable portions) طرح‌واره مجاز هستند.
+بخشی از طرح‌واره زمانی همبسته‌پذیر است که همهٔ طرح‌واره‌های والدِ از نوع <code dir="ltr">array</code> دارای <code dir="ltr">x-kubernetes-list-type=map</code> باشند؛
+وجود هر طرح‌وارهٔ والدِ آرایه‌ای از نوع <code dir="ltr">set</code> یا <code dir="ltr">atomic</code> باعث می‌شود نتوان <code dir="ltr">self</code> را بدون ابهام با <code dir="ltr">oldSelf</code> متناظر کرد.</p>
+<p dir="rtl">در ادامه چند نمونه از قواعد انتقال آمده است:</p>
+<table>
+<thead>
+<tr>
+<th dir="rtl">مورد استفاده</th>
+<th dir="rtl">قاعده</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td dir="rtl">تغییرناپذیری</td>
+<td dir="ltr" class="ltr"><code dir="ltr">self.foo == oldSelf.foo</code></td>
+</tr>
+<tr>
+<td dir="rtl">جلوگیری از تغییر یا حذف پس از مقداردهی</td>
+<td dir="rtl"><code dir="ltr">oldSelf != 'bar' || self == 'bar'</code> یا <code dir="ltr">!has(oldSelf.field) || has(self.field)</code></td>
+</tr>
+<tr>
+<td dir="rtl">مجموعهٔ فقط‌افزودنی</td>
+<td dir="ltr" class="ltr"><code dir="ltr">self.all(element, element in oldSelf)</code></td>
+</tr>
+<tr>
+<td dir="rtl">اگر مقدار قبلی X بوده است، مقدار جدید فقط می‌تواند A یا B باشد، نه Y یا Z</td>
+<td dir="ltr" class="ltr"><code dir="ltr">oldSelf != 'X' || self in ['A', 'B']</code></td>
+</tr>
+<tr>
+<td dir="rtl">شمارنده‌های یکنوا (غیرنزولی)</td>
+<td dir="ltr" class="ltr"><code dir="ltr">self &gt;= oldSelf</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="مصرف-منابع-در-توابع-اعتبارسنجی" dir="rtl">مصرف منابع در توابع اعتبارسنجی</h4>
+<p dir="rtl">هنگامی که یک CustomResourceDefinition دارای قواعد اعتبارسنجی را ایجاد یا به‌روزرسانی می‌کنید،
+سرور API تأثیر احتمالی اجرای این قواعد را بررسی می‌کند. اگر برآورد شود که اجرای یک قاعده بیش از حد پرهزینه است،
+سرور API عملیات ایجاد یا به‌روزرسانی را رد می‌کند و یک پیام خطا برمی‌گرداند.
+سازوکار مشابهی نیز در زمان اجرا وجود دارد که اقدامات مفسر را زیر نظر می‌گیرد. اگر مفسر دستورالعمل‌های بیش از حدی اجرا کند،
+اجرای قاعده متوقف می‌شود و خطا رخ می‌دهد.
+برای هر CustomResourceDefinition نیز مقدار مشخصی منبع جهت اجرای کامل همهٔ قواعد اعتبارسنجی‌اش در نظر گرفته شده است.
+اگر در زمان ایجاد برآورد شود که مجموع هزینهٔ قواعد آن از این حد فراتر می‌رود، باز هم خطای اعتبارسنجی رخ می‌دهد.</p>
+<p dir="rtl">اگر فقط قواعدی تعریف کنید که صرف‌نظر از اندازهٔ ورودی، همواره زمان یکسانی برای اجرا لازم دارند،
+بعید است با محدودیت بودجهٔ منابع اعتبارسنجی به مشکل بربخورید.
+برای مثال، قاعده‌ای که شرط <code dir="ltr">self.foo == 1</code> را بررسی می‌کند، به‌تنهایی هیچ
+خطری از بابت رد شدن به دلیل بودجهٔ منابع اعتبارسنجی ندارد.
+اما اگر <code dir="ltr">foo</code> یک رشته باشد و قاعدهٔ اعتبارسنجی <code dir="ltr">self.foo.contains("someString")</code> را تعریف کنید، زمان اجرای این قاعده
+به طول <code dir="ltr">foo</code> بستگی دارد و ممکن است طولانی‌تر شود.
+نمونهٔ دیگر حالتی است که <code dir="ltr">foo</code> یک آرایه باشد و قاعدهٔ اعتبارسنجی <code dir="ltr">self.foo.all(x, x &gt; 5)</code> را تعیین کنید.
+اگر محدودیتی برای طول <code dir="ltr">foo</code> مشخص نشده باشد، سامانهٔ برآورد هزینه همواره بدترین حالت ممکن را فرض می‌کند،
+و این موضوع برای هر چیزی که بتوان روی آن پیمایش کرد (فهرست‌ها، نگاشت‌ها و غیره) صادق است.</p>
+<p dir="rtl">به همین دلیل، بهترین روش این است که برای هر چیزی که در یک قاعدهٔ اعتبارسنجی پردازش می‌شود، با استفاده از <code dir="ltr">maxItems</code>، <code dir="ltr">maxProperties</code> و
+<code dir="ltr">maxLength</code> محدودیت تعیین کنید تا هنگام برآورد هزینه با خطای اعتبارسنجی مواجه نشوید.
+برای مثال، این طرح‌واره را با یک قاعده در نظر بگیرید:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">openAPIV3Schema:
+  type: object
+  properties:
+    foo:
+      type: array
+      items:
+        type: string
+      x-kubernetes-validations:
+        - rule: "self.all(x, x.contains('a string'))"
+</code></pre>
+<p dir="rtl">در این حالت، سرور API این قاعده را به دلیل بودجهٔ اعتبارسنجی رد می‌کند و این خطا را برمی‌گرداند:</p>
+<pre dir="ltr"><code dir="ltr">spec.validation.openAPIV3Schema.properties[spec].properties[foo].x-kubernetes-validations[0].rule: Forbidden:
+CEL rule exceeded budget by more than 100x (try simplifying the rule, or adding maxItems, maxProperties, and
+maxLength where arrays, maps, and strings are used)
+</code></pre>
+<p dir="rtl">علت رد شدن این است که <code dir="ltr">self.all</code> به معنای فراخوانی <code dir="ltr">contains()</code> روی تک‌تک رشته‌های <code dir="ltr">foo</code> است
+و این تابع نیز به نوبهٔ خود هر رشته را بررسی می‌کند تا ببیند <code dir="ltr">'a string'</code> را در بر دارد یا نه. بدون تعیین محدودیت،
+این قاعده بسیار پرهزینه است.</p>
+<p dir="rtl">اگر هیچ محدودیت اعتبارسنجی‌ای تعیین نکنید، هزینهٔ برآوردشدهٔ این قاعده از سقف هزینهٔ هر قاعده
+فراتر می‌رود. اما اگر در جاهای مناسب محدودیت اضافه کنید، این قاعده پذیرفته می‌شود:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">openAPIV3Schema:
+  type: object
+  properties:
+    foo:
+      type: array
+      maxItems: 25
+      items:
+        type: string
+        maxLength: 10
+      x-kubernetes-validations:
+        - rule: "self.all(x, x.contains('a string'))"
+</code></pre>
+<p dir="rtl">سامانهٔ برآورد هزینه علاوه بر هزینهٔ برآوردشدهٔ خود قاعده، تعداد دفعات اجرای آن را نیز در نظر می‌گیرد.
+برای نمونه، هزینهٔ برآوردشدهٔ قاعدهٔ زیر با نمونهٔ قبلی برابر است
+(با اینکه این بار قاعده روی تک‌تک آیتم‌های آرایه تعریف شده است):</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">openAPIV3Schema:
+  type: object
+  properties:
+    foo:
+      type: array
+      maxItems: 25
+      items:
+        type: string
+        x-kubernetes-validations:
+          - rule: "self.contains('a string'))"
+        maxLength: 10
+</code></pre>
+<p dir="rtl">اگر فهرستی که درون یک فهرست دیگر قرار دارد قاعدهٔ اعتبارسنجی‌ای داشته باشد که از <code dir="ltr">self.all</code> استفاده می‌کند، هزینهٔ آن
+به‌مراتب بیشتر از یک فهرست غیرتودرتو با همان قاعده است. قاعده‌ای که روی یک فهرست غیرتودرتو پذیرفته می‌شد، ممکن است
+برای پذیرفته شدن نیاز داشته باشد که روی هر دو فهرست تودرتو محدودیت‌های کمتری تعیین شود. برای مثال، قاعدهٔ زیر
+حتی بدون تعیین محدودیت پذیرفته می‌شود:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">openAPIV3Schema:
+  type: object
+  properties:
+    foo:
+      type: array
+      items:
+        type: integer
+    x-kubernetes-validations:
+      - rule: "self.all(x, x == 5)"
+</code></pre>
+<p dir="rtl">اما همین قاعده روی طرح‌وارهٔ زیر (که یک آرایهٔ تودرتو به آن اضافه شده است) خطای اعتبارسنجی ایجاد می‌کند:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">openAPIV3Schema:
+  type: object
+  properties:
+    foo:
+      type: array
+      items:
+        type: array
+        items:
+          type: integer
+        x-kubernetes-validations:
+          - rule: "self.all(x, x == 5)"
+</code></pre>
+<p dir="rtl">دلیل این است که هر آیتم <code dir="ltr">foo</code> خودش یک آرایه است و هر زیرآرایه نیز به نوبهٔ خود <code dir="ltr">self.all</code> را فراخوانی می‌کند.
+در جاهایی که از قواعد اعتبارسنجی استفاده می‌شود، تا حد امکان از فهرست‌ها و نگاشت‌های تودرتو پرهیز کنید.</p>
+<h3 id="مقداردهی-پیش-فرض" dir="rtl">مقداردهی پیش‌فرض</h3>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">برای استفاده از مقداردهی پیش‌فرض، CustomResourceDefinition شما باید از نسخهٔ API <code dir="ltr">apiextensions.k8s.io/v1</code> استفاده کند.</p>
+</div>
+<p dir="rtl">با مقداردهی پیش‌فرض (defaulting) می‌توانید مقادیر پیش‌فرض را در <a href="#validation">طرح‌وارهٔ اعتبارسنجی OpenAPI v3</a> تعیین کنید:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: crontabs.stable.example.com
+spec:
+  group: stable.example.com
+  versions:
+    - name: v1
+      served: true
+      storage: true
+      schema:
+        # openAPIV3Schema is the schema for validating custom objects.
+        openAPIV3Schema:
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                cronSpec:
+                  type: string
+                  pattern: '^(\d+|\*)(/\d+)?(\s+(\d+|\*)(/\d+)?){4}$'
+                  default: "5 0 * * *"
+                image:
+                  type: string
+                replicas:
+                  type: integer
+                  minimum: 1
+                  maximum: 10
+                  default: 1
+  scope: Namespaced
+  names:
+    plural: crontabs
+    singular: crontab
+    kind: CronTab
+    shortNames:
+    - ct
+</code></pre>
+<p dir="rtl">با این پیکربندی، هر دو فیلد <code dir="ltr">cronSpec</code> و <code dir="ltr">replicas</code> مقدار پیش‌فرض می‌گیرند؛ یعنی آبجکت زیر:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: "stable.example.com/v1"
+kind: CronTab
+metadata:
+  name: my-new-cron-object
+spec:
+  image: my-awesome-cron-image
+</code></pre>
+<p dir="rtl">به این صورت درمی‌آید:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: "stable.example.com/v1"
+kind: CronTab
+metadata:
+  name: my-new-cron-object
+spec:
+  cronSpec: "5 0 * * *"
+  image: my-awesome-cron-image
+  replicas: 1
+</code></pre>
+<p dir="rtl">مقداردهی پیش‌فرض روی آبجکت در این موارد انجام می‌شود:</p>
+<ul>
+<li dir="rtl">در درخواست ارسالی به سرور API، با استفاده از مقادیر پیش‌فرض نسخهٔ درخواست،</li>
+<li dir="rtl">هنگام خواندن از etcd، با استفاده از مقادیر پیش‌فرض نسخهٔ ذخیره‌سازی،</li>
+<li dir="rtl">پس از پلاگین‌های admission تغییردهنده (mutating) که patch غیرخالی دارند، با استفاده از مقادیر پیش‌فرض نسخهٔ آبجکت در webhook admission.</li>
+</ul>
+<p dir="rtl">مقادیر پیش‌فرضی که هنگام خواندن داده از etcd اعمال می‌شوند، به‌طور خودکار در etcd بازنویسی نمی‌شوند.
+برای ماندگار کردن این مقادیر پیش‌فرض در etcd، باید یک درخواست به‌روزرسانی از طریق API ارسال شود.</p>
+<p dir="rtl">مقادیر پیش‌فرض فیلدهای غیربرگ باید هرس شوند (به‌جز مقادیر پیش‌فرض فیلدهای <code dir="ltr">metadata</code>) و باید
+با طرح‌وارهٔ ارائه‌شده اعتبارسنجی شوند. برای مثال، در نمونهٔ بالا مقدار پیش‌فرض <code dir="ltr">{"replicas": "foo", "badger": 1}</code>
+برای فیلد <code dir="ltr">spec</code> نامعتبر است، زیرا <code dir="ltr">badger</code> یک فیلد ناشناخته است و <code dir="ltr">replicas</code> رشته نیست.</p>
+<p dir="rtl">مقادیر پیش‌فرض فیلدهای <code dir="ltr">metadata</code> در گره‌هایی که <code dir="ltr">x-kubernetes-embedded-resources: true</code> دارند (یا بخش‌هایی از
+یک مقدار پیش‌فرض که <code dir="ltr">metadata</code> را پوشش می‌دهند) هنگام ایجاد CustomResourceDefinition هرس نمی‌شوند،
+بلکه در مرحلهٔ هرس هنگام رسیدگی به درخواست‌ها هرس می‌شوند.</p>
+<h4 id="مقداردهی-پیش-فرض-و-nullable" dir="rtl">مقداردهی پیش‌فرض و Nullable</h4>
+<p dir="rtl">مقادیر null در فیلدهایی که پرچم nullable را مشخص نمی‌کنند یا مقدار آن را
+<code dir="ltr">false</code> قرار می‌دهند، پیش از انجام مقداردهی پیش‌فرض هرس می‌شوند. اگر مقدار پیش‌فرضی وجود داشته باشد،
+اعمال می‌شود. وقتی nullable برابر <code dir="ltr">true</code> باشد، مقادیر null حفظ می‌شوند و مقدار پیش‌فرض نمی‌گیرند.</p>
+<p dir="rtl">برای مثال، طرح‌وارهٔ OpenAPI زیر را در نظر بگیرید:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">type: object
+properties:
+  spec:
+    type: object
+    properties:
+      foo:
+        type: string
+        nullable: false
+        default: "default"
+      bar:
+        type: string
+        nullable: true
+      baz:
+        type: string
+</code></pre>
+<p dir="rtl">ایجاد یک آبجکت با مقادیر null برای <code dir="ltr">foo</code> و <code dir="ltr">bar</code> و <code dir="ltr">baz</code></p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">spec:
+  foo: null
+  bar: null
+  baz: null
+</code></pre>
+<p dir="rtl">به این نتیجه می‌انجامد:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">spec:
+  foo: "default"
+  bar: null
+</code></pre>
+<p dir="rtl">در اینجا <code dir="ltr">foo</code> هرس شده و مقدار پیش‌فرض گرفته است، زیرا این فیلد nullable نیست؛ <code dir="ltr">bar</code> به دلیل <code dir="ltr">nullable: true</code>
+مقدار null خود را حفظ کرده است؛ و <code dir="ltr">baz</code> هرس شده است، زیرا این فیلد nullable نیست و مقدار پیش‌فرضی
+ندارد.</p>
+<h3 id="انتشار-طرح-وارهٔ-اعتبارسنجی-در-openapi" dir="rtl">انتشار طرح‌وارهٔ اعتبارسنجی در OpenAPI</h3>
+<p dir="rtl"><a href="#validation">طرح‌واره‌های اعتبارسنجی OpenAPI v3</a> در CustomResourceDefinition که
+<a href="#specifying-a-structural-schema">ساختاریافته</a> باشند و <a href="#field-pruning">هرس را فعال کنند</a>، از سوی سرور API کوبرنتیز
+به‌صورت <a href="../../../concepts/overview/kubernetes-api.html#openapi-and-swagger-definitions">OpenAPI v3</a> و
+OpenAPI v2 منتشر می‌شوند. توصیه می‌شود از سند OpenAPI v3 استفاده کنید،
+زیرا بازنمایی بدون اتلافی از طرح‌وارهٔ اعتبارسنجی OpenAPI v3 در CustomResourceDefinition است،
+در حالی که OpenAPI v2 حاصل یک تبدیل همراه با اتلاف است.</p>
+<p dir="rtl">ابزار خط فرمان <a href="../../../reference/kubectl/index.html">kubectl</a> از طرح‌وارهٔ منتشرشده برای انجام
+اعتبارسنجی سمت کلاینت (<code dir="ltr">kubectl create</code> و <code dir="ltr">kubectl apply</code>) و توضیح طرح‌واره (<code dir="ltr">kubectl explain</code>)
+روی منابع سفارشی استفاده می‌کند. از طرح‌وارهٔ منتشرشده می‌توان برای مقاصد دیگری مانند تولید کلاینت یا مستندسازی نیز استفاده کرد.</p>
+<h4 id="سازگاری-با-openapi-v2" dir="rtl">سازگاری با OpenAPI V2</h4>
+<p dir="rtl">برای سازگاری با OpenAPI V2، طرح‌وارهٔ اعتبارسنجی OpenAPI v3 با یک تبدیل همراه با اتلاف
+به طرح‌وارهٔ OpenAPI v2 تبدیل می‌شود. این طرح‌واره در فیلدهای <code dir="ltr">definitions</code> و <code dir="ltr">paths</code> در
+<a href="../../../concepts/overview/kubernetes-api.html#openapi-and-swagger-definitions">مشخصات OpenAPI v2</a> نمایش داده می‌شود.</p>
+<p dir="rtl">تغییرات زیر در حین تبدیل اعمال می‌شوند تا سازگاری با نسخه‌های قدیمی‌تر kubectl
+در نسخهٔ 1.13 حفظ شود. این تغییرات مانع می‌شوند که kubectl بیش از حد سخت‌گیر باشد و
+طرح‌واره‌های معتبر OpenAPI را که نمی‌شناسد رد کند. این تبدیل طرح‌وارهٔ اعتبارسنجی تعریف‌شده در CRD را تغییر نمی‌دهد
+و در نتیجه بر <a href="#validation">اعتبارسنجی</a> در سرور API تأثیری ندارد.</p>
+<ol>
+<li dir="rtl">
+<p dir="rtl">فیلدهای زیر حذف می‌شوند، زیرا OpenAPI v2 از آن‌ها پشتیبانی نمی‌کند.</p>
+<ul>
+<li dir="rtl">فیلدهای <code dir="ltr">allOf</code>، <code dir="ltr">anyOf</code>، <code dir="ltr">oneOf</code> و <code dir="ltr">not</code> حذف می‌شوند</li>
+</ul>
+</li>
+<li dir="rtl">
+<p dir="rtl">اگر <code dir="ltr">nullable: true</code> تنظیم شده باشد، <code dir="ltr">type</code>، <code dir="ltr">nullable</code>، <code dir="ltr">items</code> و <code dir="ltr">properties</code> را حذف می‌کنیم، زیرا OpenAPI v2
+نمی‌تواند nullable را بیان کند. این کار برای جلوگیری از رد شدن آبجکت‌های معتبر از سوی kubectl ضروری است.</p>
+</li>
+</ol>
+<h3 id="ستون-های-چاپ-اضافی" dir="rtl">ستون‌های چاپ اضافی</h3>
+<p dir="rtl">ابزار kubectl به قالب‌بندی خروجی در سمت سرور متکی است. سرور API کلاستر شما تعیین می‌کند که
+فرمان <code dir="ltr">kubectl get</code> کدام ستون‌ها را نمایش دهد. می‌توانید این ستون‌ها را برای یک
+CustomResourceDefinition سفارشی کنید. نمونهٔ زیر ستون‌های <code dir="ltr">Spec</code>، <code dir="ltr">Replicas</code> و <code dir="ltr">Age</code>
+را اضافه می‌کند.</p>
+<p dir="rtl">این CustomResourceDefinition را در فایل <code dir="ltr">resourcedefinition.yaml</code> ذخیره کنید:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: crontabs.stable.example.com
+spec:
+  group: stable.example.com
+  scope: Namespaced
+  names:
+    plural: crontabs
+    singular: crontab
+    kind: CronTab
+    shortNames:
+    - ct
+  versions:
+  - name: v1
+    served: true
+    storage: true
+    schema:
+      openAPIV3Schema:
+        type: object
+        properties:
+          spec:
+            type: object
+            properties:
+              cronSpec:
+                type: string
+              image:
+                type: string
+              replicas:
+                type: integer
+    additionalPrinterColumns:
+    - name: Spec
+      type: string
+      description: The cron spec defining the interval a CronJob is run
+      jsonPath: .spec.cronSpec
+    - name: Replicas
+      type: integer
+      description: The number of jobs launched by the CronJob
+      jsonPath: .spec.replicas
+    - name: Age
+      type: date
+      jsonPath: .metadata.creationTimestamp
+</code></pre>
+<p dir="rtl">این CustomResourceDefinition را ایجاد کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f resourcedefinition.yaml
+</code></pre>
+<p dir="rtl">با استفاده از فایل <code dir="ltr">my-crontab.yaml</code> از بخش قبلی یک نمونه ایجاد کنید.</p>
+<p dir="rtl">چاپ سمت سرور را فراخوانی کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get crontab my-new-cron-object
+</code></pre>
+<p dir="rtl">به ستون‌های <code dir="ltr">NAME</code>، <code dir="ltr">SPEC</code>، <code dir="ltr">REPLICAS</code> و <code dir="ltr">AGE</code> در خروجی توجه کنید:</p>
+<pre dir="ltr"><code dir="ltr">NAME                 SPEC        REPLICAS   AGE
+my-new-cron-object   * * * * *   1          7s
+</code></pre>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">ستون <code dir="ltr">NAME</code> به‌صورت ضمنی وجود دارد و نیازی به تعریف آن در CustomResourceDefinition نیست.</p>
+</div>
+<h4 id="اولویت" dir="rtl">اولویت</h4>
+<p dir="rtl">هر ستون یک فیلد <code dir="ltr">priority</code> دارد. در حال حاضر، اولویت
+مشخص می‌کند که ستون در نمای استاندارد نمایش داده شود یا در نمای گسترده (با استفاده از پرچم <code dir="ltr">-o wide</code>).</p>
+<ul>
+<li dir="rtl">ستون‌هایی با اولویت <code dir="ltr">0</code> در نمای استاندارد نمایش داده می‌شوند.</li>
+<li dir="rtl">ستون‌هایی با اولویت بزرگ‌تر از <code dir="ltr">0</code> فقط در نمای گسترده نمایش داده می‌شوند.</li>
+</ul>
+<h4 id="نوع" dir="rtl">نوع</h4>
+<p dir="rtl">فیلد <code dir="ltr">type</code> یک ستون می‌تواند یکی از مقادیر زیر باشد (با
+<a href="https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.0.md#dataTypes" target="_blank" rel="noopener">انواع داده در OpenAPI v3</a> مقایسه کنید):</p>
+<ul>
+<li dir="rtl">نوع <code dir="ltr">integer</code> – اعداد غیراعشاری</li>
+<li dir="rtl">نوع <code dir="ltr">number</code> – اعداد اعشاری (ممیز شناور)</li>
+<li dir="rtl">نوع <code dir="ltr">string</code> – رشته‌ها</li>
+<li dir="rtl">نوع <code dir="ltr">boolean</code> – <code dir="ltr">true</code> یا <code dir="ltr">false</code></li>
+<li dir="rtl">نوع <code dir="ltr">date</code> – به‌صورت مدت زمان سپری‌شده از این برچسب زمانی نمایش داده می‌شود.</li>
+</ul>
+<p dir="rtl">اگر مقدار درون یک CustomResource با نوع تعیین‌شده برای ستون مطابقت نداشته باشد،
+آن مقدار نمایش داده نمی‌شود. برای اطمینان از درست بودن نوع مقادیر، از اعتبارسنجی CustomResource
+استفاده کنید.</p>
+<h4 id="قالب" dir="rtl">قالب</h4>
+<p dir="rtl">فیلد <code dir="ltr">format</code> یک ستون می‌تواند یکی از مقادیر زیر باشد:</p>
+<ul>
+<li dir="ltr" class="ltr"><code dir="ltr">int32</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">int64</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">float</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">double</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">byte</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">date</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">date-time</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">password</code></li>
+</ul>
+<p dir="rtl">فیلد <code dir="ltr">format</code> ستون، سبکی را که <code dir="ltr">kubectl</code> هنگام چاپ مقدار به کار می‌برد تعیین می‌کند.</p>
+<h3 id="انتخابگرهای-فیلد" dir="rtl">انتخابگرهای فیلد</h3>
+<p dir="rtl">با <a href="../../../concepts/overview/working-with-objects/field-selectors.html">انتخابگرهای فیلد</a>
+کلاینت‌ها می‌توانند منابع سفارشی را بر اساس مقدار یک یا چند فیلد منبع
+انتخاب کنند.</p>
+<p dir="rtl">همهٔ منابع سفارشی از انتخابگرهای فیلد <code dir="ltr">metadata.name</code> و <code dir="ltr">metadata.namespace</code>
+پشتیبانی می‌کنند.</p>
+<p dir="rtl">فیلدهای اعلام‌شده در یک <span class="term" title="CustomResourceDefinition">CustomResourceDefinition</span>
+نیز در صورتی که در فیلد <code dir="ltr">spec.versions[*].selectableFields</code> آن
+<span class="term" title="CustomResourceDefinition">CustomResourceDefinition</span> گنجانده شوند، با انتخابگرهای فیلد قابل استفاده هستند.</p>
+<h4 id="فیلدهای-قابل-انتخاب-برای-منابع-سفارشی-crd-selectable-fields" dir="rtl">فیلدهای قابل انتخاب برای منابع سفارشی {#crd-selectable-fields}</h4>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
+<p dir="rtl">با فیلد <code dir="ltr">spec.versions[*].selectableFields</code> در یک <span class="term" title="CustomResourceDefinition">CustomResourceDefinition</span> می‌توان
+اعلام کرد که کدام فیلدهای دیگرِ یک منبع سفارشی در انتخابگرهای فیلد قابل استفاده باشند.
+این قابلیت به <a href="https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/" target="_blank">feature gate</a> با نام <code dir="ltr">CustomResourceFieldSelectors</code>
+وابسته است (این feature gate از کوبرنتیز v1.31 به‌طور پیش‌فرض فعال است).
+نمونهٔ زیر فیلدهای <code dir="ltr">.spec.color</code> و <code dir="ltr">.spec.size</code> را به‌عنوان
+فیلدهای قابل انتخاب اضافه می‌کند.</p>
+<p dir="rtl">این CustomResourceDefinition را در فایل <code dir="ltr">shirt-resource-definition.yaml</code> ذخیره کنید:</p>
+<div class="code-file ltr" dir="ltr">customresourcedefinition/shirt-resource-definition.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: shirts.stable.example.com
+spec:
+  group: stable.example.com
+  scope: Namespaced
+  names:
+    plural: shirts
+    singular: shirt
+    kind: Shirt
+  versions:
+  - name: v1
+    served: true
+    storage: true
+    schema:
+      openAPIV3Schema:
+        type: object
+        properties:
+          spec:
+            type: object
+            properties:
+              color:
+                type: string
+              size:
+                type: string
+    selectableFields:
+    - jsonPath: .spec.color
+    - jsonPath: .spec.size
+    additionalPrinterColumns:
+    - jsonPath: .spec.color
+      name: Color
+      type: string
+    - jsonPath: .spec.size
+      name: Size
+      type: string
+</code></pre>
+<p dir="rtl">این CustomResourceDefinition را ایجاد کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f https://k8s.io/examples/customresourcedefinition/shirt-resource-definition.yaml
+</code></pre>
+<p dir="rtl">با ویرایش فایل <code dir="ltr">shirt-resources.yaml</code> چند Shirt تعریف کنید؛ برای نمونه:</p>
+<div class="code-file ltr" dir="ltr">customresourcedefinition/shirt-resources.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">---
+apiVersion: stable.example.com/v1
+kind: Shirt
+metadata:
+  name: example1
+spec:
+  color: blue
+  size: S
+---
+apiVersion: stable.example.com/v1
+kind: Shirt
+metadata:
+  name: example2
+spec:
+  color: blue
+  size: M
+---
+apiVersion: stable.example.com/v1
+kind: Shirt
+metadata:
+  name: example3
+spec:
+  color: green
+  size: M
+</code></pre>
+<p dir="rtl">منابع سفارشی را ایجاد کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f https://k8s.io/examples/customresourcedefinition/shirt-resources.yaml
+</code></pre>
+<p dir="rtl">همهٔ منابع را دریافت کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get shirts.stable.example.com
+</code></pre>
+<p dir="rtl">خروجی به این صورت است:</p>
+<pre dir="ltr"><code dir="ltr">NAME       COLOR  SIZE
+example1   blue   S
+example2   blue   M
+example3   green  M
+</code></pre>
+<p dir="rtl">پیراهن‌های آبی را واکشی کنید (یعنی Shirtهایی که <code dir="ltr">color</code> آن‌ها <code dir="ltr">blue</code> است):</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get shirts.stable.example.com --field-selector spec.color=blue
+</code></pre>
+<p dir="rtl">خروجی باید به این صورت باشد:</p>
+<pre dir="ltr"><code dir="ltr">NAME       COLOR  SIZE
+example1   blue   S
+example2   blue   M
+</code></pre>
+<p dir="rtl">فقط منابعی را دریافت کنید که <code dir="ltr">color</code> آن‌ها <code dir="ltr">green</code> و <code dir="ltr">size</code> آن‌ها <code dir="ltr">M</code> است:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get shirts.stable.example.com --field-selector spec.color=green,spec.size=M
+</code></pre>
+<p dir="rtl">خروجی باید به این صورت باشد:</p>
+<pre dir="ltr"><code dir="ltr">NAME       COLOR   SIZE
+example3   green   M
+</code></pre>
+<h3 id="زیرمنبع-ها" dir="rtl">زیرمنبع‌ها</h3>
+<p dir="rtl">منابع سفارشی از زیرمنبع‌های (subresources) <code dir="ltr">/status</code> و <code dir="ltr">/scale</code> پشتیبانی می‌کنند.</p>
+<p dir="rtl">می‌توانید زیرمنبع‌های status و scale را به‌صورت اختیاری و با تعریف آن‌ها در CustomResourceDefinition فعال کنید.</p>
+<h4 id="زیرمنبع-status" dir="rtl">زیرمنبع status</h4>
+<p dir="rtl">وقتی زیرمنبع status فعال باشد، زیرمنبع <code dir="ltr">/status</code> برای منبع سفارشی در دسترس قرار می‌گیرد.</p>
+<ul>
+<li dir="rtl">
+<p dir="rtl">بخش‌های status و spec در داخل منبع سفارشی به‌ترتیب با JSONPathهای <code dir="ltr">.status</code> و <code dir="ltr">.spec</code> نمایش داده می‌شوند.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">درخواست‌های <code dir="ltr">PUT</code> به زیرمنبع <code dir="ltr">/status</code> یک آبجکت منبع سفارشی دریافت می‌کنند و تغییرات همه‌چیز به‌جز بخش status را نادیده می‌گیرند.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">درخواست‌های <code dir="ltr">PUT</code> به زیرمنبع <code dir="ltr">/status</code> فقط بخش status منبع سفارشی را اعتبارسنجی می‌کنند.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">درخواست‌های <code dir="ltr">PUT</code>/<code dir="ltr">POST</code>/<code dir="ltr">PATCH</code> به منبع سفارشی، تغییرات بخش status را نادیده می‌گیرند.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">مقدار <code dir="ltr">.metadata.generation</code> با هر تغییری افزایش می‌یابد، مگر تغییراتی که در <code dir="ltr">.metadata</code> یا <code dir="ltr">.status</code> رخ دهند.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">در ریشهٔ شِمای اعتبارسنجی OpenAPI در CRD فقط ساختارهای زیر مجاز هستند:</p>
+<ul>
+<li dir="ltr" class="ltr"><code dir="ltr">description</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">example</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">exclusiveMaximum</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">exclusiveMinimum</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">externalDocs</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">format</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">items</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">maximum</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">maxItems</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">maxLength</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">minimum</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">minItems</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">minLength</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">multipleOf</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">pattern</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">properties</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">required</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">title</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">type</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">uniqueItems</code></li>
+</ul>
+</li>
+</ul>
+<h4 id="زیرمنبع-scale" dir="rtl">زیرمنبع scale</h4>
+<p dir="rtl">وقتی زیرمنبع scale فعال باشد، زیرمنبع <code dir="ltr">/scale</code> برای منبع سفارشی در دسترس قرار می‌گیرد.
+آبجکت <code dir="ltr">autoscaling/v1.Scale</code> به‌عنوان محتوای (payload) درخواست‌های <code dir="ltr">/scale</code> ارسال می‌شود.</p>
+<p dir="rtl">برای فعال‌کردن زیرمنبع scale، فیلدهای زیر در CustomResourceDefinition تعریف می‌شوند.</p>
+<ul>
+<li dir="rtl">
+<p dir="rtl">فیلد <code dir="ltr">specReplicasPath</code> مسیر JSONPath درون منبع سفارشی را تعریف می‌کند که با <code dir="ltr">scale.spec.replicas</code> متناظر است.</p>
+<ul>
+<li dir="rtl">مقدار این فیلد الزامی است.</li>
+<li dir="rtl">فقط JSONPathهایی مجاز هستند که زیر <code dir="ltr">.spec</code> قرار دارند و با نشانه‌گذاری نقطه‌ای نوشته شده‌اند.</li>
+<li dir="rtl">اگر در منبع سفارشی هیچ مقداری زیر <code dir="ltr">specReplicasPath</code> وجود نداشته باشد،
+زیرمنبع <code dir="ltr">/scale</code> هنگام GET خطا برمی‌گرداند.</li>
+</ul>
+</li>
+<li dir="rtl">
+<p dir="rtl">فیلد <code dir="ltr">statusReplicasPath</code> مسیر JSONPath درون منبع سفارشی را تعریف می‌کند که با <code dir="ltr">scale.status.replicas</code> متناظر است.</p>
+<ul>
+<li dir="rtl">مقدار این فیلد الزامی است.</li>
+<li dir="rtl">فقط JSONPathهایی مجاز هستند که زیر <code dir="ltr">.status</code> قرار دارند و با نشانه‌گذاری نقطه‌ای نوشته شده‌اند.</li>
+<li dir="rtl">اگر در منبع سفارشی هیچ مقداری زیر <code dir="ltr">statusReplicasPath</code> وجود نداشته باشد،
+مقدار پیش‌فرض تعداد رپلیکا در وضعیت زیرمنبع <code dir="ltr">/scale</code> برابر 0 خواهد بود.</li>
+</ul>
+</li>
+<li dir="rtl">
+<p dir="rtl">فیلد <code dir="ltr">labelSelectorPath</code> مسیر JSONPath درون منبع سفارشی را تعریف می‌کند که با
+<code dir="ltr">Scale.Status.Selector</code> متناظر است.</p>
+<ul>
+<li dir="rtl">مقدار این فیلد اختیاری است.</li>
+<li dir="rtl">برای کار با HPA و VPA باید این فیلد را تنظیم کنید.</li>
+<li dir="rtl">فقط JSONPathهایی مجاز هستند که زیر <code dir="ltr">.status</code> یا <code dir="ltr">.spec</code> قرار دارند و با نشانه‌گذاری نقطه‌ای نوشته شده‌اند.</li>
+<li dir="rtl">اگر در منبع سفارشی هیچ مقداری زیر <code dir="ltr">labelSelectorPath</code> وجود نداشته باشد،
+مقدار پیش‌فرض انتخابگر وضعیت در زیرمنبع <code dir="ltr">/scale</code> رشتهٔ خالی خواهد بود.</li>
+<li dir="rtl">فیلدی که این مسیر JSON به آن اشاره می‌کند باید یک فیلد رشته‌ای باشد (نه یک ساختار پیچیدهٔ انتخابگر)
+که یک انتخابگر برچسب سریال‌شده را به‌صورت رشته در خود دارد.</li>
+</ul>
+</li>
+</ul>
+<p dir="rtl">در مثال زیر، هر دو زیرمنبع status و scale فعال شده‌اند.</p>
+<p dir="rtl">این CustomResourceDefinition را در فایل <code dir="ltr">resourcedefinition.yaml</code> ذخیره کنید:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: crontabs.stable.example.com
+spec:
+  group: stable.example.com
+  versions:
+    - name: v1
+      served: true
+      storage: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                cronSpec:
+                  type: string
+                image:
+                  type: string
+                replicas:
+                  type: integer
+            status:
+              type: object
+              properties:
+                replicas:
+                  type: integer
+                labelSelector:
+                  type: string
+      # subresources describes the subresources for custom resources.
+      subresources:
+        # status enables the status subresource.
+        status: {}
+        # scale enables the scale subresource.
+        scale:
+          # specReplicasPath defines the JSONPath inside of a custom resource that corresponds to Scale.Spec.Replicas.
+          specReplicasPath: .spec.replicas
+          # statusReplicasPath defines the JSONPath inside of a custom resource that corresponds to Scale.Status.Replicas.
+          statusReplicasPath: .status.replicas
+          # labelSelectorPath defines the JSONPath inside of a custom resource that corresponds to Scale.Status.Selector.
+          labelSelectorPath: .status.labelSelector
+  scope: Namespaced
+  names:
+    plural: crontabs
+    singular: crontab
+    kind: CronTab
+    shortNames:
+    - ct
+</code></pre>
+<p dir="rtl">و آن را ایجاد کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f resourcedefinition.yaml
+</code></pre>
+<p dir="rtl">پس از ایجاد آبجکت CustomResourceDefinition، می‌توانید آبجکت‌های سفارشی بسازید.</p>
+<p dir="rtl">اگر YAML زیر را در فایل <code dir="ltr">my-crontab.yaml</code> ذخیره کنید:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: "stable.example.com/v1"
+kind: CronTab
+metadata:
+  name: my-new-cron-object
+spec:
+  cronSpec: "* * * * */5"
+  image: my-awesome-cron-image
+  replicas: 3
+</code></pre>
+<p dir="rtl">و آن را ایجاد کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f my-crontab.yaml
+</code></pre>
+<p dir="rtl">آنگاه نقطه‌های پایانی (endpoint) جدید RESTful API در سطح فضای نام (namespace) در مسیرهای زیر ایجاد می‌شوند:</p>
+<pre dir="ltr"><code class="language-none" dir="ltr">/apis/stable.example.com/v1/namespaces/*/crontabs/status
+</code></pre>
+<p dir="rtl">و</p>
+<pre dir="ltr"><code class="language-none" dir="ltr">/apis/stable.example.com/v1/namespaces/*/crontabs/scale
+</code></pre>
+<p dir="rtl">می‌توان یک منبع سفارشی را با دستور <code dir="ltr">kubectl scale</code> مقیاس‌دهی کرد.
+برای نمونه، دستور زیر مقدار <code dir="ltr">.spec.replicas</code> منبع سفارشی‌ای را که در بالا ایجاد شد
+روی 5 تنظیم می‌کند:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl scale --replicas=5 crontabs/my-new-cron-object
+crontabs "my-new-cron-object" scaled
+
+kubectl get crontabs my-new-cron-object -o jsonpath='{.spec.replicas}'
+5
+</code></pre>
+<p dir="rtl">می‌توانید از یک <a href="https://kubernetes.io/docs/tasks/run-application/configure-pdb/" target="_blank">PodDisruptionBudget</a> برای محافظت از
+منابع سفارشی‌ای که زیرمنبع scale در آن‌ها فعال است استفاده کنید.</p>
+<h3 id="دسته-ها" dir="rtl">دسته‌ها</h3>
+<p dir="rtl">دسته‌ها (categories) فهرستی از منابع گروه‌بندی‌شده‌ای است که منبع سفارشی به آن‌ها تعلق دارد (مانند <code dir="ltr">all</code>).
+با <code dir="ltr">kubectl get &lt;category-name&gt;</code> می‌توانید منابع متعلق به آن دسته را فهرست کنید.</p>
+<p dir="rtl">مثال زیر <code dir="ltr">all</code> را به فهرست دسته‌ها در CustomResourceDefinition اضافه می‌کند
+و نشان می‌دهد که چگونه می‌توان منبع سفارشی را با <code dir="ltr">kubectl get all</code> در خروجی نمایش داد.</p>
+<p dir="rtl">این CustomResourceDefinition را در فایل <code dir="ltr">resourcedefinition.yaml</code> ذخیره کنید:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: crontabs.stable.example.com
+spec:
+  group: stable.example.com
+  versions:
+    - name: v1
+      served: true
+      storage: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                cronSpec:
+                  type: string
+                image:
+                  type: string
+                replicas:
+                  type: integer
+  scope: Namespaced
+  names:
+    plural: crontabs
+    singular: crontab
+    kind: CronTab
+    shortNames:
+    - ct
+    # categories is a list of grouped resources the custom resource belongs to.
+    categories:
+    - all
+</code></pre>
+<p dir="rtl">و آن را ایجاد کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f resourcedefinition.yaml
+</code></pre>
+<p dir="rtl">پس از ایجاد آبجکت CustomResourceDefinition، می‌توانید آبجکت‌های سفارشی بسازید.</p>
+<p dir="rtl">YAML زیر را در فایل <code dir="ltr">my-crontab.yaml</code> ذخیره کنید:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: "stable.example.com/v1"
+kind: CronTab
+metadata:
+  name: my-new-cron-object
+spec:
+  cronSpec: "* * * * */5"
+  image: my-awesome-cron-image
+</code></pre>
+<p dir="rtl">و آن را ایجاد کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f my-crontab.yaml
+</code></pre>
+<p dir="rtl">هنگام استفاده از <code dir="ltr">kubectl get</code> می‌توانید دسته را مشخص کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get all
+</code></pre>
+<p dir="rtl">خروجی این دستور منابع سفارشی از نوع <code dir="ltr">CronTab</code> را نیز شامل می‌شود:</p>
+<pre dir="ltr"><code class="language-none" dir="ltr">NAME                          AGE
+crontabs/my-new-cron-object   3s
+</code></pre>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<ul>
+<li dir="rtl">
+<p dir="rtl">دربارهٔ <a href="../../../concepts/extend-kubernetes/api-extension/custom-resources.html">منابع سفارشی</a> مطالعه کنید.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">مستندات <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.37/#customresourcedefinition-v1-apiextensions-k8s-io" target="_blank">CustomResourceDefinition</a> را ببینید.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><a href="custom-resource-definition-versioning.html">چند نسخه</a> از یک
+CustomResourceDefinition را ارائه دهید.</p>
+</li>
+</ul>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#پیش-از-شروع">پیش از شروع</a><a class="l2" href="#ایجاد-یک-customresourcedefinition">ایجاد یک CustomResourceDefinition</a><a class="l2" href="#ایجاد-آبجکت-های-سفارشی">ایجاد آبجکت‌های سفارشی</a><a class="l2" href="#حذف-یک-customresourcedefinition">حذف یک CustomResourceDefinition</a><a class="l2" href="#تعیین-یک-طرح-وارهٔ-ساختاری">تعیین یک طرح‌وارهٔ ساختاری</a><a class="l3" href="#هرس-فیلدها">هرس فیلدها</a><a class="l3" href="#intorstring">IntOrString</a><a class="l3" href="#rawextension">RawExtension</a><a class="l2" href="#ارائهٔ-چند-نسخه-از-یک-crd">ارائهٔ چند نسخه از یک CRD</a><a class="l2" href="#مباحث-پیشرفته">مباحث پیشرفته</a><a class="l3" href="#نهایی-کننده-ها">نهایی‌کننده‌ها</a><a class="l3" href="#اعتبارسنجی">اعتبارسنجی</a><a class="l3" href="#رچتینگ-اعتبارسنجی">رچتینگ اعتبارسنجی</a><a class="l3" href="#قواعد-اعتبارسنجی">قواعد اعتبارسنجی</a><a class="l3" href="#مقداردهی-پیش-فرض">مقداردهی پیش‌فرض</a><a class="l3" href="#انتشار-طرح-وارهٔ-اعتبارسنجی-در-openapi">انتشار طرح‌وارهٔ اعتبارسنجی در OpenAPI</a><a class="l3" href="#ستون-های-چاپ-اضافی">ستون‌های چاپ اضافی</a><a class="l3" href="#انتخابگرهای-فیلد">انتخابگرهای فیلد</a><a class="l3" href="#زیرمنبع-ها">زیرمنبع‌ها</a><a class="l3" href="#دسته-ها">دسته‌ها</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>
