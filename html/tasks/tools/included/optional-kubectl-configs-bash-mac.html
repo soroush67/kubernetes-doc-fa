@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>تکمیل خودکار bash در macOS | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
+<header class="top"><a href="../../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">tasks / tools / included</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">تکمیل خودکار bash در macOS</h1><p class="page-meta" dir="rtl">برخی پیکربندی‌های اختیاری برای تکمیل خودکار bash در macOS.</p><h3 id="مقدمه" dir="rtl">مقدمه</h3>
+<p dir="rtl">اسکریپت تکمیل kubectl برای Bash را می‌توان با دستور <code dir="ltr">kubectl completion bash</code> تولید کرد.
+با بارگذاری (source) این اسکریپت در پوسته، تکمیل خودکار kubectl فعال می‌شود.</p>
+<p dir="rtl">با این حال، اسکریپت تکمیل kubectl به
+<a href="https://github.com/scop/bash-completion" target="_blank" rel="noopener"><strong>bash-completion</strong></a> وابسته است و بنابراین باید پیش از آن، این ابزار را نصب کنید.</p>
+<div class="callout warning"><div class="callout-title">هشدار:</div>
+<p dir="rtl">دو نسخه از bash-completion وجود دارد: v1 و v2. نسخهٔ v1 برای Bash 3.2
+(که نسخهٔ پیش‌فرض در macOS است) و نسخهٔ v2 برای Bash 4.1+ است. اسکریپت تکمیل
+kubectl با bash-completion v1 و Bash 3.2 به‌درستی <strong>کار نمی‌کند</strong> و
+به <strong>bash-completion v2</strong> و <strong>Bash 4.1+</strong> نیاز دارد. بنابراین برای اینکه بتوانید
+تکمیل kubectl را در macOS به‌درستی استفاده کنید، باید Bash 4.1+ را نصب و استفاده کنید
+(<a href="https://apple.stackexchange.com/a/292760" target="_blank" rel="noopener"><em>دستورالعمل‌ها</em></a>).
+دستورالعمل‌های زیر فرض می‌کنند که از Bash 4.1+ استفاده می‌کنید
+(یعنی هر نسخه‌ای از Bash که 4.1 یا جدیدتر باشد).</p>
+</div>
+<h3 id="ارتقای-bash" dir="rtl">ارتقای Bash</h3>
+<p dir="rtl">دستورالعمل‌های این بخش فرض می‌کنند که از Bash 4.1+ استفاده می‌کنید. برای بررسی نسخهٔ Bash خود، دستور زیر را اجرا کنید:</p>
+<pre dir="ltr"><code class="language-bash" dir="ltr">echo $BASH_VERSION
+</code></pre>
+<p dir="rtl">اگر نسخهٔ آن بیش از حد قدیمی است، می‌توانید آن را با Homebrew نصب یا ارتقا دهید:</p>
+<pre dir="ltr"><code class="language-bash" dir="ltr">brew install bash
+</code></pre>
+<p dir="rtl">پوستهٔ خود را دوباره بارگذاری کنید و بررسی کنید که نسخهٔ موردنظر در حال استفاده است:</p>
+<pre dir="ltr"><code class="language-bash" dir="ltr">echo $BASH_VERSION $SHELL
+</code></pre>
+<p dir="rtl">ابزار Homebrew معمولاً آن را در مسیر <code dir="ltr">/usr/local/bin/bash</code> نصب می‌کند.</p>
+<h3 id="نصب-bash-completion" dir="rtl">نصب bash-completion</h3>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">همان‌طور که اشاره شد، این دستورالعمل‌ها فرض می‌کنند که از Bash 4.1+ استفاده می‌کنید؛ یعنی
+bash-completion v2 را نصب خواهید کرد (برخلاف Bash 3.2 و bash-completion v1
+که در آن حالت، تکمیل kubectl کار نمی‌کند).</p>
+</div>
+<p dir="rtl">با دستور <code dir="ltr">type _init_completion</code> می‌توانید بررسی کنید که آیا bash-completion v2 از قبل نصب شده است یا نه.
+اگر نصب نشده است، می‌توانید آن را با Homebrew نصب کنید:</p>
+<pre dir="ltr"><code class="language-bash" dir="ltr">brew install bash-completion@2
+</code></pre>
+<p dir="rtl">همان‌طور که در خروجی این دستور آمده است، خط زیر را به فایل <code dir="ltr">~/.bash_profile</code> خود اضافه کنید:</p>
+<pre dir="ltr"><code class="language-bash" dir="ltr">brew_etc="$(brew --prefix)/etc" &amp;&amp; [[ -r "${brew_etc}/profile.d/bash_completion.sh" ]] &amp;&amp; . "${brew_etc}/profile.d/bash_completion.sh"
+</code></pre>
+<p dir="rtl">پوستهٔ خود را دوباره بارگذاری کنید و با دستور <code dir="ltr">type _init_completion</code> بررسی کنید که bash-completion v2 به‌درستی نصب شده است.</p>
+<h3 id="فعال-سازی-تکمیل-خودکار-kubectl" dir="rtl">فعال‌سازی تکمیل خودکار kubectl</h3>
+<p dir="rtl">اکنون باید مطمئن شوید که اسکریپت تکمیل kubectl در همهٔ نشست‌های پوستهٔ شما
+بارگذاری می‌شود. چند راه برای این کار وجود دارد:</p>
+<ul>
+<li dir="rtl">
+<p dir="rtl">اسکریپت تکمیل را در فایل <code dir="ltr">~/.bash_profile</code> خود بارگذاری کنید:</p>
+<pre dir="ltr"><code class="language-bash" dir="ltr">echo 'source &lt;(kubectl completion bash)' &gt;&gt;~/.bash_profile
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">اسکریپت تکمیل را به دایرکتوری <code dir="ltr">/usr/local/etc/bash_completion.d</code> اضافه کنید:</p>
+<pre dir="ltr"><code class="language-bash" dir="ltr">kubectl completion bash &gt;/usr/local/etc/bash_completion.d/kubectl
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">اگر برای kubectl یک نام مستعار (alias) دارید، می‌توانید تکمیل پوسته را طوری گسترش دهید که با آن نام مستعار نیز کار کند:</p>
+<pre dir="ltr"><code class="language-bash" dir="ltr">echo 'alias k=kubectl' &gt;&gt;~/.bash_profile
+echo 'complete -o default -F __start_kubectl k' &gt;&gt;~/.bash_profile
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">اگر kubectl را با Homebrew نصب کرده‌اید (همان‌طور که
+<a href="https://kubernetes.io/docs/tasks/tools/install-kubectl-macos/#install-with-homebrew-on-macos" target="_blank">اینجا</a> توضیح داده شده است)،
+اسکریپت تکمیل kubectl باید از قبل در <code dir="ltr">/usr/local/etc/bash_completion.d/kubectl</code> وجود داشته باشد.
+در این صورت، لازم نیست کاری انجام دهید.</p>
+</li>
+</ul>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">نصب bash-completion v2 از طریق Homebrew همهٔ فایل‌های موجود در دایرکتوری
+<code dir="ltr">BASH_COMPLETION_COMPAT_DIR</code> را بارگذاری می‌کند و به همین دلیل دو روش آخر کار می‌کنند.</p>
+</div>
+<p dir="rtl">در هر صورت، پس از بارگذاری دوبارهٔ پوسته، تکمیل kubectl باید کار کند.</p>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l3" href="#مقدمه">مقدمه</a><a class="l3" href="#ارتقای-bash">ارتقای Bash</a><a class="l3" href="#نصب-bash-completion">نصب bash-completion</a><a class="l3" href="#فعال-سازی-تکمیل-خودکار-kubectl">فعال‌سازی تکمیل خودکار kubectl</a></nav>
+</div>
+</body>
+</html>

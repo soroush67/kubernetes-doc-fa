@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-1665 از 1722 صفحه
+1673 از 1722 صفحه
 
 
 ## `.`
@@ -2189,7 +2189,7 @@
 
 ## `tasks/tools`
 
-- ⏳ `_index.md`
+- ✅ [_index.md](md/tasks/tools/_index.md)
 - ⏳ `install-kubectl-linux.md`
 - ⏳ `install-kubectl-macos.md`
 - ⏳ `install-kubectl-windows.md`
@@ -2198,13 +2198,13 @@
 
 - ✅ [_index.md](md/tasks/tools/included/_index.md)
 - ✅ [kubectl-convert-overview.md](md/tasks/tools/included/kubectl-convert-overview.md)
-- ⏳ `kubectl-whats-next.md`
-- ⏳ `optional-kubectl-configs-bash-linux.md`
-- ⏳ `optional-kubectl-configs-bash-mac.md`
-- ⏳ `optional-kubectl-configs-fish.md`
-- ⏳ `optional-kubectl-configs-pwsh.md`
-- ⏳ `optional-kubectl-configs-zsh.md`
-- ⏳ `verify-kubectl.md`
+- ✅ [kubectl-whats-next.md](md/tasks/tools/included/kubectl-whats-next.md)
+- ✅ [optional-kubectl-configs-bash-linux.md](md/tasks/tools/included/optional-kubectl-configs-bash-linux.md)
+- ✅ [optional-kubectl-configs-bash-mac.md](md/tasks/tools/included/optional-kubectl-configs-bash-mac.md)
+- ✅ [optional-kubectl-configs-fish.md](md/tasks/tools/included/optional-kubectl-configs-fish.md)
+- ✅ [optional-kubectl-configs-pwsh.md](md/tasks/tools/included/optional-kubectl-configs-pwsh.md)
+- ✅ [optional-kubectl-configs-zsh.md](md/tasks/tools/included/optional-kubectl-configs-zsh.md)
+- ✅ [verify-kubectl.md](md/tasks/tools/included/verify-kubectl.md)
 
 ## `tutorials`
 
