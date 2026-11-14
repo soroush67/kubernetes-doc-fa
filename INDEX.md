@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-1590 از 1722 صفحه
+1604 از 1722 صفحه
 
 
 ## `.`
@@ -2071,32 +2071,32 @@
 - ✅ [_index.md](md/tasks/debug/debug-cluster/_index.md)
 - ✅ [audit.md](md/tasks/debug/debug-cluster/audit.md)
 - ✅ [crictl.md](md/tasks/debug/debug-cluster/crictl.md)
-- ⏳ `kubectl-node-debug.md`
-- ⏳ `local-debugging.md`
-- ⏳ `monitor-node-health.md`
-- ⏳ `resource-metrics-pipeline.md`
-- ⏳ `resource-usage-monitoring.md`
-- ⏳ `topology.md`
-- ⏳ `troubleshoot-kubectl.md`
-- ⏳ `windows.md`
+- ✅ [kubectl-node-debug.md](md/tasks/debug/debug-cluster/kubectl-node-debug.md)
+- ✅ [local-debugging.md](md/tasks/debug/debug-cluster/local-debugging.md)
+- ✅ [monitor-node-health.md](md/tasks/debug/debug-cluster/monitor-node-health.md)
+- ✅ [resource-metrics-pipeline.md](md/tasks/debug/debug-cluster/resource-metrics-pipeline.md)
+- ✅ [resource-usage-monitoring.md](md/tasks/debug/debug-cluster/resource-usage-monitoring.md)
+- ✅ [topology.md](md/tasks/debug/debug-cluster/topology.md)
+- ✅ [troubleshoot-kubectl.md](md/tasks/debug/debug-cluster/troubleshoot-kubectl.md)
+- ✅ [windows.md](md/tasks/debug/debug-cluster/windows.md)
 
 ## `tasks/debug/logging`
 
-- ⏳ `_index.md`
+- ✅ [_index.md](md/tasks/debug/logging/_index.md)
 
 ## `tasks/debug/monitoring`
 
-- ⏳ `_index.md`
+- ✅ [_index.md](md/tasks/debug/monitoring/_index.md)
 
 ## `tasks/extend-kubectl`
 
-- ⏳ `kubectl-plugins.md`
+- ✅ [kubectl-plugins.md](md/tasks/extend-kubectl/kubectl-plugins.md)
 
 ## `tasks/extend-kubernetes`
 
-- ⏳ `_index.md`
+- ✅ [_index.md](md/tasks/extend-kubernetes/_index.md)
 - ⏳ `configure-aggregation-layer.md`
-- ⏳ `configure-multiple-schedulers.md`
+- ✅ [configure-multiple-schedulers.md](md/tasks/extend-kubernetes/configure-multiple-schedulers.md)
 - ⏳ `http-proxy-access-api.md`
 - ⏳ `setup-extension-api-server.md`
 - ⏳ `setup-konnectivity.md`
@@ -2104,7 +2104,7 @@
 
 ## `tasks/extend-kubernetes/custom-resources`
 
-- ⏳ `_index.md`
+- ✅ [_index.md](md/tasks/extend-kubernetes/custom-resources/_index.md)
 - ⏳ `custom-resource-definition-versioning.md`
 - ⏳ `custom-resource-definitions.md`
 

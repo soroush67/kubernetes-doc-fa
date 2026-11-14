@@ -8,8 +8,8 @@
 
 | | |
 |---|---|
-| پیشرفت (بر اساس کلمات) | **93.7٪** |
-| صفحات ترجمه‌شده | 1590 از 1722 |
+| پیشرفت (بر اساس کلمات) | **94.2٪** |
+| صفحات ترجمه‌شده | 1604 از 1722 |
 | صفحات دارای ایراد ساختاری | 74 |
 | نسخه‌ی منبع انگلیسی | `f652c6b8a26f` |
 
@@ -74,7 +74,7 @@ cd kubernetes-doc-fa
 | `home` | 2 | 2 |
 | `reference` | 1198 | 1198 |
 | `setup` | 22 | 22 |
-| `tasks` | 135 | 221 |
+| `tasks` | 149 | 221 |
 | `tutorials` | 0 | 45 |
 
 </div>
@@ -101,26 +101,26 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [tasks/extend-kubernetes/custom-resources/_index.md](md/tasks/extend-kubernetes/custom-resources/_index.md) — 2026-11-14T11:00:28+03:30
+- [tasks/extend-kubernetes/configure-multiple-schedulers.md](md/tasks/extend-kubernetes/configure-multiple-schedulers.md) — 2026-11-14T11:00:25+03:30
+- [tasks/extend-kubectl/kubectl-plugins.md](md/tasks/extend-kubectl/kubectl-plugins.md) — 2026-11-14T10:59:46+03:30
+- [tasks/extend-kubernetes/_index.md](md/tasks/extend-kubernetes/_index.md) — 2026-11-14T10:58:50+03:30
+- [tasks/debug/debug-cluster/windows.md](md/tasks/debug/debug-cluster/windows.md) — 2026-11-14T10:58:45+03:30
+- [tasks/debug/monitoring/_index.md](md/tasks/debug/monitoring/_index.md) — 2026-11-14T10:58:41+03:30
+- [tasks/debug/logging/_index.md](md/tasks/debug/logging/_index.md) — 2026-11-14T10:58:34+03:30
+- [tasks/debug/debug-cluster/troubleshoot-kubectl.md](md/tasks/debug/debug-cluster/troubleshoot-kubectl.md) — 2026-11-14T10:58:26+03:30
+- [tasks/debug/debug-cluster/resource-usage-monitoring.md](md/tasks/debug/debug-cluster/resource-usage-monitoring.md) — 2026-11-14T10:58:02+03:30
+- [tasks/debug/debug-cluster/topology.md](md/tasks/debug/debug-cluster/topology.md) — 2026-11-14T10:57:56+03:30
+- [tasks/debug/debug-cluster/resource-metrics-pipeline.md](md/tasks/debug/debug-cluster/resource-metrics-pipeline.md) — 2026-11-14T10:57:25+03:30
+- [tasks/debug/debug-cluster/monitor-node-health.md](md/tasks/debug/debug-cluster/monitor-node-health.md) — 2026-11-14T10:56:58+03:30
+- [tasks/debug/debug-cluster/local-debugging.md](md/tasks/debug/debug-cluster/local-debugging.md) — 2026-11-14T10:56:35+03:30
+- [tasks/debug/debug-cluster/kubectl-node-debug.md](md/tasks/debug/debug-cluster/kubectl-node-debug.md) — 2026-11-14T10:56:14+03:30
 - [tasks/debug/debug-cluster/crictl.md](md/tasks/debug/debug-cluster/crictl.md) — 2026-11-14T10:56:10+03:30
 - [tasks/debug/debug-cluster/audit.md](md/tasks/debug/debug-cluster/audit.md) — 2026-11-14T10:55:51+03:30
 - [tasks/debug/debug-cluster/_index.md](md/tasks/debug/debug-cluster/_index.md) — 2026-11-14T10:55:39+03:30
 - [tasks/debug/debug-application/determine-reason-pod-failure.md](md/tasks/debug/debug-application/determine-reason-pod-failure.md) — 2026-11-14T10:54:48+03:30
 - [tasks/debug/debug-application/get-shell-running-container.md](md/tasks/debug/debug-application/get-shell-running-container.md) — 2026-11-14T10:54:42+03:30
 - [tasks/debug/debug-application/debug-service.md](md/tasks/debug/debug-application/debug-service.md) — 2026-11-14T10:54:25+03:30
-- [tasks/debug/debug-application/debug-statefulset.md](md/tasks/debug/debug-application/debug-statefulset.md) — 2026-11-14T10:54:25+03:30
-- [tasks/debug/debug-application/debug-running-pod.md](md/tasks/debug/debug-application/debug-running-pod.md) — 2026-11-14T10:54:17+03:30
-- [tasks/debug/debug-application/debug-pods.md](md/tasks/debug/debug-application/debug-pods.md) — 2026-11-14T10:52:40+03:30
-- [tasks/configure-pod-container/translate-compose-kubernetes.md](md/tasks/configure-pod-container/translate-compose-kubernetes.md) — 2026-11-14T10:52:04+03:30
-- [tasks/debug/debug-application/debug-init-containers.md](md/tasks/debug/debug-application/debug-init-containers.md) — 2026-11-14T10:51:13+03:30
-- [tasks/debug/debug-application/_index.md](md/tasks/debug/debug-application/_index.md) — 2026-11-14T10:50:55+03:30
-- [tasks/debug/_index.md](md/tasks/debug/_index.md) — 2026-11-14T10:50:49+03:30
-- [tasks/configure-pod-container/user-namespaces.md](md/tasks/configure-pod-container/user-namespaces.md) — 2026-11-14T10:50:12+03:30
-- [tasks/configure-pod-container/security-context.md](md/tasks/configure-pod-container/security-context.md) — 2026-11-14T10:49:52+03:30
-- [tasks/configure-pod-container/static-pod.md](md/tasks/configure-pod-container/static-pod.md) — 2026-11-14T10:49:43+03:30
-- [tasks/configure-pod-container/share-process-namespace.md](md/tasks/configure-pod-container/share-process-namespace.md) — 2026-11-14T10:49:02+03:30
-- [tasks/configure-pod-container/resize-container-resources.md](md/tasks/configure-pod-container/resize-container-resources.md) — 2026-11-14T10:48:42+03:30
-- [tasks/configure-pod-container/resize-pod-resources.md](md/tasks/configure-pod-container/resize-pod-resources.md) — 2026-11-14T10:46:47+03:30
-- [tasks/configure-pod-container/migrate-from-psp.md](md/tasks/configure-pod-container/migrate-from-psp.md) — 2026-11-14T10:46:06+03:30
 
 </div>
 

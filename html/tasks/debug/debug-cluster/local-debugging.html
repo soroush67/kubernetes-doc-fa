@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>توسعه و اشکال‌زدایی سرویس‌ها به‌صورت محلی با استفاده از telepresence | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
+<header class="top"><a href="../../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">tasks / debug / debug-cluster</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">توسعه و اشکال‌زدایی سرویس‌ها به‌صورت محلی با استفاده از telepresence</h1><!-- overview -->
+<p dir="rtl">برنامه‌های کوبرنتیز معمولاً از چندین سرویس مجزا تشکیل می‌شوند که هر یک در کانتینر خود اجرا می‌شود. توسعه و اشکال‌زدایی این سرویس‌ها روی یک کلاستر کوبرنتیز راه دور می‌تواند دشوار باشد، زیرا برای اجرای ابزارهای اشکال‌زدایی باید <a href="../debug-application/get-shell-running-container.html">به یک کانتینر در حال اجرا شِل باز کنید</a>.</p>
+<p dir="rtl">ابزار <code dir="ltr">telepresence</code> فرایند توسعه و اشکال‌زدایی سرویس‌ها را به‌صورت محلی آسان می‌کند و هم‌زمان سرویس را به یک کلاستر کوبرنتیز راه دور پراکسی می‌کند. با استفاده از <code dir="ltr">telepresence</code> می‌توانید ابزارهای دلخواه خود، مانند دیباگر و IDE، را برای یک سرویس محلی به کار ببرید. این ابزار همچنین دسترسی کامل سرویس به ConfigMapها، Secretها و سرویس‌های در حال اجرا روی کلاستر راه دور را فراهم می‌کند.</p>
+<p dir="rtl">این سند نحوهٔ استفاده از <code dir="ltr">telepresence</code> را برای توسعه و اشکال‌زدایی محلی سرویس‌هایی که روی یک کلاستر راه دور اجرا می‌شوند، شرح می‌دهد.</p>
+<h2 id="پیش-از-شروع" dir="rtl">پیش از شروع</h2>
+<ul>
+<li dir="rtl">کلاستر کوبرنتیز نصب شده باشد.</li>
+<li dir="rtl">ابزار <code dir="ltr">kubectl</code> برای ارتباط با کلاستر پیکربندی شده باشد.</li>
+<li dir="rtl">ابزار <a href="https://www.telepresence.io/docs/latest/quick-start/" target="_blank" rel="noopener">Telepresence</a> نصب شده باشد.</li>
+</ul>
+<!-- steps -->
+<h2 id="اتصال-ماشین-محلی-به-یک-کلاستر-کوبرنتیز-راه-دور" dir="rtl">اتصال ماشین محلی به یک کلاستر کوبرنتیز راه دور</h2>
+<p dir="rtl">پس از نصب <code dir="ltr">telepresence</code>، فرمان <code dir="ltr">telepresence connect</code> را اجرا کنید تا Daemon آن راه‌اندازی شود و ایستگاه کاری محلی شما به کلاستر متصل شود.</p>
+<pre dir="ltr"><code dir="ltr">$ telepresence connect
+ 
+Launching Telepresence Daemon
+...
+Connected to context default (https://&lt;cluster public IP&gt;)
+</code></pre>
+<p dir="rtl">اکنون می‌توانید با استفاده از نحو کوبرنتیز با curl به سرویس‌ها درخواست بفرستید؛ برای مثال: <code dir="ltr">curl -ik https://kubernetes.default</code></p>
+<h2 id="توسعه-یا-اشکال-زدایی-یک-سرویس-موجود" dir="rtl">توسعه یا اشکال‌زدایی یک سرویس موجود</h2>
+<p dir="rtl">هنگام توسعهٔ یک برنامه روی کوبرنتیز، معمولاً روی یک سرویس واحد برنامه‌نویسی یا اشکال‌زدایی می‌کنید. ممکن است این سرویس برای آزمایش و اشکال‌زدایی به سرویس‌های دیگر نیاز داشته باشد. یکی از گزینه‌ها استفاده از خط لولهٔ استقرار پیوسته است، اما حتی سریع‌ترین خط لولهٔ استقرار نیز در چرخهٔ برنامه‌نویسی یا اشکال‌زدایی تأخیر ایجاد می‌کند.</p>
+<p dir="rtl">برای ایجاد یک «رهگیری» (intercept) جهت تغییر مسیر ترافیک سرویس راه دور، از فرمان <code dir="ltr">telepresence intercept $SERVICE_NAME --port $LOCAL_PORT:$REMOTE_PORT</code> استفاده کنید.</p>
+<p dir="rtl">در این فرمان:</p>
+<ul>
+<li dir="rtl">مقدار <code dir="ltr">$SERVICE_NAME</code> نام سرویس محلی شماست.</li>
+<li dir="rtl">مقدار <code dir="ltr">$LOCAL_PORT</code> پورتی است که سرویس شما روی ایستگاه کاری محلی‌تان روی آن اجرا می‌شود.</li>
+<li dir="rtl">و مقدار <code dir="ltr">$REMOTE_PORT</code> پورتی است که سرویس شما در کلاستر به آن گوش می‌دهد.</li>
+</ul>
+<p dir="rtl">با اجرای این فرمان، Telepresence ترافیک راه دور را به‌جای سرویس موجود در کلاستر کوبرنتیز راه دور، به سرویس محلی شما می‌فرستد. کد منبع سرویس خود را به‌صورت محلی ویرایش و ذخیره کنید؛ خواهید دید که تغییرات متناظر هنگام دسترسی به برنامهٔ راه دور بلافاصله اعمال می‌شوند. همچنین می‌توانید سرویس محلی خود را با یک دیباگر یا هر ابزار توسعهٔ محلی دیگری اجرا کنید.</p>
+<h2 id="telepresence-چگونه-کار-می-کند؟" dir="rtl">Telepresence چگونه کار می‌کند؟</h2>
+<p dir="rtl">ابزار Telepresence یک sidecar به نام traffic-agent را در کنار کانتینر برنامهٔ موجود شما که در کلاستر راه دور اجرا می‌شود، نصب می‌کند. سپس تمام درخواست‌های ترافیکی ورودی به Pod را دریافت می‌کند و به‌جای ارسال آن‌ها به برنامه در کلاستر راه دور، کل ترافیک (هنگامی که یک <a href="https://www.getambassador.io/docs/telepresence/latest/concepts/intercepts/#global-intercept" target="_blank" rel="noopener">رهگیری سراسری</a> ایجاد می‌کنید) یا بخشی از ترافیک (هنگامی که یک <a href="https://www.getambassador.io/docs/telepresence/latest/concepts/intercepts/#personal-intercept" target="_blank" rel="noopener">رهگیری شخصی</a> ایجاد می‌کنید) را به محیط توسعهٔ محلی شما هدایت می‌کند.</p>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<p dir="rtl">اگر به یک آموزش عملی علاقه دارید، <a href="https://cloud.google.com/community/tutorials/developing-services-with-k8s" target="_blank" rel="noopener">این آموزش</a> را ببینید که مراحل توسعهٔ محلی برنامهٔ Guestbook روی Google Kubernetes Engine را گام‌به‌گام شرح می‌دهد.</p>
+<p dir="rtl">برای مطالعهٔ بیشتر، به <a href="https://www.telepresence.io" target="_blank" rel="noopener">وب‌سایت Telepresence</a> مراجعه کنید.</p>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#پیش-از-شروع">پیش از شروع</a><a class="l2" href="#اتصال-ماشین-محلی-به-یک-کلاستر-کوبرنتیز-راه-دور">اتصال ماشین محلی به یک کلاستر کوبرنتیز راه دور</a><a class="l2" href="#توسعه-یا-اشکال-زدایی-یک-سرویس-موجود">توسعه یا اشکال‌زدایی یک سرویس موجود</a><a class="l2" href="#telepresence-چگونه-کار-می-کند؟">Telepresence چگونه کار می‌کند؟</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>
