@@ -1,0 +1,371 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ارتقای کلاسترهای kubeadm | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
+<header class="top"><a href="../../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">tasks / administer-cluster / kubeadm</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">ارتقای کلاسترهای kubeadm</h1><!-- overview -->
+<p dir="rtl">این صفحه توضیح می‌دهد که چگونه یک کلاستر کوبرنتیز ایجادشده با kubeadm را از نسخهٔ
+1.36.x به نسخهٔ 1.37.x و همچنین از نسخهٔ
+1.37.x به 1.37.y (که در آن <code dir="ltr">y &gt; x</code>) ارتقا دهید. رد شدن از نسخه‌های MINOR
+در هنگام ارتقا پشتیبانی نمی‌شود. برای جزئیات بیشتر، به <a href="/releases/version-skew-policy/">سیاست اختلاف نسخه (Version Skew Policy)</a> مراجعه کنید.</p>
+<p dir="rtl">برای دیدن اطلاعات مربوط به ارتقای کلاسترهایی که با نسخه‌های قدیمی‌تر kubeadm ایجاد شده‌اند،
+به صفحه‌های زیر مراجعه کنید:</p>
+<ul>
+<li dir="rtl"><a href="https://v1-36.docs.kubernetes.io/docs/tasks/administer-cluster/kubeadm/kubeadm-upgrade/" target="_blank" rel="noopener">ارتقای کلاستر kubeadm از 1.35 به 1.36</a></li>
+<li dir="rtl"><a href="https://v1-35.docs.kubernetes.io/docs/tasks/administer-cluster/kubeadm/kubeadm-upgrade/" target="_blank" rel="noopener">ارتقای کلاستر kubeadm از 1.34 به 1.35</a></li>
+<li dir="rtl"><a href="https://v1-34.docs.kubernetes.io/docs/tasks/administer-cluster/kubeadm/kubeadm-upgrade/" target="_blank" rel="noopener">ارتقای کلاستر kubeadm از 1.33 به 1.34</a></li>
+<li dir="rtl"><a href="https://v1-33.docs.kubernetes.io/docs/tasks/administer-cluster/kubeadm/kubeadm-upgrade/" target="_blank" rel="noopener">ارتقای کلاستر kubeadm از 1.32 به 1.33</a></li>
+</ul>
+<p dir="rtl">پروژهٔ کوبرنتیز توصیه می‌کند که بی‌درنگ به آخرین انتشارهای وصله‌ای (patch) ارتقا دهید و
+اطمینان حاصل کنید که یک انتشار فرعی (minor) پشتیبانی‌شده از کوبرنتیز را اجرا می‌کنید.
+پیروی از این توصیه به حفظ امنیت شما کمک می‌کند.</p>
+<p dir="rtl">روند کلی ارتقا به شرح زیر است:</p>
+<ol>
+<li dir="rtl">ارتقای نود اصلی control plane.</li>
+<li dir="rtl">ارتقای نودهای control plane دیگر.</li>
+<li dir="rtl">ارتقای نودهای کارگر (worker).</li>
+</ol>
+<h2 id="پیش-از-شروع" dir="rtl">پیش از شروع</h2>
+<ul>
+<li dir="rtl">حتماً <a href="https://git.k8s.io/kubernetes/CHANGELOG" target="_blank" rel="noopener">یادداشت‌های انتشار</a> را با دقت بخوانید.</li>
+<li dir="rtl">کلاستر باید از control plane ایستا و پادهای etcd یا etcd خارجی استفاده کند.</li>
+<li dir="rtl">از همهٔ اجزای مهم، مانند وضعیت سطح برنامه که در پایگاه داده ذخیره شده است، نسخهٔ پشتیبان تهیه کنید.
+دستور <code dir="ltr">kubeadm upgrade</code> به بارهای کاری شما دست نمی‌زند و فقط اجزای داخلی کوبرنتیز را تغییر می‌دهد، اما تهیهٔ نسخهٔ پشتیبان همیشه یک رویهٔ توصیه‌شده است.</li>
+<li dir="rtl"><a href="https://serverfault.com/questions/684771/best-way-to-disable-swap-in-linux" target="_blank" rel="noopener">Swap باید غیرفعال باشد</a>.</li>
+</ul>
+<h3 id="اطلاعات-تکمیلی" dir="rtl">اطلاعات تکمیلی</h3>
+<ul>
+<li dir="rtl">دستورالعمل‌های زیر مشخص می‌کنند که در طول فرایند ارتقا، هر نود را چه زمانی باید تخلیه (drain) کنید.
+اگر ارتقای نسخهٔ <strong>فرعی</strong> را برای هر kubelet انجام می‌دهید، <strong>باید</strong>
+ابتدا نود (یا نودهایی) را که ارتقا می‌دهید تخلیه کنید. ممکن است روی نودهای control plane
+پادهای CoreDNS یا بارهای کاری حیاتی دیگری در حال اجرا باشند. برای اطلاعات بیشتر،
+<a href="https://kubernetes.io/docs/tasks/administer-cluster/safely-drain-node/" target="_blank">تخلیهٔ نودها</a> را ببینید.</li>
+<li dir="rtl">پروژهٔ کوبرنتیز توصیه می‌کند که نسخه‌های kubelet و kubeadm با هم یکسان باشند.
+به‌جای این کار می‌توانید از نسخه‌ای از kubelet استفاده کنید که از kubeadm قدیمی‌تر است، به شرط آنکه
+در محدودهٔ نسخه‌های پشتیبانی‌شده قرار داشته باشد.
+برای جزئیات بیشتر، به <a href="../../../setup/production-environment/tools/kubeadm/create-cluster-kubeadm.html#kubeadm-s-skew-against-the-kubelet">اختلاف نسخهٔ kubeadm با kubelet</a> مراجعه کنید.</li>
+<li dir="rtl">همهٔ کانتینرها پس از ارتقا دوباره راه‌اندازی می‌شوند، زیرا مقدار هش مشخصات (spec) کانتینر تغییر می‌کند.</li>
+<li dir="rtl">برای اطمینان از اینکه سرویس kubelet پس از ارتقا با موفقیت دوباره راه‌اندازی شده است،
+می‌توانید دستور <code dir="ltr">systemctl status kubelet</code> را اجرا کنید یا لاگ‌های سرویس را با <code dir="ltr">journalctl -xeu kubelet</code> ببینید.</li>
+<li dir="rtl">دستور <code dir="ltr">kubeadm upgrade</code> از فلگ <code dir="ltr">--config</code> همراه با
+<a href="../../../reference/config-api/kubeadm-config.v1beta4.html">نوع API <code dir="ltr">UpgradeConfiguration</code></a> پشتیبانی می‌کند که با آن
+می‌توان فرایند ارتقا را پیکربندی کرد.</li>
+<li dir="rtl">دستور <code dir="ltr">kubeadm upgrade</code> از پیکربندی مجدد یک کلاستر موجود پشتیبانی نمی‌کند. برای این کار، مراحل
+<a href="kubeadm-reconfigure.html">پیکربندی مجدد کلاستر kubeadm</a> را دنبال کنید.</li>
+</ul>
+<h3 id="ملاحظات-ارتقای-etcd" dir="rtl">ملاحظات ارتقای etcd</h3>
+<p dir="rtl">از آنجا که پاد ایستای <code dir="ltr">kube-apiserver</code> همواره در حال اجراست (حتی اگر
+نود را تخلیه کرده باشید)، هنگامی که ارتقایی با kubeadm انجام می‌دهید که شامل
+ارتقای etcd نیز هست، درخواست‌های در حال پردازش به سرور، در مدتی که پاد ایستای جدید etcd
+در حال راه‌اندازی مجدد است، متوقف می‌مانند. برای دور زدن این مشکل، می‌توان فرایند
+<code dir="ltr">kube-apiserver</code> را چند ثانیه پیش از اجرای دستور <code dir="ltr">kubeadm upgrade apply</code> به‌طور فعال متوقف کرد. با این کار، درخواست‌های در حال پردازش تکمیل و اتصال‌های موجود
+بسته می‌شوند و پیامدهای از دسترس خارج شدن etcd به حداقل می‌رسد. این کار را می‌توان
+به‌صورت زیر روی نودهای control plane انجام داد:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">killall -s SIGTERM kube-apiserver # trigger a graceful kube-apiserver shutdown
+sleep 20 # wait a little bit to permit completing in-flight requests
+kubeadm upgrade ... # execute a kubeadm upgrade command
+</code></pre>
+<!-- steps -->
+<h2 id="تغییر-مخزن-بسته-ها" dir="rtl">تغییر مخزن بسته‌ها</h2>
+<p dir="rtl">اگر از مخازن بستهٔ متعلق به جامعه (<code dir="ltr">pkgs.k8s.io</code>) استفاده می‌کنید، باید
+مخزن بسته را برای انتشار فرعی موردنظر کوبرنتیز فعال کنید. این موضوع در سند
+<a href="change-package-repository.html">تغییر مخزن بستهٔ کوبرنتیز</a>
+توضیح داده شده است.</p>
+<h2 id="تعیین-نسخهٔ-مقصد-ارتقا" dir="rtl">تعیین نسخهٔ مقصد ارتقا</h2>
+<p dir="rtl">آخرین انتشار وصله‌ای کوبرنتیز 1.37 را با استفاده از مدیر بستهٔ سیستم‌عامل پیدا کنید:</p>
+<div class="tabs">
+<div class="tab"><div class="tab-name">Ubuntu، Debian یا HypriotOS</div>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># Find the latest 1.37 version in the list.
+# It should look like 1.37.x-*, where x is the latest patch.
+sudo apt update
+sudo apt-cache madison kubeadm
+</code></pre>
+</div>
+<div class="tab"><div class="tab-name">CentOS، RHEL یا Fedora</div>
+<p dir="rtl">برای سیستم‌های دارای DNF4 (Fedora &lt; 41، RHEL/CentOS &lt; 10):</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># Find the latest 1.37 version in the list.
+# It should look like 1.37.x-*, where x is the latest patch.
+sudo dnf list --showduplicates kubeadm --disableexcludes=kubernetes
+</code></pre>
+<p dir="rtl">برای سیستم‌های دارای DNF5:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># Find the latest 1.37 version in the list.
+# It should look like 1.37.x-*, where x is the latest patch.
+sudo dnf list --showduplicates kubeadm --setopt=disable_excludes=kubernetes
+</code></pre>
+</div>
+</div>
+<p dir="rtl">اگر نسخه‌ای را که انتظار دارید به آن ارتقا دهید نمی‌بینید، <a href="change-package-repository.html#verifying-if-the-kubernetes-package-repositories-are-used">بررسی کنید که آیا از مخازن بستهٔ کوبرنتیز استفاده می‌شود.</a></p>
+<h2 id="ارتقای-نودهای-control-plane" dir="rtl">ارتقای نودهای control plane</h2>
+<p dir="rtl">روند ارتقا روی نودهای control plane باید هر بار روی یک نود انجام شود.
+نودی از control plane را که می‌خواهید ابتدا ارتقا دهید انتخاب کنید. این نود باید فایل <code dir="ltr">/etc/kubernetes/admin.conf</code> را داشته باشد.</p>
+<h3 id="فراخوانی-kubeadm-upgrade" dir="rtl">فراخوانی «kubeadm upgrade»</h3>
+<p dir="rtl"><strong>برای نخستین نود control plane</strong></p>
+<ol>
+<li dir="rtl">ارتقای kubeadm:</li>
+</ol>
+<div class="tabs">
+<div class="tab"><div class="tab-name">Ubuntu، Debian یا HypriotOS</div>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># replace x in 1.37.x-* with the latest patch version
+sudo apt-mark unhold kubeadm &amp;&amp; \
+sudo apt-get update &amp;&amp; sudo apt-get install -y kubeadm='1.37.x-*' &amp;&amp; \
+sudo apt-mark hold kubeadm
+</code></pre>
+</div>
+<div class="tab"><div class="tab-name">CentOS، RHEL یا Fedora</div>
+<p dir="rtl">برای سیستم‌های دارای DNF4 (Fedora &lt; 41، RHEL/CentOS &lt; 10):</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># replace x in 1.37.x-* with the latest patch version
+sudo dnf install -y kubeadm-'1.37.x-*' --disableexcludes=kubernetes
+</code></pre>
+<p dir="rtl">برای سیستم‌های دارای DNF5:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># replace x in 1.37.x-* with the latest patch version
+sudo dnf install -y kubeadm-'1.37.x-*' --setopt=disable_excludes=kubernetes
+</code></pre>
+</div>
+</div>
+<ol>
+<li dir="rtl">
+<p dir="rtl">بررسی کنید که دانلود به‌درستی انجام شده و نسخهٔ موردانتظار را دارد:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubeadm version
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">برنامهٔ ارتقا را بررسی کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">sudo kubeadm upgrade plan
+</code></pre>
+<p dir="rtl">این دستور بررسی می‌کند که آیا کلاستر شما قابل ارتقاست و نسخه‌هایی را که می‌توانید به آن‌ها ارتقا دهید دریافت می‌کند.
+همچنین جدولی از وضعیت نسخه‌های پیکربندی اجزا نمایش می‌دهد.</p>
+</li>
+</ol>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">دستور <code dir="ltr">kubeadm upgrade</code> گواهی‌هایی را که روی این نود مدیریت می‌کند نیز به‌طور خودکار تمدید می‌کند.
+برای انصراف از تمدید گواهی‌ها می‌توانید از فلگ <code dir="ltr">--certificate-renewal=false</code> استفاده کنید.
+برای اطلاعات بیشتر، <a href="kubeadm-certs.html">راهنمای مدیریت گواهی‌ها</a> را ببینید.</p>
+<ol>
+<li dir="rtl">
+<p dir="rtl">نسخه‌ای را برای ارتقا انتخاب کنید و دستور مناسب را اجرا کنید. برای نمونه:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># replace x with the patch version you picked for this upgrade
+sudo kubeadm upgrade apply v1.37.x
+</code></pre>
+<p dir="rtl">پس از پایان اجرای دستور، باید خروجی زیر را ببینید:</p>
+<pre dir="ltr"><code dir="ltr">[upgrade/successful] SUCCESS! Your cluster was upgraded to "v1.37.x". Enjoy!
+
+[upgrade/kubelet] Now that your control plane is upgraded, please proceed with upgrading your kubelets if you haven't already done so.
+</code></pre>
+</li>
+</ol>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">در نسخه‌های پیش از v1.28، حالت پیش‌فرض kubeadm این بود که افزونه‌ها (از جمله CoreDNS و kube-proxy) را
+بلافاصله در طول اجرای <code dir="ltr">kubeadm upgrade apply</code> ارتقا دهد، صرف‌نظر از اینکه نمونه‌های دیگری از control plane
+وجود داشته باشند که هنوز ارتقا نیافته‌اند. این رفتار ممکن است مشکلات سازگاری ایجاد کند. از نسخهٔ v1.28 به بعد،
+حالت پیش‌فرض kubeadm این است که پیش از آغاز ارتقای افزونه‌ها بررسی کند که آیا همهٔ نمونه‌های control plane
+ارتقا یافته‌اند یا نه. شما باید نمونه‌های control plane را به‌ترتیب ارتقا دهید، یا دست‌کم اطمینان حاصل کنید که
+ارتقای آخرین نمونهٔ control plane تا زمانی که همهٔ نمونه‌های دیگر control plane به‌طور کامل ارتقا نیافته‌اند آغاز نشود.
+ارتقای افزونه‌ها پس از ارتقای آخرین نمونهٔ control plane انجام خواهد شد.</p>
+<ol>
+<li dir="rtl">
+<p dir="rtl">افزونهٔ ارائه‌دهندهٔ CNI خود را به‌صورت دستی ارتقا دهید.</p>
+<p dir="rtl">ممکن است ارائه‌دهندهٔ رابط شبکهٔ کانتینر (CNI) شما دستورالعمل‌های ارتقای مخصوص به خود را داشته باشد.
+صفحهٔ <a href="../../../concepts/cluster-administration/addons.html">افزونه‌ها</a> را بررسی کنید تا
+ارائه‌دهندهٔ CNI خود را پیدا کنید و ببینید آیا مراحل ارتقای اضافی لازم است یا نه.</p>
+<p dir="rtl">اگر ارائه‌دهندهٔ CNI به‌صورت DaemonSet اجرا می‌شود، این مرحله روی نودهای control plane دیگر لازم نیست.</p>
+</li>
+</ol>
+<p dir="rtl"><strong>برای نودهای control plane دیگر</strong></p>
+<p dir="rtl">مانند نخستین نود control plane عمل کنید، اما به‌جای دستور:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">sudo kubeadm upgrade node
+</code></pre>
+<p dir="rtl">از دستور زیر استفاده نکنید، بلکه برعکس؛ یعنی دستور بالا را به‌جای دستور زیر به کار ببرید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">sudo kubeadm upgrade apply
+</code></pre>
+<p dir="rtl">همچنین دیگر نیازی به فراخوانی <code dir="ltr">kubeadm upgrade plan</code> و ارتقای افزونهٔ ارائه‌دهندهٔ CNI نیست.</p>
+<h3 id="تخلیهٔ-نود" dir="rtl">تخلیهٔ نود</h3>
+<p dir="rtl">نود را با علامت‌گذاری آن به‌عنوان غیرقابل‌زمان‌بندی و بیرون راندن بارهای کاری، برای نگهداری آماده کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># replace &lt;node-to-drain&gt; with the name of your node you are draining
+kubectl drain &lt;node-to-drain&gt; --ignore-daemonsets
+</code></pre>
+<h3 id="ارتقای-kubelet-و-kubectl" dir="rtl">ارتقای kubelet و kubectl</h3>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">روی نودهای لینوکسی، kubelet به‌طور پیش‌فرض فقط از cgroups v2 پشتیبانی می‌کند.
+در کوبرنتیز 1.37، گزینهٔ پیکربندی <code dir="ltr">FailCgroupV1</code> در kubelet به‌طور پیش‌فرض روی <code dir="ltr">true</code> تنظیم شده است.</p>
+<p dir="rtl">برای آشنایی بیشتر، به <a href="../../../concepts/architecture/cgroups.html#deprecation-of-cgroup-v1">مستندات منسوخ شدن cgroup v1 در کوبرنتیز</a> مراجعه کنید.</p>
+<ol>
+<li dir="rtl">ارتقای kubelet و kubectl:</li>
+</ol>
+<div class="tabs">
+<div class="tab"><div class="tab-name">Ubuntu، Debian یا HypriotOS</div>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># replace x in 1.37.x-* with the latest patch version
+sudo apt-mark unhold kubelet kubectl &amp;&amp; \
+sudo apt-get update &amp;&amp; sudo apt-get install -y kubelet='1.37.x-*' kubectl='1.37.x-*' &amp;&amp; \
+sudo apt-mark hold kubelet kubectl
+</code></pre>
+</div>
+<div class="tab"><div class="tab-name">CentOS، RHEL یا Fedora</div>
+<p dir="rtl">برای سیستم‌های دارای DNF4 (Fedora &lt; 41، RHEL/CentOS &lt; 10):</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># replace x in 1.37.x-* with the latest patch version
+sudo dnf install -y kubelet-'1.37.x-*' kubectl-'1.37.x-*' --disableexcludes=kubernetes
+</code></pre>
+<p dir="rtl">برای سیستم‌های دارای DNF5:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># replace x in 1.37.x-* with the latest patch version
+sudo dnf install -y kubelet-'1.37.x-*' kubectl-'1.37.x-*' --setopt=disable_excludes=kubernetes
+</code></pre>
+</div>
+</div>
+<ol>
+<li dir="rtl">
+<p dir="rtl">kubelet را دوباره راه‌اندازی کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">sudo systemctl daemon-reload
+sudo systemctl restart kubelet
+</code></pre>
+</li>
+</ol>
+<h3 id="خارج-کردن-نود-از-حالت-cordon" dir="rtl">خارج کردن نود از حالت cordon</h3>
+<p dir="rtl">نود را با علامت‌گذاری آن به‌عنوان قابل‌زمان‌بندی، دوباره به چرخهٔ کار بازگردانید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># replace &lt;node-to-uncordon&gt; with the name of your node
+kubectl uncordon &lt;node-to-uncordon&gt;
+</code></pre>
+<h2 id="ارتقای-نودهای-کارگر" dir="rtl">ارتقای نودهای کارگر</h2>
+<p dir="rtl">روند ارتقا روی نودهای کارگر باید هر بار روی یک نود یا چند نود انجام شود،
+به‌گونه‌ای که حداقل ظرفیت لازم برای اجرای بارهای کاری شما به خطر نیفتد.</p>
+<p dir="rtl">صفحه‌های زیر نحوهٔ ارتقای نودهای کارگر لینوکس و ویندوز را نشان می‌دهند:</p>
+<ul>
+<li dir="rtl"><a href="upgrading-linux-nodes.html">ارتقای نودهای لینوکس</a></li>
+<li dir="rtl"><a href="upgrading-windows-nodes.html">ارتقای نودهای ویندوز</a></li>
+</ul>
+<h2 id="بررسی-وضعیت-کلاستر" dir="rtl">بررسی وضعیت کلاستر</h2>
+<p dir="rtl">پس از ارتقای kubelet روی همهٔ نودها، با اجرای دستور زیر از هر جایی که kubectl به کلاستر
+دسترسی دارد، بررسی کنید که همهٔ نودها دوباره در دسترس هستند:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get nodes
+</code></pre>
+<p dir="rtl">ستون <code dir="ltr">STATUS</code> باید برای همهٔ نودهای شما مقدار <code dir="ltr">Ready</code> را نشان دهد و شمارهٔ نسخه نیز باید به‌روز شده باشد.</p>
+<h2 id="بازیابی-از-وضعیت-خرابی" dir="rtl">بازیابی از وضعیت خرابی</h2>
+<p dir="rtl">اگر <code dir="ltr">kubeadm upgrade</code> با شکست مواجه شود و به وضعیت قبلی بازنگردد، برای نمونه به دلیل خاموش شدن غیرمنتظره در حین اجرا، می‌توانید <code dir="ltr">kubeadm upgrade</code> را دوباره اجرا کنید.
+این دستور خودتوان (idempotent) است و در نهایت اطمینان حاصل می‌کند که وضعیت واقعی با وضعیت مطلوبی که اعلام کرده‌اید یکسان باشد.</p>
+<p dir="rtl">برای بازیابی از یک وضعیت نامناسب، می‌توانید <code dir="ltr">sudo kubeadm upgrade apply --force</code> را نیز بدون تغییر نسخه‌ای که کلاستر شما اجرا می‌کند، اجرا کنید.</p>
+<p dir="rtl">در طول ارتقا، kubeadm پوشه‌های پشتیبان زیر را در مسیر <code dir="ltr">/etc/kubernetes/tmp</code> می‌نویسد:</p>
+<ul>
+<li dir="ltr" class="ltr"><code dir="ltr">kubeadm-backup-etcd-&lt;date&gt;-&lt;time&gt;</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">kubeadm-backup-manifests-&lt;date&gt;-&lt;time&gt;</code></li>
+</ul>
+<p dir="rtl">پوشهٔ <code dir="ltr">kubeadm-backup-etcd</code> حاوی نسخهٔ پشتیبانی از داده‌های عضو محلی etcd برای این نود control plane است.
+در صورت شکست ارتقای etcd و کار نکردن بازگشت خودکار، می‌توان محتوای این پوشه را
+به‌صورت دستی در <code dir="ltr">/var/lib/etcd</code> بازیابی کرد. اگر از etcd خارجی استفاده شود، این پوشهٔ پشتیبان خالی خواهد بود.</p>
+<p dir="rtl">پوشهٔ <code dir="ltr">kubeadm-backup-manifests</code> حاوی نسخهٔ پشتیبانی از فایل‌های مانیفست پادهای ایستا برای این نود control plane است.
+در صورت شکست ارتقا و کار نکردن بازگشت خودکار، می‌توان محتوای این پوشه را
+به‌صورت دستی در <code dir="ltr">/etc/kubernetes/manifests</code> بازیابی کرد. اگر به هر دلیلی فایل مانیفست یک جزء خاص پیش و پس از ارتقا
+تفاوتی نداشته باشد، فایل پشتیبانی برای آن نوشته نخواهد شد.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">پس از ارتقای کلاستر با kubeadm، پوشهٔ پشتیبان <code dir="ltr">/etc/kubernetes/tmp</code> باقی می‌ماند و
+این فایل‌های پشتیبان باید به‌صورت دستی پاک شوند.</p>
+<h2 id="سازوکار" dir="rtl">سازوکار</h2>
+<p dir="rtl">دستور <code dir="ltr">kubeadm upgrade apply</code> کارهای زیر را انجام می‌دهد:</p>
+<ul>
+<li dir="rtl">بررسی می‌کند که کلاستر شما در وضعیتی قابل ارتقا باشد:
+<ul>
+<li dir="rtl">سرور API در دسترس باشد</li>
+<li dir="rtl">همهٔ نودها در وضعیت <code dir="ltr">Ready</code> باشند</li>
+<li dir="rtl">وضعیت control plane سالم باشد</li>
+</ul>
+</li>
+<li dir="rtl">سیاست‌های اختلاف نسخه را اعمال می‌کند.</li>
+<li dir="rtl">اطمینان حاصل می‌کند که ایمیج‌های control plane روی ماشین موجود باشند یا قابل دریافت باشند.</li>
+<li dir="rtl">اگر پیکربندی‌های اجزا به ارتقای نسخه نیاز داشته باشند، جایگزین‌هایی تولید می‌کند و/یا از مقادیر جایگزین ارائه‌شده توسط کاربر استفاده می‌کند.</li>
+<li dir="rtl">اجزای control plane را ارتقا می‌دهد، یا اگر هر یک از آن‌ها بالا نیاید، به وضعیت قبلی بازمی‌گرداند.</li>
+<li dir="rtl">مانیفست‌های جدید <code dir="ltr">CoreDNS</code> و <code dir="ltr">kube-proxy</code> را اعمال می‌کند و اطمینان حاصل می‌کند که همهٔ قوانین RBAC لازم ایجاد شده باشند.</li>
+<li dir="rtl">گواهی‌های مدیریت‌شده توسط kubeadm را که اجزای control plane از آن‌ها استفاده می‌کنند، هم‌زمان با ارتقای این اجزا و با استفاده از گواهی و کلید CA محلی تمدید می‌کند. تمدید گواهی‌ها به‌طور پیش‌فرض فعال است؛ برای غیرفعال کردن آن از <code dir="ltr">--certificate-renewal=false</code> استفاده کنید.</li>
+</ul>
+<p dir="rtl">دستور <code dir="ltr">kubeadm upgrade node</code> روی نودهای control plane دیگر کارهای زیر را انجام می‌دهد:</p>
+<ul>
+<li dir="rtl">پیکربندی <code dir="ltr">ClusterConfiguration</code> مربوط به kubeadm را از کلاستر دریافت می‌کند.</li>
+<li dir="rtl">گواهی‌های مدیریت‌شده توسط kubeadm را که اجزای control plane از آن‌ها استفاده می‌کنند، هم‌زمان با ارتقای این اجزا و با استفاده از گواهی و کلید CA محلی تمدید می‌کند. تمدید گواهی‌ها به‌طور پیش‌فرض فعال است؛ برای غیرفعال کردن آن از <code dir="ltr">--certificate-renewal=false</code> استفاده کنید.</li>
+<li dir="rtl">مانیفست‌های پادهای ایستای اجزای control plane را ارتقا می‌دهد.</li>
+<li dir="rtl">پیکربندی kubelet را برای این نود ارتقا می‌دهد.</li>
+</ul>
+<p dir="rtl">دستور <code dir="ltr">kubeadm upgrade node</code> روی نودهای کارگر کارهای زیر را انجام می‌دهد:</p>
+<ul>
+<li dir="rtl">پیکربندی <code dir="ltr">ClusterConfiguration</code> مربوط به kubeadm را از کلاستر دریافت می‌کند.</li>
+<li dir="rtl">پیکربندی kubelet را برای این نود ارتقا می‌دهد.</li>
+</ul>
+</div></div></div></div><p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#پیش-از-شروع">پیش از شروع</a><a class="l3" href="#اطلاعات-تکمیلی">اطلاعات تکمیلی</a><a class="l3" href="#ملاحظات-ارتقای-etcd">ملاحظات ارتقای etcd</a><a class="l2" href="#تغییر-مخزن-بسته-ها">تغییر مخزن بسته‌ها</a><a class="l2" href="#تعیین-نسخهٔ-مقصد-ارتقا">تعیین نسخهٔ مقصد ارتقا</a><a class="l2" href="#ارتقای-نودهای-control-plane">ارتقای نودهای control plane</a><a class="l3" href="#فراخوانی-kubeadm-upgrade">فراخوانی «kubeadm upgrade»</a><a class="l3" href="#تخلیهٔ-نود">تخلیهٔ نود</a><a class="l3" href="#ارتقای-kubelet-و-kubectl">ارتقای kubelet و kubectl</a><a class="l3" href="#خارج-کردن-نود-از-حالت-cordon">خارج کردن نود از حالت cordon</a><a class="l2" href="#ارتقای-نودهای-کارگر">ارتقای نودهای کارگر</a><a class="l2" href="#بررسی-وضعیت-کلاستر">بررسی وضعیت کلاستر</a><a class="l2" href="#بازیابی-از-وضعیت-خرابی">بازیابی از وضعیت خرابی</a><a class="l2" href="#سازوکار">سازوکار</a></nav>
+</div>
+</body>
+</html>

@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>پیکربندی درخواست‌ها و محدودیت‌های پیش‌فرض CPU برای یک فضای نام | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
+<header class="top"><a href="../../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">tasks / administer-cluster / manage-resources</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">پیکربندی درخواست‌ها و محدودیت‌های پیش‌فرض CPU برای یک فضای نام</h1><p class="page-meta" dir="rtl">برای یک فضای نام محدودیت‌های پیش‌فرض منبع CPU تعریف کنید تا هر Pod جدید در آن فضای نام یک محدودیت منبع CPU پیکربندی‌شده داشته باشد.</p><!-- overview -->
+<p dir="rtl">این صفحه نشان می‌دهد که چگونه می‌توان درخواست‌ها و محدودیت‌های پیش‌فرض CPU را برای یک
+<span class="term" title="namespace">فضای نام</span> پیکربندی کرد.</p>
+<p dir="rtl">یک کلاستر کوبرنتیز را می‌توان به چند فضای نام (namespace) تقسیم کرد. اگر در فضای نامی که
+<a href="../../../concepts/configuration/manage-resources-containers.html#requests-and-limits">محدودیت</a> پیش‌فرض CPU دارد
+یک Pod ایجاد کنید و یکی از کانتینرهای آن Pod محدودیت CPU خود را مشخص نکرده باشد،
+<span class="term" title="control-plane">control plane</span> محدودیت پیش‌فرض CPU را به آن کانتینر اختصاص می‌دهد.</p>
+<p dir="rtl">کوبرنتیز یک
+<a href="../../../concepts/configuration/manage-resources-containers.html#requests-and-limits">درخواست</a>
+پیش‌فرض CPU نیز اختصاص می‌دهد، اما فقط در شرایط خاصی که در ادامه‌ی همین صفحه توضیح داده شده است.</p>
+<h2 id="پیش-از-شروع" dir="rtl">پیش از شروع</h2>
+<p dir="rtl">باید یک کلاستر کوبرنتیز داشته باشید و ابزار خط فرمان kubectl باید برای ارتباط با کلاستر شما پیکربندی شده باشد. توصیه می‌شود این آموزش را روی کلاستری اجرا کنید که دست‌کم دو نود داشته باشد که نقش میزبان control plane را ندارند. اگر هنوز کلاستری ندارید، می‌توانید با استفاده از
+<a href="https://minikube.sigs.k8s.io/docs/tutorials/multi_node/" target="_blank" rel="noopener">minikube</a>
+یکی بسازید یا از یکی از این محیط‌های آزمایشی کوبرنتیز استفاده کنید:</p>
+<ul>
+<li dir="ltr" class="ltr"><a href="https://labs.iximiuz.com/playgrounds?category=kubernetes&amp;filter=all" target="_blank" rel="noopener">iximiuz Labs</a></li>
+<li dir="ltr" class="ltr"><a href="https://killercoda.com/playgrounds/scenario/kubernetes" target="_blank" rel="noopener">Killercoda</a></li>
+<li dir="ltr" class="ltr"><a href="https://kodekloud.com/public-playgrounds" target="_blank" rel="noopener">KodeKloud</a></li>
+</ul>
+<p dir="rtl">باید در کلاستر خود دسترسی ایجاد فضای نام را داشته باشید.</p>
+<p dir="rtl">اگر هنوز با مفهوم 1.0 CPU در کوبرنتیز آشنا نیستید،
+<a href="../../../concepts/configuration/manage-resources-containers.html#meaning-of-cpu">معنای CPU</a> را بخوانید.</p>
+<!-- steps -->
+<h2 id="ایجاد-یک-فضای-نام" dir="rtl">ایجاد یک فضای نام</h2>
+<p dir="rtl">یک فضای نام ایجاد کنید تا منابعی که در این تمرین می‌سازید از بقیه‌ی کلاستر جدا بمانند.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl create namespace default-cpu-example
+</code></pre>
+<h2 id="ایجاد-یک-limitrange-و-یک-pod" dir="rtl">ایجاد یک LimitRange و یک Pod</h2>
+<p dir="rtl">در ادامه مانیفست یک <span class="term" title="limitrange">LimitRange</span> نمونه آمده است.
+این مانیفست یک درخواست پیش‌فرض CPU و یک محدودیت پیش‌فرض CPU را مشخص می‌کند.</p>
+<div class="code-file ltr" dir="ltr">admin/resource/cpu-defaults.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: LimitRange
+metadata:
+  name: cpu-limit-range
+spec:
+  limits:
+  - default:
+      cpu: 1
+    defaultRequest:
+      cpu: 0.5
+    type: Container
+</code></pre>
+<p dir="rtl">این LimitRange را در فضای نام default-cpu-example ایجاد کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f https://k8s.io/examples/admin/resource/cpu-defaults.yaml --namespace=default-cpu-example
+</code></pre>
+<p dir="rtl">اکنون اگر یک Pod در فضای نام default-cpu-example ایجاد کنید و یکی از کانتینرهای آن Pod
+مقادیر خود را برای درخواست و محدودیت CPU مشخص نکرده باشد،
+control plane مقادیر پیش‌فرض را اعمال می‌کند: درخواست CPU برابر با 0.5 و محدودیت پیش‌فرض
+CPU برابر با 1.</p>
+<p dir="rtl">در ادامه مانیفست یک Pod با یک کانتینر آمده است. این کانتینر
+درخواست و محدودیت CPU را مشخص نمی‌کند.</p>
+<div class="code-file ltr" dir="ltr">admin/resource/cpu-defaults-pod.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: Pod
+metadata:
+  name: default-cpu-demo
+spec:
+  containers:
+  - name: default-cpu-demo-ctr
+    image: nginx
+</code></pre>
+<p dir="rtl">Pod را ایجاد کنید.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f https://k8s.io/examples/admin/resource/cpu-defaults-pod.yaml --namespace=default-cpu-example
+</code></pre>
+<p dir="rtl">مشخصات Pod را مشاهده کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pod default-cpu-demo --output=yaml --namespace=default-cpu-example
+</code></pre>
+<p dir="rtl">خروجی نشان می‌دهد که تنها کانتینر این Pod درخواست CPU برابر با 500m <code dir="ltr">cpu</code>
+(که می‌توان آن را «۵۰۰ میلی‌CPU» خواند) و محدودیت CPU برابر با 1 <code dir="ltr">cpu</code> دارد.
+این‌ها همان مقادیر پیش‌فرضی هستند که LimitRange مشخص کرده است.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">containers:
+- image: nginx
+  imagePullPolicy: Always
+  name: default-cpu-demo-ctr
+  resources:
+    limits:
+      cpu: "1"
+    requests:
+      cpu: 500m
+</code></pre>
+<h2 id="اگر-محدودیت-کانتینر-را-مشخص-کنید-ولی-درخواست-آن-را-نه،-چه-می-شود؟" dir="rtl">اگر محدودیت کانتینر را مشخص کنید ولی درخواست آن را نه، چه می‌شود؟</h2>
+<p dir="rtl">در ادامه مانیفست یک Pod با یک کانتینر آمده است. این کانتینر
+محدودیت CPU را مشخص می‌کند، اما درخواست را نه:</p>
+<div class="code-file ltr" dir="ltr">admin/resource/cpu-defaults-pod-2.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: Pod
+metadata:
+  name: default-cpu-demo-2
+spec:
+  containers:
+  - name: default-cpu-demo-2-ctr
+    image: nginx
+    resources:
+      limits:
+        cpu: "1"
+</code></pre>
+<p dir="rtl">Pod را ایجاد کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f https://k8s.io/examples/admin/resource/cpu-defaults-pod-2.yaml --namespace=default-cpu-example
+</code></pre>
+<p dir="rtl"><a href="../../../concepts/overview/working-with-objects/index.html#object-spec-and-status">مشخصات</a>
+Pod ایجادشده را مشاهده کنید:</p>
+<pre dir="ltr"><code dir="ltr">kubectl get pod default-cpu-demo-2 --output=yaml --namespace=default-cpu-example
+</code></pre>
+<p dir="rtl">خروجی نشان می‌دهد که درخواست CPU کانتینر برابر با محدودیت CPU آن تنظیم شده است.
+توجه کنید که مقدار پیش‌فرض درخواست CPU، یعنی 0.5 <code dir="ltr">cpu</code>، به این کانتینر اختصاص داده نشده است:</p>
+<pre dir="ltr"><code dir="ltr">resources:
+  limits:
+    cpu: "1"
+  requests:
+    cpu: "1"
+</code></pre>
+<h2 id="اگر-درخواست-کانتینر-را-مشخص-کنید-ولی-محدودیت-آن-را-نه،-چه-می-شود؟" dir="rtl">اگر درخواست کانتینر را مشخص کنید ولی محدودیت آن را نه، چه می‌شود؟</h2>
+<p dir="rtl">در ادامه مانیفست نمونه‌ی یک Pod با یک کانتینر آمده است. این کانتینر
+درخواست CPU را مشخص می‌کند، اما محدودیت را نه:</p>
+<div class="code-file ltr" dir="ltr">admin/resource/cpu-defaults-pod-3.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: Pod
+metadata:
+  name: default-cpu-demo-3
+spec:
+  containers:
+  - name: default-cpu-demo-3-ctr
+    image: nginx
+    resources:
+      requests:
+        cpu: "0.75"
+</code></pre>
+<p dir="rtl">Pod را ایجاد کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f https://k8s.io/examples/admin/resource/cpu-defaults-pod-3.yaml --namespace=default-cpu-example
+</code></pre>
+<p dir="rtl">مشخصات Pod ایجادشده را مشاهده کنید:</p>
+<pre dir="ltr"><code dir="ltr">kubectl get pod default-cpu-demo-3 --output=yaml --namespace=default-cpu-example
+</code></pre>
+<p dir="rtl">خروجی نشان می‌دهد که درخواست CPU کانتینر برابر با مقداری تنظیم شده است که هنگام ایجاد Pod
+مشخص کرده بودید (به بیان دیگر، با مانیفست مطابقت دارد).
+اما محدودیت CPU همین کانتینر برابر با 1 <code dir="ltr">cpu</code> تنظیم شده است که همان محدودیت پیش‌فرض CPU
+برای آن فضای نام است.</p>
+<pre dir="ltr"><code dir="ltr">resources:
+  limits:
+    cpu: "1"
+  requests:
+    cpu: 750m
+</code></pre>
+<h2 id="انگیزه-ی-تعیین-محدودیت-ها-و-درخواست-های-پیش-فرض-cpu" dir="rtl">انگیزه‌ی تعیین محدودیت‌ها و درخواست‌های پیش‌فرض CPU</h2>
+<p dir="rtl">اگر برای فضای نام شما یک <span class="term" title="resource-quota">سهمیه‌ی منبع</span> برای CPU
+پیکربندی شده باشد،
+داشتن یک مقدار پیش‌فرض برای محدودیت CPU مفید است.
+دو مورد از محدودیت‌هایی که سهمیه‌ی منبع CPU بر یک فضای نام اعمال می‌کند در ادامه آمده است:</p>
+<ul>
+<li dir="rtl">برای هر Pod که در این فضای نام اجرا می‌شود، تک‌تک کانتینرهای آن باید محدودیت CPU داشته باشند.</li>
+<li dir="rtl">محدودیت‌های CPU روی نودی که Pod مورد نظر روی آن زمان‌بندی شده است، منبع رزرو می‌کنند.
+مجموع CPU رزروشده برای استفاده‌ی همه‌ی Podهای این فضای نام نباید
+از یک حد مشخص فراتر برود.</li>
+</ul>
+<p dir="rtl">هنگامی که یک LimitRange اضافه می‌کنید:</p>
+<p dir="rtl">اگر یکی از Podهای آن فضای نام کانتینری داشته باشد که محدودیت CPU خود را مشخص نکرده است،
+control plane محدودیت پیش‌فرض CPU را به آن کانتینر اعمال می‌کند و آن Pod می‌تواند
+در فضای نامی که با یک ResourceQuota برای CPU محدود شده است، اجرا شود.</p>
+<h2 id="پاک-سازی" dir="rtl">پاک‌سازی</h2>
+<p dir="rtl">فضای نام خود را حذف کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl delete namespace default-cpu-example
+</code></pre>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<h3 id="برای-مدیران-کلاستر" dir="rtl">برای مدیران کلاستر</h3>
+<ul>
+<li dir="rtl">
+<p dir="rtl"><a href="memory-default-namespace.html">پیکربندی درخواست‌ها و محدودیت‌های پیش‌فرض حافظه برای یک فضای نام</a></p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><a href="memory-constraint-namespace.html">پیکربندی محدودیت‌های حداقل و حداکثر حافظه برای یک فضای نام</a></p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><a href="cpu-constraint-namespace.html">پیکربندی محدودیت‌های حداقل و حداکثر CPU برای یک فضای نام</a></p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><a href="quota-memory-cpu-namespace.html">پیکربندی سهمیه‌های حافظه و CPU برای یک فضای نام</a></p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><a href="quota-pod-namespace.html">پیکربندی سهمیه‌ی Pod برای یک فضای نام</a></p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><a href="https://kubernetes.io/docs/tasks/administer-cluster/quota-api-object/" target="_blank">پیکربندی سهمیه‌ها برای آبجکت‌های API</a></p>
+</li>
+</ul>
+<h3 id="برای-توسعه-دهندگان-برنامه" dir="rtl">برای توسعه‌دهندگان برنامه</h3>
+<ul>
+<li dir="rtl">
+<p dir="rtl"><a href="https://kubernetes.io/docs/tasks/configure-pod-container/assign-memory-resource/" target="_blank">اختصاص منابع حافظه به کانتینرها و Podها</a></p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><a href="https://kubernetes.io/docs/tasks/configure-pod-container/assign-cpu-resource/" target="_blank">اختصاص منابع CPU به کانتینرها و Podها</a></p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><a href="https://kubernetes.io/docs/tasks/configure-pod-container/assign-pod-level-resources/" target="_blank">اختصاص منابع CPU و حافظه در سطح Pod</a></p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><a href="https://kubernetes.io/docs/tasks/configure-pod-container/quality-service-pod/" target="_blank">پیکربندی کیفیت خدمات برای Podها</a></p>
+</li>
+</ul>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#پیش-از-شروع">پیش از شروع</a><a class="l2" href="#ایجاد-یک-فضای-نام">ایجاد یک فضای نام</a><a class="l2" href="#ایجاد-یک-limitrange-و-یک-pod">ایجاد یک LimitRange و یک Pod</a><a class="l2" href="#اگر-محدودیت-کانتینر-را-مشخص-کنید-ولی-درخواست-آن-را-نه،-چه-می-شود؟">اگر محدودیت کانتینر را مشخص کنید ولی درخواست آن را نه، چه می‌شود؟</a><a class="l2" href="#اگر-درخواست-کانتینر-را-مشخص-کنید-ولی-محدودیت-آن-را-نه،-چه-می-شود؟">اگر درخواست کانتینر را مشخص کنید ولی محدودیت آن را نه، چه می‌شود؟</a><a class="l2" href="#انگیزه-ی-تعیین-محدودیت-ها-و-درخواست-های-پیش-فرض-cpu">انگیزه‌ی تعیین محدودیت‌ها و درخواست‌های پیش‌فرض CPU</a><a class="l2" href="#پاک-سازی">پاک‌سازی</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a><a class="l3" href="#برای-مدیران-کلاستر">برای مدیران کلاستر</a><a class="l3" href="#برای-توسعه-دهندگان-برنامه">برای توسعه‌دهندگان برنامه</a></nav>
+</div>
+</body>
+</html>

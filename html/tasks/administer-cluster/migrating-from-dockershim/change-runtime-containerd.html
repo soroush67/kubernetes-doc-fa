@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>تغییر محیط اجرای کانتینر روی یک نود از Docker Engine به containerd | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
+<header class="top"><a href="../../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">tasks / administer-cluster / migrating-from-dockershim</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">تغییر محیط اجرای کانتینر روی یک نود از Docker Engine به containerd</h1><p dir="rtl">این راهنما مراحل لازم برای تغییر محیط اجرای کانتینر (container runtime) از Docker به containerd را شرح می‌دهد. این راهنما برای اپراتورهای کلاستری که کوبرنتیز نسخهٔ ۱.۲۳ یا قدیمی‌تر را اجرا می‌کنند کاربرد دارد. همچنین یک سناریوی نمونه برای مهاجرت از dockershim به containerd را پوشش می‌دهد. سایر محیط‌های اجرای کانتینر را می‌توانید از این <a href="../../../setup/production-environment/container-runtimes.html">صفحه</a> انتخاب کنید.</p>
+<h2 id="پیش-از-شروع" dir="rtl">پیش از شروع</h2>
+<p dir="rtl">ابتدا containerd را نصب کنید. برای اطلاعات بیشتر به
+<a href="https://containerd.io/docs/getting-started/" target="_blank" rel="noopener">مستندات نصب containerd</a>
+مراجعه کنید و برای پیش‌نیازهای مشخص،
+<a href="../../../setup/production-environment/container-runtimes.html#containerd">راهنمای containerd</a> را دنبال کنید.</p>
+<h2 id="تخلیهٔ-نود" dir="rtl">تخلیهٔ نود</h2>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl drain &lt;node-to-drain&gt; --ignore-daemonsets
+</code></pre>
+<p dir="rtl">به‌جای <code dir="ltr">&lt;node-to-drain&gt;</code> نام نودی را که تخلیه می‌کنید قرار دهید.</p>
+<h2 id="متوقف-کردن-daemon-داکر" dir="rtl">متوقف کردن daemon داکر</h2>
+<pre dir="ltr"><code class="language-shell" dir="ltr">systemctl stop kubelet
+systemctl disable docker.service --now
+</code></pre>
+<h2 id="نصب-containerd" dir="rtl">نصب Containerd</h2>
+<p dir="rtl">برای مشاهدهٔ مراحل دقیق نصب containerd، این <a href="../../../setup/production-environment/container-runtimes.html#containerd">راهنما</a> را دنبال کنید.</p>
+<div class="tabs">
+<div class="tab"><div class="tab-name">Linux</div>
+<ol>
+<li dir="rtl">
+<p dir="rtl">بستهٔ <code dir="ltr">containerd.io</code> را از مخازن رسمی Docker نصب کنید.
+دستورالعمل‌های راه‌اندازی مخزن Docker برای توزیع لینوکس موردنظرتان و
+نصب بستهٔ <code dir="ltr">containerd.io</code> را می‌توانید در
+<a href="https://github.com/containerd/containerd/blob/main/docs/getting-started.md" target="_blank" rel="noopener">Getting started with containerd</a> بیابید.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">containerd را پیکربندی کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">sudo mkdir -p /etc/containerd
+containerd config default | sudo tee /etc/containerd/config.toml
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">containerd را مجدداً راه‌اندازی کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">sudo systemctl restart containerd
+</code></pre>
+</li>
+</ol>
+</div>
+<div class="tab"><div class="tab-name">Windows (PowerShell)</div>
+<p dir="rtl">یک نشست PowerShell باز کنید، متغیر <code dir="ltr">$Version</code> را برابر نسخهٔ موردنظر قرار دهید (برای مثال <code dir="ltr">$Version="1.4.3"</code>) و
+سپس فرمان‌های زیر را اجرا کنید:</p>
+<ol>
+<li dir="rtl">
+<p dir="rtl">containerd را دانلود کنید:</p>
+<pre dir="ltr"><code class="language-powershell" dir="ltr">curl.exe -L https://github.com/containerd/containerd/releases/download/v$Version/containerd-$Version-windows-amd64.tar.gz -o containerd-windows-amd64.tar.gz
+tar.exe xvf .\containerd-windows-amd64.tar.gz
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">فایل‌ها را استخراج و پیکربندی کنید:</p>
+<pre dir="ltr"><code class="language-powershell" dir="ltr">Copy-Item -Path ".\bin\" -Destination "$Env:ProgramFiles\containerd" -Recurse -Force
+cd $Env:ProgramFiles\containerd\
+.\containerd.exe config default | Out-File config.toml -Encoding ascii
+
+# Review the configuration. Depending on setup you may want to adjust:
+# - the sandbox_image (Kubernetes pause image)
+# - cni bin_dir and conf_dir locations
+Get-Content config.toml
+
+# (Optional - but highly recommended) Exclude containerd from Windows Defender Scans
+Add-MpPreference -ExclusionProcess "$Env:ProgramFiles\containerd\containerd.exe"
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">containerd را راه‌اندازی کنید:</p>
+<pre dir="ltr"><code class="language-powershell" dir="ltr">.\containerd.exe --register-service
+Start-Service containerd
+</code></pre>
+</li>
+</ol>
+</div>
+</div>
+<h2 id="پیکربندی-kubelet-برای-استفاده-از-containerd-به-عنوان-محیط-اجرای-کانتینر" dir="rtl">پیکربندی kubelet برای استفاده از containerd به‌عنوان محیط اجرای کانتینر</h2>
+<p dir="rtl">فایل <code dir="ltr">/var/lib/kubelet/kubeadm-flags.env</code> را ویرایش کنید و محیط اجرای containerd را به فلگ‌ها اضافه کنید:
+<code dir="ltr">--container-runtime-endpoint=unix:///run/containerd/containerd.sock</code>.</p>
+<p dir="rtl">کاربرانی که از kubeadm استفاده می‌کنند باید بدانند که ابزار kubeadm سوکت CRI میزبان را در فایل</p>
+<p dir="rtl"><code dir="ltr">/var/lib/kubelet/instance-config.yaml</code> روی هر نود ذخیره می‌کند. می‌توانید این فایل <code dir="ltr">/var/lib/kubelet/instance-config.yaml</code> را روی نود ایجاد کنید.</p>
+<p dir="rtl">با فایل <code dir="ltr">/var/lib/kubelet/instance-config.yaml</code> می‌توانید پارامتر <code dir="ltr">containerRuntimeEndpoint</code> را تنظیم کنید.</p>
+<p dir="rtl">مقدار این پارامتر را می‌توانید برابر مسیر سوکت CRI انتخابی خود قرار دهید (برای مثال <code dir="ltr">unix:///run/containerd/containerd.sock</code>).</p>
+<h2 id="راه-اندازی-مجدد-kubelet" dir="rtl">راه‌اندازی مجدد kubelet</h2>
+<pre dir="ltr"><code class="language-shell" dir="ltr">systemctl start kubelet
+</code></pre>
+<h2 id="بررسی-سلامت-نود" dir="rtl">بررسی سلامت نود</h2>
+<p dir="rtl">فرمان <code dir="ltr">kubectl get nodes -o wide</code> را اجرا کنید؛ containerd باید به‌عنوان محیط اجرای نودی که هم‌اکنون تغییر دادیم نمایش داده شود.</p>
+<h2 id="حذف-docker-engine" dir="rtl">حذف Docker Engine</h2>
+<p dir="rtl">اگر نود سالم به نظر می‌رسد، Docker را حذف کنید.</p>
+<div class="tabs">
+<div class="tab"><div class="tab-name">CentOS</div>
+<pre dir="ltr"><code class="language-shell" dir="ltr">sudo dnf remove docker-ce docker-ce-cli
+</code></pre>
+</div>
+<div class="tab"><div class="tab-name">Debian</div>
+<pre dir="ltr"><code class="language-shell" dir="ltr">sudo apt-get purge docker-ce docker-ce-cli
+</code></pre>
+</div>
+<div class="tab"><div class="tab-name">Fedora</div>
+<pre dir="ltr"><code class="language-shell" dir="ltr">sudo dnf remove docker-ce docker-ce-cli
+</code></pre>
+</div>
+<div class="tab"><div class="tab-name">Ubuntu</div>
+<pre dir="ltr"><code class="language-shell" dir="ltr">sudo apt-get purge docker-ce docker-ce-cli
+</code></pre>
+</div>
+</div>
+<p dir="rtl">فرمان‌های بالا ایمیج‌ها، کانتینرها، حجم‌ها (volumes) یا فایل‌های پیکربندی سفارشی‌شده را از میزبان شما حذف نمی‌کنند.
+برای حذف آن‌ها، دستورالعمل‌های Docker برای <a href="https://docs.docker.com/engine/install/ubuntu/#uninstall-docker-engine" target="_blank" rel="noopener">حذف Docker Engine</a> را دنبال کنید.</p>
+<div class="callout caution"><div class="callout-title">احتیاط:</div>
+<p dir="rtl">اجرای دستورالعمل‌های Docker برای حذف Docker Engine ممکن است به حذف containerd نیز منجر شود. هنگام اجرای فرمان‌ها احتیاط کنید.</p>
+</div>
+<h2 id="خارج-کردن-نود-از-حالت-cordon" dir="rtl">خارج کردن نود از حالت cordon</h2>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl uncordon &lt;node-to-uncordon&gt;
+</code></pre>
+<p dir="rtl">به‌جای <code dir="ltr">&lt;node-to-uncordon&gt;</code> نام نودی را که پیش‌تر تخلیه کرده بودید قرار دهید.</p>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#پیش-از-شروع">پیش از شروع</a><a class="l2" href="#تخلیهٔ-نود">تخلیهٔ نود</a><a class="l2" href="#متوقف-کردن-daemon-داکر">متوقف کردن daemon داکر</a><a class="l2" href="#نصب-containerd">نصب Containerd</a><a class="l2" href="#پیکربندی-kubelet-برای-استفاده-از-containerd-به-عنوان-محیط-اجرای-کانتینر">پیکربندی kubelet برای استفاده از containerd به‌عنوان محیط اجرای کانتینر</a><a class="l2" href="#راه-اندازی-مجدد-kubelet">راه‌اندازی مجدد kubelet</a><a class="l2" href="#بررسی-سلامت-نود">بررسی سلامت نود</a><a class="l2" href="#حذف-docker-engine">حذف Docker Engine</a><a class="l2" href="#خارج-کردن-نود-از-حالت-cordon">خارج کردن نود از حالت cordon</a></nav>
+</div>
+</body>
+</html>

@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-1499 از 1722 صفحه
+1515 از 1722 صفحه
 
 
 ## `.`
@@ -1944,10 +1944,10 @@
 - ✅ [hardening-dra.md](md/tasks/administer-cluster/hardening-dra.md)
 - ✅ [ip-masq-agent.md](md/tasks/administer-cluster/ip-masq-agent.md)
 - ✅ [kms-provider.md](md/tasks/administer-cluster/kms-provider.md)
-- ⏳ `kubelet-config-file.md`
-- ⏳ `kubelet-credential-provider.md`
-- ⏳ `kubelet-in-userns.md`
-- ⏳ `limit-storage-consumption.md`
+- ✅ [kubelet-config-file.md](md/tasks/administer-cluster/kubelet-config-file.md)
+- ✅ [kubelet-credential-provider.md](md/tasks/administer-cluster/kubelet-credential-provider.md)
+- ✅ [kubelet-in-userns.md](md/tasks/administer-cluster/kubelet-in-userns.md)
+- ✅ [limit-storage-consumption.md](md/tasks/administer-cluster/limit-storage-consumption.md)
 - ⏳ `memory-manager.md`
 - ⏳ `namespaces.md`
 - ⏳ `node-overprovisioning.md`
@@ -1971,24 +1971,24 @@
 - ✅ [change-package-repository.md](md/tasks/administer-cluster/kubeadm/change-package-repository.md)
 - ✅ [kubeadm-certs.md](md/tasks/administer-cluster/kubeadm/kubeadm-certs.md)
 - ✅ [kubeadm-reconfigure.md](md/tasks/administer-cluster/kubeadm/kubeadm-reconfigure.md)
-- ⏳ `kubeadm-upgrade.md`
-- ⏳ `upgrading-linux-nodes.md`
-- ⏳ `upgrading-windows-nodes.md`
+- ✅ [kubeadm-upgrade.md](md/tasks/administer-cluster/kubeadm/kubeadm-upgrade.md)
+- ✅ [upgrading-linux-nodes.md](md/tasks/administer-cluster/kubeadm/upgrading-linux-nodes.md)
+- ✅ [upgrading-windows-nodes.md](md/tasks/administer-cluster/kubeadm/upgrading-windows-nodes.md)
 
 ## `tasks/administer-cluster/manage-resources`
 
-- ⏳ `_index.md`
-- ⏳ `cpu-constraint-namespace.md`
-- ⏳ `cpu-default-namespace.md`
-- ⏳ `memory-constraint-namespace.md`
-- ⏳ `memory-default-namespace.md`
-- ⏳ `quota-memory-cpu-namespace.md`
-- ⏳ `quota-pod-namespace.md`
+- ✅ [_index.md](md/tasks/administer-cluster/manage-resources/_index.md)
+- ✅ [cpu-constraint-namespace.md](md/tasks/administer-cluster/manage-resources/cpu-constraint-namespace.md)
+- ✅ [cpu-default-namespace.md](md/tasks/administer-cluster/manage-resources/cpu-default-namespace.md)
+- ✅ [memory-constraint-namespace.md](md/tasks/administer-cluster/manage-resources/memory-constraint-namespace.md)
+- ✅ [memory-default-namespace.md](md/tasks/administer-cluster/manage-resources/memory-default-namespace.md)
+- ✅ [quota-memory-cpu-namespace.md](md/tasks/administer-cluster/manage-resources/quota-memory-cpu-namespace.md)
+- ✅ [quota-pod-namespace.md](md/tasks/administer-cluster/manage-resources/quota-pod-namespace.md)
 
 ## `tasks/administer-cluster/migrating-from-dockershim`
 
-- ⏳ `_index.md`
-- ⏳ `change-runtime-containerd.md`
+- ✅ [_index.md](md/tasks/administer-cluster/migrating-from-dockershim/_index.md)
+- ✅ [change-runtime-containerd.md](md/tasks/administer-cluster/migrating-from-dockershim/change-runtime-containerd.md)
 - ⏳ `check-if-dockershim-removal-affects-you.md`
 - ⏳ `find-out-runtime-you-use.md`
 - ⏳ `migrating-telemetry-and-security-agents.md`

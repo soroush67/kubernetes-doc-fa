@@ -8,8 +8,8 @@
 
 | | |
 |---|---|
-| پیشرفت (بر اساس کلمات) | **89.3٪** |
-| صفحات ترجمه‌شده | 1499 از 1722 |
+| پیشرفت (بر اساس کلمات) | **90.1٪** |
+| صفحات ترجمه‌شده | 1515 از 1722 |
 | صفحات دارای ایراد ساختاری | 73 |
 | نسخه‌ی منبع انگلیسی | `f652c6b8a26f` |
 
@@ -74,7 +74,7 @@ cd kubernetes-doc-fa
 | `home` | 2 | 2 |
 | `reference` | 1198 | 1198 |
 | `setup` | 22 | 22 |
-| `tasks` | 44 | 221 |
+| `tasks` | 60 | 221 |
 | `tutorials` | 0 | 45 |
 
 </div>
@@ -101,26 +101,26 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [tasks/administer-cluster/migrating-from-dockershim/change-runtime-containerd.md](md/tasks/administer-cluster/migrating-from-dockershim/change-runtime-containerd.md) — 2026-11-14T10:26:57+03:30
+- [tasks/administer-cluster/migrating-from-dockershim/_index.md](md/tasks/administer-cluster/migrating-from-dockershim/_index.md) — 2026-11-14T10:26:35+03:30
+- [tasks/administer-cluster/manage-resources/quota-memory-cpu-namespace.md](md/tasks/administer-cluster/manage-resources/quota-memory-cpu-namespace.md) — 2026-11-14T10:26:22+03:30
+- [tasks/administer-cluster/manage-resources/quota-pod-namespace.md](md/tasks/administer-cluster/manage-resources/quota-pod-namespace.md) — 2026-11-14T10:26:22+03:30
+- [tasks/administer-cluster/manage-resources/memory-default-namespace.md](md/tasks/administer-cluster/manage-resources/memory-default-namespace.md) — 2026-11-14T10:26:04+03:30
+- [tasks/administer-cluster/manage-resources/memory-constraint-namespace.md](md/tasks/administer-cluster/manage-resources/memory-constraint-namespace.md) — 2026-11-14T10:25:55+03:30
+- [tasks/administer-cluster/manage-resources/cpu-default-namespace.md](md/tasks/administer-cluster/manage-resources/cpu-default-namespace.md) — 2026-11-14T10:25:31+03:30
+- [tasks/administer-cluster/manage-resources/cpu-constraint-namespace.md](md/tasks/administer-cluster/manage-resources/cpu-constraint-namespace.md) — 2026-11-14T10:25:15+03:30
+- [tasks/administer-cluster/kubelet-in-userns.md](md/tasks/administer-cluster/kubelet-in-userns.md) — 2026-11-14T10:25:01+03:30
+- [tasks/administer-cluster/manage-resources/_index.md](md/tasks/administer-cluster/manage-resources/_index.md) — 2026-11-14T10:24:34+03:30
+- [tasks/administer-cluster/limit-storage-consumption.md](md/tasks/administer-cluster/limit-storage-consumption.md) — 2026-11-14T10:24:31+03:30
+- [tasks/administer-cluster/kubelet-credential-provider.md](md/tasks/administer-cluster/kubelet-credential-provider.md) — 2026-11-14T10:24:15+03:30
+- [tasks/administer-cluster/kubelet-config-file.md](md/tasks/administer-cluster/kubelet-config-file.md) — 2026-11-14T10:23:59+03:30
+- [tasks/administer-cluster/kubeadm/upgrading-linux-nodes.md](md/tasks/administer-cluster/kubeadm/upgrading-linux-nodes.md) — 2026-11-14T10:23:16+03:30
+- [tasks/administer-cluster/kubeadm/upgrading-windows-nodes.md](md/tasks/administer-cluster/kubeadm/upgrading-windows-nodes.md) — 2026-11-14T10:23:12+03:30
+- [tasks/administer-cluster/kubeadm/kubeadm-upgrade.md](md/tasks/administer-cluster/kubeadm/kubeadm-upgrade.md) — 2026-11-10T10:27:02+03:30
 - [tasks/administer-cluster/kubeadm/kubeadm-certs.md](md/tasks/administer-cluster/kubeadm/kubeadm-certs.md) — 2026-11-10T10:26:36+03:30
 - [tasks/administer-cluster/kubeadm/kubeadm-reconfigure.md](md/tasks/administer-cluster/kubeadm/kubeadm-reconfigure.md) — 2026-11-10T10:25:48+03:30
 - [tasks/administer-cluster/kubeadm/change-package-repository.md](md/tasks/administer-cluster/kubeadm/change-package-repository.md) — 2026-11-10T10:24:25+03:30
 - [tasks/administer-cluster/kubeadm/adding-windows-nodes.md](md/tasks/administer-cluster/kubeadm/adding-windows-nodes.md) — 2026-11-10T10:24:15+03:30
-- [tasks/administer-cluster/encrypt-data.md](md/tasks/administer-cluster/encrypt-data.md) — 2026-11-10T10:23:53+03:30
-- [tasks/administer-cluster/kubeadm/adding-linux-nodes.md](md/tasks/administer-cluster/kubeadm/adding-linux-nodes.md) — 2026-11-10T10:23:50+03:30
-- [tasks/administer-cluster/kubeadm/_index.md](md/tasks/administer-cluster/kubeadm/_index.md) — 2026-11-10T10:23:34+03:30
-- [tasks/administer-cluster/kms-provider.md](md/tasks/administer-cluster/kms-provider.md) — 2026-11-10T10:23:29+03:30
-- [tasks/administer-cluster/ip-masq-agent.md](md/tasks/administer-cluster/ip-masq-agent.md) — 2026-11-10T10:21:47+03:30
-- [tasks/administer-cluster/hardening-dra.md](md/tasks/administer-cluster/hardening-dra.md) — 2026-11-10T10:21:10+03:30
-- [tasks/administer-cluster/guaranteed-scheduling-critical-addon-pods.md](md/tasks/administer-cluster/guaranteed-scheduling-critical-addon-pods.md) — 2026-11-10T10:20:52+03:30
-- [tasks/administer-cluster/extended-resource-node.md](md/tasks/administer-cluster/extended-resource-node.md) — 2026-11-10T10:20:42+03:30
-- [tasks/administer-cluster/enable-disable-api.md](md/tasks/administer-cluster/enable-disable-api.md) — 2026-11-10T10:20:05+03:30
-- [tasks/administer-cluster/dns-horizontal-autoscaling.md](md/tasks/administer-cluster/dns-horizontal-autoscaling.md) — 2026-11-10T10:20:04+03:30
-- [tasks/administer-cluster/dns-debugging-resolution.md](md/tasks/administer-cluster/dns-debugging-resolution.md) — 2026-11-10T10:19:57+03:30
-- [tasks/administer-cluster/dns-custom-nameservers.md](md/tasks/administer-cluster/dns-custom-nameservers.md) — 2026-11-10T10:19:33+03:30
-- [tasks/administer-cluster/decrypt-data.md](md/tasks/administer-cluster/decrypt-data.md) — 2026-11-10T10:19:11+03:30
-- [tasks/administer-cluster/developing-cloud-controller-manager.md](md/tasks/administer-cluster/developing-cloud-controller-manager.md) — 2026-11-10T10:18:56+03:30
-- [tasks/administer-cluster/configure-upgrade-etcd.md](md/tasks/administer-cluster/configure-upgrade-etcd.md) — 2026-11-10T10:18:43+03:30
-- [tasks/administer-cluster/declare-network-policy.md](md/tasks/administer-cluster/declare-network-policy.md) — 2026-11-10T10:18:40+03:30
 
 </div>
 

@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>اجرای مؤلفه‌های نود کوبرنتیز با کاربر غیر root | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">tasks / administer-cluster</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">اجرای مؤلفه‌های نود کوبرنتیز با کاربر غیر root</h1><!-- overview -->
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes v1.37 [beta]</span> (بتا)</div>
+<p dir="rtl">این سند توضیح می‌دهد که چگونه می‌توان مؤلفه‌های نود کوبرنتیز مانند kubelet، CRI، OCI و CNI را
+بدون دسترسی root و با استفاده از یک <span class="term" title="userns">فضای نام کاربر</span> اجرا کرد.</p>
+<p dir="rtl">این روش با نام <em>حالت بدون root</em> (rootless mode) نیز شناخته می‌شود.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">این سند نحوهٔ اجرای مؤلفه‌های نود کوبرنتیز (و در نتیجه پادها) را با یک کاربر غیر root شرح می‌دهد.</p>
+<p dir="rtl">اگر فقط می‌خواهید یک پاد را با کاربر غیر root اجرا کنید، به <a href="https://kubernetes.io/docs/tasks/configure-pod-container/security-context/" target="_blank">SecurityContext</a> مراجعه کنید.</p>
+</div>
+<h2 id="پیش-از-شروع" dir="rtl">پیش از شروع</h2>
+<ul>
+<li dir="rtl"><a href="https://rootlesscontaine.rs/getting-started/common/cgroup2/" target="_blank" rel="noopener">فعال‌سازی Cgroup v2</a></li>
+<li dir="rtl"><a href="https://rootlesscontaine.rs/getting-started/common/login/" target="_blank" rel="noopener">فعال‌سازی systemd همراه با نشست کاربر</a></li>
+<li dir="rtl"><a href="https://rootlesscontaine.rs/getting-started/common/sysctl/" target="_blank" rel="noopener">پیکربندی چند مقدار sysctl، بسته به توزیع لینوکس میزبان</a></li>
+<li dir="rtl"><a href="https://rootlesscontaine.rs/getting-started/common/subuid/" target="_blank" rel="noopener">اطمینان از اینکه کاربر فاقد امتیاز ویژهٔ شما در <code dir="ltr">/etc/subuid</code> و <code dir="ltr">/etc/subgid</code> فهرست شده است</a></li>
+<li dir="rtl">فعال‌سازی <a href="https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/" target="_blank">feature gate</a> با نام <code dir="ltr">KubeletInUserNamespace</code></li>
+</ul>
+<!-- steps -->
+<h2 id="اجرای-کوبرنتیز-درون-rootless-docker-podman-nerdctl" dir="rtl">اجرای کوبرنتیز درون Rootless Docker/Podman/nerdctl</h2>
+<h3 id="kind" dir="ltr" class="ltr">kind</h3>
+<p dir="rtl">ابزار <a href="https://kind.sigs.k8s.io/" target="_blank" rel="noopener">kind</a> از اجرای کوبرنتیز درون Rootless Docker، Rootless Podman یا Rootless nerdctl پشتیبانی می‌کند.</p>
+<p dir="rtl">به <a href="https://kind.sigs.k8s.io/docs/user/rootless/" target="_blank" rel="noopener">اجرای kind با Rootless Docker</a> مراجعه کنید.</p>
+<h3 id="minikube" dir="ltr" class="ltr">minikube</h3>
+<p dir="rtl">ابزار <a href="https://minikube.sigs.k8s.io/" target="_blank" rel="noopener">minikube</a> نیز از اجرای کوبرنتیز درون Rootless Docker یا Rootless Podman پشتیبانی می‌کند.</p>
+<p dir="rtl">به مستندات Minikube مراجعه کنید:</p>
+<ul>
+<li dir="ltr" class="ltr"><a href="https://minikube.sigs.k8s.io/docs/drivers/docker/" target="_blank" rel="noopener">Rootless Docker</a></li>
+<li dir="ltr" class="ltr"><a href="https://minikube.sigs.k8s.io/docs/drivers/podman/" target="_blank" rel="noopener">Rootless Podman</a></li>
+</ul>
+<h3 id="usernetes" dir="ltr" class="ltr">Usernetes</h3>
+<p dir="rtl">پروژهٔ <a href="https://github.com/rootless-containers/usernetes" target="_blank" rel="noopener">Usernetes</a> نیز از اجرای کوبرنتیز درون Rootless Docker، Rootless Podman یا Rootless nerdctl پشتیبانی می‌کند.</p>
+<p dir="rtl">برخلاف kind و minikube، پروژهٔ Usernetes امکان تشکیل یک کلاستر از چندین نود Docker/Podman/nerdctl را با استفاده از VXLAN فراهم می‌کند.</p>
+<p dir="rtl">برای نحوهٔ استفاده، به <a href="https://github.com/rootless-containers/usernetes/blob/master/README.md" target="_blank" rel="noopener">مستندات Usernetes</a> مراجعه کنید.</p>
+<h2 id="اجرای-کوبرنتیز-درون-کوبرنتیز،-به-صورت-پادهای-دارای-فضای-نام-کاربر" dir="rtl">اجرای کوبرنتیز درون کوبرنتیز، به‌صورت پادهای دارای فضای نام کاربر</h2>
+<h3 id="usernetes-1" dir="ltr" class="ltr">Usernetes</h3>
+<p dir="rtl">پروژهٔ <a href="https://github.com/rootless-containers/usernetes" target="_blank" rel="noopener">Usernetes</a> افزون بر حالت Kubernetes-in-Docker، از حالت Kubernetes-in-Kubernetes نیز پشتیبانی می‌کند.
+در حالت Kubernetes-in-Kubernetes، نودهای یک کلاستر درونی به‌صورت پادهایی ایجاد می‌شوند که روی یک کلاستر بیرونی
+و با <a href="../../concepts/workloads/pods/user-namespaces.html">فضاهای نام کاربر</a> فعال (<code dir="ltr">hostUsers: false</code>) اجرا می‌شوند.</p>
+<p dir="rtl">برای نحوهٔ استفاده، به <a href="https://github.com/rootless-containers/usernetes/blob/master/README.md" target="_blank" rel="noopener">مستندات Usernetes</a> مراجعه کنید.</p>
+<h2 id="اجرای-کوبرنتیز-درون-کانتینرهای-فاقد-امتیاز-ویژه" dir="rtl">اجرای کوبرنتیز درون کانتینرهای فاقد امتیاز ویژه</h2>
+<h3 id="sysbox" dir="ltr" class="ltr">sysbox</h3>
+<p dir="rtl">پروژهٔ <a href="https://github.com/nestybox/sysbox" target="_blank" rel="noopener">Sysbox</a> یک محیط اجرای کانتینر متن‌باز
+(مشابه «runc») است که از اجرای بارهای کاری سطح سیستم مانند Docker
+و کوبرنتیز درون کانتینرهای فاقد امتیاز ویژه پشتیبانی می‌کند؛ کانتینرهایی که با فضای نام
+کاربر لینوکس ایزوله شده‌اند.</p>
+<p dir="rtl">برای اطلاعات بیشتر، به <a href="https://github.com/nestybox/sysbox/blob/master/docs/quickstart/kind.md" target="_blank" rel="noopener">Sysbox Quick Start Guide: Kubernetes-in-Docker</a> مراجعه کنید.</p>
+<p dir="rtl">ابزار Sysbox از اجرای کوبرنتیز درون کانتینرهای فاقد امتیاز ویژه پشتیبانی می‌کند، بی‌آنکه
+به Cgroup v2 یا feature gate با نام <code dir="ltr">KubeletInUserNamespace</code> نیازی باشد. این کار را
+با در دسترس قرار دادن فایل‌سیستم‌های <code dir="ltr">/proc</code> و <code dir="ltr">/sys</code> که به‌طور ویژه ساخته شده‌اند درون
+کانتینر، به همراه چند روش پیشرفتهٔ دیگر مجازی‌سازی سیستم‌عامل انجام می‌دهد.</p>
+<h2 id="اجرای-کوبرنتیز-بدون-root-به-طور-مستقیم-روی-میزبان" dir="rtl">اجرای کوبرنتیز بدون root به‌طور مستقیم روی میزبان</h2>
+<h3 id="k3s" dir="ltr" class="ltr">K3s</h3>
+<p dir="rtl">توزیع <a href="https://k3s.io/" target="_blank" rel="noopener">K3s</a> به‌صورت آزمایشی از حالت بدون root پشتیبانی می‌کند.</p>
+<p dir="rtl">برای نحوهٔ استفاده، به <a href="https://rancher.com/docs/k3s/latest/en/advanced/#running-k3s-with-rootless-mode-experimental" target="_blank" rel="noopener">اجرای K3s در حالت بدون root</a> مراجعه کنید.</p>
+<h3 id="usernetes-تا-سال-۲۰۲۳" dir="rtl">Usernetes (تا سال ۲۰۲۳)</h3>
+<p dir="rtl">نسل نخست <a href="https://github.com/rootless-containers/usernetes" target="_blank" rel="noopener">Usernetes</a> از اجرای کوبرنتیز بدون root به‌طور مستقیم روی میزبان پشتیبانی می‌کرد.
+این حالت در سال ۲۰۲۳ بایگانی شد.</p>
+<p dir="rtl">برای اطلاعات بایگانی‌شده، به <a href="https://github.com/rootless-containers/usernetes/tree/gen1" target="_blank" rel="noopener">شاخهٔ <code dir="ltr">gen1</code> مخزن Usernetes</a> مراجعه کنید.</p>
+<h2 id="استقرار-دستی-نودی-که-kubelet-را-در-یک-فضای-نام-کاربر-اجرا-می-کند-userns-the-hard-way" dir="rtl">استقرار دستی نودی که kubelet را در یک فضای نام کاربر اجرا می‌کند {#userns-the-hard-way}</h2>
+<p dir="rtl">این بخش نکاتی را برای اجرای دستی کوبرنتیز در یک فضای نام کاربر ارائه می‌دهد.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">مخاطب این بخش توسعه‌دهندگان توزیع‌های کوبرنتیز هستند، نه کاربران نهایی.</p>
+</div>
+<h3 id="ایجاد-فضای-نام-کاربر" dir="rtl">ایجاد فضای نام کاربر</h3>
+<p dir="rtl">نخستین گام، ایجاد یک <span class="term" title="userns">فضای نام کاربر</span> است.</p>
+<p dir="rtl">اگر می‌خواهید کوبرنتیز را در کانتینری اجرا کنید که دارای فضای نام کاربر است، مانند
+Rootless Docker/Podman یا LXC/LXD، همه‌چیز آماده است و می‌توانید به زیربخش بعدی بروید.</p>
+<p dir="rtl">در غیر این صورت، باید خودتان با فراخوانی <code dir="ltr">unshare(2)</code> همراه با <code dir="ltr">CLONE_NEWUSER</code> یک فضای نام کاربر ایجاد کنید.</p>
+<p dir="rtl">همچنین می‌توان با ابزارهای خط فرمان زیر، فضای نام کاربر را از فرایند والد جدا (unshare) کرد:</p>
+<ul>
+<li dir="ltr" class="ltr"><a href="https://man7.org/linux/man-pages/man1/unshare.1.html" target="_blank" rel="noopener"><code dir="ltr">unshare(1)</code></a></li>
+<li dir="ltr" class="ltr"><a href="https://github.com/rootless-containers/rootlesskit" target="_blank" rel="noopener">RootlessKit</a></li>
+<li dir="ltr" class="ltr"><a href="https://github.com/giuseppe/become-root" target="_blank" rel="noopener">become-root</a></li>
+</ul>
+<p dir="rtl">پس از جدا کردن فضای نام کاربر، باید فضاهای نام دیگری مانند فضای نام mount را نیز جدا کنید.</p>
+<p dir="rtl">پس از جدا کردن فضای نام mount، نیازی به فراخوانی <code dir="ltr">chroot()</code> یا <code dir="ltr">pivot_root()</code> <em>نیست</em>؛
+با این حال، باید روی چندین دایرکتوری <em>درون</em> این فضای نام، فایل‌سیستم‌های قابل‌نوشتن mount کنید.</p>
+<p dir="rtl">دست‌کم دایرکتوری‌های زیر باید <em>درون</em> فضای نام (و نه <em>بیرون</em> از آن) قابل‌نوشتن باشند:</p>
+<ul>
+<li dir="ltr" class="ltr"><code dir="ltr">/etc</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">/run</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">/var/logs</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">/var/lib/kubelet</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">/var/lib/cni</code></li>
+<li dir="rtl"><code dir="ltr">/var/lib/containerd</code> (برای containerd)</li>
+<li dir="rtl"><code dir="ltr">/var/lib/containers</code> (برای CRI-O)</li>
+</ul>
+<h3 id="ایجاد-درخت-cgroup-تفویض-شده" dir="rtl">ایجاد درخت cgroup تفویض‌شده</h3>
+<p dir="rtl">افزون بر فضای نام کاربر، به یک درخت cgroup قابل‌نوشتن با cgroup v2 نیز نیاز دارید.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">پشتیبانی کوبرنتیز از اجرای مؤلفه‌های نود در فضاهای نام کاربر، به cgroup v2 نیاز دارد.
+از cgroup v1 پشتیبانی نمی‌شود.</p>
+</div>
+<p dir="rtl">اگر می‌خواهید کوبرنتیز را در Rootless Docker/Podman یا LXC/LXD روی میزبانی مبتنی بر systemd اجرا کنید، همه‌چیز آماده است.</p>
+<p dir="rtl">در غیر این صورت، باید یک واحد systemd با ویژگی <code dir="ltr">Delegate=yes</code> ایجاد کنید تا یک درخت cgroup با مجوز نوشتن تفویض شود.</p>
+<p dir="rtl">روی نود شما، systemd باید از پیش به‌گونه‌ای پیکربندی شده باشد که اجازهٔ تفویض را بدهد؛ برای جزئیات بیشتر، به
+<a href="https://rootlesscontaine.rs/getting-started/common/cgroup2/" target="_blank" rel="noopener">cgroup v2</a> در مستندات Rootless
+Containers مراجعه کنید.</p>
+<h3 id="پیکربندی-شبکه" dir="rtl">پیکربندی شبکه</h3>
+<p dir="rtl">فضای نام شبکهٔ مؤلفه‌های نود باید یک رابط غیر loopback داشته باشد که برای نمونه می‌توان آن را با
+<a href="https://github.com/rootless-containers/slirp4netns" target="_blank" rel="noopener">slirp4netns</a>،
+<a href="https://github.com/moby/vpnkit" target="_blank" rel="noopener">VPNKit</a> یا
+<a href="https://www.man7.org/linux/man-pages/man1/lxc-user-nic.1.html" target="_blank" rel="noopener">lxc-user-nic(1)</a> پیکربندی کرد.</p>
+<p dir="rtl">فضاهای نام شبکهٔ پادها را می‌توان با افزونه‌های معمولی CNI پیکربندی کرد.
+برای شبکه‌بندی چندنودی، Flannel (VXLAN، 8472/UDP) به‌درستی کار می‌کند.</p>
+<p dir="rtl">پورت‌هایی مانند پورت kubelet (10250/TCP) و پورت‌های سرویس <code dir="ltr">NodePort</code> باید با یک پورت‌فورواردر خارجی،
+مانند RootlessKit، slirp4netns یا
+<a href="https://linux.die.net/man/1/socat" target="_blank" rel="noopener">socat(1)</a>، از فضای نام شبکهٔ نود در دسترس میزبان قرار گیرند.</p>
+<p dir="rtl">می‌توانید از پورت‌فورواردر K3s استفاده کنید.
+برای جزئیات بیشتر، به <a href="https://rancher.com/docs/k3s/latest/en/advanced/#known-issues-with-rootless-mode" target="_blank" rel="noopener">اجرای K3s در حالت بدون root</a>
+مراجعه کنید.
+پیاده‌سازی آن را می‌توانید در <a href="https://github.com/k3s-io/k3s/blob/v1.22.3+k3s1/pkg/rootlessports/controller.go" target="_blank" rel="noopener">بستهٔ <code dir="ltr">pkg/rootlessports</code></a> در k3s بیابید.</p>
+<h3 id="پیکربندی-cri" dir="rtl">پیکربندی CRI</h3>
+<p dir="rtl">مؤلفهٔ kubelet به یک محیط اجرای کانتینر وابسته است. باید یک محیط اجرای کانتینر مانند
+containerd یا CRI-O را مستقر کنید و مطمئن شوید که پیش از راه‌اندازی kubelet، درون فضای نام کاربر در حال اجراست.</p>
+<div class="tabs">
+<div class="tab"><div class="tab-name">containerd</div>
+<p dir="rtl">اجرای افزونهٔ CRI در containerd درون یک فضای نام کاربر، از نسخهٔ 1.4 containerd پشتیبانی می‌شود.</p>
+<p dir="rtl">اجرای containerd درون یک فضای نام کاربر به پیکربندی‌های زیر نیاز دارد.</p>
+<pre dir="ltr"><code class="language-toml" dir="ltr">version = 2
+
+[plugins."io.containerd.grpc.v1.cri"]
+# Disable AppArmor
+  disable_apparmor = true
+# Ignore an error during setting oom_score_adj
+  restrict_oom_score_adj = true
+# Disable hugetlb cgroup v2 controller (because systemd does not support delegating hugetlb controller)
+  disable_hugetlb_controller = true
+
+[plugins."io.containerd.grpc.v1.cri".containerd]
+# Using non-fuse overlayfs is also possible for kernel &gt;= 5.11, but requires SELinux to be disabled
+  snapshotter = "fuse-overlayfs"
+
+[plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]
+# We use cgroupfs that is delegated by systemd, so we do not use SystemdCgroup driver
+# (unless you run another systemd in the namespace)
+  SystemdCgroup = false
+</code></pre>
+<p dir="rtl">مسیر پیش‌فرض فایل پیکربندی <code dir="ltr">/etc/containerd/config.toml</code> است.
+این مسیر را می‌توان با <code dir="ltr">containerd -c /path/to/containerd/config.toml</code> مشخص کرد.</p>
+</div>
+<div class="tab"><div class="tab-name">CRI-O</div>
+<p dir="rtl">اجرای CRI-O درون یک فضای نام کاربر، از نسخهٔ 1.22 CRI-O پشتیبانی می‌شود.</p>
+<p dir="rtl">برای CRI-O باید متغیر محیطی <code dir="ltr">_CRIO_ROOTLESS=1</code> تنظیم شود.</p>
+<p dir="rtl">پیکربندی‌های زیر نیز توصیه می‌شوند:</p>
+<pre dir="ltr"><code class="language-toml" dir="ltr">[crio]
+  storage_driver = "overlay"
+# Using non-fuse overlayfs is also possible for kernel &gt;= 5.11, but requires SELinux to be disabled
+  storage_option = ["overlay.mount_program=/usr/local/bin/fuse-overlayfs"]
+
+[crio.runtime]
+# We use cgroupfs that is delegated by systemd, so we do not use "systemd" driver
+# (unless you run another systemd in the namespace)
+  cgroup_manager = "cgroupfs"
+</code></pre>
+<p dir="rtl">مسیر پیش‌فرض فایل پیکربندی <code dir="ltr">/etc/crio/crio.conf</code> است.
+این مسیر را می‌توان با <code dir="ltr">crio --config /path/to/crio/crio.conf</code> مشخص کرد.</p>
+</div>
+</div>
+<h3 id="پیکربندی-kubelet" dir="rtl">پیکربندی kubelet</h3>
+<p dir="rtl">اجرای kubelet درون یک فضای نام کاربر به پیکربندی زیر نیاز دارد:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: kubelet.config.k8s.io/v1beta1
+kind: KubeletConfiguration
+featureGates:
+  KubeletInUserNamespace: true
+# We use cgroupfs that is delegated by systemd, so we do not use "systemd" driver
+# (unless you run another systemd in the namespace)
+cgroupDriver: "cgroupfs"
+</code></pre>
+<p dir="rtl">هنگامی که feature gate با نام <code dir="ltr">KubeletInUserNamespace</code> فعال باشد، kubelet خطاهایی را که
+ممکن است هنگام تنظیم مقادیر sysctl زیر روی نود رخ دهند، نادیده می‌گیرد.</p>
+<ul>
+<li dir="ltr" class="ltr"><code dir="ltr">vm.overcommit_memory</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">vm.panic_on_oom</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">kernel.panic</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">kernel.panic_on_oops</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">kernel.keys.root_maxkeys</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">kernel.keys.root_maxbytes</code>.</li>
+</ul>
+<p dir="rtl">درون یک فضای نام کاربر، kubelet هر خطایی را که هنگام تلاش برای باز کردن <code dir="ltr">/dev/kmsg</code> رخ دهد نیز نادیده می‌گیرد.
+همچنین این feature gate به kube-proxy امکان می‌دهد خطای رخ‌داده هنگام تنظیم <code dir="ltr">RLIMIT_NOFILE</code> را نادیده بگیرد.</p>
+<p dir="rtl">این feature gate، یعنی <code dir="ltr">KubeletInUserNamespace</code>، در کوبرنتیز نسخهٔ 1.22 با وضعیت «آلفا» معرفی شد.</p>
+<p dir="rtl">اجرای kubelet درون یک فضای نام کاربر بدون استفاده از این feature gate نیز امکان‌پذیر است؛
+این کار با mount کردن یک فایل‌سیستم proc که به‌طور ویژه ساخته شده است انجام می‌شود (همان کاری که <a href="https://github.com/nestybox/sysbox" target="_blank" rel="noopener">Sysbox</a> انجام می‌دهد)، اما به‌طور رسمی پشتیبانی نمی‌شود.</p>
+<h3 id="پیکربندی-kube-proxy" dir="rtl">پیکربندی kube-proxy</h3>
+<p dir="rtl">اجرای kube-proxy درون یک فضای نام کاربر به پیکربندی زیر نیاز دارد:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: kubeproxy.config.k8s.io/v1alpha1
+kind: KubeProxyConfiguration
+mode: "iptables" # or "userspace"
+conntrack:
+# Skip setting sysctl value "net.netfilter.nf_conntrack_max"
+  maxPerCore: 0
+# Skip setting "net.netfilter.nf_conntrack_tcp_timeout_established"
+  tcpEstablishedTimeout: 0s
+# Skip setting "net.netfilter.nf_conntrack_tcp_timeout_close"
+  tcpCloseWaitTimeout: 0s
+</code></pre>
+<h2 id="محدودیت-ها" dir="rtl">محدودیت‌ها</h2>
+<ul>
+<li dir="rtl">
+<p dir="rtl">بیشتر درایورهای حجم (volume) «غیرمحلی» مانند <code dir="ltr">nfs</code> و <code dir="ltr">iscsi</code> کار نمی‌کنند.
+حجم‌های محلی مانند <code dir="ltr">local</code>، <code dir="ltr">hostPath</code>، <code dir="ltr">emptyDir</code>، <code dir="ltr">configMap</code>، <code dir="ltr">secret</code> و <code dir="ltr">downwardAPI</code> به‌درستی کار می‌کنند.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">برخی از افزونه‌های CNI ممکن است کار نکنند. Flannel (VXLAN) به‌درستی کار می‌کند.</p>
+</li>
+</ul>
+<p dir="rtl">برای اطلاعات بیشتر در این زمینه، به صفحهٔ <a href="https://rootlesscontaine.rs/caveats/" target="_blank" rel="noopener">محدودیت‌ها و کارهای آینده</a>
+در وب‌سایت rootlesscontaine.rs مراجعه کنید.</p>
+<h2 id="همچنین-ببینید" dir="rtl">همچنین ببینید</h2>
+<ul>
+<li dir="ltr" class="ltr"><a href="https://rootlesscontaine.rs/" target="_blank" rel="noopener">rootlesscontaine.rs</a></li>
+<li dir="ltr" class="ltr"><a href="https://www.slideshare.net/AkihiroSuda/kubecon-na-2020-containerd-rootless-containers-2020" target="_blank" rel="noopener">Rootless Containers 2020 (KubeCon NA 2020)</a></li>
+<li dir="rtl"><a href="https://kind.sigs.k8s.io/docs/user/rootless/" target="_blank" rel="noopener">اجرای kind با Rootless Docker</a></li>
+<li dir="ltr" class="ltr"><a href="https://github.com/rootless-containers/usernetes" target="_blank" rel="noopener">Usernetes</a></li>
+<li dir="rtl"><a href="https://rancher.com/docs/k3s/latest/en/advanced/#running-k3s-with-rootless-mode-experimental" target="_blank" rel="noopener">اجرای K3s در حالت بدون root</a></li>
+<li dir="ltr" class="ltr"><a href="https://github.com/kubernetes/enhancements/tree/master/keps/sig-node/2033-kubelet-in-userns-aka-rootless" target="_blank" rel="noopener">KEP-2033: Kubelet-in-UserNS (aka Rootless mode)</a></li>
+</ul>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#پیش-از-شروع">پیش از شروع</a><a class="l2" href="#اجرای-کوبرنتیز-درون-rootless-docker-podman-nerdctl">اجرای کوبرنتیز درون Rootless Docker/Podman/nerdctl</a><a class="l3" href="#kind">kind</a><a class="l3" href="#minikube">minikube</a><a class="l3" href="#usernetes">Usernetes</a><a class="l2" href="#اجرای-کوبرنتیز-درون-کوبرنتیز،-به-صورت-پادهای-دارای-فضای-نام-کاربر">اجرای کوبرنتیز درون کوبرنتیز، به‌صورت پادهای دارای فضای نام کاربر</a><a class="l3" href="#usernetes-1">Usernetes</a><a class="l2" href="#اجرای-کوبرنتیز-درون-کانتینرهای-فاقد-امتیاز-ویژه">اجرای کوبرنتیز درون کانتینرهای فاقد امتیاز ویژه</a><a class="l3" href="#sysbox">sysbox</a><a class="l2" href="#اجرای-کوبرنتیز-بدون-root-به-طور-مستقیم-روی-میزبان">اجرای کوبرنتیز بدون root به‌طور مستقیم روی میزبان</a><a class="l3" href="#k3s">K3s</a><a class="l3" href="#usernetes-تا-سال-۲۰۲۳">Usernetes (تا سال ۲۰۲۳)</a><a class="l2" href="#استقرار-دستی-نودی-که-kubelet-را-در-یک-فضای-نام-کاربر-اجرا-می-کند-userns-the-hard-way">استقرار دستی نودی که kubelet را در یک فضای نام کاربر اجرا می‌کند {#userns-the-hard-way}</a><a class="l3" href="#ایجاد-فضای-نام-کاربر">ایجاد فضای نام کاربر</a><a class="l3" href="#ایجاد-درخت-cgroup-تفویض-شده">ایجاد درخت cgroup تفویض‌شده</a><a class="l3" href="#پیکربندی-شبکه">پیکربندی شبکه</a><a class="l3" href="#پیکربندی-cri">پیکربندی CRI</a><a class="l3" href="#پیکربندی-kubelet">پیکربندی kubelet</a><a class="l3" href="#پیکربندی-kube-proxy">پیکربندی kube-proxy</a><a class="l2" href="#محدودیت-ها">محدودیت‌ها</a><a class="l2" href="#همچنین-ببینید">همچنین ببینید</a></nav>
+</div>
+</body>
+</html>
