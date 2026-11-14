@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>مهاجرت عامل‌های تله‌متری و امنیتی از dockershim | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
+<header class="top"><a href="../../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">tasks / administer-cluster / migrating-from-dockershim</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">مهاجرت عامل‌های تله‌متری و امنیتی از dockershim</h1><!-- overview -->
+<p dir="rtl">پشتیبانی کوبرنتیز از یکپارچه‌سازی مستقیم با Docker Engine منسوخ و سپس حذف شده است. بیشتر برنامه‌ها وابستگی مستقیمی به محیط اجرایی‌ای که کانتینرها را میزبانی می‌کند ندارند. با این حال، هنوز بسیاری از عامل‌های تله‌متری و پایش برای جمع‌آوری فراداده، لاگ‌ها و متریک‌های کانتینرها به Docker وابسته‌اند. این سند اطلاعاتی را درباره‌ی شیوه‌ی شناسایی این وابستگی‌ها گردآوری کرده و پیوندهایی را برای مهاجرت این عامل‌ها به ابزارهای عمومی یا محیط‌های اجرای جایگزین ارائه می‌دهد.</p>
+<h2 id="عامل-های-تله-متری-و-امنیتی" dir="rtl">عامل‌های تله‌متری و امنیتی</h2>
+<p dir="rtl">درون یک کلاستر کوبرنتیز، چند روش مختلف برای اجرای عامل‌های تله‌متری یا امنیتی وجود دارد. برخی از این عامل‌ها هنگامی که به‌صورت DaemonSet یا مستقیماً روی نودها اجرا می‌شوند، به Docker Engine وابستگی مستقیم دارند.</p>
+<h3 id="چرا-برخی-عامل-های-تله-متری-با-docker-engine-ارتباط-برقرار-می-کنند؟" dir="rtl">چرا برخی عامل‌های تله‌متری با Docker Engine ارتباط برقرار می‌کنند؟</h3>
+<p dir="rtl">کوبرنتیز در آغاز به‌طور خاص برای کار با Docker Engine نوشته شده بود. کوبرنتیز شبکه و زمان‌بندی را بر عهده داشت و برای راه‌اندازی و اجرای کانتینرها (درون پادها) روی هر نود به Docker Engine متکی بود. برخی اطلاعات مرتبط با تله‌متری، مانند نام پاد، فقط از طریق مؤلفه‌های کوبرنتیز در دسترس است. برخی داده‌های دیگر، مانند متریک‌های کانتینر، بر عهده‌ی محیط اجرای کانتینر نیست. به همین دلیل، عامل‌های تله‌متری اولیه برای ارائه‌ی تصویری دقیق باید هم از محیط اجرای کانتینر <em>و هم</em> از کوبرنتیز پرس‌وجو می‌کردند. به‌مرور زمان، کوبرنتیز توانایی پشتیبانی از چند محیط اجرا را به دست آورد و اکنون از هر محیط اجرایی که با <a href="https://kubernetes.io/docs/concepts/architecture/cri/" target="_blank">رابط محیط اجرای کانتینر</a> سازگار باشد پشتیبانی می‌کند.</p>
+<p dir="rtl">برخی عامل‌های تله‌متری به‌طور خاص به ابزارهای Docker Engine متکی‌اند. برای مثال، یک عامل ممکن است برای فهرست کردن کانتینرها و فرایندها فرمانی مانند
+<a href="https://docs.docker.com/engine/reference/commandline/ps/" target="_blank" rel="noopener"><code dir="ltr">docker ps</code></a>
+یا <a href="https://docs.docker.com/engine/reference/commandline/top/" target="_blank" rel="noopener"><code dir="ltr">docker top</code></a> را اجرا کند، یا برای دریافت جریانی لاگ‌ها از <a href="https://docs.docker.com/engine/reference/commandline/logs/" target="_blank" rel="noopener"><code dir="ltr">docker logs</code></a> استفاده کند. اگر نودهای کلاستر فعلی شما از Docker Engine استفاده می‌کنند و به محیط اجرای کانتینر دیگری روی بیاورید، این فرمان‌ها دیگر کار نخواهند کرد.</p>
+<h3 id="شناسایی-daemonsetهایی-که-به-docker-engine-وابسته-اند-identify-docker-dependency" dir="rtl">شناسایی DaemonSetهایی که به Docker Engine وابسته‌اند {#identify-docker-dependency}</h3>
+<p dir="rtl">اگر پادی بخواهد <code dir="ltr">dockerd</code> در حال اجرا روی نود را فراخوانی کند، باید یکی از این دو کار را انجام دهد:</p>
+<ul>
+<li dir="rtl">سامانه‌ی فایلی را که سوکت ممتاز (privileged) دیمن Docker در آن قرار دارد، به‌صورت یک
+<span class="term" title="volume">حجم (volume)</span> مانت کند؛ یا</li>
+<li dir="rtl">مسیر مشخص سوکت ممتاز دیمن Docker را مستقیماً، آن هم به‌صورت یک حجم، مانت کند.</li>
+</ul>
+<p dir="rtl">برای مثال، در ایمیج‌های COS، Docker سوکت دامنه‌ی یونیکس خود را در مسیر <code dir="ltr">/var/run/docker.sock</code> در دسترس قرار می‌دهد. یعنی مشخصات (spec) پاد شامل یک مانت حجم <code dir="ltr">hostPath</code> برای <code dir="ltr">/var/run/docker.sock</code> خواهد بود.</p>
+<p dir="rtl">در ادامه نمونه‌ای از یک اسکریپت شل آمده است که پادهای دارای مانتی را پیدا می‌کند که مستقیماً به سوکت Docker نگاشت شده است. این اسکریپت فضای نام و نام پاد را در خروجی نمایش می‌دهد. برای بررسی سایر مانت‌ها می‌توانید بخش <code dir="ltr">grep '/var/run/docker.sock'</code> را حذف کنید.</p>
+<pre dir="ltr"><code class="language-bash" dir="ltr">kubectl get pods --all-namespaces \
+-o=jsonpath='{range .items[*]}{"\n"}{.metadata.namespace}{":\t"}{.metadata.name}{":\t"}{range .spec.volumes[*]}{.hostPath.path}{", "}{end}{end}' \
+| sort \
+| grep '/var/run/docker.sock'
+</code></pre>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">یک پاد از راه‌های دیگری نیز می‌تواند به Docker روی میزبان دسترسی پیدا کند. برای نمونه، ممکن است به‌جای مسیر کامل، پوشه‌ی والد یعنی <code dir="ltr">/var/run</code> مانت شود (مانند <a href="https://gist.github.com/itaysk/7bc3e56d69c4d72a549286d98fd557dd" target="_blank" rel="noopener">این
+نمونه</a>).
+اسکریپت بالا فقط رایج‌ترین موارد را شناسایی می‌کند.</p>
+</div>
+<h3 id="شناسایی-وابستگی-به-docker-در-عامل-های-نود" dir="rtl">شناسایی وابستگی به Docker در عامل‌های نود</h3>
+<p dir="rtl">اگر نودهای کلاستر شما سفارشی‌سازی شده‌اند و عامل‌های امنیتی و تله‌متری دیگری روی نود نصب می‌کنند، از فروشنده‌ی عامل بپرسید که آیا این عامل به Docker وابستگی دارد یا نه.</p>
+<h3 id="فروشندگان-عامل-های-تله-متری-و-امنیتی" dir="rtl">فروشندگان عامل‌های تله‌متری و امنیتی</h3>
+<p dir="rtl">هدف این بخش گردآوری اطلاعات درباره‌ی عامل‌های گوناگون تله‌متری و امنیتی است که ممکن است به محیط‌های اجرای کانتینر وابسته باشند.</p>
+<p dir="rtl">نسخه‌ی در حال تکمیل دستورالعمل‌های مهاجرت مربوط به فروشندگان مختلف عامل‌های تله‌متری و امنیتی را در <a href="https://docs.google.com/document/d/1ZFi4uKit63ga5sxEiZblfb-c23lFhvy6RXVPikS8wf0/edit#" target="_blank" rel="noopener">یک سند Google</a> نگهداری می‌کنیم.
+برای دریافت دستورالعمل‌های به‌روز مهاجرت از dockershim، لطفاً با فروشنده تماس بگیرید.</p>
+<h2 id="مهاجرت-از-dockershim" dir="rtl">مهاجرت از dockershim</h2>
+<h3 id="aqua" dir="ltr" class="ltr"><a href="https://www.aquasec.com" target="_blank" rel="noopener">Aqua</a></h3>
+<p dir="rtl">به هیچ تغییری نیاز نیست: پس از تغییر محیط اجرا، همه‌چیز باید بدون مشکل کار کند.</p>
+<h3 id="datadog" dir="ltr" class="ltr"><a href="https://www.datadoghq.com/product/" target="_blank" rel="noopener">Datadog</a></h3>
+<p dir="rtl">نحوه‌ی مهاجرت:
+<a href="https://docs.datadoghq.com/agent/guide/docker-deprecation/" target="_blank" rel="noopener">منسوخ شدن Docker در کوبرنتیز</a>
+نام پادی که به Docker Engine دسترسی دارد ممکن است شامل هر یک از موارد زیر باشد:</p>
+<ul>
+<li dir="ltr" class="ltr"><code dir="ltr">datadog-agent</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">datadog</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">dd-agent</code></li>
+</ul>
+<h3 id="dynatrace" dir="ltr" class="ltr"><a href="https://www.dynatrace.com/" target="_blank" rel="noopener">Dynatrace</a></h3>
+<p dir="rtl">نحوه‌ی مهاجرت:
+<a href="https://community.dynatrace.com/t5/Best-practices/Migrating-from-Docker-only-to-generic-container-metrics-in/m-p/167030#M49" target="_blank" rel="noopener">مهاجرت از متریک‌های مختص Docker به متریک‌های عمومی کانتینر در Dynatrace</a></p>
+<p dir="rtl">اعلامیه‌ی پشتیبانی از containerd: <a href="https://www.dynatrace.com/news/blog/get-automated-full-stack-visibility-into-containerd-based-kubernetes-environments/" target="_blank" rel="noopener">دستیابی خودکار به دید کامل (full-stack) در محیط‌های کوبرنتیز مبتنی بر containerd</a></p>
+<p dir="rtl">اعلامیه‌ی پشتیبانی از CRI-O: <a href="https://www.dynatrace.com/news/blog/get-automated-full-stack-visibility-into-your-cri-o-kubernetes-containers-beta/" target="_blank" rel="noopener">دستیابی خودکار به دید کامل در کانتینرهای کوبرنتیز مبتنی بر CRI-O (بتا)</a></p>
+<p dir="rtl">نام پادی که به Docker دسترسی دارد ممکن است شامل این مورد باشد:</p>
+<ul>
+<li dir="ltr" class="ltr"><code dir="ltr">dynatrace-oneagent</code></li>
+</ul>
+<h3 id="falco" dir="ltr" class="ltr"><a href="https://falco.org" target="_blank" rel="noopener">Falco</a></h3>
+<p dir="rtl">نحوه‌ی مهاجرت:</p>
+<p dir="rtl"><a href="https://falco.org/docs/getting-started/deployment/#docker-deprecation-in-kubernetes" target="_blank" rel="noopener">مهاجرت Falco از dockershim</a>
+ابزار Falco از هر محیط اجرای سازگار با CRI پشتیبانی می‌کند (در پیکربندی پیش‌فرض از containerd استفاده می‌شود)؛ همه‌ی جزئیات در مستندات آن توضیح داده شده است.
+نام پادی که به Docker دسترسی دارد ممکن است شامل این مورد باشد:</p>
+<ul>
+<li dir="ltr" class="ltr"><code dir="ltr">falco</code></li>
+</ul>
+<h3 id="prisma-cloud-compute" dir="ltr" class="ltr"><a href="https://docs.paloaltonetworks.com/prisma/prisma-cloud.html" target="_blank" rel="noopener">Prisma Cloud Compute</a></h3>
+<p dir="rtl">بخش «Install Prisma Cloud on a CRI (non-Docker) cluster» را در <a href="https://docs.paloaltonetworks.com/prisma/prisma-cloud/prisma-cloud-admin-compute/install/install_kubernetes.html" target="_blank" rel="noopener">مستندات Prisma Cloud</a> بررسی کنید.
+نام پادی که به Docker دسترسی دارد ممکن است چیزی شبیه این باشد:</p>
+<ul>
+<li dir="ltr" class="ltr"><code dir="ltr">twistlock-defender-ds</code></li>
+</ul>
+<h3 id="signalfx-splunk" dir="ltr" class="ltr"><a href="https://www.splunk.com/en_us/investor-relations/acquisitions/signalfx.html" target="_blank" rel="noopener">SignalFx (Splunk)</a></h3>
+<p dir="rtl">عامل SignalFx Smart Agent (منسوخ‌شده) برای کوبرنتیز از چند پایشگر (monitor) مختلف استفاده می‌کند، از جمله
+<code dir="ltr">kubernetes-cluster</code>، <code dir="ltr">kubelet-stats/kubelet-metrics</code> و <code dir="ltr">docker-container-stats</code>.
+پایشگر <code dir="ltr">kubelet-stats</code> پیش‌تر از سوی فروشنده به نفع <code dir="ltr">kubelet-metrics</code> منسوخ شده بود.
+پایشگر <code dir="ltr">docker-container-stats</code> همان پایشگری است که حذف dockershim بر آن اثر می‌گذارد.
+از <code dir="ltr">docker-container-stats</code> همراه با محیط‌های اجرای کانتینری به‌جز Docker Engine استفاده نکنید.</p>
+<p dir="rtl">نحوه‌ی مهاجرت از عامل وابسته به dockershim:</p>
+<ol>
+<li dir="rtl">پایشگر <code dir="ltr">docker-container-stats</code> را از فهرست <a href="https://github.com/signalfx/signalfx-agent/blob/main/docs/monitor-config.md" target="_blank" rel="noopener">پایشگرهای پیکربندی‌شده</a> حذف کنید.
+توجه کنید که اگر این پایشگر را همراه با محیط اجرایی غیر از dockershim فعال نگه دارید، در صورت نصب بودن docker روی نود متریک‌های نادرست گزارش می‌شود و در صورت نصب نبودن آن، هیچ متریکی گزارش نمی‌شود.</li>
+<li dir="rtl"><a href="https://github.com/signalfx/signalfx-agent/blob/main/docs/monitors/kubelet-metrics.md" target="_blank" rel="noopener">پایشگر <code dir="ltr">kubelet-metrics</code> را فعال و پیکربندی کنید</a>.</li>
+</ol>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">مجموعه‌ی متریک‌های جمع‌آوری‌شده تغییر خواهد کرد. قواعد هشدار و داشبوردهای خود را بازبینی کنید.</p>
+</div>
+<p dir="rtl">نام پادی که به Docker دسترسی دارد ممکن است چیزی شبیه این باشد:</p>
+<ul>
+<li dir="ltr" class="ltr"><code dir="ltr">signalfx-agent</code></li>
+</ul>
+<h3 id="yahoo-kubectl-flame" dir="ltr" class="ltr">Yahoo Kubectl Flame</h3>
+<p dir="rtl">ابزار Flame از محیط‌های اجرای کانتینر به‌جز Docker پشتیبانی نمی‌کند. برای اطلاعات بیشتر،
+<a href="https://github.com/yahoo/kubectl-flame/issues/51" target="_blank" rel="noopener">https://github.com/yahoo/kubectl-flame/issues/51</a> را ببینید.</p>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#عامل-های-تله-متری-و-امنیتی">عامل‌های تله‌متری و امنیتی</a><a class="l3" href="#چرا-برخی-عامل-های-تله-متری-با-docker-engine-ارتباط-برقرار-می-کنند؟">چرا برخی عامل‌های تله‌متری با Docker Engine ارتباط برقرار می‌کنند؟</a><a class="l3" href="#شناسایی-daemonsetهایی-که-به-docker-engine-وابسته-اند-identify-docker-dependency">شناسایی DaemonSetهایی که به Docker Engine وابسته‌اند {#identify-docker-dependency}</a><a class="l3" href="#شناسایی-وابستگی-به-docker-در-عامل-های-نود">شناسایی وابستگی به Docker در عامل‌های نود</a><a class="l3" href="#فروشندگان-عامل-های-تله-متری-و-امنیتی">فروشندگان عامل‌های تله‌متری و امنیتی</a><a class="l2" href="#مهاجرت-از-dockershim">مهاجرت از dockershim</a><a class="l3" href="#aqua">Aqua</a><a class="l3" href="#datadog">Datadog</a><a class="l3" href="#dynatrace">Dynatrace</a><a class="l3" href="#falco">Falco</a><a class="l3" href="#prisma-cloud-compute">Prisma Cloud Compute</a><a class="l3" href="#signalfx-splunk">SignalFx (Splunk)</a><a class="l3" href="#yahoo-kubectl-flame">Yahoo Kubectl Flame</a></nav>
+</div>
+</body>
+</html>

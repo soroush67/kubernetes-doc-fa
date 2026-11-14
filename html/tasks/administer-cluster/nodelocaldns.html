@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>استفاده از NodeLocal DNSCache در کلاسترهای کوبرنتیز | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">tasks / administer-cluster</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">استفاده از NodeLocal DNSCache در کلاسترهای کوبرنتیز</h1><!-- overview -->
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes v1.18 [stable]</span> (پایدار)</div>
+<p dir="rtl">این صفحه نمای کلی از قابلیت NodeLocal DNSCache در کوبرنتیز ارائه می‌دهد.</p>
+<h2 id="پیش-از-شروع" dir="rtl">پیش از شروع</h2>
+<p dir="rtl">باید یک کلاستر کوبرنتیز داشته باشید و ابزار خط فرمان kubectl باید برای ارتباط با کلاستر شما پیکربندی شده باشد. توصیه می‌شود این آموزش را روی کلاستری اجرا کنید که دست‌کم دو نود داشته باشد که نقش میزبان control plane را ندارند. اگر هنوز کلاستری ندارید، می‌توانید با استفاده از
+<a href="https://minikube.sigs.k8s.io/docs/tutorials/multi_node/" target="_blank" rel="noopener">minikube</a>
+یکی بسازید یا از یکی از این محیط‌های آزمایشی کوبرنتیز استفاده کنید:</p>
+<ul>
+<li dir="ltr" class="ltr"><a href="https://labs.iximiuz.com/playgrounds?category=kubernetes&amp;filter=all" target="_blank" rel="noopener">iximiuz Labs</a></li>
+<li dir="ltr" class="ltr"><a href="https://killercoda.com/playgrounds/scenario/kubernetes" target="_blank" rel="noopener">Killercoda</a></li>
+<li dir="ltr" class="ltr"><a href="https://kodekloud.com/public-playgrounds" target="_blank" rel="noopener">KodeKloud</a></li>
+</ul>
+ <!-- steps -->
+<h2 id="مقدمه" dir="rtl">مقدمه</h2>
+<p dir="rtl">قابلیت NodeLocal DNSCache با اجرای یک عامل کش DNS به‌صورت DaemonSet روی نودهای کلاستر،
+کارایی DNS کلاستر را بهبود می‌دهد. در معماری فعلی، Podهایی که در حالت DNS از نوع 'ClusterFirst' هستند
+معمولاً برای پرس‌وجوهای DNS به <code dir="ltr">clusterIP</code> مربوط به CoreDNS مراجعه می‌کنند. kube-proxy این آدرس را
+به یک endpoint از CoreDNS ترجمه می‌کند.
+در این معماری جدید، Podها به عامل کش DNS که روی همان نود اجرا می‌شود مراجعه می‌کنند و به این ترتیب
+از قواعد DNAT و ردیابی اتصال (connection tracking) پرهیز می‌شود.
+عامل کش محلی، در صورت نبودِ نام‌های میزبان کلاستر در کش (که به‌طور پیش‌فرض پسوند "<code dir="ltr">cluster.local</code>" دارند)،
+از سرویس CoreDNS پرس‌وجو می‌کند.</p>
+<h2 id="انگیزه" dir="rtl">انگیزه</h2>
+<ul>
+<li dir="rtl">
+<p dir="rtl">در معماری فعلی DNS، اگر هیچ نمونهٔ محلی از CoreDNS وجود نداشته باشد، ممکن است Podهایی که
+بیشترین QPS مربوط به DNS را دارند ناچار شوند به نود دیگری مراجعه کنند.
+وجود یک کش محلی به کاهش تأخیر در چنین سناریوهایی کمک می‌کند.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">دور زدن DNAT در iptables و ردیابی اتصال به کاهش
+<a href="https://github.com/kubernetes/kubernetes/issues/56903" target="_blank" rel="noopener">شرایط رقابتی conntrack</a>
+کمک می‌کند و از پر شدن جدول conntrack با ورودی‌های DNS مبتنی بر UDP جلوگیری می‌کند.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">اتصال‌های عامل کش محلی به سرویس CoreDNS را می‌توان به TCP ارتقا داد.
+ورودی‌های conntrack مربوط به TCP هنگام بسته شدن اتصال حذف می‌شوند، در حالی که
+ورودی‌های UDP باید منتظر پایان مهلت زمانی (timeout) بمانند
+(مقدار <a href="https://www.kernel.org/doc/Documentation/networking/nf_conntrack-sysctl.txt" target="_blank" rel="noopener">پیش‌فرض</a>
+<code dir="ltr">nf_conntrack_udp_timeout</code> برابر ۳۰ ثانیه است).</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">ارتقای پرس‌وجوهای DNS از UDP به TCP، تأخیر انتهایی (tail latency) ناشی از بسته‌های UDP
+ازدست‌رفته و پایان مهلت‌های DNS را که معمولاً تا ۳۰ ثانیه (۳ تلاش مجدد + مهلت ۱۰ ثانیه) طول می‌کشد، کاهش می‌دهد.
+از آنجا که کش nodelocal به پرس‌وجوهای DNS مبتنی بر UDP گوش می‌دهد، نیازی به تغییر برنامه‌ها نیست.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">معیارها (metrics) و دیدپذیری درخواست‌های DNS در سطح نود.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">می‌توان کش منفی (negative caching) را دوباره فعال کرد و به این ترتیب تعداد پرس‌وجوها از سرویس CoreDNS را کاهش داد.</p>
+</li>
+</ul>
+<h2 id="نمودار-معماری" dir="rtl">نمودار معماری</h2>
+<p dir="rtl">مسیری که پرس‌وجوهای DNS پس از فعال‌سازی NodeLocal DNSCache طی می‌کنند به این صورت است:</p>
+<figure><img src="https://kubernetes.io/images/docs/nodelocaldns.svg" alt="جریان NodeLocal DNSCache"><figcaption dir="rtl">این تصویر نشان می‌دهد NodeLocal DNSCache چگونه پرس‌وجوهای DNS را مدیریت می‌کند.</figcaption></figure>
+<h2 id="پیکربندی" dir="rtl">پیکربندی</h2>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">نشانی IP محلی‌ای که NodeLocal DNSCache روی آن گوش می‌دهد می‌تواند هر نشانی‌ای باشد که
+بتوان تضمین کرد با هیچ IP موجود در کلاستر شما تداخل ندارد.
+توصیه می‌شود از نشانی‌ای با دامنهٔ محلی استفاده کنید؛ برای مثال،
+از بازهٔ 'link-local' یعنی '169.254.0.0/16' برای IPv4 یا از بازهٔ
+'Unique Local Address' در IPv6 یعنی 'fd00::/8'.</p>
+</div>
+<p dir="rtl">این قابلیت را می‌توان با مراحل زیر فعال کرد:</p>
+<ul>
+<li dir="rtl">
+<p dir="rtl">مانیفستی مشابه نمونهٔ
+<a href="https://github.com/kubernetes/kubernetes/blob/master/cluster/addons/dns/nodelocaldns/nodelocaldns.yaml" target="_blank" rel="noopener"><code dir="ltr">nodelocaldns.yaml</code></a>
+آماده کنید و آن را با نام <code dir="ltr">nodelocaldns.yaml</code> ذخیره کنید.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">اگر از IPv6 استفاده می‌کنید، در فایل پیکربندی CoreDNS باید همهٔ نشانی‌های IPv6 را،
+در صورتی که در قالب 'IP:Port' به کار رفته‌اند، داخل کروشه قرار دهید.
+اگر از مانیفست نمونهٔ مرحلهٔ قبل استفاده می‌کنید، لازم است
+<a href="https://github.com/kubernetes/kubernetes/blob/b2ecd1b3a3192fbbe2b9e348e095326f51dc43dd/cluster/addons/dns/nodelocaldns/nodelocaldns.yaml#L70" target="_blank" rel="noopener">خط پیکربندی L70</a>
+را به این شکل تغییر دهید: "<code dir="ltr">health [__PILLAR__LOCAL__DNS__]:8080</code>"</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">متغیرهای موجود در مانیفست را با مقادیر درست جایگزین کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># For historical reasons, the Service for CoreDNS is called "kube-dns"
+coredns=`kubectl get svc kube-dns -n kube-system -o jsonpath={.spec.clusterIP}`
+domain=&lt;cluster-domain&gt;
+localdns=&lt;node-local-address&gt;
+</code></pre>
+<p dir="rtl">مقدار <code dir="ltr">&lt;cluster-domain&gt;</code> به‌طور پیش‌فرض "<code dir="ltr">cluster.local</code>" است. مقدار <code dir="ltr">&lt;node-local-address&gt;</code>
+نشانی IP محلی‌ای است که برای گوش دادن NodeLocal DNSCache انتخاب شده است.</p>
+<ul>
+<li dir="rtl">
+<p dir="rtl">اگر kube-proxy در حالت IPTABLES اجرا می‌شود:</p>
+<pre dir="ltr"><code class="language-bash" dir="ltr">sed -i "s/__PILLAR__LOCAL__DNS__/$localdns/g; s/__PILLAR__DNS__DOMAIN__/$domain/g; s/__PILLAR__DNS__SERVER__/$coredns/g" nodelocaldns.yaml
+</code></pre>
+<p dir="rtl">مقادیر <code dir="ltr">__PILLAR__CLUSTER__DNS__</code> و <code dir="ltr">__PILLAR__UPSTREAM__SERVERS__</code> را
+Podهای <code dir="ltr">node-local-dns</code> پر می‌کنند.
+در این حالت، Podهای <code dir="ltr">node-local-dns</code> هم روی IP سرویس CoreDNS و هم روی
+<code dir="ltr">&lt;node-local-address&gt;</code> گوش می‌دهند، بنابراین Podها می‌توانند با هر یک از این دو نشانی IP رکوردهای DNS را جست‌وجو کنند.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">اگر kube-proxy در حالت IPVS اجرا می‌شود:</p>
+<pre dir="ltr"><code class="language-bash" dir="ltr">sed -i "s/__PILLAR__LOCAL__DNS__/$localdns/g; s/__PILLAR__DNS__DOMAIN__/$domain/g; s/,__PILLAR__DNS__SERVER__//g; s/__PILLAR__CLUSTER__DNS__/$coredns/g" nodelocaldns.yaml
+</code></pre>
+<p dir="rtl">در این حالت، Podهای <code dir="ltr">node-local-dns</code> فقط روی <code dir="ltr">&lt;node-local-address&gt;</code> گوش می‌دهند.
+رابط <code dir="ltr">node-local-dns</code> نمی‌تواند به IP کلاستری CoreDNS متصل (bind) شود، زیرا
+رابطی که برای توزیع بار IPVS استفاده می‌شود از قبل این نشانی را در اختیار دارد.
+مقدار <code dir="ltr">__PILLAR__UPSTREAM__SERVERS__</code> را Podهای node-local-dns پر می‌کنند.</p>
+</li>
+</ul>
+</li>
+<li dir="rtl">
+<p dir="rtl">دستور <code dir="ltr">kubectl create -f nodelocaldns.yaml</code> را اجرا کنید.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">اگر kube-proxy را در حالت IPVS استفاده می‌کنید، باید فلگ <code dir="ltr">--cluster-dns</code> در kubelet را تغییر دهید
+تا از <code dir="ltr">&lt;node-local-address&gt;</code> که NodeLocal DNSCache روی آن گوش می‌دهد استفاده کند.
+در غیر این صورت، نیازی به تغییر مقدار فلگ <code dir="ltr">--cluster-dns</code> نیست،
+زیرا NodeLocal DNSCache هم روی IP سرویس CoreDNS و هم روی
+<code dir="ltr">&lt;node-local-address&gt;</code> گوش می‌دهد.</p>
+</li>
+</ul>
+<p dir="rtl">پس از فعال‌سازی، Podهای <code dir="ltr">node-local-dns</code> در فضای نام <code dir="ltr">kube-system</code>
+روی هر یک از نودهای کلاستر اجرا می‌شوند. این Pod، <a href="https://github.com/coredns/coredns" target="_blank" rel="noopener">CoreDNS</a>
+را در حالت کش اجرا می‌کند؛ بنابراین همهٔ معیارهای CoreDNS که افزونه‌های مختلف ارائه می‌کنند
+به‌تفکیک هر نود در دسترس خواهند بود.</p>
+<p dir="rtl">برای غیرفعال کردن این قابلیت، می‌توانید DaemonSet را با دستور <code dir="ltr">kubectl delete -f &lt;manifest&gt;</code> حذف کنید.
+همچنین باید هر تغییری را که در پیکربندی kubelet داده‌اید به حالت قبل برگردانید.</p>
+<h2 id="پیکربندی-دامنه-های-stub" dir="rtl">پیکربندی دامنه‌های stub</h2>
+<p dir="rtl">فایل Corefile در ConfigMap مربوط به <code dir="ltr">node-local-dns</code> را می‌توان با پیکربندی
+stubDomain تغییر داد. برخی ارائه‌دهندگان ابری ممکن است اجازهٔ تغییر مستقیم
+ConfigMap مربوط به <code dir="ltr">node-local-dns</code> را ندهند؛ در این صورت می‌توان به‌جای آن از یک ConfigMap با نام <code dir="ltr">kube-dns</code>
+در قالبی که به‌طور سنتی در <code dir="ltr">kube-dns</code> استفاده می‌شود بهره گرفت:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: kube-system
+  name: kube-dns
+data:
+  stubDomains: |
+    {"abc.com" : ["1.2.3.4"], "my.cluster.local" : ["2.3.4.5"]}
+</code></pre>
+<h2 id="تنظیم-محدودیت-های-حافظه" dir="rtl">تنظیم محدودیت‌های حافظه</h2>
+<p dir="rtl">Podهای <code dir="ltr">node-local-dns</code> از حافظه برای ذخیرهٔ ورودی‌های کش و پردازش پرس‌وجوها استفاده می‌کنند.
+از آنجا که این Podها آبجکت‌های کوبرنتیز را پایش نمی‌کنند، اندازهٔ کلاستر یا تعداد Serviceها / EndpointSliceها مستقیماً بر مصرف حافظه اثری ندارد. مصرف حافظه تحت تأثیر الگوی پرس‌وجوهای DNS است.
+بر اساس <a href="https://github.com/coredns/deployment/blob/master/kubernetes/Scaling_CoreDNS.md" target="_blank" rel="noopener">مستندات CoreDNS</a>:</p>
+<blockquote dir="rtl">
+<p dir="rtl">اندازهٔ پیش‌فرض کش ۱۰۰۰۰ ورودی است که در صورت پر شدن کامل حدود ۳۰ مگابایت حافظه مصرف می‌کند.</p>
+</blockquote>
+<p dir="rtl">این مقدار، مصرف حافظه برای هر بلوک سرور است (در صورتی که کش کاملاً پر شود).
+با تعیین اندازه‌های کوچک‌تر برای کش می‌توان مصرف حافظه را کاهش داد.</p>
+<p dir="rtl">تعداد پرس‌وجوهای هم‌زمان با نیاز به حافظه مرتبط است، زیرا هر goroutine اضافی که برای
+رسیدگی به یک پرس‌وجو استفاده می‌شود به مقداری حافظه نیاز دارد. می‌توانید با گزینهٔ
+<code dir="ltr">max_concurrent</code> در افزونهٔ forward یک حد بالا برای آن تعیین کنید.</p>
+<p dir="rtl">اگر یک Pod از نوع <code dir="ltr">node-local-dns</code> بخواهد بیش از حافظهٔ دردسترس مصرف کند (به دلیل محدودیت
+کل منابع سیستم، یا به دلیل یک
+<a href="../../concepts/configuration/manage-resources-containers.html">محدودیت منبع</a> پیکربندی‌شده)، سیستم‌عامل
+ممکن است کانتینر آن Pod را متوقف کند.
+در این صورت، کانتینرِ خاتمه‌یافته («OOMKilled») قواعد سفارشی فیلتر بسته را که پیش‌تر
+هنگام راه‌اندازی اضافه کرده بود پاک نمی‌کند.
+کانتینر <code dir="ltr">node-local-dns</code> باید دوباره راه‌اندازی شود (زیرا به‌عنوان بخشی از یک DaemonSet مدیریت می‌شود)، اما این
+وضعیت هر بار که کانتینر از کار بیفتد به قطعی کوتاه‌مدت DNS منجر می‌شود: قواعد فیلتر بسته،
+پرس‌وجوهای DNS را به یک Pod محلی ناسالم هدایت می‌کنند.</p>
+<p dir="rtl">برای تعیین محدودیت حافظهٔ مناسب، می‌توانید Podهای node-local-dns را بدون محدودیت اجرا کنید و
+اوج مصرف را اندازه بگیرید. همچنین می‌توانید یک
+<a href="https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler" target="_blank" rel="noopener">VerticalPodAutoscaler</a>
+را در <em>حالت توصیه‌گر (recommender mode)</em> راه‌اندازی و استفاده کنید و سپس توصیه‌های آن را بررسی کنید.</p>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#پیش-از-شروع">پیش از شروع</a><a class="l2" href="#مقدمه">مقدمه</a><a class="l2" href="#انگیزه">انگیزه</a><a class="l2" href="#نمودار-معماری">نمودار معماری</a><a class="l2" href="#پیکربندی">پیکربندی</a><a class="l2" href="#پیکربندی-دامنه-های-stub">پیکربندی دامنه‌های stub</a><a class="l2" href="#تنظیم-محدودیت-های-حافظه">تنظیم محدودیت‌های حافظه</a></nav>
+</div>
+</body>
+</html>

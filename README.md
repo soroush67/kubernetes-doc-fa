@@ -8,8 +8,8 @@
 
 | | |
 |---|---|
-| پیشرفت (بر اساس کلمات) | **90.1٪** |
-| صفحات ترجمه‌شده | 1515 از 1722 |
+| پیشرفت (بر اساس کلمات) | **90.6٪** |
+| صفحات ترجمه‌شده | 1530 از 1722 |
 | صفحات دارای ایراد ساختاری | 73 |
 | نسخه‌ی منبع انگلیسی | `f652c6b8a26f` |
 
@@ -74,7 +74,7 @@ cd kubernetes-doc-fa
 | `home` | 2 | 2 |
 | `reference` | 1198 | 1198 |
 | `setup` | 22 | 22 |
-| `tasks` | 60 | 221 |
+| `tasks` | 75 | 221 |
 | `tutorials` | 0 | 45 |
 
 </div>
@@ -101,26 +101,26 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [tasks/administer-cluster/running-cloud-controller.md](md/tasks/administer-cluster/running-cloud-controller.md) — 2026-11-14T10:31:14+03:30
+- [tasks/administer-cluster/nodelocaldns.md](md/tasks/administer-cluster/nodelocaldns.md) — 2026-11-14T10:30:40+03:30
+- [tasks/administer-cluster/quota-api-object.md](md/tasks/administer-cluster/quota-api-object.md) — 2026-11-14T10:30:39+03:30
+- [tasks/administer-cluster/node-overprovisioning.md](md/tasks/administer-cluster/node-overprovisioning.md) — 2026-11-14T10:30:19+03:30
+- [tasks/administer-cluster/network-policy-provider/kube-router-network-policy.md](md/tasks/administer-cluster/network-policy-provider/kube-router-network-policy.md) — 2026-11-14T10:29:57+03:30
+- [tasks/administer-cluster/namespaces.md](md/tasks/administer-cluster/namespaces.md) — 2026-11-14T10:29:51+03:30
+- [tasks/administer-cluster/network-policy-provider/cilium-network-policy.md](md/tasks/administer-cluster/network-policy-provider/cilium-network-policy.md) — 2026-11-14T10:29:50+03:30
+- [tasks/administer-cluster/network-policy-provider/calico-network-policy.md](md/tasks/administer-cluster/network-policy-provider/calico-network-policy.md) — 2026-11-14T10:29:32+03:30
+- [tasks/administer-cluster/network-policy-provider/antrea-network-policy.md](md/tasks/administer-cluster/network-policy-provider/antrea-network-policy.md) — 2026-11-14T10:29:24+03:30
+- [tasks/administer-cluster/network-policy-provider/_index.md](md/tasks/administer-cluster/network-policy-provider/_index.md) — 2026-11-14T10:29:17+03:30
+- [tasks/administer-cluster/migrating-from-dockershim/migrating-telemetry-and-security-agents.md](md/tasks/administer-cluster/migrating-from-dockershim/migrating-telemetry-and-security-agents.md) — 2026-11-14T10:29:15+03:30
+- [tasks/administer-cluster/migrating-from-dockershim/troubleshooting-cni-plugin-related-errors.md](md/tasks/administer-cluster/migrating-from-dockershim/troubleshooting-cni-plugin-related-errors.md) — 2026-11-14T10:28:59+03:30
+- [tasks/administer-cluster/memory-manager.md](md/tasks/administer-cluster/memory-manager.md) — 2026-11-14T10:28:31+03:30
+- [tasks/administer-cluster/migrating-from-dockershim/find-out-runtime-you-use.md](md/tasks/administer-cluster/migrating-from-dockershim/find-out-runtime-you-use.md) — 2026-11-14T10:28:04+03:30
+- [tasks/administer-cluster/migrating-from-dockershim/check-if-dockershim-removal-affects-you.md](md/tasks/administer-cluster/migrating-from-dockershim/check-if-dockershim-removal-affects-you.md) — 2026-11-14T10:27:44+03:30
 - [tasks/administer-cluster/migrating-from-dockershim/change-runtime-containerd.md](md/tasks/administer-cluster/migrating-from-dockershim/change-runtime-containerd.md) — 2026-11-14T10:26:57+03:30
 - [tasks/administer-cluster/migrating-from-dockershim/_index.md](md/tasks/administer-cluster/migrating-from-dockershim/_index.md) — 2026-11-14T10:26:35+03:30
 - [tasks/administer-cluster/manage-resources/quota-memory-cpu-namespace.md](md/tasks/administer-cluster/manage-resources/quota-memory-cpu-namespace.md) — 2026-11-14T10:26:22+03:30
 - [tasks/administer-cluster/manage-resources/quota-pod-namespace.md](md/tasks/administer-cluster/manage-resources/quota-pod-namespace.md) — 2026-11-14T10:26:22+03:30
 - [tasks/administer-cluster/manage-resources/memory-default-namespace.md](md/tasks/administer-cluster/manage-resources/memory-default-namespace.md) — 2026-11-14T10:26:04+03:30
-- [tasks/administer-cluster/manage-resources/memory-constraint-namespace.md](md/tasks/administer-cluster/manage-resources/memory-constraint-namespace.md) — 2026-11-14T10:25:55+03:30
-- [tasks/administer-cluster/manage-resources/cpu-default-namespace.md](md/tasks/administer-cluster/manage-resources/cpu-default-namespace.md) — 2026-11-14T10:25:31+03:30
-- [tasks/administer-cluster/manage-resources/cpu-constraint-namespace.md](md/tasks/administer-cluster/manage-resources/cpu-constraint-namespace.md) — 2026-11-14T10:25:15+03:30
-- [tasks/administer-cluster/kubelet-in-userns.md](md/tasks/administer-cluster/kubelet-in-userns.md) — 2026-11-14T10:25:01+03:30
-- [tasks/administer-cluster/manage-resources/_index.md](md/tasks/administer-cluster/manage-resources/_index.md) — 2026-11-14T10:24:34+03:30
-- [tasks/administer-cluster/limit-storage-consumption.md](md/tasks/administer-cluster/limit-storage-consumption.md) — 2026-11-14T10:24:31+03:30
-- [tasks/administer-cluster/kubelet-credential-provider.md](md/tasks/administer-cluster/kubelet-credential-provider.md) — 2026-11-14T10:24:15+03:30
-- [tasks/administer-cluster/kubelet-config-file.md](md/tasks/administer-cluster/kubelet-config-file.md) — 2026-11-14T10:23:59+03:30
-- [tasks/administer-cluster/kubeadm/upgrading-linux-nodes.md](md/tasks/administer-cluster/kubeadm/upgrading-linux-nodes.md) — 2026-11-14T10:23:16+03:30
-- [tasks/administer-cluster/kubeadm/upgrading-windows-nodes.md](md/tasks/administer-cluster/kubeadm/upgrading-windows-nodes.md) — 2026-11-14T10:23:12+03:30
-- [tasks/administer-cluster/kubeadm/kubeadm-upgrade.md](md/tasks/administer-cluster/kubeadm/kubeadm-upgrade.md) — 2026-11-10T10:27:02+03:30
-- [tasks/administer-cluster/kubeadm/kubeadm-certs.md](md/tasks/administer-cluster/kubeadm/kubeadm-certs.md) — 2026-11-10T10:26:36+03:30
-- [tasks/administer-cluster/kubeadm/kubeadm-reconfigure.md](md/tasks/administer-cluster/kubeadm/kubeadm-reconfigure.md) — 2026-11-10T10:25:48+03:30
-- [tasks/administer-cluster/kubeadm/change-package-repository.md](md/tasks/administer-cluster/kubeadm/change-package-repository.md) — 2026-11-10T10:24:25+03:30
-- [tasks/administer-cluster/kubeadm/adding-windows-nodes.md](md/tasks/administer-cluster/kubeadm/adding-windows-nodes.md) — 2026-11-10T10:24:15+03:30
 
 </div>
 

@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>بررسی اینکه آیا حذف dockershim روی شما اثر می‌گذارد | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
+<header class="top"><a href="../../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">tasks / administer-cluster / migrating-from-dockershim</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">بررسی اینکه آیا حذف dockershim روی شما اثر می‌گذارد</h1><!-- overview -->
+<p dir="rtl">مؤلفهٔ <code dir="ltr">dockershim</code> در کوبرنتیز امکان استفاده از Docker را به‌عنوان
+<span class="term" title="container-runtime">محیط اجرای کانتینر</span> کوبرنتیز فراهم می‌کند.
+مؤلفهٔ داخلی <code dir="ltr">dockershim</code> کوبرنتیز در نسخهٔ v1.24 حذف شد.</p>
+<p dir="rtl">این صفحه توضیح می‌دهد که کلاستر شما چگونه ممکن است از Docker به‌عنوان محیط اجرای کانتینر استفاده کند،
+جزئیاتی دربارهٔ نقش <code dir="ltr">dockershim</code> در هنگام استفاده ارائه می‌دهد و گام‌هایی را نشان می‌دهد
+که با آن‌ها می‌توانید بررسی کنید آیا بارهای کاری شما ممکن است از حذف <code dir="ltr">dockershim</code> تأثیر بپذیرند یا نه.</p>
+<h2 id="بررسی-وابستگی-برنامهٔ-شما-به-docker-find-docker-dependencies" dir="rtl">بررسی وابستگی برنامهٔ شما به Docker {#find-docker-dependencies}</h2>
+<p dir="rtl">اگر از Docker برای ساختن کانتینرهای برنامهٔ خود استفاده می‌کنید، همچنان می‌توانید
+این کانتینرها را روی هر محیط اجرای کانتینری اجرا کنید. این نوع استفاده از Docker
+وابستگی به Docker به‌عنوان محیط اجرای کانتینر به شمار نمی‌آید.</p>
+<p dir="rtl">هنگامی که از یک محیط اجرای کانتینر جایگزین استفاده می‌شود، اجرای دستورهای Docker ممکن است
+کار نکند یا خروجی غیرمنتظره‌ای تولید کند. با روش زیر می‌توانید بفهمید که آیا به Docker
+وابستگی دارید یا نه:</p>
+<ol>
+<li dir="rtl">مطمئن شوید که هیچ Pod دارای دسترسی ممتاز (privileged) دستورهای Docker (مانند <code dir="ltr">docker ps</code>) را اجرا نمی‌کند،
+سرویس Docker را مجدداً راه‌اندازی نمی‌کند (با دستورهایی مانند <code dir="ltr">systemctl restart docker.service</code>)
+و فایل‌های مختص Docker مانند <code dir="ltr">/etc/docker/daemon.json</code> را تغییر نمی‌دهد.</li>
+<li dir="rtl">وجود هرگونه رجیستری خصوصی یا تنظیمات آینهٔ ایمیج (image mirror) را در فایل پیکربندی Docker
+(مانند <code dir="ltr">/etc/docker/daemon.json</code>) بررسی کنید. این تنظیمات معمولاً باید برای محیط اجرای
+کانتینر دیگر دوباره پیکربندی شوند.</li>
+<li dir="rtl">بررسی کنید که اسکریپت‌ها و برنامه‌هایی که بیرون از زیرساخت کوبرنتیز شما روی نودها اجرا
+می‌شوند، دستورهای Docker را اجرا نکنند. این موارد ممکن است شامل این‌ها باشند:
+<ul>
+<li dir="rtl">اتصال SSH به نودها برای عیب‌یابی؛</li>
+<li dir="rtl">اسکریپت‌های راه‌اندازی نود؛</li>
+<li dir="rtl">عامل‌های پایش و امنیتی که مستقیماً روی نودها نصب شده‌اند.</li>
+</ul>
+</li>
+<li dir="rtl">ابزارهای شخص ثالثی که عملیات ممتاز ذکرشده در بالا را انجام می‌دهند. برای اطلاعات بیشتر،
+<a href="migrating-telemetry-and-security-agents.html">مهاجرت عامل‌های تله‌متری و امنیتی از dockershim</a>
+را ببینید.</li>
+<li dir="rtl">مطمئن شوید که هیچ وابستگی غیرمستقیمی به رفتار dockershim وجود ندارد.
+این یک حالت حاشیه‌ای است و بعید است روی برنامهٔ شما اثر بگذارد. برخی ابزارها ممکن است طوری پیکربندی
+شده باشند که به رفتارهای مختص Docker واکنش نشان دهند؛ برای مثال، بر اساس متریک‌های خاصی هشدار دهند یا
+به‌عنوان بخشی از دستورالعمل‌های عیب‌یابی، به‌دنبال پیام لاگ خاصی بگردند.
+اگر چنین ابزارهایی را پیکربندی کرده‌اید، پیش از مهاجرت، رفتار آن‌ها را روی یک کلاستر
+آزمایشی بیازمایید.</li>
+</ol>
+<h2 id="توضیح-وابستگی-به-docker-role-of-dockershim" dir="rtl">توضیح وابستگی به Docker {#role-of-dockershim}</h2>
+<p dir="rtl"><a href="../../../concepts/containers/index.html#container-runtimes">محیط اجرای کانتینر</a> نرم‌افزاری است که
+کانتینرهای تشکیل‌دهندهٔ یک Pod کوبرنتیز را اجرا می‌کند. کوبرنتیز مسئول هماهنگ‌سازی (orchestration)
+و زمان‌بندی Podها است؛ روی هر نود، <span class="term" title="kubelet">kubelet</span>
+از رابط محیط اجرای کانتینر (CRI) به‌عنوان یک لایهٔ انتزاعی استفاده می‌کند تا بتوانید از هر
+محیط اجرای کانتینر سازگاری استفاده کنید.</p>
+<p dir="rtl">کوبرنتیز در نخستین نسخه‌های خود تنها با یک محیط اجرای کانتینر سازگار بود: Docker.
+در ادامهٔ تاریخچهٔ پروژهٔ کوبرنتیز، گردانندگان کلاستر خواستار به‌کارگیری محیط‌های اجرای کانتینر دیگری شدند.
+CRI برای فراهم کردن چنین انعطاف‌پذیری‌ای طراحی شد و kubelet نیز پشتیبانی از CRI را آغاز کرد. با این حال،
+چون Docker پیش از ابداع مشخصات CRI وجود داشت، پروژهٔ کوبرنتیز یک مؤلفهٔ
+مبدل (adapter) به نام <code dir="ltr">dockershim</code> ایجاد کرد. مبدل dockershim به kubelet امکان می‌دهد با Docker طوری
+تعامل کند که گویی Docker یک محیط اجرای سازگار با CRI است.</p>
+<p dir="rtl">می‌توانید در پست وبلاگ <a href="/blog/2018/05/24/kubernetes-containerd-integration-goes-ga/">Kubernetes Containerd integration goes GA</a> دربارهٔ آن بخوانید.</p>
+<p><img src="/images/blog/2018-05-24-kubernetes-containerd-integration-goes-ga/cri-containerd.png" alt="مقایسهٔ Dockershim با CRI همراه با Containerd"></p>
+<p dir="rtl">با تغییر محیط اجرای کانتینر به Containerd، واسطه حذف می‌شود. همهٔ همان
+کانتینرها را می‌توان مانند گذشته با محیط‌های اجرای کانتینری مانند Containerd اجرا کرد. اما
+اکنون، چون کانتینرها مستقیماً از طریق محیط اجرای کانتینر زمان‌بندی می‌شوند، برای Docker قابل مشاهده نیستند.
+بنابراین هر ابزار Docker یا رابط کاربری پیشرفته‌ای که پیش‌تر برای بررسی این کانتینرها
+استفاده می‌کردید، دیگر در دسترس نیست.</p>
+<p dir="rtl">نمی‌توانید با دستورهای <code dir="ltr">docker ps</code> یا <code dir="ltr">docker inspect</code> اطلاعات کانتینرها را به دست آورید.
+از آنجا که نمی‌توانید کانتینرها را فهرست کنید، نمی‌توانید لاگ‌ها را دریافت کنید، کانتینرها را متوقف کنید
+یا با <code dir="ltr">docker exec</code> چیزی را درون یک کانتینر اجرا کنید.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">اگر بارهای کاری را از طریق کوبرنتیز اجرا می‌کنید، بهترین راه برای متوقف کردن یک کانتینر استفاده از
+API کوبرنتیز است، نه استفادهٔ مستقیم از محیط اجرای کانتینر (این توصیه برای همهٔ
+محیط‌های اجرای کانتینر صدق می‌کند، نه فقط Docker).</p>
+</div>
+<p dir="rtl">همچنان می‌توانید ایمیج‌ها را pull کنید یا با دستور <code dir="ltr">docker build</code> آن‌ها را بسازید. اما ایمیج‌هایی
+که Docker ساخته یا pull کرده است، برای محیط اجرای کانتینر و کوبرنتیز قابل مشاهده نیستند.
+برای اینکه کوبرنتیز بتواند از آن‌ها استفاده کند، باید آن‌ها را در یک رجیستری push کرد.</p>
+<h2 id="مشکلات-شناخته-شده" dir="rtl">مشکلات شناخته‌شده</h2>
+<h3 id="برخی-متریک-های-فایل-سیستم-وجود-ندارند-و-قالب-متریک-ها-متفاوت-است" dir="rtl">برخی متریک‌های فایل‌سیستم وجود ندارند و قالب متریک‌ها متفاوت است</h3>
+<p dir="rtl">نقطهٔ پایانی (endpoint) <code dir="ltr">/metrics/cadvisor</code> در kubelet متریک‌های Prometheus را ارائه می‌کند؛
+همان‌طور که در <a href="../../../concepts/cluster-administration/system-metrics.html">متریک‌های مؤلفه‌های سیستمی کوبرنتیز</a> مستند شده است.
+اگر یک گردآورندهٔ متریک نصب کنید که به این نقطهٔ پایانی وابسته باشد، ممکن است با مشکلات زیر روبه‌رو شوید:</p>
+<ul>
+<li dir="rtl">قالب متریک‌ها روی نود Docker به صورت <code dir="ltr">k8s_&lt;container-name&gt;_&lt;pod-name&gt;_&lt;namespace&gt;_&lt;pod-uid&gt;_&lt;restart-count&gt;</code>
+است، اما این قالب در محیط‌های اجرای دیگر متفاوت است. برای مثال، روی نود containerd به صورت <code dir="ltr">&lt;container-id&gt;</code> است.</li>
+<li dir="rtl">برخی متریک‌های فایل‌سیستم به شرح زیر وجود ندارند:<pre dir="ltr"><code dir="ltr">container_fs_inodes_free
+container_fs_inodes_total
+container_fs_io_current
+container_fs_io_time_seconds_total
+container_fs_io_time_weighted_seconds_total
+container_fs_limit_bytes
+container_fs_read_seconds_total
+container_fs_reads_merged_total
+container_fs_sector_reads_total
+container_fs_sector_writes_total
+container_fs_usage_bytes
+container_fs_write_seconds_total
+container_fs_writes_merged_total
+</code></pre>
+</li>
+</ul>
+<h4 id="راه-حل-موقت" dir="rtl">راه‌حل موقت</h4>
+<p dir="rtl">می‌توانید با استفاده از <a href="https://github.com/google/cadvisor" target="_blank" rel="noopener">cAdvisor</a> به‌صورت یک daemonset مستقل، این مشکل را کاهش دهید.</p>
+<ol>
+<li dir="rtl">آخرین <a href="https://github.com/google/cadvisor/releases" target="_blank" rel="noopener">نسخهٔ منتشرشدهٔ cAdvisor</a>
+را با الگوی نام <code dir="ltr">vX.Y.Z-containerd-cri</code> (برای مثال <code dir="ltr">v0.42.0-containerd-cri</code>) پیدا کنید.</li>
+<li dir="rtl">برای ایجاد daemonset، گام‌های <a href="https://github.com/google/cadvisor/tree/master/deploy/kubernetes" target="_blank" rel="noopener">cAdvisor Kubernetes Daemonset</a> را دنبال کنید.</li>
+<li dir="rtl">گردآورندهٔ متریک نصب‌شده را طوری تنظیم کنید که از نقطهٔ پایانی <code dir="ltr">/metrics</code> در cAdvisor استفاده کند؛
+این نقطهٔ پایانی مجموعهٔ کامل
+<a href="https://github.com/google/cadvisor/blob/master/docs/storage/prometheus.md" target="_blank" rel="noopener">متریک‌های کانتینر Prometheus</a> را ارائه می‌کند.</li>
+</ol>
+<p dir="rtl">راه‌حل‌های جایگزین:</p>
+<ul>
+<li dir="rtl">از یک راهکار جایگزین شخص ثالث برای گردآوری متریک‌ها استفاده کنید.</li>
+<li dir="rtl">متریک‌ها را از API خلاصهٔ kubelet که در <code dir="ltr">/stats/summary</code> ارائه می‌شود، گردآوری کنید.</li>
+</ul>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<ul>
+<li dir="rtl">برای آشنایی با گام‌های بعدی، <a href="index.html">مهاجرت از dockershim</a> را بخوانید.</li>
+<li dir="rtl">برای اطلاعات بیشتر، مقالهٔ <a href="/blog/2020/12/02/dockershim-faq/">پرسش‌های متداول دربارهٔ منسوخ شدن dockershim</a> را بخوانید.</li>
+</ul>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#بررسی-وابستگی-برنامهٔ-شما-به-docker-find-docker-dependencies">بررسی وابستگی برنامهٔ شما به Docker {#find-docker-dependencies}</a><a class="l2" href="#توضیح-وابستگی-به-docker-role-of-dockershim">توضیح وابستگی به Docker {#role-of-dockershim}</a><a class="l2" href="#مشکلات-شناخته-شده">مشکلات شناخته‌شده</a><a class="l3" href="#برخی-متریک-های-فایل-سیستم-وجود-ندارند-و-قالب-متریک-ها-متفاوت-است">برخی متریک‌های فایل‌سیستم وجود ندارند و قالب متریک‌ها متفاوت است</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>

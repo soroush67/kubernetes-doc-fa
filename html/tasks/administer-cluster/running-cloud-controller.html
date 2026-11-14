@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>مدیریت Cloud Controller Manager | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">tasks / administer-cluster</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">مدیریت Cloud Controller Manager</h1><!-- overview -->
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes v1.11 [beta]</span> (بتا)</div>
+<p dir="rtl">ارائه‌دهندگان ابری با سرعتی متفاوت از پروژهٔ کوبرنتیز توسعه می‌یابند و نسخه منتشر می‌کنند. به همین دلیل، جدا کردن کدهای مختص هر ارائه‌دهنده و انتقال آن‌ها به فایل اجرایی
+<code dir="ltr">&lt;span class="term" title="cloud-controller-manager"&gt;cloud-controller-manager&lt;/span&gt;</code>
+به فروشندگان ابری امکان می‌دهد مستقل از کد هستهٔ کوبرنتیز پیشرفت کنند.</p>
+<p dir="rtl">می‌توان <code dir="ltr">cloud-controller-manager</code> را به هر ارائه‌دهندهٔ ابری که رابط
+<a href="https://github.com/kubernetes/cloud-provider/blob/master/cloud.go" target="_blank" rel="noopener">cloudprovider.Interface</a>
+را پیاده‌سازی کرده باشد پیوند داد. برای حفظ سازگاری با نسخه‌های قبلی،
+<a href="https://github.com/kubernetes/kubernetes/tree/master/cmd/cloud-controller-manager" target="_blank" rel="noopener">cloud-controller-manager</a>
+ارائه‌شده در هستهٔ پروژهٔ کوبرنتیز از همان کتابخانه‌های ابری <code dir="ltr">kube-controller-manager</code> استفاده می‌کند.
+انتظار می‌رود ارائه‌دهندگان ابری‌ای که هم‌اکنون در هستهٔ کوبرنتیز پشتیبانی می‌شوند، برای خروج از هستهٔ کوبرنتیز از cloud-controller-manager درون‌درختی (in-tree) استفاده کنند.</p>
+<!-- body -->
+<h2 id="مدیریت" dir="rtl">مدیریت</h2>
+<h3 id="الزامات" dir="rtl">الزامات</h3>
+<p dir="rtl">هر ابر مجموعه الزامات خاص خود را برای اجرای یکپارچه‌سازی ارائه‌دهندهٔ ابری‌اش دارد، اما این الزامات نباید تفاوت چندانی با الزامات اجرای
+<code dir="ltr">kube-controller-manager</code> داشته باشند. به‌عنوان یک قاعدهٔ کلی، به موارد زیر نیاز خواهید داشت:</p>
+<ul>
+<li dir="rtl">احراز هویت و مجوزدهی ابری: ممکن است ابر شما برای دسترسی به APIهایش به یک توکن یا قواعد IAM نیاز داشته باشد.</li>
+<li dir="rtl">احراز هویت و مجوزدهی کوبرنتیز: ممکن است cloud-controller-manager برای ارتباط با apiserver کوبرنتیز به قواعد RBAC نیاز داشته باشد.</li>
+<li dir="rtl">دسترس‌پذیری بالا: مانند kube-controller-manager، ممکن است بخواهید با استفاده از انتخاب رهبر (leader election) که به‌طور پیش‌فرض فعال است، یک راه‌اندازی با دسترس‌پذیری بالا برای cloud controller manager داشته باشید.</li>
+</ul>
+<h3 id="اجرای-cloud-controller-manager" dir="rtl">اجرای cloud-controller-manager</h3>
+<p dir="rtl">اجرای موفق cloud-controller-manager مستلزم اعمال چند تغییر در پیکربندی کلاستر شماست.</p>
+<ul>
+<li dir="rtl">باید <code dir="ltr">kubelet</code> و <code dir="ltr">kube-controller-manager</code> را متناسب با استفادهٔ کاربر از CCM خارجی تنظیم کرد. اگر کاربر یک CCM خارجی دارد (و نه حلقه‌های کنترل ابری داخلی در Kubernetes Controller Manager)، باید <code dir="ltr">--cloud-provider=external</code> مشخص شود. در غیر این صورت، نباید این گزینه مشخص شود.</li>
+</ul>
+<p dir="rtl">توجه داشته باشید که راه‌اندازی کلاستر برای استفاده از cloud controller manager، رفتار کلاستر شما را از چند جهت تغییر می‌دهد:</p>
+<ul>
+<li dir="rtl">مؤلفه‌هایی که <code dir="ltr">--cloud-provider=external</code> را مشخص می‌کنند، در حین مقداردهی اولیه یک taint با نام
+<code dir="ltr">node.cloudprovider.kubernetes.io/uninitialized</code> و اثر <code dir="ltr">NoSchedule</code> اضافه می‌کنند.
+این taint نشان می‌دهد که نود پیش از آنکه بتوان کاری روی آن زمان‌بندی کرد، به مقداردهی اولیهٔ دوم از سوی یک کنترل‌کنندهٔ خارجی نیاز دارد. توجه کنید که اگر cloud controller manager در دسترس نباشد، نودهای جدید کلاستر زمان‌بندی‌ناپذیر باقی می‌مانند. این taint اهمیت دارد، زیرا ممکن است زمان‌بند به اطلاعات مختص ابر دربارهٔ نودها، مانند منطقه یا نوع آن‌ها (پردازندهٔ قوی، GPU، حافظهٔ زیاد، نمونهٔ spot و غیره) نیاز داشته باشد.</li>
+<li dir="rtl">اطلاعات ابری مربوط به نودهای کلاستر دیگر از فراداده‌های محلی دریافت نمی‌شود، بلکه همهٔ فراخوانی‌های API برای دریافت اطلاعات نودها از طریق cloud controller manager انجام می‌شود. در نتیجه ممکن است بتوانید برای امنیت بیشتر، دسترسی به API ابر را روی kubeletها محدود کنید. در کلاسترهای بزرگ‌تر، بهتر است بررسی کنید که آیا cloud controller manager به محدودیت‌های نرخ (rate limits) برخورد می‌کند یا نه، زیرا اکنون تقریباً همهٔ فراخوانی‌های API از درون کلاستر به ابر شما بر عهدهٔ آن است.</li>
+</ul>
+<p dir="rtl">cloud controller manager می‌تواند موارد زیر را پیاده‌سازی کند:</p>
+<ul>
+<li dir="rtl">کنترل‌کنندهٔ نود: مسئول به‌روزرسانی نودهای کوبرنتیز با استفاده از APIهای ابری و حذف نودهایی از کوبرنتیز است که در ابر شما حذف شده‌اند.</li>
+<li dir="rtl">کنترل‌کنندهٔ سرویس: مسئول متعادل‌کننده‌های بار (load balancer) در ابر شما برای سرویس‌هایی از نوع LoadBalancer است.</li>
+<li dir="rtl">کنترل‌کنندهٔ مسیر: مسئول برپایی مسیرهای شبکه در ابر شماست.</li>
+<li dir="rtl">هر قابلیت دیگری که در صورت اجرای یک ارائه‌دهندهٔ بیرون‌درختی (out-of-tree) بخواهید پیاده‌سازی کنید.</li>
+</ul>
+<h2 id="نمونه-ها" dir="rtl">نمونه‌ها</h2>
+<p dir="rtl">اگر از ابری استفاده می‌کنید که در حال حاضر در هستهٔ کوبرنتیز پشتیبانی می‌شود و می‌خواهید cloud controller manager را به کار بگیرید، به
+<a href="https://github.com/kubernetes/kubernetes/tree/master/cmd/cloud-controller-manager" target="_blank" rel="noopener">cloud controller manager در هستهٔ کوبرنتیز</a> مراجعه کنید.</p>
+<p dir="rtl">برای cloud controller managerهایی که در هستهٔ کوبرنتیز نیستند، می‌توانید پروژه‌های مربوط را در مخزن‌هایی بیابید که فروشندگان ابری یا SIGها نگهداری می‌کنند.</p>
+<p dir="rtl">برای ارائه‌دهندگانی که هم‌اکنون در هستهٔ کوبرنتیز هستند، می‌توانید cloud controller manager درون‌درختی را به‌صورت یک DaemonSet در کلاستر خود اجرا کنید. از نمونهٔ زیر به‌عنوان راهنما استفاده کنید:</p>
+<div class="code-file ltr" dir="ltr">admin/cloud/ccm-example.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr"># This is an example of how to set up cloud-controller-manager as a Daemonset in your cluster.
+# It assumes that your masters can run pods and has the role node-role.kubernetes.io/master
+# Note that this Daemonset will not work straight out of the box for your cloud, this is
+# meant to be a guideline.
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: cloud-controller-manager
+  namespace: kube-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: system:cloud-controller-manager
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+- kind: ServiceAccount
+  name: cloud-controller-manager
+  namespace: kube-system
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  labels:
+    k8s-app: cloud-controller-manager
+  name: cloud-controller-manager
+  namespace: kube-system
+spec:
+  selector:
+    matchLabels:
+      k8s-app: cloud-controller-manager
+  template:
+    metadata:
+      labels:
+        k8s-app: cloud-controller-manager
+    spec:
+      serviceAccountName: cloud-controller-manager
+      containers:
+      - name: cloud-controller-manager
+        # for in-tree providers we use registry.k8s.io/cloud-controller-manager
+        # this can be replaced with any other image for out-of-tree providers
+        image: registry.k8s.io/cloud-controller-manager:v1.8.0
+        command:
+        - /usr/local/bin/cloud-controller-manager
+        - --cloud-provider=[YOUR_CLOUD_PROVIDER]  # Add your own cloud provider here!
+        - --leader-elect=true
+        - --use-service-account-credentials
+        # these flags will vary for every cloud provider
+        - --allocate-node-cidrs=true
+        - --configure-cloud-routes=true
+        - --cluster-cidr=172.17.0.0/16
+      tolerations:
+      # this is required so CCM can bootstrap itself
+      - key: node.cloudprovider.kubernetes.io/uninitialized
+        value: "true"
+        effect: NoSchedule
+      # these tolerations are to have the daemonset runnable on control plane nodes
+      # remove them if your control plane nodes should not run pods
+      - key: node-role.kubernetes.io/control-plane
+        operator: Exists
+        effect: NoSchedule
+      - key: node-role.kubernetes.io/master
+        operator: Exists
+        effect: NoSchedule
+      # this is to restrict CCM to only run on master nodes
+      # the node selector may vary depending on your cluster setup
+      nodeSelector:
+        node-role.kubernetes.io/master: ""
+</code></pre>
+<h2 id="محدودیت-ها" dir="rtl">محدودیت‌ها</h2>
+<p dir="rtl">اجرای cloud controller manager با چند محدودیت احتمالی همراه است. اگرچه این محدودیت‌ها در نسخه‌های آینده برطرف می‌شوند، مهم است که برای بارهای کاری محیط عملیاتی از آن‌ها آگاه باشید.</p>
+<h3 id="پشتیبانی-از-حجم-ها" dir="rtl">پشتیبانی از حجم‌ها</h3>
+<p dir="rtl">cloud controller manager هیچ‌یک از کنترل‌کننده‌های حجم (volume) موجود در <code dir="ltr">kube-controller-manager</code> را پیاده‌سازی نمی‌کند، زیرا یکپارچه‌سازی‌های حجم به هماهنگی با kubeletها نیز نیاز دارند. با تکامل CSI (رابط ذخیره‌سازی کانتینر) و افزودن پشتیبانی قوی‌تر از افزونه‌های flex volume، پشتیبانی لازم به cloud controller manager افزوده خواهد شد تا ابرها بتوانند به‌طور کامل با حجم‌ها یکپارچه شوند. دربارهٔ افزونه‌های حجم CSI بیرون‌درختی <a href="https://github.com/kubernetes/features/issues/178" target="_blank" rel="noopener">اینجا</a> بیشتر بخوانید.</p>
+<h3 id="مقیاس-پذیری" dir="rtl">مقیاس‌پذیری</h3>
+<p dir="rtl">cloud-controller-manager برای دریافت اطلاعات همهٔ نودها، APIهای ارائه‌دهندهٔ ابری شما را پرس‌وجو می‌کند. در کلاسترهای بسیار بزرگ، گلوگاه‌های احتمالی مانند نیازمندی‌های منابع و محدودیت نرخ API را در نظر بگیرید.</p>
+<h3 id="مسئلهٔ-مرغ-و-تخم-مرغ" dir="rtl">مسئلهٔ مرغ و تخم‌مرغ</h3>
+<p dir="rtl">هدف پروژهٔ cloud controller manager جدا کردن توسعهٔ قابلیت‌های ابری از هستهٔ پروژهٔ کوبرنتیز است. متأسفانه، بسیاری از بخش‌های پروژهٔ کوبرنتیز بر این فرض بنا شده‌اند که قابلیت‌های ارائه‌دهندهٔ ابری به‌طور تنگاتنگ با پروژه یکپارچه هستند. در نتیجه، به‌کارگیری این معماری جدید ممکن است موقعیت‌هایی پدید آورد که در آن‌ها درخواستی برای دریافت اطلاعات از ارائه‌دهندهٔ ابری ارسال می‌شود، اما cloud controller manager نمی‌تواند پیش از تکمیل درخواست اولیه آن اطلاعات را بازگرداند.</p>
+<p dir="rtl">نمونهٔ خوبی از این وضعیت، قابلیت راه‌اندازی TLS (TLS bootstrapping) در Kubelet است. در راه‌اندازی TLS فرض می‌شود که Kubelet می‌تواند همهٔ انواع نشانی‌های خود (خصوصی، عمومی و غیره) را از ارائه‌دهندهٔ ابری (یا یک سرویس فرادادهٔ محلی) درخواست کند. اما cloud controller manager نمی‌تواند انواع نشانی‌های یک نود را تنظیم کند، مگر آنکه ابتدا مقداردهی اولیه شده باشد، و این کار مستلزم آن است که kubelet برای ارتباط با apiserver گواهی‌های TLS داشته باشد.</p>
+<p dir="rtl">با پیشرفت این طرح، در نسخه‌های آینده تغییراتی برای رفع این مشکلات اعمال خواهد شد.</p>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<p dir="rtl">برای ساخت و توسعهٔ cloud controller manager خودتان،
+<a href="developing-cloud-controller-manager.html">توسعهٔ Cloud Controller Manager</a> را بخوانید.</p>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#مدیریت">مدیریت</a><a class="l3" href="#الزامات">الزامات</a><a class="l3" href="#اجرای-cloud-controller-manager">اجرای cloud-controller-manager</a><a class="l2" href="#نمونه-ها">نمونه‌ها</a><a class="l2" href="#محدودیت-ها">محدودیت‌ها</a><a class="l3" href="#پشتیبانی-از-حجم-ها">پشتیبانی از حجم‌ها</a><a class="l3" href="#مقیاس-پذیری">مقیاس‌پذیری</a><a class="l3" href="#مسئلهٔ-مرغ-و-تخم-مرغ">مسئلهٔ مرغ و تخم‌مرغ</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>

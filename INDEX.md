@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-1515 از 1722 صفحه
+1530 از 1722 صفحه
 
 
 ## `.`
@@ -1948,13 +1948,13 @@
 - ✅ [kubelet-credential-provider.md](md/tasks/administer-cluster/kubelet-credential-provider.md)
 - ✅ [kubelet-in-userns.md](md/tasks/administer-cluster/kubelet-in-userns.md)
 - ✅ [limit-storage-consumption.md](md/tasks/administer-cluster/limit-storage-consumption.md)
-- ⏳ `memory-manager.md`
-- ⏳ `namespaces.md`
-- ⏳ `node-overprovisioning.md`
-- ⏳ `nodelocaldns.md`
-- ⏳ `quota-api-object.md`
+- ✅ [memory-manager.md](md/tasks/administer-cluster/memory-manager.md)
+- ✅ [namespaces.md](md/tasks/administer-cluster/namespaces.md)
+- ✅ [node-overprovisioning.md](md/tasks/administer-cluster/node-overprovisioning.md)
+- ✅ [nodelocaldns.md](md/tasks/administer-cluster/nodelocaldns.md)
+- ✅ [quota-api-object.md](md/tasks/administer-cluster/quota-api-object.md)
 - ⏳ `reserve-compute-resources.md`
-- ⏳ `running-cloud-controller.md`
+- ✅ [running-cloud-controller.md](md/tasks/administer-cluster/running-cloud-controller.md)
 - ⏳ `safely-drain-node.md`
 - ⏳ `securing-a-cluster.md`
 - ⏳ `switch-to-evented-pleg.md`
@@ -1989,18 +1989,18 @@
 
 - ✅ [_index.md](md/tasks/administer-cluster/migrating-from-dockershim/_index.md)
 - ✅ [change-runtime-containerd.md](md/tasks/administer-cluster/migrating-from-dockershim/change-runtime-containerd.md)
-- ⏳ `check-if-dockershim-removal-affects-you.md`
-- ⏳ `find-out-runtime-you-use.md`
-- ⏳ `migrating-telemetry-and-security-agents.md`
-- ⏳ `troubleshooting-cni-plugin-related-errors.md`
+- ✅ [check-if-dockershim-removal-affects-you.md](md/tasks/administer-cluster/migrating-from-dockershim/check-if-dockershim-removal-affects-you.md)
+- ✅ [find-out-runtime-you-use.md](md/tasks/administer-cluster/migrating-from-dockershim/find-out-runtime-you-use.md)
+- ✅ [migrating-telemetry-and-security-agents.md](md/tasks/administer-cluster/migrating-from-dockershim/migrating-telemetry-and-security-agents.md)
+- ✅ [troubleshooting-cni-plugin-related-errors.md](md/tasks/administer-cluster/migrating-from-dockershim/troubleshooting-cni-plugin-related-errors.md)
 
 ## `tasks/administer-cluster/network-policy-provider`
 
-- ⏳ `_index.md`
-- ⏳ `antrea-network-policy.md`
-- ⏳ `calico-network-policy.md`
-- ⏳ `cilium-network-policy.md`
-- ⏳ `kube-router-network-policy.md`
+- ✅ [_index.md](md/tasks/administer-cluster/network-policy-provider/_index.md)
+- ✅ [antrea-network-policy.md](md/tasks/administer-cluster/network-policy-provider/antrea-network-policy.md)
+- ✅ [calico-network-policy.md](md/tasks/administer-cluster/network-policy-provider/calico-network-policy.md)
+- ✅ [cilium-network-policy.md](md/tasks/administer-cluster/network-policy-provider/cilium-network-policy.md)
+- ✅ [kube-router-network-policy.md](md/tasks/administer-cluster/network-policy-provider/kube-router-network-policy.md)
 
 ## `tasks/configmap-secret`
 

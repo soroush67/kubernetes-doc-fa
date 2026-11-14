@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>کنترل سیاست‌های مدیریت حافظه روی یک نود | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">tasks / administer-cluster</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">کنترل سیاست‌های مدیریت حافظه روی یک نود</h1><!-- overview -->
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
+<p dir="rtl"><em>مدیر حافظه</em> (Memory Manager) در کوبرنتیز قابلیت تخصیص تضمین‌شدهٔ حافظه (و hugepages) را برای پادهایی فراهم می‌کند که در <span class="term" title="qos-class">کلاس QoS</span> <code dir="ltr">Guaranteed</code> قرار دارند.</p>
+<p dir="rtl">مدیر حافظه با به‌کارگیری یک پروتکل تولید راهنما (hint)، مناسب‌ترین وابستگی NUMA (NUMA affinity) را برای هر پاد به دست می‌آورد.
+مدیر حافظه این راهنماهای وابستگی را در اختیار مدیر مرکزی، یعنی <em>مدیر توپولوژی</em> (Topology Manager)، قرار می‌دهد.
+بر اساس این راهنماها و سیاست مدیر توپولوژی، پاد یا رد می‌شود یا در نود پذیرفته می‌شود.</p>
+<p dir="rtl">افزون بر این، مدیر حافظه تضمین می‌کند که حافظهٔ درخواستیِ هر پاد از کمترین تعداد ممکن نودهای NUMA تخصیص داده شود.</p>
+<p dir="rtl">برای آشنایی با پیش‌زمینهٔ منابع حافظه برای پادها، صفحهٔ
+<a href="https://kubernetes.io/docs/tasks/configure-pod-container/assign-memory-resource/" target="_blank">تخصیص منابع حافظه به کانتینرها و پادها</a> را بخوانید.</p>
+<h2 id="پیش-از-شروع" dir="rtl">پیش از شروع</h2>
+<p dir="rtl">باید یک کلاستر کوبرنتیز داشته باشید و ابزار خط فرمان kubectl باید برای ارتباط با کلاستر شما پیکربندی شده باشد. توصیه می‌شود این آموزش را روی کلاستری اجرا کنید که دست‌کم دو نود داشته باشد که نقش میزبان control plane را ندارند. اگر هنوز کلاستری ندارید، می‌توانید با استفاده از
+<a href="https://minikube.sigs.k8s.io/docs/tutorials/multi_node/" target="_blank" rel="noopener">minikube</a>
+یکی بسازید یا از یکی از این محیط‌های آزمایشی کوبرنتیز استفاده کنید:</p>
+<ul>
+<li dir="ltr" class="ltr"><a href="https://labs.iximiuz.com/playgrounds?category=kubernetes&amp;filter=all" target="_blank" rel="noopener">iximiuz Labs</a></li>
+<li dir="ltr" class="ltr"><a href="https://killercoda.com/playgrounds/scenario/kubernetes" target="_blank" rel="noopener">Killercoda</a></li>
+<li dir="ltr" class="ltr"><a href="https://kodekloud.com/public-playgrounds" target="_blank" rel="noopener">KodeKloud</a></li>
+</ul>
+<p dir="rtl">اگر از نسخهٔ قدیمی‌تری از کوبرنتیز استفاده می‌کنید، مستندات مربوط به همان نسخه را بررسی کنید.</p>
+<h3 id="پیش-نیازهای-هم-ترازی-منابع" dir="rtl">پیش‌نیازهای هم‌ترازی منابع</h3>
+<p dir="rtl">برای هم‌تراز کردن منابع حافظه با سایر منابع درخواست‌شده در مشخصات (spec) یک پاد:</p>
+<ul>
+<li dir="rtl">مدیر CPU باید فعال باشد و سیاست مناسبی برای آن روی نود پیکربندی شده باشد.
+به <a href="cpu-management-policies.html">کنترل سیاست‌های مدیریت CPU</a> مراجعه کنید؛</li>
+<li dir="rtl">مدیر توپولوژی باید فعال باشد و سیاست مناسبی برای آن روی نود پیکربندی شده باشد.
+به <a href="https://kubernetes.io/docs/tasks/administer-cluster/topology-manager/" target="_blank">کنترل سیاست‌های مدیریت توپولوژی</a> مراجعه کنید.</li>
+</ul>
+<h3 id="پشتیبانی-از-ویندوز" dir="rtl">پشتیبانی از ویندوز</h3>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
+<p dir="rtl">پشتیبانی از ویندوز را می‌توان از طریق feature gate با نام <code dir="ltr">WindowsCPUAndMemoryAffinity</code> فعال کرد و این کار به پشتیبانی محیط اجرای کانتینر نیز نیاز دارد.<br>
+در ویندوز فقط سیاست‌های <a href="#policy-none">None</a> و <a href="#policy-best-effort">BestEffort</a> پشتیبانی می‌شوند.</p>
+<h2 id="مدیر-حافظه-چگونه-کار-می-کند؟" dir="rtl">مدیر حافظه چگونه کار می‌کند؟</h2>
+<p dir="rtl">در نودهای لینوکسی، مدیر حافظه تخصیص تضمین‌شدهٔ حافظه (و hugepages) را برای پادهای کلاس QoS از نوع Guaranteed فراهم می‌کند.
+برای به‌کار انداختن فوری مدیر حافظه، دستورالعمل‌های بخش
+<a href="#memory-manager-configuration">پیکربندی مدیر حافظه</a> را دنبال کنید و سپس، همان‌طور که در بخش
+<a href="#placing-a-pod-in-the-guaranteed-qos-class">قرار دادن یک پاد در کلاس QoS از نوع Guaranteed</a> نشان داده شده است،
+یک پاد <code dir="ltr">Guaranteed</code> آماده و مستقر کنید.</p>
+<p dir="rtl">مدیر حافظه یک فراهم‌کنندهٔ راهنما (hint provider) است و راهنماهای توپولوژی را در اختیار مدیر توپولوژی قرار می‌دهد؛ سپس مدیر توپولوژی منابع درخواست‌شده را بر اساس این راهنماها هم‌تراز می‌کند.
+در لینوکس، مدیر حافظه <code dir="ltr">cgroups</code> (به‌طور مشخص <code dir="ltr">cpuset.mems</code>) را نیز برای پادها اعمال می‌کند.
+نمودار جریان کامل فرایند پذیرش و استقرار پاد در ادامه نشان داده شده است:</p>
+<p><img src="/images/docs/memory-manager-diagram.svg" alt="مدیر حافظه در فرایند پذیرش و استقرار پاد"></p>
+<p dir="rtl">در طول این فرایند، مدیر حافظه شمارنده‌های داخلی خود را که در
+[نقشهٔ نود و نقشه‌های حافظه][2] ذخیره شده‌اند به‌روزرسانی می‌کند تا تخصیص تضمین‌شدهٔ حافظه را مدیریت کند.</p>
+<p dir="rtl">اگر مدیر نود مقدار <code dir="ltr">reservedMemory</code> را برای kubelet پیکربندی کرده باشد (بخش <a href="#reserved-memory-flag">پیکربندی حافظهٔ رزروشده</a>)، مدیر حافظه هنگام راه‌اندازی kubelet فعال می‌شود.
+در این حالت، kubelet نقشهٔ نود خود را به‌روزرسانی می‌کند تا این رزرو در آن منعکس شود.</p>
+<p dir="rtl">هنگامی که سیاست <code dir="ltr">Static</code> پیکربندی شده باشد، <strong>باید</strong> حافظهٔ رزروشده را برای نود پیکربندی کنید
+(برای مثال، با فیلد پیکربندی <code dir="ltr">reservedMemory</code> در پیکربندی kubelet).</p>
+<p dir="rtl">یکی از موضوعات مهم در عملکرد مدیر حافظه، مدیریت گروه‌های NUMA است.
+هر بار که درخواست حافظهٔ یک پاد از ظرفیت یک نود NUMA بیشتر باشد، مدیر حافظه تلاش می‌کند گروهی متشکل از چند نود NUMA ایجاد کند که ظرفیت حافظهٔ بیشتری داشته باشد.</p>
+<h2 id="پیکربندی-مدیر-حافظه" dir="rtl">پیکربندی مدیر حافظه</h2>
+<p dir="rtl">سایر مدیرها باید از قبل پیکربندی شده باشند (به <a href="#resource-alignment-prerequisites">پیش‌نیازهای هم‌ترازی منابع</a> مراجعه کنید).
+فیلد پیکربندی <code dir="ltr">memoryManagerPolicy</code> را در <a href="../../reference/config-api/kubelet-config.v1beta1.html">پیکربندی kubelet</a> برابر با نام <a href="#policies">سیاست</a> انتخابی خود قرار دهید.</p>
+<p dir="rtl">در صورت تمایل، می‌توان مقداری از حافظه را برای فرایندهای سیستم یا kubelet رزرو کرد تا پایداری نود افزایش یابد (بخش <a href="#reserved-memory-flag">پیکربندی حافظهٔ رزروشده</a>).</p>
+<h3 id="سیاست-ها" dir="rtl">سیاست‌ها</h3>
+<p dir="rtl">مدیر حافظهٔ کوبرنتیز سه سیاست ارائه می‌دهد. می‌توانید سیاست را از طریق فیلد پیکربندی <code dir="ltr">memoryManagerPolicy</code> در پیکربندی kubelet انتخاب کنید؛ مقادیر موجود در کوبرنتیز 1.37 عبارت‌اند از:</p>
+<ul>
+<li dir="rtl"><a href="#policy-none"><code dir="ltr">None</code></a> (پیش‌فرض)</li>
+<li dir="rtl"><a href="#policy-static"><code dir="ltr">Static</code></a> (فقط لینوکس)</li>
+<li dir="rtl"><a href="#policy-best-effort"><code dir="ltr">BestEffort</code></a> (فقط ویندوز)</li>
+</ul>
+<h4 id="سیاست-none-policy-none" dir="rtl">سیاست None {#policy-none}</h4>
+<p dir="rtl">این سیاست پیش‌فرض است و به هیچ وجه بر تخصیص حافظه اثر نمی‌گذارد.
+رفتار آن دقیقاً مانند حالتی است که مدیر حافظه اصلاً وجود نداشته باشد.</p>
+<p dir="rtl">سیاست <code dir="ltr">None</code> راهنمای توپولوژی پیش‌فرض را برمی‌گرداند. این راهنمای ویژه نشان می‌دهد که فراهم‌کنندهٔ راهنما (در اینجا مدیر حافظه) هیچ ترجیحی برای وابستگی NUMA با هیچ منبعی ندارد.</p>
+<h4 id="سیاست-static-policy-static" dir="rtl">سیاست Static {#policy-static}</h4>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
+<p dir="rtl"><strong>این سیاست فقط در لینوکس پشتیبانی می‌شود.</strong></p>
+<p dir="rtl">در مورد پادهای <code dir="ltr">Guaranteed</code>، سیاست <code dir="ltr">Static</code> مدیر حافظه راهنماهای توپولوژی مربوط به مجموعه‌ای از نودهای NUMA را برمی‌گرداند که حافظه در آن‌ها قابل تضمین است، و با به‌روزرسانی آبجکت داخلی [NodeMap][2] حافظه را رزرو می‌کند.</p>
+<p dir="rtl">در مورد پادهای <code dir="ltr">BestEffort</code> یا <code dir="ltr">Burstable</code>، سیاست <code dir="ltr">Static</code> مدیر حافظه راهنمای توپولوژی پیش‌فرض را بازمی‌گرداند، زیرا درخواستی برای حافظهٔ تضمین‌شده وجود ندارد، و حافظه‌ای را در آبجکت داخلی [NodeMap][2] رزرو نمی‌کند.</p>
+<p dir="rtl">این سیاست فقط در لینوکس پشتیبانی می‌شود.</p>
+<h4 id="سیاست-besteffort-policy-best-effort" dir="rtl">سیاست BestEffort {#policy-best-effort}</h4>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
+<p dir="rtl"><strong>این سیاست فقط در ویندوز پشتیبانی می‌شود.</strong></p>
+<p dir="rtl">در ویندوز، تخصیص نود NUMA به شکلی متفاوت از لینوکس انجام می‌شود.
+هیچ سازوکاری وجود ندارد که تضمین کند دسترسی به حافظه فقط از یک نود NUMA مشخص انجام شود.
+در عوض، زمان‌بند سیستم‌عامل ویندوز بهینه‌ترین نود NUMA را بر اساس تخصیص CPUها انتخاب می‌کند.
+ممکن است ویندوز در صورتی که زمان‌بند آن نودهای NUMA دیگری را بهینه تشخیص دهد، از آن‌ها استفاده کند.</p>
+<p dir="rtl">این سیاست مقدار حافظهٔ موجود و درخواست‌شده را از طریق <em>نقشهٔ نود</em> (node map) داخلی پیگیری می‌کند.
+مدیر حافظه پیش از تخصیص منبع، تمام تلاش خود را می‌کند تا اطمینان یابد حافظهٔ کافی روی یک نود NUMA در دسترس است.<br>
+این یعنی در بیشتر موارد، تخصیص حافظه باید مطابق آنچه مشخص شده است عمل کند.</p>
+<h2 id="پیکربندی-حافظهٔ-رزروشده-reserved-memory-flag" dir="rtl">پیکربندی حافظهٔ رزروشده {#reserved-memory-flag}</h2>
+<p dir="rtl">به‌عنوان مدیر، می‌توانید مقدار کل حافظهٔ رزروشده را برای یک نود پیکربندی کنید. این مقدار ازپیش‌پیکربندی‌شده سپس برای محاسبهٔ مقدار واقعی حافظهٔ <a href="https://kubernetes.io/docs/tasks/administer-cluster/reserve-compute-resources/#node-allocatable" target="_blank">قابل‌تخصیص نود</a> که در دسترس پادها است، به کار می‌رود.</p>
+<p dir="rtl">زمان‌بند کوبرنتیز از اطلاعات حافظهٔ قابل‌تخصیص برای بهینه‌سازی
+<a href="../../concepts/scheduling-eviction/index.html">زمان‌بندی</a> پادها استفاده می‌کند.
+. مدیران نود معمولاً از سازوکار <em>قابل‌تخصیص نود</em> (node allocatable) برای رزرو منابع سیستمی نود کوبرنتیز برای kubelet یا فرایندهای سیستم‌عامل استفاده می‌کنند تا پایداری نود تضمین شود.</p>
+<p dir="rtl">تنظیمات مرتبط kubelet عبارت‌اند از <code dir="ltr">kubeReserved</code>، <code dir="ltr">systemReserved</code> و <code dir="ltr">reservedMemory</code>.
+با تنظیم <code dir="ltr">reservedMemory</code> می‌توانید کل حافظهٔ رزروشده را تقسیم کنید و آن را میان چندین نود NUMA توزیع کنید.</p>
+<p dir="rtl">برای هر نود NUMA، فهرستی از رزروهای حافظه از انواع مختلف حافظه را با جداکنندهٔ کاما مشخص می‌کنید.
+همچنین می‌توانید رزروهایی را که چند نود NUMA را در بر می‌گیرند، با استفاده از نقطه‌ویرگول به‌عنوان جداکننده مشخص کنید.</p>
+<p dir="rtl">مدیر حافظه از این حافظهٔ رزروشده برای اجرای بارهای کاری کانتینری استفاده نمی‌کند.</p>
+<p dir="rtl">برای مثال، اگر یک نود NUMA با نام «NUMA0» با ۱۰GiB حافظهٔ در دسترس داشته باشید و <code dir="ltr">reservedMemory</code> را طوری پیکربندی کنید که <code dir="ltr">1Gi</code> (حافظه) را برای NUMA0 رزرو کند، مدیر حافظه فرض می‌کند که فقط ۹GiB برای پادها در دسترس است.</p>
+<p dir="rtl">می‌توانید این پارامتر را حذف کنید، اما باید بدانید که مقدار حافظهٔ رزروشده از همهٔ نودهای NUMA باید برابر با مقدار حافظهٔ <em>قابل‌تخصیص نود</em> باشد.</p>
+<p dir="rtl">اگر دست‌کم یکی از پارامترهای قابل‌تخصیص نود غیرصفر باشد، باید <code dir="ltr">reservedMemory</code> را دست‌کم برای یک نود NUMA مشخص کنید.
+در واقع، مقدار آستانهٔ <code dir="ltr">evictionHard</code> به‌طور پیش‌فرض برابر با <code dir="ltr">100Mi</code> است؛ بنابراین اگر از سیاست <code dir="ltr">Static</code> استفاده می‌کنید، مشخص کردن <code dir="ltr">reservedMemory</code> الزامی است.</p>
+<h3 id="نحو-حافظهٔ-رزروشدهٔ-مدیر-حافظه-reserved-memory-syntax" dir="rtl">نحو حافظهٔ رزروشدهٔ مدیر حافظه {#reserved-memory-syntax}</h3>
+<p dir="rtl">در ادامه چند نمونه از نحوهٔ تنظیم پیکربندی <code dir="ltr">reservedMemory</code> برای kubelet آمده است.</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">  # Example 1
+  reservedMemory:
+  - numaNode: 0 # NUMA node index
+    limits:
+      memory: "1Gi" # byte quantity
+  - numaNode: 1
+    limits:
+      memory: "2Gi" # byte quantity
+</code></pre>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">  # Example 2
+  reservedMemory:
+  - numaNode: 0
+    limits:
+      "memory": "512Gi"
+  - numaNode: 1
+    limits:
+      "memory": "512Gi"
+      "hugepages-1Gi": "2Gi" # only relevant on Linux
+</code></pre>
+<h3 id="محدودیت-های-رزرو-حافظهٔ-numa" dir="rtl">محدودیت‌های رزرو حافظهٔ NUMA</h3>
+<p dir="rtl">هنگامی که مقادیری برای <code dir="ltr">reservedMemory</code> مشخص می‌کنید، این مقادیر باید با مقادیر فعلی <code dir="ltr">kubeReserved</code> و <code dir="ltr">systemReserved</code>، و همچنین با هر تنظیم <code dir="ltr">memory.available</code> که در <code dir="ltr">evictionHard</code> انجام می‌دهید، سازگار باشند.</p>
+<pre dir="ltr"><code class="language-math" dir="ltr">\begin{equation*}
+\sum_{ \textnormal{i} = 0}^{ \textnormal{node count}} { \textit{reservedMemory} [ \textnormal{i} ]} = \textit{kubeReserved} + \textit{systemReserved} + \textit{evictionHard} \, \boxed{\textnormal{memory.available}}
+\end{equation*}\\\
+\text{where i is an index of a NUMA node}
+</code></pre>
+<p dir="rtl">اگر از فرمول بالا پیروی نکنید، مدیر حافظه هنگام راه‌اندازی خطا نشان می‌دهد.</p>
+<p dir="rtl">به بیان دیگر، مثال ۱ (در بالا) نشان می‌دهد که کوبرنتیز برای حافظهٔ متعارف (<code dir="ltr">type=memory</code>) در مجموع ۳GiB رزرو می‌کند؛ یعنی:</p>
+<pre dir="ltr"><code class="language-math" dir="ltr">\begin{equation*}
+\sum_{ \textnormal{i} = 0}^{ \textnormal{node count}} \textit{reservedMemory}_{ [ \textnormal{i} ] }  =  \underbrace{\textit{reservedMemory} [ 0 ] + \textit{reservedMemory} [ 1 ] }_{\textnormal{type=memory}}
+            = 1 \textnormal{GiB} + 2 \textnormal{GiB}
+            = 3 \textnormal{GiB}
+\end{equation*}\\\
+\text{where i is an index of a NUMA node}
+</code></pre>
+<p dir="rtl">چند نمونه از تنظیمات پیکربندی kubelet که به پیکربندی قابل‌تخصیص نود مربوط هستند:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">  kubeReserved: { cpu: "500m", memory: "50Mi" } # half a CPU, 50MiB of memory
+  systemReserved: { cpu: "500m", memory: "256Mi" } # half a CPU, 256MiB of memory
+</code></pre>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">آستانهٔ پیش‌فرض تخلیهٔ سخت (hard eviction) برابر با ۱۰۰MiB است و صفر <strong>نیست</strong>.
+به یاد داشته باشید که مقدار حافظه‌ای را که با تنظیم <code dir="ltr">reservedMemory</code> رزرو می‌کنید، به اندازهٔ همین آستانهٔ تخلیهٔ سخت افزایش دهید. در غیر این صورت، kubelet مدیر حافظه را راه‌اندازی نمی‌کند و خطا نشان می‌دهد.</p>
+<p dir="rtl">در ادامه نمونه‌ای از یک پیکربندی درست با استفاده از <code dir="ltr">reservedMemory</code> آمده است:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">  # this snippet relies on the default value of evictionHard
+  memoryManagerPolicy: Static
+  kubeReserved: { cpu: "4", memory: "4Gi" }
+  systemReserved: { cpu: "1", memory: "1Gi" }
+  reservedMemory:
+  - numaNode: 0
+    limits:
+      memory: "3Gi"
+  - numaNode: 1
+    limits:
+      memory: "2148Mi" # 3GiB minus 100MiB
+</code></pre>
+</div>
+<h3 id="پیکربندی-هایی-که-باید-از-آن-ها-پرهیز-کرد-reserved-memory-configurations-to-avoid" dir="rtl">پیکربندی‌هایی که باید از آن‌ها پرهیز کرد {#reserved-memory-configurations-to-avoid}</h3>
+<p dir="rtl">از پیکربندی‌های زیر پرهیز کنید:</p>
+<ol>
+<li dir="rtl">موارد تکراری: همان نود NUMA یا نوع حافظه، اما با مقداری متفاوت؛</li>
+<li dir="rtl">تعیین محدودیت صفر برای هر یک از انواع حافظه؛</li>
+<li dir="rtl">شناسه‌های نود NUMA که در سخت‌افزار ماشین وجود ندارند؛</li>
+<li dir="rtl">نام‌های نوع حافظه‌ای غیر از <code dir="ltr">memory</code> یا <code dir="ltr">hugepages-&lt;size&gt;</code>
+(hugepages با <code dir="ltr">&lt;size&gt;</code> مشخص‌شده نیز باید وجود داشته باشند).</li>
+</ol>
+<h2 id="قرار-دادن-یک-پاد-در-کلاس-qos-از-نوع-guaranteed" dir="rtl">قرار دادن یک پاد در کلاس QoS از نوع Guaranteed</h2>
+<p dir="rtl">اگر سیاست انتخاب‌شده چیزی غیر از <code dir="ltr">None</code> باشد، مدیر حافظه پادهایی را که در کلاس QoS از نوع <code dir="ltr">Guaranteed</code> قرار دارند شناسایی می‌کند.
+مدیر حافظه برای هر پاد <code dir="ltr">Guaranteed</code> راهنماهای توپولوژی مشخصی در اختیار مدیر توپولوژی قرار می‌دهد.
+برای پادهایی که در کلاس QoS دیگری غیر از <code dir="ltr">Guaranteed</code> هستند، مدیر حافظه راهنماهای توپولوژی پیش‌فرض را در اختیار مدیر توپولوژی قرار می‌دهد.</p>
+<p dir="rtl">بخش‌های زیر از مانیفست‌های پاد، یک پاد را در کلاس QoS از نوع <code dir="ltr">Guaranteed</code> قرار می‌دهند.</p>
+<p dir="rtl">پادی که CPU(های) آن عدد صحیح است، زمانی در کلاس QoS از نوع <code dir="ltr">Guaranteed</code> اجرا می‌شود که <code dir="ltr">requests</code> برابر با <code dir="ltr">limits</code> باشد:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">spec:
+  containers:
+  - name: nginx
+    image: nginx
+    resources:
+      limits:
+        memory: "200Mi"
+        cpu: "2"
+        example.com/device: "1"
+      requests:
+        memory: "200Mi"
+        cpu: "2"
+        example.com/device: "1"
+</code></pre>
+<p dir="rtl">همچنین پادی که CPU(ها) را به اشتراک می‌گذارد، زمانی در کلاس QoS از نوع <code dir="ltr">Guaranteed</code> اجرا می‌شود که <code dir="ltr">requests</code> برابر با <code dir="ltr">limits</code> باشد.</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">spec:
+  containers:
+  - name: nginx
+    image: nginx
+    resources:
+      limits:
+        memory: "200Mi"
+        cpu: "300m"
+        example.com/device: "1"
+      requests:
+        memory: "200Mi"
+        cpu: "300m"
+        example.com/device: "1"
+</code></pre>
+<p dir="rtl">توجه کنید که برای قرار گرفتن یک پاد در کلاس QoS از نوع Guaranteed، باید درخواست‌های CPU و حافظه هر دو مشخص شوند.</p>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<ul>
+<li dir="rtl"><a href="https://kubernetes.io/docs/tasks/debug/debug-cluster/topology/" target="_blank">عیب‌یابی مدیریت توپولوژی</a> را بخوانید.</li>
+<li dir="rtl"><a href="https://github.com/kubernetes/enhancements/tree/master/keps/sig-node/1769-memory-manager" target="_blank" rel="noopener">KEP</a> (پیشنهاد بهبود کوبرنتیز) مربوط به مدیر حافظه را بخوانید.</li>
+<li dir="rtl">دربارهٔ <a href="../../concepts/resource-management/resource-managers.html#pod-level-resource-managers">مدیرهای منابع در سطح پاد</a> مطالعه کنید.</li>
+</ul>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#پیش-از-شروع">پیش از شروع</a><a class="l3" href="#پیش-نیازهای-هم-ترازی-منابع">پیش‌نیازهای هم‌ترازی منابع</a><a class="l3" href="#پشتیبانی-از-ویندوز">پشتیبانی از ویندوز</a><a class="l2" href="#مدیر-حافظه-چگونه-کار-می-کند؟">مدیر حافظه چگونه کار می‌کند؟</a><a class="l2" href="#پیکربندی-مدیر-حافظه">پیکربندی مدیر حافظه</a><a class="l3" href="#سیاست-ها">سیاست‌ها</a><a class="l2" href="#پیکربندی-حافظهٔ-رزروشده-reserved-memory-flag">پیکربندی حافظهٔ رزروشده {#reserved-memory-flag}</a><a class="l3" href="#نحو-حافظهٔ-رزروشدهٔ-مدیر-حافظه-reserved-memory-syntax">نحو حافظهٔ رزروشدهٔ مدیر حافظه {#reserved-memory-syntax}</a><a class="l3" href="#محدودیت-های-رزرو-حافظهٔ-numa">محدودیت‌های رزرو حافظهٔ NUMA</a><a class="l3" href="#پیکربندی-هایی-که-باید-از-آن-ها-پرهیز-کرد-reserved-memory-configurations-to-avoid">پیکربندی‌هایی که باید از آن‌ها پرهیز کرد {#reserved-memory-configurations-to-avoid}</a><a class="l2" href="#قرار-دادن-یک-پاد-در-کلاس-qos-از-نوع-guaranteed">قرار دادن یک پاد در کلاس QoS از نوع Guaranteed</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>
