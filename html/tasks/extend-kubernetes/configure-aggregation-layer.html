@@ -1,0 +1,399 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>پیکربندی لایه تجمیع | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">tasks / extend-kubernetes</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">پیکربندی لایه تجمیع</h1><!-- overview -->
+<p dir="rtl">با پیکربندی <a href="../../concepts/extend-kubernetes/api-extension/apiserver-aggregation.html">لایه تجمیع</a>
+می‌توان apiserver کوبرنتیز را با APIهای دیگری گسترش داد که جزو APIهای اصلی کوبرنتیز نیستند.</p>
+<h2 id="پیش-از-شروع" dir="rtl">پیش از شروع</h2>
+<p dir="rtl">باید یک کلاستر کوبرنتیز داشته باشید و ابزار خط فرمان kubectl باید برای ارتباط با کلاستر شما پیکربندی شده باشد. توصیه می‌شود این آموزش را روی کلاستری اجرا کنید که دست‌کم دو نود داشته باشد که نقش میزبان control plane را ندارند. اگر هنوز کلاستری ندارید، می‌توانید با استفاده از
+<a href="https://minikube.sigs.k8s.io/docs/tutorials/multi_node/" target="_blank" rel="noopener">minikube</a>
+یکی بسازید یا از یکی از این محیط‌های آزمایشی کوبرنتیز استفاده کنید:</p>
+<ul>
+<li dir="ltr" class="ltr"><a href="https://labs.iximiuz.com/playgrounds?category=kubernetes&amp;filter=all" target="_blank" rel="noopener">iximiuz Labs</a></li>
+<li dir="ltr" class="ltr"><a href="https://killercoda.com/playgrounds/scenario/kubernetes" target="_blank" rel="noopener">Killercoda</a></li>
+<li dir="ltr" class="ltr"><a href="https://kodekloud.com/public-playgrounds" target="_blank" rel="noopener">KodeKloud</a></li>
+</ul>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">برای اینکه لایه تجمیع در محیط شما کار کند و از احراز هویت TLS متقابل (mutual TLS) میان پراکسی و
+apiserverهای افزونه پشتیبانی کند، باید چند پیش‌نیاز را فراهم کنید. کوبرنتیز و kube-apiserver چندین CA دارند؛
+بنابراین مطمئن شوید که پراکسی را CA لایه تجمیع امضا کرده است، نه CA دیگری مانند CA عمومی کوبرنتیز.</p>
+</div>
+<div class="callout caution"><div class="callout-title">احتیاط:</div>
+<p dir="rtl">استفادهٔ دوباره از یک CA برای انواع مختلف کلاینت می‌تواند بر عملکرد کلاستر اثر منفی بگذارد.
+برای اطلاعات بیشتر، <a href="#ca-reusage-and-conflicts">استفادهٔ دوباره از CA و تعارض‌ها</a> را ببینید.</p>
+</div>
+<!-- steps -->
+<h2 id="جریان-احراز-هویت" dir="rtl">جریان احراز هویت</h2>
+<p dir="rtl">برخلاف تعریف‌های منبع سفارشی (Custom Resource Definitions یا CRDs)، در API تجمیع (Aggregation API)
+علاوه بر apiserver استاندارد کوبرنتیز، سرور دیگری نیز دخیل است: apiserver افزونهٔ شما.
+لازم است apiserver کوبرنتیز با apiserver افزونهٔ شما ارتباط برقرار کند و apiserver افزونه نیز
+با apiserver کوبرنتیز ارتباط داشته باشد. برای ایمن‌سازی این ارتباط، apiserver کوبرنتیز از گواهی‌های x509
+برای احراز هویت خود نزد apiserver افزونه استفاده می‌کند.</p>
+<p dir="rtl">این بخش توضیح می‌دهد که جریان‌های احراز هویت و مجوزدهی چگونه کار می‌کنند
+و چگونه می‌توان آن‌ها را پیکربندی کرد.</p>
+<p dir="rtl">جریان کلی به این صورت است:</p>
+<ol>
+<li dir="rtl">در apiserver کوبرنتیز: احراز هویت کاربر درخواست‌کننده و بررسی مجوز او برای دسترسی به
+مسیر API درخواست‌شده.</li>
+<li dir="rtl">در apiserver کوبرنتیز: پراکسی کردن درخواست به apiserver افزونه</li>
+<li dir="rtl">در apiserver افزونه: احراز هویت درخواستی که از apiserver کوبرنتیز رسیده است</li>
+<li dir="rtl">در apiserver افزونه: مجوزدهی درخواست کاربر اصلی</li>
+<li dir="rtl">در apiserver افزونه: اجرا</li>
+</ol>
+<p dir="rtl">ادامهٔ این بخش این مراحل را با جزئیات شرح می‌دهد.</p>
+<p dir="rtl">این جریان را می‌توانید در نمودار زیر ببینید.</p>
+<p><img src="/images/docs/aggregation-api-auth-flow.png" alt="جریان‌های احراز هویت تجمیع"></p>
+<p dir="rtl">کد منبع نمودار بالا (swimlanes) در منبع همین سند قرار دارد.</p>
+<!--
+Swimlanes generated at https://swimlanes.io with the source as follows:
+
+-----BEGIN-----
+title: Aggregation API request flow
+
+
+User -> kube-apiserver / aggregator:
+
+note:
+1. The user makes a request to the Kube API server using any recognized credential (e.g. OIDC or client certs)
+
+kube-apiserver / aggregator -> kube-apiserver / aggregator: authentication
+
+note:
+2. The Kube API server authenticates the incoming request using any configured
+   authentication methods (e.g. OIDC or client certs)
+
+kube-apiserver / aggregator -> kube-apiserver / aggregator: authorization
+
+note:
+3. The Kube API server authorizes the requested URL using any configured authorization method (e.g. RBAC)
+
+kube-apiserver / aggregator -> aggregated apiserver:
+
+note:
+4. The aggregator opens a connection to the aggregated API server using
+   `--proxy-client-cert-file`/`--proxy-client-key-file` client certificate/key to secure the channel
+5. The aggregator sends the user info from step 1 to the aggregated API server as
+   http headers, as defined by the following flags:
+  * `--requestheader-username-headers`
+  * `--requestheader-group-headers`
+  * `--requestheader-extra-headers-prefix`
+
+aggregated apiserver -> aggregated apiserver: authentication
+
+note:
+6. The aggregated apiserver authenticates the incoming request using the auth proxy authentication method:
+  * verifies the request has a recognized auth proxy client certificate
+  * pulls user info from the incoming request's http headers
+
+By default, it pulls the configuration information for this from a configmap
+in the kube-system namespace that is published by the kube-apiserver,
+containing the info from the `--requestheader-...` flags provided to the
+kube-apiserver (CA bundle to use, auth proxy client certificate names to allow,
+http header names to use, etc)
+
+aggregated apiserver -> kube-apiserver / aggregator: authorization
+
+note:
+7. The aggregated apiserver authorizes the incoming request by making a
+   SubjectAccessReview call to the kube-apiserver
+
+aggregated apiserver -> aggregated apiserver: admission
+
+note:
+8. For mutating requests, the aggregated apiserver runs admission checks.
+   by default, the namespace lifecycle admission plugin ensures namespaced
+   resources are created in a namespace that exists in the kube-apiserver
+-----END-----
+-->
+<h3 id="احراز-هویت-و-مجوزدهی-در-apiserver-کوبرنتیز" dir="rtl">احراز هویت و مجوزدهی در apiserver کوبرنتیز</h3>
+<p dir="rtl">درخواست به مسیری از API که apiserver افزونه به آن سرویس می‌دهد، مانند همهٔ درخواست‌های API
+آغاز می‌شود: با برقراری ارتباط با apiserver کوبرنتیز. این مسیر پیش‌تر از سوی apiserver افزونه
+در apiserver کوبرنتیز ثبت شده است.</p>
+<p dir="rtl">کاربر با apiserver کوبرنتیز ارتباط برقرار می‌کند و درخواست دسترسی به این مسیر را می‌دهد.
+سپس apiserver کوبرنتیز با استفاده از سازوکارهای استاندارد احراز هویت و مجوزدهی که برای آن
+پیکربندی شده است، هویت کاربر را احراز می‌کند و مجوز دسترسی او به آن مسیر خاص را بررسی می‌کند.</p>
+<p dir="rtl">برای مروری بر احراز هویت در یک کلاستر کوبرنتیز،
+<a href="../../reference/access-authn-authz/authentication.html">«احراز هویت در کلاستر»</a> را ببینید.
+برای مروری بر مجوزدهی دسترسی به منابع کلاستر کوبرنتیز،
+<a href="../../reference/access-authn-authz/authorization.html">«مروری بر مجوزدهی»</a> را ببینید.</p>
+<p dir="rtl">تا این مرحله، همه‌چیز همان درخواست‌ها، احراز هویت و مجوزدهی استاندارد API کوبرنتیز بوده است.</p>
+<p dir="rtl">اکنون apiserver کوبرنتیز آمادهٔ ارسال درخواست به apiserver افزونه است.</p>
+<h3 id="پراکسی-کردن-درخواست-از-سوی-apiserver-کوبرنتیز" dir="rtl">پراکسی کردن درخواست از سوی apiserver کوبرنتیز</h3>
+<p dir="rtl">اکنون apiserver کوبرنتیز درخواست را به apiserver افزونه‌ای که برای رسیدگی به آن ثبت شده است
+ارسال، یا به بیان دیگر پراکسی (proxy)، می‌کند. برای این کار باید چند چیز را بداند:</p>
+<ol>
+<li dir="rtl">چگونه apiserver کوبرنتیز باید هویت خود را نزد apiserver افزونه احراز کند و به آن اطلاع دهد
+که درخواستی که از طریق شبکه می‌رسد، از یک apiserver معتبر کوبرنتیز آمده است؟</li>
+<li dir="rtl">چگونه apiserver کوبرنتیز باید نام کاربری و گروهی را که درخواست اصلی با آن‌ها احراز هویت شده است،
+به apiserver افزونه اطلاع دهد؟</li>
+</ol>
+<p dir="rtl">برای فراهم کردن این دو مورد، باید apiserver کوبرنتیز را با چند فلگ پیکربندی کنید.</p>
+<h4 id="احراز-هویت-کلاینت-در-apiserver-کوبرنتیز" dir="rtl">احراز هویت کلاینت در apiserver کوبرنتیز</h4>
+<p dir="rtl">اتصال apiserver کوبرنتیز به apiserver افزونه از طریق TLS برقرار می‌شود و apiserver کوبرنتیز
+با یک گواهی کلاینت هویت خود را احراز می‌کند. هنگام راه‌اندازی apiserver کوبرنتیز باید موارد زیر را
+با فلگ‌های مربوط در اختیار آن قرار دهید:</p>
+<ul>
+<li dir="rtl">فایل کلید خصوصی از طریق <code dir="ltr">--proxy-client-key-file</code></li>
+<li dir="rtl">فایل گواهی کلاینت امضاشده از طریق <code dir="ltr">--proxy-client-cert-file</code></li>
+<li dir="rtl">گواهی CA‌ای که فایل گواهی کلاینت را امضا کرده است، از طریق <code dir="ltr">--requestheader-client-ca-file</code></li>
+<li dir="rtl">مقادیر معتبر Common Name (CN) در گواهی کلاینت امضاشده، از طریق <code dir="ltr">--requestheader-allowed-names</code></li>
+</ul>
+<p dir="rtl">برای احراز هویت نزد apiserver افزونه، apiserver کوبرنتیز از فایل‌هایی استفاده می‌کند که با
+<code dir="ltr">--proxy-client-*-file</code> مشخص شده‌اند. برای اینکه یک apiserver افزونهٔ سازگار درخواست را معتبر بداند،
+باید شرایط زیر برقرار باشد:</p>
+<ol>
+<li dir="rtl">اتصال باید با گواهی کلاینتی برقرار شود که CA‌ای آن را امضا کرده باشد که گواهی‌اش
+در <code dir="ltr">--requestheader-client-ca-file</code> قرار دارد.</li>
+<li dir="rtl">اتصال باید با گواهی کلاینتی برقرار شود که CN آن یکی از نام‌های فهرست‌شده
+در <code dir="ltr">--requestheader-allowed-names</code> باشد.</li>
+</ol>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">می‌توانید این گزینه را به‌صورت <code dir="ltr">--requestheader-allowed-names=""</code> خالی بگذارید.
+با این کار به apiserver افزونه اعلام می‌شود که <em>هر</em> CN‌ای پذیرفتنی است.</p>
+</div>
+<p dir="rtl">وقتی apiserver کوبرنتیز با این گزینه‌ها راه‌اندازی شود:</p>
+<ol>
+<li dir="rtl">از آن‌ها برای احراز هویت نزد apiserver افزونه استفاده می‌کند.</li>
+<li dir="rtl">یک configmap با نام <code dir="ltr">extension-apiserver-authentication</code> در فضای نام <code dir="ltr">kube-system</code> ایجاد می‌کند
+و گواهی CA و CNهای مجاز را در آن قرار می‌دهد. apiserverهای افزونه نیز می‌توانند این اطلاعات را
+بازیابی کنند و برای اعتبارسنجی درخواست‌ها به کار ببرند.</li>
+</ol>
+<p dir="rtl">توجه داشته باشید که apiserver کوبرنتیز برای احراز هویت نزد <em>همهٔ</em> apiserverهای افزونه
+از یک گواهی کلاینت یکسان استفاده می‌کند. این سرور برای هر apiserver افزونه گواهی کلاینت جداگانه‌ای
+نمی‌سازد، بلکه تنها یک گواهی برای احراز هویت در نقش apiserver کوبرنتیز دارد.
+همین گواهی برای همهٔ درخواست‌ها به apiserverهای افزونه دوباره استفاده می‌شود.</p>
+<h4 id="نام-کاربری-و-گروه-درخواست-اصلی" dir="rtl">نام کاربری و گروه درخواست اصلی</h4>
+<p dir="rtl">هنگامی که apiserver کوبرنتیز درخواست را به apiserver افزونه پراکسی می‌کند، نام کاربری و گروهی را
+که درخواست اصلی با آن‌ها با موفقیت احراز هویت شده است، به apiserver افزونه اطلاع می‌دهد.
+این اطلاعات در هدرهای http درخواست پراکسی‌شده قرار می‌گیرد. شما باید نام هدرهایی را که
+باید استفاده شوند به apiserver کوبرنتیز اعلام کنید.</p>
+<ul>
+<li dir="rtl">هدری که نام کاربری در آن ذخیره می‌شود، از طریق <code dir="ltr">--requestheader-username-headers</code></li>
+<li dir="rtl">هدری که گروه در آن ذخیره می‌شود، از طریق <code dir="ltr">--requestheader-group-headers</code></li>
+<li dir="rtl">پیشوندی که به همهٔ هدرهای اضافی افزوده می‌شود، از طریق <code dir="ltr">--requestheader-extra-headers-prefix</code></li>
+</ul>
+<p dir="rtl">نام این هدرها نیز در configmap <code dir="ltr">extension-apiserver-authentication</code> قرار می‌گیرد
+تا apiserverهای افزونه بتوانند آن‌ها را بازیابی و استفاده کنند.</p>
+<h3 id="احراز-هویت-درخواست-در-apiserver-افزونه" dir="rtl">احراز هویت درخواست در apiserver افزونه</h3>
+<p dir="rtl">پس از دریافت درخواست پراکسی‌شده از apiserver کوبرنتیز، apiserver افزونه باید اطمینان یابد
+که درخواست واقعاً از یک پراکسی احراز هویت معتبر آمده است؛ نقشی که apiserver کوبرنتیز ایفا می‌کند.
+اعتبارسنجی در apiserver افزونه به این صورت انجام می‌شود:</p>
+<ol>
+<li dir="rtl">موارد زیر را، همان‌طور که در بالا توضیح داده شد، از configmap موجود در <code dir="ltr">kube-system</code> بازیابی می‌کند:
+<ul>
+<li dir="rtl">گواهی CA کلاینت</li>
+<li dir="rtl">فهرست نام‌های مجاز (CNها)</li>
+<li dir="rtl">نام هدرهای مربوط به نام کاربری، گروه و اطلاعات اضافی</li>
+</ul>
+</li>
+<li dir="rtl">بررسی می‌کند که اتصال TLS با گواهی کلاینتی احراز هویت شده باشد که:
+<ul>
+<li dir="rtl">با CA‌ای امضا شده باشد که گواهی آن با گواهی CA بازیابی‌شده مطابقت دارد.</li>
+<li dir="rtl">CN آن در فهرست CNهای مجاز باشد، مگر آنکه فهرست خالی باشد؛ در این صورت همهٔ CNها مجازند.</li>
+<li dir="rtl">نام کاربری و گروه را از هدرهای مربوط استخراج می‌کند.</li>
+</ul>
+</li>
+</ol>
+<p dir="rtl">اگر این بررسی‌ها با موفقیت انجام شوند، درخواست یک درخواست پراکسی‌شدهٔ معتبر از یک پراکسی
+احراز هویت مشروع است که در این مورد همان apiserver کوبرنتیز است.</p>
+<p dir="rtl">توجه داشته باشید که فراهم کردن موارد بالا بر عهدهٔ پیاده‌سازی apiserver افزونه است.
+بسیاری از پیاده‌سازی‌ها با بهره‌گیری از بستهٔ <code dir="ltr">k8s.io/apiserver/</code> این کار را به‌طور پیش‌فرض انجام می‌دهند.
+برخی دیگر نیز ممکن است گزینه‌هایی در خط فرمان برای بازنویسی آن ارائه دهند.</p>
+<p dir="rtl">برای داشتن مجوز بازیابی configmap، apiserver افزونه به نقش (role) مناسب نیاز دارد.
+نقشی پیش‌فرض با نام <code dir="ltr">extension-apiserver-authentication-reader</code> در فضای نام <code dir="ltr">kube-system</code>
+وجود دارد که می‌توان آن را تخصیص داد.</p>
+<h3 id="مجوزدهی-درخواست-در-apiserver-افزونه" dir="rtl">مجوزدهی درخواست در apiserver افزونه</h3>
+<p dir="rtl">اکنون apiserver افزونه می‌تواند بررسی کند که آیا کاربر/گروهی که از هدرها بازیابی شده است،
+مجاز به اجرای درخواست مورد نظر است یا نه. این کار با ارسال یک درخواست استاندارد
+<a href="../../reference/access-authn-authz/authorization.html">SubjectAccessReview</a>
+به apiserver کوبرنتیز انجام می‌شود.</p>
+<p dir="rtl">برای اینکه خود apiserver افزونه مجاز به ارسال درخواست <code dir="ltr">SubjectAccessReview</code> به apiserver کوبرنتیز باشد،
+به مجوزهای درست نیاز دارد. کوبرنتیز یک <code dir="ltr">ClusterRole</code> پیش‌فرض با نام <code dir="ltr">system:auth-delegator</code> دارد
+که مجوزهای لازم را در بر می‌گیرد. می‌توان این نقش را به حساب سرویس (service account) apiserver افزونه اعطا کرد.</p>
+<h3 id="اجرای-درخواست-در-apiserver-افزونه" dir="rtl">اجرای درخواست در apiserver افزونه</h3>
+<p dir="rtl">اگر <code dir="ltr">SubjectAccessReview</code> با موفقیت انجام شود، apiserver افزونه درخواست را اجرا می‌کند.</p>
+<h2 id="فعال-سازی-فلگ-های-apiserver-کوبرنتیز" dir="rtl">فعال‌سازی فلگ‌های apiserver کوبرنتیز</h2>
+<p dir="rtl">لایه تجمیع را با فلگ‌های زیر در <code dir="ltr">kube-apiserver</code> فعال کنید.
+ممکن است ارائه‌دهندهٔ شما پیش‌تر این کار را انجام داده باشد.</p>
+<pre dir="ltr"><code dir="ltr">--requestheader-client-ca-file=&lt;path to aggregator CA cert&gt;
+--requestheader-allowed-names=front-proxy-client
+--requestheader-extra-headers-prefix=X-Remote-Extra-
+--requestheader-group-headers=X-Remote-Group
+--requestheader-username-headers=X-Remote-User
+--proxy-client-cert-file=&lt;path to aggregator proxy cert&gt;
+--proxy-client-key-file=&lt;path to aggregator proxy key&gt;
+</code></pre>
+<h3 id="استفادهٔ-دوباره-از-ca-و-تعارض-ها" dir="rtl">استفادهٔ دوباره از CA و تعارض‌ها</h3>
+<p dir="rtl">در apiserver کوبرنتیز دو گزینه برای CA کلاینت وجود دارد:</p>
+<ul>
+<li dir="rtl">گزینهٔ <code dir="ltr">--client-ca-file</code></li>
+<li dir="rtl">گزینهٔ <code dir="ltr">--requestheader-client-ca-file</code></li>
+</ul>
+<p dir="rtl">هر یک از این گزینه‌ها مستقل عمل می‌کند و اگر به‌درستی استفاده نشوند،
+ممکن است با یکدیگر تعارض پیدا کنند.</p>
+<ul>
+<li dir="rtl">گزینهٔ <code dir="ltr">--client-ca-file</code>: وقتی درخواستی به apiserver کوبرنتیز می‌رسد و این گزینه فعال است،
+apiserver کوبرنتیز گواهی درخواست را بررسی می‌کند. اگر گواهی با یکی از گواهی‌های CA موجود
+در فایلی که <code dir="ltr">--client-ca-file</code> به آن اشاره دارد امضا شده باشد، درخواست مشروع در نظر گرفته می‌شود؛
+در این حالت کاربر برابر مقدار نام عمومی (common name) <code dir="ltr">CN=</code> و گروه برابر سازمان <code dir="ltr">O=</code> است.
+<a href="../../reference/access-authn-authz/authentication.html#x509-client-certificates">مستندات احراز هویت TLS</a> را ببینید.</li>
+<li dir="rtl">گزینهٔ <code dir="ltr">--requestheader-client-ca-file</code>: وقتی درخواستی به apiserver کوبرنتیز می‌رسد و این گزینه فعال است،
+apiserver کوبرنتیز گواهی درخواست را بررسی می‌کند. اگر گواهی با یکی از گواهی‌های CA موجود
+در فایلی که <code dir="ltr">--requestheader-client-ca-file</code> به آن اشاره دارد امضا شده باشد، درخواست به‌عنوان
+درخواستی بالقوه مشروع در نظر گرفته می‌شود. سپس apiserver کوبرنتیز بررسی می‌کند که آیا نام عمومی <code dir="ltr">CN=</code>
+یکی از نام‌های فهرست ارائه‌شده در <code dir="ltr">--requestheader-allowed-names</code> است یا نه.
+اگر نام مجاز باشد، درخواست تأیید می‌شود و در غیر این صورت، تأیید نمی‌شود.</li>
+</ul>
+<p dir="rtl">اگر <em>هر دو</em> گزینهٔ <code dir="ltr">--client-ca-file</code> و <code dir="ltr">--requestheader-client-ca-file</code> ارائه شده باشند،
+درخواست ابتدا با CA مربوط به <code dir="ltr">--requestheader-client-ca-file</code> و سپس با <code dir="ltr">--client-ca-file</code> بررسی می‌شود.
+معمولاً برای هر یک از این گزینه‌ها CAهای متفاوتی، چه CA ریشه و چه CA میانی، به کار می‌رود؛
+درخواست‌های عادی کلاینت با <code dir="ltr">--client-ca-file</code> تطبیق داده می‌شوند و درخواست‌های تجمیع با
+<code dir="ltr">--requestheader-client-ca-file</code>. اما اگر هر دو از CA <em>یکسانی</em> استفاده کنند، درخواست‌های کلاینتی
+که در حالت عادی از طریق <code dir="ltr">--client-ca-file</code> پذیرفته می‌شدند، رد خواهند شد؛ زیرا CA با CA موجود در
+<code dir="ltr">--requestheader-client-ca-file</code> مطابقت دارد، اما نام عمومی <code dir="ltr">CN=</code> با هیچ‌یک از نام‌های عمومی پذیرفتنی در
+<code dir="ltr">--requestheader-allowed-names</code> مطابقت <strong>ندارد</strong>. در نتیجه ممکن است kubeletها و سایر مؤلفه‌های control plane،
+و همچنین کاربران نهایی، نتوانند نزد apiserver کوبرنتیز احراز هویت کنند.</p>
+<p dir="rtl">به همین دلیل، برای گزینهٔ <code dir="ltr">--client-ca-file</code> (برای مجوزدهی به مؤلفه‌های control plane و کاربران نهایی)
+و گزینهٔ <code dir="ltr">--requestheader-client-ca-file</code> (برای مجوزدهی به درخواست‌های apiserver تجمیع) از گواهی‌های CA متفاوت استفاده کنید.</p>
+<div class="callout warning"><div class="callout-title">هشدار:</div>
+<p dir="rtl">از CA‌ای که در زمینهٔ دیگری استفاده می‌شود دوباره استفاده <strong>نکنید</strong>، مگر آنکه خطرات آن و
+سازوکارهای محافظت از نحوهٔ استفاده از آن CA را به‌خوبی درک کرده باشید.</p>
+</div>
+<p dir="rtl">اگر kube-proxy را روی میزبانی که API server روی آن اجرا می‌شود اجرا نمی‌کنید،
+باید مطمئن شوید که فلگ زیر در <code dir="ltr">kube-apiserver</code> فعال شده است:</p>
+<pre dir="ltr"><code dir="ltr">--enable-aggregator-routing=true
+</code></pre>
+<h3 id="ثبت-آبجکت-های-apiservice" dir="rtl">ثبت آبجکت‌های APIService</h3>
+<p dir="rtl">می‌توانید به‌صورت پویا تعیین کنید که کدام درخواست‌های کلاینت به apiserver افزونه پراکسی شوند.
+نمونه‌ای از یک ثبت در ادامه آمده است:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">
+apiVersion: apiregistration.k8s.io/v1
+kind: APIService
+metadata:
+  name: &lt;name of the registration object&gt;
+spec:
+  group: &lt;API group name this extension apiserver hosts&gt;
+  version: &lt;API version this extension apiserver hosts&gt;
+  groupPriorityMinimum: &lt;priority this APIService for this group, see API documentation&gt;
+  versionPriority: &lt;prioritizes ordering of this version within a group, see API documentation&gt;
+  service:
+    namespace: &lt;namespace of the extension apiserver service&gt;
+    name: &lt;name of the extension apiserver service&gt;
+  caBundle: &lt;pem encoded ca cert that signs the server cert used by the webhook&gt;
+</code></pre>
+<p dir="rtl">نام هر آبجکت APIService باید یک
+<a href="../../concepts/overview/working-with-objects/names.html#path-segment-names">نام بخش مسیر</a> معتبر باشد.</p>
+<h4 id="برقراری-ارتباط-با-apiserver-افزونه" dir="rtl">برقراری ارتباط با apiserver افزونه</h4>
+<p dir="rtl">پس از اینکه apiserver کوبرنتیز تشخیص داد که درخواستی باید به یک apiserver افزونه ارسال شود،
+باید بداند چگونه با آن ارتباط برقرار کند.</p>
+<p dir="rtl">بخش <code dir="ltr">service</code> ارجاعی به سرویس مربوط به apiserver افزونه است.
+فضای نام و نام سرویس الزامی هستند. پورت اختیاری است و مقدار پیش‌فرض آن 443 است.</p>
+<p dir="rtl">در اینجا نمونه‌ای از یک apiserver افزونه آمده است که طوری پیکربندی شده که روی پورت "1234" فراخوانی شود
+و اتصال TLS را با استفاده از یک بستهٔ CA سفارشی در برابر ServerName با مقدار
+<code dir="ltr">my-service-name.my-service-namespace.svc</code> اعتبارسنجی کند.</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: apiregistration.k8s.io/v1
+kind: APIService
+...
+spec:
+  ...
+  service:
+    namespace: my-service-namespace
+    name: my-service-name
+    port: 1234
+  caBundle: "Ci0tLS0tQk...&lt;base64-encoded PEM bundle&gt;...tLS0K"
+...
+</code></pre>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<ul>
+<li dir="rtl"><a href="https://kubernetes.io/docs/tasks/extend-kubernetes/setup-extension-api-server/" target="_blank">یک api-server افزونه راه‌اندازی کنید</a>
+تا با لایه تجمیع کار کند.</li>
+<li dir="rtl">برای مروری کلی،
+<a href="../../concepts/extend-kubernetes/api-extension/apiserver-aggregation.html">گسترش API کوبرنتیز با لایه تجمیع</a> را ببینید.</li>
+<li dir="rtl">یاد بگیرید چگونه <a href="https://kubernetes.io/docs/tasks/extend-kubernetes/custom-resources/custom-resource-definitions/" target="_blank">API کوبرنتیز را با استفاده از Custom Resource Definitions گسترش دهید</a>.</li>
+</ul>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#پیش-از-شروع">پیش از شروع</a><a class="l2" href="#جریان-احراز-هویت">جریان احراز هویت</a><a class="l3" href="#احراز-هویت-و-مجوزدهی-در-apiserver-کوبرنتیز">احراز هویت و مجوزدهی در apiserver کوبرنتیز</a><a class="l3" href="#پراکسی-کردن-درخواست-از-سوی-apiserver-کوبرنتیز">پراکسی کردن درخواست از سوی apiserver کوبرنتیز</a><a class="l3" href="#احراز-هویت-درخواست-در-apiserver-افزونه">احراز هویت درخواست در apiserver افزونه</a><a class="l3" href="#مجوزدهی-درخواست-در-apiserver-افزونه">مجوزدهی درخواست در apiserver افزونه</a><a class="l3" href="#اجرای-درخواست-در-apiserver-افزونه">اجرای درخواست در apiserver افزونه</a><a class="l2" href="#فعال-سازی-فلگ-های-apiserver-کوبرنتیز">فعال‌سازی فلگ‌های apiserver کوبرنتیز</a><a class="l3" href="#استفادهٔ-دوباره-از-ca-و-تعارض-ها">استفادهٔ دوباره از CA و تعارض‌ها</a><a class="l3" href="#ثبت-آبجکت-های-apiservice">ثبت آبجکت‌های APIService</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>

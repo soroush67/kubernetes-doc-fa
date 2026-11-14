@@ -8,8 +8,8 @@
 
 | | |
 |---|---|
-| پیشرفت (بر اساس کلمات) | **94.2٪** |
-| صفحات ترجمه‌شده | 1604 از 1722 |
+| پیشرفت (بر اساس کلمات) | **94.3٪** |
+| صفحات ترجمه‌شده | 1605 از 1722 |
 | صفحات دارای ایراد ساختاری | 74 |
 | نسخه‌ی منبع انگلیسی | `f652c6b8a26f` |
 
@@ -74,7 +74,7 @@ cd kubernetes-doc-fa
 | `home` | 2 | 2 |
 | `reference` | 1198 | 1198 |
 | `setup` | 22 | 22 |
-| `tasks` | 149 | 221 |
+| `tasks` | 150 | 221 |
 | `tutorials` | 0 | 45 |
 
 </div>
@@ -101,6 +101,7 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [tasks/extend-kubernetes/configure-aggregation-layer.md](md/tasks/extend-kubernetes/configure-aggregation-layer.md) — 2026-11-14T11:03:00+03:30
 - [tasks/extend-kubernetes/custom-resources/_index.md](md/tasks/extend-kubernetes/custom-resources/_index.md) — 2026-11-14T11:00:28+03:30
 - [tasks/extend-kubernetes/configure-multiple-schedulers.md](md/tasks/extend-kubernetes/configure-multiple-schedulers.md) — 2026-11-14T11:00:25+03:30
 - [tasks/extend-kubectl/kubectl-plugins.md](md/tasks/extend-kubectl/kubectl-plugins.md) — 2026-11-14T10:59:46+03:30
@@ -120,7 +121,6 @@ cd kubernetes-doc-fa
 - [tasks/debug/debug-cluster/_index.md](md/tasks/debug/debug-cluster/_index.md) — 2026-11-14T10:55:39+03:30
 - [tasks/debug/debug-application/determine-reason-pod-failure.md](md/tasks/debug/debug-application/determine-reason-pod-failure.md) — 2026-11-14T10:54:48+03:30
 - [tasks/debug/debug-application/get-shell-running-container.md](md/tasks/debug/debug-application/get-shell-running-container.md) — 2026-11-14T10:54:42+03:30
-- [tasks/debug/debug-application/debug-service.md](md/tasks/debug/debug-application/debug-service.md) — 2026-11-14T10:54:25+03:30
 
 </div>
 

@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-1604 از 1722 صفحه
+1605 از 1722 صفحه
 
 
 ## `.`
@@ -2095,7 +2095,7 @@
 ## `tasks/extend-kubernetes`
 
 - ✅ [_index.md](md/tasks/extend-kubernetes/_index.md)
-- ⏳ `configure-aggregation-layer.md`
+- ✅ [configure-aggregation-layer.md](md/tasks/extend-kubernetes/configure-aggregation-layer.md)
 - ✅ [configure-multiple-schedulers.md](md/tasks/extend-kubernetes/configure-multiple-schedulers.md)
 - ⏳ `http-proxy-access-api.md`
 - ⏳ `setup-extension-api-server.md`
