@@ -1,0 +1,433 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>استقرار یک نسخهٔ جدید با استفاده از استقرار قناری | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">tutorials / stateless-application</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">استقرار یک نسخهٔ جدید با استفاده از استقرار قناری</h1><!-- overview -->
+<p dir="rtl">این آموزش شما را گام‌به‌گام با استقرار یک نسخهٔ قناری (canary release) در کوبرنتیز آشنا می‌کند. با استقرار قناری می‌توانید نسخهٔ جدید یک برنامه را پیش از عرضهٔ کامل، به‌طور ایمن و با بخش کوچکی از ترافیک محیط عملیاتی آزمایش کنید. این رویکرد خطر را به حداقل می‌رساند و امکان دریافت سریع بازخورد از کاربران واقعی را فراهم می‌کند.</p>
+<p dir="rtl">برای آشنایی کلی با استقرارهای قناری، بخش <a href="../../concepts/workloads/management.html#canary-deployments">استقرارهای قناری</a> را در صفحهٔ مفهومی «مدیریت بارهای کاری» ببینید.</p>
+<h2 id="اهداف" dir="rtl">اهداف</h2>
+<ul>
+<li dir="rtl">استقرار یک نسخهٔ پایدار از یک برنامه</li>
+<li dir="rtl">استقرار یک نسخهٔ قناری در کنار نسخهٔ پایدار</li>
+<li dir="rtl">هدایت ترافیک به هر دو نسخه با استفاده از یک Service</li>
+<li dir="rtl">پایش استقرار قناری</li>
+<li dir="rtl">تکمیل عرضه با افزایش مقیاس نسخهٔ قناری و حذف نسخهٔ پایدار</li>
+</ul>
+<h2 id="پیش-از-شروع" dir="rtl">پیش از شروع</h2>
+<p dir="rtl">باید یک کلاستر کوبرنتیز داشته باشید و ابزار خط فرمان kubectl باید برای ارتباط با کلاستر شما پیکربندی شده باشد. توصیه می‌شود این آموزش را روی کلاستری اجرا کنید که دست‌کم دو نود داشته باشد که نقش میزبان control plane را ندارند. اگر هنوز کلاستری ندارید، می‌توانید با استفاده از
+<a href="https://minikube.sigs.k8s.io/docs/tutorials/multi_node/" target="_blank" rel="noopener">minikube</a>
+یکی بسازید یا از یکی از این محیط‌های آزمایشی کوبرنتیز استفاده کنید:</p>
+<ul>
+<li dir="ltr" class="ltr"><a href="https://labs.iximiuz.com/playgrounds?category=kubernetes&amp;filter=all" target="_blank" rel="noopener">iximiuz Labs</a></li>
+<li dir="ltr" class="ltr"><a href="https://killercoda.com/playgrounds/scenario/kubernetes" target="_blank" rel="noopener">Killercoda</a></li>
+<li dir="ltr" class="ltr"><a href="https://kodekloud.com/public-playgrounds" target="_blank" rel="noopener">KodeKloud</a></li>
+</ul>
+<!-- lessoncontent -->
+<h2 id="آشنایی-با-استقرارهای-قناری" dir="rtl">آشنایی با استقرارهای قناری</h2>
+<p dir="rtl">استقرار قناری راهبردی است که در آن نسخهٔ جدید برنامه را در کنار نسخهٔ موجود مستقر می‌کنید. نسخهٔ جدید (قناری) درصد کوچکی از ترافیک را دریافت می‌کند و به این ترتیب می‌توانید:</p>
+<ul>
+<li dir="rtl">نسخهٔ جدید را با ترافیک واقعی محیط عملیاتی آزمایش کنید</li>
+<li dir="rtl">خطاها، مشکلات کارایی یا رفتارهای غیرمنتظره را پایش کنید</li>
+<li dir="rtl">در صورت شناسایی مشکل، به‌سرعت به نسخهٔ قبلی بازگردید</li>
+<li dir="rtl">اگر نسخهٔ جدید عملکرد خوبی داشت، ترافیک آن را به‌تدریج افزایش دهید</li>
+</ul>
+<p dir="rtl">در این آموزش، از برچسب <code dir="ltr">track</code> برای تمایز میان نسخهٔ پایدار و نسخهٔ قناری استفاده می‌کنید. نسخهٔ پایدار از <code dir="ltr">track: stable</code> و نسخهٔ قناری از <code dir="ltr">track: canary</code> استفاده می‌کند. هر دو Deployment برچسب‌های مشترکی (<code dir="ltr">app.kubernetes.io/name: rollout-demo</code>) دارند که به Service امکان می‌دهد ترافیک را به هر دو مجموعه از Podها هدایت کند.</p>
+<p dir="rtl">نسخهٔ پایدار را با ۳ رونوشت (replica) و نسخهٔ قناری را با ۱ رونوشت مستقر خواهید کرد. از آنجا که هر دو نسخه انتخابگر (selector) یکسانی در Service دارند (<code dir="ltr">app.kubernetes.io/name: rollout-demo</code>)، کوبرنتیز ترافیک را میان هر ۴ پاد توزیع بار می‌کند. با این نسبت، تقریباً ۲۵٪ ترافیک به نسخهٔ قناری و ۷۵٪ آن به نسخهٔ پایدار می‌رسد.</p>
+<h2 id="استقرار-نسخهٔ-پایدار" dir="rtl">استقرار نسخهٔ پایدار</h2>
+<p dir="rtl">ابتدا نسخهٔ پایدار برنامهٔ خود را مستقر کنید:</p>
+<div class="code-file ltr" dir="ltr">application/canary/app-v1-deployment.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rollout-demo-stable
+  labels:
+    app.kubernetes.io/name: rollout-demo
+    track: stable
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: rollout-demo
+      track: stable
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: rollout-demo
+        track: stable
+    spec:
+      containers:
+      - name: rollout-demo
+        image: gcr.io/google-samples/hello-app:1.0
+        ports:
+        - containerPort: 8080
+        env:
+        - name: VERSION
+          value: "v1"
+</code></pre>
+<p dir="rtl">Deployment پایدار را اعمال کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f https://k8s.io/examples/application/canary/app-v1-deployment.yaml
+</code></pre>
+<p dir="rtl">بررسی کنید که Deployment ایجاد شده و Podها در حال اجرا هستند:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get deployments -l app.kubernetes.io/name=rollout-demo
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">NAME                  READY   UP-TO-DATE   AVAILABLE   AGE
+rollout-demo-stable    3/3     3            3           10s
+</code></pre>
+<p dir="rtl">Podها را بررسی کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pods -l app.kubernetes.io/name=rollout-demo
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">NAME                                  READY   STATUS    RESTARTS   AGE
+rollout-demo-stable-7d4b9b8c5d-abc12   1/1     Running   0          15s
+rollout-demo-stable-7d4b9b8c5d-def34   1/1     Running   0          15s
+rollout-demo-stable-7d4b9b8c5d-ghi56   1/1     Running   0          15s
+</code></pre>
+<h2 id="ایجاد-یک-service" dir="rtl">ایجاد یک Service</h2>
+<p dir="rtl">برای در دسترس قرار دادن برنامه، یک Service ایجاد کنید. انتخابگر این Service از برچسب مشترک (<code dir="ltr">app.kubernetes.io/name: rollout-demo</code>) استفاده می‌کند و برچسب <code dir="ltr">track</code> را در بر نمی‌گیرد؛ به همین دلیل می‌تواند ترافیک را هم به Podهای پایدار و هم به Podهای قناری هدایت کند:</p>
+<div class="code-file ltr" dir="ltr">application/canary/app-service.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: Service
+metadata:
+  name: rollout-demo-service
+  labels:
+    app.kubernetes.io/name: rollout-demo
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: rollout-demo
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8080
+</code></pre>
+<p dir="rtl">Service را اعمال کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f https://k8s.io/examples/application/canary/app-service.yaml
+</code></pre>
+<p dir="rtl">بررسی کنید که Service ایجاد شده است:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get service rollout-demo-service
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">NAME                  TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)   AGE
+rollout-demo-service   ClusterIP   10.96.123.45    &lt;none&gt;        80/TCP    5s
+</code></pre>
+<p dir="rtl">با ایجاد یک Pod موقت و ارسال یک درخواست، Service را آزمایش کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl run curl-test --image=curlimages/curl:latest --rm -it --restart=Never -- curl http://rollout-demo-service
+</code></pre>
+<p dir="rtl">باید پاسخ‌هایی از Podهای پایدار ببینید. اگر این فرمان را چند بار اجرا کنید، نام میزبان Podهای مختلف را خواهید دید، اما همهٔ پاسخ‌ها باید نسخهٔ v1 را نشان دهند.</p>
+<p dir="rtl">در این مرحله، برنامهٔ شما در وضعیت پایداری قرار دارد. در یک سناریوی واقعی، معمولاً در همین‌جا توقف می‌کنید و نسخهٔ پایدار را تا زمانی که نسخهٔ جدیدی برای استقرار آماده شود، به کار می‌گیرید. گام‌های بعدی نشان می‌دهند که چگونه یک نسخهٔ قناری را وارد کنید.</p>
+<h2 id="استقرار-نسخهٔ-قناری" dir="rtl">استقرار نسخهٔ قناری</h2>
+<p dir="rtl">برای ایجاد یک Deployment قناری، می‌توانید مانیفست Deployment پایدار را کپی کنید و چند تغییر در آن بدهید:</p>
+<ul>
+<li dir="rtl">مقدار <code dir="ltr">metadata.name</code> را تغییر دهید (برای نمونه، به <code dir="ltr">rollout-demo-canary</code>)</li>
+<li dir="rtl">برچسب <code dir="ltr">track</code> را هم در <code dir="ltr">metadata.labels</code> و هم در <code dir="ltr">spec.selector.matchLabels</code>/<code dir="ltr">spec.template.metadata.labels</code> از <code dir="ltr">stable</code> به <code dir="ltr">canary</code> تغییر دهید</li>
+<li dir="rtl">تعداد رونوشت‌ها را کمتر تنظیم کنید (برای نمونه، ۱)</li>
+<li dir="rtl">ایمیج کانتینر را به نسخهٔ جدید به‌روزرسانی کنید</li>
+</ul>
+<p dir="rtl">مانیفست به‌روزشده باید چنین باشد:</p>
+<div class="code-file ltr" dir="ltr">application/canary/app-v2-deployment.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rollout-demo-canary
+  labels:
+    app.kubernetes.io/name: rollout-demo
+    track: canary
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: rollout-demo
+      track: canary
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: rollout-demo
+        track: canary
+    spec:
+      containers:
+      - name: rollout-demo
+        image: gcr.io/google-samples/hello-app:2.0
+        ports:
+        - containerPort: 8080
+        env:
+        - name: VERSION
+          value: "v2"
+</code></pre>
+<p dir="rtl">می‌توانید با <code dir="ltr">kubectl</code> مانیفست محلی خود را اعمال کنید یا در صورت تمایل از این نمونهٔ بررسی‌شده استفاده کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f https://k8s.io/examples/application/canary/app-v2-deployment.yaml
+</code></pre>
+<p dir="rtl">بررسی کنید که هر دو Deployment در حال اجرا هستند:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get deployments -l app.kubernetes.io/name=rollout-demo
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">NAME                  READY   UP-TO-DATE   AVAILABLE   AGE
+rollout-demo-stable    3/3     3            3           2m
+rollout-demo-canary    1/1     1            1           10s
+</code></pre>
+<p dir="rtl">همهٔ Podها را بررسی کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pods -l app.kubernetes.io/name=rollout-demo -o wide
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">NAME                                  READY   STATUS    RESTARTS   AGE   IP           NODE
+rollout-demo-stable-7d4b9b8c5d-abc12   1/1     Running   0          2m    10.244.1.5   node1
+rollout-demo-stable-7d4b9b8c5d-def34   1/1     Running   0          2m    10.244.1.6   node1
+rollout-demo-stable-7d4b9b8c5d-ghi56   1/1     Running   0          2m    10.244.2.7   node2
+rollout-demo-canary-8e5c0d9f6a-xyz78   1/1     Running   0          15s   10.244.2.8   node2
+</code></pre>
+<p dir="rtl">توجه کنید که اکنون در مجموع ۴ Pod دارید: ۳ Pod پایدار و ۱ Pod قناری.</p>
+<h2 id="آزمایش-توزیع-ترافیک" dir="rtl">آزمایش توزیع ترافیک</h2>
+<p dir="rtl">از آنجا که هر دو Deployment از انتخابگر یکسانی در Service استفاده می‌کنند (<code dir="ltr">app.kubernetes.io/name: rollout-demo</code>)، Service ترافیک را به همهٔ Podها هدایت می‌کند. با ۳ Pod پایدار و ۱ Pod قناری، تقریباً ۲۵٪ درخواست‌ها به نسخهٔ قناری می‌رسد.</p>
+<p dir="rtl">برای مشاهدهٔ توزیع ترافیک، Service را چند بار آزمایش کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl run curl-test --image=curlimages/curl:latest --rm -it --restart=Never -- \
+  sh -c 'for i in $(seq 1 10); do curl -s http://rollout-demo-service; echo; done'
+</code></pre>
+<p dir="rtl">باید پاسخ‌هایی از هر دو نسخهٔ پایدار و قناری ببینید. این نسبت ممکن است متفاوت باشد، اما باید چند پاسخ از نسخهٔ قناری را در میان پاسخ‌های نسخهٔ پایدار مشاهده کنید.</p>
+<p dir="rtl">برای اطمینان از اینکه هر دو نسخه ترافیک دریافت می‌کنند، EndpointSliceهای Service را بررسی کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get endpointslices -l kubernetes.io/service-name=rollout-demo-service
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است (برای هر خانوادهٔ آدرس یک EndpointSlice وجود دارد و ستون ENDPOINTS به‌طور پیش‌فرض کوتاه‌شده نمایش داده می‌شود):</p>
+<pre dir="ltr"><code dir="ltr">NAME                          ADDRESSTYPE   PORTS   ENDPOINTS                              AGE
+rollout-demo-service-abc12    IPv4          8080    10.244.1.5,10.244.1.6,10.244.2.7 + 1 more...   3m
+</code></pre>
+<p dir="rtl">برای دیدن همهٔ آدرس‌های نقاط پایانی، از <code dir="ltr">-o yaml</code> استفاده کنید.</p>
+<h2 id="پایش-استقرار-قناری" dir="rtl">پایش استقرار قناری</h2>
+<p dir="rtl">استقرار قناری خود را از نظر خطاها، مشکلات کارایی یا رفتارهای غیرمنتظره پایش کنید:</p>
+<p dir="rtl">لاگ‌های Pod قناری را بررسی کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl logs -l app.kubernetes.io/name=rollout-demo,track=canary --tail=50
+</code></pre>
+<p dir="rtl">وضعیت Podها را پایش کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pods -l app.kubernetes.io/name=rollout-demo -w
+</code></pre>
+<p dir="rtl">برای توقف پایش، کلیدهای Ctrl+C را فشار دهید.</p>
+<p dir="rtl">میزان مصرف منابع را بررسی کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl top pods -l app.kubernetes.io/name=rollout-demo
+</code></pre>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">فرمان <code dir="ltr">kubectl top</code> به نصب بودن <a href="https://github.com/kubernetes-sigs/metrics-server" target="_blank" rel="noopener">metrics-server</a> در کلاستر شما نیاز دارد. اگر این مؤلفه در دسترس نیست، می‌توانید از روش‌های دیگری مانند Prometheus یا ابزارهای پایش ارائه‌دهندهٔ ابری استفاده کنید.</p>
+</div>
+<h2 id="تنظیم-توزیع-ترافیک" dir="rtl">تنظیم توزیع ترافیک</h2>
+<p dir="rtl">اگر نسخهٔ قناری عملکرد خوبی دارد، می‌توانید با افزایش مقیاس آن، ترافیک دریافتی‌اش را به‌تدریج بیشتر کنید:</p>
+<p dir="rtl">مقیاس نسخهٔ قناری را به ۲ رونوشت افزایش دهید (اکنون ۴۰٪ ترافیک):</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl scale deployment/rollout-demo-canary --replicas=2
+</code></pre>
+<p dir="rtl">بررسی کنید که Pod جدید در حال اجرا است:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pods -l app.kubernetes.io/name=rollout-demo
+</code></pre>
+<p dir="rtl">به پایش ادامه دهید. اگر همه‌چیز خوب به نظر می‌رسد، می‌توانید مقیاس نسخهٔ قناری را باز هم افزایش و مقیاس نسخهٔ پایدار را کاهش دهید.</p>
+<h2 id="تکمیل-عرضه" dir="rtl">تکمیل عرضه</h2>
+<p dir="rtl">اگر پایش شما مشکلاتی را در نسخهٔ قناری آشکار کرده باشد، به‌جای تکمیل عرضه باید به نسخهٔ قبلی بازگردید.
+برای تمرین یک سناریوی مشکل‌دار، می‌توانید مستقیماً به بخش <a href="#rolling-back-a-canary-deployment">بازگرداندن یک استقرار قناری</a> بروید.</p>
+<p dir="rtl">برای تکمیل عرضه با یک Deployment واحد، ابتدا مقیاس Deployment پایدار را دوباره افزایش دهید تا اگر دریافت ایمیج جدید با شکست مواجه شد، ظرفیتی از دست ندهید. سپس ایمیج و متغیر محیطی <code dir="ltr">VERSION</code> را مطابق نسخهٔ جدید به‌روزرسانی کنید، منتظر تکمیل عرضه بمانید و Deployment قناری را حذف کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl scale deployment/rollout-demo-stable --replicas=3
+
+# Outside of this tutorial, you wouldn't set the
+# environment variable $VERSION.
+# However, your new application code might need
+# other configuration changes after an upgrade.
+kubectl set image deployment/rollout-demo-stable rollout-demo=gcr.io/google-samples/hello-app:2.0
+kubectl set env deployment/rollout-demo-stable VERSION=v2
+
+# Wait for the rollout to complete
+kubectl rollout status deployment/rollout-demo-stable
+
+kubectl delete deployment rollout-demo-canary
+</code></pre>
+<p dir="rtl">از آنجا که این کار با موفقیت انجام شد، اکنون آماده‌اید که به بخش <a href="#cleaning-up">پاک‌سازی</a> بروید. نیازی به دنبال کردن بخش بعدی دربارهٔ بازگرداندن نسخه نیست.</p>
+<p dir="rtl">همچنین می‌توانید پیش از شروع پاک‌سازی، بقیهٔ این صفحه را بخوانید؛ چند موضوع دیگر نیز باقی مانده است.</p>
+<h2 id="بازگرداندن-یک-استقرار-قناری" dir="rtl">بازگرداندن یک استقرار قناری</h2>
+<p dir="rtl">اگر مشکلی در نسخهٔ قناری شناسایی کردید، می‌توانید به‌سرعت به نسخهٔ قبلی بازگردید:</p>
+<p dir="rtl">مقیاس استقرار قناری را کاهش دهید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl scale deployment/rollout-demo-canary --replicas=0
+</code></pre>
+<p dir="rtl">کاهش مقیاس به صفر، Deployment قناری را حفظ می‌کند تا بتوانید هنگام بررسی مشکل، پیکربندی آن را وارسی کنید. پس از پایان بررسی، آن را با <code dir="ltr">kubectl delete deployment rollout-demo-canary</code> حذف کنید.</p>
+<p dir="rtl">در صورت نیاز، مقیاس نسخهٔ پایدار را دوباره افزایش دهید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl scale deployment/rollout-demo-stable --replicas=3
+</code></pre>
+<p dir="rtl">پیش از تلاش برای استقرار قناری دیگر، مشکلات نسخهٔ قناری را بررسی کنید.</p>
+<h2 id="تقسیم-ترافیک-با-استفاده-از-httproute-اختیاری" dir="rtl">تقسیم ترافیک با استفاده از HTTPRoute (اختیاری)</h2>
+<p dir="rtl">اگر از <a href="https://gateway-api.sigs.k8s.io/" target="_blank" rel="noopener">Gateway API</a> استفاده می‌کنید، می‌توانید با HTTPRoute کنترل دقیق‌تری بر تقسیم ترافیک میان نسخه‌های پایدار و قناری داشته باشید. با این رویکرد، به‌جای تکیه بر تعداد رونوشت‌ها، می‌توانید درصد دقیق توزیع ترافیک را مشخص کنید.</p>
+<p dir="rtl">ابتدا برای نسخه‌های پایدار و قناری، Serviceهای جداگانه ایجاد کنید. این رویکرد حتی اگر از Gateway API استفاده نکنید، برای اشکال‌زدایی نیز مفید است. با داشتن Serviceهای جداگانه، می‌توانید هر نسخه را مستقیماً و به‌طور مستقل آزمایش یا پایش کنید.</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: Service
+metadata:
+  name: rollout-demo-stable-service
+spec:
+  selector:
+    app.kubernetes.io/name: rollout-demo
+    track: stable
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rollout-demo-canary-service
+spec:
+  selector:
+    app.kubernetes.io/name: rollout-demo
+    track: canary
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8080
+</code></pre>
+<p dir="rtl">سپس یک HTTPRoute ایجاد کنید که ترافیک را میان این دو Service تقسیم کند:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: rollout-demo-route
+spec:
+  parentRefs:
+  - name: example-gateway
+  hostnames:
+  - "rollout-demo.example.com"
+  rules:
+  - backendRefs:
+    - name: rollout-demo-stable-service
+      port: 80
+      weight: 90
+    - name: rollout-demo-canary-service
+      port: 80
+      weight: 10
+</code></pre>
+<p dir="rtl">این پیکربندی، صرف‌نظر از تعداد رونوشت‌ها، ۹۰٪ ترافیک را به Service پایدار و ۱۰٪ آن را به Service قناری هدایت می‌کند.</p>
+<p dir="rtl">همچنین می‌توانید از مسیریابی مبتنی بر سرآیند (header) برای ارسال ترافیک مشخصی به نسخهٔ قناری استفاده کنید:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: rollout-demo-route
+spec:
+  parentRefs:
+  - name: example-gateway
+  hostnames:
+  - "rollout-demo.example.com"
+  rules:
+  # Rule 1: Route traffic with canary header to canary service
+  - matches:
+    - headers:
+      - type: Exact
+        name: env
+        value: canary
+    backendRefs:
+    - name: rollout-demo-canary-service
+      port: 80
+  # Rule 2: Split remaining traffic 90/10
+  - backendRefs:
+    - name: rollout-demo-stable-service
+      port: 80
+      weight: 90
+    - name: rollout-demo-canary-service
+      port: 80
+      weight: 10
+</code></pre>
+<p dir="rtl">این پیکربندی همهٔ ترافیکی را که سرآیند <code dir="ltr">env: canary</code> دارد به Service قناری می‌فرستد و بقیهٔ ترافیک را به نسبت ۹۰ به ۱۰ میان نسخه‌های پایدار و قناری تقسیم می‌کند.</p>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">برای استفاده از Gateway API باید یک کنترل‌کنندهٔ Gateway در کلاستر شما نصب شده باشد. برای دستورالعمل‌های نصب و پیاده‌سازی‌های پشتیبانی‌شده، <a href="https://gateway-api.sigs.k8s.io/" target="_blank" rel="noopener">مستندات Gateway API</a> را ببینید.</p>
+</div>
+<h2 id="خودکارسازی-عرضه-های-قناری" dir="rtl">خودکارسازی عرضه‌های قناری</h2>
+<p dir="rtl">در محیط‌های عملیاتی، عرضه‌های قناری معمولاً به‌دست کنترل‌کننده‌ها یا سامانه‌های CI/CD مدیریت می‌شوند که جابه‌جایی ترافیک، پایش، و ارتقا یا بازگرداندن نسخه را خودکار می‌کنند. ابزارهایی مانند Flux، Argo Rollouts، GitLab و بسیاری دیگر می‌توانند تحویل تدریجی، تحلیل و بازگرداندن نسخه را برای شما انجام دهند. این کار گام‌های دستی را کاهش می‌دهد و به اجرای استقرارهای ایمن و تکرارپذیر کمک می‌کند. برای اطلاعات بیشتر، مستندات ابزار استقرار یا کنترل‌کنندهٔ انتخابی خود را ببینید.</p>
+<h2 id="پاکسازی" dir="rtl">پاکسازی</h2>
+<p dir="rtl">منابع ایجادشده در این آموزش را حذف کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl delete deployment rollout-demo-stable rollout-demo-canary
+kubectl delete service rollout-demo-service
+</code></pre>
+<p dir="rtl">اگر برای HTTPRoute، Serviceهای جداگانه ایجاد کرده‌اید، آن‌ها را نیز حذف کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl delete service rollout-demo-stable-service rollout-demo-canary-service
+kubectl delete httproute rollout-demo-route
+</code></pre>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<ul>
+<li dir="rtl">دربارهٔ <a href="../../concepts/workloads/management.html#canary-deployments">استقرارهای قناری</a> در صفحهٔ مفهومی «مدیریت بارهای کاری» بیشتر بیاموزید.</li>
+<li dir="rtl">دربارهٔ <a href="../../concepts/workloads/controllers/deployment.html">Deploymentها</a> و نحوهٔ مدیریت چرخهٔ عمر برنامه به‌دست آن‌ها بخوانید.</li>
+<li dir="rtl">دربارهٔ <a href="../../concepts/services-networking/service.html">Serviceها</a> و اینکه چگونه کشف سرویس و توزیع بار را ممکن می‌کنند، بخوانید.</li>
+<li dir="rtl">برای قابلیت‌های پیشرفتهٔ مدیریت ترافیک، <a href="../../concepts/services-networking/gateway.html">Gateway API</a> را بررسی کنید.</li>
+<li dir="rtl">استفاده از <a href="https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/" target="_blank">مقیاس‌دهی خودکار افقی Pod</a> را برای تنظیم خودکار تعداد رونوشت‌ها بر اساس معیارها در نظر بگیرید.</li>
+</ul>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#اهداف">اهداف</a><a class="l2" href="#پیش-از-شروع">پیش از شروع</a><a class="l2" href="#آشنایی-با-استقرارهای-قناری">آشنایی با استقرارهای قناری</a><a class="l2" href="#استقرار-نسخهٔ-پایدار">استقرار نسخهٔ پایدار</a><a class="l2" href="#ایجاد-یک-service">ایجاد یک Service</a><a class="l2" href="#استقرار-نسخهٔ-قناری">استقرار نسخهٔ قناری</a><a class="l2" href="#آزمایش-توزیع-ترافیک">آزمایش توزیع ترافیک</a><a class="l2" href="#پایش-استقرار-قناری">پایش استقرار قناری</a><a class="l2" href="#تنظیم-توزیع-ترافیک">تنظیم توزیع ترافیک</a><a class="l2" href="#تکمیل-عرضه">تکمیل عرضه</a><a class="l2" href="#بازگرداندن-یک-استقرار-قناری">بازگرداندن یک استقرار قناری</a><a class="l2" href="#تقسیم-ترافیک-با-استفاده-از-httproute-اختیاری">تقسیم ترافیک با استفاده از HTTPRoute (اختیاری)</a><a class="l2" href="#خودکارسازی-عرضه-های-قناری">خودکارسازی عرضه‌های قناری</a><a class="l2" href="#پاکسازی">پاکسازی</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>

@@ -1,0 +1,552 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>مثال: استقرار برنامه‌ی دفتر مهمانان PHP با Redis | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">tutorials / stateless-application</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">مثال: استقرار برنامه‌ی دفتر مهمانان PHP با Redis</h1><!-- overview -->
+<p dir="rtl">این آموزش نشان می‌دهد که چگونه یک برنامه‌ی وب ساده و چندلایه را با استفاده از کوبرنتیز و <a href="https://www.docker.com/" target="_blank" rel="noopener">Docker</a> بسازید و مستقر کنید. این برنامه <em>(برای محیط عملیاتی آماده نیست)</em>. این مثال از اجزای زیر تشکیل شده است:</p>
+<ul>
+<li dir="rtl">یک نمونه‌ی واحد از <a href="https://www.redis.io/" target="_blank" rel="noopener">Redis</a> برای ذخیره‌ی یادداشت‌های دفتر مهمانان</li>
+<li dir="rtl">چند نمونه از فرانت‌اند وب</li>
+</ul>
+<h2 id="اهداف" dir="rtl">اهداف</h2>
+<ul>
+<li dir="rtl">یک نمونه‌ی رهبر (leader) از Redis را راه‌اندازی کنید.</li>
+<li dir="rtl">دو نمونه‌ی پیرو (follower) از Redis را راه‌اندازی کنید.</li>
+<li dir="rtl">فرانت‌اند دفتر مهمانان را راه‌اندازی کنید.</li>
+<li dir="rtl">سرویس فرانت‌اند را در دسترس قرار دهید و آن را مشاهده کنید.</li>
+<li dir="rtl">منابع را پاک‌سازی کنید.</li>
+</ul>
+<h2 id="پیش-از-شروع" dir="rtl">پیش از شروع</h2>
+<p dir="rtl">باید یک کلاستر کوبرنتیز داشته باشید و ابزار خط فرمان kubectl باید برای ارتباط با کلاستر شما پیکربندی شده باشد. توصیه می‌شود این آموزش را روی کلاستری اجرا کنید که دست‌کم دو نود داشته باشد که نقش میزبان control plane را ندارند. اگر هنوز کلاستری ندارید، می‌توانید با استفاده از
+<a href="https://minikube.sigs.k8s.io/docs/tutorials/multi_node/" target="_blank" rel="noopener">minikube</a>
+یکی بسازید یا از یکی از این محیط‌های آزمایشی کوبرنتیز استفاده کنید:</p>
+<ul>
+<li dir="ltr" class="ltr"><a href="https://labs.iximiuz.com/playgrounds?category=kubernetes&amp;filter=all" target="_blank" rel="noopener">iximiuz Labs</a></li>
+<li dir="ltr" class="ltr"><a href="https://killercoda.com/playgrounds/scenario/kubernetes" target="_blank" rel="noopener">Killercoda</a></li>
+<li dir="ltr" class="ltr"><a href="https://kodekloud.com/public-playgrounds" target="_blank" rel="noopener">KodeKloud</a></li>
+</ul>
+<!-- lessoncontent -->
+<h2 id="راه-اندازی-پایگاه-داده-ی-redis" dir="rtl">راه‌اندازی پایگاه داده‌ی Redis</h2>
+<p dir="rtl">برنامه‌ی دفتر مهمانان داده‌های خود را در Redis ذخیره می‌کند.</p>
+<h3 id="ایجاد-deployment-مربوط-به-redis" dir="rtl">ایجاد Deployment مربوط به Redis</h3>
+<p dir="rtl">فایل مانیفست زیر یک کنترل‌کننده‌ی Deployment را تعریف می‌کند که یک Pod از Redis را با یک رپلیکا اجرا می‌کند.</p>
+<div class="code-file ltr" dir="ltr">application/guestbook/redis-leader-deployment.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr"># SOURCE: https://cloud.google.com/kubernetes-engine/docs/tutorials/guestbook
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-leader
+  labels:
+    app: redis
+    role: leader
+    tier: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis
+  template:
+    metadata:
+      labels:
+        app: redis
+        role: leader
+        tier: backend
+    spec:
+      containers:
+      - name: leader
+        image: "registry.k8s.io/redis@sha256:cb111d1bd870a6a471385a4a69ad17469d326e9dd91e0e455350cacf36e1b3ee"
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+        ports:
+        - containerPort: 6379
+</code></pre>
+<ol>
+<li dir="rtl">
+<p dir="rtl">یک پنجره‌ی ترمینال را در دایرکتوری‌ای که فایل‌های مانیفست را در آن دانلود کرده‌اید باز کنید.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">Deployment مربوط به Redis را از فایل <code dir="ltr">redis-leader-deployment.yaml</code> اعمال کنید:</p>
+<!---
+for local testing of the content via relative file path
+kubectl apply -f ./content/en/examples/application/guestbook/redis-leader-deployment.yaml
+-->
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f https://k8s.io/examples/application/guestbook/redis-leader-deployment.yaml
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">برای اطمینان از اجرای Pod مربوط به Redis، فهرست Podها را بررسی کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pods
+</code></pre>
+<p dir="rtl">خروجی باید مشابه زیر باشد:</p>
+<pre dir="ltr"><code dir="ltr">NAME                           READY   STATUS    RESTARTS   AGE
+redis-leader-fb76b4755-xjr2n   1/1     Running   0          13s
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">برای مشاهده‌ی لاگ‌های Pod رهبر Redis، دستور زیر را اجرا کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl logs -f deployment/redis-leader
+</code></pre>
+</li>
+</ol>
+<h3 id="ایجاد-service-رهبر-redis" dir="rtl">ایجاد Service رهبر Redis</h3>
+<p dir="rtl">برنامه‌ی دفتر مهمانان برای نوشتن داده‌های خود باید با Redis ارتباط برقرار کند. برای هدایت ترافیک به Pod مربوط به Redis، باید یک <a href="../../concepts/services-networking/service.html">Service</a> اعمال کنید. هر Service سیاستی را برای دسترسی به Podها تعریف می‌کند.</p>
+<div class="code-file ltr" dir="ltr">application/guestbook/redis-leader-service.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr"># SOURCE: https://cloud.google.com/kubernetes-engine/docs/tutorials/guestbook
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-leader
+  labels:
+    app: redis
+    role: leader
+    tier: backend
+spec:
+  ports:
+  - port: 6379
+    targetPort: 6379
+  selector:
+    app: redis
+    role: leader
+    tier: backend
+</code></pre>
+<ol>
+<li dir="rtl">
+<p dir="rtl">Service مربوط به Redis را از فایل <code dir="ltr">redis-leader-service.yaml</code> زیر اعمال کنید:</p>
+<!---
+for local testing of the content via relative file path
+kubectl apply -f ./content/en/examples/application/guestbook/redis-leader-service.yaml
+-->
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f https://k8s.io/examples/application/guestbook/redis-leader-service.yaml
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">برای اطمینان از اجرای Service مربوط به Redis، فهرست Serviceها را بررسی کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get service
+</code></pre>
+<p dir="rtl">خروجی باید مشابه زیر باشد:</p>
+<pre dir="ltr"><code dir="ltr">NAME           TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)    AGE
+kubernetes     ClusterIP   10.0.0.1     &lt;none&gt;        443/TCP    1m
+redis-leader   ClusterIP   10.103.78.24 &lt;none&gt;        6379/TCP   16s
+</code></pre>
+</li>
+</ol>
+<div class="callout note"><div class="callout-title">Note</div>
+<p dir="rtl">این فایل مانیفست یک Service با نام <code dir="ltr">redis-leader</code> ایجاد می‌کند که مجموعه‌ای از برچسب‌ها را دارد. این برچسب‌ها با برچسب‌هایی که پیش‌تر تعریف شده‌اند مطابقت دارند؛ بنابراین Service ترافیک شبکه را به Pod مربوط به Redis هدایت می‌کند.</p>
+</div>
+<h3 id="راه-اندازی-پیروهای-redis" dir="rtl">راه‌اندازی پیروهای Redis</h3>
+<p dir="rtl">اگرچه رهبر Redis تنها یک Pod است، می‌توانید با افزودن چند پیرو یا رپلیکای Redis، دسترس‌پذیری آن را بالا ببرید و پاسخ‌گوی حجم ترافیک باشید.</p>
+<div class="code-file ltr" dir="ltr">application/guestbook/redis-follower-deployment.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr"># SOURCE: https://cloud.google.com/kubernetes-engine/docs/tutorials/guestbook
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-follower
+  labels:
+    app: redis
+    role: follower
+    tier: backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: redis
+  template:
+    metadata:
+      labels:
+        app: redis
+        role: follower
+        tier: backend
+    spec:
+      containers:
+      - name: follower
+        image: us-docker.pkg.dev/google-samples/containers/gke/gb-redis-follower:v2
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+        ports:
+        - containerPort: 6379
+</code></pre>
+<ol>
+<li dir="rtl">
+<p dir="rtl">Deployment مربوط به Redis را از فایل <code dir="ltr">redis-follower-deployment.yaml</code> زیر اعمال کنید:</p>
+<!---
+for local testing of the content via relative file path
+kubectl apply -f ./content/en/examples/application/guestbook/redis-follower-deployment.yaml
+-->
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f https://k8s.io/examples/application/guestbook/redis-follower-deployment.yaml
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">با بررسی فهرست Podها، از اجرای دو رپلیکای پیرو Redis اطمینان حاصل کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pods
+</code></pre>
+<p dir="rtl">خروجی باید مشابه زیر باشد:</p>
+<pre dir="ltr"><code dir="ltr">NAME                             READY   STATUS    RESTARTS   AGE
+redis-follower-dddfbdcc9-82sfr   1/1     Running   0          37s
+redis-follower-dddfbdcc9-qrt5k   1/1     Running   0          38s
+redis-leader-fb76b4755-xjr2n     1/1     Running   0          11m
+</code></pre>
+</li>
+</ol>
+<h3 id="ایجاد-service-پیروهای-redis" dir="rtl">ایجاد Service پیروهای Redis</h3>
+<p dir="rtl">برنامه‌ی دفتر مهمانان برای خواندن داده‌ها باید با پیروهای Redis ارتباط برقرار کند. برای اینکه پیروهای Redis قابل کشف باشند، باید یک <a href="../../concepts/services-networking/service.html">Service</a> دیگر راه‌اندازی کنید.</p>
+<div class="code-file ltr" dir="ltr">application/guestbook/redis-follower-service.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr"># SOURCE: https://cloud.google.com/kubernetes-engine/docs/tutorials/guestbook
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-follower
+  labels:
+    app: redis
+    role: follower
+    tier: backend
+spec:
+  ports:
+    # the port that this service should serve on
+  - port: 6379
+  selector:
+    app: redis
+    role: follower
+    tier: backend
+</code></pre>
+<ol>
+<li dir="rtl">
+<p dir="rtl">Service مربوط به Redis را از فایل <code dir="ltr">redis-follower-service.yaml</code> زیر اعمال کنید:</p>
+<!---
+for local testing of the content via relative file path
+kubectl apply -f ./content/en/examples/application/guestbook/redis-follower-service.yaml
+-->
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f https://k8s.io/examples/application/guestbook/redis-follower-service.yaml
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">برای اطمینان از اجرای Service مربوط به Redis، فهرست Serviceها را بررسی کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get service
+</code></pre>
+<p dir="rtl">خروجی باید مشابه زیر باشد:</p>
+<pre dir="ltr"><code dir="ltr">NAME             TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
+kubernetes       ClusterIP   10.96.0.1       &lt;none&gt;        443/TCP    3d19h
+redis-follower   ClusterIP   10.110.162.42   &lt;none&gt;        6379/TCP   9s
+redis-leader     ClusterIP   10.103.78.24    &lt;none&gt;        6379/TCP   6m10s
+</code></pre>
+</li>
+</ol>
+<div class="callout note"><div class="callout-title">Note</div>
+<p dir="rtl">این فایل مانیفست یک Service با نام <code dir="ltr">redis-follower</code> ایجاد می‌کند که مجموعه‌ای از برچسب‌ها را دارد. این برچسب‌ها با برچسب‌هایی که پیش‌تر تعریف شده‌اند مطابقت دارند؛ بنابراین Service ترافیک شبکه را به Pod مربوط به Redis هدایت می‌کند.</p>
+</div>
+<h2 id="راه-اندازی-فرانت-اند-دفتر-مهمانان-و-در-دسترس-قرار-دادن-آن" dir="rtl">راه‌اندازی فرانت‌اند دفتر مهمانان و در دسترس قرار دادن آن</h2>
+<p dir="rtl">اکنون که ذخیره‌سازی Redis دفتر مهمانان شما راه‌اندازی شده و در حال اجراست، سرورهای وب دفتر مهمانان را راه‌اندازی کنید. فرانت‌اند نیز مانند پیروهای Redis با استفاده از یک Deployment کوبرنتیز مستقر می‌شود.</p>
+<p dir="rtl">برنامه‌ی دفتر مهمانان از یک فرانت‌اند PHP استفاده می‌کند. این فرانت‌اند طوری پیکربندی شده است که بسته به خواندنی یا نوشتنی بودن درخواست، با Service پیروها یا Service رهبر Redis ارتباط برقرار کند. فرانت‌اند یک رابط JSON ارائه می‌دهد و یک تجربه‌ی کاربری مبتنی بر jQuery-Ajax را در اختیار کاربر قرار می‌دهد.</p>
+<h3 id="ایجاد-deployment-فرانت-اند-دفتر-مهمانان" dir="rtl">ایجاد Deployment فرانت‌اند دفتر مهمانان</h3>
+<div class="code-file ltr" dir="ltr">application/guestbook/frontend-deployment.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr"># SOURCE: https://cloud.google.com/kubernetes-engine/docs/tutorials/guestbook
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+        app: guestbook
+        tier: frontend
+  template:
+    metadata:
+      labels:
+        app: guestbook
+        tier: frontend
+    spec:
+      containers:
+      - name: php-redis
+        image: us-docker.pkg.dev/google-samples/containers/gke/gb-frontend:v5
+        env:
+        - name: GET_HOSTS_FROM
+          value: "dns"
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+        ports:
+        - containerPort: 80
+</code></pre>
+<ol>
+<li dir="rtl">
+<p dir="rtl">Deployment فرانت‌اند را از فایل <code dir="ltr">frontend-deployment.yaml</code> اعمال کنید:</p>
+<!---
+for local testing of the content via relative file path
+kubectl apply -f ./content/en/examples/application/guestbook/frontend-deployment.yaml
+-->
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f https://k8s.io/examples/application/guestbook/frontend-deployment.yaml
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">برای اطمینان از اجرای سه رپلیکای فرانت‌اند، فهرست Podها را بررسی کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pods -l app=guestbook -l tier=frontend
+</code></pre>
+<p dir="rtl">خروجی باید مشابه زیر باشد:</p>
+<pre dir="ltr"><code dir="ltr">NAME                        READY   STATUS    RESTARTS   AGE
+frontend-85595f5bf9-5tqhb   1/1     Running   0          47s
+frontend-85595f5bf9-qbzwm   1/1     Running   0          47s
+frontend-85595f5bf9-zchwc   1/1     Running   0          47s
+</code></pre>
+</li>
+</ol>
+<h3 id="ایجاد-service-فرانت-اند" dir="rtl">ایجاد Service فرانت‌اند</h3>
+<p dir="rtl">سرویس‌های <code dir="ltr">Redis</code> که اعمال کردید فقط از داخل کلاستر کوبرنتیز در دسترس هستند، زیرا نوع پیش‌فرض یک Service، <a href="../../concepts/services-networking/service.html#publishing-services-service-types">ClusterIP</a> است. نوع <code dir="ltr">ClusterIP</code> یک نشانی IP واحد برای مجموعه Podهایی که Service به آن‌ها اشاره می‌کند فراهم می‌کند. این نشانی IP فقط از داخل کلاستر در دسترس است.</p>
+<p dir="rtl">اگر می‌خواهید مهمانان بتوانند به دفتر مهمانان شما دسترسی داشته باشند، باید Service فرانت‌اند را طوری پیکربندی کنید که از بیرون قابل مشاهده باشد تا کلاینت بتواند از بیرون کلاستر کوبرنتیز به Service درخواست بفرستد. با این حال، کاربر کوبرنتیز می‌تواند با استفاده از <code dir="ltr">kubectl port-forward</code> به سرویس دسترسی پیدا کند، حتی اگر نوع آن <code dir="ltr">ClusterIP</code> باشد.</p>
+<div class="callout note"><div class="callout-title">Note</div>
+<p dir="rtl">برخی از ارائه‌دهندگان ابری، مانند Google Compute Engine یا Google Kubernetes Engine، از متعادل‌کننده‌های بار (load balancer) خارجی پشتیبانی می‌کنند. اگر ارائه‌دهنده‌ی ابری شما از متعادل‌کننده‌ی بار پشتیبانی می‌کند و می‌خواهید از آن استفاده کنید، خط <code dir="ltr">type: LoadBalancer</code> را از حالت توضیح خارج کنید.</p>
+</div>
+<div class="code-file ltr" dir="ltr">application/guestbook/frontend-service.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr"># SOURCE: https://cloud.google.com/kubernetes-engine/docs/tutorials/guestbook
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+  labels:
+    app: guestbook
+    tier: frontend
+spec:
+  # if your cluster supports it, uncomment the following to automatically create
+  # an external load-balanced IP for the frontend service.
+  # type: LoadBalancer
+  #type: LoadBalancer
+  ports:
+    # the port that this service should serve on
+  - port: 80
+  selector:
+    app: guestbook
+    tier: frontend
+</code></pre>
+<ol>
+<li dir="rtl">
+<p dir="rtl">Service فرانت‌اند را از فایل <code dir="ltr">frontend-service.yaml</code> اعمال کنید:</p>
+<!---
+for local testing of the content via relative file path
+kubectl apply -f ./content/en/examples/application/guestbook/frontend-service.yaml
+-->
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f https://k8s.io/examples/application/guestbook/frontend-service.yaml
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">برای اطمینان از اجرای Service فرانت‌اند، فهرست Serviceها را بررسی کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get services
+</code></pre>
+<p dir="rtl">خروجی باید مشابه زیر باشد:</p>
+<pre dir="ltr"><code dir="ltr">NAME             TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
+frontend         ClusterIP   10.97.28.230    &lt;none&gt;        80/TCP     19s
+kubernetes       ClusterIP   10.96.0.1       &lt;none&gt;        443/TCP    3d19h
+redis-follower   ClusterIP   10.110.162.42   &lt;none&gt;        6379/TCP   5m48s
+redis-leader     ClusterIP   10.103.78.24    &lt;none&gt;        6379/TCP   11m
+</code></pre>
+</li>
+</ol>
+<h3 id="مشاهده-ی-service-فرانت-اند-با-kubectl-port-forward" dir="rtl">مشاهده‌ی Service فرانت‌اند با <code dir="ltr">kubectl port-forward</code></h3>
+<ol>
+<li dir="rtl">
+<p dir="rtl">دستور زیر را اجرا کنید تا پورت <code dir="ltr">8080</code> روی ماشین محلی شما به پورت <code dir="ltr">80</code> سرویس هدایت شود.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl port-forward svc/frontend 8080:80
+</code></pre>
+<p dir="rtl">خروجی باید مشابه زیر باشد:</p>
+<pre dir="ltr"><code dir="ltr">Forwarding from 127.0.0.1:8080 -&gt; 80
+Forwarding from [::1]:8080 -&gt; 80
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">برای مشاهده‌ی دفتر مهمانان، صفحه‌ی <a href="http://localhost:8080" target="_blank" rel="noopener">http://localhost:8080</a> را در مرورگر خود باز کنید.</p>
+</li>
+</ol>
+<h3 id="مشاهده-ی-service-فرانت-اند-با-loadbalancer" dir="rtl">مشاهده‌ی Service فرانت‌اند با <code dir="ltr">LoadBalancer</code></h3>
+<p dir="rtl">اگر مانیفست <code dir="ltr">frontend-service.yaml</code> را با نوع <code dir="ltr">LoadBalancer</code> مستقر کرده‌اید، برای مشاهده‌ی دفتر مهمانان باید نشانی IP آن را پیدا کنید.</p>
+<ol>
+<li dir="rtl">
+<p dir="rtl">برای دریافت نشانی IP مربوط به Service فرانت‌اند، دستور زیر را اجرا کنید.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get service frontend
+</code></pre>
+<p dir="rtl">خروجی باید مشابه زیر باشد:</p>
+<pre dir="ltr"><code dir="ltr">NAME       TYPE           CLUSTER-IP      EXTERNAL-IP        PORT(S)        AGE
+frontend   LoadBalancer   10.51.242.136   109.197.92.229     80:32372/TCP   1m
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">نشانی IP خارجی را کپی کنید و برای مشاهده‌ی دفتر مهمانان، صفحه را در مرورگر خود باز کنید.</p>
+</li>
+</ol>
+<div class="callout note"><div class="callout-title">Note</div>
+<p dir="rtl">با نوشتن یک پیام و کلیک روی Submit، چند یادداشت به دفتر مهمانان اضافه کنید. پیامی که نوشته‌اید در فرانت‌اند نمایش داده می‌شود. این پیام نشان می‌دهد که داده‌ها از طریق Serviceهایی که پیش‌تر ایجاد کردید با موفقیت به Redis اضافه شده‌اند.</p>
+</div>
+<h2 id="مقیاس-دهی-فرانت-اند-وب" dir="rtl">مقیاس‌دهی فرانت‌اند وب</h2>
+<p dir="rtl">از آنجا که سرورهای شما به‌صورت یک Service تعریف شده‌اند که از یک کنترل‌کننده‌ی Deployment استفاده می‌کند، می‌توانید در صورت نیاز تعداد آن‌ها را افزایش یا کاهش دهید.</p>
+<ol>
+<li dir="rtl">
+<p dir="rtl">برای افزایش تعداد Podهای فرانت‌اند، دستور زیر را اجرا کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl scale deployment frontend --replicas=5
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">برای بررسی تعداد Podهای فرانت‌اند در حال اجرا، فهرست Podها را مشاهده کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pods
+</code></pre>
+<p dir="rtl">خروجی باید مشابه زیر باشد:</p>
+<pre dir="ltr"><code dir="ltr">NAME                             READY   STATUS    RESTARTS   AGE
+frontend-85595f5bf9-5df5m        1/1     Running   0          83s
+frontend-85595f5bf9-7zmg5        1/1     Running   0          83s
+frontend-85595f5bf9-cpskg        1/1     Running   0          15m
+frontend-85595f5bf9-l2l54        1/1     Running   0          14m
+frontend-85595f5bf9-l9c8z        1/1     Running   0          14m
+redis-follower-dddfbdcc9-82sfr   1/1     Running   0          97m
+redis-follower-dddfbdcc9-qrt5k   1/1     Running   0          97m
+redis-leader-fb76b4755-xjr2n     1/1     Running   0          108m
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">برای کاهش تعداد Podهای فرانت‌اند، دستور زیر را اجرا کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl scale deployment frontend --replicas=2
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">برای بررسی تعداد Podهای فرانت‌اند در حال اجرا، فهرست Podها را مشاهده کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pods
+</code></pre>
+<p dir="rtl">خروجی باید مشابه زیر باشد:</p>
+<pre dir="ltr"><code dir="ltr">NAME                             READY   STATUS    RESTARTS   AGE
+frontend-85595f5bf9-cpskg        1/1     Running   0          16m
+frontend-85595f5bf9-l9c8z        1/1     Running   0          15m
+redis-follower-dddfbdcc9-82sfr   1/1     Running   0          98m
+redis-follower-dddfbdcc9-qrt5k   1/1     Running   0          98m
+redis-leader-fb76b4755-xjr2n     1/1     Running   0          109m
+</code></pre>
+</li>
+</ol>
+<h2 id="پاکسازی" dir="rtl">پاکسازی</h2>
+<p dir="rtl">با حذف Deploymentها و Serviceها، همه‌ی Podهای در حال اجرا نیز حذف می‌شوند. برای حذف چند منبع با یک دستور، از برچسب‌ها استفاده کنید.</p>
+<ol>
+<li dir="rtl">
+<p dir="rtl">برای حذف همه‌ی Podها، Deploymentها و Serviceها، دستورهای زیر را اجرا کنید.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl delete deployment -l app=redis
+kubectl delete service -l app=redis
+kubectl delete deployment frontend
+kubectl delete service frontend
+</code></pre>
+<p dir="rtl">خروجی باید مشابه زیر باشد:</p>
+<pre dir="ltr"><code dir="ltr">deployment.apps "redis-follower" deleted
+deployment.apps "redis-leader" deleted
+deployment.apps "frontend" deleted
+service "frontend" deleted
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">برای اطمینان از اینکه هیچ Podی در حال اجرا نیست، فهرست Podها را بررسی کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pods
+</code></pre>
+<p dir="rtl">خروجی باید مشابه زیر باشد:</p>
+<pre dir="ltr"><code dir="ltr">No resources found in default namespace.
+</code></pre>
+</li>
+</ol>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<ul>
+<li dir="rtl">
+<p dir="rtl">آموزش‌های تعاملی <a href="../kubernetes-basics/index.html">مبانی کوبرنتیز</a> را کامل کنید.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">با استفاده از کوبرنتیز و <a href="../stateful-application/mysql-wordpress-persistent-volume.html#visit-your-new-wordpress-blog">حجم‌های پایدار برای MySQL و Wordpress</a> یک وبلاگ بسازید.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">درباره‌ی <a href="../services/connect-applications-service.html">اتصال برنامه‌ها با سرویس‌ها</a> بیشتر بخوانید.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">درباره‌ی <a href="../../concepts/overview/working-with-objects/labels.html#using-labels-effectively">استفاده‌ی مؤثر از برچسب‌ها</a> بیشتر بخوانید.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">آموزش <a href="canary-deployment.html">استقرار یک نسخه‌ی قناری</a> را امتحان کنید تا یاد بگیرید چگونه نسخه‌های جدید برنامه را به‌صورت ایمن در محیط عملیاتی آزمایش کنید.</p>
+</li>
+</ul>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#اهداف">اهداف</a><a class="l2" href="#پیش-از-شروع">پیش از شروع</a><a class="l2" href="#راه-اندازی-پایگاه-داده-ی-redis">راه‌اندازی پایگاه داده‌ی Redis</a><a class="l3" href="#ایجاد-deployment-مربوط-به-redis">ایجاد Deployment مربوط به Redis</a><a class="l3" href="#ایجاد-service-رهبر-redis">ایجاد Service رهبر Redis</a><a class="l3" href="#راه-اندازی-پیروهای-redis">راه‌اندازی پیروهای Redis</a><a class="l3" href="#ایجاد-service-پیروهای-redis">ایجاد Service پیروهای Redis</a><a class="l2" href="#راه-اندازی-فرانت-اند-دفتر-مهمانان-و-در-دسترس-قرار-دادن-آن">راه‌اندازی فرانت‌اند دفتر مهمانان و در دسترس قرار دادن آن</a><a class="l3" href="#ایجاد-deployment-فرانت-اند-دفتر-مهمانان">ایجاد Deployment فرانت‌اند دفتر مهمانان</a><a class="l3" href="#ایجاد-service-فرانت-اند">ایجاد Service فرانت‌اند</a><a class="l3" href="#مشاهده-ی-service-فرانت-اند-با-kubectl-port-forward">مشاهده‌ی Service فرانت‌اند با kubectl port-forward</a><a class="l3" href="#مشاهده-ی-service-فرانت-اند-با-loadbalancer">مشاهده‌ی Service فرانت‌اند با LoadBalancer</a><a class="l2" href="#مقیاس-دهی-فرانت-اند-وب">مقیاس‌دهی فرانت‌اند وب</a><a class="l2" href="#پاکسازی">پاکسازی</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>

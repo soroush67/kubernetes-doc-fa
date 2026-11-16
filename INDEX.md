@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-1718 از 1722 صفحه
+1722 از 1722 صفحه
 
 
 ## `.`
@@ -2284,13 +2284,13 @@
 - ✅ [basic-stateful-set.md](md/tutorials/stateful-application/basic-stateful-set.md)
 - ✅ [cassandra.md](md/tutorials/stateful-application/cassandra.md)
 - ✅ [mysql-wordpress-persistent-volume.md](md/tutorials/stateful-application/mysql-wordpress-persistent-volume.md)
-- ⏳ `zookeeper.md`
+- ✅ [zookeeper.md](md/tutorials/stateful-application/zookeeper.md)
 
 ## `tutorials/stateless-application`
 
 - ✅ [_index.md](md/tutorials/stateless-application/_index.md)
-- ⏳ `canary-deployment.md`
-- ⏳ `expose-external-ip-address.md`
-- ⏳ `guestbook.md`
+- ✅ [canary-deployment.md](md/tutorials/stateless-application/canary-deployment.md)
+- ✅ [expose-external-ip-address.md](md/tutorials/stateless-application/expose-external-ip-address.md)
+- ✅ [guestbook.md](md/tutorials/stateless-application/guestbook.md)
 
 </div>

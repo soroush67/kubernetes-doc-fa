@@ -1,0 +1,955 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>اجرای ZooKeeper، یک هماهنگ‌کنندهٔ سیستم‌های توزیع‌شده | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">tutorials / stateful-application</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">اجرای ZooKeeper، یک هماهنگ‌کنندهٔ سیستم‌های توزیع‌شده</h1><!-- overview -->
+<p dir="rtl">این آموزش نحوهٔ اجرای <a href="https://zookeeper.apache.org" target="_blank" rel="noopener">Apache Zookeeper</a> را روی
+کوبرنتیز با استفاده از <a href="../../concepts/workloads/controllers/statefulset.html">StatefulSetها</a>،
+<a href="../../concepts/workloads/pods/disruptions.html#pod-disruption-budget">PodDisruptionBudgetها</a>
+و <a href="../../concepts/scheduling-eviction/assign-pod-node.html#affinity-and-anti-affinity">PodAntiAffinity</a> نشان می‌دهد.</p>
+<h2 id="پیش-از-شروع" dir="rtl">پیش از شروع</h2>
+<p dir="rtl">پیش از شروع این آموزش، باید با مفاهیم زیر در کوبرنتیز آشنا باشید:</p>
+<ul>
+<li dir="rtl"><a href="../../concepts/workloads/pods/index.html">پادها (Pods)</a></li>
+<li dir="rtl"><a href="../../concepts/services-networking/dns-pod-service.html">DNS کلاستر</a></li>
+<li dir="rtl"><a href="../../concepts/services-networking/service.html#headless-services">سرویس‌های Headless</a></li>
+<li dir="rtl"><a href="../../concepts/storage/persistent-volumes.html">PersistentVolumeها</a></li>
+<li dir="rtl"><a href="../../concepts/workloads/controllers/statefulset.html">StatefulSetها</a></li>
+<li dir="rtl"><a href="../../concepts/workloads/pods/disruptions.html#pod-disruption-budget">PodDisruptionBudgetها</a></li>
+<li dir="ltr" class="ltr"><a href="../../concepts/scheduling-eviction/assign-pod-node.html#affinity-and-anti-affinity">PodAntiAffinity</a></li>
+<li dir="rtl"><a href="../../reference/kubectl/kubectl.html">رابط خط فرمان kubectl</a></li>
+</ul>
+<p dir="rtl">به کلاستری با دست‌کم چهار نود نیاز دارید و هر نود باید دست‌کم ۲ پردازندهٔ مجازی (CPU) و ۴ گیبی‌بایت حافظه داشته باشد. در این آموزش، نودهای کلاستر را cordon و drain می‌کنید. <strong>این یعنی کلاستر همهٔ Podهای روی نودهایش را خاتمه می‌دهد و بیرون می‌راند (evict) و نودها به‌طور موقت زمان‌بندی‌ناپذیر می‌شوند.</strong> بهتر است برای این آموزش از یک کلاستر اختصاصی استفاده کنید، یا مطمئن شوید که اختلالی که ایجاد می‌کنید در کار سایر مستأجران (tenants) تداخلی ایجاد نمی‌کند.</p>
+<p dir="rtl">این آموزش فرض می‌کند که کلاستر خود را برای فراهم‌سازی پویای PersistentVolumeها
+پیکربندی کرده‌اید. اگر کلاستر شما چنین پیکربندی‌ای ندارد، باید پیش از شروع این
+آموزش، سه حجم (volume) ۲۰ گیبی‌بایتی را به‌صورت دستی فراهم کنید.</p>
+<h2 id="اهداف" dir="rtl">اهداف</h2>
+<p dir="rtl">پس از این آموزش، موارد زیر را خواهید آموخت:</p>
+<ul>
+<li dir="rtl">چگونه یک مجموعهٔ ZooKeeper (ensemble) را با استفاده از StatefulSet مستقر کنید.</li>
+<li dir="rtl">چگونه مجموعه را به‌شکلی یکنواخت پیکربندی کنید.</li>
+<li dir="rtl">چگونه استقرار سرورهای ZooKeeper را در مجموعه پخش کنید.</li>
+<li dir="rtl">چگونه با استفاده از PodDisruptionBudgetها، دسترس‌پذیری سرویس را در طول نگهداری‌های برنامه‌ریزی‌شده تضمین کنید.</li>
+</ul>
+<!-- lessoncontent -->
+<h3 id="zookeeper" dir="ltr" class="ltr">ZooKeeper</h3>
+<p dir="rtl"><a href="https://zookeeper.apache.org/doc/current/" target="_blank" rel="noopener">Apache ZooKeeper</a> یک سرویس
+هماهنگ‌سازی توزیع‌شده و متن‌باز برای برنامه‌های توزیع‌شده است.
+با ZooKeeper می‌توانید داده‌ها را بخوانید، بنویسید و به‌روزرسانی‌های آن‌ها را مشاهده کنید.
+داده‌ها در سلسله‌مراتبی شبیه به سیستم فایل سازمان‌دهی می‌شوند و روی همهٔ سرورهای
+ZooKeeper در مجموعه (مجموعه‌ای از سرورهای ZooKeeper) تکثیر می‌شوند. همهٔ عملیات روی
+داده‌ها اتمیک و به‌صورت ترتیبی سازگار هستند. ZooKeeper این ویژگی را با استفاده از
+پروتکل اجماع <a href="https://pdfs.semanticscholar.org/b02c/6b00bd5dbdbd951fddb00b906c82fa80f0b3.pdf" target="_blank" rel="noopener">Zab</a>
+تضمین می‌کند؛ این پروتکل یک ماشین حالت را روی همهٔ سرورهای مجموعه تکثیر می‌کند.</p>
+<p dir="rtl">مجموعه از پروتکل Zab برای انتخاب رهبر استفاده می‌کند و تا زمانی که این انتخاب کامل نشود، نمی‌تواند داده بنویسد. پس از کامل شدن انتخاب، مجموعه با استفاده از Zab تضمین می‌کند که همهٔ نوشتن‌ها را پیش از تأیید و قابل‌مشاهده کردن آن‌ها برای کلاینت‌ها، روی یک حد نصاب (quorum) تکثیر کند. صرف‌نظر از حد نصاب‌های وزن‌دار، حد نصاب بخشی از مجموعه است که اکثریت را تشکیل می‌دهد و رهبر فعلی را در بر دارد. برای مثال، اگر مجموعه سه سرور داشته باشد، بخشی که شامل رهبر و یک سرور دیگر باشد، حد نصاب را تشکیل می‌دهد. اگر مجموعه نتواند به حد نصاب برسد، نمی‌تواند داده بنویسد.</p>
+<p dir="rtl">سرورهای ZooKeeper کل ماشین حالت خود را در حافظه نگه می‌دارند و هر تغییر را در یک WAL (Write Ahead Log، گزارش پیش‌نویسی) ماندگار روی رسانهٔ ذخیره‌سازی می‌نویسند. وقتی سروری از کار می‌افتد، می‌تواند با بازپخش WAL، حالت قبلی خود را بازیابی کند. برای جلوگیری از رشد بی‌حد WAL، سرورهای ZooKeeper به‌طور دوره‌ای از حالت درون حافظهٔ خود یک تصویر لحظه‌ای (snapshot) روی رسانهٔ ذخیره‌سازی ثبت می‌کنند. این تصاویر لحظه‌ای را می‌توان مستقیماً در حافظه بارگذاری کرد و همهٔ ورودی‌های WAL که پیش از تصویر لحظه‌ای ثبت شده‌اند، قابل حذف هستند.</p>
+<h2 id="ایجاد-یک-مجموعهٔ-zookeeper" dir="rtl">ایجاد یک مجموعهٔ ZooKeeper</h2>
+<p dir="rtl">مانیفست زیر شامل یک
+<a href="../../concepts/services-networking/service.html#headless-services">سرویس Headless</a>،
+یک <a href="../../concepts/services-networking/service.html">Service</a>،
+یک <a href="../../concepts/workloads/pods/disruptions.html#pod-disruption-budgets">PodDisruptionBudget</a>
+و یک <a href="../../concepts/workloads/controllers/statefulset.html">StatefulSet</a> است.</p>
+<div class="code-file ltr" dir="ltr">application/zookeeper/zookeeper.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: Service
+metadata:
+  name: zk-hs
+  labels:
+    app: zk
+spec:
+  ports:
+  - port: 2888
+    name: server
+  - port: 3888
+    name: leader-election
+  clusterIP: None
+  selector:
+    app: zk
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: zk-cs
+  labels:
+    app: zk
+spec:
+  ports:
+  - port: 2181
+    name: client
+  selector:
+    app: zk
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: zk-pdb
+spec:
+  selector:
+    matchLabels:
+      app: zk
+  maxUnavailable: 1
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: zk
+spec:
+  selector:
+    matchLabels:
+      app: zk
+  serviceName: zk-hs
+  replicas: 3
+  updateStrategy:
+    type: RollingUpdate
+  podManagementPolicy: OrderedReady
+  template:
+    metadata:
+      labels:
+        app: zk
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: "app"
+                    operator: In
+                    values:
+                    - zk
+              topologyKey: "kubernetes.io/hostname"
+      containers:
+      - name: kubernetes-zookeeper
+        imagePullPolicy: Always
+        image: "registry.k8s.io/kubernetes-zookeeper:1.0-3.4.10"
+        resources:
+          requests:
+            memory: "1Gi"
+            cpu: "0.5"
+        ports:
+        - containerPort: 2181
+          name: client
+        - containerPort: 2888
+          name: server
+        - containerPort: 3888
+          name: leader-election
+        command:
+        - sh
+        - -c
+        - "start-zookeeper \
+          --servers=3 \
+          --data_dir=/var/lib/zookeeper/data \
+          --data_log_dir=/var/lib/zookeeper/data/log \
+          --conf_dir=/opt/zookeeper/conf \
+          --client_port=2181 \
+          --election_port=3888 \
+          --server_port=2888 \
+          --tick_time=2000 \
+          --init_limit=10 \
+          --sync_limit=5 \
+          --heap=512M \
+          --max_client_cnxns=60 \
+          --snap_retain_count=3 \
+          --purge_interval=12 \
+          --max_session_timeout=40000 \
+          --min_session_timeout=4000 \
+          --log_level=INFO"
+        readinessProbe:
+          exec:
+            command:
+            - sh
+            - -c
+            - "zookeeper-ready 2181"
+          initialDelaySeconds: 10
+          timeoutSeconds: 5
+        livenessProbe:
+          exec:
+            command:
+            - sh
+            - -c
+            - "zookeeper-ready 2181"
+          initialDelaySeconds: 10
+          timeoutSeconds: 5
+        volumeMounts:
+        - name: datadir
+          mountPath: /var/lib/zookeeper
+      securityContext:
+        runAsUser: 1000
+        fsGroup: 1000
+  volumeClaimTemplates:
+  - metadata:
+      name: datadir
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 10Gi
+</code></pre>
+<p dir="rtl">یک ترمینال باز کنید و با دستور
+<a href="https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands/#apply" target="_blank"><code dir="ltr">kubectl apply</code></a>
+مانیفست را ایجاد کنید.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f https://k8s.io/examples/application/zookeeper/zookeeper.yaml
+</code></pre>
+<p dir="rtl">این دستور سرویس Headless با نام <code dir="ltr">zk-hs</code>، سرویس <code dir="ltr">zk-cs</code>،
+PodDisruptionBudget با نام <code dir="ltr">zk-pdb</code> و StatefulSet با نام <code dir="ltr">zk</code> را ایجاد می‌کند.</p>
+<pre dir="ltr"><code dir="ltr">service/zk-hs created
+service/zk-cs created
+poddisruptionbudget.policy/zk-pdb created
+statefulset.apps/zk created
+</code></pre>
+<p dir="rtl">با استفاده از <a href="https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands/#get" target="_blank"><code dir="ltr">kubectl get</code></a>، ایجاد Podهای StatefulSet
+به‌دست کنترل‌کنندهٔ StatefulSet را مشاهده کنید.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pods -w -l app=zk
+</code></pre>
+<p dir="rtl">وقتی Pod با نام <code dir="ltr">zk-2</code> در وضعیت Running و Ready قرار گرفت، با <code dir="ltr">CTRL-C</code> اجرای kubectl را خاتمه دهید.</p>
+<pre dir="ltr"><code dir="ltr">NAME      READY     STATUS    RESTARTS   AGE
+zk-0      0/1       Pending   0          0s
+zk-0      0/1       Pending   0         0s
+zk-0      0/1       ContainerCreating   0         0s
+zk-0      0/1       Running   0         19s
+zk-0      1/1       Running   0         40s
+zk-1      0/1       Pending   0         0s
+zk-1      0/1       Pending   0         0s
+zk-1      0/1       ContainerCreating   0         0s
+zk-1      0/1       Running   0         18s
+zk-1      1/1       Running   0         40s
+zk-2      0/1       Pending   0         0s
+zk-2      0/1       Pending   0         0s
+zk-2      0/1       ContainerCreating   0         0s
+zk-2      0/1       Running   0         19s
+zk-2      1/1       Running   0         40s
+</code></pre>
+<p dir="rtl">کنترل‌کنندهٔ StatefulSet سه Pod ایجاد می‌کند و هر Pod یک کانتینر دارد که
+یک سرور <a href="https://archive.apache.org/dist/zookeeper/stable/" target="_blank" rel="noopener">ZooKeeper</a> را اجرا می‌کند.</p>
+<h3 id="تسهیل-انتخاب-رهبر" dir="rtl">تسهیل انتخاب رهبر</h3>
+<p dir="rtl">از آنجا که در یک شبکهٔ ناشناس هیچ الگوریتم پایان‌پذیری برای انتخاب رهبر وجود ندارد، پروتکل Zab برای انجام انتخاب رهبر به پیکربندی صریح اعضا نیاز دارد. هر سرور در مجموعه باید شناسهٔ یکتایی داشته باشد، همهٔ سرورها باید مجموعهٔ سراسری شناسه‌ها را بدانند و هر شناسه باید به یک نشانی شبکه مرتبط باشد.</p>
+<p dir="rtl">با استفاده از <a href="https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands/#exec" target="_blank"><code dir="ltr">kubectl exec</code></a>، نام میزبان (hostname)
+Podهای StatefulSet با نام <code dir="ltr">zk</code> را به دست آورید.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">for i in 0 1 2; do kubectl exec zk-$i -- hostname; done
+</code></pre>
+<p dir="rtl">کنترل‌کنندهٔ StatefulSet به هر Pod نام میزبان یکتایی بر اساس اندیس ترتیبی آن اختصاص می‌دهد. نام‌های میزبان به شکل <code dir="ltr">&lt;statefulset name&gt;-&lt;ordinal index&gt;</code> هستند. از آنجا که فیلد <code dir="ltr">replicas</code> در StatefulSet با نام <code dir="ltr">zk</code> روی <code dir="ltr">3</code> تنظیم شده است، کنترل‌کنندهٔ این مجموعه سه Pod با نام‌های میزبان <code dir="ltr">zk-0</code>، <code dir="ltr">zk-1</code> و
+<code dir="ltr">zk-2</code> ایجاد می‌کند.</p>
+<pre dir="ltr"><code dir="ltr">zk-0
+zk-1
+zk-2
+</code></pre>
+<p dir="rtl">سرورهای یک مجموعهٔ ZooKeeper از اعداد طبیعی به‌عنوان شناسهٔ یکتا استفاده می‌کنند و شناسهٔ هر سرور را در فایلی به نام <code dir="ltr">myid</code> در دایرکتوری داده‌های آن سرور ذخیره می‌کنند.</p>
+<p dir="rtl">برای بررسی محتوای فایل <code dir="ltr">myid</code> هر سرور، از دستور زیر استفاده کنید.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">for i in 0 1 2; do echo "myid zk-$i";kubectl exec zk-$i -- cat /var/lib/zookeeper/data/myid; done
+</code></pre>
+<p dir="rtl">از آنجا که شناسه‌ها اعداد طبیعی و اندیس‌های ترتیبی اعداد صحیح نامنفی هستند، می‌توانید با افزودن ۱ به اندیس ترتیبی، یک شناسه تولید کنید.</p>
+<pre dir="ltr"><code dir="ltr">myid zk-0
+1
+myid zk-1
+2
+myid zk-2
+3
+</code></pre>
+<p dir="rtl">برای به دست آوردن نام دامنهٔ کاملاً مشخص (FQDN) هر Pod در StatefulSet با نام <code dir="ltr">zk</code>، از دستور زیر استفاده کنید.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">for i in 0 1 2; do kubectl exec zk-$i -- hostname -f; done
+</code></pre>
+<p dir="rtl">سرویس <code dir="ltr">zk-hs</code> برای همهٔ Podها دامنهٔ
+<code dir="ltr">zk-hs.default.svc.cluster.local</code> را ایجاد می‌کند.</p>
+<pre dir="ltr"><code dir="ltr">zk-0.zk-hs.default.svc.cluster.local
+zk-1.zk-hs.default.svc.cluster.local
+zk-2.zk-hs.default.svc.cluster.local
+</code></pre>
+<p dir="rtl">رکوردهای A در <a href="../../concepts/services-networking/dns-pod-service.html">DNS کوبرنتیز</a>، این FQDNها را به نشانی‌های IP پادها ترجمه می‌کنند. اگر کوبرنتیز Podها را دوباره زمان‌بندی کند، رکوردهای A را با نشانی‌های IP جدید Podها به‌روزرسانی می‌کند، اما نام رکوردهای A تغییر نمی‌کند.</p>
+<p dir="rtl">ZooKeeper پیکربندی برنامهٔ خود را در فایلی به نام <code dir="ltr">zoo.cfg</code> ذخیره می‌کند. با استفاده از <code dir="ltr">kubectl exec</code>، محتوای فایل <code dir="ltr">zoo.cfg</code> را در Pod با نام <code dir="ltr">zk-0</code> مشاهده کنید.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl exec zk-0 -- cat /opt/zookeeper/conf/zoo.cfg
+</code></pre>
+<p dir="rtl">در ویژگی‌های <code dir="ltr">server.1</code>، <code dir="ltr">server.2</code> و <code dir="ltr">server.3</code> در انتهای فایل،
+اعداد <code dir="ltr">1</code>، <code dir="ltr">2</code> و <code dir="ltr">3</code> با شناسه‌های موجود در فایل‌های <code dir="ltr">myid</code> سرورهای
+ZooKeeper متناظر هستند. این ویژگی‌ها روی FQDNهای Podهای StatefulSet با نام
+<code dir="ltr">zk</code> تنظیم شده‌اند.</p>
+<pre dir="ltr"><code dir="ltr">clientPort=2181
+dataDir=/var/lib/zookeeper/data
+dataLogDir=/var/lib/zookeeper/log
+tickTime=2000
+initLimit=10
+syncLimit=2000
+maxClientCnxns=60
+minSessionTimeout= 4000
+maxSessionTimeout= 40000
+autopurge.snapRetainCount=3
+autopurge.purgeInterval=0
+server.1=zk-0.zk-hs.default.svc.cluster.local:2888:3888
+server.2=zk-1.zk-hs.default.svc.cluster.local:2888:3888
+server.3=zk-2.zk-hs.default.svc.cluster.local:2888:3888
+</code></pre>
+<h3 id="دستیابی-به-اجماع" dir="rtl">دستیابی به اجماع</h3>
+<p dir="rtl">پروتکل‌های اجماع نیاز دارند که شناسهٔ هر مشارکت‌کننده یکتا باشد. در پروتکل Zab هیچ دو مشارکت‌کننده‌ای نباید ادعای شناسهٔ یکتای یکسانی داشته باشند. این شرط لازم است تا فرایندهای سیستم بتوانند بر سر اینکه کدام فرایندها کدام داده‌ها را ثبت (commit) کرده‌اند، به توافق برسند. اگر دو Pod با اندیس ترتیبی یکسان راه‌اندازی شوند، دو سرور ZooKeeper هر دو خود را به‌عنوان یک سرور واحد معرفی می‌کنند.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pods -w -l app=zk
+</code></pre>
+<pre dir="ltr"><code dir="ltr">NAME      READY     STATUS    RESTARTS   AGE
+zk-0      0/1       Pending   0          0s
+zk-0      0/1       Pending   0         0s
+zk-0      0/1       ContainerCreating   0         0s
+zk-0      0/1       Running   0         19s
+zk-0      1/1       Running   0         40s
+zk-1      0/1       Pending   0         0s
+zk-1      0/1       Pending   0         0s
+zk-1      0/1       ContainerCreating   0         0s
+zk-1      0/1       Running   0         18s
+zk-1      1/1       Running   0         40s
+zk-2      0/1       Pending   0         0s
+zk-2      0/1       Pending   0         0s
+zk-2      0/1       ContainerCreating   0         0s
+zk-2      0/1       Running   0         19s
+zk-2      1/1       Running   0         40s
+</code></pre>
+<p dir="rtl">رکوردهای A هر Pod زمانی ثبت می‌شوند که آن Pod به وضعیت Ready برسد. بنابراین،
+FQDN هر سرور ZooKeeper تنها به یک نقطهٔ پایانی (endpoint) ترجمه می‌شود و آن
+نقطهٔ پایانی همان سرور یکتای ZooKeeper است که هویت پیکربندی‌شده در فایل <code dir="ltr">myid</code>
+خود را اعلام می‌کند.</p>
+<pre dir="ltr"><code dir="ltr">zk-0.zk-hs.default.svc.cluster.local
+zk-1.zk-hs.default.svc.cluster.local
+zk-2.zk-hs.default.svc.cluster.local
+</code></pre>
+<p dir="rtl">این امر تضمین می‌کند که ویژگی‌های <code dir="ltr">servers</code> در فایل‌های <code dir="ltr">zoo.cfg</code> سرورهای ZooKeeper،
+نمایانگر مجموعه‌ای با پیکربندی درست باشند.</p>
+<pre dir="ltr"><code dir="ltr">server.1=zk-0.zk-hs.default.svc.cluster.local:2888:3888
+server.2=zk-1.zk-hs.default.svc.cluster.local:2888:3888
+server.3=zk-2.zk-hs.default.svc.cluster.local:2888:3888
+</code></pre>
+<p dir="rtl">وقتی سرورها با استفاده از پروتکل Zab تلاش می‌کنند مقداری را ثبت کنند، یا به اجماع می‌رسند و مقدار را ثبت می‌کنند (اگر انتخاب رهبر موفقیت‌آمیز بوده و دست‌کم دو Pod در وضعیت Running و Ready باشند)، یا در این کار ناکام می‌مانند (اگر هر یک از این شرایط برقرار نباشد). هیچ‌گاه وضعیتی پیش نمی‌آید که در آن یک سرور، نوشتنی را از طرف سرور دیگری تأیید کند.</p>
+<h3 id="آزمون-سلامت-مجموعه" dir="rtl">آزمون سلامت مجموعه</h3>
+<p dir="rtl">ابتدایی‌ترین آزمون سلامت این است که داده‌ای را در یک سرور ZooKeeper بنویسید و
+آن را از سرور دیگری بخوانید.</p>
+<p dir="rtl">دستور زیر اسکریپت <code dir="ltr">zkCli.sh</code> را اجرا می‌کند تا مقدار <code dir="ltr">world</code> را در مسیر <code dir="ltr">/hello</code> روی Pod با نام <code dir="ltr">zk-0</code> در مجموعه بنویسد.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl exec zk-0 -- zkCli.sh create /hello world
+</code></pre>
+<pre dir="ltr"><code dir="ltr">WATCHER::
+
+WatchedEvent state:SyncConnected type:None path:null
+Created /hello
+</code></pre>
+<p dir="rtl">برای دریافت داده از Pod با نام <code dir="ltr">zk-1</code>، از دستور زیر استفاده کنید.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl exec zk-1 -- zkCli.sh get /hello
+</code></pre>
+<p dir="rtl">داده‌ای که روی <code dir="ltr">zk-0</code> ایجاد کردید، روی همهٔ سرورهای مجموعه در دسترس است.</p>
+<pre dir="ltr"><code dir="ltr">WATCHER::
+
+WatchedEvent state:SyncConnected type:None path:null
+world
+cZxid = 0x100000002
+ctime = Thu Dec 08 15:13:30 UTC 2016
+mZxid = 0x100000002
+mtime = Thu Dec 08 15:13:30 UTC 2016
+pZxid = 0x100000002
+cversion = 0
+dataVersion = 0
+aclVersion = 0
+ephemeralOwner = 0x0
+dataLength = 5
+numChildren = 0
+</code></pre>
+<h3 id="فراهم-کردن-ذخیره-سازی-ماندگار" dir="rtl">فراهم کردن ذخیره‌سازی ماندگار</h3>
+<p dir="rtl">همان‌طور که در بخش <a href="#zookeeper">مبانی ZooKeeper</a> گفته شد،
+ZooKeeper همهٔ ورودی‌ها را در یک WAL ماندگار ثبت می‌کند و به‌طور دوره‌ای از حالت
+درون حافظه، تصاویر لحظه‌ای روی رسانهٔ ذخیره‌سازی می‌نویسد. استفاده از WAL برای
+تأمین ماندگاری، روشی رایج در برنامه‌هایی است که برای دستیابی به یک ماشین حالت
+تکثیرشده از پروتکل‌های اجماع استفاده می‌کنند.</p>
+<p dir="rtl">با دستور <a href="https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands/#delete" target="_blank"><code dir="ltr">kubectl delete</code></a>،
+StatefulSet با نام <code dir="ltr">zk</code> را حذف کنید.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl delete statefulset zk
+</code></pre>
+<pre dir="ltr"><code dir="ltr">statefulset.apps "zk" deleted
+</code></pre>
+<p dir="rtl">خاتمه یافتن Podهای StatefulSet را مشاهده کنید.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pods -w -l app=zk
+</code></pre>
+<p dir="rtl">وقتی <code dir="ltr">zk-0</code> به‌طور کامل خاتمه یافت، با <code dir="ltr">CTRL-C</code> اجرای kubectl را خاتمه دهید.</p>
+<pre dir="ltr"><code dir="ltr">zk-2      1/1       Terminating   0         9m
+zk-0      1/1       Terminating   0         11m
+zk-1      1/1       Terminating   0         10m
+zk-2      0/1       Terminating   0         9m
+zk-2      0/1       Terminating   0         9m
+zk-2      0/1       Terminating   0         9m
+zk-1      0/1       Terminating   0         10m
+zk-1      0/1       Terminating   0         10m
+zk-1      0/1       Terminating   0         10m
+zk-0      0/1       Terminating   0         11m
+zk-0      0/1       Terminating   0         11m
+zk-0      0/1       Terminating   0         11m
+</code></pre>
+<p dir="rtl">مانیفست موجود در <code dir="ltr">zookeeper.yaml</code> را دوباره اعمال کنید.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f https://k8s.io/examples/application/zookeeper/zookeeper.yaml
+</code></pre>
+<p dir="rtl">این دستور آبجکت StatefulSet با نام <code dir="ltr">zk</code> را ایجاد می‌کند، اما سایر آبجکت‌های API موجود در مانیفست تغییری نمی‌کنند، زیرا از قبل وجود دارند.</p>
+<p dir="rtl">بازسازی Podهای StatefulSet به‌دست کنترل‌کنندهٔ StatefulSet را مشاهده کنید.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pods -w -l app=zk
+</code></pre>
+<p dir="rtl">وقتی Pod با نام <code dir="ltr">zk-2</code> در وضعیت Running و Ready قرار گرفت، با <code dir="ltr">CTRL-C</code> اجرای kubectl را خاتمه دهید.</p>
+<pre dir="ltr"><code dir="ltr">NAME      READY     STATUS    RESTARTS   AGE
+zk-0      0/1       Pending   0          0s
+zk-0      0/1       Pending   0         0s
+zk-0      0/1       ContainerCreating   0         0s
+zk-0      0/1       Running   0         19s
+zk-0      1/1       Running   0         40s
+zk-1      0/1       Pending   0         0s
+zk-1      0/1       Pending   0         0s
+zk-1      0/1       ContainerCreating   0         0s
+zk-1      0/1       Running   0         18s
+zk-1      1/1       Running   0         40s
+zk-2      0/1       Pending   0         0s
+zk-2      0/1       Pending   0         0s
+zk-2      0/1       ContainerCreating   0         0s
+zk-2      0/1       Running   0         19s
+zk-2      1/1       Running   0         40s
+</code></pre>
+<p dir="rtl">با دستور زیر، مقداری را که در طول <a href="#sanity-testing-the-ensemble">آزمون سلامت</a> وارد کردید،
+از Pod با نام <code dir="ltr">zk-2</code> دریافت کنید.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl exec zk-2 zkCli.sh get /hello
+</code></pre>
+<p dir="rtl">با اینکه همهٔ Podهای StatefulSet با نام <code dir="ltr">zk</code> را خاتمه دادید و دوباره ایجاد کردید، مجموعه همچنان مقدار اولیه را ارائه می‌دهد.</p>
+<pre dir="ltr"><code dir="ltr">WATCHER::
+
+WatchedEvent state:SyncConnected type:None path:null
+world
+cZxid = 0x100000002
+ctime = Thu Dec 08 15:13:30 UTC 2016
+mZxid = 0x100000002
+mtime = Thu Dec 08 15:13:30 UTC 2016
+pZxid = 0x100000002
+cversion = 0
+dataVersion = 0
+aclVersion = 0
+ephemeralOwner = 0x0
+dataLength = 5
+numChildren = 0
+</code></pre>
+<p dir="rtl">فیلد <code dir="ltr">volumeClaimTemplates</code> در <code dir="ltr">spec</code> مربوط به StatefulSet با نام <code dir="ltr">zk</code>، یک PersistentVolume را مشخص می‌کند که برای هر Pod فراهم می‌شود.</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">volumeClaimTemplates:
+  - metadata:
+      name: datadir
+      annotations:
+        volume.alpha.kubernetes.io/storage-class: anything
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 20Gi
+</code></pre>
+<p dir="rtl">کنترل‌کنندهٔ <code dir="ltr">StatefulSet</code> برای هر Pod در <code dir="ltr">StatefulSet</code> یک
+<code dir="ltr">PersistentVolumeClaim</code> تولید می‌کند.</p>
+<p dir="rtl">برای دریافت <code dir="ltr">PersistentVolumeClaims</code> مربوط به <code dir="ltr">StatefulSet</code>، از دستور زیر استفاده کنید.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pvc -l app=zk
+</code></pre>
+<p dir="rtl">وقتی <code dir="ltr">StatefulSet</code> پادهای خود را دوباره ایجاد کرد، PersistentVolumeهای Podها را دوباره متصل (mount) می‌کند.</p>
+<pre dir="ltr"><code dir="ltr">NAME           STATUS    VOLUME                                     CAPACITY   ACCESSMODES   AGE
+datadir-zk-0   Bound     pvc-bed742cd-bcb1-11e6-994f-42010a800002   20Gi       RWO           1h
+datadir-zk-1   Bound     pvc-bedd27d2-bcb1-11e6-994f-42010a800002   20Gi       RWO           1h
+datadir-zk-2   Bound     pvc-bee0817e-bcb1-11e6-994f-42010a800002   20Gi       RWO           1h
+</code></pre>
+<p dir="rtl">بخش <code dir="ltr">volumeMounts</code> در <code dir="ltr">template</code> کانتینر <code dir="ltr">StatefulSet</code>، این PersistentVolumeها را در دایرکتوری‌های داده‌های سرورهای ZooKeeper متصل می‌کند.</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">volumeMounts:
+- name: datadir
+  mountPath: /var/lib/zookeeper
+</code></pre>
+<p dir="rtl">هر بار که یک Pod در <code dir="ltr">StatefulSet</code> با نام <code dir="ltr">zk</code> زمان‌بندی (یا دوباره زمان‌بندی) شود،
+همیشه همان <code dir="ltr">PersistentVolume</code> به دایرکتوری داده‌های سرور ZooKeeper آن متصل می‌شود.
+حتی وقتی Podها دوباره زمان‌بندی می‌شوند، همهٔ نوشتن‌هایی که در WAL سرورهای
+ZooKeeper انجام شده و همهٔ تصاویر لحظه‌ای آن‌ها ماندگار باقی می‌مانند.</p>
+<h2 id="تضمین-پیکربندی-یکنواخت" dir="rtl">تضمین پیکربندی یکنواخت</h2>
+<p dir="rtl">همان‌طور که در بخش‌های <a href="#facilitating-leader-election">تسهیل انتخاب رهبر</a> و
+<a href="#achieving-consensus">دستیابی به اجماع</a> اشاره شد، سرورهای یک مجموعهٔ
+ZooKeeper برای انتخاب رهبر و تشکیل حد نصاب به پیکربندی یکنواخت نیاز دارند.
+همچنین برای اینکه پروتکل Zab به‌درستی روی شبکه کار کند، پیکربندی این پروتکل نیز
+باید یکنواخت باشد. در مثال ما، پیکربندی یکنواخت با جاسازی مستقیم پیکربندی در
+مانیفست به دست می‌آید.</p>
+<p dir="rtl">StatefulSet با نام <code dir="ltr">zk</code> را دریافت کنید.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get sts zk -o yaml
+</code></pre>
+<pre dir="ltr"><code dir="ltr">…
+command:
+      - sh
+      - -c
+      - "start-zookeeper \
+        --servers=3 \
+        --data_dir=/var/lib/zookeeper/data \
+        --data_log_dir=/var/lib/zookeeper/data/log \
+        --conf_dir=/opt/zookeeper/conf \
+        --client_port=2181 \
+        --election_port=3888 \
+        --server_port=2888 \
+        --tick_time=2000 \
+        --init_limit=10 \
+        --sync_limit=5 \
+        --heap=512M \
+        --max_client_cnxns=60 \
+        --snap_retain_count=3 \
+        --purge_interval=12 \
+        --max_session_timeout=40000 \
+        --min_session_timeout=4000 \
+        --log_level=INFO"
+…
+</code></pre>
+<p dir="rtl">دستوری که برای راه‌اندازی سرورهای ZooKeeper استفاده شد، پیکربندی را به‌صورت پارامتر خط فرمان ارسال کرد. همچنین می‌توانید برای ارسال پیکربندی به مجموعه از متغیرهای محیطی استفاده کنید.</p>
+<h3 id="پیکربندی-لاگ-گیری" dir="rtl">پیکربندی لاگ‌گیری</h3>
+<p dir="rtl">یکی از فایل‌هایی که اسکریپت <code dir="ltr">zkGenConfig.sh</code> تولید می‌کند، لاگ‌گیری ZooKeeper را کنترل می‌کند. ZooKeeper از <a href="https://logging.apache.org/log4j/2.x/" target="_blank" rel="noopener">Log4j</a> استفاده می‌کند و به‌طور پیش‌فرض، در پیکربندی لاگ‌گیری خود یک ضمیمه‌گر فایل چرخشی (rolling file appender) مبتنی بر زمان و اندازه را به کار می‌برد.</p>
+<p dir="rtl">با دستور زیر، پیکربندی لاگ‌گیری را از یکی از Podهای <code dir="ltr">StatefulSet</code> با نام <code dir="ltr">zk</code> دریافت کنید.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl exec zk-0 cat /usr/etc/zookeeper/log4j.properties
+</code></pre>
+<p dir="rtl">پیکربندی لاگ‌گیری زیر باعث می‌شود فرایند ZooKeeper همهٔ لاگ‌های خود را در جریان فایل خروجی استاندارد بنویسد.</p>
+<pre dir="ltr"><code dir="ltr">zookeeper.root.logger=CONSOLE
+zookeeper.console.threshold=INFO
+log4j.rootLogger=${zookeeper.root.logger}
+log4j.appender.CONSOLE=org.apache.log4j.ConsoleAppender
+log4j.appender.CONSOLE.Threshold=${zookeeper.console.threshold}
+log4j.appender.CONSOLE.layout=org.apache.log4j.PatternLayout
+log4j.appender.CONSOLE.layout.ConversionPattern=%d{ISO8601} [myid:%X{myid}] - %-5p [%t:%C{1}@%L] - %m%n
+</code></pre>
+<p dir="rtl">این ساده‌ترین روش ممکن برای لاگ‌گیری امن درون کانتینر است. از آنجا که برنامه‌ها لاگ‌ها را در خروجی استاندارد می‌نویسند، کوبرنتیز چرخش لاگ‌ها را برای شما انجام می‌دهد. کوبرنتیز همچنین یک سیاست نگهداری معقول پیاده‌سازی می‌کند که تضمین می‌کند لاگ‌های برنامه که در خروجی استاندارد و خطای استاندارد نوشته می‌شوند، رسانه‌های ذخیره‌سازی محلی را پر نکنند.</p>
+<p dir="rtl">با دستور <a href="https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands/#logs" target="_blank"><code dir="ltr">kubectl logs</code></a> بیست خط آخر لاگ را از یکی از Podها دریافت کنید.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl logs zk-0 --tail 20
+</code></pre>
+<p dir="rtl">لاگ‌های برنامه را که در خروجی استاندارد یا خطای استاندارد نوشته شده‌اند، می‌توانید با <code dir="ltr">kubectl logs</code> و همچنین از طریق داشبورد کوبرنتیز مشاهده کنید.</p>
+<pre dir="ltr"><code dir="ltr">2016-12-06 19:34:16,236 [myid:1] - INFO  [NIOServerCxn.Factory:0.0.0.0/0.0.0.0:2181:NIOServerCnxn@827] - Processing ruok command from /127.0.0.1:52740
+2016-12-06 19:34:16,237 [myid:1] - INFO  [Thread-1136:NIOServerCnxn@1008] - Closed socket connection for client /127.0.0.1:52740 (no session established for client)
+2016-12-06 19:34:26,155 [myid:1] - INFO  [NIOServerCxn.Factory:0.0.0.0/0.0.0.0:2181:NIOServerCnxnFactory@192] - Accepted socket connection from /127.0.0.1:52749
+2016-12-06 19:34:26,155 [myid:1] - INFO  [NIOServerCxn.Factory:0.0.0.0/0.0.0.0:2181:NIOServerCnxn@827] - Processing ruok command from /127.0.0.1:52749
+2016-12-06 19:34:26,156 [myid:1] - INFO  [Thread-1137:NIOServerCnxn@1008] - Closed socket connection for client /127.0.0.1:52749 (no session established for client)
+2016-12-06 19:34:26,222 [myid:1] - INFO  [NIOServerCxn.Factory:0.0.0.0/0.0.0.0:2181:NIOServerCnxnFactory@192] - Accepted socket connection from /127.0.0.1:52750
+2016-12-06 19:34:26,222 [myid:1] - INFO  [NIOServerCxn.Factory:0.0.0.0/0.0.0.0:2181:NIOServerCnxn@827] - Processing ruok command from /127.0.0.1:52750
+2016-12-06 19:34:26,226 [myid:1] - INFO  [Thread-1138:NIOServerCnxn@1008] - Closed socket connection for client /127.0.0.1:52750 (no session established for client)
+2016-12-06 19:34:36,151 [myid:1] - INFO  [NIOServerCxn.Factory:0.0.0.0/0.0.0.0:2181:NIOServerCnxnFactory@192] - Accepted socket connection from /127.0.0.1:52760
+2016-12-06 19:34:36,152 [myid:1] - INFO  [NIOServerCxn.Factory:0.0.0.0/0.0.0.0:2181:NIOServerCnxn@827] - Processing ruok command from /127.0.0.1:52760
+2016-12-06 19:34:36,152 [myid:1] - INFO  [Thread-1139:NIOServerCnxn@1008] - Closed socket connection for client /127.0.0.1:52760 (no session established for client)
+2016-12-06 19:34:36,230 [myid:1] - INFO  [NIOServerCxn.Factory:0.0.0.0/0.0.0.0:2181:NIOServerCnxnFactory@192] - Accepted socket connection from /127.0.0.1:52761
+2016-12-06 19:34:36,231 [myid:1] - INFO  [NIOServerCxn.Factory:0.0.0.0/0.0.0.0:2181:NIOServerCnxn@827] - Processing ruok command from /127.0.0.1:52761
+2016-12-06 19:34:36,231 [myid:1] - INFO  [Thread-1140:NIOServerCnxn@1008] - Closed socket connection for client /127.0.0.1:52761 (no session established for client)
+2016-12-06 19:34:46,149 [myid:1] - INFO  [NIOServerCxn.Factory:0.0.0.0/0.0.0.0:2181:NIOServerCnxnFactory@192] - Accepted socket connection from /127.0.0.1:52767
+2016-12-06 19:34:46,149 [myid:1] - INFO  [NIOServerCxn.Factory:0.0.0.0/0.0.0.0:2181:NIOServerCnxn@827] - Processing ruok command from /127.0.0.1:52767
+2016-12-06 19:34:46,149 [myid:1] - INFO  [Thread-1141:NIOServerCnxn@1008] - Closed socket connection for client /127.0.0.1:52767 (no session established for client)
+2016-12-06 19:34:46,230 [myid:1] - INFO  [NIOServerCxn.Factory:0.0.0.0/0.0.0.0:2181:NIOServerCnxnFactory@192] - Accepted socket connection from /127.0.0.1:52768
+2016-12-06 19:34:46,230 [myid:1] - INFO  [NIOServerCxn.Factory:0.0.0.0/0.0.0.0:2181:NIOServerCnxn@827] - Processing ruok command from /127.0.0.1:52768
+2016-12-06 19:34:46,230 [myid:1] - INFO  [Thread-1142:NIOServerCnxn@1008] - Closed socket connection for client /127.0.0.1:52768 (no session established for client)
+</code></pre>
+<p dir="rtl">کوبرنتیز با راهکارهای لاگ‌گیری متعددی یکپارچه می‌شود. می‌توانید راهکاری را انتخاب کنید که با کلاستر و برنامه‌هایتان بهترین سازگاری را دارد. برای لاگ‌گیری و تجمیع لاگ‌ها در سطح کلاستر، استقرار یک <a href="../../concepts/cluster-administration/logging.html#sidecar-container-with-logging-agent">کانتینر کناری (sidecar)</a> را برای چرخش و ارسال لاگ‌ها در نظر بگیرید.</p>
+<h3 id="پیکربندی-یک-کاربر-غیرممتاز" dir="rtl">پیکربندی یک کاربر غیرممتاز</h3>
+<p dir="rtl">دربارهٔ بهترین شیوه‌ها برای اجازه دادن به اجرای یک برنامه با کاربر ممتاز درون کانتینر، دیدگاه‌های متفاوتی وجود دارد. اگر سازمان شما الزام می‌کند که برنامه‌ها با یک کاربر غیرممتاز اجرا شوند، می‌توانید با یک <a href="../../tasks/configure-pod-container/security-context.html">SecurityContext</a> کاربری را که نقطهٔ ورود با آن اجرا می‌شود، کنترل کنید.</p>
+<p dir="rtl">قالب Pod (<code dir="ltr">template</code>) در <code dir="ltr">StatefulSet</code> با نام <code dir="ltr">zk</code> شامل یک <code dir="ltr">SecurityContext</code> است.</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">securityContext:
+  runAsUser: 1000
+  fsGroup: 1000
+</code></pre>
+<p dir="rtl">در کانتینرهای Podها، شناسهٔ کاربری (UID) ۱۰۰۰ متناظر با کاربر zookeeper و شناسهٔ گروه (GID) ۱۰۰۰ متناظر با گروه zookeeper است.</p>
+<p dir="rtl">اطلاعات فرایند ZooKeeper را از Pod با نام <code dir="ltr">zk-0</code> دریافت کنید.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl exec zk-0 -- ps -elf
+</code></pre>
+<p dir="rtl">از آنجا که فیلد <code dir="ltr">runAsUser</code> در آبجکت <code dir="ltr">securityContext</code> روی ۱۰۰۰ تنظیم شده است، فرایند ZooKeeper به جای root با کاربر zookeeper اجرا می‌شود.</p>
+<pre dir="ltr"><code dir="ltr">F S UID        PID  PPID  C PRI  NI ADDR SZ WCHAN  STIME TTY          TIME CMD
+4 S zookeep+     1     0  0  80   0 -  1127 -      20:46 ?        00:00:00 sh -c zkGenConfig.sh &amp;&amp; zkServer.sh start-foreground
+0 S zookeep+    27     1  0  80   0 - 1155556 -    20:46 ?        00:00:19 /usr/lib/jvm/java-8-openjdk-amd64/bin/java -Dzookeeper.log.dir=/var/log/zookeeper -Dzookeeper.root.logger=INFO,CONSOLE -cp /usr/bin/../build/classes:/usr/bin/../build/lib/*.jar:/usr/bin/../share/zookeeper/zookeeper-3.4.9.jar:/usr/bin/../share/zookeeper/slf4j-log4j12-1.6.1.jar:/usr/bin/../share/zookeeper/slf4j-api-1.6.1.jar:/usr/bin/../share/zookeeper/netty-3.10.5.Final.jar:/usr/bin/../share/zookeeper/log4j-1.2.16.jar:/usr/bin/../share/zookeeper/jline-0.9.94.jar:/usr/bin/../src/java/lib/*.jar:/usr/bin/../etc/zookeeper: -Xmx2G -Xms2G -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.local.only=false org.apache.zookeeper.server.quorum.QuorumPeerMain /usr/bin/../etc/zookeeper/zoo.cfg
+</code></pre>
+<p dir="rtl">به‌طور پیش‌فرض، وقتی PersistentVolumeهای Pod در دایرکتوری داده‌های سرور ZooKeeper مانت می‌شوند، فقط کاربر root به آن‌ها دسترسی دارد. این پیکربندی مانع می‌شود که فرایند ZooKeeper در WAL خود بنویسد و اسنپ‌شات‌هایش را ذخیره کند.</p>
+<p dir="rtl">با دستور زیر، مجوزهای فایل دایرکتوری داده‌های ZooKeeper را در Pod با نام <code dir="ltr">zk-0</code> دریافت کنید.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl exec -ti zk-0 -- ls -ld /var/lib/zookeeper/data
+</code></pre>
+<p dir="rtl">از آنجا که فیلد <code dir="ltr">fsGroup</code> در آبجکت <code dir="ltr">securityContext</code> روی ۱۰۰۰ تنظیم شده است، مالکیت PersistentVolumeهای Podها به گروه zookeeper داده می‌شود و فرایند ZooKeeper می‌تواند داده‌های خود را بخواند و بنویسد.</p>
+<pre dir="ltr"><code dir="ltr">drwxr-sr-x 3 zookeeper zookeeper 4096 Dec  5 20:45 /var/lib/zookeeper/data
+</code></pre>
+<h2 id="مدیریت-فرایند-zookeeper" dir="rtl">مدیریت فرایند ZooKeeper</h2>
+<p dir="rtl">در <a href="https://zookeeper.apache.org/doc/current/zookeeperAdmin.html#sc_supervision" target="_blank" rel="noopener">مستندات ZooKeeper</a> آمده است: «بهتر است یک فرایند ناظر داشته باشید که هر یک از فرایندهای سرور ZooKeeper (JVM) شما را مدیریت کند.» استفاده از یک دیده‌بان (watchdog)، یعنی یک فرایند ناظر، برای راه‌اندازی مجدد فرایندهای ازکارافتاده در یک سیستم توزیع‌شده، الگویی رایج است. هنگام استقرار یک برنامه در کوبرنتیز، به جای استفاده از یک ابزار خارجی به‌عنوان فرایند ناظر، باید از خود کوبرنتیز به‌عنوان دیده‌بان برنامه‌تان استفاده کنید.</p>
+<h3 id="به-روزرسانی-مجموعه-ensemble" dir="rtl">به‌روزرسانی مجموعه (ensemble)</h3>
+<p dir="rtl">برای <code dir="ltr">StatefulSet</code> با نام <code dir="ltr">zk</code>، راهبرد به‌روزرسانی <code dir="ltr">RollingUpdate</code> پیکربندی شده است.</p>
+<p dir="rtl">با <code dir="ltr">kubectl patch</code> می‌توانید تعداد <code dir="ltr">cpus</code> تخصیص‌یافته به سرورها را به‌روزرسانی کنید.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl patch sts zk --type='json' -p='[{"op": "replace", "path": "/spec/template/spec/containers/0/resources/requests/cpu", "value":"0.3"}]'
+</code></pre>
+<pre dir="ltr"><code dir="ltr">statefulset.apps/zk patched
+</code></pre>
+<p dir="rtl">با <code dir="ltr">kubectl rollout status</code> وضعیت به‌روزرسانی را دنبال کنید.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl rollout status sts/zk
+</code></pre>
+<pre dir="ltr"><code dir="ltr">waiting for statefulset rolling update to complete 0 pods at revision zk-5db4499664...
+Waiting for 1 pods to be ready...
+Waiting for 1 pods to be ready...
+waiting for statefulset rolling update to complete 1 pods at revision zk-5db4499664...
+Waiting for 1 pods to be ready...
+Waiting for 1 pods to be ready...
+waiting for statefulset rolling update to complete 2 pods at revision zk-5db4499664...
+Waiting for 1 pods to be ready...
+Waiting for 1 pods to be ready...
+statefulset rolling update complete 3 pods at revision zk-5db4499664...
+</code></pre>
+<p dir="rtl">این کار Podها را یکی‌یکی و به ترتیب معکوس شمارهٔ ترتیبی خاتمه می‌دهد و آن‌ها را با پیکربندی جدید دوباره ایجاد می‌کند. به این ترتیب، حد نصاب (quorum) در طول به‌روزرسانی تدریجی حفظ می‌شود.</p>
+<p dir="rtl">با دستور <code dir="ltr">kubectl rollout history</code> تاریخچه یا پیکربندی‌های قبلی را مشاهده کنید.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl rollout history sts/zk
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">statefulsets "zk"
+REVISION
+1
+2
+</code></pre>
+<p dir="rtl">با دستور <code dir="ltr">kubectl rollout undo</code> تغییر را بازگردانی کنید.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl rollout undo sts/zk
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">statefulset.apps/zk rolled back
+</code></pre>
+<h3 id="مدیریت-خرابی-فرایند" dir="rtl">مدیریت خرابی فرایند</h3>
+<p dir="rtl"><a href="../../concepts/workloads/pods/pod-lifecycle.html#restart-policy">سیاست‌های راه‌اندازی مجدد</a> تعیین می‌کنند که کوبرنتیز با خرابی فرایندِ نقطهٔ ورود کانتینر در یک Pod چگونه برخورد کند. برای Podهای یک <code dir="ltr">StatefulSet</code>، تنها مقدار مناسب برای <code dir="ltr">RestartPolicy</code> مقدار Always است که مقدار پیش‌فرض نیز هست. برای برنامه‌های دارای وضعیت (stateful) <strong>هرگز</strong> نباید سیاست پیش‌فرض را تغییر دهید.</p>
+<p dir="rtl">با دستور زیر، درخت فرایندهای سرور ZooKeeper را که در Pod با نام <code dir="ltr">zk-0</code> اجرا می‌شود، بررسی کنید.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl exec zk-0 -- ps -ef
+</code></pre>
+<p dir="rtl">دستوری که به‌عنوان نقطهٔ ورود کانتینر استفاده می‌شود، شناسهٔ فرایند (PID) ۱ را دارد و فرایند ZooKeeper، که فرزند نقطهٔ ورود است، شناسهٔ فرایند ۲۷ را دارد.</p>
+<pre dir="ltr"><code dir="ltr">UID        PID  PPID  C STIME TTY          TIME CMD
+zookeep+     1     0  0 15:03 ?        00:00:00 sh -c zkGenConfig.sh &amp;&amp; zkServer.sh start-foreground
+zookeep+    27     1  0 15:03 ?        00:00:03 /usr/lib/jvm/java-8-openjdk-amd64/bin/java -Dzookeeper.log.dir=/var/log/zookeeper -Dzookeeper.root.logger=INFO,CONSOLE -cp /usr/bin/../build/classes:/usr/bin/../build/lib/*.jar:/usr/bin/../share/zookeeper/zookeeper-3.4.9.jar:/usr/bin/../share/zookeeper/slf4j-log4j12-1.6.1.jar:/usr/bin/../share/zookeeper/slf4j-api-1.6.1.jar:/usr/bin/../share/zookeeper/netty-3.10.5.Final.jar:/usr/bin/../share/zookeeper/log4j-1.2.16.jar:/usr/bin/../share/zookeeper/jline-0.9.94.jar:/usr/bin/../src/java/lib/*.jar:/usr/bin/../etc/zookeeper: -Xmx2G -Xms2G -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.local.only=false org.apache.zookeeper.server.quorum.QuorumPeerMain /usr/bin/../etc/zookeeper/zoo.cfg
+</code></pre>
+<p dir="rtl">در یک ترمینال دیگر، با دستور زیر Podهای <code dir="ltr">StatefulSet</code> با نام <code dir="ltr">zk</code> را زیر نظر بگیرید.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pod -w -l app=zk
+</code></pre>
+<p dir="rtl">در ترمینالی دیگر، با دستور زیر فرایند ZooKeeper را در Pod با نام <code dir="ltr">zk-0</code> خاتمه دهید.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl exec zk-0 -- pkill java
+</code></pre>
+<p dir="rtl">خاتمهٔ فرایند ZooKeeper باعث خاتمهٔ فرایند والد آن شد. از آنجا که مقدار <code dir="ltr">RestartPolicy</code> کانتینر Always است، کانتینر فرایند والد را دوباره راه‌اندازی کرد.</p>
+<pre dir="ltr"><code dir="ltr">NAME      READY     STATUS    RESTARTS   AGE
+zk-0      1/1       Running   0          21m
+zk-1      1/1       Running   0          20m
+zk-2      1/1       Running   0          19m
+NAME      READY     STATUS    RESTARTS   AGE
+zk-0      0/1       Error     0          29m
+zk-0      0/1       Running   1         29m
+zk-0      1/1       Running   1         29m
+</code></pre>
+<p dir="rtl">اگر برنامهٔ شما برای اجرای فرایندی که منطق کسب‌وکار برنامه را پیاده‌سازی می‌کند از یک اسکریپت (مانند <code dir="ltr">zkServer.sh</code>) استفاده می‌کند، آن اسکریپت باید همراه با فرایند فرزند خاتمه یابد. به این ترتیب، هنگامی که فرایند پیاده‌سازی‌کنندهٔ منطق کسب‌وکار برنامه از کار بیفتد، کوبرنتیز کانتینر برنامه را دوباره راه‌اندازی خواهد کرد.</p>
+<h3 id="آزمودن-زنده-بودن-liveness" dir="rtl">آزمودن زنده بودن (liveness)</h3>
+<p dir="rtl">پیکربندی برنامه برای راه‌اندازی مجدد فرایندهای ازکارافتاده، برای سالم نگه داشتن یک سیستم توزیع‌شده کافی نیست. در برخی سناریوها، فرایندهای یک سیستم ممکن است زنده باشند اما پاسخ ندهند یا به شکل دیگری ناسالم باشند. باید از کاوشگرهای زنده بودن (liveness probe) استفاده کنید تا به کوبرنتیز اطلاع دهید که فرایندهای برنامه‌تان ناسالم هستند و باید آن‌ها را دوباره راه‌اندازی کند.</p>
+<p dir="rtl">قالب Pod در <code dir="ltr">StatefulSet</code> با نام <code dir="ltr">zk</code> یک کاوشگر زنده بودن را مشخص می‌کند.</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">  livenessProbe:
+    exec:
+      command:
+      - sh
+      - -c
+      - "zookeeper-ready 2181"
+    initialDelaySeconds: 15
+    timeoutSeconds: 5
+</code></pre>
+<p dir="rtl">این کاوشگر یک اسکریپت bash را فراخوانی می‌کند که با استفاده از کلمهٔ چهارحرفی <code dir="ltr">ruok</code> در ZooKeeper، سلامت سرور را می‌آزماید.</p>
+<pre dir="ltr"><code dir="ltr">OK=$(echo ruok | nc 127.0.0.1 $1)
+if [ "$OK" == "imok" ]; then
+    exit 0
+else
+    exit 1
+fi
+</code></pre>
+<p dir="rtl">در یک پنجرهٔ ترمینال، با دستور زیر Podهای StatefulSet با نام <code dir="ltr">zk</code> را زیر نظر بگیرید.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pod -w -l app=zk
+</code></pre>
+<p dir="rtl">در پنجره‌ای دیگر، با دستور زیر اسکریپت <code dir="ltr">zookeeper-ready</code> را از سیستم فایل Pod با نام <code dir="ltr">zk-0</code> حذف کنید.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl exec zk-0 -- rm /opt/zookeeper/bin/zookeeper-ready
+</code></pre>
+<p dir="rtl">هنگامی که کاوشگر زنده بودن برای فرایند ZooKeeper ناموفق شود، کوبرنتیز به‌طور خودکار فرایند را برای شما دوباره راه‌اندازی می‌کند و به این ترتیب تضمین می‌شود که فرایندهای ناسالم در مجموعه دوباره راه‌اندازی شوند.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pod -w -l app=zk
+</code></pre>
+<pre dir="ltr"><code dir="ltr">NAME      READY     STATUS    RESTARTS   AGE
+zk-0      1/1       Running   0          1h
+zk-1      1/1       Running   0          1h
+zk-2      1/1       Running   0          1h
+NAME      READY     STATUS    RESTARTS   AGE
+zk-0      0/1       Running   0          1h
+zk-0      0/1       Running   1         1h
+zk-0      1/1       Running   1         1h
+</code></pre>
+<h3 id="آزمودن-آمادگی-readiness" dir="rtl">آزمودن آمادگی (readiness)</h3>
+<p dir="rtl">آمادگی با زنده بودن یکسان نیست. اگر فرایندی زنده باشد، زمان‌بندی شده و سالم است. اگر فرایندی آماده باشد، می‌تواند ورودی را پردازش کند. زنده بودن شرط لازم برای آمادگی است، اما شرط کافی نیست. در مواردی، به‌ویژه هنگام راه‌اندازی اولیه و خاتمه، ممکن است فرایندی زنده باشد اما آماده نباشد.</p>
+<p dir="rtl">اگر یک کاوشگر آمادگی (readiness probe) مشخص کنید، کوبرنتیز تضمین می‌کند که فرایندهای برنامهٔ شما تا زمانی که بررسی‌های آمادگی‌شان موفق نشده است، ترافیک شبکه دریافت نکنند.</p>
+<p dir="rtl">برای یک سرور ZooKeeper، زنده بودن به معنای آمادگی است. بنابراین کاوشگر آمادگی در مانیفست <code dir="ltr">zookeeper.yaml</code> با کاوشگر زنده بودن یکسان است.</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">  readinessProbe:
+    exec:
+      command:
+      - sh
+      - -c
+      - "zookeeper-ready 2181"
+    initialDelaySeconds: 15
+    timeoutSeconds: 5
+</code></pre>
+<p dir="rtl">با اینکه کاوشگرهای زنده بودن و آمادگی یکسان هستند، مشخص کردن هر دو اهمیت دارد. این کار تضمین می‌کند که فقط سرورهای سالم در مجموعهٔ ZooKeeper ترافیک شبکه دریافت کنند.</p>
+<h2 id="تحمل-خرابی-نود" dir="rtl">تحمل خرابی نود</h2>
+<p dir="rtl">ZooKeeper برای ثبت موفق تغییرات داده‌ها به حد نصابی از سرورها نیاز دارد. در یک مجموعهٔ سه‌سروری، برای موفقیت عملیات نوشتن باید دو سرور سالم باشند. در سیستم‌های مبتنی بر حد نصاب، اعضا در دامنه‌های خرابی (failure domain) مختلف مستقر می‌شوند تا دسترس‌پذیری تضمین شود. برای جلوگیری از قطعی در اثر از دست رفتن یک ماشین، بهترین شیوه‌ها قرار دادن چند نمونه از برنامه روی یک ماشین را مجاز نمی‌دانند.</p>
+<p dir="rtl">کوبرنتیز به‌طور پیش‌فرض ممکن است Podهای یک <code dir="ltr">StatefulSet</code> را روی یک نود قرار دهد. در مجموعهٔ سه‌سروری‌ای که ایجاد کرده‌اید، اگر دو سرور روی یک نود باشند و آن نود از کار بیفتد، کلاینت‌های سرویس ZooKeeper شما تا زمانی که دست‌کم یکی از Podها دوباره زمان‌بندی شود، با قطعی مواجه خواهند شد.</p>
+<p dir="rtl">همیشه باید ظرفیت اضافی فراهم کنید تا فرایندهای سیستم‌های حیاتی بتوانند در صورت خرابی نودها دوباره زمان‌بندی شوند. در این صورت، قطعی فقط تا زمانی ادامه می‌یابد که زمان‌بند کوبرنتیز یکی از سرورهای ZooKeeper را دوباره زمان‌بندی کند. اما اگر می‌خواهید سرویس شما خرابی نودها را بدون هیچ زمان ازکارافتادگی تحمل کند، باید <code dir="ltr">podAntiAffinity</code> را تنظیم کنید.</p>
+<p dir="rtl">با دستور زیر، نودهای Podهای <code dir="ltr">StatefulSet</code> با نام <code dir="ltr">zk</code> را دریافت کنید.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">for i in 0 1 2; do kubectl get pod zk-$i --template {{.spec.nodeName}}; echo ""; done
+</code></pre>
+<p dir="rtl">همهٔ Podهای <code dir="ltr">StatefulSet</code> با نام <code dir="ltr">zk</code> روی نودهای متفاوتی مستقر شده‌اند.</p>
+<pre dir="ltr"><code dir="ltr">kubernetes-node-cxpk
+kubernetes-node-a5aq
+kubernetes-node-2g2d
+</code></pre>
+<p dir="rtl">دلیل این امر آن است که برای Podهای <code dir="ltr">StatefulSet</code> با نام <code dir="ltr">zk</code> یک <code dir="ltr">PodAntiAffinity</code> مشخص شده است.</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">affinity:
+  podAntiAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      - labelSelector:
+          matchExpressions:
+            - key: "app"
+              operator: In
+              values:
+                - zk
+        topologyKey: "kubernetes.io/hostname"
+</code></pre>
+<p dir="rtl">فیلد <code dir="ltr">requiredDuringSchedulingIgnoredDuringExecution</code> به زمان‌بند کوبرنتیز می‌گوید که هرگز نباید دو Pod را که برچسب <code dir="ltr">app</code> آن‌ها برابر <code dir="ltr">zk</code> است، در دامنه‌ای که <code dir="ltr">topologyKey</code> تعریف می‌کند کنار هم قرار دهد. مقدار <code dir="ltr">kubernetes.io/hostname</code> برای <code dir="ltr">topologyKey</code> نشان می‌دهد که این دامنه یک نود منفرد است. با استفاده از قواعد، برچسب‌ها و انتخابگرهای (selector) متفاوت، می‌توانید این روش را گسترش دهید تا مجموعهٔ خود را در دامنه‌های خرابی فیزیکی، شبکه و برق پخش کنید.</p>
+<h2 id="پایداری-در-زمان-نگهداری" dir="rtl">پایداری در زمان نگهداری</h2>
+<p dir="rtl">در این بخش، نودها را cordon و drain می‌کنید. اگر این آموزش را روی یک کلاستر مشترک اجرا می‌کنید، مطمئن شوید که این کار بر سایر کاربران کلاستر تأثیر منفی نمی‌گذارد.</p>
+<p dir="rtl">در بخش قبل دیدید که چگونه Podها را میان نودها پخش کنید تا در برابر خرابی‌های برنامه‌ریزی‌نشدهٔ نودها پایدار بمانند. با این حال، باید برای از دسترس خارج شدن موقت نودها بر اثر نگهداری برنامه‌ریزی‌شده نیز آماده باشید.</p>
+<p dir="rtl">با این دستور، فهرست نودهای کلاستر خود را دریافت کنید.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get nodes
+</code></pre>
+<p dir="rtl">این آموزش فرض می‌کند که کلاستر دست‌کم چهار نود دارد. اگر کلاستر بیش از چهار نود دارد، با <a href="https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands/#cordon" target="_blank"><code dir="ltr">kubectl cordon</code></a> همهٔ نودها به‌جز چهار نود را cordon کنید. محدود کردن کلاستر به چهار نود تضمین می‌کند که کوبرنتیز هنگام زمان‌بندی Podهای zookeeper در شبیه‌سازی نگهداری که در ادامه می‌آید، با محدودیت‌های affinity و PodDisruptionBudget روبه‌رو شود.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl cordon &lt;node-name&gt;
+</code></pre>
+<p dir="rtl">با این دستور، <code dir="ltr">PodDisruptionBudget</code> با نام <code dir="ltr">zk-pdb</code> را دریافت کنید.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pdb zk-pdb
+</code></pre>
+<p dir="rtl">فیلد <code dir="ltr">max-unavailable</code> به کوبرنتیز اعلام می‌کند که در هر لحظه حداکثر یک Pod از <code dir="ltr">StatefulSet</code> با نام <code dir="ltr">zk</code> می‌تواند در دسترس نباشد.</p>
+<pre dir="ltr"><code dir="ltr">NAME      MIN-AVAILABLE   MAX-UNAVAILABLE   ALLOWED-DISRUPTIONS   AGE
+zk-pdb    N/A             1                 1
+</code></pre>
+<p dir="rtl">در یک ترمینال، با این دستور Podهای <code dir="ltr">StatefulSet</code> با نام <code dir="ltr">zk</code> را زیر نظر بگیرید.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pods -w -l app=zk
+</code></pre>
+<p dir="rtl">در ترمینالی دیگر، با این دستور نودهایی را که Podها هم‌اکنون روی آن‌ها زمان‌بندی شده‌اند دریافت کنید.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">for i in 0 1 2; do kubectl get pod zk-$i --template {{.spec.nodeName}}; echo ""; done
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">kubernetes-node-pb41
+kubernetes-node-ixsl
+kubernetes-node-i4c4
+</code></pre>
+<p dir="rtl">با <a href="https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands/#drain" target="_blank"><code dir="ltr">kubectl drain</code></a>، نودی را که Pod با نام <code dir="ltr">zk-0</code> روی آن زمان‌بندی شده است cordon و drain کنید.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl drain $(kubectl get pod zk-0 --template {{.spec.nodeName}}) --ignore-daemonsets --force --delete-emptydir-data
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">node "kubernetes-node-pb41" cordoned
+
+WARNING: Deleting pods not managed by ReplicationController, ReplicaSet, Job, or DaemonSet: fluentd-cloud-logging-kubernetes-node-pb41, kube-proxy-kubernetes-node-pb41; Ignoring DaemonSet-managed pods: node-problem-detector-v0.1-o5elz
+pod "zk-0" deleted
+node "kubernetes-node-pb41" drained
+</code></pre>
+<p dir="rtl">از آنجا که کلاستر شما چهار نود دارد، دستور <code dir="ltr">kubectl drain</code> با موفقیت اجرا می‌شود و <code dir="ltr">zk-0</code> روی نود دیگری دوباره زمان‌بندی می‌شود.</p>
+<pre dir="ltr"><code dir="ltr">NAME      READY     STATUS    RESTARTS   AGE
+zk-0      1/1       Running   2          1h
+zk-1      1/1       Running   0          1h
+zk-2      1/1       Running   0          1h
+NAME      READY     STATUS        RESTARTS   AGE
+zk-0      1/1       Terminating   2          2h
+zk-0      0/1       Terminating   2         2h
+zk-0      0/1       Terminating   2         2h
+zk-0      0/1       Terminating   2         2h
+zk-0      0/1       Pending   0         0s
+zk-0      0/1       Pending   0         0s
+zk-0      0/1       ContainerCreating   0         0s
+zk-0      0/1       Running   0         51s
+zk-0      1/1       Running   0         1m
+</code></pre>
+<p dir="rtl">همچنان Podهای <code dir="ltr">StatefulSet</code> را در ترمینال اول زیر نظر داشته باشید و نودی را که <code dir="ltr">zk-1</code> روی آن زمان‌بندی شده است drain کنید.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl drain $(kubectl get pod zk-1 --template {{.spec.nodeName}}) --ignore-daemonsets --force --delete-emptydir-data
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">"kubernetes-node-ixsl" cordoned
+WARNING: Deleting pods not managed by ReplicationController, ReplicaSet, Job, or DaemonSet: fluentd-cloud-logging-kubernetes-node-ixsl, kube-proxy-kubernetes-node-ixsl; Ignoring DaemonSet-managed pods: node-problem-detector-v0.1-voc74
+pod "zk-1" deleted
+node "kubernetes-node-ixsl" drained
+</code></pre>
+<p dir="rtl">Pod با نام <code dir="ltr">zk-1</code> قابل زمان‌بندی نیست، زیرا <code dir="ltr">StatefulSet</code> با نام <code dir="ltr">zk</code> یک قاعدهٔ <code dir="ltr">PodAntiAffinity</code> دارد که از قرار گرفتن Podها روی یک نود مشترک جلوگیری می‌کند. از آنجا که فقط دو نود قابل زمان‌بندی هستند، این Pod در وضعیت Pending باقی می‌ماند.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pods -w -l app=zk
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">NAME      READY     STATUS    RESTARTS   AGE
+zk-0      1/1       Running   2          1h
+zk-1      1/1       Running   0          1h
+zk-2      1/1       Running   0          1h
+NAME      READY     STATUS        RESTARTS   AGE
+zk-0      1/1       Terminating   2          2h
+zk-0      0/1       Terminating   2         2h
+zk-0      0/1       Terminating   2         2h
+zk-0      0/1       Terminating   2         2h
+zk-0      0/1       Pending   0         0s
+zk-0      0/1       Pending   0         0s
+zk-0      0/1       ContainerCreating   0         0s
+zk-0      0/1       Running   0         51s
+zk-0      1/1       Running   0         1m
+zk-1      1/1       Terminating   0         2h
+zk-1      0/1       Terminating   0         2h
+zk-1      0/1       Terminating   0         2h
+zk-1      0/1       Terminating   0         2h
+zk-1      0/1       Pending   0         0s
+zk-1      0/1       Pending   0         0s
+</code></pre>
+<p dir="rtl">به زیر نظر گرفتن Podهای StatefulSet ادامه دهید و نودی را که <code dir="ltr">zk-2</code> روی آن زمان‌بندی شده است drain کنید.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl drain $(kubectl get pod zk-2 --template {{.spec.nodeName}}) --ignore-daemonsets --force --delete-emptydir-data
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">node "kubernetes-node-i4c4" cordoned
+
+WARNING: Deleting pods not managed by ReplicationController, ReplicaSet, Job, or DaemonSet: fluentd-cloud-logging-kubernetes-node-i4c4, kube-proxy-kubernetes-node-i4c4; Ignoring DaemonSet-managed pods: node-problem-detector-v0.1-dyrog
+WARNING: Ignoring DaemonSet-managed pods: node-problem-detector-v0.1-dyrog; Deleting pods not managed by ReplicationController, ReplicaSet, Job, or DaemonSet: fluentd-cloud-logging-kubernetes-node-i4c4, kube-proxy-kubernetes-node-i4c4
+There are pending pods when an error occurred: Cannot evict pod as it would violate the pod's disruption budget.
+pod/zk-2
+</code></pre>
+<p dir="rtl">با فشردن <code dir="ltr">CTRL-C</code> اجرای kubectl را متوقف کنید.</p>
+<p dir="rtl">نمی‌توانید نود سوم را drain کنید، زیرا بیرون راندن (evict) <code dir="ltr">zk-2</code> بودجهٔ <code dir="ltr">zk-budget</code> را نقض می‌کند. با این حال، این نود همچنان در حالت cordon باقی می‌ماند.</p>
+<p dir="rtl">با <code dir="ltr">zkCli.sh</code> مقداری را که در آزمون سلامت وارد کرده بودید از <code dir="ltr">zk-0</code> بازیابی کنید.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl exec zk-0 zkCli.sh get /hello
+</code></pre>
+<p dir="rtl">این سرویس همچنان در دسترس است، زیرا <code dir="ltr">PodDisruptionBudget</code> آن رعایت می‌شود.</p>
+<pre dir="ltr"><code dir="ltr">WatchedEvent state:SyncConnected type:None path:null
+world
+cZxid = 0x200000002
+ctime = Wed Dec 07 00:08:59 UTC 2016
+mZxid = 0x200000002
+mtime = Wed Dec 07 00:08:59 UTC 2016
+pZxid = 0x200000002
+cversion = 0
+dataVersion = 0
+aclVersion = 0
+ephemeralOwner = 0x0
+dataLength = 5
+numChildren = 0
+</code></pre>
+<p dir="rtl">با <a href="https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands/#uncordon" target="_blank"><code dir="ltr">kubectl uncordon</code></a>، نود اول را از حالت cordon خارج کنید.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl uncordon kubernetes-node-pb41
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">node "kubernetes-node-pb41" uncordoned
+</code></pre>
+<p dir="rtl">پاد <code dir="ltr">zk-1</code> روی این نود دوباره زمان‌بندی می‌شود. صبر کنید تا <code dir="ltr">zk-1</code> در وضعیت Running و Ready قرار گیرد.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pods -w -l app=zk
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">NAME      READY     STATUS    RESTARTS   AGE
+zk-0      1/1       Running   2          1h
+zk-1      1/1       Running   0          1h
+zk-2      1/1       Running   0          1h
+NAME      READY     STATUS        RESTARTS   AGE
+zk-0      1/1       Terminating   2          2h
+zk-0      0/1       Terminating   2         2h
+zk-0      0/1       Terminating   2         2h
+zk-0      0/1       Terminating   2         2h
+zk-0      0/1       Pending   0         0s
+zk-0      0/1       Pending   0         0s
+zk-0      0/1       ContainerCreating   0         0s
+zk-0      0/1       Running   0         51s
+zk-0      1/1       Running   0         1m
+zk-1      1/1       Terminating   0         2h
+zk-1      0/1       Terminating   0         2h
+zk-1      0/1       Terminating   0         2h
+zk-1      0/1       Terminating   0         2h
+zk-1      0/1       Pending   0         0s
+zk-1      0/1       Pending   0         0s
+zk-1      0/1       Pending   0         12m
+zk-1      0/1       ContainerCreating   0         12m
+zk-1      0/1       Running   0         13m
+zk-1      1/1       Running   0         13m
+</code></pre>
+<p dir="rtl">تلاش کنید نودی را که <code dir="ltr">zk-2</code> روی آن زمان‌بندی شده است drain کنید.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl drain $(kubectl get pod zk-2 --template {{.spec.nodeName}}) --ignore-daemonsets --force --delete-emptydir-data
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">node "kubernetes-node-i4c4" already cordoned
+WARNING: Deleting pods not managed by ReplicationController, ReplicaSet, Job, or DaemonSet: fluentd-cloud-logging-kubernetes-node-i4c4, kube-proxy-kubernetes-node-i4c4; Ignoring DaemonSet-managed pods: node-problem-detector-v0.1-dyrog
+pod "heapster-v1.2.0-2604621511-wht1r" deleted
+pod "zk-2" deleted
+node "kubernetes-node-i4c4" drained
+</code></pre>
+<p dir="rtl">این بار دستور <code dir="ltr">kubectl drain</code> با موفقیت اجرا می‌شود.</p>
+<p dir="rtl">نود دوم را از حالت cordon خارج کنید تا <code dir="ltr">zk-2</code> بتواند دوباره زمان‌بندی شود.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl uncordon kubernetes-node-ixsl
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">node "kubernetes-node-ixsl" uncordoned
+</code></pre>
+<p dir="rtl">می‌توانید <code dir="ltr">kubectl drain</code> را همراه با <code dir="ltr">PodDisruptionBudgets</code> به کار ببرید تا مطمئن شوید سرویس‌هایتان در زمان نگهداری در دسترس باقی می‌مانند. اگر پیش از خارج کردن نود از مدار برای نگهداری، از drain برای cordon کردن نودها و بیرون راندن Podها استفاده شود، بودجهٔ اختلال سرویس‌هایی که چنین بودجه‌ای تعریف کرده‌اند رعایت خواهد شد. همیشه باید ظرفیت اضافی برای سرویس‌های حیاتی در نظر بگیرید تا Podهای آن‌ها بتوانند بی‌درنگ دوباره زمان‌بندی شوند.</p>
+<h2 id="پاکسازی" dir="rtl">پاکسازی</h2>
+<ul>
+<li dir="rtl">با <code dir="ltr">kubectl uncordon</code> همهٔ نودهای کلاستر خود را از حالت cordon خارج کنید.</li>
+<li dir="rtl">باید رسانه‌های ذخیره‌سازی پایدار مربوط به PersistentVolumeهایی را که در این آموزش استفاده شده‌اند حذف کنید. برای اطمینان از بازپس‌گیری کامل همهٔ فضای ذخیره‌سازی، گام‌های لازم را متناسب با محیط، پیکربندی ذخیره‌سازی و روش تأمین (provisioning) خود دنبال کنید.</li>
+</ul>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#پیش-از-شروع">پیش از شروع</a><a class="l2" href="#اهداف">اهداف</a><a class="l3" href="#zookeeper">ZooKeeper</a><a class="l2" href="#ایجاد-یک-مجموعهٔ-zookeeper">ایجاد یک مجموعهٔ ZooKeeper</a><a class="l3" href="#تسهیل-انتخاب-رهبر">تسهیل انتخاب رهبر</a><a class="l3" href="#دستیابی-به-اجماع">دستیابی به اجماع</a><a class="l3" href="#آزمون-سلامت-مجموعه">آزمون سلامت مجموعه</a><a class="l3" href="#فراهم-کردن-ذخیره-سازی-ماندگار">فراهم کردن ذخیره‌سازی ماندگار</a><a class="l2" href="#تضمین-پیکربندی-یکنواخت">تضمین پیکربندی یکنواخت</a><a class="l3" href="#پیکربندی-لاگ-گیری">پیکربندی لاگ‌گیری</a><a class="l3" href="#پیکربندی-یک-کاربر-غیرممتاز">پیکربندی یک کاربر غیرممتاز</a><a class="l2" href="#مدیریت-فرایند-zookeeper">مدیریت فرایند ZooKeeper</a><a class="l3" href="#به-روزرسانی-مجموعه-ensemble">به‌روزرسانی مجموعه (ensemble)</a><a class="l3" href="#مدیریت-خرابی-فرایند">مدیریت خرابی فرایند</a><a class="l3" href="#آزمودن-زنده-بودن-liveness">آزمودن زنده بودن (liveness)</a><a class="l3" href="#آزمودن-آمادگی-readiness">آزمودن آمادگی (readiness)</a><a class="l2" href="#تحمل-خرابی-نود">تحمل خرابی نود</a><a class="l2" href="#پایداری-در-زمان-نگهداری">پایداری در زمان نگهداری</a><a class="l2" href="#پاکسازی">پاکسازی</a></nav>
+</div>
+</body>
+</html>

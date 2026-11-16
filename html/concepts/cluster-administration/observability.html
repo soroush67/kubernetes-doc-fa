@@ -82,11 +82,11 @@ document.addEventListener('DOMContentLoaded',function(){box=document.getElementB
 <a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
 <header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">concepts / cluster-administration</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
 <div class="layout">
-<main><h1 dir="rtl">مشاهده‌پذیری</h1><p class="page-meta" dir="rtl">با نحوه‌ی دستیابی به دید سرتاسری نسبت به یک کلاستر کوبرنتیز از طریق گردآوری متریک‌ها، لاگ‌ها و ردگیری‌ها (traces) آشنا شوید.
+<main><h1 dir="rtl">مشاهده‌پذیری</h1><p class="page-meta" dir="rtl">با نحوهٔ دستیابی به دید سرتاسری از یک کلاستر کوبرنتیز از طریق گردآوری متریک‌ها، لاگ‌ها و ردها آشنا شوید.
 </p><!-- overview -->
-<p dir="rtl">در کوبرنتیز، مشاهده‌پذیری (observability) فرایند گردآوری و تحلیل متریک‌ها، لاگ‌ها و ردگیری‌ها (traces) است که اغلب از آن‌ها با عنوان سه ستون مشاهده‌پذیری یاد می‌شود. هدف از این فرایند، درک بهتر وضعیت داخلی، کارایی و سلامت کلاستر است.</p>
-<p dir="rtl">اجزای control plane کوبرنتیز و همچنین بسیاری از افزونه‌ها (add-ons) این سیگنال‌ها را تولید و منتشر می‌کنند. با تجمیع و همبسته‌سازی آن‌ها می‌توانید تصویری یکپارچه از control plane، افزونه‌ها و برنامه‌ها در سراسر کلاستر به دست آورید.</p>
-<p dir="rtl">شکل ۱ نشان می‌دهد اجزای کلاستر چگونه سه نوع اصلی سیگنال را منتشر می‌کنند.</p>
+<p dir="rtl">در کوبرنتیز، مشاهده‌پذیری (observability) فرایند گردآوری و تحلیل متریک‌ها، لاگ‌ها و ردهاست. این سه معمولاً سه ستون مشاهده‌پذیری نامیده می‌شوند و هدف از گردآوری آن‌ها، درک بهتر وضعیت درونی، کارایی و سلامت کلاستر است.</p>
+<p dir="rtl">مؤلفه‌های control plane کوبرنتیز و بسیاری از افزونه‌ها این سیگنال‌ها را تولید و منتشر می‌کنند. با تجمیع این سیگنال‌ها و یافتن ارتباط میان آن‌ها، می‌توانید تصویری یکپارچه از control plane، افزونه‌ها و برنامه‌ها در سراسر کلاستر به دست آورید.</p>
+<p dir="rtl">شکل ۱ نشان می‌دهد که مؤلفه‌های کلاستر چگونه سه نوع اصلی سیگنال را منتشر می‌کنند.</p>
 <pre dir="ltr"><code class="language-mermaid" dir="ltr">flowchart LR
     A[Cluster components] --&gt; M[Metrics pipeline]
     A --&gt; L[Log pipeline]
@@ -96,10 +96,10 @@ document.addEventListener('DOMContentLoaded',function(){box=document.getElementB
     T --&gt; S
     S --&gt; O[Operators and automation]
 </code></pre>
-<p dir="rtl"><em>شکل ۱. سیگنال‌های سطح بالایی که اجزای کلاستر منتشر می‌کنند و مصرف‌کنندگان آن‌ها.</em></p>
+<p dir="rtl"><em>شکل ۱. نمای کلی سیگنال‌های منتشرشده از مؤلفه‌های کلاستر و مصرف‌کنندگان آن‌ها.</em></p>
 <!-- body -->
-<h2 id="متریک-ها-metrics" dir="rtl">متریک‌ها {#metrics}</h2>
-<p dir="rtl">اجزای کوبرنتیز متریک‌ها را با <a href="https://prometheus.io/docs/instrumenting/exposition_formats/" target="_blank" rel="noopener">قالب Prometheus</a> از طریق endpointهای <code dir="ltr">/metrics</code> خود منتشر می‌کنند. این اجزا شامل موارد زیر هستند:</p>
+<h2 id="متریک-ها" dir="rtl">متریک‌ها</h2>
+<p dir="rtl">مؤلفه‌های کوبرنتیز متریک‌ها را با <a href="https://prometheus.io/docs/instrumenting/exposition_formats/" target="_blank" rel="noopener">قالب Prometheus</a> از طریق نقطهٔ پایانی <code dir="ltr">/metrics</code> خود منتشر می‌کنند. این مؤلفه‌ها عبارت‌اند از:</p>
 <ul>
 <li dir="ltr" class="ltr">kube-controller-manager</li>
 <li dir="ltr" class="ltr">kube-proxy</li>
@@ -107,51 +107,56 @@ document.addEventListener('DOMContentLoaded',function(){box=document.getElementB
 <li dir="ltr" class="ltr">kube-scheduler</li>
 <li dir="ltr" class="ltr">kubelet</li>
 </ul>
-<p dir="rtl">kubelet همچنین متریک‌ها را در <code dir="ltr">/metrics/cadvisor</code>، <code dir="ltr">/metrics/resource</code> و <code dir="ltr">/metrics/probes</code> در دسترس قرار می‌دهد، و افزونه‌هایی مانند <a href="kube-state-metrics.html">kube-state-metrics</a> این سیگنال‌های control plane را با وضعیت آبجکت‌های کوبرنتیز غنی می‌کنند.</p>
-<p dir="rtl">یک پایپ‌لاین متریک معمول در کوبرنتیز به‌صورت دوره‌ای این endpointها را scrape می‌کند و نمونه‌ها را در یک پایگاه داده‌ی سری زمانی (برای مثال با Prometheus) ذخیره می‌کند.</p>
-<p dir="rtl">برای جزئیات و گزینه‌های پیکربندی، <a href="system-metrics.html">راهنمای متریک‌های سیستمی</a> را ببینید.</p>
-<p dir="rtl">شکل ۲ یک پایپ‌لاین متریک رایج در کوبرنتیز را نشان می‌دهد.</p>
+<p dir="rtl">همچنین kubelet متریک‌هایی را در مسیرهای <code dir="ltr">/metrics/cadvisor</code>، <code dir="ltr">/metrics/resource</code> و <code dir="ltr">/metrics/probes</code> در دسترس قرار می‌دهد. افزونه‌هایی مانند <a href="kube-state-metrics.html">kube-state-metrics</a> نیز این سیگنال‌های control plane را با اطلاعات وضعیت آبجکت‌های کوبرنتیز غنی‌تر می‌کنند.</p>
+<p dir="rtl">یک خط لولهٔ متریک معمول در کوبرنتیز، این نقاط پایانی را به‌طور دوره‌ای جمع‌آوری (scrape) می‌کند و نمونه‌ها را در یک پایگاه دادهٔ سری زمانی ذخیره می‌کند (برای مثال با Prometheus).</p>
+<p dir="rtl">برای جزئیات و گزینه‌های پیکربندی، <a href="system-metrics.html">راهنمای متریک‌های سیستم</a> را ببینید.</p>
+<p dir="rtl">شکل ۲ یک خط لولهٔ متریک رایج در کوبرنتیز را نشان می‌دهد.</p>
 <pre dir="ltr"><code class="language-mermaid" dir="ltr">flowchart LR
     C[Cluster components] --&gt; P[Prometheus scraper]
     P --&gt; TS[(Time series storage)]
     TS --&gt; D[Dashboards and alerts]
     TS --&gt; A[Automated actions]
 </code></pre>
-<p dir="rtl"><em>شکل ۲. اجزای یک پایپ‌لاین متریک معمول در کوبرنتیز.</em></p>
-<p dir="rtl">برای دید چندکلاستری یا چندابری، پایگاه‌های داده‌ی سری زمانی توزیع‌شده (برای مثال Thanos یا Cortex) می‌توانند مکمل Prometheus باشند.</p>
-<p dir="rtl">برای مشاهده‌ی scraperهای متریک و پایگاه‌های داده‌ی سری زمانی، <a href="#metrics-tools">ابزارهای رایج مشاهده‌پذیری - ابزارهای متریک</a> را ببینید.</p>
-<h3 id="metrics-api" dir="ltr" class="ltr">Metrics API</h3>
+<p dir="rtl"><em>شکل ۲. مؤلفه‌های یک خط لولهٔ متریک معمول در کوبرنتیز.</em></p>
+<p dir="rtl">برای دستیابی به دید چندکلاستری یا چندابری، می‌توان از پایگاه‌های دادهٔ سری زمانی توزیع‌شده (برای مثال Thanos یا Cortex) در کنار Prometheus استفاده کرد.</p>
+<p dir="rtl">برای آشنایی با ابزارهای جمع‌آوری متریک و پایگاه‌های دادهٔ سری زمانی، بخش <a href="#metrics-tools">ابزارهای رایج مشاهده‌پذیری - ابزارهای متریک</a> را ببینید.</p>
+<h3 id="رابط-metrics-api" dir="rtl">رابط Metrics API</h3>
 <div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes v1.37 [stable]</span> (پایدار)</div>
-<p dir="rtl">Metrics API کوبرنتیز میزان مصرف منابع CPU و حافظه را برای نودها و Podها فراهم می‌کند. دستور
-<code dir="ltr">kubectl top</code> و اجزایی مانند
+<p dir="rtl">رابط Metrics API در کوبرنتیز، میزان مصرف منابع CPU و حافظه را برای نودها و Podها فراهم می‌کند. دستور
+<code dir="ltr">kubectl top</code> و مؤلفه‌هایی مانند
 <a href="../workloads/autoscaling/horizontal-pod-autoscale.html">HorizontalPodAutoscaler</a>
 و <a href="../workloads/autoscaling/vertical-pod-autoscale.html">VerticalPodAutoscaler</a>
 از این API استفاده می‌کنند.</p>
-<p dir="rtl"><code dir="ltr">kubectl top</code> هر دو نسخه‌ی <code dir="ltr">metrics.k8s.io/v1</code> و <code dir="ltr">metrics.k8s.io/v1beta1</code> را پشتیبانی می‌کند. این دستور در صورت در دسترس بودن، نسخه‌ی <code dir="ltr">v1</code> را ترجیح می‌دهد و در غیر این صورت به <code dir="ltr">v1beta1</code> بازمی‌گردد. در کوبرنتیز v1.37، کنترل‌کننده‌ی HorizontalPodAutoscaler فقط از <code dir="ltr">metrics.k8s.io/v1beta1</code> پشتیبانی می‌کند؛ پشتیبانی از <code dir="ltr">metrics.k8s.io/v1</code> برنامه‌ریزی شده است، اما هنوز در دسترس نیست.</p>
-<p dir="rtl">برخلاف endpointهای متریک اجزا که پیش‌تر توضیح داده شد، Metrics API از طریق
-<a href="../extend-kubernetes/api-extension/apiserver-aggregation.html">لایه‌ی تجمیع API</a> کوبرنتیز ارائه می‌شود.
-کلاستر شما باید <a href="https://github.com/kubernetes-sigs/metrics-server" target="_blank" rel="noopener">Metrics Server</a> یا پیاده‌سازی دیگری را که این API را فراهم می‌کند اجرا کند. Metrics API عمداً فقط متریک‌های منابعِ موردنیاز برای مقیاس‌گذاری خودکار و بررسی‌های پایه را فراهم می‌کند؛ این API جایگزین یک پایپ‌لاین پایش کامل نیست.</p>
+<p dir="rtl">دستور <code dir="ltr">kubectl top</code> از هر دو نسخهٔ <code dir="ltr">metrics.k8s.io/v1</code> و <code dir="ltr">metrics.k8s.io/v1beta1</code> پشتیبانی می‌کند. این دستور در صورت
+در دسترس بودن نسخهٔ <code dir="ltr">v1</code> آن را ترجیح می‌دهد و در غیر این صورت به <code dir="ltr">v1beta1</code> بازمی‌گردد. در کوبرنتیز v1.37،
+کنترل‌کنندهٔ HorizontalPodAutoscaler فقط از <code dir="ltr">metrics.k8s.io/v1beta1</code> پشتیبانی می‌کند؛ پشتیبانی از
+<code dir="ltr">metrics.k8s.io/v1</code> برنامه‌ریزی شده است، اما هنوز در دسترس نیست.</p>
+<p dir="rtl">برخلاف نقاط پایانی متریک مؤلفه‌ها که پیش‌تر توضیح داده شد، Metrics API از طریق
+<a href="../extend-kubernetes/api-extension/apiserver-aggregation.html">لایهٔ تجمیع API</a> کوبرنتیز ارائه می‌شود.
+کلاستر شما باید <a href="https://github.com/kubernetes-sigs/metrics-server" target="_blank" rel="noopener">Metrics Server</a> یا پیاده‌سازی دیگری
+را که این API را فراهم می‌کند اجرا کند. این API عمداً فقط متریک‌های منابعِ لازم برای مقیاس‌دهی خودکار
+و بررسی‌های پایه را ارائه می‌دهد و جایگزینی برای یک خط لولهٔ پایش کامل نیست.</p>
 <p dir="rtl">برای آشنایی با این API، پیاده‌سازی‌های آن و جریان داده از kubeletها به کلاینت‌های آن،
-<a href="../../tasks/debug/debug-cluster/resource-metrics-pipeline.html">پایپ‌لاین متریک‌های منابع</a> را ببینید.</p>
+<a href="../../tasks/debug/debug-cluster/resource-metrics-pipeline.html">خط لولهٔ متریک‌های منابع</a> را ببینید.</p>
 <h4 id="همچنین-ببینید" dir="rtl">همچنین ببینید</h4>
 <ul>
-<li dir="rtl"><a href="system-metrics.html">متریک‌های سیستمی برای اجزای کوبرنتیز</a></li>
+<li dir="rtl"><a href="system-metrics.html">متریک‌های سیستم برای مؤلفه‌های کوبرنتیز</a></li>
 <li dir="rtl"><a href="../../tasks/debug/debug-cluster/resource-usage-monitoring.html">پایش مصرف منابع با metrics-server</a></li>
 <li dir="rtl"><a href="kube-state-metrics.html">مفهوم kube-state-metrics</a></li>
 </ul>
-<h2 id="لاگ-ها-logs" dir="rtl">لاگ‌ها {#logs}</h2>
-<p dir="rtl">لاگ‌ها یک سابقه‌ی زمانی از رویدادها را در برنامه‌ها، اجزای سیستمی کوبرنتیز و فعالیت‌های مرتبط با امنیت، مانند ثبت رویدادهای ممیزی (audit logging)، فراهم می‌کنند.</p>
-<p dir="rtl">container runtimeها خروجی برنامه‌ی کانتینری را از جریان‌های خروجی استاندارد (<code dir="ltr">stdout</code>) و خطای استاندارد (<code dir="ltr">stderr</code>) دریافت می‌کنند. اگرچه runtimeها این کار را به شیوه‌های متفاوتی پیاده‌سازی می‌کنند، یکپارچگی با kubelet از طریق <em>قالب لاگ CRI</em> استاندارد شده است و kubelet این لاگ‌ها را از طریق <code dir="ltr">kubectl logs</code> در دسترس قرار می‌دهد.</p>
+<h2 id="لاگ-ها" dir="rtl">لاگ‌ها</h2>
+<p dir="rtl">لاگ‌ها سابقه‌ای زمانی از رویدادهای درون برنامه‌ها، مؤلفه‌های سیستمی کوبرنتیز و فعالیت‌های مرتبط با امنیت، مانند لاگ ممیزی (audit logging)، فراهم می‌کنند.</p>
+<p dir="rtl">محیط‌های اجرای کانتینر، خروجی برنامهٔ کانتینری‌شده را از جریان‌های خروجی استاندارد (<code dir="ltr">stdout</code>) و خطای استاندارد (<code dir="ltr">stderr</code>) دریافت می‌کنند. هرچند هر محیط اجرا این کار را به شیوهٔ خود پیاده‌سازی می‌کند، یکپارچگی آن با kubelet از طریق <em>قالب لاگ CRI</em> استاندارد شده است و kubelet این لاگ‌ها را از طریق <code dir="ltr">kubectl logs</code> در دسترس قرار می‌دهد.</p>
 <p><img src="/images/docs/user-guide/logging/logging-node-level.png" alt="لاگ‌گیری در سطح نود"></p>
 <p dir="rtl"><em>شکل ۳الف. معماری لاگ‌گیری در سطح نود.</em></p>
-<p dir="rtl">لاگ‌های اجزای سیستمی، رویدادهای کلاستر را ثبت می‌کنند و اغلب برای اشکال‌زدایی و عیب‌یابی مفیدند. این اجزا به دو دسته تقسیم می‌شوند: اجزایی که در کانتینر اجرا می‌شوند و اجزایی که در کانتینر اجرا نمی‌شوند. برای مثال، <code dir="ltr">kube-scheduler</code> و <code dir="ltr">kube-proxy</code> معمولاً در کانتینر اجرا می‌شوند، در حالی که <code dir="ltr">kubelet</code> و container runtime مستقیماً روی میزبان اجرا می‌شوند.</p>
+<p dir="rtl">لاگ‌های مؤلفه‌های سیستمی، رویدادهای کلاستر را ثبت می‌کنند و اغلب برای اشکال‌زدایی و عیب‌یابی مفیدند. این مؤلفه‌ها به دو دسته تقسیم می‌شوند: مؤلفه‌هایی که درون کانتینر اجرا می‌شوند و مؤلفه‌هایی که چنین نیستند. برای مثال، <code dir="ltr">kube-scheduler</code> و <code dir="ltr">kube-proxy</code> معمولاً درون کانتینر اجرا می‌شوند، در حالی که <code dir="ltr">kubelet</code> و محیط اجرای کانتینر مستقیماً روی میزبان اجرا می‌شوند.</p>
 <ul>
-<li dir="rtl">روی ماشین‌هایی که <code dir="ltr">systemd</code> دارند، kubelet و container runtime در journald می‌نویسند. در غیر این صورت، در فایل‌های <code dir="ltr">.log</code> در مسیر <code dir="ltr">/var/log</code> می‌نویسند.</li>
-<li dir="rtl">اجزای سیستمی که درون کانتینر اجرا می‌شوند، همواره در فایل‌های <code dir="ltr">.log</code> در <code dir="ltr">/var/log</code> می‌نویسند و سازوکار پیش‌فرض لاگ‌گیری کانتینر را دور می‌زنند.</li>
+<li dir="rtl">روی ماشین‌هایی که از <code dir="ltr">systemd</code> استفاده می‌کنند، kubelet و محیط اجرای کانتینر در journald می‌نویسند. در غیر این صورت، در فایل‌های <code dir="ltr">.log</code> در دایرکتوری <code dir="ltr">/var/log</code> می‌نویسند.</li>
+<li dir="rtl">مؤلفه‌های سیستمی که درون کانتینر اجرا می‌شوند همواره در فایل‌های <code dir="ltr">.log</code> در <code dir="ltr">/var/log</code> می‌نویسند و سازوکار پیش‌فرض لاگ‌گیری کانتینر را دور می‌زنند.</li>
 </ul>
-<p dir="rtl">لاگ‌های اجزای سیستمی و کانتینرها که در <code dir="ltr">/var/log</code> ذخیره می‌شوند، برای جلوگیری از رشد کنترل‌نشده نیازمند چرخش لاگ (log rotation) هستند. برخی اسکریپت‌های آماده‌سازی کلاستر به‌صورت پیش‌فرض چرخش لاگ را نصب می‌کنند؛ محیط خود را بررسی کنید و در صورت نیاز آن را تنظیم نمایید. برای جزئیات مربوط به مسیرها، قالب‌ها و گزینه‌های پیکربندی، <a href="system-logs.html">مرجع لاگ‌های سیستمی</a> را ببینید.</p>
-<p dir="rtl">بیشتر کلاسترها یک عامل لاگ‌گیری در سطح نود (برای مثال Fluent Bit یا Fluentd) اجرا می‌کنند که این فایل‌ها را دنبال می‌کند و ورودی‌ها را به یک مخزن مرکزی لاگ ارسال می‌کند. <a href="logging.html">راهنمای معماری لاگ‌گیری</a> توضیح می‌دهد چگونه چنین پایپ‌لاین‌هایی را طراحی کنید، نگهداری (retention) را اعمال کنید و جریان لاگ‌ها را به backendها هدایت نمایید.</p>
-<p dir="rtl">شکل ۳ یک پایپ‌لاین رایج تجمیع لاگ را نشان می‌دهد.</p>
+<p dir="rtl">لاگ‌های مؤلفه‌های سیستمی و کانتینرها که در <code dir="ltr">/var/log</code> ذخیره می‌شوند، برای جلوگیری از رشد کنترل‌نشده به چرخش لاگ (log rotation) نیاز دارند. برخی اسکریپت‌های راه‌اندازی کلاستر، چرخش لاگ را به‌طور پیش‌فرض نصب می‌کنند؛ محیط خود را بررسی و در صورت نیاز آن را تنظیم کنید. برای جزئیات مربوط به مکان‌ها، قالب‌ها و گزینه‌های پیکربندی، <a href="system-logs.html">مرجع لاگ‌های سیستم</a> را ببینید.</p>
+<p dir="rtl">در بیشتر کلاسترها یک عامل لاگ‌گیری در سطح نود (برای مثال Fluent Bit یا Fluentd) اجرا می‌شود که این فایل‌ها را دنبال می‌کند و ورودی‌ها را به یک مخزن مرکزی لاگ ارسال می‌کند. <a href="logging.html">راهنمای معماری لاگ‌گیری</a> توضیح می‌دهد که چگونه چنین خط لوله‌هایی را طراحی کنید، سیاست نگهداری را اعمال کنید و جریان‌های لاگ را به سامانه‌های پشتیبان بفرستید.</p>
+<p dir="rtl">شکل ۳ یک خط لولهٔ رایج تجمیع لاگ را نشان می‌دهد.</p>
 <pre dir="ltr"><code class="language-mermaid" dir="ltr">flowchart LR
     subgraph Sources
         A[Application stdout / stderr]
@@ -164,20 +169,20 @@ document.addEventListener('DOMContentLoaded',function(){box=document.getElementB
     N --&gt; L[Central log store]
     L --&gt; Q[Dashboards, alerting, SIEM]
 </code></pre>
-<p dir="rtl"><em>شکل ۳. اجزای یک پایپ‌لاین لاگ معمول در کوبرنتیز.</em></p>
-<p dir="rtl">برای مشاهده‌ی عامل‌های لاگ‌گیری و مخازن مرکزی لاگ، <a href="#logging-tools">ابزارهای رایج مشاهده‌پذیری - ابزارهای لاگ‌گیری</a> را ببینید.</p>
+<p dir="rtl"><em>شکل ۳. مؤلفه‌های یک خط لولهٔ لاگ معمول در کوبرنتیز.</em></p>
+<p dir="rtl">برای آشنایی با عامل‌های لاگ‌گیری و مخازن مرکزی لاگ، بخش <a href="#logging-tools">ابزارهای رایج مشاهده‌پذیری - ابزارهای لاگ‌گیری</a> را ببینید.</p>
 <h4 id="همچنین-ببینید-1" dir="rtl">همچنین ببینید</h4>
 <ul>
 <li dir="rtl"><a href="logging.html">معماری لاگ‌گیری</a></li>
-<li dir="rtl"><a href="system-logs.html">لاگ‌های سیستمی</a></li>
+<li dir="rtl"><a href="system-logs.html">لاگ‌های سیستم</a></li>
 <li dir="rtl"><a href="../../tasks/debug/logging/index.html">وظایف و آموزش‌های لاگ‌گیری</a></li>
-<li dir="rtl"><a href="../../tasks/debug/debug-cluster/audit.html">پیکربندی audit logging</a></li>
+<li dir="rtl"><a href="../../tasks/debug/debug-cluster/audit.html">پیکربندی لاگ ممیزی</a></li>
 </ul>
-<h2 id="ردگیری-ها-traces" dir="rtl">ردگیری‌ها {#traces}</h2>
-<p dir="rtl">ردگیری‌ها (traces) نشان می‌دهند درخواست‌ها چگونه میان اجزای کوبرنتیز و برنامه‌ها حرکت می‌کنند و تأخیر، زمان‌بندی و روابط میان عملیات را به هم پیوند می‌دهند. با گردآوری ردگیری‌ها می‌توانید جریان سرتاسری درخواست را مصور کنید، مشکلات کارایی را تشخیص دهید و گلوگاه‌ها یا تعامل‌های غیرمنتظره را در control plane، افزونه‌ها یا برنامه‌ها شناسایی کنید.</p>
-<p dir="rtl">کوبرنتیز 1.37 می‌تواند spanها را از طریق <a href="system-traces.html">OpenTelemetry Protocol</a> (OTLP) صادر کند، یا مستقیماً با exporterهای gRPC داخلی یا با ارسال آن‌ها از طریق یک OpenTelemetry Collector.</p>
-<p dir="rtl">OpenTelemetry Collector، spanها را از اجزا و برنامه‌ها دریافت می‌کند، آن‌ها را پردازش می‌کند (برای مثال با اعمال نمونه‌برداری یا حذف داده‌های حساس) و برای ذخیره‌سازی و تحلیل به یک backend ردگیری ارسال می‌کند.</p>
-<p dir="rtl">شکل ۴ یک پایپ‌لاین ردگیری توزیع‌شده‌ی معمول را نشان می‌دهد.</p>
+<h2 id="ردها" dir="rtl">ردها</h2>
+<p dir="rtl">ردها (traces) نشان می‌دهند که درخواست‌ها چگونه میان مؤلفه‌ها و برنامه‌های کوبرنتیز جابه‌جا می‌شوند و تأخیر، زمان‌بندی و روابط میان عملیات‌ها را به یکدیگر پیوند می‌دهند. با گردآوری ردها می‌توانید جریان سرتاسری درخواست‌ها را به‌صورت بصری مشاهده کنید، مشکلات کارایی را تشخیص دهید و گلوگاه‌ها یا تعامل‌های غیرمنتظره را در control plane، افزونه‌ها یا برنامه‌ها شناسایی کنید.</p>
+<p dir="rtl">کوبرنتیز 1.37 می‌تواند spanها را از طریق <a href="system-traces.html">پروتکل OpenTelemetry</a> (OTLP) صادر کند؛ این کار یا مستقیماً با صادرکننده‌های gRPC داخلی انجام می‌شود یا با ارسال آن‌ها از طریق یک OpenTelemetry Collector.</p>
+<p dir="rtl">ابزار OpenTelemetry Collector، spanها را از مؤلفه‌ها و برنامه‌ها دریافت می‌کند، آن‌ها را پردازش می‌کند (برای مثال با اعمال نمونه‌برداری یا حذف اطلاعات حساس) و برای ذخیره‌سازی و تحلیل به یک سامانهٔ پشتیبان ردیابی ارسال می‌کند.</p>
+<p dir="rtl">شکل ۴ یک خط لولهٔ معمول ردیابی توزیع‌شده را نشان می‌دهد.</p>
 <pre dir="ltr"><code class="language-mermaid" dir="ltr">flowchart LR
     subgraph Sources
         A[Control plane spans]
@@ -189,50 +194,50 @@ document.addEventListener('DOMContentLoaded',function(){box=document.getElementB
     COL --&gt; TS[(Tracing backend)]
     TS --&gt; V[Visualization and analysis]
 </code></pre>
-<p dir="rtl"><em>شکل ۴. اجزای یک پایپ‌لاین ردگیری معمول در کوبرنتیز.</em></p>
-<p dir="rtl">برای مشاهده‌ی collectorها و backendهای ردگیری، <a href="#tracing-tools">ابزارهای رایج مشاهده‌پذیری - ابزارهای ردگیری</a> را ببینید.</p>
+<p dir="rtl"><em>شکل ۴. مؤلفه‌های یک خط لولهٔ ردیابی معمول در کوبرنتیز.</em></p>
+<p dir="rtl">برای آشنایی با گردآورنده‌ها و سامانه‌های پشتیبان ردیابی، بخش <a href="#tracing-tools">ابزارهای رایج مشاهده‌پذیری - ابزارهای ردیابی</a> را ببینید.</p>
 <h4 id="همچنین-ببینید-2" dir="rtl">همچنین ببینید</h4>
 <ul>
-<li dir="rtl"><a href="system-traces.html">ردگیری‌های سیستمی برای اجزای کوبرنتیز</a></li>
+<li dir="rtl"><a href="system-traces.html">ردهای سیستم برای مؤلفه‌های کوبرنتیز</a></li>
 <li dir="rtl"><a href="https://opentelemetry.io/docs/collector/getting-started/" target="_blank" rel="noopener">راهنمای شروع کار با OpenTelemetry Collector</a></li>
-<li dir="rtl"><a href="../../tasks/debug/monitoring/index.html">وظایف پایش و ردگیری</a></li>
+<li dir="rtl"><a href="../../tasks/debug/monitoring/index.html">وظایف پایش و ردیابی</a></li>
 </ul>
-<h2 id="ابزارهای-رایج-مشاهده-پذیری-common-observability-tools" dir="rtl">ابزارهای رایج مشاهده‌پذیری {#common-observability-tools}</h2>
-<p dir="rtl">نکته: این بخش به پروژه‌های شخص ثالثی پیوند می‌دهد که قابلیت‌های مشاهده‌پذیری موردنیاز کوبرنتیز را فراهم می‌کنند.
-نویسندگان پروژه‌ی کوبرنتیز مسئول این پروژه‌ها نیستند و آن‌ها به ترتیب حروف الفبای انگلیسی فهرست شده‌اند. برای افزودن یک
-پروژه به این فهرست، پیش از ارسال تغییر، <a href="../../contribute/style/content-guide.html">راهنمای محتوا</a> را مطالعه کنید.</p>
-<h3 id="ابزارهای-متریک-metrics-tools" dir="rtl">ابزارهای متریک {#metrics-tools}</h3>
+<h2 id="ابزارهای-رایج-مشاهده-پذیری" dir="rtl">ابزارهای رایج مشاهده‌پذیری</h2>
+<p dir="rtl">توجه: این بخش به پروژه‌های شخص ثالثی پیوند می‌دهد که قابلیت‌های مشاهده‌پذیری مورد نیاز کوبرنتیز را فراهم می‌کنند.
+نویسندگان پروژهٔ کوبرنتیز مسئولیتی در قبال این پروژه‌ها ندارند و این پروژه‌ها به ترتیب الفبایی فهرست شده‌اند. برای افزودن
+یک پروژه به این فهرست، پیش از ارسال تغییر، <a href="../../contribute/style/content-guide.html">راهنمای محتوا</a> را مطالعه کنید.</p>
+<h3 id="ابزارهای-متریک" dir="rtl">ابزارهای متریک</h3>
 <ul>
-<li dir="rtl"><a href="https://cortexmetrics.io/" target="_blank" rel="noopener">Cortex</a> ذخیره‌سازی بلندمدت Prometheus را با قابلیت مقیاس‌پذیری افقی ارائه می‌دهد.</li>
-<li dir="rtl"><a href="https://grafana.com/oss/mimir/" target="_blank" rel="noopener">Grafana Mimir</a> پروژه‌ای از Grafana Labs است که ذخیره‌سازی چندمستاجری (multi-tenant) و مقیاس‌پذیر افقی سازگار با Prometheus را فراهم می‌کند.</li>
-<li dir="rtl"><a href="https://prometheus.io/" target="_blank" rel="noopener">Prometheus</a> سامانه‌ی پایشی است که متریک‌ها را از اجزای کوبرنتیز scrape و ذخیره می‌کند.</li>
-<li dir="rtl"><a href="https://thanos.io/" target="_blank" rel="noopener">Thanos</a> با کوئری سراسری، کاهش نمونه‌برداری (downsampling) و پشتیبانی از ذخیره‌سازی شیء (object storage)، Prometheus را گسترش می‌دهد.</li>
+<li dir="rtl">پروژهٔ <a href="https://cortexmetrics.io/" target="_blank" rel="noopener">Cortex</a> ذخیره‌سازی بلندمدت و مقیاس‌پذیر افقی برای Prometheus ارائه می‌دهد.</li>
+<li dir="rtl">پروژهٔ <a href="https://grafana.com/oss/mimir/" target="_blank" rel="noopener">Grafana Mimir</a> از Grafana Labs، ذخیره‌سازی چندمستأجری، مقیاس‌پذیر افقی و سازگار با Prometheus فراهم می‌کند.</li>
+<li dir="rtl">سامانهٔ <a href="https://prometheus.io/" target="_blank" rel="noopener">Prometheus</a> یک سامانهٔ پایش است که متریک‌ها را از مؤلفه‌های کوبرنتیز جمع‌آوری و ذخیره می‌کند.</li>
+<li dir="rtl">پروژهٔ <a href="https://thanos.io/" target="_blank" rel="noopener">Thanos</a> قابلیت‌های Prometheus را با پرس‌وجوی سراسری، کاهش نرخ نمونه‌برداری (downsampling) و پشتیبانی از ذخیره‌سازی آبجکت گسترش می‌دهد.</li>
 </ul>
-<h3 id="ابزارهای-لاگ-گیری-logging-tools" dir="rtl">ابزارهای لاگ‌گیری {#logging-tools}</h3>
+<h3 id="ابزارهای-لاگ-گیری" dir="rtl">ابزارهای لاگ‌گیری</h3>
 <ul>
-<li dir="rtl"><a href="https://www.elastic.co/elasticsearch/" target="_blank" rel="noopener">Elasticsearch</a> نمایه‌سازی و جستجوی توزیع‌شده‌ی لاگ را فراهم می‌کند.</li>
-<li dir="rtl"><a href="https://fluentbit.io/" target="_blank" rel="noopener">Fluent Bit</a> لاگ‌های کانتینر و نود را با مصرف منابع کم گردآوری و ارسال می‌کند.</li>
-<li dir="rtl"><a href="https://www.fluentd.org/" target="_blank" rel="noopener">Fluentd</a> لاگ‌ها را به مقصدهای متعدد مسیریابی و تبدیل می‌کند.</li>
-<li dir="rtl"><a href="https://grafana.com/oss/loki/" target="_blank" rel="noopener">Grafana Loki</a> لاگ‌ها را در قالبی مبتنی بر برچسب و الهام‌گرفته از Prometheus ذخیره می‌کند.</li>
-<li dir="rtl"><a href="https://opensearch.org/" target="_blank" rel="noopener">OpenSearch</a> نمایه‌سازی و جستجوی متن‌باز لاگ را فراهم می‌کند که با APIهای Elasticsearch سازگار است.</li>
+<li dir="rtl">موتور <a href="https://www.elastic.co/elasticsearch/" target="_blank" rel="noopener">Elasticsearch</a> نمایه‌سازی و جست‌وجوی توزیع‌شدهٔ لاگ‌ها را فراهم می‌کند.</li>
+<li dir="rtl">ابزار <a href="https://fluentbit.io/" target="_blank" rel="noopener">Fluent Bit</a> لاگ‌های کانتینرها و نودها را با مصرف اندک منابع گردآوری و ارسال می‌کند.</li>
+<li dir="rtl">ابزار <a href="https://www.fluentd.org/" target="_blank" rel="noopener">Fluentd</a> لاگ‌ها را مسیریابی و تبدیل می‌کند و به مقصدهای متعدد می‌فرستد.</li>
+<li dir="rtl">سامانهٔ <a href="https://grafana.com/oss/loki/" target="_blank" rel="noopener">Grafana Loki</a> لاگ‌ها را در قالبی مبتنی بر برچسب و الهام‌گرفته از Prometheus ذخیره می‌کند.</li>
+<li dir="rtl">پروژهٔ <a href="https://opensearch.org/" target="_blank" rel="noopener">OpenSearch</a> نمایه‌سازی و جست‌وجوی متن‌باز لاگ‌ها را به‌صورت سازگار با APIهای Elasticsearch فراهم می‌کند.</li>
 </ul>
-<h3 id="ابزارهای-ردگیری-tracing-tools" dir="rtl">ابزارهای ردگیری {#tracing-tools}</h3>
+<h3 id="ابزارهای-ردیابی" dir="rtl">ابزارهای ردیابی</h3>
 <ul>
-<li dir="rtl"><a href="https://grafana.com/oss/tempo/" target="_blank" rel="noopener">Grafana Tempo</a> ذخیره‌سازی مقیاس‌پذیر و کم‌هزینه‌ی ردگیری توزیع‌شده را ارائه می‌دهد.</li>
-<li dir="rtl"><a href="https://www.jaegertracing.io/" target="_blank" rel="noopener">Jaeger</a> ردگیری‌های توزیع‌شده‌ی میکروسرویس‌ها را گردآوری و مصور می‌کند.</li>
-<li dir="rtl"><a href="https://opentelemetry.io/docs/collector/" target="_blank" rel="noopener">OpenTelemetry Collector</a> داده‌های تله‌متری، از جمله ردگیری‌ها، را دریافت، پردازش و صادر می‌کند.</li>
-<li dir="rtl"><a href="https://zipkin.io/" target="_blank" rel="noopener">Zipkin</a> گردآوری و مصورسازی ردگیری توزیع‌شده را فراهم می‌کند.</li>
+<li dir="rtl">سامانهٔ <a href="https://grafana.com/oss/tempo/" target="_blank" rel="noopener">Grafana Tempo</a> ذخیره‌سازی مقیاس‌پذیر و کم‌هزینه برای ردیابی توزیع‌شده ارائه می‌دهد.</li>
+<li dir="rtl">ابزار <a href="https://www.jaegertracing.io/" target="_blank" rel="noopener">Jaeger</a> ردهای توزیع‌شدهٔ ریزسرویس‌ها را ثبت و به‌صورت بصری نمایش می‌دهد.</li>
+<li dir="rtl">ابزار <a href="https://opentelemetry.io/docs/collector/" target="_blank" rel="noopener">OpenTelemetry Collector</a> داده‌های تله‌متری، از جمله ردها، را دریافت، پردازش و صادر می‌کند.</li>
+<li dir="rtl">سامانهٔ <a href="https://zipkin.io/" target="_blank" rel="noopener">Zipkin</a> امکان گردآوری و نمایش بصری ردهای توزیع‌شده را فراهم می‌کند.</li>
 </ul>
 <h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
 <ul>
-<li dir="rtl">یاد بگیرید چگونه <a href="../../tasks/debug/debug-cluster/resource-usage-monitoring.html">متریک‌های مصرف منابع را با metrics-server گردآوری کنید</a></li>
-<li dir="rtl"><a href="../../tasks/debug/logging/index.html">وظایف و آموزش‌های لاگ‌گیری</a> را بررسی کنید</li>
-<li dir="rtl"><a href="../../tasks/debug/monitoring/index.html">راهنمای وظایف پایش و ردگیری</a> را دنبال کنید</li>
-<li dir="rtl">برای endpointهای اجزا و پایداری آن‌ها، <a href="system-metrics.html">راهنمای متریک‌های سیستمی</a> را مرور کنید</li>
-<li dir="rtl">بخش <a href="#common-observability-tools">ابزارهای رایج مشاهده‌پذیری</a> را برای گزینه‌های شخص ثالثِ بررسی‌شده مرور کنید</li>
+<li dir="rtl">با نحوهٔ <a href="../../tasks/debug/debug-cluster/resource-usage-monitoring.html">گردآوری متریک‌های مصرف منابع با metrics-server</a> آشنا شوید.</li>
+<li dir="rtl"><a href="../../tasks/debug/logging/index.html">وظایف و آموزش‌های لاگ‌گیری</a> را بررسی کنید.</li>
+<li dir="rtl"><a href="../../tasks/debug/monitoring/index.html">راهنماهای وظایف پایش و ردیابی</a> را دنبال کنید.</li>
+<li dir="rtl">برای آشنایی با نقاط پایانی مؤلفه‌ها و پایداری آن‌ها، <a href="system-metrics.html">راهنمای متریک‌های سیستم</a> را مرور کنید.</li>
+<li dir="rtl">برای گزینه‌های شخص ثالث بررسی‌شده، بخش <a href="#common-observability-tools">ابزارهای رایج مشاهده‌پذیری</a> را مرور کنید.</li>
 </ul>
 <p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
-<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#متریک-ها-metrics">متریک‌ها {#metrics}</a><a class="l3" href="#metrics-api">Metrics API</a><a class="l2" href="#لاگ-ها-logs">لاگ‌ها {#logs}</a><a class="l2" href="#ردگیری-ها-traces">ردگیری‌ها {#traces}</a><a class="l2" href="#ابزارهای-رایج-مشاهده-پذیری-common-observability-tools">ابزارهای رایج مشاهده‌پذیری {#common-observability-tools}</a><a class="l3" href="#ابزارهای-متریک-metrics-tools">ابزارهای متریک {#metrics-tools}</a><a class="l3" href="#ابزارهای-لاگ-گیری-logging-tools">ابزارهای لاگ‌گیری {#logging-tools}</a><a class="l3" href="#ابزارهای-ردگیری-tracing-tools">ابزارهای ردگیری {#tracing-tools}</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#متریک-ها">متریک‌ها</a><a class="l3" href="#رابط-metrics-api">رابط Metrics API</a><a class="l2" href="#لاگ-ها">لاگ‌ها</a><a class="l2" href="#ردها">ردها</a><a class="l2" href="#ابزارهای-رایج-مشاهده-پذیری">ابزارهای رایج مشاهده‌پذیری</a><a class="l3" href="#ابزارهای-متریک">ابزارهای متریک</a><a class="l3" href="#ابزارهای-لاگ-گیری">ابزارهای لاگ‌گیری</a><a class="l3" href="#ابزارهای-ردیابی">ابزارهای ردیابی</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
 </div>
 </body>
 </html>
