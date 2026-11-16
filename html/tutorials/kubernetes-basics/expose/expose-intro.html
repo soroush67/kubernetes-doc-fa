@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>استفاده از Service برای در دسترس قرار دادن برنامه | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
+<header class="top"><a href="../../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">tutorials / kubernetes-basics / expose</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">استفاده از Service برای در دسترس قرار دادن برنامه</h1><h2 id="اهداف" dir="rtl">اهداف</h2>
+<ul>
+<li dir="rtl">با Service در کوبرنتیز آشنا شوید.</li>
+<li dir="rtl">رابطهٔ برچسب‌ها و انتخابگرها (selector) با Service را درک کنید.</li>
+<li dir="rtl">یک برنامه را خارج از کلاستر کوبرنتیز در دسترس قرار دهید.</li>
+</ul>
+<h2 id="پیش-از-شروع" dir="rtl">پیش از شروع</h2>
+<p dir="rtl">دستورهای پوسته در این آموزش از نحو پوستهٔ POSIX استفاده می‌کنند که پوسته‌های پیش‌فرض
+بیشتر سیستم‌های Linux و macOS (برای نمونه bash، zsh یا sh) از آن پشتیبانی می‌کنند.
+کاربران ویندوز برای اجرای دستورها به همان شکلی که نوشته شده‌اند، باید از یک پوستهٔ
+سازگار با POSIX مانند
+<a href="https://learn.microsoft.com/en-us/windows/wsl/install" target="_blank" rel="noopener">Windows Subsystem for Linux (WSL)</a>
+یا <a href="https://gitforwindows.org/" target="_blank" rel="noopener">Git Bash</a> استفاده کنند.
+دستورهایی که از <code dir="ltr">export</code>، <code dir="ltr">$()</code> و ساختارهای مشابه استفاده می‌کنند، با PowerShell یا
+Command Prompt ویندوز سازگار <strong>نیستند</strong>.</p>
+<h2 id="مروری-بر-serviceهای-کوبرنتیز" dir="rtl">مروری بر Serviceهای کوبرنتیز</h2>
+<p dir="rtl"><a href="../../../concepts/workloads/pods/index.html">Podهای</a> کوبرنتیز فناپذیرند و
+<a href="../../../concepts/workloads/pods/pod-lifecycle.html">چرخهٔ حیات</a> مشخصی دارند. وقتی یک نود
+کارگر از کار می‌افتد، Podهایی که روی آن نود اجرا می‌شوند نیز از دست می‌روند. در این
+حالت یک <a href="../../../concepts/workloads/controllers/replicaset.html">ReplicaSet</a> ممکن است با
+ایجاد Podهای جدید، کلاستر را به‌صورت پویا به وضعیت مطلوب بازگرداند تا برنامهٔ شما
+همچنان در حال اجرا بماند. به‌عنوان نمونه‌ای دیگر، یک بک‌اند پردازش تصویر با ۳ نسخهٔ
+تکراری (replica) را در نظر بگیرید. این نسخه‌ها جایگزین‌پذیرند؛ سیستم فرانت‌اند نباید
+به نسخه‌های بک‌اند اهمیت دهد، حتی اگر یک Pod از دست برود و دوباره ایجاد شود. با این
+حال، هر Pod در کلاستر کوبرنتیز نشانی IP منحصربه‌فردی دارد، حتی Podهایی که روی یک نود
+قرار دارند. بنابراین باید راهی برای هماهنگ‌سازی خودکار تغییرات میان Podها وجود داشته
+باشد تا برنامه‌های شما به کار خود ادامه دهند.</p>
+<div class="callout note"><div class="callout-title"></div>
+<p dir="rtl"><em>هر Service در کوبرنتیز یک لایهٔ انتزاعی است که مجموعه‌ای منطقی از Podها را تعریف
+می‌کند و امکان در دسترس قرار دادن آن‌ها برای ترافیک خارجی، توزیع بار و کشف سرویس را
+برای این Podها فراهم می‌کند.</em></p>
+</div>
+<p dir="rtl"><a href="../../../concepts/services-networking/service.html">Service</a> در کوبرنتیز یک انتزاع است که
+مجموعه‌ای منطقی از Podها و سیاستی برای دسترسی به آن‌ها را تعریف می‌کند. Serviceها
+امکان اتصال سست (loose coupling) میان Podهای وابسته به یکدیگر را فراهم می‌کنند. هر
+Service، مانند همهٔ مانیفست‌های آبجکت‌های کوبرنتیز، با YAML یا JSON تعریف می‌شود.
+مجموعهٔ Podهایی که یک Service هدف می‌گیرد، معمولاً با یک <em>انتخابگر برچسب</em> (label
+selector) تعیین می‌شود (در ادامه توضیح داده شده است که چرا ممکن است بخواهید Serviceی
+بدون <code dir="ltr">selector</code> در spec داشته باشید).</p>
+<p dir="rtl">اگرچه هر Pod نشانی IP منحصربه‌فردی دارد، این نشانی‌ها بدون Service خارج از کلاستر در
+دسترس نیستند. Serviceها به برنامه‌های شما امکان دریافت ترافیک را می‌دهند. با تعیین
+<code dir="ltr">type</code> در <code dir="ltr">spec</code> یک Service، می‌توان آن را به روش‌های مختلفی در دسترس قرار داد:</p>
+<ul>
+<li dir="rtl">
+<p dir="rtl"><em>ClusterIP</em> (پیش‌فرض) - Service را روی یک IP داخلی در کلاستر در دسترس قرار می‌دهد.
+با این نوع، Service فقط از درون کلاستر قابل دسترسی است.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><em>NodePort</em> - Service را با استفاده از NAT روی پورتی یکسان در هر نود انتخاب‌شده از
+کلاستر در دسترس قرار می‌دهد. با این نوع، Service از بیرون کلاستر از طریق
+<code dir="ltr">NodeIP:NodePort</code> قابل دسترسی می‌شود. این نوع، ابرمجموعهٔ ClusterIP است.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><em>LoadBalancer</em> - در ابر فعلی (در صورت پشتیبانی) یک توزیع‌کنندهٔ بار خارجی ایجاد
+می‌کند و یک IP خارجی ثابت به Service اختصاص می‌دهد. این نوع، ابرمجموعهٔ NodePort است.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl"><em>ExternalName</em> - با برگرداندن یک رکورد <code dir="ltr">CNAME</code> حاوی مقدار فیلد <code dir="ltr">externalName</code>
+(برای نمونه <code dir="ltr">foo.bar.example.com</code>)، Service را به محتوای این فیلد نگاشت می‌کند.
+هیچ نوع پراکسی‌ای راه‌اندازی نمی‌شود.</p>
+</li>
+</ul>
+<p dir="rtl">اطلاعات بیشتر دربارهٔ انواع مختلف Serviceها را می‌توانید در آموزش
+<a href="https://kubernetes.io/docs/tutorials/services/source-ip/" target="_blank">استفاده از Source IP</a> بیابید. همچنین
+<a href="https://kubernetes.io/docs/tutorials/services/connect-applications-service/" target="_blank">اتصال برنامه‌ها با Serviceها</a>
+را ببینید.</p>
+<p dir="rtl">افزون بر این، توجه کنید که در برخی موارد استفاده از Serviceها، <code dir="ltr">selector</code> در spec
+تعریف نمی‌شود. Serviceی که بدون <code dir="ltr">selector</code> ایجاد شود، آبجکت Endpoints متناظر را نیز
+ایجاد نمی‌کند. به این ترتیب کاربران می‌توانند یک Service را به‌صورت دستی به
+endpointهای مشخصی نگاشت کنند. دلیل احتمالی دیگر برای نبودن انتخابگر این است که فقط از
+<code dir="ltr">type: ExternalName</code> استفاده می‌کنید.</p>
+<h2 id="serviceها-و-برچسب-ها" dir="rtl">Serviceها و برچسب‌ها</h2>
+<p dir="rtl">هر Service ترافیک را میان مجموعه‌ای از Podها مسیریابی می‌کند. Serviceها انتزاعی هستند
+که به Podها اجازه می‌دهند در کوبرنتیز از بین بروند و تکثیر شوند، بی‌آنکه بر برنامهٔ
+شما اثری بگذارند. کشف و مسیریابی میان Podهای وابسته به یکدیگر (مانند مؤلفه‌های
+فرانت‌اند و بک‌اند یک برنامه) را Serviceهای کوبرنتیز انجام می‌دهند.</p>
+<p dir="rtl">Serviceها با استفاده از
+<a href="../../../concepts/overview/working-with-objects/labels.html">برچسب‌ها و انتخابگرها</a> با
+مجموعه‌ای از Podها تطبیق داده می‌شوند. برچسب‌ها و انتخابگرها یک سازوکار پایه‌ای
+گروه‌بندی هستند که امکان انجام عملیات منطقی روی آبجکت‌های کوبرنتیز را فراهم می‌کنند.
+برچسب‌ها زوج‌های کلید/مقداری هستند که به آبجکت‌ها متصل می‌شوند و به شیوه‌های گوناگونی
+می‌توان از آن‌ها استفاده کرد:</p>
+<ul>
+<li dir="rtl">مشخص کردن آبجکت‌ها برای محیط‌های توسعه، آزمون و تولید</li>
+<li dir="rtl">درج برچسب‌های نسخه</li>
+<li dir="rtl">دسته‌بندی یک آبجکت با استفاده از برچسب‌ها</li>
+</ul>
+<figure><img src="https://kubernetes.io/docs/tutorials/kubernetes-basics/public/images/module_04_labels.svg" alt=""><figcaption></figcaption></figure>
+<p dir="rtl">برچسب‌ها را می‌توان هنگام ایجاد آبجکت‌ها یا پس از آن به آن‌ها متصل کرد و در هر زمانی
+تغییر داد. اکنون برنامهٔ خود را با استفاده از یک Service در دسترس قرار می‌دهیم و چند
+برچسب اعمال می‌کنیم.</p>
+<h3 id="گام-۱-ایجاد-یک-service-جدید" dir="rtl">گام ۱: ایجاد یک Service جدید</h3>
+<p dir="rtl">ابتدا بررسی می‌کنیم که برنامهٔ ما در حال اجرا باشد. از دستور <code dir="ltr">kubectl get</code> استفاده
+می‌کنیم و به دنبال Podهای موجود می‌گردیم:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pods
+</code></pre>
+<p dir="rtl">اگر هیچ Podی در حال اجرا نباشد، یعنی آبجکت‌های آموزش‌های قبلی پاک شده‌اند. در این
+صورت، به آموزش
+<a href="../deploy-app/deploy-intro.html#deploy-an-app">استفاده از kubectl برای ایجاد یک Deployment</a>
+برگردید و Deployment را دوباره ایجاد کنید. چند ثانیه صبر کنید و دوباره فهرست Podها را
+بگیرید. وقتی دیدید آن یک Pod در حال اجراست، می‌توانید ادامه دهید.</p>
+<p dir="rtl">سپس فهرست Serviceهای فعلی کلاستر را می‌گیریم:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get services
+</code></pre>
+<p dir="rtl">برای در دسترس قرار دادن Deployment برای ترافیک خارجی، از دستور kubectl expose با
+گزینهٔ --type=NodePort استفاده می‌کنیم:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl expose deployment/kubernetes-bootcamp --type="NodePort" --port 8080
+</code></pre>
+<p dir="rtl">اکنون Serviceی با نام kubernetes-bootcamp در حال اجرا داریم. در اینجا می‌بینیم که این
+Service یک cluster-IP منحصربه‌فرد، یک پورت داخلی و یک external-IP (نشانی IP نود)
+دریافت کرده است.</p>
+<p dir="rtl">برای اینکه بفهمیم کدام پورت به‌صورت خارجی باز شده است (برای Service از نوع
+<code dir="ltr">type: NodePort</code>)، زیردستور <code dir="ltr">describe service</code> را اجرا می‌کنیم:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl describe services/kubernetes-bootcamp
+</code></pre>
+<p dir="rtl">یک متغیر محیطی با نام <code dir="ltr">NODE_PORT</code> ایجاد کنید که مقدار پورت اختصاص‌یافته به نود را در
+خود نگه دارد:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">export NODE_PORT="$(kubectl get services/kubernetes-bootcamp -o go-template='{{(index .spec.ports 0).nodePort}}')"
+echo "NODE_PORT=$NODE_PORT"
+</code></pre>
+<p dir="rtl">اکنون می‌توانیم با استفاده از <code dir="ltr">curl</code>، نشانی IP نود و پورتی که به‌صورت خارجی در دسترس
+قرار گرفته است، بررسی کنیم که برنامه خارج از کلاستر در دسترس است:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">curl http://"$(minikube ip):$NODE_PORT"
+</code></pre>
+<div class="callout note"><div class="callout-title">یادداشت</div>
+<p dir="rtl">اگر minikube را با Docker Desktop به‌عنوان درایور کانتینر اجرا می‌کنید، به یک تونل
+minikube نیاز دارید. دلیل این است که کانتینرهای درون Docker Desktop از رایانهٔ میزبان
+شما جدا هستند.</p>
+<p dir="rtl">در یک پنجرهٔ ترمینال جداگانه، این دستور را اجرا کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">minikube service kubernetes-bootcamp --url
+</code></pre>
+<p dir="rtl">خروجی به این شکل است:</p>
+<pre dir="ltr"><code dir="ltr">http://127.0.0.1:51082
+!  Because you are using a Docker driver on darwin, the terminal needs to be open to run it.
+</code></pre>
+<p dir="rtl">سپس با استفاده از URL داده‌شده به برنامه دسترسی پیدا کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">curl 127.0.0.1:51082
+</code></pre>
+</div>
+<p dir="rtl">و پاسخی از سرور دریافت می‌کنیم. Service در دسترس قرار گرفته است.</p>
+<h3 id="گام-۲-استفاده-از-برچسب-ها" dir="rtl">گام ۲: استفاده از برچسب‌ها</h3>
+<p dir="rtl">Deployment به‌صورت خودکار یک برچسب برای Pod ما ایجاد کرده است. با زیردستور
+<code dir="ltr">describe deployment</code> می‌توانید نام (<em>کلید</em>) آن برچسب را ببینید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl describe deployment
+</code></pre>
+<p dir="rtl">از این برچسب برای پرس‌وجو در فهرست Podها استفاده می‌کنیم. دستور <code dir="ltr">kubectl get pods</code>
+را با پارامتر <code dir="ltr">-l</code> و پس از آن مقادیر برچسب به کار می‌بریم:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pods -l app=kubernetes-bootcamp
+</code></pre>
+<p dir="rtl">همین کار را برای فهرست کردن Serviceهای موجود نیز می‌توانید انجام دهید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get services -l app=kubernetes-bootcamp
+</code></pre>
+<p dir="rtl">نام Pod را به دست آورید و آن را در متغیر محیطی POD_NAME ذخیره کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">export POD_NAME="$(kubectl get pods -o go-template --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')"
+echo "Name of the Pod: $POD_NAME"
+</code></pre>
+<p dir="rtl">برای اعمال یک برچسب جدید، از زیردستور label و پس از آن نوع آبجکت، نام آبجکت و برچسب
+جدید استفاده می‌کنیم:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl label pods "$POD_NAME" version=v1
+</code></pre>
+<p dir="rtl">با این کار برچسب جدیدی به Pod ما اعمال می‌شود (نسخهٔ برنامه را به Pod سنجاق کرده‌ایم)
+و می‌توانیم آن را با دستور <code dir="ltr">describe pod</code> بررسی کنیم:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl describe pods "$POD_NAME"
+</code></pre>
+<p dir="rtl">در اینجا می‌بینیم که برچسب اکنون به Pod ما متصل شده است. اکنون می‌توانیم با استفاده از
+برچسب جدید در فهرست Podها پرس‌وجو کنیم:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pods -l version=v1
+</code></pre>
+<p dir="rtl">و Pod را می‌بینیم.</p>
+<h3 id="گام-۳-حذف-یک-service" dir="rtl">گام ۳: حذف یک Service</h3>
+<p dir="rtl">برای حذف Serviceها می‌توانید از زیردستور <code dir="ltr">delete service</code> استفاده کنید. در اینجا هم
+می‌توان از برچسب‌ها استفاده کرد:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl delete service -l app=kubernetes-bootcamp
+</code></pre>
+<p dir="rtl">بررسی کنید که Service حذف شده باشد:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get services
+</code></pre>
+<p dir="rtl">این خروجی تأیید می‌کند که Service ما حذف شده است. برای اطمینان از اینکه این مسیر دیگر
+در دسترس نیست، می‌توانید با <code dir="ltr">curl</code> به IP و پورتی که پیش‌تر در دسترس بود درخواست
+بفرستید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">curl http://"$(minikube ip):$NODE_PORT"
+</code></pre>
+<p dir="rtl">این نشان می‌دهد که برنامه دیگر از بیرون کلاستر قابل دسترسی نیست. با اجرای <code dir="ltr">curl</code> از
+درون Pod می‌توانید تأیید کنید که برنامه همچنان در حال اجراست:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl exec -ti $POD_NAME -- curl http://localhost:8080
+</code></pre>
+<p dir="rtl">در اینجا می‌بینیم که برنامه در حال اجراست، زیرا Deployment مدیریت برنامه را بر عهده
+دارد. برای خاموش کردن برنامه، باید Deployment را نیز حذف کنید.</p>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<ul>
+<li dir="rtl">آموزش
+<a href="../scale/scale-intro.html">اجرای چند نمونه از برنامه</a>.</li>
+<li dir="rtl">دربارهٔ <a href="../../../concepts/services-networking/service.html">Service</a> بیشتر بیاموزید.</li>
+</ul>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#اهداف">اهداف</a><a class="l2" href="#پیش-از-شروع">پیش از شروع</a><a class="l2" href="#مروری-بر-serviceهای-کوبرنتیز">مروری بر Serviceهای کوبرنتیز</a><a class="l2" href="#serviceها-و-برچسب-ها">Serviceها و برچسب‌ها</a><a class="l3" href="#گام-۱-ایجاد-یک-service-جدید">گام ۱: ایجاد یک Service جدید</a><a class="l3" href="#گام-۲-استفاده-از-برچسب-ها">گام ۲: استفاده از برچسب‌ها</a><a class="l3" href="#گام-۳-حذف-یک-service">گام ۳: حذف یک Service</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>

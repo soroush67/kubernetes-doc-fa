@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-1688 از 1722 صفحه
+1703 از 1722 صفحه
 
 
 ## `.`
@@ -2209,7 +2209,7 @@
 ## `tutorials`
 
 - ✅ [_index.md](md/tutorials/_index.md)
-- ⏳ `hello-minikube.md`
+- ✅ [hello-minikube.md](md/tutorials/hello-minikube.md)
 
 ## `tutorials/cluster-management`
 
@@ -2224,43 +2224,43 @@
 ## `tutorials/configuration`
 
 - ✅ [_index.md](md/tutorials/configuration/_index.md)
-- ⏳ `configure-persistent-volume-storage.md`
+- ✅ [configure-persistent-volume-storage.md](md/tutorials/configuration/configure-persistent-volume-storage.md)
 - ✅ [configure-redis-using-configmap.md](md/tutorials/configuration/configure-redis-using-configmap.md)
 - ✅ [pod-sidecar-containers.md](md/tutorials/configuration/pod-sidecar-containers.md)
-- ⏳ `updating-configuration-via-a-configmap.md`
+- ✅ [updating-configuration-via-a-configmap.md](md/tutorials/configuration/updating-configuration-via-a-configmap.md)
 
 ## `tutorials/kubernetes-basics`
 
-- ⏳ `_index.md`
+- ⚠️ [_index.md](md/tutorials/kubernetes-basics/_index.md)
 
 ## `tutorials/kubernetes-basics/create-cluster`
 
-- ⏳ `_index.md`
-- ⏳ `cluster-intro.md`
+- ✅ [_index.md](md/tutorials/kubernetes-basics/create-cluster/_index.md)
+- ✅ [cluster-intro.md](md/tutorials/kubernetes-basics/create-cluster/cluster-intro.md)
 
 ## `tutorials/kubernetes-basics/deploy-app`
 
-- ⏳ `_index.md`
-- ⏳ `deploy-intro.md`
+- ✅ [_index.md](md/tutorials/kubernetes-basics/deploy-app/_index.md)
+- ✅ [deploy-intro.md](md/tutorials/kubernetes-basics/deploy-app/deploy-intro.md)
 
 ## `tutorials/kubernetes-basics/explore`
 
-- ⏳ `_index.md`
-- ⏳ `explore-intro.md`
+- ✅ [_index.md](md/tutorials/kubernetes-basics/explore/_index.md)
+- ✅ [explore-intro.md](md/tutorials/kubernetes-basics/explore/explore-intro.md)
 
 ## `tutorials/kubernetes-basics/expose`
 
-- ⏳ `_index.md`
-- ⏳ `expose-intro.md`
+- ✅ [_index.md](md/tutorials/kubernetes-basics/expose/_index.md)
+- ✅ [expose-intro.md](md/tutorials/kubernetes-basics/expose/expose-intro.md)
 
 ## `tutorials/kubernetes-basics/scale`
 
-- ⏳ `_index.md`
-- ⏳ `scale-intro.md`
+- ✅ [_index.md](md/tutorials/kubernetes-basics/scale/_index.md)
+- ✅ [scale-intro.md](md/tutorials/kubernetes-basics/scale/scale-intro.md)
 
 ## `tutorials/kubernetes-basics/update`
 
-- ⏳ `_index.md`
+- ✅ [_index.md](md/tutorials/kubernetes-basics/update/_index.md)
 - ⏳ `update-intro.md`
 
 ## `tutorials/security`

@@ -8,9 +8,9 @@
 
 | | |
 |---|---|
-| پیشرفت (بر اساس کلمات) | **98.1٪** |
-| صفحات ترجمه‌شده | 1688 از 1722 |
-| صفحات دارای ایراد ساختاری | 77 |
+| پیشرفت (بر اساس کلمات) | **98.6٪** |
+| صفحات ترجمه‌شده | 1703 از 1722 |
+| صفحات دارای ایراد ساختاری | 78 |
 | نسخه‌ی منبع انگلیسی | `f652c6b8a26f` |
 
 ## مشاهده
@@ -75,7 +75,7 @@ cd kubernetes-doc-fa
 | `reference` | 1198 | 1198 |
 | `setup` | 22 | 22 |
 | `tasks` | 221 | 221 |
-| `tutorials` | 11 | 45 |
+| `tutorials` | 26 | 45 |
 
 </div>
 
@@ -101,26 +101,26 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [tutorials/kubernetes-basics/expose/expose-intro.md](md/tutorials/kubernetes-basics/expose/expose-intro.md) — 2026-11-16T15:48:50+03:30
+- [tutorials/kubernetes-basics/update/_index.md](md/tutorials/kubernetes-basics/update/_index.md) — 2026-11-16T15:48:50+03:30
+- [tutorials/kubernetes-basics/scale/scale-intro.md](md/tutorials/kubernetes-basics/scale/scale-intro.md) — 2026-11-16T15:48:47+03:30
+- [tutorials/kubernetes-basics/scale/_index.md](md/tutorials/kubernetes-basics/scale/_index.md) — 2026-11-16T15:48:08+03:30
+- [tutorials/kubernetes-basics/explore/explore-intro.md](md/tutorials/kubernetes-basics/explore/explore-intro.md) — 2026-11-16T15:48:04+03:30
+- [tutorials/kubernetes-basics/expose/_index.md](md/tutorials/kubernetes-basics/expose/_index.md) — 2026-11-16T15:48:04+03:30
+- [tutorials/kubernetes-basics/deploy-app/deploy-intro.md](md/tutorials/kubernetes-basics/deploy-app/deploy-intro.md) — 2026-11-16T15:48:01+03:30
+- [tutorials/kubernetes-basics/explore/_index.md](md/tutorials/kubernetes-basics/explore/_index.md) — 2026-11-16T15:47:24+03:30
+- [tutorials/kubernetes-basics/create-cluster/cluster-intro.md](md/tutorials/kubernetes-basics/create-cluster/cluster-intro.md) — 2026-11-16T15:47:21+03:30
+- [tutorials/kubernetes-basics/deploy-app/_index.md](md/tutorials/kubernetes-basics/deploy-app/_index.md) — 2026-11-16T15:47:20+03:30
+- [tutorials/kubernetes-basics/_index.md](md/tutorials/kubernetes-basics/_index.md) — 2026-11-16T15:47:17+03:30
+- [tutorials/kubernetes-basics/create-cluster/_index.md](md/tutorials/kubernetes-basics/create-cluster/_index.md) — 2026-11-16T15:46:56+03:30
+- [tutorials/configuration/updating-configuration-via-a-configmap.md](md/tutorials/configuration/updating-configuration-via-a-configmap.md) — 2026-11-16T15:46:52+03:30
+- [tutorials/hello-minikube.md](md/tutorials/hello-minikube.md) — 2026-11-16T15:46:25+03:30
+- [tutorials/configuration/configure-persistent-volume-storage.md](md/tutorials/configuration/configure-persistent-volume-storage.md) — 2026-11-16T15:45:35+03:30
 - [tutorials/configuration/pod-sidecar-containers.md](md/tutorials/configuration/pod-sidecar-containers.md) — 2026-11-16T15:44:56+03:30
 - [tutorials/configuration/configure-redis-using-configmap.md](md/tutorials/configuration/configure-redis-using-configmap.md) — 2026-11-16T15:44:04+03:30
 - [tutorials/cluster-management/use-pod-level-resource-managers.md](md/tutorials/cluster-management/use-pod-level-resource-managers.md) — 2026-11-16T15:43:39+03:30
 - [tutorials/configuration/_index.md](md/tutorials/configuration/_index.md) — 2026-11-16T15:42:59+03:30
 - [tutorials/cluster-management/provision-swap-memory.md](md/tutorials/cluster-management/provision-swap-memory.md) — 2026-11-16T15:42:56+03:30
-- [tutorials/cluster-management/namespaces-walkthrough.md](md/tutorials/cluster-management/namespaces-walkthrough.md) — 2026-11-16T15:42:47+03:30
-- [tutorials/cluster-management/kubelet-standalone.md](md/tutorials/cluster-management/kubelet-standalone.md) — 2026-11-16T15:42:36+03:30
-- [tutorials/cluster-management/install-use-dra.md](md/tutorials/cluster-management/install-use-dra.md) — 2026-11-16T15:42:10+03:30
-- [test.md](md/test.md) — 2026-11-16T15:41:39+03:30
-- [tutorials/cluster-management/admission-policies.md](md/tutorials/cluster-management/admission-policies.md) — 2026-11-16T15:40:56+03:30
-- [tutorials/cluster-management/_index.md](md/tutorials/cluster-management/_index.md) — 2026-11-16T15:39:54+03:30
-- [tutorials/_index.md](md/tutorials/_index.md) — 2026-11-16T15:39:51+03:30
-- [tasks/tools/install-kubectl-linux.md](md/tasks/tools/install-kubectl-linux.md) — 2026-11-16T15:39:37+03:30
-- [tasks/tools/install-kubectl-windows.md](md/tasks/tools/install-kubectl-windows.md) — 2026-11-16T15:39:11+03:30
-- [tasks/tools/install-kubectl-macos.md](md/tasks/tools/install-kubectl-macos.md) — 2026-11-16T15:38:43+03:30
-- [tasks/tools/included/verify-kubectl.md](md/tasks/tools/included/verify-kubectl.md) — 2026-11-14T15:52:39+03:30
-- [tasks/tools/included/optional-kubectl-configs-zsh.md](md/tasks/tools/included/optional-kubectl-configs-zsh.md) — 2026-11-14T15:52:29+03:30
-- [tasks/tools/included/optional-kubectl-configs-pwsh.md](md/tasks/tools/included/optional-kubectl-configs-pwsh.md) — 2026-11-14T15:52:28+03:30
-- [tasks/tools/included/optional-kubectl-configs-fish.md](md/tasks/tools/included/optional-kubectl-configs-fish.md) — 2026-11-14T15:52:23+03:30
-- [tasks/tools/included/optional-kubectl-configs-bash-mac.md](md/tasks/tools/included/optional-kubectl-configs-bash-mac.md) — 2026-11-14T15:52:22+03:30
 
 </div>
 
@@ -205,6 +205,7 @@ cd kubernetes-doc-fa
 - [tasks/extend-kubernetes/socks5-proxy-access-api.md](md/tasks/extend-kubernetes/socks5-proxy-access-api.md): chunk 1: 7 untranslated English lines, e.g. 'client([client])-. local <br> traffic .->  local_ssh[Local SSH <br> SOCKS5 proxy];'
 - [tasks/tools/install-kubectl-linux.md](md/tasks/tools/install-kubectl-linux.md): chunk 1: 8 untranslated English lines, e.g. 'curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"'
 - [tasks/tools/install-kubectl-macos.md](md/tasks/tools/install-kubectl-macos.md): chunk 1: 8 untranslated English lines, e.g. 'curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/darwin/amd64/kubectl"'
+- [tutorials/kubernetes-basics/_index.md](md/tutorials/kubernetes-basics/_index.md): chunk 1: 12 untranslated English lines, e.g. 'path="/docs/tutorials/kubernetes-basics/create-cluster/cluster-intro/"'
 
 </div>
 

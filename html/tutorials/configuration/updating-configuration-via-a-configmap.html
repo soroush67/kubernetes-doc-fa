@@ -1,0 +1,779 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>به‌روزرسانی پیکربندی با استفاده از ConfigMap | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">tutorials / configuration</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">به‌روزرسانی پیکربندی با استفاده از ConfigMap</h1><!-- overview -->
+<p dir="rtl">این صفحه نمونه‌ای گام‌به‌گام از به‌روزرسانی پیکربندی درون یک Pod با استفاده از ConfigMap ارائه می‌دهد
+و بر پایهٔ وظیفهٔ <a href="../../tasks/configure-pod-container/configure-pod-configmap.html">پیکربندی Pod برای استفاده از ConfigMap</a> نوشته شده است.<br>
+در پایان این آموزش، خواهید دانست که چگونه پیکربندی یک برنامهٔ در حال اجرا را تغییر دهید.<br>
+در این آموزش از ایمیج‌های <code dir="ltr">alpine</code> و <code dir="ltr">nginx</code> به‌عنوان نمونه استفاده می‌شود.</p>
+<h2 id="پیش-از-شروع" dir="rtl">پیش از شروع</h2>
+<p dir="rtl">باید یک کلاستر کوبرنتیز داشته باشید و ابزار خط فرمان kubectl باید برای ارتباط با کلاستر شما پیکربندی شده باشد. توصیه می‌شود این آموزش را روی کلاستری اجرا کنید که دست‌کم دو نود داشته باشد که نقش میزبان control plane را ندارند. اگر هنوز کلاستری ندارید، می‌توانید با استفاده از
+<a href="https://minikube.sigs.k8s.io/docs/tutorials/multi_node/" target="_blank" rel="noopener">minikube</a>
+یکی بسازید یا از یکی از این محیط‌های آزمایشی کوبرنتیز استفاده کنید:</p>
+<ul>
+<li dir="ltr" class="ltr"><a href="https://labs.iximiuz.com/playgrounds?category=kubernetes&amp;filter=all" target="_blank" rel="noopener">iximiuz Labs</a></li>
+<li dir="ltr" class="ltr"><a href="https://killercoda.com/playgrounds/scenario/kubernetes" target="_blank" rel="noopener">Killercoda</a></li>
+<li dir="ltr" class="ltr"><a href="https://kodekloud.com/public-playgrounds" target="_blank" rel="noopener">KodeKloud</a></li>
+</ul>
+<p dir="rtl">برای ارسال درخواست‌های HTTP از ترمینال یا خط فرمان، به ابزار خط فرمان <a href="https://curl.se/" target="_blank" rel="noopener">curl</a> نیاز دارید.
+اگر <code dir="ltr">curl</code> در دسترس ندارید، می‌توانید آن را نصب کنید. برای این کار، مستندات سیستم‌عامل محلی خود را بررسی کنید.</p>
+<h2 id="اهداف" dir="rtl">اهداف</h2>
+<ul>
+<li dir="rtl">به‌روزرسانی پیکربندی با استفاده از ConfigMap که به‌صورت حجم (Volume) mount شده است</li>
+<li dir="rtl">به‌روزرسانی متغیرهای محیطی یک Pod با استفاده از ConfigMap</li>
+<li dir="rtl">به‌روزرسانی پیکربندی با استفاده از ConfigMap در یک Pod چندکانتینری</li>
+<li dir="rtl">به‌روزرسانی پیکربندی با استفاده از ConfigMap در Podای که کانتینر کناری (Sidecar Container) دارد</li>
+</ul>
+<!-- lessoncontent -->
+<h2 id="به-روزرسانی-پیکربندی-با-استفاده-از-configmap-که-به-صورت-حجم-mount-شده-است-rollout-configmap-volume" dir="rtl">به‌روزرسانی پیکربندی با استفاده از ConfigMap که به‌صورت حجم mount شده است {#rollout-configmap-volume}</h2>
+<p dir="rtl">با دستور <code dir="ltr">kubectl create configmap</code> یک ConfigMap از
+<a href="../../tasks/configure-pod-container/configure-pod-configmap.html#create-configmaps-from-literal-values">مقادیر صریح (literal)</a> بسازید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl create configmap sport --from-literal=sport=football
+</code></pre>
+<p dir="rtl">در ادامه نمونه‌ای از مانیفست یک Deployment آمده است که در آن ConfigMap با نام <code dir="ltr">sport</code> به‌صورت یک
+<span class="term" title="volume">حجم</span> در تنها کانتینر Pod، mount شده است.</p>
+<div class="code-file ltr" dir="ltr">deployments/deployment-with-configmap-as-volume.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: configmap-volume
+  labels:
+    app.kubernetes.io/name: configmap-volume
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: configmap-volume
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: configmap-volume
+    spec:
+      containers:
+        - name: alpine
+          image: alpine:3
+          command:
+            - /bin/sh
+            - -c
+            - while true; do echo "$(date) My preferred sport is $(cat /etc/config/sport)";
+              sleep 10; done;
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: config-volume
+              mountPath: /etc/config
+      volumes:
+        - name: config-volume
+          configMap:
+            name: sport
+</code></pre>
+<p dir="rtl">Deployment را ایجاد کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f https://k8s.io/examples/deployments/deployment-with-configmap-as-volume.yaml
+</code></pre>
+<p dir="rtl">Podهای این Deployment را بررسی کنید تا از آماده بودن آن‌ها مطمئن شوید (تطبیق بر اساس
+<span class="term" title="selector">انتخابگر</span>):</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pods --selector=app.kubernetes.io/name=configmap-volume
+</code></pre>
+<p dir="rtl">باید خروجی‌ای مشابه زیر ببینید:</p>
+<pre dir="ltr"><code dir="ltr">NAME                                READY   STATUS    RESTARTS   AGE
+configmap-volume-6b976dfdcf-qxvbm   1/1     Running   0          72s
+configmap-volume-6b976dfdcf-skpvm   1/1     Running   0          72s
+configmap-volume-6b976dfdcf-tbc6r   1/1     Running   0          72s
+</code></pre>
+<p dir="rtl">روی هر نودی که یکی از این Podها در آن اجرا می‌شود، kubelet داده‌های آن ConfigMap را دریافت می‌کند
+و آن‌ها را به فایل‌هایی در یک حجم محلی تبدیل می‌کند.
+سپس kubelet آن حجم را، همان‌طور که در الگوی Pod مشخص شده است، در کانتینر mount می‌کند.
+کدی که در آن کانتینر اجرا می‌شود اطلاعات را از فایل بارگذاری می‌کند
+و با استفاده از آن گزارشی در stdout چاپ می‌کند.
+برای بررسی این گزارش، لاگ‌های یکی از Podهای آن Deployment را مشاهده کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># Pick one Pod that belongs to the Deployment, and view its logs
+kubectl logs deployments/configmap-volume
+</code></pre>
+<p dir="rtl">باید خروجی‌ای مشابه زیر ببینید:</p>
+<pre dir="ltr"><code dir="ltr">Found 3 pods, using pod/configmap-volume-76d9c5678f-x5rgj
+Thu Jan  4 14:06:46 UTC 2024 My preferred sport is football
+Thu Jan  4 14:06:56 UTC 2024 My preferred sport is football
+Thu Jan  4 14:07:06 UTC 2024 My preferred sport is football
+Thu Jan  4 14:07:16 UTC 2024 My preferred sport is football
+Thu Jan  4 14:07:26 UTC 2024 My preferred sport is football
+</code></pre>
+<p dir="rtl">ConfigMap را ویرایش کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl edit configmap sport
+</code></pre>
+<p dir="rtl">در ویرایشگری که باز می‌شود، مقدار کلید <code dir="ltr">sport</code> را از <code dir="ltr">football</code> به <code dir="ltr">cricket</code> تغییر دهید و تغییرات را ذخیره کنید.
+ابزار kubectl نیز ConfigMap را متناسب با آن به‌روزرسانی می‌کند (اگر با خطا روبه‌رو شدید، دوباره تلاش کنید).</p>
+<p dir="rtl">در ادامه نمونه‌ای از شکل احتمالی آن مانیفست پس از ویرایش آمده است:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+data:
+  sport: cricket
+kind: ConfigMap
+# You can leave the existing metadata as they are.
+# The values you'll see won't exactly match these.
+metadata:
+  creationTimestamp: "2024-01-04T14:05:06Z"
+  name: sport
+  namespace: default
+  resourceVersion: "1743935"
+  uid: 024ee001-fe72-487e-872e-34d6464a8a23
+</code></pre>
+<p dir="rtl">باید خروجی زیر را ببینید:</p>
+<pre dir="ltr"><code dir="ltr">configmap/sport edited
+</code></pre>
+<p dir="rtl">لاگ‌های یکی از Podهای متعلق به این Deployment را به‌صورت پیوسته دنبال کنید (یعنی جدیدترین ورودی‌ها را دنبال کنید):</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl logs deployments/configmap-volume --follow
+</code></pre>
+<p dir="rtl">پس از چند ثانیه، باید ببینید که خروجی لاگ به شکل زیر تغییر می‌کند:</p>
+<pre dir="ltr"><code dir="ltr">Thu Jan  4 14:11:36 UTC 2024 My preferred sport is football
+Thu Jan  4 14:11:46 UTC 2024 My preferred sport is football
+Thu Jan  4 14:11:56 UTC 2024 My preferred sport is football
+Thu Jan  4 14:12:06 UTC 2024 My preferred sport is cricket
+Thu Jan  4 14:12:16 UTC 2024 My preferred sport is cricket
+</code></pre>
+<p dir="rtl">هنگامی که یک ConfigMap از طریق حجمی از نوع <code dir="ltr">configMap</code> یا <code dir="ltr">projected</code> به یک Pod در حال اجرا نگاشت شده باشد
+و آن ConfigMap را به‌روزرسانی کنید، Pod در حال اجرا تقریباً بلافاصله این به‌روزرسانی را می‌بیند.<br>
+با این حال، برنامهٔ شما تنها در صورتی متوجه این تغییر می‌شود که طوری نوشته شده باشد که تغییرات را به‌صورت دوره‌ای
+بررسی کند (poll) یا به‌روزرسانی فایل‌ها را زیر نظر داشته باشد (watch).<br>
+برنامه‌ای که پیکربندی خود را فقط یک بار و هنگام راه‌اندازی بارگذاری می‌کند، متوجه تغییر نخواهد شد.</p>
+<div class="callout note"><div class="callout-title">Note</div>
+<p dir="rtl">کل تأخیر از لحظهٔ به‌روزرسانی ConfigMap تا لحظه‌ای که کلیدهای جدید در Pod بازتاب داده می‌شوند،
+ممکن است به اندازهٔ دورهٔ همگام‌سازی kubelet طول بکشد.<br>
+همچنین بخش <a href="../../tasks/configure-pod-container/configure-pod-configmap.html#mounted-configmaps-are-updated-automatically">ConfigMapهای mountشده به‌طور خودکار به‌روزرسانی می‌شوند</a> را ببینید.</p>
+</div>
+<h2 id="به-روزرسانی-متغیرهای-محیطی-یک-pod-با-استفاده-از-configmap-rollout-configmap-env" dir="rtl">به‌روزرسانی متغیرهای محیطی یک Pod با استفاده از ConfigMap {#rollout-configmap-env}</h2>
+<p dir="rtl">با دستور <code dir="ltr">kubectl create configmap</code> یک ConfigMap از
+<a href="../../tasks/configure-pod-container/configure-pod-configmap.html#create-configmaps-from-literal-values">مقادیر صریح</a> بسازید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl create configmap fruits --from-literal=fruits=apples
+</code></pre>
+<p dir="rtl">در ادامه نمونه‌ای از مانیفست یک Deployment آمده است که در آن یک متغیر محیطی از طریق ConfigMap با نام <code dir="ltr">fruits</code> پیکربندی شده است.</p>
+<div class="code-file ltr" dir="ltr">deployments/deployment-with-configmap-as-envvar.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: configmap-env-var
+  labels:
+    app.kubernetes.io/name: configmap-env-var
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: configmap-env-var
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: configmap-env-var
+    spec:
+      containers:
+        - name: alpine
+          image: alpine:3
+          env:
+            - name: FRUITS
+              valueFrom:
+                configMapKeyRef:
+                  key: fruits
+                  name: fruits
+          command:
+            - /bin/sh
+            - -c
+            - while true; do echo "$(date) The basket is full of $FRUITS";
+                sleep 10; done;
+          ports:
+            - containerPort: 80
+</code></pre>
+<p dir="rtl">Deployment را ایجاد کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f https://k8s.io/examples/deployments/deployment-with-configmap-as-envvar.yaml
+</code></pre>
+<p dir="rtl">Podهای این Deployment را بررسی کنید تا از آماده بودن آن‌ها مطمئن شوید (تطبیق بر اساس
+<span class="term" title="selector">انتخابگر</span>):</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pods --selector=app.kubernetes.io/name=configmap-env-var
+</code></pre>
+<p dir="rtl">باید خروجی‌ای مشابه زیر ببینید:</p>
+<pre dir="ltr"><code dir="ltr">NAME                                 READY   STATUS    RESTARTS   AGE
+configmap-env-var-59cfc64f7d-74d7z   1/1     Running   0          46s
+configmap-env-var-59cfc64f7d-c4wmj   1/1     Running   0          46s
+configmap-env-var-59cfc64f7d-dpr98   1/1     Running   0          46s
+</code></pre>
+<p dir="rtl">جفت کلید-مقدار موجود در ConfigMap به‌صورت یک متغیر محیطی در کانتینر Pod پیکربندی شده است.
+برای بررسی این موضوع، لاگ‌های یکی از Podهای متعلق به Deployment را مشاهده کنید.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl logs deployment/configmap-env-var
+</code></pre>
+<p dir="rtl">باید خروجی‌ای مشابه زیر ببینید:</p>
+<pre dir="ltr"><code dir="ltr">Found 3 pods, using pod/configmap-env-var-7c994f7769-l74nq
+Thu Jan  4 16:07:06 UTC 2024 The basket is full of apples
+Thu Jan  4 16:07:16 UTC 2024 The basket is full of apples
+Thu Jan  4 16:07:26 UTC 2024 The basket is full of apples
+</code></pre>
+<p dir="rtl">ConfigMap را ویرایش کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl edit configmap fruits
+</code></pre>
+<p dir="rtl">در ویرایشگری که باز می‌شود، مقدار کلید <code dir="ltr">fruits</code> را از <code dir="ltr">apples</code> به <code dir="ltr">mangoes</code> تغییر دهید و تغییرات را ذخیره کنید.
+ابزار kubectl نیز ConfigMap را متناسب با آن به‌روزرسانی می‌کند (اگر با خطا روبه‌رو شدید، دوباره تلاش کنید).</p>
+<p dir="rtl">در ادامه نمونه‌ای از شکل احتمالی آن مانیفست پس از ویرایش آمده است:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+data:
+  fruits: mangoes
+kind: ConfigMap
+# You can leave the existing metadata as they are.
+# The values you'll see won't exactly match these.
+metadata:
+  creationTimestamp: "2024-01-04T16:04:19Z"
+  name: fruits
+  namespace: default
+  resourceVersion: "1749472"
+</code></pre>
+<p dir="rtl">باید خروجی زیر را ببینید:</p>
+<pre dir="ltr"><code dir="ltr">configmap/fruits edited
+</code></pre>
+<p dir="rtl">لاگ‌های Deployment را به‌صورت پیوسته دنبال کنید و خروجی را چند ثانیه زیر نظر بگیرید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># As the text explains, the output does NOT change
+kubectl logs deployments/configmap-env-var --follow
+</code></pre>
+<p dir="rtl">توجه کنید که با وجود ویرایش ConfigMap، خروجی <strong>بدون تغییر</strong> باقی می‌ماند:</p>
+<pre dir="ltr"><code dir="ltr">Thu Jan  4 16:12:56 UTC 2024 The basket is full of apples
+Thu Jan  4 16:13:06 UTC 2024 The basket is full of apples
+Thu Jan  4 16:13:16 UTC 2024 The basket is full of apples
+Thu Jan  4 16:13:26 UTC 2024 The basket is full of apples
+</code></pre>
+<div class="callout note"><div class="callout-title">Note</div>
+<p dir="rtl">هرچند مقدار کلید درون ConfigMap تغییر کرده است، متغیر محیطی در Pod همچنان مقدار قبلی را نشان می‌دهد.
+دلیل این است که متغیرهای محیطی فرایندی که درون یک Pod اجرا می‌شود، با تغییر دادهٔ منبع به‌روزرسانی <strong>نمی‌شوند</strong>.
+اگر بخواهید به‌روزرسانی را اجباری کنید، باید کاری کنید که کوبرنتیز Podهای موجود شما را جایگزین کند.
+در این صورت، Podهای جدید با اطلاعات به‌روزشده اجرا خواهند شد.</p>
+</div>
+<p dir="rtl">می‌توانید این جایگزینی را آغاز کنید. برای این کار، با استفاده از
+<a href="../../reference/kubectl/generated/kubectl_rollout/index.html"><code dir="ltr">kubectl rollout</code></a> یک عرضهٔ تدریجی (rollout) برای Deployment انجام دهید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># Trigger the rollout
+kubectl rollout restart deployment configmap-env-var
+
+# Wait for the rollout to complete
+kubectl rollout status deployment configmap-env-var --watch=true
+</code></pre>
+<p dir="rtl">سپس Deployment را بررسی کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get deployment configmap-env-var
+</code></pre>
+<p dir="rtl">باید خروجی‌ای مشابه زیر ببینید:</p>
+<pre dir="ltr"><code dir="ltr">NAME                READY   UP-TO-DATE   AVAILABLE   AGE
+configmap-env-var   3/3     3            3           12m
+</code></pre>
+<p dir="rtl">Podها را بررسی کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pods --selector=app.kubernetes.io/name=configmap-env-var
+</code></pre>
+<p dir="rtl">عرضهٔ تدریجی باعث می‌شود کوبرنتیز یک <span class="term" title="replica-set">ReplicaSet</span>
+جدید برای Deployment بسازد؛ یعنی Podهای موجود در نهایت خاتمه می‌یابند و Podهای جدید ایجاد می‌شوند.
+پس از چند ثانیه، باید خروجی‌ای مشابه زیر ببینید:</p>
+<pre dir="ltr"><code dir="ltr">NAME                                 READY   STATUS        RESTARTS   AGE
+configmap-env-var-6d94d89bf5-2ph2l   1/1     Running       0          13s
+configmap-env-var-6d94d89bf5-74twx   1/1     Running       0          8s
+configmap-env-var-6d94d89bf5-d5vx8   1/1     Running       0          11s
+</code></pre>
+<div class="callout note"><div class="callout-title">Note</div>
+<p dir="rtl">لطفاً پیش از ادامهٔ گام‌های بعدی، صبر کنید تا Podهای قدیمی‌تر به‌طور کامل خاتمه یابند.</p>
+</div>
+<p dir="rtl">لاگ‌های یکی از Podهای این Deployment را مشاهده کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># Pick one Pod that belongs to the Deployment, and view its logs
+kubectl logs deployment/configmap-env-var
+</code></pre>
+<p dir="rtl">باید خروجی‌ای مشابه زیر ببینید:</p>
+<pre dir="ltr"><code dir="ltr">Found 3 pods, using pod/configmap-env-var-6d9ff89fb6-bzcf6
+Thu Jan  4 16:30:35 UTC 2024 The basket is full of mangoes
+Thu Jan  4 16:30:45 UTC 2024 The basket is full of mangoes
+Thu Jan  4 16:30:55 UTC 2024 The basket is full of mangoes
+</code></pre>
+<p dir="rtl">این مثال سناریوی به‌روزرسانی متغیرهای محیطی‌ای را در یک Pod نشان می‌دهد که از یک ConfigMap گرفته شده‌اند.
+تغییرات مقادیر ConfigMap در عرضهٔ تدریجی بعدی روی Pod اعمال می‌شوند. اگر Podها به دلیل دیگری ایجاد شوند،
+مثلاً هنگام افزایش مقیاس Deployment، Podهای جدید نیز از آخرین مقادیر پیکربندی استفاده می‌کنند؛
+اما اگر عرضهٔ تدریجی را آغاز نکنید، ممکن است ببینید که برنامهٔ شما با ترکیبی از مقادیر قدیمی و جدید متغیرهای محیطی اجرا می‌شود.</p>
+<h2 id="به-روزرسانی-پیکربندی-با-استفاده-از-configmap-در-یک-pod-چندکانتینری-rollout-configmap-multiple-containers" dir="rtl">به‌روزرسانی پیکربندی با استفاده از ConfigMap در یک Pod چندکانتینری {#rollout-configmap-multiple-containers}</h2>
+<p dir="rtl">با دستور <code dir="ltr">kubectl create configmap</code> یک ConfigMap از
+<a href="../../tasks/configure-pod-container/configure-pod-configmap.html#create-configmaps-from-literal-values">مقادیر صریح</a> بسازید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl create configmap color --from-literal=color=red
+</code></pre>
+<p dir="rtl">در ادامه نمونه‌ای از مانیفست یک Deployment آمده است که مجموعه‌ای از Podها را مدیریت می‌کند و هر Pod دو کانتینر دارد.
+این دو کانتینر یک حجم از نوع <code dir="ltr">emptyDir</code> را به اشتراک می‌گذارند و از آن برای ارتباط با یکدیگر استفاده می‌کنند.
+کانتینر اول یک وب‌سرور (<code dir="ltr">nginx</code>) را اجرا می‌کند. مسیر mount حجم مشترک در کانتینر وب‌سرور،
+<code dir="ltr">/usr/share/nginx/html</code> است. کانتینر کمکی دوم بر پایهٔ <code dir="ltr">alpine</code> است و در این کانتینر، حجم <code dir="ltr">emptyDir</code>
+در مسیر <code dir="ltr">/pod-data</code> mount می‌شود. کانتینر کمکی یک فایل HTML می‌نویسد که محتوای آن بر اساس یک ConfigMap تعیین می‌شود.
+کانتینر وب‌سرور نیز این فایل HTML را از طریق HTTP ارائه می‌کند.</p>
+<div class="code-file ltr" dir="ltr">deployments/deployment-with-configmap-two-containers.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: configmap-two-containers
+  labels:
+    app.kubernetes.io/name: configmap-two-containers
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: configmap-two-containers
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: configmap-two-containers
+    spec:
+      volumes:
+        - name: shared-data
+          emptyDir: {}
+        - name: config-volume
+          configMap:
+            name: color
+      containers:
+        - name: nginx
+          image: nginx
+          volumeMounts:
+            - name: shared-data
+              mountPath: /usr/share/nginx/html
+        - name: alpine
+          image: alpine:3
+          volumeMounts:
+            - name: shared-data
+              mountPath: /pod-data
+            - name: config-volume
+              mountPath: /etc/config
+          command:
+            - /bin/sh
+            - -c
+            - while true; do echo "$(date) My preferred color is $(cat /etc/config/color)" &gt; /pod-data/index.html;
+              sleep 10; done;
+</code></pre>
+<p dir="rtl">Deployment را ایجاد کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f https://k8s.io/examples/deployments/deployment-with-configmap-two-containers.yaml
+</code></pre>
+<p dir="rtl">Podهای این Deployment را بررسی کنید تا از آماده بودن آن‌ها مطمئن شوید (تطبیق بر اساس
+<span class="term" title="selector">انتخابگر</span>):</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pods --selector=app.kubernetes.io/name=configmap-two-containers
+</code></pre>
+<p dir="rtl">باید خروجی‌ای مشابه زیر ببینید:</p>
+<pre dir="ltr"><code dir="ltr">NAME                                        READY   STATUS    RESTARTS   AGE
+configmap-two-containers-565fb6d4f4-2xhxf   2/2     Running   0          20s
+configmap-two-containers-565fb6d4f4-g5v4j   2/2     Running   0          20s
+configmap-two-containers-565fb6d4f4-mzsmf   2/2     Running   0          20s
+</code></pre>
+<p dir="rtl">Deployment را در دسترس قرار دهید (ابزار <code dir="ltr">kubectl</code> یک
+<span class="term" title="service">Service</span> برای شما ایجاد می‌کند):</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl expose deployment configmap-two-containers --name=configmap-service --port=8080 --target-port=80
+</code></pre>
+<p dir="rtl">با استفاده از <code dir="ltr">kubectl</code> پورت را هدایت (forward) کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># this stays running in the background
+kubectl port-forward service/configmap-service 8080:8080 &amp;
+</code></pre>
+<p dir="rtl">به سرویس دسترسی پیدا کنید.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">curl http://localhost:8080
+</code></pre>
+<p dir="rtl">باید خروجی‌ای مشابه زیر ببینید:</p>
+<pre dir="ltr"><code dir="ltr">Fri Jan  5 08:08:22 UTC 2024 My preferred color is red
+</code></pre>
+<p dir="rtl">ConfigMap را ویرایش کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl edit configmap color
+</code></pre>
+<p dir="rtl">در ویرایشگری که باز می‌شود، مقدار کلید <code dir="ltr">color</code> را از <code dir="ltr">red</code> به <code dir="ltr">blue</code> تغییر دهید و تغییرات را ذخیره کنید.
+ابزار kubectl نیز ConfigMap را متناسب با آن به‌روزرسانی می‌کند (اگر با خطا روبه‌رو شدید، دوباره تلاش کنید).</p>
+<p dir="rtl">در ادامه نمونه‌ای از شکل احتمالی آن مانیفست پس از ویرایش آمده است:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+data:
+  color: blue
+kind: ConfigMap
+# You can leave the existing metadata as they are.
+# The values you'll see won't exactly match these.
+metadata:
+  creationTimestamp: "2024-01-05T08:12:05Z"
+  name: color
+  namespace: configmap
+  resourceVersion: "1801272"
+  uid: 80d33e4a-cbb4-4bc9-ba8c-544c68e425d6
+</code></pre>
+<p dir="rtl">برای چند ثانیه، در یک حلقه به نشانی URL سرویس درخواست بفرستید.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># Cancel this when you're happy with it (Ctrl-C)
+while true; do curl --connect-timeout 7.5 http://localhost:8080; sleep 10; done
+</code></pre>
+<p dir="rtl">باید ببینید که خروجی به شکل زیر تغییر می‌کند:</p>
+<pre dir="ltr"><code dir="ltr">Fri Jan  5 08:14:00 UTC 2024 My preferred color is red
+Fri Jan  5 08:14:02 UTC 2024 My preferred color is red
+Fri Jan  5 08:14:20 UTC 2024 My preferred color is red
+Fri Jan  5 08:14:22 UTC 2024 My preferred color is red
+Fri Jan  5 08:14:32 UTC 2024 My preferred color is blue
+Fri Jan  5 08:14:43 UTC 2024 My preferred color is blue
+Fri Jan  5 08:15:00 UTC 2024 My preferred color is blue
+</code></pre>
+<h2 id="به-روزرسانی-پیکربندی-از-طریق-configmap-در-podی-که-کانتینر-جانبی-دارد-rollout-configmap-sidecar" dir="rtl">به‌روزرسانی پیکربندی از طریق ConfigMap در Podی که کانتینر جانبی دارد {#rollout-configmap-sidecar}</h2>
+<p dir="rtl">سناریوی بالا را می‌توان با استفاده از یک <a href="../../concepts/workloads/pods/sidecar-containers.html">کانتینر جانبی (Sidecar Container)</a>
+به‌عنوان کانتینر کمکی برای نوشتن فایل HTML نیز پیاده‌سازی کرد.<br>
+از آنجا که کانتینر جانبی از نظر مفهومی یک کانتینر آغازین (Init Container) است، تضمین می‌شود که پیش از کانتینر اصلی وب‌سرور شروع به کار کند.<br>
+به این ترتیب، هنگامی که وب‌سرور آماده‌ی ارائه‌ی فایل HTML است، این فایل همیشه در دسترس خواهد بود.</p>
+<p dir="rtl">اگر از سناریوی قبلی ادامه می‌دهید، می‌توانید ConfigMap با نام <code dir="ltr">color</code> را در این سناریو نیز دوباره به کار ببرید.<br>
+اگر این سناریو را به‌طور مستقل اجرا می‌کنید، با فرمان <code dir="ltr">kubectl create configmap</code> یک ConfigMap
+از <a href="../../tasks/configure-pod-container/configure-pod-configmap.html#create-configmaps-from-literal-values">مقادیر لفظی</a> بسازید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl create configmap color --from-literal=color=blue
+</code></pre>
+<p dir="rtl">در ادامه، نمونه‌ای از مانیفست یک Deployment آمده است که مجموعه‌ای از Podها را مدیریت می‌کند؛ هر Pod یک کانتینر اصلی و
+یک کانتینر جانبی دارد. این دو کانتینر یک حجم (volume) از نوع <code dir="ltr">emptyDir</code> را به اشتراک می‌گذارند و از طریق آن با یکدیگر ارتباط برقرار می‌کنند.
+کانتینر اصلی یک وب‌سرور (NGINX) را اجرا می‌کند. مسیر اتصال حجم مشترک در کانتینر وب‌سرور
+<code dir="ltr">/usr/share/nginx/html</code> است. کانتینر دوم یک کانتینر جانبی مبتنی بر Alpine Linux است که نقش
+کانتینر کمکی را دارد. در این کانتینر، حجم <code dir="ltr">emptyDir</code> در مسیر <code dir="ltr">/pod-data</code> متصل می‌شود. کانتینر جانبی
+یک فایل HTML می‌نویسد که محتوای آن بر اساس یک ConfigMap تعیین می‌شود. کانتینر وب‌سرور این فایل HTML را از طریق HTTP ارائه می‌دهد.</p>
+<div class="code-file ltr" dir="ltr">deployments/deployment-with-configmap-and-sidecar-container.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: configmap-sidecar-container
+  labels:
+    app.kubernetes.io/name: configmap-sidecar-container
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: configmap-sidecar-container
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: configmap-sidecar-container
+    spec:
+      volumes:
+        - name: shared-data
+          emptyDir: {}
+        - name: config-volume
+          configMap:
+            name: color
+      containers:
+        - name: nginx
+          image: nginx
+          volumeMounts:
+            - name: shared-data
+              mountPath: /usr/share/nginx/html
+      initContainers:
+        - name: alpine
+          image: alpine:3
+          restartPolicy: Always
+          volumeMounts:
+            - name: shared-data
+              mountPath: /pod-data
+            - name: config-volume
+              mountPath: /etc/config
+          command:
+            - /bin/sh
+            - -c
+            - while true; do echo "$(date) My preferred color is $(cat /etc/config/color)" &gt; /pod-data/index.html;
+              sleep 10; done;
+</code></pre>
+<p dir="rtl">Deployment را ایجاد کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f https://k8s.io/examples/deployments/deployment-with-configmap-and-sidecar-container.yaml
+</code></pre>
+<p dir="rtl">Podهای این Deployment را بررسی کنید تا مطمئن شوید آماده هستند (تطبیق بر اساس
+<span class="term" title="selector">انتخابگر</span>):</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pods --selector=app.kubernetes.io/name=configmap-sidecar-container
+</code></pre>
+<p dir="rtl">باید خروجی‌ای مشابه زیر ببینید:</p>
+<pre dir="ltr"><code dir="ltr">NAME                                           READY   STATUS    RESTARTS   AGE
+configmap-sidecar-container-5fb59f558b-87rp7   2/2     Running   0          94s
+configmap-sidecar-container-5fb59f558b-ccs7s   2/2     Running   0          94s
+configmap-sidecar-container-5fb59f558b-wnmgk   2/2     Running   0          94s
+</code></pre>
+<p dir="rtl">Deployment را در معرض دسترسی قرار دهید (ابزار <code dir="ltr">kubectl</code> یک
+<span class="term" title="service">Service</span> برای شما ایجاد می‌کند):</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl expose deployment configmap-sidecar-container --name=configmap-sidecar-service --port=8081 --target-port=80
+</code></pre>
+<p dir="rtl">با استفاده از <code dir="ltr">kubectl</code> پورت را هدایت (forward) کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># this stays running in the background
+kubectl port-forward service/configmap-sidecar-service 8081:8081 &amp;
+</code></pre>
+<p dir="rtl">به سرویس دسترسی پیدا کنید.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">curl http://localhost:8081
+</code></pre>
+<p dir="rtl">باید خروجی‌ای مشابه زیر ببینید:</p>
+<pre dir="ltr"><code dir="ltr">Sat Feb 17 13:09:05 UTC 2024 My preferred color is blue
+</code></pre>
+<p dir="rtl">ConfigMap را ویرایش کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl edit configmap color
+</code></pre>
+<p dir="rtl">در ویرایشگری که باز می‌شود، مقدار کلید <code dir="ltr">color</code> را از <code dir="ltr">blue</code> به <code dir="ltr">green</code> تغییر دهید و تغییرات را ذخیره کنید.
+ابزار kubectl نیز ConfigMap را بر همین اساس به‌روزرسانی می‌کند (اگر با خطا مواجه شدید، دوباره تلاش کنید).</p>
+<p dir="rtl">نمونه‌ای از شکل این مانیفست پس از ویرایش در ادامه آمده است:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+data:
+  color: green
+kind: ConfigMap
+# You can leave the existing metadata as they are.
+# The values you'll see won't exactly match these.
+metadata:
+  creationTimestamp: "2024-02-17T12:20:30Z"
+  name: color
+  namespace: default
+  resourceVersion: "1054"
+  uid: e40bb34c-58df-4280-8bea-6ed16edccfaa
+</code></pre>
+<p dir="rtl">چند ثانیه نشانی URL سرویس را به‌صورت حلقه‌ای فراخوانی کنید.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># Cancel this when you're happy with it (Ctrl-C)
+while true; do curl --connect-timeout 7.5 http://localhost:8081; sleep 10; done
+</code></pre>
+<p dir="rtl">باید ببینید که خروجی به شکل زیر تغییر می‌کند:</p>
+<pre dir="ltr"><code dir="ltr">Sat Feb 17 13:12:35 UTC 2024 My preferred color is blue
+Sat Feb 17 13:12:45 UTC 2024 My preferred color is blue
+Sat Feb 17 13:12:55 UTC 2024 My preferred color is blue
+Sat Feb 17 13:13:05 UTC 2024 My preferred color is blue
+Sat Feb 17 13:13:15 UTC 2024 My preferred color is green
+Sat Feb 17 13:13:25 UTC 2024 My preferred color is green
+Sat Feb 17 13:13:35 UTC 2024 My preferred color is green
+</code></pre>
+<h2 id="به-روزرسانی-پیکربندی-از-طریق-configmap-تغییرناپذیری-که-به-صورت-حجم-متصل-شده-است-rollout-configmap-immutable-volume" dir="rtl">به‌روزرسانی پیکربندی از طریق ConfigMap تغییرناپذیری که به‌صورت حجم متصل شده است {#rollout-configmap-immutable-volume}</h2>
+<div class="callout note"><div class="callout-title">Note</div>
+<p dir="rtl">ConfigMapهای تغییرناپذیر به‌ویژه برای پیکربندی‌هایی به کار می‌روند که ثابت هستند و انتظار نمی‌رود در طول زمان تغییر <strong>کنند</strong>.
+علامت‌گذاری یک ConfigMap به‌عنوان تغییرناپذیر باعث بهبود کارایی می‌شود، زیرا kubelet دیگر تغییرات آن را پایش نمی‌کند.</p>
+<p dir="rtl">اگر واقعاً لازم است تغییری ایجاد کنید، باید یکی از این کارها را برنامه‌ریزی کنید:</p>
+<ul>
+<li dir="rtl">نام ConfigMap را تغییر دهید و به اجرای Podهایی روی بیاورید که به نام جدید ارجاع می‌دهند</li>
+<li dir="rtl">همه‌ی نودهایی از کلاستر را که پیش‌تر Podی با مقدار قدیمی را اجرا کرده‌اند جایگزین کنید</li>
+<li dir="rtl">kubelet را روی هر نودی که پیش‌تر ConfigMap قدیمی را بارگذاری کرده است، دوباره راه‌اندازی کنید</li>
+</ul>
+</div>
+<p dir="rtl">نمونه‌ای از مانیفست یک <a href="../../concepts/configuration/configmap.html#configmap-immutable">ConfigMap تغییرناپذیر</a> در ادامه نشان داده شده است.</p>
+<div class="code-file ltr" dir="ltr">configmap/immutable-configmap.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+data:
+  company_name: "ACME, Inc." # existing fictional company name
+kind: ConfigMap
+immutable: true
+metadata:
+  name: company-name-20150801
+</code></pre>
+<p dir="rtl">ConfigMap تغییرناپذیر را ایجاد کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f https://k8s.io/examples/configmap/immutable-configmap.yaml
+</code></pre>
+<p dir="rtl">در ادامه، نمونه‌ای از مانیفست یک Deployment آمده است که در آن ConfigMap تغییرناپذیر <code dir="ltr">company-name-20150801</code> به‌صورت یک
+<span class="term" title="volume">حجم</span> به تنها کانتینر Pod متصل شده است.</p>
+<div class="code-file ltr" dir="ltr">deployments/deployment-with-immutable-configmap-as-volume.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: immutable-configmap-volume
+  labels:
+    app.kubernetes.io/name: immutable-configmap-volume
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: immutable-configmap-volume
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: immutable-configmap-volume
+    spec:
+      containers:
+        - name: alpine
+          image: alpine:3
+          command:
+            - /bin/sh
+            - -c
+            - while true; do echo "$(date) The name of the company is $(cat /etc/config/company_name)";
+              sleep 10; done;
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: config-volume
+              mountPath: /etc/config
+      volumes:
+        - name: config-volume
+          configMap:
+            name: company-name-20150801
+</code></pre>
+<p dir="rtl">Deployment را ایجاد کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f https://k8s.io/examples/deployments/deployment-with-immutable-configmap-as-volume.yaml
+</code></pre>
+<p dir="rtl">Podهای این Deployment را بررسی کنید تا مطمئن شوید آماده هستند (تطبیق بر اساس
+<span class="term" title="selector">انتخابگر</span>):</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pods --selector=app.kubernetes.io/name=immutable-configmap-volume
+</code></pre>
+<p dir="rtl">باید خروجی‌ای مشابه زیر ببینید:</p>
+<pre dir="ltr"><code dir="ltr">NAME                                          READY   STATUS    RESTARTS   AGE
+immutable-configmap-volume-78b6fbff95-5gsfh   1/1     Running   0          62s
+immutable-configmap-volume-78b6fbff95-7vcj4   1/1     Running   0          62s
+immutable-configmap-volume-78b6fbff95-vdslm   1/1     Running   0          62s
+</code></pre>
+<p dir="rtl">کانتینر Pod به داده‌های تعریف‌شده در ConfigMap ارجاع می‌دهد و از آن‌ها برای چاپ یک گزارش در stdout استفاده می‌کند.
+می‌توانید با مشاهده‌ی لاگ‌های یکی از Podهای آن Deployment این گزارش را بررسی کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># Pick one Pod that belongs to the Deployment, and view its logs
+kubectl logs deployments/immutable-configmap-volume
+</code></pre>
+<p dir="rtl">باید خروجی‌ای مشابه زیر ببینید:</p>
+<pre dir="ltr"><code dir="ltr">Found 3 pods, using pod/immutable-configmap-volume-78b6fbff95-5gsfh
+Wed Mar 20 03:52:34 UTC 2024 The name of the company is ACME, Inc.
+Wed Mar 20 03:52:44 UTC 2024 The name of the company is ACME, Inc.
+Wed Mar 20 03:52:54 UTC 2024 The name of the company is ACME, Inc.
+</code></pre>
+<div class="callout note"><div class="callout-title">Note</div>
+<p dir="rtl">هنگامی که یک ConfigMap به‌عنوان تغییرناپذیر علامت‌گذاری شود، دیگر نمی‌توان این تغییر را بازگرداند
+یا محتوای فیلد data یا binaryData را تغییر داد.<br>
+برای تغییر رفتار Podهایی که از این پیکربندی استفاده می‌کنند،
+باید یک ConfigMap تغییرناپذیر جدید بسازید و Deployment را ویرایش کنید
+تا الگوی Pod اندکی متفاوتی تعریف شود که به ConfigMap جدید ارجاع می‌دهد.</p>
+</div>
+<p dir="rtl">با استفاده از مانیفست زیر یک ConfigMap تغییرناپذیر جدید بسازید:</p>
+<div class="code-file ltr" dir="ltr">configmap/new-immutable-configmap.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+data:
+  company_name: "Fiktivesunternehmen GmbH" # new fictional company name
+kind: ConfigMap
+immutable: true
+metadata:
+  name: company-name-20240312
+</code></pre>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f https://k8s.io/examples/configmap/new-immutable-configmap.yaml
+</code></pre>
+<p dir="rtl">باید خروجی‌ای مشابه زیر ببینید:</p>
+<pre dir="ltr"><code dir="ltr">configmap/company-name-20240312 created
+</code></pre>
+<p dir="rtl">ConfigMap تازه ایجادشده را بررسی کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get configmap
+</code></pre>
+<p dir="rtl">باید خروجی‌ای ببینید که هر دو ConfigMap قدیمی و جدید را نشان می‌دهد:</p>
+<pre dir="ltr"><code dir="ltr">NAME                    DATA   AGE
+company-name-20150801   1      22m
+company-name-20240312   1      24s
+</code></pre>
+<p dir="rtl">Deployment را طوری تغییر دهید که به ConfigMap جدید ارجاع دهد.</p>
+<p dir="rtl">Deployment را ویرایش کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl edit deployment immutable-configmap-volume
+</code></pre>
+<p dir="rtl">در ویرایشگری که باز می‌شود، تعریف حجم موجود را طوری به‌روزرسانی کنید که از ConfigMap جدید استفاده کند.</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">volumes:
+- configMap:
+    defaultMode: 420
+    name: company-name-20240312 # Update this field
+  name: config-volume
+</code></pre>
+<p dir="rtl">باید خروجی زیر را ببینید:</p>
+<pre dir="ltr"><code dir="ltr">deployment.apps/immutable-configmap-volume edited
+</code></pre>
+<p dir="rtl">این کار یک استقرار تدریجی (rollout) را آغاز می‌کند. صبر کنید تا همه‌ی Podهای قبلی خاتمه یابند و Podهای جدید به وضعیت آماده برسند.</p>
+<p dir="rtl">وضعیت Podها را پایش کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pods --selector=app.kubernetes.io/name=immutable-configmap-volume
+</code></pre>
+<pre dir="ltr"><code dir="ltr">NAME                                          READY   STATUS        RESTARTS   AGE
+immutable-configmap-volume-5fdb88fcc8-29v8n   1/1     Running       0          13s
+immutable-configmap-volume-5fdb88fcc8-52ddd   1/1     Running       0          14s
+immutable-configmap-volume-5fdb88fcc8-n5jx4   1/1     Running       0          15s
+immutable-configmap-volume-78b6fbff95-5gsfh   1/1     Terminating   0          32m
+immutable-configmap-volume-78b6fbff95-7vcj4   1/1     Terminating   0          32m
+immutable-configmap-volume-78b6fbff95-vdslm   1/1     Terminating   0          32m
+</code></pre>
+<p dir="rtl">در نهایت باید خروجی‌ای مشابه زیر ببینید:</p>
+<pre dir="ltr"><code dir="ltr">NAME                                          READY   STATUS    RESTARTS   AGE
+immutable-configmap-volume-5fdb88fcc8-29v8n   1/1     Running   0          43s
+immutable-configmap-volume-5fdb88fcc8-52ddd   1/1     Running   0          44s
+immutable-configmap-volume-5fdb88fcc8-n5jx4   1/1     Running   0          45s
+</code></pre>
+<p dir="rtl">لاگ‌های یکی از Podهای این Deployment را مشاهده کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># Pick one Pod that belongs to the Deployment, and view its logs
+kubectl logs deployment/immutable-configmap-volume
+</code></pre>
+<p dir="rtl">باید خروجی‌ای مشابه زیر ببینید:</p>
+<pre dir="ltr"><code dir="ltr">Found 3 pods, using pod/immutable-configmap-volume-5fdb88fcc8-n5jx4
+Wed Mar 20 04:24:17 UTC 2024 The name of the company is Fiktivesunternehmen GmbH
+Wed Mar 20 04:24:27 UTC 2024 The name of the company is Fiktivesunternehmen GmbH
+Wed Mar 20 04:24:37 UTC 2024 The name of the company is Fiktivesunternehmen GmbH
+</code></pre>
+<p dir="rtl">پس از آنکه همه‌ی Deploymentها به استفاده از ConfigMap تغییرناپذیر جدید منتقل شدند، توصیه می‌شود ConfigMap قدیمی را حذف کنید.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl delete configmap company-name-20150801
+</code></pre>
+<h2 id="جمع-بندی" dir="rtl">جمع‌بندی</h2>
+<p dir="rtl">تغییرات ConfigMapی که به‌صورت حجم به یک Pod متصل شده است، پس از همگام‌سازی بعدی kubelet بدون هیچ وقفه‌ای در دسترس قرار می‌گیرند.</p>
+<p dir="rtl">تغییرات ConfigMapی که متغیرهای محیطی یک Pod را پیکربندی می‌کند، پس از استقرار تدریجی بعدی آن Pod در دسترس قرار می‌گیرند.</p>
+<p dir="rtl">هنگامی که یک ConfigMap به‌عنوان تغییرناپذیر علامت‌گذاری شود، دیگر نمی‌توان این تغییر را بازگرداند
+(نمی‌توانید یک ConfigMap تغییرناپذیر را تغییرپذیر کنید) و همچنین نمی‌توانید هیچ تغییری
+در محتوای فیلد <code dir="ltr">data</code> یا <code dir="ltr">binaryData</code> ایجاد کنید. می‌توانید ConfigMap را حذف و دوباره ایجاد کنید
+یا یک ConfigMap جدید و متفاوت بسازید. وقتی یک ConfigMap را حذف می‌کنید،
+کانتینرهای در حال اجرا و Podهای آن‌ها نقطه‌ی اتصال خود را به هر حجمی که به
+آن ConfigMap موجود ارجاع می‌داده است، حفظ می‌کنند.</p>
+<h2 id="پاکسازی" dir="rtl">پاکسازی</h2>
+<p dir="rtl">اگر فرمان‌های <code dir="ltr">kubectl port-forward</code> هنوز در حال اجرا هستند، آن‌ها را متوقف کنید.</p>
+<p dir="rtl">منابعی را که در طول این آموزش ایجاد شده‌اند حذف کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl delete deployment configmap-volume configmap-env-var configmap-two-containers configmap-sidecar-container immutable-configmap-volume
+kubectl delete service configmap-service configmap-sidecar-service
+kubectl delete configmap sport fruits color company-name-20240312
+
+kubectl delete configmap company-name-20150801 # In case it was not handled during the task execution
+</code></pre>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#پیش-از-شروع">پیش از شروع</a><a class="l2" href="#اهداف">اهداف</a><a class="l2" href="#به-روزرسانی-پیکربندی-با-استفاده-از-configmap-که-به-صورت-حجم-mount-شده-است-rollout-configmap-volume">به‌روزرسانی پیکربندی با استفاده از ConfigMap که به‌صورت حجم mount شده است {#rollout-configmap-volume}</a><a class="l2" href="#به-روزرسانی-متغیرهای-محیطی-یک-pod-با-استفاده-از-configmap-rollout-configmap-env">به‌روزرسانی متغیرهای محیطی یک Pod با استفاده از ConfigMap {#rollout-configmap-env}</a><a class="l2" href="#به-روزرسانی-پیکربندی-با-استفاده-از-configmap-در-یک-pod-چندکانتینری-rollout-configmap-multiple-containers">به‌روزرسانی پیکربندی با استفاده از ConfigMap در یک Pod چندکانتینری {#rollout-configmap-multiple-containers}</a><a class="l2" href="#به-روزرسانی-پیکربندی-از-طریق-configmap-در-podی-که-کانتینر-جانبی-دارد-rollout-configmap-sidecar">به‌روزرسانی پیکربندی از طریق ConfigMap در Podی که کانتینر جانبی دارد {#rollout-configmap-sidecar}</a><a class="l2" href="#به-روزرسانی-پیکربندی-از-طریق-configmap-تغییرناپذیری-که-به-صورت-حجم-متصل-شده-است-rollout-configmap-immutable-volume">به‌روزرسانی پیکربندی از طریق ConfigMap تغییرناپذیری که به‌صورت حجم متصل شده است {#rollout-configmap-immutable-volume}</a><a class="l2" href="#جمع-بندی">جمع‌بندی</a><a class="l2" href="#پاکسازی">پاکسازی</a></nav>
+</div>
+</body>
+</html>

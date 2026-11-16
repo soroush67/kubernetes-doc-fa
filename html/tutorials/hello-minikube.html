@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>سلام Minikube | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
+<header class="top"><a href="../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">tutorials</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">سلام Minikube</h1><!-- overview -->
+<p dir="rtl">این آموزش نشان می‌دهد که چگونه یک برنامهٔ نمونه را با استفاده از minikube روی کوبرنتیز اجرا کنید.
+در این آموزش یک ایمیج کانتینر در اختیار شما قرار می‌گیرد که با استفاده از NGINX همهٔ درخواست‌ها را عیناً بازمی‌گرداند.</p>
+<h2 id="اهداف" dir="rtl">اهداف</h2>
+<ul>
+<li dir="rtl">استقرار یک برنامهٔ نمونه روی minikube.</li>
+<li dir="rtl">اجرای برنامه.</li>
+<li dir="rtl">مشاهدهٔ لاگ‌های برنامه.</li>
+</ul>
+<h2 id="پیش-از-شروع" dir="rtl">پیش از شروع</h2>
+<p dir="rtl">در این آموزش فرض بر این است که <code dir="ltr">minikube</code> را از قبل راه‌اندازی کرده‌اید.
+برای دستورالعمل‌های نصب، <strong>گام ۱</strong> را در <a href="https://minikube.sigs.k8s.io/docs/start/" target="_blank" rel="noopener">شروع کار با minikube</a> ببینید.</p>
+<div class="callout note"><div class="callout-title">Note</div>
+<p dir="rtl">فقط دستورالعمل‌های <strong>گام ۱، نصب</strong> را اجرا کنید. باقی مراحل در همین صفحه پوشش داده شده است.</p>
+</div>
+<p dir="rtl">همچنین باید <code dir="ltr">kubectl</code> را نصب کنید.
+برای دستورالعمل‌های نصب، <a href="../tasks/tools/index.html#kubectl">نصب ابزارها</a> را ببینید.</p>
+<!-- lessoncontent -->
+<h2 id="ایجاد-یک-کلاستر-minikube" dir="rtl">ایجاد یک کلاستر minikube</h2>
+<pre dir="ltr"><code class="language-shell" dir="ltr">minikube start
+</code></pre>
+<div class="callout note"><div class="callout-title">Note</div>
+<p dir="rtl">دستور <code dir="ltr">minikube start</code> یک کلاستر تک‌نودی ایجاد می‌کند. این نود هم نقش control plane و هم نقش نود کارگر (worker) را بر عهده دارد. این وضعیت با بسیاری از کلاسترهای عملیاتی (production) کوبرنتیز متفاوت است؛ در آن کلاسترها نودهای control plane معمولاً با استفاده از
+<a href="../concepts/scheduling-eviction/taint-and-toleration.html">taintها</a> از نودهای کارگر جدا می‌شوند یا اصلاً برای کاربر قابل مشاهده نیستند.</p>
+</div>
+<h2 id="بررسی-وضعیت-کلاستر-minikube" dir="rtl">بررسی وضعیت کلاستر minikube</h2>
+<p dir="rtl">وضعیت کلاستر minikube را بررسی کنید تا مطمئن شوید همهٔ مؤلفه‌ها در حال اجرا هستند.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">minikube status
+</code></pre>
+<p dir="rtl">خروجی دستور بالا باید همهٔ مؤلفه‌ها را در وضعیت Running یا Configured نشان دهد، مانند نمونه خروجی زیر:</p>
+<pre dir="ltr"><code dir="ltr">minikube
+type: Control Plane
+host: Running
+kubelet: Running
+apiserver: Running
+kubeconfig: Configured
+</code></pre>
+<h2 id="باز-کردن-داشبورد" dir="rtl">باز کردن داشبورد</h2>
+<p dir="rtl">داشبورد کوبرنتیز را باز کنید. این کار را به دو روش می‌توانید انجام دهید:</p>
+<div class="tabs">
+<div class="tab"><div class="tab-name">اجرای مرورگر</div>
+<p dir="rtl">یک ترمینال <strong>جدید</strong> باز کنید و دستور زیر را اجرا کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># Start a new terminal, and leave this running.
+minikube dashboard
+</code></pre>
+<p dir="rtl">اکنون به ترمینالی برگردید که دستور <code dir="ltr">minikube start</code> را در آن اجرا کردید.</p>
+<div class="callout note"><div class="callout-title">Note</div>
+<p dir="rtl">دستور <code dir="ltr">dashboard</code> افزونهٔ داشبورد را فعال می‌کند و پراکسی را در مرورگر وب پیش‌فرض باز می‌کند.
+در داشبورد می‌توانید منابع کوبرنتیز مانند Deployment و Service ایجاد کنید.</p>
+<p dir="rtl">برای اینکه بدانید چگونه می‌توان از باز شدن مستقیم مرورگر از طریق ترمینال جلوگیری کرد و یک URL برای داشبورد وب به دست آورد، زبانهٔ «کپی و جای‌گذاری URL» را ببینید.</p>
+<p dir="rtl">داشبورد به‌طور پیش‌فرض فقط از داخل شبکهٔ مجازی داخلی کوبرنتیز در دسترس است.
+دستور <code dir="ltr">dashboard</code> یک پراکسی موقت ایجاد می‌کند تا داشبورد از بیرون شبکهٔ مجازی کوبرنتیز نیز در دسترس باشد.</p>
+<p dir="rtl">برای متوقف کردن پراکسی، با زدن <code dir="ltr">Ctrl+C</code> از فرایند خارج شوید.
+پس از خروج دستور، داشبورد همچنان در کلاستر کوبرنتیز در حال اجرا باقی می‌ماند.
+می‌توانید دستور <code dir="ltr">dashboard</code> را دوباره اجرا کنید تا پراکسی دیگری برای دسترسی به داشبورد ایجاد شود.</p>
+</div>
+</div>
+<div class="tab"><div class="tab-name">کپی و جای‌گذاری URL</div>
+<p dir="rtl">اگر نمی‌خواهید minikube مرورگر وب را برایتان باز کند، زیرفرمان <code dir="ltr">dashboard</code> را همراه با فلگ
+<code dir="ltr">--url</code> اجرا کنید. در این حالت، <code dir="ltr">minikube</code> یک URL در خروجی نمایش می‌دهد که می‌توانید آن را در مرورگر دلخواه خود باز کنید.</p>
+<p dir="rtl">یک ترمینال <strong>جدید</strong> باز کنید و دستور زیر را اجرا کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># Start a new terminal, and leave this running.
+minikube dashboard --url
+</code></pre>
+<p dir="rtl">اکنون می‌توانید از این URL استفاده کنید و به ترمینالی برگردید که دستور <code dir="ltr">minikube start</code> را در آن اجرا کردید.</p>
+</div>
+</div>
+<h2 id="ایجاد-یک-deployment" dir="rtl">ایجاد یک Deployment</h2>
+<p dir="rtl">هر <a href="../concepts/workloads/pods/index.html"><em>Pod</em></a> در کوبرنتیز گروهی از یک یا چند کانتینر است
+که برای اهداف مدیریتی و شبکه‌ای به هم پیوند خورده‌اند. Pod این آموزش
+فقط یک کانتینر دارد. هر
+<a href="../concepts/workloads/controllers/deployment.html"><em>Deployment</em></a> در کوبرنتیز سلامت
+Pod شما را بررسی می‌کند و در صورت خاتمه یافتن کانتینر Pod، آن را دوباره راه‌اندازی می‌کند. استفاده از Deploymentها
+روش توصیه‌شده برای مدیریت ایجاد و مقیاس‌دهی Podها است.</p>
+<ol>
+<li dir="rtl">
+<p dir="rtl">با استفاده از دستور <code dir="ltr">kubectl create</code> یک Deployment ایجاد کنید که یک Pod را مدیریت می‌کند. این
+Pod یک کانتینر را بر پایهٔ ایمیج Docker ارائه‌شده اجرا می‌کند.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># Run a test container image that includes a webserver
+kubectl create deployment hello-node --image=registry.k8s.io/e2e-test-images/agnhost:2.53 -- /agnhost netexec --http-port=8080
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">Deployment را مشاهده کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get deployments
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">NAME         READY   UP-TO-DATE   AVAILABLE   AGE
+hello-node   1/1     1            1           1m
+</code></pre>
+<p dir="rtl">(ممکن است مدتی طول بکشد تا Pod در دسترس قرار گیرد. اگر مقدار «0/1» را می‌بینید، چند ثانیه بعد دوباره امتحان کنید.)</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">Pod را مشاهده کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pods
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">NAME                          READY     STATUS    RESTARTS   AGE
+hello-node-5f76cf6ccf-br9b5   1/1       Running   0          1m
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">رویدادهای کلاستر را مشاهده کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get events
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">پیکربندی <code dir="ltr">kubectl</code> را مشاهده کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl config view
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">لاگ‌های برنامهٔ یک کانتینر را در یک Pod مشاهده کنید (نام Pod را با نامی که از <code dir="ltr">kubectl get pods</code> به دست آوردید جایگزین کنید).</p>
+</li>
+</ol>
+<div class="callout note"><div class="callout-title">Note</div>
+<p dir="rtl">در دستور <code dir="ltr">kubectl logs</code>، عبارت <code dir="ltr">hello-node-5f76cf6ccf-br9b5</code> را با نام Pod در خروجی دستور <code dir="ltr">kubectl get pods</code> جایگزین کنید.</p>
+</div>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl logs hello-node-5f76cf6ccf-br9b5
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">I0911 09:19:26.677397       1 log.go:195] Started HTTP server on port 8080
+I0911 09:19:26.677586       1 log.go:195] Started UDP server on port  8081
+</code></pre>
+<div class="callout note"><div class="callout-title">Note</div>
+<p dir="rtl">برای اطلاعات بیشتر دربارهٔ دستورهای <code dir="ltr">kubectl</code>، <a href="../reference/kubectl/index.html">مروری بر kubectl</a> را ببینید.</p>
+</div>
+<h2 id="ایجاد-یک-service" dir="rtl">ایجاد یک Service</h2>
+<p dir="rtl">به‌طور پیش‌فرض، Pod فقط از طریق نشانی IP داخلی خود و از درون
+کلاستر کوبرنتیز در دسترس است. برای اینکه کانتینر <code dir="ltr">hello-node</code> از بیرون
+شبکهٔ مجازی کوبرنتیز در دسترس باشد، باید Pod را در قالب یک
+<a href="../concepts/services-networking/service.html"><em>Service</em></a> کوبرنتیز در معرض دسترسی قرار دهید.</p>
+<div class="callout note"><div class="callout-title">Warning</div>
+<p dir="rtl">کانتینر agnhost یک endpoint با مسیر <code dir="ltr">/shell</code> دارد که برای
+اشکال‌زدایی مفید است، اما قرار دادن آن در معرض اینترنت عمومی خطرناک است. این کانتینر را روی
+کلاستری که به اینترنت دسترسی دارد یا روی کلاستر عملیاتی اجرا نکنید.</p>
+</div>
+<ol>
+<li dir="rtl">
+<p dir="rtl">با استفاده از دستور <code dir="ltr">kubectl expose</code>، Pod را در معرض اینترنت عمومی قرار دهید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl expose deployment hello-node --type=LoadBalancer --port=8080
+</code></pre>
+<p dir="rtl">فلگ <code dir="ltr">--type=LoadBalancer</code> نشان می‌دهد که می‌خواهید Service خود را
+بیرون از کلاستر در دسترس قرار دهید.</p>
+<p dir="rtl">کد برنامه در ایمیج آزمایشی فقط به پورت TCP شمارهٔ 8080 گوش می‌دهد. اگر با
+<code dir="ltr">kubectl expose</code> پورت دیگری را در معرض دسترسی قرار دهید، کلاینت‌ها نمی‌توانند به آن پورت متصل شوند.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">Service ایجادشده را مشاهده کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get services
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">NAME         TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE
+hello-node   LoadBalancer   10.108.144.78   &lt;pending&gt;     8080:30369/TCP   21s
+kubernetes   ClusterIP      10.96.0.1       &lt;none&gt;        443/TCP          23m
+</code></pre>
+<p dir="rtl">در ارائه‌دهندگان ابری که از متعادل‌کننده‌های بار (load balancer) پشتیبانی می‌کنند،
+یک نشانی IP خارجی برای دسترسی به Service تخصیص داده می‌شود. در minikube،
+نوع <code dir="ltr">LoadBalancer</code> باعث می‌شود Service از طریق دستور <code dir="ltr">minikube service</code>
+در دسترس باشد.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">دستور زیر را اجرا کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">minikube service hello-node
+</code></pre>
+<p dir="rtl">با این دستور، یک پنجرهٔ مرورگر باز می‌شود که برنامهٔ شما را ارائه می‌دهد و پاسخ برنامه را نشان می‌دهد.</p>
+</li>
+</ol>
+<h2 id="فعال-کردن-افزونه-ها" dir="rtl">فعال کردن افزونه‌ها</h2>
+<p dir="rtl">ابزار minikube شامل مجموعه‌ای از <span class="term" title="addons">افزونه‌های</span> داخلی است که می‌توان آن‌ها را در محیط محلی کوبرنتیز فعال، غیرفعال و باز کرد.</p>
+<ol>
+<li dir="rtl">
+<p dir="rtl">افزونه‌هایی را که در حال حاضر پشتیبانی می‌شوند فهرست کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">minikube addons list
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">addon-manager: enabled
+dashboard: enabled
+default-storageclass: enabled
+efk: disabled
+freshpod: disabled
+gvisor: disabled
+helm-tiller: disabled
+ingress: disabled
+ingress-dns: disabled
+logviewer: disabled
+metrics-server: disabled
+nvidia-driver-installer: disabled
+nvidia-gpu-device-plugin: disabled
+registry: disabled
+registry-creds: disabled
+storage-provisioner: enabled
+storage-provisioner-gluster: disabled
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">یک افزونه، برای مثال <code dir="ltr">metrics-server</code>، را فعال کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">minikube addons enable metrics-server
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">The 'metrics-server' addon is enabled
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">Pod و Serviceای را که با نصب این افزونه ایجاد شده‌اند مشاهده کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pod,svc -n kube-system
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">NAME                                        READY     STATUS    RESTARTS   AGE
+pod/coredns-5644d7b6d9-mh9ll                1/1       Running   0          34m
+pod/coredns-5644d7b6d9-pqd2t                1/1       Running   0          34m
+pod/metrics-server-67fb648c5                1/1       Running   0          26s
+pod/etcd-minikube                           1/1       Running   0          34m
+pod/influxdb-grafana-b29w8                  2/2       Running   0          26s
+pod/kube-addon-manager-minikube             1/1       Running   0          34m
+pod/kube-apiserver-minikube                 1/1       Running   0          34m
+pod/kube-controller-manager-minikube        1/1       Running   0          34m
+pod/kube-proxy-rnlps                        1/1       Running   0          34m
+pod/kube-scheduler-minikube                 1/1       Running   0          34m
+pod/storage-provisioner                     1/1       Running   0          34m
+
+NAME                           TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)             AGE
+service/metrics-server         ClusterIP   10.96.241.45    &lt;none&gt;        80/TCP              26s
+service/kube-dns               ClusterIP   10.96.0.10      &lt;none&gt;        53/UDP,53/TCP       34m
+service/monitoring-grafana     NodePort    10.99.24.54     &lt;none&gt;        80:30002/TCP        26s
+service/monitoring-influxdb    ClusterIP   10.111.169.94   &lt;none&gt;        8083/TCP,8086/TCP   26s
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">خروجی <code dir="ltr">metrics-server</code> را بررسی کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl top pods
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">NAME                         CPU(cores)   MEMORY(bytes)
+hello-node-ccf4b9788-4jn97   1m           6Mi
+</code></pre>
+<p dir="rtl">اگر پیام زیر را می‌بینید، کمی صبر کنید و دوباره امتحان کنید:</p>
+<pre dir="ltr"><code dir="ltr">error: Metrics API not available
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">افزونهٔ <code dir="ltr">metrics-server</code> را غیرفعال کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">minikube addons disable metrics-server
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">metrics-server was successfully disabled
+</code></pre>
+</li>
+</ol>
+<h2 id="پاک-سازی" dir="rtl">پاک‌سازی</h2>
+<p dir="rtl">اکنون می‌توانید منابعی را که در کلاستر خود ایجاد کرده‌اید پاک کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl delete service hello-node
+kubectl delete deployment hello-node
+</code></pre>
+<p dir="rtl">کلاستر Minikube را متوقف کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">minikube stop
+</code></pre>
+<p dir="rtl">در صورت تمایل، ماشین مجازی Minikube را حذف کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># Optional
+minikube delete
+</code></pre>
+<p dir="rtl">اگر می‌خواهید برای یادگیری بیشتر دربارهٔ کوبرنتیز دوباره از minikube استفاده کنید، نیازی به حذف آن ندارید.</p>
+<h2 id="جمع-بندی" dir="rtl">جمع‌بندی</h2>
+<p dir="rtl">در این صفحه، جنبه‌های اصلی راه‌اندازی و اجرای یک کلاستر minikube پوشش داده شد. اکنون آماده‌اید که برنامه‌ها را مستقر کنید.</p>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<ul>
+<li dir="rtl">آموزش <em><a href="kubernetes-basics/deploy-app/deploy-intro.html">استقرار نخستین برنامهٔ خود روی کوبرنتیز با kubectl</a></em>.</li>
+<li dir="rtl">دربارهٔ <a href="../concepts/workloads/controllers/deployment.html">آبجکت‌های Deployment</a> بیشتر بیاموزید.</li>
+<li dir="rtl">دربارهٔ <a href="../tasks/run-application/run-stateless-application-deployment.html">استقرار برنامه‌ها</a> بیشتر بیاموزید.</li>
+<li dir="rtl">دربارهٔ <a href="../concepts/services-networking/service.html">آبجکت‌های Service</a> بیشتر بیاموزید.</li>
+</ul>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#اهداف">اهداف</a><a class="l2" href="#پیش-از-شروع">پیش از شروع</a><a class="l2" href="#ایجاد-یک-کلاستر-minikube">ایجاد یک کلاستر minikube</a><a class="l2" href="#بررسی-وضعیت-کلاستر-minikube">بررسی وضعیت کلاستر minikube</a><a class="l2" href="#باز-کردن-داشبورد">باز کردن داشبورد</a><a class="l2" href="#ایجاد-یک-deployment">ایجاد یک Deployment</a><a class="l2" href="#ایجاد-یک-service">ایجاد یک Service</a><a class="l2" href="#فعال-کردن-افزونه-ها">فعال کردن افزونه‌ها</a><a class="l2" href="#پاک-سازی">پاک‌سازی</a><a class="l2" href="#جمع-بندی">جمع‌بندی</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>
