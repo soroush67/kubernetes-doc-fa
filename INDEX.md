@@ -4,13 +4,13 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-1673 از 1722 صفحه
+1688 از 1722 صفحه
 
 
 ## `.`
 
 - ✅ [_index.md](md/_index.md)
-- ⏳ `test.md`
+- ✅ [test.md](md/test.md)
 
 ## `concepts`
 
@@ -2190,9 +2190,9 @@
 ## `tasks/tools`
 
 - ✅ [_index.md](md/tasks/tools/_index.md)
-- ⏳ `install-kubectl-linux.md`
-- ⏳ `install-kubectl-macos.md`
-- ⏳ `install-kubectl-windows.md`
+- ⚠️ [install-kubectl-linux.md](md/tasks/tools/install-kubectl-linux.md)
+- ⚠️ [install-kubectl-macos.md](md/tasks/tools/install-kubectl-macos.md)
+- ✅ [install-kubectl-windows.md](md/tasks/tools/install-kubectl-windows.md)
 
 ## `tasks/tools/included`
 
@@ -2208,25 +2208,25 @@
 
 ## `tutorials`
 
-- ⏳ `_index.md`
+- ✅ [_index.md](md/tutorials/_index.md)
 - ⏳ `hello-minikube.md`
 
 ## `tutorials/cluster-management`
 
-- ⏳ `_index.md`
-- ⏳ `admission-policies.md`
-- ⏳ `install-use-dra.md`
-- ⏳ `kubelet-standalone.md`
-- ⏳ `namespaces-walkthrough.md`
-- ⏳ `provision-swap-memory.md`
-- ⏳ `use-pod-level-resource-managers.md`
+- ✅ [_index.md](md/tutorials/cluster-management/_index.md)
+- ✅ [admission-policies.md](md/tutorials/cluster-management/admission-policies.md)
+- ✅ [install-use-dra.md](md/tutorials/cluster-management/install-use-dra.md)
+- ✅ [kubelet-standalone.md](md/tutorials/cluster-management/kubelet-standalone.md)
+- ✅ [namespaces-walkthrough.md](md/tutorials/cluster-management/namespaces-walkthrough.md)
+- ✅ [provision-swap-memory.md](md/tutorials/cluster-management/provision-swap-memory.md)
+- ✅ [use-pod-level-resource-managers.md](md/tutorials/cluster-management/use-pod-level-resource-managers.md)
 
 ## `tutorials/configuration`
 
-- ⏳ `_index.md`
+- ✅ [_index.md](md/tutorials/configuration/_index.md)
 - ⏳ `configure-persistent-volume-storage.md`
-- ⏳ `configure-redis-using-configmap.md`
-- ⏳ `pod-sidecar-containers.md`
+- ✅ [configure-redis-using-configmap.md](md/tutorials/configuration/configure-redis-using-configmap.md)
+- ✅ [pod-sidecar-containers.md](md/tutorials/configuration/pod-sidecar-containers.md)
 - ⏳ `updating-configuration-via-a-configmap.md`
 
 ## `tutorials/kubernetes-basics`

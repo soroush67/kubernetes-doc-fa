@@ -8,9 +8,9 @@
 
 | | |
 |---|---|
-| پیشرفت (بر اساس کلمات) | **97.3٪** |
-| صفحات ترجمه‌شده | 1673 از 1722 |
-| صفحات دارای ایراد ساختاری | 75 |
+| پیشرفت (بر اساس کلمات) | **98.1٪** |
+| صفحات ترجمه‌شده | 1688 از 1722 |
+| صفحات دارای ایراد ساختاری | 77 |
 | نسخه‌ی منبع انگلیسی | `f652c6b8a26f` |
 
 ## مشاهده
@@ -67,15 +67,15 @@ cd kubernetes-doc-fa
 
 | بخش | ترجمه‌شده | کل |
 |---|---|---|
-| `(root)` | 1 | 2 |
+| `(root)` | 2 | 2 |
 | `concepts` | 187 | 187 |
 | `contribute` | 44 | 44 |
 | `doc-contributor-tools` | 1 | 1 |
 | `home` | 2 | 2 |
 | `reference` | 1198 | 1198 |
 | `setup` | 22 | 22 |
-| `tasks` | 218 | 221 |
-| `tutorials` | 0 | 45 |
+| `tasks` | 221 | 221 |
+| `tutorials` | 11 | 45 |
 
 </div>
 
@@ -101,26 +101,26 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [tutorials/configuration/pod-sidecar-containers.md](md/tutorials/configuration/pod-sidecar-containers.md) — 2026-11-16T15:44:56+03:30
+- [tutorials/configuration/configure-redis-using-configmap.md](md/tutorials/configuration/configure-redis-using-configmap.md) — 2026-11-16T15:44:04+03:30
+- [tutorials/cluster-management/use-pod-level-resource-managers.md](md/tutorials/cluster-management/use-pod-level-resource-managers.md) — 2026-11-16T15:43:39+03:30
+- [tutorials/configuration/_index.md](md/tutorials/configuration/_index.md) — 2026-11-16T15:42:59+03:30
+- [tutorials/cluster-management/provision-swap-memory.md](md/tutorials/cluster-management/provision-swap-memory.md) — 2026-11-16T15:42:56+03:30
+- [tutorials/cluster-management/namespaces-walkthrough.md](md/tutorials/cluster-management/namespaces-walkthrough.md) — 2026-11-16T15:42:47+03:30
+- [tutorials/cluster-management/kubelet-standalone.md](md/tutorials/cluster-management/kubelet-standalone.md) — 2026-11-16T15:42:36+03:30
+- [tutorials/cluster-management/install-use-dra.md](md/tutorials/cluster-management/install-use-dra.md) — 2026-11-16T15:42:10+03:30
+- [test.md](md/test.md) — 2026-11-16T15:41:39+03:30
+- [tutorials/cluster-management/admission-policies.md](md/tutorials/cluster-management/admission-policies.md) — 2026-11-16T15:40:56+03:30
+- [tutorials/cluster-management/_index.md](md/tutorials/cluster-management/_index.md) — 2026-11-16T15:39:54+03:30
+- [tutorials/_index.md](md/tutorials/_index.md) — 2026-11-16T15:39:51+03:30
+- [tasks/tools/install-kubectl-linux.md](md/tasks/tools/install-kubectl-linux.md) — 2026-11-16T15:39:37+03:30
+- [tasks/tools/install-kubectl-windows.md](md/tasks/tools/install-kubectl-windows.md) — 2026-11-16T15:39:11+03:30
+- [tasks/tools/install-kubectl-macos.md](md/tasks/tools/install-kubectl-macos.md) — 2026-11-16T15:38:43+03:30
 - [tasks/tools/included/verify-kubectl.md](md/tasks/tools/included/verify-kubectl.md) — 2026-11-14T15:52:39+03:30
 - [tasks/tools/included/optional-kubectl-configs-zsh.md](md/tasks/tools/included/optional-kubectl-configs-zsh.md) — 2026-11-14T15:52:29+03:30
 - [tasks/tools/included/optional-kubectl-configs-pwsh.md](md/tasks/tools/included/optional-kubectl-configs-pwsh.md) — 2026-11-14T15:52:28+03:30
 - [tasks/tools/included/optional-kubectl-configs-fish.md](md/tasks/tools/included/optional-kubectl-configs-fish.md) — 2026-11-14T15:52:23+03:30
 - [tasks/tools/included/optional-kubectl-configs-bash-mac.md](md/tasks/tools/included/optional-kubectl-configs-bash-mac.md) — 2026-11-14T15:52:22+03:30
-- [tasks/tools/included/optional-kubectl-configs-bash-linux.md](md/tasks/tools/included/optional-kubectl-configs-bash-linux.md) — 2026-11-14T15:52:18+03:30
-- [tasks/tools/included/kubectl-whats-next.md](md/tasks/tools/included/kubectl-whats-next.md) — 2026-11-14T15:52:03+03:30
-- [tasks/tools/_index.md](md/tasks/tools/_index.md) — 2026-11-14T15:51:57+03:30
-- [tasks/tools/included/kubectl-convert-overview.md](md/tasks/tools/included/kubectl-convert-overview.md) — 2026-11-14T15:51:51+03:30
-- [tasks/tools/included/_index.md](md/tasks/tools/included/_index.md) — 2026-11-14T15:51:46+03:30
-- [tasks/tls/manual-rotation-of-ca-certificates.md](md/tasks/tls/manual-rotation-of-ca-certificates.md) — 2026-11-14T15:51:43+03:30
-- [tasks/tls/managing-tls-in-a-cluster.md](md/tasks/tls/managing-tls-in-a-cluster.md) — 2026-11-14T15:51:40+03:30
-- [tasks/tls/certificate-rotation.md](md/tasks/tls/certificate-rotation.md) — 2026-11-14T15:51:01+03:30
-- [tasks/run-application/update-deployment-rolling.md](md/tasks/run-application/update-deployment-rolling.md) — 2026-11-14T15:50:49+03:30
-- [tasks/tls/certificate-issue-client-csr.md](md/tasks/tls/certificate-issue-client-csr.md) — 2026-11-14T15:50:47+03:30
-- [tasks/tls/_index.md](md/tasks/tls/_index.md) — 2026-11-14T15:50:10+03:30
-- [tasks/run-application/scale-deployment.md](md/tasks/run-application/scale-deployment.md) — 2026-11-14T15:50:07+03:30
-- [tasks/run-application/scale-stateful-set.md](md/tasks/run-application/scale-stateful-set.md) — 2026-11-14T15:50:02+03:30
-- [tasks/run-application/run-stateless-application-deployment.md](md/tasks/run-application/run-stateless-application-deployment.md) — 2026-11-14T15:49:45+03:30
-- [tasks/run-application/run-single-instance-stateful-application.md](md/tasks/run-application/run-single-instance-stateful-application.md) — 2026-11-14T15:49:35+03:30
 
 </div>
 
@@ -203,6 +203,8 @@ cd kubernetes-doc-fa
 - [tasks/access-application-cluster/communicate-containers-same-pod-shared-volume.md](md/tasks/access-application-cluster/communicate-containers-same-pod-shared-volume.md): chunk 1: 6 untranslated English lines, e.g. 'echo Hello from the debian container > /pod-data/index.html'
 - [tasks/configure-pod-container/configure-service-account.md](md/tasks/configure-pod-container/configure-service-account.md): chunk 1: 1 code block(s) changed
 - [tasks/extend-kubernetes/socks5-proxy-access-api.md](md/tasks/extend-kubernetes/socks5-proxy-access-api.md): chunk 1: 7 untranslated English lines, e.g. 'client([client])-. local <br> traffic .->  local_ssh[Local SSH <br> SOCKS5 proxy];'
+- [tasks/tools/install-kubectl-linux.md](md/tasks/tools/install-kubectl-linux.md): chunk 1: 8 untranslated English lines, e.g. 'curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"'
+- [tasks/tools/install-kubectl-macos.md](md/tasks/tools/install-kubectl-macos.md): chunk 1: 8 untranslated English lines, e.g. 'curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/darwin/amd64/kubectl"'
 
 </div>
 

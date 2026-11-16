@@ -1,0 +1,440 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>اجرای kubelet در حالت مستقل | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">tutorials / cluster-management</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">اجرای kubelet در حالت مستقل</h1><!-- overview -->
+<p dir="rtl">این آموزش نشان می‌دهد که چگونه یک نمونهٔ مستقل از kubelet را اجرا کنید.</p>
+<p dir="rtl">ممکن است انگیزه‌های گوناگونی برای اجرای kubelet به‌صورت مستقل داشته باشید.
+هدف این آموزش آشنا کردن شما با کوبرنتیز است، حتی اگر تجربهٔ چندانی با آن نداشته باشید.
+با دنبال کردن این آموزش، با راه‌اندازی نود، Podهای پایه (ایستا) و شیوهٔ مدیریت کانتینرها در کوبرنتیز آشنا می‌شوید.</p>
+<p dir="rtl">پس از پایان این آموزش، می‌توانید استفاده از کلاستری را امتحان کنید که یک
+<span class="term" title="control-plane">control plane</span> برای مدیریت Podها،
+نودها و انواع دیگر آبجکت‌ها دارد؛ برای نمونه،
+<a href="https://kubernetes.io/docs/tutorials/hello-minikube/" target="_blank">سلام، minikube</a>.</p>
+<p dir="rtl">همچنین می‌توانید kubelet را برای موارد استفادهٔ محیط عملیاتی (production) در حالت مستقل اجرا کنید؛ برای نمونه،
+برای اجرای control plane یک کلاستر با دسترس‌پذیری بالا که به‌صورت مقاوم در برابر خطا مستقر شده است. این
+آموزش به جزئیات لازم برای اجرای یک control plane مقاوم در برابر خطا نمی‌پردازد.</p>
+<h2 id="اهداف" dir="rtl">اهداف</h2>
+<ul>
+<li dir="rtl">نصب <code dir="ltr">cri-o</code> و <code dir="ltr">kubelet</code> روی یک سیستم لینوکسی و اجرای آن‌ها به‌صورت سرویس‌های <code dir="ltr">systemd</code>.</li>
+<li dir="rtl">راه‌اندازی یک Pod که <code dir="ltr">nginx</code> را اجرا می‌کند و روی پورت TCP شمارهٔ ۸۰ نشانی IP همان Pod به درخواست‌ها گوش می‌دهد.</li>
+<li dir="rtl">آشنایی با نحوهٔ تعامل اجزای مختلف این راهکار با یکدیگر.</li>
+</ul>
+<div class="callout note"><div class="callout-title">هشدار</div>
+<p dir="rtl">پیکربندی kubelet در این آموزش عمداً ناامن طراحی شده است و <em>نباید</em> در محیط عملیاتی
+از آن استفاده شود.</p>
+</div>
+<h2 id="پیش-از-شروع" dir="rtl">پیش از شروع</h2>
+<ul>
+<li dir="rtl">دسترسی مدیر (<code dir="ltr">root</code>) به یک سیستم لینوکسی که از <code dir="ltr">systemd</code> و <code dir="ltr">iptables</code>
+(یا nftables همراه با شبیه‌سازی <code dir="ltr">iptables</code>) استفاده می‌کند.</li>
+<li dir="rtl">دسترسی به اینترنت برای دریافت اجزای لازم برای این آموزش، از جمله:
+<ul>
+<li dir="rtl">یک <span class="term" title="container-runtime">محیط اجرای کانتینر</span>
+که <span class="term" title="cri">(CRI)</span> کوبرنتیز را پیاده‌سازی کند.</li>
+<li dir="rtl">افزونه‌های شبکه (که اغلب با نام
+<span class="term" title="cni">رابط شبکهٔ کانتینر (CNI)</span> شناخته می‌شوند)</li>
+<li dir="rtl">ابزارهای خط فرمان لازم: <code dir="ltr">curl</code>، <code dir="ltr">tar</code> و <code dir="ltr">jq</code>.</li>
+</ul>
+</li>
+</ul>
+<!-- lessoncontent -->
+<h2 id="آماده-سازی-سیستم" dir="rtl">آماده‌سازی سیستم</h2>
+<h3 id="پیکربندی-swap" dir="rtl">پیکربندی swap</h3>
+<p dir="rtl">به‌طور پیش‌فرض، اگر kubelet روی یک نود حافظهٔ swap را تشخیص دهد، راه‌اندازی نمی‌شود.
+بنابراین یا باید swap را غیرفعال کنید یا kubelet را طوری پیکربندی کنید که وجود آن را تحمل کند.</p>
+<div class="callout note"><div class="callout-title">نکته</div>
+<p dir="rtl">اگر kubelet را طوری پیکربندی کنید که swap را تحمل کند، kubelet همچنان Podها (و
+کانتینرهای درون آن Podها) را طوری پیکربندی می‌کند که از فضای swap استفاده نکنند. برای اینکه بدانید Podها چگونه
+می‌توانند واقعاً از swap موجود استفاده کنند، می‌توانید دربارهٔ
+<a href="../../concepts/architecture/nodes.html#swap-memory">مدیریت حافظهٔ swap</a> روی نودهای لینوکسی بیشتر بخوانید.</p>
+</div>
+<p dir="rtl">اگر حافظهٔ swap فعال است، یا آن را غیرفعال کنید یا <code dir="ltr">failSwapOn: false</code> را به
+فایل پیکربندی kubelet اضافه کنید.</p>
+<p dir="rtl">برای بررسی فعال بودن swap:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">sudo swapon --show
+</code></pre>
+<p dir="rtl">اگر این دستور خروجی‌ای نداشته باشد، حافظهٔ swap از قبل غیرفعال است.</p>
+<p dir="rtl">برای غیرفعال کردن موقت swap:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">sudo swapoff -a
+</code></pre>
+<p dir="rtl">برای اینکه این تغییر پس از راه‌اندازی مجدد سیستم نیز باقی بماند:</p>
+<p dir="rtl">بسته به اینکه swap روی سیستم شما چگونه پیکربندی شده است، مطمئن شوید که در <code dir="ltr">/etc/fstab</code> یا
+<code dir="ltr">systemd.swap</code> غیرفعال شده باشد.</p>
+<h3 id="فعال-کردن-هدایت-بسته-های-ipv4" dir="rtl">فعال کردن هدایت بسته‌های IPv4</h3>
+<p dir="rtl">برای بررسی فعال بودن هدایت بسته‌های IPv4:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">cat /proc/sys/net/ipv4/ip_forward
+</code></pre>
+<p dir="rtl">اگر خروجی <code dir="ltr">1</code> باشد، این قابلیت از قبل فعال است. اگر خروجی <code dir="ltr">0</code> باشد، مراحل بعدی را دنبال کنید.</p>
+<p dir="rtl">برای فعال کردن هدایت بسته‌های IPv4، یک فایل پیکربندی بسازید که پارامتر
+<code dir="ltr">net.ipv4.ip_forward</code> را برابر <code dir="ltr">1</code> قرار دهد:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">sudo tee /etc/sysctl.d/k8s.conf &lt;&lt;EOF
+net.ipv4.ip_forward = 1
+EOF
+</code></pre>
+<p dir="rtl">تغییرات را روی سیستم اعمال کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">sudo sysctl --system
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">...
+* Applying /etc/sysctl.d/k8s.conf ...
+net.ipv4.ip_forward = 1
+* Applying /etc/sysctl.conf ...
+</code></pre>
+<h2 id="دریافت،-نصب-و-پیکربندی-اجزا" dir="rtl">دریافت، نصب و پیکربندی اجزا</h2>
+<h3 id="نصب-محیط-اجرای-کانتینر-container-runtime" dir="rtl">نصب محیط اجرای کانتینر {#container-runtime}</h3>
+<p dir="rtl">جدیدترین نسخه‌های موجود از بسته‌های لازم را دریافت کنید (توصیه می‌شود).</p>
+<p dir="rtl">این آموزش نصب <a href="https://github.com/cri-o/cri-o" target="_blank" rel="noopener">محیط اجرای کانتینر CRI-O</a>
+(پیوند خارجی) را پیشنهاد می‌کند.</p>
+<p dir="rtl">بسته به توزیع لینوکسی که استفاده می‌کنید، <a href="https://github.com/cri-o/cri-o/blob/main/install.md" target="_blank" rel="noopener">روش‌های مختلفی برای نصب</a>
+محیط اجرای کانتینر CRI-O وجود دارد. با اینکه
+CRI-O استفاده از بسته‌های <code dir="ltr">deb</code> یا <code dir="ltr">rpm</code> را توصیه می‌کند، این آموزش از اسکریپت
+<em>بستهٔ باینری ایستا</em> (static binary bundle) در
+<a href="https://github.com/cri-o/packaging/blob/main/README.md" target="_blank" rel="noopener">پروژهٔ CRI-O Packaging</a>
+استفاده می‌کند تا هم کل فرایند ساده‌تر شود و هم به توزیع خاصی وابسته نباشد.</p>
+<p dir="rtl">این اسکریپت نرم‌افزارهای لازم دیگری را نیز نصب و پیکربندی می‌کند؛ از جمله
+<a href="https://github.com/containernetworking/cni" target="_blank" rel="noopener"><code dir="ltr">cni-plugins</code></a> برای شبکه‌بندی
+کانتینرها، و <a href="https://github.com/containers/crun" target="_blank" rel="noopener"><code dir="ltr">crun</code></a> و
+<a href="https://github.com/opencontainers/runc" target="_blank" rel="noopener"><code dir="ltr">runc</code></a> برای اجرای کانتینرها.</p>
+<p dir="rtl">این اسکریپت معماری پردازندهٔ سیستم شما (<code dir="ltr">amd64</code> یا <code dir="ltr">arm64</code>) را به‌طور خودکار
+تشخیص می‌دهد و جدیدترین نسخه‌های بسته‌های نرم‌افزاری را انتخاب و نصب می‌کند.</p>
+<h3 id="راه-اندازی-cri-o-cri-o-setup" dir="rtl">راه‌اندازی CRI-O {#cri-o-setup}</h3>
+<p dir="rtl">به صفحهٔ <a href="https://github.com/cri-o/cri-o/releases" target="_blank" rel="noopener">انتشارها</a> (پیوند خارجی) بروید.</p>
+<p dir="rtl">اسکریپت بستهٔ باینری ایستا را دریافت کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">curl https://raw.githubusercontent.com/cri-o/packaging/main/get &gt; crio-install
+</code></pre>
+<p dir="rtl">اسکریپت نصب را اجرا کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">sudo bash crio-install
+</code></pre>
+<p dir="rtl">سرویس <code dir="ltr">crio</code> را فعال و اجرا کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">sudo systemctl daemon-reload
+sudo systemctl enable --now crio.service
+</code></pre>
+<p dir="rtl">آزمون سریع:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">sudo systemctl is-active crio.service
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">active
+</code></pre>
+<p dir="rtl">بررسی دقیق سرویس:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">sudo journalctl -f -u crio.service
+</code></pre>
+<h3 id="نصب-افزونه-های-شبکه" dir="rtl">نصب افزونه‌های شبکه</h3>
+<p dir="rtl">نصب‌کنندهٔ <code dir="ltr">cri-o</code> بستهٔ <code dir="ltr">cni-plugins</code> را نصب و پیکربندی می‌کند. می‌توانید
+با اجرای دستور زیر از درستی نصب مطمئن شوید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">/opt/cni/bin/bridge --version
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">CNI bridge plugin v1.5.1
+CNI protocol versions supported: 0.1.0, 0.2.0, 0.3.0, 0.3.1, 0.4.0, 1.0.0
+</code></pre>
+<p dir="rtl">برای بررسی پیکربندی پیش‌فرض:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">cat /etc/cni/net.d/11-crio-ipv4-bridge.conflist
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code class="language-json" dir="ltr">{
+  "cniVersion": "1.0.0",
+  "name": "crio",
+  "plugins": [
+    {
+      "type": "bridge",
+      "bridge": "cni0",
+      "isGateway": true,
+      "ipMasq": true,
+      "hairpinMode": true,
+      "ipam": {
+        "type": "host-local",
+        "routes": [
+            { "dst": "0.0.0.0/0" }
+        ],
+        "ranges": [
+            [{ "subnet": "10.85.0.0/16" }]
+        ]
+      }
+    }
+  ]
+}
+</code></pre>
+<div class="callout note"><div class="callout-title">نکته</div>
+<p dir="rtl">مطمئن شوید که محدودهٔ پیش‌فرض <code dir="ltr">subnet</code> (<code dir="ltr">10.85.0.0/16</code>) با هیچ‌یک از شبکه‌های فعال شما
+هم‌پوشانی نداشته باشد. اگر هم‌پوشانی وجود دارد، می‌توانید فایل را ویرایش و این محدوده را
+متناسب با آن تغییر دهید. پس از اعمال تغییر، سرویس را دوباره راه‌اندازی کنید.</p>
+</div>
+<h3 id="دریافت-و-راه-اندازی-kubelet" dir="rtl">دریافت و راه‌اندازی kubelet</h3>
+<p dir="rtl"><a href="/releases/download/">جدیدترین نسخهٔ پایدار</a> kubelet را دریافت کنید.</p>
+<div class="tabs">
+<div class="tab"><div class="tab-name">x86-64</div>
+<p dir="ltr" class="ltr">curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubelet"</p>
+</div>
+<div class="tab"><div class="tab-name">ARM64</div>
+<p dir="ltr" class="ltr">curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/arm64/kubelet"</p>
+</div>
+</div>
+<p dir="rtl">پیکربندی:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">sudo mkdir -p /etc/kubernetes/manifests
+</code></pre>
+<pre dir="ltr"><code class="language-shell" dir="ltr">sudo tee /etc/kubernetes/kubelet.yaml &lt;&lt;EOF
+apiVersion: kubelet.config.k8s.io/v1beta1
+kind: KubeletConfiguration
+authentication:
+  webhook:
+    enabled: false # Do NOT use in production clusters!
+authorization:
+  mode: AlwaysAllow # Do NOT use in production clusters!
+enableServer: false
+logging:
+  format: text
+address: 127.0.0.1 # Restrict access to localhost
+readOnlyPort: 10255 # Do NOT use in production clusters!
+staticPodPath: /etc/kubernetes/manifests
+containerRuntimeEndpoint: unix:///var/run/crio/crio.sock
+EOF
+</code></pre>
+<div class="callout note"><div class="callout-title">نکته</div>
+<p dir="rtl">از آنجا که کلاستری برای محیط عملیاتی راه‌اندازی نمی‌کنید، برای پرس‌وجوهای بدون احراز هویت
+به API کلاینت kubelet از HTTP ساده (<code dir="ltr">readOnlyPort: 10255</code>) استفاده می‌کنید.</p>
+<p dir="rtl">در این آموزش، <em>وب‌هوک احراز هویت</em> غیرفعال شده و <em>حالت مجوزدهی</em> روی <code dir="ltr">AlwaysAllow</code>
+تنظیم شده است. برای پیکربندی درست kubelet در حالت مستقل در محیط خودتان، می‌توانید دربارهٔ
+<a href="../../reference/access-authn-authz/authorization.html#authorization-modules">حالت‌های مجوزدهی</a>
+و <a href="../../reference/access-authn-authz/webhook.html">احراز هویت با وب‌هوک</a> بیشتر بخوانید.</p>
+<p dir="rtl">برای اینکه بدانید اجزای کوبرنتیز از چه پورت‌هایی استفاده می‌کنند، صفحهٔ
+<a href="../../reference/networking/ports-and-protocols.html">پورت‌ها و پروتکل‌ها</a> را ببینید.</p>
+</div>
+<p dir="rtl">نصب:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">chmod +x kubelet
+sudo cp kubelet /usr/bin/
+</code></pre>
+<p dir="rtl">یک فایل واحد سرویس <code dir="ltr">systemd</code> بسازید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">sudo tee /etc/systemd/system/kubelet.service &lt;&lt;EOF
+[Unit]
+Description=Kubelet
+
+[Service]
+ExecStart=/usr/bin/kubelet \
+ --config=/etc/kubernetes/kubelet.yaml
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+EOF
+</code></pre>
+<p dir="rtl">آرگومان خط فرمان <code dir="ltr">--kubeconfig</code> عمداً در فایل پیکربندی سرویس حذف شده است.
+این آرگومان مسیر یک فایل
+<a href="../../concepts/configuration/organize-cluster-access-kubeconfig.html">kubeconfig</a>
+را تعیین می‌کند که نحوهٔ اتصال به API server را مشخص می‌کند و حالت API server را فعال می‌سازد.
+با حذف آن، حالت مستقل فعال می‌شود.</p>
+<p dir="rtl">سرویس <code dir="ltr">kubelet</code> را فعال و اجرا کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">sudo systemctl daemon-reload
+sudo systemctl enable --now kubelet.service
+</code></pre>
+<p dir="rtl">آزمون سریع:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">sudo systemctl is-active kubelet.service
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">active
+</code></pre>
+<p dir="rtl">بررسی دقیق سرویس:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">sudo journalctl -u kubelet.service
+</code></pre>
+<p dir="rtl">نقطهٔ پایانی <code dir="ltr">/healthz</code> در API کلاینت kubelet را بررسی کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">curl http://localhost:10255/healthz?verbose
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">[+]ping ok
+[+]log ok
+[+]syncloop ok
+healthz check passed
+</code></pre>
+<p dir="rtl">از نقطهٔ پایانی <code dir="ltr">/pods</code> در API کلاینت kubelet پرس‌وجو کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">curl http://localhost:10255/pods | jq '.'
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code class="language-json" dir="ltr">{
+  "kind": "PodList",
+  "apiVersion": "v1",
+  "metadata": {},
+  "items": null
+}
+</code></pre>
+<h2 id="اجرای-یک-pod-در-kubelet" dir="rtl">اجرای یک Pod در kubelet</h2>
+<p dir="rtl">در حالت مستقل، می‌توانید Podها را با استفاده از مانیفست‌های Pod اجرا کنید. این مانیفست‌ها
+می‌توانند روی سیستم فایل محلی باشند یا از طریق HTTP از یک منبع پیکربندی دریافت شوند.</p>
+<p dir="rtl">یک مانیفست برای Pod بسازید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">cat &lt;&lt;EOF &gt; static-web.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: static-web
+spec:
+  containers:
+    - name: web
+      image: nginx
+      ports:
+        - name: web
+          containerPort: 80
+          protocol: TCP
+EOF
+</code></pre>
+<p dir="rtl">فایل مانیفست <code dir="ltr">static-web.yaml</code> را در پوشهٔ <code dir="ltr">/etc/kubernetes/manifests</code> کپی کنید.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">sudo cp static-web.yaml /etc/kubernetes/manifests/
+</code></pre>
+<h3 id="به-دست-آوردن-اطلاعات-دربارهٔ-kubelet-و-pod-find-out-information" dir="rtl">به‌دست آوردن اطلاعات دربارهٔ kubelet و Pod {#find-out-information}</h3>
+<p dir="rtl">افزونهٔ شبکهٔ Pod یک پل شبکه (<code dir="ltr">cni0</code>) و برای هر Pod یک جفت رابط <code dir="ltr">veth</code> ایجاد می‌کند
+(یکی از این جفت درون Pod تازه‌ساخته‌شده و دیگری در سطح میزبان قرار دارد).</p>
+<p dir="rtl">از نقطهٔ پایانی API کلاینت kubelet در نشانی <code dir="ltr">http://localhost:10255/pods</code> پرس‌وجو کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">curl http://localhost:10255/pods | jq '.'
+</code></pre>
+<p dir="rtl">برای به‌دست آوردن نشانی IP مربوط به Pod با نام <code dir="ltr">static-web</code>:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">curl http://localhost:10255/pods | jq '.items[].status.podIP'
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">"10.85.0.4"
+</code></pre>
+<p dir="rtl">به Pod سرور <code dir="ltr">nginx</code> در نشانی <code dir="ltr">http://&lt;IP&gt;:&lt;Port&gt;</code> متصل شوید (پورت پیش‌فرض ۸۰ است)؛ در این مثال:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">curl http://10.85.0.4
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code class="language-html" dir="ltr">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;title&gt;Welcome to nginx!&lt;/title&gt;
+...
+</code></pre>
+<h2 id="جزئیات-بیشتر-را-کجا-پیدا-کنیم" dir="rtl">جزئیات بیشتر را کجا پیدا کنیم</h2>
+<p dir="rtl">اگر برای اجرای درست این آموزش نیاز به عیب‌یابی دارید، می‌توانید
+برای پایش و رفع اشکال، پوشه‌های زیر را بررسی کنید:</p>
+<pre dir="ltr"><code dir="ltr">/var/lib/cni
+/var/lib/containers
+/var/lib/kubelet
+
+/var/log/containers
+/var/log/pods
+</code></pre>
+<h2 id="پاک-سازی" dir="rtl">پاک‌سازی</h2>
+<h3 id="kubelet" dir="ltr" class="ltr">kubelet</h3>
+<pre dir="ltr"><code class="language-shell" dir="ltr">sudo systemctl disable --now kubelet.service
+sudo systemctl daemon-reload
+sudo rm /etc/systemd/system/kubelet.service
+sudo rm /usr/bin/kubelet
+sudo rm -rf /etc/kubernetes
+sudo rm -rf /var/lib/kubelet
+sudo rm -rf /var/log/containers
+sudo rm -rf /var/log/pods
+</code></pre>
+<h3 id="محیط-اجرای-کانتینر" dir="rtl">محیط اجرای کانتینر</h3>
+<pre dir="ltr"><code class="language-shell" dir="ltr">sudo systemctl disable --now crio.service
+sudo systemctl daemon-reload
+sudo rm -rf /usr/local/bin
+sudo rm -rf /usr/local/lib
+sudo rm -rf /usr/local/share
+sudo rm -rf /usr/libexec/crio
+sudo rm -rf /etc/crio
+sudo rm -rf /etc/containers
+</code></pre>
+<h3 id="افزونه-های-شبکه" dir="rtl">افزونه‌های شبکه</h3>
+<pre dir="ltr"><code class="language-shell" dir="ltr">sudo rm -rf /opt/cni
+sudo rm -rf /etc/cni
+sudo rm -rf /var/lib/cni
+</code></pre>
+<h2 id="جمع-بندی" dir="rtl">جمع‌بندی</h2>
+<p dir="rtl">این صفحه جنبه‌های پایه‌ای استقرار kubelet در حالت مستقل را پوشش داد.
+اکنون آماده‌اید که Podها را مستقر کنید و قابلیت‌های دیگر را بیازمایید.</p>
+<p dir="rtl">توجه کنید که در حالت مستقل، kubelet از دریافت پیکربندی Podها از control plane
+پشتیبانی <em>نمی‌کند</em> (زیرا هیچ اتصالی به control plane وجود ندارد).</p>
+<p dir="rtl">همچنین نمی‌توانید از <span class="term" title="configmap">ConfigMap</span> یا
+<span class="term" title="secret">Secret</span> برای پیکربندی کانتینرهای
+یک Pod ایستا استفاده کنید.</p>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<ul>
+<li dir="rtl">آموزش <a href="https://kubernetes.io/docs/tutorials/hello-minikube/" target="_blank">سلام، minikube</a> را دنبال کنید تا با اجرای کوبرنتیز
+<em>همراه با</em> control plane آشنا شوید. ابزار minikube به شما کمک می‌کند یک کلاستر تمرینی روی رایانهٔ خودتان راه‌اندازی کنید.</li>
+<li dir="rtl">دربارهٔ <a href="../../concepts/extend-kubernetes/compute-storage-net/network-plugins.html">افزونه‌های شبکه</a> بیشتر بیاموزید.</li>
+<li dir="rtl">دربارهٔ <a href="../../setup/production-environment/container-runtimes.html">محیط‌های اجرای کانتینر</a> بیشتر بیاموزید.</li>
+<li dir="rtl">دربارهٔ <a href="../../reference/command-line-tools-reference/kubelet.html">kubelet</a> بیشتر بیاموزید.</li>
+<li dir="rtl">دربارهٔ <a href="../../tasks/configure-pod-container/static-pod.html">Podهای ایستا</a> بیشتر بیاموزید.</li>
+</ul>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#اهداف">اهداف</a><a class="l2" href="#پیش-از-شروع">پیش از شروع</a><a class="l2" href="#آماده-سازی-سیستم">آماده‌سازی سیستم</a><a class="l3" href="#پیکربندی-swap">پیکربندی swap</a><a class="l3" href="#فعال-کردن-هدایت-بسته-های-ipv4">فعال کردن هدایت بسته‌های IPv4</a><a class="l2" href="#دریافت،-نصب-و-پیکربندی-اجزا">دریافت، نصب و پیکربندی اجزا</a><a class="l3" href="#نصب-محیط-اجرای-کانتینر-container-runtime">نصب محیط اجرای کانتینر {#container-runtime}</a><a class="l3" href="#راه-اندازی-cri-o-cri-o-setup">راه‌اندازی CRI-O {#cri-o-setup}</a><a class="l3" href="#نصب-افزونه-های-شبکه">نصب افزونه‌های شبکه</a><a class="l3" href="#دریافت-و-راه-اندازی-kubelet">دریافت و راه‌اندازی kubelet</a><a class="l2" href="#اجرای-یک-pod-در-kubelet">اجرای یک Pod در kubelet</a><a class="l3" href="#به-دست-آوردن-اطلاعات-دربارهٔ-kubelet-و-pod-find-out-information">به‌دست آوردن اطلاعات دربارهٔ kubelet و Pod {#find-out-information}</a><a class="l2" href="#جزئیات-بیشتر-را-کجا-پیدا-کنیم">جزئیات بیشتر را کجا پیدا کنیم</a><a class="l2" href="#پاک-سازی">پاک‌سازی</a><a class="l3" href="#kubelet">kubelet</a><a class="l3" href="#محیط-اجرای-کانتینر">محیط اجرای کانتینر</a><a class="l3" href="#افزونه-های-شبکه">افزونه‌های شبکه</a><a class="l2" href="#جمع-بندی">جمع‌بندی</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>

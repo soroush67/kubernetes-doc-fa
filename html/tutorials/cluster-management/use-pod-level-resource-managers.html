@@ -1,0 +1,439 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>استفاده از منابع در سطح Pod با مدیرهای منابع kubelet | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">tutorials / cluster-management</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">استفاده از منابع در سطح Pod با مدیرهای منابع kubelet</h1><!-- overview -->
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
+<p dir="rtl">این آموزش نشان می‌دهد که چگونه مدیرهای منابع kubelet (توپولوژی، CPU و حافظه) را برای پشتیبانی از تعریف منابع در سطح Pod پیکربندی کنید. با این کار می‌توانید <em>مدل‌های تخصیص ترکیبی</em> (hybrid allocation models) تعریف کنید. در این مدل‌ها برخی کانتینرها منابع زیرساختی انحصاری و هم‌تراز با NUMA دریافت می‌کنند و بقیه‌ی کانتینرها منابع باقی‌مانده را از یک مخزن اشتراکی در سطح Pod به‌طور مشترک استفاده می‌کنند.</p>
+<p dir="rtl">برای آشنایی بیشتر با مفاهیم پشت این قابلیت، صفحه‌ی مفهومی
+<a href="../../concepts/resource-management/pod-level-resource-managers.html">مدیرهای منابع در سطح Pod</a>
+را مطالعه کنید.</p>
+<!-- lessoncontent -->
+<h2 id="اهداف" dir="rtl">اهداف</h2>
+<ul>
+<li dir="rtl">پیکربندی مدیرهای منابع kubelet (CPU، حافظه و توپولوژی) برای پشتیبانی از منابع در سطح Pod.</li>
+<li dir="rtl">استقرار بارهای کاری با دامنه‌ی <code dir="ltr">pod</code> در Topology Manager برای دستیابی به هم‌ترازی با یک نود NUMA، با ترکیبی از کانتینرهای انحصاری و اشتراکی.</li>
+<li dir="rtl">بررسی و تأیید نحوه‌ی تقسیم منابع CPU و حافظه میان کانتینرهای انحصاری و مخزن اشتراکی Pod.</li>
+<li dir="rtl">درک قواعد رد پذیرش (admission) در حالتی که مخزن اشتراکی سطح Pod خالی باشد.</li>
+<li dir="rtl">استقرار بارهای کاری با دامنه‌ی <code dir="ltr">container</code> در Topology Manager، با تخصیص‌های ترکیبی برای کانتینرها.</li>
+</ul>
+<h2 id="پیش-از-شروع" dir="rtl">پیش از شروع</h2>
+<p dir="rtl">باید یک کلاستر کوبرنتیز داشته باشید و ابزار خط فرمان kubectl باید برای ارتباط با کلاستر شما پیکربندی شده باشد. توصیه می‌شود این آموزش را روی کلاستری اجرا کنید که دست‌کم دو نود داشته باشد که نقش میزبان control plane را ندارند. اگر هنوز کلاستری ندارید، می‌توانید با استفاده از
+<a href="https://minikube.sigs.k8s.io/docs/tutorials/multi_node/" target="_blank" rel="noopener">minikube</a>
+یکی بسازید یا از یکی از این محیط‌های آزمایشی کوبرنتیز استفاده کنید:</p>
+<ul>
+<li dir="ltr" class="ltr"><a href="https://labs.iximiuz.com/playgrounds?category=kubernetes&amp;filter=all" target="_blank" rel="noopener">iximiuz Labs</a></li>
+<li dir="ltr" class="ltr"><a href="https://killercoda.com/playgrounds/scenario/kubernetes" target="_blank" rel="noopener">Killercoda</a></li>
+<li dir="ltr" class="ltr"><a href="https://kodekloud.com/public-playgrounds" target="_blank" rel="noopener">KodeKloud</a></li>
+</ul>
+<p dir="rtl">برای انجام این آموزش به موارد زیر نیاز دارید:</p>
+<ul>
+<li dir="rtl">یک کلاستر کوبرنتیز با <strong>نودهای کارگر لینوکسی</strong> (مدیرهای منابع در سطح Pod روی نودهای ویندوزی پشتیبانی نمی‌شوند).</li>
+<li dir="rtl">دست‌کم یک نود کارگر با <strong>توپولوژی NUMA</strong> (ترجیحاً با چند نود NUMA تا بتوانید هم‌ترازی را مشاهده کنید).</li>
+<li dir="rtl"><strong>دسترسی مدیریتی</strong> (root یا <code dir="ltr">sudo</code>) روی نود یا نودهای کارگر، برای تغییر
+<a href="../../reference/config-api/kubelet-config.v1beta1.html">پیکربندی <code dir="ltr">kubelet</code></a>
+و راه‌اندازی مجدد سرویس <code dir="ltr">kubelet</code>.</li>
+<li dir="rtl">دسترسی به <code dir="ltr">kubectl</code> با مجوز ایجاد فضاهای نام و Podها.</li>
+</ul>
+<p dir="rtl">اطمینان حاصل کنید که
+<a href="https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/" target="_blank">feature gateهای</a> زیر
+برای control plane و نودهای کارگر فعال باشند:</p>
+<ul>
+<li dir="ltr" class="ltr"><code dir="ltr">PodLevelResources</code></li>
+<li dir="ltr" class="ltr"><code dir="ltr">PodLevelResourceManagers</code></li>
+</ul>
+<h2 id="ایجاد-یک-فضای-نام-create-namespace" dir="rtl">ایجاد یک فضای نام {#create-namespace}</h2>
+<p dir="rtl">یک فضای نام (namespace) ایجاد کنید تا منابعی که در این آموزش ساخته می‌شوند از بقیه‌ی کلاستر جدا بمانند:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl create namespace plrm-tutorial
+</code></pre>
+<h2 id="استفاده-از-دامنه-ی-pod-با-تخصیص-ترکیبی-use-pod-scope-with-mixed-allocation" dir="rtl">استفاده از دامنه‌ی pod با تخصیص ترکیبی {#use-pod-scope-with-mixed-allocation}</h2>
+<p dir="rtl">وقتی دامنه‌ی Topology Manager روی <code dir="ltr">pod</code> تنظیم شده باشد، <code dir="ltr">kubelet</code> بر اساس <code dir="ltr">.spec.resources</code> یک هم‌ترازی NUMA واحد برای کل Pod انجام می‌دهد. سپس بودجه‌ی منابع حاصل تقسیم می‌شود: کانتینرهایی که منابع <code dir="ltr">Guaranteed</code> درخواست می‌کنند سهم‌های انحصاری دریافت می‌کنند و کانتینرهایی که تخصیص انحصاری دریافت نمی‌کنند، بودجه‌ی باقی‌مانده را در یک مخزن اشتراکی سطح Pod به‌طور مشترک استفاده می‌کنند.</p>
+<h3 id="گام-۱-پیکربندی-kubelet-برای-دامنه-ی-pod" dir="rtl">گام ۱: پیکربندی kubelet برای دامنه‌ی pod</h3>
+<p dir="rtl">برای فعال‌کردن این رفتار، <code dir="ltr">kubelet</code> را روی نود یا نودهای کارگری که می‌خواهید این بارهای کاری را روی آن‌ها اجرا کنید، با سیاست‌های لازم پیکربندی کنید. می‌توانید
+<a href="../../reference/config-api/kubelet-config.v1beta1.html">پیکربندی kubelet</a>
+را برای آن نودها به شکل زیر به‌روزرسانی کنید:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: kubelet.config.k8s.io/v1beta1
+kind: KubeletConfiguration
+cpuManagerPolicy: "static"
+memoryManagerPolicy: "Static"
+topologyManagerScope: "pod"
+topologyManagerPolicy: "single-numa-node"
+</code></pre>
+<ul>
+<li dir="rtl">مقادیر معتبر برای <code dir="ltr">topologyManagerPolicy</code> عبارت‌اند از
+<code dir="ltr">single-numa-node</code>، <code dir="ltr">restricted</code> یا <code dir="ltr">best-effort</code>. هنگام استفاده از مدیریت منابع در سطح Pod نمی‌توانید مقدار دیگری تعیین کنید.</li>
+</ul>
+<p dir="rtl">برای اعمال پیکربندی، kubelet را دوباره راه‌اندازی کنید. برای مثال، در لینوکس با systemd از دستور <code dir="ltr">systemctl restart kubelet.service</code> استفاده کنید.</p>
+<h3 id="گام-۲-استقرار-یک-pod-با-تخصیص-ترکیبی" dir="rtl">گام ۲: استقرار یک Pod با تخصیص ترکیبی</h3>
+<p dir="rtl">مانیفست نمونه‌ی زیر را در نظر بگیرید. این Pod در سطح Pod (<code dir="ltr">.spec.resources</code>) بودجه‌ای در مجموع برابر با ۴ CPU درخواست می‌کند. درون این Pod:</p>
+<ul>
+<li dir="rtl">کانتینر <code dir="ltr">main-app</code> تخصیص انحصاری ۲ هسته‌ی کامل CPU را درخواست می‌کند (<code dir="ltr">requests</code> = <code dir="ltr">limits</code> = 2 CPU).</li>
+<li dir="rtl">از آنجا که <code dir="ltr">metrics-sidecar</code> و <code dir="ltr">logging-sidecar</code> درخواستی در سطح کانتینر تعیین نمی‌کنند، این دو کانتینر جانبی (sidecar) هسته‌های CPU باقی‌مانده در مخزن اشتراکی سطح Pod، یعنی ۲ هسته‌ی CPU، را به‌طور مشترک استفاده می‌کنند.</li>
+</ul>
+<div class="code-file ltr" dir="ltr">pods/resource/pod-level-resource-managers-pod-scope-mixed.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-scope-mixed
+  annotations:
+    kubernetes.io/description: "A pod demonstrating pod-level scope where one container gets exclusive resources and others share the remaining pod resources in a shared pool."
+spec:
+  # At Pod level, the Pod has CPU request equal to limits and memory request
+  # also equal to memory limits. The main-app container meets the requirements
+  # for the Guaranteed QoS class at container level, and the sidecar containers
+  # don't specify any resource request. Under pod scope, this means that the
+  # kubelet could statically assign 4 CPUs to the overall Pod, of which 2 are
+  # assigned exclusively to the main-app container, and the remaining 2 are
+  # shared by the sidecars in the pod's shared pool.
+  resources:
+    requests:
+      cpu: "4"
+      memory: "4Gi"
+    limits:
+      cpu: "4"
+      memory: "4Gi"
+  initContainers:
+  - name: metrics-sidecar
+    # Note: This is a placeholder image for demonstration purposes, not an
+    #actual metrics helper.
+    image: registry.k8s.io/pause:3.9
+    restartPolicy: Always
+  - name: logging-sidecar
+    # Note: This is a placeholder image for demonstration purposes, not an
+    # actual logging agent.
+    image: registry.k8s.io/pause:3.9
+    restartPolicy: Always
+  containers:
+  - name: main-app
+    # Note: This is a placeholder image for demonstration purposes.
+    image: registry.k8s.io/pause:3.9
+    resources:
+      requests:
+        cpu: "2"
+        memory: "2Gi"
+      limits:
+        cpu: "2"
+        memory: "2Gi"
+</code></pre>
+<p dir="rtl">مانیفست را روی کلاستر خود اعمال کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f https://k8s.io/examples/pods/resource/pod-level-resource-managers-pod-scope-mixed.yaml --namespace=plrm-tutorial
+</code></pre>
+<h3 id="گام-۳-تأیید-و-بررسی-تقسیم-منابع" dir="rtl">گام ۳: تأیید و بررسی تقسیم منابع</h3>
+<ol>
+<li dir="rtl">
+<p dir="rtl">بررسی کنید که Pod با موفقیت در حال اجرا باشد:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pod pod-scope-mixed --namespace=plrm-tutorial
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">آنچه را در پشت صحنه رخ داده است بررسی کنید:</p>
+<pre dir="ltr"><code class="language-mermaid" dir="ltr">flowchart TD
+    subgraph Pod["Pod-Level Budget: 4 CPUs, 4Gi Memory"]
+        direction TB
+        C1["main-app&lt;br/&gt;(Exclusive: 2 CPUs, 2Gi Memory)"]
+        subgraph Pool["Pod Shared Pool: 2 CPUs, 2Gi Memory"]
+            C2["metrics-sidecar"]
+            C3["logging-sidecar"]
+        end
+    end
+</code></pre>
+<ul>
+<li dir="rtl">هم‌ترازی Pod: ابزار Topology Manager درخواست ۴ CPU در سطح Pod
+(<code dir="ltr">spec.resources</code>) را ارزیابی کرد و کل Pod را به یک نود NUMA واحد اختصاص داد.</li>
+<li dir="rtl">تخصیص انحصاری: ابزار CPU Manager یک سهم اختصاصی ۲ CPU به <code dir="ltr">main-app</code> تخصیص داد. محدودسازی (throttling) سهمیه‌ی CFS پردازنده برای <code dir="ltr">main-app</code> غیرفعال است و در نتیجه این کانتینر بدون محدودیت به آن هسته‌های انحصاری دسترسی دارد.</li>
+<li dir="rtl">مخزن اشتراکی Pod: ۲ CPU باقی‌مانده یک مخزن اشتراکی در سطح Pod تشکیل می‌دهند. کانتینرهای <code dir="ltr">metrics-sidecar</code> و <code dir="ltr">logging-sidecar</code> هیچ منبعی در سطح کانتینر تعیین نمی‌کنند (<code dir="ltr">resources: {}</code>)، بنابراین درون این مخزن اشتراکیِ ایزوله در سطح Pod و با اعمال سهمیه‌ی CFS اجرا می‌شوند. این مخزن اگرچه میان این دو کانتینر جانبی مشترک است، از بارهای کاری بیرونی روی نود جدا است. به این ترتیب کانتینرهای جانبی از محلی‌بودن (locality) اختصاصی NUMA بهره می‌برند و از رقابت بر سر منابع در سطح نود در امان می‌مانند.</li>
+</ul>
+</li>
+</ol>
+<h2 id="مشاهده-ی-محدودیت-های-پذیرش-در-حالت-مخزن-اشتراکی-خالی-empty-shared-pool-restrictions" dir="rtl">مشاهده‌ی محدودیت‌های پذیرش در حالت مخزن اشتراکی خالی {#empty-shared-pool-restrictions}</h2>
+<p dir="rtl">هنگام استفاده از دامنه‌ی <code dir="ltr">pod</code>، کنترل پذیرش <code dir="ltr">kubelet</code> مشخصات Podهایی را که به یک مخزن اشتراکی خالی منجر می‌شوند رد می‌کند، به شرط آنکه کانتینرهایی وجود داشته باشند که به این مخزن نیاز دارند.</p>
+<p dir="rtl">اگر مجموع درخواست‌های منابع انحصاری کانتینرهای <code dir="ltr">Guaranteed</code> با کل بودجه‌ی سطح Pod برابر باشد و دست‌کم یک کانتینر دیگر به مخزن اشتراکی نیاز داشته باشد، <code dir="ltr">kubelet</code> آن Pod را رد می‌کند.</p>
+<h3 id="گام-۴-بررسی-مانیفست-نامعتبر-pod" dir="rtl">گام ۴: بررسی مانیفست نامعتبر Pod</h3>
+<p dir="rtl">مانیفست زیر را در نظر بگیرید. این Pod در مجموع بودجه‌ای برابر با ۴ CPU درخواست می‌کند. کانتینر <code dir="ltr">container-a</code> یک CPU انحصاری و کانتینر <code dir="ltr">container-b</code> سه CPU انحصاری درخواست می‌کند (در مجموع ۴ CPU). کانتینر <code dir="ltr">container-c</code> منابع انحصاری درخواست نمی‌کند و به یک مخزن اشتراکی نیاز دارد، اما هیچ CPUای باقی نمانده است:</p>
+<div class="code-file ltr" dir="ltr">pods/resource/pod-level-resource-managers-empty-shared-pool.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: Pod
+metadata:
+  name: empty-shared-pool
+  annotations:
+    kubernetes.io/description: "A pod demonstrating a configuration that is rejected because exclusive containers consume the entire pod resource budget, leaving no resources for the remaining container in the shared pool."
+spec:
+  # At Pod level, the Pod has CPU request equal to limits and memory request
+  # also equal to memory limits. The main-app and metrics-sidecar containers
+  # meet the requirements for the Guaranteed QoS class at container level, and
+  # the logging-sidecar container doesn't specify any resource request. Because
+  # the Guaranteed containers consume the entire pod resource budget,
+  # leaving 0 CPUs for the shared pool required by logging-sidecar, this pod
+  # will be rejected at admission.
+  resources:
+    requests:
+      cpu: "4"
+      memory: "4Gi"
+    limits:
+      cpu: "4"
+      memory: "4Gi"
+  initContainers:
+  - name: metrics-sidecar
+    # Note: This is a placeholder image for demonstration purposes, not an
+    # actual metrics helper.
+    image: registry.k8s.io/pause:3.9
+    restartPolicy: Always
+    resources:
+      requests:
+        cpu: "1"
+        memory: "1Gi"
+      limits:
+        cpu: "1"
+        memory: "1Gi"
+  - name: logging-sidecar
+    # Note: This is a placeholder image for demonstration purposes, not an
+    # actual logging agent.
+    image: registry.k8s.io/pause:3.9
+    restartPolicy: Always
+  containers:
+  - name: main-app
+    # Note: This is a placeholder image for demonstration purposes.
+    image: registry.k8s.io/pause:3.9
+    resources:
+      requests:
+        cpu: "3"
+        memory: "3Gi"
+      limits:
+        cpu: "3"
+        memory: "3Gi"
+</code></pre>
+<h3 id="گام-۵-تلاش-برای-استقرار-و-مشاهده-ی-رد-شدن" dir="rtl">گام ۵: تلاش برای استقرار و مشاهده‌ی رد شدن</h3>
+<ol>
+<li dir="rtl">
+<p dir="rtl">مانیفست را اعمال کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f https://k8s.io/examples/pods/resource/pod-level-resource-managers-empty-shared-pool.yaml --namespace=plrm-tutorial
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">رویدادهای Pod را بررسی کنید تا خطای پذیرش را ببینید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl describe pod empty-shared-pool --namespace=plrm-tutorial
+</code></pre>
+<p dir="rtl">به پیام رویداد توجه کنید. این پیام توضیح می‌دهد که <code dir="ltr">kubelet</code> این Pod را رد کرده است، زیرا مخزن اشتراکی سطح Pod برای کانتینرهایی که به منابع اشتراکی نیاز دارند خالی می‌ماند:</p>
+<pre dir="ltr"><code dir="ltr">Status:           Failed
+Reason:           TopologyAffinityError
+Message:          Pod was rejected: Pod Scope pod with pod-level resources failed admission under pod-scope topology manager
+</code></pre>
+<pre dir="ltr"><code class="language-mermaid" dir="ltr">flowchart TD
+    subgraph Pod["Pod-Level Budget: 4 CPUs, 4Gi Memory"]
+        direction TB
+        C1["container-a&lt;br/&gt;(Exclusive: 1 CPU, 1Gi Memory)"]
+        C2["container-b&lt;br/&gt;(Exclusive: 3 CPUs, 3Gi Memory)"]
+        subgraph Pool["Pod Shared Pool: 0 CPUs, 0Gi Memory"]
+            C3["container-c&lt;br/&gt;(Requires shared pool)"]
+        end
+    end
+    Pool --&gt; Rejection["Admission Error: Pod Rejected!"]
+    style Rejection fill:#ffcccc,stroke:#ff0000,stroke-width:2px
+</code></pre>
+</li>
+</ol>
+<h2 id="استفاده-از-دامنه-ی-container-با-تخصیص-ترکیبی-use-container-scope-with-mixed-allocation" dir="rtl">استفاده از دامنه‌ی container با تخصیص ترکیبی {#use-container-scope-with-mixed-allocation}</h2>
+<p dir="rtl">می‌توانید دامنه‌ی Topology Manager را روی <code dir="ltr">container</code> نیز تنظیم کنید. در این حالت، <code dir="ltr">kubelet</code> هر کانتینر را جداگانه برای تخصیص انحصاری ارزیابی می‌کند، در حالی که بودجه‌ی کلی Pod در <code dir="ltr">.spec.resources</code> همچنان مرزهای QoS و محدودیت‌های cgroup را اعمال می‌کند.</p>
+<h3 id="گام-۶-پیکربندی-kubelet-برای-دامنه-ی-container" dir="rtl">گام ۶: پیکربندی kubelet برای دامنه‌ی container</h3>
+<p dir="rtl"><a href="../../reference/config-api/kubelet-config.v1beta1.html">پیکربندی kubelet</a> را روی
+نود یا نودهای کارگر مورد نظر برای دامنه‌ی <code dir="ltr">container</code> به‌روزرسانی کنید:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: kubelet.config.k8s.io/v1beta1
+kind: KubeletConfiguration
+cpuManagerPolicy: "static"
+memoryManagerPolicy: "Static"
+topologyManagerScope: "container"
+topologyManagerPolicy: "single-numa-node"
+</code></pre>
+<p dir="rtl">برای اعمال پیکربندی، kubelet را دوباره راه‌اندازی کنید. برای مثال، در لینوکس با systemd از دستور <code dir="ltr">systemctl restart kubelet.service</code> استفاده کنید.</p>
+<h3 id="گام-۷-استقرار-یک-بار-کاری-ترکیبی-با-دامنه-ی-container" dir="rtl">گام ۷: استقرار یک بار کاری ترکیبی با دامنه‌ی container</h3>
+<p dir="rtl">مانیفست نمونه‌ی زیر را در نظر بگیرید. این Pod در مجموع بودجه‌ای برابر با ۴ CPU دارد:</p>
+<ul>
+<li dir="rtl">کانتینر <code dir="ltr">infrastructure-sidecar</code> یک سهم انحصاری ۲ CPU درخواست می‌کند (<code dir="ltr">requests</code> =
+<code dir="ltr">limits</code> = 2 CPU).</li>
+<li dir="rtl">کانتینرهای <code dir="ltr">worker-1</code> و <code dir="ltr">worker-2</code> درخواستی در سطح کانتینر تعیین نمی‌کنند و در مخزن اشتراکی عمومی کل نود اجرا می‌شوند.</li>
+</ul>
+<div class="code-file ltr" dir="ltr">pods/resource/pod-level-resource-managers-container-scope-mixed.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: Pod
+metadata:
+  name: container-scope-mixed
+  annotations:
+    kubernetes.io/description: "A pod demonstrating container-level scope where one container gets exclusive resources and others run in the node's shared pool."
+spec:
+  # At Pod level, the Pod has CPU request equal to limits and memory request
+  # also equal to memory limits. The infrastructure-sidecar container meets the
+  # requirements for the Guaranteed QoS class at container level, and the worker
+  # containers don't specify any resource request. Under container scope, the
+  # kubelet evaluates containers individually for exclusive allocation. This
+  # means the infrastructure-sidecar gets an exclusive 2 CPU slice, while the
+  # worker containers run in the node's general shared pool, all while bounded
+  # by the overall pod limits.
+  resources:
+    requests:
+      cpu: "4"
+      memory: "4Gi"
+    limits:
+      cpu: "4"
+      memory: "4Gi"
+  initContainers:
+  - name: infrastructure-sidecar
+    # Note: This is a placeholder image for demonstration purposes, not an
+    # actual infrastructure helper.
+    image: registry.k8s.io/pause:3.9
+    restartPolicy: Always
+    resources:
+      requests:
+        cpu: "2"
+        memory: "2Gi"
+      limits:
+        cpu: "2"
+        memory: "2Gi"
+  containers:
+  - name: worker-1
+    # Note: This is a placeholder image for demonstration purposes.
+    image: registry.k8s.io/pause:3.9
+  - name: worker-2
+    # Note: This is a placeholder image for demonstration purposes.
+    image: registry.k8s.io/pause:3.9
+</code></pre>
+<p dir="rtl">مانیفست را اعمال کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f https://k8s.io/examples/pods/resource/pod-level-resource-managers-container-scope-mixed.yaml --namespace=plrm-tutorial
+</code></pre>
+<h3 id="گام-۸-تأیید-استقرار" dir="rtl">گام ۸: تأیید استقرار</h3>
+<ol>
+<li dir="rtl">
+<p dir="rtl">بررسی کنید که Pod در حال اجرا باشد:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pod container-scope-mixed --namespace=plrm-tutorial
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">آنچه را در پشت صحنه رخ داده است بررسی کنید:</p>
+<pre dir="ltr"><code class="language-mermaid" dir="ltr">flowchart TD
+    subgraph Pod["Pod-Level Budget: 4 CPUs, 4Gi Memory"]
+        direction TB
+        C1["infrastructure-sidecar&lt;br/&gt;(Exclusive NUMA Slice: 2 CPUs, 2Gi Memory)"]
+        subgraph NodePool["Node Shared Pool: Pod-level limit"]
+            C3["worker-2"]
+            C2["worker-1"]
+        end
+    end
+</code></pre>
+<ul>
+<li dir="rtl">هم‌ترازی در دامنه‌ی کانتینر: در دامنه‌ی <code dir="ltr">container</code>، کوبلت (<code dir="ltr">kubelet</code>) کانتینرها را جداگانه ارزیابی می‌کند. کانتینر <code dir="ltr">infrastructure-sidecar</code> یک سهم انحصاری و هم‌تراز با NUMA به اندازه‌ی ۲ CPU را مستقیماً از مخزن قابل تخصیص نود دریافت می‌کند.</li>
+<li dir="rtl">مخزن اشتراکی نود: کانتینرهای <code dir="ltr">worker-1</code> و <code dir="ltr">worker-2</code> هیچ درخواست منبعی در سطح کانتینر تعیین نمی‌کنند (<code dir="ltr">resources: {}</code>)، بنابراین در دامنه‌ی <code dir="ltr">container</code> در مخزن اشتراکی عمومی نود اجرا می‌شوند (و نه در یک مخزن ایزوله در سطح Pod).</li>
+<li dir="rtl">اعمال محدودیت Pod: مجموع مصرف CPU همه‌ی کانتینرها همچنان با محدودیت سطح Pod
+(<code dir="ltr">spec.resources.limits</code>) به ۴ CPU محدود می‌ماند.</li>
+</ul>
+</li>
+</ol>
+<h2 id="پاکسازی" dir="rtl">پاکسازی</h2>
+<p dir="rtl">فضای نام و همه‌ی Podهای نمونه‌ای را که در این آموزش ایجاد شده‌اند حذف کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl delete namespace plrm-tutorial
+</code></pre>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<ul>
+<li dir="rtl">مستندات مفهومی را مطالعه کنید:
+<ul>
+<li dir="rtl"><a href="../../concepts/resource-management/pod-level-resource-managers.html">مدیرهای منابع در سطح Pod</a></li>
+</ul>
+</li>
+<li dir="rtl">با نحوه‌ی پیکربندی مدیرهای منابع در سطح نود آشنا شوید:
+<ul>
+<li dir="rtl"><a href="../../tasks/administer-cluster/topology-manager.html">کنترل سیاست‌های مدیریت توپولوژی روی یک نود</a></li>
+<li dir="rtl"><a href="../../tasks/administer-cluster/cpu-management-policies.html">کنترل سیاست‌های مدیریت CPU روی نود</a></li>
+<li dir="rtl"><a href="../../tasks/administer-cluster/memory-manager.html">استفاده از مدیر حافظه‌ی آگاه از NUMA</a></li>
+</ul>
+</li>
+<li dir="rtl">با نحوه‌ی تخصیص منابع آشنا شوید:
+<ul>
+<li dir="rtl"><a href="../../tasks/configure-pod-container/assign-pod-level-resources.html">تخصیص منابع CPU و حافظه در سطح Pod</a></li>
+<li dir="rtl"><a href="../../tasks/configure-pod-container/assign-cpu-resource.html">تخصیص منابع CPU به کانتینرها و Podها</a></li>
+<li dir="rtl"><a href="../../tasks/configure-pod-container/assign-memory-resource.html">تخصیص منابع حافظه به کانتینرها و Podها</a></li>
+</ul>
+</li>
+</ul>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#اهداف">اهداف</a><a class="l2" href="#پیش-از-شروع">پیش از شروع</a><a class="l2" href="#ایجاد-یک-فضای-نام-create-namespace">ایجاد یک فضای نام {#create-namespace}</a><a class="l2" href="#استفاده-از-دامنه-ی-pod-با-تخصیص-ترکیبی-use-pod-scope-with-mixed-allocation">استفاده از دامنه‌ی pod با تخصیص ترکیبی {#use-pod-scope-with-mixed-allocation}</a><a class="l3" href="#گام-۱-پیکربندی-kubelet-برای-دامنه-ی-pod">گام ۱: پیکربندی kubelet برای دامنه‌ی pod</a><a class="l3" href="#گام-۲-استقرار-یک-pod-با-تخصیص-ترکیبی">گام ۲: استقرار یک Pod با تخصیص ترکیبی</a><a class="l3" href="#گام-۳-تأیید-و-بررسی-تقسیم-منابع">گام ۳: تأیید و بررسی تقسیم منابع</a><a class="l2" href="#مشاهده-ی-محدودیت-های-پذیرش-در-حالت-مخزن-اشتراکی-خالی-empty-shared-pool-restrictions">مشاهده‌ی محدودیت‌های پذیرش در حالت مخزن اشتراکی خالی {#empty-shared-pool-restrictions}</a><a class="l3" href="#گام-۴-بررسی-مانیفست-نامعتبر-pod">گام ۴: بررسی مانیفست نامعتبر Pod</a><a class="l3" href="#گام-۵-تلاش-برای-استقرار-و-مشاهده-ی-رد-شدن">گام ۵: تلاش برای استقرار و مشاهده‌ی رد شدن</a><a class="l2" href="#استفاده-از-دامنه-ی-container-با-تخصیص-ترکیبی-use-container-scope-with-mixed-allocation">استفاده از دامنه‌ی container با تخصیص ترکیبی {#use-container-scope-with-mixed-allocation}</a><a class="l3" href="#گام-۶-پیکربندی-kubelet-برای-دامنه-ی-container">گام ۶: پیکربندی kubelet برای دامنه‌ی container</a><a class="l3" href="#گام-۷-استقرار-یک-بار-کاری-ترکیبی-با-دامنه-ی-container">گام ۷: استقرار یک بار کاری ترکیبی با دامنه‌ی container</a><a class="l3" href="#گام-۸-تأیید-استقرار">گام ۸: تأیید استقرار</a><a class="l2" href="#پاکسازی">پاکسازی</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>

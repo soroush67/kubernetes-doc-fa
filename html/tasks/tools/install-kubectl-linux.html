@@ -1,0 +1,396 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>نصب و راه‌اندازی kubectl روی لینوکس | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">tasks / tools</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">نصب و راه‌اندازی kubectl روی لینوکس</h1><h2 id="پیش-از-شروع" dir="rtl">پیش از شروع</h2>
+<p dir="rtl">نسخهٔ kubectl شما باید حداکثر یک نسخهٔ فرعی (minor) با نسخهٔ کلاستر اختلاف داشته باشد. برای مثال، یک کلاینت v1.37 می‌تواند با control plane نسخه‌های v1.36، v1.37 و v1.38 ارتباط برقرار کند.
+استفاده از جدیدترین نسخهٔ سازگار kubectl از بروز مشکلات پیش‌بینی‌نشده جلوگیری می‌کند.</p>
+<h2 id="نصب-kubectl-روی-لینوکس" dir="rtl">نصب kubectl روی لینوکس</h2>
+<p dir="rtl">برای نصب kubectl روی لینوکس، روش‌های زیر وجود دارد:</p>
+<ul>
+<li dir="rtl"><a href="#install-kubectl-binary-with-curl-on-linux">نصب فایل اجرایی kubectl با curl روی لینوکس</a></li>
+<li dir="rtl"><a href="#install-using-native-package-management">نصب با مدیر بستهٔ بومی سیستم‌عامل</a></li>
+<li dir="rtl"><a href="#install-using-other-package-management">نصب با سایر مدیران بسته</a></li>
+</ul>
+<h3 id="نصب-فایل-اجرایی-kubectl-با-curl-روی-لینوکس" dir="rtl">نصب فایل اجرایی kubectl با curl روی لینوکس</h3>
+<ol>
+<li dir="rtl">آخرین نسخهٔ منتشرشده را با دستور زیر دانلود کنید:</li>
+</ol>
+<div class="tabs">
+<div class="tab"><div class="tab-name">x86-64</div>
+<p dir="ltr" class="ltr">curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"</p>
+</div>
+<div class="tab"><div class="tab-name">ARM64</div>
+<p dir="ltr" class="ltr">curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/arm64/kubectl"</p>
+</div>
+</div>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">برای دانلود یک نسخهٔ مشخص، بخش <code dir="ltr">$(curl -L -s https://dl.k8s.io/release/stable.txt)</code>
+را در دستور با شمارهٔ نسخهٔ موردنظر جایگزین کنید.</p>
+<p dir="rtl">برای مثال، برای دانلود نسخهٔ 1.37.0 روی لینوکس x86-64، دستور زیر را وارد کنید:</p>
+<pre dir="ltr"><code class="language-bash" dir="ltr">curl -LO https://dl.k8s.io/release/v1.37.0/bin/linux/amd64/kubectl
+</code></pre>
+<p dir="rtl">و برای لینوکس ARM64، دستور زیر را وارد کنید:</p>
+<pre dir="ltr"><code class="language-bash" dir="ltr">curl -LO https://dl.k8s.io/release/v1.37.0/bin/linux/arm64/kubectl
+</code></pre>
+</div>
+<ol>
+<li dir="rtl">
+<p dir="rtl">اعتبارسنجی فایل اجرایی (اختیاری)</p>
+<p dir="rtl">فایل checksum مربوط به kubectl را دانلود کنید:</p>
+</li>
+</ol>
+<div class="tabs">
+<div class="tab"><div class="tab-name">x86-64</div>
+<p dir="ltr" class="ltr">curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl.sha256"</p>
+</div>
+<div class="tab"><div class="tab-name">ARM64</div>
+<p dir="ltr" class="ltr">curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/arm64/kubectl.sha256"</p>
+</div>
+</div>
+<p dir="rtl">فایل اجرایی kubectl را با فایل checksum اعتبارسنجی کنید:</p>
+<pre dir="ltr"><code class="language-bash" dir="ltr">echo "$(cat kubectl.sha256)  kubectl" | sha256sum --check
+</code></pre>
+<p dir="rtl">اگر فایل معتبر باشد، خروجی به این صورت است:</p>
+<pre dir="ltr"><code class="language-console" dir="ltr">kubectl: OK
+</code></pre>
+<p dir="rtl">اگر بررسی ناموفق باشد، دستور <code dir="ltr">sha256</code> با وضعیت غیرصفر خاتمه می‌یابد و خروجی‌ای مشابه زیر چاپ می‌کند:</p>
+<pre dir="ltr"><code class="language-console" dir="ltr">kubectl: FAILED
+sha256sum: WARNING: 1 computed checksum did NOT match
+</code></pre>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">فایل اجرایی و فایل checksum را از یک نسخه دانلود کنید.</p>
+</div>
+<ol>
+<li dir="rtl">
+<p dir="rtl">نصب kubectl</p>
+<pre dir="ltr"><code class="language-bash" dir="ltr">sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+</code></pre>
+</li>
+</ol>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">اگر روی سیستم مقصد دسترسی root ندارید، همچنان می‌توانید kubectl را در پوشهٔ
+<code dir="ltr">~/.local/bin</code> نصب کنید:</p>
+<pre dir="ltr"><code class="language-bash" dir="ltr">chmod +x kubectl
+mkdir -p ~/.local/bin
+mv ./kubectl ~/.local/bin/kubectl
+# and then append (or prepend) ~/.local/bin to $PATH
+</code></pre>
+</div>
+<ol>
+<li dir="rtl">
+<p dir="rtl">بررسی کنید که نسخهٔ نصب‌شده به‌روز باشد:</p>
+<pre dir="ltr"><code class="language-bash" dir="ltr">kubectl version --client
+</code></pre>
+<p dir="rtl">یا برای مشاهدهٔ جزئیات نسخه از این دستور استفاده کنید:</p>
+<pre dir="ltr"><code class="language-cmd" dir="ltr">kubectl version --client --output=yaml
+</code></pre>
+</li>
+</ol>
+<h3 id="نصب-با-مدیر-بستهٔ-بومی-سیستم-عامل" dir="rtl">نصب با مدیر بستهٔ بومی سیستم‌عامل</h3>
+<div class="tabs">
+<div class="tab"><div class="tab-name">توزیع‌های مبتنی بر Debian</div>
+<ol>
+<li dir="rtl">
+<p dir="rtl">فهرست بسته‌های <code dir="ltr">apt</code> را به‌روزرسانی کنید و بسته‌های لازم برای استفاده از مخزن <code dir="ltr">apt</code> کوبرنتیز را نصب کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">sudo apt-get update
+# apt-transport-https may be a dummy package; if so, you can skip that package
+sudo apt-get install -y apt-transport-https ca-certificates curl gnupg
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">کلید عمومی امضای مخازن بستهٔ کوبرنتیز را دانلود کنید. همهٔ مخازن از یک کلید امضای یکسان استفاده می‌کنند؛ بنابراین می‌توانید نسخهٔ درج‌شده در URL را نادیده بگیرید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># If the folder `/etc/apt/keyrings` does not exist, it should be created before the curl command, read the note below.
+# sudo mkdir -p -m 755 /etc/apt/keyrings
+curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.37/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+sudo chmod 644 /etc/apt/keyrings/kubernetes-apt-keyring.gpg # allow unprivileged APT programs to read this keyring
+</code></pre>
+</li>
+</ol>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">در نسخه‌های قدیمی‌تر از Debian 12 و Ubuntu 22.04، پوشهٔ <code dir="ltr">/etc/apt/keyrings</code> به‌طور پیش‌فرض وجود ندارد و باید پیش از اجرای دستور curl ساخته شود.</p>
+</div>
+<ol start="3">
+<li dir="rtl">
+<p dir="rtl">مخزن <code dir="ltr">apt</code> مناسب کوبرنتیز را اضافه کنید. اگر می‌خواهید از نسخه‌ای از کوبرنتیز غیر از v1.37 استفاده کنید،
+در دستور زیر v1.37 را با نسخهٔ فرعی موردنظر جایگزین کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># This overwrites any existing configuration in /etc/apt/sources.list.d/kubernetes.list
+echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.37/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
+sudo chmod 644 /etc/apt/sources.list.d/kubernetes.list   # helps tools such as command-not-found to work correctly
+</code></pre>
+</li>
+</ol>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">برای ارتقای kubectl به یک نسخهٔ فرعی دیگر، باید پیش از اجرای <code dir="ltr">apt-get update</code> و <code dir="ltr">apt-get upgrade</code>، نسخهٔ درج‌شده در <code dir="ltr">/etc/apt/sources.list.d/kubernetes.list</code> را تغییر دهید. این فرایند در <a href="../administer-cluster/kubeadm/change-package-repository.html">تغییر مخزن بستهٔ کوبرنتیز</a> با جزئیات بیشتری شرح داده شده است.</p>
+</div>
+<ol start="4">
+<li dir="rtl">
+<p dir="rtl">فهرست بسته‌های <code dir="ltr">apt</code> را به‌روزرسانی کنید و سپس kubectl را نصب کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">sudo apt-get update
+sudo apt-get install -y kubectl
+</code></pre>
+</li>
+</ol>
+</div>
+<div class="tab"><div class="tab-name">توزیع‌های مبتنی بر Red Hat</div>
+<ol>
+<li dir="rtl">
+<p dir="rtl">مخزن <code dir="ltr">yum</code> کوبرنتیز را اضافه کنید. اگر می‌خواهید از نسخه‌ای از کوبرنتیز
+غیر از v1.37 استفاده کنید، در دستور زیر v1.37 را
+با نسخهٔ فرعی موردنظر جایگزین کنید.</p>
+<pre dir="ltr"><code class="language-bash" dir="ltr"># This overwrites any existing configuration in /etc/yum.repos.d/kubernetes.repo
+cat &lt;&lt;EOF | sudo tee /etc/yum.repos.d/kubernetes.repo
+[kubernetes]
+name=Kubernetes
+baseurl=https://pkgs.k8s.io/core:/stable:/v1.37/rpm/
+enabled=1
+gpgcheck=1
+gpgkey=https://pkgs.k8s.io/core:/stable:/v1.37/rpm/repodata/repomd.xml.key
+EOF
+</code></pre>
+</li>
+</ol>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">برای ارتقای kubectl به یک نسخهٔ فرعی دیگر، باید پیش از اجرای <code dir="ltr">dnf update</code>، نسخهٔ درج‌شده در <code dir="ltr">/etc/yum.repos.d/kubernetes.repo</code> را تغییر دهید. این فرایند در <a href="../administer-cluster/kubeadm/change-package-repository.html">تغییر مخزن بستهٔ کوبرنتیز</a> با جزئیات بیشتری شرح داده شده است.</p>
+</div>
+<ol start="2">
+<li dir="rtl">
+<p dir="rtl">ابزار kubectl را با <code dir="ltr">dnf</code> نصب کنید:</p>
+<pre dir="ltr"><code class="language-bash" dir="ltr">sudo dnf install -y kubectl
+</code></pre>
+</li>
+</ol>
+</div>
+<div class="tab"><div class="tab-name">توزیع‌های مبتنی بر SUSE</div>
+<ol>
+<li dir="rtl">
+<p dir="rtl">مخزن <code dir="ltr">zypper</code> کوبرنتیز را اضافه کنید. اگر می‌خواهید از نسخه‌ای از کوبرنتیز
+غیر از v1.37 استفاده کنید، در دستور زیر v1.37 را
+با نسخهٔ فرعی موردنظر جایگزین کنید.</p>
+<pre dir="ltr"><code class="language-bash" dir="ltr"># This overwrites any existing configuration in /etc/zypp/repos.d/kubernetes.repo
+cat &lt;&lt;EOF | sudo tee /etc/zypp/repos.d/kubernetes.repo
+[kubernetes]
+name=Kubernetes
+baseurl=https://pkgs.k8s.io/core:/stable:/v1.37/rpm/
+enabled=1
+gpgcheck=1
+gpgkey=https://pkgs.k8s.io/core:/stable:/v1.37/rpm/repodata/repomd.xml.key
+EOF
+</code></pre>
+</li>
+</ol>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">برای ارتقای kubectl به یک نسخهٔ فرعی دیگر، باید پیش از اجرای <code dir="ltr">zypper update</code>،
+نسخهٔ درج‌شده در <code dir="ltr">/etc/zypp/repos.d/kubernetes.repo</code> را تغییر دهید. این فرایند در
+<a href="../administer-cluster/kubeadm/change-package-repository.html">تغییر مخزن بستهٔ کوبرنتیز</a> با جزئیات بیشتری شرح داده شده است.</p>
+</div>
+<ol start="2">
+<li dir="rtl">
+<p dir="rtl">ابزار <code dir="ltr">zypper</code> را به‌روزرسانی کنید و افزوده‌شدن مخزن جدید را تأیید کنید:</p>
+<pre dir="ltr"><code class="language-bash" dir="ltr">sudo zypper update
+</code></pre>
+<p dir="rtl">هنگامی که پیام زیر نمایش داده شد، کلید 't' یا 'a' را فشار دهید:</p>
+<pre dir="ltr"><code dir="ltr">New repository or package signing key received:
+
+Repository:       Kubernetes
+Key Fingerprint:  1111 2222 3333 4444 5555 6666 7777 8888 9999 AAAA
+Key Name:         isv:kubernetes OBS Project &lt;isv:kubernetes@build.opensuse.org&gt;
+Key Algorithm:    RSA 2048
+Key Created:      Thu 25 Aug 2022 01:21:11 PM -03
+Key Expires:      Sat 02 Nov 2024 01:21:11 PM -03 (expires in 85 days)
+Rpm Name:         gpg-pubkey-9a296436-6307a177
+
+Note: Signing data enables the recipient to verify that no modifications occurred after the data
+were signed. Accepting data with no, wrong or unknown signature can lead to a corrupted system
+and in extreme cases even to a system compromise.
+
+Note: A GPG pubkey is clearly identified by its fingerprint. Do not rely on the key's name. If
+you are not sure whether the presented key is authentic, ask the repository provider or check
+their web site. Many providers maintain a web page showing the fingerprints of the GPG keys they
+are using.
+
+Do you want to reject the key, trust temporarily, or trust always? [r/t/a/?] (r): a
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">ابزار kubectl را با <code dir="ltr">zypper</code> نصب کنید:</p>
+<pre dir="ltr"><code class="language-bash" dir="ltr">sudo zypper install -y kubectl
+</code></pre>
+</li>
+</ol>
+</div>
+</div>
+<h3 id="نصب-با-سایر-مدیران-بسته" dir="rtl">نصب با سایر مدیران بسته</h3>
+<div class="tabs">
+<div class="tab"><div class="tab-name">Snap</div>
+<p dir="rtl">اگر از Ubuntu یا توزیع لینوکس دیگری استفاده می‌کنید که از مدیر بستهٔ
+<a href="https://snapcraft.io/docs/core/install" target="_blank" rel="noopener">snap</a> پشتیبانی می‌کند، kubectl
+به‌صورت یک برنامهٔ <a href="https://snapcraft.io/" target="_blank" rel="noopener">snap</a> در دسترس است.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">snap install kubectl --classic
+kubectl version --client
+</code></pre>
+</div>
+<div class="tab"><div class="tab-name">Homebrew</div>
+<p dir="rtl">اگر روی لینوکس از مدیر بستهٔ <a href="https://docs.brew.sh/Homebrew-on-Linux" target="_blank" rel="noopener">Homebrew</a>
+استفاده می‌کنید، kubectl از این طریق قابل <a href="https://docs.brew.sh/Homebrew-on-Linux#install" target="_blank" rel="noopener">نصب</a> است.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">brew install kubectl
+kubectl version --client
+</code></pre>
+</div>
+</div>
+<h2 id="بررسی-پیکربندی-kubectl" dir="rtl">بررسی پیکربندی kubectl</h2>
+<h2 id="پیکربندی-ها-و-افزونه-های-اختیاری-kubectl" dir="rtl">پیکربندی‌ها و افزونه‌های اختیاری kubectl</h2>
+<h3 id="فعال-سازی-تکمیل-خودکار-در-پوسته" dir="rtl">فعال‌سازی تکمیل خودکار در پوسته</h3>
+<p dir="rtl">ابزار kubectl از تکمیل خودکار (autocompletion) برای Bash، Zsh، Fish و PowerShell پشتیبانی می‌کند
+که می‌تواند حجم تایپ شما را به‌طور چشمگیری کاهش دهد.</p>
+<p dir="rtl">در ادامه، روش راه‌اندازی تکمیل خودکار برای Bash، Fish و Zsh آمده است.</p>
+<div class="tabs">
+<div class="tab"><div class="tab-name">Bash</div>
+<div class="tab"><div class="tab-name">Fish</div>
+<div class="tab"><div class="tab-name">Zsh</div>
+</div>
+<h3 id="پیکربندی-kuberc" dir="rtl">پیکربندی kuberc</h3>
+<p dir="rtl">برای اطلاعات بیشتر، <a href="../../reference/kubectl/kuberc.html">kuberc</a> را ببینید.</p>
+<h3 id="نصب-افزونهٔ-kubectl-convert" dir="rtl">نصب افزونهٔ <code dir="ltr">kubectl convert</code></h3>
+<ol>
+<li dir="rtl">آخرین نسخهٔ منتشرشده را با دستور زیر دانلود کنید:</li>
+</ol>
+<div class="tabs">
+<div class="tab"><div class="tab-name">x86-64</div>
+<p dir="ltr" class="ltr">curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl-convert"</p>
+</div>
+<div class="tab"><div class="tab-name">ARM64</div>
+<p dir="ltr" class="ltr">curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/arm64/kubectl-convert"</p>
+</div>
+</div>
+<ol>
+<li dir="rtl">
+<p dir="rtl">اعتبارسنجی فایل اجرایی (اختیاری)</p>
+<p dir="rtl">فایل checksum مربوط به kubectl-convert را دانلود کنید:</p>
+</li>
+</ol>
+<div class="tabs">
+<div class="tab"><div class="tab-name">x86-64</div>
+<p dir="ltr" class="ltr">curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl-convert.sha256"</p>
+</div>
+<div class="tab"><div class="tab-name">ARM64</div>
+<p dir="ltr" class="ltr">curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/arm64/kubectl-convert.sha256"</p>
+</div>
+</div>
+<p dir="rtl">فایل اجرایی kubectl-convert را با فایل checksum اعتبارسنجی کنید:</p>
+<pre dir="ltr"><code class="language-bash" dir="ltr">echo "$(cat kubectl-convert.sha256) kubectl-convert" | sha256sum --check
+</code></pre>
+<p dir="rtl">اگر فایل معتبر باشد، خروجی به این صورت است:</p>
+<pre dir="ltr"><code class="language-console" dir="ltr">kubectl-convert: OK
+</code></pre>
+<p dir="rtl">اگر بررسی ناموفق باشد، دستور <code dir="ltr">sha256</code> با وضعیت غیرصفر خاتمه می‌یابد و خروجی‌ای مشابه زیر چاپ می‌کند:</p>
+<pre dir="ltr"><code class="language-console" dir="ltr">kubectl-convert: FAILED
+sha256sum: WARNING: 1 computed checksum did NOT match
+</code></pre>
+<div class="callout note"><div class="callout-title">توجه:</div>
+<p dir="rtl">فایل اجرایی و فایل checksum را از یک نسخه دانلود کنید.</p>
+</div>
+<ol>
+<li dir="rtl">
+<p dir="rtl">نصب kubectl-convert</p>
+<pre dir="ltr"><code class="language-bash" dir="ltr">sudo install -o root -g root -m 0755 kubectl-convert /usr/local/bin/kubectl-convert
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">بررسی کنید که افزونه با موفقیت نصب شده باشد</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl convert --help
+</code></pre>
+<p dir="rtl">اگر خطایی مشاهده نکردید، یعنی افزونه با موفقیت نصب شده است.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">پس از نصب افزونه، فایل‌های نصب را پاک کنید:</p>
+<pre dir="ltr"><code class="language-bash" dir="ltr">rm kubectl-convert kubectl-convert.sha256
+</code></pre>
+</li>
+</ol>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+</div></div></div><p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#پیش-از-شروع">پیش از شروع</a><a class="l2" href="#نصب-kubectl-روی-لینوکس">نصب kubectl روی لینوکس</a><a class="l3" href="#نصب-فایل-اجرایی-kubectl-با-curl-روی-لینوکس">نصب فایل اجرایی kubectl با curl روی لینوکس</a><a class="l3" href="#نصب-با-مدیر-بستهٔ-بومی-سیستم-عامل">نصب با مدیر بستهٔ بومی سیستم‌عامل</a><a class="l3" href="#نصب-با-سایر-مدیران-بسته">نصب با سایر مدیران بسته</a><a class="l2" href="#بررسی-پیکربندی-kubectl">بررسی پیکربندی kubectl</a><a class="l2" href="#پیکربندی-ها-و-افزونه-های-اختیاری-kubectl">پیکربندی‌ها و افزونه‌های اختیاری kubectl</a><a class="l3" href="#فعال-سازی-تکمیل-خودکار-در-پوسته">فعال‌سازی تکمیل خودکار در پوسته</a><a class="l3" href="#پیکربندی-kuberc">پیکربندی kuberc</a><a class="l3" href="#نصب-افزونهٔ-kubectl-convert">نصب افزونهٔ kubectl convert</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>

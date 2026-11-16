@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>پذیرش کانتینرهای کناری (Sidecar) | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">tutorials / configuration</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">پذیرش کانتینرهای کناری (Sidecar)</h1><!-- overview -->
+<p dir="rtl">این بخش برای کسانی است که قابلیت جدید و داخلی
+<a href="../../concepts/workloads/pods/sidecar-containers.html">کانتینرهای کناری</a> را برای بارهای کاری خود به کار می‌گیرند.</p>
+<p dir="rtl">همان‌طور که در این <a href="/blog/2015/06/the-distributed-system-toolkit-patterns/">پست وبلاگ</a> آمده است،
+کانتینر کناری مفهوم تازه‌ای نیست. کوبرنتیز با امکان اجرای چند کانتینر در یک Pod، پیاده‌سازی این مفهوم را
+ممکن می‌کند. با این حال، اجرای کانتینر کناری به‌صورت یک کانتینر عادی محدودیت‌های فراوانی دارد که
+پشتیبانی داخلی جدید از کانتینرهای کناری آن‌ها را برطرف می‌کند.</p>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
+<h2 id="اهداف" dir="rtl">اهداف</h2>
+<ul>
+<li dir="rtl">درک نیاز به کانتینرهای کناری</li>
+<li dir="rtl">توانایی عیب‌یابی مشکلات کانتینرهای کناری</li>
+<li dir="rtl">آشنایی با گزینه‌های «تزریق» (inject) فراگیر کانتینرهای کناری به هر بار کاری</li>
+</ul>
+<h2 id="پیش-از-شروع" dir="rtl">پیش از شروع</h2>
+<p dir="rtl">باید یک کلاستر کوبرنتیز داشته باشید و ابزار خط فرمان kubectl باید برای ارتباط با کلاستر شما پیکربندی شده باشد. توصیه می‌شود این آموزش را روی کلاستری اجرا کنید که دست‌کم دو نود داشته باشد که نقش میزبان control plane را ندارند. اگر هنوز کلاستری ندارید، می‌توانید با استفاده از
+<a href="https://minikube.sigs.k8s.io/docs/tutorials/multi_node/" target="_blank" rel="noopener">minikube</a>
+یکی بسازید یا از یکی از این محیط‌های آزمایشی کوبرنتیز استفاده کنید:</p>
+<ul>
+<li dir="ltr" class="ltr"><a href="https://labs.iximiuz.com/playgrounds?category=kubernetes&amp;filter=all" target="_blank" rel="noopener">iximiuz Labs</a></li>
+<li dir="ltr" class="ltr"><a href="https://killercoda.com/playgrounds/scenario/kubernetes" target="_blank" rel="noopener">Killercoda</a></li>
+<li dir="ltr" class="ltr"><a href="https://kodekloud.com/public-playgrounds" target="_blank" rel="noopener">KodeKloud</a></li>
+</ul>
+<!-- lessoncontent -->
+<h2 id="مروری-بر-کانتینرهای-کناری" dir="rtl">مروری بر کانتینرهای کناری</h2>
+<p dir="rtl">کانتینرهای کناری، کانتینرهای ثانویه‌ای هستند که در کنار کانتینر اصلی برنامه و درون همان
+<span class="term" title="pod">Pod</span> اجرا می‌شوند.
+این کانتینرها با ارائهٔ خدمات یا قابلیت‌های اضافی مانند ثبت لاگ، پایش، امنیت یا همگام‌سازی داده،
+کارکرد <em>کانتینر برنامه</em> (app container) اصلی را بهبود می‌دهند یا گسترش می‌دهند، بی‌آنکه کد برنامهٔ اصلی
+مستقیماً تغییر کند. برای آشنایی بیشتر می‌توانید صفحهٔ مفهومی
+<a href="../../concepts/workloads/pods/sidecar-containers.html">کانتینرهای کناری</a> را بخوانید.</p>
+<p dir="rtl">مفهوم کانتینرهای کناری تازه نیست و پیاده‌سازی‌های متعددی از آن وجود دارد.
+علاوه بر کانتینرهای کناری‌ای که شما، به‌عنوان تعریف‌کنندهٔ Pod، می‌خواهید اجرا کنید، ممکن است
+ببینید برخی <span class="term" title="addons">افزونه‌ها</span> پیش از شروع اجرای Podها
+آن‌ها را تغییر می‌دهند تا کانتینرهای کناری اضافی به آن‌ها افزوده شود. سازوکار <em>تزریق</em> این کانتینرهای
+کناری اضافی معمولاً <a href="../../reference/access-authn-authz/admission-controllers.html#mutatingadmissionwebhook">وب‌هوک‌های تغییردهنده (mutating webhooks)</a> است.
+برای نمونه، یک افزونهٔ سرویس‌مش (service mesh) ممکن است کانتینر کناری‌ای تزریق کند که TLS متقابل و
+رمزنگاری داده‌های در حال انتقال میان Podهای مختلف را پیکربندی می‌کند.</p>
+<p dir="rtl">اگرچه مفهوم کانتینرهای کناری تازه نیست، پیاده‌سازی بومی این قابلیت در کوبرنتیز تازه است و
+مانند هر قابلیت جدید دیگری، به‌کارگیری آن ممکن است چالش‌هایی به همراه داشته باشد.</p>
+<p dir="rtl">این آموزش چالش‌ها و راه‌حل‌هایی را بررسی می‌کند که ممکن است کاربران نهایی و همچنین نویسندگان
+کانتینرهای کناری با آن‌ها روبه‌رو شوند.</p>
+<h2 id="مزایای-کانتینر-کناری-داخلی" dir="rtl">مزایای کانتینر کناری داخلی</h2>
+<p dir="rtl">استفاده از پشتیبانی بومی کوبرنتیز از کانتینرهای کناری چند مزیت دارد:</p>
+<ol>
+<li dir="rtl">می‌توانید یک کانتینر کناری بومی را طوری پیکربندی کنید که پیش از
+<span class="term" title="init-container">کانتینرهای init</span> شروع به کار کند.</li>
+<li dir="rtl">می‌توان کانتینرهای کناری داخلی را طوری نوشت که تضمین شود آخر از همه خاتمه می‌یابند.
+پس از آنکه همهٔ کانتینرهای عادی کارشان را تمام کردند و خاتمه یافتند، کانتینرهای کناری با سیگنال
+<code dir="ltr">SIGTERM</code> خاتمه داده می‌شوند. اگر کانتینر کناری به‌شکل مناسب (graceful) خاموش نشود، برای خاتمه دادن
+به آن از سیگنال <code dir="ltr">SIGKILL</code> استفاده می‌شود.</li>
+<li dir="rtl">در Jobها، وقتی مقدار Pod برابر <code dir="ltr">restartPolicy: OnFailure</code> یا <code dir="ltr">restartPolicy: Never</code> است،
+کانتینرهای کناری بومی مانع تکمیل Pod نمی‌شوند. در کانتینرهای کناری قدیمی، مدیریت این وضعیت
+به دقت ویژه‌ای نیاز دارد.</li>
+<li dir="rtl">همچنین در Jobها، کانتینرهای کناری داخلی پس از پایان کارشان همچنان دوباره راه‌اندازی می‌شوند،
+حتی اگر کانتینرهای عادی به دلیل <code dir="ltr">restartPolicy: Never</code> در Pod دوباره راه‌اندازی نشوند.</li>
+</ol>
+<p dir="rtl">برای آشنایی بیشتر، <a href="../../concepts/workloads/pods/sidecar-containers.html#differences-from-init-containers">تفاوت‌ها با کانتینرهای init</a>
+را ببینید.</p>
+<h2 id="به-کارگیری-کانتینرهای-کناری-داخلی" dir="rtl">به‌کارگیری کانتینرهای کناری داخلی</h2>
+<p dir="rtl"><a href="https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/" target="_blank">feature gate</a> با نام <code dir="ltr">SidecarContainers</code>
+از نسخهٔ 1.29 کوبرنتیز در وضعیت بتا قرار دارد و به‌طور پیش‌فرض فعال است.
+ممکن است این قابلیت در برخی کلاسترها غیرفعال باشد یا نرم‌افزاری روی آن‌ها نصب شده باشد که با این قابلیت سازگار نیست.</p>
+<p dir="rtl">در چنین حالتی، ممکن است Pod رد شود یا کانتینرهای کناری مانع راه‌اندازی Pod شوند و Pod را بی‌استفاده کنند.
+تشخیص این وضعیت آسان است، زیرا Pod در مرحلهٔ مقداردهی اولیه گیر می‌کند. با این حال، اغلب روشن نیست
+علت مشکل چه بوده است.</p>
+<p dir="rtl">در ادامه، ملاحظات و گام‌های عیب‌یابی‌ای آمده است که هنگام به‌کارگیری کانتینرهای کناری برای بار کاری خود می‌توانید از آن‌ها استفاده کنید.</p>
+<h3 id="اطمینان-از-فعال-بودن-feature-gate" dir="rtl">اطمینان از فعال بودن feature gate</h3>
+<p dir="rtl">در نخستین گام، مطمئن شوید که هم API server و هم نودها نسخهٔ v1.29 کوبرنتیز یا بالاتر را اجرا می‌کنند.
+این قابلیت در کلاسترهایی که نودهایشان نسخه‌های قدیمی‌تری اجرا می‌کنند و قابلیت در آن‌ها فعال نیست، از کار می‌افتد.</p>
+<div class="callout note"><div class="callout-title">Note</div>
+<p dir="rtl">این قابلیت را می‌توان روی نودهای نسخهٔ 1.28 فعال کرد. رفتار خاتمهٔ کانتینرهای کناری داخلی در نسخهٔ 1.28
+متفاوت بود و توصیه نمی‌شود رفتار کانتینر کناری را با آن رفتار تطبیق دهید. با این حال، اگر تنها نگرانی شما
+ترتیب راه‌اندازی است، می‌توان گفتهٔ بالا را به نودهایی تعمیم داد که نسخهٔ 1.28 را با feature gate فعال اجرا می‌کنند.</p>
+</div>
+<p dir="rtl">باید مطمئن شوید که feature gate برای API serverهای درون control plane <strong>و</strong> برای همهٔ نودها فعال است.</p>
+<p dir="rtl">یکی از راه‌های بررسی فعال بودن feature gate، اجرای فرمانی مانند این است:</p>
+<ul>
+<li dir="rtl">
+<p dir="rtl">برای API Server:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get --raw /metrics | grep kubernetes_feature_enabled | grep SidecarContainers
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">برای هر نود به‌طور جداگانه:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get --raw /api/v1/nodes/&lt;node-name&gt;/proxy/metrics | grep kubernetes_feature_enabled | grep SidecarContainers
+</code></pre>
+</li>
+</ul>
+<p dir="rtl">اگر خروجی‌ای مانند این دیدید:</p>
+<pre dir="ltr"><code dir="ltr">kubernetes_feature_enabled{name="SidecarContainers",stage="BETA"} 1
+</code></pre>
+<p dir="rtl">یعنی این قابلیت فعال است.</p>
+<h3 id="بررسی-ابزارهای-شخص-ثالث-و-وب-هوک-های-تغییردهنده" dir="rtl">بررسی ابزارهای شخص ثالث و وب‌هوک‌های تغییردهنده</h3>
+<p dir="rtl">اگر هنگام اعتبارسنجی این قابلیت با مشکل روبه‌رو شدید، ممکن است نشانهٔ آن باشد که یکی از ابزارهای
+شخص ثالث یا وب‌هوک‌های تغییردهنده درست کار نمی‌کند.</p>
+<p dir="rtl">وقتی feature gate با نام <code dir="ltr">SidecarContainers</code> فعال باشد، فیلد جدیدی به API مربوط به Podها افزوده می‌شود.
+ممکن است برخی ابزارها یا وب‌هوک‌های تغییردهنده با نسخهٔ قدیمی‌تری از API کوبرنتیز ساخته شده باشند.</p>
+<p dir="rtl">اگر ابزارها برای تغییر آبجکت Pod از راهبردهای وصله‌گذاری (patching) گوناگون استفاده کنند و فیلدهای ناشناخته
+را بدون تغییر عبور دهند، مشکلی پیش نمی‌آید. با این حال، ابزارهایی وجود دارند که فیلدهای ناشناخته را حذف
+می‌کنند؛ اگر از چنین ابزارهایی استفاده می‌کنید، باید آن‌ها را با نسخهٔ v1.28 یا بالاتر کد کلاینت API کوبرنتیز
+دوباره کامپایل کنید.</p>
+<p dir="rtl">برای بررسی این موضوع، فرمان <code dir="ltr">kubectl describe pod</code> را روی Pod خود که از مرحلهٔ پذیرش تغییردهنده
+(mutating admission) گذشته است اجرا کنید. اگر ابزاری فیلد جدید (<code dir="ltr">restartPolicy:Always</code>) را حذف کرده باشد،
+آن را در خروجی فرمان نخواهید دید.</p>
+<p dir="rtl">اگر با چنین مشکلی روبه‌رو شدید، لطفاً به نویسندهٔ ابزارها یا وب‌هوک‌ها توصیه کنید که برای تغییر آبجکت‌ها،
+به‌جای به‌روزرسانی کامل آبجکت، از یکی از راهبردهای وصله‌گذاری استفاده کنند.</p>
+<div class="callout note"><div class="callout-title">Note</div>
+<p dir="rtl">وب‌هوک تغییردهنده ممکن است Podها را بر اساس برخی شرایط به‌روزرسانی کند.
+بنابراین ممکن است کانتینرهای کناری برای برخی Podها کار کنند و برای برخی دیگر با شکست روبه‌رو شوند.</p>
+</div>
+<h3 id="تزریق-خودکار-کانتینرهای-کناری" dir="rtl">تزریق خودکار کانتینرهای کناری</h3>
+<p dir="rtl">اگر از نرم‌افزاری استفاده می‌کنید که کانتینرهای کناری را به‌طور خودکار تزریق می‌کند، برای اطمینان از
+امکان استفاده از کانتینرهای کناری بومی می‌توانید از چند راهبرد ممکن پیروی کنید.
+همهٔ این راهبردها در اصل گزینه‌هایی هستند که با آن‌ها می‌توانید تعیین کنید Podی که کانتینر کناری به آن
+تزریق می‌شود روی نودی قرار بگیرد که از این قابلیت پشتیبانی می‌کند یا نه.</p>
+<p dir="rtl">برای نمونه، می‌توانید <a href="https://github.com/istio/istio/issues/48794" target="_blank" rel="noopener">این گفت‌وگو در جامعهٔ Istio</a> را دنبال کنید.
+در این گفت‌وگو گزینه‌های زیر بررسی شده‌اند.</p>
+<ol>
+<li dir="rtl">Podهایی را که روی نودهای پشتیبانی‌کننده از کانتینرهای کناری قرار می‌گیرند علامت‌گذاری کنید. می‌توانید با
+برچسب‌های نود و node affinity، نودهای پشتیبانی‌کننده از کانتینرهای کناری و Podهایی را که روی آن نودها
+قرار می‌گیرند علامت‌گذاری کنید.</li>
+<li dir="rtl">سازگاری نودها را هنگام تزریق بررسی کنید. هنگام تزریق کانتینر کناری، می‌توانید برای بررسی سازگاری نود
+از راهبردهای زیر استفاده کنید:
+<ul>
+<li dir="rtl">نسخهٔ نود را پرس‌وجو کنید و فرض کنید feature gate در نسخهٔ 1.29 و بالاتر فعال است</li>
+<li dir="rtl">متریک‌های prometheus نود را پرس‌وجو کنید و وضعیت فعال بودن قابلیت را بررسی کنید</li>
+<li dir="rtl">فرض کنید نودها با <a href="/releases/version-skew-policy/#supported-version-skew">اختلاف نسخهٔ پشتیبانی‌شده</a>
+نسبت به API server اجرا می‌شوند</li>
+<li dir="rtl">ممکن است روش‌های سفارشی دیگری نیز برای تشخیص سازگاری نودها وجود داشته باشد.</li>
+</ul>
+</li>
+<li dir="rtl">یک تزریق‌کنندهٔ کانتینر کناری فراگیر بسازید. ایدهٔ تزریق‌کنندهٔ فراگیر این است که کانتینر کناری هم به‌صورت
+یک کانتینر عادی و هم به‌صورت یک کانتینر کناری بومی تزریق شود و منطقی در زمان اجرا تعیین کند کدام‌یک کار کند.
+تزریق‌کنندهٔ فراگیر اتلاف منابع به همراه دارد، زیرا درخواست‌های منابع (requests) را دو بار محاسبه می‌کند،
+اما می‌توان آن را برای موارد خاص راه‌حلی کارآمد دانست.
+<ul>
+<li dir="rtl">یک راه این است که کانتینر کناری بومی هنگام شروع، نسخهٔ نود را تشخیص دهد و اگر آن نسخه از قابلیت
+کانتینر کناری پشتیبانی نمی‌کند، بی‌درنگ خارج شود.</li>
+<li dir="rtl">طراحی‌ای بر پایهٔ تشخیص قابلیت در زمان اجرا را در نظر بگیرید:
+<ul>
+<li dir="rtl">یک پوشهٔ خالی (empty dir) تعریف کنید تا کانتینرها بتوانند با یکدیگر ارتباط برقرار کنند</li>
+<li dir="rtl">یک کانتینر init تزریق کنید و آن را <code dir="ltr">NativeSidecar</code> بنامید و مقدار <code dir="ltr">restartPolicy=Always</code> را برایش تنظیم کنید.</li>
+<li dir="rtl">کانتینر <code dir="ltr">NativeSidecar</code> باید فایلی در پوشهٔ خالی بنویسد که نشان‌دهندهٔ نخستین اجرا باشد و بی‌درنگ
+با کد خروج <code dir="ltr">0</code> خارج شود.</li>
+<li dir="rtl">کانتینر <code dir="ltr">NativeSidecar</code> هنگام راه‌اندازی دوباره (وقتی کانتینرهای کناری بومی پشتیبانی می‌شوند) بررسی
+می‌کند که آن فایل از قبل در پوشهٔ خالی وجود دارد و آن را تغییر می‌دهد تا نشان دهد کانتینرهای کناری
+داخلی پشتیبانی می‌شوند و در حال اجرا هستند.</li>
+<li dir="rtl">یک کانتینر عادی تزریق کنید و آن را <code dir="ltr">OldWaySidecar</code> بنامید.</li>
+<li dir="rtl">کانتینر <code dir="ltr">OldWaySidecar</code> هنگام شروع، وجود فایل را در پوشهٔ خالی بررسی می‌کند.</li>
+<li dir="rtl">اگر فایل نشان دهد که <code dir="ltr">NativeSidecar</code> در حال اجرا <strong>نیست</strong>، فرض می‌کند قابلیت کانتینر کناری
+پشتیبانی نمی‌شود و خودش نقش کانتینر کناری را بر عهده می‌گیرد.</li>
+<li dir="rtl">اگر فایل نشان دهد که <code dir="ltr">NativeSidecar</code> در حال اجرا است، یا هیچ کاری نمی‌کند و برای همیشه در حالت
+خواب می‌ماند (در حالتی که Pod دارای <code dir="ltr">restartPolicy=Always</code> باشد)، یا بی‌درنگ با کد خروج <code dir="ltr">0</code> خارج
+می‌شود (در حالتی که Pod دارای <code dir="ltr">restartPolicy!=Always</code> باشد).</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<ul>
+<li dir="rtl">دربارهٔ <a href="../../concepts/workloads/pods/sidecar-containers.html">کانتینرهای کناری</a> بیشتر بیاموزید.</li>
+</ul>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#اهداف">اهداف</a><a class="l2" href="#پیش-از-شروع">پیش از شروع</a><a class="l2" href="#مروری-بر-کانتینرهای-کناری">مروری بر کانتینرهای کناری</a><a class="l2" href="#مزایای-کانتینر-کناری-داخلی">مزایای کانتینر کناری داخلی</a><a class="l2" href="#به-کارگیری-کانتینرهای-کناری-داخلی">به‌کارگیری کانتینرهای کناری داخلی</a><a class="l3" href="#اطمینان-از-فعال-بودن-feature-gate">اطمینان از فعال بودن feature gate</a><a class="l3" href="#بررسی-ابزارهای-شخص-ثالث-و-وب-هوک-های-تغییردهنده">بررسی ابزارهای شخص ثالث و وب‌هوک‌های تغییردهنده</a><a class="l3" href="#تزریق-خودکار-کانتینرهای-کناری">تزریق خودکار کانتینرهای کناری</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>
