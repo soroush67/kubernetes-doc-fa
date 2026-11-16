@@ -2,7 +2,7 @@
 reviewers:
 - klueska
 - pohly
-title: قابلیت مشاهده‌پذیری منابع پویا
+title: مشاهده‌پذیری منابع پویا
 content_type: concept
 weight: 30
 api_metadata:
@@ -12,13 +12,13 @@ api_metadata:
 
 <!-- overview -->
 
-این صفحه نحوهٔ مشاهدهٔ وضعیت و سلامت منابعی را که به‌صورت پویا با DRA تخصیص داده می‌شوند، توضیح می‌دهد.
+این صفحه توضیح می‌دهد که چگونه می‌توان وضعیت و سلامت منابعی را که با DRA به‌صورت پویا تخصیص داده می‌شوند مشاهده کرد.
 
 <!-- body -->
 
 ## مشاهده‌پذیری منابع پویا {#observability-dynamic-resources}
 
-می‌توانید وضعیت منابعی را که به‌صورت پویا تخصیص داده شده‌اند، با هر یک از روش‌های زیر بررسی کنید:
+برای بررسی وضعیت منابعی که به‌صورت پویا تخصیص داده شده‌اند، می‌توانید از هر یک از روش‌های زیر استفاده کنید:
 
 * [متریک‌های دستگاه در kubelet](#monitoring-resources)
 * [وضعیت ResourceClaim](#resourceclaim-device-status)
@@ -26,35 +26,19 @@ api_metadata:
 
 ### متریک‌های دستگاه در kubelet {#monitoring-resources}
 
-سرویس gRPC با نام `PodResourcesLister` در kubelet به شما امکان می‌دهد دستگاه‌های در حال استفاده را پایش کنید.
-پیام `DynamicResource` اطلاعاتی را فراهم می‌کند که مختص تخصیص پویای منابع است، مانند نام دستگاه و نام claim. برای جزئیات بیشتر،
-بخش
-[پایش منابع افزونهٔ دستگاه](/docs/concepts/extend-kubernetes/compute-storage-net/device-plugins/#monitoring-device-plugin-resources)
-را ببینید.
+با سرویس gRPC به نام `PodResourcesLister` در kubelet می‌توانید دستگاه‌های در حال استفاده را پایش کنید. پیام `DynamicResource` اطلاعاتی مختص تخصیص پویای منابع، مانند نام دستگاه و نام claim، ارائه می‌دهد. برای جزئیات بیشتر، به [پایش منابع افزونه‌های دستگاه](/docs/concepts/extend-kubernetes/compute-storage-net/device-plugins/#monitoring-device-plugin-resources) مراجعه کنید.
 
 ### وضعیت دستگاه در ResourceClaim {#resourceclaim-device-status}
 
 {{< feature-state feature_gate_name="DRAResourceClaimDeviceStatus" >}}
 
-درایورهای DRA می‌توانند داده‌های
-[وضعیت (status)](/docs/concepts/overview/working-with-objects/#object-spec-and-status) مختص درایور
-را برای هر دستگاه تخصیص‌یافته در فیلد `status.devices` از یک ResourceClaim گزارش کنند.
-برای مثال، درایور ممکن است نشانی‌های IP تخصیص‌یافته به یک دستگاه رابط شبکه را فهرست کند. به‌روزرسانی این فیلد به مجوزهای RBAC مصنوعی (synthetic) خاصی نیاز دارد؛
-بخش
-[راهنمای مقاوم‌سازی - تخصیص پویای منابع](/docs/concepts/security/hardening-guide/dynamic-resource-allocation/)
-و
-[مقاوم‌سازی تخصیص پویای منابع در کلاستر شما](/docs/tasks/administer-cluster/hardening-dra/)
-را ببینید.
+درایورهای DRA می‌توانند داده‌های [وضعیت دستگاه](/docs/concepts/overview/working-with-objects/#object-spec-and-status) مختص خود را برای هر دستگاه تخصیص‌یافته در فیلد `status.devices` یک ResourceClaim گزارش کنند. برای مثال، درایور ممکن است نشانی‌های IP اختصاص‌یافته به یک دستگاه رابط شبکه را فهرست کند. به‌روزرسانی این فیلد به مجوزهای RBAC مصنوعی (synthetic) خاصی نیاز دارد؛ برای جزئیات، به [راهنمای مقاوم‌سازی - تخصیص پویای منابع](/docs/concepts/security/hardening-guide/dynamic-resource-allocation/) و [مقاوم‌سازی تخصیص پویای منابع در کلاستر](/docs/tasks/administer-cluster/hardening-dra/) مراجعه کنید.
 
-دقت اطلاعاتی که یک درایور در فیلد `status.devices` از ResourceClaim ثبت می‌کند، به خود درایور بستگی دارد. درایورها را ارزیابی کنید تا تصمیم بگیرید
-آیا می‌توانید به این فیلد به‌عنوان تنها منبع اطلاعات دستگاه تکیه کنید.
+دقت اطلاعاتی که یک درایور به فیلد `status.devices` در ResourceClaim اضافه می‌کند به خود درایور بستگی دارد. درایورها را ارزیابی کنید تا تصمیم بگیرید آیا می‌توانید به این فیلد به‌عنوان تنها منبع اطلاعات دستگاه تکیه کنید یا خیر.
 
-اگر
-[feature gate با نام `DRAResourceClaimDeviceStatus`](/docs/reference/command-line-tools-reference/feature-gates/#DRAResourceClaimDeviceStatus) را غیرفعال کنید،
-فیلد `status.devices` هنگام ذخیره‌شدن ResourceClaim به‌طور خودکار پاک می‌شود.
-وضعیت دستگاه در ResourceClaim زمانی پشتیبانی می‌شود که یک درایور DRA بتواند یک ResourceClaim موجود را که فیلد `status.devices` در آن مقداردهی شده است، به‌روزرسانی کند.
+اگر [feature gate با نام `DRAResourceClaimDeviceStatus`](/docs/reference/command-line-tools-reference/feature-gates/#DRAResourceClaimDeviceStatus) را غیرفعال کنید، فیلد `status.devices` هنگام ذخیره‌سازی ResourceClaim به‌طور خودکار پاک می‌شود. وضعیت دستگاه در ResourceClaim زمانی پشتیبانی می‌شود که درایور DRA بتواند یک ResourceClaim موجود را که فیلد `status.devices` آن تنظیم شده است به‌روزرسانی کند.
 
-در مثال زیر، فیلد `status.devices` از یک ResourceClaim توسط درایور (`resource-driver.example.com`) که مسئول مدیریت دستگاه تخصیص‌یافته است، مقداردهی شده است:
+در مثال زیر، فیلد `status.devices` یک ResourceClaim را درایوری (`resource-driver.example.com`) پر کرده است که مسئول مدیریت دستگاه تخصیص‌یافته است:
 
 ```yaml
 apiVersion: resource.k8s.io/v1
@@ -93,42 +77,38 @@ status:
     shareID: 8e7acdf9-0290-4ecd-a801-a654b021d2b7
 ```
 
-اگر دستگاهی تخصیص داده نشده باشد، درخواست درایور برای به‌روزرسانی فیلد `status.devices`
-از ResourceClaim با آن دستگاه رد می‌شود. هنگامی که تخصیص یک دستگاه لغو می‌شود (از `status.allocation.devices` حذف می‌شود)، ورودی متناظر در
-`status.devices` به‌طور خودکار حذف می‌شود.
+اگر دستگاهی تخصیص داده نشده باشد، درخواست درایور برای به‌روزرسانی فیلد `status.devices` در ResourceClaim با آن دستگاه رد می‌شود. وقتی تخصیص یک دستگاه لغو می‌شود (یعنی از `status.allocation.devices` حذف می‌شود)، ورودی متناظر آن در `status.devices` به‌طور خودکار حذف می‌شود.
 
-برای جزئیات بیشتر دربارهٔ فیلد `status.devices`، مستندات مرجع API مربوط به
-{{< api-reference page="resource/resource-claim-v1" anchor="ResourceClaimStatus" text="ResourceClaim" >}} را ببینید.
+برای جزئیات فیلد `status.devices`، به مرجع API
+{{< api-reference page="resource/resource-claim-v1" anchor="ResourceClaimStatus" text="ResourceClaim" >}} مراجعه کنید.
 
 ### پایش سلامت دستگاه {#device-health-monitoring}
 
 {{< feature-state feature_gate_name="ResourceHealthStatus" >}}
 
-کوبرنتیز سازوکاری برای پایش و گزارش سلامت منابع زیرساختی تخصیص‌یافتهٔ پویا فراهم می‌کند.
-برای برنامه‌های حالت‌دار (stateful) که روی سخت‌افزارهای تخصصی اجرا می‌شوند، آگاهی از خرابی یا ناسالم شدن یک دستگاه بسیار مهم است. همچنین آگاهی از بازیابی دستگاه نیز مفید است.
+کوبرنتیز سازوکاری برای پایش و گزارش سلامت منابع زیرساختی‌ای فراهم می‌کند که به‌صورت پویا تخصیص داده شده‌اند. برای برنامه‌های stateful که روی سخت‌افزارهای تخصصی اجرا می‌شوند، دانستن اینکه چه زمانی یک دستگاه از کار افتاده یا ناسالم شده اهمیت حیاتی دارد. همچنین مفید است بدانید آیا دستگاه دوباره بازیابی می‌شود یا خیر.
 
-برای استفاده از این قابلیت، [feature gate](/docs/reference/command-line-tools-reference/feature-gates/resource-health-status/) با نام `ResourceHealthStatus` باید فعال باشد (از نسخهٔ v1.36 در مرحلهٔ بتا و به‌صورت پیش‌فرض فعال است) و درایور DRA باید سرویس gRPC با نام `DRAResourceHealth` را پیاده‌سازی کرده باشد.
+برای استفاده از این قابلیت، باید [feature gate](/docs/reference/command-line-tools-reference/feature-gates/resource-health-status/) با نام `ResourceHealthStatus` فعال باشد (این قابلیت از نسخهٔ v1.36 در مرحلهٔ بتا است و به‌طور پیش‌فرض فعال است) و درایور DRA نیز باید سرویس gRPC با نام `DRAResourceHealth` را پیاده‌سازی کند.
 
-هنگامی که یک درایور DRA تشخیص می‌دهد که یک دستگاه تخصیص‌یافته ناسالم شده است، این وضعیت را به kubelet گزارش می‌کند. سپس این اطلاعات سلامت مستقیماً در status مربوط به Pod نمایش داده می‌شود. kubelet فیلد `allocatedResourcesStatus` را در status هر کانتینر مقداردهی می‌کند و سلامت هر دستگاه اختصاص‌یافته به آن کانتینر را شرح می‌دهد. هر ورودی سلامت منبع می‌تواند شامل یک فیلد اختیاری `message` با زمینهٔ توضیحی قابل‌خواندن برای انسان دربارهٔ وضعیت سلامت باشد، مانند جزئیات خطا یا دلایل خرابی.
+وقتی یک درایور DRA تشخیص دهد که یک دستگاه تخصیص‌یافته ناسالم شده است، این وضعیت را به kubelet گزارش می‌دهد. سپس این اطلاعات سلامت مستقیماً در وضعیت Pod نمایش داده می‌شود. kubelet فیلد `allocatedResourcesStatus` را در وضعیت هر کانتینر پر می‌کند و سلامت هر دستگاهی را که به آن کانتینر اختصاص یافته است به‌تفصیل نشان می‌دهد. هر ورودی سلامت منبع می‌تواند یک فیلد اختیاری `message` نیز داشته باشد که توضیحات خوانا و بیشتری دربارهٔ وضعیت سلامت، مانند جزئیات خطا یا علت‌های خرابی، ارائه می‌دهد.
 
-اگر kubelet در بازهٔ زمانی مشخص (timeout) هیچ به‌روزرسانی سلامتی از یک درایور DRA دریافت نکند، وضعیت سلامت دستگاه «Unknown» علامت‌گذاری می‌شود. درایورهای DRA می‌توانند این timeout را برای هر دستگاه با تنظیم فیلد `health_check_timeout_seconds` در پیام gRPC با نام `DeviceHealth` پیکربندی کنند. در صورت عدم تعیین، kubelet از timeout پیش‌فرض ۳۰ ثانیه استفاده می‌کند. این امر به انواع مختلف سخت‌افزار (برای مثال GPUها، FPGAها یا دستگاه‌های ذخیره‌سازی) اجازه می‌دهد بر اساس ویژگی‌های گزارش سلامت خود از مقادیر timeout مناسب استفاده کنند.
+اگر kubelet در یک بازهٔ زمانی مشخص هیچ به‌روزرسانی سلامتی از درایور DRA دریافت نکند، وضعیت سلامت دستگاه به «Unknown» تغییر می‌کند. درایورهای DRA می‌توانند این مهلت زمانی را به‌صورت جداگانه برای هر دستگاه، با تنظیم فیلد `health_check_timeout_seconds` در پیام gRPC با نام `DeviceHealth`، پیکربندی کنند. اگر این مقدار مشخص نشود، kubelet از مهلت پیش‌فرض ۳۰ ثانیه استفاده می‌کند. به این ترتیب، انواع مختلف سخت‌افزار (برای مثال GPUها، FPGAها یا دستگاه‌های ذخیره‌سازی) می‌توانند متناسب با ویژگی‌های گزارش‌دهی سلامت خود از مقادیر مهلت مناسب استفاده کنند.
 
-این قابلیت دید بسیار مهمی را برای کاربران و کنترل‌کننده‌ها فراهم می‌کند تا بتوانند به خرابی‌های سخت‌افزاری واکنش نشان دهند.
-برای Podی که با شکست مواجه می‌شود، می‌توانید این status را بررسی کنید تا مشخص شود آیا شکست به یک دستگاه ناسالم مربوط بوده است یا خیر.
+این قابلیت دید بسیار مهمی در اختیار کاربران و کنترل‌کننده‌ها قرار می‌دهد تا بتوانند به خرابی‌های سخت‌افزاری واکنش نشان دهند. برای Podای که با خطا مواجه شده است، می‌توانید این وضعیت را بررسی کنید تا مشخص شود آیا خرابی به یک دستگاه ناسالم مربوط بوده است یا خیر.
 
 {{< note >}}
-وضعیت سلامت دستگاه پس از پایان کار یک Pod (برای مثال، در حالت Failed) در status مربوط به Pod به‌روزرسانی نمی‌شود.
+پس از خاتمهٔ یک Pod (برای مثال، در وضعیت Failed)، وضعیت سلامت دستگاه دیگر در وضعیت Pod به‌روزرسانی نمی‌شود.
 {{< /note >}}
 
-## وضعیت استخر منابع {#resource-pool-status}
+## وضعیت مخزن منابع {#resource-pool-status}
 
 {{< feature-state feature_gate_name="DRAResourcePoolStatus" >}}
 
-می‌توانید با استفاده از API با نام ResourcePoolStatusRequest، دسترس‌پذیری دستگاه‌ها را در استخرهای منابع (resource pool) جست‌وجو کنید. این API دید روشنی فراهم می‌کند که در استخرهای منابع DRA کلاستر شما چه تعداد دستگاه در دسترس، تخصیص‌یافته یا ناavailable هستند.
+با استفاده از API مربوط به ResourcePoolStatusRequest می‌توانید میزان در دسترس بودن دستگاه‌ها را در مخزن‌های منابع (resource pool) پرس‌وجو کنید. این API نشان می‌دهد که در مخزن‌های منابع DRA کلاستر شما چه تعداد دستگاه در دسترس، تخصیص‌یافته یا غیرقابل‌دسترس هستند.
 
-برای بررسی وضعیت استخر منابع:
+برای بررسی وضعیت مخزن منابع:
 
-1. یک ResourcePoolStatusRequest ایجاد کنید که نام درایور (الزامی) و به‌صورت اختیاری یک محدودیت برای تعداد استخرهای بازگردانده‌شده را مشخص کند. همچنین می‌توانید با تعیین نام استخر، نتیجه را به یک استخر محدود کنید:
+1. یک ResourcePoolStatusRequest ایجاد کنید و در آن نام درایور (الزامی) و در صورت تمایل، حدی برای تعداد مخزن‌های بازگردانده‌شده مشخص کنید. همچنین می‌توانید با تعیین نام یک مخزن، نتیجه را به همان یک مخزن محدود کنید:
 
    ```yaml
    apiVersion: resource.k8s.io/v1alpha3
@@ -149,34 +129,28 @@ status:
    kubectl wait --for=condition=Complete resourcepoolstatusrequest/check-gpus --timeout=30s
    ```
 
-1. status را بخوانید تا دسترس‌پذیری استخر را ببینید:
+1. برای مشاهدهٔ میزان در دسترس بودن مخزن‌ها، وضعیت را بخوانید:
 
    ```shell
    kubectl get resourcepoolstatusrequest/check-gpus -o yaml
    ```
 
-   status شامل موارد زیر است:
-   - `poolCount`: تعداد کل استخرهایی که با فیلتر مطابقت دارند (در صورتی که فهرست به‌دلیل limit کوتاه شده باشد، ممکن است از تعداد استخرهای فهرست‌شده بیشتر باشد).
-   - `pools`: فهرستی از جزئیات استخرها که هر یک شامل موارد زیر است:
-     - `driver` و `poolName`: استخر را شناسایی می‌کنند.
-     - `generation`: آخرین نسل (generation) استخر که در میان ResourceSliceها مشاهده شده است.
-     - `resourceSliceCount`: تعداد ResourceSliceهایی که استخر را تشکیل می‌دهند.
-     - `totalDevices`: مجموع دستگاه‌های موجود در استخر.
-     - `allocatedDevices`: دستگاه‌هایی که در حال حاضر به claimها تخصیص یافته‌اند.
-     - `availableDevices`: دستگاه‌های قابل تخصیص
+   وضعیت شامل موارد زیر است:
+   - `poolCount`: تعداد کل مخزن‌هایی که با فیلتر مطابقت دارند (اگر فهرست به دلیل حد تعیین‌شده کوتاه شده باشد، ممکن است این عدد از تعداد مخزن‌های فهرست‌شده بیشتر باشد).
+   - `pools`: فهرستی از جزئیات مخزن‌ها که هر کدام شامل موارد زیر است:
+     - `driver` و `poolName`: مخزن را مشخص می‌کنند.
+     - `generation`: آخرین نسل (generation) مخزن که در میان ResourceSliceها مشاهده شده است.
+     - `resourceSliceCount`: تعداد ResourceSliceهایی که مخزن را تشکیل می‌دهند.
+     - `totalDevices`: تعداد کل دستگاه‌های مخزن.
+     - `allocatedDevices`: دستگاه‌هایی که در حال حاضر به claimها تخصیص داده شده‌اند.
+     - `availableDevices`: دستگاه‌هایی که برای تخصیص در دسترس هستند
        (totalDevices - allocatedDevices - unavailableDevices).
-     - `unavailableDevices`: دستگاه‌هایی که به دلیل taintها یا سایر شرایط در دسترس نیستند.
-     - `nodeName`: نودی که با استخر مرتبط است، در صورت وجود.
-     - `validationError`: زمانی مقداردهی می‌شود که داده‌های استخر نتوانسته باشد به‌طور کامل اعتبارسنجی شود
-       (برای مثال، در جریان استقرار یک generation جدید). در صورت مقداردهی، فیلدهای شمارش دستگاه
-       ممکن است مقداردهی نشده باشند.
-     - `partitionSummary`: برای استخرهای [قابل‌افراز (partitionable)](/docs/concepts/resource-management/dynamic-resource-allocation/dra-features/#partitionable-devices)،
-       قابلیت تخصیص به‌ازای هر نوع افراز (به
-       [خلاصهٔ افراز](#resource-pool-partition-summary) مراجعه کنید).
-     - `shareableSummary`: برای استخرهایی که [دستگاه‌های اشتراک‌پذیر](/docs/concepts/resource-management/dynamic-resource-allocation/dra-features/#consumable-capacity) دارند،
-       مصرف تجمیعی ظرفیت (به
-       [خلاصهٔ اشتراک‌پذیری](#resource-pool-shareable-summary) مراجعه کنید).
-   - `conditions`: شامل انواع condition با نام `Complete` (موفقیت) یا `Failed` (خطا) است.
+     - `unavailableDevices`: دستگاه‌هایی که به دلیل taintها یا شرایط دیگر در دسترس نیستند.
+     - `nodeName`: نود مرتبط با مخزن، در صورت وجود.
+     - `validationError`: زمانی تنظیم می‌شود که داده‌های مخزن به‌طور کامل اعتبارسنجی نشده باشد (برای مثال، در حین انتشار یک نسل جدید). در این حالت، ممکن است فیلدهای شمارش دستگاه تنظیم نشده باشند.
+     - `partitionSummary`: برای مخزن‌های [قابل‌پارتیشن‌بندی](/docs/concepts/resource-management/dynamic-resource-allocation/dra-features/#partitionable-devices)، قابلیت تخصیص را به تفکیک هر نوع پارتیشن نشان می‌دهد (به [خلاصهٔ پارتیشن‌ها](#resource-pool-partition-summary) مراجعه کنید).
+     - `shareableSummary`: برای مخزن‌هایی که [دستگاه‌های اشتراک‌پذیر](/docs/concepts/resource-management/dynamic-resource-allocation/dra-features/#consumable-capacity) دارند، مصرف تجمیعی ظرفیت را نشان می‌دهد (به [خلاصهٔ اشتراک‌پذیری](#resource-pool-shareable-summary) مراجعه کنید).
+   - `conditions`: شامل انواع شرط `Complete` (موفقیت) یا `Failed` (خطا) است.
 
 1. پس از پایان کار، درخواست را حذف کنید:
 
@@ -184,32 +158,26 @@ status:
    kubectl delete resourcepoolstatusrequest/check-gpus
    ```
 
-آبجکت‌های ResourcePoolStatusRequest یک‌بار توسط یک کنترل‌کننده در kube-controller-manager پردازش می‌شوند. spec پس از ایجاد تغییرناپذیر است و کل آبجکت پس از مقداردهی status تغییرناپذیر می‌شود. برای دریافت داده‌های به‌روز دسترس‌پذیری، درخواست را حذف و دوباره ایجاد کنید. درخواست‌های تکمیل‌شده پس از ۱ ساعت به‌طور خودکار پاک‌سازی می‌شوند.
+آبجکت‌های ResourcePoolStatusRequest تنها یک بار و توسط یک کنترل‌کننده در kube-controller-manager پردازش می‌شوند. بخش spec پس از ایجاد تغییرناپذیر است و پس از پر شدن وضعیت، کل آبجکت تغییرناپذیر می‌شود. برای دریافت داده‌های به‌روز دربارهٔ در دسترس بودن دستگاه‌ها، درخواست را حذف و دوباره ایجاد کنید. درخواست‌های تکمیل‌شده پس از یک ساعت به‌طور خودکار پاک می‌شوند.
 
-این قابلیت به مجوزهای RBAC صریح روی منبع ResourcePoolStatusRequest نیاز دارد. هیچ ClusterRole پیش‌فرضی این مجوز را شامل نمی‌شود.
+این قابلیت به مجوزهای صریح RBAC روی منبع ResourcePoolStatusRequest نیاز دارد. هیچ‌یک از ClusterRoleهای پیش‌فرض این مجوز را ندارند.
 
-وضعیت استخر منابع توسط
-[feature gate با نام `DRAResourcePoolStatus`](/docs/reference/command-line-tools-reference/feature-gates/#DRAResourcePoolStatus)
-در `kube-apiserver` و `kube-controller-manager` کنترل می‌شود.
+وضعیت مخزن منابع با [feature gate با نام `DRAResourcePoolStatus`](/docs/reference/command-line-tools-reference/feature-gates/#DRAResourcePoolStatus) در `kube-apiserver` و `kube-controller-manager` کنترل می‌شود.
 
-### خلاصهٔ افراز {#resource-pool-partition-summary}
+### خلاصهٔ پارتیشن‌ها {#resource-pool-partition-summary}
 
 {{< feature-state feature_gate_name="DRAPartitionableDevicesType" >}}
 
-یک دستگاه فیزیکی واحد مانند GPU ممکن است به‌صورت چند نوع افراز (partition) معرفی شود (برای مثال، یک GPU کامل در برابر یک برش MIG نیمه‌اندازه) که از شمارنده‌های مشترک یکسانی مصرف می‌کنند. از آنجا که این افرازها برای ظرفیت زیرین یکسانی با یکدیگر رقابت می‌کنند، شمارش ساده دستگاه‌ها به شما نمی‌گوید از هر نوع هنوز چه تعداد قابل تخصیص است. برای استخرهای [قابل‌افراز (partitionable)](/docs/concepts/resource-management/dynamic-resource-allocation/dra-features/#partitionable-devices)،
-نمای `partitionSummary` به این پرسش پاسخ می‌دهد. این نما برای هر نوع افراز موارد زیر را گزارش می‌کند:
+یک دستگاه فیزیکی واحد، مانند یک GPU، ممکن است در قالب چند نوع پارتیشن عرضه شود (برای مثال، یک GPU کامل در برابر یک برش MIG با نصف اندازه) که همگی از شمارنده‌های مشترک یکسانی مصرف می‌کنند. از آنجا که این پارتیشن‌ها بر سر ظرفیت زیربنایی یکسانی رقابت می‌کنند، شمارش سادهٔ دستگاه‌ها نشان نمی‌دهد که از هر نوع هنوز چند عدد قابل تخصیص است. برای مخزن‌های [قابل‌پارتیشن‌بندی](/docs/concepts/resource-management/dynamic-resource-allocation/dra-features/#partitionable-devices)، نمای `partitionSummary` به این پرسش پاسخ می‌دهد. این نما برای هر نوع پارتیشن موارد زیر را گزارش می‌کند:
 
-- `attribute`: نام کاملاً مشخص‌شدهٔ ویژگی دستگاه که مقدار آن این ورودی را گروه‌بندی می‌کند. این مقدار برابر با `spec.partitionTypeAttribute` در ResourceSlice است، یا اگر slice چیزی تعیین نکرده باشد، برابر با `spec.defaultPartitionTypeAttribute` در درخواست است.
+- `attribute`: نام کامل ویژگی دستگاه که مقدار آن مبنای گروه‌بندی این ورودی است. این نام همان `spec.partitionTypeAttribute` در ResourceSlice است، یا اگر slice هیچ ویژگی‌ای اعلام نکرده باشد، `spec.defaultPartitionTypeAttribute` در درخواست.
 - `type`: مقدار آن ویژگی روی دستگاه (برای مثال، `Full` یا `Half`).
-- `total`: تعداد دستگاه‌های این نوع افراز در استخر.
-- `allocatable`: تعداد دستگاه‌های *اضافی* از این نوع افراز که با توجه به مصرف فعلی شمارنده‌های مشترک هنوز می‌توانند تخصیص داده شوند.
+- `total`: تعداد دستگاه‌های این نوع پارتیشن در مخزن.
+- `allocatable`: تعداد دستگاه‌های *اضافی* از این نوع پارتیشن که با توجه به مصرف فعلی شمارنده‌های مشترک هنوز می‌توان تخصیص داد.
 
-ویژگی نام‌برده باید یک ویژگی از نوع رشته (string) باشد. اگر ویژگی نوع افراز در یک دستگاه قابل‌افراز وجود نداشته باشد یا رشته نباشد (برای مثال، عدد صحیح، بولی یا مقدار نسخه)، استخر به‌جای خلاصهٔ افراز یک خطای اعتبارسنجی گزارش می‌کند. برای
-[ویژگی‌های از نوع فهرست](/docs/reference/command-line-tools-reference/feature-gates/#DRAListTypeAttributes)
-هیچ رفتار ویژه‌ای در نظر گرفته نشده است؛
-یک ویژگی غیررشته‌ای صرفاً به‌عنوان ویژگی نوع افراز معتبر نیست.
+ویژگی نام‌برده باید از نوع رشته‌ای باشد. اگر ویژگی نوع پارتیشن در یک دستگاه قابل‌پارتیشن‌بندی وجود نداشته باشد یا رشته‌ای نباشد (برای مثال، مقداری از نوع عدد صحیح، بولی یا نسخه باشد)، مخزن به‌جای خلاصهٔ پارتیشن‌ها یک خطای اعتبارسنجی گزارش می‌کند. برای [ویژگی‌های فهرستی](/docs/reference/command-line-tools-reference/feature-gates/#DRAListTypeAttributes) رفتار خاصی وجود ندارد؛ هر ویژگی غیررشته‌ای صرفاً ویژگی معتبری برای نوع پارتیشن به شمار نمی‌آید.
 
-برای تولید این نما، درایور هر دستگاه قابل‌افراز را با یک ویژگی رشته‌ای برچسب‌گذاری می‌کند که مقدار آن نوع افراز را نام می‌برد و آن ویژگی را در فیلد `partitionTypeAttribute` از ResourceSlice مشخص می‌کند:
+برای تولید این نما، درایور به هر دستگاه قابل‌پارتیشن‌بندی یک ویژگی رشته‌ای می‌دهد که مقدار آن نام نوع پارتیشن است، و نام آن ویژگی را در فیلد `partitionTypeAttribute` در ResourceSlice درج می‌کند:
 
 ```yaml
 apiVersion: resource.k8s.io/v1
@@ -221,7 +189,7 @@ spec:
   partitionTypeAttribute: gpu.example.com/profile
 ```
 
-اگر یک درایور هنوز برای اعلام `partitionTypeAttribute` به‌روزرسانی نشده باشد، یک درخواست همچنان می‌تواند با تعیین یک ویژگی جایگزین در spec خود، خلاصهٔ افراز را دریافت کند. `partitionTypeAttribute` خود slice همواره اولویت دارد؛ مقدار پیش‌فرض در سطح درخواست فقط برای دستگاه‌هایی اعمال می‌شود که slice آن‌ها چنین ویژگی‌ای اعلام نکرده است:
+اگر درایوری هنوز به‌روزرسانی نشده باشد تا `partitionTypeAttribute` را اعلام کند، یک درخواست همچنان می‌تواند با نام بردن از یک ویژگی جایگزین در spec خود، خلاصهٔ پارتیشن‌ها را دریافت کند. مقدار `partitionTypeAttribute` خود slice همواره اولویت دارد و مقدار پیش‌فرض در سطح درخواست فقط برای دستگاه‌هایی اعمال می‌شود که slice آن‌ها چنین ویژگی‌ای اعلام نکرده است:
 
 ```yaml
 apiVersion: resource.k8s.io/v1alpha3
@@ -234,85 +202,50 @@ spec:
   defaultPartitionTypeAttribute: gpu.example.com/profile
 ```
 
-هنگامی که نه slice و نه درخواست هیچ ویژگی‌ای را نام نبرده باشند، یک استخر قابل‌افراز هیچ `partitionSummary` گزارش نمی‌کند.
+اگر نه slice و نه درخواست هیچ ویژگی‌ای را نام نبرده باشند، مخزن قابل‌پارتیشن‌بندی هیچ `partitionSummary`ای گزارش نمی‌کند.
 
-نمای `partitionSummary` توسط
-[feature gate با نام `DRAPartitionableDevicesType`](/docs/reference/command-line-tools-reference/feature-gates/#DRAPartitionableDevicesType)
-در `kube-apiserver` و `kube-controller-manager` کنترل می‌شود، که خود مستلزم فعال بودن feature gateهای
-[`DRAResourcePoolStatus`](/docs/reference/command-line-tools-reference/feature-gates/#DRAResourcePoolStatus)
-و
-[`DRAPartitionableDevices`](/docs/reference/command-line-tools-reference/feature-gates/#DRAPartitionableDevices)
-است.
+نمای `partitionSummary` با [feature gate با نام `DRAPartitionableDevicesType`](/docs/reference/command-line-tools-reference/feature-gates/#DRAPartitionableDevicesType) در `kube-apiserver` و `kube-controller-manager` کنترل می‌شود. این feature gate به نوبهٔ خود مستلزم فعال بودن feature gateهای [`DRAResourcePoolStatus`](/docs/reference/command-line-tools-reference/feature-gates/#DRAResourcePoolStatus) و [`DRAPartitionableDevices`](/docs/reference/command-line-tools-reference/feature-gates/#DRAPartitionableDevices) است.
 
 ### خلاصهٔ اشتراک‌پذیری {#resource-pool-shareable-summary}
 
-برای استخرهایی که شامل [دستگاه‌های اشتراک‌پذیر](/docs/concepts/resource-management/dynamic-resource-allocation/dra-features/#consumable-capacity) هستند
-(دستگاه‌هایی که `allowMultipleAllocations` را تنظیم می‌کنند و می‌توانند توسط چند claim مصرف شوند)، `shareableSummary` مصرف تجمیعی ظرفیت را در سراسر استخر گزارش می‌کند:
+برای مخزن‌هایی که [دستگاه‌های اشتراک‌پذیر](/docs/concepts/resource-management/dynamic-resource-allocation/dra-features/#consumable-capacity) دارند (دستگاه‌هایی که `allowMultipleAllocations` را تنظیم کرده‌اند و چند claim می‌توانند از آن‌ها استفاده کنند)، `shareableSummary` مصرف تجمیعی ظرفیت را در کل مخزن گزارش می‌کند:
 
-- `fullyAvailableDevices`: دستگاه‌های اشتراک‌پذیری که هیچ ظرفیتی از آن‌ها مصرف نشده است.
-- `partiallyAvailableDevices`: دستگاه‌های اشتراک‌پذیری که بخشی از ظرفیت آن‌ها، اما نه همهٔ آن، مصرف شده است.
-- `capacity`: به‌ازای هر نام ظرفیت، مقادیر تجمیعی `total`، `consumed` و `available` (برابر `total` منهای `consumed`، که هرگز منفی نمی‌شود) در سراسر استخر.
+- `fullyAvailableDevices`: دستگاه‌های اشتراک‌پذیری که هیچ بخشی از ظرفیت آن‌ها مصرف نشده است.
+- `partiallyAvailableDevices`: دستگاه‌های اشتراک‌پذیری که بخشی از ظرفیت آن‌ها، و نه همهٔ آن، مصرف شده است.
+- `capacity`: به تفکیک نام هر ظرفیت، مقادیر تجمیعی `total`، `consumed` و `available` (یعنی `total` منهای `consumed` که هرگز منفی نمی‌شود) در کل مخزن.
 
-`shareableSummary` فقط زمانی مقداردهی می‌شود که دست‌کم یک دستگاه در استخر اشتراک‌پذیر باشد. این بخش جزئی از قابلیت [وضعیت استخر منابع](#resource-pool-status)
-است (feature gate با نام
-[`DRAResourcePoolStatus`](/docs/reference/command-line-tools-reference/feature-gates/#DRAResourcePoolStatus))
-و به `DRAPartitionableDevicesType` نیازی ندارد؛ دستگاه‌های اشتراک‌پذیری که این بخش خلاصه می‌کند از قابلیت
-[ظرفیت قابل‌مصرف (consumable capacity)](/docs/concepts/resource-management/dynamic-resource-allocation/dra-features/#consumable-capacity)
-می‌آیند.
+فیلد `shareableSummary` فقط زمانی پر می‌شود که دست‌کم یکی از دستگاه‌های مخزن اشتراک‌پذیر باشد. این فیلد بخشی از قابلیت [وضعیت مخزن منابع](#resource-pool-status) (یعنی feature gate با نام [`DRAResourcePoolStatus`](/docs/reference/command-line-tools-reference/feature-gates/#DRAResourcePoolStatus)) است و به `DRAPartitionableDevicesType` نیازی ندارد؛ دستگاه‌های اشتراک‌پذیری که خلاصه می‌کند از قابلیت [ظرفیت قابل‌مصرف](/docs/concepts/resource-management/dynamic-resource-allocation/dra-features/#consumable-capacity) می‌آیند.
 
 
-## فرادادهٔ دستگاه DRA در کانتینرها {#device-metadata}
+## فراداده‌های دستگاه DRA در کانتینرها {#device-metadata}
 
 {{< feature-state state="beta" for_k8s_version="v1.37" >}}
 
-درایورهای DRA می‌توانند فراداده‌های دستگاه مانند ویژگی‌های دستگاه (نشانی‌های باس PCI یا UUIDهای دستگاه‌های واسطه‌ای (mediated)) و پیکربندی شبکه را به‌صورت فایل‌های JSON مستقیماً در اختیار کانتینرها قرار دهند.
-این امر به برنامه‌ها اجازه می‌دهد بدون پرس‌وجو از API کوبرنتیز یا استفاده از کنترل‌کننده‌های سفارشی، اطلاعات دستگاه‌های تخصیص‌یافته را کشف کنند.
+درایورهای DRA می‌توانند فراداده‌های دستگاه، مانند ویژگی‌های دستگاه (نشانی‌های گذرگاه PCI یا UUIDهای دستگاه‌های mediated) و پیکربندی شبکه، را در قالب فایل‌های JSON مستقیماً در اختیار کانتینرها قرار دهند. به این ترتیب، برنامه‌ها می‌توانند بدون پرس‌وجو از API کوبرنتیز یا استفاده از کنترل‌کننده‌های سفارشی، اطلاعات دستگاه‌های تخصیص‌یافته را به دست آورند.
 
-KEP-5304 یک
-[پروتکل فرادادهٔ دستگاه](#device-metadata-protocol) را تعریف می‌کند که درایورها باید از آن پیروی کنند
-تا برنامه‌ها در درایورها و کلاسترهای مختلف ساختار یکسانی را ببینند.
-[کتابخانهٔ افزونهٔ DRA kubelet](https://pkg.go.dev/k8s.io/dynamic-resource-allocation/kubeletplugin)
-این پروتکل را پیاده‌سازی می‌کند.
+سند KEP-5304 یک [پروتکل فرادادهٔ دستگاه](#device-metadata-protocol) تعریف می‌کند که درایورها باید از آن پیروی کنند تا برنامه‌ها در همهٔ درایورها و کلاسترها با ساختار یکسانی روبه‌رو شوند. [کتابخانهٔ افزونهٔ kubelet برای DRA](https://pkg.go.dev/k8s.io/dynamic-resource-allocation/kubeletplugin) این پروتکل را پیاده‌سازی می‌کند.
 
-فرادادهٔ دستگاه از همان قواعد دسترسی به دستگاه پیروی می‌کند: این فراداده تنها زمانی داخل یک کانتینر در دسترس است که آن کانتینر دستگاه را درخواست کرده باشد. برای جزئیات بیشتر، بخش
-[درخواست دستگاه‌ها در بارهای کاری با استفاده از DRA](/docs/tasks/configure-pod-container/assign-resources/allocate-devices-dra/#request-devices-workloads)
-را ببینید.
+فراداده‌های دستگاه از همان قواعد دسترسی به دستگاه پیروی می‌کنند: این فراداده‌ها فقط زمانی درون یک کانتینر در دسترس هستند که آن کانتینر دستگاه را درخواست کرده باشد. برای جزئیات، به [درخواست دستگاه در بارهای کاری با استفاده از DRA](/docs/tasks/configure-pod-container/assign-resources/allocate-devices-dra/#request-devices-workloads) مراجعه کنید.
 
 ### پروتکل فرادادهٔ دستگاه {#device-metadata-protocol}
 
 این پروتکل از چهار قاعده تشکیل شده است:
 
-1. **مسیر فایل‌ها.** فایل‌های فراداده درون کانتینرها در مسیر
-   `/var/run/kubernetes.io/dra-device-attributes` قرار دارند. برای یک
-   ResourceClaim که مستقیماً ارجاع داده شده است، مسیر برابر است با
-   `resourceclaims/<claimName>/<requestName>/<driverName>-metadata.json`. برای
-   claimی که از یک ResourceClaimTemplate ایجاد شده است، مسیر برابر است با
-   `resourceclaimtemplates/<podClaimName>/<requestName>/<driverName>-metadata.json`،
-   که در آن `podClaimName` همان `pod.spec.resourceClaims[].name` است.
+1. **مسیرهای فایل.** فایل‌های فراداده درون کانتینرها در مسیر `/var/run/kubernetes.io/dra-device-attributes` قرار دارند. برای ResourceClaimای که مستقیماً به آن ارجاع داده شده است، مسیر به‌صورت `resourceclaims/<claimName>/<requestName>/<driverName>-metadata.json` است. برای claimای که از یک ResourceClaimTemplate ایجاد شده است، مسیر به‌صورت `resourceclaimtemplates/<podClaimName>/<requestName>/<driverName>-metadata.json` است که در آن `podClaimName` همان `pod.spec.resourceClaims[].name` است.
 
-   هنگامی که یک درخواست از [فهرست اولویت‌دار](/docs/concepts/resource-management/dynamic-resource-allocation/dra-api/#prioritized-list) استفاده می‌کند، فقط نام درخواست سطح بالا برای بخش مسیر `<requestName>` به کار می‌رود. فیلد
-   `requests[].name` در فایل شامل ارجاع کامل
-   `<request>/<subrequest>` است، مانند `gpu/high-memory`.
+   وقتی یک درخواست از [فهرست اولویت‌دار](/docs/concepts/resource-management/dynamic-resource-allocation/dra-api/#prioritized-list) استفاده می‌کند، فقط نام درخواست سطح بالا برای بخش `<requestName>` مسیر به کار می‌رود. فیلد `requests[].name` در فایل، ارجاع کامل `<request>/<subrequest>` را در خود دارد، مانند `gpu/high-memory`.
 
-   ثابت‌های مسیر در
-   [`k8s.io/dynamic-resource-allocation/api/metadata`](https://pkg.go.dev/k8s.io/dynamic-resource-allocation/api/metadata)
-   تعریف شده‌اند.
+   ثابت‌های مسیر در [`k8s.io/dynamic-resource-allocation/api/metadata`](https://pkg.go.dev/k8s.io/dynamic-resource-allocation/api/metadata) تعریف شده‌اند.
 
-1. **API مبتنی بر JSON.** هر فایل جریانی از یک یا چند آبجکت
-   [`DeviceMetadata`](https://pkg.go.dev/k8s.io/dynamic-resource-allocation/api/metadata/v1beta1#DeviceMetadata)
-   است. هر آبجکت مطابق با قراردادهای API کوبرنتیز دارای `apiVersion` و `kind` است. همان فراداده به‌ازای هر نسخهٔ API پیکربندی‌شده یک‌بار و به ترتیبی که درایور انتخاب کرده است کدگذاری می‌شود. مصرف‌کنندگان از نخستین نسخه‌ای که قادر به رمزگشایی آن هستند استفاده می‌کنند و نسخه‌های ناشناخته را نادیده می‌گیرند. یک آبجکت نادرست‌ساختار (malformed) در یک نسخهٔ شناخته‌شده یک خطا محسوب می‌شود.
+1. **API مبتنی بر JSON.** هر فایل جریانی از یک یا چند آبجکت [`DeviceMetadata`](https://pkg.go.dev/k8s.io/dynamic-resource-allocation/api/metadata/v1beta1#DeviceMetadata) است. هر آبجکت، مطابق با قراردادهای API کوبرنتیز، دارای `apiVersion` و `kind` است. فراداده‌های یکسان برای هر نسخهٔ API پیکربندی‌شده یک بار و به ترتیبی که درایور انتخاب کرده است کدگذاری می‌شوند. مصرف‌کنندگان از نخستین نسخه‌ای استفاده می‌کنند که بتوانند رمزگشایی کنند و از نسخه‌های ناشناخته صرف‌نظر می‌کنند. وجود آبجکتی بدساخت در یک نسخهٔ شناخته‌شده خطا محسوب می‌شود.
 
-1. **نسل (Generation).** فایل اولیه مقدار `metadata.generation` را برابر `1` دارد.
-   هر به‌روزرسانی generation را یک واحد افزایش می‌دهد تا مصرف‌کنندگان بتوانند تغییرات را تشخیص دهند.
+1. **نسل.** در فایل اولیه، مقدار `metadata.generation` برابر با `1` است. هر به‌روزرسانی این نسل را یک واحد افزایش می‌دهد تا مصرف‌کنندگان بتوانند تغییرات را تشخیص دهند.
 
-1. **در دسترس قرار دادن در کانتینر.** کتابخانهٔ افزونهٔ DRA kubelet از
-   {{< glossary_tooltip text="CDI" term_id="cdi" >}} برای bind-mount کردن هر فایل
-   به‌صورت فقط‌خواندنی استفاده می‌کند. پیاده‌سازی‌های دیگر می‌توانند از سازوکار متفاوتی استفاده کنند، مادامی که
-   فایل در مسیر موردنیاز ظاهر شود و فقط‌خواندنی باشد.
+1. **در اختیار قرار دادن برای کانتینر.** کتابخانهٔ افزونهٔ kubelet برای DRA از {{< glossary_tooltip text="CDI" term_id="cdi" >}} استفاده می‌کند تا هر فایل را به‌صورت فقط‌خواندنی bind-mount کند. پیاده‌سازی‌های دیگر می‌توانند از سازوکار متفاوتی استفاده کنند، به شرط آنکه فایل در مسیر الزامی ظاهر شود و فقط‌خواندنی باشد.
 
-### فعال‌سازی فراداده دستگاه در یک درایور {#device-metadata-enable}
+### فعال‌سازی فراداده‌ی دستگاه در یک درایور {#device-metadata-enable}
 
-فراداده دستگاه (device metadata) یک قابلیت سمت درایور است. این قابلیت feature gate مخصوص کوبرنتیز ندارد و به‌طور پیش‌فرض در کتابخانه افزونه kubelet برای DRA غیرفعال است. درایور باید این قابلیت را فعال کند و نسخه‌هایی را که می‌نویسد، صراحتاً انتخاب کند:
+فراداده‌ی دستگاه (device metadata) قابلیتی در سمت درایور است. این قابلیت هیچ feature gate کوبرنتیزی ندارد و در کتابخانه‌ی افزونه‌ی kubelet مربوط به DRA به‌طور پیش‌فرض غیرفعال است. هر درایور باید این قابلیت را فعال کند و نسخه‌هایی را که می‌نویسد به‌صراحت انتخاب کند:
 
 ```go
 kubeletplugin.EnableDeviceMetadata(true, []schema.GroupVersion{
@@ -321,48 +254,33 @@ kubeletplugin.EnableDeviceMetadata(true, []schema.GroupVersion{
 })
 ```
 
-نسخه `v1beta1` الزامی است. درایور می‌تواند برای سازگاری با مصرف‌کنندگان قدیمی‌تر، نسخه `v1alpha1` را نیز بنویسد. ترتیب عناصر در slice همان ترتیب آن‌ها در جریان فراداده است؛ فریمورک نسخه‌ها را مرتب نمی‌کند. درایورها باید جدیدترین نسخه را در ابتدا قرار دهند. فعال‌سازی فراداده دستگاه بدون هیچ نسخه‌ای، بدون `v1beta1` یا با یک نسخه ناشناخته باعث می‌شود افزونه هنگام راه‌اندازی با خطا مواجه شود.
+وجود نسخه‌ی `v1beta1` الزامی است. درایور می‌تواند برای سازگاری با مصرف‌کننده‌های قدیمی‌تر، نسخه‌ی `v1alpha1` را نیز بنویسد. ترتیب نسخه‌ها در این slice همان ترتیب آن‌ها در جریان فراداده است و چارچوب، نسخه‌ها را مرتب نمی‌کند. بهتر است درایورها جدیدترین نسخه را در ابتدا قرار دهند. اگر فراداده‌ی دستگاه بدون هیچ نسخه‌ای، بدون `v1beta1` یا با نسخه‌ای ناشناخته فعال شود، افزونه هنگام راه‌اندازی با شکست مواجه می‌شود.
 
-درایور می‌تواند برای هر دستگاه آماده‌شده، فیلد
-[`Device.Metadata`](https://pkg.go.dev/k8s.io/dynamic-resource-allocation/kubeletplugin#Device)
-را با
-[`kubeletplugin.DeviceMetadata`](https://pkg.go.dev/k8s.io/dynamic-resource-allocation/kubeletplugin#DeviceMetadata)
-مقداردهی کند. درایورها باید ویژگی‌هایی (attributes) را که برای آن دستگاه در ResourceSlice منتشر می‌کنند، در این فراداده نیز بگنجانند تا بارهای کاری در زمان اجرا همان اطلاعات را ببینند. درایورها همچنین می‌توانند ویژگی‌هایی را اضافه کنند که فقط در زمان اجرا اهمیت دارند. برای دستگاه‌های شبکه، درایورها می‌توانند پس از پیکربندی CNI با فراخوانی
-[`UpdateRequestMetadata`](https://pkg.go.dev/k8s.io/dynamic-resource-allocation/kubeletplugin#Helper.UpdateRequestMetadata)
-نام رابط‌ها، نشانی‌های IP و نشانی‌های سخت‌افزاری را اضافه کنند.
+درایور می‌تواند برای هر دستگاه آماده‌شده، فیلد [`Device.Metadata`](https://pkg.go.dev/k8s.io/dynamic-resource-allocation/kubeletplugin#Device) را با [`kubeletplugin.DeviceMetadata`](https://pkg.go.dev/k8s.io/dynamic-resource-allocation/kubeletplugin#DeviceMetadata) پر کند. بهتر است درایورها ویژگی‌هایی را که برای آن دستگاه در ResourceSlice منتشر می‌کنند، در این فراداده نیز بگنجانند تا بارهای کاری در زمان اجرا همان اطلاعات را ببینند. درایورها همچنین می‌توانند ویژگی‌هایی را اضافه کنند که فقط در زمان اجرا اهمیت دارند. درایورهای دستگاه‌های شبکه می‌توانند پس از پیکربندی CNI، با فراخوانی [`UpdateRequestMetadata`](https://pkg.go.dev/k8s.io/dynamic-resource-allocation/kubeletplugin#Helper.UpdateRequestMetadata) نام رابط‌ها، نشانی‌های IP و نشانی‌های سخت‌افزاری را اضافه کنند.
 
-پیوندهای API افزونه kubelet که در بالا آمده‌اند، یکپارچه‌سازی را برای نویسندگان درایور شرح می‌دهند. فریمورک DRA هیچ flag خط فرمان عمومی تعریف نمی‌کند؛ بنابراین اپراتورهای کلاستر این قابلیت را از طریق پیکربندی استقراری که درایورشان ارائه می‌دهد، فعال می‌کنند.
+پیوندهای بالا به API افزونه‌ی kubelet، نحوه‌ی یکپارچه‌سازی را برای نویسندگان درایور شرح می‌دهند. چارچوب DRA هیچ پرچم خط فرمان عمومی‌ای تعریف نمی‌کند؛ از این رو، گردانندگان کلاستر این قابلیت را از طریق پیکربندی استقراری که درایورشان ارائه می‌دهد فعال می‌کنند.
 
-هنگامی که این قابلیت فعال باشد، کتابخانه افزونه kubelet برای DRA هنگام آماده‌سازی دستگاه‌های تخصیص‌یافته، فایل‌های فراداده را می‌نویسد. این کتابخانه همچنین به‌طور پیش‌فرض مشخصات CDI را در مسیر `/var/run/cdi` می‌نویسد. container runtime باید به‌گونه‌ای پیکربندی شود که مشخصات CDI را از آن دایرکتوری شناسایی کند. کتابخانه حداقل نسخه مشخصات CDI لازم برای هر مشخصه تولیدشده را تعیین می‌کند.
+در صورت فعال بودن این قابلیت، کتابخانه‌ی افزونه‌ی kubelet مربوط به DRA هنگام آماده‌سازی دستگاه‌های تخصیص‌یافته، فایل‌های فراداده را می‌نویسد. این کتابخانه همچنین مشخصات CDI را به‌طور پیش‌فرض در `/var/run/cdi` می‌نویسد. محیط اجرای کانتینر باید طوری پیکربندی شود که مشخصات CDI را از این دایرکتوری کشف کند. کتابخانه، حداقل نسخه‌ی مشخصات CDI لازم برای هر مشخصات تولیدشده را تعیین می‌کند.
 
-وقتی یک درخواست، دستگاه‌هایی را از چند درایور DRA تخصیص می‌دهد، هر درایور فایل فراداده مخصوص خود را می‌نویسد. مصرف‌کنندگانی که نام درایور را می‌دانند، باید مسیر دقیق را از روی نام claim، درخواست و درایور بسازند. مصرف‌کنندگان نوشته‌شده با Go می‌توانند از
-[`ReadResourceClaimMetadata`](https://pkg.go.dev/k8s.io/dynamic-resource-allocation/devicemetadata#ReadResourceClaimMetadata)
-یا
-[`ReadResourceClaimTemplateMetadata`](https://pkg.go.dev/k8s.io/dynamic-resource-allocation/devicemetadata#ReadResourceClaimTemplateMetadata)
-برای خواندن و ادغام تمام فایل‌های هر درایور برای یک درخواست استفاده کنند.
+وقتی یک درخواست، دستگاه‌هایی را از چند درایور DRA تخصیص می‌دهد، هر درایور فایل فراداده‌ی خودش را می‌نویسد. مصرف‌کننده‌هایی که نام درایور را می‌دانند، بهتر است مسیر دقیق را از نام claim، نام درخواست و نام درایور بسازند. مصرف‌کننده‌های نوشته‌شده به زبان Go می‌توانند با استفاده از [`ReadResourceClaimMetadata`](https://pkg.go.dev/k8s.io/dynamic-resource-allocation/devicemetadata#ReadResourceClaimMetadata) یا [`ReadResourceClaimTemplateMetadata`](https://pkg.go.dev/k8s.io/dynamic-resource-allocation/devicemetadata#ReadResourceClaimTemplateMetadata) همه‌ی فایل‌های مربوط به درایورهای یک درخواست را بخوانند و ادغام کنند.
 
-### طرحواره فراداده {#device-metadata-schema}
+### طرح‌واره‌ی فراداده {#device-metadata-schema}
 
-هر آبجکت در یک فایل فراداده با API زیر مطابقت دارد:
-[`DeviceMetadata`](https://pkg.go.dev/k8s.io/dynamic-resource-allocation/api/metadata/v1beta1#DeviceMetadata)
-(`metadata.resource.k8s.io/v1beta1`).
+هر آبجکت در فایل فراداده با API‏ [`DeviceMetadata`](https://pkg.go.dev/k8s.io/dynamic-resource-allocation/api/metadata/v1beta1#DeviceMetadata) ‏(`metadata.resource.k8s.io/v1beta1`) مطابقت دارد.
 
-این طرحواره شامل موارد زیر است:
+این طرح‌واره شامل موارد زیر است:
 
-- فراداده استاندارد آبجکت برای ResourceClaim، شامل نام، فضای نام (namespace)، UID و نسل (generation) فراداده.
-- فیلد اختیاری `podClaimName` برای claim که از یک ResourceClaimTemplate تولید شده است.
+- فراداده‌ی استاندارد آبجکت برای ResourceClaim، شامل نام، فضای نام (namespace)، UID و نسل (generation) فراداده‌ی آن.
+- فیلد اختیاری `podClaimName` برای claimای که از یک ResourceClaimTemplate تولید شده است.
 - فهرستی از درخواست‌ها. هر درخواست یک نام الزامی و فهرستی از دستگاه‌های تخصیص‌یافته دارد.
 - درایور، pool و نام هر دستگاه.
 - ویژگی‌های اختیاری دستگاه و داده‌های شبکه.
 
-مقادیر ویژگی‌ها از همان قالب ویژگی‌های دستگاه در ResourceSlice استفاده می‌کنند. هر ویژگی دقیقاً یک مقدار اسکالر (`int`، `bool`، `string` یا `version`) یا یک مقدار فهرستی (`ints`، `bools`، `strings` یا `versions`) دارد. مقادیر ظرفیت دستگاه در فراداده دستگاه گنجانده نمی‌شوند.
+مقادیر ویژگی‌ها همان نمایشی را دارند که ویژگی‌های دستگاه در ResourceSlice دارند. هر ویژگی دقیقاً یک مقدار تکی (`int`، `bool`، `string` یا `version`) یا یک مقدار فهرستی (`ints`، `bools`، `strings` یا `versions`) دارد. مقادیر ظرفیت دستگاه در فراداده‌ی دستگاه گنجانده نمی‌شوند.
 
-داده‌های شبکه می‌توانند شامل `interfaceName`، `ips` و `hardwareAddress` باشند.
-برای محدودیت‌های فیلدها، به
-[مستندات API مربوط به `DeviceMetadata`](https://pkg.go.dev/k8s.io/dynamic-resource-allocation/api/metadata/v1beta1#DeviceMetadata)
-مراجعه کنید.
+داده‌های شبکه می‌توانند شامل `interfaceName`، `ips` و `hardwareAddress` باشند. برای آشنایی با محدودیت‌های فیلدها، [مستندات API‏ `DeviceMetadata`](https://pkg.go.dev/k8s.io/dynamic-resource-allocation/api/metadata/v1beta1#DeviceMetadata) را ببینید.
 
-مثال زیر یک آبجکت در جریان فراداده را برای یک دستگاه GPU نشان می‌دهد که از طریق یک ResourceClaimTemplate تخصیص یافته است:
+مثال زیر یک آبجکت را در جریان فراداده‌ی یک دستگاه GPU نشان می‌دهد که از طریق یک ResourceClaimTemplate تخصیص یافته است:
 
 ```json
 {
@@ -404,23 +322,18 @@ kubeletplugin.EnableDeviceMetadata(true, []schema.GroupVersion{
 }
 ```
 
-افزونه kubelet برای DRA فراداده را پیش از نوشتن اعتبارسنجی نمی‌کند. مصرف‌کنندگان نوشته‌شده با Go می‌توانند هنگام رمزگشایی یک جریان، اعتبارسنجی تولیدشده را به‌صورت اختیاری فعال کنند. نتایج رمزگشایی و اعتبارسنجی از یکدیگر جدا هستند: خطای اعتبارسنجی مانع از بازگردانده شدن آبجکتی که با موفقیت رمزگشایی شده است نمی‌شود. برای نحوه استفاده، به
-[دسترسی به فراداده دستگاه DRA](/docs/tasks/configure-pod-container/assign-resources/access-dra-device-metadata/#read-metadata-application)
-مراجعه کنید.
+افزونه‌ی kubelet مربوط به DRA پیش از نوشتن فراداده، آن را اعتبارسنجی نمی‌کند. مصرف‌کننده‌های نوشته‌شده به زبان Go می‌توانند هنگام رمزگشایی یک جریان، اعتبارسنجی تولیدشده را به‌دلخواه فعال کنند. رمزگشایی و اعتبارسنجی نتایج جداگانه‌ای دارند: خطای اعتبارسنجی مانع بازگرداندن آبجکتی نمی‌شود که با موفقیت رمزگشایی شده است. برای آشنایی با نحوه‌ی استفاده، [دسترسی به فراداده‌ی دستگاه DRA](/docs/tasks/configure-pod-container/assign-resources/access-dra-device-metadata/#read-metadata-application) را ببینید.
 
-### فراداده فوری و تعویق‌یافته {#device-metadata-lifecycle}
+### فراداده‌ی فوری و تأخیری {#device-metadata-lifecycle}
 
-در فراداده فوری (immediate)، درایور ویژگی‌ها یا داده‌های شبکه را هنگام آماده‌سازی claim فراهم می‌کند. افزونه kubelet برای DRA فایل را با نسل `1` پیش از آغاز به کار کانتینر مصرف‌کننده می‌نویسد.
+در فراداده‌ی فوری، درایور ویژگی‌ها یا داده‌های شبکه را هنگام آماده‌سازی claim فراهم می‌کند. افزونه‌ی kubelet مربوط به DRA پیش از شروع کانتینر مصرف‌کننده، فایل را با نسل `1` می‌نویسد.
 
-در فراداده تعویق‌یافته (deferred)، درایور می‌تواند یک دستگاه را بدون ویژگی یا داده شبکه آماده کند. فایل اولیه با نسل `1` شامل هویت دستگاه است. درایور بعداً `UpdateRequestMetadata` را فراخوانی می‌کند تا کل جریان را به‌صورت اتمی جایگزین کند و نسل را افزایش دهد. به‌روزرسانی مستلزم وجود فایل اولیه است. اگر آماده‌سازی دستگاه برای یک درخواست هیچ دستگاهی برنگرداند، فریمورک برای آن درخواست نه فایل فراداده‌ای ایجاد می‌کند و نه دستگاه CDI مربوط به فراداده.
+در فراداده‌ی تأخیری، درایور می‌تواند دستگاه را بدون ویژگی‌ها یا داده‌های شبکه آماده کند. فایل اولیه با نسل `1` شامل هویت دستگاه است. درایور بعداً با فراخوانی `UpdateRequestMetadata` کل جریان را به‌صورت اتمی جایگزین می‌کند و نسل را یک واحد افزایش می‌دهد. به‌روزرسانی مستلزم وجود فایل اولیه است. اگر آماده‌سازی دستگاه برای یک درخواست هیچ دستگاهی برنگرداند، چارچوب برای آن درخواست نه فایل فراداده‌ای می‌سازد و نه دستگاه CDI فراداده‌ای.
 
-فراداده در تمام مدت عمر هر کانتینر مصرف‌کننده برای آن کانتینر در دسترس باقی می‌ماند. فریمورک پس از لغو آماده‌سازی (unprepare) claim، فایل‌های فراداده و مشخصات CDI را حذف می‌کند.
+فراداده در تمام طول عمر هر کانتینر مصرف‌کننده، برای آن کانتینر در دسترس می‌ماند. چارچوب پس از لغو آماده‌سازی claim، فایل‌های فراداده و مشخصات CDI را حذف می‌کند.
 
-برای آشنایی با نحوه استفاده از فراداده دستگاه در بارهای کاری خود، به
-[دسترسی به فراداده دستگاه DRA](/docs/tasks/configure-pod-container/assign-resources/access-dra-device-metadata/)
-مراجعه کنید.
+برای آشنایی با نحوه‌ی استفاده از فراداده‌ی دستگاه در بارهای کاری خود، [دسترسی به فراداده‌ی دستگاه DRA](/docs/tasks/configure-pod-container/assign-resources/access-dra-device-metadata/) را ببینید.
 
 ### درایورهای سفارشی {#device-metadata-custom-drivers}
 
-درایورهای سفارشی که از کتابخانه افزونه kubelet برای DRA استفاده نمی‌کنند، باید خودشان
-[پروتکل فراداده دستگاه](#device-metadata-protocol) را پیاده‌سازی کنند. این کار شامل نوشتن جریان نسخه‌دار `DeviceMetadata` در مسیرهای صحیح، افزایش `metadata.generation` در هر به‌روزرسانی، و ارائه فایل‌ها به‌صورت فقط‌خواندنی از طریق CDI یا سازوکاری معادل است.
+درایورهای سفارشی که از کتابخانه‌ی افزونه‌ی kubelet مربوط به DRA استفاده نمی‌کنند، باید [پروتکل فراداده‌ی دستگاه](#device-metadata-protocol) را خودشان پیاده‌سازی کنند. این کار شامل نوشتن جریان نسخه‌دار `DeviceMetadata` در مسیرهای درست، افزایش `metadata.generation` در هر به‌روزرسانی، و در دسترس قرار دادن فایل‌ها به‌صورت فقط‌خواندنی از طریق CDI یا سازوکاری معادل است.

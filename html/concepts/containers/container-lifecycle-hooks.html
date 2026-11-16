@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>هوک‌های چرخه عمر کانتینر | مستندات کوبرنتیز</title>
+<title>هوک‌های چرخه حیات کانتینر | مستندات کوبرنتیز</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
@@ -82,85 +82,43 @@ document.addEventListener('DOMContentLoaded',function(){box=document.getElementB
 <a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
 <header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">concepts / containers</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
 <div class="layout">
-<main><h1 dir="rtl">هوک‌های چرخه عمر کانتینر</h1><!-- overview -->
-<p dir="rtl">این صفحه توضیح می‌دهد که کانتینرهای مدیریت‌شده توسط kubelet چگونه می‌توانند از چارچوب هوک چرخه عمر کانتینر (Container lifecycle hook) استفاده کنند تا کدی را اجرا کنند که با رویدادهای رخ‌داده در طول چرخه عمر مدیریتی آن‌ها فعال می‌شود.</p>
+<main><h1 dir="rtl">هوک‌های چرخه حیات کانتینر</h1><!-- overview -->
+<p dir="rtl">این صفحه توضیح می‌دهد که کانتینرهایی که kubelet آن‌ها را مدیریت می‌کند، چگونه می‌توانند از چارچوب هوک‌های چرخه حیات کانتینر استفاده کنند تا کدی را اجرا کنند که با رویدادهای چرخه حیات مدیریتی‌شان فعال می‌شود.</p>
 <!-- body -->
-<h2 id="نمای-کلی-overview" dir="rtl">نمای کلی {#overview}</h2>
-<p dir="rtl">کوبرنتیز، مشابه بسیاری از چارچوب‌های زبان‌های برنامه‌نویسی مانند Angular که هوک‌های چرخه عمر مؤلفه دارند، هوک‌های چرخه عمر را در اختیار کانتینرها قرار می‌دهد.
-این هوک‌ها به کانتینرها امکان می‌دهند از رویدادهای چرخه عمر مدیریتی خود آگاه باشند و هنگام اجرای هوک چرخه عمر متناظر، کدی را که در یک handler پیاده‌سازی شده است اجرا کنند.</p>
+<h2 id="نمای-کلی" dir="rtl">نمای کلی</h2>
+<p dir="rtl">کوبرنتیز، مشابه بسیاری از چارچوب‌های زبان‌های برنامه‌نویسی مانند Angular که برای اجزای خود هوک‌های چرخه حیات دارند، هوک‌های چرخه حیات را در اختیار کانتینرها قرار می‌دهد. این هوک‌ها به کانتینرها امکان می‌دهند از رویدادهای چرخه حیات مدیریتی خود آگاه شوند و هنگام اجرای هوک متناظر، کدی را اجرا کنند که در یک هندلر (handler) پیاده‌سازی شده است.</p>
 <h2 id="هوک-های-کانتینر" dir="rtl">هوک‌های کانتینر</h2>
-<p dir="rtl">دو هوک در اختیار کانتینرها قرار می‌گیرد:</p>
+<p dir="rtl">دو هوک در اختیار کانتینرها قرار گرفته است:</p>
 <p dir="ltr" class="ltr"><code dir="ltr">PostStart</code></p>
-<p dir="rtl">این هوک بلافاصله پس از ایجاد یک کانتینر اجرا می‌شود.
-این هوک <strong>به‌صورت همزمان</strong> با <code dir="ltr">ENTRYPOINT</code> کانتینر (فرایند اصلی) اجرا می‌شود،
-یعنی ممکن است پیش از شروع فرایند اصلی، در حین آن یا پس از آن اجرا شود.</p>
-<p dir="rtl">هیچ پارامتری به handler ارسال نمی‌شود.</p>
+<p dir="rtl">این هوک بلافاصله پس از ایجاد کانتینر اجرا می‌شود. اجرای آن <strong>هم‌زمان</strong> با <code dir="ltr">ENTRYPOINT</code> کانتینر (فرایند اصلی) است؛ یعنی ممکن است هوک پیش از شروع فرایند اصلی، در حین آن یا پس از آن اجرا شود.</p>
+<p dir="rtl">هیچ پارامتری به هندلر ارسال نمی‌شود.</p>
 <div class="callout note"><div class="callout-title">توجه:</div>
-<p dir="rtl">اگرچه این هوک به‌صورت همزمان با فرایند کانتینر اجرا می‌شود،
-می‌تواند به‌روزرسانی وضعیت کانتینر را به تأخیر بیندازد؛
-ممکن است کانتینر تا پایان اجرای هوک به وضعیت <code dir="ltr">Running</code> منتقل نشود.</p>
+<p dir="rtl">با اینکه هوک هم‌زمان با فرایند کانتینر اجرا می‌شود، ممکن است به‌روزرسانی وضعیت کانتینر را به تأخیر بیندازد؛ یعنی کانتینر ممکن است تا پایان اجرای هوک به وضعیت <code dir="ltr">Running</code> نرود.</p>
 </div>
 <p dir="ltr" class="ltr"><code dir="ltr">PreStop</code></p>
-<p dir="rtl">این هوک بلافاصله پیش از خاتمه یافتن یک کانتینر فراخوانی می‌شود؛ خاتمه‌ای که به دلیل یک درخواست API یا یک رویداد مدیریتی مانند شکست probe‌های liveness/startup، preemption، رقابت بر سر منابع و موارد دیگر رخ می‌دهد. اگر کانتینر از قبل در وضعیت خاتمه‌یافته (terminated) یا تکمیل‌شده (completed) باشد، فراخوانی هوک <code dir="ltr">PreStop</code> با شکست مواجه می‌شود، و این هوک باید پیش از ارسال سیگنال TERM برای متوقف کردن کانتینر به پایان برسد. شمارش معکوس مهلت خاتمه (termination grace period) پاد پیش از اجرای هوک <code dir="ltr">PreStop</code> آغاز می‌شود؛ بنابراین صرف‌نظر از نتیجه اجرای handler، کانتینر سرانجام در مهلت خاتمه پاد متوقف خواهد شد. هیچ پارامتری به handler ارسال نمی‌شود.</p>
-<p dir="rtl">توضیح دقیق‌تر درباره رفتار خاتمه را می‌توانید در
-<a href="../workloads/pods/pod-lifecycle.html#pod-termination">خاتمه پادها</a> بیابید.</p>
+<p dir="rtl">این هوک درست پیش از خاتمه یافتن کانتینر فراخوانی می‌شود؛ خاتمه‌ای که در پی یک درخواست API یا یک رویداد مدیریتی رخ می‌دهد، مانند شکست کاوشگر liveness/startup، پیش‌دستی (preemption)، رقابت بر سر منابع و موارد دیگر. اگر کانتینر از قبل در وضعیت خاتمه‌یافته یا تکمیل‌شده باشد، فراخوانی هوک <code dir="ltr">PreStop</code> با شکست مواجه می‌شود. همچنین این هوک باید پیش از ارسال سیگنال TERM برای متوقف کردن کانتینر به پایان برسد. شمارش معکوس مهلت خاتمه (termination grace period) پاد پیش از اجرای هوک <code dir="ltr">PreStop</code> آغاز می‌شود؛ بنابراین صرف‌نظر از نتیجه هندلر، کانتینر سرانجام در محدوده مهلت خاتمه Pod متوقف خواهد شد. هیچ پارامتری به هندلر ارسال نمی‌شود.</p>
+<p dir="rtl">توضیح دقیق‌تر رفتار خاتمه را می‌توانید در <a href="../workloads/pods/pod-lifecycle.html#pod-termination">خاتمه پادها</a> بیابید.</p>
 <p dir="ltr" class="ltr"><code dir="ltr">StopSignal</code></p>
-<p dir="rtl">چرخه عمر StopSignal را می‌توان برای تعریف سیگنال توقفی به کار برد که هنگام متوقف شدن کانتینر به آن ارسال می‌شود. اگر این مقدار را تنظیم کنید، هر دستور <code dir="ltr">STOPSIGNAL</code> تعریف‌شده در ایمیج کانتینر را بازنویسی می‌کند.</p>
-<p dir="rtl">توضیح دقیق‌تر درباره رفتار خاتمه با سیگنال‌های توقف سفارشی را می‌توانید در
-<a href="../workloads/pods/pod-lifecycle.html#pod-termination-stop-signals">سیگنال‌های توقف</a> بیابید.</p>
-<h3 id="پیاده-سازی-های-handler-هوک" dir="rtl">پیاده‌سازی‌های handler هوک</h3>
-<p dir="rtl">کانتینرها می‌توانند با پیاده‌سازی و ثبت یک handler برای یک هوک، به آن هوک دسترسی پیدا کنند.
-سه نوع handler هوک وجود دارد که می‌توان برای کانتینرها پیاده‌سازی کرد:</p>
+<p dir="rtl">با چرخه حیات StopSignal می‌توان سیگنال توقفی را تعریف کرد که هنگام متوقف شدن کانتینر به آن ارسال می‌شود. اگر این مقدار را تنظیم کنید، بر هر دستور <code dir="ltr">STOPSIGNAL</code> تعریف‌شده در ایمیج کانتینر اولویت پیدا می‌کند.</p>
+<p dir="rtl">توضیح دقیق‌تر رفتار خاتمه با سیگنال‌های توقف سفارشی را می‌توانید در <a href="../workloads/pods/pod-lifecycle.html#pod-termination-stop-signals">سیگنال‌های توقف</a> بیابید.</p>
+<h3 id="پیاده-سازی-هندلرهای-هوک" dir="rtl">پیاده‌سازی هندلرهای هوک</h3>
+<p dir="rtl">کانتینرها با پیاده‌سازی و ثبت یک هندلر برای هر هوک می‌توانند به آن هوک دسترسی داشته باشند. سه نوع هندلر هوک برای کانتینرها قابل پیاده‌سازی است:</p>
 <ul>
-<li dir="rtl">Exec - یک دستور مشخص، مانند <code dir="ltr">pre-stop.sh</code>، را درون cgroupها و namespaceهای کانتینر اجرا می‌کند.
-منابعی که این دستور مصرف می‌کند به حساب کانتینر گذاشته می‌شود.</li>
-<li dir="rtl">HTTP - یک درخواست HTTP را به یک endpoint مشخص روی کانتینر ارسال می‌کند.</li>
-<li dir="rtl">Sleep - کانتینر را برای مدت زمان مشخصی متوقف می‌کند.</li>
+<li dir="rtl">Exec - یک فرمان مشخص، مانند <code dir="ltr">pre-stop.sh</code>، را درون cgroupها و فضاهای نام کانتینر اجرا می‌کند. منابع مصرف‌شده توسط این فرمان به حساب کانتینر منظور می‌شود.</li>
+<li dir="rtl">HTTP - یک درخواست HTTP را به یک نقطه پایانی (endpoint) مشخص روی کانتینر ارسال می‌کند.</li>
+<li dir="rtl">Sleep - کانتینر را به مدت زمان مشخصی متوقف نگه می‌دارد.</li>
 </ul>
-<h3 id="اجرای-handler-هوک" dir="rtl">اجرای handler هوک</h3>
-<p dir="rtl">هنگامی که یک هوک مدیریت چرخه عمر کانتینر فراخوانی می‌شود،
-سیستم مدیریتی کوبرنتیز handler را بر اساس اکشن هوک اجرا می‌کند؛
-اکشن‌های <code dir="ltr">httpGet</code>، <code dir="ltr">tcpSocket</code> (<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.35/#lifecyclehandler-v1-core" target="_blank">منسوخ‌شده</a>)
-و <code dir="ltr">sleep</code> توسط فرایند kubelet اجرا می‌شوند و <code dir="ltr">exec</code> درون کانتینر اجرا می‌شود.</p>
-<p dir="rtl">فراخوانی handler هوک <code dir="ltr">PostStart</code> هنگام ایجاد کانتینر آغاز می‌شود،
-یعنی ENTRYPOINT کانتینر و هوک <code dir="ltr">PostStart</code> به‌طور همزمان فعال می‌شوند.
-(این بدان معناست که معمولاً استفاده از هوک HTTP برای <code dir="ltr">PostStart</code> منطقی نیست، زیرا
-تضمینی وجود ندارد که هنگام اجرای هوک، فرایند کانتینر به‌طور کامل راه‌اندازی شده باشد.)
-اگر اجرای هوک <code dir="ltr">PostStart</code> بیش از حد طول بکشد یا متوقف شود (hang کند)،
-می‌تواند مانع از رفتن کانتینر به وضعیت <code dir="ltr">running</code> شود.</p>
-<p dir="rtl">هوک‌های <code dir="ltr">PreStop</code> به‌صورت ناهمگام نسبت به سیگنال توقف کانتینر اجرا نمی‌شوند؛ هوک باید
-اجرای خود را پیش از ارسال سیگنال TERM به پایان برساند. اگر یک هوک <code dir="ltr">PreStop</code> در حین
-اجرا متوقف شود (hang کند)، فاز (phase) پاد <code dir="ltr">Terminating</code> خواهد بود و تا زمانی که پاد پس از
-انقضای <code dir="ltr">terminationGracePeriodSeconds</code> کشته شود، در همان وضعیت باقی می‌ماند. این مهلت برای مجموع زمانی اعمال می‌شود که
-اجرای هوک <code dir="ltr">PreStop</code> و توقف عادی کانتینر هر دو لازم دارند. برای مثال، اگر
-<code dir="ltr">terminationGracePeriodSeconds</code> برابر ۶۰ باشد، هوک ۵۵ ثانیه طول بکشد تا کامل شود، و کانتینر
-پس از دریافت سیگنال ۱۰ ثانیه برای توقف عادی نیاز داشته باشد، کانتینر پیش از آنکه بتواند
-به‌طور عادی متوقف شود کشته خواهد شد، زیرا <code dir="ltr">terminationGracePeriodSeconds</code> از مجموع زمان
-(۵۵+۱۰) لازم برای این دو کار کمتر است.</p>
-<p dir="rtl">اگر هوک <code dir="ltr">PostStart</code> یا <code dir="ltr">PreStop</code> با شکست مواجه شود،
-کانتینر کشته می‌شود.</p>
-<p dir="rtl">کاربران باید handlerهای هوک خود را تا حد امکان سبک بنویسند.
-با این حال مواردی وجود دارد که اجرای دستورهای طولانی‌مدت منطقی است،
-مانند ذخیره حالت (state) پیش از متوقف کردن یک کانتینر.</p>
+<h3 id="اجرای-هندلرهای-هوک" dir="rtl">اجرای هندلرهای هوک</h3>
+<p dir="rtl">هنگامی که یک هوک مدیریت چرخه حیات کانتینر فراخوانی می‌شود، سیستم مدیریتی کوبرنتیز هندلر را بر اساس اقدام هوک اجرا می‌کند: <code dir="ltr">httpGet</code>، <code dir="ltr">tcpSocket</code> (<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.35/#lifecyclehandler-v1-core" target="_blank">منسوخ‌شده</a>) و <code dir="ltr">sleep</code> توسط فرایند kubelet اجرا می‌شوند و <code dir="ltr">exec</code> درون کانتینر اجرا می‌شود.</p>
+<p dir="rtl">فراخوانی هندلر هوک <code dir="ltr">PostStart</code> هنگام ایجاد کانتینر آغاز می‌شود؛ یعنی ENTRYPOINT کانتینر و هوک <code dir="ltr">PostStart</code> به‌طور هم‌زمان فعال می‌شوند. (به همین دلیل، استفاده از هوک HTTP برای <code dir="ltr">PostStart</code> معمولاً منطقی نیست، زیرا هیچ تضمینی وجود ندارد که فرایند کانتینر هنگام اجرای هوک به‌طور کامل راه‌اندازی شده باشد.) اگر اجرای هوک <code dir="ltr">PostStart</code> بیش از حد طول بکشد یا متوقف و معلق شود، ممکن است مانع رفتن کانتینر به وضعیت <code dir="ltr">running</code> شود.</p>
+<p dir="rtl">هوک‌های <code dir="ltr">PreStop</code> به‌صورت ناهم‌زمان با سیگنال توقف کانتینر اجرا نمی‌شوند؛ هوک باید پیش از ارسال سیگنال TERM اجرای خود را کامل کند. اگر هوک <code dir="ltr">PreStop</code> در حین اجرا معلق بماند، فاز Pod برابر <code dir="ltr">Terminating</code> خواهد بود و تا زمانی که Pod پس از سپری شدن <code dir="ltr">terminationGracePeriodSeconds</code> کشته شود، در همین فاز باقی می‌ماند. این مهلت خاتمه به کل زمان لازم برای اجرای هوک <code dir="ltr">PreStop</code> و توقف عادی کانتینر اعمال می‌شود. برای مثال، اگر <code dir="ltr">terminationGracePeriodSeconds</code> برابر ۶۰ باشد، اجرای هوک ۵۵ ثانیه طول بکشد و توقف عادی کانتینر پس از دریافت سیگنال ۱۰ ثانیه زمان ببرد، کانتینر پیش از آنکه بتواند به‌طور عادی متوقف شود کشته خواهد شد؛ زیرا <code dir="ltr">terminationGracePeriodSeconds</code> کمتر از کل زمان لازم (۵۵+۱۰) برای انجام این دو کار است.</p>
+<p dir="rtl">اگر هر یک از هوک‌های <code dir="ltr">PostStart</code> یا <code dir="ltr">PreStop</code> با شکست مواجه شود، کانتینر کشته می‌شود.</p>
+<p dir="rtl">کاربران باید هندلرهای هوک خود را تا حد امکان سبک طراحی کنند. با این حال، مواردی وجود دارد که اجرای فرمان‌های طولانی منطقی است، مانند ذخیره کردن وضعیت پیش از توقف کانتینر.</p>
 <h3 id="تضمین-های-تحویل-هوک" dir="rtl">تضمین‌های تحویل هوک</h3>
-<p dir="rtl">تحویل هوک به‌صورت <em>حداقل یک‌بار</em> (at least once) در نظر گرفته شده است،
-یعنی ممکن است یک هوک برای هر رویداد مشخص، مانند <code dir="ltr">PostStart</code> یا <code dir="ltr">PreStop</code>، چندین بار فراخوانی شود.
-مدیریت صحیح این موضوع بر عهده پیاده‌سازی هوک است.</p>
-<p dir="rtl">به‌طور کلی فقط یک‌بار تحویل انجام می‌شود.
-برای مثال، اگر گیرنده هوک HTTP از کار افتاده باشد و نتواند ترافیک را دریافت کند،
-تلاشی برای ارسال مجدد صورت نمی‌گیرد.
-با این حال، در برخی موارد نادر ممکن است تحویل مضاعف رخ دهد.
-برای نمونه، اگر kubelet در میانه ارسال یک هوک راه‌اندازی مجدد شود،
-ممکن است هوک پس از بازگشت kubelet دوباره ارسال شود.</p>
-<h3 id="اشکال-زدایی-handlerهای-هوک" dir="rtl">اشکال‌زدایی handlerهای هوک</h3>
-<p dir="rtl">لاگ‌های یک handler هوک در رویدادهای (events) پاد نمایش داده نمی‌شوند.
-اگر یک handler به هر دلیلی شکست بخورد، یک رویداد منتشر می‌کند.
-برای <code dir="ltr">PostStart</code> این رویداد <code dir="ltr">FailedPostStartHook</code> و
-برای <code dir="ltr">PreStop</code> رویداد <code dir="ltr">FailedPreStopHook</code> است.
-برای ایجاد یک رویداد <code dir="ltr">FailedPostStartHook</code> ناموفق به‌دست خودتان، فایل
-<a href="https://k8s.io/examples/pods/lifecycle-events.yaml" target="_blank" rel="noopener">lifecycle-events.yaml</a>
-را طوری تغییر دهید که دستور postStart برابر "badcommand" شود و آن را اعمال کنید.
-در ادامه نمونه‌ای از خروجی رویدادهای حاصل را می‌بینید که از اجرای <code dir="ltr">kubectl describe pod lifecycle-demo</code> به‌دست می‌آید:</p>
+<p dir="rtl">تحویل هوک‌ها قرار است <em>دست‌کم یک بار</em> انجام شود؛ یعنی ممکن است یک هوک برای هر رویداد مشخص، مانند <code dir="ltr">PostStart</code> یا <code dir="ltr">PreStop</code>، چندین بار فراخوانی شود. مدیریت درست این وضعیت بر عهده پیاده‌سازی هوک است.</p>
+<p dir="rtl">به‌طور کلی، تنها یک بار تحویل انجام می‌شود. برای مثال، اگر گیرنده یک هوک HTTP از کار افتاده باشد و نتواند ترافیک دریافت کند، هیچ تلاشی برای ارسال دوباره صورت نمی‌گیرد. با این حال، در برخی موارد نادر ممکن است تحویل دوباره رخ دهد. برای نمونه، اگر kubelet در میانه ارسال یک هوک راه‌اندازی مجدد شود، ممکن است هوک پس از بالا آمدن دوباره kubelet مجدداً ارسال شود.</p>
+<h3 id="اشکال-زدایی-هندلرهای-هوک" dir="rtl">اشکال‌زدایی هندلرهای هوک</h3>
+<p dir="rtl">لاگ‌های هندلر هوک در رویدادهای Pod نمایش داده نمی‌شوند. اگر هندلری به هر دلیلی با شکست مواجه شود، یک رویداد منتشر می‌کند. برای <code dir="ltr">PostStart</code> این رویداد <code dir="ltr">FailedPostStartHook</code> و برای <code dir="ltr">PreStop</code> رویداد <code dir="ltr">FailedPreStopHook</code> است. برای اینکه خودتان یک رویداد <code dir="ltr">FailedPostStartHook</code> ایجاد کنید، فایل <a href="https://k8s.io/examples/pods/lifecycle-events.yaml" target="_blank" rel="noopener">lifecycle-events.yaml</a> را طوری ویرایش کنید که فرمان postStart به "badcommand" تغییر کند و سپس آن را اعمال کنید. در ادامه نمونه‌ای از خروجی رویدادهای حاصل را می‌بینید که با اجرای <code dir="ltr">kubectl describe pod lifecycle-demo</code> نمایش داده می‌شود:</p>
 <pre dir="ltr"><code dir="ltr">Events:
   Type     Reason               Age              From               Message
   ----     ------               ----             ----               -------
@@ -177,11 +135,10 @@ document.addEventListener('DOMContentLoaded',function(){box=document.getElementB
 <h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
 <ul>
 <li dir="rtl">درباره <a href="container-environment.html">محیط کانتینر</a> بیشتر بیاموزید.</li>
-<li dir="rtl">تجربه عملی کسب کنید:
-<a href="../../tasks/configure-pod-container/attach-handler-lifecycle-event.html">متصل کردن handlerها به رویدادهای چرخه عمر کانتینر</a>.</li>
+<li dir="rtl">با <a href="../../tasks/configure-pod-container/attach-handler-lifecycle-event.html">پیوست کردن هندلرها به رویدادهای چرخه حیات کانتینر</a> تجربه عملی کسب کنید.</li>
 </ul>
 <p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
-<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#نمای-کلی-overview">نمای کلی {#overview}</a><a class="l2" href="#هوک-های-کانتینر">هوک‌های کانتینر</a><a class="l3" href="#پیاده-سازی-های-handler-هوک">پیاده‌سازی‌های handler هوک</a><a class="l3" href="#اجرای-handler-هوک">اجرای handler هوک</a><a class="l3" href="#تضمین-های-تحویل-هوک">تضمین‌های تحویل هوک</a><a class="l3" href="#اشکال-زدایی-handlerهای-هوک">اشکال‌زدایی handlerهای هوک</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#نمای-کلی">نمای کلی</a><a class="l2" href="#هوک-های-کانتینر">هوک‌های کانتینر</a><a class="l3" href="#پیاده-سازی-هندلرهای-هوک">پیاده‌سازی هندلرهای هوک</a><a class="l3" href="#اجرای-هندلرهای-هوک">اجرای هندلرهای هوک</a><a class="l3" href="#تضمین-های-تحویل-هوک">تضمین‌های تحویل هوک</a><a class="l3" href="#اشکال-زدایی-هندلرهای-هوک">اشکال‌زدایی هندلرهای هوک</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
 </div>
 </body>
 </html>

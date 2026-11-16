@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>لایه تجمیع API کوبرنتیز | مستندات کوبرنتیز</title>
+<title>لایه تجمیع API در کوبرنتیز | مستندات کوبرنتیز</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
@@ -82,34 +82,33 @@ document.addEventListener('DOMContentLoaded',function(){box=document.getElementB
 <a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
 <header class="top"><a href="../../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">concepts / extend-kubernetes / api-extension</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
 <div class="layout">
-<main><h1 dir="rtl">لایه تجمیع API کوبرنتیز</h1><!-- overview -->
-<p dir="rtl">لایه تجمیع (aggregation layer) امکان می‌دهد کوبرنتیز با APIهای اضافی گسترش یابد، فراتر از آنچه APIهای اصلی کوبرنتیز ارائه می‌کنند.
-این APIهای اضافی می‌توانند راه‌حل‌های آماده‌ای مانند
-<a href="https://github.com/kubernetes-sigs/metrics-server" target="_blank" rel="noopener">metrics server</a> باشند، یا APIهایی که خودتان توسعه می‌دهید.</p>
+<main><h1 dir="rtl">لایه تجمیع API در کوبرنتیز</h1><!-- overview -->
+<p dir="rtl">لایه تجمیع (aggregation layer) امکان می‌دهد کوبرنتیز را با APIهای اضافی، فراتر از آنچه APIهای هسته کوبرنتیز ارائه می‌کنند، گسترش دهید.
+این APIهای اضافی می‌توانند راهکارهای آماده‌ای مانند
+<a href="https://github.com/kubernetes-sigs/metrics-server" target="_blank" rel="noopener">سرور معیارها (metrics server)</a> باشند یا APIهایی که خودتان توسعه می‌دهید.</p>
 <p dir="rtl">لایه تجمیع با
-<a href="custom-resources.html">Custom Resource Definitions</a>
-متفاوت است؛ Custom Resource Definitionها روشی هستند برای اینکه <span class="term" title="kube-apiserver">kube-apiserver</span>
-انواع جدیدی از آبجکت را بشناسد.</p>
+<a href="custom-resources.html">تعاریف منابع سفارشی (Custom Resource Definitions)</a>
+تفاوت دارد؛ تعاریف منابع سفارشی راهی هستند برای اینکه <span class="term" title="kube-apiserver">kube-apiserver</span>
+انواع جدیدی از آبجکت‌ها را بشناسد.</p>
 <!-- body -->
-<h2 id="لایه-تجمیع-aggregation-layer" dir="rtl">لایه تجمیع {#aggregation-layer}</h2>
-<p dir="rtl">لایه تجمیع درون همان پردازش kube-apiserver اجرا می‌شود. تا زمانی که یک منبع افزونه ثبت نشده باشد، لایه تجمیع کاری انجام نمی‌دهد. برای ثبت یک API، یک آبجکت <em>APIService</em> اضافه می‌کنید که مسیر URL مورد نظر را در API کوبرنتیز «مطالبه» (claim) می‌کند. از آن پس، لایه تجمیع هر درخواستی را که به آن مسیر API ارسال شود (برای مثال <code dir="ltr">/apis/myextension.mycompany.io/v1/…</code>) به APIService ثبت‌شده پراکسی می‌کند.</p>
-<p dir="rtl">رایج‌ترین روش پیاده‌سازی APIService، اجرای یک <em>extension API server</em> در Pod(های) درون کلاستر شماست. اگر از extension API server برای مدیریت منابع در کلاستر خود استفاده می‌کنید، این سرور (که به صورت «extension-apiserver» نیز نوشته می‌شود) معمولاً با یک یا چند <span class="term" title="controller">کنترل‌کننده</span> همراه می‌شود. کتابخانه apiserver-builder یک اسکلت برای هر دو، یعنی extension API serverها و کنترل‌کننده(های) مرتبط با آن‌ها، فراهم می‌کند.</p>
-<h3 id="تأخیر-پاسخ-response-latency" dir="rtl">تأخیر پاسخ {#response-latency}</h3>
-<p dir="rtl">extension API serverها باید شبکه‌ای با تأخیر کم از و به kube-apiserver داشته باشند.
-درخواست‌های کشف (discovery) باید در پنج ثانیه یا کمتر یک رفت‌وبرگشت کامل با kube-apiserver انجام دهند.</p>
-<p dir="rtl">اگر extension API server شما نمی‌تواند این الزام تأخیر را برآورده کند، تغییراتی را در نظر بگیرید که امکان رسیدن به آن را فراهم می‌کنند.</p>
+<h2 id="لایه-تجمیع" dir="rtl">لایه تجمیع</h2>
+<p dir="rtl">لایه تجمیع درون همان فرایند kube-apiserver اجرا می‌شود. تا زمانی که یک منبع افزونه ثبت نشده باشد، لایه تجمیع هیچ کاری انجام نمی‌دهد. برای ثبت یک API، یک آبجکت <em>APIService</em> اضافه می‌کنید که مسیر URL مربوط را در API کوبرنتیز «تصاحب» می‌کند. از آن پس، لایه تجمیع هر درخواستی را که به آن مسیر API (برای مثال <code dir="ltr">/apis/myextension.mycompany.io/v1/…</code>) ارسال شود، به APIService ثبت‌شده پراکسی می‌کند.</p>
+<p dir="rtl">رایج‌ترین روش پیاده‌سازی APIService، اجرای یک <em>سرور API افزونه</em> در یک یا چند Pod درون کلاستر است. اگر از سرور API افزونه برای مدیریت منابع کلاستر خود استفاده می‌کنید، این سرور (که با نام «extension-apiserver» نیز نوشته می‌شود) معمولاً همراه با یک یا چند <span class="term" title="controller">کنترل‌کننده</span> به کار می‌رود. کتابخانه apiserver-builder یک اسکلت اولیه هم برای سرورهای API افزونه و هم برای کنترل‌کننده‌های مرتبط با آن‌ها فراهم می‌کند.</p>
+<h3 id="تأخیر-پاسخ" dir="rtl">تأخیر پاسخ</h3>
+<p dir="rtl">ارتباط شبکه‌ای سرورهای API افزونه با kube-apiserver، در هر دو جهت، باید تأخیر کمی داشته باشد. رفت‌وبرگشت درخواست‌های کشف (discovery) از kube-apiserver باید حداکثر در پنج ثانیه انجام شود.</p>
+<p dir="rtl">اگر سرور API افزونه شما نمی‌تواند این الزام تأخیر را برآورده کند، تغییراتی را در نظر بگیرید که برآورده‌شدن آن را ممکن سازد.</p>
 <h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
 <ul>
-<li dir="rtl">برای راه‌اندازی aggregator در محیط خود، <a href="../../../tasks/extend-kubernetes/configure-aggregation-layer.html">لایه تجمیع را پیکربندی کنید</a>.</li>
-<li dir="rtl">سپس <a href="../../../tasks/extend-kubernetes/setup-extension-api-server.html">یک extension api-server راه‌اندازی کنید</a> تا با لایه تجمیع کار کند.</li>
+<li dir="rtl">برای راه‌اندازی تجمیع‌کننده در محیط خود، <a href="../../../tasks/extend-kubernetes/configure-aggregation-layer.html">لایه تجمیع را پیکربندی کنید</a>.</li>
+<li dir="rtl">سپس <a href="../../../tasks/extend-kubernetes/setup-extension-api-server.html">یک سرور API افزونه راه‌اندازی کنید</a> تا با لایه تجمیع کار کند.</li>
 <li dir="rtl">درباره <a href="https://kubernetes.io/docs/reference/kubernetes-api/cluster-resources/api-service-v1/" target="_blank">APIService</a> در مرجع API مطالعه کنید.</li>
-<li dir="rtl">با <a href="../../../reference/using-api/declarative-validation.html">مفاهیم اعتبارسنجی اعلانی (Declarative Validation)</a> آشنا شوید؛ سازوکاری داخلی برای تعریف قواعد اعتبارسنجی که در آینده به پشتیبانی از اعتبارسنجی در توسعه extension API server کمک خواهد کرد.</li>
+<li dir="rtl">با <a href="../../../reference/using-api/declarative-validation.html">مفاهیم اعتبارسنجی اعلانی</a> آشنا شوید؛
+سازوکاری داخلی برای تعریف قواعد اعتبارسنجی که در آینده به پشتیبانی از اعتبارسنجی در توسعه سرورهای API افزونه کمک خواهد کرد.</li>
 </ul>
-<p dir="rtl">به‌عنوان گزینه‌ای دیگر: یاد بگیرید چگونه API کوبرنتیز را با استفاده از
-<a href="../../../tasks/extend-kubernetes/custom-resources/custom-resource-definitions.html">Custom Resource Definitions</a>
-گسترش دهید.</p>
+<p dir="rtl">به‌عنوان راه دیگر، می‌توانید یاد بگیرید که چگونه API کوبرنتیز را با استفاده از
+<a href="../../../tasks/extend-kubernetes/custom-resources/custom-resource-definitions.html">تعاریف منابع سفارشی</a> گسترش دهید.</p>
 <p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
-<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#لایه-تجمیع-aggregation-layer">لایه تجمیع {#aggregation-layer}</a><a class="l3" href="#تأخیر-پاسخ-response-latency">تأخیر پاسخ {#response-latency}</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#لایه-تجمیع">لایه تجمیع</a><a class="l3" href="#تأخیر-پاسخ">تأخیر پاسخ</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
 </div>
 </body>
 </html>

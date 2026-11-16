@@ -101,6 +101,16 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [concepts/resource-management/dynamic-resource-allocation/dra-observability.md](md/concepts/resource-management/dynamic-resource-allocation/dra-observability.md) — 2026-11-16T16:15:02+03:30
+- [concepts/resource-management/dynamic-resource-allocation/dra-features.md](md/concepts/resource-management/dynamic-resource-allocation/dra-features.md) — 2026-11-16T16:15:01+03:30
+- [concepts/resource-management/dynamic-resource-allocation/dra-api.md](md/concepts/resource-management/dynamic-resource-allocation/dra-api.md) — 2026-11-16T16:13:02+03:30
+- [concepts/extend-kubernetes/_index.md](md/concepts/extend-kubernetes/_index.md) — 2026-11-16T16:12:38+03:30
+- [concepts/extend-kubernetes/api-extension/apiserver-aggregation.md](md/concepts/extend-kubernetes/api-extension/apiserver-aggregation.md) — 2026-11-16T16:09:41+03:30
+- [concepts/extend-kubernetes/api-extension/_index.md](md/concepts/extend-kubernetes/api-extension/_index.md) — 2026-11-16T16:09:26+03:30
+- [concepts/containers/images.md](md/concepts/containers/images.md) — 2026-11-16T16:09:18+03:30
+- [concepts/containers/runtime-class.md](md/concepts/containers/runtime-class.md) — 2026-11-16T16:08:28+03:30
+- [concepts/containers/cri.md](md/concepts/containers/cri.md) — 2026-11-16T16:07:18+03:30
+- [concepts/containers/container-lifecycle-hooks.md](md/concepts/containers/container-lifecycle-hooks.md) — 2026-11-16T16:07:00+03:30
 - [concepts/cluster-administration/observability.md](md/concepts/cluster-administration/observability.md) — 2026-11-16T16:06:45+03:30
 - [concepts/cluster-administration/proxies.md](md/concepts/cluster-administration/proxies.md) — 2026-11-16T16:06:25+03:30
 - [concepts/cluster-administration/node-shutdown.md](md/concepts/cluster-administration/node-shutdown.md) — 2026-11-16T16:06:09+03:30
@@ -111,16 +121,6 @@ cd kubernetes-doc-fa
 - [concepts/architecture/nodes.md](md/concepts/architecture/nodes.md) — 2026-11-16T16:03:26+03:30
 - [concepts/architecture/garbage-collection.md](md/concepts/architecture/garbage-collection.md) — 2026-11-16T16:00:28+03:30
 - [concepts/architecture/cloud-controller.md](md/concepts/architecture/cloud-controller.md) — 2026-11-16T15:59:59+03:30
-- [tutorials/stateless-application/guestbook.md](md/tutorials/stateless-application/guestbook.md) — 2026-11-16T15:59:36+03:30
-- [concepts/architecture/cgroups.md](md/concepts/architecture/cgroups.md) — 2026-11-16T15:59:25+03:30
-- [tutorials/stateless-application/expose-external-ip-address.md](md/tutorials/stateless-application/expose-external-ip-address.md) — 2026-11-16T15:58:42+03:30
-- [tutorials/stateless-application/canary-deployment.md](md/tutorials/stateless-application/canary-deployment.md) — 2026-11-16T15:58:41+03:30
-- [tutorials/stateful-application/zookeeper.md](md/tutorials/stateful-application/zookeeper.md) — 2026-11-16T15:58:16+03:30
-- [tutorials/stateless-application/_index.md](md/tutorials/stateless-application/_index.md) — 2026-11-16T15:57:26+03:30
-- [tutorials/stateful-application/basic-stateful-set.md](md/tutorials/stateful-application/basic-stateful-set.md) — 2026-11-16T15:57:23+03:30
-- [tutorials/stateful-application/mysql-wordpress-persistent-volume.md](md/tutorials/stateful-application/mysql-wordpress-persistent-volume.md) — 2026-11-16T15:55:07+03:30
-- [tutorials/stateful-application/cassandra.md](md/tutorials/stateful-application/cassandra.md) — 2026-11-16T15:54:25+03:30
-- [tutorials/services/source-ip.md](md/tutorials/services/source-ip.md) — 2026-11-16T15:53:40+03:30
 
 </div>
 
