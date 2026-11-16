@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>استفاده از آی‌پی مبدأ | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">tutorials / services</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">استفاده از آی‌پی مبدأ</h1><!-- overview -->
+<p dir="rtl">برنامه‌هایی که در یک کلاستر کوبرنتیز اجرا می‌شوند، از طریق انتزاع Service یکدیگر و دنیای بیرون را پیدا می‌کنند و با آن‌ها ارتباط برقرار می‌کنند. این سند توضیح می‌دهد که چه اتفاقی برای آی‌پی مبدأ (source IP) بسته‌هایی می‌افتد که به انواع مختلف Serviceها ارسال می‌شوند. همچنین نشان می‌دهد چگونه می‌توانید این رفتار را بر اساس نیازهای خود تغییر دهید.</p>
+<h2 id="پیش-از-شروع" dir="rtl">پیش از شروع</h2>
+<h3 id="اصطلاحات" dir="rtl">اصطلاحات</h3>
+<p dir="rtl">در این سند از اصطلاحات زیر استفاده می‌شود:</p>
+<dl>
+<dt dir="rtl"><a href="https://en.wikipedia.org/wiki/Network_address_translation" target="_blank" rel="noopener">ترجمهٔ نشانی شبکه (NAT)</a></dt>
+<dd dir="rtl">ترجمهٔ نشانی شبکه (Network address translation)</dd>
+<dt dir="rtl"><a href="https://en.wikipedia.org/wiki/Network_address_translation#SNAT" target="_blank" rel="noopener">ترجمهٔ نشانی مبدأ (Source NAT)</a></dt>
+<dd dir="rtl">جایگزین کردن آی‌پی مبدأ یک بسته؛ در این صفحه، معمولاً به معنای جایگزین کردن آن با نشانی آی‌پی یک نود است.</dd>
+<dt dir="rtl"><a href="https://en.wikipedia.org/wiki/Network_address_translation#DNAT" target="_blank" rel="noopener">ترجمهٔ نشانی مقصد (Destination NAT)</a></dt>
+<dd dir="rtl">جایگزین کردن آی‌پی مقصد یک بسته؛ در این صفحه، معمولاً به معنای جایگزین کردن آن با نشانی آی‌پی یک <span class="term" title="pod">pod</span> است.</dd>
+<dt dir="rtl"><a href="../../concepts/services-networking/service.html#virtual-ips-and-service-proxies">آی‌پی مجازی (VIP)</a></dt>
+<dd dir="rtl">یک نشانی آی‌پی مجازی، مانند نشانی‌ای که به هر <span class="term" title="service">Service</span> در کوبرنتیز اختصاص داده می‌شود.</dd>
+<dt dir="rtl"><a href="../../concepts/services-networking/service.html#virtual-ips-and-service-proxies">کامپوننت kube-proxy</a></dt>
+<dd dir="rtl">یک دیمن شبکه که مدیریت آی‌پی‌های مجازی Serviceها را روی هر نود هماهنگ می‌کند.</dd>
+</dl>
+<h3 id="پیش-نیازها" dir="rtl">پیش‌نیازها</h3>
+<p dir="rtl">باید یک کلاستر کوبرنتیز داشته باشید و ابزار خط فرمان kubectl باید برای ارتباط با کلاستر شما پیکربندی شده باشد. توصیه می‌شود این آموزش را روی کلاستری اجرا کنید که دست‌کم دو نود داشته باشد که نقش میزبان control plane را ندارند. اگر هنوز کلاستری ندارید، می‌توانید با استفاده از
+<a href="https://minikube.sigs.k8s.io/docs/tutorials/multi_node/" target="_blank" rel="noopener">minikube</a>
+یکی بسازید یا از یکی از این محیط‌های آزمایشی کوبرنتیز استفاده کنید:</p>
+<ul>
+<li dir="ltr" class="ltr"><a href="https://labs.iximiuz.com/playgrounds?category=kubernetes&amp;filter=all" target="_blank" rel="noopener">iximiuz Labs</a></li>
+<li dir="ltr" class="ltr"><a href="https://killercoda.com/playgrounds/scenario/kubernetes" target="_blank" rel="noopener">Killercoda</a></li>
+<li dir="ltr" class="ltr"><a href="https://kodekloud.com/public-playgrounds" target="_blank" rel="noopener">KodeKloud</a></li>
+</ul>
+<p dir="rtl">در مثال‌ها از یک وب‌سرور کوچک nginx استفاده می‌شود که آی‌پی مبدأ درخواست‌های دریافتی را از طریق یک هدر HTTP بازمی‌گرداند. می‌توانید آن را به این صورت ایجاد کنید:</p>
+<div class="callout note"><div class="callout-title">Note</div>
+<p dir="rtl">ایمیج به‌کاررفته در فرمان زیر فقط روی معماری‌های AMD64 اجرا می‌شود.</p>
+</div>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl create deployment source-ip-app --image=registry.k8s.io/echoserver:1.10
+</code></pre>
+<p dir="rtl">خروجی به این صورت است:</p>
+<pre dir="ltr"><code dir="ltr">deployment.apps/source-ip-app created
+</code></pre>
+<h2 id="اهداف" dir="rtl">اهداف</h2>
+<ul>
+<li dir="rtl">در دسترس قرار دادن یک برنامهٔ ساده از طریق انواع مختلف Serviceها</li>
+<li dir="rtl">درک نحوهٔ برخورد هر نوع Service با ترجمهٔ نشانی آی‌پی مبدأ</li>
+<li dir="rtl">درک مصالحه‌های مربوط به حفظ آی‌پی مبدأ</li>
+</ul>
+<!-- lessoncontent -->
+<h2 id="آی-پی-مبدأ-برای-serviceهایی-با-type-clusterip" dir="rtl">آی‌پی مبدأ برای Serviceهایی با <code dir="ltr">Type=ClusterIP</code></h2>
+<p dir="rtl">اگر kube-proxy را در <a href="../../reference/networking/virtual-ips.html#proxy-mode-iptables">حالت iptables</a> (حالت پیش‌فرض) اجرا کنید، روی بسته‌هایی که از داخل کلاستر به ClusterIP ارسال می‌شوند هرگز ترجمهٔ نشانی مبدأ انجام نمی‌شود. برای اطلاع از حالت kube-proxy، می‌توانید نشانی <code dir="ltr">http://localhost:10249/proxyMode</code> را روی نودی که kube-proxy در آن اجرا می‌شود دریافت کنید.</p>
+<pre dir="ltr"><code class="language-console" dir="ltr">kubectl get nodes
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">NAME                           STATUS     ROLES    AGE     VERSION
+kubernetes-node-6jst   Ready      &lt;none&gt;   2h      v1.13.0
+kubernetes-node-cx31   Ready      &lt;none&gt;   2h      v1.13.0
+kubernetes-node-jj1t   Ready      &lt;none&gt;   2h      v1.13.0
+</code></pre>
+<p dir="rtl">حالت پراکسی را روی یکی از نودها به دست آورید (kube-proxy روی پورت 10249 گوش می‌دهد):</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># Run this in a shell on the node you want to query.
+curl http://localhost:10249/proxyMode
+</code></pre>
+<p dir="rtl">خروجی به این صورت است:</p>
+<pre dir="ltr"><code dir="ltr">iptables
+</code></pre>
+<p dir="rtl">برای آزمودن حفظ آی‌پی مبدأ، می‌توانید یک Service روی برنامهٔ source IP ایجاد کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl expose deployment source-ip-app --name=clusterip --port=80 --target-port=8080
+</code></pre>
+<p dir="rtl">خروجی به این صورت است:</p>
+<pre dir="ltr"><code dir="ltr">service/clusterip exposed
+</code></pre>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get svc clusterip
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">NAME         TYPE        CLUSTER-IP    EXTERNAL-IP   PORT(S)   AGE
+clusterip    ClusterIP   10.0.170.92   &lt;none&gt;        80/TCP    51s
+</code></pre>
+<p dir="rtl">سپس از یک پاد در همان کلاستر به <code dir="ltr">ClusterIP</code> درخواست بفرستید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl run busybox -it --image=busybox:1.28 --restart=Never --rm
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">Waiting for pod default/busybox to be running, status is Pending, pod ready: false
+If you don't see a command prompt, try pressing enter.
+
+</code></pre>
+<p dir="rtl">پس از آن می‌توانید یک فرمان را درون آن Pod اجرا کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># Run this inside the terminal from "kubectl run"
+ip addr
+</code></pre>
+<pre dir="ltr"><code dir="ltr">1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host
+       valid_lft forever preferred_lft forever
+3: eth0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1460 qdisc noqueue
+    link/ether 0a:58:0a:f4:03:08 brd ff:ff:ff:ff:ff:ff
+    inet 10.244.3.8/24 scope global eth0
+       valid_lft forever preferred_lft forever
+    inet6 fe80::188a:84ff:feb0:26a5/64 scope link
+       valid_lft forever preferred_lft forever
+</code></pre>
+<p dir="rtl">…سپس با <code dir="ltr">wget</code> از وب‌سرور محلی پرس‌وجو کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># Replace "10.0.170.92" with the IPv4 address of the Service named "clusterip"
+wget -qO - 10.0.170.92
+</code></pre>
+<pre dir="ltr"><code dir="ltr">CLIENT VALUES:
+client_address=10.244.3.8
+command=GET
+...
+</code></pre>
+<p dir="rtl">مقدار <code dir="ltr">client_address</code> همیشه نشانی آی‌پی پاد کلاینت است، چه پاد کلاینت و پاد سرور روی یک نود باشند و چه روی نودهای متفاوت.</p>
+<h2 id="آی-پی-مبدأ-برای-serviceهایی-با-type-nodeport" dir="rtl">آی‌پی مبدأ برای Serviceهایی با <code dir="ltr">Type=NodePort</code></h2>
+<p dir="rtl">روی بسته‌هایی که به Serviceهایی با <a href="../../concepts/services-networking/service.html#type-nodeport"><code dir="ltr">Type=NodePort</code></a> ارسال می‌شوند، به‌طور پیش‌فرض ترجمهٔ نشانی مبدأ انجام می‌شود. برای آزمودن این موضوع، یک Service از نوع <code dir="ltr">NodePort</code> ایجاد کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl expose deployment source-ip-app --name=nodeport --port=80 --target-port=8080 --type=NodePort
+</code></pre>
+<p dir="rtl">خروجی به این صورت است:</p>
+<pre dir="ltr"><code dir="ltr">service/nodeport exposed
+</code></pre>
+<pre dir="ltr"><code class="language-shell" dir="ltr">NODEPORT=$(kubectl get -o jsonpath="{.spec.ports[0].nodePort}" services nodeport)
+NODES=$(kubectl get nodes -o jsonpath='{ $.items[*].status.addresses[?(@.type=="InternalIP")].address }')
+</code></pre>
+<p dir="rtl">اگر روی یک ارائه‌دهندهٔ ابری کار می‌کنید، ممکن است لازم باشد یک قاعدهٔ فایروال برای <code dir="ltr">nodes:nodeport</code> گزارش‌شده در بالا باز کنید.
+اکنون می‌توانید از بیرون کلاستر و از طریق پورت نودی که در بالا تخصیص یافت، به Service دسترسی پیدا کنید.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">for node in $NODES; do curl -s $node:$NODEPORT | grep -i client_address; done
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">client_address=10.180.1.1
+client_address=10.240.0.5
+client_address=10.240.0.3
+</code></pre>
+<p dir="rtl">توجه کنید که این‌ها آی‌پی‌های درست کلاینت نیستند، بلکه آی‌پی‌های داخلی کلاستر هستند. روند کار به این صورت است:</p>
+<ul>
+<li dir="rtl">کلاینت بسته را به <code dir="ltr">node2:nodePort</code> می‌فرستد</li>
+<li dir="rtl">نود <code dir="ltr">node2</code> نشانی آی‌پی مبدأ بسته را با نشانی آی‌پی خودش جایگزین می‌کند (SNAT)</li>
+<li dir="rtl">نود <code dir="ltr">node2</code> آی‌پی مقصد بسته را با آی‌پی پاد جایگزین می‌کند</li>
+<li dir="rtl">بسته به نود ۱ و سپس به نقطهٔ پایانی (endpoint) مسیریابی می‌شود</li>
+<li dir="rtl">پاسخ پاد دوباره به node2 مسیریابی می‌شود</li>
+<li dir="rtl">پاسخ پاد به کلاینت بازگردانده می‌شود</li>
+</ul>
+<p dir="rtl">به‌صورت تصویری:</p>
+<figure><img src="https://kubernetes.io/docs/images/tutor-service-nodePort-fig01.svg" alt="source IP nodeport figure 01"><figcaption dir="ltr" class="ltr">Figure. Source IP Type=NodePort using SNAT</figcaption></figure>
+<p dir="rtl">برای جلوگیری از این وضعیت، کوبرنتیز قابلیتی برای <a href="../../tasks/access-application-cluster/create-external-load-balancer.html#preserving-the-client-source-ip">حفظ آی‌پی مبدأ کلاینت</a> دارد. اگر مقدار <code dir="ltr">service.spec.externalTrafficPolicy</code> را برابر <code dir="ltr">Local</code> قرار دهید، آنگاه kube-proxy درخواست‌ها را فقط به نقطه‌های پایانی محلی پراکسی می‌کند و ترافیک را به نودهای دیگر هدایت نمی‌کند. این روش نشانی آی‌پی مبدأ اصلی را حفظ می‌کند. اگر هیچ نقطهٔ پایانی محلی وجود نداشته باشد، بسته‌های ارسال‌شده به نود دور ریخته می‌شوند؛ بنابراین در هر قاعدهٔ پردازش بسته‌ای که روی بسته‌های رسیده به نقطهٔ پایانی اعمال می‌کنید، می‌توانید به درستی آی‌پی مبدأ اتکا کنید.</p>
+<p dir="rtl">فیلد <code dir="ltr">service.spec.externalTrafficPolicy</code> را به این صورت تنظیم کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl patch svc nodeport -p '{"spec":{"externalTrafficPolicy":"Local"}}'
+</code></pre>
+<p dir="rtl">خروجی به این صورت است:</p>
+<pre dir="ltr"><code dir="ltr">service/nodeport patched
+</code></pre>
+<p dir="rtl">اکنون آزمون را دوباره اجرا کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">for node in $NODES; do curl --connect-timeout 1 -s $node:$NODEPORT | grep -i client_address; done
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">client_address=198.51.100.79
+</code></pre>
+<p dir="rtl">توجه کنید که فقط یک پاسخ، آن هم با آی‌پی <em>درست</em> کلاینت، دریافت کردید؛ پاسخی که از تنها نودی آمده است که پاد نقطهٔ پایانی روی آن اجرا می‌شود.</p>
+<p dir="rtl">روند کار به این صورت است:</p>
+<ul>
+<li dir="rtl">کلاینت بسته را به <code dir="ltr">node2:nodePort</code> می‌فرستد که هیچ نقطهٔ پایانی ندارد</li>
+<li dir="rtl">بسته دور ریخته می‌شود</li>
+<li dir="rtl">کلاینت بسته را به <code dir="ltr">node1:nodePort</code> می‌فرستد که نقطهٔ پایانی <em>دارد</em></li>
+<li dir="rtl">نود node1 بسته را با آی‌پی مبدأ درست به نقطهٔ پایانی مسیریابی می‌کند</li>
+</ul>
+<p dir="rtl">به‌صورت تصویری:</p>
+<figure><img src="https://kubernetes.io/docs/images/tutor-service-nodePort-fig02.svg" alt="source IP nodeport figure 02"><figcaption dir="ltr" class="ltr">Figure. Source IP Type=NodePort preserves client source IP address</figcaption></figure>
+<h2 id="آی-پی-مبدأ-برای-serviceهایی-با-type-loadbalancer" dir="rtl">آی‌پی مبدأ برای Serviceهایی با <code dir="ltr">Type=LoadBalancer</code></h2>
+<p dir="rtl">روی بسته‌هایی که به Serviceهایی با <a href="../../concepts/services-networking/service.html#loadbalancer"><code dir="ltr">Type=LoadBalancer</code></a> ارسال می‌شوند، به‌طور پیش‌فرض ترجمهٔ نشانی مبدأ انجام می‌شود؛ زیرا همهٔ نودهای قابل زمان‌بندی کوبرنتیز که در وضعیت <code dir="ltr">Ready</code> هستند، برای دریافت ترافیک متوازن‌شده واجد شرایط‌اند. بنابراین اگر بسته‌ها به نودی بدون نقطهٔ پایانی برسند، سیستم آن‌ها را به نودی <em>دارای</em> نقطهٔ پایانی پراکسی می‌کند و آی‌پی مبدأ بسته را با آی‌پی نود جایگزین می‌کند (همان‌طور که در بخش قبل توضیح داده شد).</p>
+<p dir="rtl">برای آزمودن این موضوع، برنامهٔ source-ip-app را از طریق یک متوازن‌کنندهٔ بار (load balancer) در دسترس قرار دهید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl expose deployment source-ip-app --name=loadbalancer --port=80 --target-port=8080 --type=LoadBalancer
+</code></pre>
+<p dir="rtl">خروجی به این صورت است:</p>
+<pre dir="ltr"><code dir="ltr">service/loadbalancer exposed
+</code></pre>
+<p dir="rtl">نشانی‌های آی‌پی Service را چاپ کنید:</p>
+<pre dir="ltr"><code class="language-console" dir="ltr">kubectl get svc loadbalancer
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">NAME           TYPE           CLUSTER-IP    EXTERNAL-IP       PORT(S)   AGE
+loadbalancer   LoadBalancer   10.0.65.118   203.0.113.140     80/TCP    5m
+</code></pre>
+<p dir="rtl">سپس یک درخواست به آی‌پی خارجی این Service بفرستید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">curl 203.0.113.140
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">CLIENT VALUES:
+client_address=10.240.0.5
+...
+</code></pre>
+<p dir="rtl">با این حال، اگر روی Google Kubernetes Engine/GCE کار می‌کنید، تنظیم همان فیلد <code dir="ltr">service.spec.externalTrafficPolicy</code> روی <code dir="ltr">Local</code> باعث می‌شود نودهای <em>بدون</em> نقطهٔ پایانی Service، با ناموفق کردن عمدی بررسی‌های سلامت، خود را از فهرست نودهای واجد شرایط برای دریافت ترافیک متوازن‌شده حذف کنند.</p>
+<p dir="rtl">به‌صورت تصویری:</p>
+<p><img src="/images/docs/sourceip-externaltrafficpolicy.svg" alt="آی‌پی مبدأ با externalTrafficPolicy"></p>
+<p dir="rtl">می‌توانید این موضوع را با تنظیم این حاشیه‌نویسی (annotation) بیازمایید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl patch svc loadbalancer -p '{"spec":{"externalTrafficPolicy":"Local"}}'
+</code></pre>
+<p dir="rtl">باید بلافاصله ببینید که کوبرنتیز فیلد <code dir="ltr">service.spec.healthCheckNodePort</code> را تخصیص داده است:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get svc loadbalancer -o yaml | grep -i healthCheckNodePort
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">  healthCheckNodePort: 32122
+</code></pre>
+<p dir="rtl">فیلد <code dir="ltr">service.spec.healthCheckNodePort</code> به پورتی روی هر نود اشاره می‌کند که بررسی سلامت را در مسیر <code dir="ltr">/healthz</code> ارائه می‌دهد. می‌توانید این را بیازمایید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pod -o wide -l app=source-ip-app
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">NAME                            READY     STATUS    RESTARTS   AGE       IP             NODE
+source-ip-app-826191075-qehz4   1/1       Running   0          20h       10.180.1.136   kubernetes-node-6jst
+</code></pre>
+<p dir="rtl">با <code dir="ltr">curl</code> نقطهٔ پایانی <code dir="ltr">/healthz</code> را روی نودهای مختلف دریافت کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># Run this locally on a node you choose
+curl localhost:32122/healthz
+</code></pre>
+<pre dir="ltr"><code dir="ltr">1 Service Endpoints found
+</code></pre>
+<p dir="rtl">ممکن است روی نود دیگری نتیجهٔ متفاوتی بگیرید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># Run this locally on a node you choose
+curl localhost:32122/healthz
+</code></pre>
+<pre dir="ltr"><code dir="ltr">No Service Endpoints Found
+</code></pre>
+<p dir="rtl">یک کنترل‌کننده که روی <span class="term" title="control-plane">control plane</span> اجرا می‌شود، مسئول تخصیص متوازن‌کنندهٔ بار ابری است. همین کنترل‌کننده بررسی‌های سلامت HTTP را نیز تخصیص می‌دهد که به این پورت و مسیر روی هر نود اشاره می‌کنند. حدود ۱۰ ثانیه صبر کنید تا بررسی سلامت دو نودِ بدون نقطهٔ پایانی ناموفق شود، سپس با <code dir="ltr">curl</code> از نشانی IPv4 متوازن‌کنندهٔ بار پرس‌وجو کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">curl 203.0.113.140
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">CLIENT VALUES:
+client_address=198.51.100.79
+...
+</code></pre>
+<h2 id="پشتیبانی-میان-سکویی" dir="rtl">پشتیبانی میان‌سکویی</h2>
+<p dir="rtl">فقط برخی از ارائه‌دهندگان ابری از حفظ آی‌پی مبدأ از طریق Serviceهایی با <code dir="ltr">Type=LoadBalancer</code> پشتیبانی می‌کنند.
+ارائه‌دهندهٔ ابری‌ای که از آن استفاده می‌کنید ممکن است درخواست ایجاد متوازن‌کنندهٔ بار را به چند روش مختلف برآورده کند:</p>
+<ol>
+<li dir="rtl">
+<p dir="rtl">با یک پراکسی که اتصال کلاینت را خاتمه می‌دهد و اتصال جدیدی به نودها یا نقطه‌های پایانی شما باز می‌کند. در چنین مواردی، آی‌پی مبدأ همیشه آی‌پی متوازن‌کنندهٔ بار ابری خواهد بود، نه آی‌پی کلاینت.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">با یک هدایت‌کنندهٔ بسته، به‌گونه‌ای که درخواست‌های کلاینت که به آی‌پی مجازی متوازن‌کنندهٔ بار فرستاده می‌شوند، با آی‌پی مبدأ کلاینت به نود برسند، نه با آی‌پی یک پراکسی میانی.</p>
+</li>
+</ol>
+<p dir="rtl">متوازن‌کننده‌های بار دستهٔ اول باید برای انتقال آی‌پی واقعی کلاینت، از پروتکلی توافق‌شده میان متوازن‌کنندهٔ بار و بک‌اند استفاده کنند؛ مانند هدرهای HTTP <a href="https://tools.ietf.org/html/rfc7239#section-5.2" target="_blank" rel="noopener">Forwarded</a> یا <a href="https://en.wikipedia.org/wiki/X-Forwarded-For" target="_blank" rel="noopener">X-FORWARDED-FOR</a>، یا <a href="https://www.haproxy.org/download/1.8/doc/proxy-protocol.txt" target="_blank" rel="noopener">پروتکل proxy</a>.
+متوازن‌کننده‌های بار دستهٔ دوم می‌توانند با ایجاد یک بررسی سلامت HTTP که به پورت ذخیره‌شده در فیلد <code dir="ltr">service.spec.healthCheckNodePort</code> آن Service اشاره می‌کند، از قابلیتی که در بالا توضیح داده شد بهره ببرند.</p>
+<h2 id="پاکسازی" dir="rtl">پاکسازی</h2>
+<p dir="rtl">Serviceها را حذف کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl delete svc -l app=source-ip-app
+</code></pre>
+<p dir="rtl">آبجکت‌های Deployment، ReplicaSet و Pod را حذف کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl delete deployment source-ip-app
+</code></pre>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<ul>
+<li dir="rtl">دربارهٔ <a href="connect-applications-service.html">اتصال برنامه‌ها از طریق Serviceها</a> بیشتر بیاموزید</li>
+<li dir="rtl">نحوهٔ <a href="../../tasks/access-application-cluster/create-external-load-balancer.html">ایجاد یک متوازن‌کنندهٔ بار خارجی</a> را بخوانید</li>
+</ul>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#پیش-از-شروع">پیش از شروع</a><a class="l3" href="#اصطلاحات">اصطلاحات</a><a class="l3" href="#پیش-نیازها">پیش‌نیازها</a><a class="l2" href="#اهداف">اهداف</a><a class="l2" href="#آی-پی-مبدأ-برای-serviceهایی-با-type-clusterip">آی‌پی مبدأ برای Serviceهایی با Type=ClusterIP</a><a class="l2" href="#آی-پی-مبدأ-برای-serviceهایی-با-type-nodeport">آی‌پی مبدأ برای Serviceهایی با Type=NodePort</a><a class="l2" href="#آی-پی-مبدأ-برای-serviceهایی-با-type-loadbalancer">آی‌پی مبدأ برای Serviceهایی با Type=LoadBalancer</a><a class="l2" href="#پشتیبانی-میان-سکویی">پشتیبانی میان‌سکویی</a><a class="l2" href="#پاکسازی">پاکسازی</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>

@@ -1,0 +1,511 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>محدود کردن فراخوانی‌های سیستمی یک کانتینر با seccomp | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">tutorials / security</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">محدود کردن فراخوانی‌های سیستمی یک کانتینر با seccomp</h1><!-- overview -->
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes v1.19 [stable]</span> (پایدار)</div>
+<p dir="rtl">واژهٔ Seccomp مخفف secure computing mode (حالت محاسبات امن) است و از نسخهٔ 2.6.12 یکی از قابلیت‌های هستهٔ لینوکس به شمار می‌رود. با آن می‌توان امتیازات (privileges) یک فرایند را در یک محیط ایزوله (sandbox) محدود کرد و فراخوانی‌هایی را که فرایند می‌تواند از فضای کاربر (userspace) به هسته انجام دهد، محدود ساخت. کوبرنتیز به شما امکان می‌دهد پروفایل‌های seccomp بارگذاری‌شده روی یک <span class="term" title="node">نود</span> را به‌طور خودکار روی Podها و کانتینرهای خود اعمال کنید.</p>
+<p dir="rtl">تشخیص امتیازاتی که بارهای کاری شما به آن‌ها نیاز دارند، ممکن است دشوار باشد. در این آموزش یاد می‌گیرید که چگونه پروفایل‌های seccomp را در یک کلاستر محلی کوبرنتیز بارگذاری کنید، چگونه آن‌ها را روی یک Pod اعمال کنید و چگونه ساختن پروفایل‌هایی را آغاز کنید که فقط امتیازات لازم را به فرایندهای کانتینر شما می‌دهند.</p>
+<h2 id="اهداف" dir="rtl">اهداف</h2>
+<ul>
+<li dir="rtl">یاد بگیرید که چگونه پروفایل‌های seccomp را روی یک نود بارگذاری کنید</li>
+<li dir="rtl">یاد بگیرید که چگونه یک پروفایل seccomp را روی یک کانتینر اعمال کنید</li>
+<li dir="rtl">ممیزی (auditing) فراخوانی‌های سیستمی (syscall) انجام‌شده توسط فرایند یک کانتینر را مشاهده کنید</li>
+<li dir="rtl">رفتار سیستم را هنگامی که پروفایلی ناموجود مشخص شده است، مشاهده کنید</li>
+<li dir="rtl">نقض یک پروفایل seccomp را مشاهده کنید</li>
+<li dir="rtl">یاد بگیرید که چگونه پروفایل‌های seccomp دقیق و جزئی‌نگر بسازید</li>
+<li dir="rtl">یاد بگیرید که چگونه پروفایل seccomp پیش‌فرض محیط اجرای کانتینر را اعمال کنید</li>
+</ul>
+<h2 id="پیش-از-شروع" dir="rtl">پیش از شروع</h2>
+<p dir="rtl">برای انجام همهٔ مراحل این آموزش، باید <a href="../../tasks/tools/index.html#kind">kind</a> و <a href="../../tasks/tools/index.html#kubectl">kubectl</a> را نصب کنید.</p>
+<p dir="rtl">فرمان‌های این آموزش فرض می‌کنند که از <a href="https://www.docker.com/" target="_blank" rel="noopener">Docker</a> به‌عنوان محیط اجرای کانتینر استفاده می‌کنید. (کلاستری که <code dir="ltr">kind</code> می‌سازد ممکن است در درون خود از محیط اجرای کانتینر دیگری استفاده کند.) می‌توانید از <a href="https://podman.io/" target="_blank" rel="noopener">Podman</a> نیز استفاده کنید، اما در آن صورت برای انجام موفق کارها باید <a href="https://kind.sigs.k8s.io/docs/user/rootless/" target="_blank" rel="noopener">دستورالعمل‌های</a> ویژه‌ای را دنبال کنید.</p>
+<p dir="rtl">این آموزش چند نمونه را نشان می‌دهد که هنوز در مرحلهٔ بتا هستند (از نسخهٔ v1.25) و نمونه‌های دیگری که فقط از قابلیت‌های seccomp عرضه‌شدهٔ عمومی (generally available) استفاده می‌کنند. باید مطمئن شوید که کلاستر شما برای نسخه‌ای که استفاده می‌کنید <a href="https://kind.sigs.k8s.io/docs/user/quick-start/#setting-kubernetes-version" target="_blank" rel="noopener">به‌درستی پیکربندی شده است</a>.</p>
+<p dir="rtl">همچنین در این آموزش از ابزار <code dir="ltr">curl</code> برای دانلود نمونه‌ها روی رایانهٔ شما استفاده می‌شود. اگر ترجیح می‌دهید، می‌توانید مراحل را برای استفاده از ابزار دیگری تطبیق دهید.</p>
+<div class="callout note"><div class="callout-title">Note</div>
+<p dir="rtl">نمی‌توان پروفایل seccomp را روی کانتینری اعمال کرد که با تنظیم <code dir="ltr">privileged: true</code> در <code dir="ltr">securityContext</code> آن اجرا می‌شود. کانتینرهای ممتاز (privileged) همیشه به‌صورت <code dir="ltr">Unconfined</code> اجرا می‌شوند.</p>
+</div>
+<!-- steps -->
+<h2 id="دانلود-پروفایل-های-نمونهٔ-seccomp-download-profiles" dir="rtl">دانلود پروفایل‌های نمونهٔ seccomp {#download-profiles}</h2>
+<p dir="rtl">محتوای این پروفایل‌ها را بعداً بررسی خواهیم کرد، اما فعلاً آن‌ها را در پوشه‌ای به نام <code dir="ltr">profiles/</code> دانلود کنید تا بتوان آن‌ها را در کلاستر بارگذاری کرد.</p>
+<div class="tabs">
+<div class="tab"><div class="tab-name">audit.json</div>
+<div class="code-file ltr" dir="ltr">pods/security/seccomp/profiles/audit.json</div>
+<pre dir="ltr"><code class="language-json" dir="ltr">{
+    "defaultAction": "SCMP_ACT_LOG"
+}
+</code></pre>
+</div>
+<div class="tab"><div class="tab-name">violation.json</div>
+<div class="code-file ltr" dir="ltr">pods/security/seccomp/profiles/violation.json</div>
+<pre dir="ltr"><code class="language-json" dir="ltr">{
+    "defaultAction": "SCMP_ACT_ERRNO"
+}
+</code></pre>
+</div>
+<div class="tab"><div class="tab-name">fine-grained.json</div>
+<div class="code-file ltr" dir="ltr">pods/security/seccomp/profiles/fine-grained.json</div>
+<pre dir="ltr"><code class="language-json" dir="ltr">{
+    "defaultAction": "SCMP_ACT_ERRNO",
+    "architectures": [
+        "SCMP_ARCH_X86_64",
+        "SCMP_ARCH_X86",
+        "SCMP_ARCH_X32"
+    ],
+    "syscalls": [
+        {
+            "names": [
+                "accept4",
+                "epoll_wait",
+                "pselect6",
+                "futex",
+                "madvise",
+                "epoll_ctl",
+                "getsockname",
+                "setsockopt",
+                "vfork",
+                "mmap",
+                "read",
+                "write",
+                "close",
+                "arch_prctl",
+                "sched_getaffinity",
+                "munmap",
+                "brk",
+                "rt_sigaction",
+                "rt_sigprocmask",
+                "sigaltstack",
+                "gettid",
+                "clone",
+                "bind",
+                "socket",
+                "openat",
+                "readlinkat",
+                "exit_group",
+                "epoll_create1",
+                "listen",
+                "rt_sigreturn",
+                "sched_yield",
+                "clock_gettime",
+                "connect",
+                "dup2",
+                "epoll_pwait",
+                "execve",
+                "exit",
+                "fcntl",
+                "getpid",
+                "getuid",
+                "ioctl",
+                "mprotect",
+                "nanosleep",
+                "open",
+                "poll",
+                "recvfrom",
+                "sendto",
+                "set_tid_address",
+                "setitimer",
+                "writev",
+                "fstatfs",
+                "getdents64",
+                "pipe2",
+                "getrlimit"
+            ],
+            "action": "SCMP_ACT_ALLOW"
+        }
+    ]
+}
+</code></pre>
+</div>
+</div>
+<p dir="rtl">این فرمان‌ها را اجرا کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">mkdir ./profiles
+curl -L -o profiles/audit.json https://k8s.io/examples/pods/security/seccomp/profiles/audit.json
+curl -L -o profiles/violation.json https://k8s.io/examples/pods/security/seccomp/profiles/violation.json
+curl -L -o profiles/fine-grained.json https://k8s.io/examples/pods/security/seccomp/profiles/fine-grained.json
+ls profiles
+</code></pre>
+<p dir="rtl">در پایان آخرین مرحله باید سه پروفایل را در فهرست ببینید:</p>
+<pre dir="ltr"><code dir="ltr">audit.json  fine-grained.json  violation.json
+</code></pre>
+<h2 id="ساخت-یک-کلاستر-محلی-کوبرنتیز-با-kind" dir="rtl">ساخت یک کلاستر محلی کوبرنتیز با kind</h2>
+<p dir="rtl">برای سادگی، می‌توان از <a href="https://kind.sigs.k8s.io/" target="_blank" rel="noopener">kind</a> برای ساخت یک کلاستر تک‌نودی استفاده کرد که پروفایل‌های seccomp در آن بارگذاری شده‌اند. ابزار kind کوبرنتیز را درون Docker اجرا می‌کند، بنابراین هر نود کلاستر یک کانتینر است. به این ترتیب می‌توان فایل‌ها را در سیستم فایل هر کانتینر سوار (mount) کرد؛ کاری مشابه بارگذاری فایل‌ها روی یک نود.</p>
+<div class="code-file ltr" dir="ltr">pods/security/seccomp/kind.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: kind.x-k8s.io/v1alpha4
+kind: Cluster
+nodes:
+- role: control-plane
+  extraMounts:
+  - hostPath: "./profiles"
+    containerPath: "/var/lib/kubelet/seccomp/profiles"
+</code></pre>
+<p dir="rtl">این پیکربندی نمونهٔ kind را دانلود کنید و آن را در فایلی به نام <code dir="ltr">kind.yaml</code> ذخیره کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">curl -L -O https://k8s.io/examples/pods/security/seccomp/kind.yaml
+</code></pre>
+<p dir="rtl">با تنظیم ایمیج کانتینر نود می‌توانید نسخهٔ مشخصی از کوبرنتیز را تعیین کنید. برای جزئیات بیشتر، بخش <a href="https://kind.sigs.k8s.io/docs/user/configuration/#nodes" target="_blank" rel="noopener">نودها</a> را در مستندات پیکربندی kind ببینید. این آموزش فرض می‌کند که از کوبرنتیز v1.37 استفاده می‌کنید.</p>
+<p dir="rtl">به‌عنوان یک قابلیت بتا، می‌توانید کوبرنتیز را طوری پیکربندی کنید که به‌جای بازگشت به <code dir="ltr">Unconfined</code>، از پروفایلی استفاده کند که <span class="term" title="container-runtime">محیط اجرای کانتینر</span> به‌طور پیش‌فرض ترجیح می‌دهد. اگر می‌خواهید این کار را امتحان کنید، پیش از ادامه، بخش <a href="#enable-the-use-of-runtimedefault-as-the-default-seccomp-profile-for-all-workloads">فعال‌سازی استفاده از <code dir="ltr">RuntimeDefault</code> به‌عنوان پروفایل seccomp پیش‌فرض برای همهٔ بارهای کاری</a> را ببینید.</p>
+<p dir="rtl">پس از آماده شدن پیکربندی kind، کلاستر kind را با آن پیکربندی بسازید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kind create cluster --config=kind.yaml
+</code></pre>
+<p dir="rtl">پس از آماده شدن کلاستر جدید کوبرنتیز، کانتینر Docker را که به‌عنوان کلاستر تک‌نودی اجرا می‌شود، شناسایی کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">docker ps
+</code></pre>
+<p dir="rtl">باید خروجی‌ای ببینید که نشان می‌دهد کانتینری با نام <code dir="ltr">kind-control-plane</code> در حال اجراست. خروجی مشابه این است:</p>
+<pre dir="ltr"><code dir="ltr">CONTAINER ID        IMAGE                  COMMAND                  CREATED             STATUS              PORTS                       NAMES
+6a96207fed4b        kindest/node:v1.18.2   "/usr/local/bin/entr…"   27 seconds ago      Up 24 seconds       127.0.0.1:42223-&gt;6443/tcp   kind-control-plane
+</code></pre>
+<p dir="rtl">اگر سیستم فایل آن کانتینر را بررسی کنید، باید ببینید که پوشهٔ <code dir="ltr">profiles/</code> با موفقیت در مسیر پیش‌فرض seccomp مربوط به kubelet بارگذاری شده است. برای اجرای یک فرمان در Pod از <code dir="ltr">docker exec</code> استفاده کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">docker exec -it kind-control-plane ls /var/lib/kubelet/seccomp/profiles
+</code></pre>
+<pre dir="ltr"><code dir="ltr">audit.json  fine-grained.json  violation.json
+</code></pre>
+<p dir="rtl">اکنون تأیید کرده‌اید که این پروفایل‌های seccomp در دسترس kubelet در حال اجرا درون kind هستند.</p>
+<h2 id="ساخت-یک-pod-که-از-پروفایل-seccomp-پیش-فرض-محیط-اجرای-کانتینر-استفاده-می-کند" dir="rtl">ساخت یک Pod که از پروفایل seccomp پیش‌فرض محیط اجرای کانتینر استفاده می‌کند</h2>
+<p dir="rtl">بیشتر محیط‌های اجرای کانتینر مجموعه‌ای معقول از فراخوانی‌های سیستمی پیش‌فرض مجاز و غیرمجاز فراهم می‌کنند. با تنظیم نوع seccomp در زمینهٔ امنیتی (security context) یک Pod یا کانتینر روی <code dir="ltr">RuntimeDefault</code>، می‌توانید این پیش‌فرض‌ها را برای بار کاری خود به کار بگیرید.</p>
+<div class="callout note"><div class="callout-title">Note</div>
+<p dir="rtl">اگر <a href="../../reference/config-api/kubelet-config.v1beta1.html">پیکربندی</a> <code dir="ltr">seccompDefault</code> را فعال کرده باشید، Podها هرگاه پروفایل seccomp دیگری مشخص نشده باشد، از پروفایل seccomp <code dir="ltr">RuntimeDefault</code> استفاده می‌کنند. در غیر این صورت، مقدار پیش‌فرض <code dir="ltr">Unconfined</code> است.</p>
+</div>
+<p dir="rtl">این مانیفست یک Pod است که پروفایل seccomp <code dir="ltr">RuntimeDefault</code> را برای همهٔ کانتینرهای خود درخواست می‌کند:</p>
+<div class="code-file ltr" dir="ltr">pods/security/seccomp/ga/default-pod.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: Pod
+metadata:
+  name: default-pod
+  labels:
+    app: default-pod
+spec:
+  securityContext:
+    seccompProfile:
+      type: RuntimeDefault
+  containers:
+  - name: test-container
+    image: hashicorp/http-echo:1.0
+    args:
+    - "-text=just made some more syscalls!"
+    securityContext:
+      allowPrivilegeEscalation: false
+</code></pre>
+<p dir="rtl">آن Pod را بسازید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f https://k8s.io/examples/pods/security/seccomp/ga/default-pod.yaml
+</code></pre>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pod default-pod
+</code></pre>
+<p dir="rtl">باید ببینید که Pod با موفقیت آغاز به کار کرده است:</p>
+<pre dir="ltr"><code dir="ltr">NAME        READY   STATUS    RESTARTS   AGE
+default-pod 1/1     Running   0          20s
+</code></pre>
+<p dir="rtl">پیش از رفتن به بخش بعدی، Pod را حذف کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl delete pod default-pod --wait --now
+</code></pre>
+<h2 id="ساخت-یک-pod-با-پروفایل-seccomp-برای-ممیزی-فراخوانی-های-سیستمی" dir="rtl">ساخت یک Pod با پروفایل seccomp برای ممیزی فراخوانی‌های سیستمی</h2>
+<p dir="rtl">برای شروع، پروفایل <code dir="ltr">audit.json</code> را که همهٔ فراخوانی‌های سیستمی فرایند را ثبت می‌کند، روی یک Pod جدید اعمال کنید.</p>
+<p dir="rtl">این مانیفست آن Pod است:</p>
+<div class="code-file ltr" dir="ltr">pods/security/seccomp/ga/audit-pod.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: Pod
+metadata:
+  name: audit-pod
+  labels:
+    app: audit-pod
+spec:
+  securityContext:
+    seccompProfile:
+      type: Localhost
+      localhostProfile: profiles/audit.json
+  containers:
+  - name: test-container
+    image: hashicorp/http-echo:1.0
+    args:
+    - "-text=just made some syscalls!"
+    securityContext:
+      allowPrivilegeEscalation: false
+</code></pre>
+<div class="callout note"><div class="callout-title">Note</div>
+<p dir="rtl">نسخه‌های قدیمی‌تر کوبرنتیز امکان پیکربندی رفتار seccomp را با <span class="term" title="annotation">حاشیه‌نویسی‌ها</span> فراهم می‌کردند. کوبرنتیز 1.37 برای پیکربندی seccomp فقط از فیلدهای درون <code dir="ltr">.spec.securityContext</code> پشتیبانی می‌کند و این آموزش همین روش را توضیح می‌دهد.</p>
+</div>
+<p dir="rtl">Pod را در کلاستر بسازید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f https://k8s.io/examples/pods/security/seccomp/ga/audit-pod.yaml
+</code></pre>
+<p dir="rtl">این پروفایل هیچ فراخوانی سیستمی را محدود نمی‌کند، بنابراین Pod باید با موفقیت آغاز به کار کند.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pod audit-pod
+</code></pre>
+<pre dir="ltr"><code dir="ltr">NAME        READY   STATUS    RESTARTS   AGE
+audit-pod   1/1     Running   0          30s
+</code></pre>
+<p dir="rtl">برای اینکه بتوانید با نقطهٔ پایانی (endpoint) که این کانتینر در معرض دسترسی قرار داده است تعامل کنید، یک <span class="term" title="service">Service</span> از نوع NodePort بسازید که دسترسی به این نقطهٔ پایانی را از درون کانتینر control plane کلاستر kind ممکن می‌کند.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl expose pod audit-pod --type NodePort --port 5678
+</code></pre>
+<p dir="rtl">بررسی کنید که چه پورتی روی نود به Service اختصاص یافته است.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get service audit-pod
+</code></pre>
+<p dir="rtl">خروجی مشابه این است:</p>
+<pre dir="ltr"><code dir="ltr">NAME        TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE
+audit-pod   NodePort   10.111.36.142   &lt;none&gt;        5678:32373/TCP   72s
+</code></pre>
+<p dir="rtl">اکنون می‌توانید با <code dir="ltr">curl</code> از درون کانتینر control plane کلاستر kind و از طریق پورتی که این Service در معرض دسترسی قرار داده است، به آن نقطهٔ پایانی دسترسی پیدا کنید. برای اجرای فرمان <code dir="ltr">curl</code> درون کانتینر control plane از <code dir="ltr">docker exec</code> استفاده کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># Change 32373 to the port number you saw from "kubectl get service audit-pod"
+docker exec -it kind-control-plane curl localhost:32373
+</code></pre>
+<pre dir="ltr"><code dir="ltr">just made some syscalls!
+</code></pre>
+<p dir="rtl">می‌بینید که فرایند در حال اجراست، اما در واقع چه فراخوانی‌های سیستمی‌ای انجام داده است؟ از آنجا که این Pod در یک کلاستر محلی اجرا می‌شود، باید بتوانید این فراخوانی‌ها را در <code dir="ltr">/var/log/syslog</code> روی سیستم محلی خود ببینید. یک پنجرهٔ ترمینال جدید باز کنید و با <code dir="ltr">tail</code> خروجی را برای فراخوانی‌های <code dir="ltr">http-echo</code> دنبال کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># The log path on your computer might be different from "/var/log/syslog"
+tail -f /var/log/syslog | grep 'http-echo'
+</code></pre>
+<p dir="rtl">باید همین حالا چند گزارش از فراخوانی‌های سیستمی انجام‌شده توسط <code dir="ltr">http-echo</code> ببینید و اگر دوباره <code dir="ltr">curl</code> را درون کانتینر control plane اجرا کنید، خروجی بیشتری در گزارش نوشته می‌شود.</p>
+<p dir="rtl">برای نمونه:</p>
+<pre dir="ltr"><code dir="ltr">Jul  6 15:37:40 my-machine kernel: [369128.669452] audit: type=1326 audit(1594067860.484:14536): auid=4294967295 uid=0 gid=0 ses=4294967295 pid=29064 comm="http-echo" exe="/http-echo" sig=0 arch=c000003e syscall=51 compat=0 ip=0x46fe1f code=0x7ffc0000
+Jul  6 15:37:40 my-machine kernel: [369128.669453] audit: type=1326 audit(1594067860.484:14537): auid=4294967295 uid=0 gid=0 ses=4294967295 pid=29064 comm="http-echo" exe="/http-echo" sig=0 arch=c000003e syscall=54 compat=0 ip=0x46fdba code=0x7ffc0000
+Jul  6 15:37:40 my-machine kernel: [369128.669455] audit: type=1326 audit(1594067860.484:14538): auid=4294967295 uid=0 gid=0 ses=4294967295 pid=29064 comm="http-echo" exe="/http-echo" sig=0 arch=c000003e syscall=202 compat=0 ip=0x455e53 code=0x7ffc0000
+Jul  6 15:37:40 my-machine kernel: [369128.669456] audit: type=1326 audit(1594067860.484:14539): auid=4294967295 uid=0 gid=0 ses=4294967295 pid=29064 comm="http-echo" exe="/http-echo" sig=0 arch=c000003e syscall=288 compat=0 ip=0x46fdba code=0x7ffc0000
+Jul  6 15:37:40 my-machine kernel: [369128.669517] audit: type=1326 audit(1594067860.484:14540): auid=4294967295 uid=0 gid=0 ses=4294967295 pid=29064 comm="http-echo" exe="/http-echo" sig=0 arch=c000003e syscall=0 compat=0 ip=0x46fd44 code=0x7ffc0000
+Jul  6 15:37:40 my-machine kernel: [369128.669519] audit: type=1326 audit(1594067860.484:14541): auid=4294967295 uid=0 gid=0 ses=4294967295 pid=29064 comm="http-echo" exe="/http-echo" sig=0 arch=c000003e syscall=270 compat=0 ip=0x4559b1 code=0x7ffc0000
+Jul  6 15:38:40 my-machine kernel: [369188.671648] audit: type=1326 audit(1594067920.488:14559): auid=4294967295 uid=0 gid=0 ses=4294967295 pid=29064 comm="http-echo" exe="/http-echo" sig=0 arch=c000003e syscall=270 compat=0 ip=0x4559b1 code=0x7ffc0000
+Jul  6 15:38:40 my-machine kernel: [369188.671726] audit: type=1326 audit(1594067920.488:14560): auid=4294967295 uid=0 gid=0 ses=4294967295 pid=29064 comm="http-echo" exe="/http-echo" sig=0 arch=c000003e syscall=202 compat=0 ip=0x455e53 code=0x7ffc0000
+</code></pre>
+<p dir="rtl">با نگاه کردن به مقدار <code dir="ltr">syscall=</code> در هر خط، می‌توانید کم‌کم فراخوانی‌های سیستمی موردنیاز فرایند <code dir="ltr">http-echo</code> را بشناسید. هرچند بعید است این موارد همهٔ فراخوانی‌های سیستمی آن را دربر بگیرند، می‌توانند پایه‌ای برای ساخت یک پروفایل seccomp برای این کانتینر باشند.</p>
+<p dir="rtl">پیش از رفتن به بخش بعدی، Service و Pod را حذف کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl delete service audit-pod --wait
+kubectl delete pod audit-pod --wait --now
+</code></pre>
+<h2 id="ساخت-یک-pod-با-پروفایل-seccomp-که-باعث-نقض-می-شود" dir="rtl">ساخت یک Pod با پروفایل seccomp که باعث نقض می‌شود</h2>
+<p dir="rtl">برای نمایش، پروفایلی را روی Pod اعمال کنید که هیچ فراخوانی سیستمی را مجاز نمی‌داند.</p>
+<p dir="rtl">مانیفست این نمایش چنین است:</p>
+<div class="code-file ltr" dir="ltr">pods/security/seccomp/ga/violation-pod.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: Pod
+metadata:
+  name: violation-pod
+  labels:
+    app: violation-pod
+spec:
+  securityContext:
+    seccompProfile:
+      type: Localhost
+      localhostProfile: profiles/violation.json
+  containers:
+  - name: test-container
+    image: hashicorp/http-echo:1.0
+    args:
+    - "-text=just made some syscalls!"
+    securityContext:
+      allowPrivilegeEscalation: false
+</code></pre>
+<p dir="rtl">تلاش کنید Pod را در کلاستر بسازید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f https://k8s.io/examples/pods/security/seccomp/ga/violation-pod.yaml
+</code></pre>
+<p dir="rtl">Pod ساخته می‌شود، اما مشکلی وجود دارد. اگر وضعیت Pod را بررسی کنید، باید ببینید که آغاز به کار آن ناموفق بوده است.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pod violation-pod
+</code></pre>
+<pre dir="ltr"><code dir="ltr">NAME            READY   STATUS             RESTARTS   AGE
+violation-pod   0/1     CrashLoopBackOff   1          6s
+</code></pre>
+<p dir="rtl">همان‌طور که در نمونهٔ قبلی دیدید، فرایند <code dir="ltr">http-echo</code> به فراخوانی‌های سیستمی نسبتاً زیادی نیاز دارد. در اینجا با تنظیم <code dir="ltr">"defaultAction": "SCMP_ACT_ERRNO"</code> به seccomp دستور داده شده است که در برابر هر فراخوانی سیستمی خطا برگرداند. این کار بسیار امن است، اما امکان انجام هر کار معناداری را از بین می‌برد. آنچه واقعاً می‌خواهید این است که فقط امتیازات موردنیاز بارهای کاری را به آن‌ها بدهید.</p>
+<p dir="rtl">پیش از رفتن به بخش بعدی، Pod را حذف کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl delete pod violation-pod --wait --now
+</code></pre>
+<h2 id="ساخت-یک-pod-با-پروفایل-seccomp-که-فقط-فراخوانی-های-سیستمی-لازم-را-مجاز-می-داند" dir="rtl">ساخت یک Pod با پروفایل seccomp که فقط فراخوانی‌های سیستمی لازم را مجاز می‌داند</h2>
+<p dir="rtl">اگر نگاهی به پروفایل <code dir="ltr">fine-grained.json</code> بیندازید، برخی از فراخوانی‌های سیستمی را خواهید دید که در syslog نمونهٔ اول مشاهده شدند؛ نمونه‌ای که در آن پروفایل مقدار <code dir="ltr">"defaultAction": "SCMP_ACT_LOG"</code> را تنظیم کرده بود. اکنون پروفایل مقدار <code dir="ltr">"defaultAction": "SCMP_ACT_ERRNO"</code> را تنظیم می‌کند، اما مجموعه‌ای از فراخوانی‌های سیستمی را به‌صراحت در بلوک <code dir="ltr">"action": "SCMP_ACT_ALLOW"</code> مجاز می‌داند. در حالت ایدئال، کانتینر با موفقیت اجرا می‌شود و هیچ پیامی به <code dir="ltr">syslog</code> فرستاده نمی‌شود.</p>
+<p dir="rtl">مانیفست این نمونه چنین است:</p>
+<div class="code-file ltr" dir="ltr">pods/security/seccomp/ga/fine-pod.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: Pod
+metadata:
+  name: fine-pod
+  labels:
+    app: fine-pod
+spec:
+  securityContext:
+    seccompProfile:
+      type: Localhost
+      localhostProfile: profiles/fine-grained.json
+  containers:
+  - name: test-container
+    image: hashicorp/http-echo:1.0
+    args:
+    - "-text=just made some syscalls!"
+    securityContext:
+      allowPrivilegeEscalation: false
+</code></pre>
+<p dir="rtl">Pod را در کلاستر خود بسازید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f https://k8s.io/examples/pods/security/seccomp/ga/fine-pod.yaml
+</code></pre>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pod fine-pod
+</code></pre>
+<p dir="rtl">باید ببینید که Pod با موفقیت آغاز به کار کرده است:</p>
+<pre dir="ltr"><code dir="ltr">NAME        READY   STATUS    RESTARTS   AGE
+fine-pod   1/1     Running   0          30s
+</code></pre>
+<p dir="rtl">یک پنجرهٔ ترمینال جدید باز کنید و با <code dir="ltr">tail</code> مدخل‌هایی از گزارش را که به فراخوانی‌های <code dir="ltr">http-echo</code> اشاره می‌کنند، زیر نظر بگیرید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># The log path on your computer might be different from "/var/log/syslog"
+tail -f /var/log/syslog | grep 'http-echo'
+</code></pre>
+<p dir="rtl">سپس Pod را با یک Service از نوع NodePort در معرض دسترسی قرار دهید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl expose pod fine-pod --type NodePort --port 5678
+</code></pre>
+<p dir="rtl">بررسی کنید که چه پورتی روی نود به Service اختصاص یافته است:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get service fine-pod
+</code></pre>
+<p dir="rtl">خروجی مشابه این است:</p>
+<pre dir="ltr"><code dir="ltr">NAME        TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE
+fine-pod    NodePort   10.111.36.142   &lt;none&gt;        5678:32373/TCP   72s
+</code></pre>
+<p dir="rtl">با <code dir="ltr">curl</code> از درون کانتینر control plane کلاستر kind به آن نقطهٔ پایانی دسترسی پیدا کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># Change 32373 to the port number you saw from "kubectl get service fine-pod"
+docker exec -it kind-control-plane curl localhost:32373
+</code></pre>
+<pre dir="ltr"><code dir="ltr">just made some syscalls!
+</code></pre>
+<p dir="rtl">نباید هیچ خروجی‌ای در <code dir="ltr">syslog</code> ببینید. دلیلش این است که پروفایل همهٔ فراخوانی‌های سیستمی لازم را مجاز دانسته و مشخص کرده است که اگر فراخوانی‌ای خارج از این فهرست انجام شود، خطا رخ دهد. این وضعیت از دیدگاه امنیتی ایدئال است، اما به تلاشی برای تحلیل برنامه نیاز داشت. خوب بود اگر راه ساده‌ای وجود داشت که بدون این‌همه تلاش، به چنین سطحی از امنیت نزدیک‌تر شویم.</p>
+<p dir="rtl">پیش از رفتن به بخش بعدی، Service و Pod را حذف کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl delete service fine-pod --wait
+kubectl delete pod fine-pod --wait --now
+</code></pre>
+<h2 id="فعال-سازی-استفاده-از-runtimedefault-به-عنوان-پروفایل-پیش-فرض-seccomp-برای-همهٔ-بارهای-کاری" dir="rtl">فعال‌سازی استفاده از <code dir="ltr">RuntimeDefault</code> به‌عنوان پروفایل پیش‌فرض seccomp برای همهٔ بارهای کاری</h2>
+<div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes v1.27 [stable]</span> (پایدار)</div>
+<p dir="rtl">برای استفاده از پروفایل پیش‌فرض seccomp، باید kubelet را روی هر نودی که می‌خواهید از این قابلیت در آن استفاده کنید، با
+<a href="../../reference/command-line-tools-reference/kubelet.html">پرچم خط فرمان</a>
+<code dir="ltr">--seccomp-default</code> اجرا کنید.</p>
+<p dir="rtl">در صورت فعال بودن این قابلیت، kubelet به‌جای حالت <code dir="ltr">Unconfined</code> (غیرفعال بودن seccomp)، به‌طور پیش‌فرض از پروفایل seccomp با نام <code dir="ltr">RuntimeDefault</code> استفاده می‌کند. این پروفایل را محیط اجرای کانتینر تعریف می‌کند. هدف پروفایل‌های پیش‌فرض این است که مجموعه‌ای قوی از پیش‌فرض‌های امنیتی فراهم کنند و در عین حال کارکرد بار کاری را حفظ کنند. ممکن است پروفایل‌های پیش‌فرض در محیط‌های اجرای کانتینر مختلف و نسخه‌های انتشار آن‌ها با یکدیگر متفاوت باشند؛ برای نمونه، پروفایل‌های CRI-O و containerd با هم تفاوت دارند.</p>
+<div class="callout note"><div class="callout-title">Note</div>
+<p dir="rtl">فعال‌سازی این قابلیت نه فیلد <code dir="ltr">securityContext.seccompProfile</code> در API کوبرنتیز را تغییر می‌دهد و نه حاشیه‌نویسی‌های (annotations) منسوخ‌شده را به بار کاری اضافه می‌کند. به این ترتیب، کاربران می‌توانند هر زمان که بخواهند، بدون تغییر واقعی در پیکربندی بار کاری، تغییرات را به حالت قبل بازگردانند. برای بررسی اینکه یک کانتینر از کدام پروفایل seccomp استفاده می‌کند، می‌توانید از ابزارهایی مانند
+<a href="https://github.com/kubernetes-sigs/cri-tools" target="_blank" rel="noopener"><code dir="ltr">crictl inspect</code></a> استفاده کنید.</p>
+</div>
+<p dir="rtl">برخی بارهای کاری ممکن است در مقایسه با بقیه به محدودیت‌های کمتری روی فراخوانی‌های سیستمی (syscall) نیاز داشته باشند. بنابراین ممکن است این بارهای کاری حتی با پروفایل <code dir="ltr">RuntimeDefault</code> نیز در زمان اجرا با شکست مواجه شوند. برای کاهش احتمال چنین شکستی می‌توانید:</p>
+<ul>
+<li dir="rtl">بار کاری را به‌صورت صریح در حالت <code dir="ltr">Unconfined</code> اجرا کنید.</li>
+<li dir="rtl">قابلیت <code dir="ltr">SeccompDefault</code> را برای نودها غیرفعال کنید و همچنین اطمینان حاصل کنید که بارهای کاری روی نودهایی زمان‌بندی می‌شوند که این قابلیت در آن‌ها غیرفعال است.</li>
+<li dir="rtl">یک پروفایل seccomp سفارشی برای بار کاری بسازید.</li>
+</ul>
+<p dir="rtl">اگر این قابلیت را در کلاستری مشابه محیط عملیاتی به کار می‌گیرید، پروژهٔ کوبرنتیز توصیه می‌کند که ابتدا این feature gate را روی زیرمجموعه‌ای از نودهای خود فعال کنید و اجرای بارهای کاری را آزمایش کنید و سپس این تغییر را در کل کلاستر اعمال کنید.</p>
+<p dir="rtl">اطلاعات دقیق‌تر دربارهٔ راهبرد احتمالی ارتقا و بازگشت به نسخهٔ قبلی را می‌توانید در پیشنهاد بهبود کوبرنتیز (Kubernetes Enhancement Proposal یا KEP) مرتبط بیابید:
+<a href="https://github.com/kubernetes/enhancements/tree/9a124fd29d1f9ddf2ff455c49a630e3181992c25/keps/sig-node/2413-seccomp-by-default#upgrade--downgrade-strategy" target="_blank" rel="noopener">Enable seccomp by default</a>.</p>
+<p dir="rtl">در کوبرنتیز 1.37 می‌توانید پروفایل seccomp را پیکربندی کنید که هنگام تعریف نشدن پروفایل seccomp مشخصی در spec یک Pod اعمال می‌شود. با این حال، همچنان باید این رفتار پیش‌فرض را برای هر نودی که می‌خواهید از آن استفاده کنید، فعال کنید.</p>
+<p dir="rtl">اگر کلاستری با کوبرنتیز 1.37 اجرا می‌کنید و می‌خواهید این قابلیت را فعال کنید، یا kubelet را با پرچم خط فرمان <code dir="ltr">--seccomp-default</code> اجرا کنید، یا این قابلیت را از طریق <a href="../../tasks/administer-cluster/kubelet-config-file.html">فایل پیکربندی kubelet</a> فعال کنید. برای فعال‌سازی این feature gate در <a href="https://kind.sigs.k8s.io" target="_blank" rel="noopener">kind</a>، اطمینان حاصل کنید که <code dir="ltr">kind</code> حداقل نسخهٔ موردنیاز کوبرنتیز را فراهم می‌کند و قابلیت <code dir="ltr">SeccompDefault</code> را
+<a href="https://kind.sigs.k8s.io/docs/user/quick-start/#enable-feature-gates-in-your-cluster" target="_blank" rel="noopener">در پیکربندی kind</a> فعال می‌کند:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes:
+  - role: control-plane
+    image: kindest/node:v1.28.0@sha256:9f3ff58f19dcf1a0611d11e8ac989fdb30a28f40f236f59f0bea31fb956ccf5c
+    kubeadmConfigPatches:
+      - |
+        kind: JoinConfiguration
+        nodeRegistration:
+          kubeletExtraArgs:
+            seccomp-default: "true"
+  - role: worker
+    image: kindest/node:v1.28.0@sha256:9f3ff58f19dcf1a0611d11e8ac989fdb30a28f40f236f59f0bea31fb956ccf5c
+    kubeadmConfigPatches:
+      - |
+        kind: JoinConfiguration
+        nodeRegistration:
+          kubeletExtraArgs:
+            seccomp-default: "true"
+</code></pre>
+<p dir="rtl">اگر کلاستر آماده باشد، پادی که به این شکل اجرا شود:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl run --rm -it --restart=Never --image=alpine alpine -- sh
+</code></pre>
+<p dir="rtl">اکنون باید پروفایل پیش‌فرض seccomp را به همراه داشته باشد. برای بررسی این موضوع می‌توانید با <code dir="ltr">docker exec</code> دستور <code dir="ltr">crictl inspect</code> را برای کانتینر روی نود worker در kind اجرا کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">docker exec -it kind-worker bash -c \
+    'crictl inspect $(crictl ps --name=alpine -q) | jq .info.runtimeSpec.linux.seccomp'
+</code></pre>
+<pre dir="ltr"><code class="language-json" dir="ltr">{
+  "defaultAction": "SCMP_ACT_ERRNO",
+  "architectures": ["SCMP_ARCH_X86_64", "SCMP_ARCH_X86", "SCMP_ARCH_X32"],
+  "syscalls": [
+    {
+      "names": ["..."]
+    }
+  ]
+}
+</code></pre>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<p dir="rtl">برای آشنایی بیشتر با seccomp در لینوکس می‌توانید این منابع را مطالعه کنید:</p>
+<ul>
+<li dir="rtl"><a href="https://lwn.net/Articles/656307/" target="_blank" rel="noopener">مروری بر seccomp</a></li>
+<li dir="rtl"><a href="https://docs.docker.com/engine/security/seccomp/" target="_blank" rel="noopener">پروفایل‌های امنیتی Seccomp برای Docker</a></li>
+</ul>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#اهداف">اهداف</a><a class="l2" href="#پیش-از-شروع">پیش از شروع</a><a class="l2" href="#دانلود-پروفایل-های-نمونهٔ-seccomp-download-profiles">دانلود پروفایل‌های نمونهٔ seccomp {#download-profiles}</a><a class="l2" href="#ساخت-یک-کلاستر-محلی-کوبرنتیز-با-kind">ساخت یک کلاستر محلی کوبرنتیز با kind</a><a class="l2" href="#ساخت-یک-pod-که-از-پروفایل-seccomp-پیش-فرض-محیط-اجرای-کانتینر-استفاده-می-کند">ساخت یک Pod که از پروفایل seccomp پیش‌فرض محیط اجرای کانتینر استفاده می‌کند</a><a class="l2" href="#ساخت-یک-pod-با-پروفایل-seccomp-برای-ممیزی-فراخوانی-های-سیستمی">ساخت یک Pod با پروفایل seccomp برای ممیزی فراخوانی‌های سیستمی</a><a class="l2" href="#ساخت-یک-pod-با-پروفایل-seccomp-که-باعث-نقض-می-شود">ساخت یک Pod با پروفایل seccomp که باعث نقض می‌شود</a><a class="l2" href="#ساخت-یک-pod-با-پروفایل-seccomp-که-فقط-فراخوانی-های-سیستمی-لازم-را-مجاز-می-داند">ساخت یک Pod با پروفایل seccomp که فقط فراخوانی‌های سیستمی لازم را مجاز می‌داند</a><a class="l2" href="#فعال-سازی-استفاده-از-runtimedefault-به-عنوان-پروفایل-پیش-فرض-seccomp-برای-همهٔ-بارهای-کاری">فعال‌سازی استفاده از RuntimeDefault به‌عنوان پروفایل پیش‌فرض seccomp برای همهٔ بارهای کاری</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>

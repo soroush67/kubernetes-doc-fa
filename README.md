@@ -8,8 +8,8 @@
 
 | | |
 |---|---|
-| پیشرفت (بر اساس کلمات) | **98.6٪** |
-| صفحات ترجمه‌شده | 1703 از 1722 |
+| پیشرفت (بر اساس کلمات) | **99.6٪** |
+| صفحات ترجمه‌شده | 1718 از 1722 |
 | صفحات دارای ایراد ساختاری | 78 |
 | نسخه‌ی منبع انگلیسی | `f652c6b8a26f` |
 
@@ -75,7 +75,7 @@ cd kubernetes-doc-fa
 | `reference` | 1198 | 1198 |
 | `setup` | 22 | 22 |
 | `tasks` | 221 | 221 |
-| `tutorials` | 26 | 45 |
+| `tutorials` | 41 | 45 |
 
 </div>
 
@@ -101,26 +101,26 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [tutorials/stateless-application/_index.md](md/tutorials/stateless-application/_index.md) — 2026-11-16T15:57:26+03:30
+- [tutorials/stateful-application/basic-stateful-set.md](md/tutorials/stateful-application/basic-stateful-set.md) — 2026-11-16T15:57:23+03:30
+- [tutorials/stateful-application/mysql-wordpress-persistent-volume.md](md/tutorials/stateful-application/mysql-wordpress-persistent-volume.md) — 2026-11-16T15:55:07+03:30
+- [tutorials/stateful-application/cassandra.md](md/tutorials/stateful-application/cassandra.md) — 2026-11-16T15:54:25+03:30
+- [tutorials/services/source-ip.md](md/tutorials/services/source-ip.md) — 2026-11-16T15:53:40+03:30
+- [tutorials/stateful-application/_index.md](md/tutorials/stateful-application/_index.md) — 2026-11-16T15:52:59+03:30
+- [tutorials/services/connect-applications-service.md](md/tutorials/services/connect-applications-service.md) — 2026-11-16T15:52:56+03:30
+- [tutorials/services/pods-and-endpoint-termination-flow.md](md/tutorials/services/pods-and-endpoint-termination-flow.md) — 2026-11-16T15:52:25+03:30
+- [tutorials/security/seccomp.md](md/tutorials/security/seccomp.md) — 2026-11-16T15:52:00+03:30
+- [tutorials/services/_index.md](md/tutorials/services/_index.md) — 2026-11-16T15:50:49+03:30
+- [tutorials/security/cluster-level-pss.md](md/tutorials/security/cluster-level-pss.md) — 2026-11-16T15:50:46+03:30
+- [tutorials/security/ns-level-pss.md](md/tutorials/security/ns-level-pss.md) — 2026-11-16T15:50:19+03:30
+- [tutorials/kubernetes-basics/update/update-intro.md](md/tutorials/kubernetes-basics/update/update-intro.md) — 2026-11-16T15:49:57+03:30
+- [tutorials/security/apparmor.md](md/tutorials/security/apparmor.md) — 2026-11-16T15:49:54+03:30
+- [tutorials/security/_index.md](md/tutorials/security/_index.md) — 2026-11-16T15:49:07+03:30
 - [tutorials/kubernetes-basics/expose/expose-intro.md](md/tutorials/kubernetes-basics/expose/expose-intro.md) — 2026-11-16T15:48:50+03:30
 - [tutorials/kubernetes-basics/update/_index.md](md/tutorials/kubernetes-basics/update/_index.md) — 2026-11-16T15:48:50+03:30
 - [tutorials/kubernetes-basics/scale/scale-intro.md](md/tutorials/kubernetes-basics/scale/scale-intro.md) — 2026-11-16T15:48:47+03:30
 - [tutorials/kubernetes-basics/scale/_index.md](md/tutorials/kubernetes-basics/scale/_index.md) — 2026-11-16T15:48:08+03:30
 - [tutorials/kubernetes-basics/explore/explore-intro.md](md/tutorials/kubernetes-basics/explore/explore-intro.md) — 2026-11-16T15:48:04+03:30
-- [tutorials/kubernetes-basics/expose/_index.md](md/tutorials/kubernetes-basics/expose/_index.md) — 2026-11-16T15:48:04+03:30
-- [tutorials/kubernetes-basics/deploy-app/deploy-intro.md](md/tutorials/kubernetes-basics/deploy-app/deploy-intro.md) — 2026-11-16T15:48:01+03:30
-- [tutorials/kubernetes-basics/explore/_index.md](md/tutorials/kubernetes-basics/explore/_index.md) — 2026-11-16T15:47:24+03:30
-- [tutorials/kubernetes-basics/create-cluster/cluster-intro.md](md/tutorials/kubernetes-basics/create-cluster/cluster-intro.md) — 2026-11-16T15:47:21+03:30
-- [tutorials/kubernetes-basics/deploy-app/_index.md](md/tutorials/kubernetes-basics/deploy-app/_index.md) — 2026-11-16T15:47:20+03:30
-- [tutorials/kubernetes-basics/_index.md](md/tutorials/kubernetes-basics/_index.md) — 2026-11-16T15:47:17+03:30
-- [tutorials/kubernetes-basics/create-cluster/_index.md](md/tutorials/kubernetes-basics/create-cluster/_index.md) — 2026-11-16T15:46:56+03:30
-- [tutorials/configuration/updating-configuration-via-a-configmap.md](md/tutorials/configuration/updating-configuration-via-a-configmap.md) — 2026-11-16T15:46:52+03:30
-- [tutorials/hello-minikube.md](md/tutorials/hello-minikube.md) — 2026-11-16T15:46:25+03:30
-- [tutorials/configuration/configure-persistent-volume-storage.md](md/tutorials/configuration/configure-persistent-volume-storage.md) — 2026-11-16T15:45:35+03:30
-- [tutorials/configuration/pod-sidecar-containers.md](md/tutorials/configuration/pod-sidecar-containers.md) — 2026-11-16T15:44:56+03:30
-- [tutorials/configuration/configure-redis-using-configmap.md](md/tutorials/configuration/configure-redis-using-configmap.md) — 2026-11-16T15:44:04+03:30
-- [tutorials/cluster-management/use-pod-level-resource-managers.md](md/tutorials/cluster-management/use-pod-level-resource-managers.md) — 2026-11-16T15:43:39+03:30
-- [tutorials/configuration/_index.md](md/tutorials/configuration/_index.md) — 2026-11-16T15:42:59+03:30
-- [tutorials/cluster-management/provision-swap-memory.md](md/tutorials/cluster-management/provision-swap-memory.md) — 2026-11-16T15:42:56+03:30
 
 </div>
 

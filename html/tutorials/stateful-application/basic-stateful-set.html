@@ -1,0 +1,969 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>مبانی StatefulSet | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">tutorials / stateful-application</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">مبانی StatefulSet</h1><!-- overview -->
+<p dir="rtl">این آموزش مقدمه‌ای بر مدیریت برنامه‌ها با
+<span class="term" title="statefulset">StatefulSetها</span> است.
+در این آموزش نشان داده می‌شود که چگونه Podهای StatefulSetها را ایجاد، حذف، مقیاس‌دهی و به‌روزرسانی کنید.</p>
+<h2 id="پیش-از-شروع" dir="rtl">پیش از شروع</h2>
+<p dir="rtl">پیش از شروع این آموزش، بهتر است با مفاهیم زیر در کوبرنتیز آشنا شوید:</p>
+<ul>
+<li dir="rtl"><a href="../../concepts/workloads/pods/index.html">Podها</a></li>
+<li dir="rtl"><a href="../../concepts/services-networking/dns-pod-service.html">DNS کلاستر</a></li>
+<li dir="rtl"><a href="../../concepts/services-networking/service.html#headless-services">Serviceهای Headless</a></li>
+<li dir="rtl"><a href="../../concepts/storage/persistent-volumes.html">PersistentVolumeها</a></li>
+<li dir="rtl"><a href="../../concepts/storage/dynamic-provisioning.html">تأمین PersistentVolumeها</a></li>
+<li dir="rtl">ابزار خط فرمان <a href="../../reference/kubectl/kubectl.html">kubectl</a></li>
+</ul>
+<p dir="rtl">باید یک کلاستر کوبرنتیز داشته باشید و ابزار خط فرمان kubectl باید برای ارتباط با کلاستر شما پیکربندی شده باشد. توصیه می‌شود این آموزش را روی کلاستری اجرا کنید که دست‌کم دو نود داشته باشد که نقش میزبان control plane را ندارند. اگر هنوز کلاستری ندارید، می‌توانید با استفاده از
+<a href="https://minikube.sigs.k8s.io/docs/tutorials/multi_node/" target="_blank" rel="noopener">minikube</a>
+یکی بسازید یا از یکی از این محیط‌های آزمایشی کوبرنتیز استفاده کنید:</p>
+<ul>
+<li dir="ltr" class="ltr"><a href="https://labs.iximiuz.com/playgrounds?category=kubernetes&amp;filter=all" target="_blank" rel="noopener">iximiuz Labs</a></li>
+<li dir="ltr" class="ltr"><a href="https://killercoda.com/playgrounds/scenario/kubernetes" target="_blank" rel="noopener">Killercoda</a></li>
+<li dir="ltr" class="ltr"><a href="https://kodekloud.com/public-playgrounds" target="_blank" rel="noopener">KodeKloud</a></li>
+</ul>
+<p dir="rtl">باید <code dir="ltr">kubectl</code> را طوری پیکربندی کنید که از یک context با فضای نام (namespace) <code dir="ltr">default</code> استفاده کند.
+اگر از یک کلاستر موجود استفاده می‌کنید، مطمئن شوید که استفاده از فضای نام پیش‌فرض آن کلاستر برای تمرین مشکلی ایجاد نمی‌کند. بهتر است در کلاستری تمرین کنید که هیچ بار کاری واقعی روی آن اجرا نمی‌شود.</p>
+<p dir="rtl">همچنین خواندن صفحهٔ مفهومی <a href="../../concepts/workloads/controllers/statefulset.html">StatefulSetها</a> مفید است.</p>
+<div class="callout note"><div class="callout-title">Note</div>
+<p dir="rtl">این آموزش فرض می‌کند که کلاستر شما برای تأمین پویای PersistentVolumeها پیکربندی شده است. همچنین به یک <a href="../../concepts/storage/storage-classes.html#default-storageclass">StorageClass پیش‌فرض</a> نیاز دارید.
+اگر کلاستر شما برای تأمین پویای ذخیره‌سازی پیکربندی نشده است، باید پیش از شروع این آموزش دو حجم (volume) یک گیبی‌بایتی را به‌صورت دستی تأمین کنید و کلاستر خود را طوری تنظیم کنید که این PersistentVolumeها به الگوهای PersistentVolumeClaim تعریف‌شده در StatefulSet نگاشت شوند.</p>
+</div>
+<h2 id="اهداف" dir="rtl">اهداف</h2>
+<p dir="rtl">StatefulSetها برای استفاده با برنامه‌های حالت‌مند (stateful) و سامانه‌های توزیع‌شده طراحی شده‌اند. با این حال، مدیریت برنامه‌های حالت‌مند و سامانه‌های توزیع‌شده روی کوبرنتیز موضوعی گسترده و پیچیده است. برای اینکه ویژگی‌های پایه‌ای StatefulSet را نشان دهیم و این دو موضوع را با هم درنیامیزیم، در این آموزش یک برنامهٔ وب ساده را با استفاده از یک StatefulSet مستقر می‌کنید.</p>
+<p dir="rtl">پس از این آموزش، با موارد زیر آشنا خواهید شد:</p>
+<ul>
+<li dir="rtl">چگونگی ایجاد یک StatefulSet</li>
+<li dir="rtl">چگونگی مدیریت Podها به‌دست StatefulSet</li>
+<li dir="rtl">چگونگی حذف یک StatefulSet</li>
+<li dir="rtl">چگونگی مقیاس‌دهی یک StatefulSet</li>
+<li dir="rtl">چگونگی به‌روزرسانی Podهای یک StatefulSet</li>
+</ul>
+<!-- lessoncontent -->
+<h2 id="ایجاد-یک-statefulset" dir="rtl">ایجاد یک StatefulSet</h2>
+<p dir="rtl">کار را با ایجاد یک StatefulSet (و Serviceای که به آن وابسته است) با استفاده از نمونهٔ زیر آغاز کنید. این نمونه شبیه نمونه‌ای است که در صفحهٔ مفهومی <a href="../../concepts/workloads/controllers/statefulset.html">StatefulSetها</a> آمده است.
+این نمونه یک <a href="../../concepts/services-networking/service.html#headless-services">Service از نوع headless</a> به نام <code dir="ltr">nginx</code> ایجاد می‌کند تا نشانی‌های IP مربوط به Podهای StatefulSet با نام <code dir="ltr">web</code> را منتشر کند.</p>
+<div class="code-file ltr" dir="ltr">application/web/web.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: Service
+metadata:
+  name: nginx
+  labels:
+    app: nginx
+spec:
+  ports:
+  - port: 80
+    name: web
+  clusterIP: None
+  selector:
+    app: nginx
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: web
+spec:
+  serviceName: "nginx"
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: registry.k8s.io/nginx-slim:0.21
+        ports:
+        - containerPort: 80
+          name: web
+        volumeMounts:
+        - name: www
+          mountPath: /usr/share/nginx/html
+  volumeClaimTemplates:
+  - metadata:
+      name: www
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Gi
+</code></pre>
+<p dir="rtl">باید دست‌کم از دو پنجرهٔ ترمینال استفاده کنید. در ترمینال اول، با استفاده از
+<a href="https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands/#get" target="_blank"><code dir="ltr">kubectl get</code></a> ایجاد Podهای StatefulSet را <span class="term" title="watch">پایش</span> کنید.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># use this terminal to run commands that specify --watch
+# end this watch when you are asked to start a new watch
+kubectl get pods --watch -l app=nginx
+</code></pre>
+<p dir="rtl">در ترمینال دوم، با استفاده از
+<a href="https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands/#apply" target="_blank"><code dir="ltr">kubectl apply</code></a> سرویس headless و StatefulSet را ایجاد کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f https://k8s.io/examples/application/web/web.yaml
+</code></pre>
+<pre dir="ltr"><code dir="ltr">service/nginx created
+statefulset.apps/web created
+</code></pre>
+<p dir="rtl">فرمان بالا دو Pod ایجاد می‌کند که هر کدام یک وب‌سرور <a href="https://www.nginx.com" target="_blank" rel="noopener">NGINX</a> را اجرا می‌کنند. ابتدا Service با نام <code dir="ltr">nginx</code> را دریافت کنید...</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get service nginx
+</code></pre>
+<pre dir="ltr"><code dir="ltr">NAME      TYPE         CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+nginx     ClusterIP    None         &lt;none&gt;        80/TCP    12s
+</code></pre>
+<p dir="rtl">...سپس StatefulSet با نام <code dir="ltr">web</code> را دریافت کنید تا مطمئن شوید هر دو با موفقیت ایجاد شده‌اند:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get statefulset web
+</code></pre>
+<pre dir="ltr"><code dir="ltr">NAME   READY   AGE
+web    2/2     37s
+</code></pre>
+<h3 id="ایجاد-ترتیبی-podها" dir="rtl">ایجاد ترتیبی Podها</h3>
+<p dir="rtl">هر StatefulSet به‌طور پیش‌فرض Podهای خود را با ترتیبی دقیق ایجاد می‌کند.</p>
+<p dir="rtl">در یک StatefulSet با <em>n</em> رپلیکا، هنگام استقرار Podها، آن‌ها به‌صورت پی‌درپی و به ترتیب از <em>{0..n-1}</em> ایجاد می‌شوند. خروجی فرمان <code dir="ltr">kubectl get</code> را در ترمینال اول بررسی کنید. در نهایت، خروجی شبیه نمونهٔ زیر خواهد بود.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># Do not start a new watch;
+# this should already be running
+kubectl get pods --watch -l app=nginx
+</code></pre>
+<pre dir="ltr"><code dir="ltr">NAME      READY     STATUS    RESTARTS   AGE
+web-0     0/1       Pending   0          0s
+web-0     0/1       Pending   0         0s
+web-0     0/1       ContainerCreating   0         0s
+web-0     1/1       Running   0         19s
+web-1     0/1       Pending   0         0s
+web-1     0/1       Pending   0         0s
+web-1     0/1       ContainerCreating   0         0s
+web-1     1/1       Running   0         18s
+</code></pre>
+<p dir="rtl">توجه کنید که Pod با نام <code dir="ltr">web-1</code> تا زمانی که Pod با نام <code dir="ltr">web-0</code> در وضعیت <em>Running</em> (به <a href="../../concepts/workloads/pods/pod-lifecycle.html#pod-phase">فاز Pod</a> مراجعه کنید) و <em>Ready</em> (به <code dir="ltr">type</code> در <a href="../../concepts/workloads/pods/pod-lifecycle.html#pod-conditions">شرایط Pod</a> مراجعه کنید) قرار نگیرد، راه‌اندازی نمی‌شود.</p>
+<p dir="rtl">در ادامهٔ این آموزش، <a href="#parallel-pod-management">راه‌اندازی موازی</a> را نیز تمرین خواهید کرد.</p>
+<div class="callout note"><div class="callout-title">Note</div>
+<p dir="rtl">برای پیکربندی عدد ترتیبی صحیحی که به هر Pod در یک StatefulSet اختصاص داده می‌شود، به <a href="../../concepts/workloads/controllers/statefulset.html#start-ordinal">عدد ترتیبی آغازین</a> مراجعه کنید.</p>
+</div>
+<h2 id="podها-در-یک-statefulset" dir="rtl">Podها در یک StatefulSet</h2>
+<p dir="rtl">هر Pod در یک StatefulSet یک شاخص ترتیبی یکتا و یک هویت شبکه‌ای پایدار دارد.</p>
+<h3 id="بررسی-شاخص-ترتیبی-pod" dir="rtl">بررسی شاخص ترتیبی Pod</h3>
+<p dir="rtl">Podهای StatefulSet را دریافت کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pods -l app=nginx
+</code></pre>
+<pre dir="ltr"><code dir="ltr">NAME      READY     STATUS    RESTARTS   AGE
+web-0     1/1       Running   0          1m
+web-1     1/1       Running   0          1m
+</code></pre>
+<p dir="rtl">همان‌طور که در صفحهٔ مفهومی <a href="../../concepts/workloads/controllers/statefulset.html">StatefulSetها</a> گفته شد، Podهای یک StatefulSet هویتی ماندگار و یکتا دارند. این هویت بر پایهٔ یک شاخص ترتیبی یکتاست که <span class="term" title="controller">کنترل‌کننده</span>ٔ StatefulSet به هر Pod اختصاص می‌دهد.<br>
+نام Podها به شکل <code dir="ltr">&lt;statefulset name&gt;-&lt;ordinal index&gt;</code> است.
+از آنجا که StatefulSet با نام <code dir="ltr">web</code> دو رپلیکا دارد، دو Pod با نام‌های <code dir="ltr">web-0</code> و <code dir="ltr">web-1</code> ایجاد می‌کند.</p>
+<h3 id="استفاده-از-هویت-های-شبکه-ای-پایدار" dir="rtl">استفاده از هویت‌های شبکه‌ای پایدار</h3>
+<p dir="rtl">هر Pod یک نام میزبان (hostname) پایدار بر پایهٔ شاخص ترتیبی خود دارد. با استفاده از
+<a href="https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands/#exec" target="_blank"><code dir="ltr">kubectl exec</code></a> فرمان <code dir="ltr">hostname</code> را در هر Pod اجرا کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">for i in 0 1; do kubectl exec "web-$i" -- sh -c 'hostname'; done
+</code></pre>
+<pre dir="ltr"><code dir="ltr">web-0
+web-1
+</code></pre>
+<p dir="rtl">با استفاده از <a href="https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands/#run" target="_blank"><code dir="ltr">kubectl run</code></a> کانتینری را اجرا کنید که فرمان <code dir="ltr">nslookup</code> را از بستهٔ <code dir="ltr">dnsutils</code> فراهم می‌کند.
+با اجرای <code dir="ltr">nslookup</code> روی نام میزبان Podها می‌توانید نشانی‌های DNS درون‌کلاستری آن‌ها را بررسی کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl run -i --tty --image busybox:1.28 dns-test --restart=Never --rm
+</code></pre>
+<p dir="rtl">این فرمان یک پوستهٔ (shell) جدید باز می‌کند. در آن پوستهٔ جدید، این فرمان را اجرا کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># Run this in the dns-test container shell
+nslookup web-0.nginx
+</code></pre>
+<p dir="rtl">خروجی شبیه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">Server:    10.0.0.10
+Address 1: 10.0.0.10 kube-dns.kube-system.svc.cluster.local
+
+Name:      web-0.nginx
+Address 1: 10.244.1.6
+
+nslookup web-1.nginx
+Server:    10.0.0.10
+Address 1: 10.0.0.10 kube-dns.kube-system.svc.cluster.local
+
+Name:      web-1.nginx
+Address 1: 10.244.2.6
+</code></pre>
+<p dir="rtl">(و اکنون با <code dir="ltr">exit</code> از پوستهٔ کانتینر خارج شوید)</p>
+<p dir="rtl">رکورد CNAME سرویس headless به رکوردهای SRV اشاره می‌کند (یک رکورد برای هر Podای که در وضعیت Running و Ready است). رکوردهای SRV نیز به رکوردهای A اشاره می‌کنند که نشانی‌های IP مربوط به Podها را در خود دارند.</p>
+<p dir="rtl">در یک ترمینال، Podهای StatefulSet را پایش کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># Start a new watch
+# End this watch when you've seen that the delete is finished
+kubectl get pod --watch -l app=nginx
+</code></pre>
+<p dir="rtl">در ترمینال دوم، با استفاده از
+<a href="https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands/#delete" target="_blank"><code dir="ltr">kubectl delete</code></a> همهٔ Podهای StatefulSet را حذف کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl delete pod -l app=nginx
+</code></pre>
+<pre dir="ltr"><code dir="ltr">pod "web-0" deleted
+pod "web-1" deleted
+</code></pre>
+<p dir="rtl">صبر کنید تا StatefulSet آن‌ها را دوباره راه‌اندازی کند و هر دو Pod به وضعیت Running و Ready برسند:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># This should already be running
+kubectl get pod --watch -l app=nginx
+</code></pre>
+<pre dir="ltr"><code dir="ltr">NAME      READY     STATUS              RESTARTS   AGE
+web-0     0/1       ContainerCreating   0          0s
+NAME      READY     STATUS    RESTARTS   AGE
+web-0     1/1       Running   0          2s
+web-1     0/1       Pending   0         0s
+web-1     0/1       Pending   0         0s
+web-1     0/1       ContainerCreating   0         0s
+web-1     1/1       Running   0         34s
+</code></pre>
+<p dir="rtl">با استفاده از <code dir="ltr">kubectl exec</code> و <code dir="ltr">kubectl run</code> نام میزبان Podها و ورودی‌های DNS درون‌کلاستری آن‌ها را مشاهده کنید. ابتدا نام میزبان Podها را ببینید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">for i in 0 1; do kubectl exec web-$i -- sh -c 'hostname'; done
+</code></pre>
+<pre dir="ltr"><code dir="ltr">web-0
+web-1
+</code></pre>
+<p dir="rtl">سپس این فرمان را اجرا کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl run -i --tty --image busybox:1.28 dns-test --restart=Never --rm
+</code></pre>
+<p dir="rtl">این فرمان یک پوستهٔ جدید باز می‌کند.<br>
+در آن پوستهٔ جدید، این فرمان را اجرا کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># Run this in the dns-test container shell
+nslookup web-0.nginx
+</code></pre>
+<p dir="rtl">خروجی شبیه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">Server:    10.0.0.10
+Address 1: 10.0.0.10 kube-dns.kube-system.svc.cluster.local
+
+Name:      web-0.nginx
+Address 1: 10.244.1.7
+
+nslookup web-1.nginx
+Server:    10.0.0.10
+Address 1: 10.0.0.10 kube-dns.kube-system.svc.cluster.local
+
+Name:      web-1.nginx
+Address 1: 10.244.2.8
+</code></pre>
+<p dir="rtl">(و اکنون با <code dir="ltr">exit</code> از پوستهٔ کانتینر خارج شوید)</p>
+<p dir="rtl">اعداد ترتیبی، نام‌های میزبان، رکوردهای SRV و نام‌های رکورد A مربوط به Podها تغییری نکرده‌اند، اما ممکن است نشانی‌های IP مرتبط با Podها تغییر کرده باشند. در کلاستری که برای این آموزش استفاده شده، این نشانی‌ها تغییر کرده‌اند. به همین دلیل مهم است که برنامه‌های دیگر را طوری پیکربندی نکنید که از طریق نشانی IP یک Pod خاص به Podهای یک StatefulSet متصل شوند (اتصال به Podها از طریق تحلیل نام میزبان آن‌ها مشکلی ندارد).</p>
+<h4 id="کشف-podهای-مشخص-در-یک-statefulset" dir="rtl">کشف Podهای مشخص در یک StatefulSet</h4>
+<p dir="rtl">اگر لازم است اعضای فعال یک StatefulSet را پیدا کنید و به آن‌ها متصل شوید، باید رکورد CNAME سرویس headless (<code dir="ltr">nginx.default.svc.cluster.local</code>) را پرس‌وجو کنید. رکوردهای SRV مرتبط با این CNAME فقط شامل Podهایی از StatefulSet خواهند بود که در وضعیت Running و Ready هستند.</p>
+<p dir="rtl">اگر برنامهٔ شما از قبل منطق اتصالی را پیاده‌سازی کرده است که زنده‌بودن (liveness) و آمادگی (readiness) را بررسی می‌کند، می‌توانید از رکوردهای SRV مربوط به Podها (<code dir="ltr">web-0.nginx.default.svc.cluster.local</code> و <code dir="ltr">web-1.nginx.default.svc.cluster.local</code>) استفاده کنید؛ زیرا این رکوردها پایدار هستند و برنامهٔ شما می‌تواند نشانی Podها را هنگامی که به وضعیت Running و Ready می‌رسند کشف کند.</p>
+<p dir="rtl">اگر برنامهٔ شما می‌خواهد هر Pod سالمی را در یک StatefulSet پیدا کند و در نتیجه نیازی به ردگیری تک‌تک Podها ندارد، می‌توانید به نشانی IP یک Service از نوع <code dir="ltr">type: ClusterIP</code> متصل شوید که Podهای آن StatefulSet پشتیبان آن هستند. می‌توانید از همان Serviceای استفاده کنید که StatefulSet را ردگیری می‌کند (و در فیلد <code dir="ltr">serviceName</code> مربوط به StatefulSet مشخص شده است)، یا از یک Service جداگانه که مجموعهٔ درستی از Podها را انتخاب می‌کند.</p>
+<h3 id="نوشتن-در-ذخیره-سازی-پایدار" dir="rtl">نوشتن در ذخیره‌سازی پایدار</h3>
+<p dir="rtl">PersistentVolumeClaimهای مربوط به <code dir="ltr">web-0</code> و <code dir="ltr">web-1</code> را دریافت کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pvc -l app=nginx
+</code></pre>
+<p dir="rtl">خروجی شبیه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">NAME        STATUS    VOLUME                                     CAPACITY   ACCESSMODES   AGE
+www-web-0   Bound     pvc-15c268c7-b507-11e6-932f-42010a800002   1Gi        RWO           48s
+www-web-1   Bound     pvc-15c79307-b507-11e6-932f-42010a800002   1Gi        RWO           48s
+</code></pre>
+<p dir="rtl">کنترل‌کنندهٔ StatefulSet دو
+<span class="term" title="persistent-volume-claim">PersistentVolumeClaim</span>
+ایجاد کرده است که به دو
+<span class="term" title="persistent-volume">PersistentVolume</span>
+متصل (bound) شده‌اند.</p>
+<p dir="rtl">از آنجا که کلاستر استفاده‌شده در این آموزش برای تأمین پویای PersistentVolumeها پیکربندی شده است، این PersistentVolumeها به‌طور خودکار ایجاد و متصل شده‌اند.</p>
+<p dir="rtl">وب‌سرور NGINX به‌طور پیش‌فرض یک فایل index را از مسیر <code dir="ltr">/usr/share/nginx/html/index.html</code> ارائه می‌کند. فیلد <code dir="ltr">volumeMounts</code> در <code dir="ltr">spec</code> مربوط به StatefulSet تضمین می‌کند که دایرکتوری <code dir="ltr">/usr/share/nginx/html</code> بر پایهٔ یک PersistentVolume باشد.</p>
+<p dir="rtl">نام میزبان Podها را در فایل‌های <code dir="ltr">index.html</code> آن‌ها بنویسید و بررسی کنید که وب‌سرورهای NGINX این نام‌های میزبان را ارائه می‌کنند:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">for i in 0 1; do kubectl exec "web-$i" -- sh -c 'echo "$(hostname)" &gt; /usr/share/nginx/html/index.html'; done
+
+for i in 0 1; do kubectl exec -i -t "web-$i" -- curl http://localhost/; done
+</code></pre>
+<pre dir="ltr"><code dir="ltr">web-0
+web-1
+</code></pre>
+<div class="callout note"><div class="callout-title">Note</div>
+<p dir="rtl">اگر به‌جای آن برای فرمان curl بالا پاسخ‌های <strong>403 Forbidden</strong> دریافت کردید، باید مجوزهای دایرکتوری‌ای را که با <code dir="ltr">volumeMounts</code> سوار (mount) شده است اصلاح کنید (این مشکل ناشی از <a href="https://github.com/kubernetes/kubernetes/issues/2630" target="_blank" rel="noopener">باگی در هنگام استفاده از حجم‌های hostPath</a> است). برای این کار، فرمان زیر را اجرا کنید:</p>
+<p dir="ltr" class="ltr"><code dir="ltr">for i in 0 1; do kubectl exec web-$i -- chmod 755 /usr/share/nginx/html; done</code></p>
+<p dir="rtl">و سپس فرمان <code dir="ltr">curl</code> بالا را دوباره امتحان کنید.</p>
+</div>
+<p dir="rtl">در یک ترمینال، Podهای StatefulSet را پایش کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># End this watch when you've reached the end of the section.
+# At the start of "Scaling a StatefulSet" you'll start a new watch.
+kubectl get pod --watch -l app=nginx
+</code></pre>
+<p dir="rtl">در ترمینال دوم، همهٔ Podهای StatefulSet را حذف کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl delete pod -l app=nginx
+</code></pre>
+<pre dir="ltr"><code dir="ltr">pod "web-0" deleted
+pod "web-1" deleted
+</code></pre>
+<p dir="rtl">خروجی فرمان <code dir="ltr">kubectl get</code> را در ترمینال اول بررسی کنید و صبر کنید تا همهٔ Podها به وضعیت Running و Ready برسند.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># This should already be running
+kubectl get pod --watch -l app=nginx
+</code></pre>
+<pre dir="ltr"><code dir="ltr">NAME      READY     STATUS              RESTARTS   AGE
+web-0     0/1       ContainerCreating   0          0s
+NAME      READY     STATUS    RESTARTS   AGE
+web-0     1/1       Running   0          2s
+web-1     0/1       Pending   0         0s
+web-1     0/1       Pending   0         0s
+web-1     0/1       ContainerCreating   0         0s
+web-1     1/1       Running   0         34s
+</code></pre>
+<p dir="rtl">بررسی کنید که وب‌سرورها همچنان نام میزبان خود را ارائه می‌کنند:</p>
+<pre dir="ltr"><code dir="ltr">for i in 0 1; do kubectl exec -i -t "web-$i" -- curl http://localhost/; done
+</code></pre>
+<pre dir="ltr"><code dir="ltr">web-0
+web-1
+</code></pre>
+<p dir="rtl">با اینکه <code dir="ltr">web-0</code> و <code dir="ltr">web-1</code> دوباره زمان‌بندی شده‌اند، همچنان نام میزبان خود را ارائه می‌کنند؛ زیرا PersistentVolumeهای مرتبط با PersistentVolumeClaimهای آن‌ها دوباره به <code dir="ltr">volumeMounts</code> آن‌ها سوار می‌شوند. فارغ از اینکه <code dir="ltr">web-0</code> و <code dir="ltr">web-1</code> روی کدام نود زمان‌بندی شوند، PersistentVolumeهای آن‌ها به نقاط اتصال مناسب سوار خواهند شد.</p>
+<h2 id="مقیاس-دهی-یک-statefulset" dir="rtl">مقیاس‌دهی یک StatefulSet</h2>
+<p dir="rtl">مقیاس‌دهی یک StatefulSet به افزایش یا کاهش تعداد رپلیکاها (مقیاس‌دهی افقی) گفته می‌شود.
+این کار با به‌روزرسانی فیلد <code dir="ltr">replicas</code> انجام می‌شود. برای مقیاس‌دهی یک StatefulSet می‌توانید از
+<a href="https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands/#scale" target="_blank"><code dir="ltr">kubectl scale</code></a> یا
+<a href="https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands/#patch" target="_blank"><code dir="ltr">kubectl patch</code></a> استفاده کنید.</p>
+<h3 id="افزایش-مقیاس" dir="rtl">افزایش مقیاس</h3>
+<p dir="rtl">افزایش مقیاس به معنای افزودن رپلیکاهای بیشتر است.
+به شرط آنکه برنامهٔ شما بتواند کار را میان اعضای StatefulSet توزیع کند، مجموعهٔ جدید و بزرگ‌تر Podها می‌تواند بخش بیشتری از آن کار را انجام دهد.</p>
+<p dir="rtl">در یک پنجرهٔ ترمینال، Podهای StatefulSet را پایش کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># If you already have a watch running, you can continue using that.
+# Otherwise, start one.
+# End this watch when there are 5 healthy Pods for the StatefulSet
+kubectl get pods --watch -l app=nginx
+</code></pre>
+<p dir="rtl">در پنجرهٔ ترمینال دیگری، با استفاده از <code dir="ltr">kubectl scale</code> تعداد رپلیکاها را به ۵ برسانید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl scale sts web --replicas=5
+</code></pre>
+<pre dir="ltr"><code dir="ltr">statefulset.apps/web scaled
+</code></pre>
+<p dir="rtl">خروجی فرمان <code dir="ltr">kubectl get</code> را در ترمینال اول بررسی کنید و صبر کنید تا سه Pod افزوده‌شده به وضعیت Running و Ready برسند.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># This should already be running
+kubectl get pod --watch -l app=nginx
+</code></pre>
+<pre dir="ltr"><code dir="ltr">NAME      READY     STATUS    RESTARTS   AGE
+web-0     1/1       Running   0          2h
+web-1     1/1       Running   0          2h
+NAME      READY     STATUS    RESTARTS   AGE
+web-2     0/1       Pending   0          0s
+web-2     0/1       Pending   0         0s
+web-2     0/1       ContainerCreating   0         0s
+web-2     1/1       Running   0         19s
+web-3     0/1       Pending   0         0s
+web-3     0/1       Pending   0         0s
+web-3     0/1       ContainerCreating   0         0s
+web-3     1/1       Running   0         18s
+web-4     0/1       Pending   0         0s
+web-4     0/1       Pending   0         0s
+web-4     0/1       ContainerCreating   0         0s
+web-4     1/1       Running   0         19s
+</code></pre>
+<p dir="rtl">کنترل‌کنندهٔ StatefulSet تعداد رپلیکاها را تغییر داد. همانند <a href="#ordered-pod-creation">ایجاد StatefulSet</a>، کنترل‌کنندهٔ StatefulSet هر Pod را به‌صورت پی‌درپی و بر اساس شاخص ترتیبی آن ایجاد کرد و پیش از راه‌اندازی هر Pod، منتظر ماند تا Pod پیشین در وضعیت Running و Ready قرار گیرد.</p>
+<h3 id="کاهش-مقیاس" dir="rtl">کاهش مقیاس</h3>
+<p dir="rtl">کاهش مقیاس به معنای کم کردن تعداد رپلیکاهاست. برای مثال، ممکن است به این دلیل این کار را انجام دهید که سطح ترافیک یک سرویس کاهش یافته است و در مقیاس فعلی، منابعی بیکار مانده‌اند.</p>
+<p dir="rtl">در یک ترمینال، Podهای StatefulSet را پایش کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># End this watch when there are only 3 Pods for the StatefulSet
+kubectl get pod --watch -l app=nginx
+</code></pre>
+<p dir="rtl">در ترمینال دیگری، با استفاده از <code dir="ltr">kubectl patch</code> مقیاس StatefulSet را دوباره به سه رپلیکا کاهش دهید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl patch sts web -p '{"spec":{"replicas":3}}'
+</code></pre>
+<pre dir="ltr"><code dir="ltr">statefulset.apps/web patched
+</code></pre>
+<p dir="rtl">صبر کنید تا <code dir="ltr">web-4</code> و <code dir="ltr">web-3</code> به وضعیت Terminating بروند.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># This should already be running
+kubectl get pods --watch -l app=nginx
+</code></pre>
+<pre dir="ltr"><code dir="ltr">NAME      READY     STATUS              RESTARTS   AGE
+web-0     1/1       Running             0          3h
+web-1     1/1       Running             0          3h
+web-2     1/1       Running             0          55s
+web-3     1/1       Running             0          36s
+web-4     0/1       ContainerCreating   0          18s
+NAME      READY     STATUS    RESTARTS   AGE
+web-4     1/1       Running   0          19s
+web-4     1/1       Terminating   0         24s
+web-4     1/1       Terminating   0         24s
+web-3     1/1       Terminating   0         42s
+web-3     1/1       Terminating   0         42s
+</code></pre>
+<h3 id="خاتمهٔ-ترتیبی-podها" dir="rtl">خاتمهٔ ترتیبی Podها</h3>
+<p dir="rtl">control plane هر بار یک Pod را، به ترتیب معکوس شاخص ترتیبی آن، حذف کرد و پیش از حذف Pod بعدی منتظر ماند تا هر Pod به‌طور کامل خاموش شود.</p>
+<p dir="rtl">PersistentVolumeClaimهای StatefulSet را دریافت کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pvc -l app=nginx
+</code></pre>
+<pre dir="ltr"><code dir="ltr">NAME        STATUS    VOLUME                                     CAPACITY   ACCESSMODES   AGE
+www-web-0   Bound     pvc-15c268c7-b507-11e6-932f-42010a800002   1Gi        RWO           13h
+www-web-1   Bound     pvc-15c79307-b507-11e6-932f-42010a800002   1Gi        RWO           13h
+www-web-2   Bound     pvc-e1125b27-b508-11e6-932f-42010a800002   1Gi        RWO           13h
+www-web-3   Bound     pvc-e1176df6-b508-11e6-932f-42010a800002   1Gi        RWO           13h
+www-web-4   Bound     pvc-e11bb5f8-b508-11e6-932f-42010a800002   1Gi        RWO           13h
+
+</code></pre>
+<p dir="rtl">هنوز پنج PersistentVolumeClaim و پنج PersistentVolume وجود دارد.
+هنگام بررسی <a href="#writing-to-stable-storage">ذخیره‌سازی پایدار</a> یک Pod دیدید که با حذف Podهای یک StatefulSet، PersistentVolumeهای سوارشده به آن Podها حذف نمی‌شوند. این موضوع زمانی که حذف Pod در اثر کاهش مقیاس StatefulSet رخ می‌دهد نیز صادق است.</p>
+<h2 id="به-روزرسانی-statefulsetها" dir="rtl">به‌روزرسانی StatefulSetها</h2>
+<p dir="rtl">کنترل‌کنندهٔ StatefulSet از به‌روزرسانی‌های خودکار پشتیبانی می‌کند. راهبرد مورد استفاده با فیلد <code dir="ltr">spec.updateStrategy</code> در آبجکت API مربوط به StatefulSet تعیین می‌شود. با این قابلیت می‌توانید ایمیج‌های کانتینر، درخواست‌ها و/یا محدودیت‌های منابع، برچسب‌ها و حاشیه‌نویسی‌های (annotation) Podهای یک StatefulSet را ارتقا دهید.</p>
+<p dir="rtl">دو راهبرد به‌روزرسانی معتبر وجود دارد: <code dir="ltr">RollingUpdate</code> (پیش‌فرض) و <code dir="ltr">OnDelete</code>.</p>
+<h3 id="rollingupdate-rolling-update" dir="ltr" class="ltr">RollingUpdate {#rolling-update}</h3>
+<p dir="rtl">راهبرد به‌روزرسانی <code dir="ltr">RollingUpdate</code> همهٔ Podهای یک StatefulSet را به ترتیب معکوس شمارهٔ ترتیبی‌شان به‌روزرسانی می‌کند و در این کار تضمین‌های StatefulSet را رعایت می‌کند.</p>
+<p dir="rtl">برای StatefulSetی که از راهبرد <code dir="ltr">RollingUpdate</code> استفاده می‌کند، می‌توانید با تعیین <code dir="ltr">.spec.updateStrategy.rollingUpdate.partition</code> به‌روزرسانی‌ها را به <em>بخش‌ها</em> (partitions) تقسیم کنید. این کار را در ادامهٔ همین آموزش تمرین خواهید کرد.</p>
+<p dir="rtl">ابتدا یک به‌روزرسانی غلتان (rolling update) ساده را امتحان کنید.</p>
+<p dir="rtl">در یک پنجرهٔ ترمینال، StatefulSet به نام <code dir="ltr">web</code> را patch کنید تا ایمیج کانتینر دوباره تغییر کند:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl patch statefulset web --type='json' -p='[{"op": "replace", "path": "/spec/template/spec/containers/0/image", "value":"registry.k8s.io/nginx-slim:0.24"}]'
+</code></pre>
+<pre dir="ltr"><code dir="ltr">statefulset.apps/web patched
+</code></pre>
+<p dir="rtl">در ترمینالی دیگر، Podهای این StatefulSet را زیر نظر بگیرید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># End this watch when the rollout is complete
+#
+# If you're not sure, leave it running one more minute
+kubectl get pod -l app=nginx --watch
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">NAME      READY     STATUS    RESTARTS   AGE
+web-0     1/1       Running   0          7m
+web-1     1/1       Running   0          7m
+web-2     1/1       Running   0          8m
+web-2     1/1       Terminating   0         8m
+web-2     1/1       Terminating   0         8m
+web-2     0/1       Terminating   0         8m
+web-2     0/1       Terminating   0         8m
+web-2     0/1       Terminating   0         8m
+web-2     0/1       Terminating   0         8m
+web-2     0/1       Pending   0         0s
+web-2     0/1       Pending   0         0s
+web-2     0/1       ContainerCreating   0         0s
+web-2     1/1       Running   0         19s
+web-1     1/1       Terminating   0         8m
+web-1     0/1       Terminating   0         8m
+web-1     0/1       Terminating   0         8m
+web-1     0/1       Terminating   0         8m
+web-1     0/1       Pending   0         0s
+web-1     0/1       Pending   0         0s
+web-1     0/1       ContainerCreating   0         0s
+web-1     1/1       Running   0         6s
+web-0     1/1       Terminating   0         7m
+web-0     1/1       Terminating   0         7m
+web-0     0/1       Terminating   0         7m
+web-0     0/1       Terminating   0         7m
+web-0     0/1       Terminating   0         7m
+web-0     0/1       Terminating   0         7m
+web-0     0/1       Pending   0         0s
+web-0     0/1       Pending   0         0s
+web-0     0/1       ContainerCreating   0         0s
+web-0     1/1       Running   0         10s
+</code></pre>
+<p dir="rtl">Podهای این StatefulSet به ترتیب معکوس شمارهٔ ترتیبی به‌روزرسانی می‌شوند. کنترل‌کنندهٔ StatefulSet هر Pod را خاتمه می‌دهد و پیش از به‌روزرسانی Pod بعدی صبر می‌کند تا آن Pod به وضعیت Running و Ready برسد. توجه کنید که کنترل‌کنندهٔ StatefulSet تا زمانی که Pod قبلی در ترتیب به وضعیت Running و Ready نرسد، به‌روزرسانی Pod بعدی را آغاز نمی‌کند؛ با این حال، هر Podی را که در حین به‌روزرسانی با شکست مواجه شود، به نسخهٔ فعلی همان Pod بازمی‌گرداند.</p>
+<p dir="rtl">Podهایی که به‌روزرسانی را دریافت کرده‌اند به نسخهٔ به‌روزشده بازگردانده می‌شوند و Podهایی که هنوز به‌روزرسانی را دریافت نکرده‌اند به نسخهٔ قبلی بازمی‌گردند. به این ترتیب، کنترل‌کننده می‌کوشد در صورت بروز خرابی‌های گاه‌به‌گاه نیز برنامه را سالم و به‌روزرسانی را سازگار نگه دارد.</p>
+<p dir="rtl">برای مشاهدهٔ ایمیج‌های کانتینر، Podها را دریافت کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">for p in 0 1 2; do kubectl get pod "web-$p" --template '{{range $i, $c := .spec.containers}}{{$c.image}}{{end}}'; echo; done
+</code></pre>
+<pre dir="ltr"><code dir="ltr">registry.k8s.io/nginx-slim:0.24
+registry.k8s.io/nginx-slim:0.24
+registry.k8s.io/nginx-slim:0.24
+
+</code></pre>
+<p dir="rtl">اکنون همهٔ Podهای این StatefulSet ایمیج کانتینر قبلی را اجرا می‌کنند.</p>
+<div class="callout note"><div class="callout-title">Note</div>
+<p dir="rtl">برای مشاهدهٔ وضعیت به‌روزرسانی غلتان یک StatefulSet می‌توانید از دستور <code dir="ltr">kubectl rollout status sts/&lt;name&gt;</code> نیز استفاده کنید.</p>
+</div>
+<h4 id="آماده-سازی-یک-به-روزرسانی" dir="rtl">آماده‌سازی یک به‌روزرسانی</h4>
+<p dir="rtl">برای StatefulSetی که از راهبرد <code dir="ltr">RollingUpdate</code> استفاده می‌کند، می‌توانید با تعیین <code dir="ltr">.spec.updateStrategy.rollingUpdate.partition</code> به‌روزرسانی‌ها را به <em>بخش‌ها</em> تقسیم کنید.</p>
+<p dir="rtl">برای آشنایی بیشتر، می‌توانید بخش <a href="../../concepts/workloads/controllers/statefulset.html#partitions">به‌روزرسانی‌های غلتان بخش‌بندی‌شده</a> را در صفحهٔ مفاهیم StatefulSet بخوانید.</p>
+<p dir="rtl">با استفاده از فیلد <code dir="ltr">partition</code> در <code dir="ltr">.spec.updateStrategy.rollingUpdate</code> می‌توانید به‌روزرسانی یک StatefulSet را از پیش آماده کنید. در این به‌روزرسانی، Podهای موجود در StatefulSet را بدون تغییر نگه می‌دارید و در همین حال الگوی Pod (pod template) آن StatefulSet را تغییر می‌دهید. سپس شما، یا در محیطی خارج از آموزش، یک سازوکار خودکارسازی خارجی، می‌توانید آن به‌روزرسانیِ آماده‌شده را راه‌اندازی کنید.</p>
+<p dir="rtl">ابتدا StatefulSet به نام <code dir="ltr">web</code> را patch کنید تا یک partition به فیلد <code dir="ltr">updateStrategy</code> اضافه شود:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># The value of "partition" determines which ordinals a change applies to
+# Make sure to use a number bigger than the last ordinal for the
+# StatefulSet
+kubectl patch statefulset web -p '{"spec":{"updateStrategy":{"type":"RollingUpdate","rollingUpdate":{"partition":3}}}}'
+</code></pre>
+<pre dir="ltr"><code dir="ltr">statefulset.apps/web patched
+</code></pre>
+<p dir="rtl">برای تغییر ایمیج کانتینری که این StatefulSet استفاده می‌کند، آن را دوباره patch کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl patch statefulset web --type='json' -p='[{"op": "replace", "path": "/spec/template/spec/containers/0/image", "value":"registry.k8s.io/nginx-slim:0.21"}]'
+</code></pre>
+<pre dir="ltr"><code dir="ltr">statefulset.apps/web patched
+</code></pre>
+<p dir="rtl">یکی از Podهای این StatefulSet را حذف کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl delete pod web-2
+</code></pre>
+<pre dir="ltr"><code dir="ltr">pod "web-2" deleted
+</code></pre>
+<p dir="rtl">صبر کنید تا Pod جایگزینِ <code dir="ltr">web-2</code> به وضعیت Running و Ready برسد:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># End the watch when you see that web-2 is healthy
+kubectl get pod -l app=nginx --watch
+</code></pre>
+<pre dir="ltr"><code dir="ltr">NAME      READY     STATUS              RESTARTS   AGE
+web-0     1/1       Running             0          4m
+web-1     1/1       Running             0          4m
+web-2     0/1       ContainerCreating   0          11s
+web-2     1/1       Running   0         18s
+</code></pre>
+<p dir="rtl">ایمیج کانتینر این Pod را دریافت کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pod web-2 --template '{{range $i, $c := .spec.containers}}{{$c.image}}{{end}}'
+</code></pre>
+<pre dir="ltr"><code dir="ltr">registry.k8s.io/nginx-slim:0.24
+</code></pre>
+<p dir="rtl">دقت کنید که با وجود اینکه راهبرد به‌روزرسانی <code dir="ltr">RollingUpdate</code> است، StatefulSet این Pod را با ایمیج کانتینر اصلی بازگردانده است. علت این است که شمارهٔ ترتیبی این Pod از مقدار <code dir="ltr">partition</code> تعیین‌شده در <code dir="ltr">updateStrategy</code> کمتر است.</p>
+<h4 id="انتشار-قناری" dir="rtl">انتشار قناری</h4>
+<p dir="rtl">اکنون می‌خواهید یک <a href="https://glossary.cncf.io/canary-deployment/" target="_blank" rel="noopener">انتشار قناری</a> (canary rollout) از آن تغییر آماده‌شده را امتحان کنید.</p>
+<p dir="rtl">برای انتشار قناری (به‌منظور آزمودن الگوی تغییریافته)، کافی است مقدار <code dir="ltr">partition</code> را که <a href="#staging-an-update">در بالا</a> تعیین کردید کاهش دهید.</p>
+<p dir="rtl">برای کاهش partition، این StatefulSet را patch کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># The value of "partition" should match the highest existing ordinal for
+# the StatefulSet
+kubectl patch statefulset web -p '{"spec":{"updateStrategy":{"type":"RollingUpdate","rollingUpdate":{"partition":2}}}}'
+</code></pre>
+<pre dir="ltr"><code dir="ltr">statefulset.apps/web patched
+</code></pre>
+<p dir="rtl">اکنون control plane جایگزینی <code dir="ltr">web-2</code> را آغاز می‌کند؛ این کار با یک <strong>حذف</strong> ملایم (graceful) و سپس ایجاد یک Pod جدید پس از کامل شدن حذف انجام می‌شود. صبر کنید تا Pod جدید <code dir="ltr">web-2</code> به وضعیت Running و Ready برسد.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># This should already be running
+kubectl get pod -l app=nginx --watch
+</code></pre>
+<pre dir="ltr"><code dir="ltr">NAME      READY     STATUS              RESTARTS   AGE
+web-0     1/1       Running             0          4m
+web-1     1/1       Running             0          4m
+web-2     0/1       ContainerCreating   0          11s
+web-2     1/1       Running   0         18s
+</code></pre>
+<p dir="rtl">کانتینر این Pod را دریافت کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pod web-2 --template '{{range $i, $c := .spec.containers}}{{$c.image}}{{end}}'
+</code></pre>
+<pre dir="ltr"><code dir="ltr">registry.k8s.io/nginx-slim:0.21
+
+</code></pre>
+<p dir="rtl">هنگامی که مقدار <code dir="ltr">partition</code> را تغییر دادید، کنترل‌کنندهٔ StatefulSet به‌طور خودکار Pod <code dir="ltr">web-2</code> را به‌روزرسانی کرد، زیرا شمارهٔ ترتیبی این Pod بزرگ‌تر یا مساوی <code dir="ltr">partition</code> بود.</p>
+<p dir="rtl">Pod <code dir="ltr">web-1</code> را حذف کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl delete pod web-1
+</code></pre>
+<pre dir="ltr"><code dir="ltr">pod "web-1" deleted
+</code></pre>
+<p dir="rtl">صبر کنید تا Pod <code dir="ltr">web-1</code> به وضعیت Running و Ready برسد.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># This should already be running
+kubectl get pod -l app=nginx --watch
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">NAME      READY     STATUS        RESTARTS   AGE
+web-0     1/1       Running       0          6m
+web-1     0/1       Terminating   0          6m
+web-2     1/1       Running       0          2m
+web-1     0/1       Terminating   0         6m
+web-1     0/1       Terminating   0         6m
+web-1     0/1       Terminating   0         6m
+web-1     0/1       Pending   0         0s
+web-1     0/1       Pending   0         0s
+web-1     0/1       ContainerCreating   0         0s
+web-1     1/1       Running   0         18s
+</code></pre>
+<p dir="rtl">ایمیج کانتینر Pod <code dir="ltr">web-1</code> را دریافت کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pod web-1 --template '{{range $i, $c := .spec.containers}}{{$c.image}}{{end}}'
+</code></pre>
+<pre dir="ltr"><code dir="ltr">registry.k8s.io/nginx-slim:0.24
+</code></pre>
+<p dir="rtl">Pod <code dir="ltr">web-1</code> به پیکربندی اصلی خود بازگردانده شد، زیرا شمارهٔ ترتیبی آن از partition کمتر بود. وقتی partition تعیین شده باشد، با به‌روزرسانی <code dir="ltr">.spec.template</code> در StatefulSet، همهٔ Podهایی که شمارهٔ ترتیبی‌شان بزرگ‌تر یا مساوی partition است به‌روزرسانی می‌شوند. اگر Podی با شمارهٔ ترتیبی کمتر از partition حذف شود یا به هر شکل دیگری خاتمه یابد، به پیکربندی اصلی خود بازگردانده می‌شود.</p>
+<h4 id="انتشارهای-مرحله-ای" dir="rtl">انتشارهای مرحله‌ای</h4>
+<p dir="rtl">با استفاده از به‌روزرسانی غلتان بخش‌بندی‌شده می‌توانید یک انتشار مرحله‌ای (مثلاً انتشار خطی، هندسی یا نمایی) را به روشی مشابه انتشار <a href="#rolling-out-a-canary">قناری</a> انجام دهید. برای انجام انتشار مرحله‌ای، مقدار <code dir="ltr">partition</code> را برابر شمارهٔ ترتیبی‌ای قرار دهید که می‌خواهید کنترل‌کننده به‌روزرسانی را در آن متوقف کند.</p>
+<p dir="rtl">مقدار partition در حال حاضر <code dir="ltr">2</code> است. آن را به <code dir="ltr">0</code> تغییر دهید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl patch statefulset web -p '{"spec":{"updateStrategy":{"type":"RollingUpdate","rollingUpdate":{"partition":0}}}}'
+</code></pre>
+<pre dir="ltr"><code dir="ltr">statefulset.apps/web patched
+</code></pre>
+<p dir="rtl">صبر کنید تا همهٔ Podهای این StatefulSet به وضعیت Running و Ready برسند.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># This should already be running
+kubectl get pod -l app=nginx --watch
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code dir="ltr">NAME      READY     STATUS              RESTARTS   AGE
+web-0     1/1       Running             0          3m
+web-1     0/1       ContainerCreating   0          11s
+web-2     1/1       Running             0          2m
+web-1     1/1       Running   0         18s
+web-0     1/1       Terminating   0         3m
+web-0     1/1       Terminating   0         3m
+web-0     0/1       Terminating   0         3m
+web-0     0/1       Terminating   0         3m
+web-0     0/1       Terminating   0         3m
+web-0     0/1       Terminating   0         3m
+web-0     0/1       Pending   0         0s
+web-0     0/1       Pending   0         0s
+web-0     0/1       ContainerCreating   0         0s
+web-0     1/1       Running   0         3s
+</code></pre>
+<p dir="rtl">جزئیات ایمیج کانتینر Podهای این StatefulSet را دریافت کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">for p in 0 1 2; do kubectl get pod "web-$p" --template '{{range $i, $c := .spec.containers}}{{$c.image}}{{end}}'; echo; done
+</code></pre>
+<pre dir="ltr"><code dir="ltr">registry.k8s.io/nginx-slim:0.21
+registry.k8s.io/nginx-slim:0.21
+registry.k8s.io/nginx-slim:0.21
+</code></pre>
+<p dir="rtl">با تغییر مقدار <code dir="ltr">partition</code> به <code dir="ltr">0</code>، به StatefulSet اجازه دادید فرایند به‌روزرسانی را ادامه دهد.</p>
+<h3 id="ondelete-on-delete" dir="ltr" class="ltr">OnDelete {#on-delete}</h3>
+<p dir="rtl">برای انتخاب این راهبرد به‌روزرسانی در یک StatefulSet، مقدار <code dir="ltr">.spec.updateStrategy.type</code> را <code dir="ltr">OnDelete</code> قرار دهید.</p>
+<p dir="rtl">StatefulSet به نام <code dir="ltr">web</code> را patch کنید تا از راهبرد به‌روزرسانی <code dir="ltr">OnDelete</code> استفاده کند:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl patch statefulset web -p '{"spec":{"updateStrategy":{"type":"OnDelete", "rollingUpdate": null}}}'
+</code></pre>
+<pre dir="ltr"><code dir="ltr">statefulset.apps/web patched
+</code></pre>
+<p dir="rtl">با انتخاب این راهبرد به‌روزرسانی، کنترل‌کنندهٔ StatefulSet پس از تغییر فیلد <code dir="ltr">.spec.template</code> در StatefulSet، Podها را به‌طور خودکار به‌روزرسانی نمی‌کند. در این حالت باید انتشار را خودتان مدیریت کنید؛ یا به‌صورت دستی یا با یک سازوکار خودکارسازی جداگانه.</p>
+<h2 id="حذف-statefulsetها" dir="rtl">حذف StatefulSetها</h2>
+<p dir="rtl">یک StatefulSet از هر دو نوع حذف <em>غیرآبشاری</em> (non-cascading) و <em>آبشاری</em> (cascading) پشتیبانی می‌کند. در <strong>حذف</strong> غیرآبشاری، با حذف StatefulSet، Podهای آن حذف نمی‌شوند. در <strong>حذف</strong> آبشاری، هم StatefulSet و هم Podهای آن حذف می‌شوند.</p>
+<p dir="rtl">برای آشنایی کلی با حذف آبشاری، صفحهٔ <a href="../../tasks/administer-cluster/use-cascading-deletion.html">استفاده از حذف آبشاری در یک کلاستر</a> را بخوانید.</p>
+<h3 id="حذف-غیرآبشاری" dir="rtl">حذف غیرآبشاری</h3>
+<p dir="rtl">در یک پنجرهٔ ترمینال، Podهای این StatefulSet را زیر نظر بگیرید.</p>
+<pre dir="ltr"><code dir="ltr"># End this watch when there are no Pods for the StatefulSet
+kubectl get pods --watch -l app=nginx
+</code></pre>
+<p dir="rtl">برای حذف StatefulSet از دستور <a href="https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands/#delete" target="_blank"><code dir="ltr">kubectl delete</code></a> استفاده کنید. حتماً پارامتر <code dir="ltr">--cascade=orphan</code> را به دستور بدهید. این پارامتر به کوبرنتیز می‌گوید که فقط StatefulSet را حذف کند و هیچ‌یک از Podهای آن را حذف <strong>نکند</strong>.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl delete statefulset web --cascade=orphan
+</code></pre>
+<pre dir="ltr"><code dir="ltr">statefulset.apps "web" deleted
+</code></pre>
+<p dir="rtl">برای بررسی وضعیت Podها، آن‌ها را دریافت کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pods -l app=nginx
+</code></pre>
+<pre dir="ltr"><code dir="ltr">NAME      READY     STATUS    RESTARTS   AGE
+web-0     1/1       Running   0          6m
+web-1     1/1       Running   0          7m
+web-2     1/1       Running   0          5m
+</code></pre>
+<p dir="rtl">با اینکه <code dir="ltr">web</code> حذف شده است، همهٔ Podها همچنان در وضعیت Running و Ready هستند. اکنون <code dir="ltr">web-0</code> را حذف کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl delete pod web-0
+</code></pre>
+<pre dir="ltr"><code dir="ltr">pod "web-0" deleted
+</code></pre>
+<p dir="rtl">Podهای این StatefulSet را دریافت کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pods -l app=nginx
+</code></pre>
+<pre dir="ltr"><code dir="ltr">NAME      READY     STATUS    RESTARTS   AGE
+web-1     1/1       Running   0          10m
+web-2     1/1       Running   0          7m
+</code></pre>
+<p dir="rtl">از آنجا که StatefulSet به نام <code dir="ltr">web</code> حذف شده است، <code dir="ltr">web-0</code> دوباره راه‌اندازی نشده است.</p>
+<p dir="rtl">در یک ترمینال، Podهای این StatefulSet را زیر نظر بگیرید.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># Leave this watch running until the next time you start a watch
+kubectl get pods --watch -l app=nginx
+</code></pre>
+<p dir="rtl">در ترمینال دوم، StatefulSet را دوباره ایجاد کنید. توجه کنید که اگر Service به نام <code dir="ltr">nginx</code> را حذف نکرده باشید (که نباید حذف کرده باشید)، خطایی خواهید دید که نشان می‌دهد این Service از قبل وجود دارد.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f https://k8s.io/examples/application/web/web.yaml
+</code></pre>
+<pre dir="ltr"><code dir="ltr">statefulset.apps/web created
+service/nginx unchanged
+</code></pre>
+<p dir="rtl">این خطا را نادیده بگیرید. این خطا فقط نشان می‌دهد که تلاشی برای ایجاد Service بدون سرآیند (headless) به نام <em>nginx</em> انجام شده، در حالی که این Service از قبل وجود داشته است.</p>
+<p dir="rtl">خروجی دستور <code dir="ltr">kubectl get</code> را که در ترمینال اول در حال اجراست بررسی کنید.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># This should already be running
+kubectl get pods --watch -l app=nginx
+</code></pre>
+<pre dir="ltr"><code dir="ltr">NAME      READY     STATUS    RESTARTS   AGE
+web-1     1/1       Running   0          16m
+web-2     1/1       Running   0          2m
+NAME      READY     STATUS    RESTARTS   AGE
+web-0     0/1       Pending   0          0s
+web-0     0/1       Pending   0         0s
+web-0     0/1       ContainerCreating   0         0s
+web-0     1/1       Running   0         18s
+web-2     1/1       Terminating   0         3m
+web-2     0/1       Terminating   0         3m
+web-2     0/1       Terminating   0         3m
+web-2     0/1       Terminating   0         3m
+</code></pre>
+<p dir="rtl">هنگامی که StatefulSet به نام <code dir="ltr">web</code> دوباره ایجاد شد، ابتدا <code dir="ltr">web-0</code> را دوباره راه‌اندازی کرد. از آنجا که <code dir="ltr">web-1</code> از قبل در وضعیت Running و Ready بود، پس از رسیدن <code dir="ltr">web-0</code> به وضعیت Running و Ready، StatefulSet این Pod را به سرپرستی گرفت. چون StatefulSet را با <code dir="ltr">replicas</code> برابر 2 دوباره ایجاد کرده بودید، پس از ایجاد دوبارهٔ <code dir="ltr">web-0</code> و مشخص شدن اینکه <code dir="ltr">web-1</code> از قبل در وضعیت Running و Ready است، <code dir="ltr">web-2</code> خاتمه یافت.</p>
+<p dir="rtl">اکنون دوباره محتوای فایل <code dir="ltr">index.html</code> را که وب‌سرورهای Podها ارائه می‌کنند بررسی کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">for i in 0 1; do kubectl exec -i -t "web-$i" -- curl http://localhost/; done
+</code></pre>
+<pre dir="ltr"><code dir="ltr">web-0
+web-1
+</code></pre>
+<p dir="rtl">با اینکه هم StatefulSet و هم Pod <code dir="ltr">web-0</code> را حذف کردید، این Pod همچنان نام میزبانی را ارائه می‌کند که در ابتدا در فایل <code dir="ltr">index.html</code> آن نوشته شده بود. علت این است که StatefulSet هرگز PersistentVolumeهای مرتبط با یک Pod را حذف نمی‌کند. وقتی StatefulSet را دوباره ایجاد کردید و <code dir="ltr">web-0</code> دوباره راه‌اندازی شد، PersistentVolume اصلی آن دوباره متصل (mount) شد.</p>
+<h3 id="حذف-آبشاری" dir="rtl">حذف آبشاری</h3>
+<p dir="rtl">در یک پنجرهٔ ترمینال، Podهای این StatefulSet را زیر نظر بگیرید.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># Leave this running until the next page section
+kubectl get pods --watch -l app=nginx
+</code></pre>
+<p dir="rtl">در ترمینالی دیگر، StatefulSet را دوباره حذف کنید. این بار پارامتر <code dir="ltr">--cascade=orphan</code> را حذف کنید.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl delete statefulset web
+</code></pre>
+<pre dir="ltr"><code dir="ltr">statefulset.apps "web" deleted
+</code></pre>
+<p dir="rtl">خروجی دستور <code dir="ltr">kubectl get</code> را که در ترمینال اول در حال اجراست بررسی کنید و صبر کنید تا همهٔ Podها به وضعیت Terminating بروند.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># This should already be running
+kubectl get pods --watch -l app=nginx
+</code></pre>
+<pre dir="ltr"><code dir="ltr">NAME      READY     STATUS    RESTARTS   AGE
+web-0     1/1       Running   0          11m
+web-1     1/1       Running   0          27m
+NAME      READY     STATUS        RESTARTS   AGE
+web-0     1/1       Terminating   0          12m
+web-1     1/1       Terminating   0         29m
+web-0     0/1       Terminating   0         12m
+web-0     0/1       Terminating   0         12m
+web-0     0/1       Terminating   0         12m
+web-1     0/1       Terminating   0         29m
+web-1     0/1       Terminating   0         29m
+web-1     0/1       Terminating   0         29m
+
+</code></pre>
+<p dir="rtl">همان‌طور که در بخش <a href="#scaling-down">کاهش مقیاس</a> دیدید، Podها یکی‌یکی و به ترتیب معکوس شاخص‌های ترتیبی‌شان خاتمه می‌یابند. کنترل‌کنندهٔ StatefulSet پیش از خاتمه دادن به هر Pod صبر می‌کند تا Pod بعدی در ترتیب به‌طور کامل خاتمه یابد.</p>
+<div class="callout note"><div class="callout-title">Note</div>
+<p dir="rtl">اگرچه حذف آبشاری یک StatefulSet را همراه با Podهای آن حذف می‌کند، این حذف آبشاری Service بدون سرآیندِ مرتبط با StatefulSet را حذف <strong>نمی‌کند</strong>. باید Service به نام <code dir="ltr">nginx</code> را به‌صورت دستی حذف کنید.</p>
+</div>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl delete service nginx
+</code></pre>
+<pre dir="ltr"><code dir="ltr">service "nginx" deleted
+</code></pre>
+<p dir="rtl">StatefulSet و Service بدون سرآیند را یک بار دیگر ایجاد کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f https://k8s.io/examples/application/web/web.yaml
+</code></pre>
+<pre dir="ltr"><code dir="ltr">service/nginx created
+statefulset.apps/web created
+</code></pre>
+<p dir="rtl">وقتی همهٔ Podهای این StatefulSet به وضعیت Running و Ready رسیدند، محتوای فایل‌های <code dir="ltr">index.html</code> آن‌ها را دریافت کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">for i in 0 1; do kubectl exec -i -t "web-$i" -- curl http://localhost/; done
+</code></pre>
+<pre dir="ltr"><code dir="ltr">web-0
+web-1
+</code></pre>
+<p dir="rtl">با اینکه StatefulSet و همهٔ Podهای آن را به‌طور کامل حذف کردید، Podها همراه با PersistentVolumeهای متصل‌شده‌شان دوباره ایجاد می‌شوند و <code dir="ltr">web-0</code> و <code dir="ltr">web-1</code> همچنان نام میزبان خود را ارائه می‌کنند.</p>
+<p dir="rtl">در پایان، Service به نام <code dir="ltr">nginx</code> را حذف کنید...</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl delete service nginx
+</code></pre>
+<pre dir="ltr"><code dir="ltr">service "nginx" deleted
+</code></pre>
+<p dir="rtl">...و سپس StatefulSet به نام <code dir="ltr">web</code> را:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl delete statefulset web
+</code></pre>
+<pre dir="ltr"><code dir="ltr">statefulset "web" deleted
+</code></pre>
+<h2 id="سیاست-مدیریت-pod" dir="rtl">سیاست مدیریت Pod</h2>
+<p dir="rtl">برای برخی سامانه‌های توزیع‌شده، تضمین‌های ترتیبی StatefulSet غیرضروری یا نامطلوب هستند. این سامانه‌ها فقط به یکتایی و هویت نیاز دارند.</p>
+<p dir="rtl">برای پرهیز از این ترتیب سخت‌گیرانه، می‌توانید یک <a href="../../concepts/workloads/controllers/statefulset.html#pod-management-policies">سیاست مدیریت Pod</a> تعیین کنید؛ یا <code dir="ltr">OrderedReady</code> (پیش‌فرض) یا <code dir="ltr">Parallel</code>.</p>
+<h3 id="مدیریت-pod-با-orderedready" dir="rtl">مدیریت Pod با OrderedReady</h3>
+<p dir="rtl">مدیریت Pod با <code dir="ltr">OrderedReady</code> حالت پیش‌فرض StatefulSetهاست. این سیاست به کنترل‌کنندهٔ StatefulSet می‌گوید که تضمین‌های ترتیبیِ نشان‌داده‌شده در بالا را رعایت کند.</p>
+<p dir="rtl">زمانی از این سیاست استفاده کنید که برنامهٔ شما نیاز دارد یا انتظار دارد تغییرات، مانند انتشار نسخهٔ جدیدی از برنامه، دقیقاً به ترتیب شمارهٔ ترتیبی (شمارهٔ Pod) که StatefulSet فراهم می‌کند انجام شوند. به بیان دیگر، اگر Podهای <code dir="ltr">app-0</code>، <code dir="ltr">app-1</code> و <code dir="ltr">app-2</code> را داشته باشید، کوبرنتیز ابتدا <code dir="ltr">app-0</code> را به‌روزرسانی و بررسی می‌کند. پس از موفقیت بررسی‌ها، کوبرنتیز <code dir="ltr">app-1</code> و در پایان <code dir="ltr">app-2</code> را به‌روزرسانی می‌کند.</p>
+<p dir="rtl">اگر دو Pod دیگر اضافه کنید، کوبرنتیز ابتدا <code dir="ltr">app-3</code> را راه‌اندازی می‌کند و پیش از استقرار <code dir="ltr">app-4</code> صبر می‌کند تا <code dir="ltr">app-3</code> سالم شود.</p>
+<p dir="rtl">از آنجا که این تنظیم پیش‌فرض است، پیش‌تر استفاده از آن را تمرین کرده‌اید.</p>
+<h3 id="مدیریت-موازی-podها" dir="rtl">مدیریت موازی Podها</h3>
+<p dir="rtl">گزینهٔ دیگر، یعنی مدیریت Pod به‌صورت <code dir="ltr">Parallel</code>، به کنترل‌کنندهٔ StatefulSet اعلام می‌کند که همهٔ Podها را به‌طور موازی راه‌اندازی یا خاتمه دهد. در این حالت، کنترل‌کننده پیش از راه‌اندازی یا خاتمهٔ یک Pod دیگر منتظر نمی‌ماند تا Podها به وضعیت <code dir="ltr">Running</code> و <code dir="ltr">Ready</code> برسند یا کاملاً خاتمه یابند.</p>
+<p dir="rtl">گزینهٔ مدیریت Pod به‌صورت <code dir="ltr">Parallel</code> فقط بر رفتار عملیات مقیاس‌دهی اثر می‌گذارد و بر به‌روزرسانی‌ها اثری ندارد. کوبرنتیز همچنان تغییرات را به‌ترتیب اعمال می‌کند. برنامهٔ این آموزش بسیار ساده است: یک وب‌سرور که نام میزبان (hostname) خود را به شما اعلام می‌کند. از آنجا که این برنامه یک StatefulSet است، نام میزبان هر Pod متفاوت و قابل پیش‌بینی است.</p>
+<div class="code-file ltr" dir="ltr">application/web/web-parallel.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: Service
+metadata:
+  name: nginx
+  labels:
+    app: nginx
+spec:
+  ports:
+  - port: 80
+    name: web
+  clusterIP: None
+  selector:
+    app: nginx
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: web
+spec:
+  serviceName: "nginx"
+  podManagementPolicy: "Parallel"
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: registry.k8s.io/nginx-slim:0.24
+        ports:
+        - containerPort: 80
+          name: web
+        volumeMounts:
+        - name: www
+          mountPath: /usr/share/nginx/html
+  volumeClaimTemplates:
+  - metadata:
+      name: www
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Gi
+</code></pre>
+<p dir="rtl">این مانیفست با مانیفستی که پیش‌تر دانلود کردید یکسان است، با این تفاوت که مقدار <code dir="ltr">.spec.podManagementPolicy</code> در StatefulSet با نام <code dir="ltr">web</code> روی <code dir="ltr">Parallel</code> تنظیم شده است.</p>
+<p dir="rtl">در یک ترمینال، Podهای StatefulSet را زیر نظر بگیرید.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># Leave this watch running until the end of the section
+kubectl get pod -l app=nginx --watch
+</code></pre>
+<p dir="rtl">در ترمینالی دیگر، StatefulSet را برای مدیریت Pod به‌صورت <code dir="ltr">Parallel</code> دوباره پیکربندی کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f https://k8s.io/examples/application/web/web-parallel.yaml
+</code></pre>
+<pre dir="ltr"><code dir="ltr">service/nginx updated
+statefulset.apps/web updated
+</code></pre>
+<p dir="rtl">ترمینالی را که فرمان watch در آن در حال اجراست باز نگه دارید. در یک پنجرهٔ ترمینال دیگر، StatefulSet را مقیاس‌دهی کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl scale statefulset/web --replicas=5
+</code></pre>
+<pre dir="ltr"><code dir="ltr">statefulset.apps/web scaled
+</code></pre>
+<p dir="rtl">خروجی ترمینالی را که فرمان <code dir="ltr">kubectl get</code> در آن در حال اجراست بررسی کنید. این خروجی ممکن است چیزی شبیه به این باشد:</p>
+<pre dir="ltr"><code dir="ltr">web-3     0/1       Pending   0         0s
+web-3     0/1       Pending   0         0s
+web-3     0/1       Pending   0         7s
+web-3     0/1       ContainerCreating   0         7s
+web-2     0/1       Pending   0         0s
+web-4     0/1       Pending   0         0s
+web-2     1/1       Running   0         8s
+web-4     0/1       ContainerCreating   0         4s
+web-3     1/1       Running   0         26s
+web-4     1/1       Running   0         2s
+</code></pre>
+<p dir="rtl">این StatefulSet سه Pod جدید راه‌اندازی کرد و پیش از راه‌اندازی Podهای دوم و سوم منتظر نماند تا Pod اول به وضعیت Running و Ready برسد.</p>
+<p dir="rtl">این رویکرد زمانی سودمند است که بار کاری شما بخشی دارای حالت (stateful) داشته باشد یا Podها باید بتوانند یکدیگر را با نام‌گذاری قابل پیش‌بینی شناسایی کنند، به‌ویژه اگر گاهی لازم باشد ظرفیت بسیار بیشتری را به‌سرعت فراهم کنید. اگر این سرویس وب سادهٔ آموزشی ناگهان ۱٬۰۰۰٬۰۰۰ درخواست اضافه در دقیقه دریافت کند، می‌خواهید Podهای بیشتری اجرا کنید، اما نمی‌خواهید برای راه‌اندازی تک‌تک Podهای جدید منتظر بمانید. راه‌اندازی موازی Podهای اضافی، فاصلهٔ زمانی میان درخواست ظرفیت اضافه و آماده‌شدن آن برای استفاده را کوتاه می‌کند.</p>
+<h2 id="پاکسازی" dir="rtl">پاکسازی</h2>
+<p dir="rtl">اکنون باید دو ترمینال باز داشته باشید تا فرمان‌های <code dir="ltr">kubectl</code> را برای پاک‌سازی در آن‌ها اجرا کنید.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl delete sts web
+# sts is an abbreviation for statefulset
+</code></pre>
+<p dir="rtl">می‌توانید با فرمان <code dir="ltr">kubectl get</code> حذف‌شدن این Podها را زیر نظر بگیرید.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># end the watch when you've seen what you need to
+kubectl get pod -l app=nginx --watch
+</code></pre>
+<pre dir="ltr"><code dir="ltr">web-3     1/1       Terminating   0         9m
+web-2     1/1       Terminating   0         9m
+web-3     1/1       Terminating   0         9m
+web-2     1/1       Terminating   0         9m
+web-1     1/1       Terminating   0         44m
+web-0     1/1       Terminating   0         44m
+web-0     0/1       Terminating   0         44m
+web-3     0/1       Terminating   0         9m
+web-2     0/1       Terminating   0         9m
+web-1     0/1       Terminating   0         44m
+web-0     0/1       Terminating   0         44m
+web-2     0/1       Terminating   0         9m
+web-2     0/1       Terminating   0         9m
+web-2     0/1       Terminating   0         9m
+web-1     0/1       Terminating   0         44m
+web-1     0/1       Terminating   0         44m
+web-1     0/1       Terminating   0         44m
+web-0     0/1       Terminating   0         44m
+web-0     0/1       Terminating   0         44m
+web-0     0/1       Terminating   0         44m
+web-3     0/1       Terminating   0         9m
+web-3     0/1       Terminating   0         9m
+web-3     0/1       Terminating   0         9m
+</code></pre>
+<p dir="rtl">هنگام حذف، StatefulSet همهٔ Podها را هم‌زمان حذف می‌کند و پیش از حذف هر Pod منتظر نمی‌ماند تا Pod بعدی آن در ترتیب شماره‌ها خاتمه یابد.</p>
+<p dir="rtl">ترمینالی را که فرمان <code dir="ltr">kubectl get</code> در آن در حال اجراست ببندید و Service با نام <code dir="ltr">nginx</code> را حذف کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl delete svc nginx
+</code></pre>
+<p dir="rtl">رسانه‌های ذخیره‌سازی پایدار مربوط به PersistentVolumeهای استفاده‌شده در این آموزش را حذف کنید.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pvc
+</code></pre>
+<pre dir="ltr"><code dir="ltr">NAME        STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   AGE
+www-web-0   Bound    pvc-2bf00408-d366-4a12-bad0-1869c65d0bee   1Gi        RWO            standard       25m
+www-web-1   Bound    pvc-ba3bfe9c-413e-4b95-a2c0-3ea8a54dbab4   1Gi        RWO            standard       24m
+www-web-2   Bound    pvc-cba6cfa6-3a47-486b-a138-db5930207eaf   1Gi        RWO            standard       15m
+www-web-3   Bound    pvc-0c04d7f0-787a-4977-8da3-d9d3a6d8d752   1Gi        RWO            standard       15m
+www-web-4   Bound    pvc-b2c73489-e70b-4a4e-9ec1-9eab439aa43e   1Gi        RWO            standard       14m
+</code></pre>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pv
+</code></pre>
+<pre dir="ltr"><code dir="ltr">NAME                                       CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS   CLAIM               STORAGECLASS   REASON   AGE
+pvc-0c04d7f0-787a-4977-8da3-d9d3a6d8d752   1Gi        RWO            Delete           Bound    default/www-web-3   standard                15m
+pvc-2bf00408-d366-4a12-bad0-1869c65d0bee   1Gi        RWO            Delete           Bound    default/www-web-0   standard                25m
+pvc-b2c73489-e70b-4a4e-9ec1-9eab439aa43e   1Gi        RWO            Delete           Bound    default/www-web-4   standard                14m
+pvc-ba3bfe9c-413e-4b95-a2c0-3ea8a54dbab4   1Gi        RWO            Delete           Bound    default/www-web-1   standard                24m
+pvc-cba6cfa6-3a47-486b-a138-db5930207eaf   1Gi        RWO            Delete           Bound    default/www-web-2   standard                15m
+</code></pre>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl delete pvc www-web-0 www-web-1 www-web-2 www-web-3 www-web-4
+</code></pre>
+<pre dir="ltr"><code dir="ltr">persistentvolumeclaim "www-web-0" deleted
+persistentvolumeclaim "www-web-1" deleted
+persistentvolumeclaim "www-web-2" deleted
+persistentvolumeclaim "www-web-3" deleted
+persistentvolumeclaim "www-web-4" deleted
+</code></pre>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pvc
+</code></pre>
+<pre dir="ltr"><code dir="ltr">No resources found in default namespace.
+</code></pre>
+<div class="callout note"><div class="callout-title">Note</div>
+<p dir="rtl">همچنین باید رسانه‌های ذخیره‌سازی پایدار مربوط به PersistentVolumeهای استفاده‌شده در این آموزش را حذف کنید.
+برای اطمینان از بازپس‌گیری کامل همهٔ فضای ذخیره‌سازی، مراحل لازم را متناسب با محیط، پیکربندی ذخیره‌سازی و روش تأمین (provisioning) خود دنبال کنید.</p>
+</div>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#پیش-از-شروع">پیش از شروع</a><a class="l2" href="#اهداف">اهداف</a><a class="l2" href="#ایجاد-یک-statefulset">ایجاد یک StatefulSet</a><a class="l3" href="#ایجاد-ترتیبی-podها">ایجاد ترتیبی Podها</a><a class="l2" href="#podها-در-یک-statefulset">Podها در یک StatefulSet</a><a class="l3" href="#بررسی-شاخص-ترتیبی-pod">بررسی شاخص ترتیبی Pod</a><a class="l3" href="#استفاده-از-هویت-های-شبکه-ای-پایدار">استفاده از هویت‌های شبکه‌ای پایدار</a><a class="l3" href="#نوشتن-در-ذخیره-سازی-پایدار">نوشتن در ذخیره‌سازی پایدار</a><a class="l2" href="#مقیاس-دهی-یک-statefulset">مقیاس‌دهی یک StatefulSet</a><a class="l3" href="#افزایش-مقیاس">افزایش مقیاس</a><a class="l3" href="#کاهش-مقیاس">کاهش مقیاس</a><a class="l3" href="#خاتمهٔ-ترتیبی-podها">خاتمهٔ ترتیبی Podها</a><a class="l2" href="#به-روزرسانی-statefulsetها">به‌روزرسانی StatefulSetها</a><a class="l3" href="#rollingupdate-rolling-update">RollingUpdate {#rolling-update}</a><a class="l3" href="#ondelete-on-delete">OnDelete {#on-delete}</a><a class="l2" href="#حذف-statefulsetها">حذف StatefulSetها</a><a class="l3" href="#حذف-غیرآبشاری">حذف غیرآبشاری</a><a class="l3" href="#حذف-آبشاری">حذف آبشاری</a><a class="l2" href="#سیاست-مدیریت-pod">سیاست مدیریت Pod</a><a class="l3" href="#مدیریت-pod-با-orderedready">مدیریت Pod با OrderedReady</a><a class="l3" href="#مدیریت-موازی-podها">مدیریت موازی Podها</a><a class="l2" href="#پاکسازی">پاکسازی</a></nav>
+</div>
+</body>
+</html>

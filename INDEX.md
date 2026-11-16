@@ -4,7 +4,7 @@
 
 ✅ ترجمه‌شده · ⚠️ ترجمه‌شده با ایراد ساختاری · ⏳ هنوز ترجمه نشده
 
-1703 از 1722 صفحه
+1718 از 1722 صفحه
 
 
 ## `.`
@@ -2261,34 +2261,34 @@
 ## `tutorials/kubernetes-basics/update`
 
 - ✅ [_index.md](md/tutorials/kubernetes-basics/update/_index.md)
-- ⏳ `update-intro.md`
+- ✅ [update-intro.md](md/tutorials/kubernetes-basics/update/update-intro.md)
 
 ## `tutorials/security`
 
-- ⏳ `_index.md`
-- ⏳ `apparmor.md`
-- ⏳ `cluster-level-pss.md`
-- ⏳ `ns-level-pss.md`
-- ⏳ `seccomp.md`
+- ✅ [_index.md](md/tutorials/security/_index.md)
+- ✅ [apparmor.md](md/tutorials/security/apparmor.md)
+- ✅ [cluster-level-pss.md](md/tutorials/security/cluster-level-pss.md)
+- ✅ [ns-level-pss.md](md/tutorials/security/ns-level-pss.md)
+- ✅ [seccomp.md](md/tutorials/security/seccomp.md)
 
 ## `tutorials/services`
 
-- ⏳ `_index.md`
-- ⏳ `connect-applications-service.md`
-- ⏳ `pods-and-endpoint-termination-flow.md`
-- ⏳ `source-ip.md`
+- ✅ [_index.md](md/tutorials/services/_index.md)
+- ✅ [connect-applications-service.md](md/tutorials/services/connect-applications-service.md)
+- ✅ [pods-and-endpoint-termination-flow.md](md/tutorials/services/pods-and-endpoint-termination-flow.md)
+- ✅ [source-ip.md](md/tutorials/services/source-ip.md)
 
 ## `tutorials/stateful-application`
 
-- ⏳ `_index.md`
-- ⏳ `basic-stateful-set.md`
-- ⏳ `cassandra.md`
-- ⏳ `mysql-wordpress-persistent-volume.md`
+- ✅ [_index.md](md/tutorials/stateful-application/_index.md)
+- ✅ [basic-stateful-set.md](md/tutorials/stateful-application/basic-stateful-set.md)
+- ✅ [cassandra.md](md/tutorials/stateful-application/cassandra.md)
+- ✅ [mysql-wordpress-persistent-volume.md](md/tutorials/stateful-application/mysql-wordpress-persistent-volume.md)
 - ⏳ `zookeeper.md`
 
 ## `tutorials/stateless-application`
 
-- ⏳ `_index.md`
+- ✅ [_index.md](md/tutorials/stateless-application/_index.md)
 - ⏳ `canary-deployment.md`
 - ⏳ `expose-external-ip-address.md`
 - ⏳ `guestbook.md`

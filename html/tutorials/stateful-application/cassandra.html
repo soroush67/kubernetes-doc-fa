@@ -1,0 +1,433 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>مثال: استقرار کاساندرا با StatefulSet | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">tutorials / stateful-application</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">مثال: استقرار کاساندرا با StatefulSet</h1><!-- overview -->
+<p dir="rtl">این آموزش نشان می‌دهد که چگونه <a href="https://cassandra.apache.org/" target="_blank" rel="noopener">Apache Cassandra</a> را روی کوبرنتیز اجرا کنید.
+کاساندرا یک پایگاه داده است و برای تضمین ماندگاری داده‌ها (<em>وضعیت</em> برنامه) به ذخیره‌سازی پایدار نیاز دارد.
+در این مثال، یک ارائه‌دهندهٔ seed سفارشی برای کاساندرا به پایگاه داده امکان می‌دهد نمونه‌های جدید کاساندرا را هنگام پیوستن به کلاستر کاساندرا شناسایی کند.</p>
+<p dir="rtl">آبجکت‌های <em>StatefulSet</em> استقرار برنامه‌های دارای وضعیت (stateful) را در کلاستر کوبرنتیز آسان‌تر می‌کنند.
+برای آشنایی بیشتر با قابلیت‌هایی که در این آموزش استفاده می‌شوند، صفحهٔ
+<a href="../../concepts/workloads/controllers/statefulset.html">StatefulSet</a> را ببینید.</p>
+<div class="callout note"><div class="callout-title">Note</div>
+<p dir="rtl">کاساندرا و کوبرنتیز هر دو اصطلاح <em>نود</em> را برای اشاره به یکی از اعضای کلاستر به کار می‌برند. در این
+آموزش، Podهایی که به StatefulSet تعلق دارند نودهای کاساندرا هستند و عضو
+کلاستر کاساندرا (که <em>حلقه</em> یا ring نامیده می‌شود) به شمار می‌روند. وقتی این Podها در کلاستر کوبرنتیز شما اجرا می‌شوند،
+control plane کوبرنتیز آن‌ها را روی
+<span class="term" title="node">نودهای</span> کوبرنتیز زمان‌بندی می‌کند.</p>
+<p dir="rtl">هر نود کاساندرا هنگام راه‌اندازی از یک <em>فهرست seed</em> برای آغاز فرایند شناسایی سایر
+نودهای حلقه استفاده می‌کند.
+این آموزش یک ارائه‌دهندهٔ seed سفارشی برای کاساندرا مستقر می‌کند که به پایگاه داده امکان می‌دهد
+Podهای جدید کاساندرا را به محض ظاهر شدن در کلاستر کوبرنتیز شما شناسایی کند.</p>
+</div>
+<h2 id="اهداف" dir="rtl">اهداف</h2>
+<ul>
+<li dir="rtl">یک <span class="term" title="service">Service</span> از نوع headless برای کاساندرا ایجاد و اعتبارسنجی کنید.</li>
+<li dir="rtl">با استفاده از یک <span class="term" title="StatefulSet">StatefulSet</span>، حلقهٔ کاساندرا را ایجاد کنید.</li>
+<li dir="rtl">آبجکت StatefulSet را اعتبارسنجی کنید.</li>
+<li dir="rtl">آبجکت StatefulSet را تغییر دهید.</li>
+<li dir="rtl">آبجکت StatefulSet و <span class="term" title="pod">Podهای</span> آن را حذف کنید.</li>
+</ul>
+<h2 id="پیش-از-شروع" dir="rtl">پیش از شروع</h2>
+<p dir="rtl">باید یک کلاستر کوبرنتیز داشته باشید و ابزار خط فرمان kubectl باید برای ارتباط با کلاستر شما پیکربندی شده باشد. توصیه می‌شود این آموزش را روی کلاستری اجرا کنید که دست‌کم دو نود داشته باشد که نقش میزبان control plane را ندارند. اگر هنوز کلاستری ندارید، می‌توانید با استفاده از
+<a href="https://minikube.sigs.k8s.io/docs/tutorials/multi_node/" target="_blank" rel="noopener">minikube</a>
+یکی بسازید یا از یکی از این محیط‌های آزمایشی کوبرنتیز استفاده کنید:</p>
+<ul>
+<li dir="ltr" class="ltr"><a href="https://labs.iximiuz.com/playgrounds?category=kubernetes&amp;filter=all" target="_blank" rel="noopener">iximiuz Labs</a></li>
+<li dir="ltr" class="ltr"><a href="https://killercoda.com/playgrounds/scenario/kubernetes" target="_blank" rel="noopener">Killercoda</a></li>
+<li dir="ltr" class="ltr"><a href="https://kodekloud.com/public-playgrounds" target="_blank" rel="noopener">KodeKloud</a></li>
+</ul>
+<p dir="rtl">برای انجام این آموزش، باید از پیش با مفاهیم پایهٔ
+<span class="term" title="pod">Podها</span>،
+<span class="term" title="service">Serviceها</span> و
+<span class="term" title="StatefulSet">StatefulSetها</span> آشنا باشید.</p>
+<h3 id="دستورالعمل-های-تکمیلی-راه-اندازی-minikube" dir="rtl">دستورالعمل‌های تکمیلی راه‌اندازی Minikube</h3>
+<div class="callout note"><div class="callout-title">Caution</div>
+<p dir="rtl">ابزار <a href="https://minikube.sigs.k8s.io/docs/" target="_blank" rel="noopener">Minikube</a> به‌طور پیش‌فرض از ۲۰۴۸ مگابایت حافظه و ۲ پردازنده استفاده می‌کند.
+اجرای Minikube با پیکربندی پیش‌فرض منابع، در طول این آموزش به خطاهای کمبود منابع
+منجر می‌شود. برای جلوگیری از این خطاها، Minikube را با تنظیمات زیر راه‌اندازی کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">minikube start --memory 5120 --cpus=4
+</code></pre>
+</div>
+<!-- lessoncontent -->
+<h2 id="ایجاد-یک-service-از-نوع-headless-برای-کاساندرا-creating-a-cassandra-headless-service" dir="rtl">ایجاد یک Service از نوع headless برای کاساندرا {#creating-a-cassandra-headless-service}</h2>
+<p dir="rtl">در کوبرنتیز، یک <span class="term" title="service">Service</span> مجموعه‌ای از
+<span class="term" title="pod">Podها</span> را توصیف می‌کند که وظیفهٔ یکسانی انجام می‌دهند.</p>
+<p dir="rtl">از Service زیر برای جست‌وجوهای DNS میان Podهای کاساندرا و کلاینت‌های درون کلاستر شما استفاده می‌شود:</p>
+<div class="code-file ltr" dir="ltr">application/cassandra/cassandra-service.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: cassandra
+  name: cassandra
+spec:
+  clusterIP: None
+  ports:
+  - port: 9042
+  selector:
+    app: cassandra
+</code></pre>
+<p dir="rtl">با استفاده از فایل <code dir="ltr">cassandra-service.yaml</code>، یک Service ایجاد کنید تا همهٔ اعضای StatefulSet کاساندرا را دنبال کند:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f https://k8s.io/examples/application/cassandra/cassandra-service.yaml
+</code></pre>
+<h3 id="اعتبارسنجی-اختیاری-validating" dir="rtl">اعتبارسنجی (اختیاری) {#validating}</h3>
+<p dir="rtl">اطلاعات Service کاساندرا را دریافت کنید.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get svc cassandra
+</code></pre>
+<p dir="rtl">پاسخ به این صورت است:</p>
+<pre dir="ltr"><code dir="ltr">NAME        TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)    AGE
+cassandra   ClusterIP   None         &lt;none&gt;        9042/TCP   45s
+</code></pre>
+<p dir="rtl">اگر Serviceای با نام <code dir="ltr">cassandra</code> نمی‌بینید، یعنی ایجاد آن ناموفق بوده است. برای کمک به
+عیب‌یابی مشکلات رایج، صفحهٔ <a href="../../tasks/debug/debug-application/debug-service.html">اشکال‌زدایی Serviceها</a>
+را مطالعه کنید.</p>
+<h2 id="استفاده-از-statefulset-برای-ایجاد-حلقهٔ-کاساندرا" dir="rtl">استفاده از StatefulSet برای ایجاد حلقهٔ کاساندرا</h2>
+<p dir="rtl">مانیفست StatefulSet که در ادامه آمده است، یک حلقهٔ کاساندرا متشکل از سه Pod ایجاد می‌کند.</p>
+<div class="callout note"><div class="callout-title">Note</div>
+<p dir="rtl">این مثال از provisioner پیش‌فرض Minikube استفاده می‌کند.
+لطفاً StatefulSet زیر را متناسب با محیط ابری‌ای که با آن کار می‌کنید به‌روزرسانی کنید.</p>
+</div>
+<div class="code-file ltr" dir="ltr">application/cassandra/cassandra-statefulset.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: cassandra
+  labels:
+    app: cassandra
+spec:
+  serviceName: cassandra
+  replicas: 3
+  selector:
+    matchLabels:
+      app: cassandra
+  template:
+    metadata:
+      labels:
+        app: cassandra
+    spec:
+      terminationGracePeriodSeconds: 500
+      containers:
+      - name: cassandra
+        image: gcr.io/google-samples/cassandra:v13
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 7000
+          name: intra-node
+        - containerPort: 7001
+          name: tls-intra-node
+        - containerPort: 7199
+          name: jmx
+        - containerPort: 9042
+          name: cql
+        resources:
+          limits:
+            cpu: "500m"
+            memory: 1Gi
+          requests:
+            cpu: "500m"
+            memory: 1Gi
+        securityContext:
+          capabilities:
+            add:
+              - IPC_LOCK
+        lifecycle:
+          preStop:
+            exec:
+              command: 
+              - /bin/sh
+              - -c
+              - nodetool drain
+        env:
+          - name: MAX_HEAP_SIZE
+            value: 512M
+          - name: HEAP_NEWSIZE
+            value: 100M
+          - name: CASSANDRA_SEEDS
+            value: "cassandra-0.cassandra.default.svc.cluster.local"
+          - name: CASSANDRA_CLUSTER_NAME
+            value: "K8Demo"
+          - name: CASSANDRA_DC
+            value: "DC1-K8Demo"
+          - name: CASSANDRA_RACK
+            value: "Rack1-K8Demo"
+          - name: POD_IP
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP
+        readinessProbe:
+          exec:
+            command:
+            - /bin/bash
+            - -c
+            - /ready-probe.sh
+          initialDelaySeconds: 15
+          timeoutSeconds: 5
+        # These volume mounts are persistent. They are like inline claims,
+        # but not exactly because the names need to match exactly one of
+        # the stateful pod volumes.
+        volumeMounts:
+        - name: cassandra-data
+          mountPath: /cassandra_data
+  # These are converted to volume claims by the controller
+  # and mounted at the paths mentioned above.
+  # do not use these in production until ssd GCEPersistentDisk or other ssd pd
+  volumeClaimTemplates:
+  - metadata:
+      name: cassandra-data
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: fast
+      resources:
+        requests:
+          storage: 1Gi
+---
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: fast
+provisioner: k8s.io/minikube-hostpath
+parameters:
+  type: pd-ssd
+</code></pre>
+<p dir="rtl">با استفاده از فایل <code dir="ltr">cassandra-statefulset.yaml</code>، آبجکت StatefulSet کاساندرا را ایجاد کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># Use this if you are able to apply cassandra-statefulset.yaml unmodified
+kubectl apply -f https://k8s.io/examples/application/cassandra/cassandra-statefulset.yaml
+</code></pre>
+<p dir="rtl">اگر لازم است فایل <code dir="ltr">cassandra-statefulset.yaml</code> را متناسب با کلاستر خود تغییر دهید، فایل
+https://k8s.io/examples/application/cassandra/cassandra-statefulset.yaml را دانلود کنید و سپس
+مانیفست را از پوشه‌ای که نسخهٔ تغییریافته را در آن ذخیره کرده‌اید اعمال کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># Use this if you needed to modify cassandra-statefulset.yaml locally
+kubectl apply -f cassandra-statefulset.yaml
+</code></pre>
+<h2 id="اعتبارسنجی-statefulset-کاساندرا" dir="rtl">اعتبارسنجی StatefulSet کاساندرا</h2>
+<ol>
+<li dir="rtl">
+<p dir="rtl">اطلاعات StatefulSet کاساندرا را دریافت کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get statefulset cassandra
+</code></pre>
+<p dir="rtl">پاسخ باید مشابه زیر باشد:</p>
+<pre dir="ltr"><code dir="ltr">NAME        DESIRED   CURRENT   AGE
+cassandra   3         0         13s
+</code></pre>
+<p dir="rtl">منبع <code dir="ltr">StatefulSet</code> پادها را به‌ترتیب و یکی پس از دیگری مستقر می‌کند.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">برای مشاهدهٔ وضعیت ایجاد ترتیبی Podها، فهرست آن‌ها را دریافت کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pods -l="app=cassandra"
+</code></pre>
+<p dir="rtl">پاسخ باید مشابه زیر باشد:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">NAME          READY     STATUS              RESTARTS   AGE
+cassandra-0   1/1       Running             0          1m
+cassandra-1   0/1       ContainerCreating   0          8s
+</code></pre>
+<p dir="rtl">استقرار هر سه Pod ممکن است چند دقیقه طول بکشد. پس از استقرار آن‌ها، همین فرمان
+خروجی‌ای مشابه زیر برمی‌گرداند:</p>
+<pre dir="ltr"><code dir="ltr">NAME          READY     STATUS    RESTARTS   AGE
+cassandra-0   1/1       Running   0          10m
+cassandra-1   1/1       Running   0          9m
+cassandra-2   1/1       Running   0          8m
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">برای نمایش وضعیت حلقه، ابزار <a href="https://cwiki.apache.org/confluence/display/CASSANDRA2/NodeTool" target="_blank" rel="noopener">nodetool</a> کاساندرا را
+درون نخستین Pod اجرا کنید.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl exec -it cassandra-0 -- nodetool status
+</code></pre>
+<p dir="rtl">پاسخ باید تقریباً به این شکل باشد:</p>
+<pre dir="ltr"><code dir="ltr">Datacenter: DC1-K8Demo
+======================
+Status=Up/Down
+|/ State=Normal/Leaving/Joining/Moving
+--  Address     Load       Tokens       Owns (effective)  Host ID                               Rack
+UN  172.17.0.5  83.57 KiB  32           74.0%             e2dd09e6-d9d3-477e-96c5-45094c08db0f  Rack1-K8Demo
+UN  172.17.0.4  101.04 KiB  32           58.8%             f89d6835-3a42-4419-92b3-0e62cae1479c  Rack1-K8Demo
+UN  172.17.0.6  84.74 KiB  32           67.1%             a6a1e8c2-3dc5-4417-b1a0-26507af2aaad  Rack1-K8Demo
+</code></pre>
+</li>
+</ol>
+<h2 id="تغییر-statefulset-کاساندرا" dir="rtl">تغییر StatefulSet کاساندرا</h2>
+<p dir="rtl">برای تغییر اندازهٔ StatefulSet کاساندرا از <code dir="ltr">kubectl edit</code> استفاده کنید.</p>
+<ol>
+<li dir="rtl">
+<p dir="rtl">فرمان زیر را اجرا کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl edit statefulset cassandra
+</code></pre>
+<p dir="rtl">این فرمان یک ویرایشگر را در ترمینال شما باز می‌کند. خطی که باید تغییر دهید فیلد <code dir="ltr">replicas</code> است.
+نمونهٔ زیر بخشی از فایل StatefulSet است:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr"># Please edit the object below. Lines beginning with a '#' will be ignored,
+# and an empty file will abort the edit. If an error occurs while saving this file will be
+# reopened with the relevant failures.
+#
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  creationTimestamp: 2016-08-13T18:40:58Z
+  generation: 1
+  labels:
+  app: cassandra
+  name: cassandra
+  namespace: default
+  resourceVersion: "323"
+  uid: 7a219483-6185-11e6-a910-42010a8a0fc0
+spec:
+  replicas: 3
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">تعداد رپلیکاها را به ۴ تغییر دهید و سپس مانیفست را ذخیره کنید.</p>
+<p dir="rtl">اکنون StatefulSet مقیاس‌پذیری می‌کند تا با ۴ Pod اجرا شود.</p>
+</li>
+<li dir="rtl">
+<p dir="rtl">برای اطمینان از اعمال تغییر، اطلاعات StatefulSet کاساندرا را دریافت کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get statefulset cassandra
+</code></pre>
+<p dir="rtl">پاسخ باید مشابه زیر باشد:</p>
+<pre dir="ltr"><code dir="ltr">NAME        DESIRED   CURRENT   AGE
+cassandra   4         4         36m
+</code></pre>
+</li>
+</ol>
+<h2 id="پاکسازی" dir="rtl">پاکسازی</h2>
+<p dir="rtl">حذف یک StatefulSet یا کاهش مقیاس آن، حجم‌های (volume) مرتبط با آن را حذف نمی‌کند.
+این تنظیم برای حفظ امنیت شماست، زیرا داده‌های شما ارزشمندتر از آن هستند که همهٔ منابع مرتبط با StatefulSet به‌طور خودکار پاک شوند.</p>
+<div class="callout note"><div class="callout-title">Warning</div>
+<p dir="rtl">بسته به کلاس ذخیره‌سازی و سیاست بازپس‌گیری (reclaim policy)، حذف <em>PersistentVolumeClaimها</em> ممکن است باعث شود حجم‌های مرتبط
+نیز حذف شوند. هرگز فرض نکنید که پس از حذف درخواست‌های حجم، همچنان به داده‌های آن‌ها دسترسی خواهید داشت.</p>
+</div>
+<ol>
+<li dir="rtl">
+<p dir="rtl">برای حذف همهٔ اجزای StatefulSet کاساندرا، فرمان‌های زیر را (که در قالب یک فرمان واحد به هم زنجیر شده‌اند) اجرا کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">grace=$(kubectl get pod cassandra-0 -o=jsonpath='{.spec.terminationGracePeriodSeconds}') \
+  &amp;&amp; kubectl delete statefulset -l app=cassandra \
+  &amp;&amp; echo "Sleeping ${grace} seconds" 1&gt;&amp;2 \
+  &amp;&amp; sleep $grace \
+  &amp;&amp; kubectl delete persistentvolumeclaim -l app=cassandra
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">برای حذف Serviceای که برای کاساندرا راه‌اندازی کرده‌اید، فرمان زیر را اجرا کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl delete service -l app=cassandra
+</code></pre>
+</li>
+</ol>
+<h2 id="متغیرهای-محیطی-کانتینر-کاساندرا" dir="rtl">متغیرهای محیطی کانتینر کاساندرا</h2>
+<p dir="rtl">پادهای این آموزش از ایمیج <a href="https://github.com/kubernetes/examples/blob/master/databases/cassandra/image/Dockerfile" target="_blank" rel="noopener"><code dir="ltr">gcr.io/google-samples/cassandra:v13</code></a>
+موجود در <a href="https://cloud.google.com/container-registry/docs/" target="_blank" rel="noopener">رجیستری کانتینر</a> گوگل استفاده می‌کنند.
+این ایمیج داکر بر پایهٔ <a href="https://github.com/kubernetes/release/tree/master/images/build/debian-base" target="_blank" rel="noopener">debian-base</a>
+ساخته شده و OpenJDK 8 را در خود دارد.</p>
+<p dir="rtl">این ایمیج شامل یک نصب استاندارد کاساندرا از مخزن Debian بنیاد Apache است.
+با استفاده از متغیرهای محیطی می‌توانید مقادیری را که در فایل <code dir="ltr">cassandra.yaml</code> درج می‌شوند تغییر دهید.</p>
+<table>
+<thead>
+<tr>
+<th dir="rtl">متغیر محیطی</th>
+<th style="text-align:center" dir="rtl">مقدار پیش‌فرض</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">CASSANDRA_CLUSTER_NAME</code></td>
+<td style="text-align:center" dir="ltr" class="ltr"><code dir="ltr">'Test Cluster'</code></td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">CASSANDRA_NUM_TOKENS</code></td>
+<td style="text-align:center"><code dir="ltr">32</code></td>
+</tr>
+<tr>
+<td dir="ltr" class="ltr"><code dir="ltr">CASSANDRA_RPC_ADDRESS</code></td>
+<td style="text-align:center"><code dir="ltr">0.0.0.0</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<ul>
+<li dir="rtl">با نحوهٔ <a href="../../tasks/run-application/scale-stateful-set.html">تغییر مقیاس یک StatefulSet</a> آشنا شوید.</li>
+<li dir="rtl">دربارهٔ <a href="https://github.com/kubernetes/examples/blob/master/databases/cassandra/java/src/main/java/io/k8s/cassandra/KubernetesSeedProvider.java" target="_blank" rel="noopener"><em>KubernetesSeedProvider</em></a> بیشتر بیاموزید.</li>
+<li dir="rtl"><a href="https://github.com/kubernetes/examples/blob/master/databases/cassandra/java/README.md" target="_blank" rel="noopener">پیکربندی‌های سفارشی بیشتری برای ارائه‌دهندهٔ seed</a> را ببینید.</li>
+</ul>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#اهداف">اهداف</a><a class="l2" href="#پیش-از-شروع">پیش از شروع</a><a class="l3" href="#دستورالعمل-های-تکمیلی-راه-اندازی-minikube">دستورالعمل‌های تکمیلی راه‌اندازی Minikube</a><a class="l2" href="#ایجاد-یک-service-از-نوع-headless-برای-کاساندرا-creating-a-cassandra-headless-service">ایجاد یک Service از نوع headless برای کاساندرا {#creating-a-cassandra-headless-service}</a><a class="l3" href="#اعتبارسنجی-اختیاری-validating">اعتبارسنجی (اختیاری) {#validating}</a><a class="l2" href="#استفاده-از-statefulset-برای-ایجاد-حلقهٔ-کاساندرا">استفاده از StatefulSet برای ایجاد حلقهٔ کاساندرا</a><a class="l2" href="#اعتبارسنجی-statefulset-کاساندرا">اعتبارسنجی StatefulSet کاساندرا</a><a class="l2" href="#تغییر-statefulset-کاساندرا">تغییر StatefulSet کاساندرا</a><a class="l2" href="#پاکسازی">پاکسازی</a><a class="l2" href="#متغیرهای-محیطی-کانتینر-کاساندرا">متغیرهای محیطی کانتینر کاساندرا</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>

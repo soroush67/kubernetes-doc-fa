@@ -1,0 +1,451 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>مثال: استقرار WordPress و MySQL با حجم‌های پایدار | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">tutorials / stateful-application</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">مثال: استقرار WordPress و MySQL با حجم‌های پایدار</h1><!-- overview -->
+<p dir="rtl">این آموزش نشان می‌دهد که چگونه یک سایت WordPress و یک پایگاه داده MySQL را با استفاده از
+Minikube مستقر کنید. هر دو برنامه برای ذخیره داده‌ها از PersistentVolume و PersistentVolumeClaim استفاده می‌کنند.</p>
+<p dir="rtl">هر <a href="../../concepts/storage/persistent-volumes.html">PersistentVolume</a> (PV) بخشی از فضای ذخیره‌سازی
+در کلاستر است که یا مدیر کلاستر آن را به‌صورت دستی تأمین کرده است، یا کوبرنتیز آن را با استفاده از یک
+<a href="../../concepts/storage/storage-classes.html">StorageClass</a> به‌صورت پویا تأمین می‌کند.
+هر <a href="../../concepts/storage/persistent-volumes.html#persistentvolumeclaims">PersistentVolumeClaim</a> (PVC)
+درخواستی از سوی کاربر برای فضای ذخیره‌سازی است که یک PV می‌تواند به آن پاسخ دهد. چرخه عمر
+PersistentVolumeها و PersistentVolumeClaimها مستقل از چرخه عمر Podها است و داده‌ها هنگام راه‌اندازی
+مجدد، زمان‌بندی مجدد و حتی حذف Podها حفظ می‌شوند.</p>
+<div class="callout note"><div class="callout-title">Warning</div>
+<p dir="rtl">این استقرار برای محیط‌های عملیاتی (production) مناسب نیست، زیرا از Podهای تک‌نمونه‌ای WordPress
+و MySQL استفاده می‌کند. برای استقرار WordPress در محیط عملیاتی، استفاده از
+<a href="https://github.com/bitnami/charts/tree/master/bitnami/wordpress" target="_blank" rel="noopener">چارت Helm وردپرس</a>
+را در نظر بگیرید.</p>
+</div>
+<div class="callout note"><div class="callout-title">Note</div>
+<p dir="rtl">فایل‌های ارائه‌شده در این آموزش از APIهای GA مربوط به Deployment استفاده می‌کنند و مختص
+کوبرنتیز نسخه 1.9 و بالاتر هستند. اگر می‌خواهید این آموزش را با نسخه‌ای قدیمی‌تر از کوبرنتیز
+به کار ببرید، نسخه API را متناسب با آن به‌روزرسانی کنید یا به نسخه‌های قدیمی‌تر این آموزش مراجعه کنید.</p>
+</div>
+<h2 id="اهداف" dir="rtl">اهداف</h2>
+<ul>
+<li dir="rtl">ایجاد PersistentVolumeClaimها و PersistentVolumeها</li>
+<li dir="rtl">ایجاد یک فایل <code dir="ltr">kustomization.yaml</code> شامل
+<ul>
+<li dir="rtl">یک مولد Secret</li>
+<li dir="rtl">پیکربندی‌های منابع MySQL</li>
+<li dir="rtl">پیکربندی‌های منابع WordPress</li>
+</ul>
+</li>
+<li dir="rtl">اعمال پوشه kustomization با دستور <code dir="ltr">kubectl apply -k ./</code></li>
+<li dir="rtl">پاک‌سازی</li>
+</ul>
+<h2 id="پیش-از-شروع" dir="rtl">پیش از شروع</h2>
+<p dir="rtl">باید یک کلاستر کوبرنتیز داشته باشید و ابزار خط فرمان kubectl باید برای ارتباط با کلاستر شما پیکربندی شده باشد. توصیه می‌شود این آموزش را روی کلاستری اجرا کنید که دست‌کم دو نود داشته باشد که نقش میزبان control plane را ندارند. اگر هنوز کلاستری ندارید، می‌توانید با استفاده از
+<a href="https://minikube.sigs.k8s.io/docs/tutorials/multi_node/" target="_blank" rel="noopener">minikube</a>
+یکی بسازید یا از یکی از این محیط‌های آزمایشی کوبرنتیز استفاده کنید:</p>
+<ul>
+<li dir="ltr" class="ltr"><a href="https://labs.iximiuz.com/playgrounds?category=kubernetes&amp;filter=all" target="_blank" rel="noopener">iximiuz Labs</a></li>
+<li dir="ltr" class="ltr"><a href="https://killercoda.com/playgrounds/scenario/kubernetes" target="_blank" rel="noopener">Killercoda</a></li>
+<li dir="ltr" class="ltr"><a href="https://kodekloud.com/public-playgrounds" target="_blank" rel="noopener">KodeKloud</a></li>
+</ul>
+<p dir="rtl">مثالی که در این صفحه نشان داده شده است با <code dir="ltr">kubectl</code> نسخه 1.27 و بالاتر کار می‌کند.</p>
+<p dir="rtl">فایل‌های پیکربندی زیر را دانلود کنید:</p>
+<ol>
+<li dir="ltr" class="ltr">
+<p dir="ltr" class="ltr"><a href="/examples/application/wordpress/mysql-deployment.yaml">mysql-deployment.yaml</a></p>
+</li>
+<li dir="ltr" class="ltr">
+<p dir="ltr" class="ltr"><a href="/examples/application/wordpress/wordpress-deployment.yaml">wordpress-deployment.yaml</a></p>
+</li>
+</ol>
+<!-- lessoncontent -->
+<h2 id="ایجاد-persistentvolumeclaimها-و-persistentvolumeها" dir="rtl">ایجاد PersistentVolumeClaimها و PersistentVolumeها</h2>
+<p dir="rtl">هر یک از MySQL و WordPress برای ذخیره داده‌ها به یک PersistentVolume نیاز دارند.
+PersistentVolumeClaimهای آن‌ها در مرحله استقرار ایجاد خواهند شد.</p>
+<p dir="rtl">در بسیاری از محیط‌های کلاستر، یک StorageClass پیش‌فرض نصب شده است.
+اگر در PersistentVolumeClaim هیچ StorageClassی مشخص نشده باشد،
+از StorageClass پیش‌فرض کلاستر استفاده می‌شود.</p>
+<p dir="rtl">هنگامی که یک PersistentVolumeClaim ایجاد می‌شود، یک PersistentVolume بر اساس پیکربندی
+StorageClass به‌صورت پویا تأمین می‌شود.</p>
+<div class="callout note"><div class="callout-title">Warning</div>
+<p dir="rtl">در کلاسترهای محلی، StorageClass پیش‌فرض از تأمین‌کننده <code dir="ltr">hostPath</code> استفاده می‌کند.
+حجم‌های <code dir="ltr">hostPath</code> فقط برای توسعه و آزمایش مناسب هستند. در حجم‌های <code dir="ltr">hostPath</code>،
+داده‌های شما در مسیر <code dir="ltr">/tmp</code> روی نودی قرار می‌گیرند که Pod روی آن زمان‌بندی شده است و بین
+نودها جابه‌جا نمی‌شوند. اگر Pod از کار بیفتد و روی نود دیگری در کلاستر زمان‌بندی شود، یا نود
+راه‌اندازی مجدد شود، داده‌ها از دست می‌روند.</p>
+</div>
+<div class="callout note"><div class="callout-title">Note</div>
+<p dir="rtl">اگر کلاستری راه‌اندازی می‌کنید که باید از تأمین‌کننده <code dir="ltr">hostPath</code> استفاده کند،
+باید فلگ <code dir="ltr">--enable-hostpath-provisioner</code> را در مؤلفه <code dir="ltr">controller-manager</code> تنظیم کنید.</p>
+</div>
+<div class="callout note"><div class="callout-title">Note</div>
+<p dir="rtl">اگر یک کلاستر کوبرنتیز دارید که روی Google Kubernetes Engine اجرا می‌شود،
+<a href="https://cloud.google.com/kubernetes-engine/docs/tutorials/persistent-disk" target="_blank" rel="noopener">این راهنما</a> را دنبال کنید.</p>
+</div>
+<h2 id="ایجاد-فایل-kustomization-yaml" dir="rtl">ایجاد فایل kustomization.yaml</h2>
+<h3 id="افزودن-یک-مولد-secret" dir="rtl">افزودن یک مولد Secret</h3>
+<p dir="rtl">هر <a href="../../concepts/configuration/secret.html">Secret</a> آبجکتی است که بخشی از داده‌های حساس،
+مانند گذرواژه یا کلید، را ذخیره می‌کند. از نسخه 1.14 به بعد، <code dir="ltr">kubectl</code> از مدیریت آبجکت‌های
+کوبرنتیز با استفاده از فایل kustomization پشتیبانی می‌کند. می‌توانید با استفاده از مولدها در
+<code dir="ltr">kustomization.yaml</code> یک Secret ایجاد کنید.</p>
+<p dir="rtl">با دستور زیر، یک مولد Secret به <code dir="ltr">kustomization.yaml</code> اضافه کنید.
+لازم است <code dir="ltr">YOUR_PASSWORD</code> را با گذرواژه‌ای که می‌خواهید استفاده کنید جایگزین کنید.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">cat &lt;&lt;EOF &gt;./kustomization.yaml
+secretGenerator:
+- name: mysql-pass
+  literals:
+  - password=YOUR_PASSWORD
+EOF
+</code></pre>
+<h2 id="افزودن-پیکربندی-های-منابع-برای-mysql-و-wordpress" dir="rtl">افزودن پیکربندی‌های منابع برای MySQL و WordPress</h2>
+<p dir="rtl">مانیفست زیر یک Deployment تک‌نمونه‌ای از MySQL را توصیف می‌کند. کانتینر MySQL،
+PersistentVolume را در مسیر /var/lib/mysql متصل (mount) می‌کند. متغیر محیطی <code dir="ltr">MYSQL_ROOT_PASSWORD</code>
+گذرواژه پایگاه داده را از Secret تنظیم می‌کند.</p>
+<div class="code-file ltr" dir="ltr">application/wordpress/mysql-deployment.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: Service
+metadata:
+  name: wordpress-mysql
+  labels:
+    app: wordpress
+spec:
+  ports:
+    - port: 3306
+  selector:
+    app: wordpress
+    tier: mysql
+  clusterIP: None
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-pv-claim
+  labels:
+    app: wordpress
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 20Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wordpress-mysql
+  labels:
+    app: wordpress
+spec:
+  selector:
+    matchLabels:
+      app: wordpress
+      tier: mysql
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: wordpress
+        tier: mysql
+    spec:
+      containers:
+      - image: mysql:8.0
+        name: mysql
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-pass
+              key: password
+        - name: MYSQL_DATABASE
+          value: wordpress
+        - name: MYSQL_USER
+          value: wordpress
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-pass
+              key: password
+        ports:
+        - containerPort: 3306
+          name: mysql
+        volumeMounts:
+        - name: mysql-persistent-storage
+          mountPath: /var/lib/mysql
+      volumes:
+      - name: mysql-persistent-storage
+        persistentVolumeClaim:
+          claimName: mysql-pv-claim
+</code></pre>
+<p dir="rtl">مانیفست زیر یک Deployment تک‌نمونه‌ای از WordPress را توصیف می‌کند. کانتینر WordPress،
+PersistentVolume را برای فایل‌های داده وب‌سایت در مسیر <code dir="ltr">/var/www/html</code> متصل می‌کند. متغیر محیطی
+<code dir="ltr">WORDPRESS_DB_HOST</code> نام Service مربوط به MySQL را که در بالا تعریف شد تنظیم می‌کند و WordPress
+از طریق این Service به پایگاه داده دسترسی خواهد داشت. متغیر محیطی <code dir="ltr">WORDPRESS_DB_PASSWORD</code>
+گذرواژه پایگاه داده را از Secretی که kustomize تولید کرده است تنظیم می‌کند.</p>
+<div class="code-file ltr" dir="ltr">application/wordpress/wordpress-deployment.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: Service
+metadata:
+  name: wordpress
+  labels:
+    app: wordpress
+spec:
+  ports:
+    - port: 80
+  selector:
+    app: wordpress
+    tier: frontend
+  type: LoadBalancer
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: wp-pv-claim
+  labels:
+    app: wordpress
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 20Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wordpress
+  labels:
+    app: wordpress
+spec:
+  selector:
+    matchLabels:
+      app: wordpress
+      tier: frontend
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: wordpress
+        tier: frontend
+    spec:
+      containers:
+      - image: wordpress:6.2.1-apache
+        name: wordpress
+        env:
+        - name: WORDPRESS_DB_HOST
+          value: wordpress-mysql
+        - name: WORDPRESS_DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-pass
+              key: password
+        - name: WORDPRESS_DB_USER
+          value: wordpress
+        ports:
+        - containerPort: 80
+          name: wordpress
+        volumeMounts:
+        - name: wordpress-persistent-storage
+          mountPath: /var/www/html
+      volumes:
+      - name: wordpress-persistent-storage
+        persistentVolumeClaim:
+          claimName: wp-pv-claim
+</code></pre>
+<ol>
+<li dir="rtl">
+<p dir="rtl">فایل پیکربندی استقرار MySQL را دانلود کنید.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">curl -LO https://k8s.io/examples/application/wordpress/mysql-deployment.yaml
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">فایل پیکربندی WordPress را دانلود کنید.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">curl -LO https://k8s.io/examples/application/wordpress/wordpress-deployment.yaml
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">آن‌ها را به فایل <code dir="ltr">kustomization.yaml</code> اضافه کنید.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">cat &lt;&lt;EOF &gt;&gt;./kustomization.yaml
+resources:
+  - mysql-deployment.yaml
+  - wordpress-deployment.yaml
+EOF
+</code></pre>
+</li>
+</ol>
+<h2 id="اعمال-و-بررسی" dir="rtl">اعمال و بررسی</h2>
+<p dir="rtl">فایل <code dir="ltr">kustomization.yaml</code> همه منابع لازم برای استقرار یک سایت WordPress و یک پایگاه داده
+MySQL را در بر دارد. می‌توانید پوشه را با دستور زیر اعمال کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -k ./
+</code></pre>
+<p dir="rtl">اکنون می‌توانید بررسی کنید که همه آبجکت‌ها وجود دارند.</p>
+<ol>
+<li dir="rtl">
+<p dir="rtl">با اجرای دستور زیر بررسی کنید که Secret وجود دارد:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get secrets
+</code></pre>
+<p dir="rtl">خروجی باید مشابه زیر باشد:</p>
+<pre dir="ltr"><code dir="ltr">NAME                    TYPE                                  DATA   AGE
+mysql-pass-c57bb4t7mf   Opaque                                1      9s
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">بررسی کنید که یک PersistentVolume به‌صورت پویا تأمین شده است.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pvc
+</code></pre>
+</li>
+</ol>
+<div class="callout note"><div class="callout-title">Note</div>
+<p dir="rtl">ممکن است تأمین و اتصال (bind) PVها تا چند دقیقه طول بکشد.</p>
+</div>
+<p dir="rtl">خروجی باید مشابه زیر باشد:</p>
+<pre dir="ltr"><code dir="ltr">NAME             STATUS    VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS       AGE
+mysql-pv-claim   Bound     pvc-8cbd7b2e-4044-11e9-b2bb-42010a800002   20Gi       RWO            standard           77s
+wp-pv-claim      Bound     pvc-8cd0df54-4044-11e9-b2bb-42010a800002   20Gi       RWO            standard           77s
+</code></pre>
+<ol start="3">
+<li dir="rtl">
+<p dir="rtl">با اجرای دستور زیر بررسی کنید که Pod در حال اجرا است:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pods
+</code></pre>
+</li>
+</ol>
+<div class="callout note"><div class="callout-title">Note</div>
+<p dir="rtl">ممکن است تا چند دقیقه طول بکشد تا وضعیت Pod به <code dir="ltr">RUNNING</code> تغییر کند.</p>
+</div>
+<p dir="rtl">خروجی باید مشابه زیر باشد:</p>
+<pre dir="ltr"><code dir="ltr">NAME                               READY     STATUS    RESTARTS   AGE
+wordpress-mysql-1894417608-x5dzt   1/1       Running   0          40s
+</code></pre>
+<ol start="4">
+<li dir="rtl">
+<p dir="rtl">با اجرای دستور زیر بررسی کنید که Service در حال اجرا است:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get services wordpress
+</code></pre>
+<p dir="rtl">خروجی باید مشابه زیر باشد:</p>
+<pre dir="ltr"><code dir="ltr">NAME        TYPE            CLUSTER-IP   EXTERNAL-IP   PORT(S)        AGE
+wordpress   LoadBalancer    10.0.0.89    &lt;pending&gt;     80:32406/TCP   4m
+</code></pre>
+</li>
+</ol>
+<div class="callout note"><div class="callout-title">Note</div>
+<p dir="rtl">در Minikube، Serviceها فقط از طریق <code dir="ltr">NodePort</code> در دسترس قرار می‌گیرند. مقدار EXTERNAL-IP همیشه در وضعیت pending است.</p>
+</div>
+<ol start="5">
+<li dir="rtl">
+<p dir="rtl">برای دریافت نشانی IP مربوط به Service وردپرس، دستور زیر را اجرا کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">minikube service wordpress --url
+</code></pre>
+<p dir="rtl">خروجی باید مشابه زیر باشد:</p>
+<pre dir="ltr"><code dir="ltr">http://1.2.3.4:32406
+</code></pre>
+</li>
+<li dir="rtl">
+<p dir="rtl">نشانی IP را کپی کنید و برای مشاهده سایت خود، صفحه را در مرورگر باز کنید.</p>
+<p dir="rtl">باید صفحه راه‌اندازی WordPress را مشابه تصویر زیر ببینید.</p>
+<p><img src="/images/docs/tutorials/mysql-wordpress-persistent-volume/WordPress.png" alt="wordpress-init"></p>
+</li>
+</ol>
+<div class="callout note"><div class="callout-title">Warning</div>
+<p dir="rtl">نصب WordPress را در همین صفحه رها نکنید. اگر کاربر دیگری آن را پیدا کند،
+می‌تواند روی نمونه شما یک وب‌سایت راه‌اندازی کند و از آن برای ارائه محتوای مخرب استفاده کند.<br><br>
+یا WordPress را با ایجاد نام کاربری و گذرواژه نصب کنید، یا نمونه خود را حذف کنید.</p>
+</div>
+<h2 id="پاکسازی" dir="rtl">پاکسازی</h2>
+<ol>
+<li dir="rtl">
+<p dir="rtl">برای حذف Secret، Deploymentها، Serviceها و PersistentVolumeClaimهای خود، دستور زیر را اجرا کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl delete -k ./
+</code></pre>
+</li>
+</ol>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<ul>
+<li dir="rtl">درباره <a href="../../tasks/debug/debug-application/debug-running-pod.html">بازرسی و اشکال‌زدایی</a> بیشتر بیاموزید</li>
+<li dir="rtl">درباره <a href="../../concepts/workloads/controllers/job.html">Jobها</a> بیشتر بیاموزید</li>
+<li dir="rtl">درباره <a href="../../tasks/access-application-cluster/port-forward-access-application-cluster.html">هدایت پورت</a> بیشتر بیاموزید</li>
+<li dir="rtl">بیاموزید که چگونه <a href="../../tasks/debug/debug-application/get-shell-running-container.html">به شِل یک کانتینر دسترسی پیدا کنید</a></li>
+</ul>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#اهداف">اهداف</a><a class="l2" href="#پیش-از-شروع">پیش از شروع</a><a class="l2" href="#ایجاد-persistentvolumeclaimها-و-persistentvolumeها">ایجاد PersistentVolumeClaimها و PersistentVolumeها</a><a class="l2" href="#ایجاد-فایل-kustomization-yaml">ایجاد فایل kustomization.yaml</a><a class="l3" href="#افزودن-یک-مولد-secret">افزودن یک مولد Secret</a><a class="l2" href="#افزودن-پیکربندی-های-منابع-برای-mysql-و-wordpress">افزودن پیکربندی‌های منابع برای MySQL و WordPress</a><a class="l2" href="#اعمال-و-بررسی">اعمال و بررسی</a><a class="l2" href="#پاکسازی">پاکسازی</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>

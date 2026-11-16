@@ -1,0 +1,583 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>اتصال برنامه‌ها با Serviceها | مستندات کوبرنتیز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--code-bg:#f6f8fa;--accent:#326ce5;--note:#e7f0ff;--caution:#fff4e5;--warning:#fdecec;--side:#f7f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--border:#30363d;--code-bg:#161b22;--accent:#6ea8fe;--note:#0f2547;--caution:#3a2a10;--warning:#3d1517;--side:#11161d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.95;font-size:16px}
+header.top{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+header.top a{color:var(--accent);text-decoration:none;font-weight:600}
+header.top .crumbs{color:var(--muted);font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layout{display:flex;max-width:1280px;margin:0 auto}
+nav.toc{width:260px;flex-shrink:0;padding:16px;border-inline-start:1px solid var(--border);position:sticky;top:52px;align-self:flex-start;max-height:calc(100vh - 52px);overflow:auto;font-size:13.5px;background:var(--side)}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:2px 0}
+nav.toc a.l3{padding-inline-start:12px}
+nav.toc a:hover{color:var(--accent)}
+main{flex:1;min-width:0;padding:20px 32px 60px;text-align:right}
+main h1{font-size:30px;line-height:1.5;margin:8px 0 16px}
+main h2{font-size:23px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:36px}
+main h3{font-size:19px;margin-top:28px}
+a{color:var(--accent)}
+[dir=ltr],.ltr{text-align:left;direction:ltr}
+pre{direction:ltr;text-align:left;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;line-height:1.55;font-size:13.5px;unicode-bidi:isolate}
+code,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:isolate;font-size:.9em}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.code-file{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-bottom:-10px}
+table{border-collapse:collapse;display:block;overflow:auto;max-width:100%;margin:14px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;vertical-align:top}
+th{background:var(--code-bg)}
+.callout{border-inline-start:4px solid var(--accent);background:var(--note);padding:10px 16px;border-radius:6px;margin:16px 0}
+.callout.caution{border-color:#d4880f;background:var(--caution)}
+.callout.warning{border-color:#cf222e;background:var(--warning)}
+.callout-title{font-weight:700;margin-bottom:4px}
+.feature-state{display:inline-block;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13.5px;margin:6px 0}
+.tabs{border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:16px 0}
+.tab-name{font-weight:700;color:var(--accent);margin-top:10px;border-bottom:1px dashed var(--border)}
+.term{border-bottom:1px dotted var(--muted)}
+img{max-width:100%}
+figure{margin:16px 0;text-align:center}
+.page-meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+.index-tree ul{list-style:none;padding-inline-start:18px;border-inline-start:1px dashed var(--border)}
+.index-tree>ul{border:0;padding:0}
+.index-tree li{margin:2px 0}
+.index-tree .sec{font-weight:700}
+.missing{color:var(--muted)}
+.totop{margin-top:40px;padding-top:12px;border-top:1px solid var(--border);text-align:center}
+#totop{position:fixed;bottom:20px;left:20px;z-index:6;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85}
+#totop:hover{opacity:1}
+html{scroll-behavior:smooth}
+#upd[hidden]{display:none}
+#upd{margin-inline-start:auto;display:flex;gap:8px;align-items:center;font-size:.85em}
+#upd:not([hidden])+#theme{margin-inline-start:8px}
+#upd button{background:var(--accent,#326ce5);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:inherit}
+#upd .upd-info{color:var(--muted)}
+#theme{margin-inline-start:auto;background:none;border:1px solid var(--border);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font:inherit}
+@media (max-width:900px){nav.toc{display:none}main{padding:16px}}
+</style>
+<script>
+(function(){var k='k8s-fa-theme';try{var t=localStorage.getItem(k);if(t)document.documentElement.dataset.theme=t;}catch(e){}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme');if(!b)return;b.onclick=function(){var d=document.documentElement;var dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem(k,d.dataset.theme)}catch(e){}};});})();
+</script>
+<script>
+(function(){var box,busy=false;
+function fmt(s){if(!s.running)return s.translated+' از '+s.total+' صفحه';
+var t=s.phase==='translate'?('ترجمه '+s.done+' از '+s.todo):s.phase;
+if(s.paused_until)t+=' — انتظار برای ریست سهمیه تا '+new Date(s.paused_until*1000).toLocaleTimeString('fa-IR');return t;}
+function draw(s){box.hidden=false;box.innerHTML='';var b=document.createElement('button');b.type='button';
+b.textContent=s.running?'توقف':'به‌روزرسانی';b.onclick=function(){if(busy)return;busy=true;
+fetch(s.running?'/api/stop':'/api/update',{method:'POST'}).then(poll).finally(function(){busy=false});};
+var i=document.createElement('span');i.className='upd-info';i.textContent=fmt(s);box.append(b,i);}
+function poll(){return fetch('/api/status').then(function(r){if(!r.ok)throw 0;return r.json()}).then(draw).catch(function(){});}
+document.addEventListener('DOMContentLoaded',function(){box=document.getElementById('upd');if(!box||location.protocol==='file:')return;poll();setInterval(poll,5000);});})();
+</script>
+</head>
+<body id="top">
+<a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
+<header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">tutorials / services</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
+<div class="layout">
+<main><h1 dir="rtl">اتصال برنامه‌ها با Serviceها</h1><!-- overview -->
+<h2 id="مدل-کوبرنتیز-برای-اتصال-کانتینرها" dir="rtl">مدل کوبرنتیز برای اتصال کانتینرها</h2>
+<p dir="rtl">اکنون یک برنامهٔ تکثیرشده دارید که به‌طور پیوسته اجرا می‌شود و می‌توانید آن را در شبکه در دسترس قرار دهید.</p>
+<p dir="rtl">کوبرنتیز فرض می‌کند که پادها، صرف‌نظر از اینکه روی کدام میزبان قرار بگیرند، می‌توانند با پادهای دیگر ارتباط برقرار کنند.
+کوبرنتیز به هر پاد یک نشانی IP خصوصی و اختصاصی در سطح کلاستر می‌دهد. بنابراین لازم نیست به‌صراحت میان پادها پیوند
+ایجاد کنید یا پورت‌های کانتینر را به پورت‌های میزبان نگاشت کنید. به این ترتیب، همهٔ کانتینرهای درون یک Pod می‌توانند
+از طریق localhost به پورت‌های یکدیگر دسترسی داشته باشند و همهٔ پادهای یک کلاستر نیز بدون NAT یکدیگر را می‌بینند.
+ادامهٔ این سند توضیح می‌دهد که چگونه می‌توانید سرویس‌های قابل‌اعتمادی را روی چنین مدل شبکه‌ای اجرا کنید.</p>
+<p dir="rtl">این آموزش برای نشان دادن این مفهوم از یک وب‌سرور سادهٔ nginx استفاده می‌کند.</p>
+<!-- body -->
+<h2 id="در-دسترس-قرار-دادن-پادها-در-کلاستر" dir="rtl">در دسترس قرار دادن پادها در کلاستر</h2>
+<p dir="rtl">این کار را در یکی از مثال‌های قبلی انجام دادیم، اما بیایید یک بار دیگر آن را تکرار کنیم و این بار بر جنبهٔ شبکه تمرکز کنیم.
+یک Pod برای nginx ایجاد کنید و توجه داشته باشید که این Pod مشخصهٔ پورت کانتینر دارد:</p>
+<div class="code-file ltr" dir="ltr">service/networking/run-my-nginx.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-nginx
+spec:
+  selector:
+    matchLabels:
+      run: my-nginx
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        run: my-nginx
+    spec:
+      containers:
+      - name: my-nginx
+        image: nginx
+        ports:
+        - containerPort: 80
+</code></pre>
+<p dir="rtl">با این کار، این Pod از هر نودی در کلاستر شما قابل دسترسی می‌شود. نودهایی را که Pod روی آن‌ها اجرا می‌شود بررسی کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f ./run-my-nginx.yaml
+kubectl get pods -l run=my-nginx -o wide
+</code></pre>
+<pre dir="ltr"><code dir="ltr">NAME                        READY     STATUS    RESTARTS   AGE       IP            NODE
+my-nginx-3800858182-jr4a2   1/1       Running   0          13s       10.244.3.4    kubernetes-minion-905m
+my-nginx-3800858182-kna2y   1/1       Running   0          13s       10.244.2.5    kubernetes-minion-ljyd
+</code></pre>
+<p dir="rtl">نشانی‌های IP پادهای خود را بررسی کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pods -l run=my-nginx -o custom-columns=POD_IP:.status.podIPs
+    POD_IP
+    [map[ip:10.244.3.4]]
+    [map[ip:10.244.2.5]]
+</code></pre>
+<p dir="rtl">باید بتوانید با ssh به هر نودی از کلاستر خود وارد شوید و با ابزاری مانند <code dir="ltr">curl</code>
+به هر دو نشانی IP درخواست بفرستید. توجه کنید که کانتینرها از پورت 80 روی نود
+استفاده <em>نمی‌کنند</em> و هیچ قاعدهٔ NAT خاصی هم برای مسیریابی ترافیک به پاد وجود ندارد. این یعنی
+می‌توانید چند پاد nginx را روی یک نود اجرا کنید که همگی از <code dir="ltr">containerPort</code> یکسانی استفاده می‌کنند،
+و از هر پاد یا نود دیگری در کلاستر، با استفاده از نشانی IP اختصاص‌یافته به هر پاد، به آن‌ها
+دسترسی داشته باشید. اگر بخواهید پورت مشخصی روی نود میزبان به پادهای پشتیبان هدایت شود،
+این کار ممکن است؛ اما مدل شبکه طوری طراحی شده است که نیازی به این کار نداشته باشید.</p>
+<p dir="rtl">اگر کنجکاو هستید، می‌توانید دربارهٔ
+<a href="../../concepts/cluster-administration/networking.html#the-kubernetes-network-model">مدل شبکهٔ کوبرنتیز</a>
+بیشتر بخوانید.</p>
+<h2 id="ایجاد-یک-service" dir="rtl">ایجاد یک Service</h2>
+<p dir="rtl">اکنون پادهایی داریم که nginx را در یک فضای نشانی تخت و سراسری در سطح کلاستر اجرا می‌کنند. در تئوری
+می‌توانید مستقیماً با این پادها ارتباط برقرار کنید، اما اگر یک نود از کار بیفتد چه اتفاقی می‌افتد؟ پادها نیز
+همراه آن از بین می‌روند و ReplicaSet درون Deployment پادهای جدیدی با نشانی‌های IP متفاوت ایجاد می‌کند.
+این همان مشکلی است که Service حل می‌کند.</p>
+<p dir="rtl">هر Service در کوبرنتیز یک انتزاع است که مجموعه‌ای منطقی از پادها را تعریف می‌کند؛ پادهایی که در جایی از
+کلاستر شما اجرا می‌شوند و همگی کارکرد یکسانی ارائه می‌دهند. هنگام ایجاد هر Service، یک نشانی IP یکتا
+(که clusterIP نیز نامیده می‌شود) به آن اختصاص داده می‌شود. این نشانی به طول عمر Service وابسته است
+و تا زمانی که Service وجود دارد تغییر نمی‌کند. می‌توان پادها را طوری پیکربندی کرد که با Service ارتباط
+برقرار کنند، با این اطمینان که ارتباط با Service به‌طور خودکار میان پادهای عضو آن Service توزیع بار (load-balance) می‌شود.</p>
+<p dir="rtl">می‌توانید با دستور <code dir="ltr">kubectl expose</code> یک Service برای دو رونوشت (replica) nginx خود ایجاد کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl expose deployment/my-nginx
+</code></pre>
+<pre dir="ltr"><code dir="ltr">service/my-nginx exposed
+</code></pre>
+<p dir="rtl">این کار معادل اجرای <code dir="ltr">kubectl apply -f</code> روی فایل YAML زیر است:</p>
+<div class="code-file ltr" dir="ltr">service/networking/nginx-svc.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: Service
+metadata:
+  name: my-nginx
+  labels:
+    run: my-nginx
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+  selector:
+    run: my-nginx
+</code></pre>
+<p dir="rtl">این مشخصه یک Service ایجاد می‌کند که پورت TCP شمارهٔ 80 را روی هر Pod دارای برچسب
+<code dir="ltr">run: my-nginx</code> هدف قرار می‌دهد و آن را روی یک پورت انتزاعی Service در دسترس قرار می‌دهد
+(<code dir="ltr">targetPort</code> پورتی است که کانتینر ترافیک را روی آن می‌پذیرد و <code dir="ltr">port</code> پورت انتزاعی Service است
+که می‌تواند هر پورتی باشد که پادهای دیگر برای دسترسی به Service از آن استفاده می‌کنند).
+برای دیدن فهرست فیلدهای پشتیبانی‌شده در تعریف Service، آبجکت API
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.37/#service-v1-core" target="_blank">Service</a> را ببینید.
+وضعیت Service خود را بررسی کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get svc my-nginx
+</code></pre>
+<pre dir="ltr"><code dir="ltr">NAME       TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)   AGE
+my-nginx   ClusterIP   10.0.162.149   &lt;none&gt;        80/TCP    21s
+</code></pre>
+<p dir="rtl">همان‌طور که پیش‌تر گفته شد، پشتوانهٔ هر Service گروهی از پادهاست. این پادها از طریق
+<span class="term" title="endpoint-slice">EndpointSliceها</span> در دسترس قرار می‌گیرند.
+انتخابگر (selector) Service به‌طور پیوسته ارزیابی می‌شود و نتایج آن با درخواست POST به یک EndpointSlice
+ارسال می‌شود که با استفاده از <span class="term" title="label">برچسب‌ها</span> به Service متصل است.
+وقتی یک Pod از بین می‌رود، به‌طور خودکار از EndpointSliceهایی که آن را به‌عنوان نقطهٔ پایانی (endpoint)
+در بر دارند حذف می‌شود. پادهای جدیدی که با انتخابگر Service مطابقت داشته باشند، به‌طور خودکار به یکی از
+EndpointSliceهای آن Service افزوده می‌شوند.
+نقاط پایانی را بررسی کنید و توجه کنید که نشانی‌های IP همان نشانی‌های پادهایی هستند که در گام اول ایجاد شدند:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl describe svc my-nginx
+</code></pre>
+<pre dir="ltr"><code dir="ltr">Name:                my-nginx
+Namespace:           default
+Labels:              run=my-nginx
+Annotations:         &lt;none&gt;
+Selector:            run=my-nginx
+Type:                ClusterIP
+IP Family Policy:    SingleStack
+IP Families:         IPv4
+IP:                  10.0.162.149
+IPs:                 10.0.162.149
+Port:                &lt;unset&gt; 80/TCP
+TargetPort:          80/TCP
+Endpoints:           10.244.2.5:80,10.244.3.4:80
+Session Affinity:    None
+Events:              &lt;none&gt;
+</code></pre>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get endpointslices -l kubernetes.io/service-name=my-nginx
+</code></pre>
+<pre dir="ltr"><code dir="ltr">NAME             ADDRESSTYPE   PORTS   ENDPOINTS               AGE
+my-nginx-7vzhx   IPv4          80      10.244.2.5,10.244.3.4   21s
+</code></pre>
+<p dir="rtl">اکنون باید بتوانید از هر نودی در کلاستر خود با curl به Service مربوط به nginx در نشانی
+<code dir="ltr">&lt;CLUSTER-IP&gt;:&lt;PORT&gt;</code> درخواست بفرستید. توجه کنید که IP سرویس کاملاً مجازی است و
+هرگز روی سیم شبکه منتقل نمی‌شود. اگر کنجکاوید بدانید این سازوکار چگونه کار می‌کند،
+می‌توانید دربارهٔ <a href="../../reference/networking/virtual-ips.html">پراکسی سرویس</a> بیشتر بخوانید.</p>
+<h2 id="دسترسی-به-service" dir="rtl">دسترسی به Service</h2>
+<p dir="rtl">کوبرنتیز از دو روش اصلی برای یافتن یک Service پشتیبانی می‌کند: متغیرهای محیطی
+و DNS. روش اول بدون هیچ پیکربندی اضافه‌ای کار می‌کند، در حالی که روش دوم به
+<a href="https://releases.k8s.io/v1.37.0/cluster/addons/dns/coredns" target="_blank" rel="noopener">افزونهٔ کلاستر CoreDNS</a> نیاز دارد.</p>
+<div class="callout note"><div class="callout-title">Note</div>
+<p dir="rtl">اگر متغیرهای محیطی سرویس را نمی‌خواهید (مثلاً به دلیل احتمال تداخل با متغیرهای مورد انتظار
+برنامه، تعداد زیاد متغیرها برای پردازش، استفادهٔ صرف از DNS و مانند آن)، می‌توانید این حالت را
+با تنظیم فلگ <code dir="ltr">enableServiceLinks</code> روی <code dir="ltr">false</code> در
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.37/#pod-v1-core" target="_blank">مشخصات پاد</a> غیرفعال کنید.</p>
+</div>
+<h3 id="متغیرهای-محیطی" dir="rtl">متغیرهای محیطی</h3>
+<p dir="rtl">وقتی یک Pod روی یک نود اجرا می‌شود، kubelet برای هر Service فعال مجموعه‌ای از متغیرهای محیطی
+را اضافه می‌کند. این موضوع مشکلی در ترتیب ایجاد پیش می‌آورد. برای اینکه دلیلش را ببینید،
+محیط پادهای nginx در حال اجرای خود را بررسی کنید (نام Pod شما متفاوت خواهد بود):</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl exec my-nginx-3800858182-jr4a2 -- printenv | grep SERVICE
+</code></pre>
+<pre dir="ltr"><code dir="ltr">KUBERNETES_SERVICE_HOST=10.0.0.1
+KUBERNETES_SERVICE_PORT=443
+KUBERNETES_SERVICE_PORT_HTTPS=443
+</code></pre>
+<p dir="rtl">توجه کنید که هیچ اشاره‌ای به Service شما نشده است. دلیلش این است که رونوشت‌ها را پیش از
+Service ایجاد کردید. عیب دیگر این کار آن است که زمان‌بند ممکن است هر دو Pod را روی یک ماشین
+قرار دهد و اگر آن ماشین از کار بیفتد، کل Service شما از دسترس خارج می‌شود. می‌توانیم این کار را
+به روش درست انجام دهیم: دو Pod را از بین می‌بریم و منتظر می‌مانیم تا Deployment دوباره آن‌ها را
+ایجاد کند. این بار Service <em>پیش از</em> رونوشت‌ها وجود دارد. با این کار، پادهای شما در سطح زمان‌بند
+بر اساس Service پخش می‌شوند (به شرط آنکه همهٔ نودهایتان ظرفیت یکسانی داشته باشند) و متغیرهای
+محیطی درست نیز تنظیم می‌شوند:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl scale deployment my-nginx --replicas=0; kubectl scale deployment my-nginx --replicas=2;
+
+kubectl get pods -l run=my-nginx -o wide
+</code></pre>
+<pre dir="ltr"><code dir="ltr">NAME                        READY     STATUS    RESTARTS   AGE     IP            NODE
+my-nginx-3800858182-e9ihh   1/1       Running   0          5s      10.244.2.7    kubernetes-minion-ljyd
+my-nginx-3800858182-j4rm4   1/1       Running   0          5s      10.244.3.8    kubernetes-minion-905m
+</code></pre>
+<p dir="rtl">ممکن است متوجه شوید که نام پادها تغییر کرده است، زیرا آن‌ها از بین رفته و دوباره ایجاد شده‌اند.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl exec my-nginx-3800858182-e9ihh -- printenv | grep SERVICE
+</code></pre>
+<pre dir="ltr"><code dir="ltr">KUBERNETES_SERVICE_PORT=443
+MY_NGINX_SERVICE_HOST=10.0.162.149
+KUBERNETES_SERVICE_HOST=10.0.0.1
+MY_NGINX_SERVICE_PORT=80
+KUBERNETES_SERVICE_PORT_HTTPS=443
+</code></pre>
+<h3 id="dns" dir="ltr" class="ltr">DNS</h3>
+<p dir="rtl">کوبرنتیز یک Service افزونهٔ کلاستر برای DNS ارائه می‌دهد که به‌طور خودکار به Serviceهای دیگر
+نام DNS اختصاص می‌دهد. می‌توانید بررسی کنید که آیا این سرویس روی کلاستر شما در حال اجراست:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get services kube-dns --namespace=kube-system
+</code></pre>
+<pre dir="ltr"><code dir="ltr">NAME       TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)         AGE
+kube-dns   ClusterIP   10.0.0.10    &lt;none&gt;        53/UDP,53/TCP   8m
+</code></pre>
+<p dir="rtl">در ادامهٔ این بخش فرض می‌کنیم که یک Service با IP بلندمدت (my-nginx) و یک سرور DNS دارید
+که به آن IP نامی اختصاص داده است. در اینجا از افزونهٔ کلاستر CoreDNS (با نام برنامهٔ <code dir="ltr">kube-dns</code>)
+استفاده می‌کنیم، بنابراین می‌توانید از هر پادی در کلاستر خود و با روش‌های استاندارد
+(مثلاً <code dir="ltr">gethostbyname()</code>) با Service ارتباط برقرار کنید.
+اگر CoreDNS در حال اجرا نیست، می‌توانید با مراجعه به
+<a href="https://github.com/coredns/deployment/tree/master/kubernetes" target="_blank" rel="noopener">README پروژهٔ CoreDNS</a>
+یا <a href="../../tasks/administer-cluster/coredns.html#installing-coredns">نصب CoreDNS</a> آن را فعال کنید.
+بیایید برای آزمودن این موضوع، یک برنامهٔ curl دیگر اجرا کنیم:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl run curl --image=radial/busyboxplus:curl -i --tty --rm
+</code></pre>
+<pre dir="ltr"><code dir="ltr">Waiting for pod default/curl-131556218-9fnch to be running, status is Pending, pod ready: false
+Hit enter for command prompt
+</code></pre>
+<p dir="rtl">سپس کلید Enter را بزنید و دستور <code dir="ltr">nslookup my-nginx</code> را اجرا کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">[ root@curl-131556218-9fnch:/ ]$ nslookup my-nginx
+Server:    10.0.0.10
+Address 1: 10.0.0.10
+
+Name:      my-nginx
+Address 1: 10.0.162.149
+</code></pre>
+<h2 id="ایمن-سازی-service" dir="rtl">ایمن‌سازی Service</h2>
+<p dir="rtl">تا اینجا فقط از درون کلاستر به سرور nginx دسترسی داشته‌ایم. پیش از آنکه Service را در اینترنت
+در دسترس قرار دهید، باید مطمئن شوید که کانال ارتباطی امن است. برای این کار به موارد زیر نیاز دارید:</p>
+<ul>
+<li dir="rtl">گواهی‌های خودامضا (self-signed) برای https (مگر آنکه از قبل گواهی هویت داشته باشید)</li>
+<li dir="rtl">یک سرور nginx که برای استفاده از این گواهی‌ها پیکربندی شده باشد</li>
+<li dir="rtl">یک <a href="../../concepts/configuration/secret.html">Secret</a> که گواهی‌ها را در دسترس پادها قرار دهد</li>
+</ul>
+<p dir="rtl">همهٔ این موارد را می‌توانید از
+<a href="https://github.com/kubernetes/examples/tree/master/_archived/https-nginx/" target="_blank" rel="noopener">مثال https برای nginx</a> به دست آورید.
+این کار به نصب ابزارهای go و make نیاز دارد. اگر نمی‌خواهید این ابزارها را نصب کنید،
+مراحل دستی را که در ادامه آمده است دنبال کنید. به‌طور خلاصه:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">make keys KEY=/tmp/nginx.key CERT=/tmp/nginx.crt
+kubectl create secret tls nginxsecret --key /tmp/nginx.key --cert /tmp/nginx.crt
+</code></pre>
+<pre dir="ltr"><code dir="ltr">secret/nginxsecret created
+</code></pre>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get secrets
+</code></pre>
+<pre dir="ltr"><code dir="ltr">NAME                  TYPE                                  DATA      AGE
+nginxsecret           kubernetes.io/tls                     2         1m
+</code></pre>
+<p dir="rtl">و همچنین ConfigMap را ایجاد کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl create configmap nginxconfigmap --from-file=default.conf
+</code></pre>
+<p dir="rtl">نمونه‌ای از فایل <code dir="ltr">default.conf</code> را می‌توانید در
+<a href="https://github.com/kubernetes/examples/tree/bc9ca4ca32bb28762ef216386934bef20f1f9930/staging/https-nginx/" target="_blank" rel="noopener">مخزن پروژهٔ مثال‌های کوبرنتیز</a> پیدا کنید.</p>
+<pre dir="ltr"><code dir="ltr">configmap/nginxconfigmap created
+</code></pre>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get configmaps
+</code></pre>
+<pre dir="ltr"><code dir="ltr">NAME             DATA   AGE
+nginxconfigmap   1      114s
+</code></pre>
+<p dir="rtl">با دستور زیر می‌توانید جزئیات ConfigMap با نام <code dir="ltr">nginxconfigmap</code> را ببینید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl describe configmap  nginxconfigmap
+</code></pre>
+<p dir="rtl">خروجی مشابه زیر است:</p>
+<pre dir="ltr"><code class="language-console" dir="ltr">Name:         nginxconfigmap
+Namespace:    default
+Labels:       &lt;none&gt;
+Annotations:  &lt;none&gt;
+
+Data
+====
+default.conf:
+----
+server {
+        listen 80 default_server;
+        listen [::]:80 default_server ipv6only=on;
+
+        listen 443 ssl;
+
+        root /usr/share/nginx/html;
+        index index.html;
+
+        server_name localhost;
+        ssl_certificate /etc/nginx/ssl/tls.crt;
+        ssl_certificate_key /etc/nginx/ssl/tls.key;
+
+        location / {
+                try_files $uri $uri/ =404;
+        }
+}
+
+BinaryData
+====
+
+Events:  &lt;none&gt;
+</code></pre>
+<p dir="rtl">اگر در اجرای make با مشکل مواجه شدید (برای مثال در ویندوز)، مراحل دستی زیر را دنبال کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr"># Create a public private key pair
+openssl req -x509 -noenc -days 365 -newkey rsa:2048 -keyout /d/tmp/nginx.key -out /d/tmp/nginx.crt -subj "/CN=my-nginx/O=my-nginx"
+# Convert the keys to base64 encoding
+cat /d/tmp/nginx.crt | base64 | tr -d '\n'
+cat /d/tmp/nginx.key | base64 | tr -d '\n'
+</code></pre>
+<p dir="rtl">از خروجی دستورهای قبلی برای ایجاد یک فایل YAML به شکل زیر استفاده کنید.
+مقدار کدگذاری‌شده با base64 باید به‌طور کامل در یک خط باشد.</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: "v1"
+kind: "Secret"
+metadata:
+  name: "nginxsecret"
+  namespace: "default"
+type: kubernetes.io/tls
+data:
+ # NOTE: Replace the following values with your own base64-encoded certificate and key.
+  tls.crt: "REPLACE_WITH_BASE64_CERT" 
+  tls.key: "REPLACE_WITH_BASE64_KEY"
+</code></pre>
+<p dir="rtl">اکنون با استفاده از این فایل، Secretها را ایجاد کنید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f nginxsecrets.yaml
+kubectl get secrets
+</code></pre>
+<pre dir="ltr"><code dir="ltr">NAME                  TYPE                                  DATA      AGE
+nginxsecret           kubernetes.io/tls                     2         1m
+</code></pre>
+<p dir="rtl">اکنون رونوشت‌های nginx خود را طوری تغییر دهید که با استفاده از گواهی موجود در Secret یک سرور https
+راه‌اندازی کنند، و Service را نیز طوری تغییر دهید که هر دو پورت (80 و 443) را در دسترس قرار دهد:</p>
+<div class="code-file ltr" dir="ltr">service/networking/nginx-secure-app.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
+kind: Service
+metadata:
+  name: my-nginx
+  labels:
+    run: my-nginx
+spec:
+  type: NodePort
+  ports:
+  - port: 8080
+    targetPort: 80
+    protocol: TCP
+    name: http
+  - port: 443
+    protocol: TCP
+    name: https
+  selector:
+    run: my-nginx
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-nginx
+spec:
+  selector:
+    matchLabels:
+      run: my-nginx
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        run: my-nginx
+    spec:
+      volumes:
+      - name: secret-volume
+        secret:
+          secretName: nginxsecret
+      - name: configmap-volume
+        configMap:
+          name: nginxconfigmap
+      containers:
+      - name: nginxhttps
+        image: bprashanth/nginxhttps:1.0
+        ports:
+        - containerPort: 443
+        - containerPort: 80
+        volumeMounts:
+        - mountPath: /etc/nginx/ssl
+          name: secret-volume
+        - mountPath: /etc/nginx/conf.d
+          name: configmap-volume
+</code></pre>
+<p dir="rtl">نکات قابل‌توجه دربارهٔ مانیفست nginx-secure-app:</p>
+<ul>
+<li dir="rtl">این فایل مشخصات Deployment و Service را با هم در بر دارد.</li>
+<li dir="rtl"><a href="https://github.com/kubernetes/examples/blob/master/_archived/https-nginx/default.conf" target="_blank" rel="noopener">سرور nginx</a>
+ترافیک HTTP را روی پورت 80 و ترافیک HTTPS را روی پورت 443 سرویس می‌دهد و Service مربوط به nginx
+هر دو پورت را در دسترس قرار می‌دهد.</li>
+<li dir="rtl">هر کانتینر از طریق یک حجم (volume) که در مسیر <code dir="ltr">/etc/nginx/ssl</code> سوار (mount) شده است به کلیدها دسترسی دارد.
+این حجم <em>پیش از</em> راه‌اندازی سرور nginx آماده می‌شود.</li>
+</ul>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl delete deployments,svc my-nginx; kubectl create -f ./nginx-secure-app.yaml
+</code></pre>
+<p dir="rtl">اکنون می‌توانید از هر نودی به سرور nginx دسترسی داشته باشید.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pods -l run=my-nginx -o custom-columns=POD_IP:.status.podIPs
+    POD_IP
+    [map[ip:10.244.3.5]]
+</code></pre>
+<pre dir="ltr"><code class="language-shell" dir="ltr">node $ curl -k https://10.244.3.5
+...
+&lt;h1&gt;Welcome to nginx!&lt;/h1&gt;
+</code></pre>
+<p dir="rtl">توجه کنید که در گام آخر پارامتر <code dir="ltr">-k</code> را به curl دادیم. دلیلش این است که هنگام تولید گواهی
+هیچ اطلاعاتی دربارهٔ پادهایی که nginx را اجرا می‌کنند نداریم، پس باید به curl بگوییم عدم تطابق
+CName را نادیده بگیرد. با ایجاد یک Service، مقدار CName به‌کاررفته در گواهی را به نام DNS واقعی‌ای
+پیوند دادیم که پادها هنگام جست‌وجوی Service از آن استفاده می‌کنند. بیایید این را از درون یک پاد
+بیازماییم (برای سادگی از همان Secret دوباره استفاده می‌شود؛ پاد برای دسترسی به Service فقط به
+nginx.crt نیاز دارد):</p>
+<div class="code-file ltr" dir="ltr">service/networking/curlpod.yaml</div>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: curl-deployment
+spec:
+  selector:
+    matchLabels:
+      app: curlpod
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: curlpod
+    spec:
+      volumes:
+      - name: secret-volume
+        secret:
+          secretName: nginxsecret
+      containers:
+      - name: curlpod
+        command:
+        - sh
+        - -c
+        - while true; do sleep 1; done
+        image: radial/busyboxplus:curl
+        volumeMounts:
+        - mountPath: /etc/nginx/ssl
+          name: secret-volume
+</code></pre>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl apply -f ./curlpod.yaml
+kubectl get pods -l app=curlpod
+</code></pre>
+<pre dir="ltr"><code dir="ltr">NAME                               READY     STATUS    RESTARTS   AGE
+curl-deployment-1515033274-1410r   1/1       Running   0          1m
+</code></pre>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl exec curl-deployment-1515033274-1410r -- curl https://my-nginx --cacert /etc/nginx/ssl/tls.crt
+...
+&lt;title&gt;Welcome to nginx!&lt;/title&gt;
+...
+</code></pre>
+<h2 id="در-دسترس-قرار-دادن-service" dir="rtl">در دسترس قرار دادن Service</h2>
+<p dir="rtl">ممکن است بخواهید برای برخی بخش‌های برنامه‌هایتان، یک Service را روی یک نشانی IP خارجی
+در دسترس قرار دهید. کوبرنتیز از دو روش برای این کار پشتیبانی می‌کند: NodePort و
+LoadBalancer. سرویسی که در بخش قبل ایجاد شد از قبل از نوع <code dir="ltr">NodePort</code> استفاده می‌کرد،
+بنابراین اگر نود شما IP عمومی داشته باشد، رونوشت HTTPS مربوط به nginx آمادهٔ سرویس‌دهی
+به ترافیک اینترنت است.</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get svc my-nginx -o yaml | grep nodePort -C 5
+  uid: 07191fb3-f61a-11e5-8ae5-42010af00002
+spec:
+  clusterIP: 10.0.162.149
+  ports:
+  - name: http
+    nodePort: 31704
+    port: 8080
+    protocol: TCP
+    targetPort: 80
+  - name: https
+    nodePort: 32453
+    port: 443
+    protocol: TCP
+    targetPort: 443
+  selector:
+    run: my-nginx
+</code></pre>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get nodes -o yaml | grep ExternalIP -C 1
+    - address: 104.197.41.11
+      type: ExternalIP
+    allocatable:
+--
+    - address: 23.251.152.56
+      type: ExternalIP
+    allocatable:
+...
+
+$ curl https://&lt;EXTERNAL-IP&gt;:&lt;NODE-PORT&gt; -k
+...
+&lt;h1&gt;Welcome to nginx!&lt;/h1&gt;
+</code></pre>
+<p dir="rtl">اکنون Service را دوباره طوری ایجاد کنیم که از یک متعادل‌کنندهٔ بار (load balancer) ابری استفاده کند.
+مقدار <code dir="ltr">Type</code> در Service با نام <code dir="ltr">my-nginx</code> را از <code dir="ltr">NodePort</code> به <code dir="ltr">LoadBalancer</code> تغییر دهید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl edit svc my-nginx
+kubectl get svc my-nginx
+</code></pre>
+<pre dir="ltr"><code dir="ltr">NAME       TYPE           CLUSTER-IP     EXTERNAL-IP        PORT(S)               AGE
+my-nginx   LoadBalancer   10.0.162.149     xx.xxx.xxx.xxx     8080:30163/TCP        21s
+</code></pre>
+<pre dir="ltr"><code dir="ltr">curl https://&lt;EXTERNAL-IP&gt; -k
+...
+&lt;title&gt;Welcome to nginx!&lt;/title&gt;
+</code></pre>
+<p dir="rtl">نشانی IP موجود در ستون <code dir="ltr">EXTERNAL-IP</code> همان نشانی‌ای است که در اینترنت عمومی در دسترس است.
+مقدار <code dir="ltr">CLUSTER-IP</code> فقط درون کلاستر یا شبکهٔ ابر خصوصی شما در دسترس است.</p>
+<p dir="rtl">توجه کنید که در AWS، نوع <code dir="ltr">LoadBalancer</code> یک ELB ایجاد می‌کند که به‌جای IP از یک نام میزبان
+(طولانی) استفاده می‌کند. این نام در واقع آن‌قدر طولانی است که در خروجی استاندارد <code dir="ltr">kubectl get svc</code>
+جا نمی‌شود، بنابراین برای دیدن آن باید دستور <code dir="ltr">kubectl describe service my-nginx</code> را اجرا کنید.
+چیزی شبیه به این خواهید دید:</p>
+<pre dir="ltr"><code class="language-shell" dir="ltr">kubectl describe service my-nginx
+...
+LoadBalancer Ingress:   a320587ffd19711e5a37606cf4a74574-1142138393.us-east-1.elb.amazonaws.com
+...
+</code></pre>
+<h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
+<ul>
+<li dir="rtl">دربارهٔ <a href="../../tasks/access-application-cluster/service-access-application-cluster.html">استفاده از Service برای دسترسی به یک برنامه در کلاستر</a> بیشتر بیاموزید</li>
+<li dir="rtl">دربارهٔ <a href="../../tasks/access-application-cluster/connecting-frontend-backend.html">اتصال فرانت‌اند به بک‌اند با استفاده از Service</a> بیشتر بیاموزید</li>
+<li dir="rtl">دربارهٔ <a href="../../tasks/access-application-cluster/create-external-load-balancer.html">ایجاد یک متعادل‌کنندهٔ بار خارجی</a> بیشتر بیاموزید</li>
+</ul>
+<p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#مدل-کوبرنتیز-برای-اتصال-کانتینرها">مدل کوبرنتیز برای اتصال کانتینرها</a><a class="l2" href="#در-دسترس-قرار-دادن-پادها-در-کلاستر">در دسترس قرار دادن پادها در کلاستر</a><a class="l2" href="#ایجاد-یک-service">ایجاد یک Service</a><a class="l2" href="#دسترسی-به-service">دسترسی به Service</a><a class="l3" href="#متغیرهای-محیطی">متغیرهای محیطی</a><a class="l3" href="#dns">DNS</a><a class="l2" href="#ایمن-سازی-service">ایمن‌سازی Service</a><a class="l2" href="#در-دسترس-قرار-دادن-service">در دسترس قرار دادن Service</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+</div>
+</body>
+</html>
