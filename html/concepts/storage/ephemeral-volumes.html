@@ -83,66 +83,35 @@ document.addEventListener('DOMContentLoaded',function(){box=document.getElementB
 <header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">concepts / storage</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
 <div class="layout">
 <main><h1 dir="rtl">حجم‌های موقت</h1><!-- overview -->
-<p dir="rtl">این سند <em>حجم‌های موقت</em> (ephemeral volumes) را در کوبرنتیز توضیح می‌دهد. آشنایی با
-<a href="volumes.html">حجم‌ها</a> توصیه می‌شود، به‌ویژه
-PersistentVolumeClaim و PersistentVolume.</p>
+<p dir="rtl">این سند <em>حجم‌های موقت</em> (ephemeral volumes) را در کوبرنتیز شرح می‌دهد. پیشنهاد می‌شود پیش از مطالعهٔ آن با <a href="volumes.html">حجم‌ها</a>، به‌ویژه PersistentVolumeClaim و PersistentVolume، آشنا باشید.</p>
 <!-- body -->
-<p dir="rtl">برخی برنامه‌ها به ذخیره‌سازی اضافی نیاز دارند، اما اهمیتی نمی‌دهند که آن داده‌ها
-پس از راه‌اندازی مجدد به‌صورت پایدار نگهداری شوند یا خیر. برای مثال، سرویس‌های کش
-معمولاً با محدودیت اندازه‌ی حافظه روبه‌رو هستند و می‌توانند داده‌هایی را که به‌ندرت
-استفاده می‌شوند، با تأثیر اندکی بر عملکرد کلی، به ذخیره‌سازی‌ای کندتر از حافظه منتقل کنند.</p>
-<p dir="rtl">برنامه‌های دیگر انتظار دارند برخی داده‌های ورودیِ فقط‌خواندنی، مانند داده‌های
-پیکربندی یا کلیدهای محرمانه، در قالب فایل در دسترس باشند.</p>
-<p dir="rtl"><em>حجم‌های موقت</em> برای همین موارد کاربرد طراحی شده‌اند. از آنجا که حجم‌ها از چرخه‌ی عمر
-Pod پیروی می‌کنند و همراه با Pod ایجاد و حذف می‌شوند، می‌توان Podها را بدون محدود شدن
-به محلی که یک حجم پایدار (persistent volume) در آن در دسترس است، متوقف و دوباره راه‌اندازی کرد.</p>
-<p dir="rtl">حجم‌های موقت به‌صورت <em>درون‌خطی</em> (inline) در spec مربوط به Pod تعریف می‌شوند که
-استقرار و مدیریت برنامه را ساده‌تر می‌کند.</p>
-<h3 id="انواع-حجم-های-موقت-types-of-ephemeral-volumes" dir="rtl">انواع حجم‌های موقت {#types-of-ephemeral-volumes}</h3>
-<p dir="rtl">کوبرنتیز از چند نوع حجم موقت برای اهداف مختلف پشتیبانی می‌کند:</p>
+<p dir="rtl">برخی برنامه‌ها به فضای ذخیره‌سازی اضافی نیاز دارند، اما برایشان اهمیتی ندارد که داده‌ها پس از راه‌اندازی مجدد به‌طور پایدار حفظ شوند یا نه. برای مثال، سرویس‌های کش (caching) اغلب با محدودیت اندازهٔ حافظه روبه‌رو هستند و می‌توانند داده‌هایی را که کمتر استفاده می‌شوند به فضای ذخیره‌سازی‌ای منتقل کنند که از حافظه کندتر است، بی‌آنکه تأثیر چندانی بر کارایی کلی داشته باشد.</p>
+<p dir="rtl">برنامه‌های دیگری انتظار دارند برخی داده‌های ورودی فقط‌خواندنی، مانند داده‌های پیکربندی یا کلیدهای محرمانه، در قالب فایل در دسترس باشند.</p>
+<p dir="rtl"><em>حجم‌های موقت</em> برای همین موارد کاربرد طراحی شده‌اند. از آنجا که این حجم‌ها از چرخهٔ عمر Pod پیروی می‌کنند و همراه با Pod ایجاد و حذف می‌شوند، می‌توان Podها را متوقف و دوباره راه‌اندازی کرد، بی‌آنکه به مکانی محدود باشند که در آن یک حجم پایدار در دسترس است.</p>
+<p dir="rtl">حجم‌های موقت به‌صورت <em>درون‌خطی</em> (inline) در مشخصات Pod تعریف می‌شوند و همین امر استقرار و مدیریت برنامه را ساده‌تر می‌کند.</p>
+<h3 id="انواع-حجم-های-موقت" dir="rtl">انواع حجم‌های موقت</h3>
+<p dir="rtl">کوبرنتیز از چند نوع مختلف حجم موقت برای اهداف گوناگون پشتیبانی می‌کند:</p>
 <ul>
-<li dir="rtl"><a href="volumes.html#emptydir">emptyDir</a>: هنگام راه‌اندازی Pod خالی است
-و ذخیره‌سازی آن به‌صورت محلی از دایرکتوری پایه‌ی kubelet (معمولاً دیسک ریشه) یا از RAM تأمین می‌شود</li>
+<li dir="rtl"><a href="volumes.html#emptydir">emptyDir</a>: هنگام راه‌اندازی Pod خالی است و فضای ذخیره‌سازی آن به‌صورت محلی از پوشهٔ پایهٔ kubelet (معمولاً دیسک ریشه) یا از RAM تأمین می‌شود</li>
 <li dir="rtl"><a href="volumes.html#configmap">configMap</a>،
 <a href="volumes.html#downwardapi">downwardAPI</a>،
-<a href="volumes.html#secret">secret</a>: انواع مختلف داده‌های کوبرنتیز را
-به داخل یک Pod تزریق می‌کنند</li>
-<li dir="rtl"><a href="volumes.html#image">image</a>: امکان مانت کردن فایل‌ها یا آرتیفکت‌های ایمیج کانتینر
-را مستقیماً در یک Pod فراهم می‌کند.</li>
+<a href="volumes.html#secret">secret</a>: انواع مختلفی از داده‌های کوبرنتیز را به یک Pod تزریق می‌کنند</li>
+<li dir="rtl"><a href="volumes.html#image">image</a>: امکان مانت‌کردن مستقیم فایل‌ها یا مصنوعات (artifacts) ایمیج کانتینر را در یک Pod فراهم می‌کند.</li>
 <li dir="rtl"><a href="#csi-ephemeral-volumes">حجم‌های موقت CSI</a>:
-مشابه انواع حجم قبلی، اما توسط درایورهای ویژه‌ی <span class="term" title="csi">CSI</span> ارائه می‌شوند
-که به‌طور مشخص <a href="https://kubernetes-csi.github.io/docs/ephemeral-local-volumes.html" target="_blank" rel="noopener">از این قابلیت پشتیبانی می‌کنند</a></li>
-<li dir="rtl"><a href="#generic-ephemeral-volumes">حجم‌های موقت عمومی</a> که می‌توانند
-توسط تمام درایورهای ذخیره‌سازی که از حجم‌های پایدار نیز پشتیبانی می‌کنند ارائه شوند</li>
+مشابه انواع حجم پیشین هستند، اما درایورهای ویژهٔ <span class="term" title="csi">CSI</span> آن‌ها را فراهم می‌کنند؛ درایورهایی که به‌طور خاص <a href="https://kubernetes-csi.github.io/docs/ephemeral-local-volumes.html" target="_blank" rel="noopener">از این قابلیت پشتیبانی می‌کنند</a></li>
+<li dir="rtl"><a href="#generic-ephemeral-volumes">حجم‌های موقت عمومی</a>، که همهٔ درایورهای ذخیره‌سازی‌ای که از حجم‌های پایدار نیز پشتیبانی می‌کنند می‌توانند آن‌ها را فراهم کنند</li>
 </ul>
-<p dir="rtl"><code dir="ltr">emptyDir</code>، <code dir="ltr">configMap</code>، <code dir="ltr">downwardAPI</code> و <code dir="ltr">secret</code> به‌عنوان
-<a href="ephemeral-storage.html">ذخیره‌سازی موقت محلی</a> ارائه می‌شوند.
-این حجم‌ها توسط kubelet روی هر نود مدیریت می‌شوند.</p>
-<p dir="rtl">حجم‌های موقت CSI <em>باید</em> توسط درایورهای ذخیره‌سازی CSI شخص ثالث ارائه شوند.</p>
-<p dir="rtl">حجم‌های موقت عمومی <em>می‌توانند</em> توسط درایورهای ذخیره‌سازی CSI شخص ثالث ارائه شوند،
-و نیز توسط هر درایور ذخیره‌سازی دیگری که از تأمین پویا (dynamic provisioning) پشتیبانی کند.
-برخی درایورهای CSI به‌طور خاص برای حجم‌های موقت CSI نوشته شده‌اند و از تأمین پویا
-پشتیبانی نمی‌کنند؛ بنابراین این درایورها را نمی‌توان برای حجم‌های موقت عمومی به کار برد.</p>
-<p dir="rtl">مزیت استفاده از درایورهای شخص ثالث این است که می‌توانند قابلیت‌هایی ارائه دهند که
-خود کوبرنتیز از آن‌ها پشتیبانی نمی‌کند؛ برای مثال ذخیره‌سازی با ویژگی‌های عملکردی
-متفاوت از دیسکی که توسط kubelet مدیریت می‌شود، یا تزریق داده‌های متفاوت.</p>
-<h3 id="حجم-های-موقت-csi-csi-ephemeral-volumes" dir="rtl">حجم‌های موقت CSI {#csi-ephemeral-volumes}</h3>
+<p dir="rtl">حجم‌های <code dir="ltr">emptyDir</code>، <code dir="ltr">configMap</code>، <code dir="ltr">downwardAPI</code> و <code dir="ltr">secret</code> به‌صورت <a href="ephemeral-storage.html">ذخیره‌سازی موقت محلی</a> فراهم می‌شوند. این حجم‌ها را kubelet روی هر نود مدیریت می‌کند.</p>
+<p dir="rtl">حجم‌های موقت CSI <em>باید</em> توسط درایورهای ذخیره‌سازی CSI شخص ثالث فراهم شوند.</p>
+<p dir="rtl">حجم‌های موقت عمومی را درایورهای ذخیره‌سازی CSI شخص ثالث <em>می‌توانند</em> فراهم کنند، اما هر درایور ذخیره‌سازی دیگری که از تأمین پویا (dynamic provisioning) پشتیبانی کند نیز می‌تواند آن‌ها را فراهم کند. برخی درایورهای CSI به‌طور خاص برای حجم‌های موقت CSI نوشته شده‌اند و از تأمین پویا پشتیبانی نمی‌کنند؛ بنابراین نمی‌توان از آن‌ها برای حجم‌های موقت عمومی استفاده کرد.</p>
+<p dir="rtl">مزیت استفاده از درایورهای شخص ثالث این است که می‌توانند قابلیت‌هایی ارائه دهند که خود کوبرنتیز از آن‌ها پشتیبانی نمی‌کند؛ برای مثال، فضای ذخیره‌سازی با ویژگی‌های کارایی متفاوت از دیسکی که kubelet مدیریت می‌کند، یا تزریق داده‌های متفاوت.</p>
+<h3 id="حجم-های-موقت-csi" dir="rtl">حجم‌های موقت CSI</h3>
 <div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes v1.25 [stable]</span> (پایدار)</div>
 <div class="callout note"><div class="callout-title">توجه:</div>
-<p dir="rtl">حجم‌های موقت CSI تنها توسط زیرمجموعه‌ای از درایورهای CSI پشتیبانی می‌شوند.
-<a href="https://kubernetes-csi.github.io/docs/drivers.html" target="_blank" rel="noopener">فهرست درایورهای</a> CSI در کوبرنتیز
-نشان می‌دهد کدام درایورها از حجم‌های موقت پشتیبانی می‌کنند.</p>
+<p dir="rtl">تنها زیرمجموعه‌ای از درایورهای CSI از حجم‌های موقت CSI پشتیبانی می‌کنند. <a href="https://kubernetes-csi.github.io/docs/drivers.html" target="_blank" rel="noopener">فهرست درایورهای</a> CSI کوبرنتیز نشان می‌دهد کدام درایورها از حجم‌های موقت پشتیبانی می‌کنند.</p>
 </div>
-<p dir="rtl">از نظر مفهومی، حجم‌های موقت CSI مشابه انواع حجم <code dir="ltr">configMap</code>،
-<code dir="ltr">downwardAPI</code> و <code dir="ltr">secret</code> هستند: ذخیره‌سازی به‌صورت محلی روی هر
-نود مدیریت می‌شود و پس از زمان‌بندی Pod روی یک نود، همراه با سایر منابع محلی ایجاد می‌شود.
-در این مرحله، کوبرنتیز دیگر مفهومی به نام زمان‌بندی مجدد Pod ندارد. ایجاد حجم باید
-به‌گونه‌ای باشد که احتمال شکست آن اندک باشد، وگرنه راه‌اندازی Pod گیر می‌کند. به‌طور خاص،
-<a href="storage-capacity.html">زمان‌بندی Pod با آگاهی از ظرفیت ذخیره‌سازی</a>
-برای این حجم‌ها پشتیبانی <em>نمی‌شود</em>. همچنین این حجم‌ها در حال حاضر مشمول
-محدودیت‌های مصرف منابع ذخیره‌سازی یک Pod نیستند، زیرا kubelet تنها می‌تواند
-این محدودیت‌ها را برای ذخیره‌سازی‌ای که خودش مدیریت می‌کند اعمال کند.</p>
-<p dir="rtl">در ادامه نمونه‌ای از مانیفست یک Pod که از ذخیره‌سازی موقت CSI استفاده می‌کند آمده است:</p>
+<p dir="rtl">از نظر مفهومی، حجم‌های موقت CSI مشابه انواع حجم <code dir="ltr">configMap</code>، <code dir="ltr">downwardAPI</code> و <code dir="ltr">secret</code> هستند: فضای ذخیره‌سازی به‌صورت محلی روی هر نود مدیریت می‌شود و پس از زمان‌بندی یک Pod روی نود، همراه با دیگر منابع محلی ایجاد می‌شود. در این مرحله، کوبرنتیز دیگر مفهومی به نام زمان‌بندی مجدد Podها ندارد. ایجاد حجم باید به‌گونه‌ای باشد که احتمال شکست آن کم باشد، وگرنه راه‌اندازی Pod متوقف می‌ماند. به‌ویژه، <a href="storage-capacity.html">زمان‌بندی Pod با آگاهی از ظرفیت ذخیره‌سازی</a> برای این حجم‌ها پشتیبانی <em>نمی‌شود</em>. همچنین این حجم‌ها در حال حاضر مشمول محدودیت‌های مصرف منابع ذخیره‌سازی یک Pod نیستند، زیرا kubelet تنها می‌تواند این محدودیت‌ها را برای فضای ذخیره‌سازی‌ای اعمال کند که خودش مدیریت می‌کند.</p>
+<p dir="rtl">در ادامه نمونه‌ای از مانیفست یک Pod آمده است که از ذخیره‌سازی موقت CSI استفاده می‌کند:</p>
 <pre dir="ltr"><code class="language-yaml" dir="ltr">kind: Pod
 apiVersion: v1
 metadata:
@@ -162,39 +131,28 @@ spec:
         volumeAttributes:
           foo: bar
 </code></pre>
-<p dir="rtl"><code dir="ltr">volumeAttributes</code> تعیین می‌کند که درایور چه حجمی را آماده کند. این ویژگی‌ها
-مختص هر درایور هستند و استاندارد نشده‌اند. برای دستورالعمل‌های بیشتر، به مستندات
-هر درایور CSI مراجعه کنید.</p>
-<h3 id="محدودیت-های-درایور-csi-csi-driver-restrictions" dir="rtl">محدودیت‌های درایور CSI {#csi-driver-restrictions}</h3>
-<p dir="rtl">حجم‌های موقت CSI به کاربران اجازه می‌دهند <code dir="ltr">volumeAttributes</code> را به‌عنوان بخشی از spec مربوط به Pod
-مستقیماً به درایور CSI بدهند. درایور CSI‌ای که <code dir="ltr">volumeAttributes</code>ی را می‌پذیرد که
-معمولاً به مدیران محدود است، برای استفاده در یک حجم موقت درون‌خطی مناسب نیست.
-برای مثال، پارامترهایی که به‌طور معمول در StorageClass تعریف می‌شوند
-نباید از طریق حجم‌های موقت درون‌خطی در اختیار کاربران قرار گیرند.</p>
-<p dir="rtl">مدیران کلاستر که نیاز دارند درایورهای CSIِ مجاز برای استفاده به‌عنوان حجم درون‌خطی
-در spec یک Pod را محدود کنند، می‌توانند از روش‌های زیر استفاده کنند:</p>
+<p dir="rtl">فیلد <code dir="ltr">volumeAttributes</code> تعیین می‌کند که درایور چه حجمی را آماده کند. این ویژگی‌ها مختص هر درایور هستند و استاندارد نشده‌اند. برای دستورالعمل‌های بیشتر، مستندات هر درایور CSI را ببینید.</p>
+<h3 id="محدودیت-های-درایور-csi" dir="rtl">محدودیت‌های درایور CSI</h3>
+<p dir="rtl">حجم‌های موقت CSI به کاربران امکان می‌دهند <code dir="ltr">volumeAttributes</code> را مستقیماً به‌عنوان بخشی از مشخصات Pod به درایور CSI ارائه کنند. درایور CSI‌ای که <code dir="ltr">volumeAttributes</code>هایی را مجاز می‌داند که معمولاً به مدیران محدود هستند، برای استفاده در حجم موقت درون‌خطی مناسب <em>نیست</em>. برای مثال، پارامترهایی که معمولاً در StorageClass تعریف می‌شوند نباید از طریق حجم‌های موقت درون‌خطی در اختیار کاربران قرار گیرند.</p>
+<p dir="rtl">مدیران کلاستر که باید درایورهای CSI مجاز برای استفاده به‌عنوان حجم درون‌خطی در مشخصات Pod را محدود کنند، می‌توانند این کار را به روش‌های زیر انجام دهند:</p>
 <ul>
-<li dir="rtl">حذف <code dir="ltr">Ephemeral</code> از <code dir="ltr">volumeLifecycleModes</code> در spec مربوط به CSIDriver، که مانع از
-استفاده‌ی درایور به‌عنوان حجم موقت درون‌خطی می‌شود.</li>
-<li dir="rtl">استفاده از یک <a href="../../reference/access-authn-authz/extensible-admission-controllers.html">admission webhook</a>
-برای محدود کردن نحوه‌ی استفاده از این درایور.</li>
+<li dir="rtl">حذف <code dir="ltr">Ephemeral</code> از <code dir="ltr">volumeLifecycleModes</code> در مشخصات CSIDriver، که مانع استفاده از درایور به‌عنوان حجم موقت درون‌خطی می‌شود.</li>
+<li dir="rtl">استفاده از یک <a href="../../reference/access-authn-authz/extensible-admission-controllers.html">وب‌هوک پذیرش</a> (admission webhook) برای محدودکردن نحوهٔ استفاده از این درایور.</li>
 </ul>
-<h3 id="حجم-های-موقت-عمومی-generic-ephemeral-volumes" dir="rtl">حجم‌های موقت عمومی {#generic-ephemeral-volumes}</h3>
+<h3 id="حجم-های-موقت-عمومی" dir="rtl">حجم‌های موقت عمومی</h3>
 <div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes v1.23 [stable]</span> (پایدار)</div>
-<p dir="rtl">حجم‌های موقت عمومی از این جهت مشابه حجم‌های <code dir="ltr">emptyDir</code> هستند که برای هر Pod
-یک دایرکتوری برای داده‌های موقت فراهم می‌کنند که معمولاً پس از تأمین (provisioning)
-خالی است. اما ممکن است قابلیت‌های اضافی نیز داشته باشند:</p>
+<p dir="rtl">حجم‌های موقت عمومی از این نظر شبیه حجم‌های <code dir="ltr">emptyDir</code> هستند که برای هر Pod پوشه‌ای برای داده‌های موقت فراهم می‌کنند که معمولاً پس از تأمین خالی است. اما ممکن است قابلیت‌های دیگری نیز داشته باشند:</p>
 <ul>
-<li dir="rtl">ذخیره‌سازی می‌تواند محلی یا متصل به شبکه باشد.</li>
-<li dir="rtl">حجم‌ها می‌توانند اندازه‌ی ثابتی داشته باشند که Podها نمی‌توانند از آن فراتر روند.</li>
-<li dir="rtl">حجم‌ها ممکن است بسته به درایور و پارامترها، مقداری داده‌ی اولیه داشته باشند.</li>
-<li dir="rtl">عملیات رایج روی حجم‌ها، با فرض اینکه درایور از آن‌ها پشتیبانی کند، پشتیبانی می‌شوند؛ از جمله
+<li dir="rtl">فضای ذخیره‌سازی می‌تواند محلی یا متصل به شبکه باشد.</li>
+<li dir="rtl">حجم‌ها می‌توانند اندازهٔ ثابتی داشته باشند که Podها نمی‌توانند از آن فراتر بروند.</li>
+<li dir="rtl">بسته به درایور و پارامترها، حجم‌ها ممکن است مقداری دادهٔ اولیه داشته باشند.</li>
+<li dir="rtl">عملیات رایج روی حجم‌ها، به شرط پشتیبانی درایور، پشتیبانی می‌شوند؛ از جمله
 <a href="volume-snapshots.html">گرفتن اسنپ‌شات</a>،
 <a href="volume-pvc-datasource.html">شبیه‌سازی (cloning)</a>،
 <a href="persistent-volumes.html#expanding-persistent-volumes-claims">تغییر اندازه</a>
 و <a href="storage-capacity.html">ردیابی ظرفیت ذخیره‌سازی</a>.</li>
 </ul>
-<p dir="rtl">نمونه:</p>
+<p dir="rtl">مثال:</p>
 <pre dir="ltr"><code class="language-yaml" dir="ltr">kind: Pod
 apiVersion: v1
 metadata:
@@ -221,79 +179,38 @@ spec:
               requests:
                 storage: 1Gi
 </code></pre>
-<h3 id="چرخه-ی-عمر-و-persistentvolumeclaim-lifecycle-and-persistentvolumeclaim" dir="rtl">چرخه‌ی عمر و PersistentVolumeClaim {#lifecycle-and-persistentvolumeclaim}</h3>
-<p dir="rtl">ایده‌ی کلیدی طراحی این است که
-<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.37/#ephemeralvolumesource-v1-core" target="_blank">پارامترهای یک درخواست حجم</a>
-درون منبع حجم (volume source) یک Pod مجاز هستند. برچسب‌ها، حاشیه‌نویسی‌ها (annotations) و
-مجموعه‌ی کامل فیلدهای یک PersistentVolumeClaim پشتیبانی می‌شوند. هنگامی که چنین Podی
-ایجاد می‌شود، کنترل‌کننده‌ی حجم موقت (ephemeral volume controller) یک آبجکت PersistentVolumeClaim واقعی
-را در همان فضای نام (namespace) Pod ایجاد می‌کند و اطمینان می‌یابد که
-PersistentVolumeClaim هنگام حذف Pod حذف شود.</p>
-<p dir="rtl">این کار اتصال حجم (volume binding) و/یا تأمین آن را فعال می‌کند؛ یا بلافاصله، اگر
-<span class="term" title="storage-class">StorageClass</span> از اتصال فوری حجم استفاده کند، یا زمانی که Pod
-به‌صورت آزمایشی روی یک نود زمان‌بندی می‌شود (حالت اتصال حجم <code dir="ltr">WaitForFirstConsumer</code>).
-حالت دوم برای حجم‌های موقت عمومی توصیه می‌شود، زیرا در این صورت زمان‌بند
-می‌تواند آزادانه نود مناسبی را برای Pod انتخاب کند. با اتصال فوری، زمان‌بند ناچار است
-نودی را انتخاب کند که پس از در دسترس قرار گرفتن حجم، به آن دسترسی داشته باشد.</p>
-<p dir="rtl">از نظر <a href="../architecture/garbage-collection.html#owners-dependents">مالکیت منبع</a>،
-Podی که ذخیره‌سازی موقت عمومی دارد، مالک PersistentVolumeClaimهایی است
-که آن ذخیره‌سازی موقت را فراهم می‌کنند. هنگامی که Pod حذف می‌شود،
-garbage collector کوبرنتیز PVC را حذف می‌کند، که معمولاً
-به حذف حجم نیز منجر می‌شود، زیرا سیاست بازیابی (reclaim policy) پیش‌فرض
-storage classها حذف حجم‌هاست. می‌توانید با استفاده از یک StorageClass با سیاست بازیابی <code dir="ltr">retain</code>
-ذخیره‌سازی محلیِ شبه‌موقت ایجاد کنید: در این حالت ذخیره‌سازی از Pod بیشتر عمر می‌کند
-و باید اطمینان حاصل کنید که پاکسازی حجم به‌صورت جداگانه انجام می‌شود.</p>
-<p dir="rtl">تا زمانی که این PVCها وجود دارند، می‌توان از آن‌ها مانند هر PVC دیگری استفاده کرد.
-به‌طور خاص، می‌توان در شبیه‌سازی حجم یا گرفتن اسنپ‌شات، به آن‌ها به‌عنوان منبع داده
-ارجاع داد. آبجکت PVC همچنین وضعیت فعلی حجم را نگه می‌دارد.</p>
-<h3 id="نام-گذاری-persistentvolumeclaim-persistentvolumeclaim-naming" dir="rtl">نام‌گذاری PersistentVolumeClaim {#persistentvolumeclaim-naming}</h3>
-<p dir="rtl">نام‌گذاری PVCهایی که به‌طور خودکار ایجاد می‌شوند قطعی (deterministic) است: نام
-ترکیبی از نام Pod و نام حجم است که میان آن‌ها یک خط تیره (<code dir="ltr">-</code>) قرار می‌گیرد.
-در مثال بالا، نام PVC برابر <code dir="ltr">my-app-scratch-volume</code> خواهد بود. این نام‌گذاری قطعی
-تعامل با PVC را آسان‌تر می‌کند، زیرا پس از آنکه نام Pod و نام حجم مشخص شد،
-نیازی به جست‌وجوی آن نیست.</p>
-<p dir="rtl">نام‌گذاری قطعی همچنین احتمال تداخل میان Podهای مختلف
-(مثلاً Podی با نام "pod-a" و حجم "scratch" و Pod دیگری با نام
-"pod" و حجم "a-scratch" که هر دو به یک نام PVC یعنی
-"pod-a-scratch" می‌رسند) و نیز میان Podها و PVCهایی که به‌صورت دستی ایجاد شده‌اند را به وجود می‌آورد.</p>
-<p dir="rtl">این تداخل‌ها شناسایی می‌شوند: یک PVC تنها در صورتی برای حجم موقت
-استفاده می‌شود که برای همان Pod ایجاد شده باشد. این بررسی بر اساس رابطه‌ی
-مالکیت انجام می‌شود. یک PVC موجود بازنویسی یا
-اصلاح نمی‌شود. اما این کار تداخل را برطرف نمی‌کند، زیرا بدون PVC
-درست، Pod نمی‌تواند راه‌اندازی شود.</p>
+<h3 id="چرخهٔ-عمر-و-persistentvolumeclaim" dir="rtl">چرخهٔ عمر و PersistentVolumeClaim</h3>
+<p dir="rtl">ایدهٔ اصلی طراحی این است که <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.37/#ephemeralvolumesource-v1-core" target="_blank">پارامترهای درخواست حجم</a> درون منبع حجم Pod مجاز باشند. برچسب‌ها، حاشیه‌نویسی‌ها (annotations) و کل مجموعهٔ فیلدهای یک PersistentVolumeClaim پشتیبانی می‌شوند. هنگامی که چنین Podای ایجاد می‌شود، کنترل‌کنندهٔ حجم موقت یک آبجکت PersistentVolumeClaim واقعی در همان فضای نام (namespace) Pod ایجاد می‌کند و اطمینان حاصل می‌کند که با حذف Pod، این PersistentVolumeClaim نیز حذف شود.</p>
+<p dir="rtl">این کار اتصال (binding) و/یا تأمین حجم را آغاز می‌کند؛ یا بلافاصله، اگر <span class="term" title="storage-class">StorageClass</span> از اتصال فوری حجم استفاده کند، یا زمانی که Pod به‌طور آزمایشی روی یک نود زمان‌بندی می‌شود (حالت اتصال حجم <code dir="ltr">WaitForFirstConsumer</code>). حالت دوم برای حجم‌های موقت عمومی توصیه می‌شود، زیرا در این صورت زمان‌بند آزاد است نود مناسبی برای Pod انتخاب کند. در اتصال فوری، زمان‌بند ناچار است نودی را انتخاب کند که پس از در دسترس قرار گرفتن حجم به آن دسترسی دارد.</p>
+<p dir="rtl">از نظر <a href="../architecture/garbage-collection.html#owners-dependents">مالکیت منابع</a>، Podای که ذخیره‌سازی موقت عمومی دارد، مالک PersistentVolumeClaim(هایی) است که آن ذخیره‌سازی موقت را فراهم می‌کنند. هنگامی که Pod حذف می‌شود، زباله‌روب (garbage collector) کوبرنتیز PVC را حذف می‌کند و این کار معمولاً حذف حجم را نیز در پی دارد، زیرا سیاست بازپس‌گیری پیش‌فرض کلاس‌های ذخیره‌سازی، حذف حجم‌هاست. می‌توانید با استفاده از یک StorageClass با سیاست بازپس‌گیری <code dir="ltr">retain</code> فضای ذخیره‌سازی محلی شبه‌موقت ایجاد کنید: در این حالت فضای ذخیره‌سازی پس از Pod نیز باقی می‌ماند و باید اطمینان حاصل کنید که پاک‌سازی حجم به‌طور جداگانه انجام شود.</p>
+<p dir="rtl">تا زمانی که این PVCها وجود دارند، می‌توان مانند هر PVC دیگری از آن‌ها استفاده کرد. به‌ویژه، می‌توان در شبیه‌سازی یا اسنپ‌شات‌گیری حجم به آن‌ها به‌عنوان منبع داده ارجاع داد. آبجکت PVC وضعیت فعلی حجم را نیز در خود نگه می‌دارد.</p>
+<h3 id="نام-گذاری-persistentvolumeclaim" dir="rtl">نام‌گذاری PersistentVolumeClaim</h3>
+<p dir="rtl">نام‌گذاری PVCهایی که به‌طور خودکار ایجاد می‌شوند قطعی (deterministic) است: نام ترکیبی از نام Pod و نام حجم است که یک خط تیره (<code dir="ltr">-</code>) میان آن‌ها قرار می‌گیرد. در مثال بالا، نام PVC برابر با <code dir="ltr">my-app-scratch-volume</code> خواهد بود. این نام‌گذاری قطعی تعامل با PVC را آسان‌تر می‌کند، زیرا پس از دانستن نام Pod و نام حجم، دیگر نیازی به جست‌وجوی آن نیست.</p>
+<p dir="rtl">نام‌گذاری قطعی همچنین احتمال تعارض را میان Podهای مختلف (برای مثال، Pod «pod-a» با حجم «scratch» و Pod دیگری با نام «pod» و حجم «a-scratch» هر دو به نام PVC یکسان «pod-a-scratch» می‌رسند) و میان Podها و PVCهایی که به‌صورت دستی ایجاد شده‌اند به وجود می‌آورد.</p>
+<p dir="rtl">چنین تعارض‌هایی شناسایی می‌شوند: یک PVC تنها در صورتی برای حجم موقت استفاده می‌شود که برای همان Pod ایجاد شده باشد. این بررسی بر پایهٔ رابطهٔ مالکیت انجام می‌شود. PVC موجود بازنویسی یا تغییر داده نمی‌شود. اما این کار تعارض را برطرف نمی‌کند، زیرا Pod بدون PVC درست نمی‌تواند راه‌اندازی شود.</p>
 <div class="callout caution"><div class="callout-title">احتیاط:</div>
-<p dir="rtl">هنگام نام‌گذاری Podها و حجم‌ها در یک فضای نام (namespace) مراقب باشید
-تا این تداخل‌ها رخ ندهند.</p>
+<p dir="rtl">هنگام نام‌گذاری Podها و حجم‌ها در یک فضای نام دقت کنید تا چنین تعارض‌هایی رخ ندهد.</p>
 </div>
-<h3 id="امنیت-security" dir="rtl">امنیت {#security}</h3>
-<p dir="rtl">استفاده از حجم‌های موقت عمومی به کاربران اجازه می‌دهد در صورتی که بتوانند Pod ایجاد کنند،
-به‌طور غیرمستقیم PVC ایجاد کنند، حتی اگر مجوز ایجاد مستقیم PVC را نداشته باشند.
-مدیران کلاستر باید از این موضوع آگاه باشند. اگر این امر با مدل امنیتی آن‌ها سازگار نیست،
-باید از یک <a href="../../reference/access-authn-authz/extensible-admission-controllers.html">admission webhook</a>
-استفاده کنند که آبجکت‌هایی مانند Podهای دارای حجم موقت عمومی را رد کند.</p>
-<p dir="rtl"><a href="../policy/resource-quotas.html#storage-resource-quota">سهمیه‌ی فضای نام (namespace) برای PVCها</a>
-همچنان به‌طور معمول اعمال می‌شود؛ بنابراین حتی اگر به کاربران اجازه‌ی استفاده از این سازوکار جدید داده شود،
-نمی‌توانند از آن برای دور زدن سایر سیاست‌ها استفاده کنند.</p>
+<h3 id="امنیت" dir="rtl">امنیت</h3>
+<p dir="rtl">استفاده از حجم‌های موقت عمومی به کاربرانی که می‌توانند Pod ایجاد کنند امکان می‌دهد به‌طور غیرمستقیم PVC ایجاد کنند، حتی اگر مجوز ایجاد مستقیم PVC را نداشته باشند. مدیران کلاستر باید از این موضوع آگاه باشند. اگر این رفتار با مدل امنیتی آن‌ها سازگار نیست، باید از یک <a href="../../reference/access-authn-authz/extensible-admission-controllers.html">وب‌هوک پذیرش</a> استفاده کنند که آبجکت‌هایی مانند Podهای دارای حجم موقت عمومی را رد کند.</p>
+<p dir="rtl"><a href="../policy/resource-quotas.html#storage-resource-quota">سهمیهٔ عادی فضای نام برای PVCها</a> همچنان اعمال می‌شود؛ بنابراین حتی اگر کاربران اجازهٔ استفاده از این سازوکار جدید را داشته باشند، نمی‌توانند با آن سیاست‌های دیگر را دور بزنند.</p>
 <h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
-<h3 id="حجم-های-موقت-مدیریت-شده-توسط-kubelet-ephemeral-volumes-managed-by-kubelet" dir="rtl">حجم‌های موقت مدیریت‌شده توسط kubelet {#ephemeral-volumes-managed-by-kubelet}</h3>
-<p dir="rtl">به <a href="ephemeral-storage.html">ذخیره‌سازی موقت محلی</a> مراجعه کنید.</p>
-<h3 id="حجم-های-موقت-csi-csi-ephemeral-volumes-1" dir="rtl">حجم‌های موقت CSI {#csi-ephemeral-volumes-1}</h3>
+<h3 id="حجم-های-موقتی-که-kubelet-مدیریت-می-کند" dir="rtl">حجم‌های موقتی که kubelet مدیریت می‌کند</h3>
+<p dir="rtl"><a href="ephemeral-storage.html">ذخیره‌سازی موقت محلی</a> را ببینید.</p>
+<h3 id="حجم-های-موقت-csi-1" dir="rtl">حجم‌های موقت CSI</h3>
 <ul>
-<li dir="rtl">برای اطلاعات بیشتر درباره‌ی طراحی، به
-<a href="https://github.com/kubernetes/enhancements/blob/ad6021b3d61a49040a3f835e12c8bb5424db2bbb/keps/sig-storage/20190122-csi-inline-volumes.md" target="_blank" rel="noopener">KEP مربوط به حجم‌های CSI درون‌خطی موقت</a>
-مراجعه کنید.</li>
-<li dir="rtl">برای اطلاعات بیشتر درباره‌ی توسعه‌ی بعدی این قابلیت، به
-<a href="https://github.com/kubernetes/enhancements/issues/596" target="_blank" rel="noopener">issue پیگیری بهبود شماره‌ی ۵۹۶</a>
-مراجعه کنید.</li>
+<li dir="rtl">برای اطلاعات بیشتر دربارهٔ طراحی،
+<a href="https://github.com/kubernetes/enhancements/blob/ad6021b3d61a49040a3f835e12c8bb5424db2bbb/keps/sig-storage/20190122-csi-inline-volumes.md" target="_blank" rel="noopener">Ephemeral Inline CSI volumes KEP</a> را ببینید.</li>
+<li dir="rtl">برای اطلاعات بیشتر دربارهٔ توسعهٔ بیشتر این قابلیت،
+<a href="https://github.com/kubernetes/enhancements/issues/596" target="_blank" rel="noopener">مسئلهٔ پیگیری بهبود شمارهٔ ‎#596</a> را ببینید.</li>
 </ul>
-<h3 id="حجم-های-موقت-عمومی-generic-ephemeral-volumes-1" dir="rtl">حجم‌های موقت عمومی {#generic-ephemeral-volumes-1}</h3>
+<h3 id="حجم-های-موقت-عمومی-1" dir="rtl">حجم‌های موقت عمومی</h3>
 <ul>
-<li dir="rtl">برای اطلاعات بیشتر درباره‌ی طراحی، به
-<a href="https://github.com/kubernetes/enhancements/blob/master/keps/sig-storage/1698-generic-ephemeral-volumes/README.md" target="_blank" rel="noopener">KEP مربوط به حجم‌های درون‌خطی موقت عمومی</a>
-مراجعه کنید.</li>
+<li dir="rtl">برای اطلاعات بیشتر دربارهٔ طراحی،
+<a href="https://github.com/kubernetes/enhancements/blob/master/keps/sig-storage/1698-generic-ephemeral-volumes/README.md" target="_blank" rel="noopener">Generic ephemeral inline volumes KEP</a> را ببینید.</li>
 </ul>
 <p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
-<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l3" href="#انواع-حجم-های-موقت-types-of-ephemeral-volumes">انواع حجم‌های موقت {#types-of-ephemeral-volumes}</a><a class="l3" href="#حجم-های-موقت-csi-csi-ephemeral-volumes">حجم‌های موقت CSI {#csi-ephemeral-volumes}</a><a class="l3" href="#محدودیت-های-درایور-csi-csi-driver-restrictions">محدودیت‌های درایور CSI {#csi-driver-restrictions}</a><a class="l3" href="#حجم-های-موقت-عمومی-generic-ephemeral-volumes">حجم‌های موقت عمومی {#generic-ephemeral-volumes}</a><a class="l3" href="#چرخه-ی-عمر-و-persistentvolumeclaim-lifecycle-and-persistentvolumeclaim">چرخه‌ی عمر و PersistentVolumeClaim {#lifecycle-and-persistentvolumeclaim}</a><a class="l3" href="#نام-گذاری-persistentvolumeclaim-persistentvolumeclaim-naming">نام‌گذاری PersistentVolumeClaim {#persistentvolumeclaim-naming}</a><a class="l3" href="#امنیت-security">امنیت {#security}</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a><a class="l3" href="#حجم-های-موقت-مدیریت-شده-توسط-kubelet-ephemeral-volumes-managed-by-kubelet">حجم‌های موقت مدیریت‌شده توسط kubelet {#ephemeral-volumes-managed-by-kubelet}</a><a class="l3" href="#حجم-های-موقت-csi-csi-ephemeral-volumes-1">حجم‌های موقت CSI {#csi-ephemeral-volumes-1}</a><a class="l3" href="#حجم-های-موقت-عمومی-generic-ephemeral-volumes-1">حجم‌های موقت عمومی {#generic-ephemeral-volumes-1}</a></nav>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l3" href="#انواع-حجم-های-موقت">انواع حجم‌های موقت</a><a class="l3" href="#حجم-های-موقت-csi">حجم‌های موقت CSI</a><a class="l3" href="#محدودیت-های-درایور-csi">محدودیت‌های درایور CSI</a><a class="l3" href="#حجم-های-موقت-عمومی">حجم‌های موقت عمومی</a><a class="l3" href="#چرخهٔ-عمر-و-persistentvolumeclaim">چرخهٔ عمر و PersistentVolumeClaim</a><a class="l3" href="#نام-گذاری-persistentvolumeclaim">نام‌گذاری PersistentVolumeClaim</a><a class="l3" href="#امنیت">امنیت</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a><a class="l3" href="#حجم-های-موقتی-که-kubelet-مدیریت-می-کند">حجم‌های موقتی که kubelet مدیریت می‌کند</a><a class="l3" href="#حجم-های-موقت-csi-1">حجم‌های موقت CSI</a><a class="l3" href="#حجم-های-موقت-عمومی-1">حجم‌های موقت عمومی</a></nav>
 </div>
 </body>
 </html>

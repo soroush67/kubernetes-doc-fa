@@ -83,35 +83,35 @@ document.addEventListener('DOMContentLoaded',function(){box=document.getElementB
 <header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">concepts / storage</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
 <div class="layout">
 <main><h1 dir="rtl">تأمین پویای حجم</h1><!-- overview -->
-<p dir="rtl">تأمین پویای حجم (Dynamic volume provisioning) امکان می‌دهد حجم‌های ذخیره‌سازی به‌صورت درخواستی ایجاد شوند.
-بدون تأمین پویا، مدیران کلاستر باید به‌صورت دستی
-با ارائه‌دهندهٔ ابری یا ذخیره‌سازی خود تماس بگیرند تا حجم‌های ذخیره‌سازی جدید ایجاد شوند، و سپس
+<p dir="rtl">با تأمین پویای حجم (dynamic volume provisioning) می‌توان حجم‌های ذخیره‌سازی را در هنگام نیاز ایجاد کرد.
+بدون تأمین پویا، مدیران کلاستر باید برای ایجاد حجم‌های ذخیره‌سازی جدید، به‌صورت دستی
+با ارائه‌دهندهٔ ابری یا ذخیره‌سازی خود تماس بگیرند و سپس
 <a href="persistent-volumes.html">آبجکت‌های <code dir="ltr">PersistentVolume</code></a>
 را برای نمایش آن‌ها در کوبرنتیز ایجاد کنند. قابلیت تأمین پویا نیاز مدیران کلاستر به
-تأمین پیشاپیش ذخیره‌سازی را از میان برمی‌دارد. در عوض، هنگامی که کاربران
-<a href="persistent-volumes.html">آبجکت‌های <code dir="ltr">PersistentVolumeClaim</code></a> ایجاد می‌کنند،
-ذخیره‌سازی به‌طور خودکار تأمین می‌شود.</p>
+تأمین پیشاپیش ذخیره‌سازی را از بین می‌برد. در عوض، این قابلیت هنگامی که کاربران
+<a href="persistent-volumes.html">آبجکت‌های <code dir="ltr">PersistentVolumeClaim</code></a>
+را ایجاد می‌کنند، ذخیره‌سازی را به‌طور خودکار تأمین می‌کند.</p>
 <!-- body -->
 <h2 id="پیش-زمینه" dir="rtl">پیش‌زمینه</h2>
-<p dir="rtl">پیاده‌سازی تأمین پویای حجم بر پایهٔ آبجکت API با نوع <code dir="ltr">StorageClass</code>
-از گروه API با نام <code dir="ltr">storage.k8s.io</code> است. مدیر کلاستر می‌تواند هر تعداد
-آبجکت <code dir="ltr">StorageClass</code> که لازم باشد تعریف کند، که هر یک یک <em>افزونهٔ حجم</em> (volume plugin) (یا همان
-<em>provisioner</em>) را مشخص می‌کند که حجم را تأمین می‌کند، و همچنین مجموعه‌ای از پارامترها را که هنگام تأمین
-به آن provisioner ارسال می‌شوند.
-مدیر کلاستر می‌تواند انواع گوناگونی از ذخیره‌سازی (از همان سامانهٔ ذخیره‌سازی
-یا از سامانه‌های متفاوت) را در یک کلاستر تعریف و ارائه کند، که هر کدام مجموعهٔ پارامترهای سفارشی خود را دارند. این طراحی همچنین تضمین می‌کند که کاربران نهایی
-لازم نیست نگران پیچیدگی‌ها و جزئیات چگونگی تأمین ذخیره‌سازی باشند، اما همچنان
-می‌توانند از میان چند گزینهٔ ذخیره‌سازی انتخاب کنند.</p>
-<p dir="rtl">برای جزئیات بیشتر، به مفهوم <a href="storage-classes.html">Storage Classes</a> مراجعه کنید.</p>
+<p dir="rtl">پیاده‌سازی تأمین پویای حجم بر پایهٔ آبجکت API با نام <code dir="ltr">StorageClass</code>
+از گروه API <code dir="ltr">storage.k8s.io</code> است. مدیر کلاستر می‌تواند به هر تعداد که لازم باشد
+آبجکت <code dir="ltr">StorageClass</code> تعریف کند. هر یک از این آبجکت‌ها یک <em>افزونهٔ حجم</em> (volume plugin)
+(که <em>تأمین‌کننده</em> یا provisioner نیز نامیده می‌شود) را مشخص می‌کند که حجم را تأمین می‌کند،
+و همچنین مجموعه‌ای از پارامترها را که هنگام تأمین باید به آن تأمین‌کننده ارسال شوند.
+مدیر کلاستر می‌تواند چندین نوع ذخیره‌سازی (از سامانه‌های ذخیره‌سازی یکسان یا متفاوت)
+را در یک کلاستر تعریف و در دسترس قرار دهد که هر کدام مجموعه‌ای سفارشی از پارامترها دارند.
+این طراحی همچنین تضمین می‌کند که کاربران نهایی نگران پیچیدگی‌ها و ظرافت‌های چگونگی
+تأمین ذخیره‌سازی نباشند و در عین حال بتوانند از میان چندین گزینهٔ ذخیره‌سازی انتخاب کنند.</p>
+<p dir="rtl">برای جزئیات بیشتر، مفهوم <a href="storage-classes.html">کلاس‌های ذخیره‌سازی</a> را ببینید.</p>
 <h2 id="فعال-سازی-تأمین-پویا" dir="rtl">فعال‌سازی تأمین پویا</h2>
 <p dir="rtl">برای فعال‌سازی تأمین پویا، مدیر کلاستر باید از پیش یک یا چند آبجکت StorageClass
-را برای کاربران ایجاد کند.
-آبجکت‌های StorageClass مشخص می‌کنند که کدام provisioner باید استفاده شود و هنگام فراخوانی تأمین پویا
-چه پارامترهایی باید به آن provisioner ارسال شوند.
-نام یک آبجکت StorageClass باید یک
+برای کاربران ایجاد کند.
+آبجکت‌های StorageClass مشخص می‌کنند که هنگام فراخوانی تأمین پویا از کدام تأمین‌کننده
+استفاده شود و چه پارامترهایی به آن ارسال شوند.
+نام هر آبجکت StorageClass باید یک
 <a href="../overview/working-with-objects/names.html#dns-subdomain-names">نام زیردامنهٔ DNS</a> معتبر باشد.</p>
-<p dir="rtl">مانifest زیر یک storage class با نام «slow» ایجاد می‌کند که دیسک‌های پایدار (persistent disk)
-از نوع دیسک استاندارد را تأمین می‌کند.</p>
+<p dir="rtl">مانیفست زیر کلاس ذخیره‌سازی‌ای با نام «slow» ایجاد می‌کند که دیسک‌های پایای
+استاندارد و مشابه دیسک‌های معمولی را تأمین می‌کند.</p>
 <pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
@@ -120,8 +120,8 @@ provisioner: kubernetes.io/gce-pd
 parameters:
   type: pd-standard
 </code></pre>
-<p dir="rtl">مانifest زیر یک storage class با نام «fast» ایجاد می‌کند که دیسک‌های پایدار
-از نوع SSD را تأمین می‌کند.</p>
+<p dir="rtl">مانیفست زیر کلاس ذخیره‌سازی‌ای با نام «fast» ایجاد می‌کند که دیسک‌های پایای
+مشابه SSD را تأمین می‌کند.</p>
 <pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
@@ -131,14 +131,15 @@ parameters:
   type: pd-ssd
 </code></pre>
 <h2 id="استفاده-از-تأمین-پویا" dir="rtl">استفاده از تأمین پویا</h2>
-<p dir="rtl">کاربران با افزودن یک storage class به <code dir="ltr">PersistentVolumeClaim</code> خود، ذخیره‌سازی با تأمین پویا را درخواست می‌کنند. پیش از کوبرنتیز نسخهٔ v1.6، این کار از طریق
-حاشیه‌نویسی (annotation) با نام <code dir="ltr">volume.beta.kubernetes.io/storage-class</code> انجام می‌شد. با این حال، این annotation
-از نسخهٔ v1.9 منسوخ شده است. اکنون کاربران می‌توانند و باید به‌جای آن از
-فیلد <code dir="ltr">storageClassName</code> در آبجکت <code dir="ltr">PersistentVolumeClaim</code> استفاده کنند. مقدار
-این فیلد باید با نام یک <code dir="ltr">StorageClass</code> که مدیر پیکربندی کرده است مطابقت داشته باشد
-(بخش <a href="#enabling-dynamic-provisioning">فعال‌سازی تأمین پویا</a> را ببینید).</p>
-<p dir="rtl">برای مثال، برای انتخاب storage class با نام «fast»، کاربر
-PersistentVolumeClaim زیر را ایجاد می‌کند:</p>
+<p dir="rtl">کاربران با درج یک کلاس ذخیره‌سازی در <code dir="ltr">PersistentVolumeClaim</code> خود، ذخیره‌سازی
+تأمین‌شده به‌صورت پویا را درخواست می‌کنند. پیش از نسخهٔ v1.6 کوبرنتیز، این کار با
+حاشیه‌نویسی (annotation) <code dir="ltr">volume.beta.kubernetes.io/storage-class</code> انجام می‌شد. اما این
+حاشیه‌نویسی از نسخهٔ v1.9 منسوخ شده است. اکنون کاربران می‌توانند و باید به‌جای آن از فیلد
+<code dir="ltr">storageClassName</code> در آبجکت <code dir="ltr">PersistentVolumeClaim</code> استفاده کنند. مقدار
+این فیلد باید با نام یکی از <code dir="ltr">StorageClass</code>هایی که مدیر پیکربندی کرده است مطابقت داشته باشد
+(<a href="#enabling-dynamic-provisioning">فعال‌سازی تأمین پویا</a> را ببینید).</p>
+<p dir="rtl">برای مثال، کاربر برای انتخاب کلاس ذخیره‌سازی «fast» باید
+PersistentVolumeClaim زیر را ایجاد کند:</p>
 <pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -151,32 +152,33 @@ spec:
     requests:
       storage: 30Gi
 </code></pre>
-<p dir="rtl">این claim موجب می‌شود یک Persistent Disk از نوع SSD به‌طور خودکار
-تأمین شود. هنگامی که claim حذف شود، حجم نیز از بین می‌رود.</p>
+<p dir="rtl">این درخواست باعث می‌شود یک دیسک پایای مشابه SSD به‌طور خودکار
+تأمین شود. هنگامی که این درخواست حذف شود، حجم نیز از بین می‌رود.</p>
 <h2 id="رفتار-پیش-فرض" dir="rtl">رفتار پیش‌فرض</h2>
-<p dir="rtl">تأمین پویا را می‌توان روی یک کلاستر طوری فعال کرد که اگر هیچ storage class مشخص نشده باشد، همهٔ claimها
-به‌صورت پویا تأمین شوند. مدیر کلاستر
-می‌تواند این رفتار را از راه زیر فعال کند:</p>
+<p dir="rtl">می‌توان تأمین پویا را در کلاستر به‌گونه‌ای فعال کرد که اگر هیچ کلاس ذخیره‌سازی‌ای
+مشخص نشده باشد، همهٔ درخواست‌ها به‌صورت پویا تأمین شوند. مدیر کلاستر
+می‌تواند این رفتار را به این روش فعال کند:</p>
 <ul>
-<li dir="rtl">علامت‌گذاری یک آبجکت <code dir="ltr">StorageClass</code> به‌عنوان <em>پیش‌فرض</em> (default).</li>
-<li dir="rtl">اطمینان از اینکه <a href="../../reference/access-authn-authz/admission-controllers.html#defaultstorageclass">admission controller با نام <code dir="ltr">DefaultStorageClass</code></a>
+<li dir="rtl">علامت‌گذاری یک آبجکت <code dir="ltr">StorageClass</code> به‌عنوان <em>پیش‌فرض</em>.</li>
+<li dir="rtl">اطمینان از اینکه <a href="../../reference/access-authn-authz/admission-controllers.html#defaultstorageclass">کنترل‌کنندهٔ پذیرش <code dir="ltr">DefaultStorageClass</code></a>
 روی سرور API فعال است.</li>
 </ul>
-<p dir="rtl">مدیر می‌تواند با افزودن <a href="../../reference/labels-annotations-taints/index.html#storageclass-kubernetes-io-is-default-class">annotation با نام <code dir="ltr">storageclass.kubernetes.io/is-default-class</code></a>
+<p dir="rtl">مدیر می‌تواند با افزودن
+<a href="../../reference/labels-annotations-taints/index.html#storageclass-kubernetes-io-is-default-class">حاشیه‌نویسی <code dir="ltr">storageclass.kubernetes.io/is-default-class</code></a>
 به یک <code dir="ltr">StorageClass</code> مشخص، آن را به‌عنوان پیش‌فرض علامت‌گذاری کند.
 هنگامی که یک <code dir="ltr">StorageClass</code> پیش‌فرض در کلاستر وجود داشته باشد و کاربر یک
-<code dir="ltr">PersistentVolumeClaim</code> ایجاد کند که <code dir="ltr">storageClassName</code> در آن مشخص نشده است،
-admission controller با نام <code dir="ltr">DefaultStorageClass</code> به‌طور خودکار فیلد
-<code dir="ltr">storageClassName</code> را که به storage class پیش‌فرض اشاره می‌کند اضافه می‌کند.</p>
-<p dir="rtl">توجه داشته باشید که اگر annotation با نام <code dir="ltr">storageclass.kubernetes.io/is-default-class</code>
+<code dir="ltr">PersistentVolumeClaim</code> بدون تعیین <code dir="ltr">storageClassName</code> ایجاد کند،
+کنترل‌کنندهٔ پذیرش <code dir="ltr">DefaultStorageClass</code> به‌طور خودکار فیلد
+<code dir="ltr">storageClassName</code> را با اشاره به کلاس ذخیره‌سازی پیش‌فرض اضافه می‌کند.</p>
+<p dir="rtl">توجه کنید که اگر حاشیه‌نویسی <code dir="ltr">storageclass.kubernetes.io/is-default-class</code>
 را روی بیش از یک StorageClass در کلاستر خود برابر true قرار دهید و سپس
-یک <code dir="ltr">PersistentVolumeClaim</code> بدون <code dir="ltr">storageClassName</code> ایجاد کنید، کوبرنتیز
-از جدیدترین StorageClass پیش‌فرضی که ایجاد شده است استفاده می‌کند.</p>
+یک <code dir="ltr">PersistentVolumeClaim</code> بدون تنظیم <code dir="ltr">storageClassName</code> ایجاد کنید، کوبرنتیز
+از جدیدترین StorageClass پیش‌فرض ایجادشده استفاده می‌کند.</p>
 <h2 id="آگاهی-از-توپولوژی" dir="rtl">آگاهی از توپولوژی</h2>
-<p dir="rtl">در کلاسترهای <a href="../../setup/best-practices/multiple-zones.html">چندمنطقه‌ای (Multi-Zone)</a>، Podها می‌توانند در
-چند Zone از یک Region پراکنده شوند. بک‌اندهای ذخیره‌سازی تک‌منطقه‌ای (Single-Zone) باید در Zoneهایی تأمین شوند که
-Podها در آن‌ها زمان‌بندی می‌شوند. این کار را می‌توان با تنظیم
-<a href="storage-classes.html#volume-binding-mode">حالت اتصال حجم (Volume Binding Mode)</a> انجام داد.</p>
+<p dir="rtl">در کلاسترهای <a href="../../setup/best-practices/multiple-zones.html">چندناحیه‌ای</a>، Podها می‌توانند در
+ناحیه‌های (Zone) مختلف یک منطقه (Region) پخش شوند. پشتیبان‌های ذخیره‌سازی تک‌ناحیه‌ای باید در ناحیه‌هایی
+تأمین شوند که Podها در آن‌ها زمان‌بندی شده‌اند. این کار با تنظیم
+<a href="storage-classes.html#volume-binding-mode">حالت اتصال حجم</a> امکان‌پذیر است.</p>
 <p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
 <nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#پیش-زمینه">پیش‌زمینه</a><a class="l2" href="#فعال-سازی-تأمین-پویا">فعال‌سازی تأمین پویا</a><a class="l2" href="#استفاده-از-تأمین-پویا">استفاده از تأمین پویا</a><a class="l2" href="#رفتار-پیش-فرض">رفتار پیش‌فرض</a><a class="l2" href="#آگاهی-از-توپولوژی">آگاهی از توپولوژی</a></nav>
 </div>

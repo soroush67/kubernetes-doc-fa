@@ -3,27 +3,29 @@ title: "ویندوز در کوبرنتیز"
 simple_list: true
 weight: 200 # late in list
 description: >-
-  کوبرنتیز از نودهایی که Microsoft Windows را اجرا می‌کنند پشتیبانی می‌کند.
+  کوبرنتیز از نودهایی که سیستم‌عامل مایکروسافت ویندوز را اجرا می‌کنند پشتیبانی می‌کند.
 ---
 
-کوبرنتیز از {{< glossary_tooltip text="نودهای" term_id="node" >}} کارگر (worker) که Linux یا Microsoft Windows را اجرا می‌کنند پشتیبانی می‌کند.
+کوبرنتیز از {{< glossary_tooltip text="نودهای" term_id="node" >}} کارگر (worker)
+پشتیبانی می‌کند که لینوکس یا مایکروسافت ویندوز را اجرا می‌کنند.
 
 {{% thirdparty-content single="true" %}}
 
-بنیاد CNCF و بنیاد مادر آن، یعنی Linux Foundation، رویکردی بی‌طرف نسبت به فروشندگان (vendor-neutral) در زمینه سازگاری در پیش می‌گیرند. می‌توان [Windows server](https://www.microsoft.com/en-us/windows-server) خود را به‌عنوان یک نود کارگر به یک کلاستر کوبرنتیز اضافه کرد.
+بنیاد CNCF و سازمان مادر آن، بنیاد لینوکس (Linux Foundation)، در زمینهٔ سازگاری رویکردی بی‌طرف نسبت به فروشندگان در پیش گرفته‌اند. می‌توانید [سرور ویندوز](https://www.microsoft.com/en-us/windows-server)
+خود را به‌عنوان یک نود کارگر به کلاستر کوبرنتیز متصل کنید.
 
-بدون توجه به اینکه در کلاستر خود از کدام سیستم‌عامل استفاده می‌کنید، می‌توانید [kubectl را روی Windows نصب و راه‌اندازی کنید](/docs/tasks/tools/install-kubectl-windows/).
+صرف‌نظر از سیستم‌عاملی که در کلاستر خود استفاده می‌کنید، می‌توانید [kubectl را روی ویندوز نصب و راه‌اندازی کنید](/docs/tasks/tools/install-kubectl-windows/).
 
-اگر از نودهای Windows استفاده می‌کنید، می‌توانید موارد زیر را مطالعه کنید:
+اگر از نودهای ویندوزی استفاده می‌کنید، می‌توانید این صفحه‌ها را بخوانید:
 
-* [شبکه در Windows](/docs/concepts/services-networking/windows-networking/)
-* [ذخیره‌سازی Windows در کوبرنتیز](/docs/concepts/storage/windows-storage/)
-* [مدیریت منابع برای نودهای Windows](/docs/concepts/configuration/windows-resource-management/)
-* [پیکربندی RunAsUserName برای Podها و کانتینرهای Windows](/docs/tasks/configure-pod-container/configure-runasusername/)
-* [ایجاد یک Pod از نوع HostProcess در Windows](/docs/tasks/configure-pod-container/create-hostprocess-pod/)
-* [پیکربندی Group Managed Service Accounts برای Podها و کانتینرهای Windows](/docs/tasks/configure-pod-container/configure-gmsa/)
-* [امنیت برای نودهای Windows](/docs/concepts/security/windows-security/)
-* [نکات عیب‌یابی در Windows](/docs/tasks/debug/debug-cluster/windows/)
-* [راهنمای زمان‌بندی کانتینرهای Windows در کوبرنتیز](/docs/concepts/windows/user-guide)
+* [شبکه در ویندوز](/docs/concepts/services-networking/windows-networking/)
+* [ذخیره‌سازی ویندوز در کوبرنتیز](/docs/concepts/storage/windows-storage/)
+* [مدیریت منابع برای نودهای ویندوزی](/docs/concepts/configuration/windows-resource-management/)
+* [پیکربندی RunAsUserName برای Podها و کانتینرهای ویندوزی](/docs/tasks/configure-pod-container/configure-runasusername/)
+* [ایجاد یک Pod از نوع HostProcess در ویندوز](/docs/tasks/configure-pod-container/create-hostprocess-pod/)
+* [پیکربندی حساب‌های سرویس مدیریت‌شدهٔ گروهی (Group Managed Service Accounts) برای Podها و کانتینرهای ویندوزی](/docs/tasks/configure-pod-container/configure-gmsa/)
+* [امنیت برای نودهای ویندوزی](/docs/concepts/security/windows-security/)
+* [نکته‌هایی برای اشکال‌زدایی در ویندوز](/docs/tasks/debug/debug-cluster/windows/)
+* [راهنمای زمان‌بندی کانتینرهای ویندوزی در کوبرنتیز](/docs/concepts/windows/user-guide)
 
-یا برای مرور کلی، موارد زیر را مطالعه کنید:
+یا برای آشنایی کلی، این صفحه را بخوانید:

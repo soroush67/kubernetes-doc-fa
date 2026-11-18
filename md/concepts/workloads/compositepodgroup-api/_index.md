@@ -1,45 +1,31 @@
 ---
-title: API مربوط به CompositePodGroup
-weight: 25
+title: CompositePodGroup API
+weight: 100
 no_list: true
 ---
 
 <!-- overview -->
 {{< feature-state feature_gate_name="CompositePodGroup" >}}
 
-یک `CompositePodGroup` یک آبجکت زمان اجراست که یک گره غیربرگ را در سلسله‌مراتب چندسطحی یک بار کاری
-نمایش می‌دهد. در حالی که [Workload API](/docs/concepts/workloads/workload-api/) قالب‌های ایستای سیاست زمان‌بندی
-را تعریف می‌کند، آبجکت‌های `CompositePodGroup` و `PodGroup` همتایان زمان اجرای آن هستند که
-سیاست‌ها و ارجاع‌های سلسله‌مراتبی را برای یک نمونه‌ی مشخص از بار کاری حمل می‌کنند.
+هر `CompositePodGroup` یک آبجکت زمان اجرا است که یک گره غیربرگ را در یک سلسله‌مراتب چندسطحی از بار کاری نمایش می‌دهد. در حالی که [Workload API](/docs/concepts/workloads/workload-api/) الگوهای ایستای سیاست زمان‌بندی را تعریف می‌کند، آبجکت‌های `CompositePodGroup` و `PodGroup` همتایان زمان اجرای آن هستند و سیاست‌ها و ارجاع‌های سلسله‌مراتبی مربوط به یک نمونهٔ مشخص از بار کاری را در خود نگه می‌دارند.
 
 <!-- body -->
 
 ## CompositePodGroup چیست؟
 
-منبع API `CompositePodGroup` بخشی از
-{{< glossary_tooltip text="گروه API" term_id="api-group" >}} `scheduling.k8s.io/v1alpha3` است. پیش از آنکه بتوانید از این API استفاده کنید،
-آن گروه API و همچنین
-[feature gate](/docs/reference/command-line-tools-reference/feature-gates/) `CompositePodGroup`
-باید در کلاستر شما فعال باشند.
+منبع API با نام `CompositePodGroup` بخشی از {{< glossary_tooltip text="گروه API" term_id="api-group" >}} `scheduling.k8s.io/v1alpha3` است. پیش از استفاده از این API، باید این گروه API و همچنین [feature gate](/docs/reference/command-line-tools-reference/feature-gates/) با نام `CompositePodGroup` در کلاستر شما فعال باشند.
 
-یک `CompositePodGroup` گروه‌بندی‌ای از گروه‌های فرزند (که می‌توانند آبجکت‌های `CompositePodGroup` یا
-`PodGroup` باشند) را نمایش می‌دهد. این آبجکت سیاست‌های زمان‌بندی، حالت‌های اختلال، تنظیمات
-اولویت، و قیدهای توپولوژی اختیاری را حمل می‌کند که به‌طور جمعی بر همه‌ی گروه‌های فرزند آن اعمال می‌شوند.
+هر `CompositePodGroup` مجموعه‌ای از گروه‌های فرزند را نمایش می‌دهد که می‌توانند آبجکت‌های `CompositePodGroup` یا `PodGroup` باشند. این آبجکت سیاست‌های زمان‌بندی، حالت‌های اختلال (disruption)، تنظیمات اولویت و محدودیت‌های اختیاری توپولوژی را در خود دارد که به‌صورت جمعی بر همهٔ گروه‌های فرزندش اعمال می‌شوند.
 
 ## ساختار API
 
-یک `CompositePodGroup` از یک `spec` که رفتار زمان‌بندی مطلوب
-گروه‌های فرزندش را تعریف می‌کند و یک زیرمنبع `status` تشکیل شده است.
+هر `CompositePodGroup` از یک `spec` که رفتار زمان‌بندی مطلوب را برای گروه‌های فرزندش تعریف می‌کند، و یک زیرمنبع `status` تشکیل شده است.
 
 ### سیاست زمان‌بندی
 
-هر `CompositePodGroup` یک [سیاست زمان‌بندی](/docs/concepts/workloads/workload-api/policies/)
-(`basic` یا `gang`) را در `spec.schedulingPolicy` حمل می‌کند. هنگامی که یک کنترل‌کننده‌ی بار کاری یک
-`CompositePodGroup` ایجاد می‌کند، این سیاست در زمان ایجاد از `CompositePodGroupTemplate` مربوط به `Workload`
-کپی می‌شود.
+هر `CompositePodGroup` یک [سیاست زمان‌بندی](/docs/concepts/workloads/workload-api/policies/) (`basic` یا `gang`) را در `spec.schedulingPolicy` در خود دارد. هنگامی که یک کنترل‌کنندهٔ بار کاری یک `CompositePodGroup` می‌سازد، این سیاست در زمان ایجاد از `CompositePodGroupTemplate` مربوط به `Workload` کپی می‌شود.
 
-برای سیاست `gang` روی یک `CompositePodGroup`، فیلد `minGroupCount`
-حداقل تعداد گروه‌های فرزندی را مشخص می‌کند که باید به‌طور هم‌زمان قابل زمان‌بندی باشند:
+در سیاست `gang` برای یک `CompositePodGroup`، فیلد `minGroupCount` حداقل تعداد گروه‌های فرزندی را مشخص می‌کند که باید به‌طور هم‌زمان قابل زمان‌بندی باشند:
 
 ```yaml
 spec:
@@ -50,18 +36,16 @@ spec:
 
 ### ارجاع به گروه والد
 
-منابع `CompositePodGroup` غیرریشه، گروه والد خود را با استفاده از
-`spec.parentCompositePodGroupName` مشخص می‌کنند. آبجکت‌های `CompositePodGroup` ریشه این فیلد را تنظیم‌نشده باقی می‌گذارند.
+منابع `CompositePodGroup` غیرریشه، گروه والد خود را با `spec.parentCompositePodGroupName` مشخص می‌کنند. در آبجکت‌های `CompositePodGroup` ریشه، این فیلد تنظیم نمی‌شود.
 
 ```yaml
 spec:
   parentCompositePodGroupName: root-group-0
 ```
 
-### ارجاع به Workload
+### ارجاع به بار کاری
 
-فیلد `spec.workloadRef`، `CompositePodGroup` را به
-`CompositePodGroupTemplate` موجود در آبجکت `Workload`ای که از آن مشتق شده است پیوند می‌دهد.
+فیلد `spec.workloadRef` آبجکت `CompositePodGroup` را به `CompositePodGroupTemplate` موجود در آبجکت `Workload` که از آن مشتق شده است، پیوند می‌دهد.
 
 ```yaml
 spec:
@@ -72,18 +56,13 @@ spec:
 
 ### وضعیت
 
-شِمای API مربوط به `CompositePodGroup` شامل یک زیرمنبع `status` است. در نسخه‌ی آلفا،
-فیلد `status` در نوع API وجود دارد، اما `kube-scheduler` شرایط وضعیت (status conditions) را برای آبجکت‌های `CompositePodGroup`
-به‌روزرسانی یا مقداردهی نمی‌کند. ردیابی وضعیت برای گروه‌های
-ترکیبی در نسخه‌های آینده پیاده‌سازی خواهد شد.
+طرح‌وارهٔ API مربوط به `CompositePodGroup` یک زیرمنبع `status` دارد. در نسخهٔ آلفا، فیلد `status` در نوع API وجود دارد، اما `kube-scheduler` شرایط وضعیت (status conditions) را برای آبجکت‌های `CompositePodGroup` به‌روزرسانی یا مقداردهی نمی‌کند. پیگیری وضعیت برای گروه‌های ترکیبی در نسخه‌های آینده پیاده‌سازی خواهد شد.
 
 ## ایجاد یک CompositePodGroup
 
-کنترل‌کننده‌های بار کاری آبجکت‌های `CompositePodGroup` را در زمان اجرا به‌طور خودکار از قالب‌های `Workload`
-ایجاد می‌کنند.
+کنترل‌کننده‌های بار کاری آبجکت‌های `CompositePodGroup` را در زمان اجرا و به‌طور خودکار از روی الگوهای `Workload` می‌سازند.
 
-مانیفست زیر یک `CompositePodGroup` ریشه با سیاست زمان‌بندی gang ایجاد می‌کند
-که مستلزم آن است که دست‌کم ۲ گروه فرزند به‌طور هم‌زمان قابل زمان‌بندی باشند:
+مانیفست زیر یک `CompositePodGroup` ریشه با سیاست زمان‌بندی gang ایجاد می‌کند که نیاز دارد دست‌کم ۲ گروه فرزند به‌طور هم‌زمان قابل زمان‌بندی باشند:
 
 ```yaml
 apiVersion: scheduling.k8s.io/v1alpha3
@@ -106,7 +85,7 @@ spec:
 kubectl get compositepodgroups
 ```
 
-برای مشاهده‌ی جزئیات یک گروه ترکیبی مشخص:
+برای مشاهدهٔ جزئیات یک گروه ترکیبی مشخص:
 
 ```shell
 kubectl describe compositepodgroup root-group-0
@@ -114,15 +93,11 @@ kubectl describe compositepodgroup root-group-0
 
 ## اجزا چگونه در کنار هم قرار می‌گیرند
 
-رابطه‌ی میان کنترل‌کننده‌ها، Workloadها، CompositePodGroupها، PodGroupها و
-Podها از این الگو پیروی می‌کند:
+رابطهٔ میان کنترل‌کننده‌ها، Workloadها، CompositePodGroupها، PodGroupها و Podها از الگوی زیر پیروی می‌کند:
 
-1. کنترل‌کننده‌ی بار کاری یک `Workload` ایجاد می‌کند که درختی از
-   `CompositePodGroupTemplates` و `PodGroupTemplates` برگ را تعریف می‌کند.
-2. برای هر نمونه‌ی زمان اجرا، کنترل‌کننده یک `CompositePodGroup` ریشه،
-   آبجکت‌های `CompositePodGroup` نوادگان، و آبجکت‌های `PodGroup` برگ را به‌صورت بالا به پایین ایجاد می‌کند.
-3. کنترل‌کننده `Pods`ی ایجاد می‌کند که از طریق
-   `spec.schedulingGroup.podGroupName` به `PodGroup` برگ خود ارجاع می‌دهند.
+1. کنترل‌کنندهٔ بار کاری یک `Workload` می‌سازد که درختی از `CompositePodGroupTemplates` و `PodGroupTemplates` برگ را تعریف می‌کند.
+2. کنترل‌کننده برای هر نمونهٔ زمان اجرا، یک `CompositePodGroup` ریشه، آبجکت‌های `CompositePodGroup` فرزند و آبجکت‌های `PodGroup` برگ را به‌ترتیب از بالا به پایین ایجاد می‌کند.
+3. کنترل‌کننده `Pods` را ایجاد می‌کند که از طریق `spec.schedulingGroup.podGroupName` به `PodGroup` برگ خود ارجاع می‌دهند.
 
 مثال زیر یک سلسله‌مراتب کامل از مانیفست‌ها را برای یک بار کاری دوسطحی نشان می‌دهد:
 
@@ -202,13 +177,12 @@ spec:
     image: registry.k8s.io/pause:3.9
 ```
 
-`Workload` به‌عنوان یک قالب سیاست بلندمدت عمل می‌کند، در حالی که منابع `CompositePodGroup` و
-`PodGroup` وضعیت زمان‌بندی زمان اجرا را به‌ازای هر نمونه مدیریت می‌کنند.
+آبجکت `Workload` نقش یک الگوی سیاست بلندمدت را دارد، در حالی که منابع `CompositePodGroup` و `PodGroup` وضعیت زمان‌بندی زمان اجرا را برای هر نمونه مدیریت می‌کنند.
 
 ## {{% heading "whatsnext" %}}
 
-* درباره‌ی [چرخه‌ی حیات CompositePodGroup](/docs/concepts/workloads/compositepodgroup-api/lifecycle/) بخوانید.
-* با [Workload API](/docs/concepts/workloads/workload-api/) و تعریف‌های قالب آشنا شوید.
-* ببینید گروه‌های برگ در [API مربوط به PodGroup](/docs/concepts/workloads/podgroup-api/) چگونه ساختاربندی می‌شوند.
-* درباره‌ی [سیاست‌های زمان‌بندی PodGroup](/docs/concepts/workloads/workload-api/policies/) بخوانید.
+* دربارهٔ [چرخهٔ عمر CompositePodGroup](/docs/concepts/workloads/compositepodgroup-api/lifecycle/) بخوانید.
+* با [Workload API](/docs/concepts/workloads/workload-api/) و تعریف الگوها آشنا شوید.
+* ببینید گروه‌های برگ در [PodGroup API](/docs/concepts/workloads/podgroup-api/) چگونه ساختاربندی می‌شوند.
+* دربارهٔ [سیاست‌های زمان‌بندی PodGroup](/docs/concepts/workloads/workload-api/policies/) بخوانید.
 * با [پیش‌دستی آگاه از بار کاری](/docs/concepts/scheduling-eviction/workload-aware-preemption/) آشنا شوید.

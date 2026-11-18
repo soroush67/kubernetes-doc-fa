@@ -101,26 +101,26 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [concepts/workloads/controllers/statefulset.md](md/concepts/workloads/controllers/statefulset.md) — 2026-11-18T15:07:54+03:30
+- [concepts/workloads/compositepodgroup-api/_index.md](md/concepts/workloads/compositepodgroup-api/_index.md) — 2026-11-18T15:04:32+03:30
+- [concepts/storage/volumes.md](md/concepts/storage/volumes.md) — 2026-11-18T15:04:15+03:30
+- [concepts/workloads/autoscaling.md](md/concepts/workloads/autoscaling.md) — 2026-11-18T15:04:04+03:30
+- [concepts/workloads/_index.md](md/concepts/workloads/_index.md) — 2026-11-18T15:03:32+03:30
+- [concepts/windows/user-guide.md](md/concepts/windows/user-guide.md) — 2026-11-18T15:03:00+03:30
+- [concepts/windows/intro.md](md/concepts/windows/intro.md) — 2026-11-18T15:02:02+03:30
+- [concepts/windows/_index.md](md/concepts/windows/_index.md) — 2026-11-18T15:00:17+03:30
+- [concepts/storage/windows-storage.md](md/concepts/storage/windows-storage.md) — 2026-11-18T15:00:07+03:30
+- [concepts/storage/storage-classes.md](md/concepts/storage/storage-classes.md) — 2026-11-18T14:59:50+03:30
+- [concepts/storage/volume-populators-and-data-sources.md](md/concepts/storage/volume-populators-and-data-sources.md) — 2026-11-18T14:58:47+03:30
+- [concepts/storage/ephemeral-storage.md](md/concepts/storage/ephemeral-storage.md) — 2026-11-18T14:58:10+03:30
+- [concepts/storage/ephemeral-volumes.md](md/concepts/storage/ephemeral-volumes.md) — 2026-11-18T14:58:06+03:30
+- [concepts/storage/dynamic-provisioning.md](md/concepts/storage/dynamic-provisioning.md) — 2026-11-18T14:57:10+03:30
+- [concepts/services-networking/windows-networking.md](md/concepts/services-networking/windows-networking.md) — 2026-11-18T14:57:06+03:30
 - [concepts/storage/_index.md](md/concepts/storage/_index.md) — 2026-11-18T14:56:33+03:30
 - [concepts/services-networking/topology-aware-routing.md](md/concepts/services-networking/topology-aware-routing.md) — 2026-11-18T14:56:30+03:30
 - [concepts/services-networking/_index.md](md/concepts/services-networking/_index.md) — 2026-11-18T14:56:05+03:30
 - [concepts/security/windows-security.md](md/concepts/security/windows-security.md) — 2026-11-18T14:55:47+03:30
 - [concepts/security/security-checklist.md](md/concepts/security/security-checklist.md) — 2026-11-18T14:55:34+03:30
-- [concepts/security/service-accounts.md](md/concepts/security/service-accounts.md) — 2026-11-18T14:55:33+03:30
-- [concepts/security/pod-security-standards.md](md/concepts/security/pod-security-standards.md) — 2026-11-18T14:54:03+03:30
-- [concepts/security/secrets-good-practices.md](md/concepts/security/secrets-good-practices.md) — 2026-11-18T14:51:57+03:30
-- [concepts/security/rbac-good-practices.md](md/concepts/security/rbac-good-practices.md) — 2026-11-18T14:51:27+03:30
-- [concepts/scheduling-eviction/scheduling-framework.md](md/concepts/scheduling-eviction/scheduling-framework.md) — 2026-11-18T14:50:25+03:30
-- [concepts/scheduling-eviction/scheduler-perf-tuning.md](md/concepts/scheduling-eviction/scheduler-perf-tuning.md) — 2026-11-18T14:49:29+03:30
-- [concepts/scheduling-eviction/podgroup-scheduling.md](md/concepts/scheduling-eviction/podgroup-scheduling.md) — 2026-11-18T14:49:27+03:30
-- [concepts/scheduling-eviction/running-multiple-schedulers.md](md/concepts/scheduling-eviction/running-multiple-schedulers.md) — 2026-11-18T14:48:43+03:30
-- [concepts/scheduling-eviction/resource-bin-packing.md](md/concepts/scheduling-eviction/resource-bin-packing.md) — 2026-11-18T14:48:25+03:30
-- [concepts/scheduling-eviction/node-pressure-eviction.md](md/concepts/scheduling-eviction/node-pressure-eviction.md) — 2026-11-18T14:47:50+03:30
-- [concepts/resource-management/dynamic-resource-allocation/dra-observability.md](md/concepts/resource-management/dynamic-resource-allocation/dra-observability.md) — 2026-11-16T16:15:02+03:30
-- [concepts/resource-management/dynamic-resource-allocation/dra-features.md](md/concepts/resource-management/dynamic-resource-allocation/dra-features.md) — 2026-11-16T16:15:01+03:30
-- [concepts/resource-management/dynamic-resource-allocation/dra-api.md](md/concepts/resource-management/dynamic-resource-allocation/dra-api.md) — 2026-11-16T16:13:02+03:30
-- [concepts/extend-kubernetes/_index.md](md/concepts/extend-kubernetes/_index.md) — 2026-11-16T16:12:38+03:30
-- [concepts/extend-kubernetes/api-extension/apiserver-aggregation.md](md/concepts/extend-kubernetes/api-extension/apiserver-aggregation.md) — 2026-11-16T16:09:41+03:30
 
 </div>
 
