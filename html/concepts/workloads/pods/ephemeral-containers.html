@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>کانتینرهای زودگذر (Ephemeral Containers) | مستندات کوبرنتیز</title>
+<title>کانتینرهای موقت | مستندات کوبرنتیز</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
@@ -82,58 +82,38 @@ document.addEventListener('DOMContentLoaded',function(){box=document.getElementB
 <a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
 <header class="top"><a href="../../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">concepts / workloads / pods</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
 <div class="layout">
-<main><h1 dir="rtl">کانتینرهای زودگذر (Ephemeral Containers)</h1><!-- overview -->
+<main><h1 dir="rtl">کانتینرهای موقت</h1><!-- overview -->
 <div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes v1.25 [stable]</span> (پایدار)</div>
-<p dir="rtl">این صفحه مروری بر کانتینرهای زودگذر (ephemeral containers) ارائه می‌دهد: نوع ویژه‌ای از کانتینر
-که به‌صورت موقت در یک <span class="term" title="pod">pod</span> موجود اجرا می‌شود تا
-اقدامات آغازشده توسط کاربر، مانند عیب‌یابی، را انجام دهد. شما از کانتینرهای زودگذر
-برای بررسی سرویس‌ها استفاده می‌کنید، نه برای ساخت برنامه‌ها.</p>
+<p dir="rtl">این صفحه مروری بر کانتینرهای موقت (ephemeral containers) ارائه می‌دهد. کانتینر موقت نوع خاصی از کانتینر است که به‌طور موقت در یک <span class="term" title="pod">pod</span> موجود اجرا می‌شود تا کارهایی را که کاربر آغاز می‌کند، مانند عیب‌یابی، انجام دهد. از کانتینرهای موقت برای بررسی سرویس‌ها استفاده می‌شود، نه برای ساختن برنامه‌ها.</p>
 <!-- body -->
-<h2 id="شناخت-کانتینرهای-زودگذر" dir="rtl">شناخت کانتینرهای زودگذر</h2>
-<p dir="rtl"><span class="term" title="pod">Podها</span> بلوک سازنده بنیادین
-برنامه‌های کوبرنتیز هستند. از آنجا که Podها قرار است یک‌بارمصرف و جایگزین‌پذیر باشند، پس از ایجاد یک Pod نمی‌توانید
-کانتینری به آن اضافه کنید. در عوض، معمولاً Podها را با استفاده از
-<span class="term" title="deployment">Deploymentها</span> به شیوه‌ای کنترل‌شده حذف و جایگزین می‌کنید.</p>
-<p dir="rtl">با این حال، گاهی لازم است وضعیت یک Pod موجود بررسی شود، برای
-مثال برای عیب‌یابی یک باگ که به‌سختی بازتولید می‌شود. در چنین مواردی می‌توانید
-یک کانتینر زودگذر را در یک Pod موجود اجرا کنید تا وضعیت آن را بررسی کنید و
-دستورهای دلخواه را اجرا نمایید.</p>
-<h3 id="کانتینر-زودگذر-چیست؟" dir="rtl">کانتینر زودگذر چیست؟</h3>
-<p dir="rtl">کانتینرهای زودگذر با سایر کانتینرها در این تفاوت دارند که هیچ تضمینی برای منابع
-یا اجرا ندارند و هرگز به‌طور خودکار راه‌اندازی مجدد نمی‌شوند، بنابراین
-برای ساخت برنامه‌ها مناسب نیستند. کانتینرهای زودگذر
-با همان <code dir="ltr">ContainerSpec</code> کانتینرهای معمولی توصیف می‌شوند، اما بسیاری از فیلدها
-با کانتینرهای زودگذر سازگار نیستند و برای آن‌ها مجاز نمی‌باشند.</p>
+<h2 id="آشنایی-با-کانتینرهای-موقت" dir="rtl">آشنایی با کانتینرهای موقت</h2>
+<p dir="rtl"><span class="term" title="pod">پادها</span> بلوک سازندهٔ بنیادین برنامه‌های کوبرنتیز هستند. از آنجا که Podها قرار است یک‌بارمصرف و جایگزین‌پذیر باشند، پس از ایجاد یک Pod نمی‌توانید کانتینری به آن اضافه کنید. در عوض، معمولاً Podها را به‌شیوه‌ای کنترل‌شده و با استفاده از <span class="term" title="deployment">Deploymentها</span> حذف و جایگزین می‌کنید.</p>
+<p dir="rtl">با این حال، گاهی لازم است وضعیت یک Pod موجود را بررسی کنید؛ برای مثال، برای عیب‌یابی باگی که بازتولید آن دشوار است. در چنین مواردی می‌توانید یک کانتینر موقت را در Pod موجود اجرا کنید تا وضعیت آن را بررسی کنید و دستورهای دلخواه را اجرا کنید.</p>
+<h3 id="کانتینر-موقت-چیست؟" dir="rtl">کانتینر موقت چیست؟</h3>
+<p dir="rtl">تفاوت کانتینرهای موقت با سایر کانتینرها در این است که هیچ تضمینی برای منابع یا اجرای آن‌ها وجود ندارد و هرگز به‌طور خودکار راه‌اندازی مجدد نمی‌شوند؛ بنابراین برای ساختن برنامه‌ها مناسب نیستند. کانتینرهای موقت با همان <code dir="ltr">ContainerSpec</code> کانتینرهای معمولی توصیف می‌شوند، اما بسیاری از فیلدها با کانتینرهای موقت ناسازگارند و برای آن‌ها مجاز نیستند.</p>
 <ul>
-<li dir="rtl">کانتینرهای زودگذر نمی‌توانند پورت داشته باشند، بنابراین فیلدهایی مانند <code dir="ltr">ports</code>،
-<code dir="ltr">livenessProbe</code> و <code dir="ltr">readinessProbe</code> مجاز نیستند.</li>
+<li dir="rtl">کانتینرهای موقت نمی‌توانند پورت داشته باشند، بنابراین فیلدهایی مانند <code dir="ltr">ports</code>، <code dir="ltr">livenessProbe</code> و <code dir="ltr">readinessProbe</code> مجاز نیستند.</li>
 <li dir="rtl">تخصیص منابع Pod تغییرناپذیر است، بنابراین تنظیم <code dir="ltr">resources</code> مجاز نیست.</li>
-<li dir="rtl">برای مشاهده فهرست کامل فیلدهای مجاز، به <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.37/#ephemeralcontainer-v1-core" target="_blank">مستندات مرجع EphemeralContainer</a> مراجعه کنید.</li>
+<li dir="rtl">برای فهرست کامل فیلدهای مجاز، به <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.37/#ephemeralcontainer-v1-core" target="_blank">مستندات مرجع EphemeralContainer</a> مراجعه کنید.</li>
 </ul>
-<p dir="rtl">کانتینرهای زودگذر با استفاده از یک handler ویژه به نام <code dir="ltr">ephemeralcontainers</code>
-در API ایجاد می‌شوند و مستقیماً به <code dir="ltr">pod.spec</code> اضافه نمی‌گردند، بنابراین
-افزودن یک کانتینر زودگذر با <code dir="ltr">kubectl edit</code> ممکن نیست.</p>
-<p dir="rtl">مانند کانتینرهای معمولی، پس از افزودن یک کانتینر زودگذر به یک Pod، نمی‌توانید آن را تغییر دهید یا حذف کنید.</p>
+<p dir="rtl">کانتینرهای موقت به‌جای افزوده‌شدن مستقیم به <code dir="ltr">pod.spec</code>، با استفاده از یک handler ویژه به نام <code dir="ltr">ephemeralcontainers</code> در API ایجاد می‌شوند؛ از این رو نمی‌توان با <code dir="ltr">kubectl edit</code> یک کانتینر موقت اضافه کرد.</p>
+<p dir="rtl">همانند کانتینرهای معمولی، پس از افزودن یک کانتینر موقت به Pod، نمی‌توانید آن را تغییر دهید یا حذف کنید.</p>
 <div class="callout note"><div class="callout-title">توجه:</div>
-<p dir="rtl">کانتینرهای زودگذر توسط <a href="../../../tasks/configure-pod-container/static-pod.html">Podهای ایستا (static pods)</a> پشتیبانی نمی‌شوند.</p>
+<p dir="rtl"><a href="../../../tasks/configure-pod-container/static-pod.html">پادهای ایستا</a> از کانتینرهای موقت پشتیبانی نمی‌کنند.</p>
 </div>
-<h2 id="کاربردهای-کانتینرهای-زودگذر" dir="rtl">کاربردهای کانتینرهای زودگذر</h2>
-<p dir="rtl">کانتینرهای زودگذر برای عیب‌یابی تعاملی زمانی مفید هستند که <code dir="ltr">kubectl exec</code> به دلیل خرابی یک کانتینر یا نبود ابزارهای اشکال‌زدایی در ایمیج کانتینر
-کافی نباشد.</p>
-<p dir="rtl">به‌طور خاص، <a href="https://github.com/GoogleContainerTools/distroless" target="_blank" rel="noopener">ایمیج‌های distroless</a>
-به شما امکان می‌دهند ایمیج‌های کانتینری حداقلی مستقر کنید که سطح حمله
-و مواجهه با باگ‌ها و آسیب‌پذیری‌ها را کاهش می‌دهند. از آنجا که ایمیج‌های distroless شامل
-شل یا هیچ ابزار اشکال‌زدایی نیستند، عیب‌یابی ایمیج‌های distroless
-تنها با <code dir="ltr">kubectl exec</code> دشوار است.</p>
-<p dir="rtl">هنگام استفاده از کانتینرهای زودگذر، فعال‌سازی
-<a href="../../../tasks/configure-pod-container/share-process-namespace.html">اشتراک‌گذاری فضای نام فرایند</a> مفید است تا
-بتوانید فرایندهای موجود در سایر کانتینرها را مشاهده کنید.</p>
+<h2 id="کاربردهای-کانتینرهای-موقت" dir="rtl">کاربردهای کانتینرهای موقت</h2>
+<p dir="rtl">کانتینرهای موقت برای عیب‌یابی تعاملی مفیدند، به‌ویژه هنگامی که <code dir="ltr">kubectl exec</code> کافی نیست؛ زیرا یک کانتینر از کار افتاده است یا ایمیج کانتینر ابزارهای اشکال‌زدایی را در خود ندارد.</p>
+<p dir="rtl">به‌طور خاص، <a href="https://github.com/GoogleContainerTools/distroless" target="_blank" rel="noopener">ایمیج‌های distroless</a> به شما امکان می‌دهند ایمیج‌های کانتینر حداقلی را مستقر کنید که سطح حمله و میزان آسیب‌پذیری در برابر باگ‌ها و نقص‌های امنیتی را کاهش می‌دهند. از آنجا که ایمیج‌های distroless شامل shell یا هیچ ابزار اشکال‌زدایی نیستند، عیب‌یابی آن‌ها تنها با <code dir="ltr">kubectl exec</code> دشوار است.</p>
+<p dir="rtl">هنگام استفاده از کانتینرهای موقت، بهتر است <a href="../../../tasks/configure-pod-container/share-process-namespace.html">اشتراک‌گذاری فضای نام پردازه</a> را فعال کنید تا بتوانید پردازه‌های کانتینرهای دیگر را مشاهده کنید.</p>
+<h2 id="کنترل-دسترسی-access-control" dir="rtl">کنترل دسترسی {#access-control}</h2>
+<p dir="rtl">افزودن یک کانتینر موقت به Pod در حال اجرا از زیرمنبع (subresource) <code dir="ltr">ephemeralcontainers</code> آن Pod استفاده می‌کند و از طریق <code dir="ltr">pod.spec</code> قابل نوشتن نیست. این یک انتخاب طراحی آگاهانه است. برخی از افزونه‌های admission و سیاست‌های امنیتی کانتینرهای موقت را تشخیص نمی‌دهند. در نظر گرفتن ایجاد کانتینر موقت به‌عنوان یک سطح API مجزا به مدیران کلاستر امکان می‌دهد آگاهانه تصمیم بگیرند چه کسی می‌تواند به Podهای در حال اجرا کانتینر اضافه کند.</p>
+<p dir="rtl">به همین دلیل، زیرمنبع <code dir="ltr">pods/ephemeralcontainers</code> در ClusterRoleهای پیش‌فرض <code dir="ltr">admin</code> و <code dir="ltr">edit</code> از مجموعهٔ <a href="../../../reference/access-authn-authz/rbac.html#user-facing-roles">ClusterRoleهای کاربرمحور</a> گنجانده <strong>نشده</strong> است. برای اینکه کاربران بتوانند کانتینر موقت اضافه کنند (برای مثال، با اجرای <a href="../../../reference/kubectl/generated/kubectl_debug/index.html"><code dir="ltr">kubectl debug</code></a>)، مدیران کلاستر باید فعل <code dir="ltr">patch</code> (و معمولاً <code dir="ltr">update</code>) را به‌طور صریح روی <code dir="ltr">pods/ephemeralcontainers</code> اعطا کنند. برای آشنایی با رویکردهای پیشنهادی، به <a href="../../../tasks/debug/debug-application/debug-running-pod.html#ephemeral-container-permissions">اشکال‌زدایی Podهای در حال اجرا: مجوزهای کانتینرهای موقت</a> مراجعه کنید.</p>
 <h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
 <ul>
-<li dir="rtl">یاد بگیرید چگونه <a href="../../../tasks/debug/debug-application/debug-running-pod.html#ephemeral-container">Podها را با استفاده از کانتینرهای زودگذر اشکال‌زدایی کنید</a>.</li>
+<li dir="rtl">با نحوهٔ <a href="../../../tasks/debug/debug-application/debug-running-pod.html#ephemeral-container">اشکال‌زدایی پادها با استفاده از کانتینرهای موقت</a> آشنا شوید.</li>
 </ul>
 <p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
-<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#شناخت-کانتینرهای-زودگذر">شناخت کانتینرهای زودگذر</a><a class="l3" href="#کانتینر-زودگذر-چیست؟">کانتینر زودگذر چیست؟</a><a class="l2" href="#کاربردهای-کانتینرهای-زودگذر">کاربردهای کانتینرهای زودگذر</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#آشنایی-با-کانتینرهای-موقت">آشنایی با کانتینرهای موقت</a><a class="l3" href="#کانتینر-موقت-چیست؟">کانتینر موقت چیست؟</a><a class="l2" href="#کاربردهای-کانتینرهای-موقت">کاربردهای کانتینرهای موقت</a><a class="l2" href="#کنترل-دسترسی-access-control">کنترل دسترسی {#access-control}</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
 </div>
 </body>
 </html>

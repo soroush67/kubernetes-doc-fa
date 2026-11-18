@@ -1,5 +1,5 @@
 ---
-title: اختلال و اولویت گروه Pod
+title: اختلال و اولویت در گروه‌های Pod
 content_type: concept
 weight: 10
 ---
@@ -7,90 +7,97 @@ weight: 10
 <!-- overview -->
 {{< feature-state feature_gate_name="GenericWorkload" >}}
 
-PodGroup می‌تواند یک حالت اختلال (disruption mode) اعلام کند. این حالت تعیین می‌کند که
-زمان‌بند چگونه می‌تواند یک PodGroup در حال اجرا را دچار اختلال کند، برای مثال برای جادادن
-یک PodGroup با اولویت بالاتر. یک PodGroup همچنین یک اولویت دارد
-که در رویدادهای [پس‌گیری آگاه از بار کاری](/docs/concepts/scheduling-eviction/workload-aware-preemption/)
-بر اولویت تک‌تک Podهای آن گروه مقدم است.
+هر PodGroup می‌تواند یک حالت اختلال (disruption mode) اعلام کند. این حالت تعیین می‌کند که
+زمان‌بند چگونه می‌تواند یک PodGroup در حال اجرا را مختل کند؛ برای نمونه، تا جا را برای یک PodGroup
+با اولویت بالاتر باز کند. هر PodGroup همچنین یک اولویت دارد که در رویدادهای
+[پیش‌دستی آگاه از بار کاری](/docs/concepts/scheduling-eviction/workload-aware-preemption/)
+جایگزین اولویت تک‌تک Podهای آن گروه می‌شود.
 
 <!-- body -->
 
 ## انواع حالت اختلال
 
 {{< note >}}
-در v1.36، فیلدهای `priority` یا `disruptionMode` آن PodGroup تنها
-در [پس‌گیری آگاه از بار کاری](/docs/concepts/scheduling-eviction/workload-aware-preemption/) رعایت می‌شوند.
-در مرحله‌ی زمان‌بندی Pod، زمان‌بند فیلدهای `priority` یا `disruptionMode`
-آن PodGroup را در نظر نمی‌گیرد. این محدودیت در v1.37 دیگر
-وجود ندارد.
+در نسخهٔ v1.36، فیلدهای `priority` و `disruptionMode` در PodGroup فقط در
+[پیش‌دستی آگاه از بار کاری](/docs/concepts/scheduling-eviction/workload-aware-preemption/) رعایت می‌شوند.
+زمان‌بند در مرحلهٔ زمان‌بندی Pod، فیلدهای `priority` و `disruptionMode` در PodGroup را در نظر نمی‌گیرد.
+این محدودیت در نسخهٔ v1.37 دیگر وجود ندارد.
 {{< /note >}}
 
-API از دو حالت اختلال پشتیبانی می‌کند: `Single` و `All`.
+این API از دو حالت اختلال پشتیبانی می‌کند: `Single` و `All`.
 حالت پیش‌فرض `Single` است.
 
 ### Single
 
-حالت `Single` به زمان‌بند دستور می‌دهد با همه‌ی Podهای گروه به‌عنوان موجودیت‌های جداگانه رفتار کند
-و اجازه می‌دهد یک Pod از یک PodGroup به‌طور مستقل دچار اختلال شود.
+حالت `Single` به زمان‌بند دستور می‌دهد که همهٔ Podهای گروه را موجودیت‌هایی جداگانه در نظر بگیرد؛
+به این ترتیب، هر Pod از یک PodGroup را می‌توان به‌طور مستقل مختل کرد.
 
 ### All
 
-حالت `All` بر معنای «همه یا هیچ» برای اختلال تأکید دارد.
-این حالت به زمان‌بند اعلام می‌کند که همه‌ی Podهای آن PodGroup باید با هم دچار اختلال شوند.
+حالت `All` بر معنای «همه یا هیچ» در اختلال تأکید دارد.
+این حالت به زمان‌بند اعلام می‌کند که همهٔ Podهای یک PodGroup باید با هم مختل شوند.
 
 ## CompositePodGroup
 
 {{< feature-state feature_gate_name="CompositePodGroup" >}}
 
-یک `CompositePodGroup` نیز می‌تواند در مشخصات خود یک `disruptionMode` اعلام کند که کنترل می‌کند
-زمان‌بند در رویدادهای پس‌گیری، گروه‌های فرزند درون گروه مرکب را چگونه دچار اختلال کند.
+یک `CompositePodGroup` نیز می‌تواند در مشخصات (specification) خود یک `disruptionMode` اعلام کند.
+این فیلد تعیین می‌کند که زمان‌بند در رویدادهای پیش‌دستی، گروه‌های فرزند درون گروه مرکب را چگونه مختل کند.
 
-API از دو حالت اختلال برای `CompositePodGroups` پشتیبانی می‌کند:
+این API برای `CompositePodGroups` از دو حالت اختلال پشتیبانی می‌کند:
 
-- **`Single`**: اجازه می‌دهد تک‌تک گروه‌های فرزند درون `CompositePodGroup` در هنگام پس‌گیری
-  به‌طور مستقل دچار اختلال شوند.
-- **`All`**: معنای اختلال همه یا هیچ را در سراسر سلسله‌مراتب `CompositePodGroup` اعمال می‌کند.
-  اگر هر Podی که در سلسله‌مراتب زیر این `CompositePodGroup` قرار دارد باید پس گرفته شود، همه‌ی
-  Podهای کل سلسله‌مراتب باید پس گرفته شوند.
+- **`Single`**: اجازه می‌دهد هر یک از گروه‌های فرزند درون `CompositePodGroup` در هنگام پیش‌دستی
+  به‌طور مستقل مختل شود.
+- **`All`**: معنای «همه یا هیچ» را در سراسر سلسله‌مراتب `CompositePodGroup` اعمال می‌کند.
+  اگر لازم باشد هر یک از Podهای موجود در سلسله‌مراتبِ زیر این `CompositePodGroup` مشمول پیش‌دستی شود،
+  همهٔ Podهای کل سلسله‌مراتب باید مشمول پیش‌دستی شوند.
 
-اگر حالتی تعیین نشود، حالت پیش‌فرض `Single` است.
+اگر حالتی مشخص نشود، مقدار پیش‌فرض `Single` است.
 
 {{< note >}}
-در v1.37، یک گروه می‌تواند حالت اختلال خود را روی `All` تنظیم کند و گروه‌های فرزندی داشته باشد که حالت آن‌ها
-`Single` است. در چنین حالتی، حالت `All` سطح بالا بر حالت‌های `Single` نوادگان مقدم است.
+در نسخهٔ v1.37، یک گروه می‌تواند حالت اختلال خود را `All` تنظیم کند و گروه‌های فرزندی داشته باشد که حالتشان
+`Single` است. در چنین وضعیتی، حالت `All` در سطح بالا بر حالت‌های `Single` در نوادگان غلبه می‌کند.
 
 به دلیل مبهم بودن معنای این پیکربندی، استفاده از آن توصیه نمی‌شود.
 {{< /note >}}
 
 ## اولویت گروه Pod
 
-PodGroup از همان مفهوم [PriorityClass](/docs/concepts/scheduling-eviction/pod-priority-preemption/#priorityclass) استفاده می‌کند که Podهای منفرد استفاده می‌کنند.
-پس از آنکه یک یا چند PriorityClass ایجاد کردید،
-می‌توانید یک PodGroup ایجاد کنید که یکی از این نام‌های PriorityClass را در مشخصات خود تعیین کند.
-کنترل‌کننده‌ی پذیرش اولویت (priority admission controller) از فیلد `priorityClassName` استفاده می‌کند و مقدار عددی اولویت را پر می‌کند.
-اگر کلاس اولویت یافت نشود، آن PodGroup رد می‌شود.
-هنگامی که `priorityClassName` برای یک PodGroup تنظیم نشده باشد، کوبرنتیز به دنبال یک مقدار پیش‌فرض می‌گردد (یک PriorityClass که `globalDefault` آن روی true تنظیم شده است).
-اگر هیچ PriorityClassی با `globalDefault` برابر true وجود نداشته باشد، PodGroupی که `priorityClassName` ندارد اولویت صفر خواهد داشت.
+مفهوم [PriorityClass](/docs/concepts/scheduling-eviction/pod-priority-preemption/#priorityclass)
+در PodGroup به همان شکلی به کار می‌رود که در Podهای منفرد.
+پس از ایجاد یک یا چند PriorityClass، می‌توانید PodGroupای بسازید که نام یکی از آن PriorityClassها را
+در مشخصات خود تعیین کند.
+کنترل‌کنندهٔ پذیرش اولویت (priority admission controller) از فیلد `priorityClassName` استفاده می‌کند
+و مقدار عددی اولویت را پر می‌کند.
+اگر کلاس اولویت پیدا نشود، PodGroup رد می‌شود.
+اگر `priorityClassName` برای یک PodGroup تنظیم نشده باشد، کوبرنتیز به دنبال یک کلاس پیش‌فرض
+(یعنی PriorityClassای که `globalDefault` آن true است) می‌گردد.
+اگر هیچ PriorityClassای با `globalDefault` برابر true وجود نداشته باشد، اولویت PodGroupای که
+`priorityClassName` ندارد صفر خواهد بود.
 
-اولویت PodGroup در رویدادهای [پس‌گیری آگاه از بار کاری](/docs/concepts/scheduling-eviction/workload-aware-preemption/) اولویت مرجع برای همه‌ی Podهای گروه است.
-این مقدار همچنین برای مرتب‌سازی PodGroupها در صف زمان‌بندی استفاده می‌شود.
-هنگامی که اولویت تک‌تک Podهای تشکیل‌دهنده‌ی این PodGroup با اولویت PodGroup متفاوت باشد،
-آن PodGroup با خطای `all pods in a single pod group should have the same priority as the pod group` زمان‌بندی نمی‌شود.
+اولویت PodGroup در رویدادهای [پیش‌دستی آگاه از بار کاری](/docs/concepts/scheduling-eviction/workload-aware-preemption/)
+اولویت مرجع برای همهٔ Podهای گروه است.
+از این مقدار برای ترتیب‌دادن PodGroupها در صف زمان‌بندی نیز استفاده می‌شود.
+اگر اولویت Podهای تشکیل‌دهندهٔ این PodGroup با اولویت خود PodGroup متفاوت باشد،
+PodGroup با خطای `all pods in a single pod group should have the same priority as the pod group`
+زمان‌بندی نخواهد شد.
 
-هنگامی که feature gate [PodGroupPreemptionPolicy](/docs/reference/command-line-tools-reference/feature-gates/podgroup-preemption-policy/)
-فعال باشد، PodGroup فیلد `preemptionPolicy` را نیز دارد. این فیلد نیز از PriorirtyClass گرفته می‌شود.
-این فیلد برای همه‌ی Podهای گروه مرجع است و تعیین می‌کند که آیا PodGroup می‌تواند Podها و گروه‌های Pod با
-اولویت پایین‌تر را پس بگیرد تا برای خود جا باز کند یا خیر. هنگامی که این feature gate فعال باشد، همه‌ی Podهای آن PodGroup
-باید همان `preemptionPolicy` آن PodGroup را داشته باشند. در غیر این صورت، آن PodGroup با خطای
-`all pods in a single pod group should have the same preemption policy as the pod group's preemption policy` زمان‌بندی نمی‌شود.
-هنگامی که PodGroup دارای `preemptionPolicy: Never` باشد، پس‌گیری آگاه از بار کاری را انجام نمی‌دهد.
-اگر این feature flag غیرفعال باشد، همه‌ی Podهای تشکیل‌دهنده‌ی PodGroup باید `preemptionPolicy` یکسانی داشته باشند.
-در غیر این صورت، آن PodGroup با خطای
-`all pods in a single pod group should have the same preemption policy` زمان‌بندی نمی‌شود.
+وقتی feature gate با نام [PodGroupPreemptionPolicy](/docs/reference/command-line-tools-reference/feature-gates/podgroup-preemption-policy/)
+فعال باشد، PodGroup فیلد `preemptionPolicy` را نیز دارد. مقدار این فیلد نیز از PriorityClass گرفته می‌شود.
+این فیلد برای همهٔ Podهای گروه مرجع است و تعیین می‌کند که آیا PodGroup می‌تواند برای باز کردن جا برای خود،
+Podها و گروه‌های Pod با اولویت پایین‌تر را مشمول پیش‌دستی کند یا نه. وقتی این feature gate فعال باشد،
+همهٔ Podهای درون PodGroup باید `preemptionPolicy` یکسانی با PodGroup داشته باشند. در غیر این صورت، PodGroup با خطای
+`all pods in a single pod group should have the same preemption policy as the pod group's preemption policy`
+زمان‌بندی نخواهد شد.
+وقتی PodGroup دارای `preemptionPolicy: Never` باشد، پیش‌دستی آگاه از بار کاری انجام نمی‌دهد.
+اگر این feature gate غیرفعال باشد، همهٔ Podهای تشکیل‌دهندهٔ PodGroup باید `preemptionPolicy` یکسانی داشته باشند.
+در غیر این صورت، PodGroup با خطای
+`all pods in a single pod group should have the same preemption policy`
+زمان‌بندی نخواهد شد.
 
-YAML زیر نمونه‌ای از پیکربندی یک PodGroup است که از PriorityClass با نام `high-priority` استفاده می‌کند،
-که به مقدار عددی اولویت 1000000 نگاشت می‌شود.
-کنترل‌کننده‌ی پذیرش اولویت مشخصات را بررسی می‌کند و اولویت PodGroup را 1000000 تعیین می‌کند.
+قطعه YAML زیر نمونه‌ای از پیکربندی یک PodGroup است که از PriorityClass با نام `high-priority` استفاده می‌کند؛
+این کلاس به مقدار عددی اولویت 1000000 نگاشت می‌شود.
+کنترل‌کنندهٔ پذیرش اولویت، مشخصات را بررسی می‌کند و اولویت PodGroup را 1000000 تعیین می‌کند.
 
 ```yaml
 apiVersion: scheduling.k8s.io/v1beta1
@@ -106,50 +113,48 @@ spec:
 
 {{< feature-state feature_gate_name="CompositePodGroup" >}}
 
-API مربوط به `CompositePodGroup` نیز فیلدهای `priorityClassName` و `priority` را دارد و مقدار آن‌ها
-به همان روشی که برای `PodGroups` انجام می‌شود، از طریق کنترل‌کننده‌ی پذیرش اولویت تعیین می‌شود.
+در API مربوط به `CompositePodGroup` نیز فیلدهای `priorityClassName` و `priority` وجود دارند و مقدار آن‌ها
+به همان روشی که برای `PodGroups` گفته شد، از طریق کنترل‌کنندهٔ پذیرش اولویت تعیین می‌شود.
 
-اولویت یک `CompositePodGroup` ریشه در رویدادهای
-[پس‌گیری آگاه از بار کاری](/docs/concepts/scheduling-eviction/workload-aware-preemption/)
-به‌عنوان اولویت مرجع برای همه‌ی گروه‌های فرزند و Podهای درون سلسله‌مراتب آن عمل می‌کند.
-همه‌ی Podهای درون یک سلسله‌مراتب گروه باید دقیقاً اولویت یکسانی داشته باشند و این اولویت باید با
+در رویدادهای [پیش‌دستی آگاه از بار کاری](/docs/concepts/scheduling-eviction/workload-aware-preemption/)،
+اولویت `CompositePodGroup` ریشه، اولویت مرجع برای همهٔ گروه‌های فرزند و Podهای درون سلسله‌مراتب آن است.
+همهٔ Podهای درون یک سلسله‌مراتب گروهی باید دقیقاً اولویت یکسانی داشته باشند و این اولویت باید با
 اولویت `CompositePodGroup` ریشه برابر باشد.
 
-مقدار اولویت همچنین برای مرتب‌سازی `CompositePodGroups` ریشه در صف فعال
-زمان‌بندی استفاده می‌شود.
+از مقدار اولویت برای ترتیب‌دادن `CompositePodGroups` ریشه در صف فعال زمان‌بندی نیز استفاده می‌شود.
 
 {{< note >}}
-در v1.37، زمان‌بند بررسی نمی‌کند که آیا گروه‌های غیرریشه مقدار اولویتی برابر با
-اولویت `CompositePodGroup` ریشه دارند یا خیر.
+در نسخهٔ v1.37، زمان‌بند بررسی نمی‌کند که مقدار اولویت گروه‌های غیرریشه با اولویت
+`CompositePodGroup` ریشه برابر باشد.
 {{< /note >}}
 
-### PreemptionPolicy در CompositePodGroup
+### سیاست پیش‌دستی در CompositePodGroup
 
 {{< feature-state feature_gate_name="PodGroupPreemptionPolicy" >}}
 
-API مربوط به `CompositePodGroup` فیلد `preemptionPolicy` را نیز دارد و مقدار آن دقیقاً
-به همان روشی که برای API مربوط به `PodGroup` انجام می‌شود تعیین می‌گردد.
+در API مربوط به `CompositePodGroup` نیز فیلد `preemptionPolicy` وجود دارد و مقدار آن دقیقاً به همان روشی
+تعیین می‌شود که در API مربوط به `PodGroup`.
 
-مقدار `preemptionPolicy` در `CompositePodGroup` ریشه تعیین می‌کند که آیا
-[پس‌گیری آگاه از بار کاری](/docs/concepts/scheduling-eviction/workload-aware-preemption/) می‌تواند
-در صورت نیاز در هنگام زمان‌بندی برای جادادن Podهای آن فراخوانی شود یا خیر:
+مقدار `preemptionPolicy` در `CompositePodGroup` ریشه تعیین می‌کند که آیا در صورت نیاز می‌توان
+[پیش‌دستی آگاه از بار کاری](/docs/concepts/scheduling-eviction/workload-aware-preemption/) را
+برای جا دادن Podهای آن در هنگام زمان‌بندی فراخواند یا نه:
 
-- سیاست `PreemptLowerPriority` اجازه‌ی پس‌گرفتن قربانیانی با اولویت پایین‌تر را می‌دهد،
-- سیاست `Never` پس‌گیری آگاه از بار کاری را برای آن `CompositePodGroup` ریشه غیرفعال می‌کند.
+- سیاست `PreemptLowerPriority` اجازه می‌دهد قربانیانی با اولویت پایین‌تر مشمول پیش‌دستی شوند،
+- سیاست `Never` پیش‌دستی آگاه از بار کاری را برای آن `CompositePodGroup` ریشه غیرفعال می‌کند.
 
-همه‌ی Podهای درون یک سلسله‌مراتب گروه باید دقیقاً سیاست پس‌گیری یکسانی داشته باشند که باید
-با سیاست پس‌گیری `CompositePodGroup` ریشه برابر باشد.
+همهٔ Podهای درون یک سلسله‌مراتب گروهی باید دقیقاً سیاست پیش‌دستی یکسانی داشته باشند و این سیاست باید با
+سیاست پیش‌دستی `CompositePodGroup` ریشه برابر باشد.
 
-اگر این feature flag غیرفعال باشد، `CompositePodGroup` ریشه مجاز به انجام پس‌گیری خواهد بود،
-مگر آنکه یکی از Podهای متعلق به سلسله‌مراتب گروه، `preemptionPolicy` را روی `Never` تنظیم کرده باشد.
+اگر این feature gate غیرفعال باشد، `CompositePodGroup` ریشه مجاز به انجام پیش‌دستی خواهد بود،
+مگر آنکه `preemptionPolicy` یکی از Podهای متعلق به سلسله‌مراتب گروه روی `Never` تنظیم شده باشد.
 
 {{< note >}}
-در v1.37، هنگامی که این feature gate فعال باشد، زمان‌بند بررسی نمی‌کند که آیا گروه‌های غیرریشه
-سیاست پس‌گیری‌ای برابر با سیاست پس‌گیری `CompositePodGroup` ریشه دارند یا خیر.
+در نسخهٔ v1.37، وقتی این feature gate فعال باشد، زمان‌بند بررسی نمی‌کند که سیاست پیش‌دستی گروه‌های غیرریشه
+با سیاست پیش‌دستی `CompositePodGroup` ریشه برابر باشد.
 {{< /note >}}
 
 ## {{% heading "whatsnext" %}}
 
-* درباره‌ی الگوریتم [پس‌گیری آگاه از بار کاری](/docs/concepts/scheduling-eviction/workload-aware-preemption/) بخوانید.
-* درباره‌ی [Workload API](/docs/concepts/workloads/workload-api/) بیاموزید.
-* درباره‌ی [بلوک‌های سازنده‌ی زمان‌بندی و کتابخانه‌ی workloadbuilder](/docs/concepts/workloads/workload-api/workloadbuilder/)، از جمله بلوک سازنده‌ی حالت اختلال، بیاموزید.
+* دربارهٔ الگوریتم [پیش‌دستی آگاه از بار کاری](/docs/concepts/scheduling-eviction/workload-aware-preemption/) مطالعه کنید.
+* با [Workload API](/docs/concepts/workloads/workload-api/) آشنا شوید.
+* با [اجزای سازندهٔ زمان‌بندی و کتابخانهٔ workloadbuilder](/docs/concepts/workloads/workload-api/workloadbuilder/)، از جمله جزء سازندهٔ حالت اختلال، آشنا شوید.

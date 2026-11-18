@@ -101,6 +101,16 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [contribute/blog/guidelines.md](md/contribute/blog/guidelines.md) — 2026-11-18T15:16:28+03:30
+- [concepts/workloads/workload-api/disruption-and-priority.md](md/concepts/workloads/workload-api/disruption-and-priority.md) — 2026-11-18T15:15:39+03:30
+- [concepts/workloads/workload-api/_index.md](md/concepts/workloads/workload-api/_index.md) — 2026-11-18T15:15:01+03:30
+- [concepts/workloads/controllers/job.md](md/concepts/workloads/controllers/job.md) — 2026-11-18T15:14:19+03:30
+- [concepts/workloads/pods/pod-hostname.md](md/concepts/workloads/pods/pod-hostname.md) — 2026-11-18T15:14:09+03:30
+- [concepts/workloads/pods/pod-condition.md](md/concepts/workloads/pods/pod-condition.md) — 2026-11-18T15:13:46+03:30
+- [concepts/workloads/pods/init-containers.md](md/concepts/workloads/pods/init-containers.md) — 2026-11-18T15:10:40+03:30
+- [concepts/workloads/pods/ephemeral-containers.md](md/concepts/workloads/pods/ephemeral-containers.md) — 2026-11-18T15:09:32+03:30
+- [concepts/workloads/pods/downward-api.md](md/concepts/workloads/pods/downward-api.md) — 2026-11-18T15:09:10+03:30
+- [concepts/workloads/podgroup-api/_index.md](md/concepts/workloads/podgroup-api/_index.md) — 2026-11-18T15:08:43+03:30
 - [concepts/workloads/controllers/statefulset.md](md/concepts/workloads/controllers/statefulset.md) — 2026-11-18T15:07:54+03:30
 - [concepts/workloads/compositepodgroup-api/_index.md](md/concepts/workloads/compositepodgroup-api/_index.md) — 2026-11-18T15:04:32+03:30
 - [concepts/storage/volumes.md](md/concepts/storage/volumes.md) — 2026-11-18T15:04:15+03:30
@@ -111,16 +121,6 @@ cd kubernetes-doc-fa
 - [concepts/windows/_index.md](md/concepts/windows/_index.md) — 2026-11-18T15:00:17+03:30
 - [concepts/storage/windows-storage.md](md/concepts/storage/windows-storage.md) — 2026-11-18T15:00:07+03:30
 - [concepts/storage/storage-classes.md](md/concepts/storage/storage-classes.md) — 2026-11-18T14:59:50+03:30
-- [concepts/storage/volume-populators-and-data-sources.md](md/concepts/storage/volume-populators-and-data-sources.md) — 2026-11-18T14:58:47+03:30
-- [concepts/storage/ephemeral-storage.md](md/concepts/storage/ephemeral-storage.md) — 2026-11-18T14:58:10+03:30
-- [concepts/storage/ephemeral-volumes.md](md/concepts/storage/ephemeral-volumes.md) — 2026-11-18T14:58:06+03:30
-- [concepts/storage/dynamic-provisioning.md](md/concepts/storage/dynamic-provisioning.md) — 2026-11-18T14:57:10+03:30
-- [concepts/services-networking/windows-networking.md](md/concepts/services-networking/windows-networking.md) — 2026-11-18T14:57:06+03:30
-- [concepts/storage/_index.md](md/concepts/storage/_index.md) — 2026-11-18T14:56:33+03:30
-- [concepts/services-networking/topology-aware-routing.md](md/concepts/services-networking/topology-aware-routing.md) — 2026-11-18T14:56:30+03:30
-- [concepts/services-networking/_index.md](md/concepts/services-networking/_index.md) — 2026-11-18T14:56:05+03:30
-- [concepts/security/windows-security.md](md/concepts/security/windows-security.md) — 2026-11-18T14:55:47+03:30
-- [concepts/security/security-checklist.md](md/concepts/security/security-checklist.md) — 2026-11-18T14:55:34+03:30
 
 </div>
 

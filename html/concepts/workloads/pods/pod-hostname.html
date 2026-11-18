@@ -83,13 +83,10 @@ document.addEventListener('DOMContentLoaded',function(){box=document.getElementB
 <header class="top"><a href="../../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">concepts / workloads / pods</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
 <div class="layout">
 <main><h1 dir="rtl">نام میزبان Pod</h1><!-- overview -->
-<p dir="rtl">این صفحه نحوه تنظیم نام میزبان (hostname) یک Pod، عوارض جانبی احتمالی پس از اعمال این پیکربندی و سازوکارهای زیربنایی آن را توضیح می‌دهد.</p>
+<p dir="rtl">این صفحه توضیح می‌دهد که چگونه نام میزبان (hostname) یک Pod را تنظیم کنید، این پیکربندی چه پیامدهای جانبی احتمالی‌ای دارد و سازوکار زیربنایی آن چگونه است.</p>
 <!-- body -->
 <h2 id="نام-میزبان-پیش-فرض-pod" dir="rtl">نام میزبان پیش‌فرض Pod</h2>
-<p dir="rtl">هنگامی که یک Pod ایجاد می‌شود، نام میزبان آن (آنگونه که از درون Pod مشاهده می‌شود)
-از مقدار metadata.name مربوط به Pod گرفته می‌شود.
-هم نام میزبان و هم نام دامنه کاملاً معتبر (FQDN) متناظر با آن
-(از دیدگاه Pod) برابر با مقدار metadata.name تنظیم می‌شوند.</p>
+<p dir="rtl">هنگامی که یک Pod ایجاد می‌شود، نام میزبان آن (آن‌گونه که از درون Pod دیده می‌شود) از مقدار metadata.name آن Pod گرفته می‌شود. از دید Pod، هم نام میزبان و هم نام دامنهٔ کاملاً مشخص (FQDN) متناظر با آن برابر با مقدار metadata.name تنظیم می‌شوند.</p>
 <pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
 kind: Pod
 metadata:
@@ -102,50 +99,25 @@ spec:
       - "3600"
     name: busybox
 </code></pre>
-<p dir="rtl">نام میزبان و نام دامنه کاملاً معتبر (FQDN) در Pod ایجادشده با این مانیفست برابر با <code dir="ltr">busybox-1</code> خواهد بود.</p>
+<p dir="rtl">نام میزبان و نام دامنهٔ کاملاً مشخص Pod ایجادشده با این مانیفست برابر با <code dir="ltr">busybox-1</code> تنظیم می‌شود.</p>
 <h2 id="نام-میزبان-با-فیلدهای-hostname-و-subdomain-در-pod" dir="rtl">نام میزبان با فیلدهای hostname و subdomain در Pod</h2>
-<p dir="rtl">مشخصات Pod (Pod spec) شامل یک فیلد اختیاری <code dir="ltr">hostname</code> است.
-در صورت تنظیم، این مقدار به‌عنوان نام میزبان (آنگونه که از درون Pod مشاهده می‌شود)
-بر <code dir="ltr">metadata.name</code> در Pod اولویت دارد.
-برای مثال، نام میزبان در Pod ای که spec.hostname آن روی <code dir="ltr">my-host</code> تنظیم شده باشد، <code dir="ltr">my-host</code> خواهد بود.</p>
-<p dir="rtl">مشخصات Pod همچنین شامل یک فیلد اختیاری <code dir="ltr">subdomain</code> است
-که نشان می‌دهد Pod به یک زیردامنه در فضای نام (namespace) خود تعلق دارد.
-اگر در فضای نام <code dir="ltr">my-namespace</code>، مقدار <code dir="ltr">spec.hostname</code> برابر با "foo" و مقدار spec.subdomain
-برابر با "bar" باشد، نام میزبان Pod برابر با <code dir="ltr">foo</code> و نام دامنه کاملاً معتبر (FQDN) آن
-برابر با <code dir="ltr">foo.bar.my-namespace.svc.cluster-domain.example</code> خواهد بود (آنگونه که از درون Pod مشاهده می‌شود).</p>
-<p dir="rtl">هنگامی که هم hostname و هم subdomain تنظیم شده باشند، سرور DNS کلاستر
-بر اساس این فیلدها رکوردهای A و/یا AAAA ایجاد می‌کند.
-به این بخش مراجعه کنید: <a href="../../services-networking/dns-pod-service.html#pod-hostname-and-subdomain-field">فیلدهای hostname و subdomain در Pod</a>.</p>
+<p dir="rtl">مشخصات (spec) Pod یک فیلد اختیاری به نام <code dir="ltr">hostname</code> دارد. اگر این فیلد تنظیم شود، مقدار آن برای تعیین نام میزبان (آن‌گونه که از درون Pod دیده می‌شود) بر <code dir="ltr">metadata.name</code> آن Pod اولویت دارد. برای مثال، نام میزبان Podای که فیلد spec.hostname آن برابر با <code dir="ltr">my-host</code> باشد، <code dir="ltr">my-host</code> خواهد بود.</p>
+<p dir="rtl">مشخصات Pod همچنین یک فیلد اختیاری به نام <code dir="ltr">subdomain</code> دارد که نشان می‌دهد Pod به یک زیردامنه در فضای نام (namespace) خود تعلق دارد. اگر در فضای نام <code dir="ltr">my-namespace</code>، فیلد <code dir="ltr">spec.hostname</code> یک Pod برابر با "foo" و فیلد spec.subdomain آن برابر با "bar" باشد، نام میزبان آن <code dir="ltr">foo</code> و نام دامنهٔ کاملاً مشخص آن (از درون Pod) <code dir="ltr">foo.bar.my-namespace.svc.cluster-domain.example</code> خواهد بود.</p>
+<p dir="rtl">هنگامی که هر دو فیلد hostname و subdomain تنظیم شده باشند، سرور DNS کلاستر بر اساس این فیلدها رکوردهای A و/یا AAAA ایجاد می‌کند. برای اطلاعات بیشتر به <a href="../../services-networking/dns-pod-service.html#pod-hostname-and-subdomain-field">فیلدهای hostname و subdomain در Pod</a> مراجعه کنید.</p>
 <h2 id="نام-میزبان-با-فیلد-sethostnameasfqdn-در-pod" dir="rtl">نام میزبان با فیلد setHostnameAsFQDN در Pod</h2>
 <div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes v1.22 [stable]</span> (پایدار)</div>
-<p dir="rtl">هنگامی که یک Pod طوری پیکربندی شده باشد که نام دامنه کاملاً معتبر (FQDN) داشته باشد،
-نام میزبان آن همان نام میزبان کوتاه است. برای مثال، اگر Pod ای با نام دامنه
-کاملاً معتبر <code dir="ltr">busybox-1.busybox-subdomain.my-namespace.svc.cluster-domain.example</code> داشته باشید،
-به‌طور پیش‌فرض دستور <code dir="ltr">hostname</code> درون آن Pod مقدار <code dir="ltr">busybox-1</code> را برمی‌گرداند و
-دستور <code dir="ltr">hostname --fqdn</code> نام FQDN را برمی‌گرداند.</p>
-<p dir="rtl">هنگامی که هم <code dir="ltr">setHostnameAsFQDN: true</code> و هم فیلد subdomain در مشخصات Pod تنظیم شده باشند،
-kubelet نام FQDN مربوط به Pod را
-در نام میزبان برای فضای نام آن Pod می‌نویسد. در این حالت، هر دو دستور <code dir="ltr">hostname</code> و <code dir="ltr">hostname --fqdn</code>
-نام FQDN مربوط به Pod را برمی‌گردانند.</p>
-<p dir="rtl">نام FQDN مربوط به Pod به همان شیوه‌ای که پیش‌تر تعریف شد ساخته می‌شود.
-این نام از فیلد <code dir="ltr">spec.hostname</code> در Pod (در صورت مشخص‌شدن) یا <code dir="ltr">metadata.name</code>،
-همراه با <code dir="ltr">spec.subdomain</code>، نام <code dir="ltr">namespace</code> و پسوند دامنه کلاستر تشکیل می‌شود.</p>
+<p dir="rtl">هنگامی که یک Pod برای داشتن نام دامنهٔ کاملاً مشخص پیکربندی شده باشد، نام میزبان آن همان نام میزبان کوتاه است. برای مثال، اگر Podای با نام دامنهٔ کاملاً مشخص <code dir="ltr">busybox-1.busybox-subdomain.my-namespace.svc.cluster-domain.example</code> داشته باشید، به‌طور پیش‌فرض دستور <code dir="ltr">hostname</code> در درون آن Pod مقدار <code dir="ltr">busybox-1</code> را برمی‌گرداند و دستور <code dir="ltr">hostname --fqdn</code> نام دامنهٔ کاملاً مشخص را برمی‌گرداند.</p>
+<p dir="rtl">هنگامی که در مشخصات Pod هم <code dir="ltr">setHostnameAsFQDN: true</code> و هم فیلد subdomain تنظیم شده باشد، kubelet نام دامنهٔ کاملاً مشخص Pod را به‌عنوان نام میزبان در فضای نام آن Pod می‌نویسد. در این حالت، هر دو دستور <code dir="ltr">hostname</code> و <code dir="ltr">hostname --fqdn</code> نام دامنهٔ کاملاً مشخص Pod را برمی‌گردانند.</p>
+<p dir="rtl">نام دامنهٔ کاملاً مشخص Pod به همان روشی ساخته می‌شود که پیش‌تر توضیح داده شد. این نام از فیلد <code dir="ltr">spec.hostname</code> Pod (در صورت تعیین) یا فیلد <code dir="ltr">metadata.name</code>، فیلد <code dir="ltr">spec.subdomain</code>، نام <code dir="ltr">namespace</code> و پسوند دامنهٔ کلاستر تشکیل می‌شود.</p>
 <div class="callout note"><div class="callout-title">توجه:</div>
-<p dir="rtl">در لینوکس، فیلد نام میزبان در هسته (فیلد <code dir="ltr">nodename</code> در <code dir="ltr">struct utsname</code>) به ۶۴ کاراکتر محدود است.</p>
-<p dir="rtl">اگر Pod ای این قابلیت را فعال کند و طول FQDN آن بیشتر از ۶۴ کاراکتر باشد، شروع به کار نخواهد کرد.
-این Pod در وضعیت <code dir="ltr">Pending</code> باقی می‌ماند (که در <code dir="ltr">kubectl</code> به‌صورت <code dir="ltr">ContainerCreating</code> دیده می‌شود)
-و رویدادهای خطایی تولید می‌کند، مانند "Failed to construct FQDN from Pod hostname and cluster domain".</p>
-<p dir="rtl">این بدان معناست که هنگام استفاده از این فیلد،
-باید اطمینان حاصل کنید که مجموع طول فیلدهای <code dir="ltr">metadata.name</code> (یا <code dir="ltr">spec.hostname</code>)
-و <code dir="ltr">spec.subdomain</code> در Pod به یک FQDN منجر شود که از ۶۴ کاراکتر بیشتر نباشد.</p>
+<p dir="rtl">در لینوکس، فیلد نام میزبان در هسته (فیلد <code dir="ltr">nodename</code> در <code dir="ltr">struct utsname</code>) به ۶۴ نویسه محدود است.</p>
+<p dir="rtl">اگر یک Pod این قابلیت را فعال کند و طول نام دامنهٔ کاملاً مشخص آن بیش از ۶۴ نویسه باشد، راه‌اندازی آن با شکست مواجه می‌شود. در این حالت، Pod در وضعیت <code dir="ltr">Pending</code> باقی می‌ماند (و <code dir="ltr">kubectl</code> آن را در وضعیت <code dir="ltr">ContainerCreating</code> نشان می‌دهد) و رویدادهای خطایی مانند "Failed to construct FQDN from Pod hostname and cluster domain" تولید می‌کند.</p>
+<p dir="rtl">بنابراین هنگام استفاده از این فیلد، باید مطمئن شوید که مجموع طول فیلدهای <code dir="ltr">metadata.name</code> (یا <code dir="ltr">spec.hostname</code>) و <code dir="ltr">spec.subdomain</code> در Pod، نام دامنهٔ کاملاً مشخصی با طول بیش از ۶۴ نویسه ایجاد نکند.</p>
 </div>
 <h2 id="نام-میزبان-با-فیلد-hostnameoverride-در-pod" dir="rtl">نام میزبان با فیلد hostnameOverride در Pod</h2>
 <div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
-<p dir="rtl">تنظیم مقدار برای <code dir="ltr">hostnameOverride</code> در مشخصات Pod باعث می‌شود kubelet
-هم نام میزبان و هم نام دامنه کاملاً معتبر (FQDN) مربوط به Pod را
-بدون هیچ قید و شرطی روی مقدار <code dir="ltr">hostnameOverride</code> تنظیم کند.</p>
-<p dir="rtl">فیلد <code dir="ltr">hostnameOverride</code> محدودیت طول ۶۴ کاراکتر دارد
-و باید از استاندارد نام‌های زیردامنه DNS که در <a href="https://datatracker.ietf.org/doc/html/rfc1123" target="_blank" rel="noopener">RFC 1123</a> تعریف شده است پیروی کند.</p>
+<p dir="rtl">اگر در مشخصات Pod مقداری برای <code dir="ltr">hostnameOverride</code> تعیین کنید، kubelet بدون هیچ شرطی هم نام میزبان و هم نام دامنهٔ کاملاً مشخص Pod را برابر با مقدار <code dir="ltr">hostnameOverride</code> تنظیم می‌کند.</p>
+<p dir="rtl">طول فیلد <code dir="ltr">hostnameOverride</code> به ۶۴ نویسه محدود است و مقدار آن باید با استاندارد نام‌های زیردامنهٔ DNS که در <a href="https://datatracker.ietf.org/doc/html/rfc1123" target="_blank" rel="noopener">RFC 1123</a> تعریف شده است مطابقت داشته باشد.</p>
 <p dir="rtl">مثال:</p>
 <pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: v1
 kind: Pod
@@ -161,7 +133,7 @@ spec:
     name: busybox
 </code></pre>
 <div class="callout note"><div class="callout-title">توجه:</div>
-<p dir="rtl">این تنظیم فقط بر نام میزبان درون Pod تأثیر می‌گذارد؛ بر رکوردهای A یا AAAA مربوط به Pod در سرور DNS کلاستر تأثیری ندارد.</p>
+<p dir="rtl">این تنظیم فقط بر نام میزبان درون Pod اثر می‌گذارد و بر رکوردهای A یا AAAA مربوط به Pod در سرور DNS کلاستر تأثیری ندارد.</p>
 </div>
 <p dir="rtl">اگر <code dir="ltr">hostnameOverride</code> همراه با فیلدهای <code dir="ltr">hostname</code> و <code dir="ltr">subdomain</code> تنظیم شود:</p>
 <ul>
@@ -169,14 +141,11 @@ spec:
 <p dir="rtl">نام میزبان درون Pod با مقدار <code dir="ltr">hostnameOverride</code> جایگزین می‌شود.</p>
 </li>
 <li dir="rtl">
-<p dir="rtl">رکوردهای A و/یا AAAA مربوط به Pod در سرور DNS کلاستر همچنان بر اساس فیلدهای <code dir="ltr">hostname</code> و <code dir="ltr">subdomain</code> تولید می‌شوند.</p>
+<p dir="rtl">رکوردهای A و/یا AAAA مربوط به Pod در سرور DNS کلاستر همچنان بر اساس فیلدهای <code dir="ltr">hostname</code> و <code dir="ltr">subdomain</code> ایجاد می‌شوند.</p>
 </li>
 </ul>
-<p dir="rtl">توجه: اگر <code dir="ltr">hostnameOverride</code> تنظیم شده باشد، نمی‌توانید هم‌زمان فیلدهای <code dir="ltr">hostNetwork</code> و <code dir="ltr">setHostnameAsFQDN</code> را تنظیم کنید.
-API server هر درخواست ایجادی را که چنین ترکیبی داشته باشد صراحتاً رد می‌کند.</p>
-<p dir="rtl">برای جزئیات مربوط به رفتار هنگامی که <code dir="ltr">hostnameOverride</code> همراه با
-سایر فیلدها (hostname، subdomain، setHostnameAsFQDN، hostNetwork) تنظیم می‌شود،
-جدول موجود در <a href="https://github.com/kubernetes/enhancements/blob/master/keps/sig-network/4762-allow-arbitrary-fqdn-as-pod-hostname/README.md#design-details" target="_blank" rel="noopener">جزئیات طراحی KEP-4762</a> را ببینید.</p>
+<p dir="rtl">نکته: اگر <code dir="ltr">hostnameOverride</code> تنظیم شده باشد، نمی‌توانید هم‌زمان فیلدهای <code dir="ltr">hostNetwork</code> و <code dir="ltr">setHostnameAsFQDN</code> را تنظیم کنید. سرور API هر درخواست ایجادی را که چنین ترکیبی داشته باشد، صراحتاً رد می‌کند.</p>
+<p dir="rtl">برای آشنایی با جزئیات رفتار سیستم هنگامی که <code dir="ltr">hostnameOverride</code> همراه با فیلدهای دیگر (hostname، subdomain، setHostnameAsFQDN، hostNetwork) تنظیم می‌شود، جدول موجود در <a href="https://github.com/kubernetes/enhancements/blob/master/keps/sig-network/4762-allow-arbitrary-fqdn-as-pod-hostname/README.md#design-details" target="_blank" rel="noopener">جزئیات طراحی KEP-4762</a> را ببینید.</p>
 <p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
 <nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#نام-میزبان-پیش-فرض-pod">نام میزبان پیش‌فرض Pod</a><a class="l2" href="#نام-میزبان-با-فیلدهای-hostname-و-subdomain-در-pod">نام میزبان با فیلدهای hostname و subdomain در Pod</a><a class="l2" href="#نام-میزبان-با-فیلد-sethostnameasfqdn-در-pod">نام میزبان با فیلد setHostnameAsFQDN در Pod</a><a class="l2" href="#نام-میزبان-با-فیلد-hostnameoverride-در-pod">نام میزبان با فیلد hostnameOverride در Pod</a></nav>
 </div>
