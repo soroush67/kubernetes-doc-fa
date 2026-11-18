@@ -82,35 +82,46 @@ document.addEventListener('DOMContentLoaded',function(){box=document.getElementB
 <a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
 <header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">concepts / services-networking</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
 <div class="layout">
-<main><h1 dir="rtl">مسیریابی آگاه از توپولوژی</h1><p class="page-meta" dir="rtl">_مسیریابی آگاه از توپولوژی (Topology Aware Routing)_ سازوکاری فراهم می‌کند که به حفظ ترافیک شبکه در همان زون مبدأ کمک می‌کند. ترجیح دادن ترافیک درون یک زون میان Podهای کلاستر شما می‌تواند به بهبود قابلیت اطمینان، کارایی (تأخیر و توان عملیاتی شبکه) یا کاهش هزینه کمک کند.</p><!-- overview -->
-<p dir="rtl"><em>مسیریابی آگاه از توپولوژی (Topology Aware Routing)</em> رفتار مسیریابی را طوری تنظیم می‌کند که ترجیح دهد ترافیک در همان زونی که از آن سرچشمه گرفته است باقی بماند. در برخی موارد، این کار می‌تواند به کاهش هزینه‌ها یا بهبود کارایی شبکه کمک کند.</p>
+<main><h1 dir="rtl">مسیریابی آگاه از توپولوژی</h1><p class="page-meta" dir="rtl">_مسیریابی آگاه از توپولوژی_ سازوکاری فراهم می‌کند که به نگه‌داشتن ترافیک شبکه درون همان ناحیه‌ای که از آن آغاز شده است کمک می‌کند. ترجیح‌دادن ترافیک درون‌ناحیه‌ای میان Podهای کلاستر می‌تواند به بهبود قابلیت اطمینان، کارایی (تأخیر و توان عملیاتی شبکه) یا کاهش هزینه کمک کند.</p><!-- overview -->
+<p dir="rtl"><em>مسیریابی آگاه از توپولوژی</em> (Topology Aware Routing) رفتار مسیریابی را طوری تنظیم می‌کند که
+ترافیک ترجیحاً در همان ناحیه‌ای که از آن آغاز شده است باقی بماند. این کار در برخی موارد
+می‌تواند به کاهش هزینه‌ها یا بهبود کارایی شبکه کمک کند.</p>
 <!-- body -->
-<h2 id="انگیزه-motivation" dir="rtl">انگیزه {#motivation}</h2>
-<p dir="rtl">کلاسترهای کوبرنتیز به‌طور فزاینده‌ای در محیط‌های چندزونی مستقر می‌شوند.
-<em>مسیریابی آگاه از توپولوژی</em> سازوکاری فراهم می‌کند که به حفظ ترافیک در
-زونی که از آن سرچشمه گرفته است کمک می‌کند. هنگام محاسبهٔ endpointهای یک <span class="term" title="Service">Service</span>، کنترل‌کنندهٔ EndpointSlice توپولوژی (ناحیه و زون) هر endpoint را در نظر می‌گیرد و فیلد hints را برای تخصیص آن به یک زون پر می‌کند. اجزای کلاستر مانند <span class="term" title="kube-proxy">kube-proxy</span> سپس می‌توانند این hintها را مصرف کنند و از آن‌ها برای تأثیرگذاری بر نحوهٔ مسیریابی ترافیک استفاده کنند (با ترجیح endpointهایی که از نظر توپولوژیک نزدیک‌ترند).</p>
-<h2 id="فعال-سازی-مسیریابی-آگاه-از-توپولوژی-enabling-topology-aware-routing" dir="rtl">فعال‌سازی مسیریابی آگاه از توپولوژی {#enabling-topology-aware-routing}</h2>
-<p dir="rtl">می‌توانید با تنظیم حاشیه‌نویسی (annotation) با نام <code dir="ltr">service.kubernetes.io/topology-mode</code> روی مقدار <code dir="ltr">Auto</code>، مسیریابی آگاه از توپولوژی را برای یک Service فعال کنید. هنگامی که endpointهای کافی در هر زون در دسترس باشد، Topology Hints روی EndpointSliceها پر می‌شوند تا endpointهای منفرد را به زون‌های مشخصی تخصیص دهند؛ در نتیجه ترافیک به مبدأ خود نزدیک‌تر مسیریابی می‌شود.</p>
-<h2 id="بهترین-شرایط-عملکرد-when-it-works-best" dir="rtl">بهترین شرایط عملکرد {#when-it-works-best}</h2>
+<h2 id="انگیزه" dir="rtl">انگیزه</h2>
+<p dir="rtl">کلاسترهای کوبرنتیز روزبه‌روز بیشتر در محیط‌های چندناحیه‌ای مستقر می‌شوند.
+<em>مسیریابی آگاه از توپولوژی</em> سازوکاری فراهم می‌کند که به نگه‌داشتن ترافیک درون ناحیه‌ای که از آن
+آغاز شده است کمک می‌کند. کنترل‌کننده EndpointSlice هنگام محاسبه endpointهای یک <span class="term" title="Service">Service</span>، توپولوژی (منطقه و ناحیه) هر endpoint را در نظر
+می‌گیرد و فیلد hints را پر می‌کند تا آن endpoint را به یک ناحیه تخصیص دهد. سپس اجزای کلاستر، مانند
+<span class="term" title="kube-proxy">kube-proxy</span>، می‌توانند این hintها را
+دریافت کنند و از آن‌ها برای اثرگذاری بر نحوه مسیریابی ترافیک (با ترجیح endpointهایی که از نظر
+توپولوژی نزدیک‌ترند) استفاده کنند.</p>
+<h2 id="فعال-سازی-مسیریابی-آگاه-از-توپولوژی" dir="rtl">فعال‌سازی مسیریابی آگاه از توپولوژی</h2>
+<p dir="rtl">برای فعال‌سازی مسیریابی آگاه از توپولوژی برای یک Service، حاشیه‌نویسی (annotation)
+<code dir="ltr">service.kubernetes.io/topology-mode</code> را روی <code dir="ltr">Auto</code> تنظیم کنید. هنگامی که در هر ناحیه
+endpointهای کافی در دسترس باشد، راهنماهای توپولوژی (Topology Hints) روی EndpointSliceها پر
+می‌شوند تا هر endpoint به ناحیه‌ای مشخص تخصیص یابد. در نتیجه، ترافیک به مقصدی نزدیک‌تر به محل
+آغاز خود مسیریابی می‌شود.</p>
+<h2 id="بهترین-شرایط-کارکرد" dir="rtl">بهترین شرایط کارکرد</h2>
 <p dir="rtl">این قابلیت در شرایط زیر بهترین عملکرد را دارد:</p>
-<h3 id="۱-ترافیک-ورودی-به-طور-یکنواخت-توزیع-شده-باشد-1-incoming-traffic-is-evenly-distributed" dir="rtl">۱. ترافیک ورودی به‌طور یکنواخت توزیع شده باشد {#1-incoming-traffic-is-evenly-distributed}</h3>
-<p dir="rtl">اگر بخش بزرگی از ترافیک از یک زون واحد سرچشمه بگیرد، آن ترافیک
-می‌تواند زیرمجموعهٔ endpointهایی را که به آن زون تخصیص یافته‌اند دچار بار بیش‌ازحد کند.
-هنگامی که انتظار می‌رود ترافیک ورودی از یک زون واحد سرچشمه بگیرد، استفاده از این قابلیت توصیه نمی‌شود.</p>
-<h3 id="۲-service-در-هر-زون-۳-endpoint-یا-بیشتر-داشته-باشد-three-or-more-endpoints-per-zone" dir="rtl">۲. Service در هر زون ۳ endpoint یا بیشتر داشته باشد {#three-or-more-endpoints-per-zone}</h3>
-<p dir="rtl">در یک کلاستر سه‌زونی، این به معنای ۹ endpoint یا بیشتر است. اگر در هر زون کمتر از
-۳ endpoint وجود داشته باشد، احتمال زیادی (حدود ۵۰٪) وجود دارد که کنترل‌کنندهٔ EndpointSlice
-نتواند endpointها را به‌طور یکنواخت تخصیص دهد و در عوض به رویکرد پیش‌فرض مسیریابی در سطح کل کلاستر بازگردد.</p>
-<h2 id="نحوهٔ-عملکرد-how-it-works" dir="rtl">نحوهٔ عملکرد {#how-it-works}</h2>
-<p dir="rtl">روش ابتکاری (heuristic) «Auto» تلاش می‌کند تعدادی از endpointها را به‌طور متناسب به هر زون تخصیص دهد. توجه کنید که این روش برای Serviceهایی که تعداد قابل‌توجهی endpoint دارند بهترین عملکرد را دارد.</p>
-<h3 id="کنترل-کنندهٔ-endpointslice-implementation-control-plane" dir="rtl">کنترل‌کنندهٔ EndpointSlice {#implementation-control-plane}</h3>
-<p dir="rtl">کنترل‌کنندهٔ EndpointSlice مسئول تنظیم hintها روی EndpointSliceها است،
-زمانی که این روش ابتکاری فعال باشد. کنترل‌کننده مقدار متناسبی از
-endpointها را به هر زون تخصیص می‌دهد. این تناسب بر پایهٔ هسته‌های CPU
-<a href="../../tasks/administer-cluster/reserve-compute-resources.html#node-allocatable">قابل‌تخصیص (allocatable)</a>
-نودهای در حال اجرا در آن زون است. برای مثال، اگر یک زون ۲ هستهٔ CPU و زون دیگر فقط ۱ هستهٔ CPU داشته باشد، کنترل‌کننده
-دو برابر تعداد endpointها را به زونی که ۲ هستهٔ CPU دارد تخصیص می‌دهد.</p>
-<p dir="rtl">مثال زیر نشان می‌دهد یک EndpointSlice هنگامی که hintها پر شده‌اند چگونه به نظر می‌رسد:</p>
+<h3 id="۱-ترافیک-ورودی-به-طور-یکنواخت-توزیع-شده-باشد" dir="rtl">۱. ترافیک ورودی به‌طور یکنواخت توزیع شده باشد</h3>
+<p dir="rtl">اگر بخش بزرگی از ترافیک از یک ناحیه واحد آغاز شود، این ترافیک ممکن است زیرمجموعه endpointهایی را
+که به آن ناحیه تخصیص یافته‌اند بیش از حد بارگذاری کند. اگر انتظار می‌رود ترافیک ورودی از یک ناحیه
+واحد آغاز شود، استفاده از این قابلیت توصیه نمی‌شود.</p>
+<h3 id="۲-این-service-در-هر-ناحیه-۳-endpoint-یا-بیشتر-داشته-باشد-three-or-more-endpoints-per-zone" dir="rtl">۲. این Service در هر ناحیه ۳ endpoint یا بیشتر داشته باشد {#three-or-more-endpoints-per-zone}</h3>
+<p dir="rtl">در یک کلاستر سه‌ناحیه‌ای، این یعنی ۹ endpoint یا بیشتر. اگر در هر ناحیه کمتر از ۳ endpoint
+وجود داشته باشد، احتمال زیادی (حدود ۵۰٪) هست که کنترل‌کننده EndpointSlice نتواند endpointها را
+به‌طور یکنواخت تخصیص دهد و در عوض به رویکرد پیش‌فرض مسیریابی در سطح کل کلاستر بازگردد.</p>
+<h2 id="نحوه-کارکرد" dir="rtl">نحوه کارکرد</h2>
+<p dir="rtl">روش اکتشافی (heuristic) «Auto» تلاش می‌کند تعدادی endpoint را به‌طور متناسب به هر ناحیه تخصیص
+دهد. توجه کنید که این روش اکتشافی برای Serviceهایی که تعداد قابل‌توجهی endpoint دارند بهترین
+عملکرد را دارد.</p>
+<h3 id="کنترل-کننده-endpointslice-implementation-control-plane" dir="rtl">کنترل‌کننده EndpointSlice {#implementation-control-plane}</h3>
+<p dir="rtl">وقتی این روش اکتشافی فعال باشد، کنترل‌کننده EndpointSlice مسئول تنظیم hintها روی
+EndpointSliceهاست. این کنترل‌کننده سهم متناسبی از endpointها را به هر ناحیه تخصیص می‌دهد. این
+تناسب بر اساس تعداد هسته‌های CPU <a href="../../tasks/administer-cluster/reserve-compute-resources.html#node-allocatable">قابل تخصیص</a>
+نودهایی است که در آن ناحیه اجرا می‌شوند. برای مثال، اگر یک ناحیه ۲ هسته CPU و ناحیه دیگر تنها ۱
+هسته CPU داشته باشد، کنترل‌کننده دو برابر endpoint به ناحیه دارای ۲ هسته CPU تخصیص می‌دهد.</p>
+<p dir="rtl">مثال زیر نشان می‌دهد که یک EndpointSlice پس از پرشدن hintها چه شکلی دارد:</p>
 <pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: discovery.k8s.io/v1
 kind: EndpointSlice
 metadata:
@@ -134,85 +145,93 @@ endpoints:
         - name: "zone-a"
 </code></pre>
 <h3 id="kube-proxy-implementation-kube-proxy" dir="ltr" class="ltr">kube-proxy {#implementation-kube-proxy}</h3>
-<p dir="rtl">مؤلفهٔ kube-proxy endpointهایی را که به آن‌ها مسیریابی می‌کند بر اساس hintهای تنظیم‌شده توسط
-کنترل‌کنندهٔ EndpointSlice فیلتر می‌کند. در بیشتر موارد، این به آن معناست که kube-proxy می‌تواند
-ترافیک را به endpointهای همان زون مسیریابی کند. گاهی کنترل‌کننده endpointهایی را
-از زونی دیگر تخصیص می‌دهد تا توزیع یکنواخت‌تری از endpointها میان زون‌ها تضمین شود.
-این امر باعث می‌شود بخشی از ترافیک به زون‌های دیگر مسیریابی شود.</p>
-<h2 id="تدابیر-محافظتی-safeguards" dir="rtl">تدابیر محافظتی {#safeguards}</h2>
-<p dir="rtl">control plane کوبرنتیز و kube-proxy روی هر نود پیش از استفاده از Topology Aware Hints برخی
-قوانین محافظتی را اعمال می‌کنند. اگر این قوانین برقرار نباشند،
-kube-proxy بدون توجه به زون، endpointها را از هر جای کلاستر شما انتخاب می‌کند.</p>
+<p dir="rtl">مؤلفه kube-proxy، endpointهایی را که ترافیک را به آن‌ها مسیریابی می‌کند، بر اساس hintهایی که
+کنترل‌کننده EndpointSlice تنظیم کرده است فیلتر می‌کند. در بیشتر موارد، این یعنی kube-proxy
+می‌تواند ترافیک را به endpointهای همان ناحیه مسیریابی کند. گاهی کنترل‌کننده endpointهایی از ناحیه‌ای
+دیگر را تخصیص می‌دهد تا توزیع endpointها میان ناحیه‌ها یکنواخت‌تر شود. در این حالت، بخشی از
+ترافیک به ناحیه‌های دیگر مسیریابی می‌شود.</p>
+<h2 id="سازوکارهای-حفاظتی" dir="rtl">سازوکارهای حفاظتی</h2>
+<p dir="rtl">control plane کوبرنتیز و kube-proxy روی هر نود، پیش از استفاده از راهنماهای آگاه از توپولوژی
+(Topology Aware Hints)، چند قاعده حفاظتی را اعمال می‌کنند. اگر این قواعد برقرار نباشند،
+kube-proxy بدون توجه به ناحیه، endpointها را از هر جای کلاستر انتخاب می‌کند.</p>
 <ol>
 <li dir="rtl">
-<p dir="rtl"><strong>تعداد ناکافی endpoint:</strong> اگر تعداد endpointها در یک کلاستر
-کمتر از تعداد زون‌ها باشد، کنترل‌کننده هیچ hintی تخصیص نمی‌دهد.</p>
+<p dir="rtl"><strong>تعداد ناکافی endpoint:</strong> اگر تعداد endpointها از تعداد ناحیه‌های کلاستر کمتر باشد،
+کنترل‌کننده هیچ hintی تخصیص نمی‌دهد.</p>
 </li>
 <li dir="rtl">
-<p dir="rtl"><strong>عدم امکان دستیابی به تخصیص متوازن:</strong> در برخی موارد، دستیابی به
-تخصیص متوازن endpointها میان زون‌ها ممکن نخواهد بود. برای
-مثال، اگر zone-a دو برابر zone-b بزرگ‌تر باشد اما فقط ۲
-endpoint وجود داشته باشد، endpointی که به zone-a تخصیص یافته ممکن است دو برابر
-zone-b ترافیک دریافت کند. اگر کنترل‌کننده نتواند این مقدار «بار بیش‌ازحد مورد انتظار» را برای هر زون زیر یک آستانهٔ قابل‌قبول نگه دارد، hint تخصیص نمی‌دهد. نکتهٔ مهم این است که این
-بر پایهٔ بازخورد بی‌درنگ نیست. همچنان ممکن است endpointهای منفرد
-دچار بار بیش‌ازحد شوند.</p>
+<p dir="rtl"><strong>ناممکن‌بودن دستیابی به تخصیص متوازن:</strong> در برخی موارد، دستیابی به تخصیص متوازن endpointها
+میان ناحیه‌ها ناممکن است. برای مثال، اگر zone-a دو برابر zone-b بزرگ باشد اما تنها ۲
+endpoint وجود داشته باشد، endpointی که به zone-a تخصیص یافته است ممکن است دو برابر zone-b
+ترافیک دریافت کند. اگر کنترل‌کننده نتواند مقدار این «بار اضافی مورد انتظار» را برای هر ناحیه
+به کمتر از یک آستانه قابل‌قبول برساند، hintی تخصیص نمی‌دهد. نکته مهم این است که این محاسبه بر
+پایه بازخورد بلادرنگ نیست؛ بنابراین همچنان ممکن است endpointهای منفرد دچار بار اضافی شوند.</p>
 </li>
 <li dir="rtl">
-<p dir="rtl"><strong>اطلاعات ناکافی در یک یا چند نود:</strong> اگر هر نودی برچسب
-<code dir="ltr">topology.kubernetes.io/zone</code> را نداشته باشد یا مقداری برای
-CPU قابل‌تخصیص گزارش نکند، control plane هیچ hint endpoint آگاه از توپولوژی تنظیم نمی‌کند و بنابراین kube-proxy endpointها را بر اساس زون فیلتر نمی‌کند.</p>
+<p dir="rtl"><strong>اطلاعات ناکافی یک یا چند نود:</strong> اگر هر یک از نودها برچسب <code dir="ltr">topology.kubernetes.io/zone</code>
+نداشته باشد یا مقداری برای CPU قابل تخصیص گزارش نکند، control plane هیچ hint آگاه از
+توپولوژی برای endpointها تنظیم نمی‌کند و در نتیجه kube-proxy endpointها را بر اساس ناحیه
+فیلتر نمی‌کند.</p>
 </li>
 <li dir="rtl">
-<p dir="rtl"><strong>نبود hint زون در یک یا چند endpoint:</strong> در این حالت،
-kube-proxy فرض می‌کند که گذار از Topology Aware Hints یا به آن در حال انجام است.
-فیلتر کردن endpointهای یک Service در این وضعیت خطرناک خواهد بود،
-بنابراین kube-proxy به استفاده از همهٔ endpointها بازمی‌گردد.</p>
+<p dir="rtl"><strong>نداشتن hint ناحیه در یک یا چند endpoint:</strong> در این حالت، kube-proxy فرض می‌کند که گذار
+به راهنماهای آگاه از توپولوژی یا گذار از آن‌ها در جریان است. فیلترکردن endpointهای یک Service
+در این وضعیت خطرناک است، بنابراین kube-proxy به استفاده از همه endpointها بازمی‌گردد.</p>
 </li>
 <li dir="rtl">
-<p dir="rtl"><strong>نبود نمایندهٔ یک زون در hintها:</strong> اگر kube-proxy نتواند دست‌کم یک endpoint با hint هدف‌گیری‌کنندهٔ زونی که در آن اجرا می‌شود بیابد، به استفاده از endpointهای همهٔ زون‌ها بازمی‌گردد. این وضعیت بیشتر زمانی رخ می‌دهد که یک زون جدید را به کلاستر موجود خود اضافه می‌کنید.</p>
+<p dir="rtl"><strong>نبود یک ناحیه در hintها:</strong> اگر kube-proxy نتواند دست‌کم یک endpoint با hintی پیدا کند که
+ناحیه محل اجرای خودش را هدف گرفته باشد، به استفاده از endpointهای همه ناحیه‌ها بازمی‌گردد.
+این وضعیت به احتمال زیاد هنگام افزودن ناحیه‌ای جدید به کلاستر موجود رخ می‌دهد.</p>
 </li>
 </ol>
-<h2 id="محدودیت-ها-constraints" dir="rtl">محدودیت‌ها {#constraints}</h2>
+<h2 id="محدودیت-ها" dir="rtl">محدودیت‌ها</h2>
 <ul>
 <li dir="rtl">
-<p dir="rtl">هنگامی که <code dir="ltr">internalTrafficPolicy</code> روی یک Service برابر <code dir="ltr">Local</code> تنظیم شده باشد، Topology Aware Hints استفاده نمی‌شوند. می‌توان از هر دو قابلیت در یک کلاستر روی Serviceهای متفاوت استفاده کرد، اما نه روی یک Service واحد.</p>
+<p dir="rtl">وقتی <code dir="ltr">internalTrafficPolicy</code> روی یک Service برابر <code dir="ltr">Local</code> تنظیم شده باشد، از راهنماهای آگاه
+از توپولوژی استفاده نمی‌شود. می‌توان هر دو قابلیت را در یک کلاستر و روی Serviceهای مختلف به کار
+برد، اما نه روی یک Service واحد.</p>
 </li>
 <li dir="rtl">
-<p dir="rtl">این رویکرد برای Serviceهایی که بخش بزرگی از ترافیک آن‌ها از زیرمجموعه‌ای از زون‌ها سرچشمه می‌گیرد، عملکرد خوبی نخواهد داشت. در عوض فرض می‌کند که ترافیک ورودی تقریباً متناسب با ظرفیت نودهای هر زون خواهد بود.</p>
+<p dir="rtl">این رویکرد برای Serviceهایی که بخش بزرگی از ترافیکشان از زیرمجموعه‌ای از ناحیه‌ها آغاز می‌شود
+به‌خوبی کار نمی‌کند. این رویکرد فرض می‌کند که ترافیک ورودی تقریباً متناسب با ظرفیت نودهای هر
+ناحیه است.</p>
 </li>
 <li dir="rtl">
-<p dir="rtl">کنترل‌کنندهٔ EndpointSlice هنگام محاسبهٔ نسبت هر زون، نودهای ناآماده را نادیده می‌گیرد. اگر بخش بزرگی از نودها ناآماده باشند، این امر می‌تواند پیامدهای ناخواسته‌ای داشته باشد.</p>
+<p dir="rtl">کنترل‌کننده EndpointSlice هنگام محاسبه سهم هر ناحیه، نودهای آماده‌نشده را نادیده می‌گیرد.
+اگر بخش بزرگی از نودها آماده نباشند، این موضوع می‌تواند پیامدهای ناخواسته‌ای داشته باشد.</p>
 </li>
 <li dir="rtl">
-<p dir="rtl">کنترل‌کنندهٔ EndpointSlice نودهایی را که برچسب
-<code dir="ltr">node-role.kubernetes.io/control-plane</code> یا <code dir="ltr">node-role.kubernetes.io/master</code>
-روی آن‌ها تنظیم شده است نادیده می‌گیرد. اگر بارهای کاری نیز روی آن نودها اجرا شوند، این موضوع می‌تواند مشکل‌ساز باشد.</p>
+<p dir="rtl">کنترل‌کننده EndpointSlice نودهایی را که برچسب <code dir="ltr">node-role.kubernetes.io/control-plane</code> یا
+<code dir="ltr">node-role.kubernetes.io/master</code> روی آن‌ها تنظیم شده است نادیده می‌گیرد. اگر بارهای کاری نیز
+روی این نودها اجرا شوند، این موضوع ممکن است مشکل‌ساز شود.</p>
 </li>
 <li dir="rtl">
-<p dir="rtl">کنترل‌کنندهٔ EndpointSlice هنگام استقرار یا محاسبهٔ نسبت هر زون، <span class="term" title="toleration">تلرانس‌ها (tolerations)</span> را در نظر نمی‌گیرد. اگر Podهای پشتیبان یک Service به زیرمجموعه‌ای از نودهای کلاستر محدود شده باشند، این موضوع در نظر گرفته نخواهد شد.</p>
+<p dir="rtl">کنترل‌کننده EndpointSlice هنگام استقرار یا محاسبه سهم هر ناحیه، <span class="term" title="toleration">تحمل‌پذیری‌ها</span> را در نظر نمی‌گیرد. اگر Podهای پشتیبان یک
+Service به زیرمجموعه‌ای از نودهای کلاستر محدود باشند، این محدودیت در محاسبه لحاظ نمی‌شود.</p>
 </li>
 <li dir="rtl">
-<p dir="rtl">ممکن است این قابلیت با مقیاس‌گذاری خودکار به‌خوبی کار نکند. برای مثال، اگر حجم زیادی از ترافیک از یک زون واحد سرچشمه بگیرد، فقط endpointهای تخصیص‌یافته به آن زون این ترافیک را مدیریت خواهند کرد. این امر می‌تواند باعث شود <span class="term" title="horizontal-pod-autoscaler">Horizontal Pod Autoscaler</span>
-این رویداد را تشخیص ندهد، یا Podهای تازه‌اضافه‌شده در زونی متفاوت شروع به کار کنند.</p>
+<p dir="rtl">این قابلیت ممکن است با مقیاس‌دهی خودکار به‌خوبی کار نکند. برای مثال، اگر حجم زیادی از ترافیک از
+یک ناحیه واحد آغاز شود، تنها endpointهایی که به آن ناحیه تخصیص یافته‌اند این ترافیک را رسیدگی
+می‌کنند. در نتیجه ممکن است <span class="term" title="horizontal-pod-autoscaler">مقیاس‌دهنده خودکار افقی Pod</span> یا متوجه این رویداد نشود، یا Podهای تازه‌افزوده‌شده
+در ناحیه‌ای دیگر راه‌اندازی شوند.</p>
 </li>
 </ul>
-<h2 id="روش-های-ابتکاری-سفارشی-custom-heuristics" dir="rtl">روش‌های ابتکاری سفارشی {#custom-heuristics}</h2>
-<p dir="rtl">کوبرنتیز به روش‌های بسیار متفاوتی مستقر می‌شود و هیچ روش ابتکاری واحدی برای
-تخصیص endpointها به زون‌ها وجود ندارد که برای همهٔ موارد استفاده کارآمد باشد. یکی از اهداف کلیدی این
-قابلیت آن است که در صورتی که روش ابتکاری داخلی برای مورد استفادهٔ شما مناسب نیست، امکان توسعهٔ روش‌های ابتکاری سفارشی فراهم شود. نخستین گام‌ها برای فعال‌سازی روش‌های ابتکاری سفارشی
-در نسخهٔ ۱.۲۷ گنجانده شد. این یک پیاده‌سازی محدود است که ممکن است
-هنوز برخی موقعیت‌های مرتبط و محتمل را پوشش ندهد.</p>
+<h2 id="روش-های-اکتشافی-سفارشی" dir="rtl">روش‌های اکتشافی سفارشی</h2>
+<p dir="rtl">کوبرنتیز به شیوه‌های بسیار متفاوتی مستقر می‌شود و هیچ روش اکتشافی واحدی برای تخصیص endpointها
+به ناحیه‌ها وجود ندارد که برای همه موارد استفاده مناسب باشد. یکی از اهداف کلیدی این قابلیت این است
+که اگر روش اکتشافی داخلی برای مورد استفاده شما مناسب نباشد، بتوان روش‌های اکتشافی سفارشی توسعه داد.
+نخستین گام‌ها برای امکان‌پذیرکردن روش‌های اکتشافی سفارشی در نسخه 1.27 گنجانده شد. این پیاده‌سازی
+محدودی است که ممکن است هنوز برخی موقعیت‌های مرتبط و محتمل را پوشش ندهد.</p>
 <h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
 <ul>
-<li dir="rtl">آموزش <a href="../../tutorials/services/connect-applications-service.html">اتصال برنامه‌ها به Serviceها</a> را دنبال کنید</li>
-<li dir="rtl">دربارهٔ فیلد
+<li dir="rtl">آموزش <a href="../../tutorials/services/connect-applications-service.html">اتصال برنامه‌ها با Serviceها</a> را دنبال کنید.</li>
+<li dir="rtl">با فیلد
 <a href="service.html#traffic-distribution">trafficDistribution</a>
-بیاموزید؛ این فیلد ارتباط نزدیکی با حاشیه‌نویسی (annotation) با نام <code dir="ltr">service.kubernetes.io/topology-mode</code>
-دارد و گزینه‌های انعطاف‌پذیری برای مسیریابی ترافیک در
-کوبرنتیز فراهم می‌کند.</li>
+آشنا شوید که ارتباط نزدیکی با حاشیه‌نویسی <code dir="ltr">service.kubernetes.io/topology-mode</code> دارد و
+گزینه‌های انعطاف‌پذیری برای مسیریابی ترافیک در کوبرنتیز فراهم می‌کند.</li>
 </ul>
 <p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
-<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#انگیزه-motivation">انگیزه {#motivation}</a><a class="l2" href="#فعال-سازی-مسیریابی-آگاه-از-توپولوژی-enabling-topology-aware-routing">فعال‌سازی مسیریابی آگاه از توپولوژی {#enabling-topology-aware-routing}</a><a class="l2" href="#بهترین-شرایط-عملکرد-when-it-works-best">بهترین شرایط عملکرد {#when-it-works-best}</a><a class="l3" href="#۱-ترافیک-ورودی-به-طور-یکنواخت-توزیع-شده-باشد-1-incoming-traffic-is-evenly-distributed">۱. ترافیک ورودی به‌طور یکنواخت توزیع شده باشد {#1-incoming-traffic-is-evenly-distributed}</a><a class="l3" href="#۲-service-در-هر-زون-۳-endpoint-یا-بیشتر-داشته-باشد-three-or-more-endpoints-per-zone">۲. Service در هر زون ۳ endpoint یا بیشتر داشته باشد {#three-or-more-endpoints-per-zone}</a><a class="l2" href="#نحوهٔ-عملکرد-how-it-works">نحوهٔ عملکرد {#how-it-works}</a><a class="l3" href="#کنترل-کنندهٔ-endpointslice-implementation-control-plane">کنترل‌کنندهٔ EndpointSlice {#implementation-control-plane}</a><a class="l3" href="#kube-proxy-implementation-kube-proxy">kube-proxy {#implementation-kube-proxy}</a><a class="l2" href="#تدابیر-محافظتی-safeguards">تدابیر محافظتی {#safeguards}</a><a class="l2" href="#محدودیت-ها-constraints">محدودیت‌ها {#constraints}</a><a class="l2" href="#روش-های-ابتکاری-سفارشی-custom-heuristics">روش‌های ابتکاری سفارشی {#custom-heuristics}</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#انگیزه">انگیزه</a><a class="l2" href="#فعال-سازی-مسیریابی-آگاه-از-توپولوژی">فعال‌سازی مسیریابی آگاه از توپولوژی</a><a class="l2" href="#بهترین-شرایط-کارکرد">بهترین شرایط کارکرد</a><a class="l3" href="#۱-ترافیک-ورودی-به-طور-یکنواخت-توزیع-شده-باشد">۱. ترافیک ورودی به‌طور یکنواخت توزیع شده باشد</a><a class="l3" href="#۲-این-service-در-هر-ناحیه-۳-endpoint-یا-بیشتر-داشته-باشد-three-or-more-endpoints-per-zone">۲. این Service در هر ناحیه ۳ endpoint یا بیشتر داشته باشد {#three-or-more-endpoints-per-zone}</a><a class="l2" href="#نحوه-کارکرد">نحوه کارکرد</a><a class="l3" href="#کنترل-کننده-endpointslice-implementation-control-plane">کنترل‌کننده EndpointSlice {#implementation-control-plane}</a><a class="l3" href="#kube-proxy-implementation-kube-proxy">kube-proxy {#implementation-kube-proxy}</a><a class="l2" href="#سازوکارهای-حفاظتی">سازوکارهای حفاظتی</a><a class="l2" href="#محدودیت-ها">محدودیت‌ها</a><a class="l2" href="#روش-های-اکتشافی-سفارشی">روش‌های اکتشافی سفارشی</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
 </div>
 </body>
 </html>

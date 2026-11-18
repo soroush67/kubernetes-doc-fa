@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>بیرون‌رانی ناشی از فشار نود | مستندات کوبرنتیز</title>
+<title>تخلیه ناشی از فشار روی نود | مستندات کوبرنتیز</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
@@ -82,58 +82,32 @@ document.addEventListener('DOMContentLoaded',function(){box=document.getElementB
 <a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
 <header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">concepts / scheduling-eviction</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
 <div class="layout">
-<main><h1 dir="rtl">بیرون‌رانی ناشی از فشار نود</h1><p dir="rtl"><em>(تعریف واژه‌نامه: node-pressure-eviction)</em></p>
-<p dir="rtl"><span class="term" title="kubelet">kubelet</span> منابعی مانند
-حافظه، فضای دیسک و inodeهای فایل‌سیستم را روی نودهای کلاستر شما پایش می‌کند.
-هنگامی که یک یا چند مورد از این منابع به سطوح مصرف مشخصی برسند،
-kubelet می‌تواند به‌طور پیش‌دستانه یک یا چند Pod روی نود را با شکست مواجه کند تا منابع را بازپس گیرد
-و از گرسنگی (starvation) جلوگیری کند.</p>
-<p dir="rtl">در طول بیرون‌رانی ناشی از فشار نود، kubelet <a href="../workloads/pods/pod-lifecycle.html#pod-phase">فاز</a>
-Podهای انتخاب‌شده را روی <code dir="ltr">Failed</code> تنظیم می‌کند و به Pod خاتمه می‌دهد.</p>
-<p dir="rtl">بیرون‌رانی ناشی از فشار نود با
-<a href="api-eviction.html">بیرون‌رانی آغازشده از طریق API</a> یکسان نیست.</p>
-<p dir="rtl">kubelet به <span class="term" title="pod-disruption-budget">PodDisruptionBudget</span> پیکربندی‌شدهٔ شما
-یا <code dir="ltr">terminationGracePeriodSeconds</code> مربوط به Pod
-احترام نمی‌گذارد. اگر از <a href="#soft-eviction-thresholds">آستانه‌های بیرون‌رانی نرم</a> استفاده کنید،
-kubelet مقدار <code dir="ltr">eviction-max-pod-grace-period</code> پیکربندی‌شدهٔ شما را رعایت می‌کند. اگر از
-<a href="#hard-eviction-thresholds">آستانه‌های بیرون‌رانی سخت</a> استفاده کنید، kubelet برای خاتمه از مهلت مقرر <code dir="ltr">0s</code> (خاموش‌سازی فوری) استفاده می‌کند.</p>
+<main><h1 dir="rtl">تخلیه ناشی از فشار روی نود</h1><p dir="rtl"><em>(تعریف واژه‌نامه: node-pressure-eviction)</em></p>
+<p dir="rtl"><span class="term" title="kubelet">kubelet</span> منابعی مانند حافظه، فضای دیسک و inodeهای سیستم فایل را روی نودهای کلاستر شما پایش می‌کند. هنگامی که مصرف یک یا چند مورد از این منابع به سطح مشخصی برسد، kubelet می‌تواند به‌صورت پیشگیرانه یک یا چند پاد روی نود را از کار بیندازد تا منابع را بازپس بگیرد و از کمبود منابع (starvation) جلوگیری کند.</p>
+<p dir="rtl">در جریان تخلیه ناشی از فشار روی نود، kubelet <a href="../workloads/pods/pod-lifecycle.html#pod-phase">فاز</a> پادهای انتخاب‌شده را روی <code dir="ltr">Failed</code> تنظیم می‌کند و Pod را خاتمه می‌دهد.</p>
+<p dir="rtl">تخلیه ناشی از فشار روی نود با <a href="api-eviction.html">تخلیه آغازشده از طریق API</a> یکسان نیست.</p>
+<p dir="rtl">kubelet به <span class="term" title="pod-disruption-budget">PodDisruptionBudget</span> پیکربندی‌شده و همچنین به <code dir="ltr">terminationGracePeriodSeconds</code> پاد پایبند نیست. اگر از <a href="#soft-eviction-thresholds">آستانه‌های تخلیه نرم</a> استفاده کنید، kubelet مقدار <code dir="ltr">evictionMaxPodGracePeriod</code> پیکربندی‌شده را رعایت می‌کند. اگر از <a href="#hard-eviction-thresholds">آستانه‌های تخلیه سخت</a> استفاده کنید، kubelet برای خاتمه از مهلت <code dir="ltr">0s</code> (خاموش‌شدن فوری) استفاده می‌کند.</p>
 <h2 id="رفتار-خودترمیمی" dir="rtl">رفتار خودترمیمی</h2>
-<p dir="rtl">kubelet پیش از خاتمه دادن به Podهای کاربر نهایی می‌کوشد <a href="#reclaim-node-resources">منابع سطح نود را بازپس گیرد</a>.
-برای مثال، هنگامی که منابع دیسک کمیاب می‌شوند، ایمیج‌های کانتینر استفاده‌نشده را
-حذف می‌کند.</p>
-<p dir="rtl">اگر Podها توسط یک آبجکت مدیریت <span class="term" title="workload">بار کاری</span>
-(مانند <span class="term" title="statefulset">StatefulSet</span>
-یا <span class="term" title="deployment">Deployment</span>) مدیریت شوند که
-Podهای ناموفق را جایگزین می‌کند، control plane (<code dir="ltr">kube-controller-manager</code>) Podهای جدیدی
-به‌جای Podهای بیرون‌رانده‌شده ایجاد می‌کند.</p>
-<h3 id="خودترمیمی-برای-podهای-ایستا" dir="rtl">خودترمیمی برای Podهای ایستا</h3>
-<p dir="rtl">اگر یک <a href="../workloads/pods/index.html#static-pods">Pod ایستا (static pod)</a>
-را روی نودی اجرا می‌کنید که زیر فشار منابع است، kubelet ممکن است آن Pod
-ایستا را بیرون براند. سپس kubelet می‌کوشد جایگزینی ایجاد کند، زیرا Podهای ایستا همیشه
-بیانگر قصد اجرای یک Pod روی آن نود هستند.</p>
-<p dir="rtl">kubelet هنگام ایجاد جایگزین، <em>اولویت</em> Pod ایستا را در نظر می‌گیرد.
-اگر مانیفست Pod ایستا اولویت پایینی مشخص کند، و Podهایی با اولویت بالاتر
-در control plane کلاستر تعریف شده باشند، و نود زیر فشار منابع باشد، kubelet ممکن است نتواند برای
-آن Pod ایستا جا باز کند. kubelet حتی هنگامی که نود زیر فشار منابع است،
-به تلاش برای اجرای همهٔ Podهای ایستا ادامه می‌دهد.</p>
-<h2 id="سیگنال-ها-و-آستانه-های-بیرون-رانی" dir="rtl">سیگنال‌ها و آستانه‌های بیرون‌رانی</h2>
-<p dir="rtl">kubelet از پارامترهای مختلفی برای گرفتن تصمیم‌های بیرون‌رانی استفاده می‌کند، مانند موارد زیر:</p>
+<p dir="rtl">kubelet پیش از خاتمه‌دادن به پادهای کاربر نهایی، تلاش می‌کند <a href="#reclaim-node-resources">منابع سطح نود را بازپس بگیرد</a>. برای مثال، هنگام کمبود منابع دیسک، ایمیج‌های کانتینر استفاده‌نشده را حذف می‌کند.</p>
+<p dir="rtl">اگر پادها توسط یک آبجکت مدیریت <span class="term" title="workload">بار کاری</span> (مانند <span class="term" title="statefulset">StatefulSet</span> یا <span class="term" title="deployment">Deployment</span>) مدیریت شوند که پادهای ناموفق را جایگزین می‌کند، control plane (<code dir="ltr">kube-controller-manager</code>) پادهای جدیدی به‌جای پادهای تخلیه‌شده ایجاد می‌کند.</p>
+<h3 id="خودترمیمی-برای-پادهای-ایستا" dir="rtl">خودترمیمی برای پادهای ایستا</h3>
+<p dir="rtl">اگر یک <a href="../workloads/pods/index.html#static-pods">پاد ایستا</a> را روی نودی اجرا کنید که تحت فشار منابع است، ممکن است kubelet آن Pod ایستا را تخلیه کند. سپس kubelet تلاش می‌کند جایگزینی برای آن ایجاد کند، زیرا Podهای ایستا همیشه نشان‌دهنده قصد اجرای یک Pod روی همان نود هستند.</p>
+<p dir="rtl">kubelet هنگام ایجاد جایگزین، <em>اولویت</em> پاد ایستا را در نظر می‌گیرد. اگر مانیفست پاد ایستا اولویت پایینی تعیین کرده باشد، Podهایی با اولویت بالاتر در control plane کلاستر تعریف شده باشند و نود تحت فشار منابع باشد، ممکن است kubelet نتواند برای آن پاد ایستا جا باز کند. kubelet حتی زمانی که نود تحت فشار منابع است، به تلاش برای اجرای همه پادهای ایستا ادامه می‌دهد.</p>
+<h2 id="سیگنال-ها-و-آستانه-های-تخلیه" dir="rtl">سیگنال‌ها و آستانه‌های تخلیه</h2>
+<p dir="rtl">kubelet برای تصمیم‌گیری درباره تخلیه از پارامترهای گوناگونی استفاده می‌کند، مانند موارد زیر:</p>
 <ul>
-<li dir="rtl">سیگنال‌های بیرون‌رانی</li>
-<li dir="rtl">آستانه‌های بیرون‌رانی</li>
+<li dir="rtl">سیگنال‌های تخلیه</li>
+<li dir="rtl">آستانه‌های تخلیه</li>
 <li dir="rtl">بازه‌های پایش</li>
 </ul>
-<h3 id="سیگنال-های-بیرون-رانی-eviction-signals" dir="rtl">سیگنال‌های بیرون‌رانی {#eviction-signals}</h3>
-<p dir="rtl">سیگنال‌های بیرون‌رانی، وضعیت فعلی یک منبع مشخص در یک
-لحظهٔ زمانی مشخص هستند. kubelet از سیگنال‌های بیرون‌رانی برای گرفتن تصمیم‌های بیرون‌رانی استفاده می‌کند؛ به این صورت که
-سیگنال‌ها را با آستانه‌های بیرون‌رانی مقایسه می‌کند، که حداقل مقدار
-منبعی هستند که باید روی نود در دسترس باشد.</p>
-<p dir="rtl">kubelet از سیگنال‌های بیرون‌رانی زیر استفاده می‌کند:</p>
+<h3 id="سیگنال-های-تخلیه-eviction-signals" dir="rtl">سیگنال‌های تخلیه {#eviction-signals}</h3>
+<p dir="rtl">سیگنال‌های تخلیه، وضعیت فعلی یک منبع مشخص در یک لحظه معین هستند. kubelet برای تصمیم‌گیری درباره تخلیه، این سیگنال‌ها را با آستانه‌های تخلیه مقایسه می‌کند؛ آستانه‌های تخلیه حداقل مقداری از منبع هستند که باید روی نود در دسترس باشد.</p>
+<p dir="rtl">kubelet از سیگنال‌های تخلیه زیر استفاده می‌کند:</p>
 <table>
 <thead>
 <tr>
-<th dir="rtl">سیگنال بیرون‌رانی</th>
-<th dir="rtl">توضیح</th>
+<th dir="rtl">سیگنال تخلیه</th>
+<th dir="rtl">توضیحات</th>
 <th dir="rtl">فقط لینوکس</th>
 </tr>
 </thead>
@@ -180,98 +154,48 @@ Podهای ناموفق را جایگزین می‌کند، control plane (<code 
 </tr>
 </tbody>
 </table>
-<p dir="rtl">در این جدول، ستون <strong>توضیح</strong> نشان می‌دهد که kubelet مقدار
-سیگنال را چگونه به دست می‌آورد. هر سیگنال از مقدار درصدی یا مقدار صریح پشتیبانی می‌کند. kubelet
-مقدار درصدی را نسبت به کل ظرفیت مرتبط با
-آن سیگنال محاسبه می‌کند.</p>
+<p dir="rtl">در این جدول، ستون <strong>توضیحات</strong> نشان می‌دهد که kubelet مقدار هر سیگنال را چگونه به دست می‌آورد. هر سیگنال از مقدار درصدی یا مقدار صریح پشتیبانی می‌کند. kubelet مقدار درصدی را نسبت به ظرفیت کل مرتبط با آن سیگنال محاسبه می‌کند.</p>
 <h4 id="سیگنال-های-حافظه" dir="rtl">سیگنال‌های حافظه</h4>
-<p dir="rtl">روی نودهای لینوکسی، مقدار <code dir="ltr">memory.available</code> به‌جای ابزارهایی
-مانند <code dir="ltr">free -m</code> از cgroupfs به دست می‌آید. این موضوع اهمیت دارد، زیرا <code dir="ltr">free -m</code> درون یک
-کانتینر کار نمی‌کند، و اگر کاربران از قابلیت
-<a href="../../tasks/administer-cluster/reserve-compute-resources.html#node-allocatable">node allocatable</a>
-استفاده کنند، تصمیم‌های مربوط به کمبود منابع
-هم به‌صورت محلی در بخش Pod کاربر نهایی از سلسله‌مراتب cgroup و هم در
-نود ریشه گرفته می‌شوند. این <a href="/examples/admin/resource/memory-available.sh">اسکریپت</a> یا
-<a href="/examples/admin/resource/memory-available-cgroupv2.sh">اسکریپت cgroupv2</a>
-همان مجموعه مراحلی را که kubelet برای محاسبهٔ
-<code dir="ltr">memory.available</code> انجام می‌دهد، بازتولید می‌کند. kubelet مقدار inactive_file (تعداد بایت‌های
-حافظهٔ پشتیبانی‌شده با فایل در فهرست LRU غیرفعال) را از محاسبهٔ خود کنار می‌گذارد، زیرا فرض می‌کند
-این حافظه تحت فشار قابل بازپس‌گیری است.</p>
+<p dir="rtl">روی نودهای لینوکسی، مقدار <code dir="ltr">memory.available</code> به‌جای ابزارهایی مانند <code dir="ltr">free -m</code> از cgroupfs به دست می‌آید. این موضوع اهمیت دارد، زیرا <code dir="ltr">free -m</code> درون کانتینر کار نمی‌کند و اگر کاربران از قابلیت <a href="../../tasks/administer-cluster/reserve-compute-resources.html#node-allocatable">منابع قابل تخصیص نود</a> استفاده کنند، تصمیم‌های مربوط به کمبود منابع هم به‌صورت محلی در بخش Pod کاربر نهایی از سلسله‌مراتب cgroup و هم در نود ریشه گرفته می‌شود. این <a href="/examples/admin/resource/memory-available.sh">اسکریپت</a> یا <a href="/examples/admin/resource/memory-available-cgroupv2.sh">اسکریپت cgroupv2</a> همان مراحلی را بازتولید می‌کند که kubelet برای محاسبه <code dir="ltr">memory.available</code> انجام می‌دهد. kubelet مقدار inactive_file (تعداد بایت‌های حافظه مبتنی بر فایل در فهرست LRU غیرفعال) را از محاسبه خود کنار می‌گذارد، زیرا فرض می‌کند این حافظه هنگام فشار قابل بازپس‌گیری است.</p>
 <div class="callout note"><div class="callout-title">توجه:</div>
 <div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
-<p dir="rtl">روی نودهایی که <a href="../../tasks/manage-hugepages/scheduling-hugepages.html">hugepages</a>
-در آن‌ها پیکربندی شده است، kubelet کل ظرفیت hugepage نود را از
-<code dir="ltr">memory.available</code> مورد استفادهٔ مدیر بیرون‌رانی کم می‌کند.
-بدون این تنظیم، RAM رزروشده برای hugepage مقدار
-<code dir="ltr">AvailableBytes</code> را بیش از واقع نشان می‌دهد، زیرا کنترل‌کنندهٔ cgroup حافظه تخصیص‌های hugetlb
-را در working set خود ردیابی نمی‌کند. این امر می‌تواند بیرون‌رانی را به تأخیر بیندازد و به کشته شدن فرایندها توسط OOM منجر شود.
-برای بازگرداندن رفتار قبلی، <a href="https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/" target="_blank">feature gate</a>
-با نام <code dir="ltr">HugepageAwareEviction</code> را غیرفعال کنید.</p>
+<p dir="rtl">روی نودهایی که <a href="../../tasks/manage-hugepages/scheduling-hugepages.html">hugepages</a> در آن‌ها پیکربندی شده است، kubelet ظرفیت کل hugepage نود را از مقدار <code dir="ltr">memory.available</code> مورد استفاده مدیر تخلیه کم می‌کند. بدون این تنظیم، حافظه RAM رزروشده برای hugepage مقدار <code dir="ltr">AvailableBytes</code> را بیش از واقع نشان می‌دهد، زیرا کنترل‌کننده cgroup حافظه، تخصیص‌های hugetlb را در working set خود ردیابی نمی‌کند. این مسئله می‌تواند تخلیه را به تأخیر بیندازد و به خاتمه‌یافتن فرایندها بر اثر کمبود حافظه (OOM kill) منجر شود. برای بازگرداندن رفتار قبلی، <a href="https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/" target="_blank">feature gate</a> با نام <code dir="ltr">HugepageAwareEviction</code> را غیرفعال کنید.</p>
 </div>
-<p dir="rtl">روی نودهای ویندوزی، مقدار <code dir="ltr">memory.available</code> از سطوح commit حافظهٔ سراسری نود
-(که از طریق فراخوانی سیستمی <a href="https://learn.microsoft.com/windows/win32/api/psapi/nf-psapi-getperformanceinfo" target="_blank" rel="noopener"><code dir="ltr">GetPerformanceInfo()</code></a>
-پرس‌وجو می‌شوند) با کم کردن <a href="https://learn.microsoft.com/windows/win32/api/psapi/ns-psapi-performance_information" target="_blank" rel="noopener"><code dir="ltr">CommitTotal</code></a> سراسری نود از <a href="https://learn.microsoft.com/windows/win32/api/psapi/ns-psapi-performance_information" target="_blank" rel="noopener"><code dir="ltr">CommitLimit</code></a> نود به دست می‌آید. لطفاً توجه داشته باشید که اگر اندازهٔ page-file نود تغییر کند، <code dir="ltr">CommitLimit</code> نیز ممکن است تغییر کند!</p>
-<h4 id="سیگنال-های-فایل-سیستم" dir="rtl">سیگنال‌های فایل‌سیستم</h4>
-<p dir="rtl">kubelet سه شناسهٔ مشخص فایل‌سیستم را می‌شناسد که می‌توانند با
-سیگنال‌های بیرون‌رانی (<code dir="ltr">&lt;identifier&gt;.inodesFree</code> یا <code dir="ltr">&lt;identifier&gt;.available</code>) استفاده شوند:</p>
+<p dir="rtl">روی نودهای ویندوزی، مقدار <code dir="ltr">memory.available</code> از سطوح سراسری commit حافظه نود (که از طریق فراخوانی سیستمی <a href="https://learn.microsoft.com/windows/win32/api/psapi/nf-psapi-getperformanceinfo" target="_blank" rel="noopener"><code dir="ltr">GetPerformanceInfo()</code></a> پرس‌وجو می‌شود) به دست می‌آید؛ به این صورت که مقدار سراسری <a href="https://learn.microsoft.com/windows/win32/api/psapi/ns-psapi-performance_information" target="_blank" rel="noopener"><code dir="ltr">CommitTotal</code></a> نود از مقدار <a href="https://learn.microsoft.com/windows/win32/api/psapi/ns-psapi-performance_information" target="_blank" rel="noopener"><code dir="ltr">CommitLimit</code></a> نود کم می‌شود. توجه داشته باشید که اگر اندازه page-file نود تغییر کند، مقدار <code dir="ltr">CommitLimit</code> نیز ممکن است تغییر کند!</p>
+<h4 id="سیگنال-های-سیستم-فایل" dir="rtl">سیگنال‌های سیستم فایل</h4>
+<p dir="rtl">kubelet سه شناسه مشخص سیستم فایل را می‌شناسد که می‌توان آن‌ها را با سیگنال‌های تخلیه (<code dir="ltr">&lt;identifier&gt;.inodesFree</code> یا <code dir="ltr">&lt;identifier&gt;.available</code>) به کار برد:</p>
 <ol>
 <li dir="rtl">
-<p dir="rtl"><code dir="ltr">nodefs</code>: فایل‌سیستم اصلی نود که برای حجم‌های دیسک محلی،
-حجم‌های emptyDir که پشتوانهٔ حافظه ندارند، ذخیره‌سازی لاگ، ذخیره‌سازی موقت (ephemeral storage)
-و موارد دیگر استفاده می‌شود. برای مثال، <code dir="ltr">nodefs</code> شامل <code dir="ltr">/var/lib/kubelet</code> است.</p>
+<p dir="rtl"><code dir="ltr">nodefs</code>: سیستم فایل اصلی نود که برای حجم‌های دیسک محلی، حجم‌های emptyDir که مبتنی بر حافظه نیستند، ذخیره‌سازی لاگ‌ها، ذخیره‌سازی موقت (ephemeral storage) و موارد دیگر استفاده می‌شود. برای مثال، <code dir="ltr">nodefs</code> شامل <code dir="ltr">/var/lib/kubelet</code> است.</p>
 </li>
 <li dir="rtl">
-<p dir="rtl"><code dir="ltr">imagefs</code>: یک فایل‌سیستم اختیاری که container runtimeها می‌توانند از آن برای ذخیرهٔ
-ایمیج‌های کانتینر (که لایه‌های فقط‌خواندنی هستند) استفاده کنند. اگر <code dir="ltr">containerfs</code> جداگانه‌ای
-وجود نداشته باشد، فایل‌سیستم ایمیج لایه‌های قابل نوشتن کانتینرها را نیز ذخیره می‌کند.</p>
+<p dir="rtl"><code dir="ltr">imagefs</code>: سیستم فایلی اختیاری که محیط‌های اجرای کانتینر می‌توانند برای ذخیره ایمیج‌های کانتینر (یعنی لایه‌های فقط‌خواندنی) از آن استفاده کنند. اگر <code dir="ltr">containerfs</code> جداگانه‌ای وجود نداشته باشد، سیستم فایل ایمیج لایه‌های قابل‌نوشتن کانتینر را نیز ذخیره می‌کند.</p>
 </li>
 <li dir="rtl">
-<p dir="rtl"><code dir="ltr">containerfs</code>: یک فایل‌سیستم اختیاری که container runtimeها می‌توانند از آن برای
-ذخیرهٔ لایه‌های قابل نوشتن کانتینرها استفاده کنند. هنگامی که از <code dir="ltr">containerfs</code> استفاده شود، فایل‌سیستم <code dir="ltr">imagefs</code>
-می‌تواند طوری تفکیک شود که تنها ایمیج‌ها (لایه‌های فقط‌خواندنی) را ذخیره کند و
-هیچ چیز دیگری را ذخیره نکند.</p>
+<p dir="rtl"><code dir="ltr">containerfs</code>: سیستم فایلی اختیاری که محیط‌های اجرای کانتینر می‌توانند برای ذخیره لایه‌های قابل‌نوشتن کانتینر از آن استفاده کنند. هنگامی که از <code dir="ltr">containerfs</code> استفاده شود، سیستم فایل <code dir="ltr">imagefs</code> را می‌توان طوری جدا کرد که فقط ایمیج‌ها (لایه‌های فقط‌خواندنی) را ذخیره کند و نه چیز دیگری.</p>
 </li>
 </ol>
-<p dir="rtl">این شناسه‌ها فایل‌سیستم‌ها را آن‌گونه که kubelet مشاهده می‌کند توصیف می‌کنند. آن‌ها
-همیشه به معنای سه نقطهٔ mount متفاوت نیستند: در چیدمان‌های رایج، دو یا هر
-سه شناسه می‌توانند به یک فایل‌سیستم زیربنایی یکسان اشاره کنند.</p>
+<p dir="rtl">این شناسه‌ها سیستم‌های فایل را آن‌گونه که kubelet مشاهده می‌کند توصیف می‌کنند. این شناسه‌ها همیشه به معنای سه نقطه اتصال (mount point) متفاوت نیستند: در چیدمان‌های رایج، دو یا هر سه شناسه می‌توانند به یک سیستم فایل زیربنایی واحد اشاره کنند.</p>
 <div class="callout note"><div class="callout-title">توجه:</div>
 <div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
-<p dir="rtl">قابلیت <em>فایل‌سیستم ایمیج تفکیک‌شده</em> (split image filesystem) سیگنال‌ها، آستانه‌ها و
-متریک‌های بیرون‌رانی جدیدی برای <code dir="ltr">containerfs</code> اضافه می‌کند. برای استفاده از <code dir="ltr">containerfs</code>، نسخهٔ
-v1.37 کوبرنتیز نیازمند فعال بودن
-<a href="https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/" target="_blank">feature gate</a> با نام <code dir="ltr">KubeletSeparateDiskGC</code>
-است. برای کوبرنتیز v1.37، تنها CRI-O (v1.29 یا
-بالاتر) از فایل‌سیستم <code dir="ltr">containerfs</code> پشتیبانی می‌کند.</p>
+<p dir="rtl">قابلیت <em>سیستم فایل ایمیج جداشده</em> سیگنال‌ها، آستانه‌ها و متریک‌های تخلیه جدیدی برای <code dir="ltr">containerfs</code> اضافه می‌کند. برای استفاده از <code dir="ltr">containerfs</code> در نسخه v1.37 کوبرنتیز، باید <a href="https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/" target="_blank">feature gate</a> با نام <code dir="ltr">KubeletSeparateDiskGC</code> فعال باشد. در کوبرنتیز v1.37، فقط CRI-O (نسخه v1.29 یا بالاتر) از سیستم فایل <code dir="ltr">containerfs</code> پشتیبانی می‌کند.</p>
 </div>
-<p dir="rtl">kubelet از سه چیدمان رایج برای فایل‌سیستم‌های کانتینر پشتیبانی می‌کند:</p>
+<p dir="rtl">kubelet از سه چیدمان رایج برای سیستم‌های فایل کانتینر پشتیبانی می‌کند:</p>
 <ul>
 <li dir="rtl">
-<p dir="rtl">همه چیز روی یک <code dir="ltr">nodefs</code> واحد قرار دارد که «rootfs» یا
-به‌سادگی «root» نیز نامیده می‌شود. در این چیدمان، <code dir="ltr">nodefs</code>، <code dir="ltr">imagefs</code> و <code dir="ltr">containerfs</code>
-همگی به یک فایل‌سیستم زیربنایی یکسان اشاره می‌کنند.</p>
+<p dir="rtl">همه‌چیز روی یک <code dir="ltr">nodefs</code> واحد قرار دارد که به آن «rootfs» یا به‌سادگی «root» نیز گفته می‌شود. در این چیدمان، <code dir="ltr">nodefs</code>، <code dir="ltr">imagefs</code> و <code dir="ltr">containerfs</code> همگی به یک سیستم فایل زیربنایی واحد اشاره می‌کنند.</p>
 </li>
 <li dir="rtl">
-<p dir="rtl">ذخیره‌سازی container runtime روی یک دیسک اختصاصی، جدا از فایل‌سیستم
-ریشه قرار دارد. در این چیدمان، <code dir="ltr">imagefs</code> و <code dir="ltr">containerfs</code> به یک
-فایل‌سیستم زیربنایی یکسان اشاره می‌کنند که هم لایه‌های ایمیج و هم لایه‌های قابل نوشتن کانتینر
-را ذخیره می‌کند. این حالت اغلب فایل‌سیستم «دیسک تفکیک‌شده» (split disk یا separate disk)
-نامیده می‌شود.</p>
+<p dir="rtl">فضای ذخیره‌سازی محیط اجرای کانتینر روی دیسکی اختصاصی و جدا از سیستم فایل ریشه قرار دارد. در این چیدمان، <code dir="ltr">imagefs</code> و <code dir="ltr">containerfs</code> به یک سیستم فایل زیربنایی واحد اشاره می‌کنند که هم لایه‌های ایمیج و هم لایه‌های قابل‌نوشتن کانتینر را ذخیره می‌کند. به این چیدمان معمولاً سیستم فایل «دیسک جداشده» (split disk یا separate disk) گفته می‌شود.</p>
 </li>
 <li dir="rtl">
-<p dir="rtl">لایه‌های قابل نوشتن کانتینر روی <code dir="ltr">nodefs</code> قرار دارند و ایمیج‌های کانتینر
-(لایه‌های فقط‌خواندنی) روی یک <code dir="ltr">imagefs</code> جداگانه ذخیره می‌شوند. در این چیدمان،
-<code dir="ltr">containerfs</code> و <code dir="ltr">nodefs</code> به یک فایل‌سیستم زیربنایی یکسان اشاره می‌کنند. این حالت
-اغلب فایل‌سیستم «ایمیج تفکیک‌شده» (split image) نامیده می‌شود.</p>
+<p dir="rtl">لایه‌های قابل‌نوشتن کانتینر روی <code dir="ltr">nodefs</code> قرار دارند و ایمیج‌های کانتینر (لایه‌های فقط‌خواندنی) روی یک <code dir="ltr">imagefs</code> جداگانه ذخیره می‌شوند. در این چیدمان، <code dir="ltr">containerfs</code> و <code dir="ltr">nodefs</code> به یک سیستم فایل زیربنایی واحد اشاره می‌کنند. به این چیدمان معمولاً سیستم فایل «ایمیج جداشده» (split image) گفته می‌شود.</p>
 </li>
 </ul>
-<p dir="rtl">kubelet می‌کوشد این فایل‌سیستم‌ها را همراه با پیکربندی فعلی‌شان
-مستقیماً از container runtime زیربنایی به‌طور خودکار کشف کند و
-سایر فایل‌سیستم‌های محلی نود را نادیده می‌گیرد.</p>
-<p dir="rtl">kubelet از فایل‌سیستم‌ها یا پیکربندی‌های ذخیره‌سازی دیگر برای کانتینرها پشتیبانی نمی‌کند
-و در حال حاضر از چند فایل‌سیستم برای ایمیج‌ها و کانتینرها پشتیبانی نمی‌کند.</p>
-<h3 id="قابلیت-های-منسوخ-شدهٔ-جمع-آوری-زباله-در-kubelet" dir="rtl">قابلیت‌های منسوخ‌شدهٔ جمع‌آوری زباله در kubelet</h3>
-<p dir="rtl">برخی از قابلیت‌های جمع‌آوری زباله (garbage collection) در kubelet به نفع بیرون‌رانی منسوخ شده‌اند:</p>
+<p dir="rtl">kubelet تلاش می‌کند این سیستم‌های فایل را همراه با پیکربندی فعلی‌شان مستقیماً از محیط اجرای کانتینر زیربنایی به‌طور خودکار شناسایی کند و سایر سیستم‌های فایل محلی نود را نادیده می‌گیرد.</p>
+<p dir="rtl">kubelet از سایر سیستم‌های فایل کانتینر یا پیکربندی‌های ذخیره‌سازی پشتیبانی نمی‌کند و در حال حاضر از چند سیستم فایل برای ایمیج‌ها و کانتینرها نیز پشتیبانی نمی‌کند.</p>
+<h3 id="قابلیت-های-منسوخ-شده-جمع-آوری-زباله-در-kubelet" dir="rtl">قابلیت‌های منسوخ‌شده جمع‌آوری زباله در kubelet</h3>
+<p dir="rtl">برخی از قابلیت‌های جمع‌آوری زباله (garbage collection) در kubelet به نفع تخلیه منسوخ شده‌اند:</p>
 <table>
 <thead>
 <tr>
@@ -282,61 +206,40 @@ v1.37 کوبرنتیز نیازمند فعال بودن
 <tbody>
 <tr>
 <td dir="ltr" class="ltr"><code dir="ltr">--maximum-dead-containers</code></td>
-<td dir="rtl">پس از اینکه لاگ‌های قدیمی بیرون از بستر کانتینر ذخیره شوند، منسوخ می‌شود</td>
+<td dir="rtl">پس از ذخیره‌شدن لاگ‌های قدیمی خارج از بستر کانتینر منسوخ شد</td>
 </tr>
 <tr>
 <td dir="ltr" class="ltr"><code dir="ltr">--maximum-dead-containers-per-container</code></td>
-<td dir="rtl">پس از اینکه لاگ‌های قدیمی بیرون از بستر کانتینر ذخیره شوند، منسوخ می‌شود</td>
+<td dir="rtl">پس از ذخیره‌شدن لاگ‌های قدیمی خارج از بستر کانتینر منسوخ شد</td>
 </tr>
 <tr>
 <td dir="ltr" class="ltr"><code dir="ltr">--minimum-container-ttl-duration</code></td>
-<td dir="rtl">پس از اینکه لاگ‌های قدیمی بیرون از بستر کانتینر ذخیره شوند، منسوخ می‌شود</td>
+<td dir="rtl">پس از ذخیره‌شدن لاگ‌های قدیمی خارج از بستر کانتینر منسوخ شد</td>
 </tr>
 </tbody>
 </table>
-<h3 id="آستانه-های-بیرون-رانی" dir="rtl">آستانه‌های بیرون‌رانی</h3>
-<p dir="rtl">می‌توانید آستانه‌های بیرون‌رانی سفارشی را برای استفادهٔ kubelet هنگام گرفتن
-تصمیم‌های بیرون‌رانی مشخص کنید. می‌توانید آستانه‌های بیرون‌رانی <a href="#soft-eviction-thresholds">نرم</a> و
-<a href="#hard-eviction-thresholds">سخت</a> را پیکربندی کنید.</p>
-<p dir="rtl">آستانه‌های بیرون‌رانی به شکل <code dir="ltr">[eviction-signal][operator][quantity]</code> هستند که در آن:</p>
+<h3 id="آستانه-های-تخلیه" dir="rtl">آستانه‌های تخلیه</h3>
+<p dir="rtl">می‌توانید آستانه‌های تخلیه سفارشی تعیین کنید تا kubelet هنگام تصمیم‌گیری درباره تخلیه از آن‌ها استفاده کند. می‌توانید آستانه‌های تخلیه <a href="#soft-eviction-thresholds">نرم</a> و <a href="#hard-eviction-thresholds">سخت</a> را پیکربندی کنید.</p>
+<p dir="rtl">آستانه‌های تخلیه به شکل <code dir="ltr">[eviction-signal][operator][quantity]</code> هستند که در آن:</p>
 <ul>
-<li dir="rtl"><code dir="ltr">eviction-signal</code> <a href="#eviction-signals">سیگنال بیرون‌رانی</a> مورد استفاده است.</li>
-<li dir="rtl"><code dir="ltr">operator</code> <a href="https://en.wikipedia.org/wiki/Relational_operator#Standard_relational_operators" target="_blank" rel="noopener">عملگر رابطه‌ای</a>
-موردنظر شماست، مانند <code dir="ltr">&lt;</code> (کمتر از).</li>
-<li dir="rtl"><code dir="ltr">quantity</code> مقدار آستانهٔ بیرون‌رانی است، مانند <code dir="ltr">1Gi</code>. مقدار <code dir="ltr">quantity</code>
-باید با نمایش مقادیر مورد استفاده در کوبرنتیز مطابقت داشته باشد. می‌توانید از
-مقادیر صریح یا درصدها (<code dir="ltr">%</code>) استفاده کنید.</li>
+<li dir="rtl"><code dir="ltr">eviction-signal</code> همان <a href="#eviction-signals">سیگنال تخلیه</a> مورد استفاده است.</li>
+<li dir="rtl"><code dir="ltr">operator</code> همان <a href="https://en.wikipedia.org/wiki/Relational_operator#Standard_relational_operators" target="_blank" rel="noopener">عملگر رابطه‌ای</a> مورد نظر شماست، مانند <code dir="ltr">&lt;</code> (کمتر از).</li>
+<li dir="rtl"><code dir="ltr">quantity</code> مقدار آستانه تخلیه است، مانند <code dir="ltr">1Gi</code>. مقدار <code dir="ltr">quantity</code> باید با نمایش کمیت‌ها در کوبرنتیز مطابقت داشته باشد. می‌توانید از مقادیر صریح یا درصدی (<code dir="ltr">%</code>) استفاده کنید.</li>
 </ul>
-<p dir="rtl">برای مثال، اگر نودی ۱۰GiB حافظهٔ کل داشته باشد و بخواهید در صورتی که
-حافظهٔ در دسترس به کمتر از ۱GiB برسد بیرون‌رانی آغاز شود، می‌توانید آستانهٔ بیرون‌رانی را
-یا به‌صورت <code dir="ltr">memory.available&lt;10%</code> یا به‌صورت <code dir="ltr">memory.available&lt;1Gi</code> تعریف کنید (نمی‌توانید از هر دو استفاده کنید).</p>
-<h4 id="آستانه-های-بیرون-رانی-نرم-soft-eviction-thresholds" dir="rtl">آستانه‌های بیرون‌رانی نرم {#soft-eviction-thresholds}</h4>
-<p dir="rtl">آستانهٔ بیرون‌رانی نرم، یک آستانهٔ بیرون‌رانی را با یک مهلت مقرر الزامی
-که مدیر تعیین می‌کند، همراه می‌کند. kubelet تا زمانی که
-مهلت مقرر سپری نشده باشد، Podها را بیرون نمی‌راند. اگر مهلت مقرر را مشخص نکنید،
-kubelet در زمان راه‌اندازی خطا برمی‌گرداند.</p>
-<p dir="rtl">می‌توانید هم مهلت مقرر آستانهٔ بیرون‌رانی نرم و هم بیشینهٔ
-مهلت مقرر مجاز برای خاتمهٔ Pod را برای استفادهٔ kubelet در طول بیرون‌رانی‌ها مشخص کنید. اگر
-بیشینهٔ مهلت مقرر مجاز را مشخص کنید و آستانهٔ بیرون‌رانی نرم برآورده شود،
-kubelet از کمترینِ این دو مهلت مقرر استفاده می‌کند. اگر بیشینهٔ
-مهلت مقرر مجاز را مشخص نکنید، kubelet Podهای بیرون‌رانده‌شده را بی‌درنگ و بدون
-خاتمهٔ مؤدبانه می‌کشد.</p>
-<p dir="rtl">می‌توانید از فلگ‌های زیر برای پیکربندی آستانه‌های بیرون‌رانی نرم استفاده کنید:</p>
+<p dir="rtl">برای مثال، اگر نودی در مجموع 10GiB حافظه داشته باشد و بخواهید زمانی که حافظه در دسترس به کمتر از 1GiB رسید تخلیه آغاز شود، می‌توانید آستانه تخلیه را به‌صورت <code dir="ltr">memory.available&lt;10%</code> یا <code dir="ltr">memory.available&lt;1Gi</code> تعریف کنید (نمی‌توانید از هر دو استفاده کنید).</p>
+<h4 id="آستانه-های-تخلیه-نرم-soft-eviction-thresholds" dir="rtl">آستانه‌های تخلیه نرم {#soft-eviction-thresholds}</h4>
+<p dir="rtl">هر آستانه تخلیه نرم، یک آستانه تخلیه را با یک مهلت (grace period) الزامی همراه می‌کند که مدیر سیستم تعیین کرده است. kubelet تا پیش از سپری‌شدن این مهلت، پادها را تخلیه نمی‌کند. اگر مهلتی تعیین نکنید، kubelet هنگام راه‌اندازی خطا برمی‌گرداند.</p>
+<p dir="rtl">می‌توانید هم مهلت آستانه تخلیه نرم و هم حداکثر مهلت مجاز خاتمه پاد را تعیین کنید تا kubelet در هنگام تخلیه از آن‌ها استفاده کند. اگر حداکثر مهلت مجاز را تعیین کنید و آستانه تخلیه نرم برآورده شود، kubelet از کوچک‌ترِ این دو مهلت استفاده می‌کند. اگر حداکثر مهلت مجاز را تعیین نکنید، kubelet پادهای تخلیه‌شده را بی‌درنگ و بدون خاتمه‌دادن آرام (graceful termination) از بین می‌برد.</p>
+<p dir="rtl">می‌توانید از تنظیمات زیر در فایل پیکربندی kubelet استفاده کنید:</p>
 <ul>
-<li dir="rtl"><code dir="ltr">eviction-soft</code>: مجموعه‌ای از آستانه‌های بیرون‌رانی مانند <code dir="ltr">memory.available&lt;1.5Gi</code>
-که اگر بیش از مهلت مقرر مشخص‌شده برقرار بمانند، می‌توانند بیرون‌رانی Pod را آغاز کنند.</li>
-<li dir="rtl"><code dir="ltr">eviction-soft-grace-period</code>: مجموعه‌ای از مهلت‌های مقرر بیرون‌رانی مانند <code dir="ltr">memory.available=1m30s</code>
-که تعیین می‌کنند یک آستانهٔ بیرون‌رانی نرم پیش از آغاز بیرون‌رانی Pod چه مدت باید برقرار بماند.</li>
-<li dir="rtl"><code dir="ltr">eviction-max-pod-grace-period</code>: بیشینهٔ مهلت مقرر مجاز (بر حسب ثانیه)
-برای استفاده هنگام خاتمه دادن به Podها در واکنش به برآورده شدن یک آستانهٔ بیرون‌رانی نرم.</li>
+<li dir="rtl"><code dir="ltr">evictionSoft</code>: مجموعه‌ای از آستانه‌های تخلیه مانند <code dir="ltr">memory.available&lt;1.5Gi</code> که اگر در طول مهلت تعیین‌شده برقرار بمانند، می‌توانند تخلیه پاد را آغاز کنند.</li>
+<li dir="rtl"><code dir="ltr">evictionSoftGracePeriod</code>: مجموعه‌ای از مهلت‌های تخلیه مانند <code dir="ltr">memory.available=1m30s</code> که تعیین می‌کنند یک آستانه تخلیه نرم پیش از آغاز تخلیه Pod باید چه مدت برقرار بماند.</li>
+<li dir="rtl"><code dir="ltr">evictionMaxPodGracePeriod</code>: حداکثر مهلت مجاز (بر حسب ثانیه) برای خاتمه‌دادن به پادها در واکنش به برآورده‌شدن یک آستانه تخلیه نرم.</li>
 </ul>
-<h4 id="آستانه-های-بیرون-رانی-سخت-hard-eviction-thresholds" dir="rtl">آستانه‌های بیرون‌رانی سخت {#hard-eviction-thresholds}</h4>
-<p dir="rtl">آستانهٔ بیرون‌رانی سخت هیچ مهلت مقرری ندارد. هنگامی که یک آستانهٔ بیرون‌رانی سخت
-برآورده شود، kubelet Podها را بی‌درنگ و بدون خاتمهٔ مؤدبانه می‌کشد تا
-منبع کمیاب‌شده را بازپس گیرد.</p>
-<p dir="rtl">می‌توانید از فلگ <code dir="ltr">eviction-hard</code> برای پیکربندی مجموعه‌ای از آستانه‌های بیرون‌رانی سخت
-مانند <code dir="ltr">memory.available&lt;1Gi</code> استفاده کنید.</p>
-<p dir="rtl">kubelet آستانه‌های بیرون‌رانی سخت پیش‌فرض زیر را دارد:</p>
+<h4 id="آستانه-های-تخلیه-سخت-hard-eviction-thresholds" dir="rtl">آستانه‌های تخلیه سخت {#hard-eviction-thresholds}</h4>
+<p dir="rtl">آستانه تخلیه سخت هیچ مهلتی ندارد. هنگامی که یک آستانه تخلیه سخت برآورده شود، kubelet برای بازپس‌گیری منبعِ دچار کمبود، پادها را بی‌درنگ و بدون خاتمه‌دادن آرام از بین می‌برد.</p>
+<p dir="rtl">می‌توانید با فیلد <code dir="ltr">evictionHard</code> مجموعه‌ای از آستانه‌های تخلیه سخت مانند <code dir="ltr">memory.available&lt;1Gi</code> را پیکربندی کنید.</p>
+<p dir="rtl">kubelet آستانه‌های تخلیه سخت پیش‌فرض زیر را دارد:</p>
 <ul>
 <li dir="rtl"><code dir="ltr">memory.available&lt;100Mi</code> (نودهای لینوکسی)</li>
 <li dir="rtl"><code dir="ltr">memory.available&lt;500Mi</code> (نودهای ویندوزی)</li>
@@ -345,199 +248,135 @@ kubelet از کمترینِ این دو مهلت مقرر استفاده می‌
 <li dir="rtl"><code dir="ltr">nodefs.inodesFree&lt;5%</code> (نودهای لینوکسی)</li>
 <li dir="rtl"><code dir="ltr">imagefs.inodesFree&lt;5%</code> (نودهای لینوکسی)</li>
 </ul>
-<p dir="rtl">این مقادیر پیش‌فرض آستانه‌های بیرون‌رانی سخت تنها در صورتی تنظیم می‌شوند که هیچ‌یک
-از پارامترها تغییر نکرده باشد. اگر مقدار هر پارامتری را تغییر دهید،
-مقادیر پارامترهای دیگر به‌عنوان مقادیر پیش‌فرض به ارث برده نمی‌شوند
-و روی صفر تنظیم می‌شوند. برای ارائهٔ مقادیر سفارشی،
-باید همهٔ آستانه‌ها را به‌ترتیب ارائه کنید. همچنین می‌توانید تنظیم kubelet با نام
-MergeDefaultEvictionSettings را در فایل پیکربندی kubelet روی true تنظیم کنید.
-اگر روی true تنظیم شده باشد و هر پارامتری تغییر کند، پارامترهای دیگر
-مقادیر پیش‌فرض خود را به‌جای 0 به ارث می‌برند.</p>
-<p dir="rtl">آستانه‌های بیرون‌رانی پیش‌فرض <code dir="ltr">containerfs.available</code> و <code dir="ltr">containerfs.inodesFree</code> (نودهای لینوکسی)
-به شرح زیر تنظیم می‌شوند:</p>
+<p dir="rtl">این مقادیر پیش‌فرض آستانه‌های تخلیه سخت تنها در صورتی تنظیم می‌شوند که هیچ‌یک از پارامترها تغییر نکرده باشد. اگر مقدار هر پارامتری را تغییر دهید، مقادیر سایر پارامترها به‌عنوان مقدار پیش‌فرض به ارث نمی‌رسند و روی صفر تنظیم می‌شوند. برای ارائه مقادیر سفارشی، باید همه آستانه‌ها را به‌ترتیب تعیین کنید. همچنین می‌توانید تنظیم MergeDefaultEvictionSettings را در فایل پیکربندی kubelet روی true قرار دهید. اگر این تنظیم روی true باشد و هر پارامتری تغییر کند، سایر پارامترها به‌جای 0 مقادیر پیش‌فرض خود را به ارث می‌برند.</p>
+<p dir="rtl">آستانه‌های تخلیه پیش‌فرض <code dir="ltr">containerfs.available</code> و <code dir="ltr">containerfs.inodesFree</code> (نودهای لینوکسی) به‌صورت زیر تنظیم می‌شوند:</p>
 <ul>
 <li dir="rtl">
-<p dir="rtl">اگر <code dir="ltr">containerfs</code> و <code dir="ltr">nodefs</code> به یک فایل‌سیستم زیربنایی یکسان اشاره کنند،
-آستانه‌های <code dir="ltr">containerfs</code> همانند <code dir="ltr">nodefs</code> تنظیم می‌شوند.</p>
+<p dir="rtl">اگر <code dir="ltr">containerfs</code> و <code dir="ltr">nodefs</code> به یک سیستم فایل زیربنایی واحد اشاره کنند، آستانه‌های <code dir="ltr">containerfs</code> همانند آستانه‌های <code dir="ltr">nodefs</code> تنظیم می‌شوند.</p>
 </li>
 <li dir="rtl">
-<p dir="rtl">اگر <code dir="ltr">containerfs</code> و <code dir="ltr">imagefs</code> به یک فایل‌سیستم زیربنایی یکسان اشاره کنند،
-آستانه‌های <code dir="ltr">containerfs</code> همانند <code dir="ltr">imagefs</code> تنظیم می‌شوند.</p>
+<p dir="rtl">اگر <code dir="ltr">containerfs</code> و <code dir="ltr">imagefs</code> به یک سیستم فایل زیربنایی واحد اشاره کنند، آستانه‌های <code dir="ltr">containerfs</code> همانند آستانه‌های <code dir="ltr">imagefs</code> تنظیم می‌شوند.</p>
 </li>
 </ul>
-<p dir="rtl">تنظیم مقادیر سفارشی جایگزین برای آستانه‌های مربوط به <code dir="ltr">containerfs</code>
-پشتیبانی نمی‌شود و در صورت تلاش برای انجام این کار، هشداری صادر می‌شود؛ هرگونه
-مقدار سفارشی ارائه‌شده نادیده گرفته می‌شود.</p>
-<h2 id="بازهٔ-پایش-بیرون-رانی" dir="rtl">بازهٔ پایش بیرون‌رانی</h2>
-<p dir="rtl">kubelet آستانه‌های بیرون‌رانی را بر اساس <code dir="ltr">housekeeping-interval</code> پیکربندی‌شدهٔ خود ارزیابی می‌کند
-که مقدار پیش‌فرض آن <code dir="ltr">10s</code> است.</p>
+<p dir="rtl">تعیین مقادیر سفارشی برای آستانه‌های مربوط به <code dir="ltr">containerfs</code> پشتیبانی نمی‌شود و در صورت تلاش برای این کار، هشداری صادر می‌شود؛ همه مقادیر سفارشی ارائه‌شده نادیده گرفته می‌شوند.</p>
+<h2 id="بازه-پایش-تخلیه" dir="rtl">بازه پایش تخلیه</h2>
+<p dir="rtl">kubelet آستانه‌های تخلیه را بر اساس <code dir="ltr">housekeeping-interval</code> پیکربندی‌شده خود ارزیابی می‌کند که مقدار پیش‌فرض آن <code dir="ltr">10s</code> است.</p>
 <h2 id="وضعیت-های-نود-node-conditions" dir="rtl">وضعیت‌های نود {#node-conditions}</h2>
-<p dir="rtl">kubelet <a href="../architecture/nodes.html#condition">وضعیت‌های نود (node conditions)</a>
-را گزارش می‌کند تا نشان دهد نود به دلیل برآورده شدن آستانهٔ بیرون‌رانی سخت یا نرم
-زیر فشار است؛ این گزارش مستقل از مهلت‌های مقرر پیکربندی‌شده است.</p>
-<p dir="rtl">kubelet سیگنال‌های بیرون‌رانی را به شرح زیر به وضعیت‌های نود نگاشت می‌کند:</p>
+<p dir="rtl">kubelet <a href="../architecture/nodes.html#condition">وضعیت‌های نود</a> را گزارش می‌کند تا نشان دهد که نود به دلیل برآورده‌شدن آستانه تخلیه سخت یا نرم تحت فشار است، صرف‌نظر از مهلت‌های پیکربندی‌شده.</p>
+<p dir="rtl">kubelet سیگنال‌های تخلیه را به‌صورت زیر به وضعیت‌های نود نگاشت می‌کند:</p>
 <table>
 <thead>
 <tr>
 <th dir="rtl">وضعیت نود</th>
-<th dir="rtl">سیگنال بیرون‌رانی</th>
-<th dir="rtl">توضیح</th>
+<th dir="rtl">سیگنال تخلیه</th>
+<th dir="rtl">توضیحات</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td dir="ltr" class="ltr"><code dir="ltr">MemoryPressure</code></td>
 <td dir="ltr" class="ltr"><code dir="ltr">memory.available</code></td>
-<td dir="rtl">حافظهٔ در دسترس روی نود یک آستانهٔ بیرون‌رانی را برآورده کرده است</td>
+<td dir="rtl">حافظه در دسترس روی نود به یک آستانه تخلیه رسیده است</td>
 </tr>
 <tr>
 <td dir="ltr" class="ltr"><code dir="ltr">DiskPressure</code></td>
 <td dir="rtl"><code dir="ltr">nodefs.available</code>، <code dir="ltr">nodefs.inodesFree</code>، <code dir="ltr">imagefs.available</code>، <code dir="ltr">imagefs.inodesFree</code>، <code dir="ltr">containerfs.available</code> یا <code dir="ltr">containerfs.inodesFree</code></td>
-<td dir="rtl">فضای دیسک و inodeهای در دسترس روی فایل‌سیستم ریشهٔ نود، فایل‌سیستم ایمیج یا فایل‌سیستم کانتینر یک آستانهٔ بیرون‌رانی را برآورده کرده است</td>
+<td dir="rtl">فضای دیسک و inodeهای در دسترس در سیستم فایل ریشه، سیستم فایل ایمیج یا سیستم فایل کانتینر نود به یک آستانه تخلیه رسیده است</td>
 </tr>
 <tr>
 <td dir="ltr" class="ltr"><code dir="ltr">PIDPressure</code></td>
 <td dir="ltr" class="ltr"><code dir="ltr">pid.available</code></td>
-<td dir="rtl">شناسه‌های فرایند در دسترس روی نود (لینوکسی) به کمتر از یک آستانهٔ بیرون‌رانی رسیده است</td>
+<td dir="rtl">شناسه‌های فرایند در دسترس روی نود (لینوکسی) به کمتر از یک آستانه تخلیه رسیده است</td>
 </tr>
 </tbody>
 </table>
-<p dir="rtl">control plane همچنین این وضعیت‌های نود را به taintها
-<a href="taint-and-toleration.html#taint-nodes-by-condition">نگاشت می‌کند</a>.</p>
-<p dir="rtl">kubelet وضعیت‌های نود را بر اساس
-<code dir="ltr">--node-status-update-frequency</code> پیکربندی‌شده به‌روزرسانی می‌کند که مقدار پیش‌فرض آن <code dir="ltr">10s</code> است.</p>
+<p dir="rtl">control plane نیز این وضعیت‌های نود را به taintها <a href="taint-and-toleration.html#taint-nodes-by-condition">نگاشت می‌کند</a>.</p>
+<p dir="rtl">kubelet وضعیت‌های نود را بر اساس <code dir="ltr">nodeStatusUpdateFrequency</code> پیکربندی‌شده به‌روزرسانی می‌کند که مقدار پیش‌فرض آن <code dir="ltr">10s</code> است.</p>
 <h3 id="نوسان-وضعیت-نود" dir="rtl">نوسان وضعیت نود</h3>
-<p dir="rtl">در برخی موارد، نودها بدون اینکه به اندازهٔ مهلت‌های مقرر تعریف‌شده در یک وضعیت بمانند، بالا و پایین آستانه‌های بیرون‌رانی نرم
-نوسان می‌کنند. این امر باعث می‌شود وضعیت گزارش‌شدهٔ نود
-پیوسته بین <code dir="ltr">true</code> و <code dir="ltr">false</code> جابه‌جا شود و به تصمیم‌های نامناسب بیرون‌رانی منجر شود.</p>
-<p dir="rtl">برای محافظت در برابر نوسان، می‌توانید از فلگ <code dir="ltr">eviction-pressure-transition-period</code>
-استفاده کنید که کنترل می‌کند kubelet پیش از تغییر وضعیت یک نود
-به حالتی دیگر، چه مدت باید صبر کند. مقدار پیش‌فرض دورهٔ گذار <code dir="ltr">5m</code> است.</p>
+<p dir="rtl">در برخی موارد، نودها بدون آنکه به اندازه مهلت‌های تعریف‌شده پایدار بمانند، بالا و پایین آستانه‌های تخلیه نرم نوسان می‌کنند. این امر باعث می‌شود وضعیت گزارش‌شده نود مدام بین <code dir="ltr">true</code> و <code dir="ltr">false</code> جابه‌جا شود و به تصمیم‌های نادرست درباره تخلیه بینجامد.</p>
+<p dir="rtl">برای جلوگیری از نوسان، می‌توانید از فلگ <code dir="ltr">eviction-pressure-transition-period</code> استفاده کنید. این فلگ تعیین می‌کند kubelet پیش از تغییر وضعیت یک نود به حالتی دیگر، چه مدت باید صبر کند. مقدار پیش‌فرض این دوره انتقال <code dir="ltr">5m</code> است.</p>
 <h3 id="بازپس-گیری-منابع-سطح-نود-reclaim-node-resources" dir="rtl">بازپس‌گیری منابع سطح نود {#reclaim-node-resources}</h3>
-<p dir="rtl">kubelet پیش از بیرون‌راندن Podهای کاربر نهایی می‌کوشد منابع سطح نود را بازپس گیرد.</p>
-<p dir="rtl">هنگامی که وضعیت نود <code dir="ltr">DiskPressure</code> گزارش شود، kubelet منابع سطح نود را
-بر اساس فایل‌سیستم‌های موجود روی نود بازپس می‌گیرد.</p>
+<p dir="rtl">kubelet پیش از تخلیه پادهای کاربر نهایی، تلاش می‌کند منابع سطح نود را بازپس بگیرد.</p>
+<p dir="rtl">هنگامی که وضعیت نود <code dir="ltr">DiskPressure</code> گزارش شود، kubelet منابع سطح نود را بر اساس سیستم‌های فایل موجود روی نود بازپس می‌گیرد.</p>
 <h4 id="بدون-imagefs-یا-containerfs" dir="rtl">بدون <code dir="ltr">imagefs</code> یا <code dir="ltr">containerfs</code></h4>
-<p dir="rtl">اگر نود تنها یک فایل‌سیستم <code dir="ltr">nodefs</code> داشته باشد که آستانه‌های بیرون‌رانی را برآورده کند،
-kubelet فضای دیسک را به ترتیب زیر آزاد می‌کند:</p>
+<p dir="rtl">اگر نود فقط یک سیستم فایل <code dir="ltr">nodefs</code> داشته باشد که به آستانه‌های تخلیه رسیده است، kubelet فضای دیسک را به ترتیب زیر آزاد می‌کند:</p>
 <ol>
-<li dir="rtl">جمع‌آوری زبالهٔ Podها و کانتینرهای مرده.</li>
-<li dir="rtl">حذف ایمیج‌های استفاده‌نشده.</li>
+<li dir="rtl">پادها و کانتینرهای ازکارافتاده را جمع‌آوری زباله می‌کند.</li>
+<li dir="rtl">ایمیج‌های استفاده‌نشده را حذف می‌کند.</li>
 </ol>
 <h4 id="با-imagefs" dir="rtl">با <code dir="ltr">imagefs</code></h4>
-<p dir="rtl">اگر نود یک فایل‌سیستم <code dir="ltr">imagefs</code> اختصاصی برای استفادهٔ container runtimeها داشته باشد،
-kubelet کارهای زیر را انجام می‌دهد:</p>
+<p dir="rtl">اگر نود یک سیستم فایل <code dir="ltr">imagefs</code> اختصاصی برای استفاده محیط‌های اجرای کانتینر داشته باشد، kubelet کارهای زیر را انجام می‌دهد:</p>
 <ul>
 <li dir="rtl">
-<p dir="rtl">اگر فایل‌سیستم <code dir="ltr">nodefs</code> آستانه‌های بیرون‌رانی را برآورده کند، kubelet
-Podها و کانتینرهای مرده را جمع‌آوری زباله می‌کند.</p>
+<p dir="rtl">اگر سیستم فایل <code dir="ltr">nodefs</code> به آستانه‌های تخلیه برسد، kubelet پادها و کانتینرهای ازکارافتاده را جمع‌آوری زباله می‌کند.</p>
 </li>
 <li dir="rtl">
-<p dir="rtl">اگر فایل‌سیستم <code dir="ltr">imagefs</code> آستانه‌های بیرون‌رانی را برآورده کند، kubelet
-همهٔ ایمیج‌های استفاده‌نشده را حذف می‌کند.</p>
+<p dir="rtl">اگر سیستم فایل <code dir="ltr">imagefs</code> به آستانه‌های تخلیه برسد، kubelet همه ایمیج‌های استفاده‌نشده را حذف می‌کند.</p>
 </li>
 </ul>
 <h4 id="با-imagefs-و-containerfs" dir="rtl">با <code dir="ltr">imagefs</code> و <code dir="ltr">containerfs</code></h4>
-<p dir="rtl">اگر نود یک <code dir="ltr">containerfs</code> اختصاصی در کنار فایل‌سیستم <code dir="ltr">imagefs</code>
-پیکربندی‌شده برای استفادهٔ container runtimeها داشته باشد، kubelet می‌کوشد
-منابع را به شرح زیر بازپس گیرد:</p>
+<p dir="rtl">اگر نود علاوه بر سیستم فایل <code dir="ltr">imagefs</code>، یک <code dir="ltr">containerfs</code> اختصاصی نیز داشته باشد که برای استفاده محیط‌های اجرای کانتینر پیکربندی شده است، kubelet به‌صورت زیر برای بازپس‌گیری منابع تلاش می‌کند:</p>
 <ul>
 <li dir="rtl">
-<p dir="rtl">اگر فایل‌سیستم <code dir="ltr">containerfs</code> آستانه‌های بیرون‌رانی را برآورده کند، kubelet
-Podها و کانتینرهای مرده را جمع‌آوری زباله می‌کند.</p>
+<p dir="rtl">اگر سیستم فایل <code dir="ltr">containerfs</code> به آستانه‌های تخلیه برسد، kubelet پادها و کانتینرهای ازکارافتاده را جمع‌آوری زباله می‌کند.</p>
 </li>
 <li dir="rtl">
-<p dir="rtl">اگر فایل‌سیستم <code dir="ltr">imagefs</code> آستانه‌های بیرون‌رانی را برآورده کند، kubelet
-همهٔ ایمیج‌های استفاده‌نشده را حذف می‌کند.</p>
+<p dir="rtl">اگر سیستم فایل <code dir="ltr">imagefs</code> به آستانه‌های تخلیه برسد، kubelet همه ایمیج‌های استفاده‌نشده را حذف می‌کند.</p>
 </li>
 </ul>
-<h3 id="انتخاب-pod-برای-بیرون-رانی-توسط-kubelet" dir="rtl">انتخاب Pod برای بیرون‌رانی توسط kubelet</h3>
-<p dir="rtl">اگر تلاش‌های kubelet برای بازپس‌گیری منابع سطح نود، سیگنال بیرون‌رانی را
-به کمتر از آستانه نرساند، kubelet بیرون‌راندن Podهای کاربر نهایی را آغاز می‌کند.</p>
-<p dir="rtl">kubelet از پارامترهای زیر برای تعیین ترتیب بیرون‌رانی Podها استفاده می‌کند:</p>
+<h3 id="انتخاب-پاد-برای-بیرون-رانی-در-kubelet" dir="rtl">انتخاب پاد برای بیرون‌رانی در kubelet</h3>
+<p dir="rtl">اگر تلاش‌های kubelet برای بازپس‌گیری منابع در سطح نود، سیگنال بیرون‌رانی (eviction) را به زیر آستانه نرساند، kubelet بیرون‌راندن پادهای کاربر نهایی را آغاز می‌کند.</p>
+<p dir="rtl">kubelet برای تعیین ترتیب بیرون‌رانی پادها از پارامترهای زیر استفاده می‌کند:</p>
 <ol>
-<li dir="rtl">اینکه آیا مصرف منابع Pod از درخواست‌ها فراتر می‌رود یا نه</li>
-<li dir="rtl"><a href="pod-priority-preemption.html">اولویت Pod</a></li>
-<li dir="rtl">مصرف منابع Pod نسبت به درخواست‌ها</li>
+<li dir="rtl">اینکه آیا مصرف منابع پاد از درخواست‌های (requests) آن بیشتر است یا نه</li>
+<li dir="rtl"><a href="pod-priority-preemption.html">اولویت پاد</a></li>
+<li dir="rtl">میزان مصرف منابع پاد نسبت به درخواست‌های آن</li>
 </ol>
-<p dir="rtl">در نتیجه، kubelet Podها را به ترتیب زیر رتبه‌بندی می‌کند و بیرون می‌راند:</p>
+<p dir="rtl">در نتیجه، kubelet پادها را به ترتیب زیر رتبه‌بندی می‌کند و بیرون می‌راند:</p>
 <ol>
 <li dir="rtl">
-<p dir="rtl">Podهای <code dir="ltr">BestEffort</code> یا <code dir="ltr">Burstable</code> که مصرفشان از درخواست‌ها فراتر می‌رود. این Podها
-بر اساس اولویتشان و سپس بر اساس میزانی که سطح مصرفشان
-از درخواست فراتر می‌رود، بیرون رانده می‌شوند.</p>
+<p dir="rtl">پادهای <code dir="ltr">BestEffort</code> یا <code dir="ltr">Burstable</code> که مصرفشان از درخواست‌هایشان بیشتر است. این پادها ابتدا بر اساس اولویتشان و سپس بر اساس میزانی که مصرفشان از درخواست فراتر رفته است، بیرون رانده می‌شوند.</p>
 </li>
 <li dir="rtl">
-<p dir="rtl">Podهای <code dir="ltr">Guaranteed</code> و Podهای <code dir="ltr">Burstable</code> که مصرفشان کمتر از درخواست‌هاست،
-در آخر و بر اساس اولویتشان بیرون رانده می‌شوند.</p>
+<p dir="rtl">پادهای <code dir="ltr">Guaranteed</code> و پادهای <code dir="ltr">Burstable</code> که مصرفشان کمتر از درخواست‌هایشان است، در آخر و بر اساس اولویتشان بیرون رانده می‌شوند.</p>
 </li>
 </ol>
 <div class="callout note"><div class="callout-title">توجه:</div>
-<p dir="rtl">kubelet از <a href="../workloads/pods/pod-qos.html">کلاس QoS</a> مربوط به Pod برای تعیین ترتیب بیرون‌رانی استفاده نمی‌کند.
-می‌توانید از کلاس QoS برای تخمین محتمل‌ترین ترتیب بیرون‌رانی Podها هنگام
-بازپس‌گیری منابعی مانند حافظه استفاده کنید. دسته‌بندی QoS برای درخواست‌های EphemeralStorage اعمال نمی‌شود،
-بنابراین سناریوی بالا در صورتی که نود برای مثال زیر <code dir="ltr">DiskPressure</code> باشد، صدق نمی‌کند.</p>
+<p dir="rtl">kubelet برای تعیین ترتیب بیرون‌رانی از <a href="../workloads/pods/pod-qos.html">کلاس QoS</a> پاد استفاده نمی‌کند. با این حال، هنگام بازپس‌گیری منابعی مانند حافظه می‌توانید از کلاس QoS برای تخمین محتمل‌ترین ترتیب بیرون‌رانی پادها استفاده کنید. طبقه‌بندی QoS شامل درخواست‌های EphemeralStorage نمی‌شود؛ بنابراین اگر نود برای مثال در وضعیت <code dir="ltr">DiskPressure</code> باشد، سناریوی بالا صدق نمی‌کند.</p>
 </div>
-<p dir="rtl">Podهای <code dir="ltr">Guaranteed</code> تنها زمانی تضمین‌شده هستند که درخواست‌ها و محدودیت‌ها برای
-همهٔ کانتینرها مشخص شده و با هم برابر باشند. این Podها هرگز به دلیل
-مصرف منابع یک Pod دیگر بیرون رانده نمی‌شوند. اگر یک daemon سیستمی (مانند <code dir="ltr">kubelet</code>
-و <code dir="ltr">journald</code>) بیش از منابعی که از طریق تخصیص‌های
-<code dir="ltr">system-reserved</code> یا <code dir="ltr">kube-reserved</code> رزرو شده‌اند مصرف کند، و روی نود تنها
-Podهای <code dir="ltr">Guaranteed</code> یا <code dir="ltr">Burstable</code> با مصرف کمتر از درخواست‌ها باقی مانده باشند،
-kubelet باید یکی از این Podها را برای بیرون‌رانی انتخاب کند تا پایداری نود حفظ شود
-و اثر گرسنگی منابع بر Podهای دیگر محدود شود. در این حالت،
-ابتدا Podهای با کمترین اولویت را برای بیرون‌رانی انتخاب می‌کند.</p>
-<p dir="rtl">اگر یک <a href="../workloads/pods/index.html#static-pods">Pod ایستا</a> اجرا می‌کنید
-و می‌خواهید از بیرون‌رانده شدن آن تحت فشار منابع جلوگیری کنید، فیلد
-<code dir="ltr">priority</code> آن Pod را مستقیماً تنظیم کنید. Podهای ایستا از فیلد
-<code dir="ltr">priorityClassName</code> پشتیبانی نمی‌کنند.</p>
-<p dir="rtl">هنگامی که kubelet در واکنش به کمبود inode یا شناسهٔ فرایند، Podها را بیرون می‌راند،
-از اولویت نسبی Podها برای تعیین ترتیب بیرون‌رانی استفاده می‌کند، زیرا inodeها و PIDها
-درخواستی ندارند.</p>
-<p dir="rtl">kubelet بسته به اینکه نود فایل‌سیستم <code dir="ltr">imagefs</code> یا <code dir="ltr">containerfs</code>
-اختصاصی داشته باشد یا نه، Podها را به شکل متفاوتی مرتب می‌کند:</p>
-<h4 id="بدون-imagefs-یا-containerfs-nodefs-و-imagefs-از-یک-فایل-سیستم-استفاده-می-کنند-without-imagefs" dir="rtl">بدون <code dir="ltr">imagefs</code> یا <code dir="ltr">containerfs</code> (<code dir="ltr">nodefs</code> و <code dir="ltr">imagefs</code> از یک فایل‌سیستم استفاده می‌کنند) {#without-imagefs}</h4>
+<p dir="rtl">پادهای <code dir="ltr">Guaranteed</code> تنها زمانی تضمین‌شده هستند که درخواست‌ها و محدودیت‌ها (limits) برای همهٔ کانتینرها تعیین شده و با هم برابر باشند. این پادها هرگز به‌دلیل مصرف منابع پادی دیگر بیرون رانده نمی‌شوند. اگر یک دیمن سیستمی (مانند <code dir="ltr">kubelet</code> و <code dir="ltr">journald</code>) بیش از مقداری که از طریق تخصیص‌های <code dir="ltr">systemReserved</code> یا <code dir="ltr">kubeReserved</code> رزرو شده است منابع مصرف کند و روی نود فقط پادهای <code dir="ltr">Guaranteed</code> یا <code dir="ltr">Burstable</code> با مصرفی کمتر از درخواست‌هایشان باقی مانده باشد، kubelet ناچار است یکی از این پادها را بیرون براند تا پایداری نود حفظ شود و اثر کمبود منابع بر سایر پادها محدود بماند. در این حالت، kubelet ابتدا پادهایی را که کمترین اولویت را دارند بیرون می‌راند.</p>
+<p dir="rtl">اگر یک <a href="../workloads/pods/index.html#static-pods">پاد ایستا</a> اجرا می‌کنید و می‌خواهید هنگام فشار منابع بیرون رانده نشود، فیلد <code dir="ltr">priority</code> را مستقیماً برای آن پاد تنظیم کنید. پادهای ایستا از فیلد <code dir="ltr">priorityClassName</code> پشتیبانی نمی‌کنند.</p>
+<p dir="rtl">هنگامی که kubelet در واکنش به کمبود inode یا شناسهٔ فرایند (PID) پادها را بیرون می‌راند، برای تعیین ترتیب بیرون‌رانی از اولویت نسبی پادها استفاده می‌کند، زیرا inodeها و PIDها درخواستی ندارند.</p>
+<p dir="rtl">kubelet بسته به اینکه نود سیستم‌فایل اختصاصی <code dir="ltr">imagefs</code> یا <code dir="ltr">containerfs</code> داشته باشد یا نه، پادها را به شیوه‌های متفاوتی مرتب می‌کند:</p>
+<h4 id="بدون-imagefs-یا-containerfs-nodefs-و-imagefs-از-یک-سیستم-فایل-استفاده-می-کنند-without-imagefs" dir="rtl">بدون <code dir="ltr">imagefs</code> یا <code dir="ltr">containerfs</code> (<code dir="ltr">nodefs</code> و <code dir="ltr">imagefs</code> از یک سیستم‌فایل استفاده می‌کنند) {#without-imagefs}</h4>
 <ul>
-<li dir="rtl">اگر <code dir="ltr">nodefs</code> بیرون‌رانی‌ها را آغاز کند، kubelet Podها را بر اساس
-کل مصرف دیسکشان (<code dir="ltr">local volumes + logs and a writable layer of all containers</code>) مرتب می‌کند.</li>
+<li dir="rtl">اگر <code dir="ltr">nodefs</code> باعث بیرون‌رانی شود، kubelet پادها را بر اساس کل مصرف دیسکشان (<code dir="ltr">local volumes + logs and a writable layer of all containers</code>) مرتب می‌کند.</li>
 </ul>
-<h4 id="با-imagefs-فایل-سیستم-های-nodefs-و-imagefs-جدا-هستند-with-imagefs" dir="rtl">با <code dir="ltr">imagefs</code> (فایل‌سیستم‌های <code dir="ltr">nodefs</code> و <code dir="ltr">imagefs</code> جدا هستند) {#with-imagefs}</h4>
+<h4 id="با-imagefs-سیستم-فایل-های-nodefs-و-imagefs-جدا-هستند-with-imagefs" dir="rtl">با <code dir="ltr">imagefs</code> (سیستم‌فایل‌های <code dir="ltr">nodefs</code> و <code dir="ltr">imagefs</code> جدا هستند) {#with-imagefs}</h4>
 <ul>
 <li dir="rtl">
-<p dir="rtl">اگر <code dir="ltr">nodefs</code> بیرون‌رانی‌ها را آغاز کند، kubelet Podها را بر اساس مصرف <code dir="ltr">nodefs</code>
-(<code dir="ltr">local volumes + logs of all containers</code>) مرتب می‌کند.</p>
+<p dir="rtl">اگر <code dir="ltr">nodefs</code> باعث بیرون‌رانی شود، kubelet پادها را بر اساس مصرف <code dir="ltr">nodefs</code> (<code dir="ltr">local volumes + logs of all containers</code>) مرتب می‌کند.</p>
 </li>
 <li dir="rtl">
-<p dir="rtl">اگر <code dir="ltr">imagefs</code> بیرون‌رانی‌ها را آغاز کند، kubelet Podها را بر اساس
-مصرف لایهٔ قابل نوشتن همهٔ کانتینرها مرتب می‌کند.</p>
+<p dir="rtl">اگر <code dir="ltr">imagefs</code> باعث بیرون‌رانی شود، kubelet پادها را بر اساس مصرف لایهٔ قابل‌نوشتن همهٔ کانتینرها مرتب می‌کند.</p>
 </li>
 </ul>
-<h4 id="با-imagefs-و-containerfs-imagefs-و-containerfs-تفکیک-شده-اند-with-containersfs" dir="rtl">با <code dir="ltr">imagefs</code> و <code dir="ltr">containerfs</code> (<code dir="ltr">imagefs</code> و <code dir="ltr">containerfs</code> تفکیک شده‌اند) {#with-containersfs}</h4>
+<h4 id="با-imagefs-و-containerfs-imagefs-و-containerfs-از-هم-جدا-شده-اند-with-containersfs" dir="rtl">با <code dir="ltr">imagefs</code> و <code dir="ltr">containerfs</code> (<code dir="ltr">imagefs</code> و <code dir="ltr">containerfs</code> از هم جدا شده‌اند) {#with-containersfs}</h4>
 <ul>
 <li dir="rtl">
-<p dir="rtl">اگر <code dir="ltr">containerfs</code> بیرون‌رانی‌ها را آغاز کند، kubelet Podها را بر اساس
-مصرف <code dir="ltr">containerfs</code> (<code dir="ltr">local volumes + logs and a writable layer of all containers</code>) مرتب می‌کند.</p>
+<p dir="rtl">اگر <code dir="ltr">containerfs</code> باعث بیرون‌رانی شود، kubelet پادها را بر اساس مصرف <code dir="ltr">containerfs</code> (<code dir="ltr">local volumes + logs and a writable layer of all containers</code>) مرتب می‌کند.</p>
 </li>
 <li dir="rtl">
-<p dir="rtl">اگر <code dir="ltr">imagefs</code> بیرون‌رانی‌ها را آغاز کند، kubelet Podها را بر اساس رتبهٔ
-<code dir="ltr">storage of images</code> مرتب می‌کند که نمایانگر مصرف دیسک یک ایمیج مشخص است.</p>
+<p dir="rtl">اگر <code dir="ltr">imagefs</code> باعث بیرون‌رانی شود، kubelet پادها را بر اساس رتبهٔ <code dir="ltr">storage of images</code> مرتب می‌کند که نشان‌دهندهٔ مصرف دیسکِ هر ایمیج است.</p>
 </li>
 </ul>
 <h3 id="حداقل-بازپس-گیری-در-بیرون-رانی" dir="rtl">حداقل بازپس‌گیری در بیرون‌رانی</h3>
 <div class="callout note"><div class="callout-title">توجه:</div>
-<p dir="rtl">از کوبرنتیز v1.37، نمی‌توانید مقدار سفارشی‌ای
-برای متریک <code dir="ltr">containerfs.available</code> تنظیم کنید. پیکربندی این متریک مشخص
-به‌طور خودکار طوری تنظیم می‌شود که بسته به پیکربندی، مقادیر تعیین‌شده برای <code dir="ltr">nodefs</code>
-یا <code dir="ltr">imagefs</code> را منعکس کند.</p>
+<p dir="rtl">از نسخهٔ v1.37 کوبرنتیز، نمی‌توانید مقدار سفارشی برای متریک <code dir="ltr">containerfs.available</code> تعیین کنید. پیکربندی این متریک خاص، بسته به پیکربندی، به‌طور خودکار طوری تنظیم می‌شود که مقادیر تعیین‌شده برای <code dir="ltr">nodefs</code> یا <code dir="ltr">imagefs</code> را منعکس کند.</p>
 </div>
-<p dir="rtl">در برخی موارد، بیرون‌رانی Pod تنها مقدار کمی از منبع کمیاب‌شده را بازپس می‌گیرد.
-این امر می‌تواند باعث شود kubelet بارها به آستانه‌های بیرون‌رانی پیکربندی‌شده برسد
-و چندین بیرون‌رانی را آغاز کند.</p>
-<p dir="rtl">می‌توانید از فلگ <code dir="ltr">--eviction-minimum-reclaim</code> یا یک <a href="../../tasks/administer-cluster/kubelet-config-file.html">فایل پیکربندی kubelet</a>
-برای پیکربندی حداقل مقدار بازپس‌گیری برای هر منبع استفاده کنید. هنگامی که kubelet متوجه شود
-که یک منبع کمیاب شده است، به بازپس‌گیری آن منبع ادامه می‌دهد تا زمانی که
-مقدار مشخص‌شده توسط شما را بازپس گیرد.</p>
-<p dir="rtl">برای مثال، پیکربندی زیر حداقل مقادیر بازپس‌گیری را تنظیم می‌کند:</p>
+<p dir="rtl">در برخی موارد، بیرون‌راندن پاد تنها مقدار کمی از منبعِ دچار کمبود را بازپس می‌گیرد. این وضعیت ممکن است باعث شود kubelet بارها به آستانه‌های بیرون‌رانی پیکربندی‌شده برسد و بیرون‌رانی‌های متعددی را آغاز کند.</p>
+<p dir="rtl">می‌توانید با فیلد <code dir="ltr">evictionMinimumReclaim</code> در <a href="../../tasks/administer-cluster/kubelet-config-file.html">فایل پیکربندی kubelet</a> برای هر منبع حداقل مقدار بازپس‌گیری را پیکربندی کنید. هنگامی که kubelet متوجه کمبود یک منبع شود، بازپس‌گیری آن منبع را تا رسیدن به مقداری که تعیین کرده‌اید ادامه می‌دهد.</p>
+<p dir="rtl">برای مثال، پیکربندی زیر حداقل مقادیر بازپس‌گیری را تعیین می‌کند:</p>
 <pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: kubelet.config.k8s.io/v1beta1
 kind: KubeletConfiguration
 evictionHard:
@@ -549,19 +388,12 @@ evictionMinimumReclaim:
   nodefs.available: "500Mi"
   imagefs.available: "2Gi"
 </code></pre>
-<p dir="rtl">در این مثال، اگر سیگنال <code dir="ltr">nodefs.available</code> آستانهٔ بیرون‌رانی را برآورده کند،
-kubelet منبع را بازپس می‌گیرد تا سیگنال به آستانهٔ ۱GiB برسد،
-و سپس بازپس‌گیری حداقل مقدار ۵۰۰MiB را ادامه می‌دهد تا مقدار ذخیره‌سازی
-nodefs در دسترس به ۱.۵GiB برسد.</p>
-<p dir="rtl">به همین ترتیب، kubelet می‌کوشد منبع <code dir="ltr">imagefs</code> را بازپس گیرد تا مقدار <code dir="ltr">imagefs.available</code>
-به <code dir="ltr">102Gi</code> برسد که نمایانگر ۱۰۲ GiB فضای ذخیره‌سازی در دسترس برای ایمیج‌های کانتینر است. اگر مقدار
-فضای ذخیره‌سازی‌ای که kubelet می‌تواند بازپس گیرد کمتر از ۲GiB باشد، kubelet هیچ چیزی را بازپس نمی‌گیرد.</p>
-<p dir="rtl">مقدار پیش‌فرض <code dir="ltr">eviction-minimum-reclaim</code> برای همهٔ منابع <code dir="ltr">0</code> است.</p>
-<h2 id="رفتار-نود-در-کمبود-حافظه" dir="rtl">رفتار نود در کمبود حافظه</h2>
-<p dir="rtl">اگر نود پیش از اینکه kubelet بتواند حافظه را بازپس گیرد، با رویداد <em>کمبود حافظه</em> (OOM)
-مواجه شود، نود برای واکنش به <a href="https://lwn.net/Articles/391222/" target="_blank" rel="noopener">oom_killer</a>
-وابسته است.</p>
-<p dir="rtl">kubelet برای هر کانتینر بر اساس QoS مربوط به Pod یک مقدار <code dir="ltr">oom_score_adj</code> تنظیم می‌کند.</p>
+<p dir="rtl">در این مثال، اگر سیگنال <code dir="ltr">nodefs.available</code> به آستانهٔ بیرون‌رانی برسد، kubelet منبع را تا زمانی بازپس می‌گیرد که سیگنال به آستانهٔ 1GiB برسد و سپس بازپس‌گیری حداقل مقدار 500MiB را ادامه می‌دهد تا مقدار فضای ذخیره‌سازی در دسترس nodefs به 1.5GiB برسد.</p>
+<p dir="rtl">به همین ترتیب، kubelet تلاش می‌کند منبع <code dir="ltr">imagefs</code> را تا زمانی بازپس بگیرد که مقدار <code dir="ltr">imagefs.available</code> به <code dir="ltr">102Gi</code> برسد؛ یعنی 102 GiB فضای ذخیره‌سازی در دسترس برای ایمیج‌های کانتینر. اگر مقدار فضایی که kubelet می‌تواند بازپس بگیرد کمتر از 2GiB باشد، kubelet هیچ فضایی را بازپس نمی‌گیرد.</p>
+<p dir="rtl">مقدار پیش‌فرض <code dir="ltr">evictionMinimumReclaim</code> برای همهٔ منابع <code dir="ltr">0</code> است.</p>
+<h2 id="رفتار-نود-هنگام-تمام-شدن-حافظه" dir="rtl">رفتار نود هنگام تمام شدن حافظه</h2>
+<p dir="rtl">اگر پیش از آنکه kubelet بتواند حافظه را بازپس بگیرد، نود با رویداد <em>تمام شدن حافظه</em> (OOM) مواجه شود، واکنش نود به <a href="https://lwn.net/Articles/391222/" target="_blank" rel="noopener">oom_killer</a> وابسته است.</p>
+<p dir="rtl">kubelet برای هر کانتینر، بر اساس QoS پاد، یک مقدار <code dir="ltr">oom_score_adj</code> تعیین می‌کند.</p>
 <table>
 <thead>
 <tr>
@@ -585,80 +417,53 @@ nodefs در دسترس به ۱.۵GiB برسد.</p>
 </tbody>
 </table>
 <div class="callout note"><div class="callout-title">توجه:</div>
-<p dir="rtl">kubelet همچنین برای همهٔ کانتینرهای Podهایی که
-<span class="term" title="pod-priority">اولویت</span> <code dir="ltr">system-node-critical</code> دارند، مقدار <code dir="ltr">oom_score_adj</code> را روی <code dir="ltr">-997</code> تنظیم می‌کند.</p>
+<p dir="rtl">kubelet همچنین برای همهٔ کانتینرهای پادهایی که <span class="term" title="pod-priority">اولویت</span> <code dir="ltr">system-node-critical</code> دارند، مقدار <code dir="ltr">oom_score_adj</code> را <code dir="ltr">-997</code> تعیین می‌کند.</p>
 </div>
-<p dir="rtl">اگر kubelet نتواند پیش از رخ دادن OOM در نود حافظه را بازپس گیرد،
-<code dir="ltr">oom_killer</code> یک <code dir="ltr">oom_score</code> بر اساس درصد حافظه‌ای که هر کانتینر
-روی نود مصرف می‌کند محاسبه می‌کند و سپس <code dir="ltr">oom_score_adj</code> را به آن اضافه می‌کند تا <code dir="ltr">oom_score</code> مؤثر
-هر کانتینر به دست آید. سپس کانتینری را که بالاترین امتیاز را دارد، می‌کشد.</p>
-<p dir="rtl">این بدان معناست که کانتینرهای Podهای با QoS پایین که نسبت به درخواست‌های زمان‌بندی خود
-مقدار زیادی حافظه مصرف می‌کنند، زودتر کشته می‌شوند.</p>
-<p dir="rtl">برخلاف بیرون‌رانی Pod، اگر یک کانتینر به دلیل OOM کشته شود، kubelet می‌تواند آن را
-بر اساس <code dir="ltr">restartPolicy</code> آن دوباره راه‌اندازی کند.</p>
-<h2 id="روش-های-خوب-node-pressure-eviction-good-practices" dir="rtl">روش‌های خوب {#node-pressure-eviction-good-practices}</h2>
-<p dir="rtl">بخش‌های زیر روش‌های خوب برای پیکربندی بیرون‌رانی را شرح می‌دهند.</p>
-<h3 id="منابع-قابل-زمان-بندی-و-سیاست-های-بیرون-رانی" dir="rtl">منابع قابل زمان‌بندی و سیاست‌های بیرون‌رانی</h3>
-<p dir="rtl">هنگامی که kubelet را با یک سیاست بیرون‌رانی پیکربندی می‌کنید، باید اطمینان حاصل کنید که
-زمان‌بند Podهایی را که به دلیل ایجاد فوری فشار حافظه، بیرون‌رانی را آغاز می‌کنند،
-زمان‌بندی نکند.</p>
+<p dir="rtl">اگر kubelet نتواند پیش از رخ دادن OOM در نود حافظه را بازپس بگیرد، <code dir="ltr">oom_killer</code> بر اساس درصد حافظه‌ای که هر کانتینر روی نود مصرف می‌کند یک <code dir="ltr">oom_score</code> محاسبه می‌کند و سپس <code dir="ltr">oom_score_adj</code> را به آن می‌افزاید تا <code dir="ltr">oom_score</code> مؤثر هر کانتینر به دست آید. سپس کانتینری را که بالاترین امتیاز را دارد از بین می‌برد.</p>
+<p dir="rtl">این بدان معناست که کانتینرهای پادهایی با QoS پایین که نسبت به درخواست‌های زمان‌بندی‌شان حافظهٔ زیادی مصرف می‌کنند، زودتر از بقیه از بین برده می‌شوند.</p>
+<p dir="rtl">برخلاف بیرون‌رانی پاد، اگر کانتینری به‌دلیل OOM از بین برود، kubelet می‌تواند آن را بر اساس <code dir="ltr">restartPolicy</code> آن دوباره راه‌اندازی کند.</p>
+<h2 id="روش-های-توصیه-شده-node-pressure-eviction-good-practices" dir="rtl">روش‌های توصیه‌شده {#node-pressure-eviction-good-practices}</h2>
+<p dir="rtl">بخش‌های زیر روش‌های توصیه‌شده برای پیکربندی بیرون‌رانی را شرح می‌دهند.</p>
+<h3 id="منابع-قابل-زمان-بندی-و-سیاست-های-بیرون-رانی" dir="rtl">منابع قابل‌زمان‌بندی و سیاست‌های بیرون‌رانی</h3>
+<p dir="rtl">هنگامی که kubelet را با یک سیاست بیرون‌رانی پیکربندی می‌کنید، باید مطمئن شوید که زمان‌بند پادهایی را که بلافاصله فشار حافظه ایجاد می‌کنند و در نتیجه باعث بیرون‌رانی می‌شوند، زمان‌بندی نمی‌کند.</p>
 <p dir="rtl">سناریوی زیر را در نظر بگیرید:</p>
 <ul>
-<li dir="rtl">ظرفیت حافظهٔ نود: ۱۰GiB</li>
-<li dir="rtl">گرداننده می‌خواهد ۱۰٪ از ظرفیت حافظه را برای daemonهای سیستمی (کرنل، <code dir="ltr">kubelet</code> و غیره) رزرو کند.</li>
-<li dir="rtl">گرداننده می‌خواهد Podها را در ۹۵٪ مصرف حافظه بیرون براند تا وقوع OOM سیستمی کاهش یابد.</li>
+<li dir="rtl">ظرفیت حافظهٔ نود: 10GiB</li>
+<li dir="rtl">اپراتور می‌خواهد ۱۰٪ از ظرفیت حافظه را برای دیمن‌های سیستمی (کرنل، <code dir="ltr">kubelet</code> و غیره) رزرو کند.</li>
+<li dir="rtl">اپراتور می‌خواهد برای کاهش وقوع OOM در سیستم، پادها را هنگام رسیدن مصرف حافظه به ۹۵٪ بیرون براند.</li>
 </ul>
-<p dir="rtl">برای اینکه این کار عملی شود، kubelet به شکل زیر اجرا می‌شود:</p>
-<pre dir="ltr"><code class="language-none" dir="ltr">--eviction-hard=memory.available&lt;500Mi
---system-reserved=memory=1.5Gi
+<p dir="rtl">برای اینکه این سناریو عملی شود، فایل پیکربندی kubelet به شکل زیر تکمیل می‌شود:</p>
+<pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: kubelet.config.k8s.io/v1beta1
+kind: KubeletConfiguration
+evictionHard:
+  memory.available: "500Mi"
+systemReserved:
+  memory: "1.5Gi"
 </code></pre>
-<p dir="rtl">در این پیکربندی، فلگ <code dir="ltr">--system-reserved</code> مقدار ۱.۵GiB حافظه
-برای سیستم رزرو می‌کند که برابر با <code dir="ltr">10% of the total memory + the eviction threshold amount</code> است.</p>
-<p dir="rtl">نود ممکن است به آستانهٔ بیرون‌رانی برسد، اگر یک Pod بیش از درخواست خود مصرف کند،
-یا اگر سیستم بیش از ۱GiB حافظه مصرف کند؛ این امر باعث می‌شود سیگنال <code dir="ltr">memory.available</code>
-به کمتر از ۵۰۰MiB برسد و آستانه فعال شود.</p>
+<p dir="rtl">در این پیکربندی، <code dir="ltr">systemReserved</code> مقدار 1.5GiB از حافظه را برای سیستم رزرو می‌کند که برابر با <code dir="ltr">10% of the total memory + the eviction threshold amount</code> است.</p>
+<p dir="rtl">نود در صورتی به آستانهٔ بیرون‌رانی می‌رسد که پادی بیش از درخواستش مصرف کند یا سیستم بیش از 1GiB حافظه مصرف کند؛ در این صورت سیگنال <code dir="ltr">memory.available</code> به زیر 500MiB می‌رسد و آستانه فعال می‌شود.</p>
 <h3 id="daemonsetها-و-بیرون-رانی-ناشی-از-فشار-نود-daemonset" dir="rtl">DaemonSetها و بیرون‌رانی ناشی از فشار نود {#daemonset}</h3>
-<p dir="rtl">اولویت Pod عامل اصلی در گرفتن تصمیم‌های بیرون‌رانی است. اگر نمی‌خواهید
-kubelet Podهای متعلق به یک DaemonSet را بیرون براند، با تعیین یک <code dir="ltr">priorityClassName</code> مناسب در مشخصات Pod،
-اولویت به‌قدر کافی بالایی به آن Podها بدهید.
-همچنین می‌توانید از اولویت پایین‌تر یا اولویت پیش‌فرض استفاده کنید تا Podهای آن
-DaemonSet تنها زمانی اجرا شوند که منابع کافی وجود داشته باشد.</p>
+<p dir="rtl">اولویت پاد عامل اصلی در تصمیم‌گیری‌های مربوط به بیرون‌رانی است. اگر نمی‌خواهید kubelet پادهای متعلق به یک DaemonSet را بیرون براند، با تعیین یک <code dir="ltr">priorityClassName</code> مناسب در مشخصات پاد، اولویت کافی به آن پادها بدهید. همچنین می‌توانید از اولویتی پایین‌تر یا اولویت پیش‌فرض استفاده کنید تا پادهای آن DaemonSet فقط زمانی اجرا شوند که منابع کافی وجود داشته باشد.</p>
 <h2 id="مشکلات-شناخته-شده" dir="rtl">مشکلات شناخته‌شده</h2>
 <p dir="rtl">بخش‌های زیر مشکلات شناخته‌شدهٔ مربوط به مدیریت کمبود منابع را شرح می‌دهند.</p>
-<h3 id="ممکن-است-kubelet-فشار-حافظه-را-بی-درنگ-مشاهده-نکند" dir="rtl">ممکن است kubelet فشار حافظه را بی‌درنگ مشاهده نکند</h3>
-<p dir="rtl">به‌طور پیش‌فرض، kubelet در بازه‌های منظم از cAdvisor برای جمع‌آوری آمار مصرف حافظه
-پرس‌وجو می‌کند. اگر مصرف حافظه در آن بازه به‌سرعت افزایش یابد،
-kubelet ممکن است <code dir="ltr">MemoryPressure</code> را به‌قدر کافی سریع مشاهده نکند و OOM killer
-همچنان فراخوانی شود.</p>
-<p dir="rtl">می‌توانید از فلگ <code dir="ltr">--kernel-memcg-notification</code> برای فعال کردن API اعلان
-<code dir="ltr">memcg</code> در kubelet استفاده کنید تا به محض عبور از یک آستانه
-بی‌درنگ مطلع شوید.</p>
-<p dir="rtl">اگر به دنبال دستیابی به بهره‌وری حداکثری نیستید، بلکه میزان معقولی از
-تخصیص بیش از ظرفیت (overcommit) را می‌خواهید، یک راه‌حل عملی برای این مشکل استفاده از فلگ‌های <code dir="ltr">--kube-reserved</code>
-و <code dir="ltr">--system-reserved</code> برای تخصیص حافظه به سیستم است.</p>
+<h3 id="ممکن-است-kubelet-فشار-حافظه-را-فوراً-تشخیص-ندهد" dir="rtl">ممکن است kubelet فشار حافظه را فوراً تشخیص ندهد</h3>
+<p dir="rtl">به‌طور پیش‌فرض، kubelet در فواصل زمانی منظم از cAdvisor آمار مصرف حافظه را جمع‌آوری می‌کند. اگر مصرف حافظه در همان بازهٔ زمانی به‌سرعت افزایش یابد، ممکن است kubelet وضعیت <code dir="ltr">MemoryPressure</code> را به‌موقع تشخیص ندهد و OOM killer همچنان فراخوانی شود.</p>
+<p dir="rtl">می‌توانید با فیلد پیکربندی <code dir="ltr">kernelMemcgNotification</code>، رابط اعلان <code dir="ltr">memcg</code> را در kubelet فعال کنید تا به محض عبور از یک آستانه بلافاصله مطلع شوید.</p>
+<p dir="rtl">اگر به دنبال بهره‌وری حداکثری نیستید و تنها میزان معقولی از تخصیص بیش از ظرفیت (overcommit) را می‌خواهید، راه‌حل عملی برای این مشکل استفاده از فیلدهای پیکربندی <code dir="ltr">kubeReserved</code> و <code dir="ltr">systemReserved</code> برای تخصیص حافظه به سیستم است.</p>
 <h3 id="حافظهٔ-active_file-به-عنوان-حافظهٔ-در-دسترس-در-نظر-گرفته-نمی-شود" dir="rtl">حافظهٔ active_file به‌عنوان حافظهٔ در دسترس در نظر گرفته نمی‌شود</h3>
-<p dir="rtl">در لینوکس، کرنل تعداد بایت‌های حافظهٔ پشتیبانی‌شده با فایل در فهرست فعال
-«کمترین استفادهٔ اخیر» (LRU) را به‌عنوان آمار <code dir="ltr">active_file</code> ردیابی می‌کند. kubelet نواحی حافظهٔ <code dir="ltr">active_file</code>
-را غیرقابل بازپس‌گیری در نظر می‌گیرد. برای بارهای کاری‌ای که به‌طور فشرده از ذخیره‌سازی محلی
-مبتنی بر بلوک، از جمله ذخیره‌سازی محلی موقت، استفاده می‌کنند، حافظه‌های نهان سطح کرنل برای داده‌های فایل
-و بلوک باعث می‌شوند بسیاری از صفحه‌های حافظهٔ نهان که اخیراً به آن‌ها دسترسی شده است، احتمالاً
-به‌عنوان <code dir="ltr">active_file</code> شمرده شوند. اگر تعداد کافی از این بافرهای بلوکی کرنل در
-فهرست LRU فعال باشند، kubelet ممکن است این را مصرف بالای منابع تلقی کند و
-نود را به‌عنوان نودی که فشار حافظه را تجربه می‌کند taint کند و بیرون‌رانی Pod را آغاز کند.</p>
+<p dir="rtl">در لینوکس، کرنل تعداد بایت‌های حافظهٔ متکی بر فایل را که در فهرست فعالِ «کمترین استفادهٔ اخیر» (LRU) قرار دارند، در قالب آمار <code dir="ltr">active_file</code> پیگیری می‌کند. kubelet نواحی حافظهٔ <code dir="ltr">active_file</code> را غیرقابل‌بازپس‌گیری در نظر می‌گیرد. در بارهای کاری‌ای که به‌طور گسترده از ذخیره‌سازی محلی مبتنی بر بلاک، از جمله ذخیره‌سازی محلی موقت، استفاده می‌کنند، کش‌های سطح کرنل برای داده‌های فایل و بلاک باعث می‌شوند بسیاری از صفحات کشی که اخیراً به آن‌ها دسترسی شده است احتمالاً جزو <code dir="ltr">active_file</code> شمرده شوند. اگر تعداد کافی از این بافرهای بلاک کرنل در فهرست LRU فعال باشند، ممکن است kubelet این وضعیت را مصرف بالای منابع تلقی کند و نود را با taint مربوط به فشار حافظه علامت‌گذاری کند؛ که این کار به بیرون‌رانی پادها منجر می‌شود.</p>
 <p dir="rtl">برای جزئیات بیشتر، <a href="https://github.com/kubernetes/kubernetes/issues/43916" target="_blank" rel="noopener">https://github.com/kubernetes/kubernetes/issues/43916</a> را ببینید.</p>
-<p dir="rtl">می‌توانید با تنظیم محدودیت حافظه و درخواست حافظه به مقدار یکسان
-برای کانتینرهایی که احتمالاً فعالیت I/O فشرده‌ای انجام می‌دهند، این رفتار را دور بزنید. لازم است
-مقدار بهینهٔ محدودیت حافظه را برای آن کانتینر تخمین بزنید یا اندازه‌گیری کنید.</p>
+<p dir="rtl">برای دور زدن این رفتار، می‌توانید برای کانتینرهایی که احتمالاً فعالیت ورودی/خروجی (I/O) سنگینی دارند، محدودیت حافظه و درخواست حافظه را برابر تعیین کنید. لازم است مقدار بهینهٔ محدودیت حافظه را برای آن کانتینر تخمین بزنید یا اندازه‌گیری کنید.</p>
 <h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
 <ul>
-<li dir="rtl">دربارهٔ <a href="api-eviction.html">بیرون‌رانی آغازشده از طریق API</a> بیاموزید</li>
-<li dir="rtl">دربارهٔ <a href="pod-priority-preemption.html">اولویت و پس‌گیری Pod</a> بیاموزید</li>
-<li dir="rtl">دربارهٔ <a href="../../tasks/run-application/configure-pdb.html">PodDisruptionBudgetها</a> بیاموزید</li>
-<li dir="rtl">دربارهٔ <a href="../../tasks/configure-pod-container/quality-service-pod.html">کیفیت سرویس</a> (QoS) بیاموزید</li>
-<li dir="rtl"><a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.37/#create-eviction-pod-v1-core" target="_blank">Eviction API</a> را بررسی کنید</li>
+<li dir="rtl">با <a href="api-eviction.html">بیرون‌رانی آغازشده از طریق API</a> آشنا شوید.</li>
+<li dir="rtl">با <a href="pod-priority-preemption.html">اولویت و پیش‌دستی پاد</a> آشنا شوید.</li>
+<li dir="rtl">با <a href="../../tasks/run-application/configure-pdb.html">PodDisruptionBudgetها</a> آشنا شوید.</li>
+<li dir="rtl">با <a href="../../tasks/configure-pod-container/quality-service-pod.html">کیفیت سرویس</a> (QoS) آشنا شوید.</li>
+<li dir="rtl">نگاهی به <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.37/#create-eviction-pod-v1-core" target="_blank">API بیرون‌رانی</a> بیندازید.</li>
 </ul>
 <p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
-<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#رفتار-خودترمیمی">رفتار خودترمیمی</a><a class="l3" href="#خودترمیمی-برای-podهای-ایستا">خودترمیمی برای Podهای ایستا</a><a class="l2" href="#سیگنال-ها-و-آستانه-های-بیرون-رانی">سیگنال‌ها و آستانه‌های بیرون‌رانی</a><a class="l3" href="#سیگنال-های-بیرون-رانی-eviction-signals">سیگنال‌های بیرون‌رانی {#eviction-signals}</a><a class="l3" href="#قابلیت-های-منسوخ-شدهٔ-جمع-آوری-زباله-در-kubelet">قابلیت‌های منسوخ‌شدهٔ جمع‌آوری زباله در kubelet</a><a class="l3" href="#آستانه-های-بیرون-رانی">آستانه‌های بیرون‌رانی</a><a class="l2" href="#بازهٔ-پایش-بیرون-رانی">بازهٔ پایش بیرون‌رانی</a><a class="l2" href="#وضعیت-های-نود-node-conditions">وضعیت‌های نود {#node-conditions}</a><a class="l3" href="#نوسان-وضعیت-نود">نوسان وضعیت نود</a><a class="l3" href="#بازپس-گیری-منابع-سطح-نود-reclaim-node-resources">بازپس‌گیری منابع سطح نود {#reclaim-node-resources}</a><a class="l3" href="#انتخاب-pod-برای-بیرون-رانی-توسط-kubelet">انتخاب Pod برای بیرون‌رانی توسط kubelet</a><a class="l3" href="#حداقل-بازپس-گیری-در-بیرون-رانی">حداقل بازپس‌گیری در بیرون‌رانی</a><a class="l2" href="#رفتار-نود-در-کمبود-حافظه">رفتار نود در کمبود حافظه</a><a class="l2" href="#روش-های-خوب-node-pressure-eviction-good-practices">روش‌های خوب {#node-pressure-eviction-good-practices}</a><a class="l3" href="#منابع-قابل-زمان-بندی-و-سیاست-های-بیرون-رانی">منابع قابل زمان‌بندی و سیاست‌های بیرون‌رانی</a><a class="l3" href="#daemonsetها-و-بیرون-رانی-ناشی-از-فشار-نود-daemonset">DaemonSetها و بیرون‌رانی ناشی از فشار نود {#daemonset}</a><a class="l2" href="#مشکلات-شناخته-شده">مشکلات شناخته‌شده</a><a class="l3" href="#ممکن-است-kubelet-فشار-حافظه-را-بی-درنگ-مشاهده-نکند">ممکن است kubelet فشار حافظه را بی‌درنگ مشاهده نکند</a><a class="l3" href="#حافظهٔ-active_file-به-عنوان-حافظهٔ-در-دسترس-در-نظر-گرفته-نمی-شود">حافظهٔ active_file به‌عنوان حافظهٔ در دسترس در نظر گرفته نمی‌شود</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#رفتار-خودترمیمی">رفتار خودترمیمی</a><a class="l3" href="#خودترمیمی-برای-پادهای-ایستا">خودترمیمی برای پادهای ایستا</a><a class="l2" href="#سیگنال-ها-و-آستانه-های-تخلیه">سیگنال‌ها و آستانه‌های تخلیه</a><a class="l3" href="#سیگنال-های-تخلیه-eviction-signals">سیگنال‌های تخلیه {#eviction-signals}</a><a class="l3" href="#قابلیت-های-منسوخ-شده-جمع-آوری-زباله-در-kubelet">قابلیت‌های منسوخ‌شده جمع‌آوری زباله در kubelet</a><a class="l3" href="#آستانه-های-تخلیه">آستانه‌های تخلیه</a><a class="l2" href="#بازه-پایش-تخلیه">بازه پایش تخلیه</a><a class="l2" href="#وضعیت-های-نود-node-conditions">وضعیت‌های نود {#node-conditions}</a><a class="l3" href="#نوسان-وضعیت-نود">نوسان وضعیت نود</a><a class="l3" href="#بازپس-گیری-منابع-سطح-نود-reclaim-node-resources">بازپس‌گیری منابع سطح نود {#reclaim-node-resources}</a><a class="l3" href="#انتخاب-پاد-برای-بیرون-رانی-در-kubelet">انتخاب پاد برای بیرون‌رانی در kubelet</a><a class="l3" href="#حداقل-بازپس-گیری-در-بیرون-رانی">حداقل بازپس‌گیری در بیرون‌رانی</a><a class="l2" href="#رفتار-نود-هنگام-تمام-شدن-حافظه">رفتار نود هنگام تمام شدن حافظه</a><a class="l2" href="#روش-های-توصیه-شده-node-pressure-eviction-good-practices">روش‌های توصیه‌شده {#node-pressure-eviction-good-practices}</a><a class="l3" href="#منابع-قابل-زمان-بندی-و-سیاست-های-بیرون-رانی">منابع قابل‌زمان‌بندی و سیاست‌های بیرون‌رانی</a><a class="l3" href="#daemonsetها-و-بیرون-رانی-ناشی-از-فشار-نود-daemonset">DaemonSetها و بیرون‌رانی ناشی از فشار نود {#daemonset}</a><a class="l2" href="#مشکلات-شناخته-شده">مشکلات شناخته‌شده</a><a class="l3" href="#ممکن-است-kubelet-فشار-حافظه-را-فوراً-تشخیص-ندهد">ممکن است kubelet فشار حافظه را فوراً تشخیص ندهد</a><a class="l3" href="#حافظهٔ-active_file-به-عنوان-حافظهٔ-در-دسترس-در-نظر-گرفته-نمی-شود">حافظهٔ active_file به‌عنوان حافظهٔ در دسترس در نظر گرفته نمی‌شود</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
 </div>
 </body>
 </html>

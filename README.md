@@ -101,26 +101,26 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [concepts/storage/_index.md](md/concepts/storage/_index.md) — 2026-11-18T14:56:33+03:30
+- [concepts/services-networking/topology-aware-routing.md](md/concepts/services-networking/topology-aware-routing.md) — 2026-11-18T14:56:30+03:30
+- [concepts/services-networking/_index.md](md/concepts/services-networking/_index.md) — 2026-11-18T14:56:05+03:30
+- [concepts/security/windows-security.md](md/concepts/security/windows-security.md) — 2026-11-18T14:55:47+03:30
+- [concepts/security/security-checklist.md](md/concepts/security/security-checklist.md) — 2026-11-18T14:55:34+03:30
+- [concepts/security/service-accounts.md](md/concepts/security/service-accounts.md) — 2026-11-18T14:55:33+03:30
+- [concepts/security/pod-security-standards.md](md/concepts/security/pod-security-standards.md) — 2026-11-18T14:54:03+03:30
+- [concepts/security/secrets-good-practices.md](md/concepts/security/secrets-good-practices.md) — 2026-11-18T14:51:57+03:30
+- [concepts/security/rbac-good-practices.md](md/concepts/security/rbac-good-practices.md) — 2026-11-18T14:51:27+03:30
+- [concepts/scheduling-eviction/scheduling-framework.md](md/concepts/scheduling-eviction/scheduling-framework.md) — 2026-11-18T14:50:25+03:30
+- [concepts/scheduling-eviction/scheduler-perf-tuning.md](md/concepts/scheduling-eviction/scheduler-perf-tuning.md) — 2026-11-18T14:49:29+03:30
+- [concepts/scheduling-eviction/podgroup-scheduling.md](md/concepts/scheduling-eviction/podgroup-scheduling.md) — 2026-11-18T14:49:27+03:30
+- [concepts/scheduling-eviction/running-multiple-schedulers.md](md/concepts/scheduling-eviction/running-multiple-schedulers.md) — 2026-11-18T14:48:43+03:30
+- [concepts/scheduling-eviction/resource-bin-packing.md](md/concepts/scheduling-eviction/resource-bin-packing.md) — 2026-11-18T14:48:25+03:30
+- [concepts/scheduling-eviction/node-pressure-eviction.md](md/concepts/scheduling-eviction/node-pressure-eviction.md) — 2026-11-18T14:47:50+03:30
 - [concepts/resource-management/dynamic-resource-allocation/dra-observability.md](md/concepts/resource-management/dynamic-resource-allocation/dra-observability.md) — 2026-11-16T16:15:02+03:30
 - [concepts/resource-management/dynamic-resource-allocation/dra-features.md](md/concepts/resource-management/dynamic-resource-allocation/dra-features.md) — 2026-11-16T16:15:01+03:30
 - [concepts/resource-management/dynamic-resource-allocation/dra-api.md](md/concepts/resource-management/dynamic-resource-allocation/dra-api.md) — 2026-11-16T16:13:02+03:30
 - [concepts/extend-kubernetes/_index.md](md/concepts/extend-kubernetes/_index.md) — 2026-11-16T16:12:38+03:30
 - [concepts/extend-kubernetes/api-extension/apiserver-aggregation.md](md/concepts/extend-kubernetes/api-extension/apiserver-aggregation.md) — 2026-11-16T16:09:41+03:30
-- [concepts/extend-kubernetes/api-extension/_index.md](md/concepts/extend-kubernetes/api-extension/_index.md) — 2026-11-16T16:09:26+03:30
-- [concepts/containers/images.md](md/concepts/containers/images.md) — 2026-11-16T16:09:18+03:30
-- [concepts/containers/runtime-class.md](md/concepts/containers/runtime-class.md) — 2026-11-16T16:08:28+03:30
-- [concepts/containers/cri.md](md/concepts/containers/cri.md) — 2026-11-16T16:07:18+03:30
-- [concepts/containers/container-lifecycle-hooks.md](md/concepts/containers/container-lifecycle-hooks.md) — 2026-11-16T16:07:00+03:30
-- [concepts/cluster-administration/observability.md](md/concepts/cluster-administration/observability.md) — 2026-11-16T16:06:45+03:30
-- [concepts/cluster-administration/proxies.md](md/concepts/cluster-administration/proxies.md) — 2026-11-16T16:06:25+03:30
-- [concepts/cluster-administration/node-shutdown.md](md/concepts/cluster-administration/node-shutdown.md) — 2026-11-16T16:06:09+03:30
-- [concepts/cluster-administration/node-autoscaling.md](md/concepts/cluster-administration/node-autoscaling.md) — 2026-11-16T16:05:44+03:30
-- [concepts/cluster-administration/logging.md](md/concepts/cluster-administration/logging.md) — 2026-11-16T16:04:54+03:30
-- [concepts/cluster-administration/networking.md](md/concepts/cluster-administration/networking.md) — 2026-11-16T16:04:27+03:30
-- [concepts/cluster-administration/flow-control.md](md/concepts/cluster-administration/flow-control.md) — 2026-11-16T16:04:03+03:30
-- [concepts/architecture/nodes.md](md/concepts/architecture/nodes.md) — 2026-11-16T16:03:26+03:30
-- [concepts/architecture/garbage-collection.md](md/concepts/architecture/garbage-collection.md) — 2026-11-16T16:00:28+03:30
-- [concepts/architecture/cloud-controller.md](md/concepts/architecture/cloud-controller.md) — 2026-11-16T15:59:59+03:30
 
 </div>
 
@@ -128,7 +128,7 @@ cd kubernetes-doc-fa
 
 ## صفحات دارای ایراد ساختاری
 
-- [concepts/security/pod-security-standards.md](md/concepts/security/pod-security-standards.md): chunk 1: short: 909 words vs 1711 source words
+- [concepts/security/pod-security-standards.md](md/concepts/security/pod-security-standards.md): chunk 1: short: 904 words vs 1711 source words
 - [contribute/docs.md](md/contribute/docs.md): chunk 1: 10 untranslated English lines, e.g. 'D[Look over the<br>kubernetes/website<br>repository] --- E[Check out the<br>Hugo static site<br>generator]'
 - [contribute/new-content/_index.md](md/contribute/new-content/_index.md): chunk 1: 6 untranslated English lines, e.g. 'A[Sign the CNCF CLA] --> B[Choose Git branch]'
 - [contribute/new-content/open-a-pr.md](md/contribute/new-content/open-a-pr.md): chunk 1: 18 untranslated English lines, e.g. '1[1. Edit this page] --> 2[2. Use GitHub markdown<br>editor to make changes]'
