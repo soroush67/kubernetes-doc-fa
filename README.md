@@ -101,6 +101,9 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [reference/access-authn-authz/kubelet-authn-authz.md](md/reference/access-authn-authz/kubelet-authn-authz.md) — 2026-11-19T09:57:41+03:30
+- [reference/access-authn-authz/authentication.md](md/reference/access-authn-authz/authentication.md) — 2026-11-19T09:57:15+03:30
+- [reference/access-authn-authz/certificate-signing-requests.md](md/reference/access-authn-authz/certificate-signing-requests.md) — 2026-11-19T09:56:35+03:30
 - [reference/access-authn-authz/bootstrap-tokens.md](md/reference/access-authn-authz/bootstrap-tokens.md) — 2026-11-19T09:53:58+03:30
 - [reference/access-authn-authz/authorization.md](md/reference/access-authn-authz/authorization.md) — 2026-11-19T09:53:25+03:30
 - [reference/access-authn-authz/admission-controllers.md](md/reference/access-authn-authz/admission-controllers.md) — 2026-11-19T09:50:08+03:30
@@ -118,9 +121,6 @@ cd kubernetes-doc-fa
 - [contribute/style/hugo-shortcodes/index.md](md/contribute/style/hugo-shortcodes/index.md) — 2026-11-19T09:41:37+03:30
 - [contribute/style/hugo-shortcodes/example2.md](md/contribute/style/hugo-shortcodes/example2.md) — 2026-11-19T09:38:59+03:30
 - [contribute/style/hugo-shortcodes/example1.md](md/contribute/style/hugo-shortcodes/example1.md) — 2026-11-19T09:38:55+03:30
-- [contribute/review/reviewing-prs.md](md/contribute/review/reviewing-prs.md) — 2026-11-19T09:38:51+03:30
-- [contribute/style/content-organization.md](md/contribute/style/content-organization.md) — 2026-11-19T09:36:41+03:30
-- [contribute/style/content-guide.md](md/contribute/style/content-guide.md) — 2026-11-19T09:36:15+03:30
 
 </div>
 

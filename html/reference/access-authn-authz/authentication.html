@@ -83,42 +83,43 @@ document.addEventListener('DOMContentLoaded',function(){box=document.getElementB
 <header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">reference / access-authn-authz</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
 <div class="layout">
 <main><h1 dir="rtl">احراز هویت</h1><!-- overview -->
-<p dir="rtl">این صفحه مروری بر احراز هویت (authentication) در کوبرنتیز ارائه می‌کند و تمرکز آن بر احراز هویت در <a href="../../concepts/overview/kubernetes-api.html">API کوبرنتیز</a> است.</p>
+<p dir="rtl">این صفحه مروری بر احراز هویت (authentication) در کوبرنتیز ارائه می‌دهد و تمرکز آن بر احراز هویت در <a href="../../concepts/overview/kubernetes-api.html">API کوبرنتیز</a> است.</p>
 <!-- body -->
-<h2 id="کاربران-در-کوبرنتیز-users-in-kubernetes" dir="rtl">کاربران در کوبرنتیز {#users-in-kubernetes}</h2>
-<p dir="rtl">همهٔ کلاسترهای کوبرنتیز دو دسته کاربر دارند: حساب‌های سرویس (service account) که توسط کوبرنتیز مدیریت می‌شوند، و کاربران عادی.</p>
+<h2 id="کاربران-در-کوبرنتیز" dir="rtl">کاربران در کوبرنتیز</h2>
+<p dir="rtl">همه‌ی کلاسترهای کوبرنتیز دو دسته کاربر دارند: حساب‌های سرویس (service account) که کوبرنتیز آن‌ها را مدیریت می‌کند، و کاربران عادی.</p>
 <p dir="rtl">فرض بر این است که یک سرویس مستقل از کلاستر، کاربران عادی را به یکی از روش‌های زیر مدیریت می‌کند:</p>
 <ul>
 <li dir="rtl">مدیری که کلیدهای خصوصی را توزیع می‌کند</li>
 <li dir="rtl">یک مخزن کاربران مانند Keystone یا Google Accounts</li>
-<li dir="rtl">یک فایل حاوی فهرستی از نام‌های کاربری و گذرواژه‌ها</li>
+<li dir="rtl">فایلی شامل فهرستی از نام‌های کاربری و گذرواژه‌ها</li>
 </ul>
-<p dir="rtl">از این منظر، <em>کوبرنتیز آبجکتی که نمایانگر حساب‌های کاربران عادی باشد ندارد.</em>
-کاربران عادی را نمی‌توان از طریق یک فراخوانی API به کلاستر افزود.</p>
-<p dir="rtl">با وجود اینکه کاربر عادی را نمی‌توان از طریق فراخوانی API افزود، هر کاربری که گواهی معتبری ارائه کند که توسط مرجع صدور گواهی (CA) کلاستر امضا شده باشد، احراز هویت‌شده در نظر گرفته می‌شود. در این پیکربندی، کوبرنتیز نام کاربری را از فیلد common name در بخش 'subject' گواهی (برای مثال "/CN=bob") تعیین می‌کند. از آنجا به بعد، زیرسامانهٔ کنترل دسترسی مبتنی بر نقش (RBAC) مشخص می‌کند که آیا کاربر مجاز است عملیات خاصی را روی یک منبع انجام دهد یا خیر.</p>
-<p dir="rtl">در مقابل، حساب‌های سرویس کاربرانی هستند که توسط API کوبرنتیز مدیریت می‌شوند. این حساب‌ها به فضاهای نام (namespace) مشخصی وابسته‌اند و به‌صورت خودکار توسط API server یا به‌صورت دستی از طریق فراخوانی‌های API ایجاد می‌شوند. حساب‌های سرویس به مجموعه‌ای از اعتبارنامه‌ها (credentials) مرتبط‌اند که به‌صورت <code dir="ltr">Secrets</code> ذخیره می‌شوند و در پادها mount می‌شوند تا فرایندهای درون کلاستر بتوانند با API کوبرنتیز ارتباط برقرار کنند.</p>
-<p dir="rtl">درخواست‌های API یا به یک کاربر عادی یا یک حساب سرویس مرتبط می‌شوند، یا به‌عنوان <a href="#anonymous-requests">درخواست‌های ناشناس</a> در نظر گرفته می‌شوند. این بدان معناست که هر فرایندی در داخل یا خارج از کلاستر، از کاربر انسانی که <code dir="ltr">kubectl</code> را روی ایستگاه کاری خود تایپ می‌کند گرفته تا <code dir="ltr">kubelets</code> روی نودها و اجزای control plane، هنگام ارسال درخواست به API server باید احراز هویت شود، وگرنه به‌عنوان کاربر ناشناس در نظر گرفته می‌شود.</p>
-<p dir="rtl">اگر تلاش کنید احراز هویت شوید و موفق باشد، API server به‌صورت خودکار شما را عضو گروه ویژهٔ <code dir="ltr">system:authenticated</code> قرار می‌دهد.</p>
-<h2 id="راهبردهای-احراز-هویت-authentication-strategies" dir="rtl">راهبردهای احراز هویت {#authentication-strategies}</h2>
-<p dir="rtl">کوبرنتیز از گواهی‌های کلاینت، توکن‌های bearer یا یک پروکسی احراز هویت‌کننده برای احراز هویت درخواست‌های API از طریق افزونه‌های احراز هویت استفاده می‌کند. هنگامی که درخواست‌های HTTP به API server ارسال می‌شوند، افزونه‌ها تلاش می‌کنند ویژگی‌های زیر را با درخواست مرتبط کنند:</p>
+<p dir="rtl">از این نظر، <em>کوبرنتیز هیچ آبجکتی برای نمایش حساب‌های کاربران عادی ندارد.</em>
+نمی‌توان کاربران عادی را با یک فراخوانی API به کلاستر اضافه کرد.</p>
+<p dir="rtl">با اینکه نمی‌توان کاربر عادی را از طریق فراخوانی API اضافه کرد، هر کاربری که گواهی معتبری ارائه دهد که مرجع صدور گواهی (CA) کلاستر آن را امضا کرده باشد، احرازهویت‌شده به شمار می‌آید. در این پیکربندی، کوبرنتیز نام کاربری را از فیلد common name در بخش «subject» گواهی (برای مثال، "/CN=bob") تعیین می‌کند. پس از آن، زیرسیستم کنترل دسترسی مبتنی بر نقش (RBAC) تعیین می‌کند که آیا کاربر مجاز به انجام عملیاتی مشخص روی یک منبع هست یا نه.</p>
+<p dir="rtl">در مقابل، حساب‌های سرویس کاربرانی هستند که API کوبرنتیز آن‌ها را مدیریت می‌کند. این حساب‌ها به فضاهای نام مشخصی وابسته‌اند و API server آن‌ها را به‌طور خودکار ایجاد می‌کند یا می‌توان آن‌ها را به‌صورت دستی و از طریق فراخوانی‌های API ایجاد کرد. حساب‌های سرویس به مجموعه‌ای از اعتبارنامه‌ها گره خورده‌اند که به‌صورت <code dir="ltr">Secrets</code> ذخیره می‌شوند. این اعتبارنامه‌ها در پادها mount می‌شوند تا فرایندهای درون کلاستر بتوانند با API کوبرنتیز ارتباط برقرار کنند.</p>
+<p dir="rtl">هر درخواست API یا به یک کاربر عادی وابسته است، یا به یک حساب سرویس، یا به‌عنوان <a href="#anonymous-requests">درخواست ناشناس</a> در نظر گرفته می‌شود. یعنی هر فرایندی در داخل یا خارج از کلاستر، از کاربر انسانی‌ای که روی ایستگاه کاری خود <code dir="ltr">kubectl</code> را اجرا می‌کند گرفته تا <code dir="ltr">kubelets</code> روی نودها و اعضای control plane، هنگام ارسال درخواست به API server باید احراز هویت شود؛ در غیر این صورت با آن مانند یک کاربر ناشناس رفتار می‌شود.</p>
+<p dir="rtl">اگر برای احراز هویت تلاش کنید و موفق شوید، API server به‌طور خودکار شما را عضو گروه ویژه‌ی <code dir="ltr">system:authenticated</code> علامت‌گذاری می‌کند.</p>
+<h2 id="راهبردهای-احراز-هویت" dir="rtl">راهبردهای احراز هویت</h2>
+<p dir="rtl">کوبرنتیز برای احراز هویت درخواست‌های API از طریق افزونه‌های احراز هویت، از گواهی‌های کلاینت، توکن‌های حامل (bearer token) یا یک پراکسی احراز هویت استفاده می‌کند. هنگامی که درخواست‌های HTTP به API server فرستاده می‌شوند، افزونه‌ها تلاش می‌کنند ویژگی‌های زیر را به درخواست نسبت دهند:</p>
 <ul>
 <li dir="rtl">نام کاربری (Username): رشته‌ای که کاربر نهایی را شناسایی می‌کند. مقادیر رایج می‌توانند <code dir="ltr">kube-admin</code> یا <code dir="ltr">jane@example.com</code> باشند.</li>
-<li dir="rtl">UID: رشته‌ای که کاربر نهایی را شناسایی می‌کند و تلاش می‌کند از نام کاربری ثابت‌تر و یکتاتر باشد.</li>
-<li dir="rtl">گروه‌ها (Groups): مجموعه‌ای از رشته‌ها که هر یک نشان‌دهندهٔ عضویت کاربر در یک مجموعهٔ منطقی نام‌دار از کاربران است. مقادیر رایج می‌توانند <code dir="ltr">system:masters</code> یا <code dir="ltr">devops-team</code> باشند.</li>
-<li dir="rtl">فیلدهای اضافی (Extra fields): نگاشتی از رشته‌ها به فهرستی از رشته‌ها که اطلاعات تکمیلی‌ای را نگه می‌دارد که ممکن است برای مجوزدهنده‌ها (authorizers) مفید باشد.</li>
+<li dir="rtl">شناسه‌ی کاربر (UID): رشته‌ای که کاربر نهایی را شناسایی می‌کند و تلاش می‌کند از نام کاربری پایدارتر و یکتاتر باشد.</li>
+<li dir="rtl">گروه‌ها (Groups): مجموعه‌ای از رشته‌ها که هر کدام عضویت کاربر را در یک مجموعه‌ی منطقیِ نام‌دار از کاربران نشان می‌دهد.
+مقادیر رایج می‌توانند <code dir="ltr">system:masters</code> یا <code dir="ltr">devops-team</code> باشند.</li>
+<li dir="rtl">فیلدهای اضافی (Extra fields): نگاشتی از رشته‌ها به فهرست‌هایی از رشته‌ها که اطلاعات تکمیلی‌ای را نگه می‌دارد که ممکن است برای مجوزدهنده‌ها مفید باشد.</li>
 </ul>
 <div class="callout note"><div class="callout-title">توجه:</div>
-<p dir="rtl">همهٔ مقادیر برای سامانهٔ احراز هویت مبهم (opaque) هستند و تنها زمانی اهمیت پیدا می‌کنند که توسط یک <a href="authorization.html">مجوزدهنده (authorizer)</a> تفسیر شوند.</p>
+<p dir="rtl">همه‌ی این مقادیر برای سیستم احراز هویت مبهم (opaque) هستند و فقط زمانی معنا پیدا می‌کنند که یک <a href="authorization.html">مجوزدهنده</a> آن‌ها را تفسیر کند.</p>
 </div>
-<h2 id="درخواست-های-ناشناس-anonymous-requests" dir="rtl">درخواست‌های ناشناس {#anonymous-requests}</h2>
-<p dir="rtl">در صورت فعال بودن، درخواست‌هایی که توسط سایر روش‌های احراز هویت پیکربندی‌شده رد نشوند، به‌عنوان درخواست‌های ناشناس در نظر گرفته می‌شوند و نام کاربری <code dir="ltr">system:anonymous</code> و گروه <code dir="ltr">system:unauthenticated</code> به آن‌ها داده می‌شود.</p>
-<p dir="rtl">برای مثال، در سروری که احراز هویت با توکن پیکربندی شده و دسترسی ناشناس فعال است، درخواستی که یک bearer token نامعتبر ارائه کند، خطای <code dir="ltr">401 Unauthorized</code> دریافت می‌کند. درخواستی که هیچ bearer token ارائه نکند، به‌عنوان درخواست ناشناس در نظر گرفته می‌شود.</p>
-<p dir="rtl">دسترسی ناشناس به‌طور پیش‌فرض فعال است اگر از <a href="authorization.html#authorization-modules">حالت مجوزدهی</a> غیر از <code dir="ltr">AlwaysAllow</code> استفاده شود؛ می‌توانید با ارسال گزینهٔ خط فرمان <code dir="ltr">--anonymous-auth=false</code> به API server آن را غیرفعال کنید.
-مجوزدهنده‌های داخلی ABAC و RBAC نیازمند مجوزدهی صریح برای کاربر <code dir="ltr">system:anonymous</code> یا گروه <code dir="ltr">system:unauthenticated</code> هستند؛ اگر قواعد سیاستی قدیمی (از کوبرنتیز نسخهٔ 1.5 یا پیش از آن) دارید، آن قواعد قدیمی که به کاربر <code dir="ltr">*</code> یا گروه <code dir="ltr">*</code> دسترسی می‌دهند، به‌طور خودکار دسترسی کاربران ناشناس را مجاز نمی‌کنند.</p>
-<h3 id="پیکربندی-احراز-هویت-کنندهٔ-ناشناس-anonymous-authenticator-configuration" dir="rtl">پیکربندی احراز هویت‌کنندهٔ ناشناس {#anonymous-authenticator-configuration}</h3>
+<h2 id="درخواست-های-ناشناس" dir="rtl">درخواست‌های ناشناس</h2>
+<p dir="rtl">اگر این قابلیت فعال باشد، درخواست‌هایی که سایر روش‌های احراز هویتِ پیکربندی‌شده آن‌ها را رد نکنند، به‌عنوان درخواست ناشناس در نظر گرفته می‌شوند و نام کاربری <code dir="ltr">system:anonymous</code> و گروه <code dir="ltr">system:unauthenticated</code> به آن‌ها داده می‌شود.</p>
+<p dir="rtl">برای مثال، در سروری که احراز هویت با توکن در آن پیکربندی شده و دسترسی ناشناس نیز فعال است، درخواستی که توکن حامل نامعتبری ارائه کند خطای <code dir="ltr">401 Unauthorized</code> دریافت می‌کند، اما با درخواستی که هیچ توکن حاملی ارائه نکند مانند یک درخواست ناشناس رفتار می‌شود.</p>
+<p dir="rtl">اگر از <a href="authorization.html#authorization-modules">حالت مجوزدهی</a>ی غیر از <code dir="ltr">AlwaysAllow</code> استفاده شود، دسترسی ناشناس به‌طور پیش‌فرض فعال است؛ می‌توانید با ارسال گزینه‌ی خط فرمان <code dir="ltr">--anonymous-auth=false</code> به API server آن را غیرفعال کنید.
+مجوزدهنده‌های داخلی ABAC و RBAC نیازمند مجوزدهی صریح به کاربر <code dir="ltr">system:anonymous</code> یا گروه <code dir="ltr">system:unauthenticated</code> هستند؛ اگر قواعد سیاست قدیمی (مربوط به کوبرنتیز نسخه‌ی ۱.۵ یا پیش از آن) دارید، آن دسته از قواعد قدیمی که به کاربر <code dir="ltr">*</code> یا گروه <code dir="ltr">*</code> دسترسی می‌دهند، به‌طور خودکار به کاربران ناشناس اجازه‌ی دسترسی نمی‌دهند.</p>
+<h3 id="پیکربندی-احرازکننده-ی-ناشناس" dir="rtl">پیکربندی احرازکننده‌ی ناشناس</h3>
 <div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
-<p dir="rtl">می‌توان از <code dir="ltr">AuthenticationConfiguration</code> برای پیکربندی احراز هویت‌کنندهٔ ناشناس استفاده کرد. اگر فیلد anonymous را در فایل <code dir="ltr">AuthenticationConfiguration</code> تنظیم کنید، نمی‌توانید گزینهٔ خط فرمان <code dir="ltr">--anonymous-auth</code> را تنظیم کنید.</p>
-<p dir="rtl">مزیت اصلی پیکربندی احراز هویت‌کنندهٔ ناشناس با استفاده از فایل پیکربندی احراز هویت این است که علاوه بر فعال و غیرفعال کردن احراز هویت ناشناس، می‌توانید مشخص کنید کدام endpointها از احراز هویت ناشناس پشتیبانی کنند.</p>
+<p dir="rtl">برای پیکربندی احرازکننده‌ی ناشناس می‌توان از <code dir="ltr">AuthenticationConfiguration</code> استفاده کرد. اگر فیلد anonymous را در فایل <code dir="ltr">AuthenticationConfiguration</code> تنظیم کنید، دیگر نمی‌توانید گزینه‌ی خط فرمان <code dir="ltr">--anonymous-auth</code> را تنظیم کنید.</p>
+<p dir="rtl">مزیت اصلی پیکربندی احرازکننده‌ی ناشناس با فایل پیکربندی احراز هویت این است که افزون بر فعال و غیرفعال کردن احراز هویت ناشناس، می‌توانید تعیین کنید کدام endpointها از احراز هویت ناشناس پشتیبانی کنند.</p>
 <p dir="rtl">نمونه‌ای از فایل پیکربندی احراز هویت در ادامه آمده است:</p>
 <pre dir="ltr"><code class="language-yaml" dir="ltr">---
 #
@@ -134,9 +135,9 @@ anonymous:
   - path: /readyz
   - path: /healthz
 </code></pre>
-<p dir="rtl">در پیکربندی بالا، تنها endpointهای <code dir="ltr">/livez</code>، <code dir="ltr">/readyz</code> و <code dir="ltr">/healthz</code> برای درخواست‌های ناشناس قابل دسترسی هستند. هر endpoint دیگری به‌صورت ناشناس قابل دسترسی نخواهد بود، حتی اگر پیکربندی مجوزدهی شما آن را مجاز بداند.</p>
-<h2 id="روش-های-احراز-هویت-authentication-methods" dir="rtl">روش‌های احراز هویت {#authentication-methods}</h2>
-<p dir="rtl">می‌توانید چندین روش احراز هویت را هم‌زمان فعال کنید. معمولاً باید دست‌کم از دو روش استفاده کنید:</p>
+<p dir="rtl">در پیکربندی بالا، فقط endpointهای <code dir="ltr">/livez</code>، <code dir="ltr">/readyz</code> و <code dir="ltr">/healthz</code> برای درخواست‌های ناشناس در دسترس هستند. هیچ endpoint دیگری به‌صورت ناشناس در دسترس نخواهد بود، حتی اگر پیکربندی مجوزدهی شما اجازه‌ی آن را بدهد.</p>
+<h2 id="روش-های-احراز-هویت" dir="rtl">روش‌های احراز هویت</h2>
+<p dir="rtl">می‌توانید چند روش احراز هویت را هم‌زمان فعال کنید. معمولاً باید دست‌کم از دو روش استفاده کنید:</p>
 <ul>
 <li dir="rtl"><a href="../../concepts/security/service-accounts.html#authenticating-credentials">توکن‌های حساب سرویس</a> برای ServiceAccountها</li>
 <li dir="rtl">دست‌کم یک روش دیگر برای احراز هویت کاربران (عادی)</li>
@@ -144,93 +145,90 @@ anonymous:
 <p dir="rtl">روش‌های احراز هویت موجود عبارت‌اند از:</p>
 <ul>
 <li dir="rtl"><a href="#x509-client-certificates">گواهی‌های کلاینت X.509</a></li>
-<li dir="rtl"><a href="#bootstrap-tokens">توکن‌های Bootstrap</a></li>
+<li dir="rtl"><a href="#bootstrap-tokens">توکن‌های راه‌اندازی</a></li>
 <li dir="rtl"><a href="#service-account-tokens">توکن‌های حساب سرویس</a></li>
 <li dir="rtl"><a href="#static-token-file">فایل توکن ایستا</a></li>
 <li dir="rtl"><a href="#external-integrations">یکپارچه‌سازی‌های خارجی</a>
 <ul>
-<li dir="ltr" class="ltr"><a href="#json-web-token-authentication">JSON Web Tokens</a></li>
+<li dir="rtl"><a href="#json-web-token-authentication">توکن‌های وب JSON</a></li>
 <li dir="rtl"><a href="#openid-connect-tokens">توکن‌های OpenID Connect</a></li>
-<li dir="rtl"><a href="#webhook-token-authentication">احراز هویت توکن با Webhook</a></li>
-<li dir="rtl"><a href="#authenticating-proxy">پروکسی معکوس احراز هویت‌کننده</a></li>
+<li dir="rtl"><a href="#webhook-token-authentication">احراز هویت با توکن از طریق Webhook</a></li>
+<li dir="rtl"><a href="#authenticating-proxy">پراکسی معکوسِ احراز هویت</a></li>
 </ul>
 </li>
 </ul>
-<p dir="rtl">هنگامی که چندین ماژول احراز هویت‌کننده فعال باشند، نخستین ماژولی که درخواست را با موفقیت احراز هویت کند، ارزیابی را کوتاه می‌کند (short-circuit) و ماژول‌های بعدی بررسی نمی‌شوند.
-API server ترتیب اجرای احراز هویت‌کننده‌ها را تضمین نمی‌کند.</p>
+<p dir="rtl">هنگامی که چند ماژول احرازکننده فعال باشد، نخستین ماژولی که درخواست را با موفقیت احراز هویت کند، ارزیابی را متوقف می‌کند و بقیه بررسی نمی‌شوند.
+API server هیچ تضمینی درباره‌ی ترتیب اجرای احرازکننده‌ها نمی‌دهد.</p>
 <h3 id="گواهی-های-کلاینت-x-509-x509-client-certificates" dir="rtl">گواهی‌های کلاینت X.509 {#x509-client-certificates}</h3>
-<p dir="rtl">هر کلاینت کوبرنتیز که گواهی کلاینت معتبری ارائه کند که توسط مرجع صدور گواهی (CA) <em>اعتماد کلاینت</em> (client trust) کلاستر امضا شده باشد، احراز هویت‌شده در نظر گرفته می‌شود. در این پیکربندی، کوبرنتیز نام کاربری را از فیلد <code dir="ltr">commonName</code> در <em>subject</em> گواهی تعیین می‌کند (برای مثال، <code dir="ltr">commonName=bob</code> نمایانگر کاربری با نام کاربری "bob" است).
-از آنجا به بعد، سازوکارهای <a href="authorization.html">مجوزدهی</a> کوبرنتیز مشخص می‌کنند که آیا کاربر مجاز است عملیات خاصی را روی یک منبع انجام دهد یا خیر.</p>
-<p dir="rtl">احراز هویت با گواهی کلاینت با ارسال گزینهٔ <code dir="ltr">--client-ca-file=&lt;SOMEFILE&gt;</code> به API server فعال می‌شود.
-این گزینه مرجع صدور گواهی <em>اعتماد کلاینت</em> کلاستر را پیکربندی می‌کند.
-فایل مورد اشاره باید شامل یک یا چند مرجع صدور گواهی باشد که API server هنگام نیاز به اعتبارسنجی گواهی‌های کلاینت می‌تواند از آن‌ها استفاده کند.
-اگر گواهی کلاینت ارائه و تأیید شود، common name موجود در subject به‌عنوان نام کاربری درخواست استفاده می‌شود. گواهی‌های کلاینت همچنین می‌توانند عضویت‌های گروهی کاربر را با استفاده از فیلدهای organization گواهی مشخص کنند. برای درج چند عضویت گروهی برای یک کاربر، چند فیلد organization را در گواهی قرار دهید.</p>
-<p dir="rtl">برای آگاهی از نحوهٔ تولید گواهی کلاینت، به <a href="../../tasks/administer-cluster/certificates.html">مدیریت گواهی‌ها</a> مراجعه کنید، یا <a href="#x509-client-certificates-example">مثال</a> کوتاهی را که در ادامهٔ همین صفحه آمده است مطالعه کنید.</p>
+<p dir="rtl">هر کلاینت کوبرنتیز که گواهی کلاینت معتبری ارائه دهد که مرجع صدور گواهیِ <em>اعتماد کلاینت</em> (client trust CA) کلاستر آن را امضا کرده باشد، احرازهویت‌شده به شمار می‌آید. در این پیکربندی، کوبرنتیز نام کاربری را از فیلد <code dir="ltr">commonName</code> در بخش <em>subject</em> گواهی تعیین می‌کند (برای مثال، <code dir="ltr">commonName=bob</code> نشان‌دهنده‌ی کاربری با نام کاربری "bob" است).
+پس از آن، سازوکارهای <a href="authorization.html">مجوزدهی</a> کوبرنتیز تعیین می‌کنند که آیا کاربر مجاز به انجام عملیاتی مشخص روی یک منبع هست یا نه.</p>
+<p dir="rtl">احراز هویت با گواهی کلاینت با ارسال گزینه‌ی <code dir="ltr">--client-ca-file=&lt;SOMEFILE&gt;</code> به API server فعال می‌شود.
+این گزینه مرجع صدور گواهیِ <em>اعتماد کلاینت</em> کلاستر را پیکربندی می‌کند.
+فایلِ مشخص‌شده باید شامل یک یا چند مرجع صدور گواهی باشد که API server بتواند هنگام اعتبارسنجی گواهی‌های کلاینت از آن‌ها استفاده کند.
+اگر یک گواهی کلاینت ارائه و تأیید شود، common name موجود در subject به‌عنوان نام کاربری درخواست استفاده می‌شود. گواهی‌های کلاینت همچنین می‌توانند عضویت کاربر در گروه‌ها را از طریق فیلدهای organization گواهی مشخص کنند. برای اینکه کاربر عضو چند گروه باشد، چند فیلد organization در گواهی قرار دهید.</p>
+<p dir="rtl">برای آشنایی با نحوه‌ی تولید گواهی کلاینت، به <a href="../../tasks/administer-cluster/certificates.html">مدیریت گواهی‌ها</a> مراجعه کنید یا <a href="#x509-client-certificates-example">مثال</a> کوتاهی را که در ادامه‌ی همین صفحه آمده است بخوانید.</p>
 <h4 id="گواهی-های-کلاینت-سازگار-با-کوبرنتیز-x509-client-certificates-k8s" dir="rtl">گواهی‌های کلاینت سازگار با کوبرنتیز {#x509-client-certificates-k8s}</h4>
-<p dir="rtl">می‌توانید گواهی معتبری را که توسط یک CA در زنجیرهٔ اعتمادی صادر شده که API server برای گواهی‌های کلاینت می‌پذیرد، ارائه کنید و از آن برای احراز هویت در کوبرنتیز استفاده کنید.
-گواهی باید معتبر باشد؛ API server این موضوع را بر اساس ویژگی‌های <code dir="ltr">notBefore</code> و <code dir="ltr">notAfter</code> استاندارد X.509 بررسی می‌کند، و گواهی باید دارای <em>extended key usage</em> باشد که شامل احراز هویت کلاینت (<code dir="ltr">ClientAuth</code>) است.</p>
+<p dir="rtl">می‌توانید گواهی معتبری را که یک CA در زنجیره‌ی اعتمادِ موردپذیرش API server برای گواهی‌های کلاینت صادر کرده است ارائه دهید و از آن برای احراز هویت در کوبرنتیز استفاده کنید.
+گواهی باید معتبر باشد؛ API server این موضوع را بر اساس ویژگی‌های <code dir="ltr">notBefore</code> و <code dir="ltr">notAfter</code> استاندارد X.509 بررسی می‌کند. همچنین گواهی باید دارای <em>کاربرد کلید توسعه‌یافته</em> (extended key usage) باشد که احراز هویت کلاینت (<code dir="ltr">ClientAuth</code>) را شامل شود.</p>
 <div class="callout note"><div class="callout-title">توجه:</div>
 <p dir="rtl">کوبرنتیز 1.37 از <em>ابطال</em> (revocation) گواهی پشتیبانی نمی‌کند.
-هر گواهی صادرشده تا زمان انقضا معتبر باقی می‌ماند.</p>
+هر گواهی‌ای که صادر شود تا زمان انقضا معتبر باقی می‌ماند.</p>
 </div>
 <h5 dir="rtl">نگاشت نام کاربری {#x509-client-certificates-k8s-username}</h5>
-<p dir="rtl">کوبرنتیز انتظار دارد گواهی کلاینت دارای ویژگی <code dir="ltr">commonName</code> (با OID برابر <code dir="ltr">2.5.4.3</code>) باشد که به‌عنوان نام کاربری سوژه استفاده می‌شود.</p>
-<h5 dir="rtl">نگاشت شناسهٔ کاربر (User ID) {#user-id-mapping}</h5>
+<p dir="rtl">کوبرنتیز انتظار دارد گواهی کلاینت دارای ویژگی <code dir="ltr">commonName</code> (با OID <code dir="ltr">2.5.4.3</code>) باشد که به‌عنوان نام کاربری subject استفاده می‌شود.</p>
+<h5 dir="rtl">نگاشت شناسه‌ی کاربر</h5>
 <div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
-<p dir="rtl">برای استفاده از این قابلیت، گواهی باید ویژگی <code dir="ltr">1.3.6.1.4.1.57683.2</code> را داشته باشد، و <a href="https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/" target="_blank">feature gate</a> با نام <code dir="ltr">AllowParsingUserUIDFromCertAuth</code> باید فعال باشد (به‌طور پیش‌فرض فعال است).</p>
-<p dir="rtl">کوبرنتیز می‌تواند یک UID <strong>اختیاری</strong> کاربر را از گواهی استخراج کند.
-UID با نام کاربری متفاوت است؛ مقداری مبهم (opaque) است که معنای آن را فردی که گواهی را درخواست کرده است، یا در غیر این صورت کسی که قواعد تأیید گواهی را تنظیم کرده است، تعیین می‌کند.</p>
-<p dir="rtl">برای مثال، UID ممکن است در یک کلاستر <code dir="ltr">1042</code> (یک عدد صحیح ساده) باشد، اما گواهی دیگری ممکن است <code dir="ltr">d3f77937-ec82-4f16-8010-61821abe315a</code> (یک UUID) را به‌عنوان UID به کار ببرد.</p>
-<p dir="rtl">در اینجا مثالی برای توضیح این موضوع آمده است. اگر گواهی‌ای دارید که common name آن روی "Ada Lovelace" تنظیم شده و گواهی همچنین دارای ویژگی <code dir="ltr">uid</code> (با OID برابر <code dir="ltr">0.9.2342.19200300.100.1.1</code>) با مقدار "aaking1815" است، کوبرنتیز نام کاربری کلاینت را "Ada Lovelace" در نظر می‌گیرد؛ کوبرنتیز ویژگی <code dir="ltr">uid</code> را نادیده می‌گیرد، زیرا OID اختصاصی CNCF که کوبرنتیز به دنبال آن است نیست.
-اگر می‌خواهید <code dir="ltr">aaking1815</code> به‌عنوان UID توسط کوبرنتیز شناسایی شود، باید به‌عنوان مقدار ویژگی OID با شمارهٔ <code dir="ltr">1.3.6.1.4.1.57683.2</code> در subject گواهی تنظیم شود.</p>
+<p dir="rtl">برای استفاده از این قابلیت، گواهی باید ویژگی <code dir="ltr">1.3.6.1.4.1.57683.2</code> را داشته باشد و <a href="https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/" target="_blank">feature gate</a> با نام <code dir="ltr">AllowParsingUserUIDFromCertAuth</code> نیز باید فعال باشد (این feature gate به‌طور پیش‌فرض فعال است).</p>
+<p dir="rtl">کوبرنتیز می‌تواند یک UID <strong>اختیاری</strong> برای کاربر را از گواهی استخراج کند.
+UID با نام کاربری متفاوت است؛ مقداری مبهم است که معنای آن را درخواست‌دهنده‌ی گواهی، یا کسی که قواعد تأیید گواهی را تنظیم کرده است، تعیین می‌کند.</p>
+<p dir="rtl">برای مثال، UID ممکن است در یک کلاستر <code dir="ltr">1042</code> (یک عدد صحیح ساده) باشد، اما گواهی دیگری ممکن است از <code dir="ltr">d3f77937-ec82-4f16-8010-61821abe315a</code> (یک UUID) به‌عنوان UID استفاده کند.</p>
+<p dir="rtl">مثالی برای توضیح این موضوع: فرض کنید گواهی‌ای دارید که common name آن "Ada Lovelace" است و ویژگی <code dir="ltr">uid</code> (با OID <code dir="ltr">0.9.2342.19200300.100.1.1</code>) نیز با مقدار "aaking1815" در آن تنظیم شده است. در این حالت کوبرنتیز نام کاربری کلاینت را "Ada Lovelace" در نظر می‌گیرد و ویژگی <code dir="ltr">uid</code> را نادیده می‌گیرد، زیرا این ویژگی همان OID مختص CNCF که کوبرنتیز به دنبال آن است نیست.
+اگر می‌خواهید کوبرنتیز مقدار <code dir="ltr">aaking1815</code> را به‌عنوان UID بشناسد، این مقدار باید به‌عنوان مقدار ویژگی OID <code dir="ltr">1.3.6.1.4.1.57683.2</code> در subject گواهی تنظیم شود.</p>
 <h5 dir="rtl">نگاشت گروه {#x509-client-certificates-k8s-group}</h5>
-<p dir="rtl">می‌توانید با گنجاندن ایستای اطلاعات گروه در گواهی، یک کاربر را به گروه‌ها نگاشت کنید. برای هر گروهی که کاربر عضو آن است، نام گروه را به‌عنوان یک <code dir="ltr">organization</code> (با OID برابر <code dir="ltr">2.5.6.4</code>) در subject گواهی خود اضافه کنید.
-برای درج چند عضویت گروهی برای یک کاربر، چند organization را در subject گواهی قرار دهید (ترتیب اهمیتی ندارد).
-برای کاربر نمونه، distinguished name یک گواهی ممکن است CN=Ada Lovelace,O=Users,O=Staff,O=Programmers باشد که او را در گروه‌های "Programmers"، "Staff"، "system:authenticated" و "Users" قرار می‌دهد.</p>
+<p dir="rtl">می‌توانید با قرار دادن ایستای اطلاعات گروه در گواهی، کاربر را به گروه‌ها نگاشت کنید. برای هر گروهی که کاربر عضو آن است، نام گروه را به‌عنوان یک <code dir="ltr">organization</code> (با OID <code dir="ltr">2.5.6.4</code>) در subject گواهی خود اضافه کنید.
+برای اینکه کاربر عضو چند گروه باشد، چند organization در subject گواهی قرار دهید (ترتیب آن‌ها اهمیتی ندارد).
+برای کاربر نمونه، distinguished name گواهی می‌تواند CN=Ada Lovelace,O=Users,O=Staff,O=Programmers باشد که او را در گروه‌های "Programmers"، "Staff"، "system:authenticated" و "Users" قرار می‌دهد.</p>
 <p dir="rtl">قرار دادن اطلاعات گروه در گواهی اختیاری است؛ اگر هیچ گروهی در گواهی مشخص نکنید، کاربر فقط عضو "system:authenticated" خواهد بود.</p>
-<h5 dir="rtl">گواهی‌های کلاینت نود {#x509-client-certificates-nodes}</h5>
-<p dir="rtl">کوبرنتیز می‌تواند همین رویکرد را برای هویت نود به کار ببرد؛ نودها کلاینت‌های API server کوبرنتیز هستند که یک <span class="term" title="kubelet">kubelet</span> را اجرا می‌کنند
-(همچنین، هرچند در اینجا اهمیت کمتری دارد، API server معمولاً کلاینت هر نود نیز هست).
-برای مثال: نودی با نام "server-1a-antarctica42" و نام دامنهٔ "server-1a-antarctica42.cluster.example" می‌تواند از گواهی‌ای استفاده کند که برای "CN=system:node:server-1a-antarctica/42,O=system:nodes" صادر شده است. در این صورت نام کاربری نود "system:node:server-1a-antarctica/g42" است و نود عضو "system:authenticated" و "system:nodes" خواهد بود.</p>
-<p dir="rtl">kubelet از گواهی و کلید خصوصی نود برای احراز هویت در API server کلاستر استفاده می‌کند.</p>
+<h5 dir="rtl">گواهی‌های کلاینت نودها {#x509-client-certificates-nodes}</h5>
+<p dir="rtl">کوبرنتیز می‌تواند همین رویکرد را برای هویت نودها نیز به کار ببرد؛ نودها کلاینت‌هایی از API server کوبرنتیز هستند که یک <span class="term" title="kubelet">kubelet</span> را اجرا می‌کنند (همچنین، هرچند در اینجا اهمیت کمتری دارد، API server معمولاً خودش نیز کلاینتِ هر نود است).
+برای مثال، نودی با نام "server-1a-antarctica42" و نام دامنه‌ی "server-1a-antarctica42.cluster.example" می‌تواند از گواهی‌ای استفاده کند که برای "CN=system:node:server-1a-antarctica/42,O=system:nodes" صادر شده است. در این صورت نام کاربری نود "system:node:server-1a-antarctica/g42" خواهد بود و نود عضو گروه‌های "system:authenticated" و "system:nodes" است.</p>
+<p dir="rtl">kubelet برای احراز هویت در API server کلاستر از گواهی و کلید خصوصی نود استفاده می‌کند.</p>
 <div class="callout note"><div class="callout-title">توجه:</div>
-<p dir="rtl">هویت‌های ماشینی نودها با
-<span class="term" title="service-account">ServiceAccountها</span>
-یکسان نیستند.</p>
+<p dir="rtl">هویت‌های ماشینی نودها با <span class="term" title="service-account">ServiceAccountها</span> یکسان نیستند.</p>
 </div>
 <h4 id="مثال-x509-client-certificates-example" dir="rtl">مثال {#x509-client-certificates-example}</h4>
-<p dir="rtl">می‌توانید از ابزار خط فرمان <code dir="ltr">openssl</code> برای تولید یک درخواست امضای گواهی (certificate signing request) استفاده کنید:</p>
+<p dir="rtl">می‌توانید با ابزار خط فرمان <code dir="ltr">openssl</code> یک درخواست امضای گواهی (CSR) تولید کنید:</p>
 <pre dir="ltr"><code class="language-bash" dir="ltr"># This example assumes that you already have a private key alovelace.pem
 openssl req -new -key alovelace.pem -out alovelace-csr.pem -subj "/CN=alovelace/O=app1/O=app2"
 </code></pre>
-<p dir="rtl">این دستور یک درخواست امضا برای نام کاربری "alovelace" ایجاد می‌کند که به دو گروه "app1" و "app2" تعلق دارد. سپس می‌توانید این درخواست امضا را توسط مرجع صدور گواهی اعتماد کلاینت کلاستر خود امضا کنید تا گواهی‌ای به دست آورید که بتوانید برای احراز هویت کلاینت در کلاستر خود استفاده کنید.</p>
-<h3 id="توکن-های-bootstrap-bootstrap-tokens" dir="rtl">توکن‌های Bootstrap {#bootstrap-tokens}</h3>
+<p dir="rtl">این دستور یک درخواست امضا برای نام کاربری "alovelace" ایجاد می‌کند که به دو گروه "app1" و "app2" تعلق دارد. سپس می‌توانید این درخواست امضا را به مرجع صدور گواهیِ اعتماد کلاینتِ کلاستر خود بدهید تا آن را امضا کند و گواهی‌ای به دست آورید که بتوانید از آن برای احراز هویت کلاینت در کلاستر استفاده کنید.</p>
+<h3 id="توکن-های-راه-اندازی" dir="rtl">توکن‌های راه‌اندازی</h3>
 <div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes v1.18 [stable]</span> (پایدار)</div>
-<p dir="rtl">برای تسهیل راه‌اندازی اولیهٔ کلاسترهای جدید، کوبرنتیز نوعی توکن Bearer با مدیریت پویا به نام <em>Bootstrap Token</em> دارد. این توکن‌ها به‌صورت Secret در فضای نام <code dir="ltr">kube-system</code> ذخیره می‌شوند و در آنجا می‌توان آن‌ها را به‌صورت پویا مدیریت و ایجاد کرد. Controller Manager شامل یک کنترل‌کنندهٔ TokenCleaner است که توکن‌های bootstrap را هنگام انقضا حذف می‌کند.</p>
-<p dir="rtl">توکن‌ها به شکل <code dir="ltr">[a-z0-9]{6}.[a-z0-9]{16}</code> هستند. مؤلفهٔ اول شناسهٔ توکن (Token ID) و مؤلفهٔ دوم رمز توکن (Token Secret) است. توکن را به‌صورت زیر در یک هدر HTTP مشخص می‌کنید:</p>
+<p dir="rtl">برای ساده‌سازی راه‌اندازی (bootstrapping) کلاسترهای جدید، کوبرنتیز نوعی توکن حامل با مدیریت پویا به نام <em>توکن راه‌اندازی</em> (Bootstrap Token) دارد. این توکن‌ها به‌صورت Secret در فضای نام <code dir="ltr">kube-system</code> ذخیره می‌شوند و در آنجا می‌توان آن‌ها را به‌صورت پویا مدیریت و ایجاد کرد. Controller Manager شامل کنترل‌کننده‌ای به نام TokenCleaner است که توکن‌های راه‌اندازی را پس از انقضا حذف می‌کند.</p>
+<p dir="rtl">این توکن‌ها به شکل <code dir="ltr">[a-z0-9]{6}.[a-z0-9]{16}</code> هستند. بخش نخست، شناسه‌ی توکن (Token ID) و بخش دوم، رمز توکن (Token Secret) است. توکن را به این صورت در یک سرآیند HTTP مشخص می‌کنید:</p>
 <pre dir="ltr"><code class="language-http" dir="ltr">Authorization: Bearer 781292.db7bc3a58fc5f07e
 </code></pre>
-<p dir="rtl">باید احراز هویت‌کنندهٔ Bootstrap Token را با پرچم <code dir="ltr">--enable-bootstrap-token-auth</code> روی API Server فعال کنید. همچنین باید کنترل‌کنندهٔ TokenCleaner را از طریق آرگومان خط فرمان <code dir="ltr">--controllers</code> برای kube-controller-manager فعال کنید.
-این کار با چیزی شبیه <code dir="ltr">--controllers=*,tokencleaner</code> انجام می‌شود.
-اگر از ابزار <code dir="ltr">kubeadm</code> برای راه‌اندازی اولیهٔ کلاستر استفاده می‌کنید، این ابزار این کار را برای شما انجام می‌دهد.</p>
-<p dir="rtl">این احراز هویت‌کننده با هویت <code dir="ltr">system:bootstrap:&lt;Token ID&gt;</code> احراز هویت می‌کند. این هویت در گروه <code dir="ltr">system:bootstrappers</code> قرار می‌گیرد. نام‌گذاری و گروه‌ها عمداً محدود شده‌اند تا کاربران را از استفاده از این توکن‌ها پس از مرحلهٔ راه‌اندازی اولیه منصرف کنند. از نام‌های کاربری و گروه می‌توان (و <code dir="ltr">kubeadm</code> نیز استفاده می‌کند) برای تدوین سیاست‌های مجوزدهی مناسب جهت پشتیبانی از راه‌اندازی اولیهٔ یک کلاستر بهره برد.</p>
-<p dir="rtl">لطفاً برای مستندات تفصیلی دربارهٔ احراز هویت‌کنندهٔ Bootstrap Token و کنترل‌کننده‌ها، و همچنین نحوهٔ مدیریت این توکن‌ها با <code dir="ltr">kubeadm</code>، به <a href="bootstrap-tokens.html">Bootstrap Tokens</a> مراجعه کنید.</p>
-<h4 id="قرار-دادن-bearer-token-در-درخواست-putting-a-bearer-token-in-a-request" dir="rtl">قرار دادن bearer token در درخواست {#putting-a-bearer-token-in-a-request}</h4>
-<p dir="rtl">هنگام استفاده از احراز هویت با bearer token از یک کلاینت HTTP، API server انتظار دارد هدر <code dir="ltr">Authorization</code> با مقدار <code dir="ltr">Bearer &lt;token&gt;</code> وجود داشته باشد. bearer token باید دنباله‌ای از کاراکترها باشد که بتوان آن را تنها با استفاده از امکانات کدگذاری و نقل‌قول (quoting) خود HTTP در مقدار یک هدر HTTP قرار داد. برای مثال: اگر bearer token برابر <code dir="ltr">31ada4fd-adec-460c-809a-9e56ceb75269</code> باشد، در هدر HTTP به‌صورت زیر ظاهر می‌شود.</p>
+<p dir="rtl">باید احرازکننده‌ی توکن راه‌اندازی را با فلگ <code dir="ltr">--enable-bootstrap-token-auth</code> روی API Server فعال کنید. همچنین باید کنترل‌کننده‌ی TokenCleaner را از طریق آرگومان خط فرمان <code dir="ltr">--controllers</code> برای kube-controller-manager فعال کنید.
+این کار با مقداری مانند <code dir="ltr">--controllers=*,tokencleaner</code> انجام می‌شود.
+اگر از ابزار <code dir="ltr">kubeadm</code> برای راه‌اندازی کلاستر استفاده کنید، این کار را برای شما انجام می‌دهد.</p>
+<p dir="rtl">این احرازکننده، درخواست را با هویت <code dir="ltr">system:bootstrap:&lt;Token ID&gt;</code> احراز می‌کند. این هویت در گروه <code dir="ltr">system:bootstrappers</code> قرار می‌گیرد. نام‌گذاری و گروه‌ها عمداً محدود شده‌اند تا کاربران از به‌کارگیری این توکن‌ها پس از مرحله‌ی راه‌اندازی منصرف شوند. از این نام‌های کاربری و گروه می‌توان برای تدوین سیاست‌های مجوزدهی مناسب جهت پشتیبانی از راه‌اندازی کلاستر استفاده کرد (و <code dir="ltr">kubeadm</code> نیز از آن‌ها استفاده می‌کند).</p>
+<p dir="rtl">برای مستندات مفصل درباره‌ی احرازکننده و کنترل‌کننده‌های توکن راه‌اندازی و نیز نحوه‌ی مدیریت این توکن‌ها با <code dir="ltr">kubeadm</code>، به <a href="bootstrap-tokens.html">توکن‌های راه‌اندازی</a> مراجعه کنید.</p>
+<h4 id="قرار-دادن-توکن-حامل-در-درخواست" dir="rtl">قرار دادن توکن حامل در درخواست</h4>
+<p dir="rtl">هنگام استفاده از احراز هویت با توکن حامل در یک کلاینت HTTP، API server انتظار دارد سرآیند <code dir="ltr">Authorization</code> با مقدار <code dir="ltr">Bearer &lt;token&gt;</code> وجود داشته باشد. توکن حامل باید دنباله‌ای از نویسه‌ها باشد که بتوان آن را تنها با امکانات کدگذاری و نقل‌قول (quoting) خود HTTP در مقدار یک سرآیند HTTP قرار داد. برای مثال، اگر توکن حامل <code dir="ltr">31ada4fd-adec-460c-809a-9e56ceb75269</code> باشد، در سرآیند HTTP به شکل زیر نمایش داده می‌شود.</p>
 <pre dir="ltr"><code class="language-http" dir="ltr">Authorization: Bearer 31ada4fd-adec-460c-809a-9e56ceb75269
 </code></pre>
-<h3 id="توکن-های-حساب-سرویس-service-account-tokens" dir="rtl">توکن‌های حساب سرویس {#service-account-tokens}</h3>
-<p dir="rtl">حساب سرویس (service account) یک احراز هویت‌کنندهٔ خودکار فعال است که از bearer tokenهای امضاشده برای تأیید درخواست‌ها استفاده می‌کند. این افزونه دو پرچم اختیاری می‌پذیرد:</p>
+<h3 id="توکن-های-حساب-سرویس" dir="rtl">توکن‌های حساب سرویس</h3>
+<p dir="rtl">حساب سرویس، احرازکننده‌ای است که به‌طور خودکار فعال است و برای تأیید درخواست‌ها از توکن‌های حاملِ امضاشده استفاده می‌کند. این افزونه دو فلگ اختیاری می‌پذیرد:</p>
 <ul>
-<li dir="rtl"><code dir="ltr">--service-account-key-file</code> فایلی حاوی کلیدهای خصوصی یا عمومی x509 RSA یا ECDSA با کدگذاری PEM که برای تأیید توکن‌های ServiceAccount استفاده می‌شود. فایل مشخص‌شده می‌تواند شامل چندین کلید باشد و پرچم را می‌توان چندین بار با فایل‌های مختلف مشخص کرد. اگر مشخص نشود، از --tls-private-key-file استفاده می‌شود.</li>
-<li dir="rtl"><code dir="ltr">--service-account-lookup</code> اگر فعال باشد، توکن‌هایی که از API حذف می‌شوند باطل (revoke) خواهند شد.</li>
+<li dir="rtl">فلگ <code dir="ltr">--service-account-key-file</code>: فایلی شامل کلیدهای خصوصی یا عمومی RSA یا ECDSA از نوع x509 با کدگذاری PEM که برای تأیید توکن‌های ServiceAccount به کار می‌رود. فایل مشخص‌شده می‌تواند چند کلید داشته باشد و می‌توان این فلگ را چند بار با فایل‌های مختلف مشخص کرد. اگر مشخص نشود، از --tls-private-key-file استفاده می‌شود.</li>
+<li dir="rtl">فلگ <code dir="ltr">--service-account-lookup</code>: اگر فعال باشد، توکن‌هایی که از API حذف شده‌اند باطل می‌شوند.</li>
 </ul>
-<p dir="rtl"><a href="../../concepts/security/service-accounts.html">ServiceAccountها</a> معمولاً به‌صورت خودکار توسط API server ایجاد می‌شوند و از طریق <code dir="ltr">ServiceAccount</code> <a href="admission-controllers.html">Admission Controller</a> با پادهای در حال اجرا در کلاستر مرتبط می‌شوند.
-Bearer tokenها در مکان‌های شناخته‌شده‌ای در پادها mount می‌شوند و به کلاینت‌های درون کلاستر اجازه می‌دهند در API server احراز هویت شوند. ServiceAccountها را می‌توان با استفاده از فیلد <code dir="ltr">serviceAccountName</code> در <code dir="ltr">spec</code> یک Pod به‌صورت صریح با Podها مرتبط کرد.</p>
+<p dir="rtl"><a href="../../concepts/security/service-accounts.html">ServiceAccountها</a> معمولاً به‌طور خودکار توسط API server ایجاد می‌شوند و از طریق <a href="admission-controllers.html">کنترل‌کننده‌ی پذیرش</a> <code dir="ltr">ServiceAccount</code> به پادهایی که در کلاستر اجرا می‌شوند مرتبط می‌شوند.
+توکن‌های حامل در مسیرهای شناخته‌شده‌ای در پادها mount می‌شوند و به کلاینت‌های درون کلاستر امکان می‌دهند در API server احراز هویت شوند. می‌توان ServiceAccountها را با فیلد <code dir="ltr">serviceAccountName</code> در <code dir="ltr">spec</code> یک Pod به‌طور صریح به Podها مرتبط کرد.</p>
 <div class="callout note"><div class="callout-title">توجه:</div>
-<p dir="rtl"><code dir="ltr">serviceAccountName</code> معمولاً حذف می‌شود، زیرا این کار به‌صورت خودکار انجام می‌شود.</p>
+<p dir="rtl">معمولاً فیلد <code dir="ltr">serviceAccountName</code> حذف می‌شود، زیرا این کار به‌طور خودکار انجام می‌شود.</p>
 </div>
-<p dir="rtl">در اینجا مانیفست (جزئی) یک Deployment آمده است که با ServiceAccount به نام bob-the-bot اجرا می‌شود:</p>
+<p dir="rtl">در ادامه مانیفستی (ناقص) برای یک Deployment آمده است که با ServiceAccountی به نام bob-the-bot اجرا می‌شود:</p>
 <pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -247,38 +245,39 @@ spec:
       - name: nginx
         image: nginx:1.14.2
 </code></pre>
-<p dir="rtl">bearer tokenهای حساب سرویس برای استفاده در خارج از کلاستر کاملاً معتبرند و می‌توان از آن‌ها برای ایجاد هویت برای کارهای (job) بلندمدتی استفاده کرد که می‌خواهند با API کوبرنتیز ارتباط برقرار کنند. برای ایجاد دستی یک حساب سرویس، از دستور <code dir="ltr">kubectl create serviceaccount (NAME)</code> استفاده کنید. این دستور یک حساب سرویس در فضای نام جاری ایجاد می‌کند.</p>
+<p dir="rtl">توکن‌های حامل حساب سرویس برای استفاده در خارج از کلاستر نیز کاملاً معتبرند و می‌توان از آن‌ها برای ایجاد هویت برای کارهای طولانی‌مدتی که می‌خواهند با API کوبرنتیز ارتباط برقرار کنند استفاده کرد. برای ایجاد دستی یک حساب سرویس، از دستور <code dir="ltr">kubectl create serviceaccount (NAME)</code> استفاده کنید. این دستور یک حساب سرویس در فضای نام فعلی ایجاد می‌کند.</p>
 <pre dir="ltr"><code class="language-bash" dir="ltr">kubectl create serviceaccount jenkins
 </code></pre>
 <pre dir="ltr"><code class="language-none" dir="ltr">serviceaccount/jenkins created
 </code></pre>
-<p dir="rtl">می‌توانید یک توکن مرتبط را به‌صورت دستی ایجاد کنید:</p>
+<p dir="rtl">می‌توانید توکن مرتبط با آن را به‌صورت دستی ایجاد کنید:</p>
 <pre dir="ltr"><code class="language-bash" dir="ltr">kubectl create token jenkins
 </code></pre>
 <pre dir="ltr"><code class="language-none" dir="ltr">eyJhbGciOiJSUzI1NiIsImtp...
 </code></pre>
-<p dir="rtl">توکن ایجادشده یک <a href="https://www.rfc-editor.org/rfc/rfc7519" target="_blank" rel="noopener">JSON Web Token</a> (JWT) امضاشده است.</p>
-<p dir="rtl">JWT امضاشده را می‌توان به‌عنوان bearer token برای احراز هویت با حساب سرویس مورد نظر استفاده کرد. برای اطلاع از نحوهٔ گنجاندن توکن در یک درخواست، <a href="#putting-a-bearer-token-in-a-request">بالا</a> را ببینید. معمولاً این توکن‌ها برای دسترسی درون کلاستر به API server در پادها mount می‌شوند، اما از خارج از کلاستر نیز قابل استفاده‌اند.</p>
-<p dir="rtl">حساب‌های سرویس با نام کاربری <code dir="ltr">system:serviceaccount:(NAMESPACE):(SERVICEACCOUNT)</code> احراز هویت می‌شوند و به گروه‌های <code dir="ltr">system:serviceaccounts</code> و <code dir="ltr">system:serviceaccounts:(NAMESPACE)</code> اختصاص می‌یابند.</p>
+<p dir="rtl">توکن ایجادشده یک <a href="https://www.rfc-editor.org/rfc/rfc7519" target="_blank" rel="noopener">توکن وب JSON</a> (JWT) امضاشده است.</p>
+<p dir="rtl">از این JWT امضاشده می‌توان به‌عنوان توکن حامل برای احراز هویت با هویتِ حساب سرویس مربوطه استفاده کرد. برای آشنایی با نحوه‌ی قرار دادن توکن در درخواست، به <a href="#putting-a-bearer-token-in-a-request">بخش بالا</a> مراجعه کنید. معمولاً این توکن‌ها برای دسترسی درون‌کلاستری به API server در پادها mount می‌شوند، اما از خارج از کلاستر نیز می‌توان از آن‌ها استفاده کرد.</p>
+<p dir="rtl">حساب‌های سرویس با نام کاربری <code dir="ltr">system:serviceaccount:(NAMESPACE):(SERVICEACCOUNT)</code> احراز هویت می‌شوند و به گروه‌های <code dir="ltr">system:serviceaccounts</code> و <code dir="ltr">system:serviceaccounts:(NAMESPACE)</code> تخصیص داده می‌شوند.</p>
 <div class="callout warning"><div class="callout-title">هشدار:</div>
-<p dir="rtl">از آنجا که توکن‌های حساب سرویس را می‌توان در آبجکت‌های API از نوع Secret نیز ذخیره کرد، هر کاربری که دسترسی نوشتن به Secretها دارد می‌تواند یک توکن درخواست کند، و هر کاربری که دسترسی خواندن به آن Secretها دارد می‌تواند به‌عنوان آن حساب سرویس احراز هویت شود. در اعطای مجوزها به حساب‌های سرویس و قابلیت‌های خواندن یا نوشتن برای Secretها احتیاط کنید.</p>
+<p dir="rtl">از آنجا که توکن‌های حساب سرویس می‌توانند در آبجکت‌های API از نوع Secret نیز ذخیره شوند، هر کاربری که دسترسی نوشتن روی Secretها داشته باشد می‌تواند توکن درخواست کند، و هر کاربری که دسترسی خواندن آن Secretها را داشته باشد می‌تواند با هویت آن حساب سرویس احراز هویت شود. هنگام اعطای مجوز به حساب‌های سرویس و اعطای قابلیت خواندن یا نوشتن Secretها، احتیاط کنید.</p>
 </div>
-<h2 id="یکپارچه-سازی-های-خارجی-external-integrations" dir="rtl">یکپارچه‌سازی‌های خارجی {#external-integrations}</h2>
-<p dir="rtl">کوبرنتیز به‌صورت بومی از JWT و OpenID Connect (OIDC) پشتیبانی می‌کند؛ بخش <a href="#json-web-token-authentication">احراز هویت با JSON Web Token</a> را ببینید.</p>
-<p dir="rtl">یکپارچه‌سازی با سایر پروتکل‌های احراز هویت (برای مثال: LDAP، SAML، Kerberos و طرح‌های جایگزین X.509)
-را می‌توان با استفاده از یک <a href="#authenticating-proxy">پراکسی احراز هویت</a> یا با یکپارچه‌سازی با یک
-<a href="#webhook-token-authentication">وب‌هوک احراز هویت</a> انجام داد.</p>
-<p dir="rtl">همچنین می‌توانید از هر روش سفارشی دیگری که <a href="#x509-client-certificates">گواهی‌های X.509 کلاینت</a> را برای کلاینت‌ها صادر می‌کند استفاده کنید،
-مشروط بر اینکه API server به گواهی‌های معتبر اعتماد کند.
-برای آگاهی از نحوه ایجاد یک گواهی، بخش <a href="#x509-client-certificates">گواهی‌های X.509 کلاینت</a> را مطالعه کنید.</p>
-<p dir="rtl">اگر برای کلاینت‌ها گواهی صادر می‌کنید، این بر عهده شماست (به‌عنوان مدیر پلتفرم ابری)
-که اطمینان حاصل کنید دوره اعتبار گواهی و سایر تصمیم‌های طراحی‌ای که اتخاذ می‌کنید، سطح امنیتی
-مناسبی را فراهم می‌کنند.</p>
+<h2 id="یکپارچه-سازی-های-خارجی" dir="rtl">یکپارچه‌سازی‌های خارجی</h2>
+<p dir="rtl">کوبرنتیز به‌طور بومی از JWT و OpenID Connect (OIDC) پشتیبانی می‌کند. برای اطلاعات بیشتر، <a href="#json-web-token-authentication">احراز هویت با JSON Web Token</a> را ببینید.</p>
+<p dir="rtl">یکپارچه‌سازی با سایر پروتکل‌های احراز هویت (برای مثال LDAP، SAML، Kerberos و طرح‌های جایگزین X.509)
+را می‌توان با استفاده از یک <a href="#authenticating-proxy">پروکسی احراز هویت</a> یا از طریق یکپارچه‌سازی با یک
+<a href="#webhook-token-authentication">وبهوک احراز هویت</a> انجام داد.</p>
+<p dir="rtl">همچنین می‌توانید از هر روش سفارشی دیگری که <a href="#x509-client-certificates">گواهی‌های کلاینت X.509</a> را برای کلاینت‌ها صادر می‌کند استفاده کنید،
+به این شرط که API server به گواهی‌های معتبر اعتماد کند.
+برای آشنایی با نحوهٔ تولید یک گواهی، بخش <a href="#x509-client-certificates">گواهی‌های کلاینت X.509</a> را
+بخوانید.</p>
+<p dir="rtl">اگر برای کلاینت‌ها گواهی صادر می‌کنید، شما (به‌عنوان مدیر پلتفرم ابری) مسئول هستید
+اطمینان حاصل کنید که مدت اعتبار گواهی و سایر تصمیم‌های طراحی‌تان سطح امنیت
+مناسبی فراهم می‌کنند.</p>
 <h3 id="احراز-هویت-با-json-web-token" dir="rtl">احراز هویت با JSON Web Token</h3>
-<p dir="rtl">می‌توانید کوبرنتیز را به‌گونه‌ای پیکربندی کنید که کاربران را با استفاده از توکن‌های سازگار با <a href="https://www.rfc-editor.org/rfc/rfc7519" target="_blank" rel="noopener">JSON Web Token</a> (JWT) احراز هویت کند. سازوکار احراز هویت JWT برای توکن‌های ServiceAccount که خود کوبرنتیز صادر می‌کند به کار می‌رود، و همچنین می‌توانید از آن برای یکپارچه‌سازی با سایر منابع هویت استفاده کنید.</p>
-<p dir="rtl">احراز هویت‌کننده تلاش می‌کند یک ID token خام را تجزیه کند و بررسی کند که توسط صادرکننده (issuer) پیکربندی‌شده امضا شده باشد.
-برای توکن‌هایی که به‌صورت خارجی صادر شده‌اند، کلید عمومی لازم برای تأیید امضا با استفاده از OIDC discovery از نقطه پایانی عمومی صادرکننده کشف می‌شود.</p>
-<p dir="rtl">حداقل payload معتبر JWT <strong>باید</strong> شامل claimهای زیر باشد:</p>
+<p dir="rtl">می‌توانید کوبرنتیز را طوری پیکربندی کنید که کاربران را با توکن‌های سازگار با <a href="https://www.rfc-editor.org/rfc/rfc7519" target="_blank" rel="noopener">JSON Web Token</a> (JWT) احراز هویت کند. کوبرنتیز برای توکن‌های ServiceAccount که خودش صادر می‌کند از سازوکار احراز هویت JWT استفاده می‌کند. شما نیز می‌توانید از همین سازوکار برای یکپارچه‌سازی با سایر منابع هویت بهره بگیرید.</p>
+<p dir="rtl">احرازکنندهٔ هویت (authenticator) ابتدا تلاش می‌کند توکن هویت خام (raw ID token) را تجزیه کند و سپس بررسی می‌کند که این توکن را صادرکنندهٔ (issuer) پیکربندی‌شده امضا کرده باشد.
+برای توکن‌هایی که خارج از کلاستر صادر شده‌اند، کلید عمومی لازم برای بررسی امضا با استفاده از OIDC discovery از نقطهٔ پایانی عمومی صادرکننده به دست می‌آید.</p>
+<p dir="rtl">حداقل محتوای معتبر یک JWT <strong>باید</strong> شامل ادعاهای (claims) زیر باشد:</p>
 <pre dir="ltr"><code class="language-javascript" dir="ltr">{
   "iss": "https://example.com",   // must match the issuer.url
   "aud": ["my-app"],              // at least one of the entries in issuer.audiences must match the "aud" claim in presented JWTs.
@@ -286,15 +285,15 @@ spec:
   "&lt;username-claim&gt;": "user"      // this is the username claim configured in the claimMappings.username.claim or claimMappings.username.expression
 }
 </code></pre>
-<h4 id="نوع-egress-selector-برای-jwt" dir="rtl">نوع egress selector برای JWT</h4>
+<h4 id="نوع-انتخابگر-خروجی-jwt" dir="rtl">نوع انتخابگر خروجی JWT</h4>
 <div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
-<p dir="rtl">فیلد <code dir="ltr">egressSelectorType</code> در پیکربندی صادرکننده JWT به شما امکان می‌دهد مشخص کنید که کدام <em>egress selector</em> برای ارسال تمام ترافیک مرتبط با صادرکننده (discovery، JWKS، claimهای توزیع‌شده و غیره) استفاده شود.
-استفاده از این قابلیت مستلزم فعال بودن feature gate با نام <code dir="ltr">StructuredAuthenticationConfigurationEgressSelector</code> است.</p>
+<p dir="rtl">با فیلد <code dir="ltr">egressSelectorType</code> در پیکربندی صادرکنندهٔ JWT می‌توانید مشخص کنید که کدام <em>انتخابگر خروجی</em> (egress selector) برای ارسال تمام ترافیک مرتبط با صادرکننده (discovery، JWKS، ادعاهای توزیع‌شده و غیره) به کار رود.
+برای استفاده از این قابلیت باید feature gate با نام <code dir="ltr">StructuredAuthenticationConfigurationEgressSelector</code> فعال باشد.</p>
 <h4 id="توکن-های-openid-connect" dir="rtl">توکن‌های OpenID Connect</h4>
-<p dir="rtl"><a href="https://openid.net/connect/" target="_blank" rel="noopener">OpenID Connect</a> گونه‌ای از OAuth2 است که برخی ارائه‌دهندگان OAuth2، از جمله Microsoft Entra ID، Salesforce و Google، از آن پشتیبانی می‌کنند.
-افزونه اصلی این پروتکل نسبت به OAuth2، فیلد اضافه‌ای است که همراه با access token بازگردانده می‌شود و <a href="https://openid.net/specs/openid-connect-core-1_0.html#IDToken" target="_blank" rel="noopener">ID Token</a> نام دارد.
-این توکن یک JSON Web Token (JWT) با فیلدهای شناخته‌شده، مانند ایمیل کاربر، است که توسط سرور امضا شده است.</p>
-<p dir="rtl">برای شناسایی کاربر، احراز هویت‌کننده از <code dir="ltr">id_token</code> (و نه <code dir="ltr">access_token</code>) موجود در <a href="https://openid.net/specs/openid-connect-core-1_0.html#TokenResponse" target="_blank" rel="noopener">پاسخ توکن</a> OAuth2 به‌عنوان bearer token استفاده می‌کند. برای اطلاع از نحوه قرار دادن توکن در درخواست، <a href="#putting-a-bearer-token-in-a-request">بالا</a> را ببینید.</p>
+<p dir="rtl"><a href="https://openid.net/connect/" target="_blank" rel="noopener">OpenID Connect</a> گونه‌ای از OAuth2 است که برخی از ارائه‌دهندگان OAuth2، به‌ویژه Microsoft Entra ID، Salesforce و Google، از آن پشتیبانی می‌کنند.
+مهم‌ترین افزونهٔ این پروتکل نسبت به OAuth2، فیلد دیگری به نام <a href="https://openid.net/specs/openid-connect-core-1_0.html#IDToken" target="_blank" rel="noopener">ID Token</a> است که همراه با توکن دسترسی (access token) بازگردانده می‌شود.
+این توکن یک JSON Web Token (JWT) است که فیلدهای شناخته‌شده‌ای مانند ایمیل کاربر دارد و سرور آن را امضا می‌کند.</p>
+<p dir="rtl">احرازکنندهٔ هویت برای شناسایی کاربر، مقدار <code dir="ltr">id_token</code> (و نه <code dir="ltr">access_token</code>) را از <a href="https://openid.net/specs/openid-connect-core-1_0.html#TokenResponse" target="_blank" rel="noopener">پاسخ توکن</a> در OAuth2 به‌عنوان توکن حامل (bearer token) به کار می‌برد. برای آشنایی با نحوهٔ قرار دادن توکن در درخواست، <a href="#putting-a-bearer-token-in-a-request">بخش بالا</a> را ببینید.</p>
 <pre dir="ltr"><code class="language-mermaid" dir="ltr">sequenceDiagram
     participant user as User
     participant idp as Identity Provider
@@ -323,48 +322,48 @@ spec:
 </code></pre>
 <ol>
 <li dir="rtl">
-<p dir="rtl">وارد ارائه‌دهنده هویت (identity provider) خود شوید.</p>
+<p dir="rtl">به ارائه‌دهندهٔ هویت (identity provider) خود وارد شوید.</p>
 </li>
 <li dir="rtl">
-<p dir="rtl">ارائه‌دهنده هویت شما یک <code dir="ltr">access_token</code>، یک <code dir="ltr">id_token</code> و یک <code dir="ltr">refresh_token</code> در اختیارتان قرار می‌دهد.</p>
+<p dir="rtl">ارائه‌دهندهٔ هویت یک <code dir="ltr">access_token</code>، یک <code dir="ltr">id_token</code> و یک <code dir="ltr">refresh_token</code> در اختیار شما قرار می‌دهد.</p>
 </li>
 <li dir="rtl">
-<p dir="rtl">هنگام استفاده از <code dir="ltr">kubectl</code>، <code dir="ltr">id_token</code> خود را با آرگومان خط فرمان <code dir="ltr">--token</code> به کار ببرید یا آن را مستقیماً به <code dir="ltr">kubeconfig</code> خود اضافه کنید.</p>
+<p dir="rtl">هنگام کار با <code dir="ltr">kubectl</code>، مقدار <code dir="ltr">id_token</code> را با آرگومان خط فرمان <code dir="ltr">--token</code> به کار ببرید یا آن را مستقیماً به فایل <code dir="ltr">kubeconfig</code> خود اضافه کنید.</p>
 </li>
 <li dir="rtl">
-<p dir="rtl"><code dir="ltr">kubectl</code> توکن <code dir="ltr">id_token</code> شما را در هدری به نام Authorization به سرور API ارسال می‌کند.</p>
+<p dir="rtl">ابزار <code dir="ltr">kubectl</code> مقدار <code dir="ltr">id_token</code> شما را در سرآیندی به نام Authorization به سرور API می‌فرستد.</p>
 </li>
 <li dir="rtl">
-<p dir="rtl">سرور API بررسی می‌کند که امضای JWT معتبر باشد.</p>
+<p dir="rtl">سرور API از معتبر بودن امضای JWT اطمینان حاصل می‌کند.</p>
 </li>
 <li dir="rtl">
-<p dir="rtl">بررسی کنید که <code dir="ltr">id_token</code> منقضی نشده باشد.</p>
-<p dir="rtl">اگر عبارات CEL در <code dir="ltr">AuthenticationConfiguration</code> پیکربندی شده باشند، اعتبارسنجی claim و/یا کاربر انجام می‌شود.</p>
+<p dir="rtl">بررسی می‌شود که <code dir="ltr">id_token</code> منقضی نشده باشد.</p>
+<p dir="rtl">اگر عبارت‌های CEL در <code dir="ltr">AuthenticationConfiguration</code> پیکربندی شده باشند، اعتبارسنجی ادعاها و/یا کاربر انجام می‌شود.</p>
 </li>
 <li dir="rtl">
-<p dir="rtl">اطمینان حاصل می‌شود که کاربر مجاز است.</p>
+<p dir="rtl">بررسی می‌شود که کاربر مجوز لازم را داشته باشد.</p>
 </li>
 <li dir="rtl">
-<p dir="rtl">پس از تأیید مجوز، سرور API پاسخی را به <code dir="ltr">kubectl</code> بازمی‌گرداند.</p>
+<p dir="rtl">پس از تأیید مجوز، سرور API پاسخی به <code dir="ltr">kubectl</code> بازمی‌گرداند.</p>
 </li>
 <li dir="rtl">
-<p dir="rtl"><code dir="ltr">kubectl</code> بازخورد را به کاربر ارائه می‌دهد.</p>
+<p dir="rtl">ابزار <code dir="ltr">kubectl</code> نتیجه را به کاربر اطلاع می‌دهد.</p>
 </li>
 </ol>
-<p dir="rtl">از آنجا که تمام داده‌های لازم برای اعتبارسنجی هویت شما در <code dir="ltr">id_token</code> وجود دارد، کوبرنتیز نیازی ندارد برای این منظور با ارائه‌دهنده هویت تماس بگیرد («phone home»). در مدلی که هر درخواست بدون حالت (stateless) است، این رویکرد راه‌حلی بسیار مقیاس‌پذیر برای احراز هویت فراهم می‌کند. با این حال چند چالش نیز دارد:</p>
+<p dir="rtl">از آنجا که تمام داده‌های لازم برای تأیید هویت شما در <code dir="ltr">id_token</code> وجود دارد، کوبرنتیز نیازی ندارد برای این کار با ارائه‌دهندهٔ هویت تماس بگیرد. در مدلی که همهٔ درخواست‌ها بی‌حالت (stateless) هستند، این روش راه‌حلی بسیار مقیاس‌پذیر برای احراز هویت فراهم می‌کند. با این حال، چند چالش نیز به همراه دارد:</p>
 <ol>
-<li dir="rtl">کوبرنتیز هیچ «رابط وب» برای آغاز فرایند احراز هویت ندارد. مرورگر یا رابطی برای دریافت اعتبارنامه‌ها وجود ندارد؛ به همین دلیل ابتدا باید نزد ارائه‌دهنده هویت خود احراز هویت شوید.</li>
-<li dir="rtl"><code dir="ltr">id_token</code> را نمی‌توان باطل (revoke) کرد. این توکن مانند یک گواهی است، بنابراین باید کوتاه‌مدت باشد (فقط چند دقیقه)؛ در نتیجه دریافت مکرر توکن جدید در هر چند دقیقه می‌تواند بسیار آزاردهنده باشد.</li>
-<li dir="rtl">برای احراز هویت در داشبورد کوبرنتیز، باید از دستور <code dir="ltr">kubectl proxy</code> یا یک reverse proxy استفاده کنید که <code dir="ltr">id_token</code> را تزریق می‌کند.</li>
+<li dir="rtl">کوبرنتیز هیچ «رابط وبی» برای آغاز فرایند احراز هویت ندارد. هیچ مرورگر یا رابطی برای دریافت اطلاعات اعتبارسنجی (credentials) وجود ندارد و به همین دلیل باید ابتدا نزد ارائه‌دهندهٔ هویت خود احراز هویت کنید.</li>
+<li dir="rtl">امکان ابطال <code dir="ltr">id_token</code> وجود ندارد. این توکن مانند یک گواهی است، بنابراین باید عمر کوتاهی (فقط چند دقیقه) داشته باشد و همین موضوع ممکن است دریافت توکن جدید در هر چند دقیقه را بسیار آزاردهنده کند.</li>
+<li dir="rtl">برای احراز هویت در داشبورد کوبرنتیز، باید از فرمان <code dir="ltr">kubectl proxy</code> یا یک پراکسی معکوس (reverse proxy) استفاده کنید که <code dir="ltr">id_token</code> را به درخواست‌ها تزریق کند.</li>
 </ol>
 <h4 id="پیکربندی-سرور-api" dir="rtl">پیکربندی سرور API</h4>
 <h5 dir="rtl">استفاده از آرگومان‌های خط فرمان</h5>
-<p dir="rtl">برای فعال‌سازی این افزونه، آرگومان‌های خط فرمان زیر را برای سرور API پیکربندی کنید:</p>
+<p dir="rtl">برای فعال کردن این افزونه، آرگومان‌های خط فرمان زیر را برای سرور API پیکربندی کنید:</p>
 <table>
 <thead>
 <tr>
 <th dir="rtl">پارامتر</th>
-<th dir="rtl">توضیحات</th>
+<th dir="rtl">توضیح</th>
 <th dir="rtl">مثال</th>
 <th dir="rtl">الزامی</th>
 </tr>
@@ -372,49 +371,49 @@ spec:
 <tbody>
 <tr>
 <td dir="ltr" class="ltr"><code dir="ltr">--oidc-issuer-url</code></td>
-<td dir="rtl">نشانی ارائه‌دهنده‌ای که به سرور API امکان می‌دهد کلیدهای عمومی امضا را کشف کند. فقط نشانی‌هایی که از طرح <code dir="ltr">https://</code> استفاده می‌کنند پذیرفته می‌شوند. این مقدار معمولاً نشانی discovery ارائه‌دهنده است که مسیر آن خالی شده است.</td>
-<td dir="rtl">اگر نشانی OIDC discovery صادرکننده <code dir="ltr">https://accounts.provider.example/.well-known/openid-configuration</code> باشد، مقدار باید <code dir="ltr">https://accounts.provider.example</code> باشد</td>
+<td dir="rtl">نشانی URL ارائه‌دهنده‌ای که سرور API از طریق آن کلیدهای عمومی امضا را کشف می‌کند. فقط نشانی‌هایی پذیرفته می‌شوند که از طرح <code dir="ltr">https://</code> استفاده کنند. این مقدار معمولاً همان نشانی discovery ارائه‌دهنده است که مسیر آن خالی شده باشد.</td>
+<td dir="rtl">اگر نشانی OIDC discovery صادرکننده <code dir="ltr">https://accounts.provider.example/.well-known/openid-configuration</code> باشد، مقدار باید <code dir="ltr">https://accounts.provider.example</code> باشد.</td>
 <td dir="rtl">بله</td>
 </tr>
 <tr>
 <td dir="ltr" class="ltr"><code dir="ltr">--oidc-client-id</code></td>
-<td dir="rtl">شناسه کلاینتی که همه توکن‌ها باید برای آن صادر شده باشند.</td>
+<td dir="rtl">شناسهٔ کلاینتی که همهٔ توکن‌ها باید برای آن صادر شده باشند.</td>
 <td dir="ltr" class="ltr">kubernetes</td>
 <td dir="rtl">بله</td>
 </tr>
 <tr>
 <td dir="ltr" class="ltr"><code dir="ltr">--oidc-username-claim</code></td>
-<td dir="rtl">claim در JWT که به‌عنوان نام کاربری استفاده می‌شود. به‌طور پیش‌فرض <code dir="ltr">sub</code> است که انتظار می‌رود شناسه یکتای کاربر نهایی باشد. مدیران می‌توانند بسته به ارائه‌دهنده خود claimهای دیگری مانند <code dir="ltr">email</code> یا <code dir="ltr">name</code> را انتخاب کنند. با این حال، برای جلوگیری از تداخل نام با افزونه‌های دیگر، به claimهایی غیر از <code dir="ltr">email</code> پیشوند نشانی صادرکننده افزوده می‌شود.</td>
+<td dir="rtl">ادعای JWT که به‌عنوان نام کاربری استفاده می‌شود. مقدار پیش‌فرض <code dir="ltr">sub</code> است که انتظار می‌رود شناسهٔ یکتای کاربر نهایی باشد. مدیران بسته به ارائه‌دهندهٔ خود می‌توانند ادعاهای دیگری مانند <code dir="ltr">email</code> یا <code dir="ltr">name</code> را انتخاب کنند. با این حال، به ادعاهایی غیر از <code dir="ltr">email</code> پیشوندی برابر با نشانی صادرکننده افزوده می‌شود تا از تداخل نام‌ها با سایر افزونه‌ها جلوگیری شود.</td>
 <td dir="ltr" class="ltr">sub</td>
 <td dir="rtl">خیر</td>
 </tr>
 <tr>
 <td dir="ltr" class="ltr"><code dir="ltr">--oidc-username-prefix</code></td>
-<td dir="rtl">پیشوندی که به claimهای نام کاربری افزوده می‌شود تا از تداخل با نام‌های موجود (مانند کاربران <code dir="ltr">system:</code>) جلوگیری شود. برای مثال، مقدار <code dir="ltr">oidc:</code> نام‌های کاربری‌ای مانند <code dir="ltr">oidc:jane.doe</code> ایجاد می‌کند. اگر این آرگومان ارائه نشود و <code dir="ltr">--oidc-username-claim</code> مقداری غیر از <code dir="ltr">email</code> داشته باشد، پیشوند به‌طور پیش‌فرض <code dir="ltr">( Issuer URL )#</code> خواهد بود که در آن <code dir="ltr">( Issuer URL )</code> مقدار <code dir="ltr">--oidc-issuer-url</code> است. با مقدار <code dir="ltr">-</code> می‌توان افزودن هرگونه پیشوند را غیرفعال کرد.</td>
+<td dir="rtl">پیشوندی که به ابتدای ادعاهای نام کاربری افزوده می‌شود تا از تداخل با نام‌های موجود (مانند کاربران <code dir="ltr">system:</code>) جلوگیری شود. برای مثال، مقدار <code dir="ltr">oidc:</code> نام‌های کاربری‌ای مانند <code dir="ltr">oidc:jane.doe</code> ایجاد می‌کند. اگر این آرگومان تعیین نشود و مقدار <code dir="ltr">--oidc-username-claim</code> چیزی غیر از <code dir="ltr">email</code> باشد، پیشوند به‌طور پیش‌فرض <code dir="ltr">( Issuer URL )#</code> خواهد بود که در آن <code dir="ltr">( Issuer URL )</code> مقدار <code dir="ltr">--oidc-issuer-url</code> است. با مقدار <code dir="ltr">-</code> می‌توان افزودن هرگونه پیشوند را غیرفعال کرد.</td>
 <td dir="ltr" class="ltr"><code dir="ltr">oidc:</code></td>
 <td dir="rtl">خیر</td>
 </tr>
 <tr>
 <td dir="ltr" class="ltr"><code dir="ltr">--oidc-groups-claim</code></td>
-<td dir="rtl">claim در JWT که به‌عنوان گروه کاربر استفاده می‌شود. اگر این claim وجود داشته باشد، باید آرایه‌ای از رشته‌ها باشد.</td>
+<td dir="rtl">ادعای JWT که به‌عنوان گروه کاربر استفاده می‌شود. اگر این ادعا وجود داشته باشد، باید آرایه‌ای از رشته‌ها باشد.</td>
 <td dir="ltr" class="ltr">groups</td>
 <td dir="rtl">خیر</td>
 </tr>
 <tr>
 <td dir="ltr" class="ltr"><code dir="ltr">--oidc-groups-prefix</code></td>
-<td dir="rtl">پیشوندی که به claimهای گروه افزوده می‌شود تا از تداخل با نام‌های موجود (مانند گروه‌های <code dir="ltr">system:</code>) جلوگیری شود. برای مثال، مقدار <code dir="ltr">oidc:</code> نام‌های گروهی مانند <code dir="ltr">oidc:engineering</code> و <code dir="ltr">oidc:infra</code> ایجاد می‌کند.</td>
+<td dir="rtl">پیشوندی که به ابتدای ادعاهای گروه افزوده می‌شود تا از تداخل با نام‌های موجود (مانند گروه‌های <code dir="ltr">system:</code>) جلوگیری شود. برای مثال، مقدار <code dir="ltr">oidc:</code> نام‌های گروهی مانند <code dir="ltr">oidc:engineering</code> و <code dir="ltr">oidc:infra</code> ایجاد می‌کند.</td>
 <td dir="ltr" class="ltr"><code dir="ltr">oidc:</code></td>
 <td dir="rtl">خیر</td>
 </tr>
 <tr>
 <td dir="ltr" class="ltr"><code dir="ltr">--oidc-required-claim</code></td>
-<td dir="rtl">یک جفت key=value که claim الزامی در ID Token را توصیف می‌کند. در صورت تنظیم، بررسی می‌شود که این claim با مقدار مطابق در ID Token وجود داشته باشد. برای مشخص کردن چند claim، این آرگومان را تکرار کنید.</td>
+<td dir="rtl">یک جفت key=value که ادعای الزامی در ID Token را توصیف می‌کند. در صورت تعیین، بررسی می‌شود که این ادعا با مقدار منطبق در ID Token وجود داشته باشد. برای تعیین چند ادعا، این آرگومان را تکرار کنید.</td>
 <td dir="ltr" class="ltr"><code dir="ltr">claim=value</code></td>
 <td dir="rtl">خیر</td>
 </tr>
 <tr>
 <td dir="ltr" class="ltr"><code dir="ltr">--oidc-ca-file</code></td>
-<td dir="rtl">مسیر گواهی مرجع صدور گواهی (CA) که گواهی وب ارائه‌دهنده هویت شما را امضا کرده است. به‌طور پیش‌فرض از CAهای ریشه میزبان استفاده می‌شود.</td>
+<td dir="rtl">مسیر گواهی مرجع صدور گواهی (CA) که گواهی وب ارائه‌دهندهٔ هویت شما را امضا کرده است. مقدار پیش‌فرض، CAهای ریشهٔ میزبان است.</td>
 <td dir="ltr" class="ltr"><code dir="ltr">/etc/kubernetes/ssl/kc-ca.pem</code></td>
 <td dir="rtl">خیر</td>
 </tr>
@@ -428,14 +427,14 @@ spec:
 </table>
 <h5 dir="rtl">پیکربندی احراز هویت از طریق فایل {#using-authentication-configuration}</h5>
 <div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
-<p dir="rtl">رویکرد فایل پیکربندی به شما امکان می‌دهد چندین احراز هویت‌کننده JWT پیکربندی کنید که هر کدام <code dir="ltr">issuer.url</code> و <code dir="ltr">issuer.discoveryURL</code> یکتای خود را دارند. فایل پیکربندی حتی اجازه می‌دهد عبارات <a href="../using-api/cel.html">CEL</a> را برای نگاشت claimها به ویژگی‌های کاربر و برای اعتبارسنجی claimها و اطلاعات کاربر مشخص کنید.
-سرور API همچنین هنگام تغییر فایل پیکربندی، احراز هویت‌کننده‌ها را به‌طور خودکار بارگذاری مجدد می‌کند.
-می‌توانید از معیار (metric) با نام <code dir="ltr">apiserver_authentication_config_controller_automatic_reload_last_timestamp_seconds</code> برای پایش آخرین زمانی که پیکربندی توسط سرور API بارگذاری مجدد شده است استفاده کنید.</p>
-<p dir="rtl">باید مسیر پیکربندی احراز هویت را با آرگومان خط فرمان <code dir="ltr">--authentication-config</code> برای سرور API مشخص کنید. اگر می‌خواهید به‌جای فایل پیکربندی از آرگومان‌های خط فرمان استفاده کنید، آن‌ها همچنان بدون تغییر کار خواهند کرد. برای دسترسی به قابلیت‌های جدید، مانند پیکربندی چندین احراز هویت‌کننده یا تنظیم چندین audience برای یک صادرکننده، باید به استفاده از فایل پیکربندی روی بیاورید.</p>
-<p dir="rtl">برای استفاده از احراز هویت ساختاریافته، آرگومان خط فرمان <code dir="ltr">--authentication-config</code> را برای kube-apiserver مشخص کنید. نمونه‌ای از فایل پیکربندی احراز هویت ساختاریافته در ادامه نشان داده شده است.</p>
+<p dir="rtl">با روش فایل پیکربندی می‌توانید چندین احرازکنندهٔ هویت JWT را پیکربندی کنید که هر کدام <code dir="ltr">issuer.url</code> و <code dir="ltr">issuer.discoveryURL</code> یکتای خود را دارند. فایل پیکربندی حتی امکان تعیین عبارت‌های <a href="../using-api/cel.html">CEL</a> را فراهم می‌کند تا ادعاها را به ویژگی‌های کاربر نگاشت کنید و ادعاها و اطلاعات کاربر را اعتبارسنجی کنید.
+همچنین هر زمان که فایل پیکربندی تغییر کند، سرور API احرازکننده‌های هویت را به‌طور خودکار دوباره بارگذاری می‌کند.
+برای پایش آخرین زمان بارگذاری مجدد پیکربندی در سرور API می‌توانید از متریک <code dir="ltr">apiserver_authentication_config_controller_automatic_reload_last_timestamp_seconds</code> استفاده کنید.</p>
+<p dir="rtl">باید مسیر فایل پیکربندی احراز هویت را با آرگومان خط فرمان <code dir="ltr">--authentication-config</code> به سرور API بدهید. اگر بخواهید به‌جای فایل پیکربندی از آرگومان‌های خط فرمان استفاده کنید، این آرگومان‌ها همچنان مانند گذشته کار می‌کنند. برای دسترسی به قابلیت‌های جدید، مانند پیکربندی چند احرازکنندهٔ هویت یا تعیین چند مخاطب (audience) برای یک صادرکننده، به استفاده از فایل پیکربندی روی بیاورید.</p>
+<p dir="rtl">برای استفاده از احراز هویت ساخت‌یافته، آرگومان خط فرمان <code dir="ltr">--authentication-config</code> را برای kube-apiserver تعیین کنید. نمونه‌ای از فایل پیکربندی احراز هویت ساخت‌یافته در ادامه آمده است.</p>
 <div class="callout note"><div class="callout-title">توجه:</div>
-<p dir="rtl">اگر <code dir="ltr">--authentication-config</code> را همراه با هر یک از آرگومان‌های خط فرمان <code dir="ltr">--oidc-*</code> مشخص کنید، این یک پیکربندی نادرست است. در این حالت، سرور API خطا گزارش می‌کند و بلافاصله خارج می‌شود.
-اگر می‌خواهید به استفاده از پیکربندی احراز هویت ساختاریافته روی بیاورید، باید آرگومان‌های خط فرمان <code dir="ltr">--oidc-*</code> را حذف کنید و به‌جای آن‌ها از فایل پیکربندی استفاده کنید.</p>
+<p dir="rtl">تعیین هم‌زمان <code dir="ltr">--authentication-config</code> با هر یک از آرگومان‌های خط فرمان <code dir="ltr">--oidc-*</code> پیکربندی نادرست به شمار می‌رود. در این حالت، سرور API خطا گزارش می‌کند و بلافاصله خارج می‌شود.
+اگر می‌خواهید به پیکربندی احراز هویت ساخت‌یافته روی بیاورید، باید آرگومان‌های خط فرمان <code dir="ltr">--oidc-*</code> را حذف کنید و به‌جای آن‌ها از فایل پیکربندی استفاده کنید.</p>
 </div>
 <pre dir="ltr"><code class="language-yaml" dir="ltr">---
 #
@@ -558,25 +557,25 @@ jwt:
 </code></pre>
 <ul>
 <li dir="rtl">
-<p dir="rtl">عبارت قانون اعتبارسنجی claim</p>
-<p dir="rtl"><code dir="ltr">jwt.claimValidationRules[i].expression</code> عبارتی را نشان می‌دهد که توسط CEL ارزیابی می‌شود.
-عبارات CEL به محتوای payload توکن دسترسی دارند که در متغیر CEL با نام <code dir="ltr">claims</code> سازمان‌دهی شده است.
-<code dir="ltr">claims</code> نگاشتی (map) از نام claimها (به‌صورت رشته) به مقادیر claimها (از هر نوع) است.</p>
+<p dir="rtl">عبارت قاعدهٔ اعتبارسنجی ادعا</p>
+<p dir="rtl">فیلد <code dir="ltr">jwt.claimValidationRules[i].expression</code> عبارتی را نشان می‌دهد که CEL آن را ارزیابی می‌کند.
+عبارت‌های CEL به محتوای بدنهٔ توکن دسترسی دارند که در متغیر CEL با نام <code dir="ltr">claims</code> سازمان‌دهی شده است.
+متغیر <code dir="ltr">claims</code> نگاشتی از نام ادعاها (به‌صورت رشته) به مقادیر ادعاها (از هر نوعی) است.</p>
 </li>
 <li dir="rtl">
-<p dir="rtl">عبارت قانون اعتبارسنجی کاربر</p>
-<p dir="rtl"><code dir="ltr">jwt.userValidationRules[i].expression</code> عبارتی را نشان می‌دهد که توسط CEL ارزیابی می‌شود.
-عبارات CEL به محتوای <code dir="ltr">userInfo</code> دسترسی دارند که در متغیر CEL با نام <code dir="ltr">user</code> سازمان‌دهی شده است.
-برای آگاهی از schema مربوط به <code dir="ltr">user</code>، مستندات API با عنوان <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.37/#userinfo-v1-authentication-k8s-io" target="_blank">UserInfo</a> را ببینید.</p>
+<p dir="rtl">عبارت قاعدهٔ اعتبارسنجی کاربر</p>
+<p dir="rtl">فیلد <code dir="ltr">jwt.userValidationRules[i].expression</code> عبارتی را نشان می‌دهد که CEL آن را ارزیابی می‌کند.
+عبارت‌های CEL به محتوای <code dir="ltr">userInfo</code> دسترسی دارند که در متغیر CEL با نام <code dir="ltr">user</code> سازمان‌دهی شده است.
+برای آشنایی با طرح‌وارهٔ <code dir="ltr">user</code>، به مستندات API مربوط به <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.37/#userinfo-v1-authentication-k8s-io" target="_blank">UserInfo</a> مراجعه کنید.</p>
 </li>
 <li dir="rtl">
-<p dir="rtl">عبارت نگاشت claim</p>
-<p dir="rtl"><code dir="ltr">jwt.claimMappings.username.expression</code>، <code dir="ltr">jwt.claimMappings.groups.expression</code>، <code dir="ltr">jwt.claimMappings.uid.expression</code> و
-<code dir="ltr">jwt.claimMappings.extra[i].valueExpression</code> عبارتی را نشان می‌دهند که توسط CEL ارزیابی می‌شود.
-عبارات CEL به محتوای payload توکن دسترسی دارند که در متغیر CEL با نام <code dir="ltr">claims</code> سازمان‌دهی شده است.
-<code dir="ltr">claims</code> نگاشتی (map) از نام claimها (به‌صورت رشته) به مقادیر claimها (از هر نوع) است.</p>
-<p dir="rtl">برای کسب اطلاعات بیشتر، <a href="../using-api/cel.html">مستندات CEL</a> را ببینید.</p>
-<p dir="rtl">در ادامه نمونه‌هایی از <code dir="ltr">AuthenticationConfiguration</code> با payloadهای مختلف توکن آمده است.</p>
+<p dir="rtl">عبارت نگاشت ادعا</p>
+<p dir="rtl">فیلدهای <code dir="ltr">jwt.claimMappings.username.expression</code>، <code dir="ltr">jwt.claimMappings.groups.expression</code>، <code dir="ltr">jwt.claimMappings.uid.expression</code> و
+<code dir="ltr">jwt.claimMappings.extra[i].valueExpression</code> عبارتی را نشان می‌دهند که CEL آن را ارزیابی می‌کند.
+عبارت‌های CEL به محتوای بدنهٔ توکن دسترسی دارند که در متغیر CEL با نام <code dir="ltr">claims</code> سازمان‌دهی شده است.
+متغیر <code dir="ltr">claims</code> نگاشتی از نام ادعاها (به‌صورت رشته) به مقادیر ادعاها (از هر نوعی) است.</p>
+<p dir="rtl">برای اطلاعات بیشتر، <a href="../using-api/cel.html">مستندات CEL</a> را ببینید.</p>
+<p dir="rtl">در ادامه نمونه‌هایی از <code dir="ltr">AuthenticationConfiguration</code> با محتوای توکن‌های مختلف آمده است.</p>
 </li>
 </ul>
 <div class="tabs">
@@ -604,7 +603,7 @@ jwt:
 </code></pre>
 <pre dir="ltr"><code class="language-bash" dir="ltr">  TOKEN=eyJhbGciOiJSUzI1NiIsImtpZCI6ImY3dF9tOEROWmFTQk1oWGw5QXZTWGhBUC04Y0JmZ0JVbFVpTG5oQkgxdXMiLCJ0eXAiOiJKV1QifQ.eyJhdWQiOiJrdWJlcm5ldGVzIiwiZXhwIjoxNzAzMjMyOTQ5LCJpYXQiOjE3MDExMDcyMzMsImlzcyI6Imh0dHBzOi8vZXhhbXBsZS5jb20iLCJqdGkiOiI3YzMzNzk0MjgwN2U3M2NhYTJjMzBjODY4YWMwY2U5MTBiY2UwMmRkY2JmZWJlOGMyM2I4YjVmMjdhZDYyODczIiwibmJmIjoxNzAxMTA3MjMzLCJyb2xlcyI6InVzZXIsYWRtaW4iLCJzdWIiOiJhdXRoIiwidGVuYW50IjoiNzJmOTg4YmYtODZmMS00MWFmLTkxYWItMmQ3Y2QwMTFkYjRhIiwidXNlcm5hbWUiOiJmb28ifQ.TBWF2RkQHm4QQz85AYPcwLxSk-VLvQW-mNDHx7SEOSv9LVwcPYPuPajJpuQn9C_gKq1R94QKSQ5F6UgHMILz8OfmPKmX_00wpwwNVGeevJ79ieX2V-__W56iNR5gJ-i9nn6FYk5pwfVREB0l4HSlpTOmu80gbPWAXY5hLW0ZtcE1JTEEmefORHV2ge8e3jp1xGafNy6LdJWabYuKiw8d7Qga__HxtKB-t0kRMNzLRS7rka_SfQg0dSYektuxhLbiDkqhmRffGlQKXGVzUsuvFw7IGM5ZWnZgEMDzCI357obHeM3tRqpn5WRjtB8oM7JgnCymaJi-P3iCd88iu1xnzA
 </code></pre>
-<p dir="rtl">که در آن payload توکن به شرح زیر است:</p>
+<p dir="rtl">که محتوای (payload) توکن آن به این صورت است:</p>
 <pre dir="ltr"><code class="language-json" dir="ltr">  {
     "aud": "kubernetes",
     "exp": 1703232949,
@@ -618,7 +617,7 @@ jwt:
     "username": "foo"
   }
 </code></pre>
-<p dir="rtl">توکن فوق همراه با <code dir="ltr">AuthenticationConfiguration</code> بالا، آبجکت <code dir="ltr">UserInfo</code> زیر را تولید می‌کند و کاربر با موفقیت احراز هویت می‌شود.</p>
+<p dir="rtl">این توکن با پیکربندی <code dir="ltr">AuthenticationConfiguration</code> بالا، آبجکت <code dir="ltr">UserInfo</code> زیر را تولید می‌کند و کاربر با موفقیت احراز هویت می‌شود.</p>
 <pre dir="ltr"><code class="language-json" dir="ltr">{
     "username": "foo:external-user",
     "uid": "auth",
@@ -632,7 +631,7 @@ jwt:
 }
 </code></pre>
 </div>
-<div class="tab"><div class="tab-name">Fails claim validation</div>
+<div class="tab"><div class="tab-name">شکست در اعتبارسنجی claim</div>
 <pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: apiserver.config.k8s.io/v1
 kind: AuthenticationConfiguration
 jwt:
@@ -659,7 +658,7 @@ jwt:
 </code></pre>
 <pre dir="ltr"><code class="language-bash" dir="ltr">TOKEN=eyJhbGciOiJSUzI1NiIsImtpZCI6ImY3dF9tOEROWmFTQk1oWGw5QXZTWGhBUC04Y0JmZ0JVbFVpTG5oQkgxdXMiLCJ0eXAiOiJKV1QifQ.eyJhdWQiOiJrdWJlcm5ldGVzIiwiZXhwIjoxNzAzMjMyOTQ5LCJpYXQiOjE3MDExMDcyMzMsImlzcyI6Imh0dHBzOi8vZXhhbXBsZS5jb20iLCJqdGkiOiI3YzMzNzk0MjgwN2U3M2NhYTJjMzBjODY4YWMwY2U5MTBiY2UwMmRkY2JmZWJlOGMyM2I4YjVmMjdhZDYyODczIiwibmJmIjoxNzAxMTA3MjMzLCJyb2xlcyI6InVzZXIsYWRtaW4iLCJzdWIiOiJhdXRoIiwidGVuYW50IjoiNzJmOTg4YmYtODZmMS00MWFmLTkxYWItMmQ3Y2QwMTFkYjRhIiwidXNlcm5hbWUiOiJmb28ifQ.TBWF2RkQHm4QQz85AYPcwLxSk-VLvQW-mNDHx7SEOSv9LVwcPYPuPajJpuQn9C_gKq1R94QKSQ5F6UgHMILz8OfmPKmX_00wpwwNVGeevJ79ieX2V-__W56iNR5gJ-i9nn6FYk5pwfVREB0l4HSlpTOmu80gbPWAXY5hLW0ZtcE1JTEEmefORHV2ge8e3jp1xGafNy6LdJWabYuKiw8d7Qga__HxtKB-t0kRMNzLRS7rka_SfQg0dSYektuxhLbiDkqhmRffGlQKXGVzUsuvFw7IGM5ZWnZgEMDzCI357obHeM3tRqpn5WRjtB8oM7JgnCymaJi-P3iCd88iu1xnzA
 </code></pre>
-<p dir="rtl">که در آن payload توکن به شرح زیر است:</p>
+<p dir="rtl">که محتوای توکن آن به این صورت است:</p>
 <pre dir="ltr"><code class="language-json" dir="ltr">  {
     "aud": "kubernetes",
     "exp": 1703232949,
@@ -673,10 +672,10 @@ jwt:
     "username": "foo"
   }
 </code></pre>
-<p dir="rtl">توکن فوق همراه با <code dir="ltr">AuthenticationConfiguration</code> بالا احراز هویت نخواهد شد، زیرا claim با نام
-<code dir="ltr">hd</code> روی <code dir="ltr">example.com</code> تنظیم نشده است. سرور API خطای <code dir="ltr">401 Unauthorized</code> را برمی‌گرداند.</p>
+<p dir="rtl">احراز هویت این توکن با پیکربندی <code dir="ltr">AuthenticationConfiguration</code> بالا ناموفق خواهد بود، زیرا
+مقدار claim با نام <code dir="ltr">hd</code> برابر با <code dir="ltr">example.com</code> تنظیم نشده است. در این حالت، سرور API خطای <code dir="ltr">401 Unauthorized</code> برمی‌گرداند.</p>
 </div>
-<div class="tab"><div class="tab-name">Fails user validation</div>
+<div class="tab"><div class="tab-name">شکست در اعتبارسنجی کاربر</div>
 <pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: apiserver.config.k8s.io/v1
 kind: AuthenticationConfiguration
 jwt:
@@ -703,7 +702,7 @@ jwt:
 </code></pre>
 <pre dir="ltr"><code class="language-bash" dir="ltr">TOKEN=eyJhbGciOiJSUzI1NiIsImtpZCI6ImY3dF9tOEROWmFTQk1oWGw5QXZTWGhBUC04Y0JmZ0JVbFVpTG5oQkgxdXMiLCJ0eXAiOiJKV1QifQ.eyJhdWQiOiJrdWJlcm5ldGVzIiwiZXhwIjoxNzAzMjMyOTQ5LCJoZCI6ImV4YW1wbGUuY29tIiwiaWF0IjoxNzAxMTEzMTAxLCJpc3MiOiJodHRwczovL2V4YW1wbGUuY29tIiwianRpIjoiYjViMDY1MjM3MmNkMjBlMzQ1YjZmZGZmY2RjMjE4MWY0YWZkNmYyNTlhYWI0YjdlMzU4ODEyMzdkMjkyMjBiYyIsIm5iZiI6MTcwMTExMzEwMSwicm9sZXMiOiJ1c2VyLGFkbWluIiwic3ViIjoiYXV0aCIsInRlbmFudCI6IjcyZjk4OGJmLTg2ZjEtNDFhZi05MWFiLTJkN2NkMDExZGI0YSIsInVzZXJuYW1lIjoiZm9vIn0.FgPJBYLobo9jnbHreooBlvpgEcSPWnKfX6dc0IvdlRB-F0dCcgy91oCJeK_aBk-8zH5AKUXoFTlInfLCkPivMOJqMECA1YTrMUwt_IVqwb116AqihfByUYIIqzMjvUbthtbpIeHQm2fF0HbrUqa_Q0uaYwgy8mD807h7sBcUMjNd215ff_nFIHss-9zegH8GI1d9fiBf-g6zjkR1j987EP748khpQh9IxPjMJbSgG_uH5x80YFuqgEWwq-aYJPQxXX6FatP96a2EAn7wfPpGlPRt0HcBOvq5pCnudgCgfVgiOJiLr_7robQu4T1bis0W75VPEvwWtgFcLnvcQx0JWg
 </code></pre>
-<p dir="rtl">که در آن payload توکن به شرح زیر است:</p>
+<p dir="rtl">که محتوای توکن آن به این صورت است:</p>
 <pre dir="ltr"><code class="language-json" dir="ltr">  {
     "aud": "kubernetes",
     "exp": 1703232949,
@@ -718,7 +717,7 @@ jwt:
     "username": "foo"
   }
 </code></pre>
-<p dir="rtl">توکن فوق همراه با <code dir="ltr">AuthenticationConfiguration</code> بالا، آبجکت <code dir="ltr">UserInfo</code> زیر را تولید می‌کند:</p>
+<p dir="rtl">این توکن با پیکربندی <code dir="ltr">AuthenticationConfiguration</code> بالا، آبجکت <code dir="ltr">UserInfo</code> زیر را تولید می‌کند:</p>
 <pre dir="ltr"><code class="language-json" dir="ltr">{
     "username": "system:foo",
     "uid": "auth",
@@ -731,45 +730,45 @@ jwt:
     }
 }
 </code></pre>
-<p dir="rtl">این آبجکت در اعتبارسنجی کاربر ناموفق خواهد بود، زیرا نام کاربری با <code dir="ltr">system:</code> آغاز می‌شود.
-سرور API خطای <code dir="ltr">401 Unauthorized</code> را برمی‌گرداند.</p>
+<p dir="rtl">این آبجکت در اعتبارسنجی کاربر رد می‌شود، زیرا نام کاربری با <code dir="ltr">system:</code> آغاز می‌شود.
+در این حالت، سرور API خطای <code dir="ltr">401 Unauthorized</code> برمی‌گرداند.</p>
 </div>
 </div>
 <h5 dir="rtl">محدودیت‌ها {#oidc-limitations}</h5>
 <ol>
-<li dir="rtl">Distributed claimها از طریق عبارت‌های <a href="../using-api/cel.html">CEL</a> کار نمی‌کنند.</li>
+<li dir="rtl">ادعاهای توزیع‌شده (distributed claims) از طریق عبارت‌های <a href="../using-api/cel.html">CEL</a> کار نمی‌کنند.</li>
 </ol>
-<p dir="rtl">کوبرنتیز یک ارائه‌دهنده هویت (Identity Provider) مبتنی بر OpenID Connect ارائه نمی‌کند.
-می‌توانید از یک ارائه‌دهنده هویت عمومی OpenID Connect موجود استفاده کنید یا ارائه‌دهنده هویت خودتان را
-که پروتکل OpenID Connect را پشتیبانی می‌کند اجرا کنید.</p>
-<p dir="rtl">برای اینکه یک ارائه‌دهنده هویت با کوبرنتیز کار کند، باید:</p>
+<p dir="rtl">کوبرنتیز هیچ ارائه‌دهندهٔ هویت (Identity Provider) مبتنی بر OpenID Connect ارائه نمی‌کند.
+می‌توانید از یک ارائه‌دهندهٔ هویت عمومی و موجود مبتنی بر OpenID Connect استفاده کنید یا ارائه‌دهندهٔ هویت
+خودتان را که از پروتکل OpenID Connect پشتیبانی می‌کند اجرا کنید.</p>
+<p dir="rtl">ارائه‌دهندهٔ هویت برای کار با کوبرنتیز باید شرایط زیر را داشته باشد:</p>
 <ol>
 <li dir="rtl">
 <p dir="rtl">از <a href="https://openid.net/specs/openid-connect-discovery-1_0.html" target="_blank" rel="noopener">OpenID connect discovery</a> پشتیبانی کند.</p>
-<p dir="rtl">کلید عمومی برای تأیید امضا، با استفاده از OIDC discovery از نقطه پایانی عمومی issuer کشف می‌شود.
-اگر از فایل پیکربندی احراز هویت استفاده می‌کنید، ارائه‌دهنده هویت نیازی ندارد نقطه پایانی discovery را به‌صورت عمومی در دسترس قرار دهد.
-می‌توانید نقطه پایانی discovery را در مکانی متفاوت از issuer (مثلاً به‌صورت محلی در داخل کلاستر) میزبانی کنید و
-<code dir="ltr">issuer.discoveryURL</code> را در فایل پیکربندی مشخص نمایید.</p>
+<p dir="rtl">کلید عمومی لازم برای بررسی امضا، با استفاده از سازوکار OIDC discovery از نقطهٔ پایانی (endpoint) عمومی صادرکننده به دست می‌آید.
+اگر از فایل پیکربندی احراز هویت استفاده می‌کنید، لازم نیست ارائه‌دهندهٔ هویت نقطهٔ پایانی discovery را به‌صورت عمومی در دسترس قرار دهد.
+می‌توانید نقطهٔ پایانی discovery را در مکانی جدا از صادرکننده (مثلاً به‌صورت محلی در داخل کلاستر) میزبانی کنید و
+مقدار <code dir="ltr">issuer.discoveryURL</code> را در فایل پیکربندی مشخص کنید.</p>
 </li>
 <li dir="rtl">
-<p dir="rtl">با TLS و با رمزنگارهای (cipher) منسوخ‌نشده اجرا شود.</p>
+<p dir="rtl">روی TLS و با رمزهایی (cipher) که منسوخ نشده‌اند اجرا شود.</p>
 </li>
 <li dir="rtl">
-<p dir="rtl">گواهی امضاشده توسط یک CA داشته باشد (حتی اگر CA یک CA تجاری نباشد یا خودامضا باشد).</p>
+<p dir="rtl">گواهی‌ای داشته باشد که یک CA آن را امضا کرده است (حتی اگر آن CA تجاری نباشد یا خودامضا باشد).</p>
 </li>
 </ol>
-<p dir="rtl">توضیحی درباره الزام شماره ۳ بالا، یعنی لزوم داشتن گواهی امضاشده توسط CA: اگر ارائه‌دهنده هویت خودتان را
-مستقر می‌کنید، باید گواهی وب‌سرور ارائه‌دهنده هویت شما توسط گواهی‌ای امضا شده باشد که پرچم <code dir="ltr">CA</code> در آن روی <code dir="ltr">TRUE</code> تنظیم شده است،
-حتی اگر خودامضا باشد. دلیل این امر آن است که پیاده‌سازی کلاینت TLS در GoLang در رعایت استانداردهای مربوط به اعتبارسنجی گواهی
-بسیار سخت‌گیر است. اگر CA در دسترس ندارید، می‌توانید با استفاده از ابزارهای استاندارد تولید گواهی،
-یک CA ساده و یک جفت گواهی و کلید امضاشده ایجاد کنید.</p>
-<h4 id="استفاده-از-kubectl-using-kubectl" dir="rtl">استفاده از kubectl {#using-kubectl}</h4>
-<h5 dir="rtl">گزینه ۱ - احراز‌هویت‌کننده OIDC</h5>
-<p dir="rtl">گزینه اول استفاده از احراز‌هویت‌کننده <code dir="ltr">oidc</code> در kubectl است که <code dir="ltr">id_token</code> را به‌عنوان bearer token
-برای همه درخواست‌ها تنظیم می‌کند و پس از انقضای توکن، آن را تازه‌سازی می‌کند. پس از ورود به ارائه‌دهنده هویت خود، از
-kubectl برای افزودن <code dir="ltr">id_token</code>، <code dir="ltr">refresh_token</code>، <code dir="ltr">client_id</code> و <code dir="ltr">client_secret</code> به‌منظور پیکربندی افزونه استفاده کنید.</p>
-<p dir="rtl">ارائه‌دهندگانی که <code dir="ltr">id_token</code> را به‌عنوان بخشی از پاسخ refresh token برنمی‌گردانند، توسط این افزونه
-پشتیبانی نمی‌شوند و باید از <a href="#option-2-use-the-token-option">گزینه ۲</a> (مشخص کردن <code dir="ltr">--token</code>) استفاده کنند.</p>
+<p dir="rtl">نکته‌ای دربارهٔ شرط شمارهٔ ۳ بالا، یعنی لزوم داشتن گواهی امضاشده توسط CA: اگر ارائه‌دهندهٔ هویت
+خودتان را مستقر می‌کنید، گواهی وب‌سرور آن <strong>باید</strong> با گواهی‌ای امضا شده باشد که پرچم <code dir="ltr">CA</code> آن
+برابر با <code dir="ltr">TRUE</code> است، حتی اگر این گواهی خودامضا باشد. علت این است که پیاده‌سازی کلاینت TLS در زبان Go
+در رعایت استانداردهای مربوط به اعتبارسنجی گواهی بسیار سخت‌گیر است. اگر CA در دسترس ندارید،
+می‌توانید با ابزارهای استاندارد تولید گواهی، یک CA ساده و یک گواهی امضاشده به همراه جفت کلید آن بسازید.</p>
+<h4 id="استفاده-از-kubectl" dir="rtl">استفاده از kubectl</h4>
+<h5 dir="rtl">گزینهٔ ۱ - احرازکنندهٔ OIDC</h5>
+<p dir="rtl">گزینهٔ نخست، استفاده از احرازکنندهٔ <code dir="ltr">oidc</code> در kubectl است. این احرازکننده مقدار <code dir="ltr">id_token</code> را به‌عنوان توکن حامل (bearer token)
+در همهٔ درخواست‌ها قرار می‌دهد و پس از منقضی شدن توکن، آن را تازه‌سازی می‌کند. پس از ورود به ارائه‌دهندهٔ هویت خود،
+با kubectl مقادیر <code dir="ltr">id_token</code>، <code dir="ltr">refresh_token</code>، <code dir="ltr">client_id</code> و <code dir="ltr">client_secret</code> را اضافه کنید تا افزونه پیکربندی شود.</p>
+<p dir="rtl">این افزونه از ارائه‌دهندگانی که در پاسخ تازه‌سازی توکن، مقدار <code dir="ltr">id_token</code> را برنمی‌گردانند پشتیبانی نمی‌کند
+و این ارائه‌دهندگان باید از <a href="#option-2-use-the-token-option">گزینهٔ ۲</a> (تعیین <code dir="ltr">--token</code>) استفاده کنند.</p>
 <pre dir="ltr"><code class="language-bash" dir="ltr">kubectl config set-credentials USER_NAME \
    --auth-provider=oidc \
    --auth-provider-arg=idp-issuer-url=( issuer url ) \
@@ -779,7 +778,7 @@ kubectl برای افزودن <code dir="ltr">id_token</code>، <code dir="ltr">
    --auth-provider-arg=idp-certificate-authority=( path to your ca certificate ) \
    --auth-provider-arg=id-token=( your id_token )
 </code></pre>
-<p dir="rtl">به‌عنوان مثال، اجرای دستور زیر پس از احراز هویت در ارائه‌دهنده هویت شما:</p>
+<p dir="rtl">برای نمونه، دستور زیر را پس از احراز هویت نزد ارائه‌دهندهٔ هویت خود اجرا کنید:</p>
 <pre dir="ltr"><code class="language-bash" dir="ltr">kubectl config set-credentials mmosley  \
         --auth-provider=oidc  \
         --auth-provider-arg=idp-issuer-url=https://oidcidp.tremolo.lan:8443/auth/idp/OidcIdP  \
@@ -789,7 +788,7 @@ kubectl برای افزودن <code dir="ltr">id_token</code>، <code dir="ltr">
         --auth-provider-arg=idp-certificate-authority=/root/ca.pem \
         --auth-provider-arg=id-token=eyJraWQiOiJDTj1vaWRjaWRwLnRyZW1vbG8ubGFuLCBPVT1EZW1vLCBPPVRybWVvbG8gU2VjdXJpdHksIEw9QXJsaW5ndG9uLCBTVD1WaXJnaW5pYSwgQz1VUy1DTj1rdWJlLWNhLTEyMDIxNDc5MjEwMzYwNzMyMTUyIiwiYWxnIjoiUlMyNTYifQ.eyJpc3MiOiJodHRwczovL29pZGNpZHAudHJlbW9sby5sYW46ODQ0My9hdXRoL2lkcC9PaWRjSWRQIiwiYXVkIjoia3ViZXJuZXRlcyIsImV4cCI6MTQ4MzU0OTUxMSwianRpIjoiMm96US15TXdFcHV4WDlHZUhQdy1hZyIsImlhdCI6MTQ4MzU0OTQ1MSwibmJmIjoxNDgzNTQ5MzMxLCJzdWIiOiI0YWViMzdiYS1iNjQ1LTQ4ZmQtYWIzMC0xYTAxZWU0MWUyMTgifQ.w6p4J_6qQ1HzTG9nrEOrubxIMb9K5hzcMPxc9IxPx2K4xO9l-oFiUw93daH3m5pluP6K7eOE6txBuRVfEcpJSwlelsOsW8gb8VJcnzMS9EnZpeA0tW_p-mnkFc3VcfyXuhe5R3G7aa5d8uHv70yJ9Y3-UhjiN9EhpMdfPAoEB9fYKKkJRzF7utTTIPGrSaSU6d2pcpfYKaxIwePzEkT4DfcQthoZdy9ucNvvLoi1DIC-UocFD8HLs8LYKEqSxQvOcvnThbObJ9af71EwmuE21fO5KzMW20KtAeget1gnldOosPtz1G5EwvaQ401-RPQzPGMVBld0_zMCAwZttJ4knw
 </code></pre>
-<p dir="rtl">که پیکربندی زیر را تولید می‌کند:</p>
+<p dir="rtl">این دستور پیکربندی زیر را تولید می‌کند:</p>
 <pre dir="ltr"><code class="language-yaml" dir="ltr">users:
 - name: mmosley
   user:
@@ -803,24 +802,22 @@ kubectl برای افزودن <code dir="ltr">id_token</code>، <code dir="ltr">
         refresh-token: q1bKLFOyUiosTfawzA93TzZIDzH2TNa2SMm0zEiPKTUwME6BkEo6Sql5yUWVBSWpKUGphaWpxSVAfekBOZbBhaEW+VlFUeVRGcluyVF5JT4+haZmPsluFoFu5XkpXk5BXq
       name: oidc
 </code></pre>
-<p dir="rtl">پس از انقضای <code dir="ltr">id_token</code> شما، <code dir="ltr">kubectl</code> تلاش می‌کند با استفاده از <code dir="ltr">refresh_token</code> و <code dir="ltr">client_secret</code>
-آن را تازه‌سازی کند و مقادیر جدید <code dir="ltr">refresh_token</code> و <code dir="ltr">id_token</code> را در <code dir="ltr">.kube/config</code> ذخیره می‌کند.</p>
-<h5 dir="rtl">گزینه ۲ - استفاده از آرگومان خط فرمان <code dir="ltr">--token</code> {#option-2-use-the-token-option}</h5>
-<p dir="rtl">دستور <code dir="ltr">kubectl</code> به شما امکان می‌دهد توکن را با آرگومان خط فرمان <code dir="ltr">--token</code> ارسال کنید.
-<code dir="ltr">id_token</code> را در این گزینه کپی و جای‌گذاری کنید:</p>
+<p dir="rtl">پس از منقضی شدن <code dir="ltr">id_token</code>، ابزار <code dir="ltr">kubectl</code> تلاش می‌کند با استفاده از <code dir="ltr">refresh_token</code> و <code dir="ltr">client_secret</code>
+مقدار <code dir="ltr">id_token</code> را تازه‌سازی کند و مقادیر جدید <code dir="ltr">refresh_token</code> و <code dir="ltr">id_token</code> را در فایل <code dir="ltr">.kube/config</code> ذخیره می‌کند.</p>
+<h5 dir="rtl">گزینهٔ ۲ - استفاده از آرگومان خط فرمان <code dir="ltr">--token</code> {#option-2-use-the-token-option}</h5>
+<p dir="rtl">با دستور <code dir="ltr">kubectl</code> می‌توانید توکن را از طریق آرگومان خط فرمان <code dir="ltr">--token</code> ارسال کنید.
+مقدار <code dir="ltr">id_token</code> را کپی کنید و در این گزینه قرار دهید:</p>
 <pre dir="ltr"><code class="language-bash" dir="ltr">kubectl --token=eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJodHRwczovL21sYi50cmVtb2xvLmxhbjo4MDQzL2F1dGgvaWRwL29pZGMiLCJhdWQiOiJrdWJlcm5ldGVzIiwiZXhwIjoxNDc0NTk2NjY5LCJqdGkiOiI2RDUzNXoxUEpFNjJOR3QxaWVyYm9RIiwiaWF0IjoxNDc0NTk2MzY5LCJuYmYiOjE0NzQ1OTYyNDksInN1YiI6Im13aW5kdSIsInVzZXJfcm9sZSI6WyJ1c2VycyIsIm5ldy1uYW1lc3BhY2Utdmlld2VyIl0sImVtYWlsIjoibXdpbmR1QG5vbW9yZWplZGkuY29tIn0.f2As579n9VNoaKzoF-dOQGmXkFKf1FMyNV0-va_B63jn-_n9LGSCca_6IVMP8pO-Zb4KvRqGyTP0r3HkHxYy5c81AnIh8ijarruczl-TK_yF5akjSTHFZD-0gRzlevBDiH8Q79NAr-ky0P4iIXS8lY9Vnjch5MF74Zx0c3alKJHJUnnpjIACByfF2SCaYzbWFMUNat-K1PaUk5-ujMBG7yYnr95xD-63n8CO8teGUAAEMx6zRjzfhnhbzX-ajwZLGwGUBT4WqjMs70-6a7_8gZmLZb2az1cZynkFRj2BaCkVT3A2RrjeEwZEtGXlMqKJ1_I2ulrOVsYx01_yD35-rw get nodes
 </code></pre>
-<h3 id="احراز-هویت-با-توکن-webhook" dir="rtl">احراز هویت با توکن Webhook</h3>
-<p dir="rtl"><em>احراز هویت webhook</em> در کوبرنتیز سازوکاری است که با ارسال یک فراخوانی HTTP، توکن‌های bearer را اعتبارسنجی می‌کند.</p>
-<p dir="rtl">در ارتباط با نحوهٔ پیکربندی API server، گزینه‌های زیر وجود دارند:</p>
+<h3 id="احراز-هویت-توکن-با-وب-هوک" dir="rtl">احراز هویت توکن با وب‌هوک</h3>
+<p dir="rtl">در کوبرنتیز، <em>احراز هویت با وب‌هوک</em> (webhook authentication) سازوکاری است که برای تأیید توکن‌های حامل (bearer token) یک فراخوانی HTTP به سرویسی بیرونی انجام می‌دهد.</p>
+<p dir="rtl">برای پیکربندی API server از گزینه‌های زیر استفاده می‌شود:</p>
 <ul>
-<li dir="rtl"><code dir="ltr">--authentication-token-webhook-config-file</code>: یک فایل پیکربندی که چگونگی دسترسی به سرویس webhook راه دور را توصیف می‌کند.</li>
-<li dir="rtl"><code dir="ltr">--authentication-token-webhook-cache-ttl</code>: مدت زمانی که تصمیم‌های احراز هویت در حافظهٔ نهان نگهداری می‌شوند. مقدار پیش‌فرض دو دقیقه است.</li>
-<li dir="rtl"><code dir="ltr">--authentication-token-webhook-version</code>: مشخص می‌کند که برای ارسال و دریافت اطلاعات از webhook، از آبجکت‌های <code dir="ltr">TokenReview</code> با نسخهٔ <code dir="ltr">authentication.k8s.io/v1beta1</code> استفاده شود یا <code dir="ltr">authentication.k8s.io/v1</code>. مقدار پیش‌فرض <code dir="ltr">v1beta1</code> است.</li>
+<li dir="rtl">گزینهٔ <code dir="ltr">--authentication-token-webhook-config-file</code> فایل پیکربندی‌ای است که نحوهٔ دسترسی به سرویس وب‌هوک راه‌دور را توصیف می‌کند.</li>
+<li dir="rtl">گزینهٔ <code dir="ltr">--authentication-token-webhook-cache-ttl</code> مدت زمان نگهداری تصمیم‌های احراز هویت در حافظهٔ نهان (cache) را تعیین می‌کند. مقدار پیش‌فرض آن دو دقیقه است.</li>
+<li dir="rtl">گزینهٔ <code dir="ltr">--authentication-token-webhook-version</code> تعیین می‌کند که برای ارسال و دریافت اطلاعات از وب‌هوک، از آبجکت‌های <code dir="ltr">TokenReview</code> نسخهٔ <code dir="ltr">authentication.k8s.io/v1beta1</code> استفاده شود یا نسخهٔ <code dir="ltr">authentication.k8s.io/v1</code>. مقدار پیش‌فرض آن <code dir="ltr">v1beta1</code> است.</li>
 </ul>
-<p dir="rtl">فایل پیکربندی از قالب فایل <a href="../../concepts/configuration/organize-cluster-access-kubeconfig.html">kubeconfig</a>
-استفاده می‌کند. در این فایل، <code dir="ltr">clusters</code> به سرویس راه دور و
-<code dir="ltr">users</code> به webhook مربوط به API server اشاره می‌کند. یک نمونه به شکل زیر است:</p>
+<p dir="rtl">فایل پیکربندی از قالب فایل <a href="../../concepts/configuration/organize-cluster-access-kubeconfig.html">kubeconfig</a> استفاده می‌کند. در این فایل، <code dir="ltr">clusters</code> به سرویس راه‌دور و <code dir="ltr">users</code> به وب‌هوک API server اشاره دارد. نمونه‌ای از آن در ادامه آمده است:</p>
 <pre dir="ltr"><code class="language-yaml" dir="ltr"># Kubernetes API version
 apiVersion: v1
 # kind of the API object
@@ -847,16 +844,13 @@ contexts:
     user: name-of-api-server
   name: webhook
 </code></pre>
-<p dir="rtl">هنگامی که یک کلاینت تلاش می‌کند با استفاده از توکن bearer، همان‌طور که
-<a href="#putting-a-bearer-token-in-a-request">پیش‌تر</a> بیان شد، نزد API server احراز هویت شود، webhook احراز هویت یک آبجکت <code dir="ltr">TokenReview</code> سریال‌شده با JSON را که شامل توکن است، با متد POST به سرویس راه دور ارسال می‌کند.</p>
-<p dir="rtl">توجه داشته باشید که آبجکت‌های API مربوط به webhook مشمول همان <a href="../../concepts/overview/kubernetes-api.html">قواعد سازگاری نسخه‌بندی</a>
-هستند که برای سایر آبجکت‌های API کوبرنتیز اعمال می‌شود. پیاده‌سازان باید فیلد <code dir="ltr">apiVersion</code> درخواست را بررسی کنند تا از deserialize شدن صحیح اطمینان یابند،
-و <strong>باید</strong> با یک آبجکت <code dir="ltr">TokenReview</code> هم‌نسخه با درخواست پاسخ دهند.</p>
+<p dir="rtl">هنگامی که یک کلاینت، همان‌طور که <a href="#putting-a-bearer-token-in-a-request">پیش‌تر</a> توضیح داده شد، می‌کوشد با یک توکن حامل نزد API server احراز هویت شود، وب‌هوک احراز هویت یک آبجکت <code dir="ltr">TokenReview</code> سریال‌شده به JSON را که حاوی توکن است، با درخواست POST به سرویس راه‌دور می‌فرستد.</p>
+<p dir="rtl">توجه کنید که آبجکت‌های API وب‌هوک نیز مانند دیگر آبجکت‌های API کوبرنتیز از همان <a href="../../concepts/overview/kubernetes-api.html">قواعد سازگاری نسخه‌بندی</a> پیروی می‌کنند. پیاده‌سازان باید فیلد <code dir="ltr">apiVersion</code> درخواست را بررسی کنند تا از واسریال‌سازی درست آن مطمئن شوند، و <strong>باید</strong> با یک آبجکت <code dir="ltr">TokenReview</code> هم‌نسخه با درخواست پاسخ دهند.</p>
 <div class="tabs">
 <div class="tab"><div class="tab-name">authentication.k8s.io/v1</div>
 <div class="callout note"><div class="callout-title">توجه:</div>
-<p dir="rtl">به‌منظور سازگاری با نسخه‌های قبلی، API server کوبرنتیز به‌طور پیش‌فرض بررسی‌های توکن (token review) را با نسخهٔ <code dir="ltr">authentication.k8s.io/v1beta1</code> ارسال می‌کند.
-برای انتخاب دریافت بررسی‌های توکن با نسخهٔ <code dir="ltr">authentication.k8s.io/v1</code>، باید API server با گزینهٔ <code dir="ltr">--authentication-token-webhook-version=v1</code> راه‌اندازی شود.</p>
+<p dir="rtl">برای حفظ سازگاری با نسخه‌های پیشین، API server کوبرنتیز به‌طور پیش‌فرض بازبینی‌های توکن را با نسخهٔ <code dir="ltr">authentication.k8s.io/v1beta1</code> ارسال می‌کند.
+برای دریافت بازبینی‌های توکن با نسخهٔ <code dir="ltr">authentication.k8s.io/v1</code>، باید API server را با گزینهٔ <code dir="ltr">--authentication-token-webhook-version=v1</code> راه‌اندازی کرد.</p>
 </div>
 <pre dir="ltr"><code class="language-yaml" dir="ltr">{
   "apiVersion": "authentication.k8s.io/v1",
@@ -896,10 +890,10 @@ contexts:
 </code></pre>
 </div>
 </div>
-<p dir="rtl">انتظار می‌رود سرویس راه دور فیلد <code dir="ltr">status</code> درخواست را برای نشان دادن موفقیت ورود پر کند.
+<p dir="rtl">انتظار می‌رود سرویس راه‌دور فیلد <code dir="ltr">status</code> درخواست را پر کند تا موفقیت ورود را نشان دهد.
 فیلد <code dir="ltr">spec</code> در بدنهٔ پاسخ نادیده گرفته می‌شود و می‌توان آن را حذف کرد.
-سرویس راه دور باید پاسخ را با همان نسخهٔ API از <code dir="ltr">TokenReview</code> که دریافت کرده است برگرداند.
-اعتبارسنجی موفق توکن bearer، پاسخی مانند زیر برمی‌گرداند:</p>
+سرویس راه‌دور باید پاسخ را با همان نسخه‌ای از API <code dir="ltr">TokenReview</code> برگرداند که دریافت کرده است.
+در صورت اعتبارسنجی موفق توکن حامل، پاسخی مانند زیر برگردانده می‌شود:</p>
 <div class="tabs">
 <div class="tab"><div class="tab-name">authentication.k8s.io/v1</div>
 <pre dir="ltr"><code class="language-yaml" dir="ltr">{
@@ -964,7 +958,7 @@ contexts:
 </code></pre>
 </div>
 </div>
-<p dir="rtl">یک درخواست ناموفق پاسخی مانند زیر برمی‌گرداند:</p>
+<p dir="rtl">در صورت ناموفق بودن درخواست، پاسخی مانند زیر برگردانده می‌شود:</p>
 <div class="tabs">
 <div class="tab"><div class="tab-name">authentication.k8s.io/v1</div>
 <pre dir="ltr"><code class="language-yaml" dir="ltr">{
@@ -995,17 +989,17 @@ contexts:
 </code></pre>
 </div>
 </div>
-<h3 id="پروکسی-معکوس-احراز-هویت-کننده-authenticating-proxy" dir="rtl">پروکسی معکوس احراز هویت‌کننده {#authenticating-proxy}</h3>
+<h3 id="پراکسی-معکوس-احراز-هویت-کننده-authenticating-proxy" dir="rtl">پراکسی معکوس احراز هویت‌کننده {#authenticating-proxy}</h3>
 <div class="callout warning"><div class="callout-title">هشدار:</div>
-<p dir="rtl">اگر مرجع صدور گواهی (CA) دارید که در زمینه‌ای دیگر نیز استفاده می‌شود، به آن مرجع صدور گواهی برای شناسایی کلاینت‌های پروکسی احراز هویت‌کننده <strong>اعتماد نکنید</strong>، مگر آنکه خطرات آن و سازوکارهای محافظت از استفادهٔ آن CA را درک کرده باشید.</p>
+<p dir="rtl">اگر مرجع صدور گواهی (CA) شما در زمینهٔ دیگری نیز استفاده می‌شود، برای شناسایی کلاینت‌های پراکسی احراز هویت‌کننده به آن مرجع صدور گواهی اعتماد <strong>نکنید</strong>، مگر آنکه خطرها و سازوکارهای محافظت از نحوهٔ استفاده از آن CA را به‌خوبی بشناسید.</p>
 </div>
-<p dir="rtl">API server را می‌توان به‌گونه‌ای پیکربندی کرد که کاربران را از روی مقادیر هدر درخواست، مانند <code dir="ltr">X-Remote-User</code>، شناسایی کند.
-این قابلیت برای استفاده همراه با یک <em>پروکسی احراز هویت‌کننده</em> طراحی شده است که این هدرها را تنظیم می‌کند.</p>
-<p dir="rtl">استفاده از پروکسی معکوس احراز هویت‌کننده با <a href="user-impersonation.html">جعل هویت کاربر</a> متفاوت است.
-در جعل هویت کاربر، یک کاربر از API server می‌خواهد درخواست را طوری در نظر بگیرد که گویی توسط کاربری دیگر ارسال شده است. در پروکسی معکوس احراز هویت‌کننده، API server به کلاینت مستقیم خود اعتماد می‌کند که اطلاعات مربوط به هویت اصل (principal) ارسال‌کنندهٔ درخواست اولیه را ارائه دهد.</p>
-<p dir="rtl">برای آشنایی با پیکربندی این قابلیت از طریق آرگومان‌های خط فرمان، به <a href="#api-server-authn-config-cli-reverse-proxy">پیکربندی هدرهای درخواست وب</a> مراجعه کنید.</p>
+<p dir="rtl">می‌توان API server را طوری پیکربندی کرد که کاربران را از روی مقادیر سرآیندهای درخواست، مانند <code dir="ltr">X-Remote-User</code>، شناسایی کند.
+این قابلیت برای استفاده همراه با یک <em>پراکسی احراز هویت‌کننده</em> (authenticating proxy) طراحی شده است که این سرآیندها را تنظیم می‌کند.</p>
+<p dir="rtl">استفاده از پراکسی معکوس احراز هویت‌کننده با <a href="user-impersonation.html">جعل هویت کاربر</a> (user impersonation) تفاوت دارد.
+در جعل هویت کاربر، یک کاربر از API server می‌خواهد که با درخواست چنان رفتار کند که گویی کاربر دیگری آن را فرستاده است. اما در پراکسی معکوس احراز هویت‌کننده، API server به کلاینت مستقیم خود اعتماد می‌کند تا اطلاعات مربوط به هویت موجودیتی را که درخواست اصلی را ارسال کرده است، در اختیارش بگذارد.</p>
+<p dir="rtl">برای آشنایی با پیکربندی این قابلیت از طریق آرگومان‌های خط فرمان، به <a href="#api-server-authn-config-cli-reverse-proxy">پیکربندی سرآیندهای درخواست وب</a> مراجعه کنید.</p>
 <h4 id="نمونه-authenticating-proxy-example" dir="rtl">نمونه {#authenticating-proxy-example}</h4>
-<p dir="rtl">برای مثال، با این پیکربندی:</p>
+<p dir="rtl">برای نمونه، با این پیکربندی:</p>
 <pre dir="ltr"><code dir="ltr">--requestheader-username-headers=X-Remote-User
 --requestheader-group-headers=X-Remote-Group
 --requestheader-extra-headers-prefix=X-Remote-Extra-
@@ -1019,7 +1013,7 @@ X-Remote-Extra-Acme.com%2Fproject: some-project
 X-Remote-Extra-Scopes: openid
 X-Remote-Extra-Scopes: profile
 </code></pre>
-<p dir="rtl">منجر به این اطلاعات کاربر می‌شود:</p>
+<p dir="rtl">به اطلاعات کاربری زیر منجر می‌شود:</p>
 <pre dir="ltr"><code class="language-yaml" dir="ltr">name: fido
 groups:
 - dogs
@@ -1032,155 +1026,144 @@ extra:
   - profile
 </code></pre>
 <h4 id="گواهی-کلاینت-reverse-proxy-client-certificate" dir="rtl">گواهی کلاینت {#reverse-proxy-client-certificate}</h4>
-<p dir="rtl">برای جلوگیری از جعل هدر، پروکسی احراز هویت‌کننده ملزم است پیش از بررسی هدرهای درخواست، یک گواهی کلاینت معتبر را به API server ارائه دهد تا در برابر CA مشخص‌شده اعتبارسنجی شود.</p>
-<p dir="rtl">برای حالت احراز هویت مبتنی بر هدر درخواست، به مرجع <a href="#api-server-authn-config-cli-reverse-proxy">گزینهٔ خط فرمان</a> مراجعه کنید.</p>
+<p dir="rtl">برای جلوگیری از جعل سرآیندها، پراکسی احراز هویت‌کننده باید پیش از بررسی سرآیندهای درخواست، یک گواهی کلاینت معتبر به API server ارائه کند تا در برابر CA مشخص‌شده اعتبارسنجی شود.</p>
+<p dir="rtl">برای حالت احراز هویت با سرآیند درخواست، به مرجع <a href="#api-server-authn-config-cli-reverse-proxy">گزینه‌های خط فرمان</a> مراجعه کنید.</p>
 <!-- deliberately repeating the earlier warning -->
-<p dir="rtl">از CA‌ای که در زمینه‌ای دیگر استفاده می‌شود <strong>دوباره استفاده نکنید</strong>، مگر آنکه خطرات آن و سازوکارهای محافظت از استفادهٔ آن CA را درک کرده باشید.</p>
-<h3 id="یکپارچه-سازی-فایل-توکن-ایستا-static-token-file" dir="rtl">یکپارچه‌سازی فایل توکن ایستا {#static-token-file}</h3>
-<p dir="rtl">هنگامی که گزینهٔ <code dir="ltr">--token-auth-file=&lt;SOMEFILE&gt;</code> در خط فرمان داده شود، API server توکن‌های bearer ایستا را از یک فایل می‌خواند.
-در کوبرنتیز 1.37، توکن‌ها به‌طور نامحدود معتبر می‌مانند و فهرست توکن‌ها بدون راه‌اندازی مجدد API server قابل تغییر نیست.</p>
-<p dir="rtl">فایل توکن یک فایل CSV با حداقل ۳ ستون است: توکن، نام کاربر، شناسهٔ یکتای کاربر (uid)،
-و پس از آن فهرستی اختیاری از نام گروه‌ها که با ویرگول از هم جدا شده‌اند.</p>
+<p dir="rtl">از CAای که در زمینهٔ دیگری استفاده می‌شود دوباره استفاده <strong>نکنید</strong>، مگر آنکه خطرها و سازوکارهای محافظت از نحوهٔ استفاده از آن CA را به‌خوبی بشناسید.</p>
+<h3 id="یکپارچه-سازی-با-فایل-توکن-ایستا-static-token-file" dir="rtl">یکپارچه‌سازی با فایل توکن ایستا {#static-token-file}</h3>
+<p dir="rtl">هنگامی که گزینهٔ <code dir="ltr">--token-auth-file=&lt;SOMEFILE&gt;</code> در خط فرمان به API server داده شود، این سرور توکن‌های حامل ایستا را از یک فایل می‌خواند.
+در کوبرنتیز 1.37، این توکن‌ها برای همیشه معتبر می‌مانند و فهرست توکن‌ها را نمی‌توان بدون راه‌اندازی دوبارهٔ API server تغییر داد.</p>
+<p dir="rtl">فایل توکن یک فایل CSV با دست‌کم ۳ ستون است: توکن، نام کاربری و uid کاربر، که پس از آن‌ها می‌توان فهرستی اختیاری از نام گروه‌ها را به‌صورت جداشده با ویرگول آورد.</p>
 <div class="callout note"><div class="callout-title">توجه:</div>
-<p dir="rtl">اگر بیش از یک گروه دارید، ستون باید داخل دابل‌کوتیشن قرار گیرد، مانند:</p>
+<p dir="rtl">اگر بیش از یک گروه دارید، آن ستون باید درون گیومهٔ دوتایی قرار گیرد؛ برای نمونه:</p>
 <pre dir="ltr"><code class="language-conf" dir="ltr">token,user,uid,"group1,group2,group3"
 </code></pre>
 </div>
-<p dir="rtl">استفاده از فایل توکن ایستا برای توکن‌هایی مناسب است که ماهیتاً
-بلندمدت و ایستا هستند و شاید هرگز چرخانده (rotate) نشوند. همچنین زمانی مفید است
-که کلاینت به یک API server مشخص در control plane محلی باشد،
-مانند یک عامل پایش (monitoring agent).</p>
-<p dir="rtl">اگر در زمان آماده‌سازی کلاستر از این روش استفاده می‌کنید و سپس به
-روش احراز هویت دیگری که برای بلندمدت استفاده خواهد شد منتقل می‌شوید،
-باید توکنی را که برای راه‌اندازی اولیه (bootstrap) به کار رفته غیرفعال کنید (این کار نیازمند
-راه‌اندازی مجدد هر API server است).</p>
-<p dir="rtl">در شرایط دیگر، و به‌ویژه جایی که چرخش بسیار سریع توکن
-اهمیت دارد، پروژهٔ کوبرنتیز استفاده از
-<a href="#webhook-token-authentication">احراز هویت‌کنندهٔ توکن webhook</a> را به‌جای این سازوکار توصیه می‌کند.</p>
-<h2 id="جعل-هویت-کاربر-user-impersonation" dir="rtl">جعل هویت کاربر {#user-impersonation}</h2>
-<p dir="rtl"><a href="user-impersonation.html">جعل هویت کاربر</a> روشی فراهم می‌کند که در آن یک کاربر می‌تواند از طریق هدرهای جعل هویت (impersonation) به‌عنوان کاربری دیگر عمل کند.</p>
+<p dir="rtl">استفاده از فایل توکن ایستا برای توکن‌هایی مناسب است که ذاتاً طولانی‌مدت و ایستا هستند و شاید هرگز چرخش (rotation) نیابند. این روش همچنین زمانی سودمند است که کلاینت، مانند یک عامل پایش، به‌صورت محلی در کنار یک API server مشخص در control plane قرار دارد.</p>
+<p dir="rtl">اگر از این روش در هنگام آماده‌سازی کلاستر استفاده می‌کنید و سپس به روش احراز هویت دیگری که قرار است در درازمدت به کار رود مهاجرت می‌کنید، باید توکنی را که برای راه‌اندازی اولیه (bootstrapping) استفاده شده است غیرفعال کنید (این کار به راه‌اندازی دوبارهٔ هر یک از API serverها نیاز دارد).</p>
+<p dir="rtl">در سایر موقعیت‌ها، به‌ویژه هنگامی که چرخش بسیار سریع توکن اهمیت دارد، پروژهٔ کوبرنتیز توصیه می‌کند به‌جای این سازوکار از یک <a href="#webhook-token-authentication">احرازکنندهٔ هویت توکن با وب‌هوک</a> استفاده کنید.</p>
+<h2 id="جعل-هویت-کاربر" dir="rtl">جعل هویت کاربر</h2>
+<p dir="rtl"><a href="user-impersonation.html">جعل هویت کاربر</a> روشی فراهم می‌کند که با آن یک کاربر می‌تواند از طریق سرآیندهای جعل هویت، در نقش کاربری دیگر عمل کند.</p>
 <h2 id="پیکربندی-احراز-هویت-api-server-authn-config" dir="rtl">پیکربندی احراز هویت {#api-server-authn-config}</h2>
-<p dir="rtl">می‌توانید احراز هویت کوبرنتیز را یا با استفاده از
-<a href="#api-server-authn-config-cli">آرگومان‌های خط فرمان</a> یا با استفاده از یک
-<a href="#api-server-authn-config-file">فایل پیکربندی</a> پیکربندی کنید.</p>
-<p dir="rtl">معمولاً از ترکیبی از این رویکردها استفاده می‌شود.</p>
+<p dir="rtl">احراز هویت در کوبرنتیز را می‌توانید با استفاده از <a href="#api-server-authn-config-cli">آرگومان‌های خط فرمان</a> یا یک <a href="#api-server-authn-config-file">فایل پیکربندی</a> پیکربندی کنید.</p>
+<p dir="rtl">معمولاً ترکیبی از این دو روش به کار گرفته می‌شود.</p>
 <h3 id="پیکربندی-از-طریق-آرگومان-های-خط-فرمان-api-server-authn-config-cli" dir="rtl">پیکربندی از طریق آرگومان‌های خط فرمان {#api-server-authn-config-cli}</h3>
-<p dir="rtl">می‌توانید از آرگومان‌های خط فرمان زیر برای پیکربندی نحوهٔ احراز هویت کلاینت‌ها توسط control plane کلاستر خود استفاده کنید.</p>
-<p dir="rtl"><a href="../command-line-tools-reference/kube-apiserver.html">مرجع خط فرمان</a> مربوط به API server
-تمام آرگومان‌های خط فرمان مرتبط را با جزئیات بیشتری شرح می‌دهد.</p>
+<p dir="rtl">با آرگومان‌های خط فرمان زیر می‌توانید نحوهٔ احراز هویت کلاینت‌ها توسط control plane کلاستر خود را پیکربندی کنید.</p>
+<p dir="rtl"><a href="../command-line-tools-reference/kube-apiserver.html">مرجع خط فرمان</a> سرور API
+همهٔ آرگومان‌های خط فرمان مرتبط را با جزئیات بیشتری شرح می‌دهد.</p>
 <h4 id="پیکربندی-احراز-هویت-ناشناس-api-server-authn-config-cli-anonymous" dir="rtl">پیکربندی احراز هویت ناشناس {#api-server-authn-config-cli-anonymous}</h4>
 <dl>
 <dt dir="ltr" class="ltr"><code dir="ltr">--anonymous-auth</code></dt>
-<dd dir="rtl">مشخص می‌کند که آیا کلاینت‌هایی که احراز هویت نشده‌اند می‌توانند از طریق درگاه امن API server درخواست ارسال کنند یا خیر. درخواست‌های ناشناس دارای نام کاربری <code dir="ltr">system:anonymous</code> و نام گروه <code dir="ltr">system:unauthenticated</code> هستند. همچنین <a href="#anonymous-requests">درخواست‌های ناشناس</a> را ببینید.</dd>
+<dd dir="rtl">تعیین می‌کند که آیا کلاینت‌هایی که احراز هویت نشده‌اند می‌توانند از طریق پورت امن سرور API درخواست ارسال کنند یا نه. نام کاربری درخواست‌های ناشناس <code dir="ltr">system:anonymous</code> و نام گروه آن‌ها <code dir="ltr">system:unauthenticated</code> است. همچنین بخش <a href="#anonymous-requests">درخواست‌های ناشناس</a> را ببینید.</dd>
 </dl>
-<h4 id="پیکربندی-توکن-bootstrap-api-server-authn-config-cli-bootstrap" dir="rtl">پیکربندی توکن Bootstrap {#api-server-authn-config-cli-bootstrap}</h4>
+<h4 id="پیکربندی-توکن-راه-اندازی-api-server-authn-config-cli-bootstrap" dir="rtl">پیکربندی توکن راه‌اندازی {#api-server-authn-config-cli-bootstrap}</h4>
 <dl>
 <dt dir="ltr" class="ltr"><code dir="ltr">--enable-bootstrap-token-auth</code></dt>
-<dd dir="rtl">هنگامی که این پرچم تنظیم شده باشد، می‌توانید از <a href="#bootstrap-tokens">توکن‌های bootstrap</a> برای احراز هویت استفاده کنید.</dd>
+<dd dir="rtl">وقتی این فلگ تنظیم شده باشد، می‌توانید برای احراز هویت از <a href="#bootstrap-tokens">توکن‌های راه‌اندازی (bootstrap tokens)</a> استفاده کنید.</dd>
 </dl>
 <h4 id="پیکربندی-احراز-هویت-با-گواهی-api-server-authn-config-cli-x-509" dir="rtl">پیکربندی احراز هویت با گواهی {#api-server-authn-config-cli-x-509}</h4>
 <dl>
 <dt dir="ltr" class="ltr"><code dir="ltr">--client-ca-file</code></dt>
-<dd dir="rtl">مسیر trust anchor(های) مورد استفاده برای اعتبارسنجی هویت کلاینت، زمانی که کلاینت‌ها از احراز هویت با گواهی X.509 استفاده می‌کنند.</dd>
+<dd dir="rtl">مسیر لنگر (یا لنگرهای) اعتماد برای اعتبارسنجی هویت کلاینت، در حالتی که کلاینت‌ها از احراز هویت با گواهی X.509 استفاده می‌کنند.</dd>
 </dl>
 <h4 id="پیکربندی-oidc-api-server-authn-config-cli-oidc" dir="rtl">پیکربندی OIDC {#api-server-authn-config-cli-oidc}</h4>
 <dl>
 <dt dir="ltr" class="ltr"><code dir="ltr">--oidc-ca-file</code></dt>
-<dd dir="rtl">مسیر trust anchor(های) مورد استفاده برای اعتبارسنجی هویت کلاینت، زمانی که کلاینت‌ها از OIDC استفاده می‌کنند.</dd>
+<dd dir="rtl">مسیر لنگر (یا لنگرهای) اعتماد برای اعتبارسنجی هویت کلاینت، در حالتی که کلاینت‌ها از OIDC استفاده می‌کنند.</dd>
 <dt dir="ltr" class="ltr"><code dir="ltr">--oidc-client-id</code></dt>
-<dd dir="rtl">شناسهٔ کلاینت (client ID) برای کلاینت OpenID Connect.</dd>
+<dd dir="rtl">شناسهٔ کلاینت برای کلاینت OpenID Connect.</dd>
 <dt dir="ltr" class="ltr"><code dir="ltr">--oidc-username-claim</code></dt>
-<dd dir="rtl">نام یک claim در JWT که برای تعیین نام کاربری استفاده می‌شود. نام claim پیش‌فرض <code dir="ltr">sub</code> است، زیرا این claim باید شناسهٔ یکتای کاربر نهایی باشد. می‌توانید claimهای دیگری مانند <code dir="ltr">email</code> یا <code dir="ltr">name</code> را انتخاب کنید. برای claimهایی غیر از <code dir="ltr">sub</code> یا <code dir="ltr">email</code>، kube-apiserver یک پیشوند به نام گروه اضافه می‌کند (تا از تداخل نام‌ها جلوگیری شود).</dd>
+<dd dir="rtl">نام یک claim در JWT برای تعیین نام کاربری؛ یعنی claimی که به‌عنوان نام کاربری به کار می‌رود. نام پیش‌فرض این claim برابر <code dir="ltr">sub</code> است، زیرا این مقدار باید شناسه‌ای یکتا برای کاربر نهایی باشد. می‌توانید claimهای دیگری مانند <code dir="ltr">email</code> یا <code dir="ltr">name</code> را انتخاب کنید. برای claimهایی غیر از <code dir="ltr">sub</code> یا <code dir="ltr">email</code>، kube-apiserver یک پیشوند به نام گروه اضافه می‌کند (تا از تداخل نام‌ها جلوگیری شود).</dd>
 <dt dir="ltr" class="ltr"><code dir="ltr">--oidc-username-prefix</code></dt>
-<dd dir="rtl">پیشوندی که به ابتدای claimهای نام کاربری افزوده می‌شود تا از تداخل با نام‌های موجود (مانند کاربران <code dir="ltr">system:</code>) جلوگیری شود. برای مثال، مقدار <code dir="ltr">oidc:</code> نام‌های کاربری‌ای مانند <code dir="ltr">oidc:jane.doe</code> ایجاد می‌کند. اگر این آرگومان ارائه نشود و مقدار <code dir="ltr">--oidc-username-claim</code> چیزی غیر از <code dir="ltr">email</code> باشد، پیشوند به‌طور پیش‌فرض <code dir="ltr">( Issuer URL )#</code> خواهد بود که در آن <code dir="ltr">( Issuer URL )</code> مقدار <code dir="ltr">--oidc-issuer-url</code> است. می‌توانید مقدار پیشوند را <code dir="ltr">-</code> تعیین کنید تا افزودن پیشوند به نام کاربری غیرفعال شود.</dd>
+<dd dir="rtl">پیشوندی که به ابتدای claimهای نام کاربری افزوده می‌شود تا از تداخل با نام‌های موجود (مانند کاربران <code dir="ltr">system:</code>) جلوگیری شود. برای مثال، مقدار <code dir="ltr">oidc:</code> نام‌های کاربری‌ای مانند <code dir="ltr">oidc:jane.doe</code> ایجاد می‌کند. اگر این آرگومان ارائه نشود و <code dir="ltr">--oidc-username-claim</code> مقداری غیر از <code dir="ltr">email</code> داشته باشد، پیشوند به‌طور پیش‌فرض <code dir="ltr">( Issuer URL )#</code> خواهد بود که در آن <code dir="ltr">( Issuer URL )</code> مقدار <code dir="ltr">--oidc-issuer-url</code> است. برای غیرفعال کردن پیشوندگذاری نام کاربری، می‌توانید مقدار پیشوند را <code dir="ltr">-</code> تعیین کنید.</dd>
 <dt dir="ltr" class="ltr"><code dir="ltr">--oidc-groups-claim</code></dt>
-<dd dir="rtl">نام یک claim سفارشی OpenID Connect برای تعیین گروه‌های کاربر. claim موجود در توکن باید آرایه‌ای از رشته‌ها باشد. مقدار پیش‌فرض ندارد.</dd>
+<dd dir="rtl">نام یک claim سفارشی OpenID Connect برای تعیین گروه‌های کاربر. این claim در توکن باید آرایه‌ای از رشته‌ها باشد. مقدار پیش‌فرضی ندارد.</dd>
 <dt dir="ltr" class="ltr"><code dir="ltr">--oidc-groups-prefix</code></dt>
 <dd dir="rtl">پیشوندی که به ابتدای claimهای گروه افزوده می‌شود تا از تداخل با نام‌های موجود (مانند گروه‌های <code dir="ltr">system:</code>) جلوگیری شود. برای مثال، مقدار <code dir="ltr">oidc:</code> نام‌های گروهی مانند <code dir="ltr">oidc:engineering</code> و <code dir="ltr">oidc:infra</code> ایجاد می‌کند. پیشوند پیش‌فرض <code dir="ltr">oidc:</code> است.</dd>
 <dt dir="ltr" class="ltr"><code dir="ltr">--oidc-issuer-url</code></dt>
-<dd dir="rtl">نشانی URL صادرکنندهٔ OpenID. طرح (scheme) این URL <strong>باید</strong> <code dir="ltr">https</code> باشد. اگر نشانی OIDC discovery مربوط به صادرکننده <code dir="ltr">https://accounts.provider.example/.well-known/openid-configuration</code> باشد، مقدار آن باید <code dir="ltr">https://accounts.provider.example</code> باشد.</dd>
+<dd dir="rtl">نشانی URL صادرکنندهٔ OpenID. طرح (scheme) این URL <strong>باید</strong> <code dir="ltr">https</code> باشد. اگر نشانی کشف OIDC صادرکننده <code dir="ltr">https://accounts.provider.example/.well-known/openid-configuration</code> باشد، مقدار این آرگومان باید <code dir="ltr">https://accounts.provider.example</code> باشد.</dd>
 <dt dir="ltr" class="ltr"><code dir="ltr">--oidc-required-claim</code></dt>
-<dd dir="rtl">claim‌ای که پیش از آنکه کوبرنتیز یک کلاینت را احراز هویت کند، باید در توکن وجود داشته باشد. قالب آن <code dir="ltr">key=value</code> است. می‌توانید این آرگومان را بیش از یک بار مشخص کنید.</dd>
+<dd dir="rtl">claimی که باید پیش از احراز هویت کلاینت توسط کوبرنتیز در توکن وجود داشته باشد. قالب آن <code dir="ltr">key=value</code> است. می‌توانید این آرگومان را بیش از یک بار مشخص کنید.</dd>
 <dt dir="ltr" class="ltr"><code dir="ltr">--oidc-signing-algs</code></dt>
-<dd dir="rtl">الگوریتم‌های امضای پذیرفته‌شده. مقادیر مجاز عبارت‌اند از: RS256، RS384، RS512، ES256، ES384، ES512، PS256، PS384، PS512. این مقادیر در <a href="https://tools.ietf.org/html/rfc7518#section-3.1" target="_blank" rel="noopener">RFC 7518</a> تعریف شده‌اند. مقدار پیش‌فرض <code dir="ltr">RS512</code> است.</dd>
+<dd dir="rtl">الگوریتم‌های امضای پذیرفته‌شده. مقادیر مجاز عبارت‌اند از: RS256، RS384، RS512، ES256، ES384، ES512، PS256، PS384 و PS512. این مقادیر در <a href="https://tools.ietf.org/html/rfc7518#section-3.1" target="_blank" rel="noopener">RFC 7518</a> تعریف شده‌اند. مقدار پیش‌فرض <code dir="ltr">RS512</code> است.</dd>
 </dl>
 <h4 id="پیکربندی-serviceaccount-api-server-authn-config-cli-sa" dir="rtl">پیکربندی ServiceAccount {#api-server-authn-config-cli-sa}</h4>
 <dl>
 <dt dir="ltr" class="ltr"><code dir="ltr">--api-audiences</code></dt>
-<dd dir="rtl">مخاطب (audience) احراز هویت را برای توکن‌های service account تعریف می‌کند.</dd>
+<dd dir="rtl">مخاطب (audience) احراز هویت را برای توکن‌های حساب سرویس تعریف می‌کند.</dd>
 <dt dir="ltr" class="ltr"><code dir="ltr">--service-account-extend-token-expiration</code></dt>
-<dd dir="rtl">این پرچم تمدید انقضای projected service account را هنگام تولید توکن فعال می‌کند، که به گذار ایمن از توکن‌های قدیمی (legacy) به قابلیت توکن‌های service account مقید (bound) کمک می‌کند. <a href="../../concepts/security/service-accounts.html#authenticating-credentials">احراز هویت اعتبارنامه‌های service account</a> را ببینید.</dd>
+<dd dir="rtl">این فلگ تمدید انقضای توکن‌های projected حساب سرویس را هنگام تولید توکن فعال می‌کند. این قابلیت به گذار امن از توکن‌های قدیمی به قابلیت توکن‌های مقید حساب سرویس کمک می‌کند. بخش <a href="../../concepts/security/service-accounts.html#authenticating-credentials">احراز هویت اعتبارنامه‌های حساب سرویس</a> را ببینید.</dd>
 <dt dir="ltr" class="ltr"><code dir="ltr">--service-account-issuer</code></dt>
-<dd dir="rtl">شناسهٔ صادرکنندهٔ توکن service account. صادرکننده این شناسه را در claim با نام <code dir="ltr">iss</code> هر توکن صادرشده اعلام می‌کند. پروژهٔ کوبرنتیز توصیه می‌کند در اینجا از یک URL با طرح <code dir="ltr">https</code> استفاده شود.</dd>
+<dd dir="rtl">شناسهٔ صادرکنندهٔ توکن حساب سرویس. صادرکننده این شناسه را در claim <code dir="ltr">iss</code> هر توکن صادرشده درج می‌کند. پروژهٔ کوبرنتیز توصیه می‌کند در اینجا از یک URL با طرح <code dir="ltr">https</code> استفاده کنید.</dd>
 <dt dir="ltr" class="ltr"><code dir="ltr">--service-account-jwks-uri</code></dt>
-<dd dir="rtl">URI مربوط به <a href="https://www.rfc-editor.org/rfc/rfc7517" target="_blank" rel="noopener">JSON Web Key Set</a> را در سند discovery که در <code dir="ltr">/.well-known/openid-configuration</code> ارائه می‌شود، بازنویسی (override) می‌کند.</dd>
+<dd dir="rtl">نشانی URI مربوط به <a href="https://www.rfc-editor.org/rfc/rfc7517" target="_blank" rel="noopener">JSON Web Key Set</a> را در سند کشفی که در <code dir="ltr">/.well-known/openid-configuration</code> ارائه می‌شود، بازنویسی می‌کند.</dd>
 <dt dir="ltr" class="ltr"><code dir="ltr">--service-account-key-file</code></dt>
-<dd dir="rtl">مسیر فایلی که حاوی کلیدهای عمومی یا خصوصی X.509 با رمزگذاری PEM (از نوع RSA یا ECDSA) است و برای تأیید توکن‌های ServiceAccount استفاده می‌شود. فایل مشخص‌شده می‌تواند حاوی چند کلید باشد و می‌توانید این آرگومان را چندین بار با مسیرهای متفاوت مشخص کنید.</dd>
+<dd dir="rtl">مسیر فایلی حاوی کلیدهای عمومی یا خصوصی X.509 با کدگذاری PEM (از نوع RSA یا ECDSA) که برای تأیید توکن‌های ServiceAccount استفاده می‌شوند. فایل مشخص‌شده می‌تواند چند کلید داشته باشد و می‌توانید این آرگومان را چند بار با مسیرهای مختلف تعیین کنید.</dd>
 <dt dir="ltr" class="ltr"><code dir="ltr">--service-account-lookup</code></dt>
-<dd dir="rtl">اگر true باشد، API server به‌عنوان بخشی از احراز هویت بررسی می‌کند که توکن‌های ServiceAccount در etcd وجود دارند.</dd>
+<dd dir="rtl">اگر مقدار آن true باشد، سرور API در فرایند احراز هویت بررسی می‌کند که توکن‌های ServiceAccount در etcd وجود داشته باشند.</dd>
 <dt dir="ltr" class="ltr"><code dir="ltr">--service-account-max-token-expiration</code></dt>
-<dd dir="rtl">بیشینهٔ مدت اعتبار یک توکن که توسط صادرکنندهٔ توکن service account ایجاد می‌شود، به‌صورت یک رشتهٔ مدت‌زمان (duration) کوبرنتیز.</dd>
+<dd dir="rtl">بیشینهٔ مدت اعتبار توکنی که صادرکنندهٔ توکن حساب سرویس ایجاد می‌کند، به‌صورت یک رشتهٔ مدت‌زمان کوبرنتیز.</dd>
 <dt dir="ltr" class="ltr"><code dir="ltr">--service-account-signing-endpoint</code></dt>
-<dd dir="rtl">مسیر سوکتی که یک امضاکنندهٔ JWT خارجی روی آن گوش می‌دهد. می‌توانید از این گزینه برای یکپارچه‌سازی با یک امضاکنندهٔ توکن خارجی استفاده کنید.</dd>
+<dd dir="rtl">مسیر سوکتی که یک امضاکنندهٔ خارجی JWT روی آن گوش می‌دهد. با این آرگومان می‌توانید با یک امضاکنندهٔ خارجی توکن یکپارچه شوید.</dd>
 <dt dir="ltr" class="ltr"><code dir="ltr">--service-account-signing-key-file</code></dt>
-<dd dir="rtl">مسیر فایلی که حاوی کلید خصوصی فعلی صادرکنندهٔ توکن service account است. تغییراتی که در این فایل هنگام اجرای API server اعمال شوند، دوباره خوانده <strong>نمی‌شوند</strong>.</dd>
+<dd dir="rtl">مسیر فایلی که کلید خصوصی فعلی صادرکنندهٔ توکن حساب سرویس را در خود دارد. تغییراتی که هنگام اجرای سرور API در این فایل اعمال شوند، دوباره خوانده <strong>نمی‌شوند</strong>.</dd>
 </dl>
 <h4 id="پیکربندی-توکن-ایستا-api-server-authn-config-cli-bearer" dir="rtl">پیکربندی توکن ایستا {#api-server-authn-config-cli-bearer}</h4>
 <dl>
 <dt dir="ltr" class="ltr"><code dir="ltr">--token-auth-file</code></dt>
-<dd dir="rtl">مسیر فایل پیکربندی <a href="#static-token-file">توکن‌های bearer ایستا</a>. تغییراتی که در این فایل هنگام اجرای API server اعمال شوند، دوباره خوانده <strong>نمی‌شوند</strong>.</dd>
+<dd dir="rtl">مسیر فایل پیکربندی برای <a href="#static-token-file">توکن‌های حامل ایستا (static bearer tokens)</a>. تغییراتی که هنگام اجرای سرور API در این فایل اعمال شوند، دوباره خوانده <strong>نمی‌شوند</strong>.</dd>
 </dl>
-<h4 id="پیکربندی-احراز-هویت-با-webhook-api-server-authn-config-cli-webhook" dir="rtl">پیکربندی احراز هویت با Webhook {#api-server-authn-config-cli-webhook}</h4>
+<h4 id="پیکربندی-احراز-هویت-وب-هوک-api-server-authn-config-cli-webhook" dir="rtl">پیکربندی احراز هویت وب‌هوک {#api-server-authn-config-cli-webhook}</h4>
 <dl>
 <dt dir="ltr" class="ltr"><code dir="ltr">--authentication-token-webhook-cache-ttl</code></dt>
-<dd dir="rtl">مدت‌زمانی (به‌صورت مشخصات duration کوبرنتیز) که API server باید نتیجهٔ فراخوانی‌های HTTP برای اعتبارسنجی توکن‌ها را در حافظهٔ نهان نگه دارد.</dd>
+<dd dir="rtl">مدت زمانی (به‌صورت یک مشخصهٔ مدت‌زمان کوبرنتیز) که سرور API باید نتیجهٔ فراخوانی‌های HTTP برای اعتبارسنجی توکن‌ها را در حافظهٔ نهان نگه دارد.</dd>
 <dt dir="ltr" class="ltr"><code dir="ltr">--authentication-token-webhook-config-file</code></dt>
-<dd dir="rtl">مسیر یک پیکربندی کلاینت با قالب kubeconfig که مشخص می‌کند API server هنگام انجام فراخوانی‌های HTTP چگونه احراز هویت می‌کند. تغییراتی که در این فایل هنگام اجرای API server اعمال شوند، دوباره خوانده <strong>نمی‌شوند</strong>.</dd>
+<dd dir="rtl">مسیر یک پیکربندی کلاینت در قالب kubeconfig که مشخص می‌کند سرور API هنگام انجام فراخوانی‌های HTTP چگونه احراز هویت شود. تغییراتی که هنگام اجرای سرور API در این فایل اعمال شوند، دوباره خوانده <strong>نمی‌شوند</strong>.</dd>
 <dt dir="ltr" class="ltr"><code dir="ltr">--authentication-token-webhook-version</code></dt>
-<dd dir="rtl">نسخهٔ API مربوط به TokenReview که هنگام انجام فراخوانی‌های HTTP برای بررسی توکن‌ها استفاده می‌شود.</dd>
+<dd dir="rtl">نسخهٔ API مربوط به TokenReview که هنگام انجام فراخوانی‌های HTTP برای بررسی توکن‌ها به کار می‌رود.</dd>
 </dl>
 <h4 id="پیکربندی-احراز-هویت-درخواست-وب-api-server-authn-config-cli-reverse-proxy" dir="rtl">پیکربندی احراز هویت درخواست وب {#api-server-authn-config-cli-reverse-proxy}</h4>
 <!-- trailing whitespace (exactly two spaces) is significant in the following list -->
 <div class="callout caution"><div class="callout-title">احتیاط:</div>
-<p dir="rtl">پیش از تعیین این آرگومان‌های خط فرمان، باید مستندات مربوط به پیکربندی <a href="#authenticating-proxy">پروکسی احراز هویت</a> را مطالعه کنید،
-زیرا توصیه‌های امنیتی مهمی دربارهٔ امنیت اطلاعات وجود دارد
-که باید آن‌ها را رعایت کنید.</p>
+<p dir="rtl">پیش از تعیین این آرگومان‌های خط فرمان، باید مستندات مربوط به پیکربندی <a href="#authenticating-proxy">پروکسی احراز هویت</a>
+را بخوانید، زیرا این مستندات توصیه‌های مهمی دربارهٔ امنیت اطلاعات دارند که باید از آن‌ها پیروی کنید.</p>
 </div>
 <dl>
 <dt dir="ltr" class="ltr"><code dir="ltr">--requestheader-client-ca-file</code></dt>
 <dd dir="rtl"><em>الزامی.</em>
-مسیر یک بستهٔ گواهی با رمزگذاری PEM که حاوی trust anchor(های) برای اعتبارسنجی هویت پروکسی احراز هویت است.<br>
-یک <a href="#reverse-proxy-client-certificate">گواهی کلاینت</a> معتبر
-باید ارائه شود و در برابر مراجع صدور گواهی موجود در فایل مشخص‌شده اعتبارسنجی گردد، پیش از آنکه
-هدرهای درخواست برای نام‌های کاربری بررسی شوند.</dd>
+مسیر یک بستهٔ گواهی با کدگذاری PEM که لنگر (یا لنگرهای) اعتماد را برای اعتبارسنجی هویت پروکسی احراز هویت در خود دارد.<br>
+پیش از آنکه هدرهای درخواست برای یافتن نام‌های کاربری بررسی شوند، باید یک <a href="#reverse-proxy-client-certificate">گواهی کلاینت</a>
+معتبر ارائه شود و با مراجع صدور گواهی موجود در فایل مشخص‌شده
+اعتبارسنجی شود.</dd>
 <dt dir="ltr" class="ltr"><code dir="ltr">--requestheader-allowed-names</code></dt>
 <dd dir="rtl"><em>اختیاری.</em> فهرستی از مقادیر Common Name (CN) که با کاما از هم جدا شده‌اند.<br>
-اگر تنظیم شود، پیش از بررسی هدرهای درخواست برای نام‌های کاربری، باید یک گواهی کلاینت معتبر
-با CN موجود در فهرست مشخص‌شده ارائه شود. اگر خالی باشد، هر CN مجاز است.</dd>
+اگر تنظیم شود، پیش از آنکه هدرهای درخواست برای یافتن نام‌های کاربری بررسی شوند، باید یک گواهی
+کلاینت معتبر ارائه شود که CN آن در فهرست مشخص‌شده باشد.
+اگر خالی باشد، هر CNی مجاز است.</dd>
 <dt dir="ltr" class="ltr"><code dir="ltr">--requestheader-username-headers</code></dt>
-<dd dir="rtl"><em>الزامی؛ بدون حساسیت به بزرگی و کوچکی حروف.</em> نام هدرهایی که برای هویت کاربر، به ترتیب بررسی می‌شوند.<br>
-نخستین هدری که حاوی مقدار باشد به‌عنوان نام کاربری استفاده می‌شود.</dd>
+<dd dir="rtl"><em>الزامی؛ بدون حساسیت به بزرگی و کوچکی حروف.</em> نام هدرهایی که به ترتیب برای یافتن هویت کاربر بررسی می‌شوند.<br>
+نخستین هدری که مقدار داشته باشد، به‌عنوان نام کاربری استفاده می‌شود.</dd>
 <dt dir="ltr" class="ltr"><code dir="ltr">--requestheader-group-headers</code></dt>
 <dd dir="rtl"><em>اختیاری؛ بدون حساسیت به بزرگی و کوچکی حروف.</em>
-نام هدرهایی که برای گروه‌های کاربر، به ترتیب بررسی می‌شوند.<br>
-<code dir="ltr">X-Remote-Group</code> پیشنهاد می‌شود.
-تمام مقادیر موجود در تمام هدرهای مشخص‌شده به‌عنوان نام گروه استفاده می‌شوند.</dd>
+نام هدرهایی که به ترتیب برای یافتن گروه‌های کاربر بررسی می‌شوند.<br>
+استفاده از <code dir="ltr">X-Remote-Group</code> پیشنهاد می‌شود.
+همهٔ مقادیر موجود در همهٔ هدرهای مشخص‌شده به‌عنوان نام گروه استفاده می‌شوند.</dd>
 <dt dir="ltr" class="ltr"><code dir="ltr">--requestheader-extra-headers-prefix</code></dt>
 <dd dir="rtl"><em>اختیاری؛ بدون حساسیت به بزرگی و کوچکی حروف.</em>
 پیشوندهای هدری که برای تعیین اطلاعات اضافی دربارهٔ کاربر جست‌وجو می‌شوند.<br>
-<code dir="ltr">X-Remote-Extra-</code> پیشنهاد می‌شود.
-داده‌های اضافی معمولاً توسط افزونه(های) احراز مجوز پیکربندی‌شده استفاده می‌شوند.
-از هر هدری که با هر یک از پیشوندهای مشخص‌شده آغاز شود، پیشوند حذف می‌شود.
-باقی‌ماندهٔ نام هدر به حروف کوچک تبدیل می‌شود و <a href="https://tools.ietf.org/html/rfc3986#section-2.1" target="_blank" rel="noopener">رمزگشایی درصدی (percent-decode)</a> می‌گردد
-و به کلید extra تبدیل می‌شود و مقدار هدر، مقدار extra خواهد بود.</dd>
+استفاده از <code dir="ltr">X-Remote-Extra-</code> پیشنهاد می‌شود.
+داده‌های اضافی معمولاً توسط افزونه (یا افزونه‌های) مجوزدهی پیکربندی‌شده استفاده می‌شوند.
+از هر هدری که با یکی از پیشوندهای مشخص‌شده شروع شود، آن پیشوند حذف می‌شود.
+باقی‌ماندهٔ نام هدر به حروف کوچک تبدیل و <a href="https://tools.ietf.org/html/rfc3986#section-2.1" target="_blank" rel="noopener">رمزگشایی درصدی (percent-decoded)</a> می‌شود
+و به کلید اضافی تبدیل می‌شود، و مقدار هدر نیز مقدار اضافی خواهد بود.</dd>
 </dl>
 <h3 id="پیکربندی-از-طریق-فایل-پیکربندی-api-server-authn-config-file" dir="rtl">پیکربندی از طریق فایل پیکربندی {#api-server-authn-config-file}</h3>
 <div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
-<p dir="rtl">هنگامی که آرگومان خط فرمان <code dir="ltr">--authentication-config</code> را به kube-apiserver می‌دهید، API server
-فایلی را که در مسیر مشخص‌شده قرار دارد بارگذاری می‌کند و از محتوای آن فایل برای پیکربندی احراز هویت استفاده می‌کند.</p>
-<p dir="rtl">محتوای آن فایل را می‌توان در حین اجرای API server تغییر داد و در این صورت، API server پس از آن فایل را دوباره می‌خواند.</p>
+<p dir="rtl">وقتی آرگومان خط فرمان <code dir="ltr">--authentication-config</code> را به kube-apiserver می‌دهید، سرور API
+فایلی را از مسیری که مشخص کرده‌اید بارگذاری می‌کند و از محتوای آن برای پیکربندی احراز هویت استفاده می‌کند.</p>
+<p dir="rtl">محتوای این فایل را می‌توان هنگام اجرای سرور API تغییر داد؛ در این صورت، سرور API پس از آن فایل را دوباره می‌خواند.</p>
 <div class="callout note"><div class="callout-title">توجه:</div>
-<p dir="rtl">تغییرات این فایل باید به‌صورت اتمیک انجام شود (برای مثال: نوشتن در یک فایل موقت هم‌سطح، سپس تغییر نام فایل موقت برای جایگزینی این فایل).</p>
+<p dir="rtl">تغییرات این فایل باید به‌صورت اتمیک انجام شوند (برای مثال: ابتدا در یک فایل موقت هم‌جوار بنویسید و سپس با تغییر نام فایل موقت، آن را جایگزین این فایل کنید).</p>
 </div>
 <h4 id="مسیر-فایل-پیکربندی-api-server-authn-config-cli-general" dir="rtl">مسیر فایل پیکربندی {#api-server-authn-config-cli-general}</h4>
 <dl>
@@ -1188,7 +1171,7 @@ extra:
 <dd dir="rtl">این آرگومان خط فرمان ویژه مشخص می‌کند که می‌خواهید <a href="#api-server-authn-config-file">احراز هویت را با استفاده از یک فایل پیکربندی، پیکربندی کنید</a>.</dd>
 </dl>
 <h4 id="مثال-api-server-authn-config-file-example" dir="rtl">مثال {#api-server-authn-config-file-example}</h4>
-<p dir="rtl">در اینجا نمونه‌ای از یک فایل پیکربندی احراز هویت (ساختاریافتهٔ) کوبرنتیز آمده است:</p>
+<p dir="rtl">در ادامه نمونه‌ای از یک فایل پیکربندی احراز هویت (ساختاریافتهٔ) کوبرنتیز آمده است:</p>
 <pre dir="ltr"><code class="language-yaml" dir="ltr">---
 #
 # CAUTION: this is an example configuration.
@@ -1199,32 +1182,32 @@ kind: AuthenticationConfiguration
 anonymous:
   enabled: false
 </code></pre>
-<h2 id="افزونه-های-اعتبارنامهٔ-client-go-client-go-credential-plugins" dir="rtl">افزونه‌های اعتبارنامهٔ client-go {#client-go-credential-plugins}</h2>
+<h2 id="افزونه-های-اعتبارنامهٔ-client-go" dir="rtl">افزونه‌های اعتبارنامهٔ client-go</h2>
 <div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes v1.22 [stable]</span> (پایدار)</div>
-<p dir="rtl"><code dir="ltr">k8s.io/client-go</code> و ابزارهایی که از آن استفاده می‌کنند، مانند <code dir="ltr">kubectl</code> و <code dir="ltr">kubelet</code>، قادرند
-یک فرمان خارجی را اجرا کنند تا اعتبارنامه‌های کاربر را دریافت نمایند.</p>
-<p dir="rtl">این قابلیت برای یکپارچه‌سازی‌های سمت کلاینت با پروتکل‌های احراز هویتی در نظر گرفته شده است که به‌صورت بومی
-توسط <code dir="ltr">k8s.io/client-go</code> پشتیبانی نمی‌شوند (مانند LDAP، Kerberos، OAuth2، SAML و غیره). افزونه
-منطق مختص پروتکل را پیاده‌سازی می‌کند و سپس اعتبارنامه‌های مبهم (opaque) را برای استفاده بازمی‌گرداند. تقریباً تمام موارد استفاده از افزونه‌های اعتبارنامه
-به یک مؤلفهٔ سمت سرور با پشتیبانی از <a href="#webhook-token-authentication">webhook token authenticator</a> نیاز دارند
-تا قالب اعتبارنامه‌ای را که افزونهٔ کلاینت تولید کرده است تفسیر کند.</p>
+<p dir="rtl">کتابخانهٔ <code dir="ltr">k8s.io/client-go</code> و ابزارهایی که از آن استفاده می‌کنند، مانند <code dir="ltr">kubectl</code> و <code dir="ltr">kubelet</code>، می‌توانند
+یک فرمان خارجی را برای دریافت اعتبارنامه‌های کاربر اجرا کنند.</p>
+<p dir="rtl">این قابلیت برای یکپارچه‌سازی سمت کلاینت با پروتکل‌های احراز هویتی طراحی شده است که
+<code dir="ltr">k8s.io/client-go</code> به‌صورت بومی از آن‌ها پشتیبانی نمی‌کند (مانند LDAP، Kerberos، OAuth2، SAML و غیره). افزونه
+منطق مخصوص پروتکل را پیاده‌سازی می‌کند و سپس اعتبارنامه‌هایی مبهم (opaque) را برای استفاده برمی‌گرداند. تقریباً همهٔ
+موارد استفاده از افزونه‌های اعتبارنامه به یک مؤلفهٔ سمت سرور نیاز دارند که از <a href="#webhook-token-authentication">احرازکنندهٔ توکن وب‌هوک</a>
+پشتیبانی کند تا قالب اعتبارنامهٔ تولیدشده توسط افزونهٔ کلاینت را تفسیر کند.</p>
 <div class="callout note"><div class="callout-title">توجه:</div>
-<p dir="rtl">نسخه‌های قدیمی‌تر <code dir="ltr">kubectl</code> پشتیبانی داخلی برای احراز هویت در AKS و GKE را شامل می‌شدند، اما این پشتیبانی دیگر وجود ندارد.</p>
+<p dir="rtl">نسخه‌های قدیمی‌تر <code dir="ltr">kubectl</code> پشتیبانی داخلی برای احراز هویت در AKS و GKE داشتند، اما این پشتیبانی دیگر وجود ندارد.</p>
 </div>
-<h3 id="نمونهٔ-مورد-استفاده-example-use-case" dir="rtl">نمونهٔ مورد استفاده {#example-use-case}</h3>
-<p dir="rtl">در یک سناریوی فرضی، یک سازمان یک سرویس خارجی اجرا می‌کند که اعتبارنامه‌های LDAP را
-با توکن‌های امضاشدهٔ مختص کاربر مبادله می‌کند. این سرویس همچنین قادر است به درخواست‌های <a href="#webhook-token-authentication">webhook token
-authenticator</a> برای اعتبارسنجی توکن‌ها پاسخ دهد. کاربران باید
-یک افزونهٔ اعتبارنامه را روی ایستگاه کاری خود نصب کنند.</p>
+<h3 id="نمونهٔ-مورد-استفاده" dir="rtl">نمونهٔ مورد استفاده</h3>
+<p dir="rtl">در یک مورد استفادهٔ فرضی، سازمانی یک سرویس خارجی را اجرا می‌کند که اعتبارنامه‌های LDAP را
+با توکن‌های امضاشدهٔ مخصوص هر کاربر مبادله می‌کند. این سرویس همچنین می‌تواند به درخواست‌های
+<a href="#webhook-token-authentication">احرازکنندهٔ توکن وب‌هوک</a> برای اعتبارسنجی توکن‌ها پاسخ دهد. کاربران
+باید یک افزونهٔ اعتبارنامه را روی ایستگاه کاری خود نصب کنند.</p>
 <p dir="rtl">برای احراز هویت در برابر API:</p>
 <ul>
 <li dir="rtl">کاربر یک فرمان <code dir="ltr">kubectl</code> اجرا می‌کند.</li>
-<li dir="rtl">افزونهٔ اعتبارنامه از کاربر اعتبارنامه‌های LDAP را درخواست می‌کند و اعتبارنامه‌ها را با سرویس خارجی در ازای یک توکن مبادله می‌کند.</li>
-<li dir="rtl">افزونهٔ اعتبارنامه توکن را به client-go بازمی‌گرداند و client-go آن را به‌عنوان توکن bearer در برابر API server استفاده می‌کند.</li>
-<li dir="rtl">API server از <a href="#webhook-token-authentication">webhook token authenticator</a> برای ارسال یک <code dir="ltr">TokenReview</code> به سرویس خارجی استفاده می‌کند.</li>
-<li dir="rtl">سرویس خارجی امضای توکن را تأیید می‌کند و نام کاربری و گروه‌های کاربر را بازمی‌گرداند.</li>
+<li dir="rtl">افزونهٔ اعتبارنامه اعتبارنامه‌های LDAP را از کاربر درخواست می‌کند و آن‌ها را با سرویس خارجی در ازای یک توکن مبادله می‌کند.</li>
+<li dir="rtl">افزونهٔ اعتبارنامه توکن را به client-go برمی‌گرداند و client-go از آن به‌عنوان توکن حامل (bearer token) در برابر سرور API استفاده می‌کند.</li>
+<li dir="rtl">سرور API با استفاده از <a href="#webhook-token-authentication">احرازکنندهٔ توکن وب‌هوک</a> یک <code dir="ltr">TokenReview</code> را به سرویس خارجی ارسال می‌کند.</li>
+<li dir="rtl">سرویس خارجی امضای توکن را تأیید می‌کند و نام کاربری و گروه‌های کاربر را برمی‌گرداند.</li>
 </ul>
-<h3 id="پیکربندی-configuration" dir="rtl">پیکربندی {#configuration}</h3>
+<h3 id="پیکربندی" dir="rtl">پیکربندی</h3>
 <p dir="rtl">افزونه‌های اعتبارنامه از طریق <a href="../../tasks/access-application-cluster/configure-access-multiple-clusters.html">فایل‌های پیکربندی kubectl</a>
 و به‌عنوان بخشی از فیلدهای کاربر پیکربندی می‌شوند.</p>
 <div class="tabs">
@@ -1374,8 +1357,8 @@ current-context: my-cluster
 </code></pre>
 </div>
 </div>
-<p dir="rtl">مسیرهای نسبی فرمان نسبت به دایرکتوری فایل پیکربندی تفسیر می‌شوند. اگر
-KUBECONFIG روی <code dir="ltr">/home/jane/kubeconfig</code> تنظیم شده باشد و فرمان exec برابر <code dir="ltr">./bin/example-client-go-exec-plugin</code> باشد،
+<p dir="rtl">مسیرهای نسبی فرمان، نسبت به دایرکتوری فایل پیکربندی تفسیر می‌شوند. اگر مقدار
+KUBECONFIG برابر <code dir="ltr">/home/jane/kubeconfig</code> و فرمان exec برابر <code dir="ltr">./bin/example-client-go-exec-plugin</code> باشد،
 فایل اجرایی <code dir="ltr">/home/jane/bin/example-client-go-exec-plugin</code> اجرا می‌شود.</p>
 <pre dir="ltr"><code class="language-yaml" dir="ltr">- name: my-user
   user:
@@ -1385,20 +1368,19 @@ KUBECONFIG روی <code dir="ltr">/home/jane/kubeconfig</code> تنظیم شده
       apiVersion: "client.authentication.k8s.io/v1"
       interactiveMode: Never
 </code></pre>
-<h3 id="فرمت-های-ورودی-و-خروجی" dir="rtl">فرمت‌های ورودی و خروجی</h3>
-<p dir="rtl">دستور اجراشده یک آبجکت <code dir="ltr">ExecCredential</code> را در <code dir="ltr">stdout</code> چاپ می‌کند. <code dir="ltr">k8s.io/client-go</code>
-با استفاده از اعتبارنامه‌های بازگردانده‌شده در <code dir="ltr">status</code>، در برابر API کوبرنتیز احراز هویت می‌کند.
-به دستور اجراشده، یک آبجکت <code dir="ltr">ExecCredential</code> از طریق متغیر محیطی <code dir="ltr">KUBERNETES_EXEC_INFO</code>
-به‌عنوان ورودی داده می‌شود. این ورودی شامل اطلاعات مفیدی مانند نسخه API مورد انتظار
-آبجکت <code dir="ltr">ExecCredential</code> بازگردانده‌شده و همچنین این است که آیا افزونه می‌تواند برای تعامل
-با کاربر از <code dir="ltr">stdin</code> استفاده کند یا خیر.</p>
-<p dir="rtl">هنگامی که دستور از یک نشست تعاملی (یعنی یک ترمینال) اجرا می‌شود، <code dir="ltr">stdin</code> می‌تواند مستقیماً در اختیار
-افزونه قرار گیرد. افزونه‌ها باید از فیلد <code dir="ltr">spec.interactive</code> در آبجکت <code dir="ltr">ExecCredential</code> ورودی
-موجود در متغیر محیطی <code dir="ltr">KUBERNETES_EXEC_INFO</code> استفاده کنند تا مشخص شود آیا <code dir="ltr">stdin</code> فراهم شده است یا خیر.
-نیازمندی افزونه به <code dir="ltr">stdin</code> (یعنی اینکه <code dir="ltr">stdin</code> برای اجرای موفق افزونه اختیاری است، اکیداً لازم است،
-یا هرگز استفاده نمی‌شود) از طریق فیلد <code dir="ltr">user.exec.interactiveMode</code> در
-<a href="../../concepts/configuration/organize-cluster-access-kubeconfig.html">kubeconfig</a>
-اعلام می‌شود (مقادیر معتبر در جدول زیر آمده است). فیلد <code dir="ltr">user.exec.interactiveMode</code> در
+<h3 id="قالب-های-ورودی-و-خروجی" dir="rtl">قالب‌های ورودی و خروجی</h3>
+<p dir="rtl">فرمان اجراشده یک آبجکت <code dir="ltr">ExecCredential</code> را در <code dir="ltr">stdout</code> چاپ می‌کند. کتابخانهٔ <code dir="ltr">k8s.io/client-go</code>
+با استفاده از اعتبارنامه‌های برگردانده‌شده در <code dir="ltr">status</code>، در برابر API کوبرنتیز احراز هویت می‌کند.
+یک آبجکت <code dir="ltr">ExecCredential</code> نیز از طریق متغیر محیطی <code dir="ltr">KUBERNETES_EXEC_INFO</code> به‌عنوان ورودی به فرمان اجراشده داده می‌شود.
+این ورودی اطلاعات مفیدی دارد؛ مثلاً نسخهٔ API مورد انتظار برای آبجکت <code dir="ltr">ExecCredential</code> برگشتی، و اینکه آیا افزونه
+می‌تواند برای تعامل با کاربر از <code dir="ltr">stdin</code> استفاده کند یا نه.</p>
+<p dir="rtl">هنگامی که افزونه از یک نشست تعاملی (یعنی یک ترمینال) اجرا می‌شود، می‌توان <code dir="ltr">stdin</code> را مستقیماً در اختیار آن گذاشت.
+افزونه‌ها باید با استفاده از فیلد <code dir="ltr">spec.interactive</code> در آبجکت <code dir="ltr">ExecCredential</code> ورودی که از متغیر محیطی
+<code dir="ltr">KUBERNETES_EXEC_INFO</code> دریافت می‌شود، تشخیص دهند که آیا <code dir="ltr">stdin</code> فراهم شده است یا نه. نیازمندی‌های یک افزونه
+به <code dir="ltr">stdin</code> (یعنی اینکه برای اجرای موفق افزونه، <code dir="ltr">stdin</code> اختیاری است، الزاماً لازم است یا هرگز استفاده نمی‌شود)
+از طریق فیلد <code dir="ltr">user.exec.interactiveMode</code> در
+<a href="../../concepts/configuration/organize-cluster-access-kubeconfig.html">kubeconfig</a> اعلام می‌شود
+(برای مقادیر معتبر، جدول زیر را ببینید). فیلد <code dir="ltr">user.exec.interactiveMode</code> در
 <code dir="ltr">client.authentication.k8s.io/v1beta1</code> اختیاری و در <code dir="ltr">client.authentication.k8s.io/v1</code> الزامی است.</p>
 <table>
 <thead>
@@ -1410,21 +1392,20 @@ KUBECONFIG روی <code dir="ltr">/home/jane/kubeconfig</code> تنظیم شده
 <tbody>
 <tr>
 <td dir="ltr" class="ltr"><code dir="ltr">Never</code></td>
-<td dir="rtl">این افزونه exec هرگز نیازی به ورودی استاندارد ندارد؛ بنابراین افزونه exec صرف‌نظر از اینکه ورودی استاندارد برای دریافت ورودی از کاربر در دسترس باشد یا نباشد، اجرا خواهد شد.</td>
+<td dir="rtl">این افزونهٔ exec هرگز به ورودی استاندارد نیاز ندارد؛ بنابراین صرف‌نظر از اینکه ورودی استاندارد برای دریافت ورودی کاربر در دسترس باشد یا نه، اجرا می‌شود.</td>
 </tr>
 <tr>
 <td dir="ltr" class="ltr"><code dir="ltr">IfAvailable</code></td>
-<td dir="rtl">این افزونه exec در صورت در دسترس بودن ورودی استاندارد مایل به استفاده از آن است، اما در صورت در دسترس نبودن آن نیز می‌تواند کار کند. بنابراین افزونه exec صرف‌نظر از اینکه stdin برای دریافت ورودی از کاربر در دسترس باشد یا نباشد، اجرا خواهد شد. اگر ورودی استاندارد برای دریافت ورودی از کاربر در دسترس باشد، در اختیار این افزونه exec قرار می‌گیرد.</td>
+<td dir="rtl">این افزونهٔ exec ترجیح می‌دهد در صورت در دسترس بودن ورودی استاندارد از آن استفاده کند، اما بدون آن نیز می‌تواند کار کند. بنابراین صرف‌نظر از اینکه stdin برای دریافت ورودی کاربر در دسترس باشد یا نه، اجرا می‌شود. اگر ورودی استاندارد برای دریافت ورودی کاربر در دسترس باشد، در اختیار این افزونهٔ exec قرار می‌گیرد.</td>
 </tr>
 <tr>
 <td dir="ltr" class="ltr"><code dir="ltr">Always</code></td>
-<td dir="rtl">این افزونه exec برای اجرا به ورودی استاندارد نیاز دارد؛ بنابراین افزونه exec تنها در صورتی اجرا می‌شود که ورودی استاندارد برای دریافت ورودی از کاربر در دسترس باشد. اگر ورودی استاندارد برای دریافت ورودی از کاربر در دسترس نباشد، افزونه exec اجرا نخواهد شد و اجراکننده افزونه exec یک خطا بازمی‌گرداند.</td>
+<td dir="rtl">این افزونهٔ exec برای اجرا به ورودی استاندارد نیاز دارد؛ بنابراین فقط در صورتی اجرا می‌شود که ورودی استاندارد برای دریافت ورودی کاربر در دسترس باشد. اگر ورودی استاندارد در دسترس نباشد، افزونهٔ exec اجرا نمی‌شود و اجراکنندهٔ افزونهٔ exec خطا برمی‌گرداند.</td>
 </tr>
 </tbody>
 </table>
 <p dir="rtl">برای استفاده از اعتبارنامه‌های توکن حامل (bearer token)، افزونه یک توکن را در status آبجکت
-<a href="../config-api/client-authentication.v1beta1.html#client-authentication-k8s-io-v1beta1-ExecCredential"><code dir="ltr">ExecCredential</code></a>
-بازمی‌گرداند.</p>
+<a href="../config-api/client-authentication.v1beta1.html#client-authentication-k8s-io-v1beta1-ExecCredential"><code dir="ltr">ExecCredential</code></a> برمی‌گرداند.</p>
 <div class="tabs">
 <div class="tab"><div class="tab-name">client.authentication.k8s.io/v1</div>
 <pre dir="ltr"><code class="language-json" dir="ltr">{
@@ -1447,11 +1428,11 @@ KUBECONFIG روی <code dir="ltr">/home/jane/kubeconfig</code> تنظیم شده
 </code></pre>
 </div>
 </div>
-<p dir="rtl">همچنین می‌توان یک گواهی کلاینت و کلید با قالب PEM را برای استفاده از احراز هویت کلاینت TLS بازگرداند.
-اگر افزونه در فراخوانی بعدی گواهی و کلید متفاوتی بازگرداند، <code dir="ltr">k8s.io/client-go</code>
-اتصال‌های موجود با سرور را می‌بندد تا یک TLS handshake جدید را اجبار کند.</p>
-<p dir="rtl">در صورت مشخص شدن، هر دو مقدار <code dir="ltr">clientKeyData</code> و <code dir="ltr">clientCertificateData</code> باید حاضر باشند.</p>
-<p dir="rtl"><code dir="ltr">clientCertificateData</code> می‌تواند شامل گواهی‌های میانی اضافی برای ارسال به سرور باشد.</p>
+<p dir="rtl">به‌عنوان جایگزین، می‌توان یک گواهی و کلید کلاینت با کدگذاری PEM برگرداند تا از احراز هویت کلاینت TLS استفاده شود.
+اگر افزونه در فراخوانی بعدی گواهی و کلید متفاوتی برگرداند، <code dir="ltr">k8s.io/client-go</code>
+اتصال‌های موجود با سرور را می‌بندد تا دست‌دهی (handshake) جدید TLS انجام شود.</p>
+<p dir="rtl">در صورت تعیین، هر دو فیلد <code dir="ltr">clientKeyData</code> و <code dir="ltr">clientCertificateData</code> باید وجود داشته باشند.</p>
+<p dir="rtl">فیلد <code dir="ltr">clientCertificateData</code> می‌تواند گواهی‌های میانی بیشتری را برای ارسال به سرور در خود داشته باشد.</p>
 <div class="tabs">
 <div class="tab"><div class="tab-name">client.authentication.k8s.io/v1</div>
 <pre dir="ltr"><code class="language-json" dir="ltr">{
@@ -1476,14 +1457,14 @@ KUBECONFIG روی <code dir="ltr">/home/jane/kubeconfig</code> تنظیم شده
 </code></pre>
 </div>
 </div>
-<p dir="rtl">به‌صورت اختیاری، پاسخ می‌تواند شامل زمان انقضای اعتبارنامه باشد که به‌صورت یک مهر زمانی
-<a href="https://datatracker.ietf.org/doc/html/rfc3339" target="_blank" rel="noopener">RFC 3339</a> قالب‌بندی می‌شود.</p>
-<p dir="rtl">وجود یا عدم وجود زمان انقضا تأثیرات زیر را دارد:</p>
+<p dir="rtl">پاسخ می‌تواند به‌صورت اختیاری زمان انقضای اعتبارنامه را نیز در قالب یک برچسب زمانی
+<a href="https://datatracker.ietf.org/doc/html/rfc3339" target="_blank" rel="noopener">RFC 3339</a> در بر داشته باشد.</p>
+<p dir="rtl">وجود یا نبودِ زمان انقضا پیامدهای زیر را دارد:</p>
 <ul>
-<li dir="rtl">اگر زمان انقضا درج شده باشد، توکن حامل و اعتبارنامه‌های TLS تا رسیدن به زمان انقضا،
-یا تا زمانی که سرور با کد وضعیت HTTP برابر با 401 پاسخ دهد، یا تا زمان خروج فرایند، در حافظه نهان نگهداری می‌شوند.</li>
+<li dir="rtl">اگر زمان انقضا درج شده باشد، توکن حامل و اعتبارنامه‌های TLS تا رسیدن زمان انقضا،
+یا تا زمانی که سرور با کد وضعیت HTTP 401 پاسخ دهد، یا تا خروج فرایند در حافظهٔ نهان نگه‌داری می‌شوند.</li>
 <li dir="rtl">اگر زمان انقضا درج نشده باشد، توکن حامل و اعتبارنامه‌های TLS تا زمانی که
-سرور با کد وضعیت HTTP برابر با 401 پاسخ دهد یا تا زمان خروج فرایند، در حافظه نهان نگهداری می‌شوند.</li>
+سرور با کد وضعیت HTTP 401 پاسخ دهد یا تا خروج فرایند در حافظهٔ نهان نگه‌داری می‌شوند.</li>
 </ul>
 <div class="tabs">
 <div class="tab"><div class="tab-name">client.authentication.k8s.io/v1</div>
@@ -1509,11 +1490,11 @@ KUBECONFIG روی <code dir="ltr">/home/jane/kubeconfig</code> تنظیم شده
 </code></pre>
 </div>
 </div>
-<p dir="rtl">برای اینکه افزونه exec بتواند اطلاعات مختص کلاستر را به دست آورد، مقدار <code dir="ltr">provideClusterInfo</code> را در فیلد <code dir="ltr">user.exec</code>
+<p dir="rtl">برای اینکه افزونهٔ exec بتواند اطلاعات مختص کلاستر را دریافت کند، <code dir="ltr">provideClusterInfo</code> را در فیلد <code dir="ltr">user.exec</code>
 در <a href="../../concepts/configuration/organize-cluster-access-kubeconfig.html">kubeconfig</a> تنظیم کنید.
-در این صورت، این اطلاعات مختص کلاستر در متغیر محیطی <code dir="ltr">KUBERNETES_EXEC_INFO</code> در اختیار افزونه قرار می‌گیرد.
-اطلاعات این متغیر محیطی را می‌توان برای اجرای منطق دریافت اعتبارنامه مختص کلاستر به کار برد.
-مانیفست <code dir="ltr">ExecCredential</code> زیر نمونه‌ای از اطلاعات کلاستر را توصیف می‌کند.</p>
+در این صورت، این اطلاعات مختص کلاستر از طریق متغیر محیطی <code dir="ltr">KUBERNETES_EXEC_INFO</code> در اختیار افزونه قرار می‌گیرد.
+می‌توان از اطلاعات این متغیر محیطی برای پیاده‌سازی منطق دریافت اعتبارنامه به‌صورت مختص هر کلاستر استفاده کرد.
+مانیفست <code dir="ltr">ExecCredential</code> زیر نمونه‌ای از اطلاعات کلاستر را نشان می‌دهد.</p>
 <div class="tabs">
 <div class="tab"><div class="tab-name">client.authentication.k8s.io/v1</div>
 <pre dir="ltr"><code class="language-json" dir="ltr">{
@@ -1556,24 +1537,24 @@ KUBECONFIG روی <code dir="ltr">/home/jane/kubeconfig</code> تنظیم شده
 </div>
 <h2 id="دسترسی-api-به-اطلاعات-احراز-هویت-یک-کلاینت-self-subject-review" dir="rtl">دسترسی API به اطلاعات احراز هویت یک کلاینت {#self-subject-review}</h2>
 <div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes v1.28 [stable]</span> (پایدار)</div>
-<p dir="rtl">می‌توانید از API به نام SelfSubjectReview استفاده کنید تا دریابید
-کلاستر کوبرنتیز شما چگونه اطلاعات احراز هویت شما را به‌عنوان یک کلاینت شناسایی و نگاشت می‌کند.
-این امر چه زمانی که به‌عنوان کاربر (که معمولاً نمایانگر
-یک شخص واقعی است) احراز هویت می‌شوید و چه زمانی که به‌عنوان ServiceAccount احراز هویت می‌شوید، کار می‌کند.</p>
-<p dir="rtl">در یک کلاستر معمول کوبرنتیز، همه کاربران احراز هویت‌شده می‌توانند SelfSubjectReview ایجاد کنند.
-دسترسی به این کار توسط
-<a href="rbac.html#role-and-clusterrole">ClusterRole</a> توکار <code dir="ltr">system:basic-user</code> مجاز شده است.</p>
-<p dir="rtl">توانایی یک کلاینت برای آگاهی از هویت خود، هنگام عیب‌یابی یک جریان احراز هویت پیچیده که در یک کلاستر کوبرنتیز به کار رفته است، بسیار مفید است؛
-برای مثال، اگر از <a href="authentication.html#webhook-token-authentication">احراز هویت توکن با webhook</a>
-یا یک <a href="authentication.html#authenticating-proxy">پروکسی احراز هویت</a> استفاده می‌کنید.</p>
-<p dir="rtl">اگر می‌خواهید این اطلاعات را در خط فرمان پرس‌وجو کنید، به
-<a href="#self-subject-review-cli">دسترسی CLI به اطلاعات احراز هویت</a> مراجعه کنید.</p>
+<p dir="rtl">با API مربوط به SelfSubjectReview می‌توانید دریابید که کلاستر کوبرنتیز شما
+چگونه اطلاعات احراز هویتتان را نگاشت می‌کند تا شما را به‌عنوان یک کلاینت شناسایی کند.
+این روش، چه به‌عنوان یک کاربر (که معمولاً نمایندهٔ یک شخص واقعی است) احراز هویت کنید
+و چه به‌عنوان یک ServiceAccount، کار می‌کند.</p>
+<p dir="rtl">در یک کلاستر کوبرنتیز معمولی، همهٔ کاربران احراز هویت‌شده می‌توانند SelfSubjectReview ایجاد کنند.
+این دسترسی را
+<a href="rbac.html#role-and-clusterrole">ClusterRole</a> داخلی <code dir="ltr">system:basic-user</code> مجاز می‌کند.</p>
+<p dir="rtl">توانایی کلاینت در شناختن هویت خودش، هنگام عیب‌یابی یک جریان پیچیدهٔ احراز هویت در کلاستر کوبرنتیز بسیار سودمند است؛
+برای نمونه، اگر از <a href="authentication.html#webhook-token-authentication">احراز هویت با توکن وب‌هوک</a>
+یا یک <a href="authentication.html#authenticating-proxy">پراکسی احراز هویت</a> استفاده می‌کنید.</p>
+<p dir="rtl">اگر می‌خواهید این اطلاعات را از خط فرمان پرس‌وجو کنید،
+<a href="#self-subject-review-cli">دسترسی CLI به اطلاعات احراز هویت</a> را ببینید.</p>
 <h3 id="دسترسی-http-به-اطلاعات-احراز-هویت-self-subject-review-http-api" dir="rtl">دسترسی HTTP به اطلاعات احراز هویت {#self-subject-review-http-api}</h3>
-<p dir="rtl">SelfSubjectReview هیچ فیلد قابل پیکربندی ندارد. هنگام دریافت یک درخواست، API server کوبرنتیز
-فیلد status را با ویژگی‌های کاربر پر می‌کند و آن را به کاربر بازمی‌گرداند.
-این کار یک منبع نام‌دار را در کلاستر شما <strong>ذخیره نمی‌کند</strong>: نمی‌توانید
+<p dir="rtl">آبجکت‌های SelfSubjectReview هیچ فیلد قابل‌پیکربندی‌ای ندارند. سرور API کوبرنتیز
+با دریافت درخواست، status را با ویژگی‌های کاربر پر می‌کند و آن را به کاربر برمی‌گرداند.
+این کار <strong>هیچ</strong> منبع نام‌داری را در کلاستر شما ذخیره نمی‌کند: نمی‌توانید
 SelfSubjectReview را بازیابی کنید و پس از تکمیل درخواست <code dir="ltr">POST</code> شما، دور ریخته می‌شود.</p>
-<p dir="rtl">نمونه درخواست (بدنه درخواست یک SelfSubjectReview خواهد بود):</p>
+<p dir="rtl">نمونهٔ درخواست (بدنهٔ درخواست یک SelfSubjectReview است):</p>
 <pre dir="ltr"><code class="language-http" dir="ltr">POST /apis/authentication.k8s.io/v1/selfsubjectreviews
 </code></pre>
 <pre dir="ltr"><code class="language-json" dir="ltr">{
@@ -1581,7 +1562,7 @@ SelfSubjectReview را بازیابی کنید و پس از تکمیل درخو�
   "kind": "SelfSubjectReview"
 }
 </code></pre>
-<p dir="rtl">نمونه پاسخ:</p>
+<p dir="rtl">نمونهٔ پاسخ:</p>
 <pre dir="ltr"><code class="language-json" dir="ltr">{
   "apiVersion": "authentication.k8s.io/v1",
   "kind": "SelfSubjectReview",
@@ -1598,16 +1579,15 @@ SelfSubjectReview را بازیابی کنید و پس از تکمیل درخو�
 }
 </code></pre>
 <div class="callout note"><div class="callout-title">توجه:</div>
-<p dir="rtl">API server کوبرنتیز فیلد <code dir="ltr">userInfo</code> را پس از اعمال همه سازوکارهای احراز هویت پر می‌کند،
-از جمله <a href="authentication.html#user-impersonation">جعل هویت (impersonation)</a>.
-اگر شما یا یک پروکسی احراز هویت با استفاده از جعل هویت یک SelfSubjectReview ایجاد کنید،
-جزئیات و ویژگی‌های کاربری را مشاهده می‌کنید که هویت او جعل شده است.</p>
+<p dir="rtl">سرور API کوبرنتیز پس از اعمال همهٔ سازوکارهای احراز هویت، از جمله
+<a href="authentication.html#user-impersonation">جعل هویت (impersonation)</a>، فیلد <code dir="ltr">userInfo</code> را پر می‌کند.
+اگر شما یا یک پراکسی احراز هویت با استفاده از جعل هویت یک SelfSubjectReview ایجاد کنید،
+جزئیات و ویژگی‌های کاربری را می‌بینید که هویتش جعل شده است.</p>
 </div>
-<p dir="rtl">این پاسخ نمونه همه فیلدهای موجود را نشان نداد؛ همه سازوکارهای
-احراز هویت تمام فیلدهای موجود را پر نمی‌کنند.
-برای مشاهده فیلدهای موجود، به <a href="https://kubernetes.io/docs/reference/kubernetes-api/authentication-resources/self-subject-review-v1/" target="_blank">مرجع API مربوط به SelfSubjectReview</a>
-مراجعه کنید.</p>
-<p dir="rtl">در اینجا مثال دیگری آمده است که فیلدهای <code dir="ltr">uid</code> و <code dir="ltr">extra</code> را نیز شامل می‌شود:</p>
+<p dir="rtl">این نمونهٔ پاسخ همهٔ فیلدهای موجود را نشان نمی‌دهد؛ همهٔ سازوکارهای
+احراز هویت همهٔ فیلدهای موجود را پر نمی‌کنند.
+برای دیدن فیلدهای موجود، <a href="https://kubernetes.io/docs/reference/kubernetes-api/authentication-resources/self-subject-review-v1/" target="_blank">مرجع API آبجکت SelfSubjectReview</a> را ببینید.</p>
+<p dir="rtl">نمونهٔ دیگری که فیلدهای <code dir="ltr">uid</code> و <code dir="ltr">extra</code> را نیز در بر دارد، در ادامه آمده است:</p>
 <!-- YAML highlighting intentional; JSON is valid YAML -->
 <pre dir="ltr"><code class="language-yaml" dir="ltr">{
   "apiVersion": "authentication.k8s.io/v1",
@@ -1637,12 +1617,11 @@ SelfSubjectReview را بازیابی کنید و پس از تکمیل درخو�
   }
 }
 </code></pre>
-<p dir="rtl">داده‌های این فیلدهای اختیاری از یکپارچه‌سازی احراز هویت شما
-یا از پایگاه داده کاربری که آن استفاده می‌کند می‌آیند. نام کاربری،
-UID، اطلاعات اضافی (extra) و همه گروه‌هایی که نامشان با
-<code dir="ltr">system:</code> شروع نمی‌شود، همگی از خارج از کوبرنتیز تأمین می‌شوند.</p>
-<p dir="rtl">هنگام پرس‌وجو از API کوبرنتیز از طریق HTTP، می‌توانید با استفاده از هدر HTTP به نام <code dir="ltr">Accept:</code> پاسخ را
-در قالب JSON یا YAML درخواست کنید؛ برای مثال:</p>
+<p dir="rtl">داده‌های این فیلدهای اختیاری از یکپارچه‌سازی احراز هویت شما یا از پایگاه دادهٔ کاربرانی
+که آن یکپارچه‌سازی استفاده می‌کند، به دست می‌آیند. نام کاربری، UID، اطلاعات اضافی
+و همهٔ گروه‌هایی که نامشان با <code dir="ltr">system:</code> شروع نمی‌شود، همگی از بیرون کوبرنتیز تأمین می‌شوند.</p>
+<p dir="rtl">هنگام پرس‌وجو از API کوبرنتیز از طریق HTTP، می‌توانید با استفاده از سرآیند HTTP با نام <code dir="ltr">Accept:</code>
+پاسخ را در قالب JSON یا YAML درخواست کنید؛ برای نمونه:</p>
 <div class="tabs">
 <div class="tab"><div class="tab-name">JSON</div>
 <pre dir="ltr"><code class="language-http" dir="ltr">POST /apis/authentication.k8s.io/v1/selfsubjectreviews HTTP/1.1
@@ -1718,7 +1697,7 @@ status:
 </div>
 </div>
 <h3 id="دسترسی-cli-به-اطلاعات-احراز-هویت-self-subject-review-cli" dir="rtl">دسترسی CLI به اطلاعات احراز هویت {#self-subject-review-cli}</h3>
-<p dir="rtl">برای سهولت، زیردستور <code dir="ltr">kubectl auth whoami</code> نیز در دسترس است:</p>
+<p dir="rtl">برای راحتی، زیرفرمان <code dir="ltr">kubectl auth whoami</code> نیز در دسترس است:</p>
 <pre dir="ltr"><code class="language-shell" dir="ltr">kubectl auth whoami
 </code></pre>
 <p dir="rtl">خروجی مشابه زیر است:</p>
@@ -1726,16 +1705,15 @@ status:
   Username          george.boole
   Groups            [system:authenticated]
 </code></pre>
-<p dir="rtl">برای جزئیات بیشتر، به <a href="../kubectl/generated/kubectl_auth/kubectl_auth_whoami.html"><code dir="ltr">kubectl auth whoami</code></a>
-مراجعه کنید.</p>
+<p dir="rtl">برای جزئیات بیشتر، <a href="../kubectl/generated/kubectl_auth/kubectl_auth_whoami.html"><code dir="ltr">kubectl auth whoami</code></a> را ببینید.</p>
 <h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
 <ul>
-<li dir="rtl">برای آشنایی با صدور گواهی برای کاربران، <a href="../../tasks/tls/certificate-issue-client-csr.html">صدور گواهی برای یک کلاینت API کوبرنتیز با استفاده از CertificateSigningRequest</a> را بخوانید</li>
-<li dir="rtl"><a href="../config-api/client-authentication.v1.html">مرجع احراز هویت کلاینت (v1)</a> را بخوانید</li>
-<li dir="rtl"><a href="../config-api/client-authentication.v1beta1.html">مرجع احراز هویت کلاینت (v1beta1)</a> را بخوانید</li>
+<li dir="rtl">برای آشنایی با صدور گواهی برای کاربران، <a href="../../tasks/tls/certificate-issue-client-csr.html">صدور گواهی برای یک کلاینت API کوبرنتیز با استفاده از CertificateSigningRequest</a> را بخوانید.</li>
+<li dir="rtl"><a href="../config-api/client-authentication.v1.html">مرجع احراز هویت کلاینت (v1)</a> را بخوانید.</li>
+<li dir="rtl"><a href="../config-api/client-authentication.v1beta1.html">مرجع احراز هویت کلاینت (v1beta1)</a> را بخوانید.</li>
 </ul>
 <p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
-<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#کاربران-در-کوبرنتیز-users-in-kubernetes">کاربران در کوبرنتیز {#users-in-kubernetes}</a><a class="l2" href="#راهبردهای-احراز-هویت-authentication-strategies">راهبردهای احراز هویت {#authentication-strategies}</a><a class="l2" href="#درخواست-های-ناشناس-anonymous-requests">درخواست‌های ناشناس {#anonymous-requests}</a><a class="l3" href="#پیکربندی-احراز-هویت-کنندهٔ-ناشناس-anonymous-authenticator-configuration">پیکربندی احراز هویت‌کنندهٔ ناشناس {#anonymous-authenticator-configuration}</a><a class="l2" href="#روش-های-احراز-هویت-authentication-methods">روش‌های احراز هویت {#authentication-methods}</a><a class="l3" href="#گواهی-های-کلاینت-x-509-x509-client-certificates">گواهی‌های کلاینت X.509 {#x509-client-certificates}</a><a class="l3" href="#توکن-های-bootstrap-bootstrap-tokens">توکن‌های Bootstrap {#bootstrap-tokens}</a><a class="l3" href="#توکن-های-حساب-سرویس-service-account-tokens">توکن‌های حساب سرویس {#service-account-tokens}</a><a class="l2" href="#یکپارچه-سازی-های-خارجی-external-integrations">یکپارچه‌سازی‌های خارجی {#external-integrations}</a><a class="l3" href="#احراز-هویت-با-json-web-token">احراز هویت با JSON Web Token</a><a class="l3" href="#احراز-هویت-با-توکن-webhook">احراز هویت با توکن Webhook</a><a class="l3" href="#پروکسی-معکوس-احراز-هویت-کننده-authenticating-proxy">پروکسی معکوس احراز هویت‌کننده {#authenticating-proxy}</a><a class="l3" href="#یکپارچه-سازی-فایل-توکن-ایستا-static-token-file">یکپارچه‌سازی فایل توکن ایستا {#static-token-file}</a><a class="l2" href="#جعل-هویت-کاربر-user-impersonation">جعل هویت کاربر {#user-impersonation}</a><a class="l2" href="#پیکربندی-احراز-هویت-api-server-authn-config">پیکربندی احراز هویت {#api-server-authn-config}</a><a class="l3" href="#پیکربندی-از-طریق-آرگومان-های-خط-فرمان-api-server-authn-config-cli">پیکربندی از طریق آرگومان‌های خط فرمان {#api-server-authn-config-cli}</a><a class="l3" href="#پیکربندی-از-طریق-فایل-پیکربندی-api-server-authn-config-file">پیکربندی از طریق فایل پیکربندی {#api-server-authn-config-file}</a><a class="l2" href="#افزونه-های-اعتبارنامهٔ-client-go-client-go-credential-plugins">افزونه‌های اعتبارنامهٔ client-go {#client-go-credential-plugins}</a><a class="l3" href="#نمونهٔ-مورد-استفاده-example-use-case">نمونهٔ مورد استفاده {#example-use-case}</a><a class="l3" href="#پیکربندی-configuration">پیکربندی {#configuration}</a><a class="l3" href="#فرمت-های-ورودی-و-خروجی">فرمت‌های ورودی و خروجی</a><a class="l2" href="#دسترسی-api-به-اطلاعات-احراز-هویت-یک-کلاینت-self-subject-review">دسترسی API به اطلاعات احراز هویت یک کلاینت {#self-subject-review}</a><a class="l3" href="#دسترسی-http-به-اطلاعات-احراز-هویت-self-subject-review-http-api">دسترسی HTTP به اطلاعات احراز هویت {#self-subject-review-http-api}</a><a class="l3" href="#دسترسی-cli-به-اطلاعات-احراز-هویت-self-subject-review-cli">دسترسی CLI به اطلاعات احراز هویت {#self-subject-review-cli}</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#کاربران-در-کوبرنتیز">کاربران در کوبرنتیز</a><a class="l2" href="#راهبردهای-احراز-هویت">راهبردهای احراز هویت</a><a class="l2" href="#درخواست-های-ناشناس">درخواست‌های ناشناس</a><a class="l3" href="#پیکربندی-احرازکننده-ی-ناشناس">پیکربندی احرازکننده‌ی ناشناس</a><a class="l2" href="#روش-های-احراز-هویت">روش‌های احراز هویت</a><a class="l3" href="#گواهی-های-کلاینت-x-509-x509-client-certificates">گواهی‌های کلاینت X.509 {#x509-client-certificates}</a><a class="l3" href="#توکن-های-راه-اندازی">توکن‌های راه‌اندازی</a><a class="l3" href="#توکن-های-حساب-سرویس">توکن‌های حساب سرویس</a><a class="l2" href="#یکپارچه-سازی-های-خارجی">یکپارچه‌سازی‌های خارجی</a><a class="l3" href="#احراز-هویت-با-json-web-token">احراز هویت با JSON Web Token</a><a class="l3" href="#احراز-هویت-توکن-با-وب-هوک">احراز هویت توکن با وب‌هوک</a><a class="l3" href="#پراکسی-معکوس-احراز-هویت-کننده-authenticating-proxy">پراکسی معکوس احراز هویت‌کننده {#authenticating-proxy}</a><a class="l3" href="#یکپارچه-سازی-با-فایل-توکن-ایستا-static-token-file">یکپارچه‌سازی با فایل توکن ایستا {#static-token-file}</a><a class="l2" href="#جعل-هویت-کاربر">جعل هویت کاربر</a><a class="l2" href="#پیکربندی-احراز-هویت-api-server-authn-config">پیکربندی احراز هویت {#api-server-authn-config}</a><a class="l3" href="#پیکربندی-از-طریق-آرگومان-های-خط-فرمان-api-server-authn-config-cli">پیکربندی از طریق آرگومان‌های خط فرمان {#api-server-authn-config-cli}</a><a class="l3" href="#پیکربندی-از-طریق-فایل-پیکربندی-api-server-authn-config-file">پیکربندی از طریق فایل پیکربندی {#api-server-authn-config-file}</a><a class="l2" href="#افزونه-های-اعتبارنامهٔ-client-go">افزونه‌های اعتبارنامهٔ client-go</a><a class="l3" href="#نمونهٔ-مورد-استفاده">نمونهٔ مورد استفاده</a><a class="l3" href="#پیکربندی">پیکربندی</a><a class="l3" href="#قالب-های-ورودی-و-خروجی">قالب‌های ورودی و خروجی</a><a class="l2" href="#دسترسی-api-به-اطلاعات-احراز-هویت-یک-کلاینت-self-subject-review">دسترسی API به اطلاعات احراز هویت یک کلاینت {#self-subject-review}</a><a class="l3" href="#دسترسی-http-به-اطلاعات-احراز-هویت-self-subject-review-http-api">دسترسی HTTP به اطلاعات احراز هویت {#self-subject-review-http-api}</a><a class="l3" href="#دسترسی-cli-به-اطلاعات-احراز-هویت-self-subject-review-cli">دسترسی CLI به اطلاعات احراز هویت {#self-subject-review-cli}</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
 </div>
 </body>
 </html>

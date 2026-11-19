@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>احراز هویت و مجوزدهی Kubelet | مستندات کوبرنتیز</title>
+<title>احراز هویت و مجوزدهی kubelet | مستندات کوبرنتیز</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
@@ -82,46 +82,43 @@ document.addEventListener('DOMContentLoaded',function(){box=document.getElementB
 <a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
 <header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">reference / access-authn-authz</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
 <div class="layout">
-<main><h1 dir="rtl">احراز هویت و مجوزدهی Kubelet</h1><h2 id="نمای-کلی-overview" dir="rtl">نمای کلی {#overview}</h2>
-<p dir="rtl">نقطه پایانی HTTPS مربوط به kubelet، APIهایی را در اختیار می‌گذارد که به داده‌هایی با سطوح حساسیت متفاوت دسترسی می‌دهند
-و امکان انجام عملیاتی با سطوح قدرت متفاوت را روی نود و درون کانتینرها فراهم می‌کنند.</p>
-<p dir="rtl">این سند توضیح می‌دهد که چگونه دسترسی به نقطه پایانی HTTPS مربوط به kubelet را احراز هویت و مجوزدهی کنید.</p>
-<h2 id="احراز-هویت-kubelet" dir="rtl">احراز هویت Kubelet</h2>
-<p dir="rtl">به‌طور پیش‌فرض، درخواست‌هایی که به نقطه پایانی HTTPS مربوط به kubelet ارسال می‌شوند و توسط سایر روش‌های احراز هویت پیکربندی‌شده رد نمی‌شوند،
-به‌عنوان درخواست ناشناس (anonymous) در نظر گرفته می‌شوند و نام کاربری <code dir="ltr">system:anonymous</code>
-و گروه <code dir="ltr">system:unauthenticated</code> به آن‌ها داده می‌شود.</p>
-<p dir="rtl">برای غیرفعال کردن دسترسی ناشناس و ارسال پاسخ <code dir="ltr">401 Unauthorized</code> به درخواست‌های فاقد احراز هویت:</p>
+<main><h1 dir="rtl">احراز هویت و مجوزدهی kubelet</h1><h2 id="مرور-کلی" dir="rtl">مرور کلی</h2>
+<p dir="rtl">نقطهٔ پایانی HTTPS هر kubelet مجموعه‌ای از APIها را در دسترس قرار می‌دهد که به داده‌هایی با سطوح حساسیت متفاوت دسترسی می‌دهند. این APIها همچنین امکان انجام عملیاتی با سطوح اختیار متفاوت را روی نود و درون کانتینرها فراهم می‌کنند.</p>
+<p dir="rtl">این سند توضیح می‌دهد که چگونه دسترسی به نقطهٔ پایانی HTTPS مربوط به kubelet را احراز هویت (authentication) و مجوزدهی (authorization) کنید.</p>
+<h2 id="احراز-هویت-kubelet" dir="rtl">احراز هویت kubelet</h2>
+<p dir="rtl">به‌طور پیش‌فرض، درخواست‌هایی به نقطهٔ پایانی HTTPS مربوط به kubelet که روش‌های احراز هویت پیکربندی‌شدهٔ دیگر آن‌ها را رد نکنند، درخواست ناشناس (anonymous) در نظر گرفته می‌شوند. به این درخواست‌ها نام کاربری <code dir="ltr">system:anonymous</code> و گروه <code dir="ltr">system:unauthenticated</code> اختصاص داده می‌شود.</p>
+<p dir="rtl">برای غیرفعال کردن دسترسی ناشناس و ارسال پاسخ <code dir="ltr">401 Unauthorized</code> به درخواست‌های احراز هویت‌نشده:</p>
 <ul>
-<li dir="rtl">kubelet را با فلگ <code dir="ltr">--anonymous-auth=false</code> راه‌اندازی کنید</li>
+<li dir="rtl">kubelet را با فلگ <code dir="ltr">--anonymous-auth=false</code> اجرا کنید</li>
 </ul>
-<p dir="rtl">برای فعال‌سازی احراز هویت با گواهی کلاینت X509 در نقطه پایانی HTTPS مربوط به kubelet:</p>
+<p dir="rtl">برای فعال کردن احراز هویت با گواهی کلاینت X509 در نقطهٔ پایانی HTTPS مربوط به kubelet:</p>
 <ul>
-<li dir="rtl">kubelet را با فلگ <code dir="ltr">--client-ca-file</code> راه‌اندازی کنید و یک بسته CA برای اعتبارسنجی گواهی‌های کلاینت در اختیار آن بگذارید</li>
-<li dir="rtl">apiserver را با فلگ‌های <code dir="ltr">--kubelet-client-certificate</code> و <code dir="ltr">--kubelet-client-key</code> راه‌اندازی کنید</li>
+<li dir="rtl">kubelet را با فلگ <code dir="ltr">--client-ca-file</code> اجرا کنید و یک بستهٔ CA برای اعتبارسنجی گواهی‌های کلاینت در اختیار آن قرار دهید</li>
+<li dir="rtl">apiserver را با فلگ‌های <code dir="ltr">--kubelet-client-certificate</code> و <code dir="ltr">--kubelet-client-key</code> اجرا کنید</li>
 <li dir="rtl">برای جزئیات بیشتر، <a href="authentication.html#x509-client-certificates">مستندات احراز هویت apiserver</a> را ببینید</li>
 </ul>
-<p dir="rtl">برای فعال‌سازی استفاده از توکن‌های bearer در API (از جمله توکن‌های service account) جهت احراز هویت در نقطه پایانی HTTPS مربوط به kubelet:</p>
+<p dir="rtl">برای فعال کردن استفاده از توکن‌های حامل (bearer token) API، از جمله توکن‌های حساب سرویس، جهت احراز هویت در نقطهٔ پایانی HTTPS مربوط به kubelet:</p>
 <ul>
-<li dir="rtl">مطمئن شوید گروه API با نام <code dir="ltr">authentication.k8s.io/v1</code> در API server فعال است</li>
-<li dir="rtl">kubelet را با فلگ‌های <code dir="ltr">--authentication-token-webhook</code> و <code dir="ltr">--kubeconfig</code> راه‌اندازی کنید</li>
-<li dir="rtl">kubelet برای تعیین اطلاعات کاربر از روی توکن‌های bearer، API با نام <code dir="ltr">TokenReview</code> را روی API server پیکربندی‌شده فراخوانی می‌کند</li>
+<li dir="rtl">مطمئن شوید که گروه API ‏<code dir="ltr">authentication.k8s.io/v1</code> در سرور API فعال است</li>
+<li dir="rtl">kubelet را با فلگ‌های <code dir="ltr">--authentication-token-webhook</code> و <code dir="ltr">--kubeconfig</code> اجرا کنید</li>
+<li dir="rtl">‏kubelet برای تعیین اطلاعات کاربر از روی توکن‌های حامل، API ‏<code dir="ltr">TokenReview</code> را روی سرور API پیکربندی‌شده فراخوانی می‌کند</li>
 </ul>
-<h2 id="مجوزدهی-kubelet" dir="rtl">مجوزدهی Kubelet</h2>
-<p dir="rtl">هر درخواستی که با موفقیت احراز هویت شود (از جمله درخواست ناشناس)، سپس مجوزدهی می‌شود. حالت پیش‌فرض مجوزدهی <code dir="ltr">AlwaysAllow</code> است که همه درخواست‌ها را مجاز می‌کند.</p>
-<p dir="rtl">دلایل متعددی برای تفکیک دسترسی به API مربوط به kubelet وجود دارد:</p>
+<h2 id="مجوزدهی-kubelet" dir="rtl">مجوزدهی kubelet</h2>
+<p dir="rtl">هر درخواستی که با موفقیت احراز هویت شود (از جمله درخواست ناشناس)، سپس مجوزدهی می‌شود. حالت پیش‌فرض مجوزدهی <code dir="ltr">AlwaysAllow</code> است که همهٔ درخواست‌ها را مجاز می‌داند.</p>
+<p dir="rtl">دلایل زیادی برای تفکیک دسترسی به API مربوط به kubelet وجود دارد:</p>
 <ul>
 <li dir="rtl">احراز هویت ناشناس فعال است، اما توانایی کاربران ناشناس برای فراخوانی API مربوط به kubelet باید محدود شود</li>
-<li dir="rtl">احراز هویت با توکن bearer فعال است، اما توانایی کاربران دلخواه API (مانند service accountها) برای فراخوانی API مربوط به kubelet باید محدود شود</li>
-<li dir="rtl">احراز هویت با گواهی کلاینت فعال است، اما فقط برخی از گواهی‌های کلاینتی که توسط CA پیکربندی‌شده امضا شده‌اند باید اجازه استفاده از API مربوط به kubelet را داشته باشند</li>
+<li dir="rtl">احراز هویت با توکن حامل فعال است، اما توانایی کاربران دلخواه API (مانند حساب‌های سرویس) برای فراخوانی API مربوط به kubelet باید محدود شود</li>
+<li dir="rtl">احراز هویت با گواهی کلاینت فعال است، اما فقط برخی از گواهی‌های کلاینتِ امضاشده با CA پیکربندی‌شده باید اجازهٔ استفاده از API مربوط به kubelet را داشته باشند</li>
 </ul>
-<p dir="rtl">برای تفکیک دسترسی به API مربوط به kubelet، مجوزدهی را به API server واگذار کنید:</p>
+<p dir="rtl">برای تفکیک دسترسی به API مربوط به kubelet، مجوزدهی را به سرور API واگذار کنید:</p>
 <ul>
-<li dir="rtl">مطمئن شوید گروه API با نام <code dir="ltr">authorization.k8s.io/v1</code> در API server فعال است</li>
-<li dir="rtl">kubelet را با فلگ‌های <code dir="ltr">--authorization-mode=Webhook</code> و <code dir="ltr">--kubeconfig</code> راه‌اندازی کنید</li>
-<li dir="rtl">kubelet برای تعیین اینکه هر درخواست مجاز است یا خیر، API با نام <code dir="ltr">SubjectAccessReview</code> را روی API server پیکربندی‌شده فراخوانی می‌کند</li>
+<li dir="rtl">مطمئن شوید که گروه API ‏<code dir="ltr">authorization.k8s.io/v1</code> در سرور API فعال است</li>
+<li dir="rtl">kubelet را با فلگ‌های <code dir="ltr">--authorization-mode=Webhook</code> و <code dir="ltr">--kubeconfig</code> اجرا کنید</li>
+<li dir="rtl">‏kubelet برای تعیین مجاز بودن هر درخواست، API ‏<code dir="ltr">SubjectAccessReview</code> را روی سرور API پیکربندی‌شده فراخوانی می‌کند</li>
 </ul>
-<p dir="rtl">kubelet درخواست‌های API را با همان رویکرد <a href="authorization.html#review-your-request-attributes">ویژگی‌های درخواست</a> که apiserver به کار می‌برد، مجوزدهی می‌کند.</p>
-<p dir="rtl">فعل (verb) از روی فعل HTTP درخواست ورودی تعیین می‌شود:</p>
+<p dir="rtl">‏kubelet درخواست‌های API را با همان رویکرد <a href="authorization.html#review-your-request-attributes">ویژگی‌های درخواست</a> که apiserver به کار می‌برد، مجوزدهی می‌کند.</p>
+<p dir="rtl">فعل درخواست بر اساس فعل HTTP درخواست ورودی تعیین می‌شود:</p>
 <table>
 <thead>
 <tr>
@@ -152,13 +149,13 @@ document.addEventListener('DOMContentLoaded',function(){box=document.getElementB
 </tr>
 </tbody>
 </table>
-<p dir="rtl">منبع (resource) و زیرمنبع (subresource) از روی مسیر درخواست ورودی تعیین می‌شوند:</p>
+<p dir="rtl">منبع و زیرمنبع بر اساس مسیر درخواست ورودی تعیین می‌شوند:</p>
 <table>
 <thead>
 <tr>
-<th dir="ltr" class="ltr">Kubelet API</th>
-<th dir="ltr" class="ltr">resource</th>
-<th dir="ltr" class="ltr">subresource</th>
+<th dir="rtl">API مربوط به kubelet</th>
+<th dir="rtl">منبع</th>
+<th dir="rtl">زیرمنبع</th>
 </tr>
 </thead>
 <tbody>
@@ -188,7 +185,7 @@ document.addEventListener('DOMContentLoaded',function(){box=document.getElementB
 <td dir="ltr" class="ltr">checkpoint</td>
 </tr>
 <tr>
-<td dir="rtl"><em>همه موارد دیگر</em></td>
+<td dir="rtl"><em>سایر موارد</em></td>
 <td dir="ltr" class="ltr">nodes</td>
 <td dir="ltr" class="ltr">proxy</td>
 </tr>
@@ -196,16 +193,11 @@ document.addEventListener('DOMContentLoaded',function(){box=document.getElementB
 </table>
 <p><a name="get-nodes-proxy-warning"></a></p>
 <div class="callout warning"><div class="callout-title">هشدار:</div>
-<p dir="rtl">مجوز <code dir="ltr">nodes/proxy</code> به همه APIهای دیگر kubelet دسترسی می‌دهد.
-این شامل APIهایی است که می‌توان از آن‌ها برای اجرای دستورها در هر کانتینری که روی نود در حال اجراست استفاده کرد.</p>
-<p dir="rtl">برخی از این نقاط پایانی از طریق درخواست‌های HTTP <code dir="ltr">GET</code> از پروتکل‌های Websocket پشتیبانی می‌کنند و با فعل <strong>get</strong> مجوزدهی می‌شوند.
-این بدان معناست که مجوز <strong>get</strong> روی <code dir="ltr">nodes/proxy</code> یک مجوز فقط‌خواندنی نیست
-و اجرای دستورها در هر کانتینری که روی نود در حال اجراست را مجاز می‌کند.</p>
+<p dir="rtl">مجوز <code dir="ltr">nodes/proxy</code> دسترسی به همهٔ APIهای دیگر kubelet را اعطا می‌کند. این شامل APIهایی است که می‌توان با آن‌ها در هر کانتینری که روی نود در حال اجراست، فرمان اجرا کرد.</p>
+<p dir="rtl">برخی از این نقاط پایانی از پروتکل‌های Websocket از طریق درخواست‌های HTTP ‏<code dir="ltr">GET</code> پشتیبانی می‌کنند که با فعل <strong>get</strong> مجوزدهی می‌شوند. بنابراین مجوز <strong>get</strong> روی <code dir="ltr">nodes/proxy</code> یک مجوز فقط‌خواندنی نیست و اجرای فرمان در هر کانتینری را که روی نود در حال اجراست مجاز می‌کند.</p>
 </div>
-<p dir="rtl">ویژگی‌های فضای نام (namespace) و گروه API همیشه رشته خالی هستند و
-نام منبع همیشه نام آبجکت API از نوع <code dir="ltr">Node</code> مربوط به kubelet است.</p>
-<p dir="rtl">هنگام اجرا در این حالت، مطمئن شوید کاربری که با فلگ‌های <code dir="ltr">--kubelet-client-certificate</code> و <code dir="ltr">--kubelet-client-key</code>
-به apiserver داده شده است، برای ویژگی‌های زیر مجوز دارد:</p>
+<p dir="rtl">ویژگی‌های فضای نام (namespace) و گروه API همیشه رشتهٔ خالی هستند و نام منبع همیشه نام آبجکت API ‏<code dir="ltr">Node</code> مربوط به همان kubelet است.</p>
+<p dir="rtl">هنگام اجرا در این حالت، مطمئن شوید کاربری که با فلگ‌های <code dir="ltr">--kubelet-client-certificate</code> و <code dir="ltr">--kubelet-client-key</code> ارسال‌شده به apiserver شناسایی می‌شود، برای ویژگی‌های زیر مجوز دارد:</p>
 <ul>
 <li dir="ltr" class="ltr">verb=*, resource=nodes, subresource=proxy</li>
 <li dir="ltr" class="ltr">verb=*, resource=nodes, subresource=stats</li>
@@ -213,16 +205,15 @@ document.addEventListener('DOMContentLoaded',function(){box=document.getElementB
 <li dir="ltr" class="ltr">verb=*, resource=nodes, subresource=spec</li>
 <li dir="ltr" class="ltr">verb=*, resource=nodes, subresource=metrics</li>
 </ul>
-<h3 id="مجوزدهی-ریزدانه-fine-grained-authorization" dir="rtl">مجوزدهی ریزدانه {#fine-grained-authorization}</h3>
+<h3 id="مجوزدهی-دقیق" dir="rtl">مجوزدهی دقیق</h3>
 <div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
-<p dir="rtl">kubelet پیش از بازگشت به زیرمنبع <code dir="ltr">proxy</code> برای نقاط پایانی <code dir="ltr">/pods</code>، <code dir="ltr">/runningPods</code>، <code dir="ltr">/configz</code> و <code dir="ltr">/healthz</code>،
-یک بررسی ریزدانه انجام می‌دهد. منبع و زیرمنبع از روی مسیر درخواست ورودی تعیین می‌شوند:</p>
+<p dir="rtl">‏kubelet برای نقاط پایانی <code dir="ltr">/pods</code>، <code dir="ltr">/runningPods</code>، <code dir="ltr">/configz</code> و <code dir="ltr">/healthz</code>، پیش از بازگشت به زیرمنبع <code dir="ltr">proxy</code>، یک بررسی دقیق انجام می‌دهد. منبع و زیرمنبع بر اساس مسیر درخواست ورودی تعیین می‌شوند:</p>
 <table>
 <thead>
 <tr>
-<th dir="ltr" class="ltr">Kubelet API</th>
-<th dir="ltr" class="ltr">resource</th>
-<th dir="ltr" class="ltr">subresource</th>
+<th dir="rtl">API مربوط به kubelet</th>
+<th dir="rtl">منبع</th>
+<th dir="rtl">زیرمنبع</th>
 </tr>
 </thead>
 <tbody>
@@ -262,15 +253,13 @@ document.addEventListener('DOMContentLoaded',function(){box=document.getElementB
 <td dir="ltr" class="ltr">configz, proxy</td>
 </tr>
 <tr>
-<td dir="rtl"><em>همه موارد دیگر</em></td>
+<td dir="rtl"><em>سایر موارد</em></td>
 <td dir="ltr" class="ltr">nodes</td>
 <td dir="ltr" class="ltr">proxy</td>
 </tr>
 </tbody>
 </table>
-<p dir="rtl">هنگامی که feature gate با نام <code dir="ltr">KubeletFineGrainedAuthz</code> فعال است، مطمئن شوید کاربری که با فلگ‌های
-<code dir="ltr">--kubelet-client-certificate</code> و <code dir="ltr">--kubelet-client-key</code>
-به API server داده شده است، برای ویژگی‌های زیر مجوز دارد:</p>
+<p dir="rtl">هنگامی که feature gate ‏<code dir="ltr">KubeletFineGrainedAuthz</code> فعال است، مطمئن شوید کاربری که با فلگ‌های <code dir="ltr">--kubelet-client-certificate</code> و <code dir="ltr">--kubelet-client-key</code> ارسال‌شده به سرور API شناسایی می‌شود، برای ویژگی‌های زیر مجوز دارد:</p>
 <ul>
 <li dir="ltr" class="ltr">verb=*, resource=nodes, subresource=proxy</li>
 <li dir="ltr" class="ltr">verb=*, resource=nodes, subresource=stats</li>
@@ -280,11 +269,9 @@ document.addEventListener('DOMContentLoaded',function(){box=document.getElementB
 <li dir="ltr" class="ltr">verb=*, resource=nodes, subresource=healthz</li>
 <li dir="ltr" class="ltr">verb=*, resource=nodes, subresource=pods</li>
 </ul>
-<p dir="rtl">اگر از <a href="rbac.html">مجوزدهی RBAC</a> استفاده می‌شود،
-فعال کردن این gate همچنین تضمین می‌کند که ClusterRole داخلی <code dir="ltr">system:kubelet-api-admin</code>
-با مجوزهای دسترسی به همه زیرمنابع یادشده به‌روزرسانی می‌شود.</p>
+<p dir="rtl">اگر از <a href="rbac.html">مجوزدهی RBAC</a> استفاده می‌شود، فعال کردن این gate همچنین تضمین می‌کند که ClusterRole داخلی <code dir="ltr">system:kubelet-api-admin</code> با مجوزهای لازم برای دسترسی به همهٔ زیرمنبع‌های ذکرشده در بالا به‌روزرسانی شود.</p>
 <p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
-<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#نمای-کلی-overview">نمای کلی {#overview}</a><a class="l2" href="#احراز-هویت-kubelet">احراز هویت Kubelet</a><a class="l2" href="#مجوزدهی-kubelet">مجوزدهی Kubelet</a><a class="l3" href="#مجوزدهی-ریزدانه-fine-grained-authorization">مجوزدهی ریزدانه {#fine-grained-authorization}</a></nav>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#مرور-کلی">مرور کلی</a><a class="l2" href="#احراز-هویت-kubelet">احراز هویت kubelet</a><a class="l2" href="#مجوزدهی-kubelet">مجوزدهی kubelet</a><a class="l3" href="#مجوزدهی-دقیق">مجوزدهی دقیق</a></nav>
 </div>
 </body>
 </html>
