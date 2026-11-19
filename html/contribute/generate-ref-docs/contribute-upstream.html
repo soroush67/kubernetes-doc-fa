@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>مشارکت در کد بالادستی (Upstream) کوبرنتیز | مستندات کوبرنتیز</title>
+<title>مشارکت در کد بالادستی کوبرنتیز | مستندات کوبرنتیز</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
@@ -82,12 +82,9 @@ document.addEventListener('DOMContentLoaded',function(){box=document.getElementB
 <a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
 <header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">contribute / generate-ref-docs</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
 <div class="layout">
-<main><h1 dir="rtl">مشارکت در کد بالادستی (Upstream) کوبرنتیز</h1><!-- overview -->
-<p dir="rtl">این صفحه نشان می‌دهد چگونه می‌توانید در پروژهٔ بالادستی <code dir="ltr">kubernetes/kubernetes</code> مشارکت کنید.
-می‌توانید اشکالاتی را که در مستندات API کوبرنتیز یا در محتوای مؤلفه‌های کوبرنتیز مانند
-<code dir="ltr">kubeadm</code>، <code dir="ltr">kube-apiserver</code> و <code dir="ltr">kube-controller-manager</code> یافته‌اید برطرف کنید.</p>
-<p dir="rtl">اگر به‌جای آن می‌خواهید مستندات مرجع API کوبرنتیز یا مؤلفه‌های <code dir="ltr">kube-*</code> را از کد بالادستی دوباره تولید کنید،
-دستورالعمل‌های زیر را ببینید:</p>
+<main><h1 dir="rtl">مشارکت در کد بالادستی کوبرنتیز</h1><!-- overview -->
+<p dir="rtl">این صفحه نشان می‌دهد که چگونه می‌توانید در پروژهٔ بالادستی (upstream) <code dir="ltr">kubernetes/kubernetes</code> مشارکت کنید. با این کار می‌توانید اشکال‌های موجود در مستندات API کوبرنتیز یا محتوای مؤلفه‌های کوبرنتیز مانند <code dir="ltr">kubeadm</code>، <code dir="ltr">kube-apiserver</code> و <code dir="ltr">kube-controller-manager</code> را برطرف کنید.</p>
+<p dir="rtl">اگر به‌جای این کار می‌خواهید مستندات مرجع API کوبرنتیز یا مؤلفه‌های <code dir="ltr">kube-*</code> را از کد بالادستی دوباره تولید کنید، دستورالعمل‌های زیر را ببینید:</p>
 <ul>
 <li dir="rtl"><a href="kubernetes-api.html">تولید مستندات مرجع برای API کوبرنتیز</a></li>
 <li dir="rtl"><a href="kubernetes-components.html">تولید مستندات مرجع برای مؤلفه‌ها و ابزارهای کوبرنتیز</a></li>
@@ -95,91 +92,67 @@ document.addEventListener('DOMContentLoaded',function(){box=document.getElementB
 <h2 id="پیش-از-شروع" dir="rtl">پیش از شروع</h2>
 <ul>
 <li dir="rtl">
-<p dir="rtl">باید این ابزارها نصب شده باشند:</p>
+<p dir="rtl">باید این ابزارها را نصب کرده باشید:</p>
 <ul>
 <li dir="ltr" class="ltr"><a href="https://git-scm.com/book/en/v2/Getting-Started-Installing-Git" target="_blank" rel="noopener">Git</a></li>
 <li dir="rtl"><a href="https://go.dev/doc/install" target="_blank" rel="noopener">Golang</a> نسخهٔ 1.13 یا بالاتر</li>
 <li dir="ltr" class="ltr"><a href="https://docs.docker.com/engine/installation/" target="_blank" rel="noopener">Docker</a></li>
 <li dir="ltr" class="ltr"><a href="https://github.com/coreos/etcd/" target="_blank" rel="noopener">etcd</a></li>
 <li dir="ltr" class="ltr"><a href="https://www.gnu.org/software/make/" target="_blank" rel="noopener">make</a></li>
-<li dir="ltr" class="ltr"><a href="https://gcc.gnu.org/" target="_blank" rel="noopener">gcc compiler/linker</a></li>
+<li dir="rtl"><a href="https://gcc.gnu.org/" target="_blank" rel="noopener">کامپایلر/لینکر gcc</a></li>
 </ul>
 </li>
 <li dir="rtl">
-<p dir="rtl">متغیر محیطی <code dir="ltr">GOPATH</code> شما باید تنظیم شده باشد و مسیر <code dir="ltr">etcd</code>
-باید در متغیر محیطی <code dir="ltr">PATH</code> شما قرار داشته باشد.</p>
+<p dir="rtl">متغیر محیطی <code dir="ltr">GOPATH</code> باید تنظیم شده باشد و مسیر <code dir="ltr">etcd</code> باید در متغیر محیطی <code dir="ltr">PATH</code> قرار داشته باشد.</p>
 </li>
 <li dir="rtl">
-<p dir="rtl">باید بدانید چگونه یک pull request برای یک مخزن GitHub ایجاد کنید.
-معمولاً این کار شامل ایجاد یک fork از مخزن است.
-برای اطلاعات بیشتر، <a href="https://help.github.com/articles/creating-a-pull-request/" target="_blank" rel="noopener">Creating a Pull Request</a>
-و <a href="https://gist.github.com/Chaser324/ce0505fbed06b947d962" target="_blank" rel="noopener">GitHub Standard Fork &amp; Pull Request Workflow</a> را ببینید.</p>
+<p dir="rtl">باید بدانید که چگونه یک درخواست ادغام (pull request) برای یک مخزن GitHub ایجاد کنید. این کار معمولاً شامل ایجاد یک فورک از مخزن است. برای اطلاعات بیشتر، <a href="https://help.github.com/articles/creating-a-pull-request/" target="_blank" rel="noopener">ایجاد یک درخواست ادغام</a> و <a href="https://gist.github.com/Chaser324/ce0505fbed06b947d962" target="_blank" rel="noopener">گردش کار استاندارد فورک و درخواست ادغام در GitHub</a> را ببینید.</p>
 </li>
 </ul>
 <!-- steps -->
 <h2 id="تصویر-کلی" dir="rtl">تصویر کلی</h2>
-<p dir="rtl">مستندات مرجع API کوبرنتیز و مؤلفه‌های <code dir="ltr">kube-*</code>
-مانند <code dir="ltr">kube-apiserver</code> و <code dir="ltr">kube-controller-manager</code> به‌طور خودکار
-از کد منبع <a href="https://github.com/kubernetes/kubernetes/" target="_blank" rel="noopener">کوبرنتیز بالادستی</a> تولید می‌شوند.</p>
-<p dir="rtl">وقتی در مستندات تولیدشده با اشکالی مواجه می‌شوید، می‌توانید
-ایجاد یک وصله (patch) برای رفع آن در پروژهٔ بالادستی را در نظر بگیرید.</p>
+<p dir="rtl">مستندات مرجع API کوبرنتیز و مؤلفه‌های <code dir="ltr">kube-*</code> مانند <code dir="ltr">kube-apiserver</code> و <code dir="ltr">kube-controller-manager</code> به‌طور خودکار از کد منبع موجود در <a href="https://github.com/kubernetes/kubernetes/" target="_blank" rel="noopener">کوبرنتیز بالادستی</a> تولید می‌شوند.</p>
+<p dir="rtl">هنگامی که در مستندات تولیدشده با اشکالی روبه‌رو می‌شوید، شاید بخواهید برای رفع آن در پروژهٔ بالادستی یک وصله (patch) ایجاد کنید.</p>
 <h2 id="کلون-کردن-مخزن-کوبرنتیز" dir="rtl">کلون کردن مخزن کوبرنتیز</h2>
-<p dir="rtl">اگر هنوز مخزن kubernetes/kubernetes را ندارید، اکنون آن را دریافت کنید:</p>
+<p dir="rtl">اگر هنوز مخزن kubernetes/kubernetes را در اختیار ندارید، اکنون آن را دریافت کنید:</p>
 <pre dir="ltr"><code class="language-shell" dir="ltr">mkdir $GOPATH/src
 cd $GOPATH/src
 go get github.com/kubernetes/kubernetes
 </code></pre>
-<p dir="rtl">دایرکتوری پایهٔ کلون مخزن
-<a href="https://github.com/kubernetes/kubernetes" target="_blank" rel="noopener">kubernetes/kubernetes</a> خود را مشخص کنید.
-برای مثال، اگر مرحلهٔ قبل را برای دریافت مخزن دنبال کرده باشید،
-دایرکتوری پایهٔ شما <code dir="ltr">$GOPATH/src/github.com/kubernetes/kubernetes</code> است.
-در مراحل بعدی، به دایرکتوری پایهٔ شما با عنوان <code dir="ltr">&lt;k8s-base&gt;</code> اشاره می‌شود.</p>
-<p dir="rtl">دایرکتوری پایهٔ کلون مخزن
-<a href="https://github.com/kubernetes-sigs/reference-docs" target="_blank" rel="noopener">kubernetes-sigs/reference-docs</a> خود را مشخص کنید.
-برای مثال، اگر مرحلهٔ قبل را برای دریافت مخزن دنبال کرده باشید،
-دایرکتوری پایهٔ شما <code dir="ltr">$GOPATH/src/github.com/kubernetes-sigs/reference-docs</code> است.
-در مراحل بعدی، به دایرکتوری پایهٔ شما با عنوان <code dir="ltr">&lt;rdocs-base&gt;</code> اشاره می‌شود.</p>
+<p dir="rtl">پوشهٔ پایهٔ کلون خود از مخزن <a href="https://github.com/kubernetes/kubernetes" target="_blank" rel="noopener">kubernetes/kubernetes</a> را مشخص کنید. برای نمونه، اگر برای دریافت مخزن مرحلهٔ قبل را دنبال کرده باشید، پوشهٔ پایهٔ شما <code dir="ltr">$GOPATH/src/github.com/kubernetes/kubernetes</code> است. در مراحل بعدی، از این پوشهٔ پایه با عنوان <code dir="ltr">&lt;k8s-base&gt;</code> یاد می‌شود.</p>
+<p dir="rtl">پوشهٔ پایهٔ کلون خود از مخزن <a href="https://github.com/kubernetes-sigs/reference-docs" target="_blank" rel="noopener">kubernetes-sigs/reference-docs</a> را مشخص کنید. برای نمونه، اگر برای دریافت مخزن مرحلهٔ قبل را دنبال کرده باشید، پوشهٔ پایهٔ شما <code dir="ltr">$GOPATH/src/github.com/kubernetes-sigs/reference-docs</code> است. در مراحل بعدی، از این پوشهٔ پایه با عنوان <code dir="ltr">&lt;rdocs-base&gt;</code> یاد می‌شود.</p>
 <h2 id="ویرایش-کد-منبع-کوبرنتیز" dir="rtl">ویرایش کد منبع کوبرنتیز</h2>
-<p dir="rtl">مستندات مرجع API کوبرنتیز به‌طور خودکار از یک مشخصات OpenAPI تولید می‌شود
-که خود از کد منبع کوبرنتیز تولید شده است. اگر
-می‌خواهید مستندات مرجع API را تغییر دهید، گام نخست تغییر یک یا چند
-توضیح (comment) در کد منبع کوبرنتیز است.</p>
-<p dir="rtl">مستندات مؤلفه‌های <code dir="ltr">kube-*</code> نیز از کد منبع بالادستی تولید می‌شود.
-برای اصلاح مستندات تولیدشده، باید کد مربوط به مؤلفه‌ای را که
-می‌خواهید اصلاح کنید تغییر دهید.</p>
+<p dir="rtl">مستندات مرجع API کوبرنتیز به‌طور خودکار از یک مشخصهٔ OpenAPI تولید می‌شود و این مشخصه نیز از کد منبع کوبرنتیز تولید می‌شود. اگر می‌خواهید مستندات مرجع API را تغییر دهید، نخستین گام تغییر یک یا چند توضیح (comment) در کد منبع کوبرنتیز است.</p>
+<p dir="rtl">مستندات مؤلفه‌های <code dir="ltr">kube-*</code> نیز از کد منبع بالادستی تولید می‌شود. برای اصلاح مستندات تولیدشده، باید کد مربوط به مؤلفه‌ای را که می‌خواهید اصلاح کنید تغییر دهید.</p>
 <h3 id="اعمال-تغییرات-در-کد-منبع-بالادستی" dir="rtl">اعمال تغییرات در کد منبع بالادستی</h3>
 <div class="callout note"><div class="callout-title">توجه:</div>
-<p dir="rtl">مراحل زیر یک مثال هستند و یک روش کلی به شمار نمی‌آیند. جزئیات
-در موقعیت شما متفاوت خواهد بود.</p>
+<p dir="rtl">مراحل زیر یک نمونه است، نه یک روال کلی. جزئیات در موقعیت شما متفاوت خواهد بود.</p>
 </div>
-<p dir="rtl">در ادامه مثالی از ویرایش یک توضیح (comment) در کد منبع کوبرنتیز آمده است.</p>
-<p dir="rtl">در مخزن محلی kubernetes/kubernetes خود، شاخهٔ پیش‌فرض را checkout کنید
-و مطمئن شوید که به‌روز است:</p>
+<p dir="rtl">در ادامه نمونه‌ای از ویرایش یک توضیح در کد منبع کوبرنتیز آمده است.</p>
+<p dir="rtl">در مخزن محلی kubernetes/kubernetes خود، شاخهٔ پیش‌فرض را checkout کنید و مطمئن شوید که به‌روز است:</p>
 <pre dir="ltr"><code class="language-shell" dir="ltr">cd &lt;k8s-base&gt;
 git checkout master
 git pull https://github.com/kubernetes/kubernetes master
 </code></pre>
-<p dir="rtl">فرض کنید این فایل منبع در آن شاخهٔ پیش‌فرض دارای غلط تایپی «atmost» است:</p>
+<p dir="rtl">فرض کنید این فایل منبع در شاخهٔ پیش‌فرض، غلط املایی "atmost" را دارد:</p>
 <p dir="ltr" class="ltr"><a href="https://github.com/kubernetes/kubernetes/blob/master/staging/src/k8s.io/api/apps/v1/types.go" target="_blank" rel="noopener">kubernetes/kubernetes/staging/src/k8s.io/api/apps/v1/types.go</a></p>
-<p dir="rtl">در محیط محلی خود، فایل <code dir="ltr">types.go</code> را باز کنید و «atmost» را به «at most» تغییر دهید.</p>
+<p dir="rtl">در محیط محلی خود، فایل <code dir="ltr">types.go</code> را باز کنید و "atmost" را به "at most" تغییر دهید.</p>
 <p dir="rtl">بررسی کنید که فایل را تغییر داده‌اید:</p>
 <pre dir="ltr"><code class="language-shell" dir="ltr">git status
 </code></pre>
-<p dir="rtl">خروجی نشان می‌دهد که در شاخهٔ master هستید و فایل منبع <code dir="ltr">types.go</code>
-تغییر کرده است:</p>
+<p dir="rtl">خروجی نشان می‌دهد که روی شاخهٔ master هستید و فایل منبع <code dir="ltr">types.go</code> تغییر کرده است:</p>
 <pre dir="ltr"><code class="language-shell" dir="ltr">On branch master
 ...
     modified:   staging/src/k8s.io/api/apps/v1/types.go
 </code></pre>
 <h3 id="کامیت-کردن-فایل-ویرایش-شده" dir="rtl">کامیت کردن فایل ویرایش‌شده</h3>
-<p dir="rtl">دستورهای <code dir="ltr">git add</code> و <code dir="ltr">git commit</code> را اجرا کنید تا تغییراتی را که تاکنون اعمال کرده‌اید کامیت کنید. در گام بعد،
-کامیت دومی انجام خواهید داد. مهم است که تغییرات شما در دو کامیت جداگانه نگه داشته شوند.</p>
-<h3 id="تولید-مشخصات-openapi-و-فایل-های-مرتبط" dir="rtl">تولید مشخصات OpenAPI و فایل‌های مرتبط</h3>
+<p dir="rtl">دستورهای <code dir="ltr">git add</code> و <code dir="ltr">git commit</code> را اجرا کنید تا تغییراتی را که تاکنون اعمال کرده‌اید کامیت کنید. در مرحلهٔ بعد، یک کامیت دوم انجام خواهید داد. مهم است که تغییرات خود را در دو کامیت جداگانه نگه دارید.</p>
+<h3 id="تولید-مشخصهٔ-openapi-و-فایل-های-مرتبط" dir="rtl">تولید مشخصهٔ OpenAPI و فایل‌های مرتبط</h3>
 <p dir="rtl">به <code dir="ltr">&lt;k8s-base&gt;</code> بروید و این اسکریپت‌ها را اجرا کنید:</p>
 <pre dir="ltr"><code class="language-shell" dir="ltr">./hack/update-codegen.sh
 ./hack/update-openapi-spec.sh
 </code></pre>
-<p dir="rtl">دستور <code dir="ltr">git status</code> را اجرا کنید تا ببینید چه چیزی تولید شده است.</p>
+<p dir="rtl">دستور <code dir="ltr">git status</code> را اجرا کنید تا ببینید چه فایل‌هایی تولید شده‌اند.</p>
 <pre dir="ltr"><code class="language-shell" dir="ltr">On branch master
 ...
     modified:   api/openapi-spec/swagger.json
@@ -188,74 +161,28 @@ git pull https://github.com/kubernetes/kubernetes master
     modified:   staging/src/k8s.io/api/apps/v1/generated.proto
     modified:   staging/src/k8s.io/api/apps/v1/types_swagger_doc_generated.go
 </code></pre>
-<p dir="rtl">محتوای فایل <code dir="ltr">api/openapi-spec/swagger.json</code> را بررسی کنید تا مطمئن شوید غلط تایپی برطرف شده است.
-برای مثال، می‌توانید دستور <code dir="ltr">git diff -a api/openapi-spec/swagger.json</code> را اجرا کنید.
-این کار مهم است، زیرا <code dir="ltr">swagger.json</code> ورودی مرحلهٔ دوم
-فرایند تولید مستندات است.</p>
-<p dir="rtl">دستورهای <code dir="ltr">git add</code> و <code dir="ltr">git commit</code> را اجرا کنید تا تغییرات خود را کامیت کنید. اکنون دو کامیت دارید:
-یکی شامل فایل ویرایش‌شدهٔ <code dir="ltr">types.go</code> و دیگری شامل مشخصات OpenAPI تولیدشده
-و فایل‌های مرتبط. این دو کامیت را جدا از هم نگه دارید. یعنی کامیت‌های خود را squash نکنید.</p>
-<p dir="rtl">تغییرات خود را به‌صورت یک
-<a href="https://help.github.com/articles/creating-a-pull-request/" target="_blank" rel="noopener">pull request</a>
-به شاخهٔ master مخزن
-<a href="https://github.com/kubernetes/kubernetes" target="_blank" rel="noopener">kubernetes/kubernetes</a> ارسال کنید.
-pull request خود را پایش کنید و در صورت لزوم به نظرات بازبینان پاسخ دهید. پایش pull request را
-تا زمان ادغام (merge) شدن آن ادامه دهید.</p>
-<p dir="rtl"><a href="https://github.com/kubernetes/kubernetes/pull/57758" target="_blank" rel="noopener">PR 57758</a>
-نمونه‌ای از یک pull request است که یک غلط تایپی را در کد منبع کوبرنتیز اصلاح می‌کند.</p>
+<p dir="rtl">محتوای <code dir="ltr">api/openapi-spec/swagger.json</code> را ببینید تا مطمئن شوید غلط املایی برطرف شده است. برای نمونه، می‌توانید دستور <code dir="ltr">git diff -a api/openapi-spec/swagger.json</code> را اجرا کنید. این کار اهمیت دارد، زیرا <code dir="ltr">swagger.json</code> ورودی مرحلهٔ دوم فرایند تولید مستندات است.</p>
+<p dir="rtl">دستورهای <code dir="ltr">git add</code> و <code dir="ltr">git commit</code> را اجرا کنید تا تغییرات خود را کامیت کنید. اکنون دو کامیت دارید: یکی شامل فایل ویرایش‌شدهٔ <code dir="ltr">types.go</code> و دیگری شامل مشخصهٔ OpenAPI تولیدشده و فایل‌های مرتبط با آن. این دو کامیت را جدا از هم نگه دارید؛ یعنی کامیت‌های خود را squash نکنید.</p>
+<p dir="rtl">تغییرات خود را به‌صورت یک <a href="https://help.github.com/articles/creating-a-pull-request/" target="_blank" rel="noopener">درخواست ادغام</a> به شاخهٔ master مخزن <a href="https://github.com/kubernetes/kubernetes" target="_blank" rel="noopener">kubernetes/kubernetes</a> ارسال کنید. درخواست ادغام خود را پیگیری کنید و در صورت نیاز به نظرهای بازبین‌ها پاسخ دهید. پیگیری درخواست ادغام را تا زمان ادغام شدن آن ادامه دهید.</p>
+<p dir="rtl"><a href="https://github.com/kubernetes/kubernetes/pull/57758" target="_blank" rel="noopener">PR 57758</a> نمونه‌ای از یک درخواست ادغام است که یک غلط املایی را در کد منبع کوبرنتیز برطرف می‌کند.</p>
 <div class="callout note"><div class="callout-title">توجه:</div>
-<p dir="rtl">تعیین فایل منبع درست برای تغییر ممکن است دشوار باشد. در مثال
-بالا، فایل منبع مرجع در دایرکتوری <code dir="ltr">staging</code>
-در مخزن <code dir="ltr">kubernetes/kubernetes</code> قرار دارد. اما در موقعیت شما، دایرکتوری <code dir="ltr">staging</code>
-ممکن است محل مناسبی برای یافتن منبع مرجع نباشد. برای راهنمایی، فایل‌های
-<code dir="ltr">README</code> را در مخزن
-<a href="https://github.com/kubernetes/kubernetes/tree/master/staging" target="_blank" rel="noopener">kubernetes/kubernetes</a>
-و در مخازن مرتبط، مانند
-<a href="https://github.com/kubernetes/apiserver/blob/master/README.md" target="_blank" rel="noopener">kubernetes/apiserver</a>، بررسی کنید.</p>
+<p dir="rtl">تشخیص فایل منبع درستی که باید تغییر کند ممکن است دشوار باشد. در نمونهٔ قبل، فایل منبع معتبر در پوشهٔ <code dir="ltr">staging</code> در مخزن <code dir="ltr">kubernetes/kubernetes</code> قرار دارد. اما در موقعیت شما، ممکن است پوشهٔ <code dir="ltr">staging</code> جای یافتن منبع معتبر نباشد. برای راهنمایی، فایل‌های <code dir="ltr">README</code> را در مخزن <a href="https://github.com/kubernetes/kubernetes/tree/master/staging" target="_blank" rel="noopener">kubernetes/kubernetes</a> و در مخزن‌های مرتبط، مانند <a href="https://github.com/kubernetes/apiserver/blob/master/README.md" target="_blank" rel="noopener">kubernetes/apiserver</a>، بررسی کنید.</p>
 </div>
-<h3 id="cherry-pick-کردن-کامیت-خود-در-یک-شاخهٔ-انتشار" dir="rtl">Cherry pick کردن کامیت خود در یک شاخهٔ انتشار</h3>
-<p dir="rtl">در بخش قبل، فایلی را در شاخهٔ master ویرایش کردید و سپس اسکریپت‌ها را اجرا کردید
-تا مشخصات OpenAPI و فایل‌های مرتبط تولید شوند. سپس تغییرات خود را در یک pull request
-به شاخهٔ master مخزن kubernetes/kubernetes ارسال کردید. اکنون فرض کنید می‌خواهید
-تغییر خود را به یک شاخهٔ انتشار backport کنید. برای مثال، فرض کنید شاخهٔ master برای توسعهٔ
-کوبرنتیز نسخهٔ 1.37 استفاده می‌شود و می‌خواهید تغییر خود را به شاخهٔ
-release-1.37 backport کنید.</p>
-<p dir="rtl">به یاد داشته باشید که pull request شما دو کامیت دارد: یکی برای ویرایش <code dir="ltr">types.go</code>
-و دیگری برای فایل‌هایی که اسکریپت‌ها تولید کرده‌اند. گام بعدی پیشنهاد cherry pick کامیت نخست شما
-به شاخهٔ release-1.37 است. ایده این است که کامیتی را که
-<code dir="ltr">types.go</code> را ویرایش کرده cherry pick کنید، نه کامیتی را که نتایج اجرای اسکریپت‌ها را دارد. برای دستورالعمل‌ها،
-<a href="https://git.k8s.io/community/contributors/devel/sig-release/cherry-picks.md" target="_blank" rel="noopener">Propose a Cherry Pick</a> را ببینید.</p>
+<h3 id="انتقال-کامیت-به-یک-شاخهٔ-انتشار-با-cherry-pick" dir="rtl">انتقال کامیت به یک شاخهٔ انتشار با cherry pick</h3>
+<p dir="rtl">در بخش قبل، فایلی را در شاخهٔ master ویرایش کردید و سپس اسکریپت‌هایی را برای تولید مشخصهٔ OpenAPI و فایل‌های مرتبط اجرا کردید. پس از آن، تغییرات خود را در قالب یک درخواست ادغام به شاخهٔ master مخزن kubernetes/kubernetes ارسال کردید. اکنون فرض کنید می‌خواهید تغییر خود را به یک شاخهٔ انتشار منتقل (backport) کنید. برای نمونه، فرض کنید شاخهٔ master برای توسعهٔ نسخهٔ 1.37 کوبرنتیز استفاده می‌شود و شما می‌خواهید تغییر خود را به شاخهٔ release-1.37 منتقل کنید.</p>
+<p dir="rtl">به یاد داشته باشید که درخواست ادغام شما دو کامیت دارد: یکی برای ویرایش <code dir="ltr">types.go</code> و دیگری برای فایل‌هایی که اسکریپت‌ها تولید کرده‌اند. گام بعدی، پیشنهاد یک cherry pick از کامیت نخست به شاخهٔ release-1.37 است. هدف این است که کامیتی را که <code dir="ltr">types.go</code> را ویرایش کرده است cherry pick کنید، اما کامیتی را که نتایج اجرای اسکریپت‌ها را در بر دارد منتقل نکنید. برای دستورالعمل‌ها، <a href="https://git.k8s.io/community/contributors/devel/sig-release/cherry-picks.md" target="_blank" rel="noopener">پیشنهاد یک Cherry Pick</a> را ببینید.</p>
 <div class="callout note"><div class="callout-title">توجه:</div>
-<p dir="rtl">پیشنهاد یک cherry pick مستلزم آن است که مجوز تنظیم برچسب و milestone را در
-pull request خود داشته باشید. اگر این مجوزها را ندارید، باید با فردی همکاری کنید که بتواند برچسب
-و milestone را برای شما تنظیم کند.</p>
+<p dir="rtl">برای پیشنهاد یک cherry pick، باید مجوز تعیین برچسب و نقطهٔ عطف (milestone) را در درخواست ادغام خود داشته باشید. اگر این مجوزها را ندارید، باید با کسی همکاری کنید که بتواند برچسب و نقطهٔ عطف را برای شما تعیین کند.</p>
 </div>
-<p dir="rtl">هنگامی که یک pull request برای cherry pick کردن تک کامیت خود به شاخهٔ
-release-1.37 ایجاد کردید، گام بعدی اجرای این اسکریپت‌ها در شاخهٔ
-release-1.37 در محیط محلی شماست.</p>
+<p dir="rtl">هنگامی که درخواست ادغامی برای cherry pick کردن آن یک کامیت به شاخهٔ release-1.37 آماده کردید، گام بعدی اجرای این اسکریپت‌ها در شاخهٔ release-1.37 محیط محلی شماست.</p>
 <pre dir="ltr"><code class="language-shell" dir="ltr">./hack/update-codegen.sh
 ./hack/update-openapi-spec.sh
 </code></pre>
-<p dir="rtl">اکنون یک کامیت که شامل مشخصات OpenAPI و فایل‌های مرتبطِ تازه تولیدشده است
-به pull request مربوط به cherry-pick خود اضافه کنید. pull request خود را پایش کنید تا زمانی که در شاخهٔ
-release-1.37 ادغام شود.</p>
-<p dir="rtl">در این مرحله، هم شاخهٔ master و هم شاخهٔ release-1.37 فایل <code dir="ltr">types.go</code> به‌روزشدهٔ شما
-و مجموعه‌ای از فایل‌های تولیدشده را دارند که تغییر شما در <code dir="ltr">types.go</code> را منعکس می‌کنند. توجه داشته باشید که
-مشخصات OpenAPI تولیدشده و سایر فایل‌های تولیدشده در شاخهٔ release-1.37 لزوماً
-با فایل‌های تولیدشده در شاخهٔ master یکسان نیستند. فایل‌های تولیدشده در شاخهٔ release-1.37
-فقط شامل عناصر API از کوبرنتیز 1.37 هستند. فایل‌های تولیدشده در شاخهٔ master ممکن است شامل
-عناصر API‌ای باشند که در 1.37 وجود ندارند، اما برای 1.37 در دست توسعه‌اند.</p>
+<p dir="rtl">اکنون کامیتی را که شامل مشخصهٔ OpenAPI تازه تولیدشده و فایل‌های مرتبط است به درخواست ادغام cherry pick خود اضافه کنید. درخواست ادغام خود را تا زمانی که در شاخهٔ release-1.37 ادغام شود پیگیری کنید.</p>
+<p dir="rtl">در این مرحله، هم شاخهٔ master و هم شاخهٔ release-1.37 فایل به‌روزشدهٔ <code dir="ltr">types.go</code> شما و مجموعه‌ای از فایل‌های تولیدشده را دارند که تغییر اعمال‌شده در <code dir="ltr">types.go</code> را بازتاب می‌دهند. توجه کنید که مشخصهٔ OpenAPI و دیگر فایل‌های تولیدشده در شاخهٔ release-1.37 لزوماً با فایل‌های تولیدشده در شاخهٔ master یکسان نیستند. فایل‌های تولیدشده در شاخهٔ release-1.37 فقط عناصر API مربوط به کوبرنتیز 1.37 را در بر دارند. فایل‌های تولیدشده در شاخهٔ master ممکن است عناصری از API را داشته باشند که در 1.37 وجود ندارند، اما برای 1.37 در حال توسعه هستند.</p>
 <h2 id="تولید-مستندات-مرجع-منتشرشده" dir="rtl">تولید مستندات مرجع منتشرشده</h2>
-<p dir="rtl">بخش قبل نشان داد چگونه یک فایل منبع را ویرایش کنید و سپس
-چندین فایل، از جمله <code dir="ltr">api/openapi-spec/swagger.json</code> را در مخزن
-<code dir="ltr">kubernetes/kubernetes</code> تولید کنید.
-فایل <code dir="ltr">swagger.json</code> همان فایل تعریف OpenAPI است که برای تولید
-مستندات مرجع API به کار می‌رود.</p>
-<p dir="rtl">اکنون آمادهٔ آن هستید که راهنمای
-<a href="kubernetes-api.html">تولید مستندات مرجع برای API کوبرنتیز</a>
-را دنبال کنید تا
-<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.37/" target="_blank">مستندات مرجع منتشرشدهٔ API کوبرنتیز</a>
-را تولید کنید.</p>
+<p dir="rtl">بخش قبل نشان داد که چگونه یک فایل منبع را ویرایش کنید و سپس چندین فایل، از جمله <code dir="ltr">api/openapi-spec/swagger.json</code> را در مخزن <code dir="ltr">kubernetes/kubernetes</code> تولید کنید. فایل <code dir="ltr">swagger.json</code> همان فایل تعریف OpenAPI است که برای تولید مستندات مرجع API به کار می‌رود.</p>
+<p dir="rtl">اکنون آماده‌اید تا راهنمای <a href="kubernetes-api.html">تولید مستندات مرجع برای API کوبرنتیز</a> را دنبال کنید و <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.37/" target="_blank">مستندات مرجع منتشرشدهٔ API کوبرنتیز</a> را تولید کنید.</p>
 <h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
 <ul>
 <li dir="rtl"><a href="kubernetes-api.html">تولید مستندات مرجع برای API کوبرنتیز</a></li>
@@ -263,7 +190,7 @@ release-1.37 ادغام شود.</p>
 <li dir="rtl"><a href="kubectl.html">تولید مستندات مرجع برای دستورهای kubectl</a></li>
 </ul>
 <p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
-<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#پیش-از-شروع">پیش از شروع</a><a class="l2" href="#تصویر-کلی">تصویر کلی</a><a class="l2" href="#کلون-کردن-مخزن-کوبرنتیز">کلون کردن مخزن کوبرنتیز</a><a class="l2" href="#ویرایش-کد-منبع-کوبرنتیز">ویرایش کد منبع کوبرنتیز</a><a class="l3" href="#اعمال-تغییرات-در-کد-منبع-بالادستی">اعمال تغییرات در کد منبع بالادستی</a><a class="l3" href="#کامیت-کردن-فایل-ویرایش-شده">کامیت کردن فایل ویرایش‌شده</a><a class="l3" href="#تولید-مشخصات-openapi-و-فایل-های-مرتبط">تولید مشخصات OpenAPI و فایل‌های مرتبط</a><a class="l3" href="#cherry-pick-کردن-کامیت-خود-در-یک-شاخهٔ-انتشار">Cherry pick کردن کامیت خود در یک شاخهٔ انتشار</a><a class="l2" href="#تولید-مستندات-مرجع-منتشرشده">تولید مستندات مرجع منتشرشده</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#پیش-از-شروع">پیش از شروع</a><a class="l2" href="#تصویر-کلی">تصویر کلی</a><a class="l2" href="#کلون-کردن-مخزن-کوبرنتیز">کلون کردن مخزن کوبرنتیز</a><a class="l2" href="#ویرایش-کد-منبع-کوبرنتیز">ویرایش کد منبع کوبرنتیز</a><a class="l3" href="#اعمال-تغییرات-در-کد-منبع-بالادستی">اعمال تغییرات در کد منبع بالادستی</a><a class="l3" href="#کامیت-کردن-فایل-ویرایش-شده">کامیت کردن فایل ویرایش‌شده</a><a class="l3" href="#تولید-مشخصهٔ-openapi-و-فایل-های-مرتبط">تولید مشخصهٔ OpenAPI و فایل‌های مرتبط</a><a class="l3" href="#انتقال-کامیت-به-یک-شاخهٔ-انتشار-با-cherry-pick">انتقال کامیت به یک شاخهٔ انتشار با cherry pick</a><a class="l2" href="#تولید-مستندات-مرجع-منتشرشده">تولید مستندات مرجع منتشرشده</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
 </div>
 </body>
 </html>

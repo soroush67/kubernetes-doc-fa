@@ -83,74 +83,63 @@ document.addEventListener('DOMContentLoaded',function(){box=document.getElementB
 <header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">contribute / generate-ref-docs</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
 <div class="layout">
 <main><h1 dir="rtl">تولید مستندات مرجع برای APIهای پیکربندی</h1><!-- overview -->
-<p dir="rtl">این صفحه نشان می‌دهد چگونه می‌توانید مستندات مرجع به‌روز‌شده را برای APIهای پیکربندی (Configuration API) کوبرنتیز تولید کنید. این صفحه برای افرادی نوشته شده است که در توسعه کوبرنتیز مشارکت می‌کنند.</p>
-<p dir="rtl">مرجع Configuration API قالب‌های پیکربندی ابزارها و مؤلفه‌های کوبرنتیز را مستند می‌کند؛ برای مثال قالب‌های <code dir="ltr">kubelet</code>، <code dir="ltr">kube-apiserver</code>، <code dir="ltr">kube-scheduler</code>، <code dir="ltr">kubeconfig</code> و
-<code dir="ltr">kubeadm</code>. مرجع منتشرشده در <a href="../../reference/config-api/index.html">/docs/reference/config-api/</a> در دسترس است.</p>
-<p dir="rtl"><code dir="ltr">genref</code> که در <a href="https://github.com/kubernetes-sigs/reference-docs" target="_blank" rel="noopener">kubernetes-sigs/reference-docs</a> قرار دارد،
-مولدی است که این مرجع را می‌سازد. این ابزار انواع پیکربندی Go هر مؤلفه را می‌خواند و آن‌ها را به‌صورت markdown تولید می‌کند.</p>
-<p dir="rtl">اگر در محتوای تولیدشده به اشکال برخوردید، به احتمال زیاد باید
-<a href="contribute-upstream.html">آن‌ها را در مخزن بالادستی (upstream) اصلاح کنید</a>.</p>
+<p dir="rtl">این صفحه نشان می‌دهد که چگونه می‌توانید مستندات مرجع به‌روزشده را برای APIهای پیکربندی کوبرنتیز تولید کنید. مخاطب این صفحه کسانی هستند که در کوبرنتیز مشارکت می‌کنند.</p>
+<p dir="rtl">مرجع API پیکربندی، قالب‌های پیکربندی ابزارها و مؤلفه‌های کوبرنتیز را مستند می‌کند؛ برای نمونه، قالب‌های <code dir="ltr">kubelet</code>، <code dir="ltr">kube-apiserver</code>، <code dir="ltr">kube-scheduler</code>، <code dir="ltr">kubeconfig</code> و <code dir="ltr">kubeadm</code>. نسخهٔ منتشرشدهٔ این مرجع در <a href="../../reference/config-api/index.html">/docs/reference/config-api/</a> در دسترس است.</p>
+<p dir="rtl">ابزار <code dir="ltr">genref</code> در مخزن <a href="https://github.com/kubernetes-sigs/reference-docs" target="_blank" rel="noopener">kubernetes-sigs/reference-docs</a> مولّدی است که این مرجع را می‌سازد. این ابزار نوع‌های پیکربندی Go هر مؤلفه را می‌خواند و آن‌ها را به‌صورت Markdown تولید می‌کند.</p>
+<p dir="rtl">اگر در محتوای تولیدشده اشکالی پیدا کردید، به احتمال زیاد باید <a href="contribute-upstream.html">آن را در مخزن بالادستی (upstream) اصلاح کنید</a>.</p>
 <h2 id="پیش-از-شروع" dir="rtl">پیش از شروع</h2>
 <!-- steps -->
-<h2 id="راه-اندازی-مخازن-محلی" dir="rtl">راه‌اندازی مخازن محلی</h2>
-<p dir="rtl">به کلون‌های محلی <code dir="ltr">kubernetes/website</code> و <code dir="ltr">kubernetes-sigs/reference-docs</code> نیاز دارید.</p>
-<p dir="rtl">اگر هنوز <code dir="ltr">kubernetes/website</code> را fork و کلون نکرده‌اید، به
-<a href="../new-content/open-a-pr.html#fork-the-repo">کار با یک کلون محلی</a> مراجعه کنید.
-مخزن <code dir="ltr">reference-docs</code> را کلون کنید:</p>
+<h2 id="راه-اندازی-مخزن-های-محلی" dir="rtl">راه‌اندازی مخزن‌های محلی</h2>
+<p dir="rtl">به نسخه‌های محلی (clone) از مخزن‌های <code dir="ltr">kubernetes/website</code> و <code dir="ltr">kubernetes-sigs/reference-docs</code> نیاز دارید.</p>
+<p dir="rtl">اگر هنوز مخزن <code dir="ltr">kubernetes/website</code> را fork و clone نکرده‌اید، به <a href="../new-content/open-a-pr.html#fork-the-repo">کار با یک نسخهٔ محلی</a> مراجعه کنید.
+مخزن <code dir="ltr">reference-docs</code> را clone کنید:</p>
 <pre dir="ltr"><code class="language-shell" dir="ltr">git clone https://github.com/kubernetes-sigs/reference-docs
 </code></pre>
-<p dir="rtl">در مراحل بعدی، کلون <code dir="ltr">kubernetes/website</code> شما با <code dir="ltr">&lt;web-base&gt;</code> و
-کلون <code dir="ltr">reference-docs</code> شما با <code dir="ltr">&lt;rdocs-base&gt;</code> نمایش داده می‌شود.</p>
+<p dir="rtl">در ادامهٔ مراحل، نسخهٔ محلی <code dir="ltr">kubernetes/website</code> با <code dir="ltr">&lt;web-base&gt;</code> و نسخهٔ محلی <code dir="ltr">reference-docs</code> با <code dir="ltr">&lt;rdocs-base&gt;</code> مشخص می‌شود.</p>
 <h2 id="تنظیم-متغیرهای-ساخت" dir="rtl">تنظیم متغیرهای ساخت</h2>
-<p dir="rtl">این مقدار را در shell خود تنظیم کنید. این تنظیم بر همه دستورهای <code dir="ltr">make</code> در مراحل
-بعدی اعمال می‌شود، فارغ از اینکه آن‌ها را از کدام دایرکتوری اجرا کنید.</p>
+<p dir="rtl">این متغیر را در پوستهٔ (shell) خود تنظیم کنید. این تنظیم برای همهٔ فرمان‌های <code dir="ltr">make</code> در مراحل بعدی اعمال می‌شود، فارغ از اینکه آن‌ها را از کدام دایرکتوری اجرا کنید.</p>
 <pre dir="ltr"><code class="language-shell" dir="ltr">export K8S_WEBROOT=/path/to/your/website   # your website clone (&lt;web-base&gt;)
 </code></pre>
-<h2 id="ساخت-و-انتشار-مرجع-configuration-api" dir="rtl">ساخت و انتشار مرجع Configuration API</h2>
+<h2 id="ساخت-و-انتشار-مرجع-api-پیکربندی" dir="rtl">ساخت و انتشار مرجع API پیکربندی</h2>
 <p dir="rtl">از دایرکتوری <code dir="ltr">&lt;rdocs-base&gt;</code>:</p>
 <pre dir="ltr"><code class="language-shell" dir="ltr">cd &lt;rdocs-base&gt;
 make copyconfigapi
 </code></pre>
-<p dir="rtl">این دستور در دو مرحله اجرا می‌شود:</p>
+<p dir="rtl">این فرمان در دو مرحله اجرا می‌شود:</p>
 <ol>
-<li dir="rtl"><strong><code dir="ltr">configapi</code></strong> - <code dir="ltr">genref</code> را می‌سازد و اجرا می‌کند و فایل‌های Markdown را در <code dir="ltr">genref/output/md</code> تولید می‌کند</li>
-<li dir="rtl"><strong><code dir="ltr">copyconfigapi</code></strong> - فایل‌های تولیدشده را در کلون وب‌سایت شما در
-<code dir="ltr">&lt;web-base&gt;/content/en/docs/reference/config-api/</code> کپی می‌کند.</li>
+<li dir="rtl"><strong><code dir="ltr">configapi</code></strong>: ابزار <code dir="ltr">genref</code> را می‌سازد و اجرا می‌کند و این ابزار فایل‌های Markdown را در <code dir="ltr">genref/output/md</code> تولید می‌کند.</li>
+<li dir="rtl"><strong><code dir="ltr">copyconfigapi</code></strong>: فایل‌های تولیدشده را در نسخهٔ محلی وب‌سایت شما، در مسیر <code dir="ltr">&lt;web-base&gt;/content/en/docs/reference/config-api/</code>، کپی می‌کند.</li>
 </ol>
-<p dir="rtl">در اولین اجرا، وابستگی‌های ماژول Go دانلود می‌شوند و ممکن است چند دقیقه طول بکشد.</p>
-<p dir="rtl">بررسی کنید چه تغییری در کلون وب‌سایت شما ایجاد شده است:</p>
+<p dir="rtl">در نخستین اجرا، وابستگی‌های ماژول Go دانلود می‌شوند و ممکن است این کار چند دقیقه طول بکشد.</p>
+<p dir="rtl">تغییرات نسخهٔ محلی وب‌سایت خود را بررسی کنید:</p>
 <pre dir="ltr"><code class="language-shell" dir="ltr">cd &lt;web-base&gt;
 git status
 </code></pre>
-<p dir="rtl">به دنبال به‌روزرسانی‌هایی در مسیر <code dir="ltr">content/en/docs/reference/config-api</code> بگردید؛ برای مثال:</p>
+<p dir="rtl">به‌دنبال به‌روزرسانی‌هایی در مسیر <code dir="ltr">content/en/docs/reference/config-api</code> بگردید؛ برای نمونه:</p>
 <pre dir="ltr"><code class="language-text" dir="ltr">content/en/docs/reference/config-api/kubelet-config.v1beta1.md
 content/en/docs/reference/config-api/kubeadm-config.v1beta4.md
 content/en/docs/reference/config-api/apiserver-config.v1.md
 content/en/docs/reference/config-api/client-authentication.v1.md
 </code></pre>
 <h2 id="پیش-نمایش-وب-سایت-و-آزمایش-محلی" dir="rtl">پیش‌نمایش وب‌سایت و آزمایش محلی</h2>
-<p dir="rtl">به‌روزرسانی‌های خود را پیش‌نمایش کنید:</p>
+<p dir="rtl">پیش‌نمایش به‌روزرسانی‌های خود را ببینید:</p>
 <pre dir="ltr"><code class="language-shell" dir="ltr">cd &lt;web-base&gt;
 git submodule update --init --recursive --depth 1   # if not already done
 make container-serve
 </code></pre>
-<p dir="rtl">سپس یک پیش‌نمایش محلی را در مرورگر وب خود باز کنید و بررسی کنید که
-صفحه‌هایی که به‌روزرسانی کرده‌اید به‌درستی بارگذاری می‌شوند.
-Hugo این پیش‌نمایش محلی را در http://localhost:1313/ ارائه می‌کند.
+<p dir="rtl">سپس پیش‌نمایش محلی را در مرورگر وب خود باز کنید و مطمئن شوید که صفحه‌هایی که به‌روزرسانی کرده‌اید به‌درستی بارگذاری می‌شوند.
+ابزار Hugo این پیش‌نمایش محلی را در نشانی http://localhost:1313/ ارائه می‌کند.
 بنابراین صفحه‌ای که باید بررسی کنید http://localhost:1313/docs/reference/config-api/ است.</p>
-<h2 id="ثبت-تغییرات-commit" dir="rtl">ثبت تغییرات (commit)</h2>
-<p dir="rtl">اگر مرجع Configuration API را برای به‌روزرسانی یک انتشار (release) بازتولید کرده‌اید،
-فایل‌های تغییریافته در مسیر <code dir="ltr">content/en/docs/reference/config-api/</code> را در
-<code dir="ltr">&lt;web-base&gt;</code> commit کنید، سپس یک <a href="../new-content/open-a-pr.html">pull request</a>
-به <a href="https://github.com/kubernetes/website" target="_blank" rel="noopener">kubernetes/website</a> باز کنید.</p>
+<h2 id="ثبت-commit-تغییرات" dir="rtl">ثبت (commit) تغییرات</h2>
+<p dir="rtl">اگر مرجع API پیکربندی را برای به‌روزرسانی یک انتشار دوباره تولید کرده‌اید، فایل‌های تغییریافته در مسیر <code dir="ltr">content/en/docs/reference/config-api/</code> را در <code dir="ltr">&lt;web-base&gt;</code> ثبت کنید و سپس یک <a href="../new-content/open-a-pr.html">درخواست ادغام (pull request)</a> برای مخزن <a href="https://github.com/kubernetes/website" target="_blank" rel="noopener">kubernetes/website</a> باز کنید.</p>
 <h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
 <ul>
 <li dir="rtl"><a href="kubernetes-api.html">تولید مستندات مرجع برای API کوبرنتیز</a></li>
-<li dir="rtl"><a href="quickstart.html">شروع سریع تولید مستندات مرجع</a></li>
+<li dir="rtl"><a href="quickstart.html">راهنمای سریع تولید مستندات مرجع</a></li>
 <li dir="rtl"><a href="contribute-upstream.html">مشارکت در مستندات مرجع بالادستی</a></li>
 </ul>
 <p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
-<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#پیش-از-شروع">پیش از شروع</a><a class="l2" href="#راه-اندازی-مخازن-محلی">راه‌اندازی مخازن محلی</a><a class="l2" href="#تنظیم-متغیرهای-ساخت">تنظیم متغیرهای ساخت</a><a class="l2" href="#ساخت-و-انتشار-مرجع-configuration-api">ساخت و انتشار مرجع Configuration API</a><a class="l2" href="#پیش-نمایش-وب-سایت-و-آزمایش-محلی">پیش‌نمایش وب‌سایت و آزمایش محلی</a><a class="l2" href="#ثبت-تغییرات-commit">ثبت تغییرات (commit)</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#پیش-از-شروع">پیش از شروع</a><a class="l2" href="#راه-اندازی-مخزن-های-محلی">راه‌اندازی مخزن‌های محلی</a><a class="l2" href="#تنظیم-متغیرهای-ساخت">تنظیم متغیرهای ساخت</a><a class="l2" href="#ساخت-و-انتشار-مرجع-api-پیکربندی">ساخت و انتشار مرجع API پیکربندی</a><a class="l2" href="#پیش-نمایش-وب-سایت-و-آزمایش-محلی">پیش‌نمایش وب‌سایت و آزمایش محلی</a><a class="l2" href="#ثبت-commit-تغییرات">ثبت (commit) تغییرات</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
 </div>
 </body>
 </html>

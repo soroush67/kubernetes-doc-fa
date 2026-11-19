@@ -6,18 +6,18 @@ weight: 50
 
 <!-- overview -->
 
-این صفحه نشان می‌دهد چگونه مستندات مرجع API کوبرنتیز را به‌روزرسانی کنید.
+این صفحه نحوهٔ به‌روزرسانی مستندات مرجع API کوبرنتیز را نشان می‌دهد.
 
 مستندات مرجع API کوبرنتیز از روی
 [مشخصات OpenAPI کوبرنتیز](https://github.com/kubernetes/kubernetes/blob/master/api/openapi-spec/swagger.json)
-و با استفاده از کد تولیدکنندهٔ [kubernetes-sigs/reference-docs](https://github.com/kubernetes-sigs/reference-docs) ساخته می‌شود.
+و با استفاده از کد تولید [kubernetes-sigs/reference-docs](https://github.com/kubernetes-sigs/reference-docs) ساخته می‌شود.
 
-اگر در مستندات تولیدشده با اشکال مواجه شدید، باید
-[آن‌ها را در مخزن بالادستی (upstream) رفع کنید](/docs/contribute/generate-ref-docs/contribute-upstream/).
+اگر در مستندات تولیدشده با اشکالی روبه‌رو شدید، باید
+[آن را در مخزن بالادستی (upstream) اصلاح کنید](/docs/contribute/generate-ref-docs/contribute-upstream/).
 
-اگر فقط لازم است مستندات مرجع را از روی مشخصات
+اگر فقط می‌خواهید مستندات مرجع را از روی مشخصات
 [OpenAPI](https://github.com/OAI/OpenAPI-Specification)
-دوباره تولید کنید، مطالعهٔ این صفحه را ادامه دهید.
+دوباره تولید کنید، خواندن این صفحه را ادامه دهید.
 
 ## {{% heading "prerequisites" %}}
 
@@ -25,9 +25,9 @@ weight: 50
 
 <!-- steps -->
 
-## راه‌اندازی مخازن محلی
+## راه‌اندازی مخزن‌های محلی
 
-یک فضای کاری محلی ایجاد کنید و `GOPATH` را تنظیم کنید:
+یک فضای کاری محلی بسازید و متغیر `GOPATH` را تنظیم کنید:
 
 ```shell
 mkdir -p $HOME/<workspace>
@@ -35,7 +35,7 @@ mkdir -p $HOME/<workspace>
 export GOPATH=$HOME/<workspace>
 ```
 
-یک کلون محلی از مخازن زیر دریافت کنید:
+یک نسخهٔ محلی (clone) از مخزن زیر تهیه کنید:
 
 ```shell
 git clone github.com/kubernetes-sigs/reference-docs
@@ -52,39 +52,38 @@ go get -u github.com/go-openapi/spec
 git clone https://github.com/<your-username>/website 
 ```
 
-یک کلون از مخزن kubernetes/kubernetes دریافت کنید:
+یک نسخهٔ محلی از مخزن kubernetes/kubernetes تهیه کنید:
 
 ```shell
 git clone https://github.com/kubernetes/kubernetes 
 ```
 
-* دایرکتوری پایهٔ کلون شما از مخزن
+* دایرکتوری پایهٔ نسخهٔ محلی شما از مخزن
   [kubernetes/kubernetes](https://github.com/kubernetes/kubernetes)
-  برابر `<your-path-to>/kubernetes/kubernetes.` است.
-  در مراحل بعدی، به این دایرکتوری پایه با عنوان `<k8s-base>` اشاره می‌شود.
+  مسیر `<your-path-to>/kubernetes/kubernetes.` است.
+  در ادامهٔ مراحل، از این دایرکتوری پایه با نام `<k8s-base>` یاد می‌شود.
 
-* دایرکتوری پایهٔ کلون شما از مخزن
+* دایرکتوری پایهٔ نسخهٔ محلی شما از مخزن
   [kubernetes/website](https://github.com/kubernetes/website)
-  برابر `<your-path-to>/website` است.
-  در مراحل بعدی، به این دایرکتوری پایه با عنوان `<web-base>` اشاره می‌شود.
+  مسیر `<your-path-to>/website` است.
+  در ادامهٔ مراحل، از این دایرکتوری پایه با نام `<web-base>` یاد می‌شود.
 
-* دایرکتوری پایهٔ کلون شما از مخزن
+* دایرکتوری پایهٔ نسخهٔ محلی شما از مخزن
   [kubernetes-sigs/reference-docs](https://github.com/kubernetes-sigs/reference-docs)
-  برابر `<your-path-to>/reference-docs` است.
-  در مراحل بعدی، به این دایرکتوری پایه با عنوان `<rdocs-base>` اشاره می‌شود.
+  مسیر `<your-path-to>/reference-docs` است.
+  در ادامهٔ مراحل، از این دایرکتوری پایه با نام `<rdocs-base>` یاد می‌شود.
 
 ## تولید مستندات مرجع API
 
-این بخش نشان می‌دهد چگونه
-[مستندات مرجع منتشرشدهٔ API کوبرنتیز](/docs/reference/generated/kubernetes-api/{{< param "version" >}}/)
-را تولید کنید.
+این بخش نشان می‌دهد که چگونه
+[مستندات مرجع منتشرشدهٔ API کوبرنتیز](/docs/reference/generated/kubernetes-api/{{< param "version" >}}/) را تولید کنید.
 
 ### تنظیم متغیرهای ساخت
 
-* مقدار `K8S_ROOT` را برابر `<k8s-base>` قرار دهید.
-* مقدار `K8S_WEBROOT` را برابر `<web-base>` قرار دهید.
-* مقدار `K8S_RELEASE` را برابر نسخهٔ مستنداتی قرار دهید که می‌خواهید بسازید.
-  برای مثال، اگر می‌خواهید مستندات کوبرنتیز 1.17.0 را بسازید، `K8S_RELEASE` را برابر 1.17.0 قرار دهید.
+* متغیر `K8S_ROOT` را برابر با `<k8s-base>` قرار دهید.
+* متغیر `K8S_WEBROOT` را برابر با `<web-base>` قرار دهید.
+* متغیر `K8S_RELEASE` را برابر با نسخه‌ای از مستندات قرار دهید که می‌خواهید بسازید.
+  برای مثال، اگر می‌خواهید مستندات کوبرنتیز 1.17.0 را بسازید، مقدار `K8S_RELEASE` را 1.17.0 قرار دهید.
 
 برای مثال:
 
@@ -96,7 +95,7 @@ export K8S_RELEASE=1.17.0
 
 ### ایجاد دایرکتوری نسخه‌دار و دریافت مشخصات Open API
 
-هدف ساخت (build target) با نام `updateapispec` دایرکتوری ساخت نسخه‌دار را ایجاد می‌کند.
+هدف ساخت `updateapispec` دایرکتوری ساخت نسخه‌دار را ایجاد می‌کند.
 پس از ایجاد این دایرکتوری، مشخصات Open API از مخزن
 `<k8s-base>` دریافت می‌شود. این مراحل تضمین می‌کنند که نسخهٔ
 فایل‌های پیکربندی و مشخصات Open API کوبرنتیز با نسخهٔ انتشار مطابقت داشته باشد.
@@ -112,7 +111,7 @@ make updateapispec
 ### ساخت مستندات مرجع API
 
 هدف `copyapi` مرجع API را می‌سازد و
-فایل‌های تولیدشده را در دایرکتوری‌هایی در `<web-base>` کپی می‌کند.
+فایل‌های تولیدشده را در دایرکتوری‌هایی درون `<web-base>` کپی می‌کند.
 دستور زیر را در `<rdocs-base>` اجرا کنید:
 
 ```shell
@@ -127,8 +126,8 @@ make copyapi
 [ -e "<rdocs-base>/gen-apidocs/build/navData.js" ] && echo "navData.js built" || echo "no navData.js"
 ```
 
-به دایرکتوری پایهٔ `<web-base>` محلی خود بروید و
-فایل‌های تغییریافته را مشاهده کنید:
+به ریشهٔ دایرکتوری محلی `<web-base>` بروید و
+ببینید کدام فایل‌ها تغییر کرده‌اند:
 
 ```shell
 cd <web-base>
@@ -155,17 +154,17 @@ static/docs/reference/generated/kubernetes-api/{{< param "version" >}}/js/scroll
 
 ## محل و نسخه‌بندی مرجع API
 
-فایل‌های تولیدشدهٔ مرجع API (نسخهٔ HTML) در مسیر `<web-base>/static/docs/reference/generated/kubernetes-api/{{< param "version" >}}/` کپی می‌شوند. این دایرکتوری شامل مستندات مستقل HTML برای API است.
+فایل‌های تولیدشدهٔ مرجع API (نسخهٔ HTML) در مسیر `<web-base>/static/docs/reference/generated/kubernetes-api/{{< param "version" >}}/` کپی می‌شوند. این دایرکتوری شامل مستندات مستقل API در قالب HTML است.
 
 {{< note >}}
 نسخهٔ Markdown مرجع API که در مسیر `<web-base>/content/en/docs/reference/kubernetes-api/` قرار دارد،
-به‌صورت جداگانه و با استفاده از تولیدکنندهٔ [gen-resourcesdocs](https://github.com/kubernetes-sigs/reference-docs/tree/master/gen-resourcesdocs) تولید می‌شود.
+به‌طور جداگانه و با استفاده از مولد [gen-resourcesdocs](https://github.com/kubernetes-sigs/reference-docs/tree/master/gen-resourcesdocs) تولید می‌شود.
 {{< /note >}}
 
 ## آزمایش محلی مرجع API
 
-یک نسخهٔ محلی از مرجع API را منتشر کنید.
-[پیش‌نمایش محلی](http://localhost:1313/docs/reference/generated/kubernetes-api/{{< param "version">}}/) را بررسی کنید.
+یک نسخهٔ محلی از مرجع API منتشر کنید.
+سپس [پیش‌نمایش محلی](http://localhost:1313/docs/reference/generated/kubernetes-api/{{< param "version">}}/) را بررسی کنید.
 
 ```shell
 cd <web-base>
@@ -173,18 +172,18 @@ git submodule update --init --recursive --depth 1 # if not already done
 make container-serve
 ```
 
-## ثبت تغییرات (commit)
+## ثبت تغییرات
 
-در `<web-base>`، دستورهای `git add` و `git commit` را برای ثبت تغییر اجرا کنید.
+در `<web-base>`، دستورهای `git add` و `git commit` را اجرا کنید تا تغییرات ثبت شوند.
 
-تغییرات خود را به‌صورت یک
-[pull request](/docs/contribute/new-content/open-a-pr/) به مخزن
+تغییرات خود را در قالب یک
+[درخواست ادغام (pull request)](/docs/contribute/new-content/open-a-pr/) به مخزن
 [kubernetes/website](https://github.com/kubernetes/website) ارسال کنید.
-pull request خود را پیگیری کنید و در صورت نیاز به نظرات بازبینان پاسخ دهید. پیگیری
-pull request را تا زمان ادغام شدن (merge) آن ادامه دهید.
+درخواست ادغام خود را پیگیری کنید و در صورت نیاز به نظرات بازبینان پاسخ دهید.
+پیگیری درخواست ادغام را تا زمانی که ادغام شود ادامه دهید.
 
 ## {{% heading "whatsnext" %}}
 
-* [راهنمای سریع تولید مستندات مرجع](/docs/contribute/generate-ref-docs/quickstart/)
+* [راهنمای شروع سریع تولید مستندات مرجع](/docs/contribute/generate-ref-docs/quickstart/)
 * [تولید مستندات مرجع برای مؤلفه‌ها و ابزارهای کوبرنتیز](/docs/contribute/generate-ref-docs/kubernetes-components/)
 * [تولید مستندات مرجع برای دستورهای kubectl](/docs/contribute/generate-ref-docs/kubectl/)

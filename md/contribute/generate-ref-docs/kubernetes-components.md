@@ -1,12 +1,12 @@
 ---
-title: تولید صفحات مرجع برای مؤلفه‌ها و ابزارهای کوبرنتیز
+title: تولید صفحه‌های مرجع برای مؤلفه‌ها و ابزارهای کوبرنتیز
 content_type: task
 weight: 120
 ---
 
 <!-- overview -->
 
-این صفحه نشان می‌دهد چگونه صفحات مرجع مؤلفه‌ها و ابزارهای کوبرنتیز را بسازید.
+این صفحه نحوهٔ ساخت صفحه‌های مرجع مؤلفه‌ها و ابزارهای کوبرنتیز را نشان می‌دهد.
 
 
 
@@ -20,7 +20,7 @@ weight: 120
 
 <!-- steps -->
 
-برای تولید صفحات مرجع مؤلفه‌ها و ابزارهای کوبرنتیز، مراحل
+برای تولید صفحه‌های مرجع مؤلفه‌ها و ابزارهای کوبرنتیز، مراحل
 [شروع سریع مستندات مرجع](/docs/contribute/generate-ref-docs/quickstart/) را دنبال کنید.
 
 
@@ -29,6 +29,6 @@ weight: 120
 
 
 * [شروع سریع تولید مستندات مرجع](/docs/contribute/generate-ref-docs/quickstart/)
-* [تولید مستندات مرجع برای دستورات kubectl](/docs/contribute/generate-ref-docs/kubectl/)
+* [تولید مستندات مرجع برای فرمان‌های kubectl](/docs/contribute/generate-ref-docs/kubectl/)
 * [تولید مستندات مرجع برای API کوبرنتیز](/docs/contribute/generate-ref-docs/kubernetes-api/)
-* [مشارکت در پروژه بالادستی کوبرنتیز برای مستندات](/docs/contribute/generate-ref-docs/contribute-upstream/)
+* [مشارکت در پروژهٔ بالادستی کوبرنتیز برای مستندات](/docs/contribute/generate-ref-docs/contribute-upstream/)

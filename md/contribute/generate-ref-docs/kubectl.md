@@ -1,22 +1,21 @@
 ---
-title: تولید مستندات مرجع برای دستورهای kubectl
+title: تولید مستندات مرجع برای فرمان‌های kubectl
 content_type: task
 weight: 90
 ---
 
 <!-- overview -->
 
-این صفحه نشان می‌دهد چگونه مرجع دستورهای `kubectl` را تولید کنید.
+این صفحه نحوهٔ تولید مرجع فرمان‌های `kubectl` را نشان می‌دهد.
 
 {{< note >}}
-این مبحث نشان می‌دهد چگونه مستندات مرجع را برای
-[دستورهای kubectl](/docs/reference/generated/kubectl/kubectl-commands) مانند
+این مبحث نحوهٔ تولید مستندات مرجع برای
+[فرمان‌های kubectl](/docs/reference/generated/kubectl/kubectl-commands) مانند
 [kubectl apply](/docs/reference/generated/kubectl/kubectl-commands#apply) و
-[kubectl taint](/docs/reference/generated/kubectl/kubectl-commands#taint) تولید کنید.
-این مبحث نشان نمی‌دهد که چگونه صفحه مرجع گزینه‌های
+[kubectl taint](/docs/reference/generated/kubectl/kubectl-commands#taint) را نشان می‌دهد.
+این مبحث نحوهٔ تولید صفحهٔ مرجع گزینه‌های
 [kubectl](/docs/reference/generated/kubectl/kubectl-commands/)
-را تولید کنید. برای دستورالعمل تولید صفحه مرجع گزینه‌های kubectl،
-به
+را توضیح نمی‌دهد. برای آشنایی با نحوهٔ تولید صفحهٔ مرجع گزینه‌های kubectl، به
 [تولید صفحات مرجع برای مؤلفه‌ها و ابزارهای کوبرنتیز](/docs/contribute/generate-ref-docs/kubernetes-components/)
 مراجعه کنید.
 {{< /note >}}
@@ -29,7 +28,7 @@ weight: 90
 
 ## راه‌اندازی مخزن‌های محلی
 
-یک فضای کاری محلی ایجاد کنید و `GOPATH` را تنظیم کنید:
+یک فضای کاری محلی ایجاد کنید و `GOPATH` خود را تنظیم کنید:
 
 ```shell
 mkdir -p $HOME/<workspace>
@@ -37,7 +36,7 @@ mkdir -p $HOME/<workspace>
 export GOPATH=$HOME/<workspace>
 ```
 
-یک کلون محلی از مخزن‌های زیر دریافت کنید:
+یک نسخهٔ محلی (clone) از مخزن‌های زیر تهیه کنید:
 
 ```shell
 go get -u github.com/spf13/pflag
@@ -46,19 +45,19 @@ go get -u gopkg.in/yaml.v2
 go get -u github.com/kubernetes-sigs/reference-docs
 ```
 
-اگر هنوز مخزن kubernetes/website را ندارید، اکنون آن را دریافت کنید:
+اگر مخزن kubernetes/website را هنوز ندارید، اکنون آن را دریافت کنید:
 
 ```shell
 git clone https://github.com/<your-username>/website $GOPATH/src/github.com/<your-username>/website
 ```
 
-یک کلون از مخزن kubernetes/kubernetes را با نام k8s.io/kubernetes دریافت کنید:
+یک نسخه از مخزن kubernetes/kubernetes را با نام k8s.io/kubernetes تهیه کنید:
 
 ```shell
 git clone https://github.com/kubernetes/kubernetes $GOPATH/src/k8s.io/kubernetes
 ```
 
-بسته spf13 را از `$GOPATH/src/k8s.io/kubernetes/vendor/github.com` حذف کنید:
+بستهٔ spf13 را از مسیر `$GOPATH/src/k8s.io/kubernetes/vendor/github.com` حذف کنید:
 
 ```shell
 rm -rf $GOPATH/src/k8s.io/kubernetes/vendor/github.com/spf13
@@ -66,27 +65,27 @@ rm -rf $GOPATH/src/k8s.io/kubernetes/vendor/github.com/spf13
 
 مخزن kubernetes/kubernetes کد منبع `kubectl` و `kustomize` را فراهم می‌کند.
 
-* دایرکتوری پایه کلون خود از مخزن
+* پوشهٔ پایهٔ نسخهٔ محلی خود از مخزن
   [kubernetes/kubernetes](https://github.com/kubernetes/kubernetes) را مشخص کنید.
-  برای مثال، اگر مرحله قبل را برای دریافت مخزن دنبال کرده باشید،
-  دایرکتوری پایه شما `$GOPATH/src/k8s.io/kubernetes` است.
-  در مراحل بعدی، این دایرکتوری پایه با نام `<k8s-base>` به آن اشاره می‌شود.
+  برای مثال، اگر مخزن را با مرحلهٔ قبل دریافت کرده باشید، پوشهٔ پایهٔ شما
+  `$GOPATH/src/k8s.io/kubernetes` است.
+  در مراحل بعدی، از این پوشهٔ پایه با نام `<k8s-base>` یاد می‌شود.
 
-* دایرکتوری پایه کلون خود از مخزن
+* پوشهٔ پایهٔ نسخهٔ محلی خود از مخزن
   [kubernetes/website](https://github.com/kubernetes/website) را مشخص کنید.
-  برای مثال، اگر مرحله قبل را برای دریافت مخزن دنبال کرده باشید،
-  دایرکتوری پایه شما `$GOPATH/src/github.com/<your-username>/website` است.
-  در مراحل بعدی، این دایرکتوری پایه با نام `<web-base>` به آن اشاره می‌شود.
+  برای مثال، اگر مخزن را با مرحلهٔ قبل دریافت کرده باشید، پوشهٔ پایهٔ شما
+  `$GOPATH/src/github.com/<your-username>/website` است.
+  در مراحل بعدی، از این پوشهٔ پایه با نام `<web-base>` یاد می‌شود.
 
-* دایرکتوری پایه کلون خود از مخزن
+* پوشهٔ پایهٔ نسخهٔ محلی خود از مخزن
   [kubernetes-sigs/reference-docs](https://github.com/kubernetes-sigs/reference-docs) را مشخص کنید.
-  برای مثال، اگر مرحله قبل را برای دریافت مخزن دنبال کرده باشید،
-  دایرکتوری پایه شما `$GOPATH/src/github.com/kubernetes-sigs/reference-docs` است.
-  در مراحل بعدی، این دایرکتوری پایه با نام `<rdocs-base>` به آن اشاره می‌شود.
+  برای مثال، اگر مخزن را با مرحلهٔ قبل دریافت کرده باشید، پوشهٔ پایهٔ شما
+  `$GOPATH/src/github.com/kubernetes-sigs/reference-docs` است.
+  در مراحل بعدی، از این پوشهٔ پایه با نام `<rdocs-base>` یاد می‌شود.
 
-در مخزن محلی k8s.io/kubernetes خود، شاخه مورد نظر را checkout کنید
-و مطمئن شوید که به‌روز است. برای مثال، اگر می‌خواهید مستندات کوبرنتیز
-{{< skew prevMinorVersion >}}.0 را تولید کنید، می‌توانید از این دستورها استفاده کنید:
+در مخزن محلی k8s.io/kubernetes، شاخهٔ موردنظر را checkout کنید و مطمئن شوید
+که به‌روز است. برای مثال، اگر می‌خواهید مستندات کوبرنتیز
+{{< skew prevMinorVersion >}}.0 را تولید کنید، می‌توانید از این فرمان‌ها استفاده کنید:
 
 ```shell
 cd <k8s-base>
@@ -94,53 +93,53 @@ git checkout v{{< skew prevMinorVersion >}}.0
 git pull https://github.com/kubernetes/kubernetes {{< skew prevMinorVersion >}}.0
 ```
 
-اگر نیازی به ویرایش کد منبع `kubectl` ندارید، دستورالعمل‌های
+اگر نیازی به ویرایش کد منبع `kubectl` ندارید، دستورالعمل‌های بخش
 [تنظیم متغیرهای ساخت](#set-build-variables) را دنبال کنید.
 
 ## ویرایش کد منبع kubectl
 
-مستندات مرجع دستورهای kubectl به‌صورت خودکار از کد منبع kubectl تولید می‌شود.
-اگر می‌خواهید مستندات مرجع را تغییر دهید، گام نخست این است که یک یا چند کامنت را
-در کد منبع kubectl تغییر دهید. این تغییر را در مخزن محلی kubernetes/kubernetes خود
-اعمال کنید و سپس یک pull request به شاخه master مخزن
+مستندات مرجع فرمان‌های kubectl به‌طور خودکار از کد منبع kubectl تولید می‌شود.
+اگر می‌خواهید مستندات مرجع را تغییر دهید، نخستین گام تغییر یک یا چند توضیح (comment)
+در کد منبع kubectl است. این تغییر را در مخزن محلی kubernetes/kubernetes خود اعمال کنید
+و سپس یک درخواست ادغام (pull request) به شاخهٔ master مخزن
 [github.com/kubernetes/kubernetes](https://github.com/kubernetes/kubernetes) ارسال کنید.
 
 [PR 56673](https://github.com/kubernetes/kubernetes/pull/56673/files)
-نمونه‌ای از یک pull request است که یک غلط تایپی را در کد منبع kubectl اصلاح می‌کند.
+نمونه‌ای از یک درخواست ادغام است که یک اشتباه تایپی را در کد منبع kubectl اصلاح می‌کند.
 
-pull request خود را پیگیری کنید و به نظرات بازبینان پاسخ دهید. تا زمانی که
-pull request شما در شاخه هدف مخزن kubernetes/kubernetes ادغام نشده است،
-آن را پیگیری کنید.
+درخواست ادغام خود را پیگیری کنید و به نظرات بازبینان پاسخ دهید. این پیگیری را تا زمانی
+ادامه دهید که درخواست ادغام شما در شاخهٔ هدف مخزن kubernetes/kubernetes ادغام شود.
 
-## Cherry pick کردن تغییر خود در یک شاخه انتشار
+## انتقال گزینشی (cherry pick) تغییر به یک شاخهٔ انتشار
 
-تغییر شما اکنون در شاخه master است که برای توسعه نسخه بعدی کوبرنتیز استفاده می‌شود.
-اگر می‌خواهید تغییر شما در مستندات نسخه‌ای از کوبرنتیز که قبلاً منتشر شده است
-نیز ظاهر شود، باید پیشنهاد دهید که تغییر شما در شاخه انتشار cherry pick شود.
+اکنون تغییر شما در شاخهٔ master قرار دارد که برای توسعهٔ انتشار بعدی کوبرنتیز
+استفاده می‌شود. اگر می‌خواهید تغییرتان در مستندات نسخه‌ای از کوبرنتیز که پیش‌تر
+منتشر شده است نیز دیده شود، باید پیشنهاد دهید که تغییرتان به‌صورت گزینشی
+به شاخهٔ انتشار منتقل شود.
 
-برای مثال، فرض کنید شاخه master برای توسعه کوبرنتیز {{< skew currentVersion >}}
-استفاده می‌شود و می‌خواهید تغییر خود را به شاخه release-{{< skew prevMinorVersion >}}
-backport کنید. برای مشاهده دستورالعمل انجام این کار، به
-[پیشنهاد یک Cherry Pick](https://git.k8s.io/community/contributors/devel/sig-release/cherry-picks.md)
+برای مثال، فرض کنید شاخهٔ master برای توسعهٔ کوبرنتیز {{< skew currentVersion >}}
+استفاده می‌شود و شما می‌خواهید تغییرتان را به شاخهٔ release-{{< skew prevMinorVersion >}}
+منتقل کنید. برای آشنایی با نحوهٔ انجام این کار، به
+[پیشنهاد یک انتقال گزینشی](https://git.k8s.io/community/contributors/devel/sig-release/cherry-picks.md)
 مراجعه کنید.
 
-pull request مربوط به cherry-pick را تا زمانی که در شاخه انتشار ادغام شود، پیگیری کنید.
+درخواست ادغام مربوط به انتقال گزینشی را تا زمان ادغام آن در شاخهٔ انتشار پیگیری کنید.
 
 {{< note >}}
-برای پیشنهاد یک cherry pick لازم است مجوز تنظیم برچسب و milestone را
-در pull request خود داشته باشید. اگر این مجوزها را ندارید، باید با فردی همکاری کنید
-که بتواند برچسب و milestone را برای شما تنظیم کند.
+برای پیشنهاد یک انتقال گزینشی، باید مجوز تعیین برچسب و نقطهٔ عطف (milestone)
+را در درخواست ادغام خود داشته باشید. اگر این مجوزها را ندارید، باید با فردی همکاری کنید
+که بتواند برچسب و نقطهٔ عطف را برای شما تعیین کند.
 {{< /note >}}
 
 ## تنظیم متغیرهای ساخت
 
-به `<rdocs-base>` بروید. در خط فرمان خود، متغیرهای محیطی زیر را تنظیم کنید.
+به `<rdocs-base>` بروید و در خط فرمان، متغیرهای محیطی زیر را تنظیم کنید.
 
-* `K8S_ROOT` را روی `<k8s-base>` تنظیم کنید.
-* `K8S_WEBROOT` را روی `<web-base>` تنظیم کنید.
-* `K8S_RELEASE` را روی نسخه‌ای از مستندات که می‌خواهید بسازید تنظیم کنید.
+* مقدار `K8S_ROOT` را برابر `<k8s-base>` قرار دهید.
+* مقدار `K8S_WEBROOT` را برابر `<web-base>` قرار دهید.
+* مقدار `K8S_RELEASE` را برابر نسخه‌ای از مستندات قرار دهید که می‌خواهید بسازید.
   برای مثال، اگر می‌خواهید مستندات کوبرنتیز {{< skew prevMinorVersion >}} را بسازید،
-  `K8S_RELEASE` را روی {{< skew prevMinorVersion >}} تنظیم کنید.
+  مقدار `K8S_RELEASE` را برابر {{< skew prevMinorVersion >}} قرار دهید.
 
 برای مثال:
 
@@ -150,25 +149,24 @@ export K8S_ROOT=$GOPATH/src/k8s.io/kubernetes
 export K8S_RELEASE={{< skew prevMinorVersion >}}
 ```
 
-## ایجاد یک دایرکتوری نسخه‌دار
+## ایجاد یک پوشهٔ نسخه‌دار
 
-هدف ساخت `createversiondirs` یک دایرکتوری نسخه‌دار ایجاد می‌کند
-و فایل‌های پیکربندی مرجع kubectl را در آن کپی می‌کند.
-نام دایرکتوری نسخه‌دار از الگوی `v<major>_<minor>` پیروی می‌کند.
+هدف ساخت `createversiondirs` یک پوشهٔ نسخه‌دار ایجاد می‌کند و فایل‌های پیکربندی
+مرجع kubectl را در آن کپی می‌کند. نام پوشهٔ نسخه‌دار از الگوی `v<major>_<minor>` پیروی می‌کند.
 
-در دایرکتوری `<rdocs-base>`، هدف ساخت زیر را اجرا کنید:
+در پوشهٔ `<rdocs-base>`، هدف ساخت زیر را اجرا کنید:
 
 ```shell
 cd <rdocs-base>
 make createversiondirs
 ```
 
-## Checkout کردن یک تگ انتشار در k8s.io/kubernetes
+## دریافت (checkout) یک برچسب انتشار در k8s.io/kubernetes
 
-در مخزن محلی `<k8s-base>` خود، شاخه‌ای را checkout کنید که نسخه‌ای از کوبرنتیز
-را که می‌خواهید مستند کنید در بر دارد. برای مثال، اگر می‌خواهید مستندات کوبرنتیز
-{{< skew prevMinorVersion >}}.0 را تولید کنید، تگ
-`v{{< skew prevMinorVersion >}}` را checkout کنید. مطمئن شوید شاخه محلی شما به‌روز است.
+در مخزن محلی `<k8s-base>`، شاخه‌ای را checkout کنید که نسخهٔ موردنظر شما از کوبرنتیز
+را برای مستندسازی در خود دارد. برای مثال، اگر می‌خواهید مستندات کوبرنتیز
+{{< skew prevMinorVersion >}}.0 را تولید کنید، برچسب `v{{< skew prevMinorVersion >}}`
+را checkout کنید. مطمئن شوید که شاخهٔ محلی شما به‌روز است.
 
 ```shell
 cd <k8s-base>
@@ -178,15 +176,15 @@ git pull https://github.com/kubernetes/kubernetes v{{< skew prevMinorVersion >}}
 
 ## اجرای کد تولید مستندات
 
-در `<rdocs-base>` محلی خود، هدف ساخت `copycli` را اجرا کنید. این دستور با دسترسی `root` اجرا می‌شود:
+در `<rdocs-base>` محلی خود، هدف ساخت `copycli` را اجرا کنید. این فرمان با کاربر `root` اجرا می‌شود:
 
 ```shell
 cd <rdocs-base>
 make copycli
 ```
 
-دستور `copycli` دایرکتوری موقت ساخت را پاک می‌کند، فایل‌های دستورهای kubectl را تولید می‌کند
-و صفحه HTML تجمیع‌شده مرجع دستورهای kubectl و دارایی‌های (assets) آن را به `<web-base>` کپی می‌کند.
+فرمان `copycli` پوشهٔ موقت ساخت را پاک می‌کند، فایل‌های فرمان‌های kubectl را تولید می‌کند
+و صفحهٔ HTML گردآوری‌شدهٔ مرجع فرمان‌های kubectl را همراه با فایل‌های جانبی آن در `<web-base>` کپی می‌کند.
 
 ## یافتن فایل‌های تولیدشده
 
@@ -199,21 +197,21 @@ make copycli
 
 ## یافتن فایل‌های کپی‌شده
 
-بررسی کنید که همه فایل‌های تولیدشده در `<web-base>` شما کپی شده باشند:
+بررسی کنید که همهٔ فایل‌های تولیدشده در `<web-base>` کپی شده باشند:
 
 ```shell
 cd <web-base>
 git status
 ```
 
-خروجی باید شامل فایل‌های تغییریافته زیر باشد:
+خروجی باید شامل فایل‌های تغییریافتهٔ زیر باشد:
 
 ```
 static/docs/reference/generated/kubectl/kubectl-commands.html
 static/docs/reference/generated/kubectl/navData.js
 ```
 
-خروجی ممکن است شامل موارد زیر نیز باشد:
+خروجی ممکن است شامل این فایل‌ها نیز باشد:
 
 ```
 static/docs/reference/generated/kubectl/scroll.js
@@ -238,21 +236,21 @@ make container-serve
 
 [پیش‌نمایش محلی](https://localhost:1313/docs/reference/generated/kubectl/kubectl-commands/) را مشاهده کنید.
 
-## افزودن و commit کردن تغییرات در kubernetes/website
+## افزودن و ثبت (commit) تغییرات در kubernetes/website
 
-برای commit کردن فایل‌ها، `git add` و `git commit` را اجرا کنید.
+برای ثبت فایل‌ها، فرمان‌های `git add` و `git commit` را اجرا کنید.
 
-## ایجاد یک pull request
+## ایجاد یک درخواست ادغام
 
-یک pull request به مخزن `kubernetes/website` ایجاد کنید. pull request خود را
-پیگیری کنید و در صورت نیاز به نظرات بازبینی پاسخ دهید. تا زمانی که
-pull request شما ادغام نشده است، آن را پیگیری کنید.
+یک درخواست ادغام به مخزن `kubernetes/website` ایجاد کنید. درخواست ادغام خود را
+پیگیری کنید و در صورت نیاز به نظرات بازبینی پاسخ دهید. این پیگیری را تا زمان
+ادغام درخواست ادامه دهید.
 
-چند دقیقه پس از ادغام pull request شما، مباحث مرجع به‌روزشده شما
-در [مستندات منتشرشده](/docs/home) قابل مشاهده خواهند بود.
+چند دقیقه پس از ادغام درخواست شما، مباحث مرجع به‌روزشده در
+[مستندات منتشرشده](/docs/home) قابل مشاهده خواهند بود.
 
 ## {{% heading "whatsnext" %}}
 
-* [شروع سریع تولید مستندات مرجع](/docs/contribute/generate-ref-docs/quickstart/)
+* [راهنمای سریع تولید مستندات مرجع](/docs/contribute/generate-ref-docs/quickstart/)
 * [تولید مستندات مرجع برای مؤلفه‌ها و ابزارهای کوبرنتیز](/docs/contribute/generate-ref-docs/kubernetes-components/)
 * [تولید مستندات مرجع برای API کوبرنتیز](/docs/contribute/generate-ref-docs/kubernetes-api/)

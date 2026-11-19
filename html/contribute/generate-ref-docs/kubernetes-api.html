@@ -83,24 +83,24 @@ document.addEventListener('DOMContentLoaded',function(){box=document.getElementB
 <header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">contribute / generate-ref-docs</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
 <div class="layout">
 <main><h1 dir="rtl">تولید مستندات مرجع برای API کوبرنتیز</h1><!-- overview -->
-<p dir="rtl">این صفحه نشان می‌دهد چگونه مستندات مرجع API کوبرنتیز را به‌روزرسانی کنید.</p>
+<p dir="rtl">این صفحه نحوهٔ به‌روزرسانی مستندات مرجع API کوبرنتیز را نشان می‌دهد.</p>
 <p dir="rtl">مستندات مرجع API کوبرنتیز از روی
 <a href="https://github.com/kubernetes/kubernetes/blob/master/api/openapi-spec/swagger.json" target="_blank" rel="noopener">مشخصات OpenAPI کوبرنتیز</a>
-و با استفاده از کد تولیدکنندهٔ <a href="https://github.com/kubernetes-sigs/reference-docs" target="_blank" rel="noopener">kubernetes-sigs/reference-docs</a> ساخته می‌شود.</p>
-<p dir="rtl">اگر در مستندات تولیدشده با اشکال مواجه شدید، باید
-<a href="contribute-upstream.html">آن‌ها را در مخزن بالادستی (upstream) رفع کنید</a>.</p>
-<p dir="rtl">اگر فقط لازم است مستندات مرجع را از روی مشخصات
+و با استفاده از کد تولید <a href="https://github.com/kubernetes-sigs/reference-docs" target="_blank" rel="noopener">kubernetes-sigs/reference-docs</a> ساخته می‌شود.</p>
+<p dir="rtl">اگر در مستندات تولیدشده با اشکالی روبه‌رو شدید، باید
+<a href="contribute-upstream.html">آن را در مخزن بالادستی (upstream) اصلاح کنید</a>.</p>
+<p dir="rtl">اگر فقط می‌خواهید مستندات مرجع را از روی مشخصات
 <a href="https://github.com/OAI/OpenAPI-Specification" target="_blank" rel="noopener">OpenAPI</a>
-دوباره تولید کنید، مطالعهٔ این صفحه را ادامه دهید.</p>
+دوباره تولید کنید، خواندن این صفحه را ادامه دهید.</p>
 <h2 id="پیش-از-شروع" dir="rtl">پیش از شروع</h2>
 <!-- steps -->
-<h2 id="راه-اندازی-مخازن-محلی" dir="rtl">راه‌اندازی مخازن محلی</h2>
-<p dir="rtl">یک فضای کاری محلی ایجاد کنید و <code dir="ltr">GOPATH</code> را تنظیم کنید:</p>
+<h2 id="راه-اندازی-مخزن-های-محلی" dir="rtl">راه‌اندازی مخزن‌های محلی</h2>
+<p dir="rtl">یک فضای کاری محلی بسازید و متغیر <code dir="ltr">GOPATH</code> را تنظیم کنید:</p>
 <pre dir="ltr"><code class="language-shell" dir="ltr">mkdir -p $HOME/&lt;workspace&gt;
 
 export GOPATH=$HOME/&lt;workspace&gt;
 </code></pre>
-<p dir="rtl">یک کلون محلی از مخازن زیر دریافت کنید:</p>
+<p dir="rtl">یک نسخهٔ محلی (clone) از مخزن زیر تهیه کنید:</p>
 <pre dir="ltr"><code class="language-shell" dir="ltr">git clone github.com/kubernetes-sigs/reference-docs
 </code></pre>
 <p dir="rtl">به دایرکتوری <code dir="ltr">gen-apidocs</code> در مخزن <code dir="ltr">reference-docs</code> بروید و بسته‌های Go موردنیاز را نصب کنید:</p>
@@ -110,39 +110,38 @@ go get -u github.com/go-openapi/spec
 <p dir="rtl">اگر هنوز مخزن kubernetes/website را ندارید، اکنون آن را دریافت کنید:</p>
 <pre dir="ltr"><code class="language-shell" dir="ltr">git clone https://github.com/&lt;your-username&gt;/website 
 </code></pre>
-<p dir="rtl">یک کلون از مخزن kubernetes/kubernetes دریافت کنید:</p>
+<p dir="rtl">یک نسخهٔ محلی از مخزن kubernetes/kubernetes تهیه کنید:</p>
 <pre dir="ltr"><code class="language-shell" dir="ltr">git clone https://github.com/kubernetes/kubernetes 
 </code></pre>
 <ul>
 <li dir="rtl">
-<p dir="rtl">دایرکتوری پایهٔ کلون شما از مخزن
+<p dir="rtl">دایرکتوری پایهٔ نسخهٔ محلی شما از مخزن
 <a href="https://github.com/kubernetes/kubernetes" target="_blank" rel="noopener">kubernetes/kubernetes</a>
-برابر <code dir="ltr">&lt;your-path-to&gt;/kubernetes/kubernetes.</code> است.
-در مراحل بعدی، به این دایرکتوری پایه با عنوان <code dir="ltr">&lt;k8s-base&gt;</code> اشاره می‌شود.</p>
+مسیر <code dir="ltr">&lt;your-path-to&gt;/kubernetes/kubernetes.</code> است.
+در ادامهٔ مراحل، از این دایرکتوری پایه با نام <code dir="ltr">&lt;k8s-base&gt;</code> یاد می‌شود.</p>
 </li>
 <li dir="rtl">
-<p dir="rtl">دایرکتوری پایهٔ کلون شما از مخزن
+<p dir="rtl">دایرکتوری پایهٔ نسخهٔ محلی شما از مخزن
 <a href="https://github.com/kubernetes/website" target="_blank" rel="noopener">kubernetes/website</a>
-برابر <code dir="ltr">&lt;your-path-to&gt;/website</code> است.
-در مراحل بعدی، به این دایرکتوری پایه با عنوان <code dir="ltr">&lt;web-base&gt;</code> اشاره می‌شود.</p>
+مسیر <code dir="ltr">&lt;your-path-to&gt;/website</code> است.
+در ادامهٔ مراحل، از این دایرکتوری پایه با نام <code dir="ltr">&lt;web-base&gt;</code> یاد می‌شود.</p>
 </li>
 <li dir="rtl">
-<p dir="rtl">دایرکتوری پایهٔ کلون شما از مخزن
+<p dir="rtl">دایرکتوری پایهٔ نسخهٔ محلی شما از مخزن
 <a href="https://github.com/kubernetes-sigs/reference-docs" target="_blank" rel="noopener">kubernetes-sigs/reference-docs</a>
-برابر <code dir="ltr">&lt;your-path-to&gt;/reference-docs</code> است.
-در مراحل بعدی، به این دایرکتوری پایه با عنوان <code dir="ltr">&lt;rdocs-base&gt;</code> اشاره می‌شود.</p>
+مسیر <code dir="ltr">&lt;your-path-to&gt;/reference-docs</code> است.
+در ادامهٔ مراحل، از این دایرکتوری پایه با نام <code dir="ltr">&lt;rdocs-base&gt;</code> یاد می‌شود.</p>
 </li>
 </ul>
 <h2 id="تولید-مستندات-مرجع-api" dir="rtl">تولید مستندات مرجع API</h2>
-<p dir="rtl">این بخش نشان می‌دهد چگونه
-<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.37/" target="_blank">مستندات مرجع منتشرشدهٔ API کوبرنتیز</a>
-را تولید کنید.</p>
+<p dir="rtl">این بخش نشان می‌دهد که چگونه
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.37/" target="_blank">مستندات مرجع منتشرشدهٔ API کوبرنتیز</a> را تولید کنید.</p>
 <h3 id="تنظیم-متغیرهای-ساخت" dir="rtl">تنظیم متغیرهای ساخت</h3>
 <ul>
-<li dir="rtl">مقدار <code dir="ltr">K8S_ROOT</code> را برابر <code dir="ltr">&lt;k8s-base&gt;</code> قرار دهید.</li>
-<li dir="rtl">مقدار <code dir="ltr">K8S_WEBROOT</code> را برابر <code dir="ltr">&lt;web-base&gt;</code> قرار دهید.</li>
-<li dir="rtl">مقدار <code dir="ltr">K8S_RELEASE</code> را برابر نسخهٔ مستنداتی قرار دهید که می‌خواهید بسازید.
-برای مثال، اگر می‌خواهید مستندات کوبرنتیز 1.17.0 را بسازید، <code dir="ltr">K8S_RELEASE</code> را برابر 1.17.0 قرار دهید.</li>
+<li dir="rtl">متغیر <code dir="ltr">K8S_ROOT</code> را برابر با <code dir="ltr">&lt;k8s-base&gt;</code> قرار دهید.</li>
+<li dir="rtl">متغیر <code dir="ltr">K8S_WEBROOT</code> را برابر با <code dir="ltr">&lt;web-base&gt;</code> قرار دهید.</li>
+<li dir="rtl">متغیر <code dir="ltr">K8S_RELEASE</code> را برابر با نسخه‌ای از مستندات قرار دهید که می‌خواهید بسازید.
+برای مثال، اگر می‌خواهید مستندات کوبرنتیز 1.17.0 را بسازید، مقدار <code dir="ltr">K8S_RELEASE</code> را 1.17.0 قرار دهید.</li>
 </ul>
 <p dir="rtl">برای مثال:</p>
 <pre dir="ltr"><code class="language-shell" dir="ltr">export K8S_WEBROOT=&lt;your-path-to&gt;/website
@@ -150,7 +149,7 @@ export K8S_ROOT=&lt;your-path-to&gt;/kubernetes
 export K8S_RELEASE=1.17.0
 </code></pre>
 <h3 id="ایجاد-دایرکتوری-نسخه-دار-و-دریافت-مشخصات-open-api" dir="rtl">ایجاد دایرکتوری نسخه‌دار و دریافت مشخصات Open API</h3>
-<p dir="rtl">هدف ساخت (build target) با نام <code dir="ltr">updateapispec</code> دایرکتوری ساخت نسخه‌دار را ایجاد می‌کند.
+<p dir="rtl">هدف ساخت <code dir="ltr">updateapispec</code> دایرکتوری ساخت نسخه‌دار را ایجاد می‌کند.
 پس از ایجاد این دایرکتوری، مشخصات Open API از مخزن
 <code dir="ltr">&lt;k8s-base&gt;</code> دریافت می‌شود. این مراحل تضمین می‌کنند که نسخهٔ
 فایل‌های پیکربندی و مشخصات Open API کوبرنتیز با نسخهٔ انتشار مطابقت داشته باشد.
@@ -161,7 +160,7 @@ make updateapispec
 </code></pre>
 <h3 id="ساخت-مستندات-مرجع-api" dir="rtl">ساخت مستندات مرجع API</h3>
 <p dir="rtl">هدف <code dir="ltr">copyapi</code> مرجع API را می‌سازد و
-فایل‌های تولیدشده را در دایرکتوری‌هایی در <code dir="ltr">&lt;web-base&gt;</code> کپی می‌کند.
+فایل‌های تولیدشده را در دایرکتوری‌هایی درون <code dir="ltr">&lt;web-base&gt;</code> کپی می‌کند.
 دستور زیر را در <code dir="ltr">&lt;rdocs-base&gt;</code> اجرا کنید:</p>
 <pre dir="ltr"><code class="language-shell" dir="ltr">cd &lt;rdocs-base&gt;
 make copyapi
@@ -170,8 +169,8 @@ make copyapi
 <pre dir="ltr"><code class="language-shell" dir="ltr">[ -e "&lt;rdocs-base&gt;/gen-apidocs/build/index.html" ] &amp;&amp; echo "index.html built" || echo "no index.html"
 [ -e "&lt;rdocs-base&gt;/gen-apidocs/build/navData.js" ] &amp;&amp; echo "navData.js built" || echo "no navData.js"
 </code></pre>
-<p dir="rtl">به دایرکتوری پایهٔ <code dir="ltr">&lt;web-base&gt;</code> محلی خود بروید و
-فایل‌های تغییریافته را مشاهده کنید:</p>
+<p dir="rtl">به ریشهٔ دایرکتوری محلی <code dir="ltr">&lt;web-base&gt;</code> بروید و
+ببینید کدام فایل‌ها تغییر کرده‌اند:</p>
 <pre dir="ltr"><code class="language-shell" dir="ltr">cd &lt;web-base&gt;
 git status
 </code></pre>
@@ -191,33 +190,33 @@ static/docs/reference/generated/kubernetes-api/v1.37/js/navData.js
 static/docs/reference/generated/kubernetes-api/v1.37/js/scroll.js
 </code></pre>
 <h2 id="محل-و-نسخه-بندی-مرجع-api" dir="rtl">محل و نسخه‌بندی مرجع API</h2>
-<p dir="rtl">فایل‌های تولیدشدهٔ مرجع API (نسخهٔ HTML) در مسیر <code dir="ltr">&lt;web-base&gt;/static/docs/reference/generated/kubernetes-api/v1.37/</code> کپی می‌شوند. این دایرکتوری شامل مستندات مستقل HTML برای API است.</p>
+<p dir="rtl">فایل‌های تولیدشدهٔ مرجع API (نسخهٔ HTML) در مسیر <code dir="ltr">&lt;web-base&gt;/static/docs/reference/generated/kubernetes-api/v1.37/</code> کپی می‌شوند. این دایرکتوری شامل مستندات مستقل API در قالب HTML است.</p>
 <div class="callout note"><div class="callout-title">توجه:</div>
 <p dir="rtl">نسخهٔ Markdown مرجع API که در مسیر <code dir="ltr">&lt;web-base&gt;/content/en/docs/reference/kubernetes-api/</code> قرار دارد،
-به‌صورت جداگانه و با استفاده از تولیدکنندهٔ <a href="https://github.com/kubernetes-sigs/reference-docs/tree/master/gen-resourcesdocs" target="_blank" rel="noopener">gen-resourcesdocs</a> تولید می‌شود.</p>
+به‌طور جداگانه و با استفاده از مولد <a href="https://github.com/kubernetes-sigs/reference-docs/tree/master/gen-resourcesdocs" target="_blank" rel="noopener">gen-resourcesdocs</a> تولید می‌شود.</p>
 </div>
 <h2 id="آزمایش-محلی-مرجع-api" dir="rtl">آزمایش محلی مرجع API</h2>
-<p dir="rtl">یک نسخهٔ محلی از مرجع API را منتشر کنید.
-<a href="http://localhost:1313/docs/reference/generated/kubernetes-api/v1.37/" target="_blank" rel="noopener">پیش‌نمایش محلی</a> را بررسی کنید.</p>
+<p dir="rtl">یک نسخهٔ محلی از مرجع API منتشر کنید.
+سپس <a href="http://localhost:1313/docs/reference/generated/kubernetes-api/v1.37/" target="_blank" rel="noopener">پیش‌نمایش محلی</a> را بررسی کنید.</p>
 <pre dir="ltr"><code class="language-shell" dir="ltr">cd &lt;web-base&gt;
 git submodule update --init --recursive --depth 1 # if not already done
 make container-serve
 </code></pre>
-<h2 id="ثبت-تغییرات-commit" dir="rtl">ثبت تغییرات (commit)</h2>
-<p dir="rtl">در <code dir="ltr">&lt;web-base&gt;</code>، دستورهای <code dir="ltr">git add</code> و <code dir="ltr">git commit</code> را برای ثبت تغییر اجرا کنید.</p>
-<p dir="rtl">تغییرات خود را به‌صورت یک
-<a href="../new-content/open-a-pr.html">pull request</a> به مخزن
+<h2 id="ثبت-تغییرات" dir="rtl">ثبت تغییرات</h2>
+<p dir="rtl">در <code dir="ltr">&lt;web-base&gt;</code>، دستورهای <code dir="ltr">git add</code> و <code dir="ltr">git commit</code> را اجرا کنید تا تغییرات ثبت شوند.</p>
+<p dir="rtl">تغییرات خود را در قالب یک
+<a href="../new-content/open-a-pr.html">درخواست ادغام (pull request)</a> به مخزن
 <a href="https://github.com/kubernetes/website" target="_blank" rel="noopener">kubernetes/website</a> ارسال کنید.
-pull request خود را پیگیری کنید و در صورت نیاز به نظرات بازبینان پاسخ دهید. پیگیری
-pull request را تا زمان ادغام شدن (merge) آن ادامه دهید.</p>
+درخواست ادغام خود را پیگیری کنید و در صورت نیاز به نظرات بازبینان پاسخ دهید.
+پیگیری درخواست ادغام را تا زمانی که ادغام شود ادامه دهید.</p>
 <h2 id="گام-های-بعدی" dir="rtl">گام‌های بعدی</h2>
 <ul>
-<li dir="rtl"><a href="quickstart.html">راهنمای سریع تولید مستندات مرجع</a></li>
+<li dir="rtl"><a href="quickstart.html">راهنمای شروع سریع تولید مستندات مرجع</a></li>
 <li dir="rtl"><a href="kubernetes-components.html">تولید مستندات مرجع برای مؤلفه‌ها و ابزارهای کوبرنتیز</a></li>
 <li dir="rtl"><a href="kubectl.html">تولید مستندات مرجع برای دستورهای kubectl</a></li>
 </ul>
 <p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
-<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#پیش-از-شروع">پیش از شروع</a><a class="l2" href="#راه-اندازی-مخازن-محلی">راه‌اندازی مخازن محلی</a><a class="l2" href="#تولید-مستندات-مرجع-api">تولید مستندات مرجع API</a><a class="l3" href="#تنظیم-متغیرهای-ساخت">تنظیم متغیرهای ساخت</a><a class="l3" href="#ایجاد-دایرکتوری-نسخه-دار-و-دریافت-مشخصات-open-api">ایجاد دایرکتوری نسخه‌دار و دریافت مشخصات Open API</a><a class="l3" href="#ساخت-مستندات-مرجع-api">ساخت مستندات مرجع API</a><a class="l2" href="#محل-و-نسخه-بندی-مرجع-api">محل و نسخه‌بندی مرجع API</a><a class="l2" href="#آزمایش-محلی-مرجع-api">آزمایش محلی مرجع API</a><a class="l2" href="#ثبت-تغییرات-commit">ثبت تغییرات (commit)</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#پیش-از-شروع">پیش از شروع</a><a class="l2" href="#راه-اندازی-مخزن-های-محلی">راه‌اندازی مخزن‌های محلی</a><a class="l2" href="#تولید-مستندات-مرجع-api">تولید مستندات مرجع API</a><a class="l3" href="#تنظیم-متغیرهای-ساخت">تنظیم متغیرهای ساخت</a><a class="l3" href="#ایجاد-دایرکتوری-نسخه-دار-و-دریافت-مشخصات-open-api">ایجاد دایرکتوری نسخه‌دار و دریافت مشخصات Open API</a><a class="l3" href="#ساخت-مستندات-مرجع-api">ساخت مستندات مرجع API</a><a class="l2" href="#محل-و-نسخه-بندی-مرجع-api">محل و نسخه‌بندی مرجع API</a><a class="l2" href="#آزمایش-محلی-مرجع-api">آزمایش محلی مرجع API</a><a class="l2" href="#ثبت-تغییرات">ثبت تغییرات</a><a class="l2" href="#گام-های-بعدی">گام‌های بعدی</a></nav>
 </div>
 </body>
 </html>
