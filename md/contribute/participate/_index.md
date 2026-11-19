@@ -10,63 +10,63 @@ no_list: true
 
 <!-- overview -->
 
-SIG Docs یکی از
-[گروه‌های ویژه علاقه‌مند (special interest groups)](https://github.com/kubernetes/community/blob/main/sig-list.md)
-در پروژه کوبرنتیز است که بر نوشتن، به‌روزرسانی و نگهداری
-مستندات کوبرنتیز به‌عنوان یک کل تمرکز دارد. برای اطلاعات بیشتر درباره این گروه، به
-[SIG Docs در مخزن گیت‌هاب جامعه](https://github.com/kubernetes/community/tree/main/sig-docs)
-مراجعه کنید.
+‏SIG Docs یکی از [گروه‌های ذی‌نفع ویژه (special interest groups)](https://github.com/kubernetes/community/blob/main/sig-list.md)
+در پروژه کوبرنتیز است که بر نوشتن، به‌روزرسانی و نگهداری کل مستندات کوبرنتیز
+تمرکز دارد. برای کسب اطلاعات بیشتر درباره این گروه، صفحه
+[SIG Docs در مخزن github جامعه](https://github.com/kubernetes/community/tree/main/sig-docs)
+را ببینید.
 
-SIG Docs از محتوا و بازبینی‌های همه مشارکت‌کنندگان استقبال می‌کند. هر کسی می‌تواند یک
-pull request (PR) باز کند و هر کسی می‌تواند درباره محتوا issue ثبت کند یا
-برای pull requestهای در حال انجام نظر بگذارد.
+گروه SIG Docs از محتوا و بازبینی‌های همه مشارکت‌کنندگان استقبال می‌کند. هر کسی
+می‌تواند یک درخواست ادغام (pull request یا PR) باز کند و همه می‌توانند درباره
+محتوا issue ثبت کنند یا روی درخواست‌های ادغامِ در حال بررسی نظر بگذارند.
 
-همچنین می‌توانید [عضو (member)](/docs/contribute/participate/roles-and-responsibilities/#members)،
-[بازبین (reviewer)](/docs/contribute/participate/roles-and-responsibilities/#reviewers) یا
-[تأییدکننده (approver)](/docs/contribute/participate/roles-and-responsibilities/#approvers) شوید.
-این نقش‌ها به سطح دسترسی بیشتری نیاز دارند و مسئولیت‌هایی را برای
-تأیید و ثبت تغییرات به همراه دارند. برای اطلاعات بیشتر درباره نحوه عملکرد عضویت در جامعه کوبرنتیز، به
-[community-membership](https://github.com/kubernetes/community/blob/main/community-membership.md)
-مراجعه کنید.
+شما همچنین می‌توانید [عضو](/docs/contribute/participate/roles-and-responsibilities/#members)،
+[بازبین](/docs/contribute/participate/roles-and-responsibilities/#reviewers) یا
+[تأییدکننده](/docs/contribute/participate/roles-and-responsibilities/#approvers) شوید.
+این نقش‌ها به دسترسی بیشتری نیاز دارند و مسئولیت‌های مشخصی را برای تأیید و
+ثبت تغییرات به همراه دارند. برای کسب اطلاعات بیشتر درباره نحوه عضویت در جامعه
+کوبرنتیز، صفحه
+[عضویت در جامعه](https://github.com/kubernetes/community/blob/main/community-membership.md)
+را ببینید.
 
-ادامه این سند به شیوه‌های خاصی می‌پردازد که این نقش‌ها در
-SIG Docs عمل می‌کنند؛ گروهی که مسئول نگهداری یکی از عمومی‌ترین
-بخش‌های کوبرنتیز، یعنی وب‌سایت و مستندات کوبرنتیز، است.
+ادامه این سند برخی از شیوه‌های منحصربه‌فرد عملکرد این نقش‌ها را در SIG Docs شرح
+می‌دهد؛ گروهی که مسئولیت نگهداری یکی از عمومی‌ترین جنبه‌های کوبرنتیز، یعنی
+وب‌سایت و مستندات کوبرنتیز، را بر عهده دارد.
 
 <!-- body -->
 
-## رئیس SIG Docs {#sig-docs-chairperson}
+## رئیس SIG Docs
 
-هر SIG، از جمله SIG Docs، یک یا چند نفر از اعضای SIG را برای ایفای نقش
-رئیس برمی‌گزیند. این افراد نقاط ارتباطی میان SIG Docs و سایر بخش‌های
-سازمان کوبرنتیز هستند. آن‌ها باید دانش گسترده‌ای از ساختار
-پروژه کوبرنتیز به‌عنوان یک کل و نحوه عملکرد SIG Docs در آن داشته باشند. برای مشاهده فهرست فعلی روسا،
-به [Leadership](https://github.com/kubernetes/community/tree/main/sig-docs#leadership)
-مراجعه کنید.
+هر SIG، از جمله SIG Docs، یک یا چند نفر از اعضای خود را به‌عنوان رئیس انتخاب
+می‌کند. این افراد نقطه ارتباط میان SIG Docs و سایر بخش‌های سازمان کوبرنتیز
+هستند. آن‌ها باید شناخت گسترده‌ای از ساختار کل پروژه کوبرنتیز و نحوه فعالیت
+SIG Docs در آن داشته باشند. برای مشاهده فهرست فعلی رؤسا، صفحه
+[رهبری](https://github.com/kubernetes/community/tree/main/sig-docs#leadership)
+را ببینید.
 
-## تیم‌ها و خودکارسازی SIG Docs
+## تیم‌ها و خودکارسازی در SIG Docs
 
-خودکارسازی در SIG Docs به دو سازوکار متفاوت متکی است:
+خودکارسازی در SIG Docs بر دو سازوکار متفاوت تکیه دارد:
 تیم‌های GitHub و فایل‌های OWNERS.
 
 ### تیم‌های GitHub
 
-دو دسته [تیم](https://github.com/orgs/kubernetes/teams?query=sig-docs) SIG Docs در GitHub وجود دارد:
+دو دسته از [تیم‌های](https://github.com/orgs/kubernetes/teams?query=sig-docs) SIG Docs در GitHub وجود دارد:
 
-- `@sig-docs-{language}-owners` تأییدکنندگان و سرپرستان هستند
-- `@sig-docs-{language}-reviews` بازبین‌ها هستند
+- ‏`@sig-docs-{language}-owners` شامل تأییدکنندگان و راهبران است
+- ‏`@sig-docs-{language}-reviews` شامل بازبینان است
 
-هر یک از آن‌ها را می‌توان با `@name` در نظرهای GitHub مطرح کرد تا با
-همه اعضای آن گروه ارتباط برقرار شود.
+برای ارتباط با همه اعضای هر یک از این گروه‌ها، می‌توان در نظرهای GitHub با
+`@name` به آن گروه اشاره کرد.
 
-گاهی تیم‌های Prow و GitHub با هم همپوشانی دارند، بی‌آنکه دقیقاً یکسان باشند. برای
-تخصیص issueها و pull requestها و برای پشتیبانی از تأیید PRها، خودکارسازی
-از اطلاعات فایل‌های `OWNERS` استفاده می‌کند.
+گاهی تیم‌های Prow و GitHub با هم هم‌پوشانی دارند، اما دقیقاً منطبق نیستند.
+سازوکار خودکارسازی برای واگذاری issueها و درخواست‌های ادغام و نیز پشتیبانی از
+تأیید PRها، از اطلاعات فایل‌های `OWNERS` استفاده می‌کند.
 
 ### فایل‌های OWNERS و front-matter
 
-پروژه کوبرنتیز از ابزار خودکارسازی به نام prow برای خودکارسازی
-مرتبط با issueها و pull requestهای GitHub استفاده می‌کند.
+پروژه کوبرنتیز برای خودکارسازی کارهای مربوط به issueها و درخواست‌های ادغام در
+GitHub از ابزاری به نام prow استفاده می‌کند.
 [مخزن وب‌سایت کوبرنتیز](https://github.com/kubernetes/website) از
 دو [افزونه prow](https://github.com/kubernetes-sigs/prow/tree/main/pkg/plugins) استفاده می‌کند:
 
@@ -76,49 +76,54 @@ SIG Docs عمل می‌کنند؛ گروهی که مسئول نگهداری یک
 این دو افزونه از فایل‌های
 [OWNERS](https://github.com/kubernetes/website/blob/main/OWNERS) و
 [OWNERS_ALIASES](https://github.com/kubernetes/website/blob/main/OWNERS_ALIASES)
-در سطح بالای مخزن GitHub با نام `kubernetes/website` استفاده می‌کنند تا
-نحوه کار prow را در این مخزن کنترل کنند.
+در سطح بالای مخزن GitHub ‏`kubernetes/website` برای کنترل نحوه عملکرد prow در
+این مخزن استفاده می‌کنند.
 
-یک فایل OWNERS شامل فهرستی از افرادی است که بازبین‌ها و تأییدکنندگان SIG Docs هستند. فایل‌های OWNERS
-می‌توانند در زیرپوشه‌ها نیز وجود داشته باشند و مشخص کنند چه کسانی می‌توانند به‌عنوان بازبین یا تأییدکننده
-فایل‌های آن زیرپوشه و زیرمجموعه‌های آن عمل کنند. برای اطلاعات بیشتر درباره فایل‌های OWNERS به‌طور کلی، به
-[OWNERS](https://github.com/kubernetes/community/blob/main/contributors/guide/owners.md) مراجعه کنید.
+هر فایل OWNERS فهرستی از افرادی را در بر دارد که بازبین و تأییدکننده SIG Docs
+هستند. فایل‌های OWNERS می‌توانند در زیرشاخه‌ها نیز وجود داشته باشند و تعیین
+کنند که چه کسانی بازبین یا تأییدکننده فایل‌های آن زیرشاخه و زیرشاخه‌های فرزند
+آن باشند. برای کسب اطلاعات بیشتر درباره فایل‌های OWNERS به‌طور کلی، صفحه
+[OWNERS](https://github.com/kubernetes/community/blob/main/contributors/guide/owners.md)
+را ببینید.
 
-علاوه بر این، یک فایل Markdown منفرد می‌تواند بازبین‌ها و تأییدکنندگان را در
-front-matter خود فهرست کند، چه با فهرست کردن نام‌های کاربری GitHub و چه گروه‌های GitHub.
+افزون بر این، هر فایل Markdown می‌تواند در بخش front-matter خود بازبینان و
+تأییدکنندگان را فهرست کند؛ چه با ذکر نام کاربری افراد در GitHub و چه با ذکر
+گروه‌های GitHub.
 
-ترکیب فایل‌های OWNERS و front-matter در فایل‌های Markdown تعیین می‌کند
-سامانه‌های خودکار به صاحبان PR چه توصیه‌ای درباره درخواست بازبینی فنی
-و ویرایشی برای PR آن‌ها ارائه دهند.
+ترکیب فایل‌های OWNERS و front-matter فایل‌های Markdown تعیین می‌کند که سامانه‌های
+خودکار به صاحبان PRها پیشنهاد دهند برای بازبینی فنی و ویرایشی PR خود از چه
+کسانی درخواست کنند.
 
-## نحوه عملکرد ادغام (merge)
+## ادغام چگونه انجام می‌شود
 
-وقتی یک pull request در شاخه‌ای که برای انتشار محتوا استفاده می‌شود ادغام شود، آن محتوا در https://kubernetes.io منتشر می‌شود. برای اطمینان از اینکه
-کیفیت محتوای منتشرشده بالا است، ادغام pull requestها را به
-تأییدکنندگان SIG Docs محدود می‌کنیم. روند کار به این صورت است.
+وقتی یک درخواست ادغام در شاخه‌ای که برای انتشار محتوا استفاده می‌شود ادغام شود،
+آن محتوا در https://kubernetes.io منتشر می‌شود. برای اطمینان از کیفیت بالای
+محتوای منتشرشده، ادغام درخواست‌ها را به تأییدکنندگان SIG Docs محدود کرده‌ایم.
+این فرایند به شرح زیر است:
 
-- وقتی یک pull request هر دو برچسب `lgtm` و `approve` را داشته باشد، برچسب `hold`
-  نداشته باشد و همه آزمون‌ها موفق باشند، pull request به‌صورت خودکار ادغام می‌شود.
-- اعضای سازمان کوبرنتیز و تأییدکنندگان SIG Docs می‌توانند با افزودن نظر
-  از ادغام خودکار یک pull request مشخص جلوگیری کنند (با افزودن نظر `/hold`
-  یا خودداری از افزودن نظر `/lgtm`).
+- وقتی یک درخواست ادغام هر دو برچسب `lgtm` و `approve` را داشته باشد، هیچ برچسب
+  `hold` نداشته باشد و همه آزمون‌ها را با موفقیت بگذراند، به‌طور خودکار ادغام
+  می‌شود.
+- اعضای سازمان کوبرنتیز و تأییدکنندگان SIG Docs می‌توانند با افزودن نظر، از
+  ادغام خودکار یک درخواست ادغام جلوگیری کنند (با افزودن نظر `/hold` یا خودداری
+  از افزودن نظر `/lgtm`).
 - هر عضو کوبرنتیز می‌تواند با افزودن نظر `/lgtm` برچسب `lgtm` را اضافه کند.
-- فقط تأییدکنندگان SIG Docs می‌توانند با افزودن نظر `/approve` یک pull request را
-  ادغام کنند. برخی تأییدکنندگان نقش‌های ویژه دیگری نیز بر عهده دارند،
-  مانند [PR Wrangler](/docs/contribute/participate/pr-wranglers/) یا
+- تنها تأییدکنندگان SIG Docs می‌توانند با افزودن نظر `/approve` یک درخواست ادغام
+  را ادغام کنند. برخی از تأییدکنندگان نقش‌های مشخص دیگری نیز بر عهده دارند؛ مانند
+  [مدیر PRها (PR Wrangler)](/docs/contribute/participate/pr-wranglers/) یا
   [رئیس SIG Docs](#sig-docs-chairperson).
 
 
 
 ## {{% heading "whatsnext" %}}
 
-برای آگاهی بیشتر درباره مشارکت در SIG Docs، به این موارد مراجعه کنید:
+برای کسب اطلاعات بیشتر درباره مشارکت در SIG Docs، صفحه‌های زیر را ببینید:
 
 - [نقش‌ها و مسئولیت‌ها](/docs/contribute/participate/roles-and-responsibilities/)
-- [Issue wranglerها](/docs/contribute/participate/issue-wrangler/)
-- [PR wranglerها](/docs/contribute/participate/pr-wranglers/)
+- [مدیران issueها](/docs/contribute/participate/issue-wrangler/)
+- [مدیران PRها](/docs/contribute/participate/pr-wranglers/)
 
-برای اطلاعات بیشتر درباره مشارکت در مستندات کوبرنتیز، به این موارد مراجعه کنید:
+برای کسب اطلاعات بیشتر درباره مشارکت در مستندات کوبرنتیز، صفحه‌های زیر را ببینید:
 
 - [مشارکت با محتوای جدید](/docs/contribute/new-content/)
 - [بازبینی محتوا](/docs/contribute/review/reviewing-prs)

@@ -101,26 +101,26 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [contribute/style/hugo-shortcodes/example2.md](md/contribute/style/hugo-shortcodes/example2.md) — 2026-11-19T09:38:59+03:30
+- [contribute/style/hugo-shortcodes/example1.md](md/contribute/style/hugo-shortcodes/example1.md) — 2026-11-19T09:38:55+03:30
+- [contribute/review/reviewing-prs.md](md/contribute/review/reviewing-prs.md) — 2026-11-19T09:38:51+03:30
+- [contribute/style/content-organization.md](md/contribute/style/content-organization.md) — 2026-11-19T09:36:41+03:30
+- [contribute/style/content-guide.md](md/contribute/style/content-guide.md) — 2026-11-19T09:36:15+03:30
+- [contribute/style/_index.md](md/contribute/style/_index.md) — 2026-11-19T09:35:59+03:30
+- [contribute/review/for-approvers.md](md/contribute/review/for-approvers.md) — 2026-11-19T09:35:51+03:30
+- [contribute/new-content/open-a-pr.md](md/contribute/new-content/open-a-pr.md) — 2026-11-19T09:35:21+03:30
+- [contribute/review/_index.md](md/contribute/review/_index.md) — 2026-11-19T09:34:46+03:30
+- [contribute/participate/roles-and-responsibilities.md](md/contribute/participate/roles-and-responsibilities.md) — 2026-11-19T09:34:41+03:30
+- [contribute/participate/pr-wranglers.md](md/contribute/participate/pr-wranglers.md) — 2026-11-19T09:33:06+03:30
+- [contribute/participate/issue-wrangler.md](md/contribute/participate/issue-wrangler.md) — 2026-11-19T09:32:23+03:30
+- [contribute/participate/_index.md](md/contribute/participate/_index.md) — 2026-11-19T09:32:05+03:30
+- [contribute/new-content/preview-locally.md](md/contribute/new-content/preview-locally.md) — 2026-11-19T09:31:35+03:30
+- [contribute/new-content/new-features.md](md/contribute/new-content/new-features.md) — 2026-11-19T09:31:06+03:30
 - [contribute/new-content/_index.md](md/contribute/new-content/_index.md) — 2026-11-19T09:30:52+03:30
 - [contribute/new-content/case-studies.md](md/contribute/new-content/case-studies.md) — 2026-11-19T09:30:20+03:30
 - [contribute/generate-ref-docs/release-generation.md](md/contribute/generate-ref-docs/release-generation.md) — 2026-11-19T09:30:12+03:30
 - [contribute/localization.md](md/contribute/localization.md) — 2026-11-19T09:29:09+03:30
 - [concepts/workloads/pods/pod-lifecycle.md](md/concepts/workloads/pods/pod-lifecycle.md) — 2026-11-19T09:27:15+03:30
-- [contribute/generate-ref-docs/quickstart.md](md/contribute/generate-ref-docs/quickstart.md) — 2026-11-19T09:27:08+03:30
-- [contribute/generate-ref-docs/prerequisites-ref-docs.md](md/contribute/generate-ref-docs/prerequisites-ref-docs.md) — 2026-11-19T09:26:23+03:30
-- [contribute/generate-ref-docs/metrics-reference.md](md/contribute/generate-ref-docs/metrics-reference.md) — 2026-11-19T09:26:13+03:30
-- [contribute/generate-ref-docs/kubernetes-components.md](md/contribute/generate-ref-docs/kubernetes-components.md) — 2026-11-19T09:25:59+03:30
-- [contribute/generate-ref-docs/kubernetes-api.md](md/contribute/generate-ref-docs/kubernetes-api.md) — 2026-11-19T09:25:49+03:30
-- [contribute/generate-ref-docs/kubectl.md](md/contribute/generate-ref-docs/kubectl.md) — 2026-11-19T09:25:22+03:30
-- [contribute/generate-ref-docs/contribute-upstream.md](md/contribute/generate-ref-docs/contribute-upstream.md) — 2026-11-19T09:23:57+03:30
-- [contribute/generate-ref-docs/config-api.md](md/contribute/generate-ref-docs/config-api.md) — 2026-11-19T09:23:12+03:30
-- [contribute/generate-ref-docs/_index.md](md/contribute/generate-ref-docs/_index.md) — 2026-11-19T09:22:53+03:30
-- [contribute/docs.md](md/contribute/docs.md) — 2026-11-19T09:22:45+03:30
-- [contribute/blog/guidelines.md](md/contribute/blog/guidelines.md) — 2026-11-18T15:16:28+03:30
-- [concepts/workloads/workload-api/disruption-and-priority.md](md/concepts/workloads/workload-api/disruption-and-priority.md) — 2026-11-18T15:15:39+03:30
-- [concepts/workloads/workload-api/_index.md](md/concepts/workloads/workload-api/_index.md) — 2026-11-18T15:15:01+03:30
-- [concepts/workloads/controllers/job.md](md/concepts/workloads/controllers/job.md) — 2026-11-18T15:14:19+03:30
-- [concepts/workloads/pods/pod-hostname.md](md/concepts/workloads/pods/pod-hostname.md) — 2026-11-18T15:14:09+03:30
 
 </div>
 
@@ -131,7 +131,7 @@ cd kubernetes-doc-fa
 - [concepts/security/pod-security-standards.md](md/concepts/security/pod-security-standards.md): chunk 1: short: 904 words vs 1711 source words
 - [contribute/docs.md](md/contribute/docs.md): chunk 1: 10 untranslated English lines, e.g. 'D[Look over the<br>kubernetes/website<br>repository] --- E[Check out the<br>Hugo static site<br>generator]'
 - [contribute/new-content/_index.md](md/contribute/new-content/_index.md): chunk 1: 3 untranslated English lines, e.g. 'classDef grey fill:#dddddd,stroke:#ffffff,stroke-width:px,color:#000000, font-size:15px;'
-- [contribute/new-content/open-a-pr.md](md/contribute/new-content/open-a-pr.md): chunk 1: 18 untranslated English lines, e.g. '1[1. Edit this page] --> 2[2. Use GitHub markdown<br>editor to make changes]'
+- [contribute/new-content/open-a-pr.md](md/contribute/new-content/open-a-pr.md): chunk 1: 10 untranslated English lines, e.g. 'classDef grey fill:#dddddd,stroke:#ffffff,stroke-width:px,color:#000000, font-size:15px;'
 - [contribute/review/reviewing-prs.md](md/contribute/review/reviewing-prs.md): chunk 1: 5 untranslated English lines, e.g. 'J[read description<br>and comments]--> K[preview changes in<br>Netlify preview build]'
 - [contribute/style/hugo-shortcodes/index.md](md/contribute/style/hugo-shortcodes/index.md): chunk 1: 4 untranslated English lines, e.g. "// If you don't set a tab name, the site supplies one."
 - [contribute/style/style-guide.md](md/contribute/style/style-guide.md): chunk 1: 37 untranslated English lines, e.g. "{{< comment >}}[If you're localizing this page, you can omit the point about US English.]{{< /comment >}}"
