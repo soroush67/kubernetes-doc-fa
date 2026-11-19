@@ -6,72 +6,73 @@ reviewers:
 - erictune
 - janetkuo
 - thockin
-title: کنترل پذیرش (Admission Control) در کوبرنتیز
+title: کنترل پذیرش در کوبرنتیز
 linkTitle: کنترل پذیرش
 content_type: concept
 weight: 40
 ---
 
 <!-- overview -->
-این صفحه مروری بر _admission controllerها_ (کنترل‌کننده‌های پذیرش) ارائه می‌دهد.
+این صفحه مروری بر _کنترل‌کننده‌های پذیرش_ (admission controllers) ارائه می‌دهد.
 
-یک admission controller قطعه‌ای از کد است که درخواست‌های ارسال‌شده به API server کوبرنتیز را پیش از ماندگار شدن (persistence) منبع، اما پس از احراز هویت و مجوزدهی درخواست، رهگیری می‌کند.
+کنترل‌کنندهٔ پذیرش قطعه‌کدی است که درخواست‌های ارسالی به سرور API کوبرنتیز را پس از احراز هویت و مجوزدهی، اما پیش از ذخیره‌شدن منبع، رهگیری می‌کند.
 
-چند قابلیت مهم کوبرنتیز برای آنکه به‌درستی پشتیبانی شوند، به فعال بودن یک admission controller نیاز دارند. در نتیجه، API server کوبرنتیزی که با مجموعه مناسبی از admission controllerها پیکربندی نشده باشد، سروری ناقص است و همه قابلیت‌هایی را که انتظار دارید پشتیبانی نخواهد کرد.
+برخی از قابلیت‌های مهم کوبرنتیز تنها زمانی به‌درستی پشتیبانی می‌شوند که یک کنترل‌کنندهٔ پذیرش فعال باشد. در نتیجه، سرور API کوبرنتیزی که با مجموعهٔ مناسبی از کنترل‌کننده‌های پذیرش پیکربندی نشده باشد، سروری ناقص است و از همهٔ قابلیت‌هایی که انتظار دارید پشتیبانی نخواهد کرد.
 
 <!-- body -->
-## آن‌ها چیستند؟
+## کنترل‌کننده‌های پذیرش چه هستند؟
 
-Admission controllerها کدهایی در {{< glossary_tooltip term_id="kube-apiserver" text="API server" >}} کوبرنتیز هستند که داده‌های موجود در یک درخواست برای تغییر یک منبع را بررسی می‌کنند.
+کنترل‌کننده‌های پذیرش کدهایی درون {{< glossary_tooltip term_id="kube-apiserver" text="سرور API" >}} کوبرنتیز هستند که داده‌های رسیده در درخواستی برای تغییر یک منبع را بررسی می‌کنند.
 
-Admission controllerها بر درخواست‌هایی اعمال می‌شوند که آبجکت‌ها را ایجاد، حذف یا تغییر می‌دهند. Admission controllerها همچنین می‌توانند فعل‌های سفارشی (custom verbs) را مسدود کنند؛ برای نمونه درخواست اتصال به یک pod از طریق پروکسی API server. Admission controllerها درخواست‌های خواندن آبجکت‌ها (**get**، **watch** یا **list**) را مسدود _نمی‌کنند_ (و نمی‌توانند بکنند)، زیرا خواندن از لایه کنترل پذیرش عبور نمی‌کند.
+کنترل‌کننده‌های پذیرش بر درخواست‌هایی اعمال می‌شوند که آبجکت‌ها را ایجاد، حذف یا تغییر می‌دهند. این کنترل‌کننده‌ها می‌توانند فعل‌های سفارشی را نیز مسدود کنند؛ برای نمونه، درخواستی برای اتصال به یک پاد از طریق پراکسی سرور API. کنترل‌کننده‌های پذیرش درخواست‌های خواندن آبجکت‌ها (**get**، **watch** یا **list**) را مسدود _نمی‌کنند_ (و نمی‌توانند مسدود کنند)، زیرا عملیات خواندن از لایهٔ کنترل پذیرش عبور نمی‌کند.
 
-سازوکارهای کنترل پذیرش ممکن است _اعتبارسنجی‌کننده_ (validating)، _تغییردهنده_ (mutating) یا هر دو باشند. کنترل‌کننده‌های mutating می‌توانند داده‌های منبعی را که در حال تغییر است اصلاح کنند؛ کنترل‌کننده‌های validating چنین کاری نمی‌توانند بکنند.
+سازوکارهای کنترل پذیرش می‌توانند _اعتبارسنج_ (validating)، _تغییردهنده_ (mutating) یا هر دو باشند. کنترل‌کننده‌های تغییردهنده می‌توانند داده‌های منبعِ در حال تغییر را اصلاح کنند، اما کنترل‌کننده‌های اعتبارسنج چنین اجازه‌ای ندارند.
 
-admission controllerهای کوبرنتیز {{< skew currentVersion >}} شامل [فهرست](#what-does-each-admission-controller-do) زیر هستند، در باینری `kube-apiserver` کامپایل شده‌اند و تنها مدیر کلاستر می‌تواند آن‌ها را پیکربندی کند.
+کنترل‌کننده‌های پذیرش در کوبرنتیز {{< skew currentVersion >}} شامل موارد [فهرست](#what-does-each-admission-controller-do) زیر هستند، درون فایل اجرایی `kube-apiserver` کامپایل شده‌اند و تنها مدیر کلاستر می‌تواند آن‌ها را پیکربندی کند.
 
-### نقاط توسعه کنترل پذیرش
+### نقاط توسعهٔ کنترل پذیرش
 
-در میان کل [فهرست](#what-does-each-admission-controller-do)، چهار کنترل‌کننده ویژه وجود دارد:
+در میان [فهرست](#what-does-each-admission-controller-do) کامل، چهار کنترل‌کنندهٔ ویژه وجود دارد:
 [MutatingAdmissionWebhook](#mutatingadmissionwebhook)،
 [MutatingAdmissionPolicy](#mutatingadmissionpolicy)،
 [ValidatingAdmissionWebhook](#validatingadmissionwebhook) و
 [ValidatingAdmissionPolicy](#validatingadmissionpolicy).
-دو کنترل‌کننده webhook به‌ترتیب، [webhookهای کنترل پذیرش](/docs/reference/access-authn-authz/extensible-admission-controllers/#admission-webhooks) از نوع mutating و validating را اجرا می‌کنند که در API پیکربندی شده‌اند. MutatingAdmissionPolicy و ValidatingAdmissionPolicy روشی برای تعبیه کد تغییر/اعتبارسنجی اعلانی (declarative) در درون API فراهم می‌کنند، بدون آنکه به فراخوانی‌های HTTP خارجی وابسته باشند.
+دو کنترل‌کنندهٔ وب‌هوک، به‌ترتیب [وب‌هوک‌های کنترل پذیرش](/docs/reference/access-authn-authz/extensible-admission-controllers/#admission-webhooks) تغییردهنده و اعتبارسنجی را اجرا می‌کنند که در API پیکربندی شده‌اند. کنترل‌کننده‌های MutatingAdmissionPolicy و ValidatingAdmissionPolicy نیز راهی برای جاسازی کد اعلانی تغییر یا اعتبارسنجی درون خود API فراهم می‌کنند، بی‌آنکه به فراخوانی‌های HTTP خارجی نیازی باشد.
 
-می‌توانید از این چهار admission controller برای سفارشی‌سازی رفتار کلاستر در زمان پذیرش استفاده کنید.
+با این چهار کنترل‌کنندهٔ پذیرش می‌توانید رفتار کلاستر را در زمان پذیرش سفارشی کنید.
 
 ### مراحل کنترل پذیرش
 
-فرایند کنترل پذیرش در دو مرحله پیش می‌رود. در مرحله نخست، admission controllerهای mutating اجرا می‌شوند. در مرحله دوم، admission controllerهای validating اجرا می‌شوند. دوباره یادآوری می‌شود که برخی از کنترل‌کننده‌ها هر دو نقش را دارند.
+فرایند کنترل پذیرش در دو مرحله انجام می‌شود. در مرحلهٔ نخست، کنترل‌کننده‌های پذیرش تغییردهنده اجرا می‌شوند و در مرحلهٔ دوم، کنترل‌کننده‌های پذیرش اعتبارسنج. یادآوری می‌کنیم که برخی کنترل‌کننده‌ها هر دو نقش را دارند.
 
-اگر هر یک از کنترل‌کننده‌ها در هر یک از این دو مرحله درخواست را رد کنند، کل درخواست بلافاصله رد می‌شود و خطایی به کاربر نهایی بازگردانده می‌شود.
+اگر هر یک از کنترل‌کننده‌ها در هر یک از این دو مرحله درخواست را رد کند، کل درخواست بی‌درنگ رد می‌شود و خطایی به کاربر نهایی بازگردانده می‌شود.
 
-سرانجام، admission controllerها علاوه بر آنکه گاهی آبجکت مورد نظر را تغییر می‌دهند، ممکن است گاهی عوارض جانبی (side effects) نیز داشته باشند؛ یعنی در جریان پردازش درخواست، منابع مرتبط را تغییر دهند. افزایش میزان مصرف سهمیه (quota) مثال شاخص دلیل ضرورت این موضوع است. هر عارضه جانبی از این دست به یک فرایند بازپس‌گیری یا هم‌ترازسازی (reconciliation) متناظر نیاز دارد، زیرا یک admission controller مشخص با اطمینان نمی‌داند که درخواست داده‌شده از همه admission controllerهای دیگر عبور خواهد کرد یا نه.
+در پایان، کنترل‌کننده‌های پذیرش افزون بر اینکه گاهی آبجکت مورد نظر را تغییر می‌دهند، ممکن است گاهی اثرات جانبی نیز داشته باشند؛ یعنی منابع مرتبط را در جریان پردازش درخواست تغییر دهند. افزایش میزان مصرف سهمیه (quota) نمونهٔ شاخص ضرورت این کار است. هر اثر جانبی از این دست به فرایند بازپس‌گیری یا هماهنگ‌سازی متناظری نیاز دارد، زیرا هیچ کنترل‌کنندهٔ پذیرشی با قطعیت نمی‌داند که یک درخواست از همهٔ کنترل‌کننده‌های پذیرش دیگر نیز عبور خواهد کرد.
 
-ترتیب این فراخوانی‌ها را در زیر می‌توانید ببینید.
+ترتیب این فراخوانی‌ها را در نمودار زیر می‌توانید ببینید.
 
 {{< figure src="/docs/reference/access-authn-authz/admission-control-phases.svg" alt="Sequence diagram for kube-apiserver handling requests during the admission phase showing mutation webhooks, followed by validatingadmissionpolicies and finally validating webhooks. It shows that the continue until the first rejection, or being accepted by all of them. It also shows that mutations by mutating webhooks cause all previously called webhooks to be called again." class="diagram-large" link="[https://mermaid.live/edit#pako:eNqtVm1v2zYQ_isHDcZazO-O34QhQJdiazAEKJquAwZ9oaSzxZoiNZJy4gT-7ztSL1bs5sPQ6otE8rm75-45inwOEpViEAa9HnxgewSrwKCFjZL2nj8hbIWKmRAHYAZsxg1wI3-2oNEUmFhMIS29UWZtYcLRaMttVsbDROWjHHXOeDr4aprPETemRDOardfjSPZ6z1xyGz5Hgc0wxygIo0BiaTUTUdCPgoYELUAUTKfFI03Tl8F_S5SJnyfjnGut9LvEKm1oyuoSj_1IAj215y9McxYLNJWFX6qWmbP6bbf1sX-aTRcJzl3sc8hnfLQ3SijtgQ8Zt3gGE0oVXRS85k8qixSxg9tqPJyBvpV6JI_HY68XyUg2FXjP2Vaz3E05OxLxc6URaYXAhB1YokRqamBJgsbwmAtuD31gMgWTqVKkECOURcqcmLhHfQDLc_QO0so9-RtWAcjJezSJ7hbxvubSol20XRnjgBXcoCaXkFE4weWW-obAxhpqG-3GnmaaU19wJaHImEFH68Gt5aVl1k0_YJwptTN9ci2EeiCi8QH2THBiTcjWQaEETzgan92GS9-4J1zraAgn-rfWB3QVY9bzSaj2XFJbl_QWfmrDtXFN_5V6nuL0gVKM0bl0ZS1sxYjCgdo4g_wsAhNGdcM0qRlnVg069CBhpUHvrtC456o0lEdCY4rTgmjTkXL1LNsyLmuRjk07FExbqkfBpIW_SAm3h_37cvndx1u3-ifJpiVaKqGbuffqfQNd2szB3RupSEml0y9-Qmn-5MdtT74wTfMbq4W3bnW_oYprJSqDWD3CH5SNiZVWlyD4NdbXN1XWlUBn4lzSvWsKTEHb79bxJf7LqWPIojM6s0GZulJXA1_YwfW1L1wIn6pGhzc43A77kGikDQYMCpW-revvgN6AihZ2a0md59WiJnbJJhkmu2qqoP9oxcA0cd1_B353G5zapc3uY70TTl3oNXPhGkwIt3KvdnhmdDiZtAsnlncq5ZuDa_-q3qBi_3rDNyARU0zfvqjN6wz_rvv4fzGsjX44RVK_ZdjRu6kicOkgrunEK7FPVi3rc0edynaWXib86XspN2X9bsqX-vwA0q3E1PvU8u5n3hGqPhxasNsfDuy2lotiCup7hGZPmdIfac4BuhsAhQv6dJjytLoE9IP62kHXG39ene4Z9JnihpXC-mOVzGjj_6NU3lhqVW6zINzQj5tG1fFYH7YNhJVW3R9k0owx5XRRuKuuU_5WRW4od9Q3in5UQTgZ-zBB-Bw8BuFgNpsOF_PF-mo-nkxmq-WsHxwINFkOr8aT5WoxW01Wy8l4fewHT57ZZDieL-fr8WI8W01XV7Px9PgfcW89xA](https://mermaid.live/edit#pako:eNqtVm1v2zYQ_isHDcZazO-O34QhQJdiazAEKJquAwZ9oaSzxZoiNZJy4gT-7ztSL1bs5sPQ6otE8rm75-45inwOEpViEAa9HnxgewSrwKCFjZL2nj8hbIWKmRAHYAZsxg1wI3-2oNEUmFhMIS29UWZtYcLRaMttVsbDROWjHHXOeDr4aprPETemRDOardfjSPZ6z1xyGz5Hgc0wxygIo0BiaTUTUdCPgoYELUAUTKfFI03Tl8F_S5SJnyfjnGut9LvEKm1oyuoSj_1IAj215y9McxYLNJWFX6qWmbP6bbf1sX-aTRcJzl3sc8hnfLQ3SijtgQ8Zt3gGE0oVXRS85k8qixSxg9tqPJyBvpV6JI_HY68XyUg2FXjP2Vaz3E05OxLxc6URaYXAhB1YokRqamBJgsbwmAtuD31gMgWTqVKkECOURcqcmLhHfQDLc_QO0so9-RtWAcjJezSJ7hbxvubSol20XRnjgBXcoCaXkFE4weWW-obAxhpqG-3GnmaaU19wJaHImEFH68Gt5aVl1k0_YJwptTN9ci2EeiCi8QH2THBiTcjWQaEETzgan92GS9-4J1zraAgn-rfWB3QVY9bzSaj2XFJbl_QWfmrDtXFN_5V6nuL0gVKM0bl0ZS1sxYjCgdo4g_wsAhNGdcM0qRlnVg069CBhpUHvrtC456o0lEdCY4rTgmjTkXL1LNsyLmuRjk07FExbqkfBpIW_SAm3h_37cvndx1u3-ifJpiVaKqGbuffqfQNd2szB3RupSEml0y9-Qmn-5MdtT74wTfMbq4W3bnW_oYprJSqDWD3CH5SNiZVWlyD4NdbXN1XWlUBn4lzSvWsKTEHb79bxJf7LqWPIojM6s0GZulJXA1_YwfW1L1wIn6pGhzc43A77kGikDQYMCpW-revvgN6AihZ2a0md59WiJnbJJhkmu2qqoP9oxcA0cd1_B353G5zapc3uY70TTl3oNXPhGkwIt3KvdnhmdDiZtAsnlncq5ZuDa_-q3qBi_3rDNyARU0zfvqjN6wz_rvv4fzGsjX44RVK_ZdjRu6kicOkgrunEK7FPVi3rc0edynaWXib86XspN2X9bsqX-vwA0q3E1PvU8u5n3hGqPhxasNsfDuy2lotiCup7hGZPmdIfac4BuhsAhQv6dJjytLoE9IP62kHXG39ene4Z9JnihpXC-mOVzGjj_6NU3lhqVW6zINzQj5tG1fFYH7YNhJVW3R9k0owx5XRRuKuuU_5WRW4od9Q3in5UQTgZ-zBB-Bw8BuFgNpsOF_PF-mo-nkxmq-WsHxwINFkOr8aT5WoxW01Wy8l4fewHT57ZZDieL-fr8WI8W01XV7Px9PgfcW89xA)" >}}
 
 ## چرا به آن‌ها نیاز دارم؟
 
-چند قابلیت مهم کوبرنتیز برای آنکه به‌درستی پشتیبانی شوند، به فعال بودن یک admission controller نیاز دارند. در نتیجه، API server کوبرنتیزی که با مجموعه مناسبی از admission controllerها پیکربندی نشده باشد، سروری ناقص است و همه قابلیت‌هایی را که انتظار دارید پشتیبانی نخواهد کرد.
+برخی از قابلیت‌های مهم کوبرنتیز تنها زمانی به‌درستی پشتیبانی می‌شوند که یک کنترل‌کنندهٔ پذیرش فعال باشد. در نتیجه، سرور API کوبرنتیزی که با مجموعهٔ مناسبی از کنترل‌کننده‌های پذیرش پیکربندی نشده باشد، سروری ناقص است و از همهٔ قابلیت‌هایی که انتظار دارید پشتیبانی نخواهد کرد.
 
-## چگونه یک admission controller را فعال کنم؟
+## چگونه یک کنترل‌کنندهٔ پذیرش را فعال کنم؟
 
-فلگ `enable-admission-plugins` در API server کوبرنتیز فهرستی از افزونه‌های کنترل پذیرش را که با کاما از هم جدا شده‌اند می‌پذیرد تا پیش از تغییر آبجکت‌ها در کلاستر فراخوانی شوند. برای مثال، دستور زیر افزونه‌های کنترل پذیرش `NamespaceLifecycle` و `LimitRanger` را فعال می‌کند:
+فلگ `enable-admission-plugins` در سرور API کوبرنتیز فهرستی از افزونه‌های کنترل پذیرش را، جداشده با ویرگول، دریافت می‌کند که باید پیش از تغییر آبجکت‌ها در کلاستر فراخوانی شوند.
+برای نمونه، خط فرمان زیر افزونه‌های کنترل پذیرش `NamespaceLifecycle` و `LimitRanger` را فعال می‌کند:
 
 ```shell
 kube-apiserver --enable-admission-plugins=NamespaceLifecycle,LimitRanger ...
 ```
 
 {{< note >}}
-بسته به شیوه استقرار کلاستر کوبرنتیز و نحوه راه‌اندازی API server، ممکن است لازم باشد تنظیمات را به روش‌های متفاوتی اعمال کنید. برای مثال، اگر API server به‌صورت یک سرویس systemd مستقر شده باشد، ممکن است لازم باشد فایل unit مربوط به systemd را تغییر دهید؛ و اگر کوبرنتیز به‌صورت خودمیزبان (self-hosted) مستقر شده باشد، می‌توانید فایل مانیفست API server را تغییر دهید.
+بسته به شیوهٔ استقرار کلاستر کوبرنتیز و نحوهٔ راه‌اندازی سرور API، ممکن است لازم باشد این تنظیمات را به روش‌های متفاوتی اعمال کنید. برای نمونه، اگر سرور API به‌صورت یک سرویس systemd مستقر شده باشد، باید فایل واحد systemd را ویرایش کنید و اگر کوبرنتیز به‌صورت خودمیزبان (self-hosted) مستقر شده باشد، می‌توانید فایل مانیفست سرور API را تغییر دهید.
 {{< /note >}}
 
-## چگونه یک admission controller را غیرفعال کنم؟
+## چگونه یک کنترل‌کنندهٔ پذیرش را غیرفعال کنم؟
 
-فلگ `disable-admission-plugins` در API server کوبرنتیز فهرستی از افزونه‌های کنترل پذیرش را که با کاما از هم جدا شده‌اند می‌پذیرد تا غیرفعال شوند، حتی اگر در فهرست افزونه‌هایی باشند که به‌طور پیش‌فرض فعال هستند.
+فلگ `disable-admission-plugins` در سرور API کوبرنتیز فهرستی از افزونه‌های کنترل پذیرش را، جداشده با ویرگول، دریافت می‌کند که باید غیرفعال شوند؛ حتی اگر در فهرست افزونه‌های پیش‌فرض فعال قرار داشته باشند.
 
 ```shell
 kube-apiserver --disable-admission-plugins=PodNodeSelector,AlwaysDeny ...
@@ -79,7 +80,7 @@ kube-apiserver --disable-admission-plugins=PodNodeSelector,AlwaysDeny ...
 
 ## کدام افزونه‌ها به‌طور پیش‌فرض فعال هستند؟
 
-برای مشاهده اینکه کدام افزونه‌های پذیرش فعال هستند:
+برای دیدن افزونه‌های پذیرش فعال، دستور زیر را اجرا کنید:
 
 ```shell
 kube-apiserver -h | grep enable-admission-plugins
@@ -91,98 +92,103 @@ kube-apiserver -h | grep enable-admission-plugins
 CertificateApproval, CertificateSigning, CertificateSubjectRestriction, DefaultIngressClass, DefaultStorageClass, DefaultTolerationSeconds, LimitRanger, MutatingAdmissionPolicy, MutatingAdmissionWebhook, NamespaceLifecycle, PersistentVolumeClaimResize, PodSecurity, Priority, ResourceQuota, RuntimeClass, ServiceAccount, StorageObjectInUseProtection, TaintNodesByCondition, ValidatingAdmissionPolicy, ValidatingAdmissionWebhook
 ```
 
-## هر admission controller چه کاری انجام می‌دهد؟
+## هر کنترل‌کنندهٔ پذیرش چه کاری انجام می‌دهد؟
 
 ### AlwaysAdmit {#alwaysadmit}
 
 {{< feature-state for_k8s_version="v1.13" state="deprecated" >}}
 
-**نوع**: Validating.
+**نوع**: اعتبارسنج.
 
-این admission controller اجازه ورود همه podها به کلاستر را می‌دهد. این کنترل‌کننده **منسوخ‌شده (deprecated)** است، زیرا رفتار آن با نبودن هرگونه admission controller یکسان است.
+این کنترل‌کنندهٔ پذیرش اجازهٔ ورود همهٔ پادها به کلاستر را می‌دهد. این کنترل‌کننده **منسوخ** شده است، زیرا رفتارش دقیقاً مانند حالتی است که هیچ کنترل‌کنندهٔ پذیرشی وجود نداشته باشد.
 
 ### AlwaysDeny {#alwaysdeny}
 
 {{< feature-state for_k8s_version="v1.13" state="deprecated" >}}
 
-**نوع**: Validating.
+**نوع**: اعتبارسنج.
 
-همه درخواست‌ها را رد می‌کند. AlwaysDeny **منسوخ‌شده (deprecated)** است، زیرا معنای واقعی ندارد.
+این کنترل‌کننده همهٔ درخواست‌ها را رد می‌کند. کنترل‌کنندهٔ AlwaysDeny **منسوخ** شده است، زیرا کاربرد واقعی ندارد.
 
 ### AlwaysPullImages {#alwayspullimages}
 
-**نوع**: Mutating و Validating.
+**نوع**: تغییردهنده و اعتبارسنج.
 
-این admission controller هر Pod جدید را طوری تغییر می‌دهد که سیاست دریافت ایمیج (image pull policy) به‌اجبار روی `Always` تنظیم شود. این کار در یک کلاستر چندمستاجری (multitenant) مفید است تا کاربران مطمئن باشند ایمیج‌های خصوصی آن‌ها فقط توسط کسانی قابل استفاده است که اعتبارنامه‌های لازم برای دریافت آن‌ها را دارند. بدون این admission controller، پس از آنکه یک ایمیج روی یک نود دریافت شد، هر podی از هر کاربری می‌تواند با دانستن نام ایمیج از آن استفاده کند (با فرض آنکه Pod روی نود مناسب زمان‌بندی شود)، بی‌آنکه هیچ بررسی مجوزی روی ایمیج انجام شود. وقتی این admission controller فعال باشد، ایمیج‌ها همیشه پیش از راه‌اندازی کانتینرها دریافت می‌شوند، که به این معنی است که اعتبارنامه‌های معتبر الزامی هستند.
+این کنترل‌کنندهٔ پذیرش هر Pod جدید را طوری تغییر می‌دهد که سیاست دریافت ایمیج آن الزاماً `Always` باشد. این کار در کلاسترهای چندمستأجره (multitenant) سودمند است، زیرا کاربران مطمئن می‌شوند که ایمیج‌های خصوصی‌شان تنها به دست کسانی استفاده می‌شود که اعتبارنامهٔ لازم برای دریافت آن‌ها را دارند. بدون این کنترل‌کنندهٔ پذیرش، وقتی ایمیجی روی یک نود دریافت شد، هر پادی از هر کاربری می‌تواند تنها با دانستن نام ایمیج و بدون هیچ بررسی مجوزی، از آن استفاده کند (به شرط آنکه Pod روی همان نود زمان‌بندی شود). با فعال بودن این کنترل‌کنندهٔ پذیرش، ایمیج‌ها همیشه پیش از راه‌اندازی کانتینرها دریافت می‌شوند؛ بنابراین داشتن اعتبارنامهٔ معتبر الزامی است.
 
 ### CertificateApproval {#certificateapproval}
 
-**نوع**: Validating.
+**نوع**: اعتبارسنج.
 
-این admission controller درخواست‌های تأیید منابع CertificateSigningRequest را زیر نظر می‌گیرد و بررسی‌های مجوز اضافی انجام می‌دهد تا اطمینان حاصل کند کاربر تأییدکننده اجازه **approve** کردن درخواست‌های گواهی با `spec.signerName` درخواست‌شده روی منبع CertificateSigningRequest را دارد.
+این کنترل‌کنندهٔ پذیرش درخواست‌های تأیید منابع CertificateSigningRequest را زیر نظر می‌گیرد و بررسی‌های مجوزدهی بیشتری انجام می‌دهد تا مطمئن شود کاربر تأییدکننده اجازهٔ **تأیید** درخواست‌های گواهی را با مقدار `spec.signerName` درخواست‌شده در منبع CertificateSigningRequest دارد.
 
-برای اطلاعات بیشتر درباره مجوزهای لازم برای انجام اقدامات مختلف روی منابع CertificateSigningRequest، به [درخواست‌های امضای گواهی (Certificate Signing Requests)](/docs/reference/access-authn-authz/certificate-signing-requests/) مراجعه کنید.
+برای آگاهی بیشتر دربارهٔ مجوزهای لازم برای انجام کارهای مختلف روی منابع CertificateSigningRequest، به [درخواست‌های امضای گواهی](/docs/reference/access-authn-authz/certificate-signing-requests/) مراجعه کنید.
 
 ### CertificateSigning {#certificatesigning}
 
-**نوع**: Validating.
+**نوع**: اعتبارسنج.
 
-این admission controller به‌روزرسانی‌های فیلد `status.certificate` در منابع CertificateSigningRequest را زیر نظر می‌گیرد و بررسی‌های مجوز اضافی انجام می‌دهد تا اطمینان حاصل کند کاربر امضاکننده اجازه **sign** کردن درخواست‌های گواهی با `spec.signerName` درخواست‌شده روی منبع CertificateSigningRequest را دارد.
+این کنترل‌کنندهٔ پذیرش به‌روزرسانی‌های فیلد `status.certificate` در منابع CertificateSigningRequest را زیر نظر می‌گیرد و بررسی‌های مجوزدهی بیشتری انجام می‌دهد تا مطمئن شود کاربر امضاکننده اجازهٔ **امضای** درخواست‌های گواهی را با مقدار `spec.signerName` درخواست‌شده در منبع CertificateSigningRequest دارد.
 
-برای اطلاعات بیشتر درباره مجوزهای لازم برای انجام اقدامات مختلف روی منابع CertificateSigningRequest، به [درخواست‌های امضای گواهی (Certificate Signing Requests)](/docs/reference/access-authn-authz/certificate-signing-requests/) مراجعه کنید.
+برای آگاهی بیشتر دربارهٔ مجوزهای لازم برای انجام کارهای مختلف روی منابع CertificateSigningRequest، به [درخواست‌های امضای گواهی](/docs/reference/access-authn-authz/certificate-signing-requests/) مراجعه کنید.
 
 ### CertificateSubjectRestriction {#certificatesubjectrestriction}
 
-**نوع**: Validating.
+**نوع**: اعتبارسنج.
 
-این admission controller ایجاد منابع CertificateSigningRequest را که `spec.signerName` آن‌ها `kubernetes.io/kube-apiserver-client` است زیر نظر می‌گیرد. هر درخواستی را که «group» (یا «organization attribute») آن `system:masters` باشد رد می‌کند.
+این کنترل‌کنندهٔ پذیرش ایجاد منابع CertificateSigningRequest را که مقدار `spec.signerName` آن‌ها `kubernetes.io/kube-apiserver-client` است زیر نظر می‌گیرد و هر درخواستی را که گروه (group یا organization attribute) آن `system:masters` باشد رد می‌کند.
 
 ### DefaultIngressClass {#defaultingressclass}
 
-**نوع**: Mutating.
+**نوع**: تغییردهنده.
 
-این admission controller ایجاد آبجکت‌های `Ingress` را که هیچ ingress class مشخصی درخواست نکرده‌اند زیر نظر می‌گیرد و به‌طور خودکار یک ingress class پیش‌فرض به آن‌ها اضافه می‌کند. به این ترتیب، کاربرانی که ingress class خاصی درخواست نمی‌کنند، لازم نیست اصلاً نگران آن باشند و کلاس پیش‌فرض را دریافت خواهند کرد.
+این کنترل‌کنندهٔ پذیرش ایجاد آبجکت‌های `Ingress` را که کلاس ingress مشخصی درخواست نکرده‌اند زیر نظر می‌گیرد و به‌طور خودکار یک کلاس ingress پیش‌فرض به آن‌ها اضافه می‌کند. به این ترتیب، کاربرانی که کلاس ingress خاصی درخواست نمی‌کنند نیازی به توجه به این موضوع ندارند و کلاس پیش‌فرض را دریافت می‌کنند.
 
-وقتی هیچ ingress class پیش‌فرضی پیکربندی نشده باشد، این admission controller هیچ کاری انجام نمی‌دهد. وقتی بیش از یک ingress class به‌عنوان پیش‌فرض علامت‌گذاری شده باشد، هر درخواست ایجاد `Ingress` را با یک خطا رد می‌کند و مدیر باید آبجکت‌های `IngressClass` خود را بازبینی کند و تنها یکی از آن‌ها را (با حاشیه‌نویسی (annotation) «ingressclass.kubernetes.io/is-default-class») به‌عنوان پیش‌فرض علامت‌گذاری کند. این admission controller هر به‌روزرسانی `Ingress` را نادیده می‌گیرد؛ فقط هنگام ایجاد عمل می‌کند.
+اگر هیچ کلاس ingress پیش‌فرضی پیکربندی نشده باشد، این کنترل‌کنندهٔ پذیرش هیچ کاری انجام نمی‌دهد. اگر بیش از یک کلاس ingress به‌عنوان پیش‌فرض علامت‌گذاری شده باشد، این کنترل‌کننده ایجاد هر `Ingress` را با خطا رد می‌کند و مدیر کلاستر باید آبجکت‌های `IngressClass` خود را بازبینی کند و تنها یکی را (با حاشیه‌نویسی "ingressclass.kubernetes.io/is-default-class") به‌عنوان پیش‌فرض علامت بزند. این کنترل‌کنندهٔ پذیرش به‌روزرسانی‌های `Ingress` را نادیده می‌گیرد و تنها هنگام ایجاد عمل می‌کند.
 
-برای اطلاعات بیشتر درباره ingress classها و نحوه علامت‌گذاری یکی از آن‌ها به‌عنوان پیش‌فرض، مستندات [Ingress](/docs/concepts/services-networking/ingress/) را ببینید.
+برای آگاهی بیشتر دربارهٔ کلاس‌های ingress و نحوهٔ علامت‌گذاری یکی از آن‌ها به‌عنوان پیش‌فرض، مستندات [Ingress](/docs/concepts/services-networking/ingress/) را ببینید.
 
 ### DefaultStorageClass {#defaultstorageclass}
 
-**نوع**: Mutating.
+**نوع**: تغییردهنده.
 
-این admission controller ایجاد آبجکت‌های `PersistentVolumeClaim` را که هیچ storage class مشخصی درخواست نکرده‌اند زیر نظر می‌گیرد و به‌طور خودکار یک storage class پیش‌فرض به آن‌ها اضافه می‌کند. به این ترتیب، کاربرانی که storage class خاصی درخواست نمی‌کنند، لازم نیست اصلاً نگران آن باشند و کلاس پیش‌فرض را دریافت خواهند کرد.
+این کنترل‌کنندهٔ پذیرش ایجاد آبجکت‌های `PersistentVolumeClaim` را که کلاس ذخیره‌سازی مشخصی درخواست نکرده‌اند زیر نظر می‌گیرد و به‌طور خودکار یک کلاس ذخیره‌سازی پیش‌فرض به آن‌ها اضافه می‌کند.
+به این ترتیب، کاربرانی که کلاس ذخیره‌سازی خاصی درخواست نمی‌کنند نیازی به توجه به این موضوع ندارند و کلاس پیش‌فرض را دریافت می‌کنند.
 
-وقتی هیچ `StorageClass` پیش‌فرضی وجود نداشته باشد، این admission controller کاری انجام نمی‌دهد. وقتی بیش از یک storage class به‌عنوان پیش‌فرض علامت‌گذاری شده باشد و سپس یک `PersistentVolumeClaim` بدون تنظیم `storageClassName` ایجاد کنید، کوبرنتیز از آخرین `StorageClass` پیش‌فرضی که ایجاد شده است استفاده می‌کند. وقتی یک `PersistentVolumeClaim` با `volumeName` مشخص ایجاد می‌شود، اگر پس از اعمال هر StorageClass پیش‌فرض بر آن، `storageClassName` مربوط به حجم ایستا (static volume) با `storageClassName` موجود در `PersistentVolumeClaim` مطابقت نداشته باشد، در وضعیت pending باقی می‌ماند. این admission controller هر به‌روزرسانی `PersistentVolumeClaim` را نادیده می‌گیرد؛ فقط هنگام ایجاد عمل می‌کند.
+اگر هیچ `StorageClass` پیش‌فرضی وجود نداشته باشد، این کنترل‌کنندهٔ پذیرش کاری انجام نمی‌دهد. اگر بیش از یک کلاس ذخیره‌سازی به‌عنوان پیش‌فرض علامت‌گذاری شده باشد و سپس یک `PersistentVolumeClaim` بدون تنظیم `storageClassName` ایجاد کنید، کوبرنتیز از جدیدترین `StorageClass` پیش‌فرض ایجادشده استفاده می‌کند.
+اگر یک `PersistentVolumeClaim` با مقدار مشخصی برای `volumeName` ایجاد شود و پس از اعمال StorageClass پیش‌فرض، مقدار `storageClassName` حجم ایستا با `storageClassName` آن `PersistentVolumeClaim` یکسان نباشد، این درخواست در وضعیت معلق (pending) باقی می‌ماند.
+این کنترل‌کنندهٔ پذیرش به‌روزرسانی‌های `PersistentVolumeClaim` را نادیده می‌گیرد و تنها هنگام ایجاد عمل می‌کند.
 
-برای اطلاعات درباره persistent volume claimها و storage classها و نحوه علامت‌گذاری یک storage class به‌عنوان پیش‌فرض، مستندات [persistent volume](/docs/concepts/storage/persistent-volumes/) را ببینید.
+برای آگاهی دربارهٔ درخواست‌های حجم پایدار (persistent volume claims)، کلاس‌های ذخیره‌سازی و نحوهٔ علامت‌گذاری یک کلاس ذخیره‌سازی به‌عنوان پیش‌فرض، مستندات [حجم پایدار](/docs/concepts/storage/persistent-volumes/) را ببینید.
 
 ### DefaultTolerationSeconds {#defaulttolerationseconds}
 
-**نوع**: Mutating.
+**نوع**: تغییردهنده.
 
-این admission controller، بر اساس پارامترهای ورودی k8s-apiserver یعنی `default-not-ready-toleration-seconds` و `default-unreachable-toleration-seconds`، تلرانس (toleration) پیش‌فرض از نوع بخشش را برای podها تنظیم می‌کند تا taintهای `notready:NoExecute` و `unreachable:NoExecute` را تحمل کنند، مشروط بر آنکه podها از قبل برای taintهای `node.kubernetes.io/not-ready:NoExecute` یا `node.kubernetes.io/unreachable:NoExecute` toleration نداشته باشند. مقدار پیش‌فرض `default-not-ready-toleration-seconds` و `default-unreachable-toleration-seconds` برابر ۵ دقیقه است.
+اگر پادها از پیش تحملی (toleration) برای taintهای `node.kubernetes.io/not-ready:NoExecute` یا `node.kubernetes.io/unreachable:NoExecute` نداشته باشند، این کنترل‌کنندهٔ پذیرش تحمل پیش‌فرض را برای پادها تنظیم می‌کند تا taintهای `notready:NoExecute` و `unreachable:NoExecute` را بر اساس پارامترهای ورودی `default-not-ready-toleration-seconds` و `default-unreachable-toleration-seconds` در k8s-apiserver تحمل کنند.
+مقدار پیش‌فرض `default-not-ready-toleration-seconds` و `default-unreachable-toleration-seconds` برابر با ۵ دقیقه است.
 
 ### DenyServiceExternalIPs
 
-**نوع**: Validating.
+**نوع**: اعتبارسنج.
 
-این admission controller هر گونه استفاده جدید از فیلد `externalIPs` در `Service` را رد می‌کند. این قابلیت بسیار قدرتمند است (امکان رهگیری ترافیک شبکه را فراهم می‌کند) و به‌خوبی توسط سیاست‌ها کنترل نمی‌شود. وقتی این کنترل‌کننده فعال باشد، کاربران کلاستر نمی‌توانند Serviceهای جدیدی ایجاد کنند که از `externalIPs` استفاده می‌کنند و نمی‌توانند مقادیر جدیدی به `externalIPs` آبجکت‌های `Service` موجود اضافه کنند. استفاده‌های موجود از `externalIPs` تحت تأثیر قرار نمی‌گیرند و کاربران می‌توانند مقادیری را از `externalIPs` آبجکت‌های `Service` موجود حذف کنند.
+این کنترل‌کنندهٔ پذیرش هر استفادهٔ تازه از فیلد `externalIPs` در `Service` را رد می‌کند. این قابلیت بسیار قدرتمند است (امکان رهگیری ترافیک شبکه را فراهم می‌کند) و سیاست‌ها کنترل خوبی بر آن ندارند. با فعال بودن این کنترل‌کننده، کاربران کلاستر نمی‌توانند Serviceهای جدیدی بسازند که از `externalIPs` استفاده کنند و نمی‌توانند مقادیر جدیدی به `externalIPs` در آبجکت‌های `Service` موجود اضافه کنند. استفاده‌های موجود از `externalIPs` تحت تأثیر قرار نمی‌گیرند و کاربران می‌توانند مقادیری را از `externalIPs` در آبجکت‌های `Service` موجود حذف کنند.
 
-بیشتر کاربران اصلاً به این قابلیت نیاز ندارند و مدیران کلاستر باید غیرفعال کردن آن را در نظر بگیرند. کلاسترهایی که واقعاً نیاز به استفاده از این قابلیت دارند، باید استفاده از یک سیاست سفارشی را برای مدیریت کاربرد آن در نظر بگیرند.
+بیشتر کاربران اصلاً به این قابلیت نیاز ندارند و مدیران کلاستر بهتر است غیرفعال کردن آن را بررسی کنند.
+کلاسترهایی که واقعاً به این قابلیت نیاز دارند، بهتر است برای مدیریت استفاده از آن یک سیاست سفارشی به کار بگیرند.
 
-این admission controller به‌طور پیش‌فرض غیرفعال است.
+این کنترل‌کنندهٔ پذیرش به‌طور پیش‌فرض غیرفعال است.
 
 ### EventRateLimit {#eventratelimit}
 
 {{< feature-state for_k8s_version="v1.13" state="alpha" >}}
 
-**نوع**: Validating.
+**نوع**: اعتبارسنج.
 
-این admission controller مشکل هجوم درخواست‌های ذخیره‌سازی Eventهای جدید به API server را کاهش می‌دهد. مدیر کلاستر می‌تواند محدودیت‌های نرخ Event را به این روش مشخص کند:
+این کنترل‌کنندهٔ پذیرش مشکل سرازیر شدن انبوه درخواست‌های ذخیرهٔ Eventهای جدید به سرور API را کاهش می‌دهد. مدیر کلاستر می‌تواند محدودیت نرخ رویدادها را به این صورت تعیین کند:
 
-* فعال کردن admission controller با نام `EventRateLimit`؛
-* ارجاع به یک فایل پیکربندی `EventRateLimit` از درون فایلی که به فلگ خط فرمان `--admission-control-config-file` در API server داده می‌شود:
+* فعال کردن کنترل‌کنندهٔ پذیرش `EventRateLimit`؛
+* ارجاع به یک فایل پیکربندی `EventRateLimit` در فایلی که با فلگ خط فرمان `--admission-control-config-file` به سرور API داده می‌شود:
 
 ```yaml
 apiVersion: apiserver.config.k8s.io/v1
@@ -193,14 +199,14 @@ plugins:
 ...
 ```
 
-چهار نوع محدودیت وجود دارد که می‌توان در پیکربندی مشخص کرد:
+چهار نوع محدودیت را می‌توان در پیکربندی مشخص کرد:
 
- * `Server`: همه درخواست‌های Event (ایجاد یا تغییر) که API server دریافت می‌کند، یک bucket مشترک را به اشتراک می‌گذارند.
- * `Namespace`: هر فضای نام (namespace) یک bucket اختصاصی دارد.
- * `User`: به هر کاربر یک bucket اختصاص داده می‌شود.
- * `SourceAndObject`: به ازای هر ترکیب از منبع (source) و آبجکت درگیرِ رویداد، یک bucket اختصاص داده می‌شود.
+ * `Server`: همهٔ درخواست‌های Event (ایجاد یا تغییر) که سرور API دریافت می‌کند، یک سطل (bucket) مشترک دارند.
+ * `Namespace`: هر فضای نام (namespace) سطل اختصاصی خود را دارد.
+ * `User`: به هر کاربر یک سطل اختصاص داده می‌شود.
+ * `SourceAndObject`: به هر ترکیب از منبع رویداد و آبجکت درگیر در آن، یک سطل اختصاص داده می‌شود.
 
-در زیر نمونه‌ای از `eventconfig.yaml` برای چنین پیکربندی‌ای آمده است:
+در ادامه نمونه‌ای از فایل `eventconfig.yaml` برای چنین پیکربندی‌ای آمده است:
 
 ```yaml
 apiVersion: eventratelimit.admission.k8s.io/v1alpha1
@@ -217,28 +223,29 @@ limits:
 
 برای جزئیات بیشتر، [EventRateLimit Config API (v1alpha1)](/docs/reference/config-api/apiserver-eventratelimit.v1alpha1/) را ببینید.
 
-این admission controller به‌طور پیش‌فرض غیرفعال است.
+این کنترل‌کنندهٔ پذیرش به‌طور پیش‌فرض غیرفعال است.
 
 ### ExtendedResourceToleration {#extendedresourcetoleration}
 
-**نوع**: Mutating.
+**نوع**: تغییردهنده.
 
-این افزونه ایجاد نودهای اختصاصی دارای منابع توسعه‌یافته (extended resources) را تسهیل می‌کند. اگر اپراتورها بخواهند نودهای اختصاصی با منابع توسعه‌یافته (مانند GPUها، FPGAها و غیره) ایجاد کنند، انتظار می‌رود [نود را taint کنند](/docs/concepts/scheduling-eviction/taint-and-toleration/#example-use-cases) و نام منبع توسعه‌یافته را به‌عنوان کلید قرار دهند. این admission controller، در صورت فعال بودن، به‌طور خودکار tolerationهای مربوط به این taintها را به podهایی که منابع توسعه‌یافته درخواست می‌کنند اضافه می‌کند، بنابراین کاربران لازم نیست این tolerationها را به‌صورت دستی اضافه کنند.
+این افزونه ایجاد نودهای اختصاصی دارای منابع توسعه‌یافته (extended resources) را آسان می‌کند.
+اگر اپراتورها بخواهند نودهای اختصاصی با منابع توسعه‌یافته (مانند GPU، FPGA و غیره) ایجاد کنند، باید [روی نود taint بگذارند](/docs/concepts/scheduling-eviction/taint-and-toleration/#example-use-cases) و نام منبع توسعه‌یافته را به‌عنوان کلید آن قرار دهند. اگر این کنترل‌کنندهٔ پذیرش فعال باشد، به‌طور خودکار تحمل‌های لازم برای چنین taintهایی را به پادهایی که منابع توسعه‌یافته درخواست می‌کنند اضافه می‌کند تا کاربران مجبور نباشند این تحمل‌ها را به‌صورت دستی اضافه کنند.
 
-این admission controller به‌طور پیش‌فرض غیرفعال است.
+این کنترل‌کنندهٔ پذیرش به‌طور پیش‌فرض غیرفعال است.
 
 ### ImagePolicyWebhook {#imagepolicywebhook}
 
 **نوع**: اعتبارسنجی (Validating).
 
-کنترل‌کننده پذیرش ImagePolicyWebhook به یک webhook در بک‌اند اجازه می‌دهد تصمیم‌های پذیرش را اتخاذ کند.
+کنترل‌کننده پذیرش (admission controller) ImagePolicyWebhook به یک وب‌هوک (webhook) بک‌اند امکان می‌دهد درباره پذیرش درخواست‌ها تصمیم بگیرد.
 
-این کنترل‌کننده پذیرش به‌صورت پیش‌فرض غیرفعال است.
+این کنترل‌کننده پذیرش به‌طور پیش‌فرض غیرفعال است.
 
 #### قالب فایل پیکربندی {#imagereview-config-file-format}
 
-ImagePolicyWebhook برای تنظیم گزینه‌های رفتاری بک‌اند از یک فایل پیکربندی استفاده می‌کند.
-این فایل می‌تواند به قالب json یا yaml باشد و قالب آن به شرح زیر است:
+کنترل‌کننده ImagePolicyWebhook برای تنظیم گزینه‌های رفتاری بک‌اند از یک فایل پیکربندی استفاده می‌کند.
+این فایل می‌تواند در قالب json یا yaml باشد و ساختار آن به شکل زیر است:
 
 ```yaml
 imagePolicy:
@@ -253,7 +260,7 @@ imagePolicy:
   defaultAllow: true
 ```
 
-فایل پیکربندی ImagePolicyWebhook را از طریق فایلی که به فلگ خط فرمان `--admission-control-config-file` سرور API داده می‌شود ارجاع دهید:
+در فایلی که به فلگ خط فرمان `--admission-control-config-file` سرور API داده می‌شود، به فایل پیکربندی ImagePolicyWebhook ارجاع دهید:
 
 ```yaml
 apiVersion: apiserver.config.k8s.io/v1
@@ -264,7 +271,7 @@ plugins:
 ...
 ```
 
-همچنین می‌توانید پیکربندی را مستقیماً درون همان فایل جاسازی کنید:
+همچنین می‌توانید پیکربندی را مستقیماً در همین فایل قرار دهید:
 
 ```yaml
 apiVersion: apiserver.config.k8s.io/v1
@@ -280,13 +287,13 @@ plugins:
         defaultAllow: true
 ```
 
-فایل پیکربندی ImagePolicyWebhook باید به فایلی با قالب
+فایل پیکربندی ImagePolicyWebhook باید به فایلی در قالب
 [kubeconfig](/docs/tasks/access-application-cluster/configure-access-multiple-clusters/)
 ارجاع دهد که اتصال به بک‌اند را برقرار می‌کند.
-الزامی است که بک‌اند از طریق TLS ارتباط برقرار کند.
+ارتباط با بک‌اند حتماً باید از طریق TLS انجام شود.
 
 فیلد `cluster` در فایل kubeconfig باید به سرویس راه دور اشاره کند و فیلد `user`
-باید شامل authorizer بازگردانده‌شده باشد.
+باید مجوزدهنده (authorizer) بازگردانده‌شده را در خود داشته باشد.
 
 ```yaml
 # clusters refers to the remote service.
@@ -304,22 +311,22 @@ users:
       client-key: /path/to/key.pem          # key matching the cert
 ```
 
-برای پیکربندی‌های HTTP بیشتر، به مستندات
+برای پیکربندی‌های بیشتر HTTP، به مستندات
 [kubeconfig](/docs/tasks/access-application-cluster/configure-access-multiple-clusters/) مراجعه کنید.
 
-#### بارهای درخواست (Request payloads)
+#### محتوای درخواست‌ها
 
-هنگامی که باید تصمیم پذیرش گرفته شود، سرور API یک آبجکت `ImageReview` از نوع
+هنگامی که سرور API باید درباره پذیرش یک درخواست تصمیم بگیرد، یک آبجکت `ImageReview` از نسخه
 `imagepolicy.k8s.io/v1alpha1` را که به‌صورت JSON سریال‌سازی شده و عمل موردنظر را توصیف می‌کند، با متد POST ارسال می‌کند.
-این آبجکت شامل فیلدهایی است که کانتینرهای در حال پذیرش را توصیف می‌کنند، و همچنین
-هر حاشیه‌نویسی (annotation) از Pod که با `*.image-policy.k8s.io/*` مطابقت داشته باشد.
+این آبجکت فیلدهایی دارد که کانتینرهای در حال پذیرش را توصیف می‌کنند و همچنین همه
+حاشیه‌نویسی‌های (annotation) پاد را که با `*.image-policy.k8s.io/*` مطابقت دارند، در بر می‌گیرد.
 
 {{< note >}}
-آبجکت‌های API مربوط به webhook تابع همان قواعد سازگاری نسخه‌بندی هستند که برای
-سایر آبجکت‌های API کوبرنتیز اعمال می‌شود. پیاده‌سازان باید از تعهدات سازگاری سهل‌گیرانه‌تر
-برای آبجکت‌های آلفا آگاه باشند و برای اطمینان از deserialize صحیح، فیلد `apiVersion` درخواست را بررسی کنند.
-علاوه بر این، سرور API باید گروه افزونه‌های API با نام `imagepolicy.k8s.io/v1alpha1` را فعال کند
-(`--runtime-config=imagepolicy.k8s.io/v1alpha1=true`).
+آبجکت‌های API وب‌هوک از همان قواعد سازگاری نسخه‌بندی پیروی می‌کنند که سایر آبجکت‌های API کوبرنتیز
+از آن‌ها پیروی می‌کنند. پیاده‌سازان باید بدانند که تعهدات سازگاری برای آبجکت‌های آلفا سست‌تر است
+و باید فیلد `apiVersion` درخواست را بررسی کنند تا از واسازی (deserialization) صحیح آن اطمینان یابند.
+افزون بر این، سرور API باید گروه افزونه‌های API با نام `imagepolicy.k8s.io/v1alpha1` را
+فعال کند (`--runtime-config=imagepolicy.k8s.io/v1alpha1=true`).
 {{< /note >}}
 
 نمونه‌ای از بدنه درخواست:
@@ -345,9 +352,8 @@ users:
 }
 ```
 
-انتظار می‌رود سرویس راه دور فیلد `status` درخواست را پر کند و
-با اجازه دادن یا اجازه ندادن دسترسی پاسخ دهد. فیلد `spec` در بدنه پاسخ نادیده گرفته می‌شود و
-می‌توان آن را حذف کرد. یک پاسخ مجاز‌کننده به این صورت خواهد بود:
+انتظار می‌رود سرویس راه دور فیلد `status` درخواست را پر کند و با اجازه‌دادن یا ندادن دسترسی
+پاسخ دهد. فیلد `spec` در بدنه پاسخ نادیده گرفته می‌شود و می‌توان آن را حذف کرد. پاسخی که دسترسی را مجاز می‌کند به این شکل است:
 
 ```json
 {
@@ -359,7 +365,7 @@ users:
 }
 ```
 
-برای رد کردن دسترسی، سرویس پاسخ زیر را بازمی‌گرداند:
+برای رد دسترسی، سرویس پاسخ زیر را برمی‌گرداند:
 
 ```json
 {
@@ -373,203 +379,206 @@ users:
 ```
 
 {{< note >}}
-آبجکت‌های `ImageReview` شامل تمام ایمیج‌های موجود در Podهایی خواهند بود که قرار است به‌عنوان
+آبجکت‌های `ImageReview` همه ایمیج‌هایی از Podها را در بر می‌گیرند که قرار است به‌صورت
 کانتینر اجرا شوند. این شامل ایمیج‌هایی است که در فیلدهای containers،
-initContainers یا ephemeralContainers در مشخصات Pod تعریف شده‌اند. در نتیجه،
-ایمیج‌هایی که در image volumeها قرار دارند، در حوزه ImagePolicyWebhook نیستند.
+initContainers یا ephemeralContainers در مشخصات یک Pod تعیین شده‌اند. در نتیجه،
+ایمیج‌هایی که در حجم‌های ایمیج (image volumes) قرار دارند، در محدوده
+ImagePolicyWebhook نیستند.
 {{< /note >}}
 
 برای مستندات بیشتر به
-[API مربوط به `imagepolicy.v1alpha1`](/docs/reference/config-api/imagepolicy.v1alpha1/) مراجعه کنید.
+[API `imagepolicy.v1alpha1`](/docs/reference/config-api/imagepolicy.v1alpha1/) مراجعه کنید.
 
-#### گسترش با حاشیه‌نویسی‌ها (Annotations)
+#### گسترش با حاشیه‌نویسی‌ها
 
-تمام حاشیه‌نویسی‌های (annotation) یک Pod که با `*.image-policy.k8s.io/*` مطابقت داشته باشند، به webhook ارسال می‌شوند.
-ارسال حاشیه‌نویسی‌ها به کاربرانی که از بک‌اند سیاست ایمیج آگاه هستند اجازه می‌دهد
-اطلاعات اضافی را به آن ارسال کنند، و به پیاده‌سازی‌های مختلف بک‌اند اجازه می‌دهد
+همه حاشیه‌نویسی‌های یک Pod که با `*.image-policy.k8s.io/*` مطابقت دارند، به وب‌هوک ارسال می‌شوند.
+ارسال حاشیه‌نویسی‌ها به کاربرانی که از بک‌اند سیاست ایمیج آگاه هستند امکان می‌دهد
+اطلاعات بیشتری برای آن بفرستند، و به پیاده‌سازی‌های مختلف بک‌اند نیز امکان می‌دهد
 اطلاعات متفاوتی را بپذیرند.
 
-نمونه‌هایی از اطلاعاتی که ممکن است در اینجا قرار دهید عبارت‌اند از:
+نمونه‌هایی از اطلاعاتی که می‌توانید در این حاشیه‌نویسی‌ها قرار دهید:
 
-* درخواست «break glass» برای نادیده گرفتن یک سیاست در شرایط اضطراری.
-* شماره تیکت از یک سامانه تیکتینگ که درخواست break-glass را مستند می‌کند
-* ارائه یک راهنمایی به سرور سیاست درباره imageID ایمیجی که ارائه می‌شود، تا از جست‌وجوی مجدد آن جلوگیری شود
+* درخواست «شکستن شیشه» (break glass) برای نادیده‌گرفتن یک سیاست در شرایط اضطراری.
+* شماره تیکتی از یک سامانه تیکت که درخواست شکستن شیشه را مستند می‌کند
+* ارائه سرنخی به سرور سیاست درباره imageID ایمیج ارائه‌شده، تا نیازی به جست‌وجوی آن نباشد
 
-در هر صورت، حاشیه‌نویسی‌ها توسط کاربر ارائه می‌شوند و کوبرنتیز به هیچ وجه آن‌ها را اعتبارسنجی نمی‌کند.
+در هر صورت، حاشیه‌نویسی‌ها را کاربر فراهم می‌کند و کوبرنتیز به هیچ وجه آن‌ها را اعتبارسنجی نمی‌کند.
 
 ### LimitPodHardAntiAffinityTopology {#limitpodhardantiaffinitytopology}
 
-**نوع**: اعتبارسنجی (Validating).
+**نوع**: اعتبارسنجی.
 
-این کنترل‌کننده پذیرش هر Podی را که در `requiredDuringSchedulingIgnoredDuringExecution`
-کلید توپولوژی `AntiAffinity` غیر از `kubernetes.io/hostname` تعریف کرده باشد، رد می‌کند.
+این کنترل‌کننده پذیرش هر پادی را که در `requiredDuringSchedulingIgnoredDuringExecution`
+کلید توپولوژی `AntiAffinity` دیگری به جز `kubernetes.io/hostname` تعریف کند، رد می‌کند.
 
-این کنترل‌کننده پذیرش به‌صورت پیش‌فرض غیرفعال است.
+این کنترل‌کننده پذیرش به‌طور پیش‌فرض غیرفعال است.
 
 ### LimitRanger {#limitranger}
 
-**نوع**: تغییردهنده و اعتبارسنجی (Mutating and Validating).
+**نوع**: تغییردهنده (Mutating) و اعتبارسنجی.
 
-این کنترل‌کننده پذیرش درخواست ورودی را بررسی می‌کند و اطمینان حاصل می‌کند که هیچ‌یک از
-محدودیت‌های برشمرده‌شده در آبجکت `LimitRange` در یک `Namespace` را نقض نکند. اگر در استقرار کوبرنتیز خود
-از آبجکت‌های `LimitRange` استفاده می‌کنید، باید از این کنترل‌کننده پذیرش برای
-اعمال آن محدودیت‌ها استفاده کنید. LimitRanger همچنین می‌تواند برای اعمال درخواست‌های منبع پیش‌فرض به Podهایی
-که هیچ‌کدام را مشخص نکرده‌اند به کار رود؛ در حال حاضر، LimitRanger پیش‌فرض یک نیاز ۰٫۱ CPU را برای تمام
-Podها در فضای نام (namespace) `default` اعمال می‌کند.
+این کنترل‌کننده پذیرش درخواست ورودی را بررسی می‌کند و اطمینان می‌یابد که هیچ‌یک از
+محدودیت‌های فهرست‌شده در آبجکت `LimitRange` در یک `Namespace` نقض نشود. اگر در
+استقرار کوبرنتیز خود از آبجکت‌های `LimitRange` استفاده می‌کنید، حتماً باید از این کنترل‌کننده پذیرش
+برای اعمال آن محدودیت‌ها استفاده کنید. از LimitRanger همچنین می‌توان برای اعمال درخواست‌های منبع پیش‌فرض
+بر Podهایی استفاده کرد که هیچ درخواستی مشخص نکرده‌اند؛ در حال حاضر، LimitRanger پیش‌فرض نیاز ۰٫۱ CPU را
+بر همه Podهای فضای نام (namespace) `default` اعمال می‌کند.
 
-برای جزئیات بیشتر، [مرجع API مربوط به LimitRange](/docs/reference/kubernetes-api/core/limit-range-v1/)
-و [نمونه LimitRange](/docs/tasks/administer-cluster/manage-resources/memory-default-namespace/) را ببینید.
+برای جزئیات بیشتر، [مرجع API LimitRange](/docs/reference/kubernetes-api/core/limit-range-v1/)
+و [نمونه LimitRange](/docs/tasks/administer-cluster/manage-resources/memory-default-namespace/)
+را ببینید.
 
 ### MutatingAdmissionPolicy {#mutatingadmissionpolicy}
 
-**نوع**: تغییردهنده (Mutating).
+**نوع**: تغییردهنده.
 
-[این کنترل‌کننده پذیرش](/docs/reference/access-authn-authz/mutating-admission-policy/) از Common Expression Language (CEL) برای اعلام تغییرات بر منابع استفاده می‌کند. تغییرات را می‌توان یا با یک apply configuration که با راهبرد ادغام server side apply ادغام می‌شود، یا با یک JSON patch تعریف کرد.
-این کنترل‌کننده زمانی فعال می‌شود که هم feature gate با نام `mutatingadmissionpolicy` و هم گروه/نسخه `admissionregistration.k8s.io/v1alpha1` فعال باشند.
-اگر هر یک از MutatingAdmissionPolicyها شکست بخورد، درخواست شکست می‌خورد.
+[این کنترل‌کننده پذیرش](/docs/reference/access-authn-authz/mutating-admission-policy/) از زبان عبارت مشترک (Common Expression Language یا CEL) برای اعلام تغییرات روی منابع استفاده می‌کند. تغییرات را می‌توان یا با یک پیکربندی apply تعریف کرد که با راهبرد ادغام server side apply ادغام می‌شود، یا با یک JSON patch.
+این کنترل‌کننده زمانی فعال است که هم feature gate `mutatingadmissionpolicy` و هم گروه/نسخه `admissionregistration.k8s.io/v1alpha1` فعال باشند.
+اگر هر یک از MutatingAdmissionPolicyها شکست بخورد، درخواست نیز شکست می‌خورد.
 
 ### MutatingAdmissionWebhook {#mutatingadmissionwebhook}
 
-**نوع**: تغییردهنده (Mutating).
+**نوع**: تغییردهنده.
 
-این کنترل‌کننده پذیرش هر webhook تغییردهنده‌ای را که با درخواست مطابقت داشته باشد فراخوانی می‌کند. webhookهای
-منطبق به‌صورت سریالی فراخوانی می‌شوند؛ هر یک در صورت تمایل می‌تواند آبجکت را تغییر دهد.
+این کنترل‌کننده پذیرش همه وب‌هوک‌های تغییردهنده‌ای را که با درخواست مطابقت دارند فراخوانی می‌کند.
+وب‌هوک‌های مطابق به‌صورت متوالی فراخوانی می‌شوند و هر یک در صورت تمایل می‌تواند آبجکت را تغییر دهد.
 
-این کنترل‌کننده پذیرش (همان‌گونه که از نامش پیداست) فقط در فاز تغییر (mutating) اجرا می‌شود.
+همان‌طور که از نامش پیداست، این کنترل‌کننده پذیرش فقط در مرحله تغییر (mutating) اجرا می‌شود.
 
-اگر webhookی که توسط این کنترل‌کننده فراخوانی می‌شود عوارض جانبی داشته باشد (برای مثال، کاهش سهمیه)،
-*باید* یک سیستم تطبیق (reconciliation) داشته باشد، زیرا تضمین نمی‌شود که webhookهای بعدی
-یا کنترل‌کننده‌های پذیرش اعتبارسنجی اجازه دهند درخواست به پایان برسد.
+اگر وب‌هوکی که این کنترل‌کننده فراخوانی می‌کند اثرات جانبی داشته باشد (برای مثال، کاهش سهمیه)،
+*باید* یک سامانه آشتی‌دهی (reconciliation) داشته باشد، زیرا تضمینی وجود ندارد که وب‌هوک‌های بعدی
+یا کنترل‌کننده‌های پذیرش اعتبارسنج اجازه دهند درخواست به پایان برسد.
 
-اگر MutatingAdmissionWebhook را غیرفعال کنید، باید آبجکت `MutatingWebhookConfiguration` را نیز
-در گروه/نسخه `admissionregistration.k8s.io/v1` از طریق فلگ `--runtime-config` غیرفعال کنید؛ هر دو به‌صورت پیش‌فرض فعال هستند.
+اگر MutatingAdmissionWebhook را غیرفعال کنید، باید آبجکت `MutatingWebhookConfiguration`
+را نیز در گروه/نسخه `admissionregistration.k8s.io/v1` از طریق فلگ `--runtime-config`
+غیرفعال کنید؛ هر دو به‌طور پیش‌فرض فعال هستند.
 
-#### هنگام نوشتن و نصب webhookهای تغییردهنده احتیاط کنید
+#### هنگام نوشتن و نصب وب‌هوک‌های تغییردهنده احتیاط کنید
 
-* ممکن است کاربران سردرگم شوند، زیرا آبجکت‌هایی که تلاش می‌کنند ایجاد کنند با
-  آنچه دریافت می‌کنند متفاوت است.
-* حلقه‌های کنترلی داخلی ممکن است زمانی که آبجکت‌هایی که تلاش می‌کنند ایجاد کنند
-  هنگام خواندن مجدد متفاوت باشند، دچار اختلال شوند.
-  * تنظیم فیلدهایی که در اصل تنظیم نشده بودند کمتر احتمال دارد مشکل ایجاد کند تا
-    بازنویسی فیلدهایی که در درخواست اصلی تنظیم شده بودند. از انجام مورد دوم خودداری کنید.
-* تغییرات آتی در حلقه‌های کنترلی برای منابع داخلی یا منابع شخص ثالث
-  ممکن است webhookهایی را که امروز به‌خوبی کار می‌کنند از کار بیندازد. حتی پس از نهایی شدن API نصب webhook،
-  تضمینی وجود ندارد که تمام رفتارهای ممکن webhook برای همیشه پشتیبانی شوند.
+* وقتی آبجکت‌هایی که کاربران قصد ایجادشان را دارند با آنچه به آن‌ها بازگردانده می‌شود
+  متفاوت باشد، ممکن است کاربران سردرگم شوند.
+* وقتی آبجکت‌هایی که حلقه‌های کنترلی داخلی قصد ایجادشان را دارند هنگام خواندن مجدد متفاوت باشند،
+  ممکن است این حلقه‌ها دچار اختلال شوند.
+  * مقداردهی فیلدهایی که در ابتدا تنظیم نشده‌اند، نسبت به بازنویسی فیلدهایی که در درخواست اصلی
+    تنظیم شده‌اند، احتمال کمتری دارد که مشکل ایجاد کند. از انجام کار دوم پرهیز کنید.
+* تغییرات آینده در حلقه‌های کنترلی منابع داخلی یا منابع شخص ثالث ممکن است
+  وب‌هوک‌هایی را که امروز به‌خوبی کار می‌کنند از کار بیندازد. حتی پس از نهایی‌شدن API نصب وب‌هوک،
+  تضمین نمی‌شود که همه رفتارهای ممکن وب‌هوک‌ها برای همیشه پشتیبانی شوند.
 
 ### NamespaceAutoProvision {#namespaceautoprovision}
 
-**نوع**: تغییردهنده (Mutating).
+**نوع**: تغییردهنده.
 
-این کنترل‌کننده پذیرش تمام درخواست‌های ورودی روی منابع دارای فضای نام را بررسی می‌کند و
-وجود فضای نام ارجاع‌شده را وارسی می‌کند.
+این کنترل‌کننده پذیرش همه درخواست‌های ورودی روی منابع وابسته به فضای نام را بررسی می‌کند
+و وجود فضای نام ارجاع‌شده را وارسی می‌کند.
 اگر فضای نام پیدا نشود، آن را ایجاد می‌کند.
-این کنترل‌کننده پذیرش در استقرارهایی مفید است که نمی‌خواهند ایجاد
-فضای نام پیش از استفاده از آن را محدود کنند.
+این کنترل‌کننده پذیرش در استقرارهایی مفید است که نمی‌خواهند ایجاد فضای نام را
+پیش از استفاده از آن محدود کنند.
 
 ### NamespaceExists {#namespaceexists}
 
-**نوع**: اعتبارسنجی (Validating).
+**نوع**: اعتبارسنجی.
 
-این کنترل‌کننده پذیرش تمام درخواست‌ها روی منابع دارای فضای نام، به‌جز خود `Namespace`، را بررسی می‌کند.
-اگر فضای نام ارجاع‌شده در یک درخواست وجود نداشته باشد، درخواست رد می‌شود.
+این کنترل‌کننده پذیرش همه درخواست‌ها روی منابع وابسته به فضای نام، به جز خود `Namespace`، را بررسی می‌کند.
+اگر فضای نامی که درخواست به آن ارجاع می‌دهد وجود نداشته باشد، درخواست رد می‌شود.
 
 ### NamespaceLifecycle {#namespacelifecycle}
 
-**نوع**: اعتبارسنجی (Validating).
+**نوع**: اعتبارسنجی.
 
-این کنترل‌کننده پذیرش تضمین می‌کند که در یک `Namespace` که در حال خاتمه یافتن است نمی‌توان
-آبجکت جدید ایجاد کرد، و اطمینان می‌دهد درخواست‌ها در یک `Namespace` ناموجود رد می‌شوند.
-این کنترل‌کننده پذیرش همچنین از حذف سه فضای نام رزرو‌شده سیستمی یعنی `default`،
-`kube-system` و `kube-public` جلوگیری می‌کند.
+این کنترل‌کننده پذیرش تضمین می‌کند که در یک `Namespace` در حال خاتمه نتوان آبجکت جدیدی ایجاد کرد،
+و درخواست‌هایی که در یک `Namespace` ناموجود ارسال می‌شوند رد شوند.
+همچنین این کنترل‌کننده پذیرش از حذف سه فضای نام رزروشده سیستمی، یعنی `default`،
+`kube-system` و `kube-public`، جلوگیری می‌کند.
 
-حذف یک `Namespace` دنباله‌ای از عملیات را آغاز می‌کند که تمام آبجکت‌ها (Podها، سرویس‌ها
-و غیره) در آن فضای نام را حذف می‌کند. برای تضمین یکپارچگی آن فرایند، اکیداً توصیه می‌کنیم
-این کنترل‌کننده پذیرش اجرا شود.
+حذف یک `Namespace` دنباله‌ای از عملیات را آغاز می‌کند که همه آبجکت‌های آن فضای نام (پادها، سرویس‌ها
+و غیره) را حذف می‌کند. برای حفظ یکپارچگی این فرایند، اکیداً توصیه می‌کنیم
+این کنترل‌کننده پذیرش را اجرا کنید.
 
 ### NodeDeclaredFeatureValidator {#nodedeclaredfeaturevalidator}
 
 {{< feature-state feature_gate_name="NodeDeclaredFeatures" >}}
 
-**نوع**: اعتبارسنجی (Validating).
+**نوع**: اعتبارسنجی.
 
-این کنترل‌کننده پذیرش نوشتن‌ها روی Podهای متصل‌شده (bound) را رهگیری می‌کند تا اطمینان حاصل شود
-تغییرات با ویژگی‌هایی که نودی که Pod در حال حاضر روی آن اجرا می‌شود اعلام کرده سازگار هستند. این کنترل‌کننده از فیلد
-`.status.declaredFeatures` در Node برای
-تعیین مجموعه ویژگی‌های فعال استفاده می‌کند. اگر به‌روزرسانی Pod به ویژگی‌ای نیاز داشته باشد که
-در فهرست ویژگی‌های نود فعلی آن نباشد، کنترل‌کننده پذیرش
-درخواست به‌روزرسانی را رد می‌کند. این کار از بروز خطاهای زمان اجرا ناشی از
-ناسازگاری ویژگی‌ها پس از زمان‌بندی Pod جلوگیری می‌کند.
+این کنترل‌کننده پذیرش عملیات نوشتن روی Podهای مقیدشده (bound) را رهگیری می‌کند تا اطمینان یابد
+تغییرات با ویژگی‌هایی که نود میزبان فعلی Pod اعلام کرده است سازگارند.
+این کنترل‌کننده برای تعیین مجموعه ویژگی‌های فعال، از فیلد `.status.declaredFeatures` آبجکت Node
+استفاده می‌کند. اگر به‌روزرسانی یک Pod به ویژگی‌ای نیاز داشته باشد که در فهرست ویژگی‌های
+نود فعلی آن نیست، کنترل‌کننده پذیرش درخواست به‌روزرسانی را رد می‌کند.
+این کار از بروز خطاهای زمان اجرا به‌دلیل ناهمخوانی ویژگی‌ها پس از زمان‌بندی Pod جلوگیری می‌کند.
 
-اگر feature gate با نام [`NodeDeclaredFeatures`](/docs/reference/command-line-tools-reference/feature-gates/#NodeDeclaredFeatures) فعال باشد،
-این کنترل‌کننده پذیرش به‌صورت پیش‌فرض فعال است.
+اگر feature gate [`NodeDeclaredFeatures`](/docs/reference/command-line-tools-reference/feature-gates/#NodeDeclaredFeatures) فعال باشد،
+این کنترل‌کننده پذیرش به‌طور پیش‌فرض فعال است.
 
 ### NodeRestriction {#noderestriction}
 
-**نوع**: اعتبارسنجی (Validating).
+**نوع**: اعتبارسنجی.
 
-این کنترل‌کننده پذیرش آبجکت‌های `Node` و `Pod` را که یک kubelet می‌تواند تغییر دهد محدود می‌کند. برای اینکه این کنترل‌کننده پذیرش بر kubeletها اعمال شود،
-kubeletها باید از اعتبارنامه‌هایی در گروه `system:nodes` استفاده کنند، با نام کاربری به شکل `system:node:<nodeName>`.
-چنین kubeletهایی فقط مجاز خواهند بود آبجکت API مربوط به `Node` خودشان را تغییر دهند، و فقط آبجکت‌های API از نوع `Pod` را که به نود آن‌ها متصل شده‌اند تغییر دهند.
-kubeletها مجاز نیستند taintها را از آبجکت API مربوط به `Node` خود به‌روزرسانی یا حذف کنند.
+این کنترل‌کننده پذیرش آبجکت‌های `Node` و `Pod` را که یک kubelet می‌تواند تغییر دهد محدود می‌کند. برای اینکه
+kubeletها مشمول محدودیت این کنترل‌کننده پذیرش شوند، باید از اعتبارنامه‌هایی در گروه `system:nodes`
+با نام کاربری به شکل `system:node:<nodeName>` استفاده کنند.
+چنین kubeletهایی فقط مجازند آبجکت API `Node` خودشان را تغییر دهند و از میان آبجکت‌های API `Pod` نیز فقط آن‌هایی را که به نود خودشان مقید شده‌اند تغییر دهند.
+به kubeletها اجازه داده نمی‌شود که taintهای آبجکت API `Node` خود را به‌روزرسانی یا حذف کنند.
 
-افزونه پذیرش `NodeRestriction` از حذف آبجکت API مربوط به `Node` توسط kubeletها جلوگیری می‌کند،
-و تغییر برچسب‌ها با پیشوندهای `kubernetes.io/` یا `k8s.io/` توسط kubelet را به شرح زیر اعمال می‌کند:
+افزونه پذیرش `NodeRestriction` نمی‌گذارد kubeletها آبجکت API `Node` خود را حذف کنند،
+و تغییر برچسب‌های دارای پیشوند `kubernetes.io/` یا `k8s.io/` را از سوی kubelet به شکل زیر کنترل می‌کند:
 
-* **ممنوع** (kubeletها از تغییر این‌ها منع می‌شوند):
-  * برچسب‌هایی با پیشوند `node-restriction.kubernetes.io/`. این پیشوند برای برچسب‌گذاری آبجکت‌های `Node` توسط مدیران جهت جداسازی بار کاری رزرو شده است.
-  * برچسب‌هایی با پیشوند `node-role.kubernetes.io/` (برای مثال: `node-role.kubernetes.io/control-plane`). این برچسب‌ها محدود شده‌اند تا نودهای بدون سطح دسترسی لازم نتوانند نقش‌های کلاستر را برای خود اعلام کنند.
-* **مجاز** (kubeletها می‌توانند این‌ها را اضافه/حذف/به‌روزرسانی کنند):
+* **ممنوع** (kubeletها از تغییر این موارد منع می‌شوند):
+  * برچسب‌هایی با پیشوند `node-restriction.kubernetes.io/`. این پیشوند برای مدیران رزرو شده است تا آبجکت‌های `Node` را برای جداسازی بارهای کاری برچسب‌گذاری کنند.
+  * برچسب‌هایی با پیشوند `node-role.kubernetes.io/` (برای مثال: `node-role.kubernetes.io/control-plane`). این برچسب‌ها محدود شده‌اند تا نودهای فاقد امتیاز نتوانند نقش‌های کلاستر را برای خودشان اعلام کنند.
+* **مجاز** (kubeletها می‌توانند این موارد را اضافه، حذف یا به‌روزرسانی کنند):
   * `kubernetes.io/hostname`
   * `kubernetes.io/arch`
   * `kubernetes.io/os`
   * `beta.kubernetes.io/instance-type`
   * `node.kubernetes.io/instance-type`
-  * `failure-domain.beta.kubernetes.io/region` (منسوخ‌شده)
-  * `failure-domain.beta.kubernetes.io/zone` (منسوخ‌شده)
+  * `failure-domain.beta.kubernetes.io/region` (منسوخ)
+  * `failure-domain.beta.kubernetes.io/zone` (منسوخ)
   * `topology.kubernetes.io/region`
   * `topology.kubernetes.io/zone`
   * برچسب‌هایی با پیشوند `kubelet.kubernetes.io/`
   * برچسب‌هایی با پیشوند `node.kubernetes.io/`
 * **رزروشده**:
-  استفاده kubeletها از هر برچسب دیگری تحت پیشوندهای `kubernetes.io` یا `k8s.io` رزرو شده است.
-  افزونه پذیرش `NodeRestriction` عموماً این برچسب‌ها را برای جلوگیری از خودبرچسب‌گذاری غیرمجاز مجاز نمی‌داند،
-  اما ممکن است در آینده، در قالب ویژگی‌های بعدی، برچسب‌های بیشتری را تحت این پیشوندها مجاز کند.
+  استفاده kubeletها از هر برچسب دیگری با پیشوندهای `kubernetes.io` یا `k8s.io` رزرو شده است.
+  افزونه پذیرش `NodeRestriction` معمولاً اجازه استفاده از این برچسب‌ها را نمی‌دهد تا از برچسب‌گذاری غیرمجاز نود روی خودش جلوگیری کند،
+  اما ممکن است در آینده، در قالب ویژگی‌های جدید، برچسب‌های بیشتری با این پیشوندها را مجاز کند.
 
-زمانی که [feature gate](/docs/reference/command-line-tools-reference/feature-gates/) با نام `ServiceAccountNodeAudienceRestriction`
-فعال باشد، این افزونه پذیرش همچنین audienceهایی را که kubelet می‌تواند برای آن‌ها از طریق API مربوط به `TokenRequest`
-توکن service account درخواست کند محدود می‌کند. kubelet فقط می‌تواند
-برای audienceهایی توکن درخواست کند که پیش‌تر توسط Podهای روی آن نود ارجاع داده شده‌اند (از طریق حجم‌های (volume) توکن
-service account از نوع projected یا درخواست‌های توکن درایور CSI)، یا برای audienceهایی که به‌صراحت
-از طریق RBAC و با استفاده از فعل `request-serviceaccounts-token-audience` اعطا شده‌اند. برای جزئیات بیشتر،
-[محدودیت audience توکن service account](/docs/reference/access-authn-authz/node/#service-account-token-audience-restriction) را ببینید.
+وقتی [feature gate](/docs/reference/command-line-tools-reference/feature-gates/) با نام `ServiceAccountNodeAudienceRestriction`
+فعال باشد، این افزونه پذیرش مخاطبانی (audiences) را نیز محدود می‌کند که kubelet می‌تواند
+از طریق API `TokenRequest` برای آن‌ها توکن حساب سرویس درخواست کند. در این حالت، kubelet فقط می‌تواند
+برای مخاطبانی توکن درخواست کند که پادهای روی آن نود از قبل به آن‌ها ارجاع داده‌اند (از طریق حجم‌های (volume) توکن حساب سرویس
+projected یا درخواست‌های توکن درایور CSI)، یا برای مخاطبانی که صراحتاً
+از طریق RBAC و با فعل `request-serviceaccounts-token-audience` اعطا شده‌اند. برای جزئیات بیشتر،
+[محدودیت مخاطب توکن حساب سرویس](/docs/reference/access-authn-authz/node/#service-account-token-audience-restriction) را ببینید.
 
-نسخه‌های آتی ممکن است محدودیت‌های بیشتری اضافه کنند تا اطمینان حاصل شود kubeletها حداقل مجموعه
-مجوزهای لازم برای عملکرد صحیح را دارند.
+نسخه‌های آینده ممکن است محدودیت‌های بیشتری اضافه کنند تا اطمینان حاصل شود kubeletها فقط حداقل مجموعه
+مجوزهای لازم برای عملکرد صحیح را در اختیار دارند.
 
 ### OwnerReferencesPermissionEnforcement {#ownerreferencespermissionenforcement}
 
-**نوع**: اعتبارسنجی (Validating).
+**نوع**: اعتبارسنجی.
 
 این کنترل‌کننده پذیرش از دسترسی به `metadata.ownerReferences` یک آبجکت محافظت می‌کند
-به‌طوری که فقط کاربرانی که مجوز **delete** روی آبجکت را دارند بتوانند آن را تغییر دهند.
-این کنترل‌کننده پذیرش همچنین از دسترسی به `metadata.ownerReferences[x].blockOwnerDeletion`
-یک آبجکت محافظت می‌کند، به‌طوری که فقط کاربرانی که مجوز **update** روی زیرمنبع `finalizers`
-مربوط به *مالک* (owner) ارجاع‌شده را دارند بتوانند آن را تغییر دهند.
+تا فقط کاربرانی که مجوز **حذف** (delete) آن آبجکت را دارند بتوانند آن را تغییر دهند.
+همچنین این کنترل‌کننده پذیرش از دسترسی به `metadata.ownerReferences[x].blockOwnerDeletion`
+یک آبجکت محافظت می‌کند تا فقط کاربرانی که مجوز **به‌روزرسانی** (update) زیرمنبع `finalizers`
+در *مالک* ارجاع‌شده را دارند بتوانند آن را تغییر دهند.
 
 ### PersistentVolumeClaimResize {#persistentvolumeclaimresize}
 
 {{< feature-state for_k8s_version="v1.24" state="stable" >}}
 
-**نوع**: اعتبارسنجی (Validating).
+**نوع**: اعتبارسنجی.
 
-این کنترل‌کننده پذیرش اعتبارسنجی‌های اضافی را برای بررسی درخواست‌های تغییر اندازه
-`PersistentVolumeClaim` ورودی پیاده‌سازی می‌کند.
+این کنترل‌کننده پذیرش اعتبارسنجی‌های بیشتری برای بررسی درخواست‌های ورودی
+تغییر اندازه `PersistentVolumeClaim` پیاده‌سازی می‌کند.
 
-فعال‌سازی کنترل‌کننده پذیرش `PersistentVolumeClaimResize` توصیه می‌شود.
-این کنترل‌کننده پذیرش به‌صورت پیش‌فرض از تغییر اندازه تمام claimها جلوگیری می‌کند، مگر اینکه `StorageClass` مربوط به claim
-به‌صراحت با تنظیم `allowVolumeExpansion` روی `true` تغییر اندازه را فعال کرده باشد.
+فعال‌کردن کنترل‌کننده پذیرش `PersistentVolumeClaimResize` توصیه می‌شود.
+این کنترل‌کننده پذیرش به‌طور پیش‌فرض از تغییر اندازه همه claimها جلوگیری می‌کند، مگر اینکه `StorageClass` آن claim
+با تنظیم `allowVolumeExpansion` روی `true` صراحتاً تغییر اندازه را فعال کرده باشد.
 
-برای مثال: تمام `PersistentVolumeClaim`هایی که از `StorageClass` زیر ایجاد شوند از گسترش حجم (volume) پشتیبانی می‌کنند:
+برای مثال، همه `PersistentVolumeClaim`هایی که از `StorageClass` زیر ایجاد می‌شوند از گسترش حجم پشتیبانی می‌کنند:
 
 ```yaml
 apiVersion: storage.k8s.io/v1
@@ -585,24 +594,24 @@ parameters:
 allowVolumeExpansion: true
 ```
 
-برای اطلاعات بیشتر درباره persistent volume claimها، [PersistentVolumeClaims](/docs/concepts/storage/persistent-volumes/#persistentvolumeclaims) را ببینید.
+برای اطلاعات بیشتر درباره درخواست‌های حجم پایدار (persistent volume claims)، [PersistentVolumeClaimها](/docs/concepts/storage/persistent-volumes/#persistentvolumeclaims) را ببینید.
 
 ### PodNodeSelector {#podnodeselector}
 
 {{< feature-state for_k8s_version="v1.5" state="alpha" >}}
 
-**نوع**: اعتبارسنجی (Validating).
+**نوع**: اعتبارسنجی.
 
-این کنترل‌کننده پذیرش با خواندن یک حاشیه‌نویسی (annotation) فضای نام و یک پیکربندی سراسری، مقدار پیش‌فرض و محدودیت
-انتخابگرهای نود (node selector) قابل استفاده در یک فضای نام را تعیین می‌کند.
+این کنترل‌کننده پذیرش با خواندن یک حاشیه‌نویسی فضای نام و یک پیکربندی سراسری،
+انتخابگرهای (selector) نودی را که می‌توان در یک فضای نام استفاده کرد، پیش‌فرض‌گذاری و محدود می‌کند.
 
-این کنترل‌کننده پذیرش به‌صورت پیش‌فرض غیرفعال است.
+این کنترل‌کننده پذیرش به‌طور پیش‌فرض غیرفعال است.
 
 #### قالب فایل پیکربندی
 
-`PodNodeSelector` برای تنظیم گزینه‌های رفتاری بک‌اند از یک فایل پیکربندی استفاده می‌کند.
-توجه داشته باشید که قالب فایل پیکربندی در یک نسخه آینده به یک فایل نسخه‌بندی‌شده تغییر خواهد کرد.
-این فایل می‌تواند به قالب json یا yaml باشد و قالب آن به شرح زیر است:
+کنترل‌کننده `PodNodeSelector` برای تنظیم گزینه‌های رفتاری بک‌اند از یک فایل پیکربندی استفاده می‌کند.
+توجه داشته باشید که قالب این فایل پیکربندی در نسخه‌ای آینده به یک فایل نسخه‌بندی‌شده منتقل خواهد شد.
+این فایل می‌تواند در قالب json یا yaml باشد و ساختار آن به شکل زیر است:
 
 ```yaml
 podNodeSelectorPluginConfig:
@@ -611,8 +620,8 @@ podNodeSelectorPluginConfig:
   namespace2: name-of-node-selector
 ```
 
-فایل پیکربندی `PodNodeSelector` را از طریق فایلی که به فلگ خط فرمان
-`--admission-control-config-file` سرور API داده می‌شود ارجاع دهید:
+در فایلی که به فلگ خط فرمان `--admission-control-config-file` سرور API داده می‌شود،
+به فایل پیکربندی `PodNodeSelector` ارجاع دهید:
 
 ```yaml
 apiVersion: apiserver.config.k8s.io/v1
@@ -625,8 +634,8 @@ plugins:
 
 #### قالب حاشیه‌نویسی پیکربندی
 
-`PodNodeSelector` از کلید حاشیه‌نویسی `scheduler.alpha.kubernetes.io/node-selector` برای تخصیص
-انتخابگرهای نود به فضاهای نام استفاده می‌کند.
+کنترل‌کننده `PodNodeSelector` برای اختصاص انتخابگرهای نود به فضاهای نام از کلید حاشیه‌نویسی
+`scheduler.alpha.kubernetes.io/node-selector` استفاده می‌کند.
 
 ```yaml
 apiVersion: v1
@@ -642,52 +651,53 @@ metadata:
 این کنترل‌کننده پذیرش رفتار زیر را دارد:
 
 1. اگر `Namespace` حاشیه‌نویسی‌ای با کلید `scheduler.alpha.kubernetes.io/node-selector` داشته باشد،
-   از مقدار آن به‌عنوان انتخابگر نود استفاده می‌شود.
-2. اگر فضای نام چنین حاشیه‌نویسی‌ای نداشته باشد، از `clusterDefaultNodeSelector` تعریف‌شده در
+   مقدار آن به‌عنوان انتخابگر نود استفاده می‌شود.
+2. اگر فضای نام چنین حاشیه‌نویسی‌ای نداشته باشد، `clusterDefaultNodeSelector` تعریف‌شده در
    فایل پیکربندی افزونه `PodNodeSelector` به‌عنوان انتخابگر نود استفاده می‌شود.
-3. انتخابگر نود Pod با انتخابگر نود فضای نام از نظر تعارض ارزیابی می‌شود. تعارض
-   منجر به رد درخواست می‌شود.
-4. انتخابگر نود Pod با انتخابگر مجاز مختص فضای نام که در فایل پیکربندی افزونه تعریف شده است ارزیابی می‌شود.
-   تعارض منجر به رد درخواست می‌شود.
+3. انتخابگر نود پاد از نظر تعارض با انتخابگر نود فضای نام ارزیابی می‌شود. وجود تعارض
+   به رد درخواست می‌انجامد.
+4. انتخابگر نود پاد با انتخابگر مجاز مختص فضای نام که در فایل پیکربندی افزونه تعریف شده است
+   مقایسه و ارزیابی می‌شود. وجود تعارض به رد درخواست می‌انجامد.
 
 {{< note >}}
-PodNodeSelector امکان اجبار Podها به اجرا روی نودهای دارای برچسب مشخص را فراهم می‌کند. همچنین افزونه پذیرش
-PodTolerationRestriction را ببینید که اجازه می‌دهد از اجرای Podها روی نودهای دارای taint مشخص جلوگیری شود.
+با افزونه PodNodeSelector می‌توان پادها را وادار کرد که روی نودهایی با برچسب‌های مشخص اجرا شوند. افزونه پذیرش
+PodTolerationRestriction را نیز ببینید که با آن می‌توان از اجرای پادها روی نودهایی با taintهای مشخص جلوگیری کرد.
 {{< /note >}}
 
 ### PodSecurity {#podsecurity}
 
 {{< feature-state for_k8s_version="v1.25" state="stable" >}}
 
-**نوع**: اعتبارسنجی (Validating).
+**نوع**: اعتبارسنجی.
 
-کنترل‌کننده پذیرش PodSecurity، Podهای جدید را پیش از پذیرش بررسی می‌کند و بر اساس security context درخواستی و محدودیت‌های
-[استانداردهای امنیتی Pod](/docs/concepts/security/pod-security-standards/) مجاز
-برای فضای نامی که Pod در آن قرار خواهد گرفت، تعیین می‌کند که آیا باید پذیرفته شود یا خیر.
+کنترل‌کننده پذیرش PodSecurity، Podهای جدید را پیش از پذیرش بررسی می‌کند و بر اساس
+security context درخواست‌شده و محدودیت‌های [استانداردهای امنیتی Pod](/docs/concepts/security/pod-security-standards/)
+مجاز برای فضای نامی که Pod در آن قرار خواهد گرفت، تعیین می‌کند که آیا باید پذیرفته شود یا نه.
 
-برای اطلاعات بیشتر، مستندات [Pod Security Admission](/docs/concepts/security/pod-security-admission/)
+برای اطلاعات بیشتر، مستندات [پذیرش امنیت Pod](/docs/concepts/security/pod-security-admission/)
 را ببینید.
 
-PodSecurity جایگزین کنترل‌کننده پذیرش قدیمی‌تری با نام PodSecurityPolicy شد.
+کنترل‌کننده PodSecurity جایگزین کنترل‌کننده پذیرش قدیمی‌تری به نام PodSecurityPolicy شد.
 
 ### PodTolerationRestriction {#podtolerationrestriction}
 
 {{< feature-state for_k8s_version="v1.7" state="alpha" >}}
 
-**نوع**: تغییردهنده و اعتبارسنجی (Mutating and Validating).
+**نوع**: تغییردهنده و اعتبارسنجی.
 
-کنترل‌کننده پذیرش PodTolerationRestriction هرگونه تعارض میان toleration‌های یک
-Pod و toleration‌های فضای نام آن را بررسی می‌کند.
-اگر تعارضی وجود داشته باشد، درخواست Pod را رد می‌کند.
-سپس toleration‌هایی را که روی فضای نام حاشیه‌نویسی شده‌اند با toleration‌های Pod ادغام می‌کند.
-toleration‌های حاصل با فهرستی از toleration‌های مجاز که روی فضای نام حاشیه‌نویسی شده است بررسی می‌شوند.
-اگر بررسی موفق باشد، درخواست Pod پذیرفته می‌شود، در غیر این صورت رد می‌شود.
+کنترل‌کننده پذیرش PodTolerationRestriction هرگونه تعارض بین tolerationهای یک
+پاد و tolerationهای فضای نام آن را بررسی می‌کند.
+در صورت وجود تعارض، درخواست پاد را رد می‌کند.
+سپس tolerationهایی را که روی فضای نام حاشیه‌نویسی شده‌اند با tolerationهای پاد ادغام می‌کند.
+مجموعه tolerationهای حاصل با فهرستی از tolerationهای مجاز که روی فضای نام حاشیه‌نویسی شده است، سنجیده می‌شود.
+اگر این بررسی موفق باشد، درخواست پاد پذیرفته می‌شود؛ در غیر این صورت رد می‌شود.
 
-اگر فضای نام Pod هیچ toleration پیش‌فرض یا toleration مجاز حاشیه‌نویسی‌شده‌ای نداشته باشد، در صورت مشخص بودن،
-toleration‌های پیش‌فرض سطح کلاستر یا فهرست toleration‌های مجاز سطح کلاستر به‌جای آن‌ها استفاده می‌شوند.
+اگر فضای نام پاد هیچ toleration پیش‌فرض یا toleration مجاز حاشیه‌نویسی‌شده‌ای نداشته باشد،
+در صورت تعیین‌شدن، tolerationهای پیش‌فرض سطح کلاستر یا فهرست tolerationهای مجاز سطح کلاستر
+به‌جای آن‌ها استفاده می‌شوند.
 
-toleration‌ها برای یک فضای نام از طریق کلید حاشیه‌نویسی `scheduler.alpha.kubernetes.io/defaultTolerations` تخصیص داده می‌شوند.
-فهرست toleration‌های مجاز را می‌توان از طریق کلید حاشیه‌نویسی `scheduler.alpha.kubernetes.io/tolerationsWhitelist` اضافه کرد.
+اختصاص tolerationها به یک فضای نام از طریق کلید حاشیه‌نویسی `scheduler.alpha.kubernetes.io/defaultTolerations` انجام می‌شود.
+فهرست tolerationهای مجاز را می‌توان از طریق کلید حاشیه‌نویسی `scheduler.alpha.kubernetes.io/tolerationsWhitelist` اضافه کرد.
 
 نمونه‌ای از حاشیه‌نویسی‌های فضای نام:
 
@@ -701,108 +711,80 @@ metadata:
     scheduler.alpha.kubernetes.io/tolerationsWhitelist: '[{"operator": "Exists", "effect": "NoSchedule", "key": "dedicated-node"}]'
 ```
 
-این کنترل‌کننده پذیرش به‌صورت پیش‌فرض غیرفعال است.
+این کنترل‌کننده پذیرش به‌طور پیش‌فرض غیرفعال است.
 
 ### PodTopologyLabels {#podtopologylabels}
 
 {{< feature-state feature_gate_name="PodTopologyLabelsAdmission" >}}
 
-**نوع**: تغییر‌دهنده (Mutating)
+**نوع**: تغییردهنده (Mutating)
 
-کنترل‌کننده پذیرش PodTopologyLabels زیرمنبع‌های `pods/binding` مربوط به همه Podهایی را که به یک Node متصل (bind) شده‌اند تغییر می‌دهد و برچسب‌های توپولوژی منطبق با برچسب‌های Node مقصد را به آن‌ها اضافه می‌کند.
-این کار باعث می‌شود برچسب‌های توپولوژی Node به‌عنوان برچسب‌های Pod در دسترس باشند و بتوان آن‌ها را از طریق
-[Downward API](/docs/concepts/workloads/pods/downward-api/)
-در اختیار کانتینرهای در حال اجرا قرار داد.
-برچسب‌هایی که در نتیجه این کنترل‌کننده در دسترس قرار می‌گیرند، برچسب‌های
-[topology.kubernetes.io/region](/docs/reference/labels-annotations-taints/#topologykubernetesioregion) و
-[topology.kubernetes.io/zone](/docs/reference/labels-annotations-taints/#topologykubernetesiozone) هستند.
+کنترل‌کنندهٔ پذیرش PodTopologyLabels زیرمنبع‌های `pods/binding` را برای همهٔ پادهایی که به یک Node متصل شده‌اند تغییر می‌دهد و برچسب‌های توپولوژی متناظر با برچسب‌های همان Node را به آن‌ها اضافه می‌کند. به این ترتیب، برچسب‌های توپولوژی Node به‌صورت برچسب‌های پاد در دسترس قرار می‌گیرند و می‌توان آن‌ها را با استفاده از [Downward API](/docs/concepts/workloads/pods/downward-api/) در اختیار کانتینرهای در حال اجرا گذاشت. برچسب‌هایی که در نتیجهٔ این کنترل‌کننده در دسترس قرار می‌گیرند، برچسب‌های [topology.kubernetes.io/region](/docs/reference/labels-annotations-taints/#topologykubernetesioregion) و [topology.kubernetes.io/zone](/docs/reference/labels-annotations-taints/#topologykubernetesiozone) هستند.
 
 {{<note>}}
-اگر هر webhook پذیرشِ تغییر‌دهنده‌ای برچسب‌های زیرمنبع `pods/binding` را اضافه یا اصلاح کند،
-این تغییرات در نتیجه عملکرد این کنترل‌کننده به برچسب‌های Pod منتقل می‌شوند
-و برچسب‌هایی را که کلید آن‌ها تداخل دارد بازنویسی می‌کنند.
+اگر یک webhook پذیرش تغییردهنده برچسب‌های زیرمنبع `pods/binding` را اضافه یا تغییر دهد، این تغییرات در نتیجهٔ عملکرد این کنترل‌کننده به برچسب‌های پاد نیز منتقل می‌شوند و برچسب‌هایی را که کلید متعارض دارند بازنویسی می‌کنند.
 {{</note>}}
 
-این کنترل‌کننده پذیرش زمانی فعال می‌شود که feature gate با نام `PodTopologyLabelsAdmission` فعال باشد.
+این کنترل‌کنندهٔ پذیرش زمانی فعال می‌شود که feature gate با نام `PodTopologyLabelsAdmission` فعال باشد.
 
 ### Priority {#priority}
 
-**نوع**: تغییر‌دهنده (Mutating) و اعتبارسنج (Validating).
+**نوع**: تغییردهنده و اعتبارسنج.
 
-کنترل‌کننده پذیرش Priority از فیلد `priorityClassName` استفاده می‌کند و مقدار صحیح (عددی) اولویت را در آن درج می‌کند.
-اگر کلاس اولویت (priority class) پیدا نشود، Pod رد می‌شود.
+کنترل‌کنندهٔ پذیرش priority از فیلد `priorityClassName` استفاده می‌کند و مقدار عددی صحیح اولویت را تعیین می‌کند. اگر کلاس اولویت (priority class) پیدا نشود، Pod رد می‌شود.
 
 ### ResourceQuota {#resourcequota}
 
-**نوع**: اعتبارسنج (Validating).
+**نوع**: اعتبارسنج.
 
-این کنترل‌کننده پذیرش، درخواست‌های ورودی را بررسی می‌کند و اطمینان می‌یابد که هیچ‌یک از محدودیت‌های تعریف‌شده در آبجکت `ResourceQuota` موجود در یک `Namespace` نقض نشود. اگر در استقرار کوبرنتیز خود از آبجکت‌های `ResourceQuota` استفاده می‌کنید، **باید** از این کنترل‌کننده پذیرش برای اعمال محدودیت‌های سهمیه استفاده کنید.
+این کنترل‌کنندهٔ پذیرش درخواست ورودی را بررسی می‌کند و اطمینان می‌یابد که هیچ‌یک از محدودیت‌های تعریف‌شده در آبجکت `ResourceQuota` در یک `Namespace` نقض نشود. اگر در استقرار کوبرنتیز خود از آبجکت‌های `ResourceQuota` استفاده می‌کنید، برای اعمال محدودیت‌های سهمیه (quota) **باید** از این کنترل‌کنندهٔ پذیرش استفاده کنید.
 
-برای جزئیات بیشتر، [مرجع API مربوط به ResourceQuota](/docs/reference/kubernetes-api/core/resource-quota-v1/)
-و [مثال سهمیه منابع (Resource Quota)](/docs/concepts/policy/resource-quotas/) را ببینید.
+برای جزئیات بیشتر، [مرجع API مربوط به ResourceQuota](/docs/reference/kubernetes-api/core/resource-quota-v1/) و [نمونهٔ سهمیهٔ منابع](/docs/concepts/policy/resource-quotas/) را ببینید.
 
 ### RuntimeClass {#runtimeclass}
 
-**نوع**: تغییر‌دهنده (Mutating) و اعتبارسنج (Validating).
+**نوع**: تغییردهنده و اعتبارسنج.
 
-اگر یک RuntimeClass را با پیکربندی [سربار Pod (Pod overhead)](/docs/concepts/scheduling-eviction/pod-overhead/) تعریف کنید،
-این کنترل‌کننده پذیرش، Podهای ورودی را بررسی می‌کند.
-در صورت فعال بودن، این کنترل‌کننده پذیرش هر درخواست ایجاد Pod را که از قبل مقدار overhead در آن تنظیم شده باشد، رد می‌کند.
-برای Podهایی که در `.spec` خود یک RuntimeClass پیکربندی و انتخاب کرده‌اند،
-این کنترل‌کننده پذیرش مقدار `.spec.overhead` را در Pod بر اساس مقدار تعریف‌شده در RuntimeClass متناظر تنظیم می‌کند.
+اگر یک RuntimeClass با [سربار پاد](/docs/concepts/scheduling-eviction/pod-overhead/) (Pod overhead) پیکربندی‌شده تعریف کنید، این کنترل‌کنندهٔ پذیرش Podهای ورودی را بررسی می‌کند. این کنترل‌کنندهٔ پذیرش، در صورت فعال بودن، هر درخواست ایجاد Pod را که مقدار سربار در آن از قبل تنظیم شده باشد رد می‌کند. برای Podهایی که یک RuntimeClass در `.spec` آن‌ها پیکربندی و انتخاب شده است، این کنترل‌کنندهٔ پذیرش فیلد `.spec.overhead` را در Pod بر اساس مقدار تعریف‌شده در RuntimeClass متناظر تنظیم می‌کند.
 
-برای اطلاعات بیشتر، همچنین [سربار Pod](/docs/concepts/scheduling-eviction/pod-overhead/) را ببینید.
+برای اطلاعات بیشتر، [سربار پاد](/docs/concepts/scheduling-eviction/pod-overhead/) را نیز ببینید.
 
 ### ServiceAccount {#serviceaccount}
 
-**نوع**: تغییر‌دهنده (Mutating) و اعتبارسنج (Validating).
+**نوع**: تغییردهنده و اعتبارسنج.
 
-این کنترل‌کننده پذیرش، خودکارسازی مربوط به
-[serviceAccountها](/docs/tasks/configure-pod-container/configure-service-account/) را پیاده‌سازی می‌کند.
-پروژه کوبرنتیز قویاً توصیه می‌کند این کنترل‌کننده پذیرش فعال شود.
-اگر قصد دارید از آبجکت‌های `ServiceAccount` در کوبرنتیز استفاده کنید، باید این کنترل‌کننده پذیرش را فعال کنید.
+این کنترل‌کنندهٔ پذیرش خودکارسازی را برای [serviceAccountها](/docs/tasks/configure-pod-container/configure-service-account/) پیاده‌سازی می‌کند. پروژهٔ کوبرنتیز اکیداً توصیه می‌کند این کنترل‌کنندهٔ پذیرش را فعال کنید. اگر قصد دارید به هر شکلی از آبجکت‌های `ServiceAccount` کوبرنتیز استفاده کنید، باید این کنترل‌کنندهٔ پذیرش را فعال کنید.
 
-برای تقویت تدابیر امنیتی پیرامون Secretها، از فضاهای نام (namespace) جداگانه برای جداسازی دسترسی به Secretهای مونت‌شده استفاده کنید.
+برای تقویت تدابیر امنیتی مربوط به Secretها، از فضاهای نام (namespace) جداگانه استفاده کنید تا دسترسی به Secretهای mount‌شده از یکدیگر جدا شود.
 
 ### StorageObjectInUseProtection
 
-**نوع**: تغییر‌دهنده (Mutating).
+**نوع**: تغییردهنده.
 
-افزونه `StorageObjectInUseProtection` فاینالایزرهای `kubernetes.io/pvc-protection` یا `kubernetes.io/pv-protection`
-را به PersistentVolumeClaimها (PVC) یا PersistentVolumeهای (PV) تازه ایجادشده اضافه می‌کند.
-اگر کاربر یک PVC یا PV را حذف کند، آن PVC یا PV تا زمانی که کنترل‌کننده حفاظت از PVC یا PV (PVC or PV Protection Controller)
-فاینالایزر را از آن حذف نکرده باشد، پاک نخواهد شد.
-برای اطلاعات دقیق‌تر،
-[حفاظت از آبجکت ذخیره‌سازی در حال استفاده](/docs/concepts/storage/persistent-volumes/#storage-object-in-use-protection)
-را ببینید.
+افزونهٔ `StorageObjectInUseProtection` نهایی‌کننده‌های (finalizer) `kubernetes.io/pvc-protection` یا `kubernetes.io/pv-protection` را به Persistent Volume Claimها (PVC) یا Persistent Volumeهای (PV) تازه ایجادشده اضافه می‌کند. اگر کاربری یک PVC یا PV را حذف کند، آن PVC یا PV تا زمانی که کنترل‌کنندهٔ PVC Protection یا PV Protection این نهایی‌کننده را از آن حذف نکند، پاک نمی‌شود. برای اطلاعات دقیق‌تر، به [محافظت از آبجکت ذخیره‌سازی در حال استفاده](/docs/concepts/storage/persistent-volumes/#storage-object-in-use-protection) مراجعه کنید.
 
 ### TaintNodesByCondition {#taintnodesbycondition}
 
-**نوع**: تغییر‌دهنده (Mutating).
+**نوع**: تغییردهنده.
 
-این کنترل‌کننده پذیرش، Nodeهای تازه ایجادشده را با {{< glossary_tooltip text="taint" term_id="taint" >}}های `NotReady` و `NoSchedule` علامت‌گذاری می‌کند. این taint کردن از بروز وضعیت رقابتی (race condition) جلوگیری می‌کند که ممکن است باعث شود Podها پیش از به‌روزرسانی taintها برای انعکاس دقیق وضعیت‌های گزارش‌شده، روی Nodeهای جدید زمان‌بندی شوند.
+این کنترل‌کنندهٔ پذیرش Nodeهای تازه ایجادشده را با `NotReady` و `NoSchedule` {{< glossary_tooltip text="taint می‌کند" term_id="taint" >}}. این کار از بروز شرایط رقابتی (race condition) جلوگیری می‌کند که ممکن بود باعث شود Podها پیش از به‌روزرسانی taintهای Nodeهای جدید، یعنی پیش از آنکه این taintها وضعیت گزارش‌شدهٔ Node را به‌درستی منعکس کنند، روی آن Nodeها زمان‌بندی شوند.
 
 ### ValidatingAdmissionPolicy {#validatingadmissionpolicy}
 
-**نوع**: اعتبارسنج (Validating).
+**نوع**: اعتبارسنج.
 
-[این کنترل‌کننده پذیرش](/docs/reference/access-authn-authz/validating-admission-policy/) اعتبارسنجی CEL را برای درخواست‌های ورودیِ منطبق پیاده‌سازی می‌کند.
-این کنترل‌کننده زمانی فعال می‌شود که هم feature gate با نام `validatingadmissionpolicy` و هم گروه/نسخه `admissionregistration.k8s.io/v1alpha1` فعال باشند.
-اگر هر یک از ValidatingAdmissionPolicyها ناموفق باشد، درخواست ناموفق می‌شود.
+[این کنترل‌کنندهٔ پذیرش](/docs/reference/access-authn-authz/validating-admission-policy/) اعتبارسنجی CEL را برای درخواست‌های ورودیِ منطبق پیاده‌سازی می‌کند. این کنترل‌کننده زمانی فعال است که هم feature gate با نام `validatingadmissionpolicy` و هم group/version مربوط به `admissionregistration.k8s.io/v1alpha1` فعال باشند. اگر هر یک از ValidatingAdmissionPolicyها ناموفق باشد، درخواست ناموفق می‌شود.
 
 ### ValidatingAdmissionWebhook {#validatingadmissionwebhook}
 
-**نوع**: اعتبارسنج (Validating).
+**نوع**: اعتبارسنج.
 
-این کنترل‌کننده پذیرش، همه webhookهای اعتبارسنجی را که با درخواست مطابقت دارند فراخوانی می‌کند. webhookهای منطبق به‌صورت موازی فراخوانی می‌شوند؛ اگر هر یک از آن‌ها درخواست را رد کند، درخواست ناموفق می‌شود. این کنترل‌کننده پذیرش فقط در مرحله اعتبارسنجی اجرا می‌شود؛ برخلاف webhookهایی که کنترل‌کننده پذیرش `MutatingAdmissionWebhook` فراخوانی می‌کند، webhookهایی که این کنترل‌کننده فراخوانی می‌کند نمی‌توانند آبجکت را تغییر دهند.
+این کنترل‌کنندهٔ پذیرش هر webhook اعتبارسنجی را که با درخواست منطبق باشد فراخوانی می‌کند. webhookهای منطبق به‌صورت موازی فراخوانی می‌شوند و اگر هر یک از آن‌ها درخواست را رد کند، درخواست ناموفق می‌شود. این کنترل‌کنندهٔ پذیرش فقط در مرحلهٔ اعتبارسنجی اجرا می‌شود. برخلاف webhookهایی که کنترل‌کنندهٔ پذیرش `MutatingAdmissionWebhook` فراخوانی می‌کند، webhookهایی که این کنترل‌کننده فراخوانی می‌کند نمی‌توانند آبجکت را تغییر دهند.
 
-اگر webhookی که توسط این کنترل‌کننده فراخوانی می‌شود عوارض جانبی داشته باشد (برای مثال، کاهش سهمیه)، **باید** سازوکار تطبیق (reconciliation) داشته باشد، زیرا تضمینی وجود ندارد که webhookهای بعدی یا سایر کنترل‌کننده‌های پذیرشِ اعتبارسنج اجازه تکمیل درخواست را بدهند.
+اگر webhookای که این کنترل‌کننده فراخوانی می‌کند اثر جانبی داشته باشد (برای مثال، کاهش سهمیه)، *باید* یک سازوکار تطبیق (reconciliation) داشته باشد، زیرا تضمینی وجود ندارد که webhookهای بعدی یا سایر کنترل‌کننده‌های پذیرش اعتبارسنج اجازهٔ تکمیل درخواست را بدهند.
 
-اگر ValidatingAdmissionWebhook را غیرفعال کنید، باید آبجکت `ValidatingWebhookConfiguration` را نیز در گروه/نسخه `admissionregistration.k8s.io/v1` از طریق فلگ `--runtime-config` غیرفعال کنید.
+اگر ValidatingAdmissionWebhook را غیرفعال کنید، باید آبجکت `ValidatingWebhookConfiguration` را نیز در group/version مربوط به `admissionregistration.k8s.io/v1` از طریق فلگ `--runtime-config` غیرفعال کنید.
 
-## آیا مجموعه‌ای از کنترل‌کننده‌های پذیرش توصیه‌شده برای استفاده وجود دارد؟
+## آیا مجموعهٔ توصیه‌شده‌ای از کنترل‌کننده‌های پذیرش برای استفاده وجود دارد؟
 
-بله. کنترل‌کننده‌های پذیرش توصیه‌شده به‌صورت پیش‌فرض فعال هستند
-(فهرست آن‌ها [اینجا](/docs/reference/command-line-tools-reference/kube-apiserver/#options) نمایش داده شده است)،
-بنابراین نیازی به تعیین صریح آن‌ها نیست.
-می‌توانید با استفاده از فلگ `--enable-admission-plugins` کنترل‌کننده‌های پذیرش بیشتری را علاوه بر مجموعه پیش‌فرض فعال کنید (**ترتیب اهمیتی ندارد**).
+بله. کنترل‌کننده‌های پذیرش توصیه‌شده به‌طور پیش‌فرض فعال هستند (فهرست آن‌ها را [اینجا](/docs/reference/command-line-tools-reference/kube-apiserver/#options) ببینید)، بنابراین لازم نیست آن‌ها را به‌صراحت مشخص کنید. می‌توانید با استفاده از فلگ `--enable-admission-plugins` کنترل‌کننده‌های پذیرش دیگری را علاوه بر مجموعهٔ پیش‌فرض فعال کنید (**ترتیب اهمیتی ندارد**).

@@ -83,134 +83,134 @@ document.addEventListener('DOMContentLoaded',function(){box=document.getElementB
 <header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">reference / access-authn-authz</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
 <div class="layout">
 <main><h1 dir="rtl">استفاده از مجوزدهی ABAC</h1><!-- overview -->
-<p dir="rtl">کنترل دسترسی مبتنی بر ویژگی (Attribute-based access control یا ABAC) الگویی برای کنترل دسترسی تعریف می‌کند که در آن حقوق دسترسی از طریق سیاست‌هایی به کاربران اعطا می‌شود که ویژگی‌ها (attributes) را با یکدیگر ترکیب می‌کنند.</p>
+<p dir="rtl">کنترل دسترسی مبتنی بر ویژگی (Attribute-based access control یا ABAC) الگویی برای کنترل دسترسی تعریف می‌کند که در آن، حقوق دسترسی از طریق سیاست‌هایی به کاربران اعطا می‌شود که چند ویژگی را با هم ترکیب می‌کنند.</p>
 <!-- body -->
-<h2 id="قالب-فایل-سیاست-policy-file-format" dir="rtl">قالب فایل سیاست {#policy-file-format}</h2>
-<p dir="rtl">برای فعال‌سازی حالت <code dir="ltr">ABAC</code>، هنگام راه‌اندازی، گزینه‌های <code dir="ltr">--authorization-policy-file=SOME_FILENAME</code> و <code dir="ltr">--authorization-mode=ABAC</code> را مشخص کنید.</p>
-<p dir="rtl">قالب فایل، <a href="https://jsonlines.org/" target="_blank" rel="noopener">یک آبجکت JSON در هر خط</a> است. نباید هیچ لیست یا map فراگیری وجود داشته باشد؛ فقط یک map در هر خط.</p>
-<p dir="rtl">هر خط یک «آبجکت سیاست» (policy object) است و هر یک از این آبجکت‌ها یک map با ویژگی‌های زیر است:</p>
+<h2 id="قالب-فایل-سیاست" dir="rtl">قالب فایل سیاست</h2>
+<p dir="rtl">برای فعال‌سازی حالت <code dir="ltr">ABAC</code>، هنگام راه‌اندازی، <code dir="ltr">--authorization-policy-file=SOME_FILENAME</code> و <code dir="ltr">--authorization-mode=ABAC</code> را مشخص کنید.</p>
+<p dir="rtl">قالب این فایل به صورت <a href="https://jsonlines.org/" target="_blank" rel="noopener">یک آبجکت JSON در هر خط</a> است. هیچ فهرست یا نگاشت دربرگیرنده‌ای نباید وجود داشته باشد و در هر خط فقط یک نگاشت قرار می‌گیرد.</p>
+<p dir="rtl">هر خط یک «آبجکت سیاست» است و هر آبجکت از این نوع، نگاشتی با ویژگی‌های زیر است:</p>
 <ul>
 <li dir="rtl">ویژگی‌های نسخه‌بندی:
 <ul>
-<li dir="rtl"><code dir="ltr">apiVersion</code>، از نوع رشته؛ مقادیر معتبر عبارت است از "abac.authorization.kubernetes.io/v1beta1". این ویژگی امکان نسخه‌بندی و تبدیل قالب سیاست را فراهم می‌کند.</li>
-<li dir="rtl"><code dir="ltr">kind</code>، از نوع رشته؛ مقادیر معتبر عبارت است از "Policy". این ویژگی امکان نسخه‌بندی و تبدیل قالب سیاست را فراهم می‌کند.</li>
+<li dir="rtl">ویژگی <code dir="ltr">apiVersion</code> از نوع رشته؛ مقدار معتبر آن "abac.authorization.kubernetes.io/v1beta1" است. این ویژگی امکان نسخه‌بندی و تبدیل قالب سیاست را فراهم می‌کند.</li>
+<li dir="rtl">ویژگی <code dir="ltr">kind</code> از نوع رشته؛ مقدار معتبر آن "Policy" است. این ویژگی امکان نسخه‌بندی و تبدیل قالب سیاست را فراهم می‌کند.</li>
 </ul>
 </li>
-<li dir="rtl">ویژگی <code dir="ltr">spec</code> که روی یک map با ویژگی‌های زیر تنظیم می‌شود:
+<li dir="rtl">ویژگی <code dir="ltr">spec</code> که مقدار آن نگاشتی با ویژگی‌های زیر است:
 <ul>
-<li dir="rtl">ویژگی‌های تطبیق سوژه (Subject):
+<li dir="rtl">ویژگی‌های تطبیق موضوع:
 <ul>
-<li dir="rtl"><code dir="ltr">user</code>، از نوع رشته؛ رشته کاربر از <code dir="ltr">--token-auth-file</code>. اگر <code dir="ltr">user</code> را مشخص کنید، باید با نام کاربری کاربر احراز هویت‌شده مطابقت داشته باشد.</li>
-<li dir="rtl"><code dir="ltr">group</code>، از نوع رشته؛ اگر <code dir="ltr">group</code> را مشخص کنید، باید با یکی از گروه‌های کاربر احراز هویت‌شده مطابقت داشته باشد. <code dir="ltr">system:authenticated</code> با همه درخواست‌های احراز هویت‌شده مطابقت دارد. <code dir="ltr">system:unauthenticated</code> با همه درخواست‌های احراز هویت‌نشده مطابقت دارد.</li>
+<li dir="rtl">ویژگی <code dir="ltr">user</code> از نوع رشته؛ رشتهٔ کاربر از <code dir="ltr">--token-auth-file</code>. اگر <code dir="ltr">user</code> را مشخص کنید، باید با نام کاربری کاربر احرازهویت‌شده مطابقت داشته باشد.</li>
+<li dir="rtl">ویژگی <code dir="ltr">group</code> از نوع رشته؛ اگر <code dir="ltr">group</code> را مشخص کنید، باید با یکی از گروه‌های کاربر احرازهویت‌شده مطابقت داشته باشد. مقدار <code dir="ltr">system:authenticated</code> با همهٔ درخواست‌های احرازهویت‌شده و مقدار <code dir="ltr">system:unauthenticated</code> با همهٔ درخواست‌های احرازهویت‌نشده مطابقت دارد.</li>
 </ul>
 </li>
 <li dir="rtl">ویژگی‌های تطبیق منبع:
 <ul>
-<li dir="rtl"><code dir="ltr">apiGroup</code>، از نوع رشته؛ یک گروه API.
+<li dir="rtl">ویژگی <code dir="ltr">apiGroup</code> از نوع رشته؛ یک گروه API.
 <ul>
 <li dir="rtl">مثال: <code dir="ltr">apps</code>، <code dir="ltr">networking.k8s.io</code></li>
-<li dir="rtl">نویسه عام (Wildcard): <code dir="ltr">*</code> با همه گروه‌های API مطابقت دارد.</li>
+<li dir="rtl">نویسهٔ عام: <code dir="ltr">*</code> با همهٔ گروه‌های API مطابقت دارد.</li>
 </ul>
 </li>
-<li dir="rtl"><code dir="ltr">namespace</code>، از نوع رشته؛ یک فضای نام (namespace).
+<li dir="rtl">ویژگی <code dir="ltr">namespace</code> از نوع رشته؛ یک فضای نام (namespace).
 <ul>
 <li dir="rtl">مثال: <code dir="ltr">kube-system</code></li>
-<li dir="rtl">نویسه عام: <code dir="ltr">*</code> با همه درخواست‌های منبع مطابقت دارد.</li>
+<li dir="rtl">نویسهٔ عام: <code dir="ltr">*</code> با همهٔ درخواست‌های منبع مطابقت دارد.</li>
 </ul>
 </li>
-<li dir="rtl"><code dir="ltr">resource</code>، از نوع رشته؛ یک نوع منبع
+<li dir="rtl">ویژگی <code dir="ltr">resource</code> از نوع رشته؛ یک نوع منبع.
 <ul>
 <li dir="rtl">مثال: <code dir="ltr">pods</code>، <code dir="ltr">deployments</code></li>
-<li dir="rtl">نویسه عام: <code dir="ltr">*</code> با همه درخواست‌های منبع مطابقت دارد.</li>
+<li dir="rtl">نویسهٔ عام: <code dir="ltr">*</code> با همهٔ درخواست‌های منبع مطابقت دارد.</li>
 </ul>
 </li>
 </ul>
 </li>
 <li dir="rtl">ویژگی‌های تطبیق غیرمنبع:
 <ul>
-<li dir="rtl"><code dir="ltr">nonResourcePath</code>، از نوع رشته؛ مسیرهای درخواست‌های غیرمنبع.
+<li dir="rtl">ویژگی <code dir="ltr">nonResourcePath</code> از نوع رشته؛ مسیرهای درخواست غیرمنبع.
 <ul>
 <li dir="rtl">مثال: <code dir="ltr">/version</code> یا <code dir="ltr">/apis</code></li>
-<li dir="rtl">نویسه عام:
+<li dir="rtl">نویسهٔ عام:
 <ul>
-<li dir="rtl"><code dir="ltr">*</code> با همه درخواست‌های غیرمنبع مطابقت دارد.</li>
-<li dir="rtl"><code dir="ltr">/foo/*</code> با همه زیرمسیرهای <code dir="ltr">/foo/</code> مطابقت دارد.</li>
+<li dir="rtl"><code dir="ltr">*</code> با همهٔ درخواست‌های غیرمنبع مطابقت دارد.</li>
+<li dir="rtl"><code dir="ltr">/foo/*</code> با همهٔ زیرمسیرهای <code dir="ltr">/foo/</code> مطابقت دارد.</li>
 </ul>
 </li>
 </ul>
 </li>
 </ul>
 </li>
-<li dir="rtl"><code dir="ltr">readonly</code>، از نوع بولی؛ هنگامی که true باشد، به این معناست که سیاست تطبیق منبع فقط برای عملیات get، list و watch اعمال می‌شود و سیاست تطبیق غیرمنبع فقط برای عملیات get اعمال می‌شود.</li>
+<li dir="rtl">ویژگی <code dir="ltr">readonly</code> از نوع بولی؛ اگر مقدار آن true باشد، سیاست تطبیق منبع فقط بر عملیات get، list و watch اعمال می‌شود و سیاست تطبیق غیرمنبع فقط بر عملیات get اعمال می‌شود.</li>
 </ul>
 </li>
 </ul>
 <div class="callout note"><div class="callout-title">توجه:</div>
-<p dir="rtl">ویژگی تنظیم‌نشده با ویژگی‌ای که روی مقدار صفر نوع خود تنظیم شده است (مثلاً رشته خالی، 0، false) یکسان است. با این حال، برای خوانایی بهتر است از تنظیم‌نکردن ویژگی استفاده شود.</p>
+<p dir="rtl">ویژگیِ تنظیم‌نشده معادل ویژگی‌ای است که مقدار صفرِ نوع خود را دارد (مثلاً رشتهٔ خالی، 0، false). با این حال، برای خوانایی بهتر است ویژگی را تنظیم‌نشده باقی بگذارید.</p>
 <p dir="rtl">در آینده ممکن است سیاست‌ها در قالب JSON بیان شوند و از طریق یک رابط REST مدیریت شوند.</p>
 </div>
-<h2 id="الگوریتم-مجوزدهی-authorization-algorithm" dir="rtl">الگوریتم مجوزدهی {#authorization-algorithm}</h2>
-<p dir="rtl">یک درخواست دارای ویژگی‌هایی است که با ویژگی‌های آبجکت سیاست متناظرند.</p>
-<p dir="rtl">هنگامی که درخواستی دریافت می‌شود، ویژگی‌ها تعیین می‌گردند. ویژگی‌های ناشناخته روی مقدار صفر نوع خود تنظیم می‌شوند (مثلاً رشته خالی، 0، false).</p>
-<p dir="rtl">ویژگی‌ای که روی <code dir="ltr">"*"</code> تنظیم شده باشد با هر مقداری از ویژگی متناظر مطابقت می‌کند.</p>
-<p dir="rtl">چندتایی (tuple) ویژگی‌ها برای یافتن تطابق با تک‌تک سیاست‌های موجود در فایل سیاست بررسی می‌شود. اگر دست‌کم یک خط با ویژگی‌های درخواست مطابقت داشته باشد، درخواست مجاز شناخته می‌شود (اما ممکن است در اعتبارسنجی‌های بعدی ناموفق شود).</p>
-<p dir="rtl">برای اینکه به هر کاربر احراز هویت‌شده اجازه انجام کاری را بدهید، سیاستی بنویسید که ویژگی group در آن روی <code dir="ltr">"system:authenticated"</code> تنظیم شده باشد.</p>
-<p dir="rtl">برای اینکه به هر کاربر احراز هویت‌نشده اجازه انجام کاری را بدهید، سیاستی بنویسید که ویژگی group در آن روی <code dir="ltr">"system:unauthenticated"</code> تنظیم شده باشد.</p>
-<p dir="rtl">برای اینکه به یک کاربر اجازه انجام هر کاری را بدهید، سیاستی بنویسید که ویژگی‌های apiGroup، namespace، resource و nonResourcePath در آن روی <code dir="ltr">"*"</code> تنظیم شده باشند.</p>
-<h2 id="kubectl-kubectl" dir="ltr" class="ltr">Kubectl {#kubectl}</h2>
-<p dir="rtl">Kubectl از نقاط پایانی <code dir="ltr">/api</code> و <code dir="ltr">/apis</code> در apiserver برای کشف انواع منابعی که ارائه می‌شوند استفاده می‌کند و آبجکت‌هایی را که در عملیات create/update به API ارسال می‌شوند، با استفاده از اطلاعات طرحواره (schema) موجود در <code dir="ltr">/openapi/v2</code> اعتبارسنجی می‌کند.</p>
-<p dir="rtl">هنگام استفاده از مجوزدهی ABAC، این منابع ویژه باید به‌صراحت از طریق ویژگی <code dir="ltr">nonResourcePath</code> در یک سیاست در دسترس قرار گیرند (به <a href="#examples">مثال‌ها</a> در ادامه مراجعه کنید):</p>
+<h2 id="الگوریتم-مجوزدهی" dir="rtl">الگوریتم مجوزدهی</h2>
+<p dir="rtl">هر درخواست ویژگی‌هایی دارد که با ویژگی‌های آبجکت سیاست متناظرند.</p>
+<p dir="rtl">هنگام دریافت یک درخواست، ویژگی‌های آن تعیین می‌شوند. ویژگی‌های ناشناخته برابر با مقدار صفرِ نوع خود (مثلاً رشتهٔ خالی، 0، false) قرار می‌گیرند.</p>
+<p dir="rtl">ویژگی‌ای که مقدار آن <code dir="ltr">"*"</code> باشد، با هر مقداری از ویژگی متناظر درخواست مطابقت دارد.</p>
+<p dir="rtl">مجموعهٔ ویژگی‌های درخواست با تک‌تک سیاست‌های موجود در فایل سیاست مقایسه می‌شود. اگر دست‌کم یک خط با ویژگی‌های درخواست مطابقت داشته باشد، درخواست مجاز شمرده می‌شود (هرچند ممکن است در اعتبارسنجی‌های بعدی رد شود).</p>
+<p dir="rtl">برای اینکه به هر کاربر احرازهویت‌شده اجازهٔ انجام کاری را بدهید، سیاستی بنویسید که ویژگی group آن برابر با <code dir="ltr">"system:authenticated"</code> باشد.</p>
+<p dir="rtl">برای اینکه به هر کاربر احرازهویت‌نشده اجازهٔ انجام کاری را بدهید، سیاستی بنویسید که ویژگی group آن برابر با <code dir="ltr">"system:unauthenticated"</code> باشد.</p>
+<p dir="rtl">برای اینکه به یک کاربر اجازهٔ انجام هر کاری را بدهید، سیاستی بنویسید که ویژگی‌های apiGroup، namespace، resource و nonResourcePath آن برابر با <code dir="ltr">"*"</code> باشند.</p>
+<h2 id="kubectl" dir="ltr" class="ltr">Kubectl</h2>
+<p dir="rtl">ابزار kubectl از نقطه‌های پایانی <code dir="ltr">/api</code> و <code dir="ltr">/apis</code> در apiserver برای کشف انواع منابع ارائه‌شده استفاده می‌کند و آبجکت‌هایی را که با عملیات create/update به API فرستاده می‌شوند، با کمک اطلاعات طرح‌واره‌ای که در <code dir="ltr">/openapi/v2</code> قرار دارد، اعتبارسنجی می‌کند.</p>
+<p dir="rtl">هنگام استفاده از مجوزدهی ABAC، این منابع ویژه باید به‌صراحت از طریق ویژگی <code dir="ltr">nonResourcePath</code> در یک سیاست در دسترس قرار گیرند (به <a href="#examples">مثال‌های</a> زیر مراجعه کنید):</p>
 <ul>
-<li dir="rtl"><code dir="ltr">/api</code>، <code dir="ltr">/api/*</code>، <code dir="ltr">/apis</code> و <code dir="ltr">/apis/*</code> برای مذاکره نسخه API.</li>
-<li dir="rtl"><code dir="ltr">/version</code> برای دریافت نسخه سرور از طریق <code dir="ltr">kubectl version</code>.</li>
-<li dir="rtl"><code dir="ltr">/swaggerapi/*</code> برای عملیات create/update.</li>
+<li dir="rtl">مسیرهای <code dir="ltr">/api</code>، <code dir="ltr">/api/*</code>، <code dir="ltr">/apis</code> و <code dir="ltr">/apis/*</code> برای مذاکرهٔ نسخهٔ API.</li>
+<li dir="rtl">مسیر <code dir="ltr">/version</code> برای دریافت نسخهٔ سرور از طریق <code dir="ltr">kubectl version</code>.</li>
+<li dir="rtl">مسیر <code dir="ltr">/swaggerapi/*</code> برای عملیات create/update.</li>
 </ul>
-<p dir="rtl">برای بررسی فراخوانی‌های HTTP که در یک عملیات مشخص kubectl انجام می‌شوند، می‌توانید سطح جزئیات گزارش‌ها (verbosity) را افزایش دهید:</p>
+<p dir="rtl">برای بررسی فراخوانی‌های HTTP که در یک عملیات خاص kubectl انجام می‌شوند، می‌توانید سطح جزئیات خروجی را افزایش دهید:</p>
 <pre dir="ltr"><code class="language-shell" dir="ltr">kubectl --v=8 version
 </code></pre>
-<h2 id="مثال-ها-examples" dir="rtl">مثال‌ها {#examples}</h2>
+<h2 id="مثال-ها" dir="rtl">مثال‌ها</h2>
 <ol>
 <li dir="rtl">
-<p dir="rtl">Alice می‌تواند هر کاری را روی همه منابع انجام دهد:</p>
+<p dir="rtl">کاربر Alice می‌تواند هر کاری را روی همهٔ منابع انجام دهد:</p>
 <pre dir="ltr"><code class="language-json" dir="ltr">{"apiVersion": "abac.authorization.kubernetes.io/v1beta1", "kind": "Policy", "spec": {"user": "alice", "namespace": "*", "resource": "*", "apiGroup": "*"}}
 </code></pre>
 </li>
 <li dir="rtl">
-<p dir="rtl">kubelet می‌تواند هر Podی را بخواند:</p>
+<p dir="rtl">کامپوننت kubelet می‌تواند همهٔ پادها را بخواند:</p>
 <pre dir="ltr"><code class="language-json" dir="ltr">{"apiVersion": "abac.authorization.kubernetes.io/v1beta1", "kind": "Policy", "spec": {"user": "kubelet", "namespace": "*", "resource": "pods", "readonly": true}}
 </code></pre>
 </li>
 <li dir="rtl">
-<p dir="rtl">kubelet می‌تواند رویدادها (events) را بخواند و بنویسد:</p>
+<p dir="rtl">کامپوننت kubelet می‌تواند رویدادها را بخواند و بنویسد:</p>
 <pre dir="ltr"><code class="language-json" dir="ltr">{"apiVersion": "abac.authorization.kubernetes.io/v1beta1", "kind": "Policy", "spec": {"user": "kubelet", "namespace": "*", "resource": "events"}}
 </code></pre>
 </li>
 <li dir="rtl">
-<p dir="rtl">Bob فقط می‌تواند Podها را در فضای نام "projectCaribou" بخواند:</p>
+<p dir="rtl">کاربر Bob فقط می‌تواند پادهای فضای نام "projectCaribou" را بخواند:</p>
 <pre dir="ltr"><code class="language-json" dir="ltr">{"apiVersion": "abac.authorization.kubernetes.io/v1beta1", "kind": "Policy", "spec": {"user": "bob", "namespace": "projectCaribou", "resource": "pods", "readonly": true}}
 </code></pre>
 </li>
 <li dir="rtl">
-<p dir="rtl">هر کسی می‌تواند درخواست‌های فقط‌خواندنی را به همه مسیرهای غیرمنبع ارسال کند:</p>
+<p dir="rtl">همه می‌توانند درخواست‌های فقط‌خواندنی به همهٔ مسیرهای غیرمنبع بفرستند:</p>
 <pre dir="ltr"><code class="language-json" dir="ltr">{"apiVersion": "abac.authorization.kubernetes.io/v1beta1", "kind": "Policy", "spec": {"group": "system:authenticated", "readonly": true, "nonResourcePath": "*"}}
  {"apiVersion": "abac.authorization.kubernetes.io/v1beta1", "kind": "Policy", "spec": {"group": "system:unauthenticated", "readonly": true, "nonResourcePath": "*"}}
 </code></pre>
 </li>
 </ol>
-<p dir="rtl"><a href="https://releases.k8s.io/v1.37.0/pkg/auth/authorizer/abac/example_policy_file.jsonl" target="_blank" rel="noopener">نمونه فایل کامل</a></p>
-<h2 id="نکته-ای-کوتاه-درباره-حساب-های-سرویس-service-account-a-quick-note-on-service-accounts" dir="rtl">نکته‌ای کوتاه درباره حساب‌های سرویس (service account) {#a-quick-note-on-service-accounts}</h2>
-<p dir="rtl">هر حساب سرویس (service account) یک نام کاربری ABAC متناظر دارد و نام کاربری آن حساب سرویس طبق قرارداد نام‌گذاری زیر تولید می‌شود:</p>
+<p dir="rtl"><a href="https://releases.k8s.io/v1.37.0/pkg/auth/authorizer/abac/example_policy_file.jsonl" target="_blank" rel="noopener">نمونهٔ کامل فایل</a></p>
+<h2 id="نکته-ای-کوتاه-دربارهٔ-حساب-های-سرویس" dir="rtl">نکته‌ای کوتاه دربارهٔ حساب‌های سرویس</h2>
+<p dir="rtl">هر حساب سرویس یک نام کاربری ABAC متناظر دارد و نام کاربری هر حساب سرویس طبق قرارداد نام‌گذاری زیر ساخته می‌شود:</p>
 <pre dir="ltr"><code class="language-shell" dir="ltr">system:serviceaccount:&lt;namespace&gt;:&lt;serviceaccountname&gt;
 </code></pre>
-<p dir="rtl">ایجاد یک فضای نام جدید منجر به ایجاد یک حساب سرویس جدید با قالب زیر می‌شود:</p>
+<p dir="rtl">ایجاد یک فضای نام جدید به ایجاد یک حساب سرویس جدید با قالب زیر منجر می‌شود:</p>
 <pre dir="ltr"><code class="language-shell" dir="ltr">system:serviceaccount:&lt;namespace&gt;:default
 </code></pre>
-<p dir="rtl">برای مثال، اگر بخواهید با استفاده از ABAC به حساب سرویس default (در فضای نام <code dir="ltr">kube-system</code>) دسترسی کامل به API بدهید، باید این خط را به فایل سیاست خود اضافه کنید:</p>
+<p dir="rtl">برای مثال، اگر بخواهید با استفاده از ABAC به حساب سرویس پیش‌فرض (در فضای نام <code dir="ltr">kube-system</code>) دسترسی کامل به API بدهید، باید این خط را به فایل سیاست خود اضافه کنید:</p>
 <pre dir="ltr"><code class="language-json" dir="ltr">{"apiVersion":"abac.authorization.kubernetes.io/v1beta1","kind":"Policy","spec":{"user":"system:serviceaccount:kube-system:default","namespace":"*","resource":"*","apiGroup":"*"}}
 </code></pre>
-<p dir="rtl">برای اینکه خطوط جدید سیاست اعمال شوند، apiserver باید دوباره راه‌اندازی شود.</p>
+<p dir="rtl">برای اعمال خطوط جدید سیاست، باید apiserver را دوباره راه‌اندازی کنید.</p>
 <p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
-<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#قالب-فایل-سیاست-policy-file-format">قالب فایل سیاست {#policy-file-format}</a><a class="l2" href="#الگوریتم-مجوزدهی-authorization-algorithm">الگوریتم مجوزدهی {#authorization-algorithm}</a><a class="l2" href="#kubectl-kubectl">Kubectl {#kubectl}</a><a class="l2" href="#مثال-ها-examples">مثال‌ها {#examples}</a><a class="l2" href="#نکته-ای-کوتاه-درباره-حساب-های-سرویس-service-account-a-quick-note-on-service-accounts">نکته‌ای کوتاه درباره حساب‌های سرویس (service account) {#a-quick-note-on-service-accounts}</a></nav>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#قالب-فایل-سیاست">قالب فایل سیاست</a><a class="l2" href="#الگوریتم-مجوزدهی">الگوریتم مجوزدهی</a><a class="l2" href="#kubectl">Kubectl</a><a class="l2" href="#مثال-ها">مثال‌ها</a><a class="l2" href="#نکته-ای-کوتاه-دربارهٔ-حساب-های-سرویس">نکته‌ای کوتاه دربارهٔ حساب‌های سرویس</a></nav>
 </div>
 </body>
 </html>

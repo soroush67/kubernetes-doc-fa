@@ -17,60 +17,60 @@ no_list: true
 
 ## مرجع API
 
-* [واژه‌نامه](/docs/reference/glossary/) - فهرستی جامع و استاندارد از اصطلاحات کوبرنتیز
+* [واژه‌نامه](/docs/reference/glossary/) - فهرستی جامع و استانداردشده از اصطلاحات کوبرنتیز
 
 * [مرجع API کوبرنتیز](/docs/reference/kubernetes-api/)
 * [مرجع تک‌صفحه‌ای API برای کوبرنتیز {{< param "version" >}}](/docs/reference/generated/kubernetes-api/{{< param "version" >}}/)
-* [استفاده از API کوبرنتیز](/docs/reference/using-api/) - مروری بر API کوبرنتیز.
-* [کنترل دسترسی به API](/docs/reference/access-authn-authz/) - جزئیات نحوهٔ کنترل دسترسی به API در کوبرنتیز
-* [برچسب‌ها، حاشیه‌نویسی‌ها و Taintهای شناخته‌شده](/docs/reference/labels-annotations-taints/)
+* [استفاده از API کوبرنتیز](/docs/reference/using-api/) - نمای کلی API کوبرنتیز.
+* [کنترل دسترسی به API](/docs/reference/access-authn-authz/) - جزئیات چگونگی کنترل دسترسی به API در کوبرنتیز
+* [برچسب‌ها، حاشیه‌نویسی‌ها (annotations) و taintهای شناخته‌شده](/docs/reference/labels-annotations-taints/)
 
 ## کتابخانه‌های کلاینت با پشتیبانی رسمی
 
-برای فراخوانی API کوبرنتیز از یک زبان برنامه‌نویسی می‌توانید از
-[کتابخانه‌های کلاینت](/docs/reference/using-api/client-libraries/) استفاده کنید. کتابخانه‌های کلاینت با پشتیبانی رسمی عبارت‌اند از:
+برای فراخوانی API کوبرنتیز از یک زبان برنامه‌نویسی، می‌توانید از
+[کتابخانه‌های کلاینت](/docs/reference/using-api/client-libraries/) استفاده کنید. کتابخانه‌های کلاینتی که به‌طور رسمی پشتیبانی می‌شوند عبارت‌اند از:
 
-- [کتابخانه کلاینت Go برای کوبرنتیز](https://github.com/kubernetes/client-go/)
-- [کتابخانه کلاینت Python برای کوبرنتیز](https://github.com/kubernetes-client/python)
-- [کتابخانه کلاینت Java برای کوبرنتیز](https://github.com/kubernetes-client/java)
-- [کتابخانه کلاینت JavaScript برای کوبرنتیز](https://github.com/kubernetes-client/javascript)
-- [کتابخانه کلاینت C# برای کوبرنتیز](https://github.com/kubernetes-client/csharp)
-- [کتابخانه کلاینت Haskell برای کوبرنتیز](https://github.com/kubernetes-client/haskell)
+- [کتابخانهٔ کلاینت Go کوبرنتیز](https://github.com/kubernetes/client-go/)
+- [کتابخانهٔ کلاینت Python کوبرنتیز](https://github.com/kubernetes-client/python)
+- [کتابخانهٔ کلاینت Java کوبرنتیز](https://github.com/kubernetes-client/java)
+- [کتابخانهٔ کلاینت JavaScript کوبرنتیز](https://github.com/kubernetes-client/javascript)
+- [کتابخانهٔ کلاینت C# کوبرنتیز](https://github.com/kubernetes-client/csharp)
+- [کتابخانهٔ کلاینت Haskell کوبرنتیز](https://github.com/kubernetes-client/haskell)
 
-## CLI
+## رابط خط فرمان (CLI)
 
-* [kubectl](/docs/reference/kubectl/) - ابزار اصلی خط فرمان برای اجرای دستورات و مدیریت کلاسترهای کوبرنتیز.
-  * [JSONPath](/docs/reference/kubectl/jsonpath/) - راهنمای نحو برای استفاده از [عبارات JSONPath](https://goessner.net/articles/JsonPath/) در kubectl.
+* [kubectl](/docs/reference/kubectl/) - ابزار اصلی خط فرمان برای اجرای دستورها و مدیریت کلاسترهای کوبرنتیز.
+  * [JSONPath](/docs/reference/kubectl/jsonpath/) - راهنمای نحو برای استفاده از [عبارت‌های JSONPath](https://goessner.net/articles/JsonPath/) همراه با kubectl.
 * [kubeadm](/docs/reference/setup-tools/kubeadm/) - ابزار خط فرمان برای راه‌اندازی آسان یک کلاستر امن کوبرنتیز.
 
 ## مؤلفه‌ها
 
 * [kubelet](/docs/reference/command-line-tools-reference/kubelet/) - عامل
   اصلی که روی هر نود اجرا می‌شود. kubelet مجموعه‌ای از PodSpecها را دریافت می‌کند
-  و اطمینان می‌دهد کانتینرهای توصیف‌شده در آن‌ها در حال اجرا و سالم هستند.
+  و اطمینان حاصل می‌کند که کانتینرهای توصیف‌شده در حال اجرا و سالم باشند.
 * [kube-apiserver](/docs/reference/command-line-tools-reference/kube-apiserver/) -
-  یک REST API که داده‌های آبجکت‌های API مانند Podها،
-  Serviceها و replication controllerها را اعتبارسنجی و پیکربندی می‌کند.
+  یک REST API که داده‌های آبجکت‌های API مانند پادها، سرویس‌ها و
+  replication controllerها را اعتبارسنجی و پیکربندی می‌کند.
 * [kube-controller-manager](/docs/reference/command-line-tools-reference/kube-controller-manager/) -
-  دیمنی که حلقه‌های کنترلی اصلی همراه با کوبرنتیز را در خود جای داده است.
+  دیمنی (daemon) که حلقه‌های کنترلی اصلیِ همراهِ کوبرنتیز را در خود جای داده است.
 * [kube-proxy](/docs/reference/command-line-tools-reference/kube-proxy/) - می‌تواند
-  هدایت ساده جریان TCP/UDP یا هدایت round-robin ترافیک TCP/UDP را میان
-  مجموعه‌ای از بک‌اندها انجام دهد.
+  هدایت سادهٔ جریان TCP/UDP یا هدایت چرخشی (round-robin) TCP/UDP را میان
+  مجموعه‌ای از سرویس‌های پشتی (back-end) انجام دهد.
 * [kube-scheduler](/docs/reference/command-line-tools-reference/kube-scheduler/) -
   زمان‌بندی که دسترس‌پذیری، کارایی و ظرفیت را مدیریت می‌کند.
   
   * [سیاست‌های زمان‌بند](/docs/reference/scheduling/policies)
   * [پروفایل‌های زمان‌بند](/docs/reference/scheduling/config#profiles)
 
-* فهرست [پورت‌ها و پروتکل‌ها](/docs/reference/networking/ports-and-protocols/) که
-  باید روی نودهای control plane و worker باز باشند
+* فهرست [پورت‌ها و پروتکل‌هایی](/docs/reference/networking/ports-and-protocols/) که
+  باید روی نودهای control plane و نودهای کارگر باز باشند
 
 ## APIهای پیکربندی
 
-این بخش مستندات APIهای «منتشرنشده» را در خود جای داده است که برای
+این بخش میزبان مستندات APIهای «منتشرنشده‌ای» است که برای
 پیکربندی مؤلفه‌ها یا ابزارهای کوبرنتیز به کار می‌روند. بیشتر این APIها
-از طریق API server به شیوهٔ RESTful ارائه نمی‌شوند، با این حال برای
-استفاده یا مدیریت یک کلاستر توسط کاربر یا اپراتور ضروری هستند.
+از طریق API server به‌صورت RESTful در دسترس قرار نمی‌گیرند، هرچند برای
+کاربر یا اپراتور در استفاده از کلاستر یا مدیریت آن ضروری هستند.
 
 
 * [kubeconfig (v1)](/docs/reference/config-api/kubeconfig.v1/)
@@ -117,7 +117,7 @@ no_list: true
 * [پیکربندی kubelet (v1)](/docs/reference/config-api/kubelet-config.v1/)
   - `kubelet.config.k8s.io/v1`
     - [CredentialProviderConfig](/docs/reference/config-api/kubelet-config.v1/#kubelet-config-k8s-io-v1-CredentialProviderConfig)
-* [ارائه‌دهندگان اعتبارنامه kubelet (v1)](/docs/reference/config-api/kubelet-credentialprovider.v1/)
+* [ارائه‌دهندگان اعتبارنامهٔ kubelet (v1)](/docs/reference/config-api/kubelet-credentialprovider.v1/)
   - `credentialprovider.kubelet.k8s.io/v1`
     - [CredentialProviderRequest](/docs/reference/config-api/kubelet-credentialprovider.v1/#credentialprovider-kubelet-k8s-io-v1-CredentialProviderRequest)
     - [CredentialProviderResponse](/docs/reference/config-api/kubelet-credentialprovider.v1/#credentialprovider-kubelet-k8s-io-v1-CredentialProviderResponse)
@@ -167,32 +167,32 @@ no_list: true
 
 ## APIهای خارجی
 
-این‌ها APIهایی هستند که توسط پروژه کوبرنتیز تعریف شده‌اند، اما
-توسط پروژه اصلی پیاده‌سازی نمی‌شوند:
+این‌ها APIهایی هستند که پروژهٔ کوبرنتیز آن‌ها را تعریف کرده است، اما
+در پروژهٔ هسته پیاده‌سازی نشده‌اند:
 
-* [Metrics API (v1beta1)](/docs/reference/external-api/metrics.v1beta1/)
-* [Custom Metrics API (v1beta2)](/docs/reference/external-api/custom-metrics.v1beta2)
-* [External Metrics API (v1beta1)](/docs/reference/external-api/external-metrics.v1beta1)
+* [API معیارها (Metrics) (v1beta1)](/docs/reference/external-api/metrics.v1beta1/)
+* [API معیارهای سفارشی (v1beta2)](/docs/reference/external-api/custom-metrics.v1beta2)
+* [API معیارهای خارجی (v1beta1)](/docs/reference/external-api/external-metrics.v1beta1)
 
-## مستندات طراحی
+## اسناد طراحی
 
-آرشیوی از مستندات طراحی قابلیت‌های کوبرنتیز. نقاط شروع مناسب
+بایگانی‌ای از اسناد طراحی قابلیت‌های کوبرنتیز. برای شروع، منابع
 [معماری کوبرنتیز](https://git.k8s.io/design-proposals-archive/architecture/architecture.md) و
-[مروری بر طراحی کوبرنتیز](https://git.k8s.io/design-proposals-archive) هستند.
+[نمای کلی طراحی کوبرنتیز](https://git.k8s.io/design-proposals-archive) نقطه‌های مناسبی هستند.
 
 ## کدگذاری‌ها
 
 ابزارهایی مانند {{< glossary_tooltip text="kubectl" term_id="kubectl" >}}
-می‌توانند با قالب‌ها / کدگذاری‌های مختلف کار کنند. این موارد عبارت‌اند از:
+می‌توانند با قالب‌ها و کدگذاری‌های (encodings) مختلفی کار کنند. این قالب‌ها عبارت‌اند از:
 
-* [CBOR](https://cbor.io/)، که روی شبکه استفاده می‌شود اما به‌عنوان قالب خروجی kubectl **در دسترس نیست**
-  * بخش [کدگذاری CBOR برای منابع](/docs/reference/using-api/api-concepts/#cbor-encoding) را ببینید
+* [CBOR](https://cbor.io/)، که در شبکه استفاده می‌شود اما به‌عنوان قالب خروجی kubectl در دسترس **نیست**
+  * به [کدگذاری منابع با CBOR](/docs/reference/using-api/api-concepts/#cbor-encoding) مراجعه کنید
 * [JSON](https://www.json.org/)، که به‌عنوان قالب خروجی `kubectl` در دسترس است و در لایهٔ HTTP نیز استفاده می‌شود
-* [KYAML](/docs/reference/encodings/kyaml)، گویشی از YAML مختص کوبرنتیز
-  * KYAML در اصل یک _قالب خروجی_ است؛ در هر جایی که می‌توانید KYAML را به کوبرنتیز بدهید، می‌توانید هر ورودی معتبر YAML دیگری را نیز ارائه کنید
+* [KYAML](/docs/reference/encodings/kyaml)، گویشی از YAML مخصوص کوبرنتیز
+  * قالب KYAML اساساً یک _قالب خروجی_ است؛ هر جا که بتوانید KYAML را به کوبرنتیز بدهید، می‌توانید هر ورودی YAML معتبر دیگری را نیز ارائه کنید
 * [YAML](https://yaml.org/)، که به‌عنوان قالب خروجی `kubectl` در دسترس است و در لایهٔ HTTP نیز استفاده می‌شود
 
-کوبرنتیز همچنین یک [کدگذاری protobuf](/docs/reference/using-api/api-concepts/#protobuf-encoding) اختصاصی دارد که فقط در پیام‌های HTTP استفاده می‌شود.
+کوبرنتیز همچنین یک [کدگذاری protobuf](/docs/reference/using-api/api-concepts/#protobuf-encoding) سفارشی دارد که فقط درون پیام‌های HTTP استفاده می‌شود.
 
-ابزار `kubectl` از برخی قالب‌های خروجی دیگر مانند _custom columns_ پشتیبانی می‌کند؛
-بخش [قالب‌های خروجی](/docs/reference/kubectl/#output-options) را در مرجع kubectl ببینید.
+ابزار `kubectl` از برخی قالب‌های خروجی دیگر، مانند _ستون‌های سفارشی_، نیز پشتیبانی می‌کند؛
+برای اطلاعات بیشتر، بخش [قالب‌های خروجی](/docs/reference/kubectl/#output-options) را در مرجع kubectl ببینید.

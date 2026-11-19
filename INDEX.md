@@ -336,14 +336,14 @@
 - ✅ [content-organization.md](md/contribute/style/content-organization.md)
 - ✅ [diagram-guide.md](md/contribute/style/diagram-guide.md)
 - ✅ [page-content-types.md](md/contribute/style/page-content-types.md)
-- ⚠️ [style-guide.md](md/contribute/style/style-guide.md)
+- ✅ [style-guide.md](md/contribute/style/style-guide.md)
 - ✅ [write-new-topic.md](md/contribute/style/write-new-topic.md)
 
 ## `contribute/style/hugo-shortcodes`
 
 - ✅ [example1.md](md/contribute/style/hugo-shortcodes/example1.md)
 - ✅ [example2.md](md/contribute/style/hugo-shortcodes/example2.md)
-- ⚠️ [index.md](md/contribute/style/hugo-shortcodes/index.md)
+- ✅ [index.md](md/contribute/style/hugo-shortcodes/index.md)
 
 ## `doc-contributor-tools/linkchecker`
 

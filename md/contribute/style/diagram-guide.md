@@ -1,17 +1,17 @@
 ---
-title: راهنمای نمودار
-linktitle: راهنمای نمودار
+title: راهنمای نمودارها
+linktitle: راهنمای نمودارها
 content_type: concept
 weight: 60
 ---
 
 <!--Overview-->
 
-این راهنما نشان می‌دهد که چگونه با استفاده از کتابخانه جاوا‌اسکریپت Mermaid نمودارها را ایجاد، ویرایش و به اشتراک بگذارید. Mermaid.js به شما امکان می‌دهد با استفاده از یک نحو ساده و شبیه به مارک‌داون، درون فایل‌های Markdown نمودار تولید کنید. همچنین می‌توانید از Mermaid برای تولید فایل‌های تصویری `.svg` یا `.png` استفاده کنید و آن‌ها را به مستندات خود بیفزایید.
+این راهنما نشان می‌دهد که چگونه با کتابخانهٔ جاوااسکریپتی Mermaid نمودار بسازید، آن را ویرایش کنید و با دیگران به اشتراک بگذارید. با کتابخانهٔ Mermaid.js می‌توانید با نحوی ساده و شبیه به مارک‌داون، درون فایل‌های Markdown نمودار تولید کنید. همچنین می‌توانید با Mermaid فایل‌های تصویری `.svg` یا `.png` بسازید و آن‌ها را به مستندات خود اضافه کنید.
 
-مخاطب هدف این راهنما هر کسی است که مایل است درباره Mermaid بیاموزد و/یا نحوه ایجاد و افزودن نمودار به مستندات کوبرنتیز را یاد بگیرد.
+مخاطب این راهنما هر کسی است که می‌خواهد با Mermaid آشنا شود یا یاد بگیرد چگونه نمودار بسازد و آن را به مستندات کوبرنتیز اضافه کند.
 
-شکل ۱ موضوعات پوشش‌داده‌شده در این بخش را نشان می‌دهد.
+شکل ۱ موضوعاتی را که در این بخش بررسی می‌شوند نشان می‌دهد.
 
 {{< mermaid >}}
 flowchart LR
@@ -46,79 +46,79 @@ click V "https://mermaid-js.github.io/mermaid-live-editor/edit/#eyJjb2RlIjoiZmxv
 
 {{< /mermaid >}}
 
-شکل ۱. موضوعات پوشش‌داده‌شده در این بخش.
+شکل ۱. موضوعات بررسی‌شده در این بخش.
 
-برای شروع کار با Mermaid به موارد زیر نیاز دارید:
+برای شروع کار با Mermaid تنها به موارد زیر نیاز دارید:
 
-* درک پایه‌ای از مارک‌داون.
-* استفاده از ویرایشگر زنده Mermaid.
-* استفاده از [shortcodeهای Hugo](/docs/contribute/style/hugo-shortcodes/).
-* استفاده از [shortcode ‏{{</* figure */>}} در Hugo](https://gohugo.io/content-management/shortcodes/#figure).
-* انجام [پیش‌نمایش محلی Hugo](/docs/contribute/new-content/open-a-pr/#preview-locally).
-* آشنایی با فرایند [مشارکت با محتوای جدید](/docs/contribute/new-content/).
+* آشنایی مقدماتی با مارک‌داون (markdown).
+* توانایی کار با ویرایشگر زندهٔ Mermaid.
+* توانایی استفاده از [شورت‌کدهای Hugo](/docs/contribute/style/hugo-shortcodes/).
+* توانایی استفاده از [شورت‌کد {{</* figure */>}} در Hugo](https://gohugo.io/content-management/shortcodes/#figure).
+* توانایی اجرای [پیش‌نمایش محلی Hugo](/docs/contribute/new-content/open-a-pr/#preview-locally).
+* آشنایی با فرایند [مشارکت در محتوای جدید](/docs/contribute/new-content/).
 
 {{< note >}}
-می‌توانید روی هر نمودار در این بخش کلیک کنید تا کد و نمودار رندرشده را در ویرایشگر زنده Mermaid مشاهده کنید.
+با کلیک روی هر نمودار در این بخش، می‌توانید کد آن و نمودار رندرشده را در ویرایشگر زندهٔ Mermaid ببینید.
 {{< /note >}}
 
 <!--body-->
 
 ## چرا باید در مستندات از نمودار استفاده کنید
 
-نمودارها وضوح و درک‌پذیری مستندات را بهبود می‌بخشند. این کار هم برای کاربر و هم برای مشارکت‌کننده مزایایی دارد.
+نمودارها مستندات را شفاف‌تر و فهم آن را آسان‌تر می‌کنند. این کار هم برای کاربر و هم برای مشارکت‌کننده مزایایی دارد.
 
-مزایای کاربر شامل موارد زیر است:
+مزایا برای کاربر عبارت‌اند از:
 
-* __نقطه شروع دوستانه__. یک صفحه خوش‌آمدگویی طولانی که فقط متن دارد می‌تواند کاربران، به‌ویژه کاربران تازه‌وارد کوبرنتیز، را دلسرد کند.
-* __درک سریع‌تر مفاهیم__. یک نمودار می‌تواند به کاربران کمک کند نکات کلیدی یک موضوع پیچیده را بفهمند. نمودار شما می‌تواند به‌عنوان یک راهنمای یادگیری بصری برای ورود به جزئیات موضوع عمل کند.
-* __ماندگاری بهتر در ذهن__. برای برخی افراد یادآوری تصویر آسان‌تر از یادآوری متن است.
+* __صفحهٔ ورود دوستانه__. صفحهٔ آغازینی که فقط از متن مفصل تشکیل شده باشد ممکن است کاربران را، به‌ویژه کسانی را که برای نخستین بار با کوبرنتیز کار می‌کنند، دلسرد کند.
+* __درک سریع‌تر مفاهیم__. یک نمودار می‌تواند به کاربران کمک کند نکات کلیدی یک موضوع پیچیده را درک کنند. نمودار شما می‌تواند همچون راهنمایی بصری برای یادگیری عمل کند تا کاربر به جزئیات موضوع بپردازد.
+* __به‌خاطرسپاری بهتر__. برای برخی افراد، به‌یادآوردن تصویر آسان‌تر از به‌یادآوردن متن است.
 
-مزایای مشارکت‌کننده شامل موارد زیر است:
+مزایا برای مشارکت‌کننده عبارت‌اند از:
 
-* __کمک به شکل‌دهی ساختار و محتوا__ی مشارکت شما. برای مثال، می‌توانید با یک نمودار ساده که نکات سطح بالا را پوشش می‌دهد شروع کنید و سپس به جزئیات بپردازید.
-* __گسترش و رشد جامعه کاربران__. مستنداتی که با نمودار تقویت شده‌اند و به‌آسانی قابل استفاده‌اند، کاربران تازه‌ای را جذب می‌کنند که پیش‌تر ممکن بود به‌دلیل پیچیدگی‌های ادراک‌شده تمایلی به مشارکت نداشته باشند.
+* __کمک به شکل‌دادن ساختار و محتوای__ مشارکت شما. برای مثال، می‌توانید با نموداری ساده که نکات کلی را پوشش می‌دهد شروع کنید و سپس به جزئیات بپردازید.
+* __گسترش و رشد جامعهٔ کاربران__. مستنداتی که به‌آسانی درک می‌شوند و با نمودار تکمیل شده‌اند، کاربران تازه‌ای را جذب می‌کنند که شاید پیش‌تر به دلیل پیچیدگی ظاهری موضوع تمایلی به مشارکت نداشتند.
 
-باید مخاطب هدف خود را در نظر بگیرید. افزون بر کاربران باتجربه K8s، بسیاری از مخاطبان شما با کوبرنتیز تازه آشنا شده‌اند. حتی یک نمودار ساده می‌تواند به کاربران جدید در درک مفاهیم کوبرنتیز کمک کند. آن‌ها جسورتر می‌شوند و اعتمادبه‌نفس بیشتری برای کاوش بیشتر در کوبرنتیز و مستندات آن پیدا می‌کنند.
+باید مخاطبان هدف خود را در نظر بگیرید. علاوه بر کاربران باتجربهٔ K8s، بسیاری از خوانندگان شما تازه با کوبرنتیز آشنا شده‌اند. حتی یک نمودار ساده می‌تواند به کاربران تازه‌کار کمک کند مفاهیم کوبرنتیز را درک کنند. این کاربران جسورتر می‌شوند و با اطمینان بیشتری کوبرنتیز و مستندات آن را کاوش می‌کنند.
 
 ## Mermaid
 
-[Mermaid](https://mermaid-js.github.io/mermaid/#/) یک کتابخانه جاوا‌اسکریپت متن‌باز است که به شما امکان می‌دهد با استفاده از یک نحو ساده و شبیه به مارک‌داون که به‌صورت درون‌خطی در فایل‌های Markdown پیکربندی می‌شود، نمودارها را ایجاد و ویرایش کنید و به‌آسانی به اشتراک بگذارید.
+[Mermaid](https://mermaid-js.github.io/mermaid/#/) یک کتابخانهٔ جاوااسکریپتی متن‌باز است که با آن می‌توانید با نحوی ساده و شبیه به مارک‌داون، که به‌صورت درون‌خطی در فایل‌های Markdown نوشته می‌شود، نمودار بسازید، ویرایش کنید و به‌آسانی به اشتراک بگذارید.
 
-موارد زیر ویژگی‌های Mermaid را فهرست می‌کنند:
+ویژگی‌های Mermaid عبارت‌اند از:
 
-* نحو کد ساده.
-* شامل یک ابزار تحت وب که به شما امکان می‌دهد نمودارهای خود را کدنویسی و پیش‌نمایش کنید.
-* پشتیبانی از قالب‌های متعدد از جمله flowchart، state و sequence.
-* همکاری آسان با همکاران از طریق اشتراک‌گذاری یک URL مخصوص هر نمودار.
-* مجموعه گسترده‌ای از شکل‌ها، خطوط، تم‌ها و سبک‌دهی‌ها.
+* نحو ساده برای نوشتن کد.
+* ابزاری تحت وب که با آن می‌توانید کد نمودارها را بنویسید و پیش‌نمایش آن‌ها را ببینید.
+* پشتیبانی از قالب‌های متعدد، از جمله فلوچارت، نمودار حالت و نمودار توالی.
+* همکاری آسان با همکاران از طریق اشتراک‌گذاری نشانی اینترنتی (URL) اختصاصی هر نمودار.
+* مجموعهٔ گسترده‌ای از شکل‌ها، خطوط، پوسته‌ها و سبک‌ها.
 
-موارد زیر مزایای استفاده از Mermaid را فهرست می‌کنند:
+مزایای استفاده از Mermaid عبارت‌اند از:
 
-* نیازی به ابزارهای جداگانه و غیر Mermaid برای نمودار نیست.
-* با جریان کاری موجود PR سازگار است. می‌توانید کد Mermaid را صرفاً متن Markdown در PR خود در نظر بگیرید.
-* یک ابزار ساده، نمودارهای ساده می‌سازد. نمی‌خواهید در (بازسازی) یک تصویر بیش‌ازحد پیچیده و پرجزئیات گرفتار شوید. آن را ساده نگه دارید!
+* بی‌نیازی از ابزارهای جداگانهٔ رسم نمودار غیر از Mermaid.
+* سازگاری با گردش کار فعلی PR. می‌توانید کد Mermaid را صرفاً متنی Markdown بدانید که در PR شما گنجانده شده است.
+* ابزار ساده، نمودار ساده می‌سازد. نباید درگیر طراحی (یا بازطراحی) تصویری بیش از حد پیچیده و پرجزئیات شوید. ساده نگهش دارید!
 
-Mermaid روشی ساده، باز و شفاف برای جامعه‌های SIG فراهم می‌کند تا نمودارها را برای مستندات جدید یا موجود اضافه کنند، ویرایش کنند و روی آن‌ها همکاری کنند.
+‏Mermaid روشی ساده، باز و شفاف در اختیار جوامع SIG قرار می‌دهد تا برای مستندات جدید یا موجود نمودار اضافه کنند، آن را ویرایش کنند و روی آن همکاری داشته باشند.
 
 {{< note >}}
-حتی اگر Mermaid در محیط شما پشتیبانی نشود، همچنان می‌توانید از آن برای ایجاد/ویرایش نمودار استفاده کنید. این روش __Mermaid+SVG__ نام دارد و در ادامه توضیح داده شده است.
+حتی اگر محیط شما از Mermaid پشتیبانی نکند، باز هم می‌توانید از آن برای ساخت یا ویرایش نمودار استفاده کنید. این روش __Mermaid+SVG__ نام دارد و در ادامه توضیح داده شده است.
 {{< /note >}}
 
 ### ویرایشگر زنده
 
-[ویرایشگر زنده Mermaid](https://mermaid-js.github.io/mermaid-live-editor) یک ابزار تحت وب است که به شما امکان می‌دهد نمودارها را ایجاد، ویرایش و بازبینی کنید.
+[ویرایشگر زندهٔ Mermaid](https://mermaid-js.github.io/mermaid-live-editor) ابزاری تحت وب است که با آن می‌توانید نمودار بسازید، ویرایش و بازبینی کنید.
 
-موارد زیر کارکردهای ویرایشگر زنده را فهرست می‌کنند:
+قابلیت‌های ویرایشگر زنده عبارت‌اند از:
 
 * نمایش کد Mermaid و نمودار رندرشده.
-* تولید یک URL برای هر نمودار ذخیره‌شده. این URL در فیلد نشانی مرورگر شما نمایش داده می‌شود. می‌توانید URL را با همکارانی به اشتراک بگذارید که می‌توانند به نمودار دسترسی داشته باشند و آن را تغییر دهند.
+* تولید یک URL برای هر نمودار ذخیره‌شده. این URL در نوار نشانی مرورگر شما نمایش داده می‌شود. می‌توانید آن را با همکارانی به اشتراک بگذارید تا به نمودار دسترسی داشته باشند و آن را تغییر دهند.
 * امکان دانلود فایل‌های `.svg` یا `.png`.
 
 {{< note >}}
-ویرایشگر زنده آسان‌ترین و سریع‌ترین راه برای ایجاد و ویرایش نمودارهای Mermaid است.
+ویرایشگر زنده آسان‌ترین و سریع‌ترین راه برای ساخت و ویرایش نمودارهای Mermaid است.
 {{< /note >}}
 
-## روش‌های ایجاد نمودار
+## روش‌های ساخت نمودار
 
 شکل ۲ سه روش تولید و افزودن نمودار را نشان می‌دهد.
 
@@ -148,12 +148,12 @@ click D "https://mermaid-js.github.io/mermaid-live-editor/edit/#eyJjb2RlIjoiZ3Jh
 
 {{< /mermaid >}} 
 
-شکل ۲. روش‌های ایجاد نمودار.
+شکل ۲. روش‌های ساخت نمودار.
 
 
-### درون‌خطی (Inline)
+### روش درون‌خطی
 
-شکل ۳ مراحلی را که باید برای افزودن نمودار با روش درون‌خطی (Inline) دنبال کنید نشان می‌دهد.
+شکل ۳ مراحل افزودن نمودار به روش درون‌خطی (Inline) را نشان می‌دهد.
 
 {{< mermaid >}}
 graph LR
@@ -180,23 +180,23 @@ click D "https://mermaid-js.github.io/mermaid-live-editor/edit/#eyJjb2RlIjoiZ3Jh
 
 {{< /mermaid >}}
 
-شکل ۳. مراحل روش درون‌خطی (Inline).
+شکل ۳. مراحل روش درون‌خطی.
 
 
-مراحل زیر را برای افزودن نمودار با روش درون‌خطی (Inline) دنبال کنید:
+برای افزودن نمودار به روش درون‌خطی، مراحل زیر را دنبال کنید:
 
-1. نمودار خود را با استفاده از ویرایشگر زنده ایجاد کنید.
-2. URL نمودار را برای دسترسی بعدی در جایی ذخیره کنید.
-3. کد mermaid را در محلی از فایل `.md` خود که می‌خواهید نمودار نمایش داده شود کپی کنید.
-4. با استفاده از متن Markdown، یک شرح (caption) در زیر نمودار اضافه کنید.
+1. نمودار خود را با ویرایشگر زنده بسازید.
+2. نشانی URL نمودار را جایی ذخیره کنید تا بعداً به آن دسترسی داشته باشید.
+3. کد Mermaid را در همان جایی از فایل `.md` کپی کنید که می‌خواهید نمودار نمایش داده شود.
+4. با متن Markdown، زیر نمودار یک زیرنویس (caption) اضافه کنید.
 
-یک build از Hugo کد Mermaid را اجرا می‌کند و آن را به نمودار تبدیل می‌کند.
+هنگام ساخت سایت با Hugo، کد Mermaid اجرا و به نمودار تبدیل می‌شود.
 
 {{< note >}}
-ممکن است نگهداری URL نمودارها را دست‌وپاگیر بیابید. در این صورت، در فایل `.md` یادداشتی بگذارید که کد Mermaid خودمستند (self-documenting) است. مشارکت‌کنندگان می‌توانند برای ویرایش نمودار، کد Mermaid را به ویرایشگر زنده کپی کنند و از آن بازگردانند.
+ممکن است نگهداری و پیگیری نشانی‌های URL نمودارها برایتان دشوار باشد. در این صورت، در فایل `.md` یادداشتی بگذارید که کد Mermaid خودش مستندات خودش است. مشارکت‌کنندگان می‌توانند برای ویرایش نمودار، کد Mermaid را به ویرایشگر زنده کپی کنند و پس از ویرایش، آن را از ویرایشگر بازگردانند.
 {{< /note >}}
 
-در اینجا یک قطعه کد نمونه در یک فایل `.md` آمده است:
+در ادامه نمونه‌ای از کد موجود در یک فایل `.md` آمده است:
 
 ```
 ---
@@ -214,30 +214,30 @@ Figure 17. A to B
 more text
 ```
 {{< note >}}
-باید تگ‌های shortcode مربوط به Mermaid در Hugo را در ابتدا و انتهای بلوک کد Mermaid قرار دهید. همچنین باید یک شرح (caption) برای نمودار در زیر آن اضافه کنید.
+باید تگ‌های شورت‌کد Mermaid در Hugo را در ابتدا و انتهای بلوک کد Mermaid قرار دهید. همچنین بهتر است زیر نمودار، زیرنویسی برای آن اضافه کنید.
 {{< /note >}}
 
-برای جزئیات بیشتر درباره شرح نمودارها، بخش [نحوه استفاده از شرح‌ها](#how-to-use-captions) را ببینید.
+برای جزئیات بیشتر دربارهٔ زیرنویس نمودارها، به [نحوهٔ استفاده از زیرنویس‌ها](#how-to-use-captions) مراجعه کنید.
 
-موارد زیر مزایای روش درون‌خطی (Inline) را فهرست می‌کنند:
+مزایای روش درون‌خطی عبارت‌اند از:
 
-* ابزار ویرایشگر زنده.
-* کپی کردن آسان کد Mermaid از ویرایشگر زنده و به آن و فایل `.md` شما.
-* نیازی به مدیریت فایل تصویری `.svg` جداگانه نیست.
-* متن محتوا، کد نمودار و شرح نمودار همگی در یک فایل `.md` قرار دارند.
+* استفاده از ابزار ویرایشگر زنده.
+* کپی آسان کد Mermaid میان ویرایشگر زنده و فایل `.md`.
+* بی‌نیازی از مدیریت جداگانهٔ فایل تصویری `.svg`.
+* قرارگرفتن متن محتوا، کد نمودار و زیرنویس آن در یک فایل `.md`.
 
-باید از پیش‌نمایش [محلی](/docs/contribute/new-content/open-a-pr/#preview-locally) و پیش‌نمایش Netlify استفاده کنید تا مطمئن شوید نمودار به‌درستی رندر شده است.
+برای اطمینان از رندر درست نمودار، از پیش‌نمایش [محلی](/docs/contribute/new-content/open-a-pr/#preview-locally) و پیش‌نمایش Netlify استفاده کنید.
 
 {{< caution >}}
-ممکن است مجموعه ویژگی‌های ویرایشگر زنده Mermaid با مجموعه ویژگی‌های Mermaid در [kubernetes/website](https://github.com/kubernetes/website) پشتیبانی نشود.
-و لطفاً توجه داشته باشید که مشارکت‌کنندگان می‌توانند `kubernetes/website` را به‌صورت `k/website` ذکر کنند.
-ممکن است پس از build با Hugo یک خطای نحوی یا یک صفحه خالی ببینید.
+ممکن است مجموعهٔ قابلیت‌های ویرایشگر زندهٔ Mermaid با مجموعهٔ قابلیت‌های Mermaid در [kubernetes/website](https://github.com/kubernetes/website) یکسان نباشد.
+همچنین توجه کنید که مشارکت‌کنندگان ممکن است از `kubernetes/website` با نام کوتاه `k/website` یاد کنند.
+ممکن است پس از ساخت سایت با Hugo، با خطای نحوی یا صفحهٔ خالی روبه‌رو شوید.
 در این صورت، استفاده از روش Mermaid+SVG را در نظر بگیرید.
 {{< /caution >}}
 
 ### Mermaid+SVG
 
-شکل ۴ مراحلی را که برای افزودن یک نمودار با روش Mermaid+SVG باید دنبال کنید، نشان می‌دهد.
+شکل ۴ مراحل افزودن نمودار با روش Mermaid+SVG را نشان می‌دهد.
 
 {{< mermaid >}}
 flowchart LR
@@ -272,58 +272,59 @@ click E "https://mermaid-js.github.io/mermaid-live-editor/edit/#eyJjb2RlIjoiZmxv
 
 شکل ۴. مراحل روش Mermaid+SVG.
 
-در ادامه مراحلی که باید برای افزودن یک نمودار با روش Mermaid+SVG دنبال کنید فهرست شده است:
+برای افزودن نمودار با روش Mermaid+SVG، مراحل زیر را دنبال کنید:
 
-1. نمودار خود را با استفاده از live editor ایجاد کنید.
-2. نشانی URL نمودار را برای دسترسی در آینده در جایی ذخیره کنید.
-3. یک فایل تصویر `.svg` برای نمودار تولید کنید و آن را در پوشه `images/` مناسب دانلود کنید.
-4. از shortcode با نام `{{</* figure */>}}` برای ارجاع به نمودار در فایل `.md` استفاده کنید.
-5. با استفاده از پارامتر `caption` در shortcode با نام `{{</* figure */>}}` یک عنوان توضیحی (caption) اضافه کنید.
+1. نمودار خود را با ویرایشگر زنده (live editor) بسازید.
+2. نشانی (URL) نمودار را در جایی نگه دارید تا بعداً بتوانید به آن دسترسی داشته باشید.
+3. یک فایل تصویری `.svg` از نمودار تولید کنید و آن را در پوشهٔ `images/` مناسب دانلود کنید.
+4. با شورت‌کد `{{</* figure */>}}` در فایل `.md` به نمودار ارجاع دهید.
+5. با پارامتر `caption` شورت‌کد `{{</* figure */>}}` برای نمودار زیرنویس بگذارید.
 
-برای مثال، از live editor برای ایجاد نموداری با نام `boxnet` استفاده کنید.
-نشانی URL نمودار را برای دسترسی در آینده در جایی ذخیره کنید. یک فایل
-`boxnet.svg` تولید کنید و آن را در پوشه `../images/` مناسب دانلود کنید.
+برای مثال، با ویرایشگر زنده نموداری به نام `boxnet` بسازید.
+نشانی نمودار را برای دسترسی‌های بعدی در جایی نگه دارید. سپس فایل
+`boxnet.svg` را تولید کنید و در پوشهٔ `../images/` مناسب دانلود کنید.
 
-در فایل `.md` مربوط به PR خود از shortcode با نام `{{</* figure */>}}` برای ارجاع
-به فایل تصویر `.svg` استفاده کنید و یک caption اضافه کنید.
+در فایل `.md` درخواست ادغام (PR) خود، با شورت‌کد `{{</* figure */>}}` به
+فایل تصویری `.svg` ارجاع دهید و زیرنویس را اضافه کنید.
 
 ```json
 {{</* figure src="/static/images/boxnet.svg" alt="Boxnet figure" class="diagram-large" caption="Figure 14. Boxnet caption" */>}}
 ```
 
-برای جزئیات بیشتر درباره‌ی caption نمودارها، [نحوه استفاده از captionها](#how-to-use-captions) را ببینید.
+برای جزئیات بیشتر دربارهٔ زیرنویس نمودارها، به [نحوهٔ استفاده از زیرنویس‌ها](#how-to-use-captions) مراجعه کنید.
 
 {{< note >}}
-shortcode با نام figure روش ترجیحی برای افزودن فایل‌های تصویر `.svg`
-به مستندات شماست. همچنین می‌توانید از نحو استاندارد تصویر در markdown به این شکل استفاده کنید:
+شورت‌کد figure روش ترجیحی برای افزودن فایل‌های تصویری `.svg` به مستندات است.
+همچنین می‌توانید از نحو استاندارد تصویر در markdown به این شکل استفاده کنید:
 `![my boxnet diagram](static/images/boxnet.svg)`.
-در این صورت باید یک caption در زیر نمودار اضافه کنید.
+در این صورت باید زیرنویس را خودتان زیر نمودار اضافه کنید.
 {{< /note >}}
 
-باید نشانی URL مربوط به live editor را با استفاده از یک ویرایشگر متن، به‌صورت یک بلوک توضیح (comment) در فایل تصویر `.svg` اضافه کنید.
-برای مثال، موارد زیر را در ابتدای فایل تصویر `.svg` قرار می‌دهید:
+بهتر است نشانی ویرایشگر زنده را با یک ویرایشگر متن، به‌صورت یک بلوک توضیح (comment) در فایل تصویری `.svg` اضافه کنید.
+برای مثال، متن زیر را در ابتدای فایل تصویری `.svg` قرار دهید:
 
 ```
 <!-- To view or edit the mermaid code, use the following URL: -->
 <!-- https://mermaid-js.github.io/mermaid-live-editor/edit/#eyJjb ... <remainder of the URL> -->
 ```
 
-در ادامه مزایای روش Mermaid+SVG فهرست شده است:
+مزایای روش Mermaid+SVG به شرح زیر است:
 
-* ابزار live editor.
-* ابزار live editor از جدیدترین مجموعه قابلیت‌های Mermaid پشتیبانی می‌کند.
-* استفاده از روش‌های موجود در [kubernetes/website](https://github.com/kubernetes/website) برای مدیریت فایل‌های تصویر `.svg`.
-* محیط نیازی به پشتیبانی از Mermaid ندارد.
+* ابزار ویرایشگر زنده در دسترس است.
+* ویرایشگر زنده از جدیدترین مجموعه قابلیت‌های Mermaid پشتیبانی می‌کند.
+* از روش‌های موجود در [kubernetes/website](https://github.com/kubernetes/website) برای مدیریت فایل‌های تصویری `.svg` بهره می‌گیرد.
+* محیط به پشتیبانی از Mermaid نیازی ندارد.
 
-حتماً بررسی کنید که نمودار شما با پیش‌نمایش [محلی](/docs/contribute/new-content/open-a-pr/#preview-locally)
-و پیش‌نمایش Netlify به‌درستی نمایش داده می‌شود.
+حتماً با پیش‌نمایش‌های [محلی](/docs/contribute/new-content/open-a-pr/#preview-locally)
+و Netlify بررسی کنید که نمودارتان به‌درستی نمایش داده می‌شود.
 
-### ابزار خارجی {#external-tool}
+### ابزار خارجی
 
-شکل ۵ مراحلی را که برای افزودن یک نمودار با روش ابزار خارجی (External Tool) باید دنبال کنید، نشان می‌دهد.
+شکل ۵ مراحل افزودن نمودار با روش ابزار خارجی را نشان می‌دهد.
 
-ابتدا از ابزار خارجی خود برای ایجاد نمودار استفاده کنید و آن را به‌صورت یک فایل تصویر `.svg`
-یا `.png` ذخیره کنید. پس از آن، برای افزودن فایل‌های تصویر `.svg` همان مراحل روش __Mermaid+SVG__ را دنبال کنید.
+ابتدا نمودار را با ابزار خارجی خود بسازید و آن را به‌صورت فایل تصویری `.svg`
+یا `.png` ذخیره کنید. پس از آن، همان مراحل روش __Mermaid+SVG__ را برای
+افزودن فایل‌های تصویری `.svg` دنبال کنید.
 
 {{< mermaid >}}
 flowchart LR
@@ -353,21 +354,21 @@ click E "https://mermaid-js.github.io/mermaid-live-editor/edit/#eyJjb2RlIjoiZmxv
 
 {{< /mermaid >}}
 
-شکل ۵. مراحل روش ابزار خارجی (External Tool)
+شکل ۵. مراحل روش ابزار خارجی
 
 
-در ادامه مراحلی که باید برای افزودن یک نمودار با روش ابزار خارجی دنبال کنید فهرست شده است:
+برای افزودن نمودار با روش ابزار خارجی، مراحل زیر را دنبال کنید:
 
-1. از ابزار خارجی خود برای ایجاد نمودار استفاده کنید.
-2. مختصات (coordinates) نمودار را برای دسترسی مشارکت‌کنندگان ذخیره کنید. برای مثال،
-   ممکن است ابزار شما پیوندی به تصویر نمودار ارائه دهد، یا می‌توانید فایل کد منبع،
-   مانند یک فایل `.xml`، را برای دسترسی بعدی مشارکت‌کنندگان در یک مخزن عمومی قرار دهید.
-3. نمودار را تولید کنید و به‌صورت یک فایل تصویر `.svg` یا `.png` ذخیره کنید.
-   این فایل را در پوشه `../images/` مناسب دانلود کنید.
-4. از shortcode با نام `{{</* figure */>}}` برای ارجاع به نمودار در فایل `.md` استفاده کنید.
-5. با استفاده از پارامتر `caption` در shortcode با نام `{{</* figure */>}}` یک caption اضافه کنید.
+1. نمودار را با ابزار خارجی خود بسازید.
+2. مختصات نمودار را برای دسترسی مشارکت‌کنندگان ذخیره کنید. برای مثال، ممکن است
+   ابزارتان پیوندی به تصویر نمودار ارائه دهد، یا می‌توانید فایل کد منبع، مانند یک
+   فایل `.xml`، را در یک مخزن عمومی قرار دهید تا مشارکت‌کنندگان بعداً به آن دسترسی داشته باشند.
+3. نمودار را به‌صورت فایل تصویری `.svg` یا `.png` تولید و ذخیره کنید.
+   سپس این فایل را در پوشهٔ `../images/` مناسب دانلود کنید.
+4. با شورت‌کد `{{</* figure */>}}` در فایل `.md` به نمودار ارجاع دهید.
+5. با پارامتر `caption` شورت‌کد `{{</* figure */>}}` برای نمودار زیرنویس بگذارید.
 
-در اینجا shortcode با نام `{{</* figure */>}}` برای نمودار `images/apple.svg` آمده است:
+شورت‌کد `{{</* figure */>}}` برای نمودار `images/apple.svg` به این شکل است:
 ```text
 {{</* figure src="/static/images/apple.svg" alt="red-apple-figure" class="diagram-large" caption="Figure 9. A Big Red Apple" */>}} 
 ```
@@ -375,37 +376,39 @@ click E "https://mermaid-js.github.io/mermaid-live-editor/edit/#eyJjb2RlIjoiZmxv
 اگر ابزار طراحی خارجی شما اجازه دهد:
 
 * می‌توانید چندین لوگو، آیکون و تصویر `.svg` یا `.png` را در نمودار خود بگنجانید.
-  با این حال، مطمئن شوید که حق کپی‌رایت را رعایت می‌کنید و از
-  [رهنمودهای](/docs/contribute/style/content-guide/) مستندات کوبرنتیز درباره استفاده از محتوای شخص ثالث پیروی می‌کنید.
-* باید مختصات منبع نمودار را برای دسترسی بعدی مشارکت‌کنندگان ذخیره کنید.
-  برای مثال، ممکن است ابزار شما پیوندی به تصویر نمودار ارائه دهد، یا می‌توانید
-  فایل کد منبع، مانند یک فایل `.xml`، را در جایی برای دسترسی مشارکت‌کنندگان قرار دهید.
+  با این حال، حتماً حق نشر (copyright) را رعایت کنید و از
+  [رهنمودهای](/docs/contribute/style/content-guide/) مستندات کوبرنتیز دربارهٔ استفاده از محتوای شخص ثالث پیروی کنید.
+* بهتر است مختصات منبع نمودار را برای دسترسی بعدی مشارکت‌کنندگان ذخیره کنید.
+  برای مثال، ممکن است ابزارتان پیوندی به تصویر نمودار ارائه دهد، یا می‌توانید
+  فایل کد منبع، مانند یک فایل `.xml`، را در جایی قرار دهید که مشارکت‌کنندگان به آن دسترسی داشته باشند.
 
-برای اطلاعات بیشتر درباره لوگوها و تصاویر K8s و CNCF، به
-[CNCF Artwork](https://github.com/cncf/artwork) مراجعه کنید.
+برای اطلاعات بیشتر دربارهٔ لوگوها و تصاویر K8s و CNCF، به
+[CNCF Artwork](https://github.com/cncf/artwork) سر بزنید.
 
-در ادامه مزایای روش ابزار خارجی فهرست شده است:
+مزایای روش ابزار خارجی به شرح زیر است:
 
-* آشنایی مشارکت‌کننده با ابزار خارجی.
-* نمودارهایی که به جزئیاتی بیش از آنچه Mermaid ارائه می‌دهد نیاز دارند.
+* مشارکت‌کنندگان با ابزار خارجی آشنا هستند.
+* نمودارها به جزئیاتی بیش از آنچه Mermaid ارائه می‌دهد نیاز دارند.
 
-فراموش نکنید که بررسی کنید نمودار شما با پیش‌نمایش [محلی](/docs/contribute/new-content/open-a-pr/#preview-locally) و Netlify به‌درستی نمایش داده می‌شود.
+فراموش نکنید که با پیش‌نمایش‌های [محلی](/docs/contribute/new-content/open-a-pr/#preview-locally) و Netlify
+بررسی کنید که نمودارتان به‌درستی نمایش داده می‌شود.
 
-## مثال‌ها {#examples}
+## نمونه‌ها
 
-این بخش چند مثال از نمودارهای Mermaid را نشان می‌دهد.
+این بخش چند نمونه از نمودارهای Mermaid را نشان می‌دهد.
 
 {{< note >}}
-نمونه‌های بلوک کد، برچسب‌های shortcode مربوط به Mermaid در Hugo را حذف کرده‌اند.
-این کار به شما امکان می‌دهد بلوک کد را برای آزمایش شخصی در live editor کپی کنید.
-توجه داشته باشید که live editor شورت‌کدهای Hugo را تشخیص نمی‌دهد.
+در نمونه‌های بلوک کد، تگ‌های شورت‌کد Mermaid در Hugo حذف شده‌اند.
+به این ترتیب می‌توانید بلوک کد را در ویرایشگر زنده کپی کنید
+و خودتان با آن آزمایش کنید.
+توجه کنید که ویرایشگر زنده شورت‌کدهای Hugo را تشخیص نمی‌دهد.
 {{< /note >}}
 
-### مثال ۱ - محدودیت‌های توزیع توپولوژی Pod {#example-1-pod-topology-spread-constraints}
+### نمونهٔ ۱ - محدودیت‌های توزیع توپولوژی Pod
 
-شکل ۶ نموداری را نشان می‌دهد که در صفحه
+شکل ۶ نموداری را نشان می‌دهد که در صفحهٔ
 [محدودیت‌های توزیع توپولوژی Pod](/docs/concepts/scheduling-eviction/topology-spread-constraints/#node-labels)
-نمایش داده می‌شود.
+آمده است.
 
 {{< mermaid >}}
     graph TB
@@ -458,7 +461,7 @@ graph TB
 
 ### مثال ۲ - Ingress
 
-شکل ۷ نموداری را نشان می‌دهد که در صفحهٔ [Ingress چیست](/docs/concepts/services-networking/ingress/#what-is-ingress) نمایش داده می‌شود.
+شکل ۷ نموداری را نشان می‌دهد که در صفحه‌ی [Ingress چیست](/docs/concepts/services-networking/ingress/#what-is-ingress) آمده است.
 
 {{< mermaid >}}
 graph LR;
@@ -510,12 +513,11 @@ graph LR;
  class cluster cluster;
 ```
 
-### مثال ۳ - جریان سیستم K8s
+### مثال ۳ - جریان سیستمی K8s
 
-شکل ۸ یک نمودار توالی (sequence diagram) در Mermaid را نشان می‌دهد که جریان سیستم میان
-مؤلفه‌های K8s را برای راه‌اندازی یک کانتینر به تصویر می‌کشد.
+شکل ۸ یک نمودار توالی (sequence diagram) در Mermaid را نشان می‌دهد که جریان سیستمی میان اجزای K8s را برای راه‌اندازی یک کانتینر به تصویر می‌کشد.
 
-{{< figure src="/docs/images/diagram-guide-example-3.svg" alt="نمودار جریان سیستم K8s" class="diagram-large" caption="شکل ۸. نمودار جریان سیستم K8s" link="https://mermaid-js.github.io/mermaid-live-editor/edit/#eyJjb2RlIjoiJSV7aW5pdDp7XCJ0aGVtZVwiOlwibmV1dHJhbFwifX0lJVxuc2VxdWVuY2VEaWFncmFtXG4gICAgYWN0b3IgbWVcbiAgICBwYXJ0aWNpcGFudCBhcGlTcnYgYXMgY29udHJvbCBwbGFuZTxicj48YnI-YXBpLXNlcnZlclxuICAgIHBhcnRpY2lwYW50IGV0Y2QgYXMgY29udHJvbCBwbGFuZTxicj48YnI-ZXRjZCBkYXRhc3RvcmVcbiAgICBwYXJ0aWNpcGFudCBjbnRybE1nciBhcyBjb250cm9sIHBsYW5lPGJyPjxicj5jb250cm9sbGVyPGJyPm1hbmFnZXJcbiAgICBwYXJ0aWNpcGFudCBzY2hlZCBhcyBjb250cm9sIHBsYW5lPGJyPjxicj5zY2hlZHVsZXJcbiAgICBwYXJ0aWNpcGFudCBrdWJlbGV0IGFzIG5vZGU8YnI-PGJyPmt1YmVsZXRcbiAgICBwYXJ0aWNpcGFudCBjb250YWluZXIgYXMgbm9kZTxicj48YnI-Y29udGFpbmVyPGJyPnJ1bnRpbWVcbiAgICBtZS0-PmFwaVNydjogMS4ga3ViZWN0bCBjcmVhdGUgLWYgcG9kLnlhbWxcbiAgICBhcGlTcnYtLT4-ZXRjZDogMi4gc2F2ZSBuZXcgc3RhdGVcbiAgICBjbnRybE1nci0-PmFwaVNydjogMy4gY2hlY2sgZm9yIGNoYW5nZXNcbiAgICBzY2hlZC0-PmFwaVNydjogNC4gd2F0Y2ggZm9yIHVuYXNzaWduZWQgcG9kcyhzKVxuICAgIGFwaVNydi0-PnNjaGVkOiA1LiBub3RpZnkgYWJvdXQgcG9kIHcgbm9kZW5hbWU9XCIgXCJcbiAgICBzY2hlZC0-PmFwaVNydjogNi4gYXNzaWduIHBvZCB0byBub2RlXG4gICAgYXBpU3J2LS0-PmV0Y2Q6IDcuIHNhdmUgbmV3IHN0YXRlXG4gICAga3ViZWxldC0-PmFwaVNydjogOC4gbG9vayBmb3IgbmV3bHkgYXNzaWduZWQgcG9kKHMpXG4gICAgYXBpU3J2LT4-a3ViZWxldDogOS4gYmluZCBwb2QgdG8gbm9kZVxuICAgIGt1YmVsZXQtPj5jb250YWluZXI6IDEwLiBzdGFydCBjb250YWluZXJcbiAgICBrdWJlbGV0LT4-YXBpU3J2OiAxMS4gdXBkYXRlIHBvZCBzdGF0dXNcbiAgICBhcGlTcnYtLT4-ZXRjZDogMTIuIHNhdmUgbmV3IHN0YXRlIiwibWVybWFpZCI6IntcbiAgXCJ0aGVtZVwiOiBcImRlZmF1bHRcIlxufSIsInVwZGF0ZUVkaXRvciI6ZmFsc2UsImF1dG9TeW5jIjp0cnVlLCJ1cGRhdGVEaWFncmFtIjp0cnVlfQ" >}}
+{{< figure src="/docs/images/diagram-guide-example-3.svg" alt="K8s system flow diagram" class="diagram-large" caption="Figure 8. K8s system flow diagram" link="https://mermaid-js.github.io/mermaid-live-editor/edit/#eyJjb2RlIjoiJSV7aW5pdDp7XCJ0aGVtZVwiOlwibmV1dHJhbFwifX0lJVxuc2VxdWVuY2VEaWFncmFtXG4gICAgYWN0b3IgbWVcbiAgICBwYXJ0aWNpcGFudCBhcGlTcnYgYXMgY29udHJvbCBwbGFuZTxicj48YnI-YXBpLXNlcnZlclxuICAgIHBhcnRpY2lwYW50IGV0Y2QgYXMgY29udHJvbCBwbGFuZTxicj48YnI-ZXRjZCBkYXRhc3RvcmVcbiAgICBwYXJ0aWNpcGFudCBjbnRybE1nciBhcyBjb250cm9sIHBsYW5lPGJyPjxicj5jb250cm9sbGVyPGJyPm1hbmFnZXJcbiAgICBwYXJ0aWNpcGFudCBzY2hlZCBhcyBjb250cm9sIHBsYW5lPGJyPjxicj5zY2hlZHVsZXJcbiAgICBwYXJ0aWNpcGFudCBrdWJlbGV0IGFzIG5vZGU8YnI-PGJyPmt1YmVsZXRcbiAgICBwYXJ0aWNpcGFudCBjb250YWluZXIgYXMgbm9kZTxicj48YnI-Y29udGFpbmVyPGJyPnJ1bnRpbWVcbiAgICBtZS0-PmFwaVNydjogMS4ga3ViZWN0bCBjcmVhdGUgLWYgcG9kLnlhbWxcbiAgICBhcGlTcnYtLT4-ZXRjZDogMi4gc2F2ZSBuZXcgc3RhdGVcbiAgICBjbnRybE1nci0-PmFwaVNydjogMy4gY2hlY2sgZm9yIGNoYW5nZXNcbiAgICBzY2hlZC0-PmFwaVNydjogNC4gd2F0Y2ggZm9yIHVuYXNzaWduZWQgcG9kcyhzKVxuICAgIGFwaVNydi0-PnNjaGVkOiA1LiBub3RpZnkgYWJvdXQgcG9kIHcgbm9kZW5hbWU9XCIgXCJcbiAgICBzY2hlZC0-PmFwaVNydjogNi4gYXNzaWduIHBvZCB0byBub2RlXG4gICAgYXBpU3J2LS0-PmV0Y2Q6IDcuIHNhdmUgbmV3IHN0YXRlXG4gICAga3ViZWxldC0-PmFwaVNydjogOC4gbG9vayBmb3IgbmV3bHkgYXNzaWduZWQgcG9kKHMpXG4gICAgYXBpU3J2LT4-a3ViZWxldDogOS4gYmluZCBwb2QgdG8gbm9kZVxuICAgIGt1YmVsZXQtPj5jb250YWluZXI6IDEwLiBzdGFydCBjb250YWluZXJcbiAgICBrdWJlbGV0LT4-YXBpU3J2OiAxMS4gdXBkYXRlIHBvZCBzdGF0dXNcbiAgICBhcGlTcnYtLT4-ZXRjZDogMTIuIHNhdmUgbmV3IHN0YXRlIiwibWVybWFpZCI6IntcbiAgXCJ0aGVtZVwiOiBcImRlZmF1bHRcIlxufSIsInVwZGF0ZUVkaXRvciI6ZmFsc2UsImF1dG9TeW5jIjp0cnVlLCJ1cGRhdGVEaWFncmFtIjp0cnVlfQ" >}}
 
 
 
@@ -545,43 +547,42 @@ sequenceDiagram
     apiSrv-->>etcd: 12. save new state
 ```
 
-## نحوهٔ استایل‌دهی به نمودارها
+## نحوه‌ی سبک‌دهی به نمودارها
 
-می‌توانید با استفاده از نام‌گذاری شناخته‌شدهٔ CSS به یک یا چند عنصر نمودار استایل بدهید.
-این کار را با دو نوع دستور در کد Mermaid انجام می‌دهید.
+می‌توانید با استفاده از نام‌گذاری‌های شناخته‌شده‌ی CSS، به یک یا چند عنصر نمودار سبک بدهید.
+این کار با دو نوع دستور در کد Mermaid انجام می‌شود:
 
-* `classDef` یک کلاس از ویژگی‌های استایل را تعریف می‌کند.
-* `class` یک یا چند عنصر را مشخص می‌کند که کلاس بر آن‌ها اعمال شود.
+* دستور `classDef` یک کلاس از ویژگی‌های سبک را تعریف می‌کند.
+* دستور `class` یک یا چند عنصر را مشخص می‌کند که کلاس باید روی آن‌ها اعمال شود.
 
 در کد
 [شکل ۷](https://mermaid-js.github.io/mermaid-live-editor/edit/#eyJjb2RlIjoiZ3JhcGggIExSXG4gIGNsaWVudChbY2xpZW50XSktLiBJbmdyZXNzLW1hbmFnZWQgPGJyPiBsb2FkIGJhbGFuY2VyIC4tPmluZ3Jlc3NbSW5ncmVzc107XG4gIGluZ3Jlc3MtLT58cm91dGluZyBydWxlfHNlcnZpY2VbU2VydmljZV07XG4gIHN1YmdyYXBoIGNsdXN0ZXJcbiAgaW5ncmVzcztcbiAgc2VydmljZS0tPnBvZDFbUG9kXTtcbiAgc2VydmljZS0tPnBvZDJbUG9kXTtcbiAgZW5kXG4gIGNsYXNzRGVmIHBsYWluIGZpbGw6I2RkZCxzdHJva2U6I2ZmZixzdHJva2Utd2lkdGg6NHB4LGNvbG9yOiMwMDA7XG4gIGNsYXNzRGVmIGs4cyBmaWxsOiMzMjZjZTUsc3Ryb2tlOiNmZmYsc3Ryb2tlLXdpZHRoOjRweCxjb2xvcjojZmZmO1xuICBjbGFzc0RlZiBjbHVzdGVyIGZpbGw6I2ZmZixzdHJva2U6I2JiYixzdHJva2Utd2lkdGg6MnB4LGNvbG9yOiMzMjZjZTU7XG4gIGNsYXNzIGluZ3Jlc3Msc2VydmljZSxwb2QxLHBvZDIgazhzO1xuICBjbGFzcyBjbGllbnQgcGxhaW47XG4gIGNsYXNzIGNsdXN0ZXIgY2x1c3RlcjtcbiIsIm1lcm1haWQiOiJ7XG4gIFwidGhlbWVcIjogXCJkZWZhdWx0XCJcbn0iLCJ1cGRhdGVFZGl0b3IiOmZhbHNlLCJhdXRvU3luYyI6dHJ1ZSwidXBkYXRlRGlhZ3JhbSI6dHJ1ZX0)
-هر دو نوع دستور را می‌توانید ببینید.
+می‌توانید نمونه‌هایی از هر دو دستور را ببینید.
 
 ```text
 classDef k8s fill:#326ce5,stroke:#fff,stroke-width:4px,color:#fff; // defines style for the k8s class
 class ingress,service,pod1,pod2 k8s; // k8s class is applied to elements ingress, service, pod1 and pod2.
 ```
 
-می‌توانید در نمودار خود یک یا چند دستور `classDef` و `class` به کار ببرید.
-همچنین می‌توانید برای مؤلفه‌های K8s در نمودار خود از کد رنگ هگزادسیمال رسمی K8s یعنی `#326ce5` استفاده کنید.
+می‌توانید یک یا چند دستور `classDef` و `class` را در نمودار خود به کار ببرید.
+همچنین می‌توانید برای اجزای K8s در نمودار خود از کد رنگ هگز رسمی K8s، یعنی `#326ce5`، استفاده کنید.
 
-برای اطلاعات بیشتر دربارهٔ استایل‌دهی و کلاس‌ها،
-[مستندات استایل‌دهی و کلاس‌ها در Mermaid](https://mermaid-js.github.io/mermaid/#/flowchart?id=styling-and-classes) را ببینید.
+برای اطلاعات بیشتر درباره‌ی سبک‌دهی و کلاس‌ها، به
+[مستندات سبک‌دهی و کلاس‌ها در Mermaid](https://mermaid-js.github.io/mermaid/#/flowchart?id=styling-and-classes) مراجعه کنید.
 
-## نحوهٔ استفاده از عنوان‌ها (caption)
+## نحوه‌ی استفاده از زیرنویس‌ها
 
-عنوان (caption) توضیحی کوتاه دربارهٔ یک نمودار است. یک عنوان یا یک توضیح مختصر
-دربارهٔ نمودار، نمونه‌هایی از captionها هستند. captionها برای جایگزین شدن به‌جای
-متن توضیحی موجود در مستندات شما نیستند، بلکه نقش یک
-«پیوند زمینه‌ای» میان آن متن و نمودار شما را ایفا می‌کنند.
+زیرنویس (caption) توضیح کوتاهی درباره‌ی یک نمودار است. عنوان یا شرح کوتاه نمودار، نمونه‌هایی از زیرنویس هستند.
+زیرنویس‌ها قرار نیست جایگزین متن توضیحی مستندات شما شوند؛ بلکه
+نقش یک «پیوند زمینه‌ای» میان آن متن و نمودار را ایفا می‌کنند.
 
-ترکیب متن و نمودار که با یک caption به هم پیوند خورده‌اند، به ارائهٔ نمایشی موجز از
-اطلاعاتی که می‌خواهید به کاربر منتقل کنید کمک می‌کند.
+ترکیب متن و نموداری که با یک زیرنویس به هم پیوند خورده‌اند، کمک می‌کند
+اطلاعاتی که می‌خواهید به کاربر منتقل کنید به شکلی موجز ارائه شود.
 
-بدون caption، از کاربر می‌خواهید متن بالا یا پایین نمودار را مرور کند تا
-معنای آن را دریابد. این کار ممکن است برای کاربر آزاردهنده باشد.
+بدون زیرنویس، از کاربر انتظار دارید برای درک معنای نمودار، متن بالا یا پایین آن را
+مرور کند. این وضعیت می‌تواند برای کاربر آزاردهنده باشد.
 
-شکل ۹ سه مؤلفهٔ لازم برای عنوان‌گذاری صحیح را نشان می‌دهد: نمودار، عنوان نمودار
+شکل ۹ سه جزء لازم برای زیرنویس‌گذاری درست را نشان می‌دهد: نمودار، زیرنویس نمودار
 و ارجاع به نمودار.
 
 {{< mermaid >}}
@@ -600,38 +601,38 @@ click B "https://mermaid-js.github.io/mermaid-live-editor/edit#eyJjb2RlIjoiZmxvd
 click C "https://mermaid-js.github.io/mermaid-live-editor/edit#eyJjb2RlIjoiZmxvd2NoYXJ0XG4gICAgQVtEaWFncmFtPGJyPjxicj5JbmxpbmUgTWVybWFpZCBvcjxicj5TVkcgaW1hZ2UgZmlsZXNdXG4gICAgQltEaWFncmFtIENhcHRpb248YnI-PGJyPkFkZCBGaWd1cmUgTnVtYmVyLiBhbmQ8YnI-Q2FwdGlvbiBUZXh0XVxuICAgIENbRGlhZ3JhbSBSZWZlcnJhbDxicj48YnI-UmVmZXJlbmVuY2UgRmlndXJlIE51bWJlcjxicj5pbiB0ZXh0XVxuXG4gICAgY2xhc3NEZWYgYm94IGZpbGw6I2ZmZixzdHJva2U6IzAwMCxzdHJva2Utd2lkdGg6MXB4LGNvbG9yOiMwMDA7XG4gICAgY2xhc3MgQSxCLEMgYm94IiwibWVybWFpZCI6IntcbiAgXCJ0aGVtZVwiOiBcImRlZmF1bHRcIlxufSIsInVwZGF0ZUVkaXRvciI6ZmFsc2UsImF1dG9TeW5jIjp0cnVlLCJ1cGRhdGVEaWFncmFtIjpmYWxzZX0" _blank
 
 {{< /mermaid >}}
-شکل ۹. مؤلفه‌های caption.
+شکل ۹. اجزای زیرنویس.
 
 {{< note >}}
-همواره باید برای هر نمودار در مستندات خود یک caption اضافه کنید.
+همیشه باید برای هر نمودار در مستندات خود یک زیرنویس اضافه کنید.
 {{< /note >}}
 
 **نمودار**
 
 روش‌های `Mermaid+SVG` و `External Tool` فایل‌های تصویری `.svg` تولید می‌کنند.
 
-در ادامه شورت‌کد `{{</* figure */>}}` برای نموداری آمده است که در یک فایل تصویری
-`.svg` تعریف شده و در مسیر `/images/docs/components-of-kubernetes.svg` ذخیره شده است:
+در ادامه، شورت‌کد `{{</* figure */>}}` برای نموداری آمده است که در یک فایل تصویری
+`.svg` ذخیره‌شده در مسیر `/images/docs/components-of-kubernetes.svg` تعریف شده است:
 
 ```none
 {{</* figure src="/images/docs/components-of-kubernetes.svg" alt="Kubernetes pod running inside a cluster" class="diagram-large" caption="Figure 4. Kubernetes Architecture Components" */>}}
 ```
 
 باید مقادیر `src`، `alt`، `class` و `caption` را به شورت‌کد
-`{{</* figure */>}}` بدهید. می‌توانید با استفاده از کلاس‌های
-`diagram-large`، `diagram-medium` و `diagram-small` اندازهٔ نمودار را تنظیم کنید.
+`{{</* figure */>}}` بدهید. اندازه‌ی نمودار را می‌توانید با کلاس‌های
+`diagram-large`، `diagram-medium` و `diagram-small` تنظیم کنید.
 
 {{< note >}}
 نمودارهایی که با روش `Inline` ساخته می‌شوند از شورت‌کد figure استفاده نمی‌کنند.
-کد Mermaid تعیین می‌کند که نمودار چگونه در صفحهٔ شما نمایش داده شود.
+در این حالت، کد Mermaid تعیین می‌کند که نمودار در صفحه‌ی شما چگونه نمایش داده شود.
 {{< /note >}}
 
-برای اطلاعات بیشتر دربارهٔ روش‌های مختلف ایجاد نمودار،
-بخش [روش‌های ایجاد نمودار](#methods-for-creating-diagrams) را ببینید.
+برای اطلاعات بیشتر درباره‌ی روش‌های مختلف ساخت نمودار، به
+[روش‌های ساخت نمودار](#methods-for-creating-diagrams) مراجعه کنید.
 
-**عنوان نمودار (Diagram Caption)**
+**زیرنویس نمودار**
 
-سپس یک caption برای نمودار اضافه کنید.
+در گام بعد، یک زیرنویس به نمودار اضافه کنید.
 
 اگر نمودار خود را در یک فایل تصویری `.svg` تعریف کرده‌اید، باید از پارامتر
 `caption` در شورت‌کد `{{</* figure */>}}` استفاده کنید.
@@ -640,97 +641,98 @@ click C "https://mermaid-js.github.io/mermaid-live-editor/edit#eyJjb2RlIjoiZmxvd
 {{</* figure src="/images/docs/components-of-kubernetes.svg" alt="Kubernetes pod running inside a cluster" class="diagram-large" caption="Figure 4. Kubernetes Architecture Components" */>}}
 ```
 
-اگر نمودار خود را با کد Mermaid درون‌خطی (inline) تعریف می‌کنید، باید از متن Markdown استفاده کنید.
+اگر نمودار خود را با کد Mermaid درون‌خطی تعریف کرده‌اید، باید از متن Markdown استفاده کنید.
 
 ```none
 Figure 4. Kubernetes Architecture Components
 ```
 
-موارد زیر فهرستی از نکاتی است که هنگام افزودن caption به نمودار باید در نظر بگیرید:
+هنگام افزودن زیرنویس به نمودار، به نکات زیر توجه کنید:
 
-* برای افزودن caption به نمودارهای `Mermaid+SVG` و `External Tool` از شورت‌کد
+* برای افزودن زیرنویس به نمودارهای `Mermaid+SVG` و `External Tool` از شورت‌کد
   `{{</* figure */>}}` استفاده کنید.
-* برای افزودن caption در روش `Inline` از متن ساده Markdown استفاده کنید.
-* ابتدای caption نمودار را با `Figure NUMBER.` آغاز کنید. باید از واژهٔ `Figure`
-  استفاده کنید و شماره باید برای هر نمودار در صفحهٔ مستندات شما یکتا باشد.
+* برای افزودن زیرنویس در روش `Inline` از متن ساده‌ی Markdown استفاده کنید.
+* در ابتدای زیرنویس نمودار، عبارت `Figure NUMBER.` را قرار دهید. باید از واژه‌ی `Figure`
+  استفاده کنید و شماره‌ی هر نمودار در صفحه‌ی مستندات شما باید یکتا باشد.
   پس از شماره یک نقطه بگذارید.
-* متن caption نمودار را در همان خط و پس از `Figure NUMBER.` بنویسید.
-  باید در انتهای caption نقطه بگذارید. متن caption را کوتاه نگه دارید.
-* caption نمودار را __زیر__ نمودار قرار دهید.
+* متن زیرنویس را پس از `Figure NUMBER.` و در همان خط بنویسید.
+  زیرنویس باید با نقطه پایان یابد. متن زیرنویس را کوتاه نگه دارید.
+* زیرنویس را __زیر__ نمودار قرار دهید.
 
-**ارجاع به نمودار (Diagram Referral)**
+**ارجاع به نمودار**
 
-در نهایت می‌توانید یک ارجاع به نمودار اضافه کنید. این ارجاع درون متن شما به کار می‌رود
-و باید پیش از خود نمودار بیاید. این ارجاع به کاربر امکان می‌دهد متن شما را با
-نمودار مرتبط پیوند دهد. `Figure NUMBER` در ارجاع و caption باید یکسان باشند.
+در پایان، می‌توانید یک ارجاع به نمودار اضافه کنید. این ارجاع درون متن شما به کار می‌رود و
+باید پیش از خود نمودار بیاید. به کمک آن، کاربر می‌تواند متن شما را به نمودار مربوط
+پیوند دهد. عبارت `Figure NUMBER` در ارجاع و در زیرنویس باید با هم
+یکسان باشد.
 
-باید از ارجاعات مکانی مانند `..the image below..` یا
+از ارجاع‌های مکانی مانند `..the image below..` یا
 `..the following figure ..` پرهیز کنید.
 
-در ادامه نمونه‌ای از ارجاع به نمودار آمده است:
+نمونه‌ای از ارجاع به نمودار در ادامه آمده است:
 
 ```text
 Figure 10 depicts the components of the Kubernetes architecture.
 The control plane ...
 ```
-ارجاع به نمودار اختیاری است و مواردی وجود دارد که ممکن است مناسب نباشد.
-اگر مطمئن نیستید، یک ارجاع به نمودار را به متن خود اضافه کنید و ببینید آیا
-ظاهر و لحن مناسبی دارد یا خیر. در صورت تردید، از ارجاع به نمودار استفاده کنید.
+ارجاع به نمودار اختیاری است و در برخی موارد ممکن است مناسب نباشد.
+اگر مطمئن نیستید، یک ارجاع به نمودار در متن خود اضافه کنید تا ببینید از نظر ظاهر و
+خوانش مناسب است یا نه. در صورت تردید، از ارجاع به نمودار استفاده کنید.
 
 **تصویر کامل**
 
-شکل ۱۰ نمودار معماری Kubernetes را نشان می‌دهد که شامل نمودار،
-caption نمودار و ارجاع به نمودار است. شورت‌کد `{{</* figure */>}}`
-نمودار را نمایش می‌دهد، caption را اضافه می‌کند و پارامتر اختیاری `link`
-را هم دربرمی‌گیرد تا بتوانید نمودار را پیوندپذیر کنید. ارجاع به نمودار
-در همین پاراگراف آمده است.
+شکل ۱۰ نمودار معماری کوبرنتیز را نشان می‌دهد که شامل نمودار، زیرنویس نمودار
+و ارجاع به نمودار است. شورت‌کد `{{</* figure */>}}` نمودار را
+رندر می‌کند، زیرنویس را اضافه می‌کند و پارامتر اختیاری `link` را نیز در بر دارد
+تا بتوانید برای نمودار پیوند بگذارید. ارجاع به نمودار در همین پاراگراف
+آمده است.
 
-در ادامه شورت‌کد `{{</* figure */>}}` برای این نمودار آمده است:
+شورت‌کد `{{</* figure */>}}` این نمودار در ادامه آمده است:
 
 ```
 {{</* figure src="/images/docs/components-of-kubernetes.svg" alt="Kubernetes pod running inside a cluster" class="diagram-large" caption="Figure 10. Kubernetes Architecture." link="https://kubernetes.io/docs/concepts/overview/components/" */>}}
 ```
 
-{{< figure src="/images/docs/components-of-kubernetes.svg" alt="Kubernetes pod running inside a cluster" class="diagram-large" caption="شکل ۱۰. معماری کوبرنتیز." link="https://kubernetes.io/docs/concepts/overview/components/" >}}
+{{< figure src="/images/docs/components-of-kubernetes.svg" alt="Kubernetes pod running inside a cluster" class="diagram-large" caption="Figure 10. Kubernetes Architecture." link="https://kubernetes.io/docs/concepts/overview/components/" >}}
 
-## نکات
+## نکته‌ها
 
-* همواره برای ایجاد یا ویرایش نمودار از ویرایشگر زنده (live editor) استفاده کنید.
+* برای ساخت یا ویرایش نمودار، همیشه از ویرایشگر زنده (live editor) استفاده کنید.
 
-* همواره از پیش‌نمایش‌های محلی Hugo و Netlify استفاده کنید تا ببینید نمودار
+* همیشه با پیش‌نمایش محلی Hugo و پیش‌نمایش‌های Netlify بررسی کنید که نمودار
   در مستندات چگونه نمایش داده می‌شود.
 
-* ارجاع به منبع نمودار را، مانند یک URL، محل کد منبع، یا اشاره به اینکه کد
-  خودمستند (self-documenting) است، درج کنید.
+* اشاره‌گرهایی به منبع نمودار، مانند یک URL یا محل کد منبع، اضافه کنید، یا
+  مشخص کنید که کد خودمستند است.
 
-* همواره از captionهای نمودار استفاده کنید.
+* همیشه از زیرنویس نمودار استفاده کنید.
 
-* بسیار مفید است که تصویر `.svg` یا `.png` نمودار و/یا کد منبع Mermaid را
-  در issueها و PRها بگنجانید.
+* افزودن تصویر `.svg` یا `.png` نمودار و/یا کد منبع Mermaid آن به issueها و
+  PRها بسیار مفید است.
 
-* با روش‌های `Mermaid+SVG` و `External Tool` از فایل‌های تصویری `.svg` استفاده کنید،
+* در روش‌های `Mermaid+SVG` و `External Tool` از فایل‌های تصویری `.svg` استفاده کنید،
   زیرا هنگام بزرگ‌نمایی نمودار، وضوح خود را حفظ می‌کنند.
 
-* بهترین روش برای فایل‌های `.svg` این است که آن را در یک ابزار ویرایش SVG بارگذاری کنید و از قابلیت
-  «Convert text to paths» استفاده کنید.
-  این کار تضمین می‌کند که نمودار صرف‌نظر از در دسترس بودن فونت‌ها و پشتیبانی از
-  رندر فونت، در همهٔ سیستم‌ها یکسان نمایش داده شود.
+* بهترین رویه برای فایل‌های `.svg` این است که آن‌ها را در یک ابزار ویرایش SVG باز کنید و از
+  قابلیت «Convert text to paths» (تبدیل متن به مسیر) استفاده کنید.
+  با این کار، نمودار در همه‌ی سیستم‌ها، صرف‌نظر از در دسترس بودن فونت‌ها و
+  پشتیبانی از رندر فونت، یکسان نمایش داده می‌شود.
 
-* Mermaid از آیکون‌ها یا آثار گرافیکی اضافی پشتیبانی نمی‌کند.
+* ابزار Mermaid از آیکون‌ها یا طرح‌های گرافیکی اضافی پشتیبانی نمی‌کند.
 
 * شورت‌کدهای Mermaid در Hugo در ویرایشگر زنده کار نمی‌کنند.
 
-* هر زمان که نموداری را در ویرایشگر زنده تغییر می‌دهید، __باید__ آن را ذخیره کنید
-  تا یک URL جدید برای نمودار تولید شود.
+* هر بار که نموداری را در ویرایشگر زنده تغییر می‌دهید، __باید__ آن را ذخیره کنید
+  تا یک URL جدید برای نمودار ساخته شود.
 
-* روی نمودارهای این بخش کلیک کنید تا کد و رندر نمودار را
+* روی نمودارهای این بخش کلیک کنید تا کد و نمایش رندرشده‌ی نمودار را
   در ویرایشگر زنده ببینید.
 
-* برای مشاهدهٔ نمونه‌های بیشتر، کد منبع همین صفحه یعنی `diagram-guide.md` را مرور کنید.
+* برای دیدن نمونه‌های بیشتر، کد منبع همین صفحه، یعنی `diagram-guide.md`، را بررسی کنید.
 
-* برای توضیحات و نمونه‌ها،
-  [مستندات Mermaid](https://mermaid-js.github.io/mermaid/#/) را بررسی کنید.
+* برای توضیحات و نمونه‌ها، به [مستندات Mermaid](https://mermaid-js.github.io/mermaid/#/)
+  مراجعه کنید.
 
-از همه مهم‌تر، __نمودارها را ساده نگه دارید__.
-این کار در وقت شما و سایر مشارکت‌کنندگان صرفه‌جویی می‌کند و خواندن را برای
-کاربران تازه‌کار و باتجربه آسان‌تر می‌سازد.
+مهم‌تر از همه، __نمودارها را ساده نگه دارید__.
+این کار در وقت شما و دیگر مشارکت‌کنندگان صرفه‌جویی می‌کند و خواندن نمودارها را
+برای کاربران تازه‌کار و باتجربه آسان‌تر می‌کند.

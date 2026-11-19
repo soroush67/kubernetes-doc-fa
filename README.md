@@ -10,7 +10,7 @@
 |---|---|
 | پیشرفت (بر اساس کلمات) | **100.0٪** |
 | صفحات ترجمه‌شده | 1722 از 1722 |
-| صفحات دارای ایراد ساختاری | 78 |
+| صفحات دارای ایراد ساختاری | 76 |
 | نسخه‌ی منبع انگلیسی | `f652c6b8a26f` |
 
 ## مشاهده
@@ -101,26 +101,26 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [reference/access-authn-authz/bootstrap-tokens.md](md/reference/access-authn-authz/bootstrap-tokens.md) — 2026-11-19T09:53:58+03:30
+- [reference/access-authn-authz/authorization.md](md/reference/access-authn-authz/authorization.md) — 2026-11-19T09:53:25+03:30
+- [reference/access-authn-authz/admission-controllers.md](md/reference/access-authn-authz/admission-controllers.md) — 2026-11-19T09:50:08+03:30
+- [contribute/style/style-guide.md](md/contribute/style/style-guide.md) — 2026-11-19T09:47:23+03:30
+- [reference/access-authn-authz/abac.md](md/reference/access-authn-authz/abac.md) — 2026-11-19T09:45:19+03:30
+- [reference/access-authn-authz/_index.md](md/reference/access-authn-authz/_index.md) — 2026-11-19T09:44:47+03:30
+- [reference/_index.md](md/reference/_index.md) — 2026-11-19T09:44:39+03:30
+- [home/supported-doc-versions.md](md/home/supported-doc-versions.md) — 2026-11-19T09:43:44+03:30
+- [home/_index.md](md/home/_index.md) — 2026-11-19T09:43:40+03:30
+- [doc-contributor-tools/linkchecker/README.md](md/doc-contributor-tools/linkchecker/README.md) — 2026-11-19T09:43:28+03:30
+- [contribute/suggesting-improvements.md](md/contribute/suggesting-improvements.md) — 2026-11-19T09:43:09+03:30
+- [contribute/style/write-new-topic.md](md/contribute/style/write-new-topic.md) — 2026-11-19T09:42:53+03:30
+- [contribute/style/page-content-types.md](md/contribute/style/page-content-types.md) — 2026-11-19T09:42:12+03:30
+- [contribute/style/diagram-guide.md](md/contribute/style/diagram-guide.md) — 2026-11-19T09:42:00+03:30
+- [contribute/style/hugo-shortcodes/index.md](md/contribute/style/hugo-shortcodes/index.md) — 2026-11-19T09:41:37+03:30
 - [contribute/style/hugo-shortcodes/example2.md](md/contribute/style/hugo-shortcodes/example2.md) — 2026-11-19T09:38:59+03:30
 - [contribute/style/hugo-shortcodes/example1.md](md/contribute/style/hugo-shortcodes/example1.md) — 2026-11-19T09:38:55+03:30
 - [contribute/review/reviewing-prs.md](md/contribute/review/reviewing-prs.md) — 2026-11-19T09:38:51+03:30
 - [contribute/style/content-organization.md](md/contribute/style/content-organization.md) — 2026-11-19T09:36:41+03:30
 - [contribute/style/content-guide.md](md/contribute/style/content-guide.md) — 2026-11-19T09:36:15+03:30
-- [contribute/style/_index.md](md/contribute/style/_index.md) — 2026-11-19T09:35:59+03:30
-- [contribute/review/for-approvers.md](md/contribute/review/for-approvers.md) — 2026-11-19T09:35:51+03:30
-- [contribute/new-content/open-a-pr.md](md/contribute/new-content/open-a-pr.md) — 2026-11-19T09:35:21+03:30
-- [contribute/review/_index.md](md/contribute/review/_index.md) — 2026-11-19T09:34:46+03:30
-- [contribute/participate/roles-and-responsibilities.md](md/contribute/participate/roles-and-responsibilities.md) — 2026-11-19T09:34:41+03:30
-- [contribute/participate/pr-wranglers.md](md/contribute/participate/pr-wranglers.md) — 2026-11-19T09:33:06+03:30
-- [contribute/participate/issue-wrangler.md](md/contribute/participate/issue-wrangler.md) — 2026-11-19T09:32:23+03:30
-- [contribute/participate/_index.md](md/contribute/participate/_index.md) — 2026-11-19T09:32:05+03:30
-- [contribute/new-content/preview-locally.md](md/contribute/new-content/preview-locally.md) — 2026-11-19T09:31:35+03:30
-- [contribute/new-content/new-features.md](md/contribute/new-content/new-features.md) — 2026-11-19T09:31:06+03:30
-- [contribute/new-content/_index.md](md/contribute/new-content/_index.md) — 2026-11-19T09:30:52+03:30
-- [contribute/new-content/case-studies.md](md/contribute/new-content/case-studies.md) — 2026-11-19T09:30:20+03:30
-- [contribute/generate-ref-docs/release-generation.md](md/contribute/generate-ref-docs/release-generation.md) — 2026-11-19T09:30:12+03:30
-- [contribute/localization.md](md/contribute/localization.md) — 2026-11-19T09:29:09+03:30
-- [concepts/workloads/pods/pod-lifecycle.md](md/concepts/workloads/pods/pod-lifecycle.md) — 2026-11-19T09:27:15+03:30
 
 </div>
 
@@ -133,8 +133,6 @@ cd kubernetes-doc-fa
 - [contribute/new-content/_index.md](md/contribute/new-content/_index.md): chunk 1: 3 untranslated English lines, e.g. 'classDef grey fill:#dddddd,stroke:#ffffff,stroke-width:px,color:#000000, font-size:15px;'
 - [contribute/new-content/open-a-pr.md](md/contribute/new-content/open-a-pr.md): chunk 1: 10 untranslated English lines, e.g. 'classDef grey fill:#dddddd,stroke:#ffffff,stroke-width:px,color:#000000, font-size:15px;'
 - [contribute/review/reviewing-prs.md](md/contribute/review/reviewing-prs.md): chunk 1: 5 untranslated English lines, e.g. 'J[read description<br>and comments]--> K[preview changes in<br>Netlify preview build]'
-- [contribute/style/hugo-shortcodes/index.md](md/contribute/style/hugo-shortcodes/index.md): chunk 1: 4 untranslated English lines, e.g. "// If you don't set a tab name, the site supplies one."
-- [contribute/style/style-guide.md](md/contribute/style/style-guide.md): chunk 1: 37 untranslated English lines, e.g. "{{< comment >}}[If you're localizing this page, you can omit the point about US English.]{{< /comment >}}"
 - [reference/access-authn-authz/authentication.md](md/reference/access-authn-authz/authentication.md): chunk 3: 54 untranslated English lines, e.g. '#          Do not use this for your own cluster!'
 - [reference/access-authn-authz/psp-to-pod-security-standards.md](md/reference/access-authn-authz/psp-to-pod-security-standards.md): chunk 1: short: 716 words vs 997 source words
 - [reference/command-line-tools-reference/kube-apiserver.md](md/reference/command-line-tools-reference/kube-apiserver.md): chunk 2: short: 1797 words vs 2502 source words; chunk 3: short: 2074 words vs 3387 source words
