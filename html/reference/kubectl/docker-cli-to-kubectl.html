@@ -83,11 +83,11 @@ document.addEventListener('DOMContentLoaded',function(){box=document.getElementB
 <header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">reference / kubectl</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
 <div class="layout">
 <main><h1 dir="rtl">kubectl برای کاربران Docker</h1><!-- overview -->
-<p dir="rtl">می‌توانید از ابزار خط فرمان کوبرنتیز، یعنی <code dir="ltr">kubectl</code>، برای تعامل با API Server استفاده کنید. اگر با ابزار خط فرمان Docker آشنا باشید، استفاده از kubectl ساده است. با این حال، میان دستورهای Docker و دستورهای kubectl چند تفاوت وجود دارد. در بخش‌های زیر یک زیردستور Docker نشان داده می‌شود و دستور معادل آن در <code dir="ltr">kubectl</code> شرح داده می‌شود.</p>
+<p dir="rtl">برای تعامل با API Server می‌توانید از ابزار خط فرمان کوبرنتیز، یعنی <code dir="ltr">kubectl</code>، استفاده کنید. اگر با ابزار خط فرمان Docker آشنا باشید، کار با kubectl برایتان ساده خواهد بود. با این حال، دستورهای Docker و دستورهای kubectl تفاوت‌هایی با هم دارند. در هر یک از بخش‌های زیر، یکی از زیردستورهای Docker آمده و دستور معادل آن در <code dir="ltr">kubectl</code> شرح داده شده است.</p>
 <!-- body -->
 <h2 id="docker-run" dir="ltr" class="ltr">docker run</h2>
-<p dir="rtl">برای اجرای یک Deployment از nginx و در دسترس قرار دادن آن، به <a href="https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#-em-deployment-em-" target="_blank">kubectl create deployment</a> مراجعه کنید.</p>
-<p dir="ltr" class="ltr">docker:</p>
+<p dir="rtl">برای اجرای یک Deployment از nginx و در دسترس قرار دادن (expose) آن، به <a href="https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#-em-deployment-em-" target="_blank">kubectl create deployment</a> مراجعه کنید.</p>
+<p dir="rtl">دستور docker:</p>
 <pre dir="ltr"><code class="language-shell" dir="ltr">docker run -d --restart=always -e DOMAIN=cluster --name nginx-app -p 80:80 nginx
 </code></pre>
 <pre dir="ltr"><code dir="ltr">55c103fa129692154a7652490236fee9be47d70a8dd562281ae7d2f9a339a6db
@@ -97,7 +97,7 @@ document.addEventListener('DOMContentLoaded',function(){box=document.getElementB
 <pre dir="ltr"><code dir="ltr">CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                NAMES
 55c103fa1296        nginx               "nginx -g 'daemon of…"   9 seconds ago       Up 9 seconds        0.0.0.0:80-&gt;80/tcp   nginx-app
 </code></pre>
-<p dir="ltr" class="ltr">kubectl:</p>
+<p dir="rtl">دستور kubectl:</p>
 <pre dir="ltr"><code class="language-shell" dir="ltr"># start the pod running nginx
 kubectl create deployment --image=nginx nginx-app
 </code></pre>
@@ -109,29 +109,29 @@ kubectl set env deployment/nginx-app  DOMAIN=cluster
 <pre dir="ltr"><code dir="ltr">deployment.apps/nginx-app env updated
 </code></pre>
 <div class="callout note"><div class="callout-title">توجه:</div>
-<p dir="rtl">دستورهای <code dir="ltr">kubectl</code> نوع و نام منبعی را که ایجاد یا تغییر داده‌اند چاپ می‌کنند و می‌توان از آن‌ها در دستورهای بعدی استفاده کرد. پس از ایجاد یک Deployment می‌توانید یک Service جدید را در دسترس قرار دهید.</p>
+<p dir="rtl">دستورهای <code dir="ltr">kubectl</code> نوع و نام منبعی را که ایجاد یا تغییر داده‌اند چاپ می‌کنند تا بتوانید در دستورهای بعدی از آن استفاده کنید. پس از ایجاد یک Deployment می‌توانید یک Service جدید را در دسترس قرار دهید.</p>
 </div>
 <pre dir="ltr"><code class="language-shell" dir="ltr"># expose a port through with a service
 kubectl expose deployment nginx-app --port=80 --name=nginx-http
 </code></pre>
 <pre dir="ltr"><code dir="ltr">service "nginx-http" exposed
 </code></pre>
-<p dir="rtl">با استفاده از kubectl می‌توانید یک <a href="../../concepts/workloads/controllers/deployment.html">Deployment</a> ایجاد کنید تا اطمینان حاصل شود که N پاد nginx را اجرا می‌کنند؛ در اینجا N تعداد replicaهایی است که در spec مشخص شده است و مقدار پیش‌فرض آن 1 است. همچنین می‌توانید یک <a href="../../concepts/services-networking/service.html">service</a> با یک انتخابگر (selector) ایجاد کنید که با برچسب‌های پادها مطابقت داشته باشد. برای اطلاعات بیشتر، به <a href="../../tasks/access-application-cluster/service-access-application-cluster.html">استفاده از Service برای دسترسی به یک برنامه در کلاستر</a> مراجعه کنید.</p>
-<p dir="rtl">به‌طور پیش‌فرض، ایمیج‌ها در پس‌زمینه اجرا می‌شوند، مشابه <code dir="ltr">docker run -d ...</code>. برای اجرای آن‌ها در پیش‌زمینه، از <a href="https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands/#run" target="_blank"><code dir="ltr">kubectl run</code></a> برای ایجاد پاد استفاده کنید:</p>
+<p dir="rtl">با kubectl می‌توانید یک <a href="../../concepts/workloads/controllers/deployment.html">Deployment</a> ایجاد کنید تا اطمینان حاصل شود که N پاد در حال اجرای nginx هستند؛ در اینجا N تعداد رونوشت‌هایی (replica) است که در مشخصات (spec) تعیین شده و مقدار پیش‌فرض آن ۱ است. همچنین می‌توانید یک <a href="../../concepts/services-networking/service.html">Service</a> با انتخابگر (selector) منطبق بر برچسب‌های پاد ایجاد کنید. برای اطلاعات بیشتر، به <a href="../../tasks/access-application-cluster/service-access-application-cluster.html">استفاده از Service برای دسترسی به یک برنامه در کلاستر</a> مراجعه کنید.</p>
+<p dir="rtl">به‌طور پیش‌فرض، ایمیج‌ها مانند <code dir="ltr">docker run -d ...</code> در پس‌زمینه اجرا می‌شوند. برای اجرای برنامه‌ها در پیش‌زمینه، با <a href="https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands/#run" target="_blank"><code dir="ltr">kubectl run</code></a> یک پاد ایجاد کنید:</p>
 <pre dir="ltr"><code class="language-shell" dir="ltr">kubectl run [-i] [--tty] --attach &lt;name&gt; --image=&lt;image&gt;
 </code></pre>
-<p dir="rtl">برخلاف <code dir="ltr">docker run ...</code>، اگر <code dir="ltr">--attach</code> را مشخص کنید، <code dir="ltr">stdin</code>، <code dir="ltr">stdout</code> و <code dir="ltr">stderr</code> متصل می‌شوند. نمی‌توانید کنترل کنید که کدام جریان‌ها متصل شوند (<code dir="ltr">docker -a ...</code>).
-برای جدا شدن از کانتینر، می‌توانید دنباله escape یعنی Ctrl+P و سپس Ctrl+Q را وارد کنید.</p>
+<p dir="rtl">برخلاف <code dir="ltr">docker run ...</code>، اگر <code dir="ltr">--attach</code> را مشخص کنید، <code dir="ltr">stdin</code>، <code dir="ltr">stdout</code> و <code dir="ltr">stderr</code> همگی متصل می‌شوند و نمی‌توانید تعیین کنید کدام جریان‌ها متصل شوند (کاری که با <code dir="ltr">docker -a ...</code> ممکن است).
+برای جدا شدن از کانتینر، می‌توانید دنباله‌ی گریز Ctrl+P و پس از آن Ctrl+Q را وارد کنید.</p>
 <h2 id="docker-ps" dir="ltr" class="ltr">docker ps</h2>
 <p dir="rtl">برای فهرست کردن آنچه در حال حاضر در حال اجراست، به <a href="https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands/#get" target="_blank">kubectl get</a> مراجعه کنید.</p>
-<p dir="ltr" class="ltr">docker:</p>
+<p dir="rtl">دستور docker:</p>
 <pre dir="ltr"><code class="language-shell" dir="ltr">docker ps -a
 </code></pre>
 <pre dir="ltr"><code dir="ltr">CONTAINER ID        IMAGE               COMMAND                  CREATED              STATUS                     PORTS                NAMES
 14636241935f        ubuntu:16.04        "echo test"              5 seconds ago        Exited (0) 5 seconds ago                        cocky_fermi
 55c103fa1296        nginx               "nginx -g 'daemon of…"   About a minute ago   Up About a minute          0.0.0.0:80-&gt;80/tcp   nginx-app
 </code></pre>
-<p dir="ltr" class="ltr">kubectl:</p>
+<p dir="rtl">دستور kubectl:</p>
 <pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get po
 </code></pre>
 <pre dir="ltr"><code dir="ltr">NAME                        READY     STATUS      RESTARTS   AGE
@@ -139,8 +139,8 @@ nginx-app-8df569cb7-4gd89   1/1       Running     0          3m
 ubuntu                      0/1       Completed   0          20s
 </code></pre>
 <h2 id="docker-attach" dir="ltr" class="ltr">docker attach</h2>
-<p dir="rtl">برای اتصال به فرایندی که از قبل در یک کانتینر در حال اجراست، به <a href="https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands/#attach" target="_blank">kubectl attach</a> مراجعه کنید.</p>
-<p dir="ltr" class="ltr">docker:</p>
+<p dir="rtl">برای اتصال به فرایندی که هم‌اکنون در یک کانتینر در حال اجراست، به <a href="https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands/#attach" target="_blank">kubectl attach</a> مراجعه کنید.</p>
+<p dir="rtl">دستور docker:</p>
 <pre dir="ltr"><code class="language-shell" dir="ltr">docker ps
 </code></pre>
 <pre dir="ltr"><code dir="ltr">CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                NAMES
@@ -149,7 +149,7 @@ ubuntu                      0/1       Completed   0          20s
 <pre dir="ltr"><code class="language-shell" dir="ltr">docker attach 55c103fa1296
 ...
 </code></pre>
-<p dir="ltr" class="ltr">kubectl:</p>
+<p dir="rtl">دستور kubectl:</p>
 <pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get pods
 </code></pre>
 <pre dir="ltr"><code dir="ltr">NAME              READY     STATUS    RESTARTS   AGE
@@ -158,10 +158,10 @@ nginx-app-5jyvm   1/1       Running   0          10m
 <pre dir="ltr"><code class="language-shell" dir="ltr">kubectl attach -it nginx-app-5jyvm
 ...
 </code></pre>
-<p dir="rtl">برای جدا شدن از کانتینر، می‌توانید دنباله escape یعنی Ctrl+P و سپس Ctrl+Q را وارد کنید.</p>
+<p dir="rtl">برای جدا شدن از کانتینر، می‌توانید دنباله‌ی گریز Ctrl+P و پس از آن Ctrl+Q را وارد کنید.</p>
 <h2 id="docker-exec" dir="ltr" class="ltr">docker exec</h2>
-<p dir="rtl">برای اجرای یک دستور در یک کانتینر، به <a href="https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands/#exec" target="_blank">kubectl exec</a> مراجعه کنید.</p>
-<p dir="ltr" class="ltr">docker:</p>
+<p dir="rtl">برای اجرای یک دستور در کانتینر، به <a href="https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands/#exec" target="_blank">kubectl exec</a> مراجعه کنید.</p>
+<p dir="rtl">دستور docker:</p>
 <pre dir="ltr"><code class="language-shell" dir="ltr">docker ps
 </code></pre>
 <pre dir="ltr"><code dir="ltr">CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                NAMES
@@ -171,7 +171,7 @@ nginx-app-5jyvm   1/1       Running   0          10m
 </code></pre>
 <pre dir="ltr"><code dir="ltr">55c103fa1296
 </code></pre>
-<p dir="ltr" class="ltr">kubectl:</p>
+<p dir="rtl">دستور kubectl:</p>
 <pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get po
 </code></pre>
 <pre dir="ltr"><code dir="ltr">NAME              READY     STATUS    RESTARTS   AGE
@@ -182,39 +182,39 @@ nginx-app-5jyvm   1/1       Running   0          10m
 <pre dir="ltr"><code dir="ltr">nginx-app-5jyvm
 </code></pre>
 <p dir="rtl">برای استفاده از دستورهای تعاملی:</p>
-<p dir="ltr" class="ltr">docker:</p>
+<p dir="rtl">دستور docker:</p>
 <pre dir="ltr"><code class="language-shell" dir="ltr">docker exec -ti 55c103fa1296 /bin/sh
 # exit
 </code></pre>
-<p dir="ltr" class="ltr">kubectl:</p>
+<p dir="rtl">دستور kubectl:</p>
 <pre dir="ltr"><code class="language-shell" dir="ltr">kubectl exec -ti nginx-app-5jyvm -- /bin/sh
 # exit
 </code></pre>
-<p dir="rtl">برای اطلاعات بیشتر، به <a href="../../tasks/debug/debug-application/get-shell-running-container.html">دریافت یک شل در کانتینر در حال اجرا</a> مراجعه کنید.</p>
+<p dir="rtl">برای اطلاعات بیشتر، به <a href="../../tasks/debug/debug-application/get-shell-running-container.html">دسترسی به پوسته‌ی یک کانتینر در حال اجرا</a> مراجعه کنید.</p>
 <h2 id="docker-logs" dir="ltr" class="ltr">docker logs</h2>
-<p dir="rtl">برای دنبال کردن stdout/stderr یک فرایند در حال اجرا، به <a href="https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands/#logs" target="_blank">kubectl logs</a> مراجعه کنید.</p>
-<p dir="ltr" class="ltr">docker:</p>
+<p dir="rtl">برای دنبال کردن stdout/stderr فرایندی که در حال اجراست، به <a href="https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands/#logs" target="_blank">kubectl logs</a> مراجعه کنید.</p>
+<p dir="rtl">دستور docker:</p>
 <pre dir="ltr"><code class="language-shell" dir="ltr">docker logs -f a9e
 </code></pre>
 <pre dir="ltr"><code dir="ltr">192.168.9.1 - - [14/Jul/2015:01:04:02 +0000] "GET / HTTP/1.1" 200 612 "-" "curl/7.35.0" "-"
 192.168.9.1 - - [14/Jul/2015:01:04:03 +0000] "GET / HTTP/1.1" 200 612 "-" "curl/7.35.0" "-"
 </code></pre>
-<p dir="ltr" class="ltr">kubectl:</p>
+<p dir="rtl">دستور kubectl:</p>
 <pre dir="ltr"><code class="language-shell" dir="ltr">kubectl logs -f nginx-app-zibvs
 </code></pre>
 <pre dir="ltr"><code dir="ltr">10.240.63.110 - - [14/Jul/2015:01:09:01 +0000] "GET / HTTP/1.1" 200 612 "-" "curl/7.26.0" "-"
 10.240.63.110 - - [14/Jul/2015:01:09:02 +0000] "GET / HTTP/1.1" 200 612 "-" "curl/7.26.0" "-"
 </code></pre>
-<p dir="rtl">میان پادها و کانتینرها تفاوت اندکی وجود دارد؛ به‌طور پیش‌فرض، پادها در صورت خروج فرایندهایشان خاتمه نمی‌یابند. در عوض، پادها فرایند را دوباره راه‌اندازی می‌کنند. این رفتار مشابه گزینه <code dir="ltr">--restart=always</code> در docker run است، با یک تفاوت عمده: در docker، خروجی هر بار اجرای فرایند به خروجی قبلی افزوده می‌شود، اما در کوبرنتیز هر بار اجرا جداگانه است. برای مشاهده خروجی اجرای قبلی در کوبرنتیز، به این صورت عمل کنید:</p>
+<p dir="rtl">پادها و کانتینرها تفاوت اندکی با هم دارند: به‌طور پیش‌فرض، پادها با خاتمه یافتن فرایندهایشان خاتمه نمی‌یابند، بلکه فرایند را دوباره راه‌اندازی می‌کنند. این رفتار شبیه گزینه‌ی <code dir="ltr">--restart=always</code> در docker run است، اما یک تفاوت مهم دارد: در docker خروجی همه‌ی دفعات اجرای فرایند به هم پیوسته می‌شود، ولی در کوبرنتیز خروجی هر بار اجرا جداگانه است. برای دیدن خروجی اجرای قبلی در کوبرنتیز، دستور زیر را اجرا کنید:</p>
 <pre dir="ltr"><code class="language-shell" dir="ltr">kubectl logs --previous nginx-app-zibvs
 </code></pre>
 <pre dir="ltr"><code dir="ltr">10.240.63.110 - - [14/Jul/2015:01:09:01 +0000] "GET / HTTP/1.1" 200 612 "-" "curl/7.26.0" "-"
 10.240.63.110 - - [14/Jul/2015:01:09:02 +0000] "GET / HTTP/1.1" 200 612 "-" "curl/7.26.0" "-"
 </code></pre>
 <p dir="rtl">برای اطلاعات بیشتر، به <a href="../../concepts/cluster-administration/logging.html">معماری ثبت لاگ</a> مراجعه کنید.</p>
-<h2 id="docker-stop-and-docker-rm" dir="ltr" class="ltr">docker stop and docker rm</h2>
+<h2 id="docker-stop-و-docker-rm" dir="rtl">docker stop و docker rm</h2>
 <p dir="rtl">برای متوقف کردن و حذف یک فرایند در حال اجرا، به <a href="https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands/#delete" target="_blank">kubectl delete</a> مراجعه کنید.</p>
-<p dir="ltr" class="ltr">docker:</p>
+<p dir="rtl">دستور docker:</p>
 <pre dir="ltr"><code class="language-shell" dir="ltr">docker ps
 </code></pre>
 <pre dir="ltr"><code dir="ltr">CONTAINER ID        IMAGE               COMMAND                CREATED             STATUS              PORTS                         NAMES
@@ -228,7 +228,7 @@ a9ec34d98787        nginx               "nginx -g 'daemon of"  22 hours ago     
 </code></pre>
 <pre dir="ltr"><code dir="ltr">a9ec34d98787
 </code></pre>
-<p dir="ltr" class="ltr">kubectl:</p>
+<p dir="rtl">دستور kubectl:</p>
 <pre dir="ltr"><code class="language-shell" dir="ltr">kubectl get deployment nginx-app
 </code></pre>
 <pre dir="ltr"><code dir="ltr">NAME         READY   UP-TO-DATE   AVAILABLE   AGE
@@ -247,13 +247,13 @@ nginx-app-2883164633-aklf7   1/1       Running   0          2m
 # Return nothing
 </code></pre>
 <div class="callout note"><div class="callout-title">توجه:</div>
-<p dir="rtl">هنگام استفاده از kubectl، پاد را مستقیماً حذف نمی‌کنید. ابتدا باید Deployment مالک آن پاد را حذف کنید. اگر پاد را مستقیماً حذف کنید، Deployment آن را دوباره ایجاد می‌کند.</p>
+<p dir="rtl">هنگام استفاده از kubectl، پاد را مستقیماً حذف نمی‌کنید؛ ابتدا باید Deployment مالک آن پاد را حذف کنید. اگر پاد را مستقیماً حذف کنید، Deployment آن را دوباره ایجاد می‌کند.</p>
 </div>
 <h2 id="docker-login" dir="ltr" class="ltr">docker login</h2>
-<p dir="rtl">در kubectl معادل مستقیمی برای <code dir="ltr">docker login</code> وجود ندارد. اگر می‌خواهید کوبرنتیز را با یک رجیستری خصوصی به کار ببرید، به <a href="../../concepts/containers/images.html#using-a-private-registry">استفاده از رجیستری خصوصی</a> مراجعه کنید.</p>
+<p dir="rtl">در kubectl معادل مستقیمی برای <code dir="ltr">docker login</code> وجود ندارد. اگر می‌خواهید از کوبرنتیز همراه با یک رجیستری خصوصی استفاده کنید، به <a href="../../concepts/containers/images.html#using-a-private-registry">استفاده از رجیستری خصوصی</a> مراجعه کنید.</p>
 <h2 id="docker-version" dir="ltr" class="ltr">docker version</h2>
-<p dir="rtl">برای دریافت نسخه کلاینت و سرور، به <a href="https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands/#version" target="_blank">kubectl version</a> مراجعه کنید.</p>
-<p dir="ltr" class="ltr">docker:</p>
+<p dir="rtl">برای دریافت نسخه‌ی کلاینت و سرور، به <a href="https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands/#version" target="_blank">kubectl version</a> مراجعه کنید.</p>
+<p dir="rtl">دستور docker:</p>
 <pre dir="ltr"><code class="language-shell" dir="ltr">docker version
 </code></pre>
 <pre dir="ltr"><code dir="ltr">Client version: 1.7.0
@@ -267,15 +267,15 @@ Go version (server): go1.4.2
 Git commit (server): 0baf609
 OS/Arch (server): linux/amd64
 </code></pre>
-<p dir="ltr" class="ltr">kubectl:</p>
+<p dir="rtl">دستور kubectl:</p>
 <pre dir="ltr"><code class="language-shell" dir="ltr">kubectl version
 </code></pre>
 <pre dir="ltr"><code dir="ltr">Client Version: version.Info{Major:"1", Minor:"6", GitVersion:"v1.6.9+a3d1dfa6f4335", GitCommit:"9b77fed11a9843ce3780f70dd251e92901c43072", GitTreeState:"dirty", BuildDate:"2017-08-29T20:32:58Z", OpenPaasKubernetesVersion:"v1.03.02", GoVersion:"go1.7.5", Compiler:"gc", Platform:"linux/amd64"}
 Server Version: version.Info{Major:"1", Minor:"6", GitVersion:"v1.6.9+a3d1dfa6f4335", GitCommit:"9b77fed11a9843ce3780f70dd251e92901c43072", GitTreeState:"dirty", BuildDate:"2017-08-29T20:32:58Z", OpenPaasKubernetesVersion:"v1.03.02", GoVersion:"go1.7.5", Compiler:"gc", Platform:"linux/amd64"}
 </code></pre>
 <h2 id="docker-info" dir="ltr" class="ltr">docker info</h2>
-<p dir="rtl">برای دریافت اطلاعات متفرقه درباره محیط و پیکربندی، به <a href="https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands/#cluster-info" target="_blank">kubectl cluster-info</a> مراجعه کنید.</p>
-<p dir="ltr" class="ltr">docker:</p>
+<p dir="rtl">برای دریافت اطلاعات گوناگون درباره‌ی محیط و پیکربندی، به <a href="https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands/#cluster-info" target="_blank">kubectl cluster-info</a> مراجعه کنید.</p>
+<p dir="rtl">دستور docker:</p>
 <pre dir="ltr"><code class="language-shell" dir="ltr">docker info
 </code></pre>
 <pre dir="ltr"><code dir="ltr">Containers: 40
@@ -295,7 +295,7 @@ Name: k8s-is-fun.mtv.corp.google.com
 ID: ADUV:GCYR:B3VJ:HMPO:LNPQ:KD5S:YKFQ:76VN:IANZ:7TFV:ZBF4:BYJO
 WARNING: No swap limit support
 </code></pre>
-<p dir="ltr" class="ltr">kubectl:</p>
+<p dir="rtl">دستور kubectl:</p>
 <pre dir="ltr"><code class="language-shell" dir="ltr">kubectl cluster-info
 </code></pre>
 <pre dir="ltr"><code dir="ltr">Kubernetes master is running at https://203.0.113.141
@@ -306,7 +306,7 @@ Heapster is running at https://203.0.113.141/api/v1/namespaces/kube-system/servi
 InfluxDB is running at https://203.0.113.141/api/v1/namespaces/kube-system/services/monitoring-influxdb/proxy
 </code></pre>
 <p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
-<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#docker-run">docker run</a><a class="l2" href="#docker-ps">docker ps</a><a class="l2" href="#docker-attach">docker attach</a><a class="l2" href="#docker-exec">docker exec</a><a class="l2" href="#docker-logs">docker logs</a><a class="l2" href="#docker-stop-and-docker-rm">docker stop and docker rm</a><a class="l2" href="#docker-login">docker login</a><a class="l2" href="#docker-version">docker version</a><a class="l2" href="#docker-info">docker info</a></nav>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#docker-run">docker run</a><a class="l2" href="#docker-ps">docker ps</a><a class="l2" href="#docker-attach">docker attach</a><a class="l2" href="#docker-exec">docker exec</a><a class="l2" href="#docker-logs">docker logs</a><a class="l2" href="#docker-stop-و-docker-rm">docker stop و docker rm</a><a class="l2" href="#docker-login">docker login</a><a class="l2" href="#docker-version">docker version</a><a class="l2" href="#docker-info">docker info</a></nav>
 </div>
 </body>
 </html>

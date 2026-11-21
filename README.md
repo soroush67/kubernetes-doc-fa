@@ -85,6 +85,7 @@ cd kubernetes-doc-fa
 
 | شروع | پایان | ترجمه‌شده | با ایراد | نتیجه |
 |---|---|---|---|---|
+| 2026-11-21T08:36:05+03:30 | 2026-11-21T09:08:21+03:30 | 197 | 5 | stopped |
 | 2026-11-19T09:20:22+03:30 | 2026-11-19T10:05:37+03:30 | 48 | 5 | stopped |
 | 2026-11-03T07:17:54+03:30 | 2026-11-03T14:39:34+03:30 | 102 | 3 | stopped |
 | 2026-11-02T16:41:28+03:30 | 2026-11-02T16:56:09+03:30 | 0 | 0 | stopped |
@@ -94,7 +95,6 @@ cd kubernetes-doc-fa
 | 2026-10-31T09:52:10+03:30 | 2026-10-31T09:55:49+03:30 | 0 | 0 | stopped |
 | 2026-10-31T09:49:44+03:30 | 2026-10-31T09:51:55+03:30 | 0 | 0 | stopped |
 | 2026-10-31T09:43:22+03:30 | 2026-10-31T09:49:30+03:30 | 0 | 0 | stopped |
-| 2026-10-28T11:00:04+03:30 | 2026-10-28T11:56:52+03:30 | 217 | 13 | stopped |
 
 </div>
 
@@ -102,6 +102,8 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [reference/kubectl/docker-cli-to-kubectl.md](md/reference/kubectl/docker-cli-to-kubectl.md) — 2026-11-21T09:08:14+03:30
+- [reference/kubectl/conventions.md](md/reference/kubectl/conventions.md) — 2026-11-21T09:07:29+03:30
 - [reference/issues-security/security.md](md/reference/issues-security/security.md) — 2026-11-21T09:07:00+03:30
 - [reference/instrumentation/zpages.md](md/reference/instrumentation/zpages.md) — 2026-11-21T09:06:39+03:30
 - [reference/issues-security/official-cve-feed.md](md/reference/issues-security/official-cve-feed.md) — 2026-11-21T09:06:39+03:30
@@ -120,8 +122,6 @@ cd kubernetes-doc-fa
 - [reference/glossary/volume.md](md/reference/glossary/volume.md) — 2026-11-21T09:04:15+03:30
 - [reference/glossary/upstream.md](md/reference/glossary/upstream.md) — 2026-11-21T09:04:09+03:30
 - [reference/glossary/userns.md](md/reference/glossary/userns.md) — 2026-11-21T09:04:09+03:30
-- [reference/glossary/toleration.md](md/reference/glossary/toleration.md) — 2026-11-21T09:04:02+03:30
-- [reference/glossary/uid.md](md/reference/glossary/uid.md) — 2026-11-21T09:04:02+03:30
 
 </div>
 
