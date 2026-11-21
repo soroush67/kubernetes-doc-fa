@@ -1,16 +1,16 @@
 ---
-title: Taint
+title: لکه (Taint)
 id: taint
 full_link: /docs/concepts/scheduling-eviction/taint-and-toleration/
 short_description: >
-  یک آبجکت اصلی که از سه ویژگی الزامی تشکیل شده است: key، value و effect. Taintها از زمان‌بندی Podها روی نودها یا گروه‌های نود جلوگیری می‌کنند.
+  یک آبجکت هسته‌ای که از سه ویژگی الزامی تشکیل شده است: کلید، مقدار و اثر. لکه‌ها از زمان‌بندی Podها روی نودها یا گروه‌های نود جلوگیری می‌کنند.
 
 aka:
 tags:
 - fundamental
 ---
- یک آبجکت اصلی که از سه ویژگی الزامی تشکیل شده است: key، value و effect. Taintها از زمان‌بندی {{< glossary_tooltip text="Podها" term_id="pod" >}} روی {{< glossary_tooltip text="نودها" term_id="node" >}} یا گروه‌های نود جلوگیری می‌کنند.
+ یک آبجکت هسته‌ای که از سه ویژگی الزامی تشکیل شده است: کلید، مقدار و اثر. لکه‌ها از زمان‌بندی {{< glossary_tooltip text="Podها" term_id="pod" >}} روی {{< glossary_tooltip text="نودها" term_id="node" >}} یا گروه‌های نود جلوگیری می‌کنند.
 
 <!--more-->
 
-Taintها و {{< glossary_tooltip text="tolerationها" term_id="toleration" >}} با یکدیگر کار می‌کنند تا اطمینان حاصل شود که Podها روی نودهای نامناسب زمان‌بندی نمی‌شوند. یک یا چند taint روی یک نود اعمال می‌شود. یک نود باید تنها Podی را بپذیرد که tolerationهای متناسب با taintهای پیکربندی‌شده را داشته باشد.
+لکه‌ها و {{< glossary_tooltip text="تحمل‌ها (tolerations)" term_id="toleration" >}} با هم کار می‌کنند تا Podها روی نودهای نامناسب زمان‌بندی نشوند. هر نود می‌تواند یک یا چند لکه داشته باشد. روی هر نود فقط باید Podهایی زمان‌بندی شوند که تحمل‌های متناظر با لکه‌های پیکربندی‌شده‌ی آن نود را داشته باشند.

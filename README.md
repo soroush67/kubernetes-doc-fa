@@ -102,26 +102,26 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [reference/glossary/volume.md](md/reference/glossary/volume.md) — 2026-11-21T09:04:15+03:30
+- [reference/glossary/upstream.md](md/reference/glossary/upstream.md) — 2026-11-21T09:04:09+03:30
+- [reference/glossary/userns.md](md/reference/glossary/userns.md) — 2026-11-21T09:04:09+03:30
+- [reference/glossary/toleration.md](md/reference/glossary/toleration.md) — 2026-11-21T09:04:02+03:30
+- [reference/glossary/uid.md](md/reference/glossary/uid.md) — 2026-11-21T09:04:02+03:30
+- [reference/glossary/taint.md](md/reference/glossary/taint.md) — 2026-11-21T09:03:57+03:30
+- [reference/glossary/sysctl.md](md/reference/glossary/sysctl.md) — 2026-11-21T09:03:54+03:30
+- [reference/glossary/storage-class.md](md/reference/glossary/storage-class.md) — 2026-11-21T09:03:46+03:30
+- [reference/glossary/statefulset.md](md/reference/glossary/statefulset.md) — 2026-11-21T09:03:43+03:30
+- [reference/glossary/static-pod.md](md/reference/glossary/static-pod.md) — 2026-11-21T09:03:40+03:30
+- [reference/glossary/sig.md](md/reference/glossary/sig.md) — 2026-11-21T09:03:34+03:30
+- [reference/glossary/spec.md](md/reference/glossary/spec.md) — 2026-11-21T09:03:34+03:30
+- [reference/glossary/shuffle-sharding.md](md/reference/glossary/shuffle-sharding.md) — 2026-11-21T09:03:27+03:30
+- [reference/glossary/sidecar-container.md](md/reference/glossary/sidecar-container.md) — 2026-11-21T09:03:27+03:30
+- [reference/glossary/service.md](md/reference/glossary/service.md) — 2026-11-21T09:03:10+03:30
 - [reference/glossary/service-catalog.md](md/reference/glossary/service-catalog.md) — 2026-11-21T09:03:07+03:30
 - [reference/glossary/service-account.md](md/reference/glossary/service-account.md) — 2026-11-21T09:03:03+03:30
 - [reference/glossary/selector.md](md/reference/glossary/selector.md) — 2026-11-21T09:03:01+03:30
 - [reference/glossary/security-context.md](md/reference/glossary/security-context.md) — 2026-11-21T09:02:58+03:30
 - [reference/glossary/secret.md](md/reference/glossary/secret.md) — 2026-11-21T09:02:56+03:30
-- [reference/glossary/san.md](md/reference/glossary/san.md) — 2026-11-21T09:02:52+03:30
-- [reference/glossary/reviewer.md](md/reference/glossary/reviewer.md) — 2026-11-21T09:02:49+03:30
-- [reference/glossary/resourceslice.md](md/reference/glossary/resourceslice.md) — 2026-11-21T09:02:45+03:30
-- [reference/glossary/resourceclaimtemplate.md](md/reference/glossary/resourceclaimtemplate.md) — 2026-11-21T09:02:44+03:30
-- [reference/glossary/resourceclaim.md](md/reference/glossary/resourceclaim.md) — 2026-11-21T09:02:39+03:30
-- [reference/glossary/resource-quota.md](md/reference/glossary/resource-quota.md) — 2026-11-21T09:02:37+03:30
-- [reference/glossary/replica.md](md/reference/glossary/replica.md) — 2026-11-21T09:02:32+03:30
-- [reference/glossary/replication-controller.md](md/reference/glossary/replication-controller.md) — 2026-11-21T09:02:31+03:30
-- [reference/glossary/replica-set.md](md/reference/glossary/replica-set.md) — 2026-11-21T09:02:24+03:30
-- [reference/glossary/rbac.md](md/reference/glossary/rbac.md) — 2026-11-21T09:02:14+03:30
-- [reference/glossary/quantity.md](md/reference/glossary/quantity.md) — 2026-11-21T09:02:13+03:30
-- [reference/glossary/qos-class.md](md/reference/glossary/qos-class.md) — 2026-11-21T09:02:03+03:30
-- [reference/glossary/proxy.md](md/reference/glossary/proxy.md) — 2026-11-21T09:02:02+03:30
-- [reference/glossary/probe.md](md/reference/glossary/probe.md) — 2026-11-21T09:01:57+03:30
-- [reference/glossary/priority-class.md](md/reference/glossary/priority-class.md) — 2026-11-21T09:01:55+03:30
 
 </div>
 
