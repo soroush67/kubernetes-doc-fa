@@ -1,13 +1,13 @@
 ---
-title: Kubernetes Metrics (v1beta1)
+title: معیارهای کوبرنتیز (v1beta1)
 content_type: tool-reference
 package: metrics.k8s.io/v1beta1
 auto_generated: true
 ---
-<p>بسته v1beta1 نسخه v1beta1 از API متریک‌ها است.</p>
+<p>بستهٔ v1beta1 نسخهٔ v1beta1 از API معیارها (metrics) است.</p>
 
 
-## انواع منابع 
+## انواع منبع 
 
 
 - [NodeMetrics](#metrics-k8s-io-v1beta1-NodeMetrics)
@@ -19,12 +19,12 @@ auto_generated: true
 ## `NodeMetrics`     {#metrics-k8s-io-v1beta1-NodeMetrics}
     
 
-**در این موارد ظاهر می‌شود:**
+**در این موارد آمده است:**
 
 - [NodeMetricsList](#metrics-k8s-io-v1beta1-NodeMetricsList)
 
 
-<p>NodeMetrics متریک‌های میزان استفاده از منابع یک نود را مشخص می‌کند.</p>
+<p>نوع NodeMetrics معیارهای مصرف منابع یک نود را مشخص می‌کند.</p>
 
 
 <table class="table">
@@ -39,15 +39,16 @@ auto_generated: true
 <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.37/#objectmeta-v1-meta"><code>meta/v1.ObjectMeta</code></a>
 </td>
 <td>
-   <p>فراداده استاندارد آبجکت.
+   <p>فراداده‌های استاندارد آبجکت.
 اطلاعات بیشتر: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata</p>
-برای مشاهده فیلدهای <code>metadata</code> به مستندات API کوبرنتیز مراجعه کنید.</td>
+برای آشنایی با فیلدهای فیلد <code>metadata</code> به مستندات API کوبرنتیز مراجعه کنید.</td>
 </tr>
 <tr><td><code>timestamp</code> <B>[الزامی]</B><br/>
 <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.37/#time-v1-meta"><code>meta/v1.Time</code></a>
 </td>
 <td>
-   <p>فیلدهای زیر بازه زمانی‌ای را تعریف می‌کنند که متریک‌ها از آن گردآوری شده‌اند؛ این بازه برابر است با [Timestamp-Window, Timestamp].</p>
+   <p>فیلدهای زیر بازهٔ زمانی گردآوری معیارها را مشخص می‌کنند؛ این بازه
+[Timestamp-Window, Timestamp] است.</p>
 </td>
 </tr>
 <tr><td><code>window</code> <B>[الزامی]</B><br/>
@@ -60,7 +61,7 @@ auto_generated: true
 <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.37/#resourcelist-v1-core"><code>core/v1.ResourceList</code></a>
 </td>
 <td>
-   <p>میزان استفاده از حافظه برابر با مجموعه کاری حافظه (memory working set) است.</p>
+   <p>مقدار مصرف حافظه همان مجموعهٔ کاری حافظه (memory working set) است.</p>
 </td>
 </tr>
 </tbody>
@@ -70,7 +71,7 @@ auto_generated: true
     
 
 
-<p>NodeMetricsList فهرستی از NodeMetrics است.</p>
+<p>نوع NodeMetricsList فهرستی از NodeMetrics است.</p>
 
 
 <table class="table">
@@ -85,7 +86,7 @@ auto_generated: true
 <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.37/#listmeta-v1-meta"><code>meta/v1.ListMeta</code></a>
 </td>
 <td>
-   <p>فراداده استاندارد فهرست.
+   <p>فراداده‌های استاندارد فهرست.
 اطلاعات بیشتر: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds</p>
 </td>
 </tr>
@@ -93,7 +94,7 @@ auto_generated: true
 <a href="#metrics-k8s-io-v1beta1-NodeMetrics"><code>[]NodeMetrics</code></a>
 </td>
 <td>
-   <p>فهرست متریک‌های نودها.</p>
+   <p>فهرست معیارهای نودها.</p>
 </td>
 </tr>
 </tbody>
@@ -102,12 +103,12 @@ auto_generated: true
 ## `PodMetrics`     {#metrics-k8s-io-v1beta1-PodMetrics}
     
 
-**در این موارد ظاهر می‌شود:**
+**در این موارد آمده است:**
 
 - [PodMetricsList](#metrics-k8s-io-v1beta1-PodMetricsList)
 
 
-<p>PodMetrics متریک‌های میزان استفاده از منابع یک Pod را مشخص می‌کند.</p>
+<p>نوع PodMetrics معیارهای مصرف منابع یک پاد را مشخص می‌کند.</p>
 
 
 <table class="table">
@@ -122,15 +123,16 @@ auto_generated: true
 <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.37/#objectmeta-v1-meta"><code>meta/v1.ObjectMeta</code></a>
 </td>
 <td>
-   <p>فراداده استاندارد آبجکت.
+   <p>فراداده‌های استاندارد آبجکت.
 اطلاعات بیشتر: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata</p>
-برای مشاهده فیلدهای <code>metadata</code> به مستندات API کوبرنتیز مراجعه کنید.</td>
+برای آشنایی با فیلدهای فیلد <code>metadata</code> به مستندات API کوبرنتیز مراجعه کنید.</td>
 </tr>
 <tr><td><code>timestamp</code> <B>[الزامی]</B><br/>
 <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.37/#time-v1-meta"><code>meta/v1.Time</code></a>
 </td>
 <td>
-   <p>فیلدهای زیر بازه زمانی‌ای را تعریف می‌کنند که متریک‌ها از آن گردآوری شده‌اند؛ این بازه برابر است با [Timestamp-Window, Timestamp].</p>
+   <p>فیلدهای زیر بازهٔ زمانی گردآوری معیارها را مشخص می‌کنند؛ این بازه
+[Timestamp-Window, Timestamp] است.</p>
 </td>
 </tr>
 <tr><td><code>window</code> <B>[الزامی]</B><br/>
@@ -143,7 +145,7 @@ auto_generated: true
 <a href="#metrics-k8s-io-v1beta1-ContainerMetrics"><code>[]ContainerMetrics</code></a>
 </td>
 <td>
-   <p>متریک‌های همه کانتینرها در یک بازه زمانی یکسان گردآوری می‌شوند.</p>
+   <p>معیارهای همهٔ کانتینرها در یک بازهٔ زمانی یکسان گردآوری می‌شوند.</p>
 </td>
 </tr>
 </tbody>
@@ -153,7 +155,7 @@ auto_generated: true
     
 
 
-<p>PodMetricsList فهرستی از PodMetrics است.</p>
+<p>نوع PodMetricsList فهرستی از PodMetrics است.</p>
 
 
 <table class="table">
@@ -168,7 +170,7 @@ auto_generated: true
 <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.37/#listmeta-v1-meta"><code>meta/v1.ListMeta</code></a>
 </td>
 <td>
-   <p>فراداده استاندارد فهرست.
+   <p>فراداده‌های استاندارد فهرست.
 اطلاعات بیشتر: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds</p>
 </td>
 </tr>
@@ -176,7 +178,7 @@ auto_generated: true
 <a href="#metrics-k8s-io-v1beta1-PodMetrics"><code>[]PodMetrics</code></a>
 </td>
 <td>
-   <p>فهرست متریک‌های Podها.</p>
+   <p>فهرست معیارهای پادها.</p>
 </td>
 </tr>
 </tbody>
@@ -185,12 +187,12 @@ auto_generated: true
 ## `ContainerMetrics`     {#metrics-k8s-io-v1beta1-ContainerMetrics}
     
 
-**در این موارد ظاهر می‌شود:**
+**در این موارد آمده است:**
 
 - [PodMetrics](#metrics-k8s-io-v1beta1-PodMetrics)
 
 
-<p>ContainerMetrics متریک‌های میزان استفاده از منابع یک کانتینر را مشخص می‌کند.</p>
+<p>نوع ContainerMetrics معیارهای مصرف منابع یک کانتینر را مشخص می‌کند.</p>
 
 
 <table class="table">
@@ -202,14 +204,14 @@ auto_generated: true
 <code>string</code>
 </td>
 <td>
-   <p>نام کانتینر که با نام موجود در pod.spec.containers مطابقت دارد.</p>
+   <p>نام کانتینر، مطابق با نام آن در pod.spec.containers.</p>
 </td>
 </tr>
 <tr><td><code>usage</code> <B>[الزامی]</B><br/>
 <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.37/#resourcelist-v1-core"><code>core/v1.ResourceList</code></a>
 </td>
 <td>
-   <p>میزان استفاده از حافظه برابر با مجموعه کاری حافظه (memory working set) است.</p>
+   <p>مقدار مصرف حافظه همان مجموعهٔ کاری حافظه است.</p>
 </td>
 </tr>
 </tbody>

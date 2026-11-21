@@ -102,26 +102,26 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [reference/glossary/app-container.md](md/reference/glossary/app-container.md) — 2026-11-21T08:54:24+03:30
+- [reference/glossary/api-resource.md](md/reference/glossary/api-resource.md) — 2026-11-21T08:54:17+03:30
+- [reference/glossary/api-group.md](md/reference/glossary/api-group.md) — 2026-11-21T08:54:15+03:30
+- [reference/external-api/metrics.v1beta1.md](md/reference/external-api/metrics.v1beta1.md) — 2026-11-21T08:54:10+03:30
+- [reference/glossary/api-eviction.md](md/reference/glossary/api-eviction.md) — 2026-11-21T08:54:10+03:30
+- [reference/glossary/annotation.md](md/reference/glossary/annotation.md) — 2026-11-21T08:54:03+03:30
+- [reference/glossary/aggregation-layer.md](md/reference/glossary/aggregation-layer.md) — 2026-11-21T08:53:57+03:30
+- [reference/glossary/affinity.md](md/reference/glossary/affinity.md) — 2026-11-21T08:53:52+03:30
+- [reference/glossary/admission-controller.md](md/reference/glossary/admission-controller.md) — 2026-11-21T08:53:46+03:30
+- [reference/glossary/addons.md](md/reference/glossary/addons.md) — 2026-11-21T08:53:37+03:30
+- [reference/external-api/metrics.v1.md](md/reference/external-api/metrics.v1.md) — 2026-11-21T08:53:32+03:30
+- [reference/external-api/external-metrics.v1beta1.md](md/reference/external-api/external-metrics.v1beta1.md) — 2026-11-21T08:52:48+03:30
+- [reference/deprecation-policy.md](md/reference/deprecation-policy.md) — 2026-11-21T08:52:11+03:30
+- [reference/external-api/custom-metrics.v1beta2.md](md/reference/external-api/custom-metrics.v1beta2.md) — 2026-11-21T08:51:58+03:30
+- [reference/external-api/_index.md](md/reference/external-api/_index.md) — 2026-11-21T08:50:45+03:30
 - [reference/encodings/kyaml.md](md/reference/encodings/kyaml.md) — 2026-11-21T08:50:29+03:30
 - [reference/encodings/_index.md](md/reference/encodings/_index.md) — 2026-11-21T08:50:20+03:30
 - [reference/access-authn-authz/validating-admission-policy.md](md/reference/access-authn-authz/validating-admission-policy.md) — 2026-11-21T08:50:13+03:30
 - [reference/debug-cluster/flow-control.md](md/reference/debug-cluster/flow-control.md) — 2026-11-21T08:48:46+03:30
 - [reference/debug-cluster/_index.md](md/reference/debug-cluster/_index.md) — 2026-11-21T08:48:05+03:30
-- [reference/access-authn-authz/webhook.md](md/reference/access-authn-authz/webhook.md) — 2026-11-21T08:48:01+03:30
-- [reference/access-authn-authz/service-accounts-admin.md](md/reference/access-authn-authz/service-accounts-admin.md) — 2026-11-21T08:47:30+03:30
-- [reference/access-authn-authz/user-impersonation.md](md/reference/access-authn-authz/user-impersonation.md) — 2026-11-21T08:46:27+03:30
-- [reference/access-authn-authz/rbac.md](md/reference/access-authn-authz/rbac.md) — 2026-11-21T08:45:10+03:30
-- [reference/access-authn-authz/psp-to-pod-security-standards.md](md/reference/access-authn-authz/psp-to-pod-security-standards.md) — 2026-11-21T08:43:13+03:30
-- [reference/access-authn-authz/node.md](md/reference/access-authn-authz/node.md) — 2026-11-21T08:41:41+03:30
-- [reference/access-authn-authz/extensible-admission-controllers.md](md/reference/access-authn-authz/extensible-admission-controllers.md) — 2026-11-21T08:41:21+03:30
-- [reference/access-authn-authz/mutating-admission-policy.md](md/reference/access-authn-authz/mutating-admission-policy.md) — 2026-11-21T08:41:02+03:30
-- [reference/access-authn-authz/manifest-admission-control.md](md/reference/access-authn-authz/manifest-admission-control.md) — 2026-11-21T08:39:11+03:30
-- [reference/access-authn-authz/kubelet-tls-bootstrapping.md](md/reference/access-authn-authz/kubelet-tls-bootstrapping.md) — 2026-11-21T08:37:56+03:30
-- [reference/access-authn-authz/kubelet-authn-authz.md](md/reference/access-authn-authz/kubelet-authn-authz.md) — 2026-11-19T09:57:41+03:30
-- [reference/access-authn-authz/authentication.md](md/reference/access-authn-authz/authentication.md) — 2026-11-19T09:57:15+03:30
-- [reference/access-authn-authz/certificate-signing-requests.md](md/reference/access-authn-authz/certificate-signing-requests.md) — 2026-11-19T09:56:35+03:30
-- [reference/access-authn-authz/bootstrap-tokens.md](md/reference/access-authn-authz/bootstrap-tokens.md) — 2026-11-19T09:53:58+03:30
-- [reference/access-authn-authz/authorization.md](md/reference/access-authn-authz/authorization.md) — 2026-11-19T09:53:25+03:30
 
 </div>
 
@@ -146,10 +146,10 @@ cd kubernetes-doc-fa
 - [reference/config-api/kubeadm-config.v1beta3.md](md/reference/config-api/kubeadm-config.v1beta3.md): chunk 1: short: 1881 words vs 4131 source words
 - [reference/config-api/kubeadm-config.v1beta4.md](md/reference/config-api/kubeadm-config.v1beta4.md): chunk 1: short: 2508 words vs 5597 source words; chunk 2: short: 1496 words vs 2029 source words
 - [reference/config-api/kubelet-config.v1alpha1.md](md/reference/config-api/kubelet-config.v1alpha1.md): chunk 1: short: 1158 words vs 1573 source words
-- [reference/external-api/custom-metrics.v1beta2.md](md/reference/external-api/custom-metrics.v1beta2.md): chunk 1: short: 351 words vs 548 source words
-- [reference/external-api/external-metrics.v1beta1.md](md/reference/external-api/external-metrics.v1beta1.md): chunk 1: short: 224 words vs 345 source words
-- [reference/external-api/metrics.v1.md](md/reference/external-api/metrics.v1.md): chunk 1: short: 374 words vs 606 source words
-- [reference/external-api/metrics.v1beta1.md](md/reference/external-api/metrics.v1beta1.md): chunk 1: short: 388 words vs 620 source words
+- [reference/external-api/custom-metrics.v1beta2.md](md/reference/external-api/custom-metrics.v1beta2.md): chunk 1: short: 366 words vs 548 source words
+- [reference/external-api/external-metrics.v1beta1.md](md/reference/external-api/external-metrics.v1beta1.md): chunk 1: short: 221 words vs 345 source words
+- [reference/external-api/metrics.v1.md](md/reference/external-api/metrics.v1.md): chunk 1: short: 368 words vs 606 source words
+- [reference/external-api/metrics.v1beta1.md](md/reference/external-api/metrics.v1beta1.md): chunk 1: short: 371 words vs 620 source words
 - [reference/instrumentation/metrics.md](md/reference/instrumentation/metrics.md): chunk 2: short: 1603 words vs 4479 source words; chunk 3: short: 2653 words vs 7422 source words
 - [reference/kubectl/generated/kubectl_api-resources/_index.md](md/reference/kubectl/generated/kubectl_api-resources/_index.md): chunk 1: short: 1121 words vs 1550 source words
 - [reference/kubectl/generated/kubectl_api-versions/_index.md](md/reference/kubectl/generated/kubectl_api-versions/_index.md): chunk 1: short: 903 words vs 1266 source words
