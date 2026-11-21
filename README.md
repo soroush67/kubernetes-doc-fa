@@ -102,26 +102,26 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [reference/glossary/cluster-infrastructure.md](md/reference/glossary/cluster-infrastructure.md) — 2026-11-21T08:55:17+03:30
+- [reference/glossary/cloud-provider.md](md/reference/glossary/cloud-provider.md) — 2026-11-21T08:55:13+03:30
+- [reference/glossary/cluster-architect.md](md/reference/glossary/cluster-architect.md) — 2026-11-21T08:55:12+03:30
+- [reference/glossary/cloud-controller-manager.md](md/reference/glossary/cloud-controller-manager.md) — 2026-11-21T08:55:08+03:30
+- [reference/glossary/cla.md](md/reference/glossary/cla.md) — 2026-11-21T08:55:04+03:30
+- [reference/glossary/cidr.md](md/reference/glossary/cidr.md) — 2026-11-21T08:55:01+03:30
+- [reference/glossary/cgroup.md](md/reference/glossary/cgroup.md) — 2026-11-21T08:54:59+03:30
+- [reference/glossary/certificate.md](md/reference/glossary/certificate.md) — 2026-11-21T08:54:52+03:30
+- [reference/glossary/cel.md](md/reference/glossary/cel.md) — 2026-11-21T08:54:48+03:30
+- [reference/glossary/cdi.md](md/reference/glossary/cdi.md) — 2026-11-21T08:54:46+03:30
+- [reference/glossary/cadvisor.md](md/reference/glossary/cadvisor.md) — 2026-11-21T08:54:41+03:30
+- [reference/glossary/approver.md](md/reference/glossary/approver.md) — 2026-11-21T08:54:40+03:30
+- [reference/glossary/applications.md](md/reference/glossary/applications.md) — 2026-11-21T08:54:34+03:30
+- [reference/glossary/application-developer.md](md/reference/glossary/application-developer.md) — 2026-11-21T08:54:30+03:30
+- [reference/glossary/application-architect.md](md/reference/glossary/application-architect.md) — 2026-11-21T08:54:25+03:30
 - [reference/glossary/app-container.md](md/reference/glossary/app-container.md) — 2026-11-21T08:54:24+03:30
 - [reference/glossary/api-resource.md](md/reference/glossary/api-resource.md) — 2026-11-21T08:54:17+03:30
 - [reference/glossary/api-group.md](md/reference/glossary/api-group.md) — 2026-11-21T08:54:15+03:30
 - [reference/external-api/metrics.v1beta1.md](md/reference/external-api/metrics.v1beta1.md) — 2026-11-21T08:54:10+03:30
 - [reference/glossary/api-eviction.md](md/reference/glossary/api-eviction.md) — 2026-11-21T08:54:10+03:30
-- [reference/glossary/annotation.md](md/reference/glossary/annotation.md) — 2026-11-21T08:54:03+03:30
-- [reference/glossary/aggregation-layer.md](md/reference/glossary/aggregation-layer.md) — 2026-11-21T08:53:57+03:30
-- [reference/glossary/affinity.md](md/reference/glossary/affinity.md) — 2026-11-21T08:53:52+03:30
-- [reference/glossary/admission-controller.md](md/reference/glossary/admission-controller.md) — 2026-11-21T08:53:46+03:30
-- [reference/glossary/addons.md](md/reference/glossary/addons.md) — 2026-11-21T08:53:37+03:30
-- [reference/external-api/metrics.v1.md](md/reference/external-api/metrics.v1.md) — 2026-11-21T08:53:32+03:30
-- [reference/external-api/external-metrics.v1beta1.md](md/reference/external-api/external-metrics.v1beta1.md) — 2026-11-21T08:52:48+03:30
-- [reference/deprecation-policy.md](md/reference/deprecation-policy.md) — 2026-11-21T08:52:11+03:30
-- [reference/external-api/custom-metrics.v1beta2.md](md/reference/external-api/custom-metrics.v1beta2.md) — 2026-11-21T08:51:58+03:30
-- [reference/external-api/_index.md](md/reference/external-api/_index.md) — 2026-11-21T08:50:45+03:30
-- [reference/encodings/kyaml.md](md/reference/encodings/kyaml.md) — 2026-11-21T08:50:29+03:30
-- [reference/encodings/_index.md](md/reference/encodings/_index.md) — 2026-11-21T08:50:20+03:30
-- [reference/access-authn-authz/validating-admission-policy.md](md/reference/access-authn-authz/validating-admission-policy.md) — 2026-11-21T08:50:13+03:30
-- [reference/debug-cluster/flow-control.md](md/reference/debug-cluster/flow-control.md) — 2026-11-21T08:48:46+03:30
-- [reference/debug-cluster/_index.md](md/reference/debug-cluster/_index.md) — 2026-11-21T08:48:05+03:30
 
 </div>
 
