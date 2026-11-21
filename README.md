@@ -102,26 +102,26 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [reference/glossary/init-container.md](md/reference/glossary/init-container.md) — 2026-11-21T08:59:13+03:30
+- [reference/glossary/istio.md](md/reference/glossary/istio.md) — 2026-11-21T08:59:13+03:30
+- [reference/glossary/infrastructure-resource.md](md/reference/glossary/infrastructure-resource.md) — 2026-11-21T08:59:06+03:30
+- [reference/glossary/ingress.md](md/reference/glossary/ingress.md) — 2026-11-21T08:59:06+03:30
+- [reference/glossary/immutable-infrastructure.md](md/reference/glossary/immutable-infrastructure.md) — 2026-11-21T08:58:58+03:30
+- [reference/glossary/index.md](md/reference/glossary/index.md) — 2026-11-21T08:58:55+03:30
+- [reference/glossary/image.md](md/reference/glossary/image.md) — 2026-11-21T08:58:52+03:30
+- [reference/glossary/host-aliases.md](md/reference/glossary/host-aliases.md) — 2026-11-21T08:58:48+03:30
+- [reference/glossary/horizontal-pod-autoscaler.md](md/reference/glossary/horizontal-pod-autoscaler.md) — 2026-11-21T08:58:45+03:30
+- [reference/glossary/helm-chart.md](md/reference/glossary/helm-chart.md) — 2026-11-21T08:58:42+03:30
+- [reference/glossary/group-version-resource.md](md/reference/glossary/group-version-resource.md) — 2026-11-21T08:58:39+03:30
+- [reference/glossary/gateway.md](md/reference/glossary/gateway.md) — 2026-11-21T08:58:36+03:30
+- [reference/glossary/garbage-collection.md](md/reference/glossary/garbage-collection.md) — 2026-11-21T08:58:33+03:30
+- [reference/glossary/flexvolume.md](md/reference/glossary/flexvolume.md) — 2026-11-21T08:58:30+03:30
+- [reference/glossary/finalizer.md](md/reference/glossary/finalizer.md) — 2026-11-21T08:58:20+03:30
 - [reference/glossary/feature-gates.md](md/reference/glossary/feature-gates.md) — 2026-11-21T08:58:15+03:30
 - [reference/glossary/extensions.md](md/reference/glossary/extensions.md) — 2026-11-21T08:58:10+03:30
 - [reference/glossary/eviction.md](md/reference/glossary/eviction.md) — 2026-11-21T08:58:08+03:30
 - [reference/glossary/etcd.md](md/reference/glossary/etcd.md) — 2026-11-21T08:58:04+03:30
 - [reference/glossary/event.md](md/reference/glossary/event.md) — 2026-11-21T08:58:03+03:30
-- [reference/glossary/ephemeral-container.md](md/reference/glossary/ephemeral-container.md) — 2026-11-21T08:57:56+03:30
-- [reference/glossary/endpoint.md](md/reference/glossary/endpoint.md) — 2026-11-21T08:57:55+03:30
-- [reference/glossary/dynamic-volume-provisioning.md](md/reference/glossary/dynamic-volume-provisioning.md) — 2026-11-21T08:57:47+03:30
-- [reference/glossary/endpoint-slice.md](md/reference/glossary/endpoint-slice.md) — 2026-11-21T08:57:47+03:30
-- [reference/glossary/drain.md](md/reference/glossary/drain.md) — 2026-11-21T08:57:40+03:30
-- [reference/glossary/duration.md](md/reference/glossary/duration.md) — 2026-11-21T08:57:40+03:30
-- [reference/glossary/downward-api.md](md/reference/glossary/downward-api.md) — 2026-11-21T08:57:33+03:30
-- [reference/glossary/dra.md](md/reference/glossary/dra.md) — 2026-11-21T08:57:32+03:30
-- [reference/glossary/downstream.md](md/reference/glossary/downstream.md) — 2026-11-21T08:57:26+03:30
-- [reference/glossary/dockershim.md](md/reference/glossary/dockershim.md) — 2026-11-21T08:57:19+03:30
-- [reference/glossary/disruption.md](md/reference/glossary/disruption.md) — 2026-11-21T08:57:16+03:30
-- [reference/glossary/docker.md](md/reference/glossary/docker.md) — 2026-11-21T08:57:11+03:30
-- [reference/glossary/deviceclass.md](md/reference/glossary/deviceclass.md) — 2026-11-21T08:57:04+03:30
-- [reference/glossary/device-plugin.md](md/reference/glossary/device-plugin.md) — 2026-11-21T08:56:58+03:30
-- [reference/glossary/device.md](md/reference/glossary/device.md) — 2026-11-21T08:56:58+03:30
 
 </div>
 

@@ -8,16 +8,16 @@ aka:
 tags:
 - architecture
 ---
-قابلیت‌هایی که در اختیار یک یا چند {{< glossary_tooltip text="نود" term_id="node" >}} قرار می‌گیرند (CPU، حافظه، GPU و غیره) و برای مصرف توسط
-{{< glossary_tooltip text="Podهایی" term_id="pod" >}} که روی آن نودها اجرا می‌شوند در دسترس قرار داده می‌شوند.
+قابلیت‌هایی (مانند CPU، حافظه، GPU و غیره) که در اختیار یک یا چند {{< glossary_tooltip text="نود" term_id="node" >}} قرار می‌گیرند و
+{{< glossary_tooltip text="Podهایی" term_id="pod" >}} که روی آن نودها اجرا می‌شوند، می‌توانند آن‌ها را مصرف کنند.
 
-کوبرنتیز همچنین از اصطلاح _منبع_ برای توصیف یک {{< glossary_tooltip text="منبع API" term_id="api-resource" >}} استفاده می‌کند.
+کوبرنتیز اصطلاح _منبع_ (resource) را برای توصیف یک {{< glossary_tooltip text="منبع API" term_id="api-resource" >}} نیز به کار می‌برد.
 
 <!--more-->
-رایانه‌ها امکانات سخت‌افزاری بنیادینی را فراهم می‌کنند: توان پردازشی، حافظه ذخیره‌سازی، شبکه و غیره.
-این منابع ظرفیت محدودی دارند که با واحدی متناسب با همان منبع اندازه‌گیری می‌شود (تعداد CPUها، بایت‌های حافظه و غیره).
-کوبرنتیز [منابع](/docs/concepts/configuration/manage-resources-containers/) رایج را برای تخصیص به بارهای کاری انتزاعی می‌کند
-و برای مدیریت مصرف توسط {{< glossary_tooltip text="بارهای کاری" term_id="workload" >}} از primitiveهای سیستم‌عامل (برای مثال {{< glossary_tooltip text="cgroups" term_id="cgroup" >}} در لینوکس) استفاده می‌کند.
+رایانه‌ها امکانات سخت‌افزاری بنیادینی مانند توان پردازشی، حافظهٔ ذخیره‌سازی، شبکه و غیره را فراهم می‌کنند.
+ظرفیت این منابع محدود است و با واحدی متناسب با هر منبع (تعداد CPUها، تعداد بایت‌های حافظه و غیره) اندازه‌گیری می‌شود.
+کوبرنتیز [منابع](/docs/concepts/configuration/manage-resources-containers/) رایج را برای تخصیص به بارهای کاری انتزاع می‌کند
+و برای مدیریت مصرف {{< glossary_tooltip text="بارهای کاری" term_id="workload" >}}) از سازوکارهای پایه‌ای سیستم‌عامل (برای نمونه، {{< glossary_tooltip text="cgroupها" term_id="cgroup" >}} در لینوکس) بهره می‌گیرد.
 
-همچنین می‌توانید از [تخصیص پویای منابع](/docs/concepts/resource-management/dynamic-resource-allocation/) برای
-مدیریت خودکار تخصیص‌های پیچیده منابع استفاده کنید.
+همچنین می‌توانید با استفاده از [تخصیص پویای منابع](/docs/concepts/resource-management/dynamic-resource-allocation/)
+تخصیص‌های پیچیدهٔ منابع را به‌صورت خودکار مدیریت کنید.

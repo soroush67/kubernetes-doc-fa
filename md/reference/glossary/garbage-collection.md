@@ -1,9 +1,9 @@
 ---
-title: Garbage Collection
+title: جمع‌آوری زباله (Garbage Collection)
 id: garbage-collection
 full_link: /docs/concepts/architecture/garbage-collection/
 short_description: >
-  اصطلاحی جمعی برای سازوکارهای مختلفی که کوبرنتیز برای پاک‌سازی منابع کلاستر به کار می‌گیرد.
+  اصطلاحی جامع برای سازوکارهای گوناگونی که کوبرنتیز برای پاک‌سازی منابع کلاستر به کار می‌گیرد.
 
 aka: 
 tags:
@@ -11,14 +11,13 @@ tags:
 - operation
 ---
 
-جمع‌آوری زباله (Garbage Collection) اصطلاحی جمعی برای سازوکارهای مختلفی است که کوبرنتیز برای پاک‌سازی
-منابع کلاستر از آن‌ها استفاده می‌کند.
+جمع‌آوری زباله اصطلاحی جامع برای سازوکارهای گوناگونی است که کوبرنتیز برای پاک‌سازی منابع کلاستر به کار می‌گیرد.
 
 <!--more-->
 
-کوبرنتیز از جمع‌آوری زباله برای پاک‌سازی منابعی مانند
-[کانتینرها و ایمیج‌های استفاده‌نشده](/docs/concepts/architecture/garbage-collection/#containers-images)،
-[Podهای ناموفق](/docs/concepts/workloads/pods/pod-lifecycle/#pod-garbage-collection)،
-[آبجکت‌های متعلق به منبع هدف](/docs/concepts/overview/working-with-objects/owners-dependents/)،
-[Jobهای تکمیل‌شده](/docs/concepts/workloads/controllers/ttlafterfinished/) و منابعی
-که منقضی شده‌اند یا با شکست مواجه شده‌اند، استفاده می‌کند.
+کوبرنتیز با جمع‌آوری زباله منابعی مانند
+[کانتینرها و ایمیج‌های بلااستفاده](/docs/concepts/architecture/garbage-collection/#containers-images)،
+[پادهای ناموفق](/docs/concepts/workloads/pods/pod-lifecycle/#pod-garbage-collection)،
+[آبجکت‌هایی که مالکشان منبع موردنظر است](/docs/concepts/overview/working-with-objects/owners-dependents/)،
+[Jobهای تکمیل‌شده](/docs/concepts/workloads/controllers/ttlafterfinished/) و منابعی را
+که منقضی شده یا با شکست مواجه شده‌اند پاک‌سازی می‌کند.
