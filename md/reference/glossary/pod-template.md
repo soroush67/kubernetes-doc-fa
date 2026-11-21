@@ -2,7 +2,7 @@
 title: PodTemplate
 id: pod-template
 short_description: >
-  قالبی برای ایجاد Podها.
+  الگویی برای ایجاد Podها.
 
 aka: 
   - pod template
@@ -10,18 +10,18 @@ tags:
 - core-object
 
 ---
-یک آبجکت API که قالبی برای ایجاد {{< glossary_tooltip text="Podها" term_id="pod" >}} تعریف می‌کند.
-API مربوط به PodTemplate در تعریف‌های API برای مدیریت بار کاری نیز تعبیه می‌شود، مانند
+آبجکتی در API که الگویی (template) برای ایجاد {{< glossary_tooltip text="Podها" term_id="pod" >}} تعریف می‌کند.
+API مربوط به PodTemplate در تعریف‌های API مربوط به مدیریت بار کاری، مانند
 {{< glossary_tooltip text="Deployment" term_id="deployment" >}} یا
-{{< glossary_tooltip text="StatefulSets" term_id="StatefulSet" >}}.
+{{< glossary_tooltip text="StatefulSetها" term_id="StatefulSet" >}}، نیز جاسازی شده است.
 
 <!--more--> 
 
-قالب‌های Pod به شما امکان می‌دهند فراداده‌های مشترک (مانند برچسب‌ها یا قالبی برای نام
-یک Pod جدید) را تعریف کنید و همچنین وضعیت مطلوب یک Pod را مشخص نمایید.
-کنترل‌کننده‌های [مدیریت بار کاری](/docs/concepts/workloads/controllers/) از قالب‌های Pod
-(که در آبجکتی دیگر، مانند Deployment یا StatefulSet، تعبیه شده‌اند)
+با الگوهای Pod می‌توانید فراداده‌های مشترک (مانند برچسب‌ها یا الگویی برای نام یک Pod جدید) را تعریف کنید
+و وضعیت مطلوب یک Pod را نیز مشخص کنید.
+کنترل‌کننده‌های [مدیریت بار کاری](/docs/concepts/workloads/controllers/) از الگوهای Pod
+(که درون آبجکت دیگری مانند Deployment یا StatefulSet جاسازی شده‌اند)
 برای تعریف و مدیریت یک یا چند {{< glossary_tooltip text="Pod" term_id="pod" >}} استفاده می‌کنند.
-هنگامی که ممکن است چندین Pod بر پایهٔ یک قالب واحد وجود داشته باشند، به آن‌ها
-{{< glossary_tooltip term_id="replica" text="replicaها" >}} گفته می‌شود.
-اگرچه می‌توانید یک آبجکت PodTemplate را مستقیماً ایجاد کنید، به‌ندرت نیازی به این کار پیدا می‌کنید.
+هنگامی که چند Pod بر پایهٔ یک الگوی یکسان وجود داشته باشد، به آن‌ها
+{{< glossary_tooltip term_id="replica" text="رپلیکا" >}} گفته می‌شود.
+اگرچه می‌توانید یک آبجکت PodTemplate را مستقیماً ایجاد کنید، به‌ندرت به این کار نیاز پیدا می‌کنید.

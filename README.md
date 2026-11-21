@@ -102,26 +102,26 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [reference/glossary/quantity.md](md/reference/glossary/quantity.md) — 2026-11-21T09:02:13+03:30
+- [reference/glossary/qos-class.md](md/reference/glossary/qos-class.md) — 2026-11-21T09:02:03+03:30
+- [reference/glossary/proxy.md](md/reference/glossary/proxy.md) — 2026-11-21T09:02:02+03:30
+- [reference/glossary/probe.md](md/reference/glossary/probe.md) — 2026-11-21T09:01:57+03:30
+- [reference/glossary/priority-class.md](md/reference/glossary/priority-class.md) — 2026-11-21T09:01:55+03:30
+- [reference/glossary/preemption.md](md/reference/glossary/preemption.md) — 2026-11-21T09:01:51+03:30
+- [reference/glossary/podgroup.md](md/reference/glossary/podgroup.md) — 2026-11-21T09:01:49+03:30
+- [reference/glossary/pod-template.md](md/reference/glossary/pod-template.md) — 2026-11-21T09:01:45+03:30
+- [reference/glossary/pod.md](md/reference/glossary/pod.md) — 2026-11-21T09:01:43+03:30
+- [reference/glossary/pod-priority.md](md/reference/glossary/pod-priority.md) — 2026-11-21T09:01:37+03:30
+- [reference/glossary/pod-security-policy.md](md/reference/glossary/pod-security-policy.md) — 2026-11-21T09:01:37+03:30
+- [reference/glossary/pod-disruption.md](md/reference/glossary/pod-disruption.md) — 2026-11-21T09:01:32+03:30
+- [reference/glossary/pod-lifecycle.md](md/reference/glossary/pod-lifecycle.md) — 2026-11-21T09:01:31+03:30
+- [reference/glossary/pod-disruption-budget.md](md/reference/glossary/pod-disruption-budget.md) — 2026-11-21T09:01:25+03:30
+- [reference/glossary/platform-developer.md](md/reference/glossary/platform-developer.md) — 2026-11-21T09:01:16+03:30
 - [reference/glossary/persistent-volume.md](md/reference/glossary/persistent-volume.md) — 2026-11-21T09:01:13+03:30
 - [reference/glossary/persistent-volume-claim.md](md/reference/glossary/persistent-volume-claim.md) — 2026-11-21T09:01:08+03:30
 - [reference/glossary/operator-pattern.md](md/reference/glossary/operator-pattern.md) — 2026-11-21T09:01:06+03:30
 - [reference/glossary/object.md](md/reference/glossary/object.md) — 2026-11-21T09:01:02+03:30
 - [reference/glossary/node.md](md/reference/glossary/node.md) — 2026-11-21T09:00:59+03:30
-- [reference/glossary/node-pressure-eviction.md](md/reference/glossary/node-pressure-eviction.md) — 2026-11-21T09:00:55+03:30
-- [reference/glossary/network-policy.md](md/reference/glossary/network-policy.md) — 2026-11-21T09:00:53+03:30
-- [reference/glossary/namespace.md](md/reference/glossary/namespace.md) — 2026-11-21T09:00:47+03:30
-- [reference/glossary/name.md](md/reference/glossary/name.md) — 2026-11-21T09:00:46+03:30
-- [reference/glossary/mixed-version-proxy.md](md/reference/glossary/mixed-version-proxy.md) — 2026-11-21T09:00:39+03:30
-- [reference/glossary/mirror-pod.md](md/reference/glossary/mirror-pod.md) — 2026-11-21T09:00:38+03:30
-- [reference/glossary/member.md](md/reference/glossary/member.md) — 2026-11-21T09:00:32+03:30
-- [reference/glossary/minikube.md](md/reference/glossary/minikube.md) — 2026-11-21T09:00:32+03:30
-- [reference/glossary/master.md](md/reference/glossary/master.md) — 2026-11-21T09:00:26+03:30
-- [reference/glossary/manifest.md](md/reference/glossary/manifest.md) — 2026-11-21T09:00:20+03:30
-- [reference/glossary/managed-service.md](md/reference/glossary/managed-service.md) — 2026-11-21T09:00:16+03:30
-- [reference/glossary/logging.md](md/reference/glossary/logging.md) — 2026-11-21T09:00:15+03:30
-- [reference/glossary/label.md](md/reference/glossary/label.md) — 2026-11-21T09:00:08+03:30
-- [reference/glossary/limitrange.md](md/reference/glossary/limitrange.md) — 2026-11-21T09:00:07+03:30
-- [reference/glossary/kubernetes-api.md](md/reference/glossary/kubernetes-api.md) — 2026-11-21T09:00:01+03:30
 
 </div>
 

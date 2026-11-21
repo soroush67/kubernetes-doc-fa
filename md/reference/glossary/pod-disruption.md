@@ -1,6 +1,6 @@
 ---
 id: pod-disruption
-title: اختلال در Pod
+title: اختلال Pod
 full_link: /docs/concepts/workloads/pods/disruptions/
 short_description: >
   فرایندی که طی آن Podهای روی نودها به‌صورت داوطلبانه یا غیرداوطلبانه خاتمه می‌یابند.
@@ -13,12 +13,11 @@ tags:
  - operation
 ---
 
-[اختلال در Pod](/docs/concepts/workloads/pods/disruptions/) فرایندی است که طی آن
+[اختلال Pod](/docs/concepts/workloads/pods/disruptions/) (Pod disruption) فرایندی است که طی آن
 Podهای روی نودها به‌صورت داوطلبانه یا غیرداوطلبانه خاتمه می‌یابند.
 
 <!--more--> 
 
-اختلال‌های داوطلبانه به‌صورت عمدی توسط مالکان برنامه یا مدیران کلاستر آغاز می‌شوند.
-اختلال‌های غیرداوطلبانه عمدی نیستند و می‌توانند در اثر مشکلات اجتناب‌ناپذیری مانند تمام شدن
-{{< glossary_tooltip text="منابع" term_id="infrastructure-resource" >}} نودها،
-یا در اثر حذف‌های ناخواسته رخ دهند.
+اختلال‌های داوطلبانه را مالکان برنامه‌ها یا مدیران کلاستر به‌طور عمدی آغاز می‌کنند.
+اختلال‌های غیرداوطلبانه ناخواسته‌اند و ممکن است بر اثر مشکلات اجتناب‌ناپذیر، مانند تمام‌شدن
+{{< glossary_tooltip text="منابع" term_id="infrastructure-resource" >}} نودها، یا بر اثر حذف‌های تصادفی رخ دهند.

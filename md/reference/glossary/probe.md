@@ -1,16 +1,16 @@
 ---
-title: Probe
+title: کاوشگر (Probe)
 id: probe
 full_link: /docs/concepts/workloads/pods/pod-lifecycle/#container-probes
 
 short_description: >
-  بررسی‌ای که kubelet به‌صورت دوره‌ای روی یک کانتینر در یک Pod انجام می‌دهد.
+  بررسی‌ای که kubelet به‌طور دوره‌ای روی یک کانتینر در یک Pod انجام می‌دهد.
 
 tags:
 - tool
 ---
-بررسی‌ای که {{< glossary_tooltip text="kubelet" term_id="kubelet" >}} به‌صورت دوره‌ای روی یک کانتینر در حال اجرا در یک Pod انجام می‌دهد؛ این بررسی وضعیت و سلامت کانتینر را مشخص می‌کند و چرخه حیات کانتینر را تحت تأثیر قرار می‌دهد.
+کاوشگر بررسی‌ای است که {{< glossary_tooltip text="kubelet" term_id="kubelet" >}} به‌طور دوره‌ای روی کانتینری که درون یک پاد در حال اجراست انجام می‌دهد. نتیجهٔ این بررسی وضعیت و سلامت کانتینر را تعیین می‌کند و چرخهٔ حیات آن را جهت می‌دهد.
 
 <!--more-->
  
-برای کسب اطلاعات بیشتر، [probeهای کانتینر](/docs/concepts/workloads/pods/pod-lifecycle/#container-probes) را مطالعه کنید.
+برای آشنایی بیشتر، بخش [کاوشگرهای کانتینر](/docs/concepts/workloads/pods/pod-lifecycle/#container-probes) را بخوانید.
