@@ -11,10 +11,8 @@ tags:
 - operation
 - architecture
 ---
-آبجکتی که مصرف کل منابع را در هر {{< glossary_tooltip term_id="namespace" text="فضای نام" >}} محدود می‌کند.
+آبجکتی که مصرف کل منابع را در هر {{< glossary_tooltip term_id="namespace" >}} محدود می‌کند.
 
 <!--more-->
 
-یک ResourceQuota می‌تواند تعداد {{< glossary_tooltip text="منابع API" term_id="api-resource" >}} قابل ایجاد در یک فضای نام را بر اساس نوع محدود کند، یا می‌تواند سقفی برای مقدار کل
-{{< glossary_tooltip text="منابع زیرساختی" term_id="infrastructure-resource" >}}
-تعیین کند که به نمایندگی از فضای نام (و آبجکت‌های درون آن) ممکن است مصرف شوند.
+هر ResourceQuota می‌تواند تعداد {{< glossary_tooltip text="منابع API" term_id="api-resource" >}} قابل ایجاد در یک فضای نام (namespace) را به تفکیک نوع محدود کند، یا برای مقدار کل {{< glossary_tooltip text="منابع زیرساختی" term_id="infrastructure-resource" >}} که از طرف آن فضای نام (و آبجکت‌های درون آن) مصرف می‌شود، سقفی تعیین کند.

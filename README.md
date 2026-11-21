@@ -102,26 +102,26 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [reference/glossary/service-catalog.md](md/reference/glossary/service-catalog.md) — 2026-11-21T09:03:07+03:30
+- [reference/glossary/service-account.md](md/reference/glossary/service-account.md) — 2026-11-21T09:03:03+03:30
+- [reference/glossary/selector.md](md/reference/glossary/selector.md) — 2026-11-21T09:03:01+03:30
+- [reference/glossary/security-context.md](md/reference/glossary/security-context.md) — 2026-11-21T09:02:58+03:30
+- [reference/glossary/secret.md](md/reference/glossary/secret.md) — 2026-11-21T09:02:56+03:30
+- [reference/glossary/san.md](md/reference/glossary/san.md) — 2026-11-21T09:02:52+03:30
+- [reference/glossary/reviewer.md](md/reference/glossary/reviewer.md) — 2026-11-21T09:02:49+03:30
+- [reference/glossary/resourceslice.md](md/reference/glossary/resourceslice.md) — 2026-11-21T09:02:45+03:30
+- [reference/glossary/resourceclaimtemplate.md](md/reference/glossary/resourceclaimtemplate.md) — 2026-11-21T09:02:44+03:30
+- [reference/glossary/resourceclaim.md](md/reference/glossary/resourceclaim.md) — 2026-11-21T09:02:39+03:30
+- [reference/glossary/resource-quota.md](md/reference/glossary/resource-quota.md) — 2026-11-21T09:02:37+03:30
+- [reference/glossary/replica.md](md/reference/glossary/replica.md) — 2026-11-21T09:02:32+03:30
+- [reference/glossary/replication-controller.md](md/reference/glossary/replication-controller.md) — 2026-11-21T09:02:31+03:30
+- [reference/glossary/replica-set.md](md/reference/glossary/replica-set.md) — 2026-11-21T09:02:24+03:30
+- [reference/glossary/rbac.md](md/reference/glossary/rbac.md) — 2026-11-21T09:02:14+03:30
 - [reference/glossary/quantity.md](md/reference/glossary/quantity.md) — 2026-11-21T09:02:13+03:30
 - [reference/glossary/qos-class.md](md/reference/glossary/qos-class.md) — 2026-11-21T09:02:03+03:30
 - [reference/glossary/proxy.md](md/reference/glossary/proxy.md) — 2026-11-21T09:02:02+03:30
 - [reference/glossary/probe.md](md/reference/glossary/probe.md) — 2026-11-21T09:01:57+03:30
 - [reference/glossary/priority-class.md](md/reference/glossary/priority-class.md) — 2026-11-21T09:01:55+03:30
-- [reference/glossary/preemption.md](md/reference/glossary/preemption.md) — 2026-11-21T09:01:51+03:30
-- [reference/glossary/podgroup.md](md/reference/glossary/podgroup.md) — 2026-11-21T09:01:49+03:30
-- [reference/glossary/pod-template.md](md/reference/glossary/pod-template.md) — 2026-11-21T09:01:45+03:30
-- [reference/glossary/pod.md](md/reference/glossary/pod.md) — 2026-11-21T09:01:43+03:30
-- [reference/glossary/pod-priority.md](md/reference/glossary/pod-priority.md) — 2026-11-21T09:01:37+03:30
-- [reference/glossary/pod-security-policy.md](md/reference/glossary/pod-security-policy.md) — 2026-11-21T09:01:37+03:30
-- [reference/glossary/pod-disruption.md](md/reference/glossary/pod-disruption.md) — 2026-11-21T09:01:32+03:30
-- [reference/glossary/pod-lifecycle.md](md/reference/glossary/pod-lifecycle.md) — 2026-11-21T09:01:31+03:30
-- [reference/glossary/pod-disruption-budget.md](md/reference/glossary/pod-disruption-budget.md) — 2026-11-21T09:01:25+03:30
-- [reference/glossary/platform-developer.md](md/reference/glossary/platform-developer.md) — 2026-11-21T09:01:16+03:30
-- [reference/glossary/persistent-volume.md](md/reference/glossary/persistent-volume.md) — 2026-11-21T09:01:13+03:30
-- [reference/glossary/persistent-volume-claim.md](md/reference/glossary/persistent-volume-claim.md) — 2026-11-21T09:01:08+03:30
-- [reference/glossary/operator-pattern.md](md/reference/glossary/operator-pattern.md) — 2026-11-21T09:01:06+03:30
-- [reference/glossary/object.md](md/reference/glossary/object.md) — 2026-11-21T09:01:02+03:30
-- [reference/glossary/node.md](md/reference/glossary/node.md) — 2026-11-21T09:00:59+03:30
 
 </div>
 
