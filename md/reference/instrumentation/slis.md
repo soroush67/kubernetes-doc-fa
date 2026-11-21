@@ -1,40 +1,33 @@
 ---
 reviewers:
 - logicalhan
-title: معیارهای SLI اجزای کوبرنتیز
-linkTitle: معیارهای شاخص سطح خدمت (SLI)
+title: معیارهای SLI مؤلفه‌های کوبرنتیز
+linkTitle: معیارهای شاخص سطح سرویس
 content_type: reference
 weight: 20
 description: >-
-  شاخص‌های سطح بالا برای سنجش قابلیت اطمینان و کارایی اجزای کوبرنتیز.
+  شاخص‌هایی سطح بالا برای سنجش قابلیت اطمینان و کارایی مؤلفه‌های کوبرنتیز.
 ---
 
 <!-- overview -->
 
 {{< feature-state feature_gate_name="ComponentSLIs" >}}
 
-به‌طور پیش‌فرض، کوبرنتیز {{< skew currentVersion >}} معیارهای شاخص سطح خدمت (Service Level Indicator یا SLI) را
-برای فایل اجرایی هر یک از اجزای کوبرنتیز منتشر می‌کند. این نقطه پایانی (endpoint) معیارها روی
-پورت HTTPS سرویس‌دهی هر جزء و در مسیر `/metrics/slis` در دسترس قرار می‌گیرد.
-[Feature gate](/docs/reference/command-line-tools-reference/feature-gates/) با نام
-`ComponentSLIs` از نسخه v1.27 به‌صورت پیش‌فرض برای هر جزء کوبرنتیز فعال است.
+کوبرنتیز {{< skew currentVersion >}} به‌طور پیش‌فرض برای هر فایل اجرایی (binary) مؤلفه‌های کوبرنتیز، معیارهای شاخص سطح سرویس (Service Level Indicator یا SLI) را منتشر می‌کند. این نقطهٔ پایانی معیارها روی پورت HTTPS سرویس‌دهی هر مؤلفه و در مسیر `/metrics/slis` در دسترس قرار می‌گیرد. از نسخهٔ v1.27، [feature gate](/docs/reference/command-line-tools-reference/feature-gates/) با نام `ComponentSLIs` برای همهٔ مؤلفه‌های کوبرنتیز به‌طور پیش‌فرض فعال است.
 
 <!-- body -->
 
-## معیارهای SLI {#sli-metrics}
+## معیارهای SLI
 
-با فعال بودن معیارهای SLI، هر جزء کوبرنتیز دو معیار را
-به‌ازای هر بررسی سلامت (healthcheck) و با برچسب مربوط به آن ارائه می‌کند:
+با فعال بودن معیارهای SLI، هر مؤلفهٔ کوبرنتیز دو معیار را در دسترس قرار می‌دهد که برای هر بررسی سلامت (healthcheck) برچسب‌گذاری شده‌اند:
 
-- یک gauge (که وضعیت فعلی بررسی سلامت را نشان می‌دهد)
-- یک counter (که تعداد تجمعیِ مشاهده‌شده برای هر وضعیت بررسی سلامت را ثبت می‌کند)
+- یک گیج (gauge) که وضعیت فعلی بررسی سلامت را نشان می‌دهد
+- یک شمارنده (counter) که تعداد تجمعی مشاهده‌شده برای هر وضعیت بررسی سلامت را ثبت می‌کند
 
-می‌توانید از اطلاعات این معیارها برای محاسبه آمار دسترس‌پذیری هر جزء استفاده کنید.
-برای مثال، API server سلامت etcd را بررسی می‌کند. شما می‌توانید محاسبه و گزارش کنید که etcd
-از دید کلاینت خود، یعنی API server، چقدر در دسترس یا ناavailable بوده است.
+با استفاده از اطلاعات این معیارها می‌توانید آمار دسترس‌پذیری هر مؤلفه را محاسبه کنید. برای مثال، API server سلامت etcd را بررسی می‌کند. بر این اساس می‌توانید میزان دسترس‌پذیر یا دسترس‌ناپذیر بودن etcd را، آن‌گونه که کلاینت آن یعنی API server گزارش کرده است، محاسبه و گزارش کنید.
 
 
-داده‌های gauge در prometheus به این شکل است:
+داده‌های گیج Prometheus به این شکل است:
 
 ```
 # HELP kubernetes_healthcheck [ALPHA] This metric records the result of a single healthcheck.
@@ -51,7 +44,7 @@ kubernetes_healthcheck{name="ping",type="healthz"} 1
 kubernetes_healthcheck{name="ping",type="readyz"} 1
 ```
 
-و داده‌های counter به این شکل است:
+در حالی که داده‌های شمارنده به این شکل است:
 
 ```
 # HELP kubernetes_healthchecks_total [ALPHA] This metric records the results of all healthcheck.
@@ -70,9 +63,6 @@ kubernetes_healthchecks_total{name="ping",status="success",type="healthz"} 15
 kubernetes_healthchecks_total{name="ping",status="success",type="readyz"} 15
 ```
 
-## استفاده از این داده‌ها {#using-this-data}
+## استفاده از این داده‌ها
 
-نقطه پایانی معیارهای SLI اجزا برای جمع‌آوری (scrape) با فرکانس بالا طراحی شده است. جمع‌آوری
-با فرکانس بالا به این معناست که سیگنال gauge با جزئیات (granularity) بیشتری در اختیار شما قرار می‌گیرد و
-می‌توان از آن برای محاسبه SLOها استفاده کرد. نقطه پایانی `/metrics/slis` داده‌های خام لازم را
-برای محاسبه SLO دسترس‌پذیری جزء مربوط در کوبرنتیز فراهم می‌کند.
+نقطهٔ پایانی معیارهای SLI مؤلفه‌ها برای جمع‌آوری (scrape) با بسامد بالا طراحی شده است. جمع‌آوری با بسامد بالا باعث می‌شود سیگنال گیج با جزئیات دقیق‌تری به دست آید و سپس بتوان از آن برای محاسبهٔ SLOها استفاده کرد. نقطهٔ پایانی `/metrics/slis` داده‌های خام لازم برای محاسبهٔ SLO دسترس‌پذیری مؤلفهٔ مربوط در کوبرنتیز را فراهم می‌کند.

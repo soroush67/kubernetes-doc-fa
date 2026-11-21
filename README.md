@@ -102,26 +102,26 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [reference/issues-security/security.md](md/reference/issues-security/security.md) — 2026-11-21T09:07:00+03:30
+- [reference/instrumentation/zpages.md](md/reference/instrumentation/zpages.md) — 2026-11-21T09:06:39+03:30
+- [reference/issues-security/official-cve-feed.md](md/reference/issues-security/official-cve-feed.md) — 2026-11-21T09:06:39+03:30
+- [reference/issues-security/issues.md](md/reference/issues-security/issues.md) — 2026-11-21T09:06:27+03:30
+- [reference/issues-security/_index.md](md/reference/issues-security/_index.md) — 2026-11-21T09:06:21+03:30
+- [reference/instrumentation/understand-psi-metrics.md](md/reference/instrumentation/understand-psi-metrics.md) — 2026-11-21T09:06:17+03:30
+- [reference/instrumentation/slis.md](md/reference/instrumentation/slis.md) — 2026-11-21T09:05:28+03:30
+- [reference/instrumentation/native-histograms.md](md/reference/instrumentation/native-histograms.md) — 2026-11-21T09:05:27+03:30
+- [reference/instrumentation/node-metrics.md](md/reference/instrumentation/node-metrics.md) — 2026-11-21T09:05:12+03:30
+- [reference/instrumentation/cri-pod-container-metrics.md](md/reference/instrumentation/cri-pod-container-metrics.md) — 2026-11-21T09:04:54+03:30
+- [reference/instrumentation/_index.md](md/reference/instrumentation/_index.md) — 2026-11-21T09:04:34+03:30
+- [reference/glossary/workload.md](md/reference/glossary/workload.md) — 2026-11-21T09:04:33+03:30
+- [reference/glossary/wg.md](md/reference/glossary/wg.md) — 2026-11-21T09:04:30+03:30
+- [reference/glossary/watch.md](md/reference/glossary/watch.md) — 2026-11-21T09:04:21+03:30
+- [reference/glossary/volume-plugin.md](md/reference/glossary/volume-plugin.md) — 2026-11-21T09:04:15+03:30
 - [reference/glossary/volume.md](md/reference/glossary/volume.md) — 2026-11-21T09:04:15+03:30
 - [reference/glossary/upstream.md](md/reference/glossary/upstream.md) — 2026-11-21T09:04:09+03:30
 - [reference/glossary/userns.md](md/reference/glossary/userns.md) — 2026-11-21T09:04:09+03:30
 - [reference/glossary/toleration.md](md/reference/glossary/toleration.md) — 2026-11-21T09:04:02+03:30
 - [reference/glossary/uid.md](md/reference/glossary/uid.md) — 2026-11-21T09:04:02+03:30
-- [reference/glossary/taint.md](md/reference/glossary/taint.md) — 2026-11-21T09:03:57+03:30
-- [reference/glossary/sysctl.md](md/reference/glossary/sysctl.md) — 2026-11-21T09:03:54+03:30
-- [reference/glossary/storage-class.md](md/reference/glossary/storage-class.md) — 2026-11-21T09:03:46+03:30
-- [reference/glossary/statefulset.md](md/reference/glossary/statefulset.md) — 2026-11-21T09:03:43+03:30
-- [reference/glossary/static-pod.md](md/reference/glossary/static-pod.md) — 2026-11-21T09:03:40+03:30
-- [reference/glossary/sig.md](md/reference/glossary/sig.md) — 2026-11-21T09:03:34+03:30
-- [reference/glossary/spec.md](md/reference/glossary/spec.md) — 2026-11-21T09:03:34+03:30
-- [reference/glossary/shuffle-sharding.md](md/reference/glossary/shuffle-sharding.md) — 2026-11-21T09:03:27+03:30
-- [reference/glossary/sidecar-container.md](md/reference/glossary/sidecar-container.md) — 2026-11-21T09:03:27+03:30
-- [reference/glossary/service.md](md/reference/glossary/service.md) — 2026-11-21T09:03:10+03:30
-- [reference/glossary/service-catalog.md](md/reference/glossary/service-catalog.md) — 2026-11-21T09:03:07+03:30
-- [reference/glossary/service-account.md](md/reference/glossary/service-account.md) — 2026-11-21T09:03:03+03:30
-- [reference/glossary/selector.md](md/reference/glossary/selector.md) — 2026-11-21T09:03:01+03:30
-- [reference/glossary/security-context.md](md/reference/glossary/security-context.md) — 2026-11-21T09:02:58+03:30
-- [reference/glossary/secret.md](md/reference/glossary/secret.md) — 2026-11-21T09:02:56+03:30
 
 </div>
 

@@ -1,4 +1,4 @@
 ---
-title: ابزارگذاری (Instrumentation)
+title: ابزارگذاری
 weight: 60
 ---

@@ -84,47 +84,42 @@ document.addEventListener('DOMContentLoaded',function(){box=document.getElementB
 <div class="layout">
 <main><h1 dir="rtl">معیارهای Pod و کانتینر از طریق CRI</h1><p class="page-meta" dir="rtl">جمع‌آوری معیارهای Pod و کانتینر از طریق CRI.</p><!-- overview -->
 <div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
-<p dir="rtl"><a href="../command-line-tools-reference/kubelet.html">kubelet</a> معیارهای Pod و
-کانتینر را از طریق <a href="https://github.com/google/cadvisor" target="_blank" rel="noopener">cAdvisor</a> جمع‌آوری می‌کند. کوبرنتیز به‌عنوان یک قابلیت بتا، امکان می‌دهد جمع‌آوری معیارهای Pod و کانتینر را از طریق
-<span class="term" title="cri">رابط زمان‌اجرای کانتینر (Container Runtime Interface)</span> (CRI) پیکربندی کنید. برای استفاده از سازوکار جمع‌آوری مبتنی بر CRI، باید
-<a href="https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/" target="_blank">feature gate</a> با نام <code dir="ltr">PodAndContainerStatsFromCRI</code> را فعال کنید و از یک پیاده‌سازی سازگار CRI
-(containerd نسخه ۲.۲ یا بالاتر، CRI-O نسخه ۱.۳۱.۰ یا بالاتر) استفاده کنید.</p>
+<p dir="rtl"><a href="../command-line-tools-reference/kubelet.html">kubelet</a> معیارهای پاد و کانتینر را به کمک <a href="https://github.com/google/cadvisor" target="_blank" rel="noopener">cAdvisor</a> جمع‌آوری می‌کند. کوبرنتیز به‌عنوان یک قابلیت بتا امکان می‌دهد جمع‌آوری معیارهای پاد و کانتینر را از طریق <span class="term" title="cri">رابط محیط اجرای کانتینر</span> (CRI) پیکربندی کنید. برای استفاده از سازوکار جمع‌آوری مبتنی بر CRI، باید <a href="https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/" target="_blank">feature gate</a> با نام <code dir="ltr">PodAndContainerStatsFromCRI</code> را فعال کنید و از یک پیاده‌سازی سازگار CRI (containerd نسخهٔ 2.2 یا بالاتر، CRI-O نسخهٔ 1.31.0 یا بالاتر) استفاده کنید.</p>
 <!-- body -->
-<h2 id="معیارهای-pod-و-کانتینر-از-طریق-cri-cri-pod-container-metrics" dir="rtl">معیارهای Pod و کانتینر از طریق CRI {#cri-pod-container-metrics}</h2>
-<p dir="rtl">زمانی که <code dir="ltr">PodAndContainerStatsFromCRI</code> فعال باشد، kubelet به‌جای بررسی مستقیم سیستم میزبان با استفاده از cAdvisor، آمار Pod و کانتینر را از زمان‌اجرای کانتینر زیرین دریافت می‌کند.
-مزایای تکیه بر زمان‌اجرای کانتینر برای این اطلاعات، در مقایسه با جمع‌آوری مستقیم با cAdvisor، شامل موارد زیر است:</p>
+<h2 id="معیارهای-pod-و-کانتینر-از-طریق-cri" dir="rtl">معیارهای Pod و کانتینر از طریق CRI</h2>
+<p dir="rtl">با فعال بودن <code dir="ltr">PodAndContainerStatsFromCRI</code>، ‏kubelet به‌جای آنکه سیستم میزبان را مستقیماً با cAdvisor بررسی کند، آمار پاد و کانتینر را به‌صورت دوره‌ای از محیط اجرای کانتینرِ زیرین دریافت می‌کند. تکیه بر محیط اجرای کانتینر برای این اطلاعات، در مقایسه با جمع‌آوری مستقیم با cAdvisor، مزایای زیر را دارد:</p>
 <ul>
 <li dir="rtl">
-<p dir="rtl">بهبود بالقوه عملکرد، در صورتی که زمان‌اجرای کانتینر پیش‌تر این اطلاعات را در جریان عملیات عادی خود جمع‌آوری کند. در این حالت، می‌توان از داده‌ها دوباره استفاده کرد و نیازی نیست kubelet آن‌ها را دوباره تجمیع کند.</p>
+<p dir="rtl">اگر محیط اجرای کانتینر این اطلاعات را در جریان عملکرد عادی خود از پیش جمع‌آوری کند، کارایی ممکن است بهبود یابد. در این حالت می‌توان از همان داده‌ها دوباره استفاده کرد و لازم نیست kubelet آن‌ها را دوباره تجمیع کند.</p>
 </li>
 <li dir="rtl">
-<p dir="rtl">جداسازی بیشتر kubelet و زمان‌اجرای کانتینر را فراهم می‌کند و امکان جمع‌آوری معیارها را برای زمان‌اجراهایی فراهم می‌سازد که فرایندها را مستقیماً روی میزبانِ kubelet اجرا نمی‌کنند و بنابراین cAdvisor نمی‌تواند آن‌ها را مشاهده کند (برای مثال: زمان‌اجراهای کانتینری که از مجازی‌سازی استفاده می‌کنند).</p>
+<p dir="rtl">وابستگی میان kubelet و محیط اجرای کانتینر را بیشتر کاهش می‌دهد. به این ترتیب، می‌توان معیارها را برای محیط‌های اجرای کانتینری نیز جمع‌آوری کرد که فرایندها را مستقیماً روی همان میزبانِ kubelet اجرا نمی‌کنند و در نتیجه cAdvisor نمی‌تواند آن فرایندها را مشاهده کند (برای نمونه، محیط‌های اجرای کانتینری که از مجازی‌سازی استفاده می‌کنند).</p>
 </li>
 </ul>
 <div class="callout note"><div class="callout-title">توجه:</div>
-<p dir="rtl">از کوبرنتیز v1.37، جمع‌آوری معیارهای Pod و کانتینر مبتنی بر cAdvisor در kubelet منسوخ شده است. زمان‌اجراهای CRI که معیارهای موردنیاز را پشتیبانی نمی‌کنند، پس از رسیدن این قابلیت به دسترس‌پذیری عمومی (GA)، جمع‌آوری معیارها در سطح Pod و کانتینر را از دست خواهند داد.</p>
+<p dir="rtl">از کوبرنتیز نسخهٔ v1.37، جمع‌آوری معیارهای پاد و کانتینر بر پایهٔ cAdvisor در kubelet منسوخ شده است. محیط‌های اجرای CRI که از معیارهای لازم پشتیبانی نمی‌کنند، هنگامی که این قابلیت به وضعیت در دسترس عمومی (GA) برسد، امکان جمع‌آوری معیارها در سطح پاد و کانتینر را از دست خواهند داد.</p>
 </div>
-<h2 id="endpointهای-تحت-تأثیر-affected-endpoints" dir="rtl">Endpointهای تحت تأثیر {#affected-endpoints}</h2>
-<p dir="rtl">زمانی که feature gate فعال باشد، kubelet داده‌های سطح Pod و کانتینر را به‌جای cAdvisor از زمان‌اجرای CRI می‌گیرد. آمار سطح نود و سیستم فایل ایمیج‌ها همچنان از cAdvisor جمع‌آوری می‌شود. endpointهای زیر تحت تأثیر قرار می‌گیرند:</p>
-<h3 id="summary-api-stats-summary" dir="ltr" class="ltr">Summary API (<code dir="ltr">/stats/summary</code>)</h3>
-<p dir="rtl">kubelet برای <a href="../kubelet-api/stats.v1alpha1.html">Summary API</a>، آمار Pod و کانتینر را به‌جای cAdvisor از زمان‌اجرای CRI دریافت می‌کند. این آمار شامل آمار CPU، حافظه، شبکه و فرایندها برای Podها و کانتینرها است.</p>
+<h2 id="نقاط-پایانی-تحت-تأثیر" dir="rtl">نقاط پایانی تحت تأثیر</h2>
+<p dir="rtl">هنگامی که این feature gate فعال باشد، kubelet داده‌های سطح پاد و کانتینر را به‌جای cAdvisor از محیط اجرای CRI درخواست می‌کند. آمار سطح نود و آمار سیستم فایل ایمیج همچنان از cAdvisor جمع‌آوری می‌شوند. نقاط پایانی زیر تحت تأثیر قرار می‌گیرند:</p>
+<h3 id="summary-api-stats-summary" dir="ltr" class="ltr">‏Summary API ‏(<code dir="ltr">/stats/summary</code>)</h3>
+<p dir="rtl">‏kubelet برای <a href="../kubelet-api/stats.v1alpha1.html">Summary API</a> آمار پاد و کانتینر را به‌جای cAdvisor از محیط اجرای CRI دریافت می‌کند. این آمار شامل اطلاعات CPU، حافظه، شبکه و فرایندهای پادها و کانتینرها است.</p>
 <h3 id="metrics-cadvisor" dir="ltr" class="ltr"><code dir="ltr">/metrics/cadvisor</code></h3>
-<p dir="rtl">kubelet معیارهای Pod و کانتینر را از طریق RPC با نام <code dir="ltr">ListPodSandboxMetrics</code> از زمان‌اجرای CRI می‌گیرد و آن‌ها را در endpoint با مسیر <code dir="ltr">/metrics/cadvisor</code> ارائه می‌کند. این روش جایگزین جمع‌آوری مبتنی بر cAdvisor در سطح Pod و کانتینر می‌شود و مسیر endpoint و نام معیارها را حفظ می‌کند. معیارهای سطح نود و ماشین در این endpoint همچنان توسط cAdvisor ارائه می‌شوند.</p>
-<h2 id="شناسایی-ارائه-دهنده-فعال-معیارها-identifying-the-active-metrics-provider" dir="rtl">شناسایی ارائه‌دهنده فعال معیارها {#identifying-the-active-metrics-provider}</h2>
-<p dir="rtl">kubelet معیاری با نام <code dir="ltr">kubelet_metrics_provider</code> را ارائه می‌کند که برچسب <code dir="ltr">provider</code> در آن برابر <code dir="ltr">cri</code> یا <code dir="ltr">cadvisor</code> است. می‌توانید از این معیار برای بررسی اینکه روی یک نود مشخص، کدام منبع آمار Pod و کانتینر را فراهم می‌کند، استفاده کنید.</p>
-<h2 id="الزامات-requirements" dir="rtl">الزامات {#requirements}</h2>
-<p dir="rtl">برای استفاده از جمع‌آوری معیارها مبتنی بر CRI، به موارد زیر نیاز دارید:</p>
+<p dir="rtl">‏kubelet معیارهای پاد و کانتینر را از طریق RPC با نام <code dir="ltr">ListPodSandboxMetrics</code> از محیط اجرای CRI درخواست می‌کند و آن‌ها را روی نقطهٔ پایانی <code dir="ltr">/metrics/cadvisor</code> ارائه می‌دهد. این سازوکار جایگزین جمع‌آوری مبتنی بر cAdvisor در سطح پاد و کانتینر می‌شود، اما مسیر نقطهٔ پایانی و نام معیارها را بدون تغییر حفظ می‌کند. معیارهای سطح نود و ماشین در این نقطهٔ پایانی همچنان از سوی cAdvisor ارائه می‌شوند.</p>
+<h2 id="شناسایی-تأمین-کنندهٔ-فعال-معیارها" dir="rtl">شناسایی تأمین‌کنندهٔ فعال معیارها</h2>
+<p dir="rtl">‏kubelet معیاری با نام <code dir="ltr">kubelet_metrics_provider</code> را در دسترس قرار می‌دهد که برچسب <code dir="ltr">provider</code> آن یکی از دو مقدار <code dir="ltr">cri</code> یا <code dir="ltr">cadvisor</code> را دارد. با استفاده از این معیار می‌توانید بررسی کنید که روی یک نود مشخص، کدام منبع در حال حاضر آمار پاد و کانتینر را فراهم می‌کند.</p>
+<h2 id="پیش-نیازها" dir="rtl">پیش‌نیازها</h2>
+<p dir="rtl">برای استفاده از جمع‌آوری معیارها بر پایهٔ CRI، به موارد زیر نیاز دارید:</p>
 <ul>
-<li dir="rtl"><strong>containerd</strong> نسخه ۲.۲ یا بالاتر، یا <strong>CRI-O</strong> نسخه ۱.۳۱.۰ یا بالاتر</li>
+<li dir="rtl">‏<strong>containerd</strong> نسخهٔ 2.2 یا بالاتر، یا <strong>CRI-O</strong> نسخهٔ 1.31.0 یا بالاتر</li>
 <li dir="rtl">فعال بودن <a href="https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/" target="_blank">feature gate</a> با نام <code dir="ltr">PodAndContainerStatsFromCRI</code> روی kubelet</li>
 </ul>
 <div class="callout note"><div class="callout-title">توجه:</div>
-<p dir="rtl">CRI-O از نسخه 1.36.3 به بعد، برچسب‌های <code dir="ltr">namespace</code>، <code dir="ltr">pod</code> و <code dir="ltr">container</code> را به معیارهای CRI در endpoint با مسیر <code dir="ltr">/metrics/cadvisor</code> افزوده است. نسخه‌های قبلی این برچسب‌ها را شامل نمی‌شوند و این موضوع ممکن است بر کوئری‌های معیاری که برای تطبیق با معیارهای تولیدشده توسط cAdvisor به این برچسب‌ها متکی هستند، تأثیر بگذارد.</p>
+<p dir="rtl">‏CRI-O از نسخهٔ 1.36.3 به بعد، برچسب‌های <code dir="ltr">namespace</code>، <code dir="ltr">pod</code> و <code dir="ltr">container</code> را به معیارهای CRI در نقطهٔ پایانی <code dir="ltr">/metrics/cadvisor</code> افزوده است. نسخه‌های پیشین این برچسب‌ها را ندارند. این موضوع ممکن است بر پرس‌وجوهایی از معیارها اثر بگذارد که برای تطبیق با معیارهای تولیدشده از سوی cAdvisor به این برچسب‌ها متکی هستند.</p>
 </div>
-<h2 id="رفتار-جایگزین-fallback-fallback-behavior" dir="rtl">رفتار جایگزین (Fallback) {#fallback-behavior}</h2>
-<p dir="rtl">اگر زمان‌اجرای CRI معیارهای مورد انتظار را گزارش نکند، kubelet حتی در صورت فعال بودن feature gate، برای جمع‌آوری آمار Pod و کانتینر به cAdvisor بازمی‌گردد. با غیرفعال کردن feature gate و راه‌اندازی مجدد kubelet می‌توانید به‌طور کامل به جمع‌آوری مبتنی بر cAdvisor بازگردید.</p>
+<h2 id="رفتار-جایگزین" dir="rtl">رفتار جایگزین</h2>
+<p dir="rtl">اگر محیط اجرای CRI معیارهای مورد انتظار را گزارش نکند، kubelet حتی با فعال بودن feature gate، برای جمع‌آوری آمار پاد و کانتینر به cAdvisor بازمی‌گردد. برای بازگشت کامل به جمع‌آوری مبتنی بر cAdvisor، می‌توانید feature gate را غیرفعال کنید و kubelet را دوباره راه‌اندازی کنید.</p>
 <p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
-<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#معیارهای-pod-و-کانتینر-از-طریق-cri-cri-pod-container-metrics">معیارهای Pod و کانتینر از طریق CRI {#cri-pod-container-metrics}</a><a class="l2" href="#endpointهای-تحت-تأثیر-affected-endpoints">Endpointهای تحت تأثیر {#affected-endpoints}</a><a class="l3" href="#summary-api-stats-summary">Summary API (/stats/summary)</a><a class="l3" href="#metrics-cadvisor">/metrics/cadvisor</a><a class="l2" href="#شناسایی-ارائه-دهنده-فعال-معیارها-identifying-the-active-metrics-provider">شناسایی ارائه‌دهنده فعال معیارها {#identifying-the-active-metrics-provider}</a><a class="l2" href="#الزامات-requirements">الزامات {#requirements}</a><a class="l2" href="#رفتار-جایگزین-fallback-fallback-behavior">رفتار جایگزین (Fallback) {#fallback-behavior}</a></nav>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#معیارهای-pod-و-کانتینر-از-طریق-cri">معیارهای Pod و کانتینر از طریق CRI</a><a class="l2" href="#نقاط-پایانی-تحت-تأثیر">نقاط پایانی تحت تأثیر</a><a class="l3" href="#summary-api-stats-summary">‏Summary API ‏(/stats/summary)</a><a class="l3" href="#metrics-cadvisor">/metrics/cadvisor</a><a class="l2" href="#شناسایی-تأمین-کنندهٔ-فعال-معیارها">شناسایی تأمین‌کنندهٔ فعال معیارها</a><a class="l2" href="#پیش-نیازها">پیش‌نیازها</a><a class="l2" href="#رفتار-جایگزین">رفتار جایگزین</a></nav>
 </div>
 </body>
 </html>

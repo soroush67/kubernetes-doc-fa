@@ -1,27 +1,26 @@
 ---
-title: داده‌های معیارهای نود
+title: داده‌های متریک نود
 content_type: reference
 weight: 50
 description: >-
-  سازوکارهای دسترسی به معیارها در سطح نود، حجم (volume)، Pod و کانتینر،
-  آن‌گونه که kubelet آن‌ها را مشاهده می‌کند.
+  سازوکارهای دسترسی به متریک‌ها در سطح نود، حجم، پاد و کانتینر،
+  آن‌گونه که kubelet آن‌ها را می‌بیند.
 ---
 
-[kubelet](/docs/reference/command-line-tools-reference/kubelet/)
-آمار معیارها را در سطح نود، حجم (volume)، Pod و کانتینر گردآوری می‌کند
-و این اطلاعات را از طریق
-[Summary API](/docs/reference/kubelet-api/stats.v1alpha1/)
-ارائه می‌دهد.
+مؤلفهٔ [kubelet](/docs/reference/command-line-tools-reference/kubelet/)
+آمار متریک‌ها را در سطح نود، حجم (volume)، پاد و کانتینر جمع‌آوری می‌کند
+و این اطلاعات را در
+[Summary API](/docs/reference/kubelet-api/stats.v1alpha1/) منتشر می‌کند.
 
-می‌توانید از طریق kube-apiserver یک درخواست پراکسی‌شده به API خلاصه آمار (stats summary) ارسال کنید.
+می‌توانید از طریق سرور API کوبرنتیز، یک درخواست پراکسی‌شده به API خلاصهٔ آمار (stats summary API) بفرستید.
 
-در ادامه نمونه‌ای از یک درخواست Summary API برای نودی با نام `minikube` آمده است:
+در اینجا نمونه‌ای از درخواست Summary API برای نودی با نام `minikube` آمده است:
 
 ```shell
 kubectl get --raw "/api/v1/nodes/minikube/proxy/stats/summary"
 ```
 
-در ادامه همین فراخوانی API با استفاده از `curl` آمده است:
+همین فراخوانی API با استفاده از `curl` به این صورت است:
 
 ```shell
 # You need to run "kubectl proxy" first
@@ -30,38 +29,38 @@ curl http://localhost:8080/api/v1/nodes/minikube/proxy/stats/summary
 ```
 
 {{< note >}}
-از `metrics-server` نسخه 0.6.x به بعد، `metrics-server` به‌جای `/stats/summary`، از endpoint با مسیر `/metrics/resource` در kubelet پرس‌وجو می‌کند.
+از نسخهٔ 0.6.x به بعد، `metrics-server` به‌جای `/stats/summary` از endpoint ‏`/metrics/resource` در kubelet پرس‌وجو می‌کند.
 {{< /note >}}
 
-## منبع Summary metrics API {#summary-api-source}
+## منبع API متریک‌های خلاصه {#summary-api-source}
 
-به‌طور پیش‌فرض، کوبرنتیز داده‌های معیارهای خلاصه نود را با استفاده از
-[cAdvisor](https://github.com/google/cadvisor) تعبیه‌شده‌ای که درون kubelet اجرا می‌شود، دریافت می‌کند. اگر
-`PodAndContainerStatsFromCRI` [feature gate](/docs/reference/command-line-tools-reference/feature-gates/)
-را در کلاستر خود فعال کنید و از یک container runtime استفاده کنید که دسترسی به آمار را از طریق
-{{< glossary_tooltip term_id="cri" text="Container Runtime Interface">}} (CRI) پشتیبانی می‌کند، آنگاه
-kubelet [داده‌های معیارهای سطح Pod و کانتینر را با استفاده از CRI دریافت می‌کند](/docs/reference/instrumentation/cri-pod-container-metrics) و نه از طریق cAdvisor.
+کوبرنتیز به‌طور پیش‌فرض داده‌های متریک خلاصهٔ نود را با استفاده از یک
+[cAdvisor](https://github.com/google/cadvisor) تعبیه‌شده که درون kubelet اجرا می‌شود، دریافت می‌کند. اگر
+[feature gate](/docs/reference/command-line-tools-reference/feature-gates/) ‏`PodAndContainerStatsFromCRI` را
+در کلاستر خود فعال کنید و از محیط اجرای کانتینری استفاده کنید که دسترسی به آمار را از طریق
+{{< glossary_tooltip term_id="cri" text="رابط محیط اجرای کانتینر">}} (CRI) پشتیبانی می‌کند،
+kubelet [داده‌های متریک سطح پاد و کانتینر را به‌جای cAdvisor از طریق CRI دریافت می‌کند](/docs/reference/instrumentation/cri-pod-container-metrics).
 
-## Pressure Stall Information (PSI) {#psi}
+## اطلاعات توقف ناشی از فشار (PSI) {#psi}
 
 {{< feature-state feature_gate_name="KubeletPSI" >}}
 
-به‌عنوان یک قابلیت پایدار، کوبرنتیز به شما امکان می‌دهد kubelet را طوری پیکربندی کنید که
-[Pressure Stall Information](https://docs.kernel.org/accounting/psi.html)
-(PSI) هسته لینوکس را برای میزان استفاده از CPU، حافظه و I/O گردآوری کند. این اطلاعات در سطح نود، Pod و کانتینر گردآوری می‌شود.
-برای مشاهده طرح‌واره (schema) کامل، به [Summary API](/docs/reference/kubelet-api/stats.v1alpha1/) مراجعه کنید.
-از کوبرنتیز نسخه v1.36 به بعد، `KubeletPSI` [feature gate](/docs/reference/command-line-tools-reference/feature-gates/) روی true قفل شده است و نمی‌توان آن را غیرفعال کرد. این اطلاعات همچنین در
-[معیارهای Prometheus](/docs/concepts/cluster-administration/system-metrics#psi-metrics) ارائه می‌شود.
+کوبرنتیز به‌عنوان یک قابلیت پایدار به شما امکان می‌دهد kubelet را طوری پیکربندی کنید که
+[اطلاعات توقف ناشی از فشار](https://docs.kernel.org/accounting/psi.html)
+(Pressure Stall Information یا PSI) هستهٔ لینوکس را برای مصرف CPU، حافظه و I/O جمع‌آوری کند. این اطلاعات در سطح نود، پاد و کانتینر جمع‌آوری می‌شود.
+برای مشاهدهٔ طرح‌وارهٔ (schema) تفصیلی، به [Summary API](/docs/reference/kubelet-api/stats.v1alpha1/) مراجعه کنید.
+از کوبرنتیز نسخهٔ v.1.36 به بعد، [feature gate](/docs/reference/command-line-tools-reference/feature-gates/) ‏`KubeletPSI` روی مقدار true قفل شده است و نمی‌توان آن را غیرفعال کرد. این اطلاعات همچنین در
+[متریک‌های Prometheus](/docs/concepts/cluster-administration/system-metrics#psi-metrics) در دسترس قرار می‌گیرد.
 
-می‌توانید یاد بگیرید معیارهای PSI را چگونه تفسیر کنید، در [درک معیارهای PSI](/docs/reference/instrumentation/understand-psi-metrics/).
+برای آشنایی با نحوهٔ تفسیر متریک‌های PSI، صفحهٔ [درک متریک‌های PSI](/docs/reference/instrumentation/understand-psi-metrics/) را ببینید.
 
-### الزامات {#requirements}
+### پیش‌نیازها
 
-Pressure Stall Information به موارد زیر نیاز دارد:
+اطلاعات توقف ناشی از فشار به موارد زیر نیاز دارد:
 
-- [هسته لینوکس نسخه 4.20 یا بالاتر](/docs/reference/node/kernel-version-requirements#requirements-psi).
+- [هستهٔ لینوکس نسخهٔ 4.20 یا بالاتر](/docs/reference/node/kernel-version-requirements#requirements-psi).
 - [cgroup v2](/docs/concepts/architecture/cgroups)
 
 ## {{% heading "whatsnext" %}}
 
-صفحات وظیفه [عیب‌یابی کلاسترها](/docs/tasks/debug/debug-cluster/) نحوه استفاده از یک خط لوله معیارها (metrics pipeline) را که به این داده‌ها متکی است، شرح می‌دهند.
+صفحه‌های وظایف مربوط به [عیب‌یابی کلاسترها](/docs/tasks/debug/debug-cluster/) نحوهٔ استفاده از یک خط لولهٔ متریک‌ها (metrics pipeline) را که به این داده‌ها متکی است، شرح می‌دهند.

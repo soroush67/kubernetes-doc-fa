@@ -84,50 +84,48 @@ document.addEventListener('DOMContentLoaded',function(){box=document.getElementB
 <div class="layout">
 <main><h1 dir="rtl">پشتیبانی از هیستوگرام‌های بومی برای متریک‌های کوبرنتیز</h1><!-- overview -->
 <div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
-<p dir="rtl">اجزای کوبرنتیز می‌توانند متریک‌های هیستوگرام را علاوه بر قالب هیستوگرام کلاسیک، در قالب
-<a href="https://prometheus.io/docs/specs/native_histograms/" target="_blank" rel="noopener">هیستوگرام بومی Prometheus</a> نیز ارائه کنند.
-هیستوگرام‌های بومی به‌جای مرزهای ثابت، از مرزهای نمایی برای باکت‌ها استفاده می‌کنند و
-بهره‌وری قابل‌توجهی در ذخیره‌سازی، عملکرد بهتر کوئری‌ها و دید دقیق‌تری نسبت به توزیع داده‌ها فراهم می‌کنند.</p>
+<p dir="rtl">اجزای کوبرنتیز می‌توانند متریک‌های هیستوگرام را علاوه بر قالب کلاسیک، در قالب
+<a href="https://prometheus.io/docs/specs/native_histograms/" target="_blank" rel="noopener">هیستوگرام بومی Prometheus</a>
+نیز ارائه کنند. هیستوگرام‌های بومی (native histograms) به‌جای مرزهای ثابت، از مرزهای نمایی برای سطل‌ها (buckets) استفاده می‌کنند. این رویکرد بهره‌وری ذخیره‌سازی را به‌طور چشمگیری افزایش می‌دهد، کارایی کوئری‌ها را بهبود می‌بخشد و دید دقیق‌تری از توزیع داده‌ها فراهم می‌کند.</p>
 <!-- body -->
-<h2 id="پیش-از-شروع-before-you-begin" dir="rtl">پیش از شروع {#before-you-begin}</h2>
+<h2 id="پیش-از-شروع" dir="rtl">پیش از شروع</h2>
 <p dir="rtl">برای استفاده از هیستوگرام‌های بومی به موارد زیر نیاز دارید:</p>
 <ul>
-<li dir="rtl"><strong>کوبرنتیز نسخه v1.36 یا بالاتر</strong>. در نسخه v1.36 باید
-<a href="https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/#NativeHistograms" target="_blank">feature gate</a> با نام <code dir="ltr">NativeHistograms</code> را به‌صورت دستی فعال کنید. از نسخه v1.37 این قابلیت در سطح بتا قرار دارد و به‌طور پیش‌فرض فعال است.</li>
-<li dir="rtl"><strong>Prometheus نسخه 2.40 یا بالاتر</strong> برای جمع‌آوری (scrape) و ذخیره‌سازی هیستوگرام‌های بومی.
-برای پیکربندی به‌ازای هر job، Prometheus نسخه 3.0 به بالا توصیه می‌شود.</li>
+<li dir="rtl"><strong>کوبرنتیز نسخهٔ v1.36 یا بالاتر</strong>. در نسخهٔ v1.36 باید
+<a href="https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/#NativeHistograms" target="_blank">feature gate</a> با نام <code dir="ltr">NativeHistograms</code> را به‌صورت دستی فعال کنید. از نسخهٔ v1.37 به بعد، این قابلیت در مرحلهٔ بتا قرار دارد و به‌طور پیش‌فرض فعال است.</li>
+<li dir="rtl"><strong>ابزار Prometheus نسخهٔ 2.40 یا بالاتر</strong> برای جمع‌آوری (scrape) و ذخیرهٔ هیستوگرام‌های بومی.
+برای پیکربندی جداگانهٔ هر job، استفاده از نسخهٔ 3.0 یا بالاتر Prometheus توصیه می‌شود.</li>
 </ul>
-<h2 id="هیستوگرام-های-بومی-چیستند؟" dir="rtl">هیستوگرام‌های بومی چیستند؟</h2>
-<p dir="rtl">هیستوگرام‌های کلاسیک Prometheus از مرزهای ثابت برای باکت‌ها استفاده می‌کنند (برای مثال،
+<h2 id="هیستوگرام-های-بومی-چه-هستند؟" dir="rtl">هیستوگرام‌های بومی چه هستند؟</h2>
+<p dir="rtl">هیستوگرام‌های کلاسیک Prometheus از مرزهای ثابت برای سطل‌ها استفاده می‌کنند (برای نمونه،
 <code dir="ltr">[0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1, 2.5, 5, 10]</code> ثانیه).
-هر باکت یک سری زمانی جداگانه (<code dir="ltr">_bucket</code>، <code dir="ltr">_count</code>، <code dir="ltr">_sum</code>) ایجاد می‌کند
-که می‌تواند به مشکلات زیر منجر شود:</p>
+هر سطل یک سری زمانی جداگانه (<code dir="ltr">_bucket</code>، <code dir="ltr">_count</code>، <code dir="ltr">_sum</code>) ایجاد می‌کند
+و این موضوع می‌تواند به مشکلات زیر بینجامد:</p>
 <ul>
-<li dir="rtl"><strong>هزینه‌های بالای ذخیره‌سازی</strong> در مقیاس بزرگ، زیرا هر هیستوگرام سری‌های زمانی بسیاری تولید می‌کند.</li>
-<li dir="rtl"><strong>مشکلات دقت</strong>، زیرا نقاط داده‌ای که در یک بازه باکت پهن قرار می‌گیرند
-قابل تفکیک از یکدیگر نیستند. برای مثال، درخواستی که در 1µs تکمیل می‌شود و درخواستی که در
-4ms تکمیل می‌شود، هر دو در یک باکت <code dir="ltr">le="0.005"</code> قرار می‌گیرند.</li>
+<li dir="rtl"><strong>هزینهٔ بالای ذخیره‌سازی</strong> در مقیاس بزرگ، زیرا هر هیستوگرام سری‌های زمانی زیادی تولید می‌کند.</li>
+<li dir="rtl"><strong>مشکلات دقت</strong>، زیرا نقاط داده‌ای که در بازهٔ یک سطل گسترده قرار می‌گیرند، از یکدیگر
+قابل‌تشخیص نیستند. برای مثال، درخواستی که در ۱ میکروثانیه کامل می‌شود و درخواستی که
+در ۴ میلی‌ثانیه کامل می‌شود، هر دو در یک سطل <code dir="ltr">le="0.005"</code> قرار می‌گیرند.</li>
 </ul>
 <p dir="rtl"><a href="https://prometheus.io/docs/specs/native_histograms/" target="_blank" rel="noopener">هیستوگرام‌های بومی</a>
-با استفاده از مرزهای نمایی باکت‌ها که به‌طور خودکار
-با توزیع داده‌ها تطبیق پیدا می‌کنند، این محدودیت‌ها را برطرف می‌کنند. مزایای آن‌ها عبارت‌اند از:</p>
+با استفاده از مرزهای نمایی برای سطل‌ها که به‌طور خودکار با توزیع داده‌ها سازگار می‌شوند،
+این محدودیت‌ها را برطرف می‌کنند. مزایای آن‌ها عبارت‌اند از:</p>
 <ul>
-<li dir="rtl"><strong>کاهش حدود ۱۰ برابری تعداد سری‌های زمانی</strong> به‌ازای هر متریک هیستوگرام، که به‌طور چشمگیری
-فضای ذخیره‌سازی Prometheus را کاهش می‌دهد و عملکرد کوئری‌ها را بهبود می‌بخشد.</li>
-<li dir="rtl"><strong>وضوح دقیق‌تر</strong> برای شناسایی افت عملکرد و تعیین
-آستانه‌های دقیق SLO.</li>
+<li dir="rtl"><strong>کاهش حدوداً ده‌برابری تعداد سری‌های زمانی</strong> برای هر متریک هیستوگرام، که حجم
+ذخیره‌سازی Prometheus را به‌طور چشمگیری کاهش می‌دهد و کارایی کوئری‌ها را بهبود می‌بخشد.</li>
+<li dir="rtl"><strong>تفکیک‌پذیری دقیق‌تر</strong> برای تشخیص افت کارایی و تعیین آستانه‌های دقیق SLO.</li>
 </ul>
-<h2 id="نحوه-عملکرد" dir="rtl">نحوه عملکرد</h2>
-<p dir="rtl">هنگامی که feature gate با نام <code dir="ltr">NativeHistograms</code> فعال باشد، اجزای کوبرنتیز
-متریک‌های هیستوگرام را هم‌زمان در هر دو قالب کلاسیک و بومی ارائه می‌کنند (dual exposition).
-قالب بازگردانده‌شده به هدر <code dir="ltr">Accept</code> در درخواست HTTP بستگی دارد
-(<a href="https://prometheus.io/docs/instrumenting/exposition_formats/#content-negotiation" target="_blank" rel="noopener">مذاکره محتوا در Prometheus</a>).
-Prometheus این هدر را به‌طور خودکار بر اساس پیکربندی scrape شما تنظیم می‌کند؛
-فقط زمانی که مستقیماً از endpoint مربوط به <code dir="ltr">/metrics</code> کوئری می‌گیرید لازم است به آن توجه داشته باشید.</p>
+<h2 id="نحوهٔ-کار" dir="rtl">نحوهٔ کار</h2>
+<p dir="rtl">وقتی feature gate با نام <code dir="ltr">NativeHistograms</code> فعال باشد، اجزای کوبرنتیز متریک‌های هیستوگرام را
+هم‌زمان در هر دو قالب کلاسیک و بومی ارائه می‌کنند (ارائهٔ دوگانه).
+قالبی که بازگردانده می‌شود به سرآیند <code dir="ltr">Accept</code> در درخواست HTTP بستگی دارد
+(<a href="https://prometheus.io/docs/instrumenting/exposition_formats/#content-negotiation" target="_blank" rel="noopener">مذاکرهٔ محتوا در Prometheus</a>).
+ابزار Prometheus این سرآیند را بر اساس پیکربندی جمع‌آوری شما به‌طور خودکار تنظیم می‌کند؛
+تنها زمانی لازم است به آن توجه کنید که مستقیماً از endpoint با مسیر <code dir="ltr">/metrics</code> کوئری می‌گیرید.</p>
 <ul>
 <li dir="rtl">
-<p dir="rtl"><strong>قالب متنی</strong> (Accept: <code dir="ltr">text/plain</code>، OpenMetrics 1.0): فقط باکت‌های هیستوگرام کلاسیک را بازمی‌گرداند.
-با تمام ابزارهای موجود سازگار است.</p>
+<p dir="rtl"><strong>قالب متنی</strong> (Accept: <code dir="ltr">text/plain</code>، OpenMetrics 1.0): فقط سطل‌های هیستوگرام کلاسیک
+را بازمی‌گرداند و با همهٔ ابزارهای موجود سازگار است.</p>
 <pre dir="ltr"><code dir="ltr"># Classic histogram buckets (always present)
 apiserver_request_duration_seconds_bucket{le="0.005"} 1000
 apiserver_request_duration_seconds_bucket{le="0.01"} 2000
@@ -138,30 +136,29 @@ apiserver_request_duration_seconds_sum 450.5
 </code></pre>
 </li>
 <li dir="rtl">
-<p dir="rtl"><strong>قالب Protobuf</strong> (Accept: <code dir="ltr">application/vnd.google.protobuf</code>): هم باکت‌های کلاسیک
-و هم داده‌های هیستوگرام بومی را در بر دارد. زمانی که
-<code dir="ltr">scrape_native_histograms: true</code> در
-<a href="https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config" target="_blank" rel="noopener">پیکربندی scrape در Prometheus</a>
-برای job مربوطه تنظیم شده باشد، Prometheus این قالب را به‌طور خودکار درخواست می‌کند.</p>
+<p dir="rtl"><strong>قالب Protobuf</strong> (Accept: <code dir="ltr">application/vnd.google.protobuf</code>): هم سطل‌های کلاسیک و
+هم داده‌های هیستوگرام بومی را در بر دارد. وقتی گزینهٔ <code dir="ltr">scrape_native_histograms: true</code> در
+<a href="https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config" target="_blank" rel="noopener">پیکربندی جمع‌آوری Prometheus</a>
+برای job جمع‌آوری مربوطه تنظیم شده باشد، Prometheus به‌طور خودکار این قالب را درخواست می‌کند.</p>
 </li>
 </ul>
-<p dir="rtl">این راهبرد ارائه دوگانه تضمین می‌کند که:</p>
+<p dir="rtl">این راهبرد ارائهٔ دوگانه موارد زیر را تضمین می‌کند:</p>
 <ul>
-<li dir="rtl">داشبوردها و هشدارهای موجود بدون نیاز به تغییر به کار خود ادامه می‌دهند.</li>
-<li dir="rtl">کاربران می‌توانند کوئری‌ها را با سرعت دلخواه خود به هیستوگرام‌های بومی منتقل کنند.</li>
-<li dir="rtl">Prometheus هر قالبی را که برای دریافت آن پیکربندی شده باشد ذخیره می‌کند.</li>
+<li dir="rtl">داشبوردها و هشدارهای موجود بدون هیچ تغییری به کار خود ادامه می‌دهند.</li>
+<li dir="rtl">کاربران می‌توانند کوئری‌های خود را با سرعت دلخواه به هیستوگرام‌های بومی منتقل کنند.</li>
+<li dir="rtl">ابزار Prometheus هر قالبی را که برای دریافتش پیکربندی شده باشد ذخیره می‌کند.</li>
 </ul>
 <h2 id="فعال-سازی-هیستوگرام-های-بومی" dir="rtl">فعال‌سازی هیستوگرام‌های بومی</h2>
-<p dir="rtl">فعال‌سازی هیستوگرام‌های بومی فرایندی دومرحله‌ای است: فعال‌کردن feature gate روی
-اجزای کوبرنتیز و پیکربندی Prometheus برای جمع‌آوری هیستوگرام‌های بومی.</p>
-<h3 id="مرحله-۱-اطمینان-از-فعال-بودن-feature-gate-در-کوبرنتیز" dir="rtl">مرحله ۱: اطمینان از فعال‌بودن feature gate در کوبرنتیز</h3>
-<p dir="rtl">feature gate با نام <code dir="ltr">NativeHistograms</code> در کوبرنتیز v1.37 به‌طور پیش‌فرض فعال است.
-اگر از کوبرنتیز v1.36 استفاده می‌کنید، یا اگر این قابلیت را به‌صورت صریح غیرفعال کرده‌اید،
-feature gate با نام <code dir="ltr">NativeHistograms</code> را روی اجزای کوبرنتیزی که
-می‌خواهید هیستوگرام‌های بومی را از آن‌ها ارائه کنید فعال نمایید:</p>
+<p dir="rtl">فعال‌سازی هیستوگرام‌های بومی دو مرحله دارد: فعال کردن feature gate روی اجزای
+کوبرنتیز و پیکربندی Prometheus برای جمع‌آوری هیستوگرام‌های بومی.</p>
+<h3 id="مرحلهٔ-۱-اطمینان-از-فعال-بودن-feature-gate-در-کوبرنتیز" dir="rtl">مرحلهٔ ۱: اطمینان از فعال بودن feature gate در کوبرنتیز</h3>
+<p dir="rtl">در کوبرنتیز v1.37، feature gate با نام <code dir="ltr">NativeHistograms</code> به‌طور پیش‌فرض فعال است.
+اگر از کوبرنتیز v1.36 استفاده می‌کنید یا این قابلیت را صراحتاً غیرفعال کرده‌اید،
+feature gate با نام <code dir="ltr">NativeHistograms</code> را روی اجزایی از کوبرنتیز که می‌خواهید
+هیستوگرام‌های بومی را ارائه کنند فعال کنید:</p>
 <pre dir="ltr"><code class="language-bash" dir="ltr">--feature-gates=NativeHistograms=true
 </code></pre>
-<p dir="rtl">این feature gate برای اجزای زیر اعمال می‌شود:</p>
+<p dir="rtl">این feature gate بر اجزای زیر اعمال می‌شود:</p>
 <ul>
 <li dir="ltr" class="ltr">kube-apiserver</li>
 <li dir="ltr" class="ltr">kube-controller-manager</li>
@@ -169,80 +166,80 @@ feature gate با نام <code dir="ltr">NativeHistograms</code> را روی ا�
 <li dir="ltr" class="ltr">kubelet</li>
 <li dir="ltr" class="ltr">kube-proxy</li>
 </ul>
-<p dir="rtl">متریک‌های هر جزء مستقل از سایر اجزا هستند؛ می‌توانید feature gate را
-به‌ازای هر جزء فعال یا غیرفعال کنید.</p>
-<h3 id="مرحله-۲-پیکربندی-prometheus" dir="rtl">مرحله ۲: پیکربندی Prometheus</h3>
-<p dir="rtl">پیکربندی Prometheus به نسخه آن بستگی دارد.</p>
+<p dir="rtl">متریک‌های هر جزء مستقل از یکدیگر هستند؛ بنابراین می‌توانید این feature gate را
+برای هر جزء به‌طور جداگانه فعال یا غیرفعال کنید.</p>
+<h3 id="مرحلهٔ-۲-پیکربندی-prometheus" dir="rtl">مرحلهٔ ۲: پیکربندی Prometheus</h3>
+<p dir="rtl">پیکربندی Prometheus به نسخهٔ آن بستگی دارد.</p>
 <table>
 <thead>
 <tr>
-<th dir="rtl">نسخه Prometheus</th>
+<th dir="rtl">نسخهٔ Prometheus</th>
 <th dir="rtl">پشتیبانی از هیستوگرام بومی</th>
 <th dir="rtl">پیکربندی</th>
-<th dir="rtl">نکات</th>
+<th dir="rtl">توضیحات</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>&lt; 2.40</td>
 <td dir="rtl">ندارد</td>
-<td dir="ltr" class="ltr">N/A</td>
-<td dir="rtl">فقط هیستوگرام‌های کلاسیک. فعال‌کردن feature gate در کوبرنتیز تأثیری ندارد.</td>
+<td dir="rtl">ندارد</td>
+<td dir="rtl">فقط هیستوگرام‌های کلاسیک. فعال کردن feature gate در کوبرنتیز تأثیری ندارد.</td>
 </tr>
 <tr>
 <td dir="ltr" class="ltr">2.40 – 2.x</td>
 <td dir="rtl">آزمایشی</td>
 <td dir="rtl"><code dir="ltr">--enable-feature=native-histograms</code> (سراسری)</td>
-<td dir="rtl">یا همه یا هیچ؛ کنترل به‌ازای هر job وجود ندارد.</td>
+<td dir="rtl">همه یا هیچ؛ امکان کنترل جداگانهٔ هر job وجود ندارد.</td>
 </tr>
 <tr>
 <td>3.0 – 3.7</td>
 <td dir="rtl">پایدار</td>
-<td dir="rtl"><code dir="ltr">scrape_native_histograms</code> و <code dir="ltr">always_scrape_classic_histograms</code> به‌ازای هر job</td>
-<td dir="rtl">پیکربندی به‌ازای هر job توصیه می‌شود. پرچم سراسری همچنان پشتیبانی می‌شود.</td>
+<td dir="rtl">تنظیم <code dir="ltr">scrape_native_histograms</code> و <code dir="ltr">always_scrape_classic_histograms</code> برای هر job</td>
+<td dir="rtl">پیکربندی جداگانهٔ هر job توصیه می‌شود. پرچم سراسری همچنان پشتیبانی می‌شود.</td>
 </tr>
 <tr>
 <td>3.8</td>
 <td dir="rtl">پایدار</td>
-<td dir="rtl">پیکربندی به‌ازای هر job (برای کنترل دقیق الزامی است)</td>
-<td dir="rtl">پرچم سراسری فقط مقدار پیش‌فرض را برای همه jobها تغییر می‌دهد.</td>
+<td dir="rtl">پیکربندی جداگانهٔ هر job (برای کنترل دقیق الزامی است)</td>
+<td dir="rtl">پرچم سراسری فقط مقدار پیش‌فرض همهٔ jobها را تغییر می‌دهد.</td>
 </tr>
 <tr>
 <td>3.9+</td>
 <td dir="rtl">پایدار</td>
-<td dir="rtl">فقط <code dir="ltr">scrape_native_histograms</code> به‌ازای هر job</td>
-<td dir="rtl">پرچم سراسری حذف شده است. باید از پیکربندی به‌ازای هر job استفاده کرد.</td>
+<td dir="rtl">فقط تنظیم <code dir="ltr">scrape_native_histograms</code> برای هر job</td>
+<td dir="rtl">پرچم سراسری حذف شده است. باید از پیکربندی جداگانهٔ هر job استفاده کنید.</td>
 </tr>
 </tbody>
 </table>
-<p dir="rtl">برای Prometheus نسخه 3.x، جهت کنترل دقیق از پیکربندی به‌ازای هر job استفاده کنید:</p>
+<p dir="rtl">در Prometheus نسخهٔ 3.x، برای کنترل دقیق از پیکربندی جداگانهٔ هر job استفاده کنید:</p>
 <pre dir="ltr"><code class="language-yaml" dir="ltr">scrape_configs:
   - job_name: 'kubernetes-apiservers'
     scrape_native_histograms: true            # Ingest native histograms
     always_scrape_classic_histograms: true     # Keep classic format during migration
 </code></pre>
-<p dir="rtl">در دوره مهاجرت هر دو گزینه را روی <code dir="ltr">true</code> تنظیم کنید. این کار به شما امکان می‌دهد
+<p dir="rtl">در طول دورهٔ مهاجرت، هر دو گزینه را روی <code dir="ltr">true</code> تنظیم کنید. با این کار می‌توانید
 هیستوگرام‌های بومی را دریافت کنید و در عین حال هیستوگرام‌های کلاسیک را برای داشبوردهای موجود نگه دارید.</p>
 <div class="callout note"><div class="callout-title">توجه:</div>
-<p dir="rtl">هیستوگرام‌های بومی به قالب ارائه Protobuf نیاز دارند. Prometheus این مورد را به‌طور پیش‌فرض به‌صورت خودکار مدیریت می‌کند. با این حال، اگر <code dir="ltr">scrape_protocols</code> را سفارشی‌سازی کرده‌اید، مطمئن شوید که <code dir="ltr">PrometheusProto</code> در فهرست وجود دارد.</p>
+<p dir="rtl">هیستوگرام‌های بومی به قالب ارائهٔ Protobuf نیاز دارند. ابزار Prometheus به‌طور پیش‌فرض این موضوع را خودکار مدیریت می‌کند. با این حال، اگر <code dir="ltr">scrape_protocols</code> را سفارشی کرده‌اید، مطمئن شوید که <code dir="ltr">PrometheusProto</code> در فهرست آن وجود دارد.</p>
 </div>
 <h2 id="مهاجرت-داشبوردها-و-هشدارها" dir="rtl">مهاجرت داشبوردها و هشدارها</h2>
 <div class="callout caution"><div class="callout-title">احتیاط:</div>
-<p dir="rtl">اگر Prometheus با <code dir="ltr">scrape_native_histograms: true</code> اما
-<code dir="ltr">always_scrape_classic_histograms: false</code> (مقدار پیش‌فرض) پیکربندی شده باشد،
-Prometheus فقط هیستوگرام‌های بومی را دریافت می‌کند. داشبوردهای موجودی که از کوئری‌های هیستوگرام کلاسیک استفاده می‌کنند
-(برای مثال، <code dir="ltr">histogram_quantile(..._bucket...)</code>) هیچ داده‌ای نشان نخواهند داد.
-در طول مهاجرت همواره <code dir="ltr">always_scrape_classic_histograms: true</code> را تنظیم کنید.</p>
+<p dir="rtl">اگر Prometheus با <code dir="ltr">scrape_native_histograms: true</code> اما با
+<code dir="ltr">always_scrape_classic_histograms: false</code> (مقدار پیش‌فرض) پیکربندی شده باشد، فقط
+هیستوگرام‌های بومی را دریافت می‌کند. در این حالت، داشبوردهای موجودی که از کوئری‌های
+هیستوگرام کلاسیک استفاده می‌کنند (برای مثال، <code dir="ltr">histogram_quantile(..._bucket...)</code>) هیچ داده‌ای نشان نخواهند داد.
+همیشه در طول مهاجرت، <code dir="ltr">always_scrape_classic_histograms: true</code> را تنظیم کنید.</p>
 </div>
-<p dir="rtl">هنگام مهاجرت از کوئری‌های هیستوگرام کلاسیک به بومی، این روند را دنبال کنید:</p>
+<p dir="rtl">برای مهاجرت از کوئری‌های هیستوگرام کلاسیک به کوئری‌های هیستوگرام بومی، این روند را دنبال کنید:</p>
 <ol>
 <li dir="rtl">
-<p dir="rtl"><strong>فعال‌کردن هر دو قالب</strong>: مقادیر <code dir="ltr">scrape_native_histograms: true</code> و
-<code dir="ltr">always_scrape_classic_histograms: true</code> را در پیکربندی scrape در Prometheus تنظیم کنید.</p>
+<p dir="rtl"><strong>فعال کردن هر دو قالب</strong>: در پیکربندی جمع‌آوری Prometheus، گزینه‌های
+<code dir="ltr">scrape_native_histograms: true</code> و <code dir="ltr">always_scrape_classic_histograms: true</code> را تنظیم کنید.</p>
 </li>
 <li dir="rtl">
-<p dir="rtl"><strong>مهاجرت کوئری‌ها</strong>: کوئری‌های داشبورد و عبارت‌های هشدار را از
-توابع هیستوگرام کلاسیک به معادل‌های هیستوگرام بومی به‌روزرسانی کنید.</p>
+<p dir="rtl"><strong>مهاجرت کوئری‌ها</strong>: کوئری‌های داشبورد و عبارت‌های هشدار را از توابع هیستوگرام
+کلاسیک به معادل‌های هیستوگرام بومی آن‌ها به‌روزرسانی کنید.</p>
 <p dir="rtl">کوئری کلاسیک:</p>
 <pre dir="ltr"><code class="language-promql" dir="ltr">histogram_quantile(0.99, rate(apiserver_request_duration_seconds_bucket[5m]))
 </code></pre>
@@ -251,75 +248,75 @@ Prometheus فقط هیستوگرام‌های بومی را دریافت می‌
 </code></pre>
 </li>
 <li dir="rtl">
-<p dir="rtl"><strong>بررسی در محیط staging</strong>: همه داشبوردها و هشدارها را با کوئری‌های هیستوگرام بومی
-پیش از استقرار در محیط production آزمایش کنید.</p>
+<p dir="rtl"><strong>بررسی در محیط آزمایشی (staging)</strong>: پیش از انتشار در محیط عملیاتی، همهٔ داشبوردها
+و هشدارها را با کوئری‌های هیستوگرام بومی آزمایش کنید.</p>
 </li>
 <li dir="rtl">
-<p dir="rtl"><strong>غیرفعال‌کردن جمع‌آوری کلاسیک</strong>: پس از تکمیل و تأیید مهاجرت،
-مقدار <code dir="ltr">always_scrape_classic_histograms: false</code> را تنظیم کنید تا سربار ذخیره‌سازی کاهش یابد.</p>
+<p dir="rtl"><strong>غیرفعال کردن جمع‌آوری کلاسیک</strong>: پس از تکمیل و تأیید مهاجرت، برای کاهش سربار
+ذخیره‌سازی، <code dir="ltr">always_scrape_classic_histograms: false</code> را تنظیم کنید.</p>
 </li>
 </ol>
-<h2 id="غیرفعال-سازی-هیستوگرام-های-بومی" dir="rtl">غیرفعال‌سازی هیستوگرام‌های بومی</h2>
-<p dir="rtl">می‌توانید هیستوگرام‌های بومی را در هر زمان با یکی از دو روش زیر غیرفعال کنید:</p>
+<h2 id="غیرفعال-کردن-هیستوگرام-های-بومی" dir="rtl">غیرفعال کردن هیستوگرام‌های بومی</h2>
+<p dir="rtl">می‌توانید هر زمان که بخواهید، به یکی از دو روش زیر هیستوگرام‌های بومی را غیرفعال کنید:</p>
 <ul>
 <li dir="rtl">
-<p dir="rtl"><strong>از سمت Prometheus (سریع‌ترین روش، بدون نیاز به راه‌اندازی مجدد کوبرنتیز؛ فقط Prometheus 3.x)</strong>:
-مقدار <code dir="ltr">scrape_native_histograms: false</code> را به‌ازای هر job جمع‌آوری تنظیم کنید. Prometheus
-در بازه scrape بعدی دوباره به جمع‌آوری قالب کلاسیک بازمی‌گردد.</p>
+<p dir="rtl"><strong>از سمت Prometheus (سریع‌ترین روش، بدون نیاز به راه‌اندازی مجدد کوبرنتیز؛ فقط در Prometheus 3.x)</strong>:
+گزینهٔ <code dir="ltr">scrape_native_histograms: false</code> را برای هر job جمع‌آوری تنظیم کنید. ابزار Prometheus
+از بازهٔ جمع‌آوری بعدی، دوباره جمع‌آوری قالب کلاسیک را از سر می‌گیرد.</p>
 </li>
 <li dir="rtl">
-<p dir="rtl"><strong>feature gate در کوبرنتیز</strong>: جزء مورد نظر را با
-<code dir="ltr">--feature-gates=NativeHistograms=false</code> مجدداً راه‌اندازی کنید. پس از راه‌اندازی مجدد، فقط قالب هیستوگرام کلاسیک
-ارائه می‌شود.</p>
+<p dir="rtl"><strong>از طریق feature gate کوبرنتیز</strong>: جزء موردنظر را با
+<code dir="ltr">--feature-gates=NativeHistograms=false</code> مجدداً راه‌اندازی کنید. پس از راه‌اندازی مجدد،
+فقط قالب هیستوگرام کلاسیک ارائه می‌شود.</p>
 </li>
 </ul>
-<p dir="rtl">هنگامی که هیستوگرام‌های بومی غیرفعال شوند، endpoint متریک‌ها
-فقط به قالب هیستوگرام کلاسیک بازمی‌گردد. داده‌های تاریخی هیستوگرام بومی در Prometheus
-همچنان قابل کوئری‌گرفتن باقی می‌مانند.</p>
+<p dir="rtl">وقتی هیستوگرام‌های بومی غیرفعال شوند، endpoint متریک‌ها تنها به ارائهٔ قالب
+هیستوگرام کلاسیک بازمی‌گردد. داده‌های تاریخی هیستوگرام بومی در Prometheus
+همچنان قابل کوئری گرفتن هستند.</p>
 <h2 id="عیب-یابی" dir="rtl">عیب‌یابی</h2>
 <ul>
 <li dir="rtl">
-<p dir="rtl"><strong>داشبوردها پس از فعال‌سازی هیستوگرام‌های بومی هیچ داده‌ای نشان نمی‌دهند</strong>
+<p dir="rtl"><strong>داشبوردها پس از فعال کردن هیستوگرام‌های بومی هیچ داده‌ای نشان نمی‌دهند</strong>
 : این مشکل زمانی رخ می‌دهد که Prometheus با <code dir="ltr">scrape_native_histograms: true</code>
-اما <code dir="ltr">always_scrape_classic_histograms: false</code> (مقدار پیش‌فرض) پیکربندی شده باشد و داشبوردهای شما
+اما با <code dir="ltr">always_scrape_classic_histograms: false</code> (مقدار پیش‌فرض) پیکربندی شده باشد و داشبوردهای شما
 همچنان از کوئری‌های هیستوگرام کلاسیک استفاده کنند (برای مثال، <code dir="ltr">histogram_quantile(..._bucket...)</code>).</p>
-<p dir="rtl">راه‌حل: مقدار <code dir="ltr">always_scrape_classic_histograms: true</code> را تنظیم کنید تا دریافت قالب کلاسیک
-در زمان مهاجرت داشبوردها بازگردانده شود.</p>
+<p dir="rtl">راه‌حل: گزینهٔ <code dir="ltr">always_scrape_classic_histograms: true</code> را تنظیم کنید تا در طول مهاجرت
+داشبوردها، دریافت قالب کلاسیک دوباره برقرار شود.</p>
 </li>
 <li dir="rtl">
-<p dir="rtl"><strong>افزایش مصرف حافظه پس از فعال‌سازی هیستوگرام‌های بومی</strong>
-: افزایش اندکی در حافظه برای ذخیره‌سازی باکت‌های هیستوگرام بومی مورد انتظار است
-که حداکثر به ۱۶۰ باکت به‌ازای هر هیستوگرام محدود می‌شود. برای افزایش‌های غیرمنتظره،
-<code dir="ltr">process_resident_memory_bytes</code> را پایش کنید.</p>
-<p dir="rtl">راه‌حل: اگر فشار حافظه شدید است، دریافت هیستوگرام بومی را در
+<p dir="rtl"><strong>افزایش مصرف حافظه پس از فعال کردن هیستوگرام‌های بومی</strong>
+: افزایش اندک مصرف حافظه برای ذخیرهٔ سطل‌های هیستوگرام بومی قابل‌انتظار است و
+حداکثر به ۱۶۰ سطل برای هر هیستوگرام محدود می‌شود. متریک
+<code dir="ltr">process_resident_memory_bytes</code> را برای شناسایی افزایش‌های غیرمنتظره پایش کنید.</p>
+<p dir="rtl">راه‌حل: اگر فشار حافظه شدید است، دریافت هیستوگرام‌های بومی را در
 Prometheus غیرفعال کنید (<code dir="ltr">scrape_native_histograms: false</code>) یا feature gate
-کوبرنتیز را غیرفعال نمایید.</p>
+کوبرنتیز را غیرفعال کنید.</p>
 </li>
 <li dir="rtl">
-<p dir="rtl"><strong>Prometheus خطاهایی درباره قالب ناشناخته متریک ثبت می‌کند</strong>
-: نسخه Prometheus شما برای درک هیستوگرام‌های بومی بسیار قدیمی است.</p>
-<p dir="rtl">راه‌حل: Prometheus را به نسخه 2.40 یا بالاتر ارتقا دهید یا هیستوگرام‌های بومی را در کوبرنتیز غیرفعال کنید.</p>
+<p dir="rtl"><strong>ابزار Prometheus خطاهایی دربارهٔ قالب ناشناختهٔ متریک ثبت می‌کند</strong>
+: نسخهٔ Prometheus شما قدیمی‌تر از آن است که بتواند هیستوگرام‌های بومی را تفسیر کند.</p>
+<p dir="rtl">راه‌حل: نسخهٔ Prometheus را به 2.40 یا بالاتر ارتقا دهید یا هیستوگرام‌های بومی را در کوبرنتیز غیرفعال کنید.</p>
 </li>
 <li dir="rtl">
-<p dir="rtl"><strong>اطمینان ندارید که هیستوگرام‌های بومی ارائه می‌شوند یا خیر</strong>
-: وضعیت feature gate را با کوئری‌گرفتن از <code dir="ltr">kubernetes_feature_enabled{name="NativeHistograms"}</code>
-در Prometheus بررسی کنید. مقدار <code dir="ltr">1</code> نشان می‌دهد که قابلیت فعال است. همچنین می‌توانید
+<p dir="rtl"><strong>مطمئن نیستید که هیستوگرام‌های بومی ارائه می‌شوند یا نه</strong>
+: وضعیت feature gate را با کوئری گرفتن از <code dir="ltr">kubernetes_feature_enabled{name="NativeHistograms"}</code>
+در Prometheus بررسی کنید. مقدار <code dir="ltr">1</code> نشان می‌دهد که این قابلیت فعال است. همچنین می‌توانید
 مستقیماً با قالب protobuf از endpoint متریک‌ها کوئری بگیرید:</p>
 <pre dir="ltr"><code class="language-bash" dir="ltr">curl -H "Accept: application/vnd.google.protobuf;proto=io.prometheus.client.MetricFamily;encoding=delimited" \
   https://&lt;component-address&gt;/metrics
 </code></pre>
-<p dir="rtl">پاسخ باید برای متریک‌های هیستوگرام شامل کدگذاری هیستوگرام بومی باشد.</p>
+<p dir="rtl">پاسخ باید برای متریک‌های هیستوگرام، کدگذاری هیستوگرام بومی را در بر داشته باشد.</p>
 </li>
 </ul>
 <h2 id="منابع" dir="rtl">منابع</h2>
 <ul>
-<li dir="rtl">برای جزئیات درباره قالب هیستوگرام بومی و توابع کوئری،
-<a href="https://prometheus.io/docs/specs/native_histograms/" target="_blank" rel="noopener">مستندات هیستوگرام‌های بومی Prometheus</a> را مطالعه کنید.</li>
+<li dir="rtl">برای جزئیات قالب هیستوگرام بومی و توابع کوئری آن،
+<a href="https://prometheus.io/docs/specs/native_histograms/" target="_blank" rel="noopener">مستندات هیستوگرام‌های بومی Prometheus</a> را بخوانید.</li>
 <li dir="rtl">برای فهرست کامل متریک‌هایی که اجزای کوبرنتیز ارائه می‌کنند،
 <a href="metrics.html">مرجع متریک‌های کوبرنتیز</a> را ببینید.</li>
 </ul>
 <p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
-<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#پیش-از-شروع-before-you-begin">پیش از شروع {#before-you-begin}</a><a class="l2" href="#هیستوگرام-های-بومی-چیستند؟">هیستوگرام‌های بومی چیستند؟</a><a class="l2" href="#نحوه-عملکرد">نحوه عملکرد</a><a class="l2" href="#فعال-سازی-هیستوگرام-های-بومی">فعال‌سازی هیستوگرام‌های بومی</a><a class="l3" href="#مرحله-۱-اطمینان-از-فعال-بودن-feature-gate-در-کوبرنتیز">مرحله ۱: اطمینان از فعال‌بودن feature gate در کوبرنتیز</a><a class="l3" href="#مرحله-۲-پیکربندی-prometheus">مرحله ۲: پیکربندی Prometheus</a><a class="l2" href="#مهاجرت-داشبوردها-و-هشدارها">مهاجرت داشبوردها و هشدارها</a><a class="l2" href="#غیرفعال-سازی-هیستوگرام-های-بومی">غیرفعال‌سازی هیستوگرام‌های بومی</a><a class="l2" href="#عیب-یابی">عیب‌یابی</a><a class="l2" href="#منابع">منابع</a></nav>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#پیش-از-شروع">پیش از شروع</a><a class="l2" href="#هیستوگرام-های-بومی-چه-هستند؟">هیستوگرام‌های بومی چه هستند؟</a><a class="l2" href="#نحوهٔ-کار">نحوهٔ کار</a><a class="l2" href="#فعال-سازی-هیستوگرام-های-بومی">فعال‌سازی هیستوگرام‌های بومی</a><a class="l3" href="#مرحلهٔ-۱-اطمینان-از-فعال-بودن-feature-gate-در-کوبرنتیز">مرحلهٔ ۱: اطمینان از فعال بودن feature gate در کوبرنتیز</a><a class="l3" href="#مرحلهٔ-۲-پیکربندی-prometheus">مرحلهٔ ۲: پیکربندی Prometheus</a><a class="l2" href="#مهاجرت-داشبوردها-و-هشدارها">مهاجرت داشبوردها و هشدارها</a><a class="l2" href="#غیرفعال-کردن-هیستوگرام-های-بومی">غیرفعال کردن هیستوگرام‌های بومی</a><a class="l2" href="#عیب-یابی">عیب‌یابی</a><a class="l2" href="#منابع">منابع</a></nav>
 </div>
 </body>
 </html>
