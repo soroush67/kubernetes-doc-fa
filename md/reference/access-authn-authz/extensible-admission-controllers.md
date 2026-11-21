@@ -12,83 +12,88 @@ weight: 45
 ---
 
 <!-- overview -->
-علاوه بر [افزونه‌های پذیرش داخلی (compiled-in)](/docs/reference/access-authn-authz/admission-controllers/)،
-می‌توان افزونه‌های پذیرش را به‌صورت افزونه‌های توسعه‌ای (extension) تولید کرد و آن‌ها را در قالب webhook اجرا نمود که در زمان اجرا پیکربندی می‌شوند.
-این صفحه نحوهٔ ساخت، پیکربندی، استفاده و پایش admission webhookها را شرح می‌دهد.
+علاوه بر [افزونه‌های پذیرش کامپایل‌شده در کد](/docs/reference/access-authn-authz/admission-controllers/)،
+می‌توان افزونه‌های پذیرش (admission plugins) را به‌صورت افزونه‌های جانبی توسعه داد و آن‌ها را
+به شکل وب‌هوک‌هایی اجرا کرد که در زمان اجرا پیکربندی می‌شوند.
+این صفحه چگونگی ساخت، پیکربندی، استفاده و پایش وب‌هوک‌های پذیرش را شرح می‌دهد.
 
 <!-- body -->
 
-## admission webhookها چیستند؟
+## وب‌هوک‌های پذیرش چه هستند؟
 
-Admission webhookها فراخوانی‌های HTTP (callback) هستند که درخواست‌های پذیرش را دریافت می‌کنند و پردازشی روی آن‌ها انجام می‌دهند. می‌توانید دو نوع admission webhook تعریف کنید:
-[validating admission webhook](/docs/reference/access-authn-authz/admission-controllers/#validatingadmissionwebhook)
+وب‌هوک‌های پذیرش (admission webhooks) فراخوانی‌های بازگشتی HTTP هستند که درخواست‌های پذیرش را
+دریافت می‌کنند و کاری روی آن‌ها انجام می‌دهند. می‌توانید دو نوع وب‌هوک پذیرش تعریف کنید:
+[وب‌هوک پذیرش اعتبارسنج](/docs/reference/access-authn-authz/admission-controllers/#validatingadmissionwebhook)
 و
-[mutating admission webhook](/docs/reference/access-authn-authz/admission-controllers/#mutatingadmissionwebhook).
-Mutating admission webhookها ابتدا فراخوانی می‌شوند و می‌توانند آبجکت‌های ارسال‌شده به API server را برای اعمال مقادیر پیش‌فرض سفارشی تغییر دهند.
-پس از آنکه همهٔ تغییرات آبجکت کامل شد و آبجکت ورودی توسط API server اعتبارسنجی گردید،
-validating admission webhookها فراخوانی می‌شوند و می‌توانند درخواست‌ها را برای اعمال سیاست‌های سفارشی رد کنند.
+[وب‌هوک پذیرش تغییردهنده](/docs/reference/access-authn-authz/admission-controllers/#mutatingadmissionwebhook).
+ابتدا وب‌هوک‌های پذیرش تغییردهنده فراخوانی می‌شوند و می‌توانند آبجکت‌های ارسال‌شده به API server را
+برای اعمال مقادیر پیش‌فرض سفارشی تغییر دهند. پس از پایان همه‌ی تغییرات آبجکت و پس از آنکه
+API server آبجکت ورودی را اعتبارسنجی کرد، وب‌هوک‌های پذیرش اعتبارسنج فراخوانی می‌شوند و
+می‌توانند برای اعمال سیاست‌های سفارشی، درخواست‌ها را رد کنند.
 
 {{< note >}}
-Admission webhookهایی که برای اعمال سیاست باید اطمینان داشته باشند که وضعیت نهایی آبجکت را مشاهده می‌کنند،
-باید از validating admission webhook استفاده کنند، زیرا آبجکت‌ها پس از مشاهده توسط mutating webhookها همچنان قابل تغییرند.
+وب‌هوک‌های پذیرشی که برای اعمال سیاست باید مطمئن باشند وضعیت نهایی آبجکت را می‌بینند،
+باید از وب‌هوک پذیرش اعتبارسنج استفاده کنند؛ زیرا آبجکت‌ها ممکن است پس از دیده‌شدن
+به‌دست وب‌هوک‌های تغییردهنده، باز هم تغییر کنند.
 {{< /note >}}
 
-## آزمایش با admission webhookها
+## آزمودن وب‌هوک‌های پذیرش
 
-Admission webhookها در اصل بخشی از control plane کلاستر هستند. باید آن‌ها را با نهایت احتیاط
-بنویسید و مستقر کنید. اگر قصد دارید admission webhookهای درجه‌ی تولید (production-grade) بنویسید یا مستقر کنید،
-لطفاً [راهنماهای کاربر](/docs/reference/access-authn-authz/extensible-admission-controllers/#write-an-admission-webhook-server)
-را مطالعه کنید.
-در ادامه، نحوهٔ آزمایش سریع با admission webhookها شرح داده می‌شود.
+وب‌هوک‌های پذیرش در اصل بخشی از control plane کلاستر هستند. بنابراین باید آن‌ها را با
+احتیاط بسیار بنویسید و مستقر کنید. اگر قصد نوشتن یا استقرار وب‌هوک‌های پذیرش در سطح محیط
+عملیاتی را دارید، لطفاً
+[راهنماهای کاربر](/docs/reference/access-authn-authz/extensible-admission-controllers/#write-an-admission-webhook-server)
+را مطالعه کنید. در ادامه، روش آزمودن سریع وب‌هوک‌های پذیرش را شرح می‌دهیم.
 
 ### پیش‌نیازها
 
-* اطمینان حاصل کنید که کنترل‌کننده‌های پذیرش MutatingAdmissionWebhook و ValidatingAdmissionWebhook
+* مطمئن شوید که کنترل‌کننده‌های پذیرش MutatingAdmissionWebhook و ValidatingAdmissionWebhook
   فعال هستند.
-  [اینجا](/docs/reference/access-authn-authz/admission-controllers/#is-there-a-recommended-set-of-admission-controllers-to-use)
-  مجموعه‌ای از کنترل‌کننده‌های پذیرش توصیه‌شده برای فعال‌سازی عمومی آمده است.
+  [در این بخش](/docs/reference/access-authn-authz/admission-controllers/#is-there-a-recommended-set-of-admission-controllers-to-use)
+  مجموعه‌ای پیشنهادی از کنترل‌کننده‌های پذیرش آمده است که به‌طور کلی فعال‌کردن آن‌ها توصیه می‌شود.
 
-* اطمینان حاصل کنید که API با نام `admissionregistration.k8s.io/v1` فعال است.
+* مطمئن شوید که API ‏`admissionregistration.k8s.io/v1` فعال است.
 
-### نوشتن یک سرور admission webhook
+### نوشتن سرور وب‌هوک پذیرش
 
-لطفاً به پیاده‌سازی [سرور admission webhook](https://github.com/kubernetes/kubernetes/blob/release-1.21/test/images/agnhost/webhook/main.go)
-مراجعه کنید که در یک آزمون e2e کوبرنتیز اعتبارسنجی شده است. این webhook درخواست
-`AdmissionReview` ارسالی از سوی API serverها را پردازش می‌کند و تصمیم خود را
-در قالب یک آبجکت `AdmissionReview` و با همان نسخه‌ای که دریافت کرده است بازمی‌گرداند.
+لطفاً به پیاده‌سازی [سرور وب‌هوک پذیرش](https://github.com/kubernetes/kubernetes/blob/release-1.21/test/images/agnhost/webhook/main.go)
+مراجعه کنید که در یکی از آزمون‌های e2e کوبرنتیز اعتبارسنجی شده است. این وب‌هوک درخواست
+`AdmissionReview` ارسال‌شده از سوی API serverها را پردازش می‌کند و تصمیم خود را در قالب یک آبجکت
+`AdmissionReview` با همان نسخه‌ای که دریافت کرده بود، بازمی‌گرداند.
 
-برای جزئیات داده‌های ارسالی به webhookها، بخش [درخواست webhook](#request) را ببینید.
+برای جزئیات داده‌هایی که به وب‌هوک‌ها ارسال می‌شود، بخش [درخواست وب‌هوک](#request) را ببینید.
 
-برای داده‌های مورد انتظار از webhookها، بخش [پاسخ webhook](#response) را ببینید.
+برای داده‌هایی که از وب‌هوک‌ها انتظار می‌رود، بخش [پاسخ وب‌هوک](#response) را ببینید.
 
-سرور admission webhook نمونه، فیلد `ClientAuth` را
+در سرور وب‌هوک پذیرش نمونه، فیلد `ClientAuth`
 [خالی](https://github.com/kubernetes/kubernetes/blob/v1.22.0/test/images/agnhost/webhook/config.go#L38-L39)
-می‌گذارد که مقدار پیش‌فرض آن `NoClientCert` است. این بدان معناست که سرور webhook
-هویت کلاینت‌ها، که فرض بر این است API serverها هستند، را احراز هویت نمی‌کند. اگر به
-mutual TLS یا روش‌های دیگری برای احراز هویت کلاینت‌ها نیاز دارید، به
-بخش [احراز هویت API serverها](#authenticate-apiservers) مراجعه کنید.
+رها شده است که مقدار پیش‌فرض آن `NoClientCert` است. یعنی سرور وب‌هوک هویت کلاینت‌ها را که
+قاعدتاً API serverها هستند، احراز نمی‌کند. اگر به TLS دوطرفه یا روش‌های دیگری برای احراز هویت
+کلاینت‌ها نیاز دارید، بخش [احراز هویت API serverها](#authenticate-apiservers) را ببینید.
 
-### استقرار سرویس admission webhook
+### استقرار سرویس وب‌هوک پذیرش
 
-سرور webhook در آزمون e2e درون کلاستر کوبرنتیز و از طریق
-[API مربوط به Deployment](/docs/reference/generated/kubernetes-api/{{< param "version" >}}/#deployment-v1-apps) مستقر می‌شود.
-این آزمون همچنین یک [سرویس](/docs/reference/generated/kubernetes-api/{{< param "version" >}}/#service-v1-core)
-را به‌عنوان درگاه جلویی (front-end) سرور webhook ایجاد می‌کند. به
-[کد](https://github.com/kubernetes/kubernetes/blob/v1.22.0/test/e2e/apimachinery/webhook.go#L748) مراجعه کنید.
+سرور وب‌هوک در آزمون e2e با استفاده از
+[API مربوط به Deployment](/docs/reference/generated/kubernetes-api/{{< param "version" >}}/#deployment-v1-apps)
+در کلاستر کوبرنتیز مستقر می‌شود. این آزمون همچنین یک
+[Service](/docs/reference/generated/kubernetes-api/{{< param "version" >}}/#service-v1-core)
+به‌عنوان واسط جلویی سرور وب‌هوک ایجاد می‌کند.
+[کد](https://github.com/kubernetes/kubernetes/blob/v1.22.0/test/e2e/apimachinery/webhook.go#L748)
+را ببینید.
 
-همچنین می‌توانید webhookهای خود را بیرون از کلاستر مستقر کنید. در این صورت باید
-پیکربندی webhookهای خود را متناسب با آن به‌روزرسانی کنید.
+همچنین می‌توانید وب‌هوک‌های خود را بیرون از کلاستر مستقر کنید. در این صورت باید پیکربندی
+وب‌هوک‌های خود را متناسب با آن به‌روزرسانی کنید.
 
-### پیکربندی admission webhookها به‌صورت پویا
+### پیکربندی پویای وب‌هوک‌های پذیرش
 
-می‌توانید به‌صورت پویا مشخص کنید که کدام منابع مشمول کدام admission webhookها شوند. این کار از طریق
+می‌توانید به‌صورت پویا تعیین کنید که چه منابعی تحت پوشش چه وب‌هوک‌های پذیرشی باشند. این کار با
 [ValidatingWebhookConfiguration](/docs/reference/generated/kubernetes-api/{{< param "version" >}}/#validatingwebhookconfiguration-v1-admissionregistration-k8s-io)
 یا
 [MutatingWebhookConfiguration](/docs/reference/generated/kubernetes-api/{{< param "version" >}}/#mutatingwebhookconfiguration-v1-admissionregistration-k8s-io)
 انجام می‌شود.
 
-در ادامه نمونه‌ای از `ValidatingWebhookConfiguration` آمده است؛ پیکربندی mutating webhook نیز مشابه آن است.
-برای جزئیات هر فیلد پیکربندی، بخش [پیکربندی webhook](#webhook-configuration) را ببینید.
+در ادامه نمونه‌ای از یک `ValidatingWebhookConfiguration` آمده است؛ پیکربندی وب‌هوک تغییردهنده نیز
+مشابه آن است. برای جزئیات هر فیلد پیکربندی، بخش [پیکربندی وب‌هوک](#webhook-configuration) را ببینید.
 
 ```yaml
 apiVersion: admissionregistration.k8s.io/v1
@@ -114,12 +119,14 @@ webhooks:
 ```
 
 {{< note >}}
-باید مقدار `<CA_BUNDLE>` را در مثال بالا با یک CA bundle معتبر جایگزین کنید؛
-این مقدار یک CA bundle با رمزگذاری PEM (مقدار فیلد با Base64 کدگذاری می‌شود) برای اعتبارسنجی گواهی سرور webhook است.
+باید `<CA_BUNDLE>` را در نمونه‌ی بالا با یک بسته‌ی CA معتبر جایگزین کنید. این بسته‌ی CA باید
+با کدگذاری PEM باشد (مقدار فیلد با Base64 کدگذاری می‌شود) و برای اعتبارسنجی گواهی سرور وب‌هوک
+به کار می‌رود.
 {{< /note >}}
 
-فیلد `scope` مشخص می‌کند که فقط منابع با دامنهٔ کلاستر ("Cluster") یا
-منابع با دامنهٔ فضای نام ("Namespaced") با این قاعده تطبیق داده شوند. مقدار "&lowast;" به این معناست که هیچ محدودیتی در دامنه وجود ندارد.
+فیلد `scope` مشخص می‌کند که آیا فقط منابع در سطح کلاستر ("Cluster") یا فقط منابع در سطح
+فضای نام (namespace) ‏("Namespaced") با این قاعده تطبیق داده شوند. مقدار "&lowast;" به این معناست
+که هیچ محدودیتی از نظر دامنه وجود ندارد.
 
 {{< note >}}
 هنگام استفاده از `clientConfig.service`، گواهی سرور باید برای
@@ -127,33 +134,30 @@ webhooks:
 {{< /note >}}
 
 {{< note >}}
-مهلت زمانی پیش‌فرض برای فراخوانی یک webhook برابر ۱۰ ثانیه است.
-می‌توانید `timeout` را تنظیم کنید و توصیه می‌شود برای webhookها از مهلت زمانی کوتاه استفاده شود.
-اگر فراخوانی webhook با پایان مهلت زمانی مواجه شود، درخواست مطابق
-سیاست شکست (failure policy) آن webhook مدیریت می‌شود.
+مهلت زمانی پیش‌فرض برای فراخوانی یک وب‌هوک ۱۰ ثانیه است.
+می‌توانید `timeout` را تنظیم کنید و توصیه می‌شود برای وب‌هوک‌ها مهلت زمانی کوتاهی در نظر بگیرید.
+اگر مهلت فراخوانی وب‌هوک به پایان برسد، درخواست بر اساس سیاست خرابی (failure policy) وب‌هوک
+رسیدگی می‌شود.
 {{< /note >}}
 
-هنگامی که یک API server درخواستی دریافت می‌کند که با یکی از `rules` تطبیق دارد،
-API server یک درخواست `admissionReview` را مطابق آنچه در
-`clientConfig` مشخص شده است به webhook ارسال می‌کند.
+هنگامی که API server درخواستی دریافت می‌کند که با یکی از `rules` تطبیق دارد، یک درخواست
+`admissionReview` را به وب‌هوکی که در `clientConfig` مشخص شده است ارسال می‌کند.
 
-پس از ایجاد پیکربندی webhook، سیستم چند ثانیه زمان لازم دارد
-تا پیکربندی جدید را اعمال کند.
+پس از ایجاد پیکربندی وب‌هوک، چند ثانیه طول می‌کشد تا سیستم پیکربندی جدید را اعمال کند.
 
 ### احراز هویت API serverها   {#authenticate-apiservers}
 
-اگر admission webhookهای شما به احراز هویت نیاز دارند، می‌توانید
-API serverها را طوری پیکربندی کنید که برای احراز هویت خود نزد
-webhookها از basic auth، bearer token یا گواهی (cert) استفاده کنند. تکمیل این پیکربندی شامل سه مرحله است.
+اگر وب‌هوک‌های پذیرش شما به احراز هویت نیاز دارند، می‌توانید API serverها را طوری پیکربندی کنید
+که برای احراز هویت خود نزد وب‌هوک‌ها از احراز هویت پایه (basic auth)، توکن حامل (bearer token)
+یا گواهی استفاده کنند. تکمیل این پیکربندی سه مرحله دارد.
 
-* هنگام راه‌اندازی API server، مکان فایل پیکربندی کنترل پذیرش را
-  از طریق فلگ `--admission-control-config-file` مشخص کنید.
+* هنگام راه‌اندازی API server، محل فایل پیکربندی کنترل پذیرش را با فلگ
+  `--admission-control-config-file` مشخص کنید.
 
-* در فایل پیکربندی کنترل پذیرش، مشخص کنید که کنترل‌کننده
-  MutatingAdmissionWebhook و کنترل‌کننده ValidatingAdmissionWebhook
-  باید اطلاعات احراز هویت را از کجا بخوانند. این اطلاعات در فایل‌های kubeConfig ذخیره می‌شوند
-  (بله، با همان طرحواره‌ای که kubectl استفاده می‌کند)، بنابراین نام فیلد
-  `kubeConfigFile` است. در ادامه نمونه‌ای از فایل پیکربندی کنترل پذیرش آمده است:
+* در فایل پیکربندی کنترل پذیرش، مشخص کنید که کنترل‌کننده‌ی MutatingAdmissionWebhook و
+  کنترل‌کننده‌ی ValidatingAdmissionWebhook اعتبارنامه‌ها را از کجا بخوانند. اعتبارنامه‌ها در
+  فایل‌های kubeConfig ذخیره می‌شوند (بله، همان طرح‌واره‌ای که kubectl از آن استفاده می‌کند)؛
+  بنابراین نام فیلد `kubeConfigFile` است. در ادامه نمونه‌ای از فایل پیکربندی کنترل پذیرش آمده است:
 
 ```yaml
 apiVersion: apiserver.config.k8s.io/v1
@@ -171,11 +175,11 @@ plugins:
     kubeConfigFile: "<path-to-kubeconfig-file>"
 ```
 
-برای اطلاعات بیشتر دربارهٔ `AdmissionConfiguration`، به
-[مرجع AdmissionConfiguration (v1)](/docs/reference/config-api/apiserver-webhookadmission.v1/) مراجعه کنید.
-برای جزئیات هر فیلد پیکربندی، بخش [پیکربندی webhook](#webhook-configuration) را ببینید.
+برای اطلاعات بیشتر درباره‌ی `AdmissionConfiguration`،
+[مرجع AdmissionConfiguration (v1)](/docs/reference/config-api/apiserver-webhookadmission.v1/) را ببینید.
+برای جزئیات هر فیلد پیکربندی، بخش [پیکربندی وب‌هوک](#webhook-configuration) را ببینید.
 
-در فایل kubeConfig، اطلاعات احراز هویت را ارائه کنید:
+در فایل kubeConfig، اعتبارنامه‌ها را وارد کنید:
 
 ```yaml
 apiVersion: v1
@@ -223,96 +227,92 @@ users:
     token: "<token>"
 ```
 
-البته باید سرور webhook را طوری تنظیم کنید که این درخواست‌های احراز هویت را مدیریت کند.
+البته باید سرور وب‌هوک را طوری راه‌اندازی کنید که بتواند این درخواست‌های احراز هویت را پردازش کند.
 
-### احراز هویت نزد admission webhookها {#authenticating-to-admission-webhooks}
+### احراز هویت نزد وب‌هوک‌های پذیرش {#authenticating-to-admission-webhooks}
 
 {{< feature-state feature_gate_name="APIServerWebhookAuthenticationToken" >}}
 
-به‌عنوان جایگزینی برای مدیریت دستی اطلاعات احراز هویت که در
-[احراز هویت API serverها](#authenticate-apiservers) شرح داده شد، `kube-apiserver` می‌تواند
-توکن‌های ServiceAccount کوتاه‌مدت و دارای دامنهٔ محدود را برای احراز هویت نزد admission
-webhookها صادر کند. این سازوکار از API مربوط به
+به‌عنوان جایگزینی برای مدیریت دستی اعتبارنامه‌ها که در بخش
+[احراز هویت API serverها](#authenticate-apiservers) شرح داده شد، ‏`kube-apiserver` می‌تواند
+توکن‌های ServiceAccount کوتاه‌مدت و دامنه‌دار برای احراز هویت نزد وب‌هوک‌های پذیرش صادر کند.
+این سازوکار از API ‏
 [TokenRequest](/docs/reference/kubernetes-api/authentication-resources/token-request-v1/)
-استفاده می‌کند تا توکن‌هایی صادر کند که به یک پیکربندی مشخص webhook متصل (bound) هستند و
-به API groupهای خاصی محدود می‌شوند.
+برای صدور توکن‌هایی استفاده می‌کند که به یک پیکربندی وب‌هوک مشخص وابسته‌اند و دامنه‌ی آن‌ها
+به گروه‌های API خاصی محدود است.
 
 {{< note >}}
-این سازوکار صدور توکن را پیاده‌سازی می‌کند. دریافت و ارائهٔ خودکار توکن
-توسط `kube-apiserver` و API serverهای تجمیعی (aggregated) هنگام فراخوانی
-webhookها، همراه با یک کتابخانهٔ تأیید توکن در سمت webhook، بخشی از
-این سازوکار نیستند.
+این سازوکار فقط صدور توکن را پیاده‌سازی می‌کند. دریافت و ارائه‌ی خودکار توکن به‌دست
+`kube-apiserver` و API serverهای تجمیعی (aggregated) هنگام فراخوانی وب‌هوک‌ها، و نیز کتابخانه‌ای
+برای راستی‌آزمایی توکن در سمت وب‌هوک، بخشی از این سازوکار نیستند.
 {{< /note >}}
 
-#### نحوهٔ کار
+#### نحوه‌ی کار
 
-API مربوط به TokenRequest گسترش یافته است تا از صدور توکن‌های متصل به
-آبجکت‌های ValidatingWebhookConfiguration یا MutatingWebhookConfiguration پشتیبانی کند.
-این توکن‌ها شامل ادعاهای گواهی (attestation claims) هستند که مشخص می‌کنند دارندهٔ توکن
-مجاز است دربارهٔ کدام API groupها از webhook پرس‌وجو کند. اگر
-پیکربندی webhook ارجاع‌شده حذف شود، توکن نامعتبر می‌شود.
+‏API ‏TokenRequest گسترش یافته است تا بتواند توکن‌هایی صادر کند که به آبجکت‌های
+ValidatingWebhookConfiguration یا MutatingWebhookConfiguration وابسته‌اند.
+این توکن‌ها شامل ادعاهای گواهی‌دهی (attestation claims) هستند که مشخص می‌کنند حامل توکن
+مجاز است درباره‌ی کدام گروه‌های API از وب‌هوک پرس‌وجو کند. اگر پیکربندی وب‌هوک ارجاع‌داده‌شده
+حذف شود، توکن نامعتبر می‌شود.
 
-برای درخواست یک توکن احراز هویت webhook، یک TokenRequest باید شامل موارد زیر باشد:
+برای درخواست توکن احراز هویت وب‌هوک، TokenRequest باید شامل موارد زیر باشد:
 
-1. **یک فیلد `.spec.boundObjectRef`** که به یک ValidatingWebhookConfiguration یا
-   یک MutatingWebhookConfiguration ارجاع می‌دهد. پیکربندی webhook ارجاع‌شده باید
+1. **فیلد `.spec.boundObjectRef`** که به یک ValidatingWebhookConfiguration یا
+   یک MutatingWebhookConfiguration ارجاع می‌دهد. پیکربندی وب‌هوک ارجاع‌داده‌شده باید
    وجود داشته باشد و نباید برای حذف علامت‌گذاری شده باشد.
 
-1. **یک فیلد `.spec.attestations`** با دقیقاً یک مدخل: کلید
-   `admissionReviewAPIGroups` با مقداری از نوع آرایهٔ رشته‌ای تک‌عنصری که
-   API group تحت پوشش این توکن را مشخص می‌کند. مقدار `"*"` به معنای همهٔ API groupهاست.
-   API group مشخص‌شده باید با یکی از قواعد (rule) در پیکربندی webhook
-   ارجاع‌شده مطابقت داشته باشد.
+1. **فیلد `.spec.attestations`** با دقیقاً یک مدخل: کلید
+   `admissionReviewAPIGroups` با مقداری از نوع آرایه‌ی رشته‌ای تک‌عنصری که گروه API تحت پوشش
+   این توکن را مشخص می‌کند. مقدار `"*"` به معنای همه‌ی گروه‌های API است.
+   گروه API مشخص‌شده باید با یکی از قاعده‌های پیکربندی وب‌هوک ارجاع‌داده‌شده تطبیق داشته باشد.
 
-1. **یک فیلد `.spec.audiences`** با دقیقاً یک عنصر که با نقطهٔ پایانی (endpoint) webhook
-   مطابقت دارد:
-   - برای webhookهای پیکربندی‌شده با URL: audience باید دقیقاً با
-     URL یکسان باشد.
-   - برای webhookهای پیکربندی‌شده با service: audience باید با الگوی
-     `https://<name>.<namespace>.svc:<port>[<path>]` مطابقت داشته باشد؛ در این الگو `<port>` به‌طور پیش‌فرض
-     `443` است و اگر `<path>` در پیکربندی webhook مشخص نشده باشد، پیش‌فرض آن `/` است.
+1. **فیلد `.spec.audiences`** با دقیقاً یک عنصر که با نقطه‌ی پایانی (endpoint) وب‌هوک
+   تطبیق داشته باشد:
+   - برای وب‌هوک‌هایی که با URL پیکربندی شده‌اند: مخاطب (audience) باید دقیقاً با URL یکسان باشد.
+   - برای وب‌هوک‌هایی که با Service پیکربندی شده‌اند: مخاطب باید با الگوی
+     `https://<name>.<namespace>.svc:<port>[<path>]` تطبیق داشته باشد؛ اگر در پیکربندی وب‌هوک
+     مقداری مشخص نشده باشد، مقدار پیش‌فرض `<port>` برابر `443` و مقدار پیش‌فرض `<path>`
+     برابر `/` است.
 
-1. **یک مقدار `.spec.expirationSeconds`**. حداکثر زمان انقضای مجاز برای
-   توکن‌های متصل به webhook برابر ۶۰۰ ثانیه (۱۰ دقیقه) است.
+1. **مقدار `.spec.expirationSeconds`**. حداکثر زمان انقضای مجاز برای توکن‌های وابسته به
+   وب‌هوک ۶۰۰ ثانیه (۱۰ دقیقه) است.
 
 #### الزامات مجوزدهی
 
-هنگام صدور یک توکن احراز هویت webhook، دو سطح از مجوزدهی بررسی می‌شود:
+هنگام صدور توکن احراز هویت وب‌هوک، دو سطح از مجوزدهی بررسی می‌شود:
 
-1. درخواست‌دهنده باید مجوز `create` را روی `serviceaccounts/token` برای
-   حساب سرویس (service account) هدف داشته باشد (مجوزدهی استاندارد TokenRequest).
+1. درخواست‌کننده باید روی `serviceaccounts/token` برای حساب سرویس هدف، مجوز `create`
+   داشته باشد (مجوزدهی استاندارد TokenRequest).
 
-1. حساب سرویسی که در TokenRequest نام برده شده است باید مجوز `attest`
-   را روی منبع `admissionReviewAPIGroups` در API group با نام `authentication.k8s.io`
-   داشته باشد، با یک `resourceName` که با API group مشخص‌شده در
-   attestation مطابقت دارد (یا `"*"` برای همهٔ API groupها).
+1. حساب سرویسی که نام آن در TokenRequest آمده است، باید روی منبع `admissionReviewAPIGroups`
+   در گروه API ‏`authentication.k8s.io` مجوز `attest` داشته باشد؛ آن هم با یک `resourceName`
+   که با گروه API مشخص‌شده در گواهی‌دهی تطبیق داشته باشد (یا `"*"` برای همه‌ی گروه‌های API).
 
-پیکربندی RBAC نمونهٔ زیر به یک service account اجازه می‌دهد توکن‌های احراز هویت webhook را
-با دامنهٔ API group با نام `mygroup.example.com` درخواست کند:
+نمونه‌ی پیکربندی RBAC زیر به یک حساب سرویس اجازه می‌دهد توکن‌های احراز هویت وب‌هوکی
+درخواست کند که دامنه‌ی آن‌ها به گروه API ‏`mygroup.example.com` محدود است:
 
 {{% code_sample language="yaml" file="access/extensible-admission-controllers/webhook-auth-attest-clusterrole.yaml" %}}
 
-#### ادعاهای توکن و تأیید آن از طریق TokenReview
+#### ادعاهای توکن و راستی‌آزمایی با TokenReview
 
-هنگامی که یک توکن احراز هویت webhook از طریق
+هنگامی که یک توکن احراز هویت وب‌هوک از طریق
 [TokenReview](/docs/reference/kubernetes-api/definitions/token-review-v1-authentication/)
-تأیید می‌شود،
-کلیدهای اضافی زیر در فیلد `.status.user.extra` پاسخ مقداردهی می‌شوند:
+راستی‌آزمایی می‌شود، کلیدهای اضافی زیر در فیلد `.status.user.extra` پاسخ مقداردهی می‌شوند:
 
-برای توکن‌های متصل به یک ValidatingWebhookConfiguration:
+برای توکن‌های وابسته به یک ValidatingWebhookConfiguration:
 - `authentication.kubernetes.io/validatingwebhookconfiguration-name`
 - `authentication.kubernetes.io/validatingwebhookconfiguration-uid`
 
-برای توکن‌های متصل به یک MutatingWebhookConfiguration:
+برای توکن‌های وابسته به یک MutatingWebhookConfiguration:
 - `authentication.kubernetes.io/mutatingwebhookconfiguration-name`
 - `authentication.kubernetes.io/mutatingwebhookconfiguration-uid`
 
-برای همهٔ توکن‌های احراز هویت webhook:
+برای همه‌ی توکن‌های احراز هویت وب‌هوک:
 - `attestation.authentication.kubernetes.io/admissionReviewAPIGroups` --
-  API group که توکن برای آن مجاز است.
+  گروه API‌ای که توکن برای آن مجاز است.
 
-JWT زیرین این ادعاها را در فضای نام ادعاهای خصوصی `kubernetes.io` شامل می‌شود.
-برای مثال، توکنی که به یک MutatingWebhookConfiguration متصل است:
+توکن JWT زیربنایی این ادعاها را در فضای نام ادعاهای خصوصی `kubernetes.io` قرار می‌دهد.
+برای نمونه، توکنی که به یک MutatingWebhookConfiguration وابسته است:
 
 ```json
 {
@@ -328,16 +328,16 @@ JWT زیرین این ادعاها را در فضای نام ادعاهای خص
 }
 ```
 
-## درخواست و پاسخ webhook
+## درخواست و پاسخ وب‌هوک
 
-### درخواست {#request}
+### درخواست
 
-درخواست‌ها به webhookها به‌صورت POST و با `Content-Type: application/json` ارسال می‌شوند
-و بدنهٔ آن‌ها یک آبجکت API با نام `AdmissionReview` از API group با نام `admission.k8s.io` است که
-به JSON سریالیزه شده است.
+درخواست‌ها به وب‌هوک‌ها به‌صورت درخواست POST با `Content-Type: application/json` ارسال می‌شوند
+و بدنه‌ی آن‌ها یک آبجکت API از نوع `AdmissionReview` در گروه API ‏`admission.k8s.io` است که
+به JSON سریال‌سازی شده است.
 
-Webhookها می‌توانند با فیلد `admissionReviewVersions` در پیکربندی خود مشخص کنند که
-چه نسخه‌هایی از آبجکت‌های `AdmissionReview` را می‌پذیرند:
+وب‌هوک‌ها می‌توانند با فیلد `admissionReviewVersions` در پیکربندی خود مشخص کنند که
+کدام نسخه‌های آبجکت `AdmissionReview` را می‌پذیرند:
 
 ```yaml
 apiVersion: admissionregistration.k8s.io/v1
@@ -347,17 +347,19 @@ webhooks:
   admissionReviewVersions: ["v1", "v1beta1"]
 ```
 
-`admissionReviewVersions` هنگام ایجاد پیکربندی webhook یک فیلد الزامی است.
-Webhookها موظف‌اند دست‌کم از یک نسخهٔ `AdmissionReview` که API server فعلی و قبلی
-آن را می‌شناسند پشتیبانی کنند.
+فیلد `admissionReviewVersions` هنگام ایجاد پیکربندی‌های وب‌هوک الزامی است.
+وب‌هوک‌ها باید دست‌کم از یک نسخه‌ی `AdmissionReview` پشتیبانی کنند که API server فعلی و
+نسخه‌ی پیشین آن آن را بشناسند.
 
-API serverها نخستین نسخهٔ `AdmissionReview` از فهرست `admissionReviewVersions` را که خود پشتیبانی می‌کنند ارسال می‌کنند.
-اگر هیچ‌یک از نسخه‌های فهرست توسط API server پشتیبانی نشود، ایجاد پیکربندی مجاز نخواهد بود.
-اگر API server با پیکربندی webhookی روبه‌رو شود که پیش‌تر ایجاد شده است و از هیچ‌یک از نسخه‌های `AdmissionReview`
-که API server می‌تواند ارسال کند پشتیبانی نمی‌کند، تلاش‌ها برای فراخوانی webhook ناموفق خواهد بود و مشمول [سیاست شکست](#failure-policy) می‌شود.
+‏API serverها نخستین نسخه‌ی `AdmissionReview` در فهرست `admissionReviewVersions` را که
+پشتیبانی می‌کنند، ارسال می‌کنند. اگر API server از هیچ‌یک از نسخه‌های این فهرست پشتیبانی نکند،
+اجازه‌ی ایجاد پیکربندی داده نمی‌شود. اگر API server با پیکربندی وب‌هوکی روبه‌رو شود که پیش‌تر
+ایجاد شده و از هیچ‌یک از نسخه‌های `AdmissionReview` که API server قادر به ارسال آن‌هاست
+پشتیبانی نمی‌کند، تلاش‌ها برای فراخوانی وب‌هوک با شکست روبه‌رو می‌شوند و
+[سیاست خرابی](#failure-policy) بر آن‌ها اعمال می‌شود.
 
-این مثال داده‌های موجود در یک آبجکت `AdmissionReview` را برای درخواست
-به‌روزرسانی زیرمنبع `scale` از یک `Deployment` با نسخهٔ `apps/v1` نشان می‌دهد:
+این نمونه داده‌های موجود در یک آبجکت `AdmissionReview` را برای درخواستی نشان می‌دهد که
+زیرمنبع `scale` یک `Deployment` از نوع `apps/v1` را به‌روزرسانی می‌کند:
 
 ```yaml
 {
@@ -467,14 +469,14 @@ API serverها نخستین نسخهٔ `AdmissionReview` از فهرست `admiss
 
 ### پاسخ
 
-وب‌هوک‌ها با کد وضعیت HTTP برابر 200 و `Content-Type: application/json` پاسخ می‌دهند و بدنه‌ی پاسخ شامل یک آبجکت `AdmissionReview` (در همان نسخه‌ای که برای وب‌هوک ارسال شده است) است که بخش `response` در آن تکمیل و به JSON سریال‌سازی شده است.
+وب‌هوک‌ها با کد وضعیت HTTP ‏۲۰۰ و سرآیند `Content-Type: application/json` پاسخ می‌دهند. بدنهٔ پاسخ یک آبجکت `AdmissionReview` است که به JSON سریال‌سازی شده، بخش `response` آن پر شده و نسخهٔ آن با نسخهٔ درخواست ارسال‌شده یکی است.
 
-بخش `response` دست‌کم باید شامل فیلدهای زیر باشد:
+بخش `response` دست‌کم باید فیلدهای زیر را داشته باشد:
 
-* `uid`، که از `request.uid` ارسال‌شده به وب‌هوک کپی می‌شود
-* `allowed`، که مقدار آن یا `true` است یا `false`
+* فیلد `uid` که از مقدار `request.uid` ارسال‌شده به وب‌هوک کپی می‌شود
+* فیلد `allowed` که مقدار آن `true` یا `false` است
 
-نمونه‌ای از یک پاسخ حداقلی از سوی وب‌هوک برای اجازه دادن به یک درخواست:
+نمونه‌ای از کمینه‌ترین پاسخ وب‌هوک برای اجازه دادن به یک درخواست:
 
 ```json
 {
@@ -487,7 +489,7 @@ API serverها نخستین نسخهٔ `AdmissionReview` از فهرست `admiss
 }
 ```
 
-نمونه‌ای از یک پاسخ حداقلی از سوی وب‌هوک برای رد یک درخواست:
+نمونه‌ای از کمینه‌ترین پاسخ وب‌هوک برای رد کردن یک درخواست:
 
 ```json
 {
@@ -500,9 +502,8 @@ API serverها نخستین نسخهٔ `AdmissionReview` از فهرست `admiss
 }
 ```
 
-هنگام رد کردن یک درخواست، وب‌هوک می‌تواند با استفاده از فیلد `status` کد HTTP و پیامی را که به کاربر بازگردانده می‌شود سفارشی کند. آبجکت status مشخص‌شده به کاربر بازگردانده می‌شود.
-برای جزئیات بیشتر درباره‌ی نوع `status`، [مستندات API](/docs/reference/generated/kubernetes-api/{{< param "version" >}}/#status-v1-meta) را ببینید.
-نمونه‌ای از پاسخ برای رد یک درخواست، همراه با سفارشی‌سازی کد وضعیت HTTP و پیامی که به کاربر نمایش داده می‌شود:
+وب‌هوک هنگام رد کردن یک درخواست می‌تواند کد HTTP و پیامی را که به کاربر بازگردانده می‌شود، با فیلد `status` سفارشی کند. آبجکت وضعیتِ تعیین‌شده به کاربر بازگردانده می‌شود. برای جزئیات نوع `status` به [مستندات API](/docs/reference/generated/kubernetes-api/{{< param "version" >}}/#status-v1-meta) مراجعه کنید.
+نمونه‌ای از پاسخی که درخواست را رد می‌کند و کد وضعیت HTTP و پیام نمایش‌داده‌شده به کاربر را سفارشی می‌کند:
 
 ```json
 {
@@ -519,16 +520,12 @@ API serverها نخستین نسخهٔ `AdmissionReview` از فهرست `admiss
 }
 ```
 
-هنگام اجازه دادن به یک درخواست، یک وب‌هوک پذیرش از نوع mutating می‌تواند به‌صورت اختیاری آبجکت ورودی را نیز تغییر دهد.
-این کار با استفاده از فیلدهای `patch` و `patchType` در پاسخ انجام می‌شود.
-تنها `patchType` که در حال حاضر پشتیبانی می‌شود `JSONPatch` است.
-برای جزئیات بیشتر، مستندات [JSON patch](https://jsonpatch.com/) را ببینید.
-برای `patchType: JSONPatch`، فیلد `patch` شامل آرایه‌ای از عملیات JSON patch است که با base64 کدگذاری شده است.
+هنگامی که وب‌هوک پذیرش تغییردهنده (mutating admission webhook) به درخواستی اجازه می‌دهد، می‌تواند در صورت تمایل آبجکت ورودی را نیز تغییر دهد. این کار با فیلدهای `patch` و `patchType` در پاسخ انجام می‌شود. در حال حاضر تنها مقدار پشتیبانی‌شده برای `patchType`، مقدار `JSONPatch` است. برای جزئیات بیشتر به مستندات [JSON patch](https://jsonpatch.com/) مراجعه کنید. وقتی `patchType: JSONPatch` تنظیم شده باشد، فیلد `patch` شامل آرایه‌ای از عملیات‌های JSON patch است که با base64 کدگذاری شده است.
 
-برای مثال، یک عملیات patch منفرد که `spec.replicas` را تنظیم می‌کند، به این صورت است:
+برای نمونه، یک عملیات patch منفرد که `spec.replicas` را تنظیم می‌کند به این صورت است:
 `[{"op": "add", "path": "/spec/replicas", "value": 3}]`
 
-این مقدار پس از کدگذاری با Base64 به صورت `W3sib3AiOiAiYWRkIiwgInBhdGgiOiAiL3NwZWMvcmVwbGljYXMiLCAidmFsdWUiOiAzfV0=` درمی‌آید.
+شکل کدگذاری‌شدهٔ آن با base64 چنین است: `W3sib3AiOiAiYWRkIiwgInBhdGgiOiAiL3NwZWMvcmVwbGljYXMiLCAidmFsdWUiOiAzfV0=`
 
 بنابراین پاسخ وب‌هوک برای افزودن آن برچسب به این صورت خواهد بود:
 
@@ -545,17 +542,17 @@ API serverها نخستین نسخهٔ `AdmissionReview` از فهرست `admiss
 }
 ```
 
-وب‌هوک‌های پذیرش می‌توانند به‌صورت اختیاری پیام‌های هشدار بازگردانند که در هدرهای HTTP با نام `Warning` و با کد هشدار 299 به کلاینت درخواست‌دهنده بازگردانده می‌شوند. هشدارها را می‌توان هم در پاسخ‌های پذیرش مجاز و هم در پاسخ‌های ردشده ارسال کرد.
+وب‌هوک‌های پذیرش می‌توانند در صورت تمایل پیام‌های هشداری بازگردانند که در سرآیندهای HTTP `Warning` با کد هشدار ۲۹۹ به کلاینتِ درخواست‌دهنده بازگردانده می‌شوند. هشدارها را می‌توان هم همراه پاسخ‌های پذیرشِ مجاز و هم همراه پاسخ‌های ردشده ارسال کرد.
 
 اگر وب‌هوکی پیاده‌سازی می‌کنید که هشدار بازمی‌گرداند:
 
 * پیشوند "Warning:" را در پیام قرار ندهید
-* از پیام‌های هشدار برای شرح مشکلاتی استفاده کنید که کلاینتِ ارسال‌کننده‌ی درخواست API باید آن‌ها را اصلاح کند یا از آن‌ها آگاه باشد
-* در صورت امکان، هشدارها را به 120 نویسه محدود کنید
+* از پیام‌های هشدار برای توصیف مشکلاتی استفاده کنید که کلاینتِ ارسال‌کنندهٔ درخواست API باید آن‌ها را اصلاح کند یا از آن‌ها آگاه باشد
+* در صورت امکان، طول هشدارها را به ۱۲۰ نویسه محدود کنید
 
 {{< caution >}}
-پیام‌های هشدار منفرد با بیش از 256 نویسه ممکن است پیش از بازگردانده شدن به کلاینت‌ها توسط API server کوتاه شوند.
-اگر بیش از 4096 نویسه پیام هشدار (از همه‌ی منابع) اضافه شود، پیام‌های هشدار اضافی نادیده گرفته می‌شوند.
+ممکن است سرور API پیام‌های هشدارِ منفردِ بلندتر از ۲۵۶ نویسه را پیش از بازگرداندن به کلاینت‌ها کوتاه کند.
+اگر مجموع پیام‌های هشدارِ افزوده‌شده (از همهٔ مبدأها) از ۴۰۹۶ نویسه بیشتر شود، پیام‌های هشدار اضافی نادیده گرفته می‌شوند.
 {{< /caution >}}
 
 ```json
@@ -573,52 +570,53 @@ API serverها نخستین نسخهٔ `AdmissionReview` از فهرست `admiss
 }
 ```
 
-## پیکربندی وب‌هوک {#webhook-configuration}
+## پیکربندی وب‌هوک
 
-برای ثبت وب‌هوک‌های پذیرش، آبجکت‌های API از نوع `MutatingWebhookConfiguration` یا `ValidatingWebhookConfiguration` را ایجاد کنید.
-نام یک آبجکت `MutatingWebhookConfiguration` یا `ValidatingWebhookConfiguration` باید یک
-[نام زیردامنه‌ی DNS](/docs/concepts/overview/working-with-objects/names#dns-subdomain-names) معتبر باشد.
+برای ثبت وب‌هوک‌های پذیرش، آبجکت‌های API از نوع `MutatingWebhookConfiguration` یا `ValidatingWebhookConfiguration` ایجاد کنید.
+نام هر آبجکت `MutatingWebhookConfiguration` یا `ValidatingWebhookConfiguration` باید یک
+[نام زیردامنهٔ DNS](/docs/concepts/overview/working-with-objects/names#dns-subdomain-names) معتبر باشد.
 
 {{< note >}}
 نام‌هایی که به `.static.k8s.io` ختم می‌شوند برای
 [کنترل پذیرش مبتنی بر مانیفست](/docs/reference/access-authn-authz/manifest-admission-control/)
-رزرو شده‌اند و نمی‌توان از آن‌ها برای پیکربندی‌های وب‌هوکِ مبتنی بر API استفاده کرد. این رزرو
+رزرو شده‌اند و نمی‌توان از آن‌ها برای پیکربندی‌های وب‌هوکِ مبتنی بر API استفاده کرد. این محدودیت
 زمانی اعمال می‌شود که
-[feature gate](/docs/reference/command-line-tools-reference/feature-gates/#ManifestBasedAdmissionControlConfig) با نام `ManifestBasedAdmissionControlConfig` فعال باشد.
+[feature gate](/docs/reference/command-line-tools-reference/feature-gates/#ManifestBasedAdmissionControlConfig) مربوط به `ManifestBasedAdmissionControlConfig` فعال باشد.
 {{< /note >}}
 
-هر پیکربندی می‌تواند شامل یک یا چند وب‌هوک باشد.
-اگر چند وب‌هوک در یک پیکربندی واحد مشخص شوند، باید به هر یک نامی یکتا داده شود.
-این کار لازم است تا تطبیق لاگ‌های ممیزی و متریک‌های حاصل با پیکربندی‌های فعال آسان‌تر شود.
+هر پیکربندی می‌تواند یک یا چند وب‌هوک داشته باشد.
+اگر چند وب‌هوک در یک پیکربندی تعریف شوند، هر کدام باید نامی یکتا داشته باشد.
+این الزام برای آن است که تطبیق لاگ‌های ممیزی (audit) و متریک‌های حاصل با پیکربندی‌های فعال آسان‌تر شود.
 
 هر وب‌هوک موارد زیر را تعریف می‌کند.
 
-### تطبیق درخواست‌ها: rules {#matching-requests-rules}
+### تطبیق درخواست‌ها: rules
 
-هر وب‌هوک باید فهرستی از قواعد (rules) را مشخص کند که برای تعیین این‌که آیا یک درخواست به API server باید به وب‌هوک ارسال شود یا خیر به کار می‌روند.
-هر قاعده یک یا چند operation، apiGroup، apiVersion و resource و همچنین یک دامنه‌ی منبع (scope) را مشخص می‌کند:
+هر وب‌هوک باید فهرستی از قواعد را مشخص کند که با آن‌ها تعیین می‌شود آیا درخواستی که به سرور API می‌رسد باید به وب‌هوک ارسال شود یا نه.
+هر قاعده یک یا چند عملیات، گروه API، نسخهٔ API و منبع، و همچنین یک دامنهٔ منبع (scope) را مشخص می‌کند:
 
-* `operations` یک یا چند عملیاتی را که باید تطبیق داده شوند فهرست می‌کند. می‌تواند `"CREATE"`، `"UPDATE"`، `"DELETE"`، `"CONNECT"`
-  یا `"*"` برای تطبیق همه باشد.
-* `apiGroups` یک یا چند گروه API را که باید تطبیق داده شوند فهرست می‌کند. `""` گروه API هسته (core) است. `"*"` با همه‌ی گروه‌های API تطبیق می‌یابد.
-* `apiVersions` یک یا چند نسخه‌ی API را که باید تطبیق داده شوند فهرست می‌کند. `"*"` با همه‌ی نسخه‌های API تطبیق می‌یابد.
-* `resources` یک یا چند منبع را که باید تطبیق داده شوند فهرست می‌کند.
+* فیلد `operations` یک یا چند عملیات را برای تطبیق فهرست می‌کند. مقدار آن می‌تواند `"CREATE"`، `"UPDATE"`، `"DELETE"`، `"CONNECT"`
+  یا `"*"` برای تطبیق با همهٔ عملیات‌ها باشد.
+* فیلد `apiGroups` یک یا چند گروه API را برای تطبیق فهرست می‌کند. مقدار `""` گروه API هسته است و `"*"` با همهٔ گروه‌های API تطبیق می‌یابد.
+* فیلد `apiVersions` یک یا چند نسخهٔ API را برای تطبیق فهرست می‌کند. مقدار `"*"` با همهٔ نسخه‌های API تطبیق می‌یابد.
+* فیلد `resources` یک یا چند منبع را برای تطبیق فهرست می‌کند.
 
-  * `"*"` با همه‌ی منابع تطبیق می‌یابد، اما با زیرمنبع‌ها (subresources) خیر.
-  * `"*/*"` با همه‌ی منابع و زیرمنبع‌ها تطبیق می‌یابد.
-  * `"pods/*"` با همه‌ی زیرمنبع‌های Pod ها تطبیق می‌یابد.
-  * `"*/status"` با همه‌ی زیرمنبع‌های status تطبیق می‌یابد.
+  * مقدار `"*"` با همهٔ منابع تطبیق می‌یابد، اما نه با زیرمنابع.
+  * مقدار `"*/*"` با همهٔ منابع و زیرمنابع تطبیق می‌یابد.
+  * مقدار `"pods/*"` با همهٔ زیرمنابعِ پادها تطبیق می‌یابد.
+  * مقدار `"*/status"` با همهٔ زیرمنابعِ status تطبیق می‌یابد.
 
-* `scope` دامنه‌ای را که باید تطبیق داده شود مشخص می‌کند. مقادیر معتبر `"Cluster"`، `"Namespaced"` و `"*"` هستند.
-  زیرمنبع‌ها با دامنه‌ی منبع والد خود تطبیق می‌یابند. مقدار پیش‌فرض `"*"` است.
+* فیلد `scope` دامنه‌ای را برای تطبیق مشخص می‌کند. مقادیر معتبر `"Cluster"`، `"Namespaced"` و `"*"` هستند.
+  زیرمنابع با دامنهٔ منبعِ والد خود تطبیق داده می‌شوند. مقدار پیش‌فرض `"*"` است.
 
-  * `"Cluster"` یعنی فقط منابعی که در سطح کلاستر هستند با این قاعده تطبیق می‌یابند (آبجکت‌های API از نوع Namespace در سطح کلاستر هستند).
-  * `"Namespaced"` یعنی فقط منابعی که به فضای نام تعلق دارند با این قاعده تطبیق می‌یابند.
-  * `"*"` یعنی هیچ محدودیتی از نظر دامنه وجود ندارد.
+  * مقدار `"Cluster"` به این معناست که فقط منابعِ در دامنهٔ کلاستر با این قاعده تطبیق می‌یابند (آبجکت‌های API از نوع Namespace در دامنهٔ کلاستر قرار دارند).
+  * مقدار `"Namespaced"` به این معناست که فقط منابعِ وابسته به فضای نام (namespace) با این قاعده تطبیق می‌یابند.
+  * مقدار `"*"` به این معناست که هیچ محدودیتی از نظر دامنه وجود ندارد.
 
-اگر یک درخواست ورودی با `operations`، `groups`، `versions`، `resources` و `scope` مشخص‌شده در هر یک از `rules` یک وب‌هوک تطبیق یابد، درخواست به آن وب‌هوک ارسال می‌شود.
+اگر درخواست ورودی با یکی از مقادیر مشخص‌شده برای `operations`، `groups`، `versions`،
+`resources` و `scope` در هر یک از `rules` یک وب‌هوک تطبیق یابد، درخواست به آن وب‌هوک ارسال می‌شود.
 
-در ادامه نمونه‌های دیگری از قواعد آمده است که می‌توان برای مشخص کردن منابعی که باید رهگیری شوند از آن‌ها استفاده کرد.
+در ادامه نمونه‌های دیگری از قواعد آمده است که می‌توان با آن‌ها مشخص کرد کدام منابع باید رهگیری شوند.
 
 تطبیق درخواست‌های `CREATE` یا `UPDATE` برای `deployments` و `replicasets` در `apps/v1` و `apps/v1beta1`:
 
@@ -637,7 +635,7 @@ webhooks:
   ...
 ```
 
-تطبیق درخواست‌های ایجاد برای همه‌ی منابع (اما نه زیرمنبع‌ها) در همه‌ی گروه‌ها و نسخه‌های API:
+تطبیق درخواست‌های ایجاد برای همهٔ منابع (اما نه زیرمنابع) در همهٔ گروه‌ها و نسخه‌های API:
 
 ```yaml
 apiVersion: admissionregistration.k8s.io/v1
@@ -652,7 +650,7 @@ webhooks:
         scope: "*"
 ```
 
-تطبیق درخواست‌های به‌روزرسانی برای همه‌ی زیرمنبع‌های `status` در همه‌ی گروه‌ها و نسخه‌های API:
+تطبیق درخواست‌های به‌روزرسانی برای همهٔ زیرمنابعِ `status` در همهٔ گروه‌ها و نسخه‌های API:
 
 ```yaml
 apiVersion: admissionregistration.k8s.io/v1
@@ -667,11 +665,12 @@ webhooks:
         scope: "*"
 ```
 
-### منابع مجازی مستثناشده {#excluded-virtual-resources}
+### منابع مجازیِ مستثنا {#excluded-virtual-resources}
 
 {{< feature-state feature_gate_name="ExcludeAdmissionWebhookVirtualResources" >}}
 
-وب‌هوک‌های پذیرش برای منابع احراز هویت و مجوزدهیِ غیرپایدار (مجازی) زیر فراخوانی نمی‌شوند، حتی اگر `rules` یک وب‌هوک با آن‌ها تطبیق داشته باشد:
+وب‌هوک‌های پذیرش برای منابع احراز هویت و مجوزدهیِ زیر که ماندگار نمی‌شوند (منابع مجازی)
+فراخوانی نمی‌شوند، حتی اگر `rules` یک وب‌هوک با آن‌ها تطبیق یابد:
 
 * [TokenReviews]({{< relref "/docs/reference/kubernetes-api/definitions/token-review-v1-authentication/" >}})
 * [SelfSubjectReviews]({{< relref "/docs/reference/kubernetes-api/definitions/self-subject-review-v1-authentication/" >}})
@@ -680,21 +679,42 @@ webhooks:
 * [SelfSubjectRulesReviews]({{< relref "/docs/reference/kubernetes-api/definitions/self-subject-rules-review-v1-authorization/" >}})
 * [SubjectAccessReviews]({{< relref "/docs/reference/kubernetes-api/definitions/subject-access-review-v1-authorization/" >}})
 
-وب‌هوکی که این منابع را رهگیری کند می‌تواند کلاستر را از مسیر احراز هویت و مجوزدهیِ خودش بیرون بیندازد: برای مثال، یک وب‌هوکِ دچار خطا که با `subjectaccessreviews` تطبیق دارد می‌تواند بررسی‌های مجوزدهی را که خود کلاستر به آن‌ها وابسته است مسدود کند. مستثنا کردن این منابع، وب‌هوک‌های پذیرش را با [ValidatingAdmissionPolicy](/docs/reference/access-authn-authz/validating-admission-policy/) و [MutatingAdmissionPolicy](/docs/reference/access-authn-authz/mutating-admission-policy/) هم‌راستا می‌کند، که همواره این منابع را مستثنا کرده‌اند.
+وب‌هوکی که این منابع را رهگیری کند ممکن است مسیر احراز هویت و مجوزدهیِ خودِ کلاستر را مسدود کند.
+برای مثال، وب‌هوکِ معیوبی که با `subjectaccessreviews` تطبیق می‌یابد می‌تواند بررسی‌های مجوزدهی‌ای
+را که خودِ کلاستر به آن‌ها وابسته است مسدود کند. با مستثنا کردن این منابع، رفتار وب‌هوک‌های پذیرش
+با [ValidatingAdmissionPolicy](/docs/reference/access-authn-authz/validating-admission-policy/)
+و [MutatingAdmissionPolicy](/docs/reference/access-authn-authz/mutating-admission-policy/)
+هماهنگ می‌شود؛ این دو همواره این منابع را مستثنا کرده‌اند.
 
-اگر پیکربندی وب‌هوکی را با قاعده‌ای ایجاد یا به‌روزرسانی کنید که صراحتاً نام یکی از این منابع را آورده است، API server هشداری بازمی‌گرداند و به شما اطلاع می‌دهد که آن قاعده تأثیری ندارد. همچنین API server هنگام بارگذاری هر پیکربندی وب‌هوکِ موجودی که چنین قاعده‌ای دارد، نام آن را لاگ می‌کند تا بتوانید پیش از ارتقا کلاستر خود را بررسی کنید. قاعده‌هایی که فقط از طریق نویسه‌ی عام (`"*"`) در `apiGroups` یا `resources` با این منابع تطبیق می‌یابند علامت‌گذاری نمی‌شوند، زیرا قصد آن‌ها مبهم است.
+اگر پیکربندی وب‌هوکی را با قاعده‌ای ایجاد یا به‌روزرسانی کنید که صراحتاً نام یکی از این منابع را آورده
+باشد، سرور API هشداری بازمی‌گرداند و اعلام می‌کند که آن قاعده هیچ اثری ندارد. سرور API همچنین هنگام
+بارگذاری پیکربندی‌های وب‌هوکِ موجود، نام هر پیکربندی‌ای را که چنین قاعده‌ای داشته باشد در لاگ ثبت
+می‌کند تا بتوانید پیش از ارتقا، کلاستر خود را ممیزی کنید. قواعدی که تنها از طریق یک نویسهٔ عام
+(`"*"`) در `apiGroups` یا `resources` با این منابع تطبیق می‌یابند علامت‌گذاری نمی‌شوند، زیرا
+هدف آن‌ها مبهم است.
 
-رهگیری این منابع مجازی توسط وب‌هوک‌ها از کوبرنتیز v1.37 منسوخ شده است. به‌عنوان یک راهکار موقت، می‌توانید [feature gate](/docs/reference/command-line-tools-reference/feature-gates/#ExcludeAdmissionWebhookVirtualResources) با نام `ExcludeAdmissionWebhookVirtualResources` را روی `false` تنظیم کنید تا رفتار قبلی بازگردانده شود. برنامه این است که وقتی این قابلیت به مرحله‌ی پایدار برسد، این feature gate روی حالت فعال قفل شود و پس از آن وب‌هوک‌های پذیرش دیگر نتوانند این منابع را رهگیری کنند.
+رهگیری این منابع مجازی توسط وب‌هوک‌ها از نسخهٔ v1.37 کوبرنتیز منسوخ (deprecated) شده است.
+به‌عنوان راه‌حلی موقت، می‌توانید
+[feature gate](/docs/reference/command-line-tools-reference/feature-gates/#ExcludeAdmissionWebhookVirtualResources)
+مربوط به `ExcludeAdmissionWebhookVirtualResources` را روی `false` تنظیم کنید تا رفتار قبلی بازگردد.
+برنامه این است که وقتی این قابلیت به مرحلهٔ پایدار برسد، این feature gate در حالت فعال قفل شود؛
+از آن پس وب‌هوک‌های پذیرش دیگر نمی‌توانند این منابع را رهگیری کنند.
 
-### تطبیق درخواست‌ها: objectSelector {#matching-requests-objectselector}
+### تطبیق درخواست‌ها: objectSelector
 
-وب‌هوک‌ها می‌توانند با مشخص کردن یک `objectSelector`، به‌صورت اختیاری رهگیری درخواست‌ها را بر اساس برچسب‌های آبجکت‌هایی که برایشان ارسال می‌شوند محدود کنند. در صورت مشخص شدن، objectSelector هم روی object و هم روی oldObject که به وب‌هوک ارسال می‌شود ارزیابی می‌شود و اگر هر یک از این دو آبجکت با انتخابگر (selector) تطبیق یابد، تطبیق‌یافته در نظر گرفته می‌شود.
+وب‌هوک‌ها می‌توانند در صورت تمایل با تعیین `objectSelector`، درخواست‌های رهگیری‌شده را بر اساس
+برچسب‌های آبجکت‌هایی که قرار است برایشان ارسال شوند محدود کنند. در صورت تعیین این فیلد، انتخابگر
+(selector) آبجکت هم روی object و هم روی oldObject که قرار است به وب‌هوک ارسال شوند ارزیابی می‌شود،
+و اگر هر یک از این دو آبجکت با انتخابگر تطبیق یابد، تطبیق برقرار تلقی می‌شود.
 
-یک آبجکت null (`oldObject` در مورد ایجاد، یا `newObject` در مورد حذف)، یا آبجکتی که نمی‌تواند برچسب داشته باشد (مانند آبجکت `DeploymentRollback` یا `PodProxyOptions`)، تطبیق‌یافته در نظر گرفته نمی‌شود.
+آبجکت تهی (`oldObject` در حالت ایجاد، یا `newObject` در حالت حذف)
+یا آبجکتی که نمی‌تواند برچسب داشته باشد (مانند آبجکت `DeploymentRollback` یا `PodProxyOptions`)
+تطبیق‌یافته در نظر گرفته نمی‌شود.
 
-از انتخابگر آبجکت فقط در صورتی استفاده کنید که وب‌هوک به‌صورت opt-in عمل می‌کند، زیرا کاربران نهایی می‌توانند با تنظیم برچسب‌ها از وب‌هوک پذیرش عبور کنند.
+از انتخابگر آبجکت فقط زمانی استفاده کنید که وب‌هوک اختیاری (opt-in) باشد، زیرا کاربران نهایی
+می‌توانند با تنظیم برچسب‌ها از وب‌هوک پذیرش عبور کنند.
 
-این مثال یک وب‌هوک از نوع mutating را نشان می‌دهد که با `CREATE` هر منبعی (اما نه زیرمنبع‌ها) که برچسب `foo: bar` را دارد تطبیق می‌یابد:
+این نمونه یک وب‌هوک تغییردهنده را نشان می‌دهد که با عملیات `CREATE` روی هر منبعی (اما نه زیرمنابع) که برچسب `foo: bar` دارد تطبیق می‌یابد:
 
 ```yaml
 apiVersion: admissionregistration.k8s.io/v1
@@ -712,17 +732,22 @@ webhooks:
     scope: "*"
 ```
 
-برای نمونه‌های بیشتر از انتخابگرهای برچسب، [مفهوم برچسب‌ها](/docs/concepts/overview/working-with-objects/labels) را ببینید.
+برای نمونه‌های بیشتری از انتخابگرهای برچسب، به [مفهوم برچسب‌ها](/docs/concepts/overview/working-with-objects/labels)
+مراجعه کنید.
 
-### تطبیق درخواست‌ها: namespaceSelector {#matching-requests-namespaceselector}
+### تطبیق درخواست‌ها: namespaceSelector
 
-وب‌هوک‌ها می‌توانند با مشخص کردن یک `namespaceSelector`، به‌صورت اختیاری رهگیری درخواست‌ها برای منابعِ دارای فضای نام را بر اساس برچسب‌های فضای نام حاوی آن‌ها محدود کنند.
+وب‌هوک‌ها می‌توانند در صورت تمایل با تعیین `namespaceSelector`، درخواست‌های رهگیری‌شده برای
+منابعِ وابسته به فضای نام را بر اساس برچسب‌های فضای نامِ دربرگیرنده محدود کنند.
 
-`namespaceSelector` بر اساس این‌که برچسب‌های فضای نام با انتخابگر تطبیق دارند یا خیر، تصمیم می‌گیرد که آیا وب‌هوک روی درخواستی برای یک منبعِ دارای فضای نام (یا یک آبجکت Namespace) اجرا شود یا نه.
-اگر خود آبجکت یک فضای نام باشد، تطبیق روی object.metadata.labels انجام می‌شود.
-اگر آبجکت یک منبع در سطح کلاستر غیر از Namespace باشد، `namespaceSelector` تأثیری ندارد.
+فیلد `namespaceSelector` تعیین می‌کند که آیا وب‌هوک روی درخواستی برای یک منبعِ وابسته به فضای نام
+(یا یک آبجکت Namespace) اجرا شود یا نه؛ این تصمیم بر این اساس گرفته می‌شود که آیا برچسب‌های فضای نام
+با انتخابگر تطبیق دارند یا خیر.
+اگر خودِ آبجکت یک فضای نام باشد، تطبیق روی object.metadata.labels انجام می‌شود.
+اگر آبجکت منبعی در دامنهٔ کلاستر به‌جز Namespace باشد، `namespaceSelector` هیچ اثری ندارد.
 
-این مثال یک وب‌هوک از نوع mutating را نشان می‌دهد که با `CREATE` هر منبعِ دارای فضای نام در فضای نامی که برچسب "runlevel" آن برابر "0" یا "1" نیست تطبیق می‌یابد:
+این نمونه یک وب‌هوک تغییردهنده را نشان می‌دهد که با عملیات `CREATE` روی هر منبعِ وابسته به فضای نام
+در فضای نامی تطبیق می‌یابد که برچسب "runlevel" آن مقدار "0" یا "1" ندارد:
 
 ```yaml
 apiVersion: admissionregistration.k8s.io/v1
@@ -742,7 +767,8 @@ webhooks:
         scope: "Namespaced"
 ```
 
-این مثال یک وب‌هوک از نوع validating را نشان می‌دهد که با `CREATE` هر منبعِ دارای فضای نام در فضای نامی که با "environment" برابر "prod" یا "staging" مرتبط است تطبیق می‌یابد:
+این نمونه یک وب‌هوک اعتبارسنج (validating) را نشان می‌دهد که با عملیات `CREATE` روی هر منبعِ وابسته
+به فضای نام در فضای نامی تطبیق می‌یابد که "environment" آن "prod" یا "staging" است:
 
 ```yaml
 apiVersion: admissionregistration.k8s.io/v1
@@ -762,38 +788,44 @@ webhooks:
         scope: "Namespaced"
 ```
 
-برای نمونه‌های بیشتر از انتخابگرهای برچسب، [مفهوم برچسب‌ها](/docs/concepts/overview/working-with-objects/labels) را ببینید.
+برای نمونه‌های بیشتری از انتخابگرهای برچسب، به [مفهوم برچسب‌ها](/docs/concepts/overview/working-with-objects/labels)
+مراجعه کنید.
 
-### تطبیق درخواست‌ها: matchPolicy {#matching-requests-matchpolicy}
+### تطبیق درخواست‌ها: matchPolicy
 
-API serverها می‌توانند آبجکت‌ها را از طریق چند گروه یا نسخه‌ی API در دسترس قرار دهند.
+سرورهای API می‌توانند آبجکت‌ها را از طریق چندین گروه یا نسخهٔ API در دسترس قرار دهند.
 
-برای مثال، اگر یک وب‌هوک فقط برای برخی گروه‌ها/نسخه‌های API قاعده‌ای مشخص کرده باشد
+برای مثال، اگر وب‌هوکی فقط برای برخی گروه‌ها/نسخه‌های API قاعده تعریف کرده باشد
 (مانند `apiGroups:["apps"], apiVersions:["v1","v1beta1"]`)
-و درخواستی برای تغییر منبع از طریق گروه/نسخه‌ی API دیگری (مانند `extensions/v1beta1`) صادر شود،
-آن درخواست به وب‌هوک ارسال نخواهد شد.
+و درخواستی برای تغییر منبع از طریق گروه/نسخهٔ API دیگری (مانند `extensions/v1beta1`) ارسال شود،
+آن درخواست به وب‌هوک فرستاده نمی‌شود.
 
-`matchPolicy` به وب‌هوک اجازه می‌دهد تعیین کند `rules` آن چگونه برای تطبیق درخواست‌های ورودی به کار روند.
+با فیلد `matchPolicy`، وب‌هوک می‌تواند تعیین کند که `rules` آن چگونه برای تطبیق درخواست‌های ورودی به کار رود.
 مقادیر مجاز `Exact` یا `Equivalent` هستند.
 
-* `Exact` یعنی یک درخواست فقط در صورتی باید رهگیری شود که دقیقاً با یکی از قواعد مشخص‌شده تطبیق یابد.
-* `Equivalent` یعنی یک درخواست در صورتی باید رهگیری شود که منبعی را که در `rules` فهرست شده است تغییر دهد، حتی اگر از طریق گروه یا نسخه‌ی API دیگری باشد.
+* مقدار `Exact` به این معناست که درخواست فقط زمانی رهگیری شود که دقیقاً با یک قاعدهٔ مشخص‌شده تطبیق یابد.
+* مقدار `Equivalent` به این معناست که اگر درخواست منبعی را که در `rules` فهرست شده تغییر دهد،
+  حتی از طریق گروه یا نسخهٔ API دیگری، رهگیری شود.
 
-در مثال بالا، وب‌هوکی که فقط برای `apps/v1` ثبت شده بود می‌توانست از `matchPolicy` استفاده کند:
+در نمونهٔ بالا، وب‌هوکی که فقط برای `apps/v1` ثبت شده بود می‌توانست از `matchPolicy` استفاده کند:
 
-* `matchPolicy: Exact` یعنی درخواست `extensions/v1beta1` به وب‌هوک ارسال نمی‌شود
-* `matchPolicy: Equivalent` یعنی درخواست `extensions/v1beta1` به وب‌هوک ارسال می‌شود
-  (با تبدیل آبجکت‌ها به نسخه‌ای که وب‌هوک مشخص کرده بود: `apps/v1`)
+* تنظیم `matchPolicy: Exact` به این معناست که درخواست `extensions/v1beta1` به وب‌هوک ارسال نمی‌شود
+* تنظیم `matchPolicy: Equivalent` به این معناست که درخواست `extensions/v1beta1` به وب‌هوک ارسال می‌شود
+  (و آبجکت‌ها به نسخه‌ای که وب‌هوک مشخص کرده، یعنی `apps/v1`، تبدیل می‌شوند)
 
-مشخص کردن `Equivalent` توصیه می‌شود و تضمین می‌کند که وب‌هوک‌ها هنگامی که ارتقاها نسخه‌های جدید منبع را در API server فعال می‌کنند، همچنان منابعی را که انتظار دارند رهگیری کنند.
+توصیه می‌شود مقدار `Equivalent` را تعیین کنید؛ این کار تضمین می‌کند که وقتی ارتقاها نسخه‌های جدیدی
+از منبع را در سرور API فعال می‌کنند، وب‌هوک‌ها همچنان منابعی را که انتظار دارند رهگیری کنند.
 
-وقتی ارائه‌ی یک منبع توسط API server متوقف می‌شود، دیگر معادل نسخه‌های دیگر آن منبع که هنوز ارائه می‌شوند در نظر گرفته نمی‌شود.
+وقتی سرور API دیگر منبعی را ارائه نکند، آن منبع دیگر با نسخه‌های دیگرِ همان منبع که هنوز ارائه می‌شوند
+معادل در نظر گرفته نمی‌شود.
 برای مثال، deploymentهای `extensions/v1beta1` ابتدا منسوخ و سپس (در کوبرنتیز v1.16) حذف شدند.
 
-از زمان آن حذف، وب‌هوکی با قاعده‌ی `apiGroups:["extensions"], apiVersions:["v1beta1"], resources:["deployments"]`
-deploymentهایی را که از طریق APIهای `apps/v1` ایجاد می‌شوند رهگیری نمی‌کند. به همین دلیل، وب‌هوک‌ها باید ترجیحاً برای نسخه‌های پایدار منابع ثبت شوند.
+از زمان این حذف، وب‌هوکی که قاعدهٔ `apiGroups:["extensions"], apiVersions:["v1beta1"], resources:["deployments"]`
+را دارد، deploymentهایی را که از طریق APIهای `apps/v1` ایجاد می‌شوند رهگیری نمی‌کند. به همین دلیل،
+بهتر است وب‌هوک‌ها برای نسخه‌های پایدارِ منابع ثبت شوند.
 
-این مثال یک وب‌هوک از نوع validating را نشان می‌دهد که تغییرات deploymentها را (صرف‌نظر از گروه یا نسخه‌ی API) رهگیری می‌کند و همواره یک آبجکت `Deployment` از `apps/v1` دریافت می‌کند:
+این نمونه یک وب‌هوک اعتبارسنج را نشان می‌دهد که تغییرات deploymentها را (صرف‌نظر از گروه یا نسخهٔ API)
+رهگیری می‌کند و همیشه یک آبجکت `Deployment` با نسخهٔ `apps/v1` برای آن ارسال می‌شود:
 
 ```yaml
 apiVersion: admissionregistration.k8s.io/v1
@@ -809,15 +841,19 @@ webhooks:
     scope: "Namespaced"
 ```
 
-مقدار پیش‌فرض `matchPolicy` برای وب‌هوک‌های پذیرش `Equivalent` است.
+مقدار پیش‌فرض `matchPolicy` برای وب‌هوک‌های پذیرش، `Equivalent` است.
 
-### تطبیق درخواست‌ها: `matchConditions` {#matching-requests-matchconditions}
+### تطبیق درخواست‌ها: `matchConditions`
 
 {{< feature-state feature_gate_name="AdmissionWebhookMatchConditions" >}}
 
-اگر به فیلتر کردن دقیق‌تر درخواست‌ها نیاز دارید، می‌توانید برای وب‌هوک‌ها _شرایط تطبیق_ (match conditions) تعریف کنید. این شرایط زمانی مفید هستند که قواعد تطبیق، `objectSelectors` و `namespaceSelectors` همچنان فیلتری را که می‌خواهید بر این‌که چه زمانی از طریق HTTP فراخوانی انجام شود فراهم نمی‌کنند. شرایط تطبیق [عبارت‌های CEL](/docs/reference/using-api/cel/) هستند. برای این‌که وب‌هوک فراخوانی شود، همه‌ی شرایط تطبیق باید به true ارزیابی شوند.
+اگر به فیلتر کردن دقیق‌تر درخواست‌ها نیاز دارید، می‌توانید برای وب‌هوک‌ها _شرایط تطبیق_ تعریف کنید.
+این شرایط زمانی مفیدند که ببینید قواعد تطبیق، `objectSelectors` و `namespaceSelectors` هنوز
+فیلتری را که برای تعیین زمانِ فراخوانی از طریق HTTP می‌خواهید فراهم نمی‌کنند. شرایط تطبیق،
+[عبارت‌های CEL](/docs/reference/using-api/cel/) هستند. برای فراخوانی وب‌هوک، همهٔ شرایط تطبیق
+باید به true ارزیابی شوند.
 
-در اینجا مثالی آمده است که چند کاربرد مختلف از شرایط تطبیق را نشان می‌دهد:
+در اینجا نمونه‌ای آمده است که چند کاربرد مختلف شرایط تطبیق را نشان می‌دهد:
 
 ```yaml
 apiVersion: admissionregistration.k8s.io/v1
@@ -872,60 +908,52 @@ webhooks:
 ```
 
 {{< note >}}
-می‌توانید در فیلد `matchConditions` برای هر وب‌هوک حداکثر 64 عنصر تعریف کنید.
+برای هر وب‌هوک می‌توانید حداکثر ۶۴ عنصر در فیلد `matchConditions` تعریف کنید.
 {{< /note >}}
 
 شرایط تطبیق به متغیرهای CEL زیر دسترسی دارند:
 
-- `object` - آبجکت موجود در درخواست ورودی. مقدار آن برای درخواست‌های DELETE برابر null است. نسخه‌ی آبجکت ممکن است بر اساس [matchPolicy](#matching-requests-matchpolicy) تبدیل شود.
-- `oldObject` - آبجکت موجود. مقدار آن برای درخواست‌های CREATE برابر null است.
-- `request` - بخش درخواست از [AdmissionReview](#request)، به‌جز `object` و `oldObject`.
-- `authorizer` - یک CEL Authorizer. می‌توان از آن برای انجام بررسی‌های مجوزدهی برای principal (کاربر احراز هویت‌شده) درخواست استفاده کرد. برای جزئیات بیشتر، بخش
-  [Authz](https://pkg.go.dev/k8s.io/apiserver/pkg/cel/library#Authz) را در مستندات کتابخانه‌ی CEL کوبرنتیز ببینید.
-- `authorizer.requestResource` - میان‌بری برای یک بررسی مجوزدهی که با منبع درخواست (group، resource، (subresource)، namespace، name) پیکربندی شده است.
+- متغیر `object`: آبجکتِ درخواست ورودی. مقدار آن برای درخواست‌های DELETE تهی است. ممکن است
+  نسخهٔ آبجکت بر اساس [matchPolicy](#matching-requests-matchpolicy) تبدیل شود.
+- متغیر `oldObject`: آبجکت موجود. مقدار آن برای درخواست‌های CREATE تهی است.
+- متغیر `request`: بخش درخواستِ [AdmissionReview](#request)، به‌جز `object` و `oldObject`.
+- متغیر `authorizer`: یک مجوزدهندهٔ CEL. از آن می‌توان برای انجام بررسی‌های مجوزدهی برای
+  هویتِ اصلیِ (principal) درخواست، یعنی کاربر احراز هویت‌شده، استفاده کرد. برای جزئیات بیشتر به
+  [Authz](https://pkg.go.dev/k8s.io/apiserver/pkg/cel/library#Authz) در مستندات کتابخانهٔ CEL کوبرنتیز
+  مراجعه کنید.
+- متغیر `authorizer.requestResource`: میان‌بری برای بررسی مجوزدهی‌ای که با منبعِ درخواست
+  (گروه، منبع، (زیرمنبع)، فضای نام، نام) پیکربندی شده است.
 
-برای اطلاعات بیشتر درباره‌ی عبارت‌های CEL، به
+برای اطلاعات بیشتر دربارهٔ عبارت‌های CEL، به
 [مرجع Common Expression Language در کوبرنتیز](/docs/reference/using-api/cel/) مراجعه کنید.
 
-در صورت بروز خطا هنگام ارزیابی یک شرط تطبیق، وب‌هوک هرگز فراخوانی نمی‌شود. اینکه درخواست رد شود یا نه، به شرح زیر تعیین می‌شود:
+اگر هنگام ارزیابی یک شرط تطبیق خطایی رخ دهد، وب‌هوک هرگز فراخوانی نمی‌شود. اینکه درخواست رد شود
+یا نه، به این صورت تعیین می‌شود:
 
-1. اگر **هر** شرط تطبیقی به `false` ارزیابی شود (صرف‌نظر از خطاهای دیگر)، API server وب‌هوک را نادیده می‌گیرد.
+1. اگر **هر یک** از شرایط تطبیق به `false` ارزیابی شده باشد (صرف‌نظر از خطاهای دیگر)، سرور API از وب‌هوک صرف‌نظر می‌کند.
 2. در غیر این صورت:
-    - برای [`failurePolicy: Fail`](#failure-policy)، درخواست رد می‌شود (بدون فراخوانی وب‌هوک).
-    - برای [`failurePolicy: Ignore`](#failure-policy)، درخواست ادامه می‌یابد اما وب‌هوک نادیده گرفته می‌شود.
+    - برای [`failurePolicy: Fail`](#failure-policy)، درخواست (بدون فراخوانی وب‌هوک) رد می‌شود.
+    - برای [`failurePolicy: Ignore`](#failure-policy)، پردازش درخواست ادامه می‌یابد، اما از وب‌هوک صرف‌نظر می‌شود.
 
-### تماس با webhook
+### تماس با وب‌هوک
 
-پس از آنکه API server تشخیص داد که یک درخواست باید به یک webhook ارسال شود،
-باید بداند چگونه با آن webhook تماس بگیرد. این موضوع در بخش `clientConfig`
-از پیکربندی webhook مشخص می‌شود.
+پس از اینکه سرور API تشخیص داد درخواستی باید به یک وب‌هوک فرستاده شود، باید بداند چگونه با آن وب‌هوک تماس بگیرد. این موضوع در بخش `clientConfig` از پیکربندی وب‌هوک مشخص می‌شود.
 
-webhookها را می‌توان از طریق یک URL یا یک ارجاع به سرویس (service reference) فراخوانی کرد
-و در صورت نیاز می‌توان یک CA bundle سفارشی برای تأیید اتصال TLS در آن‌ها قرار داد.
+وب‌هوک‌ها را می‌توان از طریق یک URL یا یک ارجاع به سرویس فراخوانی کرد. همچنین در صورت نیاز می‌توان یک بستهٔ CA سفارشی برای تأیید اتصال TLS در پیکربندی آن‌ها گنجاند.
 
-#### URL
+#### نشانی URL
 
-مقدار `url` نشانی webhook را به شکل استاندارد URL
-(`scheme://host:port/path`) مشخص می‌کند.
+فیلد `url` مکان وب‌هوک را در قالب استاندارد URL (`scheme://host:port/path`) مشخص می‌کند.
 
-مقدار `host` نباید به سرویسی اشاره کند که درون کلاستر در حال اجراست؛ برای این منظور
-به‌جای آن با تعیین فیلد `service` از یک ارجاع به سرویس استفاده کنید.
-در برخی API serverها ممکن است host از طریق DNS خارجی تفسیر و resolve شود
-(برای مثال، `kube-apiserver` نمی‌تواند DNS داخل کلاستر را resolve کند، زیرا این کار
-نقض لایه‌بندی (layering violation) خواهد بود). `host` می‌تواند یک نشانی IP نیز باشد.
+مقدار `host` نباید به سرویسی اشاره کند که درون کلاستر اجرا می‌شود؛ در این حالت به‌جای آن با تعیین فیلد `service` از ارجاع به سرویس استفاده کنید. در برخی سرورهای API ممکن است نام میزبان از طریق DNS خارجی تفکیک (resolve) شود. برای نمونه، `kube-apiserver` نمی‌تواند نام‌های DNS درون کلاستر را تفکیک کند، زیرا این کار نقض لایه‌بندی است. مقدار `host` می‌تواند یک نشانی IP نیز باشد.
 
-توجه داشته باشید که استفاده از `localhost` یا `127.0.0.1` به‌عنوان `host`
-پرخطر است، مگر آنکه دقت زیادی به خرج دهید تا این webhook روی تمام هاست‌هایی اجرا شود
-که یک API server را اجرا می‌کنند و ممکن است لازم باشد با این webhook تماس بگیرند.
-چنین نصب‌هایی به احتمال زیاد قابل‌حمل نیستند یا به‌سادگی در یک کلاستر جدید اجرا نمی‌شوند.
+توجه کنید که استفاده از `localhost` یا `127.0.0.1` به‌عنوان `host` پرخطر است، مگر اینکه با دقت بسیار این وب‌هوک را روی همهٔ میزبان‌هایی اجرا کنید که سرور API روی آن‌ها اجرا می‌شود و ممکن است لازم باشد این وب‌هوک را فراخوانی کند. چنین نصب‌هایی احتمالاً قابل‌حمل نیستند یا به‌سادگی در یک کلاستر جدید اجرا نمی‌شوند.
 
-scheme باید "https" باشد؛ یعنی URL باید با "https://" آغاز شود.
+طرح (scheme) باید "https" باشد؛ یعنی URL باید با "https://" آغاز شود.
 
-استفاده از نام کاربری یا احراز هویت پایه (basic auth) (برای مثال `user:password@`) مجاز نیست.
-همچنین fragmentها (`#...`) و پارامترهای query (`?...`) مجاز نیستند.
+استفاده از اطلاعات کاربر یا احراز هویت پایه (basic auth)، برای نمونه `user:password@`، مجاز نیست. قطعه‌ها (`#...`) و پارامترهای پرس‌وجو (`?...`) نیز مجاز نیستند.
 
-در ادامه مثالی از یک mutating webhook آمده است که برای فراخوانی یک URL پیکربندی شده است
-(و انتظار دارد گواهی TLS با استفاده از ریشه‌های اعتماد سیستم تأیید شود، بنابراین caBundle را مشخص نمی‌کند):
+نمونهٔ زیر یک وب‌هوک تغییردهنده (mutating) را نشان می‌دهد که برای فراخوانی یک URL پیکربندی شده است. این وب‌هوک انتظار دارد گواهی TLS با ریشه‌های اعتماد سیستم تأیید شود و به همین دلیل caBundle را مشخص نمی‌کند:
 
 ```yaml
 apiVersion: admissionregistration.k8s.io/v1
@@ -938,14 +966,9 @@ webhooks:
 
 #### ارجاع به سرویس
 
-بخش `service` درون `clientConfig` ارجاعی به سرویس این webhook است.
-اگر webhook درون کلاستر در حال اجراست، باید به‌جای `url` از `service` استفاده کنید.
-فضای نام (namespace) و نام سرویس الزامی هستند. پورت اختیاری است و مقدار پیش‌فرض آن 443 است.
-مسیر (path) اختیاری است و مقدار پیش‌فرض آن "/" است.
+بخش `service` درون `clientConfig` ارجاعی به سرویسِ این وب‌هوک است. اگر وب‌هوک درون کلاستر اجرا می‌شود، باید به‌جای `url` از `service` استفاده کنید. فضای نام (namespace) و نام سرویس الزامی هستند. پورت اختیاری است و مقدار پیش‌فرض آن 443 است. مسیر نیز اختیاری است و مقدار پیش‌فرض آن "/" است.
 
-در ادامه مثالی از یک mutating webhook آمده است که برای فراخوانی یک سرویس روی پورت "1234"
-در زیرمسیر "/my-path" پیکربندی شده است و اتصال TLS را با استفاده از یک CA bundle سفارشی
-در برابر ServerName برابر با `my-service-name.my-service-namespace.svc` تأیید می‌کند:
+نمونهٔ زیر یک وب‌هوک تغییردهنده را نشان می‌دهد که برای فراخوانی یک سرویس روی پورت "1234" و در زیرمسیر "/my-path" پیکربندی شده است و اتصال TLS را با استفاده از یک بستهٔ CA سفارشی در برابر ServerName با مقدار `my-service-name.my-service-namespace.svc` تأیید می‌کند:
 
 ```yaml
 apiVersion: admissionregistration.k8s.io/v1
@@ -962,35 +985,25 @@ webhooks:
 ```
 
 {{< note >}}
-باید مقدار `<CA_BUNDLE>` را در مثال بالا با یک CA bundle معتبر جایگزین کنید؛
-این مقدار یک CA bundle با کدگذاری PEM است که برای اعتبارسنجی گواهی سرور webhook به کار می‌رود.
+باید `<CA_BUNDLE>` را در نمونهٔ بالا با یک بستهٔ CA معتبر جایگزین کنید؛ یعنی بسته‌ای با کدگذاری PEM که برای اعتبارسنجی گواهی سرور وب‌هوک به کار می‌رود.
 {{< /note >}}
 
-### عوارض جانبی
+### اثرات جانبی
 
-webhookها معمولاً فقط روی محتوای `AdmissionReview` ارسال‌شده به آن‌ها عمل می‌کنند.
-با این حال، برخی webhookها در جریان پردازش درخواست‌های admission تغییراتی خارج از این جریان (out-of-band) اعمال می‌کنند.
+وب‌هوک‌ها معمولاً فقط روی محتوای `AdmissionReview` ارسال‌شده به آن‌ها عمل می‌کنند. با این حال، برخی وب‌هوک‌ها در جریان پردازش درخواست‌های پذیرش (admission)، تغییراتی را خارج از این جریان (out-of-band) نیز اعمال می‌کنند.
 
-webhookهایی که تغییرات out-of-band اعمال می‌کنند («عوارض جانبی» یا side effects) باید یک سازوکار تطبیق (reconciliation)
-نیز داشته باشند (مانند یک کنترل‌کننده) که به‌صورت دوره‌ای وضعیت واقعی سیستم را تعیین کند و
-داده‌های out-of-band را که توسط admission webhook تغییر یافته‌اند، مطابق با واقعیت تنظیم کند.
-دلیل این امر آن است که فراخوانی یک admission webhook تضمین نمی‌کند که آبجکت پذیرفته‌شده همان‌گونه که هست، یا اصلاً، ذخیره شود.
-webhookهای بعدی می‌توانند محتوای آبجکت را تغییر دهند، ممکن است هنگام نوشتن در ذخیره‌سازی با تعارض (conflict) مواجه شویم،
-یا سرور ممکن است پیش از ذخیره‌شدن آبجکت خاموش شود.
+وب‌هوک‌هایی که تغییرات خارج از جریان («اثرات جانبی») ایجاد می‌کنند، باید یک سازوکار تطبیق (reconciliation) نیز داشته باشند (مانند یک کنترل‌کننده) که به‌طور دوره‌ای وضعیت واقعی را تعیین کند و داده‌های خارج از جریانی را که وب‌هوک پذیرش تغییر داده است، مطابق با واقعیت اصلاح کند. دلیل این است که فراخوانی یک وب‌هوک پذیرش تضمین نمی‌کند که آبجکتِ پذیرفته‌شده عیناً، یا حتی اصلاً، ذخیره شود. ممکن است وب‌هوک‌های بعدی محتوای آبجکت را تغییر دهند، هنگام نوشتن در ذخیره‌ساز تعارضی پیش آید، یا سرور پیش از ذخیرهٔ آبجکت خاموش شود.
 
-علاوه بر این، webhookهای دارای عوارض جانبی باید هنگام پردازش درخواست‌های admission با `dryRun: true`
-از اعمال این عوارض جانبی صرف‌نظر کنند.
-یک webhook باید به‌صراحت اعلام کند که هنگام اجرا با `dryRun` عارضه جانبی نخواهد داشت،
-در غیر این صورت درخواست dry-run به webhook ارسال نخواهد شد و درخواست API با شکست مواجه می‌شود.
+افزون بر این، وب‌هوک‌های دارای اثر جانبی باید هنگام رسیدگی به درخواست‌های پذیرش با `dryRun: true` از اعمال آن اثرات جانبی صرف‌نظر کنند. هر وب‌هوک باید صراحتاً اعلام کند که هنگام اجرا با `dryRun` اثر جانبی نخواهد داشت؛ در غیر این صورت، درخواست dry-run به وب‌هوک فرستاده نمی‌شود و به‌جای آن درخواست API با شکست مواجه می‌شود.
 
-webhookها با استفاده از فیلد `sideEffects` در پیکربندی webhook مشخص می‌کنند که آیا عوارض جانبی دارند یا خیر:
+وب‌هوک‌ها با فیلد `sideEffects` در پیکربندی وب‌هوک مشخص می‌کنند که آیا اثر جانبی دارند یا نه:
 
-* `None`: فراخوانی webhook هیچ عارضه جانبی نخواهد داشت.
-* `NoneOnDryRun`: فراخوانی webhook احتمالاً عوارض جانبی خواهد داشت، اما اگر درخواستی با
-  `dryRun: true` به webhook ارسال شود، webhook عوارض جانبی را سرکوب می‌کند (webhook
+* `None`: فراخوانی وب‌هوک هیچ اثر جانبی نخواهد داشت.
+* `NoneOnDryRun`: فراخوانی وب‌هوک ممکن است اثر جانبی داشته باشد، اما اگر درخواستی با
+  `dryRun: true` به وب‌هوک فرستاده شود، وب‌هوک از اعمال اثرات جانبی خودداری می‌کند (یعنی وب‌هوک
   از `dryRun` آگاه است).
 
-در ادامه مثالی از یک validating webhook آمده است که اعلام می‌کند برای درخواست‌های `dryRun: true` عارضه جانبی ندارد:
+نمونهٔ زیر یک وب‌هوک اعتبارسنج (validating) را نشان می‌دهد که اعلام می‌کند روی درخواست‌های `dryRun: true` اثر جانبی ندارد:
 
 ```yaml
 apiVersion: admissionregistration.k8s.io/v1
@@ -1000,18 +1013,15 @@ webhooks:
     sideEffects: NoneOnDryRun
 ```
 
-### مهلت‌های زمانی (Timeouts)
+### مهلت‌های زمانی
 
-از آنجا که webhookها به تأخیر درخواست‌های API می‌افزایند، باید در کمترین زمان ممکن ارزیابی را انجام دهند.
-فیلد `timeoutSeconds` امکان پیکربندی این را فراهم می‌کند که API server تا چه مدت برای پاسخ یک webhook منتظر بماند
-تا فراخوانی را شکست‌خورده تلقی کند.
+از آنجا که وب‌هوک‌ها تأخیر درخواست‌های API را افزایش می‌دهند، باید تا حد امکان سریع ارزیابی شوند. با فیلد `timeoutSeconds` می‌توان تعیین کرد که سرور API پیش از آنکه فراخوانی را شکست‌خورده تلقی کند، چه مدت منتظر پاسخ وب‌هوک بماند.
 
-اگر مهلت زمانی پیش از پاسخ webhook به پایان برسد، فراخوانی webhook نادیده گرفته می‌شود یا
-درخواست API بر اساس [سیاست شکست](#failure-policy) رد می‌شود.
+اگر مهلت زمانی پیش از پاسخ وب‌هوک به پایان برسد، بسته به [سیاست شکست](#failure-policy)، یا فراخوانی وب‌هوک نادیده گرفته می‌شود یا درخواست API رد می‌شود.
 
-مقدار مهلت زمانی باید بین 1 تا 30 ثانیه باشد.
+مقدار مهلت زمانی باید بین ۱ تا ۳۰ ثانیه باشد.
 
-در ادامه مثالی از یک validating webhook با مهلت زمانی سفارشی 2 ثانیه آمده است:
+نمونهٔ زیر یک وب‌هوک اعتبارسنج را با مهلت زمانی سفارشی ۲ ثانیه نشان می‌دهد:
 
 ```yaml
 apiVersion: admissionregistration.k8s.io/v1
@@ -1021,36 +1031,30 @@ webhooks:
     timeoutSeconds: 2
 ```
 
-مهلت زمانی پیش‌فرض برای یک admission webhook برابر با 10 ثانیه است.
+مقدار پیش‌فرض مهلت زمانی برای یک وب‌هوک پذیرش ۱۰ ثانیه است.
 
-### سیاست فراخوانی مجدد (Reinvocation policy)
+### سیاست فراخوانی مجدد
 
-یک ترتیب واحد از افزونه‌های mutating admission (از جمله webhookها) برای همه حالت‌ها کارآمد نیست
-(برای نمونه به https://issue.k8s.io/64333 مراجعه کنید). یک mutating webhook می‌تواند ساختار فرعی جدیدی
-به آبجکت اضافه کند (مانند افزودن یک `container` به یک `pod`)، و سایر افزونه‌های mutating که پیش‌تر
-اجرا شده‌اند ممکن است درباره این ساختارهای جدید نظر یا قاعده‌ای داشته باشند (مانند تنظیم `imagePullPolicy` روی همه کانتینرها).
+یک ترتیب واحد برای افزونه‌های پذیرش تغییردهنده (از جمله وب‌هوک‌ها) در همهٔ موارد کارساز نیست (برای نمونه، https://issue.k8s.io/64333 را ببینید). یک وب‌هوک تغییردهنده می‌تواند زیرساختار جدیدی به آبجکت اضافه کند (مانند افزودن یک `container` به یک `pod`) و افزونه‌های تغییردهندهٔ دیگری که پیش‌تر اجرا شده‌اند ممکن است دربارهٔ این ساختارهای جدید نظری داشته باشند (مانند تنظیم `imagePullPolicy` روی همهٔ کانتینرها).
 
-برای آنکه افزونه‌های mutating admission بتوانند تغییرات اعمال‌شده توسط افزونه‌های دیگر را مشاهده کنند،
-اگر یک mutating webhook آبجکتی را تغییر دهد، افزونه‌های mutating admission درونی (built-in) دوباره اجرا می‌شوند،
-و mutating webhookها می‌توانند با تعیین `reinvocationPolicy` مشخص کنند که آیا خودشان نیز دوباره فراخوانی شوند یا خیر.
+برای آنکه افزونه‌های پذیرش تغییردهنده بتوانند تغییراتی را که افزونه‌های دیگر اعمال کرده‌اند مشاهده کنند، اگر یک وب‌هوک تغییردهنده آبجکتی را تغییر دهد، افزونه‌های پذیرش تغییردهندهٔ داخلی دوباره اجرا می‌شوند. وب‌هوک‌های تغییردهنده نیز می‌توانند با تعیین `reinvocationPolicy` کنترل کنند که آیا خودشان هم دوباره فراخوانی شوند یا نه.
 
-مقدار `reinvocationPolicy` می‌تواند `Never` یا `IfNeeded` باشد. مقدار پیش‌فرض آن `Never` است.
+فیلد `reinvocationPolicy` را می‌توان روی `Never` یا `IfNeeded` تنظیم کرد. مقدار پیش‌فرض آن `Never` است.
 
-* `Never`: webhook نباید در یک ارزیابی admission منفرد بیش از یک بار فراخوانی شود.
-* `IfNeeded`: اگر آبجکتِ در حال پذیرش پس از فراخوانی اولیه webhook توسط افزونه‌های admission دیگر تغییر کند،
-  webhook ممکن است به‌عنوان بخشی از ارزیابی admission دوباره فراخوانی شود.
+* `Never`: وب‌هوک نباید در یک ارزیابی پذیرش بیش از یک بار فراخوانی شود.
+* `IfNeeded`: اگر افزونه‌های پذیرش دیگر پس از نخستین فراخوانی وب‌هوک، آبجکتِ در حال پذیرش را
+  تغییر دهند، ممکن است وب‌هوک در جریان همان ارزیابی پذیرش دوباره فراخوانی شود.
 
 نکات مهمی که باید به آن‌ها توجه کرد:
 
-* تضمین نمی‌شود که تعداد فراخوانی‌های اضافی دقیقاً یک بار باشد.
-* اگر فراخوانی‌های اضافی به تغییرات بیشتری در آبجکت منجر شوند، تضمین نمی‌شود که webhookها
-  دوباره فراخوانی شوند.
-* ترتیب webhookهایی که از این گزینه استفاده می‌کنند ممکن است برای کمینه‌کردن تعداد فراخوانی‌های اضافی تغییر کند.
-* برای اعتبارسنجی یک آبجکت پس از آنکه تکمیل شدن همه تغییرات تضمین شده است، به‌جای آن از یک validating admission
-  webhook استفاده کنید (برای webhookهای دارای عوارض جانبی توصیه می‌شود).
+* تضمینی وجود ندارد که تعداد فراخوانی‌های اضافی دقیقاً یک بار باشد.
+* اگر فراخوانی‌های اضافی به تغییرات بیشتری در آبجکت بینجامد، تضمینی برای فراخوانی دوبارهٔ
+  وب‌هوک‌ها وجود ندارد.
+* ممکن است ترتیب وب‌هوک‌هایی که از این گزینه استفاده می‌کنند تغییر کند تا تعداد فراخوانی‌های اضافی به حداقل برسد.
+* برای اعتبارسنجی یک آبجکت پس از آنکه تکمیل همهٔ تغییرات تضمین شد، به‌جای این گزینه از یک وب‌هوک
+  پذیرش اعتبارسنج استفاده کنید (این روش برای وب‌هوک‌های دارای اثر جانبی توصیه می‌شود).
 
-در ادامه مثالی از یک mutating webhook آمده است که انتخاب کرده است در صورت تغییر آبجکت توسط افزونه‌های admission بعدی
-دوباره فراخوانی شود:
+نمونهٔ زیر یک وب‌هوک تغییردهنده را نشان می‌دهد که اگر افزونه‌های پذیرش بعدی آبجکت را تغییر دهند، فراخوانی مجدد را می‌پذیرد:
 
 ```yaml
 apiVersion: admissionregistration.k8s.io/v1
@@ -1060,33 +1064,25 @@ webhooks:
   reinvocationPolicy: IfNeeded
 ```
 
-mutating webhookها باید [خودتوان (idempotent)](#idempotence) باشند؛ یعنی بتوانند آبجکتی را که پیش‌تر پذیرفته
-و احتمالاً تغییر داده‌اند، با موفقیت پردازش کنند. این موضوع برای همه mutating admission webhookها صادق است، زیرا هر تغییری که
-بتوانند در یک آبجکت اعمال کنند ممکن است از قبل در آبجکت ارائه‌شده توسط کاربر وجود داشته باشد، اما برای webhookهایی که
-فراخوانی مجدد را انتخاب می‌کنند، این امر ضروری است.
+وب‌هوک‌های تغییردهنده باید [خودتوان (idempotent)](/docs/concepts/cluster-administration/admission-webhooks-good-practices/#ordering-idempotence) باشند؛ یعنی بتوانند آبجکتی را که پیش‌تر پذیرفته و احتمالاً تغییر داده‌اند، با موفقیت پردازش کنند. این موضوع دربارهٔ همهٔ وب‌هوک‌های پذیرش تغییردهنده صادق است، زیرا هر تغییری که آن‌ها می‌توانند در یک آبجکت ایجاد کنند ممکن است از پیش در آبجکتِ ارائه‌شده از سوی کاربر وجود داشته باشد؛ اما برای وب‌هوک‌هایی که فراخوانی مجدد را برمی‌گزینند، این ویژگی ضروری است.
 
-### سیاست شکست (Failure policy)
+### سیاست شکست
 
-فیلد `failurePolicy` مشخص می‌کند که خطاهای رخ‌داده هنگام _فراخوانی_ admission webhook چگونه مدیریت شوند.
-مقادیر مجاز `Ignore` یا `Fail` هستند.
+فیلد `failurePolicy` تعیین می‌کند که با خطاهایی که هنگام _فراخوانی_ وب‌هوک پذیرش رخ می‌دهند، چگونه رفتار شود. مقادیر مجاز `Ignore` یا `Fail` هستند.
 
-* `Ignore` به این معناست که خطای فراخوانی webhook نادیده گرفته می‌شود و درخواست API اجازه ادامه می‌یابد.
-* `Fail` به این معناست که خطای فراخوانی webhook باعث شکست admission و رد شدن درخواست API می‌شود.
+* مقدار `Ignore` یعنی خطا در فراخوانی وب‌هوک نادیده گرفته می‌شود و درخواست API می‌تواند ادامه یابد.
+* مقدار `Fail` یعنی خطا در فراخوانی وب‌هوک باعث شکست پذیرش و رد درخواست API می‌شود.
 
 سیاست شکست برای انواع خطاهای زیر اعمال می‌شود:
 
-* خطاهای شبکه، مهلت‌های زمانی یا شکست در اتصال هنگام تماس با webhook.
-* webhook یک پاسخ HTTP غیر 2xx یا یک پاسخ نامعتبر (malformed) برگرداند.
-* API server در سریال‌سازی درخواست admission یا ایجاد یک کلاینت HTTP داخلی برای webhook ناموفق باشد.
-* (فقط برای mutating webhookها) پاسخ شامل نوع patch غیرقابل رمزگشایی یا پشتیبانی‌نشده باشد.
+* خطاهای شبکه، اتمام مهلت زمانی یا شکست اتصال هنگام تماس با وب‌هوک.
+* وب‌هوک پاسخ HTTP غیر از 2xx یا پاسخی با قالب نادرست برمی‌گرداند.
+* سرور API نمی‌تواند درخواست پذیرش را سریال‌سازی کند یا یک کلاینت HTTP داخلی برای وب‌هوک بسازد.
+* (فقط برای وب‌هوک‌های تغییردهنده) پاسخ شامل وصله‌ای (patch) است که رمزگشایی‌پذیر نیست یا نوع آن پشتیبانی نمی‌شود.
 
-اگر نوشتن در API کوبرنتیز از طریق یک فراخوانی admission رد شود، این یک _رد شدن (rejection)_ است،
-اما کوبرنتیز آن را شکست (failure) به حساب نمی‌آورد.
-API server کوبرنتیز زمانی که به webhook با موفقیت دسترسی پیدا می‌کند و پیاده‌سازی webhook
-درخواست را به‌صراحت رد کرده است (با تعیین `allowed: false` در پاسخ)، سیاست شکست را **اعمال نمی‌کند**.
-یک رد صریح که به‌درستی منتقل شده باشد، صرف‌نظر از تنظیم `failurePolicy`، همیشه درخواست API را رد می‌کند.
+اگر نوشتن در API کوبرنتیز از طریق یک فراخوان پذیرش رد شود، این یک _رد کردن_ است و کوبرنتیز آن را شکست به شمار نمی‌آورد. وقتی سرور API کوبرنتیز با موفقیت به وب‌هوک دسترسی پیدا کند و پیاده‌سازی وب‌هوک صراحتاً درخواست را رد کرده باشد (با تعیین `allowed: false` در پاسخ)، سیاست شکست را اعمال **نمی‌کند**. رد صریحی که به‌درستی منتقل شده باشد، صرف‌نظر از مقدار `failurePolicy`، همیشه درخواست API را رد می‌کند.
 
-در ادامه یک mutating webhook آمده است که پیکربندی شده تا در صورت بروز خطا هنگام فراخوانی admission webhook، درخواست API را رد کند:
+نمونهٔ زیر وب‌هوک تغییردهنده‌ای را نشان می‌دهد که طوری پیکربندی شده است که اگر هنگام فراخوانی وب‌هوک پذیرش خطایی رخ دهد، درخواست API را رد کند:
 
 ```yaml
 apiVersion: admissionregistration.k8s.io/v1
@@ -1096,38 +1092,33 @@ webhooks:
   failurePolicy: Fail
 ```
 
-مقدار پیش‌فرض `failurePolicy` برای admission webhookها برابر `Fail` است.
+مقدار پیش‌فرض `failurePolicy` برای وب‌هوک‌های پذیرش `Fail` است.
 
-## پایش admission webhookها
+## پایش وب‌هوک‌های پذیرش
 
-API server راه‌هایی برای پایش رفتار admission webhookها فراهم می‌کند. این
-سازوکارهای پایش به مدیران کلاستر کمک می‌کنند به پرسش‌هایی از این دست پاسخ دهند:
+سرور API روش‌هایی برای پایش رفتار وب‌هوک‌های پذیرش فراهم می‌کند. این سازوکارهای پایش به مدیران کلاستر کمک می‌کنند به پرسش‌هایی مانند پرسش‌های زیر پاسخ دهند:
 
-1. کدام mutating webhook آبجکت را در یک درخواست API تغییر داده است؟
+1. کدام وب‌هوک تغییردهنده آبجکت را در یک درخواست API تغییر داد؟
 
-2. mutating webhook چه تغییری را روی آبجکت اعمال کرده است؟
+2. وب‌هوک تغییردهنده چه تغییری روی آبجکت اعمال کرد؟
 
-3. کدام webhookها به‌طور مکرر درخواست‌های API را رد می‌کنند؟ دلیل رد شدن چیست؟
+3. کدام وب‌هوک‌ها مکرراً درخواست‌های API را رد می‌کنند؟ دلیل رد چیست؟
 
-### حاشیه‌نویسی‌های ممیزی (auditing annotations) برای mutating webhook
+### حاشیه‌نویسی‌های ممیزی وب‌هوک تغییردهنده
 
-گاهی دانستن اینکه کدام mutating webhook آبجکت را در یک درخواست API تغییر داده و webhook چه تغییری
-اعمال کرده است، مفید است.
+گاهی دانستن اینکه کدام وب‌هوک تغییردهنده آبجکت را در یک درخواست API تغییر داده و چه تغییری اعمال کرده است، مفید است.
 
-API server کوبرنتیز روی هر فراخوانی mutating webhook [ممیزی (auditing)](/docs/tasks/debug/debug-cluster/audit/) انجام می‌دهد.
-هر فراخوانی یک حاشیه‌نویسی (annotation) ممیزی تولید می‌کند که ثبت می‌کند آیا آبجکت درخواست توسط آن فراخوانی تغییر کرده است یا خیر،
-و به‌صورت اختیاری یک annotation تولید می‌کند که patch اعمال‌شده از پاسخ admission webhook را ثبت می‌کند. این annotationها
-در رویداد ممیزی (audit event) مربوط به درخواست داده‌شده و در مرحله‌ای مشخص از اجرای آن تنظیم می‌شوند؛ سپس این رویداد
-بر اساس یک سیاست مشخص پیش‌پردازش شده و در یک backend نوشته می‌شود.
+سرور API کوبرنتیز برای هر فراخوانی وب‌هوک تغییردهنده [ممیزی (auditing)](/docs/tasks/debug/debug-cluster/audit/) انجام می‌دهد. هر فراخوانی یک حاشیه‌نویسی (annotation) ممیزی تولید می‌کند که ثبت می‌کند آیا آبجکت درخواست در آن فراخوانی تغییر کرده است یا نه. همچنین در صورت نیاز، حاشیه‌نویسی دیگری تولید می‌کند که وصلهٔ اعمال‌شده از پاسخ پذیرش وب‌هوک را ثبت می‌کند. این حاشیه‌نویسی‌ها در رویداد ممیزیِ درخواست مربوط و در مرحلهٔ مشخصی از اجرای آن تنظیم می‌شوند؛ سپس این رویداد بر اساس یک سیاست مشخص پیش‌پردازش و در یک بک‌اند نوشته می‌شود.
 
-سطح ممیزی (audit level) یک رویداد تعیین می‌کند کدام annotationها ثبت شوند:
+سطح ممیزی یک رویداد تعیین می‌کند که کدام حاشیه‌نویسی‌ها ثبت شوند:
 
-- در سطح ممیزی `Metadata` یا بالاتر، یک annotation با کلید
-  `mutation.webhook.admission.k8s.io/round_{round idx}_index_{order idx}` همراه با یک payload از نوع JSON ثبت می‌شود
-  که نشان می‌دهد یک webhook برای درخواست داده‌شده فراخوانی شده است و اینکه آبجکت را تغییر داده است یا خیر.
+- در سطح ممیزی `Metadata` یا بالاتر، حاشیه‌نویسی‌ای با کلید
+  `mutation.webhook.admission.k8s.io/round_{round idx}_index_{order idx}` همراه با محتوای JSON ثبت
+  می‌شود که نشان می‌دهد یک وب‌هوک برای درخواست مورد نظر فراخوانی شده و آیا آبجکت را تغییر داده است یا نه.
 
-  برای مثال، annotation زیر برای یک webhook که دوباره فراخوانی شده ثبت می‌شود. این webhook
-  در زنجیره mutating webhookها سومین webhook است و در طول فراخوانی، آبجکت درخواست را تغییر نداده است.
+  برای نمونه، حاشیه‌نویسی زیر برای وب‌هوکی ثبت می‌شود که دوباره فراخوانی شده است. این وب‌هوک در
+  زنجیرهٔ وب‌هوک‌های تغییردهنده در جایگاه سوم قرار دارد و در طول فراخوانی، آبجکت درخواست را تغییر
+  نداده است.
 
   ```yaml
   # the audit event recorded
@@ -1153,8 +1144,8 @@ API server کوبرنتیز روی هر فراخوانی mutating webhook [مم�
   }
   ```
 
-  annotation زیر برای یک webhook که در دور اول فراخوانی شده ثبت می‌شود. این webhook
-  در زنجیره mutating webhookها اولین webhook است و در طول فراخوانی، آبجکت درخواست را تغییر داده است.
+  حاشیه‌نویسی زیر برای وب‌هوکی ثبت می‌شود که در دور نخست فراخوانی شده است. این وب‌هوک در زنجیرهٔ
+  وب‌هوک‌های تغییردهنده در جایگاه نخست قرار دارد و در طول فراخوانی، آبجکت درخواست را تغییر داده است.
 
   ```yaml
   # the audit event recorded
@@ -1180,12 +1171,14 @@ API server کوبرنتیز روی هر فراخوانی mutating webhook [مم�
   }
   ```
 
-- در سطح ممیزی `Request` یا بالاتر، یک annotation با کلید
-  `patch.webhook.admission.k8s.io/round_{round idx}_index_{order idx}` همراه با یک payload از نوع JSON ثبت می‌شود
-  که نشان می‌دهد یک webhook برای درخواست داده‌شده فراخوانی شده است و چه patchی روی آبجکت درخواست اعمال شده است.
+- در سطح ممیزی `Request` یا بالاتر، حاشیه‌نویسی‌ای با کلید
+  `patch.webhook.admission.k8s.io/round_{round idx}_index_{order idx}` همراه با محتوای JSON ثبت
+  می‌شود که نشان می‌دهد یک وب‌هوک برای درخواست مورد نظر فراخوانی شده و چه وصله‌ای روی آبجکت درخواست
+  اعمال شده است.
 
-  برای مثال، annotation زیر برای یک webhook که دوباره فراخوانی شده ثبت می‌شود. این webhook در زنجیره
-  mutating webhookها چهارمین webhook است و با یک JSON patch پاسخ داده که روی آبجکت درخواست اعمال شده است.
+  برای نمونه، حاشیه‌نویسی زیر برای وب‌هوکی ثبت می‌شود که دوباره فراخوانی شده است. این وب‌هوک در
+  زنجیرهٔ وب‌هوک‌های تغییردهنده در جایگاه چهارم قرار دارد و با یک وصلهٔ JSON پاسخ داده است که روی
+  آبجکت درخواست اعمال شده است.
 
   ```yaml
   # the audit event recorded
@@ -1218,36 +1211,33 @@ API server کوبرنتیز روی هر فراخوانی mutating webhook [مم�
   }
   ```
 
-### متریک‌های admission webhook
+### معیارهای وب‌هوک پذیرش
 
-API server متریک‌های Prometheus را از طریق نقطه پایانی `/metrics` ارائه می‌کند که می‌توان از آن‌ها برای پایش و
-عیب‌یابی وضعیت API server استفاده کرد. متریک‌های زیر وضعیت مرتبط با admission webhookها را ثبت می‌کنند.
+سرور API معیارهای Prometheus را از طریق نقطهٔ پایانی `/metrics` در دسترس قرار می‌دهد که می‌توان از آن‌ها برای پایش و عیب‌یابی وضعیت سرور API استفاده کرد. معیارهای زیر وضعیت مربوط به وب‌هوک‌های پذیرش را ثبت می‌کنند.
 
-#### تعداد رد شدن‌ها توسط admission webhookها در API server
+#### شمار ردهای وب‌هوک پذیرش در سرور API
 
-گاهی دانستن اینکه کدام admission webhookها به‌طور مکرر درخواست‌های API را رد می‌کنند و
-دلیل رد شدن چیست، مفید است.
+گاهی دانستن اینکه کدام وب‌هوک‌های پذیرش مکرراً درخواست‌های API را رد می‌کنند و دلیل رد چیست، مفید است.
 
-API server یک متریک شمارنده (counter) در Prometheus ارائه می‌کند که رد شدن‌ها توسط admission webhookها را ثبت می‌کند.
-این متریک‌ها برای مشخص‌کردن علت‌های رد شدن توسط webhook(ها) برچسب‌گذاری شده‌اند:
+سرور API یک معیار شمارندهٔ (counter) Prometheus ارائه می‌کند که ردهای وب‌هوک پذیرش را ثبت می‌کند. این معیارها برچسب‌هایی دارند که علت یا علت‌های رد را مشخص می‌کنند:
 
-- `name`: نام webhookی که درخواست را رد کرده است.
-- `operation`: نوع عملیات درخواست، که می‌تواند یکی از `CREATE`،
+- `name`: نام وب‌هوکی که درخواست را رد کرده است.
+- `operation`: نوع عملیات درخواست؛ می‌تواند یکی از `CREATE`،
   `UPDATE`، `DELETE` و `CONNECT` باشد.
-- `type`: نوع admission webhook، که می‌تواند یکی از `admit` و `validating` باشد.
-- `error_type`: مشخص می‌کند که آیا در طول فراخوانی webhook خطایی رخ داده که
-  باعث رد شدن شده است. مقدار آن می‌تواند یکی از موارد زیر باشد:
+- `type`: نوع وب‌هوک پذیرش؛ می‌تواند یکی از `admit` و `validating` باشد.
+- `error_type`: مشخص می‌کند آیا در طول فراخوانی وب‌هوک خطایی رخ داده است که به رد درخواست
+  انجامیده باشد یا نه. مقدار آن می‌تواند یکی از موارد زیر باشد:
 
-  - `calling_webhook_error`: خطاهای ناشناخته یا خطاهای مهلت زمانی از سوی admission webhook رخ داده است و
-    [سیاست شکست](#failure-policy) webhook روی `Fail` تنظیم شده است.
-  - `no_error`: هیچ خطایی رخ نداده است. webhook درخواست را با `allowed: false` در پاسخ admission
-    رد کرده است. برچسب متریک `rejection_code` مقدار `.status.code` تنظیم‌شده در پاسخ admission را ثبت می‌کند.
-  - `apiserver_internal_error`: یک خطای داخلی API server رخ داده است.
+  - `calling_webhook_error`: خطاهای ناشناخته یا خطاهای اتمام مهلت زمانی از سوی وب‌هوک پذیرش رخ داده و
+    [سیاست شکست](#failure-policy) وب‌هوک روی `Fail` تنظیم شده است.
+  - `no_error`: هیچ خطایی رخ نداده است. وب‌هوک درخواست را با `allowed: false` در پاسخ پذیرش رد کرده
+    است. برچسب `rejection_code` در این معیارها مقدار `.status.code` تنظیم‌شده در پاسخ پذیرش را ثبت می‌کند.
+  - `apiserver_internal_error`: یک خطای داخلی در سرور API رخ داده است.
 
-- `rejection_code`: کد وضعیت HTTP که هنگام رد کردن یک درخواست توسط webhook
-  در پاسخ admission تنظیم شده است.
+- `rejection_code`: کد وضعیت HTTP که هنگام رد درخواست از سوی وب‌هوک، در پاسخ پذیرش
+  تنظیم شده است.
 
-نمونه‌ای از متریک‌های تعداد رد شدن‌ها:
+نمونه‌ای از معیارهای شمار ردها:
 
 ```
 # HELP apiserver_admission_webhook_rejection_count [ALPHA] Admission webhook rejection count, identified by name and broken out for each admission type (validating or admit) and operation. Additional labels specify an error type (calling_webhook_error or apiserver_internal_error if an error occurred; no_error otherwise) and optionally a non-zero rejection code if the webhook rejects the request with an HTTP status code (honored by the apiserver when the code is greater or equal to 400). Codes greater than 600 are truncated to 600, to keep the metrics cardinality bounded.
@@ -1257,9 +1247,7 @@ apiserver_admission_webhook_rejection_count{error_type="calling_webhook_error",n
 apiserver_admission_webhook_rejection_count{error_type="no_error",name="deny-unwanted-configmap-data.example.com",operation="CREATE",rejection_code="400",type="validating"} 13
 ```
 
-## بهترین روش‌ها و هشدارها
+## بهترین شیوه‌ها و هشدارها
 
-برای مشاهده توصیه‌ها و ملاحظات هنگام نوشتن mutating admission webhookها،
-به
-[روش‌های خوب برای Admission Webhookها](/docs/concepts/cluster-administration/admission-webhooks-good-practices)
-مراجعه کنید.
+برای آشنایی با توصیه‌ها و ملاحظات مربوط به نوشتن وب‌هوک‌های پذیرش تغییردهنده،
+[شیوه‌های خوب وب‌هوک‌های پذیرش](/docs/concepts/cluster-administration/admission-webhooks-good-practices) را ببینید.

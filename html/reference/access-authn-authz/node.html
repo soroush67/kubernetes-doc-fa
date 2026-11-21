@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>استفاده از Node Authorization | مستندات کوبرنتیز</title>
+<title>استفاده از مجوزدهی نود | مستندات کوبرنتیز</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
@@ -82,52 +82,46 @@ document.addEventListener('DOMContentLoaded',function(){box=document.getElementB
 <a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
 <header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">reference / access-authn-authz</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
 <div class="layout">
-<main><h1 dir="rtl">استفاده از Node Authorization</h1><!-- overview -->
-<p dir="rtl">Node authorization یک حالت مجوزدهی با کاربرد ویژه است که به‌طور اختصاصی درخواست‌های API را که توسط kubeletها ارسال می‌شوند، مجاز می‌کند.</p>
+<main><h1 dir="rtl">استفاده از مجوزدهی نود</h1><!-- overview -->
+<p dir="rtl">مجوزدهی نود (Node authorization) یک حالت مجوزدهی با کاربرد ویژه است که به‌طور خاص درخواست‌های API ارسال‌شده از سوی kubeletها را مجوزدهی می‌کند.</p>
 <!-- body -->
-<h2 id="مرور-کلی-overview" dir="rtl">مرور کلی {#overview}</h2>
-<p dir="rtl">Node authorizer به kubelet اجازه می‌دهد عملیات API را انجام دهد. این عملیات شامل موارد زیر است:</p>
+<h2 id="مرور-کلی" dir="rtl">مرور کلی</h2>
+<p dir="rtl">مجوزدهندهٔ Node به kubelet امکان می‌دهد عملیات API را انجام دهد. این عملیات عبارت‌اند از:</p>
 <p dir="rtl">عملیات خواندن:</p>
 <ul>
-<li dir="ltr" class="ltr">services</li>
-<li dir="ltr" class="ltr">endpoints</li>
-<li dir="ltr" class="ltr">nodes</li>
-<li dir="ltr" class="ltr">pods</li>
-<li dir="rtl">secrets، configmaps، persistent volume claims و persistent volumeهای مرتبط
-با پادهایی که به نود kubelet متصل (bound) شده‌اند</li>
+<li dir="rtl">سرویس‌ها (services)</li>
+<li dir="rtl">اندپوینت‌ها (endpoints)</li>
+<li dir="rtl">نودها</li>
+<li dir="rtl">پادها (pods)</li>
+<li dir="rtl">سکرت‌ها (secrets)، کانفیگ‌مپ‌ها (configmaps)، درخواست‌های حجم پایدار (persistent volume claims) و حجم‌های پایدار (persistent volumes) مرتبط با پادهایی که به نود kubelet متصل شده‌اند</li>
 </ul>
 <div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
-<p dir="rtl">kubeletها فقط به خواندن آبجکت‌های Node مربوط به خودشان و فقط به خواندن پادهایی که به نود آن‌ها متصل شده‌اند محدود می‌شوند.</p>
+<p dir="rtl">هر kubelet تنها می‌تواند آبجکت Node مربوط به خودش را بخواند و فقط پادهایی را بخواند که به نود خودش متصل شده‌اند.</p>
 <p dir="rtl">عملیات نوشتن:</p>
 <ul>
-<li dir="rtl">nodes و وضعیت node (افزونه admission با نام <code dir="ltr">NodeRestriction</code> را فعال کنید تا
-kubelet فقط بتواند نود خودش را تغییر دهد)</li>
-<li dir="rtl">pods و وضعیت pod (افزونه admission با نام <code dir="ltr">NodeRestriction</code> را فعال کنید تا
-kubelet فقط بتواند پادهای متصل به خودش را تغییر دهد)</li>
-<li dir="ltr" class="ltr">events</li>
+<li dir="rtl">نودها و وضعیت نود (برای محدود کردن kubelet به تغییر نود خودش، افزونهٔ پذیرش <code dir="ltr">NodeRestriction</code> را فعال کنید)</li>
+<li dir="rtl">پادها و وضعیت پاد (برای محدود کردن kubelet به تغییر پادهای متصل به خودش، افزونهٔ پذیرش <code dir="ltr">NodeRestriction</code> را فعال کنید)</li>
+<li dir="rtl">رویدادها (events)</li>
 </ul>
 <p dir="rtl">عملیات مرتبط با احراز هویت و مجوزدهی:</p>
 <ul>
 <li dir="rtl">دسترسی خواندن/نوشتن به
-<a href="certificate-signing-requests.html">CertificateSigningRequests API</a>
-برای TLS bootstrapping</li>
-<li dir="rtl">قابلیت ایجاد TokenReview و SubjectAccessReview برای بررسی‌های احراز هویت/مجوزدهی تفویض‌شده</li>
+<a href="certificate-signing-requests.html">API درخواست‌های امضای گواهی (CertificateSigningRequests)</a>
+برای راه‌اندازی اولیهٔ TLS (TLS bootstrapping)</li>
+<li dir="rtl">توانایی ایجاد TokenReviewها و SubjectAccessReviewها برای بررسی‌های واگذارشدهٔ احراز هویت و مجوزدهی</li>
 </ul>
-<p dir="rtl">در نسخه‌های آینده، node authorizer ممکن است مجوزهایی را اضافه یا حذف کند تا اطمینان حاصل شود
-kubeletها حداقل مجموعه مجوزهای لازم برای عملکرد صحیح را دارند.</p>
-<p dir="rtl">برای آنکه kubeletها توسط Node authorizer مجاز شناخته شوند، باید از اعتبارنامه‌ای (credential) استفاده کنند
-که آن‌ها را عضو گروه <code dir="ltr">system:nodes</code> با نام کاربری <code dir="ltr">system:node:&lt;nodeName&gt;</code> معرفی کند.
-قالب این گروه و نام کاربری با هویتی که برای هر kubelet در جریان
-<a href="kubelet-tls-bootstrapping.html">TLS bootstrapping مربوط به kubelet</a>
-ایجاد می‌شود، مطابقت دارد.</p>
-<p dir="rtl">مقدار <code dir="ltr">&lt;nodeName&gt;</code> <strong>باید</strong> دقیقاً با نام نودی که توسط kubelet ثبت شده است مطابقت داشته باشد. به‌طور پیش‌فرض، این مقدار همان نام میزبان (host name) است که توسط <code dir="ltr">hostname</code> ارائه می‌شود، یا با
-<a href="../command-line-tools-reference/kubelet.html">گزینه kubelet</a>
-با نام <code dir="ltr">--hostname-override</code> بازنویسی می‌شود. با این حال، هنگام استفاده از گزینه
-<code dir="ltr">--cloud-provider</code> در kubelet، ممکن است نام میزبان مشخص توسط ارائه‌دهنده ابر (cloud provider) تعیین شود و <code dir="ltr">hostname</code> محلی و گزینه <code dir="ltr">--hostname-override</code> نادیده گرفته شوند.
-برای جزئیات بیشتر درباره نحوه تعیین نام میزبان توسط kubelet، به
+<p dir="rtl">در نسخه‌های آینده، ممکن است مجوزدهندهٔ نود مجوزهایی را اضافه یا حذف کند تا اطمینان حاصل شود که kubeletها کمینهٔ مجوزهای لازم برای عملکرد درست را در اختیار دارند.</p>
+<p dir="rtl">برای اینکه مجوزدهندهٔ Node به kubeletها مجوز بدهد، آن‌ها باید از اعتبارنامه‌ای استفاده کنند که آن‌ها را عضو گروه <code dir="ltr">system:nodes</code> و با نام کاربری <code dir="ltr">system:node:&lt;nodeName&gt;</code> معرفی کند.
+این قالب گروه و نام کاربری با هویتی مطابقت دارد که در جریان
+<a href="kubelet-tls-bootstrapping.html">راه‌اندازی اولیهٔ TLS برای kubelet</a>
+برای هر kubelet ایجاد می‌شود.</p>
+<p dir="rtl">مقدار <code dir="ltr">&lt;nodeName&gt;</code> <strong>باید</strong> دقیقاً با نام نودی که kubelet ثبت کرده است مطابقت داشته باشد. به‌طور پیش‌فرض، این مقدار همان نام میزبانی است که دستور <code dir="ltr">hostname</code> ارائه می‌دهد، یا مقداری که با
+<a href="../command-line-tools-reference/kubelet.html">گزینهٔ kubelet</a>
+<code dir="ltr">--hostname-override</code> جایگزین آن شده است. با این حال، هنگام استفاده از گزینهٔ <code dir="ltr">--cloud-provider</code> در kubelet، ممکن است نام میزبان مشخص را ارائه‌دهندهٔ ابری تعیین کند و در این صورت <code dir="ltr">hostname</code> محلی و گزینهٔ <code dir="ltr">--hostname-override</code> نادیده گرفته می‌شوند.
+برای جزئیات نحوهٔ تعیین نام میزبان توسط kubelet، به
 <a href="../command-line-tools-reference/kubelet.html">مرجع گزینه‌های kubelet</a> مراجعه کنید.</p>
-<p dir="rtl">برای فعال‌سازی Node authorizer، <span class="term" title="kube-apiserver">API server</span> را
-با فلگ <code dir="ltr">--authorization-config</code> اجرا کنید و آن را روی فایلی تنظیم کنید که شامل authorizer با نوع <code dir="ltr">Node</code> باشد؛ برای مثال:</p>
+<p dir="rtl">برای فعال کردن مجوزدهندهٔ Node، <span class="term" title="kube-apiserver">سرور API</span>
+را با فلگ <code dir="ltr">--authorization-config</code> اجرا کنید و مقدار آن را فایلی قرار دهید که مجوزدهندهٔ <code dir="ltr">Node</code> را در بر دارد؛ برای مثال:</p>
 <pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: apiserver.config.k8s.io/v1
 kind: AuthorizationConfiguration
 authorizers:
@@ -135,37 +129,27 @@ authorizers:
   - type: Node
   ...
 </code></pre>
-<p dir="rtl">یا <span class="term" title="kube-apiserver">API server</span> را با
-فلگ <code dir="ltr">--authorization-mode</code> اجرا کنید و آن را روی فهرستی جداشده با ویرگول که شامل <code dir="ltr">Node</code> است تنظیم کنید؛
+<p dir="rtl">یا <span class="term" title="kube-apiserver">سرور API</span> را با فلگ <code dir="ltr">--authorization-mode</code> اجرا کنید و مقدار آن را فهرستی جداشده با ویرگول قرار دهید که <code dir="ltr">Node</code> را در بر دارد؛
 برای مثال:</p>
 <pre dir="ltr"><code class="language-shell" dir="ltr">kube-apiserver --authorization-mode=...,Node --other-options --more-options
 </code></pre>
-<p dir="rtl">برای محدود کردن آبجکت‌های API که kubeletها می‌توانند بنویسند، افزونه admission با نام
+<p dir="rtl">برای محدود کردن آبجکت‌های API که kubeletها می‌توانند بنویسند، افزونهٔ پذیرش
 <a href="admission-controllers.html#noderestriction">NodeRestriction</a>
 را با اجرای apiserver همراه با
-<code dir="ltr">--enable-admission-plugins=...,NodeRestriction,...</code>
-فعال کنید.</p>
-<h2 id="محدودسازی-audience-توکن-service-account-service-account-token-audience-restriction" dir="rtl">محدودسازی audience توکن service account {#service-account-token-audience-restriction}</h2>
+<code dir="ltr">--enable-admission-plugins=...,NodeRestriction,...</code> فعال کنید.</p>
+<h2 id="محدودیت-مخاطب-توکن-حساب-سرویس-service-account-token-audience-restriction" dir="rtl">محدودیت مخاطب توکن حساب سرویس {#service-account-token-audience-restriction}</h2>
 <div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes  []</span> ()</div>
-<p dir="rtl">زمانی که <a href="https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/" target="_blank">feature gate</a> با نام <code dir="ltr">ServiceAccountNodeAudienceRestriction</code>
-فعال باشد و افزونه admission با نام <code dir="ltr">NodeRestriction</code> نیز فعال باشد، kubelet فقط می‌تواند
-توکن‌های service account را برای audienceهایی درخواست کند که پیش‌تر توسط پادهای در حال اجرا
-روی همان نود ارجاع داده شده‌اند. این کار از دریافت توکن برای audienceهای دلخواه توسط یک نود در معرض خطر (compromised) جلوگیری می‌کند.</p>
-<p dir="rtl">audienceهای مجاز از روی مشخصات pod تعیین می‌شوند:</p>
+<p dir="rtl">هنگامی که <a href="https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/" target="_blank">feature gate</a> با نام <code dir="ltr">ServiceAccountNodeAudienceRestriction</code>
+فعال و افزونهٔ پذیرش <code dir="ltr">NodeRestriction</code> نیز فعال باشد، kubelet تنها می‌تواند برای مخاطبانی (audiences) توکن حساب سرویس درخواست کند که پادهای در حال اجرا روی آن نود از پیش به آن‌ها ارجاع داده‌اند. این کار مانع می‌شود که یک نود به‌خطرافتاده برای مخاطبان دلخواه توکن به دست آورد.</p>
+<p dir="rtl">مخاطبان مجاز از روی مشخصات پاد (pod spec) تعیین می‌شوند:</p>
 <ul>
-<li dir="rtl">audience پیش‌فرض API server (خالی یا audience پیکربندی‌شده در API server).</li>
-<li dir="rtl">audienceهای تعیین‌شده در منابع حجم توکن service account از نوع projected.</li>
-<li dir="rtl">audienceهای پیکربندی‌شده در <code dir="ltr">spec.tokenRequests</code> مربوط به درایور CSI برای هر درایور CSI که
-توسط pod استفاده می‌شود، چه از طریق حجم‌های CSI درون‌خطی (inline)، چه حجم‌های مبتنی بر PersistentVolumeClaim
-و چه حجم‌های ephemeral.</li>
+<li dir="rtl">مخاطب پیش‌فرض سرور API (مقدار خالی یا مخاطب پیکربندی‌شدهٔ سرور API).</li>
+<li dir="rtl">مخاطبانی که در منابع حجم توکن حساب سرویس پروجکت‌شده (projected) تنظیم شده‌اند.</li>
+<li dir="rtl">مخاطبانی که در <code dir="ltr">spec.tokenRequests</code> درایور CSI برای هر درایور CSI مورد استفادهٔ پاد پیکربندی شده‌اند؛ چه از طریق حجم‌های CSI درون‌خطی، چه حجم‌های مبتنی بر PersistentVolumeClaim و چه حجم‌های موقت (ephemeral).</li>
 </ul>
-<p dir="rtl">این موضوع به‌ویژه هنگام استفاده از <a href="../../tasks/administer-cluster/kubelet-credential-provider.html#service-account-token-for-image-pulls">توکن‌های service account برای ارائه‌دهندگان اعتبارنامه ایمیج</a>
-اهمیت دارد، جایی که kubelet از طرف پادها توکن‌هایی را با audience مختص registry درخواست می‌کند.</p>
-<h3 id="مجاز-کردن-audienceهای-اضافی-با-rbac-allowing-additional-audiences" dir="rtl">مجاز کردن audienceهای اضافی با RBAC {#allowing-additional-audiences}</h3>
-<p dir="rtl">می‌توانید به kubeletها اجازه دهید توکن‌هایی را برای audienceهایی فراتر از آنچه در
-مشخصات pod ارجاع داده شده است درخواست کنند. هنگامی که kubelet توکنی را با audienceای درخواست می‌کند که
-در مشخصات pod یافت نمی‌شود، افزونه admission با نام NodeRestriction با انجام یک بررسی مجوزدهی
-با ویژگی‌های زیر بررسی می‌کند که آیا kubelet مجاز است یا خیر:</p>
+<p dir="rtl">این موضوع به‌ویژه هنگام استفاده از <a href="../../tasks/administer-cluster/kubelet-credential-provider.html#service-account-token-for-image-pulls">توکن‌های حساب سرویس برای ارائه‌دهندگان اعتبارنامهٔ ایمیج</a> اهمیت دارد؛ در این حالت kubelet از طرف پادها توکن‌هایی با مخاطب مختص رجیستری درخواست می‌کند.</p>
+<h3 id="مجاز-کردن-مخاطبان-اضافی-با-rbac-allowing-additional-audiences" dir="rtl">مجاز کردن مخاطبان اضافی با RBAC {#allowing-additional-audiences}</h3>
+<p dir="rtl">می‌توانید به kubeletها اجازه دهید برای مخاطبانی فراتر از آنچه در مشخصات پاد ارجاع داده شده است توکن درخواست کنند. هنگامی که kubelet توکنی با مخاطبی درخواست می‌کند که در مشخصات پاد یافت نمی‌شود، افزونهٔ پذیرش NodeRestriction با انجام یک بررسی مجوزدهی با ویژگی‌های زیر، مجاز بودن kubelet را بررسی می‌کند:</p>
 <table>
 <thead>
 <tr>
@@ -175,32 +159,29 @@ authorizers:
 </thead>
 <tbody>
 <tr>
-<td dir="ltr" class="ltr">Verb</td>
+<td dir="rtl">فعل (Verb)</td>
 <td dir="ltr" class="ltr"><code dir="ltr">request-serviceaccounts-token-audience</code></td>
 </tr>
 <tr>
-<td dir="ltr" class="ltr">API Group</td>
-<td dir="rtl">(رشته خالی، به معنی API group هسته (core))</td>
+<td dir="rtl">گروه API</td>
+<td dir="rtl">(رشتهٔ خالی، به معنای گروه API هسته)</td>
 </tr>
 <tr>
-<td dir="ltr" class="ltr">Resource</td>
-<td dir="rtl">مقدار audience درخواست‌شده</td>
+<td dir="rtl">منبع</td>
+<td dir="rtl">مقدار مخاطب درخواست‌شده</td>
 </tr>
 <tr>
-<td dir="ltr" class="ltr">Name</td>
-<td dir="rtl">نام service account</td>
+<td dir="rtl">نام</td>
+<td dir="rtl">نام حساب سرویس</td>
 </tr>
 <tr>
-<td dir="ltr" class="ltr">Namespace</td>
-<td dir="rtl">فضای نام (namespace) service account</td>
+<td dir="rtl">فضای نام (namespace)</td>
+<td dir="rtl">فضای نام حساب سرویس</td>
 </tr>
 </tbody>
 </table>
-<p dir="rtl">می‌توانید از قواعد استاندارد RBAC برای مجاز کردن این بررسی‌ها استفاده کنید. فیلد <code dir="ltr">resources</code>
-مشخص می‌کند کدام audienceها مجاز هستند و فیلد <code dir="ltr">resourceNames</code> مشخص می‌کند
-قاعده برای کدام service accountها اعمال می‌شود.</p>
-<p dir="rtl">برای مثال، برای اینکه به kubelet اجازه دهید audience با نام <code dir="ltr">my-registry-audience</code> را برای
-یک service account مشخص درخواست کند:</p>
+<p dir="rtl">می‌توانید برای مجوزدهی به این بررسی‌ها از قواعد استاندارد RBAC استفاده کنید. فیلد <code dir="ltr">resources</code> تعیین می‌کند کدام مخاطبان مجاز هستند و فیلد <code dir="ltr">resourceNames</code> تعیین می‌کند قاعده روی کدام حساب‌های سرویس اعمال شود.</p>
+<p dir="rtl">برای مثال، برای اینکه kubelet بتواند برای یک حساب سرویس مشخص، مخاطب <code dir="ltr">my-registry-audience</code> را درخواست کند:</p>
 <pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
@@ -211,8 +192,7 @@ rules:
   resources: ["my-registry-audience"]
   resourceNames: ["my-service-account"]
 </code></pre>
-<p dir="rtl">حذف <code dir="ltr">resourceNames</code> باعث می‌شود audience برای هر service account مجاز باشد. استفاده از
-علامت wildcard (<code dir="ltr">"*"</code>) برای <code dir="ltr">resources</code> هر audience را مجاز می‌کند:</p>
+<p dir="rtl">حذف <code dir="ltr">resourceNames</code> این مخاطب را برای همهٔ حساب‌های سرویس مجاز می‌کند. استفاده از نویسهٔ عام (<code dir="ltr">"*"</code>) برای <code dir="ltr">resources</code> هر مخاطبی را مجاز می‌کند:</p>
 <pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
@@ -223,7 +203,7 @@ rules:
   resources: ["*"]  # any audience
   # no resourceNames: any service account
 </code></pre>
-<p dir="rtl">ClusterRole را به گروه <code dir="ltr">system:nodes</code> متصل (bind) کنید تا برای همه kubeletها اعمال شود:</p>
+<p dir="rtl">برای اعمال این ClusterRole روی همهٔ kubeletها، آن را به گروه <code dir="ltr">system:nodes</code> متصل کنید:</p>
 <pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
@@ -238,25 +218,18 @@ subjects:
   apiGroup: rbac.authorization.k8s.io
 </code></pre>
 <div class="callout note"><div class="callout-title">توجه:</div>
-<p dir="rtl">این محدودیت بخشی از افزونه admission با نام NodeRestriction است و فقط برای
-هویت‌های نود (kubeletها) اعمال می‌شود. این محدودیت، audienceهایی را که سایر فراخوان‌کنندگان
-API با نام <code dir="ltr">TokenRequest</code> می‌توانند درخواست کنند، محدود نمی‌کند. اگر نیاز دارید سایر فراخوان‌کنندگان را محدود کنید، استفاده از <a href="validating-admission-policy.html">ValidatingAdmissionPolicy</a> را در نظر بگیرید.</p>
+<p dir="rtl">این محدودیت بخشی از افزونهٔ پذیرش NodeRestriction است و تنها برای هویت‌های نود (kubeletها) اعمال می‌شود. این محدودیت تعیین نمی‌کند که سایر فراخوانندگان API <code dir="ltr">TokenRequest</code> چه مخاطبانی را می‌توانند درخواست کنند. اگر لازم است سایر فراخوانندگان را محدود کنید، استفاده از <a href="validating-admission-policy.html">ValidatingAdmissionPolicy</a> را بررسی کنید.</p>
 </div>
-<h2 id="ملاحظات-مهاجرت-migration-considerations" dir="rtl">ملاحظات مهاجرت {#migration-considerations}</h2>
-<h3 id="kubeletهای-خارج-از-گروه-system-nodes-kubelets-outside-the-system-nodes-group" dir="rtl">kubeletهای خارج از گروه <code dir="ltr">system:nodes</code> {#kubelets-outside-the-system-nodes-group}</h3>
-<p dir="rtl">kubeletهای خارج از گروه <code dir="ltr">system:nodes</code> توسط حالت مجوزدهی <code dir="ltr">Node</code> مجاز شناخته نمی‌شوند
-و باید همچنان از طریق هر سازوکاری که در حال حاضر آن‌ها را مجاز می‌کند، مجوز بگیرند.
-افزونه admission مربوط به نود، درخواست‌های این kubeletها را محدود نمی‌کند.</p>
-<h3 id="kubeletهای-دارای-نام-کاربری-غیرمتمایز-kubelets-with-undifferentiated-usernames" dir="rtl">kubeletهای دارای نام کاربری غیرمتمایز {#kubelets-with-undifferentiated-usernames}</h3>
-<p dir="rtl">در برخی استقرارها، kubeletها اعتبارنامه‌هایی دارند که آن‌ها را در گروه <code dir="ltr">system:nodes</code> قرار می‌دهد،
-اما نودی را که با آن مرتبط هستند مشخص نمی‌کند،
-زیرا نام کاربری آن‌ها در قالب <code dir="ltr">system:node:...</code> نیست.
-این kubeletها توسط حالت مجوزدهی <code dir="ltr">Node</code> مجاز شناخته نمی‌شوند
-و باید همچنان از طریق هر سازوکاری که در حال حاضر آن‌ها را مجاز می‌کند، مجوز بگیرند.</p>
-<p dir="rtl">افزونه admission با نام <code dir="ltr">NodeRestriction</code> درخواست‌های این kubeletها را نادیده می‌گیرد،
-زیرا پیاده‌سازی پیش‌فرض شناسایی نود، آن را هویت نود در نظر نمی‌گیرد.</p>
+<h2 id="ملاحظات-مهاجرت" dir="rtl">ملاحظات مهاجرت</h2>
+<h3 id="kubeletهای-خارج-از-گروه-system-nodes" dir="rtl">kubeletهای خارج از گروه <code dir="ltr">system:nodes</code></h3>
+<p dir="rtl">حالت مجوزدهی <code dir="ltr">Node</code> به kubeletهایی که عضو گروه <code dir="ltr">system:nodes</code> نیستند مجوز نمی‌دهد و این kubeletها باید همچنان با هر سازوکاری که در حال حاضر به آن‌ها مجوز می‌دهد، مجوزدهی شوند.
+افزونهٔ پذیرش نود درخواست‌های این kubeletها را محدود نمی‌کند.</p>
+<h3 id="kubeletهایی-با-نام-های-کاربری-غیرمتمایز" dir="rtl">kubeletهایی با نام‌های کاربری غیرمتمایز</h3>
+<p dir="rtl">در برخی استقرارها، kubeletها اعتبارنامه‌هایی دارند که آن‌ها را در گروه <code dir="ltr">system:nodes</code> قرار می‌دهد، اما نود مشخصی را که به آن مرتبط هستند معرفی نمی‌کند، زیرا نام کاربری آن‌ها در قالب <code dir="ltr">system:node:...</code> نیست.
+حالت مجوزدهی <code dir="ltr">Node</code> به این kubeletها مجوز نمی‌دهد و آن‌ها باید همچنان با هر سازوکاری که در حال حاضر به آن‌ها مجوز می‌دهد، مجوزدهی شوند.</p>
+<p dir="rtl">افزونهٔ پذیرش <code dir="ltr">NodeRestriction</code> درخواست‌های این kubeletها را نادیده می‌گیرد، زیرا پیاده‌سازی پیش‌فرض شناسهٔ نود آن را هویت نود به شمار نمی‌آورد.</p>
 <p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
-<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#مرور-کلی-overview">مرور کلی {#overview}</a><a class="l2" href="#محدودسازی-audience-توکن-service-account-service-account-token-audience-restriction">محدودسازی audience توکن service account {#service-account-token-audience-restriction}</a><a class="l3" href="#مجاز-کردن-audienceهای-اضافی-با-rbac-allowing-additional-audiences">مجاز کردن audienceهای اضافی با RBAC {#allowing-additional-audiences}</a><a class="l2" href="#ملاحظات-مهاجرت-migration-considerations">ملاحظات مهاجرت {#migration-considerations}</a><a class="l3" href="#kubeletهای-خارج-از-گروه-system-nodes-kubelets-outside-the-system-nodes-group">kubeletهای خارج از گروه system:nodes {#kubelets-outside-the-system-nodes-group}</a><a class="l3" href="#kubeletهای-دارای-نام-کاربری-غیرمتمایز-kubelets-with-undifferentiated-usernames">kubeletهای دارای نام کاربری غیرمتمایز {#kubelets-with-undifferentiated-usernames}</a></nav>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#مرور-کلی">مرور کلی</a><a class="l2" href="#محدودیت-مخاطب-توکن-حساب-سرویس-service-account-token-audience-restriction">محدودیت مخاطب توکن حساب سرویس {#service-account-token-audience-restriction}</a><a class="l3" href="#مجاز-کردن-مخاطبان-اضافی-با-rbac-allowing-additional-audiences">مجاز کردن مخاطبان اضافی با RBAC {#allowing-additional-audiences}</a><a class="l2" href="#ملاحظات-مهاجرت">ملاحظات مهاجرت</a><a class="l3" href="#kubeletهای-خارج-از-گروه-system-nodes">kubeletهای خارج از گروه system:nodes</a><a class="l3" href="#kubeletهایی-با-نام-های-کاربری-غیرمتمایز">kubeletهایی با نام‌های کاربری غیرمتمایز</a></nav>
 </div>
 </body>
 </html>

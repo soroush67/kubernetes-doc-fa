@@ -5,37 +5,38 @@ weight: 130
 
 <!-- overview -->
 
-قابلیت «اولویت و انصاف API» (API Priority and Fairness) رفتار kube-apiserver کوبرنتیز را در شرایط بار بیش از حد کنترل می‌کند. اطلاعات بیشتر درباره‌ی آن را می‌توانید در مستندات
+قابلیت «اولویت و انصاف API» (API Priority and Fairness) رفتار سرور API کوبرنتیز را در شرایط اضافه‌بار کنترل می‌کند. اطلاعات بیشتر درباره‌ی این قابلیت را می‌توانید در مستندات
 [اولویت و انصاف API](/docs/concepts/cluster-administration/flow-control/)
 بیابید.
 
 <!-- body -->
 
-## عیب‌یابی {#diagnostics}
+## عیب‌یابی
 
-هر پاسخ HTTP از یک API server که قابلیت اولویت و انصاف در آن فعال است، دو هدر اضافی دارد: `X-Kubernetes-PF-FlowSchema-UID` و `X-Kubernetes-PF-PriorityLevel-UID`، که به ترتیب flow schemaی که با درخواست مطابقت یافته و سطح اولویتی که درخواست به آن اختصاص داده شده است را مشخص می‌کنند. نام آبجکت‌های API در این هدرها درج نمی‌شود (تا در صورتی که کاربر درخواست‌دهنده مجوز مشاهده‌ی آن‌ها را نداشته باشد، جزئیاتی افشا نشود). هنگام عیب‌یابی می‌توانید از دستوری مانند زیر استفاده کنید:
+هر پاسخ HTTP از سرور API‌ای که قابلیت اولویت و انصاف در آن فعال است، دو سرآیند (header) اضافه دارد: `X-Kubernetes-PF-FlowSchema-UID` و
+`X-Kubernetes-PF-PriorityLevel-UID`. این دو سرآیند به ترتیب طرح‌واره‌ی جریان (flow schema) منطبق با درخواست و سطح اولویتی را که درخواست به آن تخصیص یافته است، مشخص می‌کنند. نام آبجکت‌های API در این سرآیندها درج نمی‌شود تا اگر کاربر درخواست‌دهنده اجازه‌ی مشاهده‌ی آن‌ها را نداشته باشد، جزئیاتی فاش نشود. هنگام عیب‌یابی می‌توانید از دستوری مانند زیر استفاده کنید:
 
 ```shell
 kubectl get flowschemas -o custom-columns="uid:{metadata.uid},name:{metadata.name}"
 kubectl get prioritylevelconfigurations -o custom-columns="uid:{metadata.uid},name:{metadata.name}"
 ```
 
-تا نگاشتی از UIDها به نام‌ها را برای هر دو FlowSchema و PriorityLevelConfiguration به دست آورید.
+تا نگاشتی از UIDها به نام‌ها را هم برای FlowSchemaها و هم برای
+PriorityLevelConfigurationها به دست آورید.
 
-## نقاط پایانی اشکال‌زدایی {#debug-endpoints}
+## نقاط پایانی عیب‌یابی
 
-وقتی قابلیت `APIPriorityAndFairness` فعال باشد، `kube-apiserver` مسیرهای اضافی زیر را روی پورت‌های HTTP(S) خود ارائه می‌کند.
+وقتی قابلیت `APIPriorityAndFairness` فعال باشد، `kube-apiserver` مسیرهای اضافه‌ی زیر را روی درگاه‌های HTTP(S) خود ارائه می‌کند.
 
-باید مطمئن شوید که مجوز دسترسی به این نقاط پایانی را دارید. اگر از کاربر admin استفاده می‌کنید، لازم نیست کار خاصی انجام دهید. در صورت نیاز، می‌توان با پیروی از مستندات [RBAC](/docs/reference/access-authn-authz/rbac/) و با مشخص کردن `nonResourceURLs`، مجوز دسترسی به `/debug/api_priority_and_fairness/` را اعطا کرد.
+باید مطمئن شوید که مجوز دسترسی به این نقاط پایانی (endpoint) را دارید. اگر از حساب مدیر (admin) استفاده می‌کنید، لازم نیست کاری انجام دهید. در صورت نیاز می‌توان طبق مستندات [RBAC](/docs/reference/access-authn-authz/rbac/) و با مشخص کردن `nonResourceURLs`، مجوز دسترسی به `/debug/api_priority_and_fairness/` را اعطا کرد.
 
-- `/debug/api_priority_and_fairness/dump_priority_levels` - فهرستی از
-  همه‌ی سطوح اولویت و وضعیت فعلی هر یک. می‌توانید آن را به این صورت دریافت کنید:
+- مسیر `/debug/api_priority_and_fairness/dump_priority_levels`: فهرستی از همه‌ی سطوح اولویت و وضعیت فعلی هر یک. می‌توانید آن را به این صورت دریافت کنید:
 
   ```shell
   kubectl get --raw /debug/api_priority_and_fairness/dump_priority_levels
   ```
 
-  خروجی با قالب CSV و مشابه نمونه‌ی زیر خواهد بود:
+  خروجی در قالب CSV و مشابه زیر خواهد بود:
 
   ```none
   PriorityLevelName, ActiveQueues, IsIdle, IsQuiescing, WaitingRequests, ExecutingRequests, DispatchedRequests, RejectedRequests, TimedoutRequests, CancelledRequests
@@ -49,17 +50,16 @@ kubectl get prioritylevelconfigurations -o custom-columns="uid:{metadata.uid},na
   workload-low,      0,            true,   false,       0,               0,                 0,                  0,                0,                0
   ```
 
-  توضیح برخی از نام ستون‌ها:
-  - `IsQuiescing` نشان می‌دهد که آیا این سطح اولویت پس از تخلیه‌ی صف‌هایش حذف خواهد شد یا خیر.
+  توضیح برخی از ستون‌ها:
+  - ستون `IsQuiescing` نشان می‌دهد که آیا این سطح اولویت پس از خالی شدن صف‌هایش حذف خواهد شد یا نه.
 
-- `/debug/api_priority_and_fairness/dump_queues` - فهرستی از همه‌ی
-  صف‌ها و وضعیت فعلی آن‌ها. می‌توانید آن را به این صورت دریافت کنید:
+- مسیر `/debug/api_priority_and_fairness/dump_queues`: فهرستی از همه‌ی صف‌ها و وضعیت فعلی آن‌ها. می‌توانید آن را به این صورت دریافت کنید:
 
   ```shell
   kubectl get --raw /debug/api_priority_and_fairness/dump_queues
   ```
 
-  خروجی با قالب CSV و مشابه نمونه‌ی زیر خواهد بود:
+  خروجی در قالب CSV و مشابه زیر خواهد بود:
 
   ```none
   PriorityLevelName, Index,  PendingRequests, ExecutingRequests, SeatsInUse, NextDispatchR,   InitialSeatsSum, MaxSeatsSum, TotalWorkSum
@@ -73,27 +73,21 @@ kubectl get prioritylevelconfigurations -o custom-columns="uid:{metadata.uid},na
   workload-high,     1,      0,               0,                 0,          1119.44936475ss, 0,               0,           0.00000000ss
   ```
 
-  توضیح برخی از نام ستون‌ها:
-  - `NextDispatchR`: مقدار نشانگر پیشرفت R، بر حسب seat-second، که در آن
-    درخواست بعدی ارسال (dispatch) خواهد شد.
-  - `InitialSeatsSum`: مجموع InitialSeats مرتبط با همه‌ی درخواست‌ها در
-    یک صف مشخص.
-  - `MaxSeatsSum`: مجموع MaxSeats مرتبط با همه‌ی درخواست‌ها در یک
-    صف مشخص.
-  - `TotalWorkSum`: مجموع کل کار، بر حسب seat-second، همه‌ی
-    درخواست‌های در انتظار در یک صف مشخص.
+  توضیح برخی از ستون‌ها:
+  - ستون `NextDispatchR`: مقدار نمایش‌داده‌شده در شمارنده‌ی پیشرفت R، بر حسب واحد صندلی-ثانیه، که درخواست بعدی در آن مقدار ارسال خواهد شد.
+  - ستون `InitialSeatsSum`: مجموع InitialSeats مربوط به همه‌ی درخواست‌های موجود در یک صف مشخص.
+  - ستون `MaxSeatsSum`: مجموع MaxSeats مربوط به همه‌ی درخواست‌های موجود در یک صف مشخص.
+  - ستون `TotalWorkSum`: مجموع کل کار همه‌ی درخواست‌های در انتظار در یک صف مشخص، بر حسب واحد صندلی-ثانیه.
 
-  نکته: `seat-second` (با اختصار `ss`) در دنیای APF معیاری برای سنجش کار، بر حسب seat-second، است.
+  نکته: در دنیای APF، واحد `seat-second` (به اختصار `ss`) معیاری برای سنجش میزان کار بر حسب صندلی-ثانیه است.
 
-- `/debug/api_priority_and_fairness/dump_requests` - فهرستی از همه‌ی درخواست‌ها
-  شامل درخواست‌هایی که در صف منتظرند و درخواست‌هایی که در حال اجرا هستند.
-  می‌توانید آن را به این صورت دریافت کنید:
+- مسیر `/debug/api_priority_and_fairness/dump_requests`: فهرستی از همه‌ی درخواست‌ها، شامل درخواست‌هایی که در صف منتظرند و درخواست‌هایی که در حال اجرا هستند. می‌توانید آن را به این صورت دریافت کنید:
 
   ```shell
   kubectl get --raw /debug/api_priority_and_fairness/dump_requests
   ```
 
-  خروجی با قالب CSV و مشابه نمونه‌ی زیر خواهد بود:
+  خروجی در قالب CSV و مشابه زیر خواهد بود:
 
   ```none
   PriorityLevelName, FlowSchemaName,   QueueIndex, RequestIndexInQueue, FlowDistingsher,                        ArriveTime,                     InitialSeats, FinalSeats, AdditionalLatency, StartTime
@@ -102,13 +96,13 @@ kubectl get prioritylevelconfigurations -o custom-columns="uid:{metadata.uid},na
   workload-low,      service-accounts, 14,         1,                   system:serviceaccount:default:loadtest, 2023-07-18T00:12:51.487092539Z, 10,           0,          0s,                0001-01-01T00:00:00Z
   ```
 
-  با دستوری مانند زیر می‌توانید فهرستی با جزئیات بیشتر دریافت کنید:
+  با دستوری مانند زیر می‌توانید فهرست مفصل‌تری به دست آورید:
 
   ```shell
   kubectl get --raw '/debug/api_priority_and_fairness/dump_requests?includeRequestDetails=1'
   ```
 
-  خروجی با قالب CSV و مشابه نمونه‌ی زیر خواهد بود:
+  خروجی در قالب CSV و مشابه زیر خواهد بود:
 
   ```none
   PriorityLevelName, FlowSchemaName,   QueueIndex, RequestIndexInQueue, FlowDistingsher,                        ArriveTime,                     InitialSeats, FinalSeats, AdditionalLatency, StartTime,                      UserName,                               Verb,   APIPath,                                   Namespace,   Name,   APIVersion, Resource,   SubResource
@@ -117,45 +111,34 @@ kubectl get prioritylevelconfigurations -o custom-columns="uid:{metadata.uid},na
   workload-low,      service-accounts, 14,         1,                   system:serviceaccount:default:loadtest, 2023-07-18T00:13:09.086476021Z, 10,           0,          0s,                0001-01-01T00:00:00Z,           system:serviceaccount:default:loadtest, list,   /api/v1/namespaces/kube-stress/configmaps, kube-stress, ,       v1,         configmaps,
   ```
 
-  توضیح برخی از نام ستون‌ها:
-  - `QueueIndex`: اندیس صف. برای سطوح اولویتی که صف ندارند، مقدار آن 1- خواهد بود.
-  - `RequestIndexInQueue`: اندیس یک درخواست مشخص در صف. برای درخواست‌های
-    در حال اجرا، مقدار آن 1- خواهد بود.
-  - `InitialSeats`: تعداد seatهایی که در مرحله‌ی اولیه
-    (عادی) اجرای درخواست اشغال می‌شوند.
-  - `FinalSeats`: تعداد seatهایی که در مرحله‌ی نهایی
-    اجرای درخواست اشغال می‌شوند، با احتساب اعلان‌های WATCH مرتبط.
-  - `AdditionalLatency`: زمان اضافی صرف‌شده در مرحله‌ی نهایی اجرای درخواست.
-    در این بازه‌ی زمانی، FinalSeats اشغال خواهد بود. این مقدار به معنای تأخیری
-    نیست که کاربر مشاهده می‌کند.
-  - `StartTime`: زمانی که اجرای یک درخواست آغاز می‌شود. برای درخواست‌های
-    در صف، مقدار آن 0001-01-01T00:00:00Z خواهد بود.
+  توضیح برخی از ستون‌ها:
+  - ستون `QueueIndex`: شماره‌ی صف. برای سطوح اولویتی که صف ندارند، مقدار آن ‎-1 خواهد بود.
+  - ستون `RequestIndexInQueue`: شماره‌ی یک درخواست مشخص در صف. برای درخواست‌های در حال اجرا، مقدار آن ‎-1 خواهد بود.
+  - ستون `InitialSeats`: تعداد صندلی‌هایی که در مرحله‌ی اولیه (عادی) اجرای درخواست اشغال می‌شوند.
+  - ستون `FinalSeats`: تعداد صندلی‌هایی که در مرحله‌ی پایانی اجرای درخواست، با احتساب اعلان‌های WATCH مرتبط، اشغال می‌شوند.
+  - ستون `AdditionalLatency`: زمان اضافه‌ای که در مرحله‌ی پایانی اجرای درخواست صرف می‌شود. در این بازه‌ی زمانی، صندلی‌های FinalSeats اشغال خواهند بود. این مقدار به معنای تأخیری نیست که کاربر مشاهده کند.
+  - ستون `StartTime`: زمانی که اجرای درخواست آغاز می‌شود. برای درخواست‌های داخل صف، مقدار آن 0001-01-01T00:00:00Z خواهد بود.
 
-## ثبت لاگ اشکال‌زدایی {#debug-logging}
+## ثبت لاگ برای عیب‌یابی
 
-در سطح جزئیات `-v=3` یا بالاتر، API server برای هر درخواست یک خط httplog در لاگ API server ثبت می‌کند که شامل ویژگی‌های زیر است.
+در سطح جزئیات (verbosity) ‏`-v=3` یا بالاتر، سرور API برای هر درخواست یک خط httplog در لاگ سرور API ثبت می‌کند که شامل ویژگی‌های زیر است.
 
-- `apf_fs`: نام flow schemaی که درخواست در آن طبقه‌بندی شده است.
-- `apf_pl`: نام سطح اولویت مربوط به آن flow schema.
-- `apf_iseats`: تعداد seatهای تعیین‌شده برای مرحله‌ی اولیه
-  (عادی) اجرای درخواست.
-- `apf_fseats`: تعداد seatهای تعیین‌شده برای مرحله‌ی نهایی
-  اجرای درخواست (با احتساب اعلان‌های `watch` مرتبط).
-- `apf_additionalLatency`: مدت زمان مرحله‌ی نهایی
-  اجرای درخواست.
+- ویژگی `apf_fs`: نام طرح‌واره‌ی جریانی که درخواست در آن دسته‌بندی شده است.
+- ویژگی `apf_pl`: نام سطح اولویت مربوط به آن طرح‌واره‌ی جریان.
+- ویژگی `apf_iseats`: تعداد صندلی‌هایی که برای مرحله‌ی اولیه (عادی) اجرای درخواست تعیین شده است.
+- ویژگی `apf_fseats`: تعداد صندلی‌هایی که برای مرحله‌ی پایانی اجرای درخواست (با احتساب اعلان‌های `watch` مرتبط) تعیین شده است.
+- ویژگی `apf_additionalLatency`: مدت زمان مرحله‌ی پایانی اجرای درخواست.
 
-در سطوح بالاتر جزئیات، خطوط لاگی وجود خواهد داشت که جزئیات نحوه‌ی رسیدگی APF به درخواست را نمایش می‌دهند و عمدتاً برای اشکال‌زدایی هستند.
+در سطوح بالاتر جزئیات، خطوطی در لاگ ثبت می‌شوند که جزئیات نحوه‌ی رسیدگی APF به درخواست را نشان می‌دهند و عمدتاً برای عیب‌یابی کاربرد دارند.
 
-## هدرهای پاسخ {#response-headers}
+## سرآیندهای پاسخ
 
-APF دو هدر زیر را به هر پیام پاسخ HTTP اضافه می‌کند. این هدرها در لاگ ممیزی (audit log) ظاهر نمی‌شوند. می‌توان آن‌ها را از سمت کلاینت مشاهده کرد. برای کلاینت‌هایی که از `klog` استفاده می‌کنند، برای مشاهده‌ی این هدرها از سطح جزئیات `-v=8` یا بالاتر استفاده کنید.
+APF دو سرآیند زیر را به هر پیام پاسخ HTTP اضافه می‌کند. این سرآیندها در لاگ ممیزی (audit log) نمایش داده نمی‌شوند، اما می‌توان آن‌ها را از سمت کلاینت مشاهده کرد. در کلاینت‌هایی که از `klog` استفاده می‌کنند، برای مشاهده‌ی این سرآیندها از سطح جزئیات `-v=8` یا بالاتر استفاده کنید.
 
-- `X-Kubernetes-PF-FlowSchema-UID` شامل UID آبجکت FlowSchema است
-  که درخواست مربوطه در آن طبقه‌بندی شده است.
-- `X-Kubernetes-PF-PriorityLevel-UID` شامل UID آبجکت
-  PriorityLevelConfiguration مرتبط با آن FlowSchema است.
+- سرآیند `X-Kubernetes-PF-FlowSchema-UID` شامل UID آبجکت FlowSchema‌ای است که درخواست مربوطه در آن دسته‌بندی شده است.
+- سرآیند `X-Kubernetes-PF-PriorityLevel-UID` شامل UID آبجکت PriorityLevelConfiguration مرتبط با آن FlowSchema است.
 
 ## {{% heading "whatsnext" %}}
 
-برای کسب اطلاعات پایه درباره‌ی جزئیات طراحی اولویت و انصاف API، به
-[پیشنهاد بهبود (enhancement proposal)](https://github.com/kubernetes/enhancements/tree/master/keps/sig-api-machinery/1040-priority-and-fairness) مراجعه کنید.
+برای آشنایی با پیش‌زمینه و جزئیات طراحی قابلیت اولویت و انصاف API، به
+[پیشنهاد بهبود](https://github.com/kubernetes/enhancements/tree/master/keps/sig-api-machinery/1040-priority-and-fairness) مراجعه کنید.

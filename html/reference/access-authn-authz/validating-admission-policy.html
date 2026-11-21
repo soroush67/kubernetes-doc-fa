@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>سیاست پذیرش اعتبارسنجی (Validating Admission Policy) | مستندات کوبرنتیز</title>
+<title>سیاست پذیرش اعتبارسنجی | مستندات کوبرنتیز</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
@@ -82,46 +82,49 @@ document.addEventListener('DOMContentLoaded',function(){box=document.getElementB
 <a id="totop" href="#top" title="بالای صفحه" aria-label="بازگشت به بالای صفحه">↑</a>
 <header class="top"><a href="../../index.html">مستندات کوبرنتیز (فارسی)</a><span class="crumbs">reference / access-authn-authz</span><span id="upd" hidden></span><button id="theme" type="button">روشن / تاریک</button></header>
 <div class="layout">
-<main><h1 dir="rtl">سیاست پذیرش اعتبارسنجی (Validating Admission Policy)</h1><!-- overview -->
+<main><h1 dir="rtl">سیاست پذیرش اعتبارسنجی</h1><!-- overview -->
 <div class="feature-state">وضعیت ویژگی: <span class="ltr" dir="ltr">Kubernetes v1.30 [stable]</span> (پایدار)</div>
-<p dir="rtl">این صفحه مروری بر Validating Admission Policy ارائه می‌دهد.</p>
+<p dir="rtl">این صفحه مروری بر سیاست پذیرش اعتبارسنجی (Validating Admission Policy) ارائه می‌دهد.</p>
 <!-- body -->
-<h2 id="validating-admission-policy-چیست؟" dir="rtl">Validating Admission Policy چیست؟</h2>
-<p dir="rtl">سیاست‌های پذیرش اعتبارسنجی (Validating Admission Policy) یک جایگزین اعلانی و درون‌فرایندی (in-process) برای وب‌هوک‌های پذیرش اعتبارسنجی (validating admission webhooks) ارائه می‌دهند.</p>
-<p dir="rtl">سیاست‌های پذیرش اعتبارسنجی برای اعلام قواعد اعتبارسنجی یک سیاست از Common Expression Language (CEL) استفاده می‌کنند.
-این سیاست‌ها بسیار قابل پیکربندی هستند و به نویسندگان سیاست امکان می‌دهند سیاست‌هایی تعریف کنند که بر حسب نیاز مدیران کلاستر، پارامتری‌شده و محدود به منابع مشخص باشند.</p>
-<h2 id="چه-منابعی-یک-سیاست-را-می-سازند" dir="rtl">چه منابعی یک سیاست را می‌سازند</h2>
-<p dir="rtl">یک سیاست معمولاً از سه منبع تشکیل می‌شود:</p>
+<h2 id="سیاست-پذیرش-اعتبارسنجی-چیست؟" dir="rtl">سیاست پذیرش اعتبارسنجی چیست؟</h2>
+<p dir="rtl">سیاست‌های پذیرش اعتبارسنجی جایگزینی اعلانی (declarative) و درون‌فرایندی (in-process) برای وب‌هوک‌های پذیرش اعتبارسنجی (validating admission webhooks) هستند.</p>
+<p dir="rtl">این سیاست‌ها قواعد اعتبارسنجی هر سیاست را با زبان عبارت مشترک (Common Expression Language یا CEL) تعریف می‌کنند.
+سیاست‌های پذیرش اعتبارسنجی بسیار پیکربندی‌پذیر هستند. نویسندگان سیاست می‌توانند سیاست‌هایی تعریف کنند که مدیران کلاستر بر حسب نیاز آن‌ها را پارامتری کنند و دامنهٔ اعمالشان را به منابع مشخصی محدود کنند.</p>
+<h2 id="یک-سیاست-از-چه-منابعی-تشکیل-می-شود" dir="rtl">یک سیاست از چه منابعی تشکیل می‌شود</h2>
+<p dir="rtl">هر سیاست معمولاً از سه منبع تشکیل می‌شود:</p>
 <ul>
 <li dir="rtl">
-<p dir="rtl"><code dir="ltr">ValidatingAdmissionPolicy</code> منطق انتزاعی یک سیاست را توصیف می‌کند
-(مثلاً: «این سیاست اطمینان می‌دهد که یک برچسب مشخص روی یک مقدار مشخص تنظیم شده است»).</p>
+<p dir="rtl">منبع <code dir="ltr">ValidatingAdmissionPolicy</code> منطق انتزاعی سیاست را توصیف می‌کند
+(برای مثال: «این سیاست اطمینان حاصل می‌کند که یک برچسب مشخص مقدار مشخصی داشته باشد»).</p>
 </li>
 <li dir="rtl">
-<p dir="rtl">یک منبع پارامتر (parameter resource) اطلاعاتی را در اختیار ValidatingAdmissionPolicy قرار می‌دهد تا آن را به یک گزاره‌ی مشخص تبدیل کند
-(مثلاً: «برچسب <code dir="ltr">owner</code> باید روی مقداری تنظیم شود که به <code dir="ltr">.company.com</code> ختم می‌شود»).
-یک نوع بومی مانند ConfigMap یا یک CRD، طرح‌واره (schema) منبع پارامتر را تعریف می‌کند.
-آبجکت‌های <code dir="ltr">ValidatingAdmissionPolicy</code> مشخص می‌کنند که برای منبع پارامتر خود چه Kind ای را انتظار دارند.</p>
+<p dir="rtl">منبع پارامتر اطلاعاتی را در اختیار ValidatingAdmissionPolicy قرار می‌دهد تا آن را به یک حکم مشخص و عینی تبدیل کند
+(برای مثال: «برچسب <code dir="ltr">owner</code> باید مقداری داشته باشد که به <code dir="ltr">.company.com</code> ختم شود»).
+طرح‌وارهٔ (schema) منبع پارامتر را یک نوع بومی مانند ConfigMap یا یک CRD تعریف می‌کند.
+آبجکت‌های <code dir="ltr">ValidatingAdmissionPolicy</code> مشخص می‌کنند که برای منبع پارامتر خود انتظار چه Kind ای را دارند.</p>
 </li>
 <li dir="rtl">
-<p dir="rtl">یک <code dir="ltr">ValidatingAdmissionPolicyBinding</code> منابع بالا را به یکدیگر پیوند می‌دهد و دامنه‌ی اعمال را مشخص می‌کند.
-اگر فقط بخواهید تنظیم برچسب <code dir="ltr">owner</code> را برای <code dir="ltr">Pods</code> الزامی کنید، این محدودیت را در binding مشخص می‌کنید.</p>
+<p dir="rtl">منبع <code dir="ltr">ValidatingAdmissionPolicyBinding</code> منابع بالا را به یکدیگر پیوند می‌دهد و دامنهٔ اعمال سیاست را تعیین می‌کند.
+اگر فقط می‌خواهید تنظیم برچسب <code dir="ltr">owner</code> را برای <code dir="ltr">Pods</code> الزامی کنید، این محدودیت را باید در همین اتصال (binding)
+مشخص کنید.</p>
 </li>
 </ul>
-<p dir="rtl">برای اینکه یک سیاست اثر داشته باشد، دست‌کم یک <code dir="ltr">ValidatingAdmissionPolicy</code> و یک <code dir="ltr">ValidatingAdmissionPolicyBinding</code> متناظر با آن باید تعریف شود.</p>
+<p dir="rtl">برای اینکه یک سیاست اثر داشته باشد، دست‌کم باید یک <code dir="ltr">ValidatingAdmissionPolicy</code> و یک <code dir="ltr">ValidatingAdmissionPolicyBinding</code>
+متناظر با آن تعریف شده باشند.</p>
 <div class="callout note"><div class="callout-title">توجه:</div>
 <p dir="rtl">نام‌هایی که به <code dir="ltr">.static.k8s.io</code> ختم می‌شوند برای
 <a href="manifest-admission-control.html">کنترل پذیرش مبتنی بر مانیفست</a>
-رزرو شده‌اند و نمی‌توان از آن‌ها برای سیاست‌ها یا bindingهای مبتنی بر API استفاده کرد. این رزرو
-زمانی اعمال می‌شود که
-<a href="https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/#ManifestBasedAdmissionControlConfig" target="_blank">feature gate</a> با نام <code dir="ltr">ManifestBasedAdmissionControlConfig</code> فعال باشد.</p>
+رزرو شده‌اند و نمی‌توان از آن‌ها برای سیاست‌ها یا اتصال‌های مبتنی بر API استفاده کرد. این محدودیت
+زمانی اعمال می‌شود که <a href="https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/#ManifestBasedAdmissionControlConfig" target="_blank">feature gate</a> با نام
+<code dir="ltr">ManifestBasedAdmissionControlConfig</code> فعال باشد.</p>
 </div>
-<p dir="rtl">اگر یک <code dir="ltr">ValidatingAdmissionPolicy</code> نیازی به پیکربندی از طریق پارامترها نداشته باشد، کافی است
+<p dir="rtl">اگر یک <code dir="ltr">ValidatingAdmissionPolicy</code> نیازی به پیکربندی از طریق پارامترها ندارد، کافی است فیلد
 <code dir="ltr">spec.paramKind</code> را در <code dir="ltr">ValidatingAdmissionPolicy</code> مشخص نکنید.</p>
-<h2 id="شروع-کار-با-validating-admission-policy" dir="rtl">شروع کار با Validating Admission Policy</h2>
-<p dir="rtl">Validating Admission Policy بخشی از control plane کلاستر است. باید آن‌ها را با نهایت احتیاط بنویسید و مستقر کنید. در ادامه نحوه‌ی آزمایش سریع Validating Admission Policy شرح داده شده است.</p>
+<h2 id="شروع-کار-با-سیاست-پذیرش-اعتبارسنجی" dir="rtl">شروع کار با سیاست پذیرش اعتبارسنجی</h2>
+<p dir="rtl">سیاست پذیرش اعتبارسنجی بخشی از control plane کلاستر است. این سیاست‌ها را باید با احتیاط فراوان بنویسید و مستقر کنید.
+در ادامه توضیح داده می‌شود که چگونه می‌توانید به‌سرعت با سیاست پذیرش اعتبارسنجی آزمایش کنید.</p>
 <h3 id="ایجاد-یک-validatingadmissionpolicy" dir="rtl">ایجاد یک ValidatingAdmissionPolicy</h3>
-<p dir="rtl">در ادامه نمونه‌ای از یک ValidatingAdmissionPolicy آمده است.</p>
+<p dir="rtl">نمونهٔ زیر یک ValidatingAdmissionPolicy را نشان می‌دهد.</p>
 <div class="code-file ltr" dir="ltr">validatingadmissionpolicy/basic-example-policy.yaml</div>
 <pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingAdmissionPolicy
@@ -138,13 +141,14 @@ spec:
   validations:
     - expression: "object.spec.replicas &lt;= 5"
 </code></pre>
-<p dir="rtl"><code dir="ltr">spec.validations</code> شامل عبارت‌های CEL است که برای اعتبارسنجی درخواست از <a href="https://github.com/google/cel-spec" target="_blank" rel="noopener">Common Expression Language (CEL)</a> استفاده می‌کنند.
-اگر نتیجه‌ی ارزیابی یک عبارت false باشد، بررسی اعتبارسنجی مطابق با فیلد <code dir="ltr">spec.failurePolicy</code> اعمال می‌شود.</p>
+<p dir="rtl">فیلد <code dir="ltr">spec.validations</code> شامل عبارت‌هایی است که با استفاده از <a href="https://github.com/google/cel-spec" target="_blank" rel="noopener">زبان عبارت مشترک (CEL)</a>
+درخواست را اعتبارسنجی می‌کنند. اگر یک عبارت به false ارزیابی شود، بررسی اعتبارسنجی
+مطابق فیلد <code dir="ltr">spec.failurePolicy</code> اعمال می‌شود.</p>
 <div class="callout note"><div class="callout-title">توجه:</div>
 <p dir="rtl">می‌توانید عبارت‌های CEL را به‌سرعت در <a href="https://playcel.undistro.io" target="_blank" rel="noopener">CEL Playground</a> آزمایش کنید.</p>
 </div>
-<p dir="rtl">برای پیکربندی یک سیاست پذیرش اعتبارسنجی جهت استفاده در کلاستر، وجود یک binding الزامی است.
-در ادامه نمونه‌ای از یک ValidatingAdmissionPolicyBinding آمده است:</p>
+<p dir="rtl">برای پیکربندی یک سیاست پذیرش اعتبارسنجی جهت استفاده در کلاستر، به یک اتصال نیاز است.
+نمونهٔ زیر یک ValidatingAdmissionPolicyBinding را نشان می‌دهد:</p>
 <div class="code-file ltr" dir="ltr">validatingadmissionpolicy/basic-example-binding.yaml</div>
 <pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingAdmissionPolicyBinding
@@ -158,37 +162,41 @@ spec:
       matchLabels:
         environment: test
 </code></pre>
-<p dir="rtl">هنگام تلاش برای ایجاد یک deployment که مقدار replicas آن عبارت اعتبارسنجی را برآورده نمی‌کند،
+<p dir="rtl">اگر بخواهید یک Deployment با تعداد replicaهایی ایجاد کنید که عبارت اعتبارسنجی را برآورده نمی‌کند،
 خطایی با پیام زیر بازگردانده می‌شود:</p>
 <pre dir="ltr"><code class="language-none" dir="ltr">ValidatingAdmissionPolicy 'demo-policy.example.com' with binding 'demo-binding-test.example.com' denied request: failed expression: object.spec.replicas &lt;= 5
 </code></pre>
-<p dir="rtl">مثال بالا یک نمونه‌ی ساده از استفاده از ValidatingAdmissionPolicy بدون پیکربندی پارامتر است.</p>
-<h4 id="اقدام-های-اعتبارسنجی-validation-actions-validation-actions" dir="rtl">اقدام‌های اعتبارسنجی (Validation actions) {#validation-actions}</h4>
+<p dir="rtl">نمونهٔ بالا مثال ساده‌ای از استفاده از ValidatingAdmissionPolicy بدون پیکربندی پارامتر است.</p>
+<h4 id="کنش-های-اعتبارسنجی" dir="rtl">کنش‌های اعتبارسنجی</h4>
 <p dir="rtl">هر <code dir="ltr">ValidatingAdmissionPolicyBinding</code> باید یک یا چند مقدار
-<code dir="ltr">validationActions</code> مشخص کند تا نحوه‌ی اِعمال <code dir="ltr">validations</code> یک سیاست را تعیین کند.</p>
-<p dir="rtl">مقادیر پشتیبانی‌شده‌ی <code dir="ltr">validationActions</code> عبارت‌اند از:</p>
+<code dir="ltr">validationActions</code> مشخص کند تا نحوهٔ اعمال <code dir="ltr">validations</code> سیاست را تعیین کند.</p>
+<p dir="rtl">مقادیر پشتیبانی‌شده برای <code dir="ltr">validationActions</code> عبارت‌اند از:</p>
 <ul>
-<li dir="rtl"><code dir="ltr">Deny</code>: شکست اعتبارسنجی به رد شدن درخواست منجر می‌شود.</li>
-<li dir="rtl"><code dir="ltr">Warn</code>: شکست اعتبارسنجی به‌صورت <a href="/blog/2020/09/03/warnings/">هشدار</a> به کلاینت درخواست‌دهنده گزارش می‌شود.</li>
-<li dir="rtl"><code dir="ltr">Audit</code>: شکست اعتبارسنجی در رویداد ممیزی (audit event) مربوط به درخواست API درج می‌شود.</li>
+<li dir="rtl">مقدار <code dir="ltr">Deny</code>: شکست اعتبارسنجی به رد درخواست منجر می‌شود.</li>
+<li dir="rtl">مقدار <code dir="ltr">Warn</code>: شکست اعتبارسنجی به‌صورت یک <a href="/blog/2020/09/03/warnings/">هشدار</a>
+به کلاینت درخواست‌دهنده گزارش می‌شود.</li>
+<li dir="rtl">مقدار <code dir="ltr">Audit</code>: شکست اعتبارسنجی در رویداد ممیزی (audit event) مربوط به درخواست API درج می‌شود.</li>
 </ul>
-<p dir="rtl">برای مثال، برای اینکه هم به کلاینت‌ها درباره‌ی شکست اعتبارسنجی هشدار داده شود و هم
-شکست‌های اعتبارسنجی ممیزی شوند، از این مقدار استفاده کنید:</p>
+<p dir="rtl">برای مثال، اگر می‌خواهید هم به کلاینت‌ها دربارهٔ شکست اعتبارسنجی هشدار دهید و هم
+شکست‌های اعتبارسنجی را ممیزی کنید، از این تنظیم استفاده کنید:</p>
 <pre dir="ltr"><code class="language-yaml" dir="ltr">validationActions: [Warn, Audit]
 </code></pre>
-<p dir="rtl"><code dir="ltr">Deny</code> و <code dir="ltr">Warn</code> را نمی‌توان با هم به کار برد، زیرا این ترکیب شکست اعتبارسنجی را بی‌دلیل هم در
-بدنه‌ی پاسخ API و هم در هدرهای هشدار HTTP تکرار می‌کند.</p>
-<p dir="rtl">یک <code dir="ltr">validation</code> که نتیجه‌ی ارزیابی آن false باشد، همیشه بر اساس این اقدام‌ها اِعمال می‌شود.
-شکست‌های تعریف‌شده توسط <code dir="ltr">failurePolicy</code> فقط در صورتی بر اساس این اقدام‌ها اِعمال می‌شوند که <code dir="ltr">failurePolicy</code> روی <code dir="ltr">Fail</code> تنظیم شده باشد (یا مشخص نشده باشد)؛
+<p dir="rtl">نمی‌توان <code dir="ltr">Deny</code> و <code dir="ltr">Warn</code> را همزمان به کار برد، زیرا این ترکیب
+شکست اعتبارسنجی را بی‌جهت هم در بدنهٔ پاسخ API
+و هم در سرآیندهای هشدار HTTP تکرار می‌کند.</p>
+<p dir="rtl">هر <code dir="ltr">validation</code> که به false ارزیابی شود، همواره مطابق این کنش‌ها
+اعمال می‌شود. شکست‌هایی که با <code dir="ltr">failurePolicy</code> تعریف می‌شوند فقط در صورتی
+مطابق این کنش‌ها اعمال می‌شوند که <code dir="ltr">failurePolicy</code> روی <code dir="ltr">Fail</code> تنظیم شده باشد (یا مشخص نشده باشد)؛
 در غیر این صورت، این شکست‌ها نادیده گرفته می‌شوند.</p>
-<p dir="rtl">برای جزئیات بیشتر درباره‌ی حاشیه‌نویسی (annotation) ممیزی شکست اعتبارسنجی، به
-<a href="../labels-annotations-taints/audit-annotations.html#validation-policy-admission-k8s-io-validation-failure">Audit Annotations: validation failures</a> مراجعه کنید.</p>
-<h3 id="منابع-پارامتر-parameter-resources" dir="rtl">منابع پارامتر {#parameter-resources}</h3>
-<p dir="rtl">منابع پارامتر امکان می‌دهند پیکربندی یک سیاست از تعریف آن جدا باشد.
-یک سیاست می‌تواند paramKind را تعریف کند که GVK منبع پارامتر را مشخص می‌کند،
-و سپس یک policy binding، سیاست را با نام (از طریق policyName) از راه paramRef به یک منبع پارامتر مشخص پیوند می‌دهد.</p>
-<p dir="rtl">اگر پیکربندی پارامتر لازم باشد، در ادامه نمونه‌ای از یک ValidatingAdmissionPolicy
-با پیکربندی پارامتر آمده است.</p>
+<p dir="rtl">برای جزئیات بیشتر دربارهٔ حاشیه‌نویسی (annotation) ممیزیِ شکست اعتبارسنجی، به
+<a href="../labels-annotations-taints/audit-annotations.html#validation-policy-admission-k8s-io-validation-failure">حاشیه‌نویسی‌های ممیزی: شکست‌های اعتبارسنجی</a>
+مراجعه کنید.</p>
+<h3 id="منابع-پارامتر" dir="rtl">منابع پارامتر</h3>
+<p dir="rtl">منابع پارامتر باعث می‌شوند پیکربندی سیاست از تعریف آن جدا باشد.
+هر سیاست می‌تواند فیلد paramKind را تعریف کند که GVK منبع پارامتر را مشخص می‌کند؛
+سپس یک اتصال سیاست، آن سیاست را با نامش (از طریق policyName) و از طریق paramRef به یک منبع پارامتر مشخص پیوند می‌دهد.</p>
+<p dir="rtl">اگر به پیکربندی پارامتر نیاز باشد، نمونهٔ زیر یک ValidatingAdmissionPolicy
+همراه با پیکربندی پارامتر را نشان می‌دهد.</p>
 <div class="code-file ltr" dir="ltr">validatingadmissionpolicy/policy-with-param.yaml</div>
 <pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingAdmissionPolicy
@@ -209,16 +217,19 @@ spec:
     - expression: "object.spec.replicas &lt;= params.maxReplicas"
       reason: Invalid
 </code></pre>
-<p dir="rtl">فیلد <code dir="ltr">spec.paramKind</code> در ValidatingAdmissionPolicy نوع منابعی را که برای پارامتری‌کردن این سیاست به کار می‌روند مشخص می‌کند. در این مثال، این کار با custom resourceهای ReplicaLimit پیکربندی شده است.
-توجه کنید که در این مثال، عبارت CEL از طریق متغیر params در CEL به پارامترها ارجاع می‌دهد،
-مثلاً <code dir="ltr">params.maxReplicas</code>. فیلد <code dir="ltr">spec.matchConstraints</code> مشخص می‌کند که این سیاست برای اعتبارسنجی چه منابعی طراحی شده است. توجه داشته باشید که نوع‌های بومی مانند <code dir="ltr">ConfigMap</code> نیز می‌توانند به‌عنوان مرجع پارامتر استفاده شوند.</p>
-<p dir="rtl">فیلدهای <code dir="ltr">spec.validations</code> شامل عبارت‌های CEL هستند. اگر نتیجه‌ی ارزیابی یک عبارت false باشد،
-بررسی اعتبارسنجی مطابق با فیلد <code dir="ltr">spec.failurePolicy</code> اِعمال می‌شود.</p>
-<p dir="rtl">نویسنده‌ی سیاست پذیرش اعتبارسنجی مسئول ارائه‌ی CRD پارامتر ReplicaLimit است.</p>
-<p dir="rtl">برای پیکربندی یک سیاست پذیرش اعتبارسنجی جهت استفاده در کلاستر، یک binding و یک منبع پارامتر
-ایجاد می‌شوند. در ادامه نمونه‌ای از یک ValidatingAdmissionPolicyBinding آمده است
-که از یک پارامتر <strong>سراسری در سطح کلاستر</strong> استفاده می‌کند؛ یعنی همان پارامتر برای اعتبارسنجی
-هر درخواست منبعی که با binding مطابقت داشته باشد به کار می‌رود:</p>
+<p dir="rtl">فیلد <code dir="ltr">spec.paramKind</code> در ValidatingAdmissionPolicy نوع منابعی را مشخص می‌کند که برای
+پارامتری کردن این سیاست به کار می‌روند. در این مثال، سیاست با منابع سفارشی ReplicaLimit پیکربندی می‌شود.
+به این نکته توجه کنید که در این مثال، عبارت CEL از طریق متغیر params در CEL به پارامترها ارجاع می‌دهد،
+مانند <code dir="ltr">params.maxReplicas</code>. فیلد <code dir="ltr">spec.matchConstraints</code> مشخص می‌کند که این سیاست
+برای اعتبارسنجی چه منابعی طراحی شده است. توجه داشته باشید که انواع بومی مانند <code dir="ltr">ConfigMap</code> نیز می‌توانند
+به‌عنوان مرجع پارامتر استفاده شوند.</p>
+<p dir="rtl">فیلدهای <code dir="ltr">spec.validations</code> شامل عبارت‌های CEL هستند. اگر یک عبارت به false ارزیابی شود،
+بررسی اعتبارسنجی مطابق فیلد <code dir="ltr">spec.failurePolicy</code> اعمال می‌شود.</p>
+<p dir="rtl">تأمین CRD پارامتر ReplicaLimit بر عهدهٔ نویسندهٔ سیاست پذیرش اعتبارسنجی است.</p>
+<p dir="rtl">برای پیکربندی یک سیاست پذیرش اعتبارسنجی جهت استفاده در کلاستر، یک اتصال و یک منبع پارامتر
+ایجاد می‌شوند. نمونهٔ زیر یک ValidatingAdmissionPolicyBinding را نشان می‌دهد
+که از یک پارامتر <strong>در سطح کل کلاستر</strong> استفاده می‌کند؛ یعنی همان پارامتر برای اعتبارسنجی
+همهٔ درخواست‌های منبعی که با این اتصال مطابقت دارند به کار می‌رود:</p>
 <div class="code-file ltr" dir="ltr">validatingadmissionpolicy/binding-with-param.yaml</div>
 <pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingAdmissionPolicyBinding
@@ -236,7 +247,8 @@ spec:
       matchLabels:
         environment: test
 </code></pre>
-<p dir="rtl">توجه کنید که این binding یک پارامتر را برای همه‌ی منابعی که در محیط <code dir="ltr">test</code> قرار دارند به سیاست اعمال می‌کند.</p>
+<p dir="rtl">توجه کنید که این اتصال، پارامتر را برای همهٔ منابعی که
+در محیط <code dir="ltr">test</code> قرار دارند به سیاست اعمال می‌کند.</p>
 <p dir="rtl">منبع پارامتر می‌تواند به شکل زیر باشد:</p>
 <div class="code-file ltr" dir="ltr">validatingadmissionpolicy/replicalimit-param.yaml</div>
 <pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: rules.example.com/v1
@@ -246,9 +258,9 @@ metadata:
   namespace: "default"
 maxReplicas: 3
 </code></pre>
-<p dir="rtl">این منبع پارامتر سیاست، استقرارها (deployments) را به حداکثر ۳ replica محدود می‌کند.</p>
-<p dir="rtl">یک سیاست پذیرش می‌تواند چندین binding داشته باشد. برای اینکه سایر محیط‌ها
-حد maxReplicas برابر ۱۰۰ داشته باشند، یک ValidatingAdmissionPolicyBinding دیگر ایجاد کنید:</p>
+<p dir="rtl">این منبع پارامتر سیاست، تعداد replicaهای Deploymentها را حداکثر به ۳ محدود می‌کند.</p>
+<p dir="rtl">یک سیاست پذیرش می‌تواند چندین اتصال داشته باشد. برای اینکه همهٔ محیط‌های دیگر
+محدودیت maxReplicas برابر ۱۰۰ داشته باشند، یک ValidatingAdmissionPolicyBinding دیگر ایجاد کنید:</p>
 <div class="code-file ltr" dir="ltr">validatingadmissionpolicy/binding-with-param-prod.yaml</div>
 <pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingAdmissionPolicyBinding
@@ -269,9 +281,9 @@ spec:
         values:
         - test
 </code></pre>
-<p dir="rtl">توجه کنید که این binding یک پارامتر متفاوت را برای منابعی اعمال می‌کند که
-در محیط <code dir="ltr">test</code> نیستند.</p>
-<p dir="rtl">و یک منبع پارامتر داشته باشید:</p>
+<p dir="rtl">توجه کنید که این اتصال، پارامتر متفاوتی را بر منابعی اعمال می‌کند که
+در محیط <code dir="ltr">test</code> قرار ندارند.</p>
+<p dir="rtl">و منبع پارامتر زیر را نیز ایجاد کنید:</p>
 <div class="code-file ltr" dir="ltr">validatingadmissionpolicy/replicalimit-param-prod.yaml</div>
 <pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: rules.example.com/v1
 kind: ReplicaLimit
@@ -279,89 +291,97 @@ metadata:
   name: "replica-limit-prod.example.com"
 maxReplicas: 100
 </code></pre>
-<p dir="rtl">برای هر درخواست پذیرش، API server عبارت‌های CEL مربوط به هر ترکیب
-(policy, binding, param) را که با درخواست مطابقت دارد ارزیابی می‌کند. برای اینکه یک درخواست
-پذیرفته شود، باید در <strong>همه‌ی</strong> ارزیابی‌ها موفق شود.</p>
-<p dir="rtl">اگر چند binding با درخواست مطابقت داشته باشند، سیاست برای هر یک ارزیابی می‌شود،
-و برای اینکه سیاست موفق در نظر گرفته شود، همه‌ی آن‌ها باید در ارزیابی موفق شوند.</p>
-<p dir="rtl">اگر چند پارامتر با یک binding مطابقت داشته باشند، قواعد سیاست برای هر پارامتر ارزیابی می‌شوند،
-و برای اینکه binding موفق در نظر گرفته شود، همه‌ی آن‌ها نیز باید موفق شوند.
-bindingها می‌توانند معیارهای تطبیق همپوشان داشته باشند. سیاست برای هر
-ترکیب binding-پارامتر مطابق ارزیابی می‌شود. حتی ممکن است یک سیاست چندین بار ارزیابی شود،
-اگر چند binding با آن مطابقت داشته باشند یا یک binding واحد با چند پارامتر مطابقت داشته باشد.</p>
-<p dir="rtl">اگر منبع پارامتر به سیاست متصل (bind) نشده باشد، آبجکت params که نمایانگر منبع پارامتر است تنظیم نخواهد شد؛
-بنابراین برای سیاست‌هایی که به یک منبع پارامتر نیاز دارند، افزودن بررسی‌ای برای اطمینان از متصل‌بودن آن می‌تواند مفید باشد. اگر <code dir="ltr">paramKind</code> سیاست یا <code dir="ltr">paramRef</code> در binding مشخص نشده باشد، هیچ منبع پارامتری متصل نمی‌شود و <code dir="ltr">params</code> برابر null خواهد بود.</p>
-<p dir="rtl">برای موارد استفاده‌ای که به پیکربندی پارامتر نیاز دارند، توصیه می‌کنیم یک بررسی پارامتر را در
+<p dir="rtl">سرور API برای هر درخواست پذیرش، عبارت‌های CEL هر ترکیب
+(سیاست، اتصال، پارامتر) را که با درخواست مطابقت دارد ارزیابی می‌کند. درخواست
+فقط زمانی پذیرفته می‌شود که از <strong>همهٔ</strong> ارزیابی‌ها با موفقیت عبور کند.</p>
+<p dir="rtl">اگر چند اتصال با درخواست مطابقت داشته باشند، سیاست برای هر یک از آن‌ها ارزیابی می‌شود
+و برای اینکه سیاست موفق تلقی شود، همهٔ این ارزیابی‌ها باید موفق باشند.</p>
+<p dir="rtl">اگر چند پارامتر با یک اتصال واحد مطابقت داشته باشند، قواعد سیاست برای هر پارامتر ارزیابی
+می‌شوند و برای اینکه اتصال موفق تلقی شود، همهٔ این ارزیابی‌ها نیز باید موفق باشند.
+معیارهای تطبیق اتصال‌ها می‌توانند با یکدیگر همپوشانی داشته باشند. سیاست برای هر ترکیب
+اتصال-پارامترِ مطابق ارزیابی می‌شود. حتی ممکن است یک سیاست چندین بار ارزیابی شود؛
+چه به این دلیل که چند اتصال با آن مطابقت دارند و چه به این دلیل که یک اتصال واحد
+با چند پارامتر مطابقت دارد.</p>
+<p dir="rtl">اگر هیچ منبع پارامتری متصل نشده باشد، آبجکت params که نمایانگر منبع پارامتر است مقداردهی نمی‌شود؛
+بنابراین در سیاست‌هایی که به منبع پارامتر نیاز دارند، افزودن بررسی‌ای برای اطمینان از
+متصل بودن یک منبع پارامتر می‌تواند مفید باشد. اگر <code dir="ltr">paramKind</code> سیاست یا <code dir="ltr">paramRef</code> اتصال
+مشخص نشده باشد، هیچ منبع پارامتری متصل نمی‌شود و <code dir="ltr">params</code> برابر null خواهد بود.</p>
+<p dir="rtl">برای مواردی که به پیکربندی پارامتر نیاز دارند، توصیه می‌کنیم یک بررسی پارامتر در
 <code dir="ltr">spec.validations[0].expression</code> اضافه کنید:</p>
 <pre dir="ltr"><code dir="ltr">- expression: "params != null"
   message: "params missing but required to bind to this policy"
 </code></pre>
-<h4 id="پارامترهای-اختیاری-optional-parameters" dir="rtl">پارامترهای اختیاری {#optional-parameters}</h4>
-<p dir="rtl">داشتن پارامترهای اختیاری به‌عنوان بخشی از یک منبع پارامتر، و اعتبارسنجی آن‌ها فقط در صورت وجود، می‌تواند راحت باشد. CEL ماکروی <code dir="ltr">has()</code> را فراهم می‌کند که پیش از آنکه یک عبارت CEL به مقدار یک فیلد دسترسی پیدا کند، وجود آن فیلد را بررسی می‌کند.
-CEL همچنین میان‌بر منطقی (short-circuiting) بولی را پیاده‌سازی می‌کند. اگر نیمه‌ی اول یک OR منطقی true ارزیابی شود،
-نیمه‌ی دیگر ارزیابی نمی‌شود (زیرا نتیجه‌ی کل OR صرف‌نظر از آن true خواهد بود).</p>
-<p dir="rtl">با ترکیب این دو، می‌توانیم راهی برای اعتبارسنجی پارامترهای اختیاری فراهم کنیم:</p>
+<h4 id="پارامترهای-اختیاری" dir="rtl">پارامترهای اختیاری</h4>
+<p dir="rtl">گاهی مفید است که منبع پارامتر شامل پارامترهای اختیاری باشد و این پارامترها
+فقط در صورت وجود اعتبارسنجی شوند. زبان CEL ماکروی <code dir="ltr">has()</code> را فراهم می‌کند که پیش از
+دسترسی یک عبارت CEL به مقدار یک فیلد، وجود آن فیلد را بررسی می‌کند.
+همچنین CEL ارزیابی کوتاه‌مدار (short-circuit) عبارت‌های بولی را پیاده‌سازی می‌کند. اگر نیمهٔ اول یک OR منطقی به true ارزیابی شود،
+نیمهٔ دیگر ارزیابی نمی‌شود (زیرا نتیجهٔ کل OR در هر صورت true خواهد بود).</p>
+<p dir="rtl">با ترکیب این دو، می‌توان پارامترهای اختیاری را اعتبارسنجی کرد:</p>
 <p dir="ltr" class="ltr"><code dir="ltr">!has(params.optionalNumber) || (params.optionalNumber &gt;= 5 &amp;&amp; params.optionalNumber &lt;= 10)</code></p>
-<p dir="rtl">در اینجا، ابتدا با <code dir="ltr">!has(params.optionalNumber)</code> بررسی می‌کنیم که آیا پارامتر اختیاری وجود ندارد.</p>
+<p dir="rtl">در اینجا ابتدا با <code dir="ltr">!has(params.optionalNumber)</code> بررسی می‌کنیم که آیا پارامتر اختیاری وجود ندارد.</p>
 <ul>
-<li dir="rtl">اگر <code dir="ltr">optionalNumber</code> تعریف نشده باشد، عبارت میان‌بر می‌زند، زیرا
-<code dir="ltr">!has(params.optionalNumber)</code> برابر true ارزیابی می‌شود.</li>
-<li dir="rtl">اگر <code dir="ltr">optionalNumber</code> تعریف شده باشد، نیمه‌ی دوم عبارت CEL ارزیابی می‌شود،
-و optionalNumber بررسی می‌شود تا اطمینان حاصل شود که مقداری بین ۵ و ۱۰ (با احتساب هر دو مرز) دارد.</li>
+<li dir="rtl">اگر <code dir="ltr">optionalNumber</code> تعریف نشده باشد، ارزیابی عبارت کوتاه‌مدار می‌شود، زیرا
+<code dir="ltr">!has(params.optionalNumber)</code> به true ارزیابی خواهد شد.</li>
+<li dir="rtl">اگر <code dir="ltr">optionalNumber</code> تعریف شده باشد، نیمهٔ دوم عبارت CEL ارزیابی می‌شود
+و optionalNumber بررسی می‌شود تا اطمینان حاصل شود که مقداری بین ۵ تا ۱۰
+(شامل خود این دو عدد) دارد.</li>
 </ul>
-<p dir="rtl">برای بررسی وجود یک فیلد از <code dir="ltr">has()</code> استفاده کنید. برای بررسی اینکه یک map حاوی یک کلید است، به‌جای آن از عملگر <code dir="ltr">in</code> استفاده کنید. برای مثال،
+<p dir="rtl">برای بررسی وجود فیلد از <code dir="ltr">has()</code> استفاده کنید. برای بررسی اینکه یک نگاشت (map) کلید مشخصی دارد یا نه،
+به‌جای آن از عملگر <code dir="ltr">in</code> استفاده کنید. برای مثال، عبارت
 <code dir="ltr">has(object.metadata.labels) &amp;&amp; 'example.com/environment' in object.metadata.labels</code> بررسی می‌کند که
-فیلد <code dir="ltr">metadata.labels</code> وجود دارد و map شامل کلید <code dir="ltr">example.com/environment</code> است.
-برای دسترسی به فیلدهای اختیاری چندسطحی، نحو اختیاری CEL را ترجیح دهید (کوبرنتیز ۱.۲۹ و بالاتر):
-<code dir="ltr">object.?metadata.labels['example.com/block'].orValue('')</code> فیلدهای میانیِ غایب را به‌صورت ایمن پیمایش می‌کند
-و مقدار پیش‌فرض داده‌شده را بازمی‌گرداند.</p>
-<h4 id="پارامترهای-هر-فضای-نام-per-namespace-parameters-per-namespace-parameters" dir="rtl">پارامترهای هر فضای نام (Per-namespace Parameters) {#per-namespace-parameters}</h4>
-<p dir="rtl">به‌عنوان نویسنده‌ی یک ValidatingAdmissionPolicy و ValidatingAdmissionPolicyBinding آن،
-می‌توانید پارامترهای سراسری در سطح کلاستر یا پارامترهای مخصوص هر فضای نام را مشخص کنید.
-اگر برای <code dir="ltr">paramRef</code> در binding یک <code dir="ltr">namespace</code> مشخص کنید، control plane فقط
-در آن فضای نام به دنبال پارامترها می‌گردد.</p>
-<p dir="rtl">با این حال، اگر <code dir="ltr">namespace</code> در ValidatingAdmissionPolicyBinding مشخص نشده باشد،
-API server می‌تواند پارامترهای مرتبط را در فضای نامی که درخواست علیه آن انجام شده جست‌وجو کند.
+فیلد <code dir="ltr">metadata.labels</code> وجود دارد و نگاشت شامل کلید <code dir="ltr">example.com/environment</code> است.
+برای دسترسی به فیلدهای اختیاری چندسطحی، بهتر است از نحو اختیاری CEL (کوبرنتیز 1.29 و بالاتر) استفاده کنید:
+عبارت <code dir="ltr">object.?metadata.labels['example.com/block'].orValue('')</code> فیلدهای میانیِ غایب را به‌صورت ایمن
+پیمایش می‌کند و مقدار پیش‌فرض داده‌شده را بازمی‌گرداند.</p>
+<h4 id="پارامترهای-مختص-هر-فضای-نام" dir="rtl">پارامترهای مختص هر فضای نام</h4>
+<p dir="rtl">شما به‌عنوان نویسندهٔ یک ValidatingAdmissionPolicy و ValidatingAdmissionPolicyBinding آن،
+می‌توانید پارامترها را در سطح کل کلاستر یا به‌صورت مختص هر فضای نام (namespace) مشخص کنید.
+اگر برای <code dir="ltr">paramRef</code> اتصال یک <code dir="ltr">namespace</code> مشخص کنید، control plane فقط
+در همان فضای نام به دنبال پارامترها می‌گردد.</p>
+<p dir="rtl">اما اگر <code dir="ltr">namespace</code> در ValidatingAdmissionPolicyBinding مشخص نشده باشد،
+سرور API می‌تواند در فضای نامی که درخواست به آن مربوط است به دنبال پارامترهای مرتبط بگردد.
 برای مثال، اگر درخواستی برای تغییر یک ConfigMap در فضای نام <code dir="ltr">default</code> ارسال کنید و
-یک ValidatingAdmissionPolicyBinding مرتبط بدون <code dir="ltr">namespace</code> وجود داشته باشد،
-API server به دنبال یک آبجکت پارامتر در <code dir="ltr">default</code> می‌گردد.
-این طراحی پیکربندی سیاستی را ممکن می‌سازد که به فضای نام منبعِ در حال دست‌کاری وابسته است، و کنترل دقیق‌تری فراهم می‌کند.</p>
-<h4 id="انتخابگر-پارامتر-parameter-selector-parameter-selector" dir="rtl">انتخابگر پارامتر (Parameter selector) {#parameter-selector}</h4>
-<p dir="rtl">علاوه بر مشخص‌کردن یک پارامتر در binding با <code dir="ltr">name</code>، می‌توانید
-به‌جای آن یک انتخابگر برچسب (label selector) مشخص کنید، به‌گونه‌ای که همه‌ی منابعی از
-<code dir="ltr">paramKind</code> سیاست، و <code dir="ltr">namespace</code> پارامتر (در صورت کاربرد) که با
-انتخابگر برچسب مطابقت دارند، برای ارزیابی انتخاب شوند. برای اطلاعات بیشتر درباره‌ی نحوه‌ی تطبیق انتخابگرهای برچسب با منابع، به <span class="term" title="selector">انتخابگر (selector)</span> مراجعه کنید.</p>
-<p dir="rtl">اگر مشخص شود که چند پارامتر شرط را برآورده می‌کنند، قواعد سیاست برای
-هر پارامتر یافت‌شده ارزیابی می‌شوند و نتایج با هم AND می‌شوند.</p>
-<p dir="rtl">اگر <code dir="ltr">namespace</code> ارائه شود، فقط آبجکت‌هایی از <code dir="ltr">paramKind</code> که در فضای نام ارائه‌شده قرار دارند
-واجد شرایط انتخاب هستند. در غیر این صورت، وقتی <code dir="ltr">namespace</code> خالی باشد و
-<code dir="ltr">paramKind</code> در سطح فضای نام (namespace-scoped) باشد، از <code dir="ltr">namespace</code> درخواستی که
-در حال پذیرش است استفاده خواهد شد.</p>
-<h4 id="بررسی-های-مجوزدهی-authorization-checks-authorization-check" dir="rtl">بررسی‌های مجوزدهی (Authorization checks) {#authorization-check}</h4>
-<p dir="rtl">بررسی مجوزدهی برای منابع پارامتر معرفی شده است.
-انتظار می‌رود کاربر به منابعی که در <code dir="ltr">paramKind</code> در
-<code dir="ltr">ValidatingAdmissionPolicy</code> و در <code dir="ltr">paramRef</code> در <code dir="ltr">ValidatingAdmissionPolicyBinding</code> به آن‌ها ارجاع داده شده، دسترسی <code dir="ltr">read</code> داشته باشد.</p>
-<p dir="rtl">توجه داشته باشید که اگر تعیین یک منبع در <code dir="ltr">paramKind</code> از طریق restmapper با شکست مواجه شود، دسترسی <code dir="ltr">read</code> به همه‌ی
-منابع گروه‌ها لازم است.</p>
-<h4 id="paramref" dir="ltr" class="ltr"><code dir="ltr">paramRef</code></h4>
-<p dir="rtl">فیلد <code dir="ltr">paramRef</code> منبع پارامتری را که سیاست استفاده می‌کند مشخص می‌کند. این فیلد دارای فیلدهای زیر است:</p>
+یک ValidatingAdmissionPolicyBinding مرتبط بدون تنظیم <code dir="ltr">namespace</code> وجود داشته باشد،
+سرور API در <code dir="ltr">default</code> به دنبال یک آبجکت پارامتر می‌گردد.
+این طراحی امکان پیکربندی سیاستی را فراهم می‌کند که به فضای نام منبعِ در حال تغییر
+وابسته است و به این ترتیب کنترل دقیق‌تری به دست می‌دهد.</p>
+<h4 id="انتخابگر-پارامتر" dir="rtl">انتخابگر پارامتر</h4>
+<p dir="rtl">به‌جای مشخص کردن پارامتر با <code dir="ltr">name</code> در اتصال، می‌توانید
+یک انتخابگر برچسب (label selector) تعیین کنید تا همهٔ منابعی از نوع <code dir="ltr">paramKind</code> سیاست که
+در <code dir="ltr">namespace</code> پارامتر قرار دارند (در صورت کاربرد) و با انتخابگر برچسب مطابقت دارند،
+برای ارزیابی انتخاب شوند. برای اطلاعات بیشتر دربارهٔ نحوهٔ تطبیق انتخابگرهای برچسب با منابع، به <span class="term" title="selector">انتخابگر</span> مراجعه کنید.</p>
+<p dir="rtl">اگر چند پارامتر شرط را برآورده کنند، قواعد سیاست برای هر یک از پارامترهای
+یافت‌شده ارزیابی می‌شوند و نتایج با AND منطقی با یکدیگر ترکیب می‌شوند.</p>
+<p dir="rtl">اگر <code dir="ltr">namespace</code> مشخص شده باشد، فقط آبجکت‌هایی از نوع <code dir="ltr">paramKind</code> که در
+فضای نام مشخص‌شده قرار دارند قابل انتخاب هستند. در غیر این صورت، وقتی <code dir="ltr">namespace</code> خالی باشد و
+<code dir="ltr">paramKind</code> در محدودهٔ فضای نام تعریف شده باشد (namespace-scoped)، از <code dir="ltr">namespace</code> درخواستِ
+در حال پذیرش استفاده می‌شود.</p>
+<h4 id="بررسی-های-مجوز-authorization-check" dir="rtl">بررسی‌های مجوز {#authorization-check}</h4>
+<p dir="rtl">بررسی مجوز برای منابع پارامتر معرفی شده است.
+انتظار می‌رود کاربر به منابعی که با <code dir="ltr">paramKind</code> در
+<code dir="ltr">ValidatingAdmissionPolicy</code> و با <code dir="ltr">paramRef</code> در <code dir="ltr">ValidatingAdmissionPolicyBinding</code> ارجاع داده می‌شوند، دسترسی <code dir="ltr">read</code> داشته باشد.</p>
+<p dir="rtl">توجه داشته باشید که اگر تفکیک (resolve) یک منبع در <code dir="ltr">paramKind</code> از طریق restmapper ناموفق باشد،
+دسترسی <code dir="ltr">read</code> به همهٔ منابع گروه‌ها لازم است.</p>
+<h4 id="فیلد-paramref" dir="rtl">فیلد <code dir="ltr">paramRef</code></h4>
+<p dir="rtl">فیلد <code dir="ltr">paramRef</code> منبع پارامتری را که سیاست از آن استفاده می‌کند مشخص می‌کند. این فیلد شامل فیلدهای زیر است:</p>
 <ul>
 <li dir="rtl">
-<p dir="rtl"><strong>name</strong>: نام منبع پارامتر.</p>
+<p dir="rtl">فیلد <strong>name</strong>: نام منبع پارامتر.</p>
 </li>
 <li dir="rtl">
-<p dir="rtl"><strong>namespace</strong>: فضای نام منبع پارامتر.</p>
+<p dir="rtl">فیلد <strong>namespace</strong>: فضای نام منبع پارامتر.</p>
 </li>
 <li dir="rtl">
-<p dir="rtl"><strong>selector</strong>: یک انتخابگر برچسب برای تطبیق چند منبع پارامتر.</p>
+<p dir="rtl">فیلد <strong>selector</strong>: یک انتخابگر برچسب برای تطبیق با چند منبع پارامتر.</p>
 </li>
 <li dir="rtl">
-<p dir="rtl"><strong>parameterNotFoundAction</strong>: (الزامی) رفتار را هنگامی که پارامترهای مشخص‌شده یافت نشوند کنترل می‌کند.</p>
+<p dir="rtl">فیلد <strong>parameterNotFoundAction</strong>: (الزامی) رفتار را در زمانی که پارامترهای مشخص‌شده یافت نشوند کنترل می‌کند.</p>
 <ul>
 <li dir="rtl"><strong>مقادیر مجاز</strong>:
 <ul>
-<li dir="rtl"><strong><code dir="ltr">Allow</code></strong>: نبودِ پارامترهای مطابق، توسط binding به‌عنوان اعتبارسنجی موفق تلقی می‌شود.</li>
-<li dir="rtl"><strong><code dir="ltr">Deny</code></strong>: نبودِ پارامترهای مطابق مشمول <code dir="ltr">failurePolicy</code> سیاست می‌شود.</li>
+<li dir="rtl">مقدار <strong><code dir="ltr">Allow</code></strong>: اتصال، نبودِ پارامترهای مطابق را اعتبارسنجی موفق تلقی می‌کند.</li>
+<li dir="rtl">مقدار <strong><code dir="ltr">Deny</code></strong>: نبودِ پارامترهای مطابق، تابع <code dir="ltr">failurePolicy</code> سیاست است.</li>
 </ul>
 </li>
 </ul>
@@ -369,15 +389,15 @@ API server به دنبال یک آبجکت پارامتر در <code dir="ltr">d
 </ul>
 <p dir="rtl">باید یکی از <code dir="ltr">name</code> یا <code dir="ltr">selector</code> تنظیم شود، اما نه هر دو.</p>
 <div class="callout note"><div class="callout-title">توجه:</div>
-<p dir="rtl">فیلد <code dir="ltr">parameterNotFoundAction</code> در <code dir="ltr">paramRef</code> <strong>الزامی</strong> است. این فیلد اقدامی را که باید هنگام نبودِ پارامتر مطابق با <code dir="ltr">paramRef</code> انجام شود مشخص می‌کند. اگر مشخص نشود، ممکن است policy binding نامعتبر تلقی شود و نادیده گرفته شود یا به رفتار پیش‌بینی‌نشده منجر شود.</p>
+<p dir="rtl">فیلد <code dir="ltr">parameterNotFoundAction</code> در <code dir="ltr">paramRef</code> <strong>الزامی</strong> است. این فیلد کنشی را مشخص می‌کند که وقتی هیچ پارامتری مطابق با <code dir="ltr">paramRef</code> یافت نشود انجام می‌شود. اگر این فیلد مشخص نشود، ممکن است اتصال سیاست نامعتبر تلقی و نادیده گرفته شود یا به رفتار غیرمنتظره‌ای منجر شود.</p>
 <ul>
-<li dir="rtl"><strong><code dir="ltr">Allow</code></strong>: اگر روی <code dir="ltr">Allow</code> تنظیم شود و هیچ پارامتری یافت نشود، binding نبودِ پارامترها را اعتبارسنجی موفق تلقی می‌کند و سیاست گذرانده‌شده در نظر گرفته می‌شود.</li>
-<li dir="rtl"><strong><code dir="ltr">Deny</code></strong>: اگر روی <code dir="ltr">Deny</code> تنظیم شود و هیچ پارامتری یافت نشود، binding مقدار <code dir="ltr">failurePolicy</code> سیاست را اِعمال می‌کند. اگر <code dir="ltr">failurePolicy</code> برابر <code dir="ltr">Fail</code> باشد، درخواست رد می‌شود.</li>
+<li dir="rtl">مقدار <strong><code dir="ltr">Allow</code></strong>: اگر این فیلد روی <code dir="ltr">Allow</code> تنظیم شده باشد و هیچ پارامتری یافت نشود، اتصال نبودِ پارامترها را اعتبارسنجی موفق تلقی می‌کند و سیاست موفق در نظر گرفته می‌شود.</li>
+<li dir="rtl">مقدار <strong><code dir="ltr">Deny</code></strong>: اگر این فیلد روی <code dir="ltr">Deny</code> تنظیم شده باشد و هیچ پارامتری یافت نشود، اتصال <code dir="ltr">failurePolicy</code> سیاست را اعمال می‌کند. اگر <code dir="ltr">failurePolicy</code> برابر <code dir="ltr">Fail</code> باشد، درخواست رد می‌شود.</li>
 </ul>
-<p dir="rtl">حتماً <code dir="ltr">parameterNotFoundAction</code> را مطابق با رفتار مطلوب در زمان نبودِ پارامترها تنظیم کنید.</p>
+<p dir="rtl">مطمئن شوید که <code dir="ltr">parameterNotFoundAction</code> را مطابق رفتار مطلوب در زمان نبودِ پارامترها تنظیم می‌کنید.</p>
 </div>
-<h4 id="مدیریت-پارامترهای-مفقود-با-parameternotfoundaction-handling-missing-parameters-with-parameternotfoundaction" dir="rtl">مدیریت پارامترهای مفقود با <code dir="ltr">parameterNotFoundAction</code> {#handling-missing-parameters-with-parameternotfoundaction}</h4>
-<p dir="rtl">هنگام استفاده از <code dir="ltr">paramRef</code> همراه با selector، ممکن است هیچ پارامتری با selector مطابقت نداشته باشد. فیلد <code dir="ltr">parameterNotFoundAction</code> تعیین می‌کند که binding در این سناریو چگونه رفتار کند.</p>
+<h4 id="مدیریت-پارامترهای-غایب-با-parameternotfoundaction" dir="rtl">مدیریت پارامترهای غایب با <code dir="ltr">parameterNotFoundAction</code></h4>
+<p dir="rtl">وقتی از <code dir="ltr">paramRef</code> همراه با یک انتخابگر استفاده می‌کنید، ممکن است هیچ پارامتری با انتخابگر مطابقت نداشته باشد. فیلد <code dir="ltr">parameterNotFoundAction</code> تعیین می‌کند که اتصال در این وضعیت چگونه رفتار کند.</p>
 <p dir="rtl"><strong>مثال:</strong></p>
 <pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: admissionregistration.k8s.io/v1alpha1
 kind: ValidatingAdmissionPolicyBinding
@@ -393,13 +413,13 @@ spec:
   validationActions:
   - Deny
 </code></pre>
-<h3 id="سیاست-شکست-failure-policy-failure-policy" dir="rtl">سیاست شکست (Failure Policy) {#failure-policy}</h3>
-<p dir="rtl"><code dir="ltr">failurePolicy</code> تعیین می‌کند که پیکربندی‌های نادرست و عبارت‌های CEL که در سیاست پذیرش به خطا منجر می‌شوند
-چگونه مدیریت شوند. مقادیر مجاز <code dir="ltr">Ignore</code> یا <code dir="ltr">Fail</code> هستند.</p>
+<h3 id="سیاست-شکست" dir="rtl">سیاست شکست</h3>
+<p dir="rtl">فیلد <code dir="ltr">failurePolicy</code> تعیین می‌کند که پیکربندی‌های نادرست و عبارت‌های CEL که در سیاست پذیرش
+به خطا ارزیابی می‌شوند چگونه مدیریت شوند. مقادیر مجاز <code dir="ltr">Ignore</code> یا <code dir="ltr">Fail</code> هستند.</p>
 <ul>
-<li dir="rtl"><code dir="ltr">Ignore</code> به این معناست که خطا در فراخوانی ValidatingAdmissionPolicy نادیده گرفته می‌شود و اجازه داده می‌شود
-درخواست API ادامه یابد.</li>
-<li dir="rtl"><code dir="ltr">Fail</code> به این معناست که خطا در فراخوانی ValidatingAdmissionPolicy باعث شکست پذیرش
+<li dir="rtl">مقدار <code dir="ltr">Ignore</code> یعنی خطا در فراخوانی ValidatingAdmissionPolicy نادیده گرفته می‌شود و
+درخواست API اجازهٔ ادامه پیدا می‌کند.</li>
+<li dir="rtl">مقدار <code dir="ltr">Fail</code> یعنی خطا در فراخوانی ValidatingAdmissionPolicy باعث شکست پذیرش
 و رد شدن درخواست API می‌شود.</li>
 </ul>
 <p dir="rtl">توجه داشته باشید که <code dir="ltr">failurePolicy</code> درون <code dir="ltr">ValidatingAdmissionPolicy</code> تعریف می‌شود:</p>
@@ -412,30 +432,28 @@ failurePolicy: Ignore # The default is "Fail"
 validations:
 - expression: "object.spec.xyz == params.x"
 </code></pre>
-<h3 id="عبارت-اعتبارسنجی-validation-expression" dir="rtl">عبارت اعتبارسنجی (Validation Expression)</h3>
-<p dir="rtl"><code dir="ltr">spec.validations[i].expression</code> عبارتی را نمایش می‌دهد که توسط CEL ارزیابی خواهد شد.
-برای کسب اطلاعات بیشتر، <a href="https://github.com/google/cel-spec" target="_blank" rel="noopener">مشخصات زبان CEL</a> را ببینید.
-عبارت‌های CEL به محتوای درخواست/پاسخ پذیرش (Admission) دسترسی دارند که در قالب متغیرهای CEL سازمان‌دهی شده است، و همچنین به چند متغیر مفید دیگر:</p>
+<h3 id="عبارت-اعتبارسنجی" dir="rtl">عبارت اعتبارسنجی</h3>
+<p dir="rtl">فیلد <code dir="ltr">spec.validations[i].expression</code> عبارتی را مشخص می‌کند که CEL آن را ارزیابی می‌کند. برای آگاهی بیشتر، <a href="https://github.com/google/cel-spec" target="_blank" rel="noopener">مشخصات زبان CEL</a> را ببینید.
+عبارت‌های CEL به محتوای درخواست و پاسخ پذیرش (Admission) دسترسی دارند. این محتوا در قالب متغیرهای CEL سازمان‌دهی شده است و چند متغیر مفید دیگر نیز در دسترس است:</p>
 <ul>
-<li dir="rtl">'object' - آبجکت موجود در درخواست ورودی. مقدار آن برای درخواست‌های DELETE برابر null است.</li>
-<li dir="rtl">'oldObject' - آبجکت موجود. مقدار آن برای درخواست‌های CREATE برابر null است.</li>
-<li dir="rtl">'request' - ویژگی‌های <a href="../config-api/apiserver-admission.v1.html#admission-k8s-io-v1-AdmissionRequest">درخواست پذیرش</a>.</li>
-<li dir="rtl">'params' - منبع پارامتر که توسط policy binding در حال ارزیابی به آن ارجاع داده شده است. اگر <code dir="ltr">ParamKind</code> مشخص نشده باشد، مقدار آن null است.</li>
-<li dir="rtl"><code dir="ltr">namespaceObject</code> - فضای نام (namespace)، به‌صورت یک منبع کوبرنتیز، که آبجکت ورودی به آن تعلق دارد. اگر آبجکت ورودی در سطح کلاستر (cluster-scoped) باشد، مقدار آن null است.</li>
-<li dir="rtl"><code dir="ltr">authorizer</code> - یک CEL Authorizer. می‌توان از آن برای انجام بررسی‌های احراز مجوز (authorization) برای principal (کاربر احراز هویت‌شده) درخواست استفاده کرد. برای جزئیات بیشتر، <a href="https://pkg.go.dev/k8s.io/apiserver/pkg/cel/library#AuthzSelectors" target="_blank" rel="noopener">AuthzSelectors</a> و <a href="https://pkg.go.dev/k8s.io/apiserver/pkg/cel/library#Authz" target="_blank" rel="noopener">Authz</a> را در مستندات کتابخانه CEL کوبرنتیز ببینید.</li>
-<li dir="rtl"><code dir="ltr">authorizer.requestResource</code> - میان‌بری برای یک بررسی احراز مجوز که با منبع درخواست (group، resource، (subresource)، namespace، name) پیکربندی شده است.</li>
+<li dir="rtl">متغیر 'object': آبجکتِ درخواست ورودی. مقدار آن برای درخواست‌های DELETE برابر null است.</li>
+<li dir="rtl">متغیر 'oldObject': آبجکت موجود. مقدار آن برای درخواست‌های CREATE برابر null است.</li>
+<li dir="rtl">متغیر 'request': ویژگی‌های <a href="../config-api/apiserver-admission.v1.html#admission-k8s-io-v1-AdmissionRequest">درخواست پذیرش</a>.</li>
+<li dir="rtl">متغیر 'params': منبع پارامتری که اتصال سیاستِ در حال ارزیابی به آن ارجاع می‌دهد. اگر <code dir="ltr">ParamKind</code> مشخص نشده باشد، مقدار آن null است.</li>
+<li dir="rtl">متغیر <code dir="ltr">namespaceObject</code>: فضای نامی که آبجکت ورودی به آن تعلق دارد، در قالب یک منبع کوبرنتیز. اگر آبجکت ورودی در سطح کلاستر باشد، مقدار آن null است.</li>
+<li dir="rtl">متغیر <code dir="ltr">authorizer</code>: یک مجوزدهندهٔ (Authorizer) CEL. با آن می‌توان بررسی‌های مجوزدهی را برای هویت اصلی (کاربر احرازهویت‌شده) درخواست انجام داد. برای جزئیات بیشتر، <a href="https://pkg.go.dev/k8s.io/apiserver/pkg/cel/library#AuthzSelectors" target="_blank" rel="noopener">AuthzSelectors</a> و <a href="https://pkg.go.dev/k8s.io/apiserver/pkg/cel/library#Authz" target="_blank" rel="noopener">Authz</a> را در مستندات کتابخانهٔ CEL کوبرنتیز ببینید.</li>
+<li dir="rtl">متغیر <code dir="ltr">authorizer.requestResource</code>: میان‌بری برای بررسی مجوزدهی که با منبعِ درخواست (گروه، منبع، (زیرمنبع)، فضای نام، نام) پیکربندی شده است.</li>
 </ul>
-<p dir="rtl">در عبارت‌های CEL، متغیرهایی مانند <code dir="ltr">object</code> و <code dir="ltr">oldObject</code> به‌صورت قوی‌نوع (strongly-typed) هستند.
-می‌توانید به هر فیلد در طرحواره (schema) آبجکت، مانند <code dir="ltr">object.metadata.labels</code> و فیلدهای داخل <code dir="ltr">spec</code>، دسترسی داشته باشید.</p>
-<p dir="rtl">برای هر آبجکت کوبرنتیز، از جمله Custom Resourceهای بدون طرحواره (schemaless)، CEL دسترسی به مجموعه‌ای حداقلی از ویژگی‌ها را تضمین می‌کند:
+<p dir="rtl">در عبارت‌های CEL، متغیرهایی مانند <code dir="ltr">object</code> و <code dir="ltr">oldObject</code> نوع‌دهی قوی دارند. می‌توانید به هر فیلدی در شِمای آبجکت، مانند <code dir="ltr">object.metadata.labels</code> و فیلدهای درون <code dir="ltr">spec</code>، دسترسی داشته باشید.</p>
+<p dir="rtl">برای هر آبجکت کوبرنتیز، از جمله منابع سفارشی (Custom Resources) بدون شِما، CEL دسترسی به مجموعه‌ای حداقلی از ویژگی‌ها را تضمین می‌کند:
 <code dir="ltr">apiVersion</code>، <code dir="ltr">kind</code>، <code dir="ltr">metadata.name</code> و <code dir="ltr">metadata.generateName</code>.</p>
-<p dir="rtl">مقایسه برابری روی آرایه‌هایی که نوع فهرست آن‌ها 'set' یا 'map' است، ترتیب عناصر را نادیده می‌گیرد؛ یعنی [1, 2] == [2, 1].
-الحاق (concatenation) روی آرایه‌هایی که x-kubernetes-list-type دارند از معناشناسی نوع فهرست پیروی می‌کند:</p>
+<p dir="rtl">در آرایه‌هایی که نوع فهرست آن‌ها 'set' یا 'map' است، مقایسهٔ برابری ترتیب عناصر را نادیده می‌گیرد؛ یعنی [1, 2] == [2, 1].
+الحاق آرایه‌هایی که x-kubernetes-list-type دارند از معنای همان نوع فهرست پیروی می‌کند:</p>
 <ul>
-<li dir="rtl">'set': عبارت <code dir="ltr">X + Y</code> یک اجتماع (union) انجام می‌دهد که در آن موقعیت آرایه‌ای همه عناصر <code dir="ltr">X</code> حفظ می‌شود و عناصر <code dir="ltr">Y</code> که با <code dir="ltr">X</code> اشتراک ندارند، با حفظ ترتیب جزئی‌شان به انتها افزوده می‌شوند.</li>
-<li dir="rtl">'map': عبارت <code dir="ltr">X + Y</code> یک ادغام (merge) انجام می‌دهد که در آن موقعیت آرایه‌ای همه کلیدهای <code dir="ltr">X</code> حفظ می‌شود، اما در صورت اشتراک مجموعه کلیدهای <code dir="ltr">X</code> و <code dir="ltr">Y</code>، مقادیر با مقادیر <code dir="ltr">Y</code> بازنویسی می‌شوند. عناصر <code dir="ltr">Y</code> که کلیدهای غیرمشترک دارند، با حفظ ترتیب جزئی‌شان به انتها افزوده می‌شوند.</li>
+<li dir="rtl">نوع 'set': عبارت <code dir="ltr">X + Y</code> اجتماع دو آرایه را می‌سازد؛ به این صورت که جایگاه همهٔ عناصر <code dir="ltr">X</code> در آرایه حفظ می‌شود و عناصرِ غیرمشترکِ <code dir="ltr">Y</code> با حفظ ترتیب جزئی‌شان به انتها افزوده می‌شوند.</li>
+<li dir="rtl">نوع 'map': عبارت <code dir="ltr">X + Y</code> دو آرایه را ادغام می‌کند؛ به این صورت که جایگاه همهٔ کلیدهای <code dir="ltr">X</code> در آرایه حفظ می‌شود، اما هرجا مجموعهٔ کلیدهای <code dir="ltr">X</code> و <code dir="ltr">Y</code> اشتراک داشته باشند، مقادیر <code dir="ltr">Y</code> جایگزین مقادیر قبلی می‌شوند. عناصری از <code dir="ltr">Y</code> که کلیدهای غیرمشترک دارند با حفظ ترتیب جزئی‌شان به انتها افزوده می‌شوند.</li>
 </ul>
-<h4 id="نمونه-هایی-از-عبارت-های-اعتبارسنجی" dir="rtl">نمونه‌هایی از عبارت‌های اعتبارسنجی</h4>
+<h4 id="نمونه-های-عبارت-اعتبارسنجی" dir="rtl">نمونه‌های عبارت اعتبارسنجی</h4>
 <table>
 <thead>
 <tr>
@@ -446,27 +464,27 @@ validations:
 <tbody>
 <tr>
 <td dir="ltr" class="ltr"><code dir="ltr">object.minReplicas &lt;= object.replicas &amp;&amp; object.replicas &lt;= object.maxReplicas</code></td>
-<td dir="rtl">اعتبارسنجی اینکه سه فیلدِ تعریف‌کننده replicas به‌درستی مرتب شده‌اند</td>
+<td dir="rtl">اعتبارسنجی اینکه سه فیلدِ تعیین‌کنندهٔ تعداد نسخه‌ها (replicas) ترتیب درستی دارند</td>
 </tr>
 <tr>
 <td dir="ltr" class="ltr"><code dir="ltr">'Available' in object.stateCounts</code></td>
-<td dir="rtl">اعتبارسنجی اینکه ورودی‌ای با کلید 'Available' در یک map وجود دارد</td>
+<td dir="rtl">اعتبارسنجی وجود ورودی‌ای با کلید 'Available' در یک نگاشت (map)</td>
 </tr>
 <tr>
 <td dir="ltr" class="ltr"><code dir="ltr">(size(object.list1) == 0) != (size(object.list2) == 0)</code></td>
-<td dir="rtl">اعتبارسنجی اینکه یکی از دو فهرست خالی نیست، اما هر دو با هم غیرخالی نیستند</td>
+<td dir="rtl">اعتبارسنجی اینکه یکی از دو فهرست خالی نیست، اما هر دو هم‌زمان غیرخالی نیستند</td>
 </tr>
 <tr>
 <td dir="ltr" class="ltr"><code dir="ltr">!('MY_KEY' in object.map1) || object.map1['MY_KEY'].matches('^[a-zA-Z]*$')</code></td>
-<td dir="rtl">اعتبارسنجی مقدار یک map برای یک کلید مشخص، در صورتی که آن کلید در map وجود داشته باشد</td>
+<td dir="rtl">اعتبارسنجی مقدار یک کلید مشخص در نگاشت، در صورتی که آن کلید در نگاشت وجود داشته باشد</td>
 </tr>
 <tr>
 <td dir="ltr" class="ltr"><code dir="ltr">object.envars.filter(e, e.name == 'MY_ENV').all(e, e.value.matches('^[a-zA-Z]*$')</code></td>
-<td dir="rtl">اعتبارسنجی فیلد 'value' در ورودی listMap که فیلد کلید 'name' آن برابر 'MY_ENV' است</td>
+<td dir="rtl">اعتبارسنجی فیلد 'value' در ورودی‌ای از یک listMap که فیلد کلیدی 'name' آن برابر 'MY_ENV' است</td>
 </tr>
 <tr>
 <td dir="ltr" class="ltr"><code dir="ltr">has(object.expired) &amp;&amp; object.created + object.ttl &lt; object.expired</code></td>
-<td dir="rtl">اعتبارسنجی اینکه تاریخ 'expired' پس از تاریخ 'create' به‌اضافه مدت 'ttl' است</td>
+<td dir="rtl">اعتبارسنجی اینکه تاریخ 'expired' پس از تاریخ 'create' به‌علاوهٔ مدت 'ttl' است</td>
 </tr>
 <tr>
 <td dir="ltr" class="ltr"><code dir="ltr">object.health.startsWith('ok')</code></td>
@@ -474,41 +492,38 @@ validations:
 </tr>
 <tr>
 <td dir="ltr" class="ltr"><code dir="ltr">object.widgets.exists(w, w.key == 'x' &amp;&amp; w.foo &lt; 10)</code></td>
-<td dir="rtl">اعتبارسنجی اینکه ویژگی 'foo' از آیتم listMap با کلید 'x' کمتر از 10 است</td>
+<td dir="rtl">اعتبارسنجی اینکه ویژگی 'foo' در عضوی از listMap با کلید 'x' کمتر از ۱۰ است</td>
 </tr>
 <tr>
 <td dir="ltr" class="ltr"><code dir="ltr">type(object) == string ? object == '100%' : object == 1000</code></td>
-<td dir="rtl">اعتبارسنجی یک فیلد int-or-string برای هر دو حالت عدد صحیح و رشته</td>
+<td dir="rtl">اعتبارسنجی یک فیلد از نوع int-or-string، هم در حالت عدد صحیح و هم در حالت رشته</td>
 </tr>
 <tr>
 <td dir="ltr" class="ltr"><code dir="ltr">object.metadata.name.startsWith(object.prefix)</code></td>
-<td dir="rtl">اعتبارسنجی اینکه نام یک آبجکت با مقدار فیلدی دیگر پیشوند دارد</td>
+<td dir="rtl">اعتبارسنجی اینکه نام آبجکت با مقدار فیلدی دیگر به‌عنوان پیشوند آغاز می‌شود</td>
 </tr>
 <tr>
 <td dir="ltr" class="ltr"><code dir="ltr">object.set1.all(e, !(e in object.set2))</code></td>
-<td dir="rtl">اعتبارسنجی اینکه دو listSet از هم جدا (disjoint) هستند</td>
+<td dir="rtl">اعتبارسنجی اینکه دو listSet هیچ عضو مشترکی ندارند</td>
 </tr>
 <tr>
 <td dir="ltr" class="ltr"><code dir="ltr">size(object.names) == size(object.details) &amp;&amp; object.names.all(n, n in object.details)</code></td>
-<td dir="rtl">اعتبارسنجی اینکه map با نام 'details' بر اساس آیتم‌های listSet با نام 'names' کلیدگذاری شده است</td>
+<td dir="rtl">اعتبارسنجی اینکه کلیدهای نگاشت 'details' همان اعضای listSet با نام 'names' هستند</td>
 </tr>
 <tr>
 <td dir="ltr" class="ltr"><code dir="ltr">size(object.clusters.filter(c, c.name == object.primary)) == 1</code></td>
-<td dir="rtl">اعتبارسنجی اینکه ویژگی 'primary' دقیقاً یک بار در listMap با نام 'clusters' رخ داده است</td>
+<td dir="rtl">اعتبارسنجی اینکه ویژگی 'primary' دقیقاً یک بار در listMap با نام 'clusters' آمده است</td>
 </tr>
 </tbody>
 </table>
-<p dir="rtl">برای اطلاعات بیشتر درباره قواعد CEL، <a href="https://github.com/google/cel-spec/blob/v0.6.0/doc/langdef.md#evaluation" target="_blank" rel="noopener">Supported evaluation on CEL</a> را مطالعه کنید.</p>
-<p dir="rtl"><code dir="ltr">spec.validation[i].reason</code> توصیفی قابل‌خواندن برای ماشین است که علت شکست این اعتبارسنجی را بیان می‌کند.
-اگر این نخستین اعتبارسنجی در فهرست باشد که شکست می‌خورد، این reason و همچنین کد پاسخ HTTP متناظر با آن در پاسخ HTTP به کلاینت استفاده می‌شود.
-reasonهای پشتیبانی‌شده در حال حاضر عبارت‌اند از: <code dir="ltr">Unauthorized</code>، <code dir="ltr">Forbidden</code>، <code dir="ltr">Invalid</code>، <code dir="ltr">RequestEntityTooLarge</code>.
-اگر مقداردهی نشود، <code dir="ltr">StatusReasonInvalid</code> در پاسخ به کلاینت استفاده می‌شود.</p>
-<h3 id="تطبیق-درخواست-ها-matchconditions-matching-requests-matchconditions" dir="rtl">تطبیق درخواست‌ها: <code dir="ltr">matchConditions</code> {#matching-requests-matchconditions}</h3>
-<p dir="rtl">اگر به فیلتر کردن دقیق‌تر درخواست‌ها نیاز دارید، می‌توانید برای یک <code dir="ltr">ValidatingAdmissionPolicy</code> <em>شرایط تطبیق</em> (match conditions) تعریف کنید. این
-شرایط زمانی مفیدند که قواعد تطبیق، <code dir="ltr">objectSelectors</code> و <code dir="ltr">namespaceSelectors</code> همچنان
-فیلتر مورد نظر شما را فراهم نمی‌کنند. شرایط تطبیق
-<a href="../using-api/cel.html">عبارت‌های CEL</a> هستند. برای اینکه منبع ارزیابی شود، همه شرایط تطبیق باید true ارزیابی شوند.</p>
-<p dir="rtl">در ادامه مثالی آمده است که چند کاربرد مختلف شرایط تطبیق را نشان می‌دهد:</p>
+<p dir="rtl">برای اطلاعات بیشتر دربارهٔ قواعد CEL، <a href="https://github.com/google/cel-spec/blob/v0.6.0/doc/langdef.md#evaluation" target="_blank" rel="noopener">ارزیابی پشتیبانی‌شده در CEL</a> را بخوانید.</p>
+<p dir="rtl">فیلد <code dir="ltr">spec.validation[i].reason</code> توصیفی ماشین‌خوان از علت شکست این اعتبارسنجی ارائه می‌دهد.
+اگر این نخستین اعتبارسنجیِ ناموفق در فهرست باشد، همین علت به‌همراه کد پاسخ HTTP متناظر با آن در پاسخ HTTP به کلاینت به کار می‌رود.
+علت‌هایی که در حال حاضر پشتیبانی می‌شوند عبارت‌اند از: <code dir="ltr">Unauthorized</code>، <code dir="ltr">Forbidden</code>، <code dir="ltr">Invalid</code> و <code dir="ltr">RequestEntityTooLarge</code>.
+اگر این فیلد تنظیم نشود، <code dir="ltr">StatusReasonInvalid</code> در پاسخ به کلاینت استفاده می‌شود.</p>
+<h3 id="تطبیق-درخواست-ها-matchconditions" dir="rtl">تطبیق درخواست‌ها: <code dir="ltr">matchConditions</code></h3>
+<p dir="rtl">اگر به پالایش دقیق‌تر درخواست‌ها نیاز دارید، می‌توانید برای یک <code dir="ltr">ValidatingAdmissionPolicy</code> <em>شرط‌های تطبیق</em> تعریف کنید. این شرط‌ها زمانی مفیدند که قواعد تطبیق، <code dir="ltr">objectSelectors</code> و <code dir="ltr">namespaceSelectors</code> هنوز پالایش مورد نظرتان را فراهم نمی‌کنند. شرط‌های تطبیق در واقع <a href="../using-api/cel.html">عبارت‌های CEL</a> هستند. برای اینکه منبع ارزیابی شود، همهٔ شرط‌های تطبیق باید به true ارزیابی شوند.</p>
+<p dir="rtl">در ادامه نمونه‌ای آمده است که چند کاربرد مختلف شرط‌های تطبیق را نشان می‌دهد:</p>
 <div class="code-file ltr" dir="ltr">access/validating-admission-policy-match-conditions.yaml</div>
 <pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingAdmissionPolicy
@@ -532,29 +547,24 @@ spec:
   validations:
     - expression: "!object.metadata.name.contains('demo') || object.metadata.namespace == 'demo'"
 </code></pre>
-<p dir="rtl">شرایط تطبیق به همان متغیرهای CEL دسترسی دارند که عبارت‌های اعتبارسنجی دارند، به‌جز
-<code dir="ltr">namespaceObject</code> و <code dir="ltr">variables</code>:</p>
+<p dir="rtl">شرط‌های تطبیق به همان متغیرهای CEL دسترسی دارند که عبارت‌های اعتبارسنجی دارند، به‌جز <code dir="ltr">namespaceObject</code> و <code dir="ltr">variables</code>:</p>
 <ul>
-<li dir="rtl"><code dir="ltr">namespaceObject</code> برای شرایط تطبیق مقداردهی نمی‌شود و همیشه null ارزیابی می‌شود. برای انتخاب
-درخواست‌ها بر اساس برچسب‌های namespace، از یک <code dir="ltr">namespaceSelector</code> در <code dir="ltr">matchConstraints</code> سیاست
-یا در <code dir="ltr">matchResources</code> مربوط به binding استفاده کنید. برای بررسی سایر فیلدهای namespace، از یک عبارت
-اعتبارسنجی استفاده کنید که در آن <code dir="ltr">namespaceObject</code> در دسترس است.</li>
-<li dir="rtl">به <code dir="ltr">variables</code> نمی‌توان از شرایط تطبیق ارجاع داد، زیرا شرایط تطبیق
-پیش از بقیه بخش‌های سیاست ارزیابی می‌شوند.</li>
+<li dir="rtl">متغیر <code dir="ltr">namespaceObject</code> برای شرط‌های تطبیق مقداردهی نمی‌شود و همیشه به null ارزیابی می‌شود. برای انتخاب درخواست‌ها بر اساس برچسب‌های فضای نام، از یک <code dir="ltr">namespaceSelector</code> در <code dir="ltr">matchConstraints</code> سیاست یا در <code dir="ltr">matchResources</code> اتصال استفاده کنید. برای بررسی سایر فیلدهای فضای نام، از یک عبارت اعتبارسنجی استفاده کنید که <code dir="ltr">namespaceObject</code> در آن در دسترس است.</li>
+<li dir="rtl">در شرط‌های تطبیق نمی‌توان به <code dir="ltr">variables</code> ارجاع داد، زیرا شرط‌های تطبیق پیش از بقیهٔ سیاست ارزیابی می‌شوند.</li>
 </ul>
-<p dir="rtl">در صورت بروز خطا هنگام ارزیابی یک شرط تطبیق، سیاست ارزیابی نمی‌شود. اینکه درخواست رد شود یا نه، به شکل زیر تعیین می‌شود:</p>
+<p dir="rtl">اگر هنگام ارزیابی یک شرط تطبیق خطایی رخ دهد، سیاست ارزیابی نمی‌شود. رد شدن یا نشدن درخواست به این صورت تعیین می‌شود:</p>
 <ol>
-<li dir="rtl">اگر <strong>هر</strong> شرط تطبیقی <code dir="ltr">false</code> ارزیابی شود (صرف‌نظر از خطاهای دیگر)، سرور API سیاست را نادیده می‌گیرد.</li>
+<li dir="rtl">اگر <strong>هر یک</strong> از شرط‌های تطبیق به <code dir="ltr">false</code> ارزیابی شده باشد (صرف‌نظر از سایر خطاها)، سرور API از آن سیاست صرف‌نظر می‌کند.</li>
 <li dir="rtl">در غیر این صورت:
 <ul>
-<li dir="rtl">برای <a href="#failure-policy"><code dir="ltr">failurePolicy: Fail</code></a>، درخواست رد می‌شود (بدون ارزیابی سیاست).</li>
-<li dir="rtl">برای <a href="#failure-policy"><code dir="ltr">failurePolicy: Ignore</code></a>، درخواست ادامه می‌یابد اما سیاست نادیده گرفته می‌شود.</li>
+<li dir="rtl">برای <a href="#failure-policy"><code dir="ltr">failurePolicy: Fail</code></a>، درخواست (بدون ارزیابی سیاست) رد می‌شود.</li>
+<li dir="rtl">برای <a href="#failure-policy"><code dir="ltr">failurePolicy: Ignore</code></a>، درخواست ادامه می‌یابد، اما از سیاست صرف‌نظر می‌شود.</li>
 </ul>
 </li>
 </ol>
-<h3 id="حاشیه-نویسی-های-ممیزی-audit-annotations-audit-annotations" dir="rtl">حاشیه‌نویسی‌های ممیزی (Audit annotations) {#audit-annotations}</h3>
-<p dir="rtl"><code dir="ltr">auditAnnotations</code> را می‌توان برای افزودن حاشیه‌نویسی‌های ممیزی (audit annotations) به رویداد ممیزی درخواست API به کار برد.</p>
-<p dir="rtl">برای مثال، در ادامه یک سیاست پذیرش (admission policy) همراه با یک audit annotation آمده است:</p>
+<h3 id="حاشیه-نویسی-های-ممیزی" dir="rtl">حاشیه‌نویسی‌های ممیزی</h3>
+<p dir="rtl">با <code dir="ltr">auditAnnotations</code> می‌توان حاشیه‌نویسی‌های (annotation) ممیزی را در رویداد ممیزیِ درخواست API گنجاند.</p>
+<p dir="rtl">برای نمونه، سیاست پذیرش زیر یک حاشیه‌نویسی ممیزی دارد:</p>
 <div class="code-file ltr" dir="ltr">access/validating-admission-policy-audit-annotation.yaml</div>
 <pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingAdmissionPolicy
@@ -575,7 +585,7 @@ spec:
     - key: "high-replica-count"
       valueExpression: "'Deployment spec.replicas set to ' + string(object.spec.replicas)"
 </code></pre>
-<p dir="rtl">هنگامی که یک درخواست API با این سیاست پذیرش اعتبارسنجی شود، رویداد ممیزی حاصل به شکل زیر خواهد بود:</p>
+<p dir="rtl">وقتی یک درخواست API با این سیاست پذیرش اعتبارسنجی شود، رویداد ممیزیِ حاصل به این شکل خواهد بود:</p>
 <pre dir="ltr"><code dir="ltr"># the audit event recorded
 {
     "kind": "Event",
@@ -589,18 +599,11 @@ spec:
     ...
 }
 </code></pre>
-<p dir="rtl">در این مثال، annotation تنها در صورتی درج می‌شود که مقدار <code dir="ltr">spec.replicas</code> در Deployment بیشتر از 50 باشد؛ در غیر این صورت، عبارت CEL مقدار null را برمی‌گرداند و annotation درج نخواهد شد.</p>
-<p dir="rtl">توجه کنید که کلیدهای audit annotation با نام <code dir="ltr">ValidatingAdmissionPolicy</code> و یک <code dir="ltr">/</code> پیشوند می‌گیرند. اگر
-کنترل‌کننده پذیرش دیگری، مانند یک admission webhook، دقیقاً از همان کلید audit annotation استفاده کند،
-مقدار نخستین کنترل‌کننده پذیرشی که audit annotation را درج کرده است در رویداد ممیزی قرار می‌گیرد
-و سایر مقادیر نادیده گرفته می‌شوند.</p>
-<h3 id="عبارت-پیام-message-expression-message-expression" dir="rtl">عبارت پیام (Message expression) {#message-expression}</h3>
-<p dir="rtl">برای بازگرداندن پیامی کاربرپسندتر هنگامی که سیاست یک درخواست را رد می‌کند، می‌توانیم از یک عبارت CEL
-برای ساخت پیام با <code dir="ltr">spec.validations[i].messageExpression</code> استفاده کنیم. مشابه عبارت اعتبارسنجی،
-عبارت پیام به <code dir="ltr">object</code>، <code dir="ltr">oldObject</code>، <code dir="ltr">request</code>، <code dir="ltr">params</code> و <code dir="ltr">namespaceObject</code> دسترسی دارد.
-برخلاف اعتبارسنجی‌ها، عبارت پیام باید به یک رشته ارزیابی شود.</p>
-<p dir="rtl">برای مثال، برای اطلاع‌رسانی بهتر به کاربر درباره علت رد درخواست، وقتی سیاست به یک پارامتر ارجاع می‌دهد،
-می‌توانیم اعتبارسنجی زیر را داشته باشیم:</p>
+<p dir="rtl">در این نمونه، حاشیه‌نویسی فقط زمانی گنجانده می‌شود که مقدار <code dir="ltr">spec.replicas</code> در Deployment بیشتر از ۵۰ باشد؛ در غیر این صورت، عبارت CEL به null ارزیابی می‌شود و حاشیه‌نویسی گنجانده نخواهد شد.</p>
+<p dir="rtl">توجه کنید که کلیدهای حاشیه‌نویسی ممیزی با نام <code dir="ltr">ValidatingAdmissionPolicy</code> و یک <code dir="ltr">/</code> پیشوند می‌گیرند. اگر کنترل‌کنندهٔ پذیرش دیگری، مانند یک وب‌هوک پذیرش، دقیقاً از همان کلید حاشیه‌نویسی ممیزی استفاده کند، مقدارِ نخستین کنترل‌کنندهٔ پذیرشی که آن حاشیه‌نویسی را اضافه کرده است در رویداد ممیزی گنجانده می‌شود و همهٔ مقادیر دیگر نادیده گرفته می‌شوند.</p>
+<h3 id="عبارت-پیام" dir="rtl">عبارت پیام</h3>
+<p dir="rtl">برای اینکه هنگام رد شدن درخواست توسط سیاست پیام گویاتری برگردانده شود، می‌توان با <code dir="ltr">spec.validations[i].messageExpression</code> و یک عبارت CEL پیامی ترکیبی ساخت. عبارت پیام، همانند عبارت اعتبارسنجی، به <code dir="ltr">object</code>، <code dir="ltr">oldObject</code>، <code dir="ltr">request</code>، <code dir="ltr">params</code> و <code dir="ltr">namespaceObject</code> دسترسی دارد. اما برخلاف اعتبارسنجی‌ها، عبارت پیام باید به یک رشته ارزیابی شود.</p>
+<p dir="rtl">برای نمونه، اگر سیاست به یک پارامتر ارجاع دهد، برای آگاه‌کردن بهتر کاربر از علت رد شدن درخواست می‌توان اعتبارسنجی زیر را تعریف کرد:</p>
 <div class="code-file ltr" dir="ltr">access/deployment-replicas-policy.yaml</div>
 <pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingAdmissionPolicy
@@ -621,26 +624,21 @@ spec:
     messageExpression: "'object.spec.replicas must be no greater than ' + string(params.maxReplicas)"
     reason: Invalid
 </code></pre>
-<p dir="rtl">پس از ایجاد یک آبجکت params که replicas را به 3 محدود می‌کند و برپا کردن binding،
-هنگامی که تلاش کنیم یک deployment با 5 replica ایجاد کنیم، پیام زیر را دریافت خواهیم کرد.</p>
+<p dir="rtl">پس از ایجاد یک آبجکت پارامتر که تعداد نسخه‌ها را به ۳ محدود می‌کند و برپاسازی اتصال، اگر بخواهیم یک Deployment با ۵ نسخه ایجاد کنیم، پیام زیر را دریافت خواهیم کرد.</p>
 <pre dir="ltr"><code dir="ltr">$ kubectl create deploy --image=nginx nginx --replicas=5
 error: failed to create deployment: deployments.apps "nginx" is forbidden: ValidatingAdmissionPolicy 'deploy-replica-policy.example.com' with binding 'demo-binding-test.example.com' denied request: object.spec.replicas must be no greater than 3
 </code></pre>
-<p dir="rtl">این پیام از یک پیام ایستا مانند "too many replicas" اطلاعات بیشتری می‌دهد.</p>
+<p dir="rtl">این پیام از پیام ایستایی مانند «too many replicas» گویاتر است.</p>
 <p dir="rtl">اگر هر دو تعریف شده باشند، عبارت پیام بر پیام ایستای تعریف‌شده در <code dir="ltr">spec.validations[i].message</code> اولویت دارد.
-با این حال، اگر ارزیابی عبارت پیام با شکست مواجه شود، به‌جای آن از پیام ایستا استفاده می‌شود.
-افزون بر این، اگر عبارت پیام به یک رشته چندخطی ارزیابی شود،
-نتیجه ارزیابی کنار گذاشته می‌شود و در صورت وجود، از پیام ایستا استفاده خواهد شد.
-توجه کنید که پیام ایستا از نظر چندخطی بودن اعتبارسنجی می‌شود.</p>
-<h3 id="بررسی-نوع-type-checking-type-checking" dir="rtl">بررسی نوع (Type checking) {#type-checking}</h3>
-<p dir="rtl">هنگامی که تعریف یک سیاست ایجاد یا به‌روزرسانی می‌شود، فرایند اعتبارسنجی عبارت‌های موجود در آن را تجزیه می‌کند
-و هر گونه خطای نحوی (syntax) را گزارش می‌دهد و در صورت یافتن هر خطا، تعریف را رد می‌کند.
-سپس، متغیرهای ارجاع‌شده از نظر خطاهای نوع، از جمله فیلدهای ناموجود و اشتباه گرفتن نوع‌ها،
-در برابر نوع‌های تطبیق‌یافته در <code dir="ltr">spec.matchConstraints</code> بررسی می‌شوند.
-نتیجه بررسی نوع را می‌توان از <code dir="ltr">status.typeChecking</code> بازیابی کرد.
-وجود <code dir="ltr">status.typeChecking</code> نشان‌دهنده تکمیل بررسی نوع است،
-و خالی بودن <code dir="ltr">status.typeChecking</code> به این معناست که هیچ خطایی شناسایی نشده است.</p>
-<p dir="rtl">برای مثال، با توجه به تعریف سیاست زیر:</p>
+با این حال، اگر ارزیابی عبارت پیام با شکست روبه‌رو شود، به‌جای آن از پیام ایستا استفاده می‌شود.
+همچنین اگر عبارت پیام به رشته‌ای چندخطی ارزیابی شود، نتیجهٔ ارزیابی کنار گذاشته می‌شود و در صورت وجود، پیام ایستا به کار می‌رود.
+توجه کنید که پیام ایستا نیز از نظر چندخطی بودن اعتبارسنجی می‌شود.</p>
+<h3 id="بررسی-نوع" dir="rtl">بررسی نوع</h3>
+<p dir="rtl">هنگام ایجاد یا به‌روزرسانی تعریف یک سیاست، فرایند اعتبارسنجی عبارت‌های درون آن را تجزیه می‌کند، هر خطای نحوی را گزارش می‌دهد و در صورت یافتن خطا، تعریف را رد می‌کند.
+پس از آن، متغیرهای ارجاع‌شده در برابر نوع‌های تطبیق‌یافته در <code dir="ltr">spec.matchConstraints</code> از نظر خطاهای نوع، از جمله فیلدهای ناموجود و ابهام در نوع، بررسی می‌شوند.
+نتیجهٔ بررسی نوع را می‌توان از <code dir="ltr">status.typeChecking</code> دریافت کرد.
+وجود <code dir="ltr">status.typeChecking</code> نشان می‌دهد که بررسی نوع کامل شده است، و خالی بودن <code dir="ltr">status.typeChecking</code> به این معناست که هیچ خطایی شناسایی نشده است.</p>
+<p dir="rtl">برای نمونه، تعریف سیاست زیر را در نظر بگیرید:</p>
 <div class="code-file ltr" dir="ltr">validatingadmissionpolicy/typechecking.yaml</div>
 <pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingAdmissionPolicy
@@ -658,7 +656,7 @@ spec:
     message: "must be replicated"
     reason: Invalid
 </code></pre>
-<p dir="rtl">وضعیت (status) اطلاعات زیر را نتیجه خواهد داد:</p>
+<p dir="rtl">وضعیت آن اطلاعات زیر را نشان می‌دهد:</p>
 <pre dir="ltr"><code class="language-yaml" dir="ltr">status:
   typeChecking:
     expressionWarnings:
@@ -668,8 +666,8 @@ spec:
          | object.replicas &gt; 1
          | ......^
 </code></pre>
-<p dir="rtl">اگر در <code dir="ltr">spec.matchConstraints</code> چند منبع تطبیق داده شوند، همه منابع تطبیق‌یافته بررسی خواهند شد.
-برای مثال، تعریف سیاست زیر</p>
+<p dir="rtl">اگر چند منبع در <code dir="ltr">spec.matchConstraints</code> تطبیق داده شوند، همهٔ منابع تطبیق‌یافته بررسی می‌شوند.
+برای نمونه، تعریف سیاست زیر</p>
 <div class="code-file ltr" dir="ltr">validatingadmissionpolicy/typechecking-multiple-match.yaml</div>
 <pre dir="ltr"><code class="language-yaml" dir="ltr">apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingAdmissionPolicy
@@ -687,7 +685,7 @@ spec:
     message: "must be replicated"
     reason: Invalid
 </code></pre>
-<p dir="rtl">چندین نوع خواهد داشت و نتیجه بررسی نوع هر نوع در پیام هشدار آمده است.</p>
+<p dir="rtl">چند نوع خواهد داشت و نتیجهٔ بررسی هر نوع در پیام هشدار آمده است.</p>
 <pre dir="ltr"><code class="language-yaml" dir="ltr">status:
   typeChecking:
     expressionWarnings:
@@ -702,18 +700,13 @@ spec:
 </code></pre>
 <p dir="rtl">بررسی نوع محدودیت‌های زیر را دارد:</p>
 <ul>
-<li dir="rtl">تطبیق با نویسه عام (wildcard) پشتیبانی نمی‌شود. اگر <code dir="ltr">spec.matchConstraints.resourceRules</code> در هر یک از <code dir="ltr">apiGroups</code>، <code dir="ltr">apiVersions</code> یا <code dir="ltr">resources</code> شامل <code dir="ltr">"*"</code> باشد،
-نوع‌هایی که <code dir="ltr">"*"</code> با آن‌ها تطبیق می‌یابد بررسی نخواهند شد.</li>
-<li dir="rtl">تعداد نوع‌های تطبیق‌یافته به 10 محدود شده است. این کار برای جلوگیری از سیاستی است که با تعیین دستی نوع‌های بسیار زیاد،
-منابع محاسباتی بیش از حد مصرف کند. به ترتیب صعودی group، سپس version و سپس resource، ترکیب یازدهم و بعد از آن نادیده گرفته می‌شوند.</li>
-<li dir="rtl">بررسی نوع به هیچ وجه بر رفتار سیاست تأثیر نمی‌گذارد. حتی اگر بررسی نوع خطاهایی را شناسایی کند، سیاست همچنان
-ارزیابی خواهد شد. اگر در هنگام ارزیابی خطایی رخ دهد، failure policy نتیجه آن را تعیین می‌کند.</li>
-<li dir="rtl">بررسی نوع برای CRDها، از جمله نوع‌های CRD تطبیق‌یافته و ارجاع paramKind، اعمال نمی‌شود. پشتیبانی از CRDها در نسخه‌های آینده خواهد آمد.</li>
+<li dir="rtl">تطبیق با نویسهٔ عام (wildcard) پشتیبانی نمی‌شود. اگر <code dir="ltr">spec.matchConstraints.resourceRules</code> در هر یک از <code dir="ltr">apiGroups</code>، <code dir="ltr">apiVersions</code> یا <code dir="ltr">resources</code> مقدار <code dir="ltr">"*"</code> داشته باشد، نوع‌هایی که با <code dir="ltr">"*"</code> تطبیق می‌یابند بررسی نمی‌شوند.</li>
+<li dir="rtl">تعداد نوع‌های تطبیق‌یافته به ۱۰ محدود است. این محدودیت جلوی آن را می‌گیرد که سیاستی با تعیین دستیِ تعداد بسیار زیادی نوع، منابع محاسباتی را بیش از حد مصرف کند. ترکیب‌ها به ترتیب صعودی گروه، سپس نسخه و سپس منبع مرتب می‌شوند و ترکیب یازدهم و پس از آن نادیده گرفته می‌شوند.</li>
+<li dir="rtl">بررسی نوع به هیچ وجه بر رفتار سیاست اثر نمی‌گذارد. حتی اگر بررسی نوع خطاهایی را شناسایی کند، ارزیابی سیاست ادامه می‌یابد. اگر در حین ارزیابی خطایی رخ دهد، سیاست شکست (failure policy) نتیجهٔ آن را تعیین می‌کند.</li>
+<li dir="rtl">بررسی نوع روی CRDها، از جمله نوع‌های CRD تطبیق‌یافته و ارجاع paramKind، اعمال نمی‌شود. پشتیبانی از CRDها در نسخه‌های آینده اضافه خواهد شد.</li>
 </ul>
-<h3 id="ترکیب-متغیرها-variable-composition-variable-composition" dir="rtl">ترکیب متغیرها (Variable composition) {#variable-composition}</h3>
-<p dir="rtl">اگر یک عبارت بیش از حد پیچیده شود، یا بخشی از عبارت قابل استفاده مجدد و ارزیابی آن از نظر محاسباتی پرهزینه باشد،
-می‌توانید بخشی از عبارت‌ها را به متغیرها استخراج کنید. متغیر یک عبارت نام‌دار است که بعداً می‌توان
-از طریق <code dir="ltr">variables</code> در عبارت‌های دیگر به آن ارجاع داد.</p>
+<h3 id="ترکیب-متغیرها" dir="rtl">ترکیب متغیرها</h3>
+<p dir="rtl">اگر عبارتی بیش از حد پیچیده شود، یا بخشی از آن قابل استفادهٔ دوباره باشد و ارزیابی آن هزینهٔ محاسباتی زیادی داشته باشد، می‌توانید بخشی از عبارت‌ها را در قالب متغیر جدا کنید. متغیر عبارتی نام‌دار است که بعدها می‌توان در عبارت‌های دیگر از طریق <code dir="ltr">variables</code> به آن ارجاع داد.</p>
 <pre dir="ltr"><code class="language-yaml" dir="ltr">spec:
   variables:
     - name: foo
@@ -721,12 +714,10 @@ spec:
   validations:
     - expression: variables.foo == 'bar'
 </code></pre>
-<p dir="rtl">یک متغیر به‌صورت تنبل (lazy) و هنگام نخستین ارجاع ارزیابی می‌شود. هر خطایی که در طول ارزیابی رخ دهد،
-در زمان ارزیابی عبارتِ ارجاع‌دهنده گزارش می‌شود. هم نتیجه و هم خطای احتمالی حفظ می‌شوند
-و فقط یک بار در هزینه زمان اجرا محاسبه می‌شوند.</p>
-<p dir="rtl">ترتیب متغیرها مهم است، زیرا یک متغیر می‌تواند به متغیرهایی که پیش از آن تعریف شده‌اند ارجاع دهد.
-این ترتیب از ارجاع‌های دوری جلوگیری می‌کند.</p>
-<p dir="rtl">در ادامه مثالی پیچیده‌تر آمده است که اعمال می‌کند نام مخزن‌های ایمیج با محیط تعریف‌شده در namespace آن‌ها مطابقت داشته باشد.</p>
+<p dir="rtl">هر متغیر به‌صورت تنبل (lazy) و در نخستین ارجاع به آن ارزیابی می‌شود. هر خطایی که در حین این ارزیابی رخ دهد، هنگام ارزیابی عبارتِ ارجاع‌دهنده گزارش می‌شود. هم نتیجه و هم خطای احتمالی به خاطر سپرده می‌شوند و فقط یک بار در هزینهٔ زمان اجرا محاسبه می‌شوند.</p>
+<p dir="rtl">ترتیب متغیرها اهمیت دارد، زیرا هر متغیر فقط می‌تواند به متغیرهایی ارجاع دهد که پیش از آن تعریف شده‌اند.
+این ترتیب از ارجاع‌های چرخه‌ای جلوگیری می‌کند.</p>
+<p dir="rtl">نمونهٔ پیچیده‌تر زیر الزام می‌کند که نام مخزن‌های ایمیج با محیطی که در فضای نام آن‌ها تعریف شده است مطابقت داشته باشد.</p>
 <div class="code-file ltr" dir="ltr">access/image-matches-namespace-environment.policy.yaml</div>
 <pre dir="ltr"><code class="language-yaml" dir="ltr"># This policy enforces that all containers of a deployment has the image repo match the environment label of its namespace.
 # Except for "exempt" deployments, or any containers that do not belong to the "example.com" organization (e.g. common sidecars).
@@ -757,16 +748,15 @@ spec:
   - expression: "variables.exempt || variables.containersToCheck.all(c, c.image.startsWith(variables.environment + '.'))"
     messageExpression: "'only ' + variables.environment + ' images are allowed in namespace ' + namespaceObject.metadata.name"
 </code></pre>
-<p dir="rtl">وقتی سیاست به namespace با نام <code dir="ltr">default</code> که برچسب <code dir="ltr">environment: prod</code> دارد متصل شده باشد،
-تلاش زیر برای ایجاد یک deployment رد خواهد شد.</p>
+<p dir="rtl">اگر این سیاست به فضای نام <code dir="ltr">default</code> متصل شده باشد که برچسب <code dir="ltr">environment: prod</code> دارد، تلاش زیر برای ایجاد یک Deployment رد خواهد شد.</p>
 <pre dir="ltr"><code class="language-shell" dir="ltr">kubectl create deploy --image=dev.example.com/nginx invalid
 </code></pre>
 <p dir="rtl">پیام خطا مشابه زیر است.</p>
 <pre dir="ltr"><code class="language-console" dir="ltr">error: failed to create deployment: deployments.apps "invalid" is forbidden: ValidatingAdmissionPolicy 'image-matches-namespace-environment.policy.example.com' with binding 'demo-binding-test.example.com' denied request: only prod images are allowed in namespace default
 </code></pre>
-<h2 id="انواع-api-معاف-از-اعتبارسنجی-پذیرش-api-kinds-exempt-from-admission-validation" dir="rtl">انواع API معاف از اعتبارسنجی پذیرش {#api-kinds-exempt-from-admission-validation}</h2>
-<p dir="rtl">برخی انواع API از بررسی‌های اعتبارسنجی در زمان پذیرش معاف هستند. برای مثال، نمی‌توانید یک ValidatingAdmissionPolicy ایجاد کنید که از تغییر ValidatingAdmissionPolicyBindingها جلوگیری کند.</p>
-<p dir="rtl">انواع پیکربندی پذیرش زیر از سیاست‌هایی که از طریق REST API ایجاد می‌شوند معاف هستند، تا از وابستگی‌های دوری جلوگیری شود:</p>
+<h2 id="انواع-api-معاف-از-اعتبارسنجی-پذیرش" dir="rtl">انواع API معاف از اعتبارسنجی پذیرش</h2>
+<p dir="rtl">برخی انواع API از بررسی‌های اعتبارسنجی در زمان پذیرش معاف‌اند. برای نمونه، نمی‌توانید یک ValidatingAdmissionPolicy ایجاد کنید که جلوی تغییر ValidatingAdmissionPolicyBindingها را بگیرد.</p>
+<p dir="rtl">برای جلوگیری از وابستگی‌های چرخه‌ای، انواع پیکربندی پذیرش زیر از سیاست‌هایی که از طریق REST API ایجاد می‌شوند معاف‌اند:</p>
 <ul>
 <li dir="ltr" class="ltr"><a href="../kubernetes-api/admissionregistration/validating-admission-policy-v1.html">ValidatingAdmissionPolicies</a></li>
 <li dir="ltr" class="ltr"><a href="../kubernetes-api/admissionregistration/validating-admission-policy-binding-v1.html">ValidatingAdmissionPolicyBindings</a></li>
@@ -774,14 +764,9 @@ spec:
 <li dir="ltr" class="ltr">MutatingAdmissionPolicyBindings</li>
 </ul>
 <div class="callout note"><div class="callout-title">توجه:</div>
-<p dir="rtl">هنگامی که از طریق
-<a href="manifest-admission-control.html">کنترل پذیرش مبتنی بر مانیفست</a> پیکربندی شود،
-یک ValidatingAdmissionPolicy می‌تواند انواع پیکربندی پذیرشِ فهرست‌شده در بالا را رهگیری کند. این کار
-محدودیت‌هایی را که معمولاً برای سیاست‌های ایجادشده از طریق REST API اعمال می‌شود دور می‌زند و به شما امکان می‌دهد
-حتی پیکربندی پذیرش و منابع حساس از نظر امنیتی را اعتبارسنجی کنید. برخلاف REST API، یک سیاست پذیرش مبتنی بر مانیفست
-که اشتباه پیکربندی شده و این منابع را رهگیری می‌کند غیرقابل بازیابی نخواهد بود، زیرا به‌جای تعریف از طریق API، روی دیسک تعریف می‌شود.</p>
+<p dir="rtl">اگر یک ValidatingAdmissionPolicy از طریق <a href="manifest-admission-control.html">کنترل پذیرش مبتنی بر مانیفست</a> پیکربندی شود، می‌تواند انواع پیکربندی پذیرشِ فهرست‌شده در بالا را رهگیری کند. در این حالت، محدودیت‌هایی که معمولاً بر سیاست‌های ایجادشده از طریق REST API اعمال می‌شوند دور زده می‌شوند و می‌توانید حتی پیکربندی پذیرش و منابع حساس از نظر امنیتی را نیز اعتبارسنجی کنید. برخلاف REST API، یک سیاست پذیرشِ نادرستِ مبتنی بر مانیفست که این منابع را رهگیری می‌کند وضعیت غیرقابل بازیابی ایجاد نمی‌کند، زیرا روی دیسک تعریف شده است، نه از طریق API.</p>
 </div>
-<p dir="rtl">افزون بر این، انواع API احراز هویت و احراز مجوز غیرپایدار (مجازی) زیر از همه سیاست‌های پذیرش، از جمله سیاست‌های مبتنی بر مانیفست، معاف هستند، زیرا رهگیری آن‌ها می‌تواند کلاستر را از مسیر احراز هویت و احراز مجوز خودش قفل کند:</p>
+<p dir="rtl">افزون بر این، انواع API احرازهویت و مجوزدهیِ ذخیره‌نشده (مجازی) زیر از همهٔ سیاست‌های پذیرش، از جمله سیاست‌های مبتنی بر مانیفست، معاف‌اند؛ زیرا رهگیری آن‌ها ممکن است کلاستر را از مسیر احرازهویت و مجوزدهیِ خودش محروم کند:</p>
 <ul>
 <li dir="ltr" class="ltr"><a href="../kubernetes-api/definitions/token-review-v1-authentication.html">TokenReviews</a></li>
 <li dir="ltr" class="ltr"><a href="../kubernetes-api/definitions/self-subject-review-v1-authentication.html">SelfSubjectReviews</a></li>
@@ -790,11 +775,9 @@ spec:
 <li dir="ltr" class="ltr"><a href="../kubernetes-api/definitions/self-subject-rules-review-v1-authorization.html">SelfSubjectRulesReviews</a></li>
 <li dir="ltr" class="ltr"><a href="../kubernetes-api/definitions/subject-access-review-v1-authorization.html">SubjectAccessReviews</a></li>
 </ul>
-<p dir="rtl">از کوبرنتیز نسخه v1.37 به بعد،
-<a href="extensible-admission-controllers.html#excluded-virtual-resources">admission webhookها</a>
-نیز این منابع مجازی را به‌صورت پیش‌فرض مستثنا می‌کنند.</p>
+<p dir="rtl">از کوبرنتیز نسخهٔ v1.37 به بعد، <a href="extensible-admission-controllers.html#excluded-virtual-resources">وب‌هوک‌های پذیرش</a> نیز به‌طور پیش‌فرض این منابع مجازی را مستثنا می‌کنند.</p>
 <p class="totop"><a href="#top">↑ بازگشت به بالای صفحه</a></p></main>
-<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#validating-admission-policy-چیست؟">Validating Admission Policy چیست؟</a><a class="l2" href="#چه-منابعی-یک-سیاست-را-می-سازند">چه منابعی یک سیاست را می‌سازند</a><a class="l2" href="#شروع-کار-با-validating-admission-policy">شروع کار با Validating Admission Policy</a><a class="l3" href="#ایجاد-یک-validatingadmissionpolicy">ایجاد یک ValidatingAdmissionPolicy</a><a class="l3" href="#منابع-پارامتر-parameter-resources">منابع پارامتر {#parameter-resources}</a><a class="l3" href="#سیاست-شکست-failure-policy-failure-policy">سیاست شکست (Failure Policy) {#failure-policy}</a><a class="l3" href="#عبارت-اعتبارسنجی-validation-expression">عبارت اعتبارسنجی (Validation Expression)</a><a class="l3" href="#تطبیق-درخواست-ها-matchconditions-matching-requests-matchconditions">تطبیق درخواست‌ها: matchConditions {#matching-requests-matchconditions}</a><a class="l3" href="#حاشیه-نویسی-های-ممیزی-audit-annotations-audit-annotations">حاشیه‌نویسی‌های ممیزی (Audit annotations) {#audit-annotations}</a><a class="l3" href="#عبارت-پیام-message-expression-message-expression">عبارت پیام (Message expression) {#message-expression}</a><a class="l3" href="#بررسی-نوع-type-checking-type-checking">بررسی نوع (Type checking) {#type-checking}</a><a class="l3" href="#ترکیب-متغیرها-variable-composition-variable-composition">ترکیب متغیرها (Variable composition) {#variable-composition}</a><a class="l2" href="#انواع-api-معاف-از-اعتبارسنجی-پذیرش-api-kinds-exempt-from-admission-validation">انواع API معاف از اعتبارسنجی پذیرش {#api-kinds-exempt-from-admission-validation}</a></nav>
+<nav class="toc" aria-label="فهرست این صفحه"><strong>در این صفحه</strong><a class="l2" href="#سیاست-پذیرش-اعتبارسنجی-چیست؟">سیاست پذیرش اعتبارسنجی چیست؟</a><a class="l2" href="#یک-سیاست-از-چه-منابعی-تشکیل-می-شود">یک سیاست از چه منابعی تشکیل می‌شود</a><a class="l2" href="#شروع-کار-با-سیاست-پذیرش-اعتبارسنجی">شروع کار با سیاست پذیرش اعتبارسنجی</a><a class="l3" href="#ایجاد-یک-validatingadmissionpolicy">ایجاد یک ValidatingAdmissionPolicy</a><a class="l3" href="#منابع-پارامتر">منابع پارامتر</a><a class="l3" href="#سیاست-شکست">سیاست شکست</a><a class="l3" href="#عبارت-اعتبارسنجی">عبارت اعتبارسنجی</a><a class="l3" href="#تطبیق-درخواست-ها-matchconditions">تطبیق درخواست‌ها: matchConditions</a><a class="l3" href="#حاشیه-نویسی-های-ممیزی">حاشیه‌نویسی‌های ممیزی</a><a class="l3" href="#عبارت-پیام">عبارت پیام</a><a class="l3" href="#بررسی-نوع">بررسی نوع</a><a class="l3" href="#ترکیب-متغیرها">ترکیب متغیرها</a><a class="l2" href="#انواع-api-معاف-از-اعتبارسنجی-پذیرش">انواع API معاف از اعتبارسنجی پذیرش</a></nav>
 </div>
 </body>
 </html>
