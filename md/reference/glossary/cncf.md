@@ -1,19 +1,21 @@
 ---
-title: بنیاد رایانش ابری‌بومی (CNCF)
+title: بنیاد رایانش ابری بومی (CNCF)
 id: cncf
 full_link: https://cncf.io/
 short_description: >
-  بنیاد رایانش ابری‌بومی
+  بنیاد رایانش ابری بومی
 
 aka:
 tags:
 - community
 ---
- بنیاد رایانش ابری‌بومی (Cloud Native Computing Foundation یا CNCF) اکوسیستم‌هایی پایدار می‌سازد و پیرامون [پروژه‌هایی](https://www.cncf.io/projects/) که کانتینرها را در قالب یک معماری ریزسرویس‌ها (microservices) ارکستریشن می‌کنند، جامعه‌ای فعال را پرورش می‌دهد.
+ بنیاد رایانش ابری بومی (Cloud Native Computing Foundation) اکوسیستم‌هایی پایدار می‌سازد و جامعه‌ای را پیرامون
+ [پروژه‌هایی](https://www.cncf.io/projects/) پرورش می‌دهد که
+ کانتینرها را در قالب یک معماری میکروسرویس هماهنگ‌سازی (orchestrate) می‌کنند.
 
 کوبرنتیز یکی از پروژه‌های CNCF است.
 
 <!--more-->
 
-CNCF یک زیرمجموعهٔ بنیاد [لینوکس](https://www.linuxfoundation.org/) است.
-مأموریت آن فراگیر کردن رایانش ابری‌بومی است.
+بنیاد CNCF یکی از زیرمجموعه‌های [بنیاد لینوکس](https://www.linuxfoundation.org/) است.
+مأموریت آن فراگیر کردن رایانش ابری بومی است.

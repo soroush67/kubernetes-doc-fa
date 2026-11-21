@@ -10,8 +10,8 @@ aka:
 tags:
 - networking 
 ---
- افزونه‌های رابط شبکه کانتینر (Container Network Interface یا CNI) نوعی افزونه شبکه هستند که از مشخصات appc/CNI پیروی می‌کنند.
+ افزونه‌های رابط شبکه کانتینر (Container network interface) نوعی افزونه شبکه هستند که از مشخصات appc/CNI پیروی می‌کنند.
 
 <!--more-->
 
-* برای کسب اطلاعات درباره کوبرنتیز و CNI، به [**افزونه‌های شبکه**](/docs/concepts/extend-kubernetes/compute-storage-net/network-plugins/) مراجعه کنید.
+* برای اطلاعات درباره کوبرنتیز و CNI، به [**افزونه‌های شبکه**](/docs/concepts/extend-kubernetes/compute-storage-net/network-plugins/) مراجعه کنید.

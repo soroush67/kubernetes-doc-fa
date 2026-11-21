@@ -102,26 +102,26 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [reference/glossary/controller.md](md/reference/glossary/controller.md) — 2026-11-21T08:56:15+03:30
+- [reference/glossary/contributor.md](md/reference/glossary/contributor.md) — 2026-11-21T08:56:07+03:30
+- [reference/glossary/containerd.md](md/reference/glossary/containerd.md) — 2026-11-21T08:56:06+03:30
+- [reference/glossary/container.md](md/reference/glossary/container.md) — 2026-11-21T08:55:59+03:30
+- [reference/glossary/container-runtime.md](md/reference/glossary/container-runtime.md) — 2026-11-21T08:55:57+03:30
+- [reference/glossary/container-lifecycle-hooks.md](md/reference/glossary/container-lifecycle-hooks.md) — 2026-11-21T08:55:53+03:30
+- [reference/glossary/container-env-variables.md](md/reference/glossary/container-env-variables.md) — 2026-11-21T08:55:52+03:30
+- [reference/glossary/condition.md](md/reference/glossary/condition.md) — 2026-11-21T08:55:47+03:30
+- [reference/glossary/configmap.md](md/reference/glossary/configmap.md) — 2026-11-21T08:55:46+03:30
+- [reference/glossary/code-contributor.md](md/reference/glossary/code-contributor.md) — 2026-11-21T08:55:39+03:30
+- [reference/glossary/cni.md](md/reference/glossary/cni.md) — 2026-11-21T08:55:38+03:30
+- [reference/glossary/cncf.md](md/reference/glossary/cncf.md) — 2026-11-21T08:55:34+03:30
+- [reference/glossary/cluster.md](md/reference/glossary/cluster.md) — 2026-11-21T08:55:33+03:30
+- [reference/glossary/cluster-operator.md](md/reference/glossary/cluster-operator.md) — 2026-11-21T08:55:24+03:30
+- [reference/glossary/cluster-operations.md](md/reference/glossary/cluster-operations.md) — 2026-11-21T08:55:19+03:30
 - [reference/glossary/cluster-infrastructure.md](md/reference/glossary/cluster-infrastructure.md) — 2026-11-21T08:55:17+03:30
 - [reference/glossary/cloud-provider.md](md/reference/glossary/cloud-provider.md) — 2026-11-21T08:55:13+03:30
 - [reference/glossary/cluster-architect.md](md/reference/glossary/cluster-architect.md) — 2026-11-21T08:55:12+03:30
 - [reference/glossary/cloud-controller-manager.md](md/reference/glossary/cloud-controller-manager.md) — 2026-11-21T08:55:08+03:30
 - [reference/glossary/cla.md](md/reference/glossary/cla.md) — 2026-11-21T08:55:04+03:30
-- [reference/glossary/cidr.md](md/reference/glossary/cidr.md) — 2026-11-21T08:55:01+03:30
-- [reference/glossary/cgroup.md](md/reference/glossary/cgroup.md) — 2026-11-21T08:54:59+03:30
-- [reference/glossary/certificate.md](md/reference/glossary/certificate.md) — 2026-11-21T08:54:52+03:30
-- [reference/glossary/cel.md](md/reference/glossary/cel.md) — 2026-11-21T08:54:48+03:30
-- [reference/glossary/cdi.md](md/reference/glossary/cdi.md) — 2026-11-21T08:54:46+03:30
-- [reference/glossary/cadvisor.md](md/reference/glossary/cadvisor.md) — 2026-11-21T08:54:41+03:30
-- [reference/glossary/approver.md](md/reference/glossary/approver.md) — 2026-11-21T08:54:40+03:30
-- [reference/glossary/applications.md](md/reference/glossary/applications.md) — 2026-11-21T08:54:34+03:30
-- [reference/glossary/application-developer.md](md/reference/glossary/application-developer.md) — 2026-11-21T08:54:30+03:30
-- [reference/glossary/application-architect.md](md/reference/glossary/application-architect.md) — 2026-11-21T08:54:25+03:30
-- [reference/glossary/app-container.md](md/reference/glossary/app-container.md) — 2026-11-21T08:54:24+03:30
-- [reference/glossary/api-resource.md](md/reference/glossary/api-resource.md) — 2026-11-21T08:54:17+03:30
-- [reference/glossary/api-group.md](md/reference/glossary/api-group.md) — 2026-11-21T08:54:15+03:30
-- [reference/external-api/metrics.v1beta1.md](md/reference/external-api/metrics.v1beta1.md) — 2026-11-21T08:54:10+03:30
-- [reference/glossary/api-eviction.md](md/reference/glossary/api-eviction.md) — 2026-11-21T08:54:10+03:30
 
 </div>
 
