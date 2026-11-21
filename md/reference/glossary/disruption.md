@@ -3,22 +3,21 @@ title: اختلال
 id: disruption
 full_link: /docs/concepts/workloads/pods/disruptions/
 short_description: >
-  رویدادی که باعث از دسترس خارج شدن یک یا چند Pod می‌شود
+  رویدادی که باعث خارج شدن یک یا چند Pod از سرویس می‌شود
 aka:
 tags:
 - fundamental
 ---
- اختلال‌ها (Disruptions) رویدادهایی هستند که باعث می‌شوند یک یا چند
-{{< glossary_tooltip term_id="pod" text="Pod" >}} از سرویس‌دهی خارج شوند.
-یک اختلال بر {{< glossary_tooltip text="منابع" term_id="api-resource" >}} مدیریت بار کاری،
-مانند {{< glossary_tooltip term_id="deployment" >}}، که به Podهای آسیب‌دیده وابسته‌اند،
-پیامد دارد.
+ اختلال‌ها (disruptions) رویدادهایی هستند که باعث می‌شوند یک یا چند
+{{< glossary_tooltip term_id="pod" text="Pod" >}} از سرویس خارج شوند.
+هر اختلال بر {{< glossary_tooltip text="منابع" term_id="api-resource" >}} مدیریت بار کاری
+که به Podهای آسیب‌دیده وابسته‌اند، مانند {{< glossary_tooltip term_id="deployment" >}}، تأثیر می‌گذارد.
 
 <!--more-->
 
-اگر شما، به عنوان مدیر کلاستر، یک Pod متعلق به یک اپلیکیشن را از بین ببرید،
-کوبرنتیز این حالت را _اختلال داوطلبانه_ (voluntary disruption) می‌نامد. اگر یک Pod
-به دلیل خرابی نود یا قطعی‌ای که یک ناحیه خرابی گسترده‌تر را تحت تأثیر قرار می‌دهد، آفلاین شود،
-کوبرنتیز این حالت را _اختلال غیرداوطلبانه_ (involuntary disruption) می‌نامد.
+اگر شما در نقش اپراتور کلاستر، Pod متعلق به یک برنامه را از بین ببرید،
+کوبرنتیز آن را _اختلال داوطلبانه_ می‌نامد. اگر یک Pod به دلیل خرابی نود
+یا قطعی‌ای که یک ناحیهٔ خرابی (failure zone) گسترده‌تر را تحت تأثیر قرار می‌دهد از دسترس خارج شود،
+کوبرنتیز آن را _اختلال غیرداوطلبانه_ می‌نامد.
 
-برای اطلاعات بیشتر، [اختلال‌ها](/docs/concepts/workloads/pods/disruptions/) را ببینید.
+برای اطلاعات بیشتر، صفحهٔ [اختلال‌ها](/docs/concepts/workloads/pods/disruptions/) را ببینید.

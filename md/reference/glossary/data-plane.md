@@ -1,5 +1,5 @@
 ---
-title: صفحه داده
+title: صفحه داده (Data Plane)
 id: data-plane
 full_link:
 short_description: >

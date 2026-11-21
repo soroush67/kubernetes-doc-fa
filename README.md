@@ -102,26 +102,26 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [reference/glossary/disruption.md](md/reference/glossary/disruption.md) — 2026-11-21T08:57:16+03:30
+- [reference/glossary/docker.md](md/reference/glossary/docker.md) — 2026-11-21T08:57:11+03:30
+- [reference/glossary/deviceclass.md](md/reference/glossary/deviceclass.md) — 2026-11-21T08:57:04+03:30
+- [reference/glossary/device-plugin.md](md/reference/glossary/device-plugin.md) — 2026-11-21T08:56:58+03:30
+- [reference/glossary/device.md](md/reference/glossary/device.md) — 2026-11-21T08:56:58+03:30
+- [reference/glossary/developer.md](md/reference/glossary/developer.md) — 2026-11-21T08:56:52+03:30
+- [reference/glossary/deployment.md](md/reference/glossary/deployment.md) — 2026-11-21T08:56:51+03:30
+- [reference/glossary/daemonset.md](md/reference/glossary/daemonset.md) — 2026-11-21T08:56:46+03:30
+- [reference/glossary/data-plane.md](md/reference/glossary/data-plane.md) — 2026-11-21T08:56:45+03:30
+- [reference/glossary/customresourcedefinition.md](md/reference/glossary/customresourcedefinition.md) — 2026-11-21T08:56:41+03:30
+- [reference/glossary/csi.md](md/reference/glossary/csi.md) — 2026-11-21T08:56:38+03:30
+- [reference/glossary/cronjob.md](md/reference/glossary/cronjob.md) — 2026-11-21T08:56:32+03:30
+- [reference/glossary/cri.md](md/reference/glossary/cri.md) — 2026-11-21T08:56:31+03:30
+- [reference/glossary/cri-o.md](md/reference/glossary/cri-o.md) — 2026-11-21T08:56:27+03:30
+- [reference/glossary/control-plane.md](md/reference/glossary/control-plane.md) — 2026-11-21T08:56:17+03:30
 - [reference/glossary/controller.md](md/reference/glossary/controller.md) — 2026-11-21T08:56:15+03:30
 - [reference/glossary/contributor.md](md/reference/glossary/contributor.md) — 2026-11-21T08:56:07+03:30
 - [reference/glossary/containerd.md](md/reference/glossary/containerd.md) — 2026-11-21T08:56:06+03:30
 - [reference/glossary/container.md](md/reference/glossary/container.md) — 2026-11-21T08:55:59+03:30
 - [reference/glossary/container-runtime.md](md/reference/glossary/container-runtime.md) — 2026-11-21T08:55:57+03:30
-- [reference/glossary/container-lifecycle-hooks.md](md/reference/glossary/container-lifecycle-hooks.md) — 2026-11-21T08:55:53+03:30
-- [reference/glossary/container-env-variables.md](md/reference/glossary/container-env-variables.md) — 2026-11-21T08:55:52+03:30
-- [reference/glossary/condition.md](md/reference/glossary/condition.md) — 2026-11-21T08:55:47+03:30
-- [reference/glossary/configmap.md](md/reference/glossary/configmap.md) — 2026-11-21T08:55:46+03:30
-- [reference/glossary/code-contributor.md](md/reference/glossary/code-contributor.md) — 2026-11-21T08:55:39+03:30
-- [reference/glossary/cni.md](md/reference/glossary/cni.md) — 2026-11-21T08:55:38+03:30
-- [reference/glossary/cncf.md](md/reference/glossary/cncf.md) — 2026-11-21T08:55:34+03:30
-- [reference/glossary/cluster.md](md/reference/glossary/cluster.md) — 2026-11-21T08:55:33+03:30
-- [reference/glossary/cluster-operator.md](md/reference/glossary/cluster-operator.md) — 2026-11-21T08:55:24+03:30
-- [reference/glossary/cluster-operations.md](md/reference/glossary/cluster-operations.md) — 2026-11-21T08:55:19+03:30
-- [reference/glossary/cluster-infrastructure.md](md/reference/glossary/cluster-infrastructure.md) — 2026-11-21T08:55:17+03:30
-- [reference/glossary/cloud-provider.md](md/reference/glossary/cloud-provider.md) — 2026-11-21T08:55:13+03:30
-- [reference/glossary/cluster-architect.md](md/reference/glossary/cluster-architect.md) — 2026-11-21T08:55:12+03:30
-- [reference/glossary/cloud-controller-manager.md](md/reference/glossary/cloud-controller-manager.md) — 2026-11-21T08:55:08+03:30
-- [reference/glossary/cla.md](md/reference/glossary/cla.md) — 2026-11-21T08:55:04+03:30
 
 </div>
 

@@ -3,21 +3,16 @@ title: CRI-O
 id: cri-o
 full_link: https://cri-o.io/#what-is-cri-o
 short_description: >
-  یک container runtime سبک‌وزن که به‌طور ویژه برای کوبرنتیز ساخته شده است
+  یک محیط اجرای کانتینر سبک که به‌طور ویژه برای کوبرنتیز طراحی شده است
 
 aka:
 tags:
 - tool
 ---
-ابزاری که به شما امکان می‌دهد container runtimeهای سازگار با OCI را با CRI کوبرنتیز به کار بگیرید.
+ابزاری که امکان استفاده از محیط‌های اجرای کانتینر سازگار با OCI را همراه با CRI کوبرنتیز فراهم می‌کند.
 
 <!--more-->
 
-CRI-O پیاده‌سازی‌ای از {{< glossary_tooltip term_id="cri" >}} است
-که امکان استفاده از runtimeهای {{< glossary_tooltip text="کانتینر" term_id="container" >}}
-سازگار با [مشخصات runtime](https://www.github.com/opencontainers/runtime-spec)
-پروژه Open Container Initiative (OCI) را فراهم می‌کند.
+پروژهٔ CRI-O پیاده‌سازی‌ای از {{< glossary_tooltip term_id="cri" >}} است و امکان استفاده از محیط‌های اجرای {{< glossary_tooltip text="کانتینر" term_id="container" >}} را فراهم می‌کند که با [مشخصات محیط اجرا](https://www.github.com/opencontainers/runtime-spec)ی ابتکار کانتینر باز (Open Container Initiative یا OCI) سازگار هستند.
 
-استقرار CRI-O به کوبرنتیز اجازه می‌دهد از هر runtime سازگار با OCI به‌عنوان container
-runtime برای اجرای {{< glossary_tooltip text="Podها" term_id="pod" >}} استفاده کند و
-ایمیج‌های کانتینر OCI را از registryهای راه‌دور دریافت کند.
+با استقرار CRI-O، کوبرنتیز می‌تواند هر محیط اجرای سازگار با OCI را به‌عنوان محیط اجرای کانتینر برای اجرای {{< glossary_tooltip text="پادها" term_id="pod" >}} به کار گیرد و ایمیج‌های کانتینر OCI را از رجیستری‌های راه دور دریافت کند.
