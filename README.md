@@ -102,26 +102,26 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [reference/glossary/managed-service.md](md/reference/glossary/managed-service.md) — 2026-11-21T09:00:16+03:30
+- [reference/glossary/logging.md](md/reference/glossary/logging.md) — 2026-11-21T09:00:15+03:30
+- [reference/glossary/label.md](md/reference/glossary/label.md) — 2026-11-21T09:00:08+03:30
+- [reference/glossary/limitrange.md](md/reference/glossary/limitrange.md) — 2026-11-21T09:00:07+03:30
+- [reference/glossary/kubernetes-api.md](md/reference/glossary/kubernetes-api.md) — 2026-11-21T09:00:01+03:30
+- [reference/glossary/kubelet.md](md/reference/glossary/kubelet.md) — 2026-11-21T09:00:00+03:30
+- [reference/glossary/kubectl.md](md/reference/glossary/kubectl.md) — 2026-11-21T08:59:54+03:30
+- [reference/glossary/kubeadm.md](md/reference/glossary/kubeadm.md) — 2026-11-21T08:59:51+03:30
+- [reference/glossary/kube-proxy.md](md/reference/glossary/kube-proxy.md) — 2026-11-21T08:59:49+03:30
+- [reference/glossary/kube-scheduler.md](md/reference/glossary/kube-scheduler.md) — 2026-11-21T08:59:46+03:30
+- [reference/glossary/kube-controller-manager.md](md/reference/glossary/kube-controller-manager.md) — 2026-11-21T08:59:40+03:30
+- [reference/glossary/kube-apiserver.md](md/reference/glossary/kube-apiserver.md) — 2026-11-21T08:59:36+03:30
+- [reference/glossary/kops.md](md/reference/glossary/kops.md) — 2026-11-21T08:59:31+03:30
+- [reference/glossary/jwt.md](md/reference/glossary/jwt.md) — 2026-11-21T08:59:26+03:30
+- [reference/glossary/job.md](md/reference/glossary/job.md) — 2026-11-21T08:59:19+03:30
 - [reference/glossary/init-container.md](md/reference/glossary/init-container.md) — 2026-11-21T08:59:13+03:30
 - [reference/glossary/istio.md](md/reference/glossary/istio.md) — 2026-11-21T08:59:13+03:30
 - [reference/glossary/infrastructure-resource.md](md/reference/glossary/infrastructure-resource.md) — 2026-11-21T08:59:06+03:30
 - [reference/glossary/ingress.md](md/reference/glossary/ingress.md) — 2026-11-21T08:59:06+03:30
 - [reference/glossary/immutable-infrastructure.md](md/reference/glossary/immutable-infrastructure.md) — 2026-11-21T08:58:58+03:30
-- [reference/glossary/index.md](md/reference/glossary/index.md) — 2026-11-21T08:58:55+03:30
-- [reference/glossary/image.md](md/reference/glossary/image.md) — 2026-11-21T08:58:52+03:30
-- [reference/glossary/host-aliases.md](md/reference/glossary/host-aliases.md) — 2026-11-21T08:58:48+03:30
-- [reference/glossary/horizontal-pod-autoscaler.md](md/reference/glossary/horizontal-pod-autoscaler.md) — 2026-11-21T08:58:45+03:30
-- [reference/glossary/helm-chart.md](md/reference/glossary/helm-chart.md) — 2026-11-21T08:58:42+03:30
-- [reference/glossary/group-version-resource.md](md/reference/glossary/group-version-resource.md) — 2026-11-21T08:58:39+03:30
-- [reference/glossary/gateway.md](md/reference/glossary/gateway.md) — 2026-11-21T08:58:36+03:30
-- [reference/glossary/garbage-collection.md](md/reference/glossary/garbage-collection.md) — 2026-11-21T08:58:33+03:30
-- [reference/glossary/flexvolume.md](md/reference/glossary/flexvolume.md) — 2026-11-21T08:58:30+03:30
-- [reference/glossary/finalizer.md](md/reference/glossary/finalizer.md) — 2026-11-21T08:58:20+03:30
-- [reference/glossary/feature-gates.md](md/reference/glossary/feature-gates.md) — 2026-11-21T08:58:15+03:30
-- [reference/glossary/extensions.md](md/reference/glossary/extensions.md) — 2026-11-21T08:58:10+03:30
-- [reference/glossary/eviction.md](md/reference/glossary/eviction.md) — 2026-11-21T08:58:08+03:30
-- [reference/glossary/etcd.md](md/reference/glossary/etcd.md) — 2026-11-21T08:58:04+03:30
-- [reference/glossary/event.md](md/reference/glossary/event.md) — 2026-11-21T08:58:03+03:30
 
 </div>
 

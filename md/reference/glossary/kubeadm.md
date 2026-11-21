@@ -14,4 +14,4 @@ tags:
 
 <!--more--> 
 
-می‌توانید از kubeadm برای نصب هم control plane و هم مؤلفه‌های {{< glossary_tooltip text="نود کارگر" term_id="node" >}} استفاده کنید.
+با ابزار kubeadm می‌توانید هم مؤلفه‌های control plane و هم مؤلفه‌های {{< glossary_tooltip text="نود کارگر" term_id="node" >}} را نصب کنید.
