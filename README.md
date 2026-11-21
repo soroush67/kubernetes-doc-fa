@@ -102,26 +102,26 @@ cd kubernetes-doc-fa
 
 ## آخرین صفحات ترجمه‌شده
 
+- [reference/glossary/feature-gates.md](md/reference/glossary/feature-gates.md) — 2026-11-21T08:58:15+03:30
+- [reference/glossary/extensions.md](md/reference/glossary/extensions.md) — 2026-11-21T08:58:10+03:30
+- [reference/glossary/eviction.md](md/reference/glossary/eviction.md) — 2026-11-21T08:58:08+03:30
+- [reference/glossary/etcd.md](md/reference/glossary/etcd.md) — 2026-11-21T08:58:04+03:30
+- [reference/glossary/event.md](md/reference/glossary/event.md) — 2026-11-21T08:58:03+03:30
+- [reference/glossary/ephemeral-container.md](md/reference/glossary/ephemeral-container.md) — 2026-11-21T08:57:56+03:30
+- [reference/glossary/endpoint.md](md/reference/glossary/endpoint.md) — 2026-11-21T08:57:55+03:30
+- [reference/glossary/dynamic-volume-provisioning.md](md/reference/glossary/dynamic-volume-provisioning.md) — 2026-11-21T08:57:47+03:30
+- [reference/glossary/endpoint-slice.md](md/reference/glossary/endpoint-slice.md) — 2026-11-21T08:57:47+03:30
+- [reference/glossary/drain.md](md/reference/glossary/drain.md) — 2026-11-21T08:57:40+03:30
+- [reference/glossary/duration.md](md/reference/glossary/duration.md) — 2026-11-21T08:57:40+03:30
+- [reference/glossary/downward-api.md](md/reference/glossary/downward-api.md) — 2026-11-21T08:57:33+03:30
+- [reference/glossary/dra.md](md/reference/glossary/dra.md) — 2026-11-21T08:57:32+03:30
+- [reference/glossary/downstream.md](md/reference/glossary/downstream.md) — 2026-11-21T08:57:26+03:30
+- [reference/glossary/dockershim.md](md/reference/glossary/dockershim.md) — 2026-11-21T08:57:19+03:30
 - [reference/glossary/disruption.md](md/reference/glossary/disruption.md) — 2026-11-21T08:57:16+03:30
 - [reference/glossary/docker.md](md/reference/glossary/docker.md) — 2026-11-21T08:57:11+03:30
 - [reference/glossary/deviceclass.md](md/reference/glossary/deviceclass.md) — 2026-11-21T08:57:04+03:30
 - [reference/glossary/device-plugin.md](md/reference/glossary/device-plugin.md) — 2026-11-21T08:56:58+03:30
 - [reference/glossary/device.md](md/reference/glossary/device.md) — 2026-11-21T08:56:58+03:30
-- [reference/glossary/developer.md](md/reference/glossary/developer.md) — 2026-11-21T08:56:52+03:30
-- [reference/glossary/deployment.md](md/reference/glossary/deployment.md) — 2026-11-21T08:56:51+03:30
-- [reference/glossary/daemonset.md](md/reference/glossary/daemonset.md) — 2026-11-21T08:56:46+03:30
-- [reference/glossary/data-plane.md](md/reference/glossary/data-plane.md) — 2026-11-21T08:56:45+03:30
-- [reference/glossary/customresourcedefinition.md](md/reference/glossary/customresourcedefinition.md) — 2026-11-21T08:56:41+03:30
-- [reference/glossary/csi.md](md/reference/glossary/csi.md) — 2026-11-21T08:56:38+03:30
-- [reference/glossary/cronjob.md](md/reference/glossary/cronjob.md) — 2026-11-21T08:56:32+03:30
-- [reference/glossary/cri.md](md/reference/glossary/cri.md) — 2026-11-21T08:56:31+03:30
-- [reference/glossary/cri-o.md](md/reference/glossary/cri-o.md) — 2026-11-21T08:56:27+03:30
-- [reference/glossary/control-plane.md](md/reference/glossary/control-plane.md) — 2026-11-21T08:56:17+03:30
-- [reference/glossary/controller.md](md/reference/glossary/controller.md) — 2026-11-21T08:56:15+03:30
-- [reference/glossary/contributor.md](md/reference/glossary/contributor.md) — 2026-11-21T08:56:07+03:30
-- [reference/glossary/containerd.md](md/reference/glossary/containerd.md) — 2026-11-21T08:56:06+03:30
-- [reference/glossary/container.md](md/reference/glossary/container.md) — 2026-11-21T08:55:59+03:30
-- [reference/glossary/container-runtime.md](md/reference/glossary/container-runtime.md) — 2026-11-21T08:55:57+03:30
 
 </div>
 

@@ -1,17 +1,17 @@
 ---
-title: Eviction
+title: بیرون‌رانی (Eviction)
 id: eviction
 full_link: /docs/concepts/scheduling-eviction/
 short_description: >
-    فرایند خاتمه دادن به یک یا چند Pod روی نودها
+    فرایند خاتمه‌دادن به یک یا چند Pod روی نودها
 aka:
 tags:
 - operation
 ---
 
-اخراج (Eviction) فرایندی است که طی آن یک یا چند Pod روی نودها خاتمه می‌یابد.
+بیرون‌رانی (eviction) فرایند خاتمه‌دادن به یک یا چند Pod روی نودها است.
 
 <!--more-->
-دو نوع اخراج وجود دارد:
-* [اخراج ناشی از فشار روی نود](/docs/concepts/scheduling-eviction/node-pressure-eviction/)
-* [اخراج آغازشده توسط API](/docs/concepts/scheduling-eviction/api-eviction/)
+بیرون‌رانی دو نوع دارد:
+* [بیرون‌رانی ناشی از فشار نود](/docs/concepts/scheduling-eviction/node-pressure-eviction/)
+* [بیرون‌رانی آغازشده از طریق API](/docs/concepts/scheduling-eviction/api-eviction/)
