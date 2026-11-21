@@ -1,18 +1,18 @@
 ---
-title: Node-pressure eviction
+title: تخلیه ناشی از فشار نود
 id: node-pressure-eviction
 full_link: /docs/concepts/scheduling-eviction/node-pressure-eviction/
 short_description: >
-  Node-pressure eviction فرایندی است که در آن kubelet برای بازیابی منابع روی نودها، Podها را به‌صورت پیشگیرانه از کار می‌اندازد.
+  تخلیه ناشی از فشار نود فرایندی است که در آن kubelet به‌طور پیش‌دستانه پادها را با شکست متوقف می‌کند تا منابع نودها را بازپس بگیرد.
 aka:
 - kubelet eviction
 tags:
 - operation
 ---
-Node-pressure eviction فرایندی است که در آن {{<glossary_tooltip term_id="kubelet" text="kubelet">}} برای بازیابی {{< glossary_tooltip text="منابع" term_id="infrastructure-resource" >}} روی نودها، Podها را به‌صورت پیشگیرانه خاتمه می‌دهد.
+تخلیه ناشی از فشار نود (Node-pressure eviction) فرایندی است که در آن {{<glossary_tooltip term_id="kubelet" text="kubelet">}} به‌طور پیش‌دستانه پادها را خاتمه می‌دهد تا {{< glossary_tooltip text="منابع" term_id="infrastructure-resource" >}} نودها را بازپس بگیرد.
 
 <!--more-->
 
-kubelet منابعی مانند CPU، حافظه، فضای دیسک و inodeهای سیستم فایل را روی نودهای کلاستر شما پایش می‌کند. هنگامی که یک یا چند مورد از این منابع به سطوح مصرف مشخصی برسند، kubelet می‌تواند برای بازیابی منابع و جلوگیری از کمبود آن‌ها، یک یا چند Pod را روی نود به‌صورت پیشگیرانه از کار بیندازد.
+مؤلفه kubelet منابعی مانند CPU، حافظه، فضای دیسک و inodeهای فایل‌سیستم را روی نودهای کلاستر شما پایش می‌کند. هنگامی که مصرف یک یا چند مورد از این منابع به سطح مشخصی برسد، kubelet می‌تواند به‌طور پیش‌دستانه یک یا چند پاد را روی آن نود با شکست متوقف کند تا منابع را بازپس بگیرد و از کمبود منابع (starvation) جلوگیری کند.
 
-Node-pressure eviction با [تخلیه آغازشده از طریق API (API-initiated eviction)](/docs/concepts/scheduling-eviction/api-eviction/) یکسان نیست.
+تخلیه ناشی از فشار نود با [تخلیه آغازشده از طریق API](/docs/concepts/scheduling-eviction/api-eviction/) یکسان نیست.
