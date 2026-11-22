@@ -10,42 +10,42 @@ card:
 ---
 
 <!-- overview -->
-{{< glossary_definition prepend="کوبرنتیز یک" term_id="kubectl" length="short" >}}
+{{< glossary_definition prepend="Kubernetes provides a" term_id="kubectl" length="short" >}}
 
 نام این ابزار `kubectl` است.
 
-برای پیکربندی، `kubectl` به دنبال فایلی با نام `config` در مسیر `$HOME/.kube` می‌گردد.
-می‌توانید فایل‌های [kubeconfig](/docs/concepts/configuration/organize-cluster-access-kubeconfig/) دیگری را
-با تنظیم متغیر محیطی `KUBECONFIG` یا با تنظیم فلگ
-[`--kubeconfig`](/docs/concepts/configuration/organize-cluster-access-kubeconfig/) مشخص کنید.
+ابزار `kubectl` برای پیکربندی، به دنبال فایلی به نام `config` در دایرکتوری `$HOME/.kube` می‌گردد.
+می‌توانید با تنظیم متغیر محیطی `KUBECONFIG` یا با استفاده از فلگ
+[`--kubeconfig`](/docs/concepts/configuration/organize-cluster-access-kubeconfig/)، فایل‌های
+[kubeconfig](/docs/concepts/configuration/organize-cluster-access-kubeconfig/) دیگری را مشخص کنید.
 
-این مرور کلی، نحو (syntax) دستور `kubectl` را پوشش می‌دهد، عملیات دستورها را توضیح می‌دهد و مثال‌های رایج ارائه می‌کند.
-برای جزئیات هر دستور، شامل تمام فلگ‌ها و زیردستورهای پشتیبانی‌شده، به مستندات مرجع
+این نمای کلی، نحو (syntax) دستورهای `kubectl` را پوشش می‌دهد، عملیات دستورها را شرح می‌دهد و نمونه‌های رایجی ارائه می‌کند.
+برای جزئیات هر دستور، از جمله همهٔ فلگ‌ها و زیردستورهای پشتیبانی‌شده، به مستندات مرجع
 [kubectl](/docs/reference/kubectl/generated/kubectl/) مراجعه کنید.
 
-برای مرور کلی، [ابزار خط فرمان kubectl](/docs/concepts/overview/kubectl/) را ببینید.
+برای مشاهدهٔ نمای کلی، به [ابزار خط فرمان kubectl](/docs/concepts/overview/kubectl/) مراجعه کنید.
 برای دستورالعمل‌های نصب، [نصب kubectl](/docs/tasks/tools/#kubectl) را ببینید؛
-برای یک راهنمای سریع، [برگه تقلب (cheat sheet)](/docs/reference/kubectl/quick-reference/) را ببینید.
-اگر به استفاده از ابزار خط فرمان `docker` عادت دارید،
-[`kubectl` برای کاربران Docker](/docs/reference/kubectl/docker-cli-to-kubectl/) برخی دستورهای معادل در کوبرنتیز را توضیح می‌دهد.
+و برای راهنمای سریع، به [برگهٔ تقلب](/docs/reference/kubectl/quick-reference/) مراجعه کنید.
+اگر به استفاده از ابزار خط فرمان `docker` عادت دارید، صفحهٔ
+[`kubectl` برای کاربران Docker](/docs/reference/kubectl/docker-cli-to-kubectl/) برخی از دستورهای معادل در کوبرنتیز را توضیح می‌دهد.
 
 <!-- body -->
 
-## نحو (Syntax) {#syntax}
+## نحو دستورها
 
-برای اجرای دستورهای `kubectl` از پنجره ترمینال خود، از نحو زیر استفاده کنید:
+برای اجرای دستورهای `kubectl` از پنجرهٔ ترمینال خود، از نحو زیر استفاده کنید:
 
 ```shell
 kubectl [command] [TYPE] [NAME] [flags]
 ```
 
-که در آن `command`، `TYPE`، `NAME` و `flags` عبارت‌اند از:
+در این نحو، `command`، `TYPE`، `NAME` و `flags` به این معنا هستند:
 
-* `command`: عملیاتی را که می‌خواهید روی یک یا چند منبع انجام دهید مشخص می‌کند،
-  برای مثال `create`، `get`، `describe`، `delete`.
+* `command`: عملیاتی را مشخص می‌کند که می‌خواهید روی یک یا چند منبع انجام دهید؛
+  برای مثال `create`، `get`، `describe` و `delete`.
 
-* `TYPE`: [نوع منبع](#resource-types) را مشخص می‌کند. نوع‌های منبع به حروف بزرگ و کوچک حساس نیستند و
-  می‌توانید شکل مفرد، جمع یا مخفف آن‌ها را به کار ببرید.
+* `TYPE`: [نوع منبع](#resource-types) را مشخص می‌کند. انواع منابع به بزرگی و کوچکی حروف حساس نیستند و
+  می‌توانید شکل مفرد، جمع یا کوتاه‌شدهٔ آن‌ها را به کار ببرید.
   برای مثال، دستورهای زیر خروجی یکسانی تولید می‌کنند:
 
   ```shell
@@ -54,136 +54,135 @@ kubectl [command] [TYPE] [NAME] [flags]
   kubectl get po pod1
   ```
 
-* `NAME`: نام منبع را مشخص می‌کند. نام‌ها به حروف بزرگ و کوچک حساس هستند. اگر نام حذف شود،
-  جزئیات تمام منابع نمایش داده می‌شود، برای مثال `kubectl get pods`.
+* `NAME`: نام منبع را مشخص می‌کند. نام‌ها به بزرگی و کوچکی حروف حساس هستند. اگر نام را ذکر نکنید،
+  جزئیات همهٔ منابع نمایش داده می‌شود؛ برای مثال `kubectl get pods`.
 
-  هنگام انجام یک عملیات روی چند منبع، می‌توانید هر منبع را با
-  نوع و نام آن مشخص کنید یا یک یا چند فایل را مشخص نمایید:
+  هنگام انجام عملیات روی چند منبع، می‌توانید هر منبع را با نوع و نام آن مشخص کنید
+  یا یک یا چند فایل را تعیین کنید:
 
   * برای مشخص کردن منابع با نوع و نام:
 
-    * برای گروه‌بندی منابع در صورتی که همگی از یک نوع باشند:  `TYPE1 name1 name2 name<#>`.<br/>
+    * برای گروه‌بندی منابعی که همگی از یک نوع هستند:  `TYPE1 name1 name2 name<#>`.<br/>
       مثال: `kubectl get pod example-pod1 example-pod2`
 
-    * برای مشخص کردن جداگانه چند نوع منبع:  `TYPE1/name1 TYPE1/name2 TYPE2/name3 TYPE<#>/name<#>`.<br/>
+    * برای مشخص کردن جداگانهٔ چند نوع منبع:  `TYPE1/name1 TYPE1/name2 TYPE2/name3 TYPE<#>/name<#>`.<br/>
       مثال: `kubectl get pod/example-pod1 replicationcontroller/example-rc1`
 
   * برای مشخص کردن منابع با یک یا چند فایل:  `-f file1 -f file2 -f file<#>`
 
-    * به جای JSON از YAML استفاده کنید،
+    * به‌جای JSON از YAML استفاده کنید،
       زیرا YAML معمولاً کاربرپسندتر است، به‌ویژه برای فایل‌های پیکربندی.<br/>
       مثال: `kubectl get -f ./pod.yaml`
 
-* `flags`: فلگ‌های اختیاری را مشخص می‌کند. برای مثال، می‌توانید از فلگ‌های `-s` یا `--server`
-  برای مشخص کردن نشانی و پورت سرور API کوبرنتیز استفاده کنید.<br/>
+* `flags`: فلگ‌های اختیاری را مشخص می‌کند. برای مثال، می‌توانید با فلگ‌های `-s` یا `--server`
+  نشانی و پورت سرور API کوبرنتیز را مشخص کنید.<br/>
 
 {{< caution >}}
-فلگ‌هایی که از خط فرمان مشخص می‌کنید، مقادیر پیش‌فرض و هر متغیر محیطی متناظر را بازنویسی (override) می‌کنند.
+فلگ‌هایی که در خط فرمان مشخص می‌کنید، مقادیر پیش‌فرض و هر متغیر محیطی متناظر را بازنویسی می‌کنند.
 {{< /caution >}}
 
-اگر به کمک نیاز دارید، دستور `kubectl help` را در پنجره ترمینال اجرا کنید.
+اگر به راهنمایی نیاز دارید، دستور `kubectl help` را در پنجرهٔ ترمینال اجرا کنید.
 
-## احراز هویت درون کلاستر و بازنویسی فضای نام {#in-cluster-authentication-and-namespace-overrides}
+## احراز هویت درون کلاستر و بازنویسی فضای نام
 
-به‌طور پیش‌فرض `kubectl` ابتدا تشخیص می‌دهد که آیا درون یک Pod و در نتیجه درون یک کلاستر در حال اجراست یا خیر.
-این کار را با بررسی متغیرهای محیطی `KUBERNETES_SERVICE_HOST` و `KUBERNETES_SERVICE_PORT`
-و وجود یک فایل توکن service account در مسیر `/var/run/secrets/kubernetes.io/serviceaccount/token` آغاز می‌کند.
-اگر هر سه مورد یافت شوند، فرض بر احراز هویت درون کلاستر است.
+ابزار `kubectl` به‌طور پیش‌فرض ابتدا بررسی می‌کند که آیا درون یک پاد، و در نتیجه درون یک کلاستر، اجرا می‌شود یا نه.
+این ابزار کار را با بررسی متغیرهای محیطی `KUBERNETES_SERVICE_HOST` و `KUBERNETES_SERVICE_PORT`
+و وجود فایل توکن حساب سرویس در مسیر `/var/run/secrets/kubernetes.io/serviceaccount/token` آغاز می‌کند.
+اگر هر سه مورد یافت شوند، فرض بر احراز هویت درون کلاستر گذاشته می‌شود.
 
-برای حفظ سازگاری با نسخه‌های قبلی، اگر متغیر محیطی `POD_NAMESPACE` در هنگام
-احراز هویت درون کلاستر تنظیم شده باشد، فضای نام پیش‌فرض برگرفته از توکن
-service account را بازنویسی می‌کند. هر مانیفست یا ابزاری که به فضای نام پیش‌فرض متکی باشد از این موضوع تأثیر می‌پذیرد.
+برای حفظ سازگاری با نسخه‌های قبلی، اگر متغیر محیطی `POD_NAMESPACE` هنگام احراز هویت
+درون کلاستر تنظیم شده باشد، فضای نام (namespace) پیش‌فرضِ برگرفته از توکن حساب سرویس را
+بازنویسی می‌کند. این موضوع بر همهٔ مانیفست‌ها یا ابزارهایی که به فضای نام پیش‌فرض متکی هستند اثر می‌گذارد.
 
 **متغیر محیطی `POD_NAMESPACE`**
 
-اگر متغیر محیطی `POD_NAMESPACE` تنظیم شده باشد، عملیات خط فرمان روی منابع دارای فضای نام
-به‌طور پیش‌فرض از مقدار این متغیر استفاده می‌کنند. برای مثال، اگر مقدار متغیر `seattle` باشد،
-دستور `kubectl get pods`، Podهای فضای نام `seattle` را برمی‌گرداند. دلیل این است که Podها
-منبعی دارای فضای نام هستند و در دستور هیچ فضای نامی مشخص نشده است. برای تعیین اینکه یک منبع دارای فضای نام است یا خیر،
-خروجی `kubectl api-resources` را بررسی کنید.
+اگر متغیر محیطی `POD_NAMESPACE` تنظیم شده باشد، عملیات خط فرمان روی منابع وابسته به فضای نام
+به‌طور پیش‌فرض از مقدار این متغیر استفاده می‌کنند. برای مثال، اگر مقدار این متغیر `seattle` باشد،
+دستور `kubectl get pods` پادهای موجود در فضای نام `seattle` را برمی‌گرداند. دلیل این است که پادها
+منبعی وابسته به فضای نام هستند و در دستور هیچ فضای نامی مشخص نشده است. برای اینکه بدانید
+یک منبع وابسته به فضای نام است یا نه، خروجی `kubectl api-resources` را بررسی کنید.
 
-استفاده صریح از `--namespace <value>` این رفتار را بازنویسی می‌کند.
+استفادهٔ صریح از `--namespace <value>` این رفتار را بازنویسی می‌کند.
 
-**نحوه برخورد kubectl با توکن‌های ServiceAccount**
+**نحوهٔ برخورد kubectl با توکن‌های ServiceAccount**
 
 اگر:
 
-* یک فایل توکن service account کوبرنتیز در مسیر
-  `/var/run/secrets/kubernetes.io/serviceaccount/token` mount شده باشد، و
+* فایل توکن حساب سرویس کوبرنتیز در مسیر
+  `/var/run/secrets/kubernetes.io/serviceaccount/token` مانت شده باشد، و
 * متغیر محیطی `KUBERNETES_SERVICE_HOST` تنظیم شده باشد، و
 * متغیر محیطی `KUBERNETES_SERVICE_PORT` تنظیم شده باشد، و
-* در خط فرمان kubectl صراحتاً فضای نامی مشخص نکرده باشید،
+* در خط فرمان kubectl فضای نامی را به‌صراحت مشخص نکرده باشید،
 
-آنگاه kubectl فرض می‌کند که درون کلاستر شما در حال اجراست. ابزار kubectl
-فضای نام آن ServiceAccount را (که با فضای نام Pod یکسان است) پیدا می‌کند
-و روی آن فضای نام عمل می‌کند. این با آنچه خارج از یک
-کلاستر رخ می‌دهد متفاوت است؛ وقتی kubectl خارج از کلاستر اجرا می‌شود و فضای نامی مشخص نمی‌کنید،
-دستور kubectl روی فضای نام تنظیم‌شده برای context فعلی در
-پیکربندی کلاینت شما عمل می‌کند. برای تغییر فضای نام پیش‌فرض kubectl می‌توانید از
+آنگاه kubectl فرض می‌کند که درون کلاستر شما اجرا می‌شود. ابزار kubectl فضای نام آن
+ServiceAccount را (که همان فضای نام Pod است) پیدا می‌کند و روی همان فضای نام عمل می‌کند.
+این رفتار با آنچه بیرون از کلاستر رخ می‌دهد متفاوت است؛ وقتی kubectl بیرون از کلاستر اجرا می‌شود
+و فضای نامی مشخص نکرده‌اید، دستور kubectl روی فضای نامی عمل می‌کند که برای context فعلی
+در پیکربندی کلاینت شما تنظیم شده است. برای تغییر فضای نام پیش‌فرض kubectl می‌توانید از
 دستور زیر استفاده کنید:
 
 ```shell
 kubectl config set-context --current --namespace=<namespace-name>
 ```
 
-## عملیات {#operations}
+## عملیات
 
-جدول زیر شامل توضیحات کوتاه و نحو کلی تمام عملیات `kubectl` است:
+جدول زیر شامل توضیحات کوتاه و نحو کلی همهٔ عملیات `kubectl` است:
 
-Operation       | Syntax    |       Description
+عملیات       | نحو    |       توضیح
 -------------------- | -------------------- | --------------------
 `alpha`    | `kubectl alpha SUBCOMMAND [flags]` | دستورهای موجود مربوط به قابلیت‌های آلفا را فهرست می‌کند؛ این قابلیت‌ها به‌طور پیش‌فرض در کلاسترهای کوبرنتیز فعال نیستند.
 `annotate`    | <code>kubectl annotate (-f FILENAME &#124; TYPE NAME &#124; TYPE/NAME) KEY_1=VAL_1 ... KEY_N=VAL_N [--overwrite] [--all] [--resource-version=version] [flags]</code> | حاشیه‌نویسی‌های (annotation) یک یا چند منبع را اضافه یا به‌روزرسانی می‌کند.
 `api-resources`    | `kubectl api-resources [flags]` | منابع API موجود را فهرست می‌کند.
 `api-versions`    | `kubectl api-versions [flags]` | نسخه‌های API موجود را فهرست می‌کند.
-`apply`            | `kubectl apply -f FILENAME [flags]`| یک تغییر پیکربندی را از یک فایل یا stdin روی یک منبع اعمال می‌کند.
-`attach`        | `kubectl attach POD -c CONTAINER [-i] [-t] [flags]` | به یک کانتینر در حال اجرا متصل می‌شود تا جریان خروجی را مشاهده کند یا با کانتینر (stdin) تعامل داشته باشد.
-`auth`    | `kubectl auth [flags] [options]` | مجوزدهی (authorization) را بررسی می‌کند.
-`autoscale`    | <code>kubectl autoscale (-f FILENAME &#124; TYPE NAME &#124; TYPE/NAME) [--min=MINPODS] --max=MAXPODS [--cpu=CPU] [flags]</code> | مجموعه Podهایی را که توسط یک replication controller مدیریت می‌شوند به‌طور خودکار مقیاس می‌دهد.
-`certificate`    | `kubectl certificate SUBCOMMAND [options]` | منابع گواهی (certificate) را تغییر می‌دهد.
-`cluster-info`    | `kubectl cluster-info [flags]` | اطلاعات نقطه پایانی (endpoint) مربوط به master و سرویس‌های کلاستر را نمایش می‌دهد.
-`completion`    | `kubectl completion SHELL [options]` | کد تکمیل خودکار shell را برای shell مشخص‌شده (bash یا zsh) خروجی می‌دهد.
-`config`        | `kubectl config SUBCOMMAND [flags]` | فایل‌های kubeconfig را تغییر می‌دهد. برای جزئیات، زیردستورهای مربوطه را ببینید.
-`convert`    | `kubectl convert -f FILENAME [options]` | فایل‌های پیکربندی را بین نسخه‌های مختلف API تبدیل می‌کند. هر دو قالب YAML و JSON پذیرفته می‌شوند. توجه - نیازمند نصب افزونه `kubectl-convert` است.
-`cordon`    | `kubectl cordon NODE [options]` | نود را به‌عنوان غیرقابل زمان‌بندی علامت‌گذاری می‌کند.
-`cp`    | `kubectl cp <file-spec-src> <file-spec-dest> [options]` | فایل‌ها و دایرکتوری‌ها را از/به کانتینرها کپی می‌کند.
+`apply`            | `kubectl apply -f FILENAME [flags]`| تغییری در پیکربندی را از یک فایل یا stdin روی یک منبع اعمال می‌کند.
+`attach`        | `kubectl attach POD -c CONTAINER [-i] [-t] [flags]` | به یک کانتینر در حال اجرا متصل می‌شود تا جریان خروجی آن را ببینید یا با کانتینر (از طریق stdin) تعامل کنید.
+`auth`    | `kubectl auth [flags] [options]` | مجوزدهی را بررسی می‌کند.
+`autoscale`    | <code>kubectl autoscale (-f FILENAME &#124; TYPE NAME &#124; TYPE/NAME) [--min=MINPODS] --max=MAXPODS [--cpu=CPU] [flags]</code> | مجموعه پادهایی را که یک replication controller مدیریت می‌کند به‌طور خودکار مقیاس‌دهی می‌کند.
+`certificate`    | `kubectl certificate SUBCOMMAND [options]` | منابع گواهی را تغییر می‌دهد.
+`cluster-info`    | `kubectl cluster-info [flags]` | اطلاعات endpoint مربوط به master و سرویس‌های کلاستر را نمایش می‌دهد.
+`completion`    | `kubectl completion SHELL [options]` | کد تکمیل خودکار پوسته را برای پوستهٔ مشخص‌شده (bash یا zsh) خروجی می‌دهد.
+`config`        | `kubectl config SUBCOMMAND [flags]` | فایل‌های kubeconfig را تغییر می‌دهد. برای جزئیات، به هر یک از زیردستورها مراجعه کنید.
+`convert`    | `kubectl convert -f FILENAME [options]` | فایل‌های پیکربندی را بین نسخه‌های مختلف API تبدیل می‌کند. هر دو قالب YAML و JSON پذیرفته می‌شوند. توجه: این دستور به نصب افزونهٔ `kubectl-convert` نیاز دارد.
+`cordon`    | `kubectl cordon NODE [options]` | نود را غیرقابل زمان‌بندی علامت‌گذاری می‌کند.
+`cp`    | `kubectl cp <file-spec-src> <file-spec-dest> [options]` | فایل‌ها و دایرکتوری‌ها را به کانتینرها و از آن‌ها کپی می‌کند.
 `create`        | `kubectl create -f FILENAME [flags]` | یک یا چند منبع را از یک فایل یا stdin ایجاد می‌کند.
-`delete`        | <code>kubectl delete (-f FILENAME &#124; TYPE [NAME &#124; /NAME &#124; -l label &#124; --all]) [flags]</code> | منابع را از یک فایل یا stdin حذف می‌کند، یا با مشخص کردن انتخابگرهای برچسب، نام‌ها، انتخابگرهای منبع یا منابع.
-`describe`    | <code>kubectl describe (-f FILENAME &#124; TYPE [NAME_PREFIX &#124; /NAME &#124; -l label]) [flags]</code> | وضعیت تفصیلی یک یا چند منبع را نمایش می‌دهد.
-`diff`        | `kubectl diff -f FILENAME [flags]`| فایل یا stdin را با پیکربندی زنده مقایسه می‌کند و تفاوت‌ها را نشان می‌دهد.
-`drain`    | `kubectl drain NODE [options]` | نود را برای آماده‌سازی جهت نگهداری تخلیه (drain) می‌کند.
+`delete`        | <code>kubectl delete (-f FILENAME &#124; TYPE [NAME &#124; /NAME &#124; -l label &#124; --all]) [flags]</code> | منابع را از روی یک فایل، stdin، یا با مشخص کردن انتخابگرهای (selector) برچسب، نام‌ها، انتخابگرهای منبع یا خود منابع حذف می‌کند.
+`describe`    | <code>kubectl describe (-f FILENAME &#124; TYPE [NAME_PREFIX &#124; /NAME &#124; -l label]) [flags]</code> | وضعیت جزئی یک یا چند منبع را نمایش می‌دهد.
+`diff`        | `kubectl diff -f FILENAME [flags]`| تفاوت فایل یا stdin را با پیکربندی زنده نشان می‌دهد.
+`drain`    | `kubectl drain NODE [options]` | نود را برای آماده‌سازی جهت نگهداری تخلیه می‌کند.
 `edit`        | <code>kubectl edit (-f FILENAME &#124; TYPE NAME &#124; TYPE/NAME) [flags]</code> | تعریف یک یا چند منبع را روی سرور با استفاده از ویرایشگر پیش‌فرض ویرایش و به‌روزرسانی می‌کند.
-`events`      | `kubectl events` | رویدادها (events) را فهرست می‌کند.
-`exec`        | `kubectl exec POD [-c CONTAINER] [-i] [-t] [flags] [-- COMMAND [args...]]` | یک دستور را روی یک کانتینر در یک Pod اجرا می‌کند.
-`explain`    | `kubectl explain TYPE [--recursive=false] [flags]` | مستندات منابع مختلف را دریافت می‌کند. برای مثال Podها، نودها، سرویس‌ها و غیره.
-`expose`        | <code>kubectl expose (-f FILENAME &#124; TYPE NAME &#124; TYPE/NAME) [--port=port] [--protocol=TCP&#124;UDP] [--target-port=number-or-name] [--name=name] [--external-ip=external-ip-of-service] [--type=type] [flags]</code> | یک replication controller، سرویس یا Pod را به‌صورت یک Service جدید کوبرنتیز در دسترس قرار می‌دهد.
+`events`      | `kubectl events` | رویدادها را فهرست می‌کند.
+`exec`        | `kubectl exec POD [-c CONTAINER] [-i] [-t] [flags] [-- COMMAND [args...]]` | دستوری را در یک کانتینرِ درون پاد اجرا می‌کند.
+`explain`    | `kubectl explain TYPE [--recursive=false] [flags]` | مستندات منابع مختلف، مانند پادها، نودها، سرویس‌ها و غیره را دریافت می‌کند.
+`expose`        | <code>kubectl expose (-f FILENAME &#124; TYPE NAME &#124; TYPE/NAME) [--port=port] [--protocol=TCP&#124;UDP] [--target-port=number-or-name] [--name=name] [--external-ip=external-ip-of-service] [--type=type] [flags]</code> | یک replication controller، سرویس یا پاد را به‌صورت یک سرویس جدید کوبرنتیز در دسترس قرار می‌دهد.
 `get`        | <code>kubectl get (-f FILENAME &#124; TYPE [NAME &#124; /NAME &#124; -l label]) [--watch] [--sort-by=FIELD] [[-o &#124; --output]=OUTPUT_FORMAT] [flags]</code> | یک یا چند منبع را فهرست می‌کند.
-`kustomize`    | `kubectl kustomize <dir> [flags] [options]` | مجموعه‌ای از منابع API را که از دستورالعمل‌های موجود در یک فایل kustomization.yaml تولید شده‌اند فهرست می‌کند. آرگومان باید مسیر دایرکتوری حاوی فایل باشد، یا نشانی یک مخزن git همراه با پسوند مسیر که همان را نسبت به ریشه مخزن مشخص می‌کند.
+`kustomize`    | `kubectl kustomize <dir> [flags] [options]` | مجموعه‌ای از منابع API را که از دستورالعمل‌های یک فایل kustomization.yaml تولید شده‌اند فهرست می‌کند. آرگومان باید مسیر دایرکتوری حاوی این فایل باشد، یا نشانی یک مخزن git همراه با پسوند مسیری که همان دایرکتوری را نسبت به ریشهٔ مخزن مشخص می‌کند.
 `label`        | <code>kubectl label (-f FILENAME &#124; TYPE NAME &#124; TYPE/NAME) KEY_1=VAL_1 ... KEY_N=VAL_N [--overwrite] [--all] [--resource-version=version] [flags]</code> | برچسب‌های یک یا چند منبع را اضافه یا به‌روزرسانی می‌کند.
-`logs`        | `kubectl logs POD [-c CONTAINER] [--follow] [flags]` | لاگ‌های یک کانتینر در یک Pod را چاپ می‌کند.
-`options`    | `kubectl options` | فهرست گزینه‌های سراسری خط فرمان را نمایش می‌دهد که برای تمام دستورها اعمال می‌شوند.
-`patch`        | <code>kubectl patch (-f FILENAME &#124; TYPE NAME &#124; TYPE/NAME) --patch PATCH [flags]</code> | یک یا چند فیلد از یک منبع را با استفاده از فرایند strategic merge patch به‌روزرسانی می‌کند.
-`plugin`    | `kubectl plugin [flags] [options]` | ابزارهایی برای تعامل با افزونه‌ها (plugins) فراهم می‌کند.
-`port-forward`    | `kubectl port-forward POD [LOCAL_PORT:]REMOTE_PORT [...[LOCAL_PORT_N:]REMOTE_PORT_N] [flags]` | یک یا چند پورت محلی را به یک Pod هدایت (forward) می‌کند.
+`logs`        | `kubectl logs POD [-c CONTAINER] [--follow] [flags]` | لاگ‌های یک کانتینرِ درون پاد را چاپ می‌کند.
+`options`    | `kubectl options` | فهرست گزینه‌های سراسری خط فرمان را نمایش می‌دهد که برای همهٔ دستورها اعمال می‌شوند.
+`patch`        | <code>kubectl patch (-f FILENAME &#124; TYPE NAME &#124; TYPE/NAME) --patch PATCH [flags]</code> | یک یا چند فیلد از یک منبع را با فرایند strategic merge patch به‌روزرسانی می‌کند.
+`plugin`    | `kubectl plugin [flags] [options]` | ابزارهایی برای تعامل با افزونه‌ها فراهم می‌کند.
+`port-forward`    | `kubectl port-forward POD [LOCAL_PORT:]REMOTE_PORT [...[LOCAL_PORT_N:]REMOTE_PORT_N] [flags]` | یک یا چند پورت محلی را به یک پاد هدایت می‌کند.
 `proxy`        | `kubectl proxy [--port=PORT] [--www=static-dir] [--www-prefix=prefix] [--api-prefix=prefix] [flags]` | یک پراکسی به سرور API کوبرنتیز اجرا می‌کند.
-`replace`        | `kubectl replace -f FILENAME` | یک منبع را از یک فایل یا stdin جایگزین می‌کند.
-`rollout`    | `kubectl rollout SUBCOMMAND [options]` | عرضه تدریجی (rollout) یک منبع را مدیریت می‌کند. نوع‌های منبع معتبر عبارت‌اند از: deployments، daemonsets و statefulsets.
-`run`        | <code>kubectl run NAME --image=image [--env="key=value"] [--port=port] [--dry-run=server&#124;client&#124;none] [--overrides=inline-json] [flags]</code> | یک ایمیج مشخص‌شده را روی کلاستر اجرا می‌کند.
-`scale`        | <code>kubectl scale (-f FILENAME &#124; TYPE NAME &#124; TYPE/NAME) --replicas=COUNT [--resource-version=version] [--current-replicas=count] [flags]</code> | اندازه replication controller مشخص‌شده را به‌روزرسانی می‌کند.
-`set`    | `kubectl set SUBCOMMAND [options]` | منابع برنامه کاربردی را پیکربندی می‌کند.
+`replace`        | `kubectl replace -f FILENAME` | یک منبع را از روی یک فایل یا stdin جایگزین می‌کند.
+`rollout`    | `kubectl rollout SUBCOMMAND [options]` | انتشار (rollout) یک منبع را مدیریت می‌کند. انواع منبع معتبر عبارت‌اند از: deployments، daemonsets و statefulsets.
+`run`        | <code>kubectl run NAME --image=image [--env="key=value"] [--port=port] [--dry-run=server&#124;client&#124;none] [--overrides=inline-json] [flags]</code> | ایمیج مشخص‌شده را روی کلاستر اجرا می‌کند.
+`scale`        | <code>kubectl scale (-f FILENAME &#124; TYPE NAME &#124; TYPE/NAME) --replicas=COUNT [--resource-version=version] [--current-replicas=count] [flags]</code> | اندازهٔ replication controller مشخص‌شده را به‌روزرسانی می‌کند.
+`set`    | `kubectl set SUBCOMMAND [options]` | منابع برنامه را پیکربندی می‌کند.
 `taint`    | `kubectl taint NODE NAME KEY_1=VAL_1:TAINT_EFFECT_1 ... KEY_N=VAL_N:TAINT_EFFECT_N [options]` | taintهای یک یا چند نود را به‌روزرسانی می‌کند.
-`top`    | <code>kubectl top (POD &#124; NODE) [flags] [options]</code> | میزان مصرف منابع (CPU/حافظه/ذخیره‌سازی) یک Pod یا نود را نمایش می‌دهد.
-`uncordon`    | `kubectl uncordon NODE [options]` | نود را به‌عنوان قابل زمان‌بندی علامت‌گذاری می‌کند.
-`version`        | `kubectl version [--client] [flags]` | نسخه کوبرنتیز در حال اجرا روی کلاینت و سرور را نمایش می‌دهد.
-`wait`    | <code>kubectl wait ([-f FILENAME] &#124; resource.group/resource.name &#124; resource.group [(-l label &#124; --all)]) [--for=delete&#124;--for condition=available] [options]</code> | آزمایشی: منتظر یک شرط مشخص روی یک یا چند منبع می‌ماند.
+`top`    | <code>kubectl top (POD &#124; NODE) [flags] [options]</code> | میزان مصرف منابع (CPU/حافظه/ذخیره‌سازی) پاد یا نود را نمایش می‌دهد.
+`uncordon`    | `kubectl uncordon NODE [options]` | نود را قابل زمان‌بندی علامت‌گذاری می‌کند.
+`version`        | `kubectl version [--client] [flags]` | نسخهٔ کوبرنتیزِ در حال اجرا روی کلاینت و سرور را نمایش می‌دهد.
+`wait`    | <code>kubectl wait ([-f FILENAME] &#124; resource.group/resource.name &#124; resource.group [(-l label &#124; --all)]) [--for=delete&#124;--for condition=available] [options]</code> | آزمایشی: منتظر برقراری یک شرط مشخص روی یک یا چند منبع می‌ماند.
 
-برای کسب اطلاعات بیشتر درباره عملیات دستورها، مستندات مرجع [kubectl](/docs/reference/kubectl/kubectl/) را ببینید.
+برای آشنایی بیشتر با عملیات دستورها، به مستندات مرجع [kubectl](/docs/reference/kubectl/kubectl/) مراجعه کنید.
 
-## انواع منبع {#resource-types}
+## انواع منابع
 
-جدول زیر شامل فهرستی از تمام انواع منبع پشتیبانی‌شده و نام‌های مستعار مخفف آن‌هاست.
+جدول زیر فهرستی از همهٔ انواع منابع پشتیبانی‌شده و نام‌های مستعار کوتاه آن‌ها را نشان می‌دهد.
 
-(این خروجی را می‌توان از `kubectl api-resources` دریافت کرد و در زمان کوبرنتیز 1.25.0 دقیق بود)
+(این خروجی را می‌توان از `kubectl api-resources` به دست آورد و تا نسخهٔ 1.25.0 کوبرنتیز دقیق بوده است.)
 
 | NAME | SHORTNAMES | APIVERSION | NAMESPACED | KIND |
 |---|---|---|---|---|
@@ -244,19 +243,19 @@ Operation       | Syntax    |       Description
 | `storageclasses` | `sc` | storage.k8s.io/v1 | false | StorageClass |
 | `volumeattachments` |  | storage.k8s.io/v1 | false | VolumeAttachment |
 
-## گزینه‌های خروجی {#output-options}
+## گزینه‌های خروجی
 
-از بخش‌های زیر برای کسب اطلاعات درباره نحوه قالب‌بندی یا مرتب‌سازی خروجی
-برخی دستورها استفاده کنید. برای جزئیات اینکه کدام دستورها از گزینه‌های مختلف خروجی پشتیبانی می‌کنند،
-مستندات مرجع [kubectl](/docs/reference/kubectl/kubectl/) را ببینید.
+در بخش‌های زیر می‌توانید با نحوهٔ قالب‌بندی یا مرتب‌سازی خروجی برخی دستورها آشنا شوید.
+برای جزئیات اینکه کدام دستورها از گزینه‌های مختلف خروجی پشتیبانی می‌کنند،
+به مستندات مرجع [kubectl](/docs/reference/kubectl/kubectl/) مراجعه کنید.
 
-### قالب‌بندی خروجی {#formatting-output}
+### قالب‌بندی خروجی
 
-قالب پیش‌فرض خروجی تمام دستورهای `kubectl`، قالب متن ساده قابل‌خواندن برای انسان است.
-برای نمایش جزئیات در پنجره ترمینال با یک قالب مشخص، می‌توانید فلگ `-o`
-یا `--output` را به یک دستور `kubectl` پشتیبانی‌شده اضافه کنید.
+قالب خروجی پیش‌فرض همهٔ دستورهای `kubectl`، قالب متن سادهٔ خوانا برای انسان است.
+برای اینکه جزئیات را در قالبی مشخص در پنجرهٔ ترمینال خود نمایش دهید، می‌توانید یکی از فلگ‌های `-o`
+یا `--output` را به یک دستور پشتیبانی‌شدهٔ `kubectl` اضافه کنید.
 
-#### نحو (Syntax) {#syntax-1}
+#### نحو
 
 ```shell
 kubectl [command] [TYPE] [NAME] -o <output_format>
@@ -264,35 +263,35 @@ kubectl [command] [TYPE] [NAME] -o <output_format>
 
 بسته به عملیات `kubectl`، قالب‌های خروجی زیر پشتیبانی می‌شوند:
 
-Output format | Description
+قالب خروجی | توضیح
 --------------| -----------
-`-o custom-columns=<spec>` | یک جدول را با استفاده از فهرست جداشده با کاما از [ستون‌های سفارشی](#custom-columns) چاپ می‌کند.
-`-o custom-columns-file=<filename>` | یک جدول را با استفاده از قالب [ستون‌های سفارشی](#custom-columns) موجود در فایل `<filename>` چاپ می‌کند.
-`-o json`     | یک آبجکت API با قالب JSON را خروجی می‌دهد.
+`-o custom-columns=<spec>` | جدولی را با استفاده از فهرستی از [ستون‌های سفارشی](#custom-columns) که با کاما از هم جدا شده‌اند چاپ می‌کند.
+`-o custom-columns-file=<filename>` | جدولی را با استفاده از الگوی [ستون‌های سفارشی](#custom-columns) موجود در فایل `<filename>` چاپ می‌کند.
+`-o json`     | یک آبجکت API را در قالب JSON خروجی می‌دهد.
 `-o jsonpath=<template>` | فیلدهای تعریف‌شده در یک عبارت [jsonpath](/docs/reference/kubectl/jsonpath/) را چاپ می‌کند.
-`-o jsonpath-file=<filename>` | فیلدهای تعریف‌شده توسط عبارت [jsonpath](/docs/reference/kubectl/jsonpath/) موجود در فایل `<filename>` را چاپ می‌کند.
-`-o kyaml`    | یک آبجکت API با قالب [KYAML](/docs/reference/encodings/kyaml/) را خروجی می‌دهد.
-`-o name`     | فقط نام منبع را چاپ می‌کند و چیز دیگری چاپ نمی‌کند.
-`-o wide`     | خروجی را با قالب متن ساده همراه با اطلاعات اضافی نمایش می‌دهد. برای Podها، نام نود نیز درج می‌شود.
-`-o yaml`     | یک آبجکت API با قالب YAML را خروجی می‌دهد. KYAML گونه‌ای از YAML مختص کوبرنتیز است و می‌توان آن را به‌عنوان YAML تجزیه (parse) کرد.
+`-o jsonpath-file=<filename>` | فیلدهای تعریف‌شده در عبارت [jsonpath](/docs/reference/kubectl/jsonpath/) موجود در فایل `<filename>` را چاپ می‌کند.
+`-o kyaml`    | یک آبجکت API را در قالب [KYAML](/docs/reference/encodings/kyaml/) خروجی می‌دهد.
+`-o name`     | فقط نام منبع را چاپ می‌کند و هیچ چیز دیگری را نمایش نمی‌دهد.
+`-o wide`     | خروجی را در قالب متن ساده همراه با اطلاعات تکمیلی نمایش می‌دهد. برای پادها، نام نود نیز درج می‌شود.
+`-o yaml`     | یک آبجکت API را در قالب YAML خروجی می‌دهد. KYAML گویشی از YAML مخصوص کوبرنتیز است و می‌توان آن را به‌عنوان YAML تجزیه کرد.
 
-##### مثال {#example}
+##### مثال
 
-در این مثال، دستور زیر جزئیات یک Pod را به‌صورت یک آبجکت با قالب YAML خروجی می‌دهد:
+در این مثال، دستور زیر جزئیات یک پاد را به‌صورت آبجکتی در قالب YAML خروجی می‌دهد:
 
 ```shell
 kubectl get pod web-pod-13je7 -o yaml
 ```
 
 به یاد داشته باشید: برای جزئیات اینکه هر دستور از کدام قالب خروجی پشتیبانی می‌کند،
-مستندات مرجع [kubectl](/docs/reference/kubectl/kubectl/) را ببینید.
+به مستندات مرجع [kubectl](/docs/reference/kubectl/kubectl/) مراجعه کنید.
 
-#### ستون‌های سفارشی {#custom-columns}
+#### ستون‌های سفارشی
 
-برای تعریف ستون‌های سفارشی و خروجی گرفتن فقط از جزئیات موردنظر خود در یک جدول، می‌توانید از گزینه `custom-columns` استفاده کنید.
-می‌توانید ستون‌های سفارشی را به‌صورت درون‌خطی (inline) تعریف کنید یا از یک فایل قالب استفاده کنید: `-o custom-columns=<spec>` یا `-o custom-columns-file=<filename>`.
+برای تعریف ستون‌های سفارشی و نمایش تنها جزئیات موردنظرتان در قالب جدول، می‌توانید از گزینهٔ `custom-columns` استفاده کنید.
+می‌توانید ستون‌های سفارشی را به‌صورت درون‌خطی تعریف کنید یا از یک فایل الگو استفاده کنید: `-o custom-columns=<spec>` یا `-o custom-columns-file=<filename>`.
 
-##### مثال‌ها {#examples}
+##### مثال‌ها
 
 درون‌خطی:
 
@@ -300,37 +299,37 @@ kubectl get pod web-pod-13je7 -o yaml
 kubectl get pods <pod-name> -o custom-columns=NAME:.metadata.name,RSRC:.metadata.resourceVersion
 ```
 
-فایل قالب:
+فایل الگو:
 
 ```shell
 kubectl get pods <pod-name> -o custom-columns-file=template.txt
 ```
 
-که در آن فایل `template.txt` شامل موارد زیر است:
+که در آن فایل `template.txt` شامل محتوای زیر است:
 
 ```
 NAME          RSRC
 metadata.name metadata.resourceVersion
 ```
-نتیجه اجرای هر یک از این دو دستور مشابه زیر است:
+نتیجهٔ اجرای هر یک از این دو دستور مشابه زیر است:
 
 ```
 NAME           RSRC
 submit-queue   610995
 ```
 
-#### ستون‌های سمت سرور {#server-side-columns}
+#### ستون‌های سمت سرور
 
-`kubectl` از دریافت اطلاعات ستون‌های مشخص درباره آبجکت‌ها از سرور پشتیبانی می‌کند.
-این بدان معناست که برای هر منبع مشخص، سرور ستون‌ها و ردیف‌های مرتبط با آن منبع را برمی‌گرداند تا کلاینت آن‌ها را چاپ کند.
-این کار با آنکه سرور جزئیات چاپ را کپسوله می‌کند، امکان خروجی یکدست و قابل‌خواندن برای انسان را در کلاینت‌های مختلفی که روی یک کلاستر استفاده می‌شوند فراهم می‌کند.
+ابزار `kubectl` از دریافت اطلاعات ستون‌های مشخص دربارهٔ آبجکت‌ها از سرور پشتیبانی می‌کند.
+به این معنا که سرور برای هر منبع، ستون‌ها و ردیف‌های مرتبط با آن منبع را برمی‌گرداند تا کلاینت آن‌ها را چاپ کند.
+از آنجا که جزئیات چاپ در سرور کپسوله می‌شود، خروجی خوانا برای انسان در همهٔ کلاینت‌هایی که با یک کلاستر کار می‌کنند یکسان خواهد بود.
 
 این قابلیت به‌طور پیش‌فرض فعال است. برای غیرفعال کردن آن، فلگ
 `--server-print=false` را به دستور `kubectl get` اضافه کنید.
 
-##### مثال‌ها {#examples-1}
+##### مثال‌ها
 
-برای چاپ اطلاعات مربوط به وضعیت یک Pod، از دستوری مانند دستور زیر استفاده کنید:
+برای چاپ اطلاعات مربوط به وضعیت یک پاد، از دستوری مانند دستور زیر استفاده کنید:
 
 ```shell
 kubectl get pods <pod-name> --server-print=false
@@ -343,11 +342,11 @@ NAME       AGE
 pod-name   1m
 ```
 
-### مرتب‌سازی آبجکت‌های فهرست
+### مرتب‌سازی فهرست آبجکت‌ها
 
-برای نمایش آبجکت‌ها به‌صورت یک فهرست مرتب‌شده در پنجرهٔ ترمینال، می‌توانید فلگ `--sort-by` را به یکی از دستورهای پشتیبانی‌شدهٔ `kubectl` اضافه کنید. آبجکت‌های خود را با تعیین هر فیلد عددی یا رشته‌ای توسط فلگ `--sort-by` مرتب کنید. برای تعیین فیلد، از یک عبارت [jsonpath](/docs/reference/kubectl/jsonpath/) استفاده کنید.
+برای نمایش آبجکت‌ها به‌صورت فهرستی مرتب‌شده در پنجرهٔ ترمینال، می‌توانید فلگ `--sort-by` را به یکی از دستورهای پشتیبانی‌شدهٔ `kubectl` اضافه کنید. با مشخص کردن هر فیلد عددی یا رشته‌ای در فلگ `--sort-by`، آبجکت‌ها بر اساس آن فیلد مرتب می‌شوند. برای مشخص کردن فیلد، از یک عبارت [jsonpath](/docs/reference/kubectl/jsonpath/) استفاده کنید.
 
-#### نحو
+#### نحو دستور
 
 ```shell
 kubectl [command] [TYPE] [NAME] --sort-by=<jsonpath_exp>
@@ -355,7 +354,7 @@ kubectl [command] [TYPE] [NAME] --sort-by=<jsonpath_exp>
 
 ##### مثال
 
-برای چاپ فهرستی از Podها که بر اساس نام مرتب شده‌اند، دستور زیر را اجرا کنید:
+برای چاپ فهرست پادها به‌ترتیب نام، دستور زیر را اجرا کنید:
 
 ```shell
 kubectl get pods --sort-by=.metadata.name
@@ -363,9 +362,9 @@ kubectl get pods --sort-by=.metadata.name
 
 ## مثال‌ها: عملیات رایج
 
-از مجموعه مثال‌های زیر برای آشنایی با اجرای عملیات پرکاربرد `kubectl` استفاده کنید:
+مجموعه مثال‌های زیر به شما کمک می‌کند با اجرای عملیات پرکاربرد `kubectl` آشنا شوید:
 
-`kubectl apply` - اعمال یا به‌روزرسانی یک منبع از یک فایل یا stdin.
+دستور `kubectl apply` یک منبع را از روی یک فایل یا ورودی استاندارد (stdin) اعمال یا به‌روزرسانی می‌کند.
 
 ```shell
 # Create a service using the definition in example-service.yaml.
@@ -378,7 +377,7 @@ kubectl apply -f example-controller.yaml
 kubectl apply -f <directory>
 ```
 
-`kubectl get` - فهرست‌کردن یک یا چند منبع.
+دستور `kubectl get` یک یا چند منبع را فهرست می‌کند.
 
 ```shell
 # List all pods in plain-text output format.
@@ -400,7 +399,7 @@ kubectl get ds
 kubectl get pods --field-selector=spec.nodeName=server01
 ```
 
-`kubectl describe` - نمایش وضعیت تفصیلی یک یا چند منبع، که به‌طور پیش‌فرض منابع مقداردهی‌نشده (uninitialized) را نیز شامل می‌شود.
+دستور `kubectl describe` وضعیت مفصل یک یا چند منبع را نمایش می‌دهد و به‌طور پیش‌فرض منابع مقداردهی‌نشده را نیز در بر می‌گیرد.
 
 ```shell
 # Display the details of the node with name <node-name>.
@@ -418,11 +417,10 @@ kubectl describe pods
 ```
 
 {{< note >}}
-دستور `kubectl get` معمولاً برای بازیابی یک یا چند منبع از یک نوع منبع به کار می‌رود. این دستور مجموعه‌ای غنی از فلگ‌ها دارد که برای مثال به شما امکان می‌دهد قالب خروجی را با فلگ `-o` یا `--output` سفارشی کنید.
-می‌توانید با تعیین فلگ `-w` یا `--watch`، پایش به‌روزرسانی‌های یک آبجکت مشخص را آغاز کنید. دستور `kubectl describe` بیشتر بر توصیف جنبه‌های مرتبط و متعدد یک منبع مشخص تمرکز دارد. این دستور ممکن است برای ساخت یک نمای کامل برای کاربر، چندین فراخوانی API به API server انجام دهد. برای مثال، دستور `kubectl describe node` نه‌تنها اطلاعات مربوط به نود، بلکه خلاصه‌ای از Podهای در حال اجرا روی آن، رویدادهای تولیدشده برای نود و موارد مشابه را نیز بازیابی می‌کند.
+دستور `kubectl get` معمولاً برای بازیابی یک یا چند منبع از یک نوع منبع به کار می‌رود. این دستور مجموعهٔ گسترده‌ای از فلگ‌ها دارد؛ برای نمونه، با فلگ `-o` یا `--output` می‌توانید قالب خروجی را سفارشی کنید. همچنین با فلگ `-w` یا `--watch` می‌توانید پایش به‌روزرسانی‌های یک آبجکت مشخص را آغاز کنید. در مقابل، دستور `kubectl describe` بیشتر بر توصیف جنبه‌های مرتبط متعدد یک منبع مشخص تمرکز دارد و ممکن است برای ساختن نمایی برای کاربر، چندین فراخوانی API به سرور API انجام دهد. برای مثال، دستور `kubectl describe node` نه‌تنها اطلاعات خود نود، بلکه خلاصه‌ای از پادهای در حال اجرا روی آن، رویدادهای تولیدشده برای نود و موارد دیگر را نیز بازیابی می‌کند.
 {{< /note >}}
 
-`kubectl delete` - حذف منابع از یک فایل یا stdin، یا با تعیین انتخابگرهای برچسب (label selector)، نام‌ها، انتخابگرهای منبع یا خود منابع.
+دستور `kubectl delete` منابع را از روی یک فایل یا ورودی استاندارد، یا با مشخص کردن انتخابگرهای برچسب، نام‌ها، انتخابگرهای منبع یا خود منابع حذف می‌کند.
 
 ```shell
 # Delete a pod using the type and name specified in the pod.yaml file.
@@ -435,7 +433,7 @@ kubectl delete pods,services -l <label-key>=<label-value>
 kubectl delete pods --all
 ```
 
-`kubectl exec` - اجرای یک دستور در یک کانتینر درون یک Pod.
+دستور `kubectl exec` یک فرمان را روی یکی از کانتینرهای یک پاد اجرا می‌کند.
 
 ```shell
 # Get output from running 'date' from pod <pod-name>. By default, output is from the first container.
@@ -448,7 +446,7 @@ kubectl exec <pod-name> -c <container-name> -- date
 kubectl exec -ti <pod-name> -- /bin/bash
 ```
 
-`kubectl logs` - چاپ لاگ‌های یک کانتینر درون یک Pod.
+دستور `kubectl logs` لاگ‌های یک کانتینر در یک پاد را چاپ می‌کند.
 
 ```shell
 # Return a snapshot of the logs from pod <pod-name>.
@@ -458,7 +456,7 @@ kubectl logs <pod-name>
 kubectl logs -f <pod-name>
 ```
 
-`kubectl diff` - مشاهدهٔ تفاوت (diff) به‌روزرسانی‌های پیشنهادی برای یک کلاستر.
+دستور `kubectl diff` تفاوت‌های به‌روزرسانی‌های پیشنهادی برای کلاستر را نمایش می‌دهد.
 
 ```shell
 # Diff resources included in "pod.json".
@@ -468,9 +466,9 @@ kubectl diff -f pod.json
 cat service.yaml | kubectl diff -f -
 ```
 
-## مثال‌ها: ایجاد و استفاده از افزونه‌ها
+## مثال‌ها: ساخت و استفاده از افزونه‌ها
 
-از مجموعه مثال‌های زیر برای آشنایی با نوشتن و استفاده از افزونه‌های (plugin) `kubectl` استفاده کنید:
+مجموعه مثال‌های زیر به شما کمک می‌کند با نوشتن و استفاده از افزونه‌های (plugins) `kubectl` آشنا شوید:
 
 ```shell
 # create a simple plugin in any language and name the resulting executable file
@@ -483,7 +481,7 @@ cat ./kubectl-hello
 # this plugin prints the words "hello world"
 echo "hello world"
 ```
-پس از نوشتن افزونه، آن را اجرایی می‌کنیم:
+اکنون که افزونه نوشته شده است، آن را اجراپذیر می‌کنیم:
 ```bash
 chmod a+x ./kubectl-hello
 
@@ -505,7 +503,7 @@ hello world
 sudo rm /usr/local/bin/kubectl-hello
 ```
 
-برای مشاهدهٔ همهٔ افزونه‌هایی که در دسترس `kubectl` هستند، از زیردستور `kubectl plugin list` استفاده کنید:
+برای مشاهدهٔ همهٔ افزونه‌هایی که در دسترس `kubectl` هستند، از زیرفرمان `kubectl plugin list` استفاده کنید:
 
 ```shell
 kubectl plugin list
@@ -519,7 +517,7 @@ The following kubectl-compatible plugins are available:
 /usr/local/bin/kubectl-bar
 ```
 
-دستور `kubectl plugin list` همچنین دربارهٔ افزونه‌هایی که اجرایی نیستند یا توسط افزونه‌های دیگر پوشانده شده‌اند هشدار می‌دهد؛ برای مثال:
+زیرفرمان `kubectl plugin list` دربارهٔ افزونه‌هایی که اجراپذیر نیستند یا افزونه‌های دیگری آن‌ها را تحت‌الشعاع قرار داده‌اند نیز هشدار می‌دهد؛ برای مثال:
 
 ```shell
 sudo chmod -x /usr/local/bin/kubectl-foo # remove execute permission
@@ -537,13 +535,13 @@ The following kubectl-compatible plugins are available:
 error: one plugin warning was found
 ```
 
-می‌توانید افزونه‌ها را وسیله‌ای برای ساخت قابلیت‌های پیچیده‌تر بر پایهٔ دستورهای موجود kubectl در نظر بگیرید:
+می‌توانید افزونه‌ها را ابزاری برای ساختن قابلیت‌های پیچیده‌تر بر پایهٔ دستورهای موجود kubectl در نظر بگیرید:
 
 ```shell
 cat ./kubectl-whoami
 ```
 
-مثال‌های بعدی فرض می‌کنند که فایل `kubectl-whoami` را با محتوای زیر ساخته‌اید:
+در چند مثال بعدی فرض شده است که محتوای فایل `kubectl-whoami` را از قبل به شکل زیر تنظیم کرده‌اید:
 
 ```shell
 #!/bin/bash
@@ -553,7 +551,7 @@ cat ./kubectl-whoami
 kubectl config view --template='{{ range .contexts }}{{ if eq .name "'$(kubectl config current-context)'" }}Current user: {{ printf "%s\n" .context.user }}{{ end }}{{ end }}'
 ```
 
-اجرای دستور بالا خروجی‌ای حاوی کاربر مربوط به context فعلی در فایل KUBECONFIG شما تولید می‌کند:
+اجرای دستور بالا خروجی‌ای به شما می‌دهد که کاربر مربوط به context فعلی در فایل KUBECONFIG شما را نشان می‌دهد:
 
 ```shell
 # make the file executable
@@ -569,9 +567,9 @@ Current user: plugins-user
 ## {{% heading "whatsnext" %}}
 
 * مستندات مرجع `kubectl` را بخوانید:
-  * [مرجع دستورها](/docs/reference/kubectl/kubectl/) در kubectl
+  * [مرجع دستورهای](/docs/reference/kubectl/kubectl/) kubectl
   * مرجع [آرگومان‌های خط فرمان](/docs/reference/kubectl/generated/kubectl/)
-* دربارهٔ [قراردادهای استفاده از `kubectl`](/docs/reference/kubectl/conventions/) بیاموزید
-* دربارهٔ [پشتیبانی از JSONPath](/docs/reference/kubectl/jsonpath/) در kubectl مطالعه کنید
-* دربارهٔ چگونگی [گسترش kubectl با افزونه‌ها](/docs/tasks/extend-kubectl/kubectl-plugins) مطالعه کنید
-  * برای آگاهی بیشتر دربارهٔ افزونه‌ها، [نمونهٔ افزونهٔ CLI](https://github.com/kubernetes/sample-cli-plugin) را ببینید.
+* با [قراردادهای استفاده از `kubectl`](/docs/reference/kubectl/conventions/) آشنا شوید.
+* دربارهٔ [پشتیبانی از JSONPath](/docs/reference/kubectl/jsonpath/) در kubectl بخوانید.
+* دربارهٔ نحوهٔ [گسترش kubectl با افزونه‌ها](/docs/tasks/extend-kubectl/kubectl-plugins) بخوانید.
+  * برای آشنایی بیشتر با افزونه‌ها، نگاهی به [نمونهٔ افزونهٔ CLI](https://github.com/kubernetes/sample-cli-plugin) بیندازید.
